@@ -1,5 +1,6 @@
 # yuyinting
-
+# fluttter sdk 3.7.3
+# xcode 14.2
 A new Flutter project.
 
 ## Getting Started
