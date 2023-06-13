@@ -1,0 +1,193 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../colors/my_colors.dart';
+import '../../utils/style_utils.dart';
+import '../../utils/widget_utils.dart';
+///被关注
+class BeCarePage extends StatefulWidget {
+  const BeCarePage({Key? key}) : super(key: key);
+
+  @override
+  State<BeCarePage> createState() => _BeCarePageState();
+}
+
+class _BeCarePageState extends State<BeCarePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+      child: Column(
+        children: [
+          WidgetUtils.onlyText('被关注数（5）', StyleUtils.getCommonTextStyle(color: Colors.black , fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(28))),
+
+          SizedBox(
+            height: ScreenUtil().setHeight(130),
+            width: double.infinity,
+            child: Row(
+              children: [
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(110), ScreenUtil().setWidth(110), 'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
+                    WidgetUtils.showImages('assets/images/zhibozhong.webp', ScreenUtil().setHeight(110), ScreenUtil().setWidth(110),),
+                  ],
+                ),
+                WidgetUtils.commonSizedBox(0, 10),
+                Expanded(
+                  child: Column(
+                    children: [
+                      const Expanded(child: Text('')),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        width: double.infinity,
+                        child: Row(
+                          children: [
+                            Text(
+                              '系统消息',
+                              style: StyleUtils.getCommonTextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(38)),
+                            ),
+                            Container(
+                              height: ScreenUtil().setHeight(25),
+                              width: ScreenUtil().setWidth(50),
+                              alignment: Alignment.center,
+                              //边框设置
+                              decoration: const BoxDecoration(
+                                //背景
+                                color: MyColors.dtPink ,
+                                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(20.0)),
+                              ),
+                              child: WidgetUtils.showImages(
+                                  'assets/images/nv.png',
+                                  12,
+                                  12),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        width: double.infinity,
+                        child: Text(
+                          'aaaaaa',
+                          style: StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(30)),
+                        ),
+                      ),
+                      const Expanded(child: Text('')),
+                    ],
+                  ),
+                ),
+                Container(
+                  height: ScreenUtil().setHeight(60),
+                  width: ScreenUtil().setWidth(180),
+                  alignment: Alignment.center,
+                  //边框设置
+                  decoration: const BoxDecoration(
+                    //背景
+                    color: MyColors.f6 ,
+                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                    borderRadius:
+                    BorderRadius.all(Radius.circular(20.0)),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      WidgetUtils.onlyText('相互关注', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(30)))
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: ScreenUtil().setHeight(130),
+            width: double.infinity,
+            child: Row(
+              children: [
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(110), ScreenUtil().setWidth(110), 'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
+                    WidgetUtils.showImages('assets/images/zhibozhong.webp', ScreenUtil().setHeight(110), ScreenUtil().setWidth(110),),
+                  ],
+                ),
+                WidgetUtils.commonSizedBox(0, 10),
+                Expanded(
+                  child: Column(
+                    children: [
+                      const Expanded(child: Text('')),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        width: double.infinity,
+                        child: Row(
+                          children: [
+                            Text(
+                              '系统消息',
+                              style: StyleUtils.getCommonTextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(38)),
+                            ),
+                            Container(
+                              height: ScreenUtil().setHeight(25),
+                              width: ScreenUtil().setWidth(50),
+                              alignment: Alignment.center,
+                              //边框设置
+                              decoration: const BoxDecoration(
+                                //背景
+                                color: MyColors.dtPink ,
+                                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(20.0)),
+                              ),
+                              child: WidgetUtils.showImages(
+                                  'assets/images/nv.png',
+                                  12,
+                                  12),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        width: double.infinity,
+                        child: Text(
+                          'aaaaaa',
+                          style: StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(30)),
+                        ),
+                      ),
+                      const Expanded(child: Text('')),
+                    ],
+                  ),
+                ),
+                Container(
+                  height: ScreenUtil().setHeight(60),
+                  width: ScreenUtil().setWidth(180),
+                  alignment: Alignment.center,
+                  //边框设置
+                  decoration: BoxDecoration(
+                    //背景
+                    color: Colors.white ,
+                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                    borderRadius:
+                    const BorderRadius.all(Radius.circular(20.0)),
+                    //设置四周边框
+                    border: Border.all(width: 1, color: MyColors.careBlue),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      WidgetUtils.showImages('assets/images/care_jia.png', 12, 12),
+                      WidgetUtils.commonSizedBox(0, 5),
+                      WidgetUtils.onlyText('回关', StyleUtils.getCommonTextStyle(color: MyColors.careBlue, fontSize: ScreenUtil().setSp(30)))
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
