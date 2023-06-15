@@ -5,6 +5,10 @@ import 'package:yuyinting/pages/message/care_page.dart';
 import 'package:yuyinting/pages/mine/daili/daili_home_page.dart';
 import 'package:yuyinting/pages/mine/gonghui/jiesuan_page.dart';
 import 'package:yuyinting/pages/mine/gonghui/shenhe_page.dart';
+import 'package:yuyinting/pages/mine/setting/password_pay_page.dart';
+import 'package:yuyinting/pages/mine/setting/setting_page.dart';
+import 'package:yuyinting/pages/mine/setting/zhanghao_shezhi_page.dart';
+import 'package:yuyinting/pages/mine/setting/zhuxiao_page.dart';
 import 'package:yuyinting/pages/trends/trends_more_page.dart';
 
 import '../pages/message/be_care_page.dart';
@@ -33,6 +37,11 @@ import '../pages/mine/qianbao/tixian_zuan_page.dart';
 import '../pages/mine/qianbao/wallet_more_page.dart';
 import '../pages/mine/qianbao/wallet_page.dart';
 import '../pages/mine/qianbao/zuan_pay_page.dart';
+import '../pages/mine/setting/change_phone_page.dart';
+import '../pages/mine/setting/choose_country_page.dart';
+import '../pages/mine/setting/password_page.dart';
+import '../pages/mine/setting/shimingzhi_card_page.dart';
+import '../pages/mine/setting/shimingzhi_page.dart';
 import '../pages/mine/who_lock_me_page.dart';
 import '../pages/trends/trends_hi_page.dart';
 import '../pages/trends/trends_send_page.dart';
@@ -77,4 +86,16 @@ var staticRoutes = {
   'JiesuanPage':(context) => const JiesuanPage(),// 结算账单
   'JiesuanMorePage':(context) => const JiesuanMorePage(),// 账单明细
   'RoomMorePage':(context) => const RoomMorePage(),// 公会房间列表
+  'SettingPage':(context) => const SettingPage(),// 设置页面
+  'ZhanghaoShezhipage':(context) => const ZhanghaoShezhipage(),// 账号设置
+  'ChooseCountryPage':(context) => const ChooseCountryPage(),// 选择国家区号
+  'ChangePhonePage':(context) => const ChangePhonePage(),// 更换手机号
+  'PasswordPage':(context) => PasswordPage(title: '',),// 修改登录密码
+  'PasswordPayPage':(context) => const PasswordPayPage(),// 修改支付密码
+  'ZhuxiaoPage':(context) => const ZhuxiaoPage(),// 注销账号
+  'ShimingzhiPage':(context) => const ShimingzhiPage(),// 实名制认证
+  'ShimingzhiCardPage':(context) => const ShimingzhiCardPage(),// 实名制上传身份证认证
+
+
+
 };

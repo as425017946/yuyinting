@@ -295,6 +295,9 @@ class WidgetUtils {
       keyboardType: TextInputType.number,
       //设置键盘为数字
       style: StyleUtils.loginTextStyle,
+      onChanged: (value) {
+        eventBus.fire(InfoBack(info: value));
+      },
       decoration: InputDecoration(
         border: InputBorder.none,
         // labelText: "请输入用户名",
@@ -777,10 +780,9 @@ class WidgetUtils {
   static Widget onlyTextLeftRightImg(
       String title, TextStyle leftStyle, String url) {
     return Container(
-      height: ConfigScreenUtil.autoHeight50,
+      height: ConfigScreenUtil.autoHeight110,
       width: double.infinity,
-      //边框设置
-      decoration: StyleUtils.getCommonBoxDecoration(),
+      color: Colors.white,
       child: Row(
         children: [
           SizedBox(
@@ -816,7 +818,7 @@ class WidgetUtils {
         //背景
         color: boxColors,
         //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-        borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+        borderRadius: const BorderRadius.all(Radius.circular(30.0)),
         //设置四周边框
         border: Border.all(width: 1, color: borderColors),
       ),
@@ -995,4 +997,68 @@ class WidgetUtils {
       ],
     );
   }
+
+
+  ///实名制使用
+  static Widget commonTextFieldRenzheng(
+      TextEditingController controller, String hintText) {
+    return TextField(
+      controller: controller,
+      inputFormatters: [
+        RegexFormatter(regex: MyUtils.regexFirstNotNull),
+      ],
+      style: StyleUtils.loginTextStyle,
+      onChanged: (value) {
+        LogE('长度$value');
+        eventBus.fire(InfoBack(info: value));
+      },
+      decoration: InputDecoration(
+        // border: InputBorder.none,
+        // labelText: "请输入用户名",
+        // icon: Icon(Icons.people), //前面的图标
+        hintText: hintText,
+        hintStyle: StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(38)),
+
+        contentPadding: const EdgeInsets.only(top: 0, bottom: 0),
+        border: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.transparent),
+        ),
+        enabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.transparent,
+          ),
+        ),
+        disabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.transparent,
+          ),
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.transparent,
+          ),
+        ),
+        // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
+      ),
+    );
+  }
+
+  ///实名制提示
+  static Widget renzhengText(
+      String title) {
+    return Container(
+      alignment: Alignment.centerLeft,
+      padding: const EdgeInsets.all(20),
+      child: Text(
+        title,
+        maxLines: 20,
+        style: TextStyle(
+          fontSize: ScreenUtil().setSp(21),
+          color: Colors.black,
+          height: 2.0,
+        ),
+      ),
+    );
+  }
+
 }

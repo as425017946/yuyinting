@@ -24,10 +24,10 @@ class _MinePageState extends State<MinePage> {
     eventBus.on<SubmitButtonBack>().listen((event) {
       if(event.title == '我的装扮'){
       }else if(event.title == '公会中心'){
-        Navigator.pushNamed(context, 'GonghuiHomePage');
-        // if(mounted){
-        //   // Navigator.pushNamed(context, 'MyGonghuiPage');
-        // }
+        // Navigator.pushNamed(context, 'GonghuiHomePage');
+        if(mounted){
+          Navigator.pushNamed(context, 'MyGonghuiPage');
+        }
       }else if(event.title == '全民代理'){
         if(mounted) {
           Navigator.pushNamed(context, 'DailiHomePage');
@@ -56,12 +56,17 @@ class _MinePageState extends State<MinePage> {
         child: Column(
           children: [
             WidgetUtils.commonSizedBox(30, 0),
-            Row(
-              children: [
-                const Expanded(child: Text('')),
-                WidgetUtils.showImages('assets/images/mine_icon_setting.png',
-                    ScreenUtil().setHeight(40), ScreenUtil().setHeight(40)),
-              ],
+            GestureDetector(
+              onTap: ((){
+                Navigator.pushNamed(context, 'SettingPage');
+              }),
+              child: Row(
+                children: [
+                  const Expanded(child: Text('')),
+                  WidgetUtils.showImages('assets/images/mine_icon_setting.png',
+                      ScreenUtil().setHeight(40), ScreenUtil().setHeight(40)),
+                ],
+              ),
             ),
 
             ///头像等信息

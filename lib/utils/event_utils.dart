@@ -15,3 +15,10 @@ class SubmitButtonBack {
 
   SubmitButtonBack({required this.title});
 }
+
+///提交类的按钮
+class InfoBack {
+  String info;
+
+  InfoBack({required this.info});
+}

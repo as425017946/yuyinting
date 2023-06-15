@@ -1,0 +1,26 @@
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+class LinePainter2 extends CustomPainter {
+  Color colors ;
+  LinePainter2({required this.colors});
+  //定义画笔
+  late final Paint _paint = Paint()
+    ..color = colors
+    ..strokeCap = StrokeCap.square
+    ..isAntiAlias = true
+    ..strokeWidth = 3.0
+    ..style = PaintingStyle
+        .fill; //画笔样式有填充PaintingStyle.fill 及没有填充PaintingStyle.stroke 两种
+
+  void paint(Canvas canvas, Size size) {
+    //绘制圆 参数为中心点 半径 画笔
+    canvas.drawCircle(const Offset(8,8), 16, _paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return true;
+  }
+}
