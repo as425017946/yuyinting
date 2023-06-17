@@ -92,7 +92,7 @@ class _ChangePhonePageState extends State<ChangePhonePage> {
                   WidgetUtils.onlyText('+86', StyleUtils.getCommonTextStyle(
                       color: MyColors.g6, fontSize: ScreenUtil().setSp(29))),
                   WidgetUtils.commonSizedBox(0, 5),
-                  WidgetUtils.showImages('assets/images/mine_more.png', 15, 20)
+                  WidgetUtils.showImages('assets/images/mine_more.png', ScreenUtil().setHeight(15), ScreenUtil().setHeight(26)),
                 ],
               ),
             ),

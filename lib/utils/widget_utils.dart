@@ -63,6 +63,10 @@ class WidgetUtils {
               eventBus.fire(SubmitButtonBack(title: '创建公会'));
             } else if (index == 4) {
               eventBus.fire(SubmitButtonBack(title: '公会手册'));
+            } else if (index == 5) {
+              eventBus.fire(SubmitButtonBack(title: '管理'));
+            } else if (index == 6) {
+              eventBus.fire(SubmitButtonBack(title: '装扮商城'));
             }
           }),
           child: isCreate == true
@@ -73,7 +77,7 @@ class WidgetUtils {
                       MyColors.zhouBangBg,
                       MyColors.zhouBangBg,
                       '发布',
-                      ScreenUtil().setSp(30),
+                      ScreenUtil().setSp(25),
                       Colors.white)
                   : index == 1
                       ? Container(
@@ -83,7 +87,7 @@ class WidgetUtils {
                             '完成',
                             style: StyleUtils.getCommonTextStyle(
                                 color: Colors.black,
-                                fontSize: ScreenUtil().setSp(32)),
+                                fontSize: ScreenUtil().setSp(25)),
                           ),
                         )
                       : index == 2
@@ -108,16 +112,44 @@ class WidgetUtils {
                                         fontSize: ScreenUtil().setSp(25)),
                                   ),
                                 )
-                              : Container(
-                                  alignment: Alignment.center,
-                                  margin: const EdgeInsets.only(right: 15),
-                                  child: Text(
-                                    '公会手册',
-                                    style: StyleUtils.getCommonTextStyle(
-                                        color: Colors.black,
-                                        fontSize: ScreenUtil().setSp(25)),
-                                  ),
-                                )
+                              : index == 4
+                                  ? Container(
+                                      alignment: Alignment.center,
+                                      margin: const EdgeInsets.only(right: 15),
+                                      child: Text(
+                                        '公会手册',
+                                        style: StyleUtils.getCommonTextStyle(
+                                            color: Colors.black,
+                                            fontSize: ScreenUtil().setSp(25)),
+                                      ),
+                                    )
+                                  : index == 5
+                                      ? Container(
+                                          alignment: Alignment.center,
+                                          margin:
+                                              const EdgeInsets.only(right: 15),
+                                          child: Text(
+                                            '管理',
+                                            style:
+                                                StyleUtils.getCommonTextStyle(
+                                                    color: Colors.black,
+                                                    fontSize:
+                                                        ScreenUtil().setSp(25)),
+                                          ),
+                                        )
+                                      : Container(
+                                          alignment: Alignment.center,
+                                          margin:
+                                              const EdgeInsets.only(right: 15),
+                                          child: Text(
+                                            '装扮商城',
+                                            style:
+                                                StyleUtils.getCommonTextStyle(
+                                                    color: Colors.black,
+                                                    fontSize:
+                                                        ScreenUtil().setSp(25)),
+                                          ),
+                                        )
               : Text(''),
         )
       ],
@@ -126,7 +158,7 @@ class WidgetUtils {
         style: TextStyle(
             overflow: TextOverflow.ellipsis,
             color: Colors.black,
-            fontSize: ScreenUtil().setSp(36),
+            fontSize: ScreenUtil().setSp(34),
             fontWeight: FontWeight.bold),
       ),
       elevation: 0,
@@ -472,8 +504,8 @@ class WidgetUtils {
   static Widget CircleImageAss(
       double height, double width, double radius, String url) {
     return Container(
-      width: ScreenUtil().setHeight(height),
-      height: ScreenUtil().setWidth(width),
+      width: ScreenUtil().setHeight(width),
+      height: ScreenUtil().setHeight(height),
       //超出部分，可裁剪
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
@@ -998,7 +1030,6 @@ class WidgetUtils {
     );
   }
 
-
   ///实名制使用
   static Widget commonTextFieldRenzheng(
       TextEditingController controller, String hintText) {
@@ -1017,7 +1048,8 @@ class WidgetUtils {
         // labelText: "请输入用户名",
         // icon: Icon(Icons.people), //前面的图标
         hintText: hintText,
-        hintStyle: StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(38)),
+        hintStyle: StyleUtils.getCommonTextStyle(
+            color: MyColors.g9, fontSize: ScreenUtil().setSp(38)),
 
         contentPadding: const EdgeInsets.only(top: 0, bottom: 0),
         border: const OutlineInputBorder(
@@ -1044,8 +1076,7 @@ class WidgetUtils {
   }
 
   ///实名制提示
-  static Widget renzhengText(
-      String title) {
+  static Widget renzhengText(String title) {
     return Container(
       alignment: Alignment.centerLeft,
       padding: const EdgeInsets.all(20),
@@ -1061,4 +1092,23 @@ class WidgetUtils {
     );
   }
 
+  ///装扮商城使用
+  static Widget myContainerZhuangban(
+      Color boxColors, String title, TextStyle style) {
+    return Container(
+      padding: const EdgeInsets.only(left: 15, top: 2, right: 15, bottom: 2),
+      alignment: Alignment.center,
+      //边框设置
+      decoration: BoxDecoration(
+        //背景
+        color: boxColors,
+        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+        borderRadius: const BorderRadius.all(Radius.circular(30.0)),
+      ),
+      child: Text(
+        title,
+        style: style,
+      ),
+    );
+  }
 }

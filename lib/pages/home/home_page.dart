@@ -9,6 +9,7 @@ import 'package:yuyinting/pages/home/shoucang_page.dart';
 import 'package:yuyinting/pages/home/tuijian_page.dart';
 import 'package:yuyinting/pages/home/youxi_page.dart';
 import 'package:yuyinting/pages/home/zaixian_page.dart';
+import 'package:yuyinting/pages/login/edit_info_page.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 
@@ -29,7 +30,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   late final PageController _controller ;
-
+  bool isFirst = true;
   @override
   void initState() {
     // TODO: implement initState
@@ -38,6 +39,15 @@ class _HomePageState extends State<HomePage> {
     _controller = PageController(
       initialPage: 0,
     );
+    // if(isFirst){
+    //   Future.delayed(const Duration(seconds: 0), (){
+    //     Navigator.of(context).push(PageRouteBuilder(
+    //         opaque: false,
+    //         pageBuilder: (context, animation, secondaryAnimation) {
+    //           return const EditInfoPage();
+    //         }));
+    //   });
+    // }
   }
 
 

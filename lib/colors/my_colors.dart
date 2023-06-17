@@ -69,6 +69,24 @@ class MyColors{
   static const Color dailiTime = Color(0xFFEEF4F4);
   static const Color dailiBaobiao = Color(0xFFF7F6F9);
   static const Color dailiShare= Color(0xFFDEDEE0);
+  static const Color loginBlue= Color(0xFF6ABCF4);
+  static const Color loginBlue2= Color(0xFFDDF0FD);
+  static const Color loginPink= Color(0xFFFAACCE);
+  static const Color loginPink2= Color(0xFFF9D7E6);
+  static const Color loginPurple = Color(0xFFD7D0FB);
+  static const Color messagePurple = Color(0xFFEAE7F7);
+  static const Color zhuangbanBg = Color(0xFF1F1531);
+  static const Color zhuangbanWZBg = Color(0xFF352C45);
+  static const Color zhuangbanWZ = Color(0xFFABA7B2);
+  static const Color zhuangbanBottomBG = Color(0xFF292940);
+  static const Color guizuYellow = Color(0xFFFFCB88);
+  static const Color guizuYellow2 = Color(0xFF492F09);
+  static const Color guizuGrey = Color(0xFF9386AA);
+  static const Color guizuBlack = Color(0xFF3C2A5C);
+  static const Color roomID = Color(0xFFBFCCE9);
+  static const Color roomHot = Color(0xFF18293E);
+  static const Color roomMaiWZ = Color(0xFF97A2AE);
+  static const Color roomMaiLiao = Color(0xFF3886B7);
 
 
 }

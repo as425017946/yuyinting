@@ -16,6 +16,8 @@ class GonghuiPeoplePage extends StatefulWidget {
 class _GonghuiPeoplePageState extends State<GonghuiPeoplePage> {
   var appBar;
   final TextEditingController _souSuoName = TextEditingController();
+  var length = 10;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -128,10 +130,24 @@ class _GonghuiPeoplePageState extends State<GonghuiPeoplePage> {
             ],
           ),
           Expanded(
-            child: ListView.builder(
+            child:  length > 0 ? ListView.builder(
               padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
               itemBuilder: _itemPeople,
-              itemCount: 15,
+              itemCount: length,
+            )
+                :
+            Container(
+              height: double.infinity,
+              alignment: Alignment.center,
+              child: Column(
+                children: [
+                  const Expanded(child: Text('')),
+                  WidgetUtils.showImages('assets/images/no_have.png', 100, 100),
+                  WidgetUtils.commonSizedBox(10, 0),
+                  WidgetUtils.onlyTextCenter('暂无公会房间', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(26))),
+                  const Expanded(child: Text('')),
+                ],
+              ),
             ),
           )
         ],

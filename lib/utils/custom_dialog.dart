@@ -12,7 +12,7 @@ class CustomDialog extends Dialog {
 
   CustomDialog({
     this.width: 270,
-    this.height: 110,
+    this.height: 120,
     required this.title,
     required this.content, // 根据content来，判断显示哪种类型
     this.cancelTxt: "取消",

@@ -2,9 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/colors/my_colors.dart';
+import 'package:yuyinting/pages/login/login_page.dart';
 import 'package:yuyinting/utils/line_painter.dart';
-import 'package:yuyinting/utils/log_util.dart';
 
+import '../../../main.dart';
+import '../../../utils/custom_dialog.dart';
+import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 
@@ -97,7 +100,9 @@ class _SettingPageState extends State<SettingPage> {
           ),
           WidgetUtils.commonSizedBox(1, 0),
           GestureDetector(
-            onTap: (() {}),
+            onTap: (() {
+              Navigator.pushNamed(context, 'BlackPage');
+            }),
             child: WidgetUtils.onlyTextLeftRightImg(
                 '黑名单',
                 StyleUtils.getCommonTextStyle(
@@ -129,7 +134,7 @@ class _SettingPageState extends State<SettingPage> {
           WidgetUtils.commonSizedBox(10, 0),
           GestureDetector(
             onTap: ((){
-
+                Navigator.pushNamed(context, 'AboutPage');
             }),
             child: Container(
               width: double.infinity,
@@ -156,7 +161,7 @@ class _SettingPageState extends State<SettingPage> {
           const Expanded(child: Text('')),
           GestureDetector(
             onTap: ((){
-
+                Navigator.pushNamed(context, 'QiehuanAccountPage');
             }),
             child: Container(
               width: double.infinity,
@@ -172,7 +177,9 @@ class _SettingPageState extends State<SettingPage> {
           WidgetUtils.commonSizedBox(10, 0),
           GestureDetector(
             onTap: ((){
-
+              if (MyUtils.checkClick()) {
+                exitLogin(context);
+              }
             }),
             child: Container(
               width: double.infinity,
@@ -188,5 +195,31 @@ class _SettingPageState extends State<SettingPage> {
         ],
       ),
     );
+  }
+
+
+  /// 退出登录
+  Future<void> exitLogin(BuildContext context) async {
+    return  showDialog(
+        context: context,
+        builder: (context) {
+          return CustomDialog(
+            title: '是否确认退出登录？',
+            callback: (res) {
+              setState((){
+                sp.setString('user_password', '');
+              });
+              Future.delayed(Duration.zero, () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                  // ignore: unnecessary_null_comparison
+                      (route) => route == null,
+                );
+              });
+            },
+            content: '',
+          );
+        });
   }
 }

@@ -32,23 +32,28 @@ class _MyZiliaoPageState extends State<MyZiliaoPage> {
           ),
           child: Column(
             children: [
-              Container(
-                height: ScreenUtil().setHeight(44),
-                alignment: Alignment.center,
-                margin: const EdgeInsets.only(top: 10),
-                child: Row(
-                  children: [
-                    WidgetUtils.showImages('assets/images/people_liwu.png', ScreenUtil().setHeight(44), ScreenUtil().setHeight(44)),
-                    WidgetUtils.commonSizedBox(0, 5),
-                    WidgetUtils.onlyText('礼物墙', StyleUtils.getCommonTextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(36))),
-                    WidgetUtils.commonSizedBox(0, 5),
-                    WidgetUtils.onlyText('共收到0/300款', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(26))),
-                    const Expanded(child: Text('')),
-                    WidgetUtils.onlyText('查看', StyleUtils.getCommonTextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(26))),
-                    WidgetUtils.commonSizedBox(0, 5),
-                    WidgetUtils.showImages('assets/images/people_right.png', ScreenUtil().setHeight(25), ScreenUtil().setHeight(15)),
-                    WidgetUtils.commonSizedBox(0, 10),
-                  ],
+              GestureDetector(
+                onTap: ((){
+                  Navigator.pushNamed(context, 'WallPage');
+                }),
+                child: Container(
+                  height: ScreenUtil().setHeight(44),
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.only(top: 10),
+                  child: Row(
+                    children: [
+                      WidgetUtils.showImages('assets/images/people_liwu.png', ScreenUtil().setHeight(44), ScreenUtil().setHeight(44)),
+                      WidgetUtils.commonSizedBox(0, 5),
+                      WidgetUtils.onlyText('礼物墙', StyleUtils.getCommonTextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(36))),
+                      WidgetUtils.commonSizedBox(0, 5),
+                      WidgetUtils.onlyText('共收到0/300款', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(26))),
+                      const Expanded(child: Text('')),
+                      WidgetUtils.onlyText('查看', StyleUtils.getCommonTextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(26))),
+                      WidgetUtils.commonSizedBox(0, 5),
+                      WidgetUtils.showImages('assets/images/people_right.png', ScreenUtil().setHeight(25), ScreenUtil().setHeight(15)),
+                      WidgetUtils.commonSizedBox(0, 10),
+                    ],
+                  ),
                 ),
               ),
               Expanded(

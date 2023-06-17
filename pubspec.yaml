@@ -74,6 +74,8 @@ dependencies:
   path_provider: ^2.0.15
   # 虚线边框
   dotted_border: ^2.0.0+3
+  # 查看SVGA
+  svgaplayer_flutter: ^2.2.0
 
 
 dev_dependencies:
@@ -106,6 +108,7 @@ flutter:
     - assets/images/
     - assets/images/feilong/
     - assets/images/saiche/
+    - assets/svga/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

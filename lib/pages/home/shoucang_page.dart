@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../colors/my_colors.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
+import '../room/room_page.dart';
 ///收藏页面
 class ShoucangPage extends StatefulWidget {
   const ShoucangPage({Key? key}) : super(key: key);
@@ -17,32 +18,53 @@ class _ShoucangPageState extends State<ShoucangPage> {
 
   ///收藏使用
   Widget _initlistdata(context, index) {
-    return Container(
-      alignment: Alignment.bottomLeft,
-      child: Stack(
-        children: [
-          WidgetUtils.CircleImageNet(ScreenUtil().setHeight(320),ScreenUtil().setHeight(320),10.0,'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
-          Container(
-            margin: const EdgeInsets.fromLTRB(10, 120, 10, 0),
-            child: Text(
-              '欲望女神  全麦等一个...',
-              style: StyleUtils.getCommonTextStyle(color: Colors.white,fontSize: ScreenUtil().setSp(26)),
+    return GestureDetector(
+      onTap: ((){
+        if(index%2 == 0){
+          Future.delayed(const Duration(seconds: 0), (){
+            Navigator.of(context).push(PageRouteBuilder(
+                opaque: false,
+                pageBuilder: (context, animation, secondaryAnimation) {
+                  return RoomPage(type: 0,);
+                }));
+          });
+        }else{
+          Future.delayed(const Duration(seconds: 0), (){
+            Navigator.of(context).push(PageRouteBuilder(
+                opaque: false,
+                pageBuilder: (context, animation, secondaryAnimation) {
+                  return RoomPage(type: 1,);
+                }));
+          });
+        }
+      }),
+      child: Container(
+        alignment: Alignment.bottomLeft,
+        child: Stack(
+          children: [
+            WidgetUtils.CircleImageNet(ScreenUtil().setHeight(320),ScreenUtil().setHeight(320),10.0,'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
+            Container(
+              margin: const EdgeInsets.fromLTRB(10, 120, 10, 0),
+              child: Text(
+                '欲望女神  全麦等一个...',
+                style: StyleUtils.getCommonTextStyle(color: Colors.white,fontSize: ScreenUtil().setSp(26)),
+              ),
             ),
-          ),
-          Container(
-            margin: const EdgeInsets.fromLTRB(10, 150, 10, 0),
-            child: Row(
-              children: [
-                WidgetUtils.showImages('assets/images/zhibo2.webp', 10, 15),
-                Text(
-                  '10000',
-                  style: StyleUtils.getCommonTextStyle(color: Colors.white,fontSize: ScreenUtil().setSp(18),fontWeight: FontWeight.w500),
-                )
-              ],
+            Container(
+              margin: const EdgeInsets.fromLTRB(10, 150, 10, 0),
+              child: Row(
+                children: [
+                  WidgetUtils.showImages('assets/images/zhibo2.webp', 10, 15),
+                  Text(
+                    '10000',
+                    style: StyleUtils.getCommonTextStyle(color: Colors.white,fontSize: ScreenUtil().setSp(18),fontWeight: FontWeight.w500),
+                  )
+                ],
+              ),
             ),
-          ),
 
-        ],
+          ],
+        ),
       ),
     );
   }

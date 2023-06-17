@@ -6,13 +6,18 @@ import 'package:yuyinting/pages/mine/daili/daili_home_page.dart';
 import 'package:yuyinting/pages/mine/gonghui/jiesuan_page.dart';
 import 'package:yuyinting/pages/mine/gonghui/shenhe_page.dart';
 import 'package:yuyinting/pages/mine/setting/password_pay_page.dart';
+import 'package:yuyinting/pages/mine/setting/qiehuan_account_page.dart';
 import 'package:yuyinting/pages/mine/setting/setting_page.dart';
+import 'package:yuyinting/pages/mine/setting/yinsi_page.dart';
+import 'package:yuyinting/pages/mine/setting/yonghu_page.dart';
 import 'package:yuyinting/pages/mine/setting/zhanghao_shezhi_page.dart';
 import 'package:yuyinting/pages/mine/setting/zhuxiao_page.dart';
 import 'package:yuyinting/pages/trends/trends_more_page.dart';
 
+import '../pages/login/forgot_password_page.dart';
 import '../pages/message/be_care_page.dart';
 import '../pages/message/geren/people_info_page.dart';
+import '../pages/message/xitong_more_page.dart';
 import '../pages/mine/daili/share_tuiguang_page.dart';
 import '../pages/mine/gonghui/gonghui_home_page.dart';
 import '../pages/mine/gonghui/gonghui_more_page.dart';
@@ -25,6 +30,7 @@ import '../pages/mine/kefu_page.dart';
 import '../pages/mine/liwu/liwu_page.dart';
 import '../pages/mine/liwu/liwu_shoudao_page.dart';
 import '../pages/mine/liwu/liwu_songchu_page.dart';
+import '../pages/mine/liwu/wall_page.dart';
 import '../pages/mine/my/edit_audio_page.dart';
 import '../pages/mine/my/edit_biaoqian_page.dart';
 import '../pages/mine/my/edit_head_page.dart';
@@ -37,12 +43,18 @@ import '../pages/mine/qianbao/tixian_zuan_page.dart';
 import '../pages/mine/qianbao/wallet_more_page.dart';
 import '../pages/mine/qianbao/wallet_page.dart';
 import '../pages/mine/qianbao/zuan_pay_page.dart';
+import '../pages/mine/setting/about_page.dart';
+import '../pages/mine/setting/black_page.dart';
 import '../pages/mine/setting/change_phone_page.dart';
 import '../pages/mine/setting/choose_country_page.dart';
 import '../pages/mine/setting/password_page.dart';
 import '../pages/mine/setting/shimingzhi_card_page.dart';
 import '../pages/mine/setting/shimingzhi_page.dart';
+import '../pages/mine/tequan/tequan_page.dart';
 import '../pages/mine/who_lock_me_page.dart';
+import '../pages/mine/zhuangban/shop_page.dart';
+import '../pages/mine/zhuangban/zhuangban_page.dart';
+import '../pages/room/room_page.dart';
 import '../pages/trends/trends_hi_page.dart';
 import '../pages/trends/trends_send_page.dart';
 
@@ -95,6 +107,19 @@ var staticRoutes = {
   'ZhuxiaoPage':(context) => const ZhuxiaoPage(),// 注销账号
   'ShimingzhiPage':(context) => const ShimingzhiPage(),// 实名制认证
   'ShimingzhiCardPage':(context) => const ShimingzhiCardPage(),// 实名制上传身份证认证
+  'BlackPage':(context) => const BlackPage(),// 黑名单
+  'AboutPage':(context) => const AboutPage(),// 关于
+  'YinsiPage':(context) => const YinsiPage(),// 隐私协议
+  'YonghuPage':(context) => const YonghuPage(),// 用户协议
+  'QiehuanAccountPage':(context) => const QiehuanAccountPage(),// 切换账号
+  'ForgotPasswordPage':(context) => const ForgotPasswordPage(),// 忘记密码
+  'XitongMorePage':(context) => const XitongMorePage(),// 系统消息详情
+  'WallPage':(context) => const WallPage(),// 礼物墙
+  'ZhuangbanPage':(context) => const ZhuangbanPage(),// 礼物墙
+  'ShopPage':(context) => const ShopPage(),// 装扮商城
+  'TequanPage':(context) => const TequanPage(),// 特权页面
+  'RoomPage':(context) => RoomPage(type: 0,),// 房间页面
+
 
 
 

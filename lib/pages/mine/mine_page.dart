@@ -15,7 +15,7 @@ class MinePage extends StatefulWidget {
 }
 
 class _MinePageState extends State<MinePage> {
-  var guizuType = 0;
+  var guizuType = 1;
 
   @override
   void initState() {
@@ -23,6 +23,7 @@ class _MinePageState extends State<MinePage> {
     super.initState();
     eventBus.on<SubmitButtonBack>().listen((event) {
       if(event.title == '我的装扮'){
+        Navigator.pushNamed(context, 'ZhuangbanPage');
       }else if(event.title == '公会中心'){
         // Navigator.pushNamed(context, 'GonghuiHomePage');
         if(mounted){
@@ -161,7 +162,7 @@ class _MinePageState extends State<MinePage> {
             /// 升级贵族
             Container(
               width: double.infinity,
-              height: ScreenUtil().setHeight(270),
+              height: ScreenUtil().setHeight(250),
               padding: const EdgeInsets.only(left: 20, right: 20),
               decoration: const BoxDecoration(
                 //设置Container修饰
@@ -173,36 +174,41 @@ class _MinePageState extends State<MinePage> {
               ),
               child: Column(
                 children: [
-                  Container(
-                    alignment: Alignment.bottomRight,
-                    padding: const EdgeInsets.only(right: 50, top: 20),
-                    child: guizuType == 0
-                        ? WidgetUtils.myContainer(
-                            ScreenUtil().setHeight(39),
-                            ScreenUtil().setHeight(116),
-                            Colors.transparent,
-                            MyColors.mineOrange,
-                            '已开通',
-                            ScreenUtil().setSp(21),
-                            MyColors.mineOrange)
-                        : SizedBox(
-                            width: ScreenUtil().setHeight(116),
-                            height: ScreenUtil().setHeight(39),
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                WidgetUtils.showImages(
-                                    'assets/images/mine_kaitong_bg.png',
-                                    ScreenUtil().setHeight(39),
-                                    ScreenUtil().setHeight(116)),
-                                WidgetUtils.onlyTextCenter(
-                                    '开通',
-                                    StyleUtils.getCommonTextStyle(
-                                        color: Colors.white,
-                                        fontSize: ScreenUtil().setSp(21))),
-                              ],
-                            ),
-                          ),
+                  GestureDetector(
+                    onTap: ((){
+                      Navigator.pushNamed(context, 'TequanPage');
+                    }),
+                    child: Container(
+                      alignment: Alignment.bottomRight,
+                      padding: const EdgeInsets.only(right: 30, top: 20),
+                      child: guizuType == 0
+                          ? WidgetUtils.myContainer(
+                          ScreenUtil().setHeight(39),
+                          ScreenUtil().setHeight(116),
+                          Colors.transparent,
+                          MyColors.mineOrange,
+                          '已开通',
+                          ScreenUtil().setSp(21),
+                          MyColors.mineOrange)
+                          : SizedBox(
+                        width: ScreenUtil().setHeight(116),
+                        height: ScreenUtil().setHeight(39),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            WidgetUtils.showImages(
+                                'assets/images/mine_kaitong_bg.png',
+                                ScreenUtil().setHeight(39),
+                                ScreenUtil().setHeight(116)),
+                            WidgetUtils.onlyTextCenter(
+                                '开通',
+                                StyleUtils.getCommonTextStyle(
+                                    color: Colors.white,
+                                    fontSize: ScreenUtil().setSp(21))),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                   WidgetUtils.commonSizedBox(50, 0),
 
@@ -216,15 +222,15 @@ class _MinePageState extends State<MinePage> {
                         }),
                         child: Column(
                           children: [
-                            Container(
-                              width: ScreenUtil().setHeight(80),
-                              alignment: Alignment.topRight,
-                              child: Text(
-                                  '+1',
-                                  style : StyleUtils.getCommonTextStyle(
-                                      color: MyColors.mineRed,
-                                      fontSize: ScreenUtil().setSp(25))),
-                            ),
+                            // Container(
+                            //   width: ScreenUtil().setHeight(80),
+                            //   alignment: Alignment.topRight,
+                            //   child: Text(
+                            //       '+1',
+                            //       style : StyleUtils.getCommonTextStyle(
+                            //           color: MyColors.mineRed,
+                            //           fontSize: ScreenUtil().setSp(25))),
+                            // ),
                             WidgetUtils.onlyText(
                                 '8',
                                 StyleUtils.getCommonTextStyle(
@@ -246,15 +252,15 @@ class _MinePageState extends State<MinePage> {
                         }),
                         child: Column(
                           children: [
-                            Container(
-                              width: ScreenUtil().setHeight(80),
-                              alignment: Alignment.topRight,
-                              child: Text(
-                                  '+1',
-                                  style : StyleUtils.getCommonTextStyle(
-                                      color: MyColors.mineRed,
-                                      fontSize: ScreenUtil().setSp(25))),
-                            ),
+                            // Container(
+                            //   width: ScreenUtil().setHeight(80),
+                            //   alignment: Alignment.topRight,
+                            //   child: Text(
+                            //       '+1',
+                            //       style : StyleUtils.getCommonTextStyle(
+                            //           color: MyColors.mineRed,
+                            //           fontSize: ScreenUtil().setSp(25))),
+                            // ),
                             WidgetUtils.onlyText(
                                 '8',
                                 StyleUtils.getCommonTextStyle(
@@ -276,15 +282,15 @@ class _MinePageState extends State<MinePage> {
                         }),
                         child: Column(
                           children: [
-                            Container(
-                              width: ScreenUtil().setHeight(80),
-                              alignment: Alignment.topRight,
-                              child: Text(
-                                  '+1',
-                                  style : StyleUtils.getCommonTextStyle(
-                                      color: MyColors.mineRed,
-                                      fontSize: ScreenUtil().setSp(25))),
-                            ),
+                            // Container(
+                            //   width: ScreenUtil().setHeight(80),
+                            //   alignment: Alignment.topRight,
+                            //   child: Text(
+                            //       '+1',
+                            //       style : StyleUtils.getCommonTextStyle(
+                            //           color: MyColors.mineRed,
+                            //           fontSize: ScreenUtil().setSp(25))),
+                            // ),
                             WidgetUtils.onlyText(
                                 '8',
                                 StyleUtils.getCommonTextStyle(
