@@ -76,6 +76,10 @@ dependencies:
   dotted_border: ^2.0.0+3
   # 查看SVGA
   svgaplayer_flutter: ^2.2.0
+  # 声网 Flutter SDK 依赖项，请使用最新版本的 agora_rtc_engine
+  agora_rtc_engine: ^6.0.0
+  #  权限处理插件依赖项
+  permission_handler: ^8.3.0
 
 
 dev_dependencies:
