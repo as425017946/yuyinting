@@ -228,7 +228,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage> {
                 ),
                 /// 展示礼物
                 Expanded(child: GridView.builder(
-                    padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                     itemCount: 10,
                     scrollDirection: Axis.horizontal,
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

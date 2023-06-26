@@ -139,3 +139,10 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  fonts:
+    - family: Impact
+      fonts:
+        - asset: assets/font/IMPACT.TTF
+    - family: ARIAL
+      fonts:
+        - asset: assets/font/ARIAL.TTF

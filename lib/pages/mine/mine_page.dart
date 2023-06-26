@@ -23,7 +23,8 @@ class _MinePageState extends State<MinePage> {
     super.initState();
     eventBus.on<SubmitButtonBack>().listen((event) {
       if(event.title == '我的装扮'){
-        Navigator.pushNamed(context, 'ZhuangbanPage');
+        Navigator.pushNamed(context, 'DengjiPage');
+        // Navigator.pushNamed(context, 'ZhuangbanPage');
       }else if(event.title == '公会中心'){
         // Navigator.pushNamed(context, 'GonghuiHomePage');
         if(mounted){

@@ -19,6 +19,7 @@ import '../pages/message/be_care_page.dart';
 import '../pages/message/geren/people_info_page.dart';
 import '../pages/message/xitong_more_page.dart';
 import '../pages/mine/daili/share_tuiguang_page.dart';
+import '../pages/mine/dengji_page.dart';
 import '../pages/mine/gonghui/gonghui_home_page.dart';
 import '../pages/mine/gonghui/gonghui_more_page.dart';
 import '../pages/mine/gonghui/gonghui_people_page.dart';
@@ -124,6 +125,7 @@ var staticRoutes = {
   'RoomPeopleInfoPage':(context) => const RoomPeopleInfoPage(),// 房间他人信息详情
   'RoomReDuPage':(context) => const RoomReDuPage(),// 房间内的热度
 
+  'DengjiPage':(context) => const DengjiPage(),// 测试等级描边
 
 
 

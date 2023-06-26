@@ -104,6 +104,11 @@ class MyColors{
   static const Color roomMessageLiaotian = Color(0xFF43456E);
   static const Color roomPassXian = Color(0xFF363657);
   static const Color roomCirle = Color(0xFF2F2876);
+  /// 等级描边字体
+  static const Color djOne = Color(0xFFFAFAFD);
+  static const Color djOneM = Color(0xFF3D4C57);
+  static const Color djTwoM = Color(0xFF1A0096);
+  static const Color djThreeM = Color(0xFF025C69);
 
 
 
