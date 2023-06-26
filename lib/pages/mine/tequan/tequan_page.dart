@@ -6,12 +6,15 @@ import 'package:yuyinting/pages/mine/tequan/guowang_page.dart';
 import 'package:yuyinting/pages/mine/tequan/houjue_page.dart';
 import 'package:yuyinting/pages/mine/tequan/qishi_page.dart';
 import 'package:yuyinting/pages/mine/tequan/yongshi_page.dart';
+import 'package:yuyinting/utils/log_util.dart';
 
 import '../../../colors/my_colors.dart';
+import '../../../utils/event_utils.dart';
 import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 import 'bojue_page.dart';
+
 /// 特权
 class TequanPage extends StatefulWidget {
   const TequanPage({Key? key}) : super(key: key);
@@ -23,7 +26,9 @@ class TequanPage extends StatefulWidget {
 class _TequanPageState extends State<TequanPage> {
   int _currentIndex = 0;
   late final PageController _controller;
-
+  int priceDou=360;
+  int priceYue=36;
+  var listen;
   @override
   void initState() {
     // TODO: implement initState
@@ -32,6 +37,26 @@ class _TequanPageState extends State<TequanPage> {
     _controller = PageController(
       initialPage: 0,
     );
+    listen = eventBus.on<GuizuButtonBack>().listen((event) {
+      if(event.title == '右'){
+        setState(() {
+          _currentIndex = event.index+1;
+          _controller.jumpToPage(_currentIndex);
+        });
+      }
+      if(event.title == '左'){
+        setState(() {
+          _currentIndex = event.index-1;
+          _controller.jumpToPage(_currentIndex);
+        });
+      }
+    });
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    listen.cancel();
   }
 
   @override
@@ -41,226 +66,340 @@ class _TequanPageState extends State<TequanPage> {
       body: Stack(
         alignment: Alignment.bottomCenter,
         children: [
-          Column(
-            children: [
-              WidgetUtils.commonSizedBox(35, 0),
+          Container(
+            decoration: const BoxDecoration(
+              //设置Container修饰
+              image: DecorationImage(
+                //背景图片修饰
+                image: AssetImage("assets/images/guizu_bg.jpg"),
+                fit: BoxFit.fill, //覆盖
+              ),
+            ),
+            child: Column(
+              children: [
+                WidgetUtils.commonSizedBox(35, 0),
 
-              ///头部信息
-              Container(
-                padding: const EdgeInsets.only(left: 10, right: 20),
-                height: ScreenUtil().setHeight(60),
-                width: double.infinity,
-                alignment: Alignment.bottomLeft,
-                child: Row(
-                  children: [
-                    Container(
-                      width: ScreenUtil().setHeight(150),
-                      alignment: Alignment.centerLeft,
-                      child: IconButton(
-                        icon: const Icon(Icons.arrow_back_ios),
-                        color: Colors.white,
-                        onPressed: (() {
-                          Navigator.of(context).pop();
-                          MyUtils.hideKeyboard(context);
-                        }),
-                      ),
-                    ),
-                    const Expanded(child: Text('')),
-                    WidgetUtils.onlyTextCenter(
-                        '贵族',
-                        StyleUtils.getCommonTextStyle(
-                            color: Colors.white,
-                            fontSize: ScreenUtil().setSp(34),
-                            fontWeight: FontWeight.bold)),
-                    const Expanded(child: Text('')),
-                    GestureDetector(
-                      onTap: (() {}),
-                      child: Container(
-                        width: ScreenUtil().setWidth(150),
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          '',
-                          style: StyleUtils.getCommonTextStyle(
-                            color: Colors.white,
-                            fontSize: ScreenUtil().setSp(25),
-                          ),
+                ///头部信息
+                Container(
+                  padding: const EdgeInsets.only(left: 10, right: 20),
+                  height: ScreenUtil().setHeight(60),
+                  width: double.infinity,
+                  alignment: Alignment.bottomLeft,
+                  child: Row(
+                    children: [
+                      Container(
+                        width: ScreenUtil().setHeight(150),
+                        alignment: Alignment.centerLeft,
+                        child: IconButton(
+                          icon: const Icon(Icons.arrow_back_ios),
+                          color: Colors.white,
+                          onPressed: (() {
+                            Navigator.of(context).pop();
+                            MyUtils.hideKeyboard(context);
+                          }),
                         ),
                       ),
-                    )
-                  ],
+                      const Expanded(child: Text('')),
+                      WidgetUtils.onlyTextCenter(
+                          '贵族',
+                          StyleUtils.getCommonTextStyle(
+                              color: Colors.white,
+                              fontSize: ScreenUtil().setSp(34),
+                              fontWeight: FontWeight.bold)),
+                      const Expanded(child: Text('')),
+                      GestureDetector(
+                        onTap: (() {}),
+                        child: Container(
+                          width: ScreenUtil().setWidth(150),
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            '',
+                            style: StyleUtils.getCommonTextStyle(
+                              color: Colors.white,
+                              fontSize: ScreenUtil().setSp(25),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              WidgetUtils.commonSizedBox(20, 0),
-              SizedBox(
-                height: ScreenUtil().setHeight(60),
-                child: Row(
+                WidgetUtils.commonSizedBox(10, 0),
+                Row(
                   children: [
-                    WidgetUtils.commonSizedBox(0, 20),
+                    WidgetUtils.commonSizedBox(0, 10),
                     GestureDetector(
                       onTap: (() {
                         setState(() {
                           _currentIndex = 0;
                           _controller.jumpToPage(0);
+
+                          priceDou=360;
+                          priceYue=36;
                         });
                       }),
                       child: Column(
                         children: [
-                          WidgetUtils.onlyText('勇士', StyleUtils.getCommonTextStyle(
-                              color: _currentIndex == 0
-                                  ? Colors.white
-                                  : MyColors.zhuangbanWZ,
-                              fontSize: ScreenUtil().setSp(29),
-                              fontWeight: FontWeight.bold)),
-                          _currentIndex == 0 ? WidgetUtils.showImages('assets/images/zhuxiao.jpg', ScreenUtil().setHeight(3), ScreenUtil().setHeight(65)) : const Text(''),
+                          WidgetUtils.onlyText(
+                              '勇士',
+                              StyleUtils.getCommonTextStyle(
+                                  color: _currentIndex == 0
+                                      ? Colors.white
+                                      : MyColors.zhuangbanWZ,
+                                  fontSize: ScreenUtil().setSp(29),
+                                  fontWeight: FontWeight.bold)),
+                          WidgetUtils.commonSizedBox(8, 0),
+                          _currentIndex == 0
+                              ? WidgetUtils.showImages(
+                                  'assets/images/guizu_xian.png',
+                                  ScreenUtil().setHeight(3),
+                                  ScreenUtil().setHeight(65))
+                              : WidgetUtils.commonSizedBox(
+                                  ScreenUtil().setHeight(3),
+                                  ScreenUtil().setHeight(65)),
                         ],
                       ),
                     ),
-                    WidgetUtils.commonSizedBox(0, 20),
+                    WidgetUtils.commonSizedBox(0, 15),
                     GestureDetector(
                       onTap: (() {
                         setState(() {
                           _currentIndex = 1;
                           _controller.jumpToPage(1);
+                          priceDou=2800;
+                          priceYue=280;
                         });
                       }),
                       child: Column(
                         children: [
-                          WidgetUtils.onlyText('骑士', StyleUtils.getCommonTextStyle(
-                              color: _currentIndex == 1
-                                  ? Colors.white
-                                  : MyColors.zhuangbanWZ,
-                              fontSize: ScreenUtil().setSp(29),
-                              fontWeight: FontWeight.bold)),
-                          _currentIndex == 1 ? WidgetUtils.showImages('assets/images/zhuxiao.jpg', ScreenUtil().setHeight(3), ScreenUtil().setHeight(65)) : const Text(''),
+                          WidgetUtils.onlyText(
+                              '骑士',
+                              StyleUtils.getCommonTextStyle(
+                                  color: _currentIndex == 1
+                                      ? Colors.white
+                                      : MyColors.zhuangbanWZ,
+                                  fontSize: ScreenUtil().setSp(29),
+                                  fontWeight: FontWeight.bold)),
+                          WidgetUtils.commonSizedBox(8, 0),
+                          _currentIndex == 1
+                              ? WidgetUtils.showImages(
+                                  'assets/images/guizu_xian.png',
+                                  ScreenUtil().setHeight(3),
+                                  ScreenUtil().setHeight(65))
+                              : WidgetUtils.commonSizedBox(
+                                  ScreenUtil().setHeight(3),
+                                  ScreenUtil().setHeight(65)),
                         ],
                       ),
                     ),
-                    WidgetUtils.commonSizedBox(0, 20),
+                    WidgetUtils.commonSizedBox(0, 15),
                     GestureDetector(
                       onTap: (() {
                         setState(() {
                           _currentIndex = 2;
                           _controller.jumpToPage(2);
+                          priceDou=9000;
+                          priceYue=900;
                         });
                       }),
                       child: Column(
                         children: [
-                          WidgetUtils.onlyText('伯爵', StyleUtils.getCommonTextStyle(
-                              color: _currentIndex == 2
-                                  ? Colors.white
-                                  : MyColors.zhuangbanWZ,
-                              fontSize: ScreenUtil().setSp(29),
-                              fontWeight: FontWeight.bold)),
-                          _currentIndex == 2 ? WidgetUtils.showImages('assets/images/zhuxiao.jpg', ScreenUtil().setHeight(3), ScreenUtil().setHeight(65)) : const Text(''),
+                          WidgetUtils.onlyText(
+                              '伯爵',
+                              StyleUtils.getCommonTextStyle(
+                                  color: _currentIndex == 2
+                                      ? Colors.white
+                                      : MyColors.zhuangbanWZ,
+                                  fontSize: ScreenUtil().setSp(29),
+                                  fontWeight: FontWeight.bold)),
+                          WidgetUtils.commonSizedBox(8, 0),
+                          _currentIndex == 2
+                              ? WidgetUtils.showImages(
+                                  'assets/images/guizu_xian.png',
+                                  ScreenUtil().setHeight(3),
+                                  ScreenUtil().setHeight(65))
+                              : WidgetUtils.commonSizedBox(
+                                  ScreenUtil().setHeight(3),
+                                  ScreenUtil().setHeight(65)),
                         ],
                       ),
                     ),
-                    WidgetUtils.commonSizedBox(0, 20),
+                    WidgetUtils.commonSizedBox(0, 15),
                     GestureDetector(
                       onTap: (() {
                         setState(() {
                           _currentIndex = 3;
                           _controller.jumpToPage(3);
+                          priceDou=50000;
+                          priceYue=5000;
                         });
                       }),
                       child: Column(
                         children: [
-                          WidgetUtils.onlyText('侯爵', StyleUtils.getCommonTextStyle(
-                              color: _currentIndex == 3
-                                  ? Colors.white
-                                  : MyColors.zhuangbanWZ,
-                              fontSize: ScreenUtil().setSp(29),
-                              fontWeight: FontWeight.bold)),
-                          _currentIndex == 3 ? WidgetUtils.showImages('assets/images/zhuxiao.jpg', ScreenUtil().setHeight(3), ScreenUtil().setHeight(65)) : const Text(''),
+                          WidgetUtils.onlyText(
+                              '侯爵',
+                              StyleUtils.getCommonTextStyle(
+                                  color: _currentIndex == 3
+                                      ? Colors.white
+                                      : MyColors.zhuangbanWZ,
+                                  fontSize: ScreenUtil().setSp(29),
+                                  fontWeight: FontWeight.bold)),
+                          WidgetUtils.commonSizedBox(8, 0),
+                          _currentIndex == 3
+                              ? WidgetUtils.showImages(
+                                  'assets/images/guizu_xian.png',
+                                  ScreenUtil().setHeight(3),
+                                  ScreenUtil().setHeight(65))
+                              : WidgetUtils.commonSizedBox(
+                                  ScreenUtil().setHeight(3),
+                                  ScreenUtil().setHeight(65)),
                         ],
                       ),
                     ),
-                    WidgetUtils.commonSizedBox(0, 20),
+                    WidgetUtils.commonSizedBox(0, 15),
                     GestureDetector(
                       onTap: (() {
                         setState(() {
                           _currentIndex = 4;
                           _controller.jumpToPage(4);
+                          priceDou=120000;
+                          priceYue=12000;
                         });
                       }),
                       child: Column(
                         children: [
-                          WidgetUtils.onlyText('公爵', StyleUtils.getCommonTextStyle(
-                              color: _currentIndex == 4
-                                  ? Colors.white
-                                  : MyColors.zhuangbanWZ,
-                              fontSize: ScreenUtil().setSp(29),
-                              fontWeight: FontWeight.bold)),
-                          _currentIndex == 4 ? WidgetUtils.showImages('assets/images/zhuxiao.jpg', ScreenUtil().setHeight(3), ScreenUtil().setHeight(65)) : const Text(''),
+                          WidgetUtils.onlyText(
+                              '公爵',
+                              StyleUtils.getCommonTextStyle(
+                                  color: _currentIndex == 4
+                                      ? Colors.white
+                                      : MyColors.zhuangbanWZ,
+                                  fontSize: ScreenUtil().setSp(29),
+                                  fontWeight: FontWeight.bold)),
+                          WidgetUtils.commonSizedBox(8, 0),
+                          _currentIndex == 4
+                              ? WidgetUtils.showImages(
+                                  'assets/images/guizu_xian.png',
+                                  ScreenUtil().setHeight(3),
+                                  ScreenUtil().setHeight(65))
+                              : WidgetUtils.commonSizedBox(
+                                  ScreenUtil().setHeight(3),
+                                  ScreenUtil().setHeight(65)),
                         ],
                       ),
                     ),
-                    WidgetUtils.commonSizedBox(0, 20),
+                    WidgetUtils.commonSizedBox(0, 15),
                     GestureDetector(
                       onTap: (() {
                         setState(() {
                           _currentIndex = 5;
                           _controller.jumpToPage(5);
+                          priceDou=360000;
+                          priceYue=36000;
                         });
                       }),
                       child: Column(
                         children: [
-                          WidgetUtils.onlyText('国王', StyleUtils.getCommonTextStyle(
-                              color: _currentIndex == 5
-                                  ? Colors.white
-                                  : MyColors.zhuangbanWZ,
-                              fontSize: ScreenUtil().setSp(29),
-                              fontWeight: FontWeight.bold)),
-                          _currentIndex == 5 ? WidgetUtils.showImages('assets/images/zhuxiao.jpg', ScreenUtil().setHeight(3), ScreenUtil().setHeight(65)) : const Text(''),
+                          WidgetUtils.onlyText(
+                              '国王',
+                              StyleUtils.getCommonTextStyle(
+                                  color: _currentIndex == 5
+                                      ? Colors.white
+                                      : MyColors.zhuangbanWZ,
+                                  fontSize: ScreenUtil().setSp(29),
+                                  fontWeight: FontWeight.bold)),
+                          WidgetUtils.commonSizedBox(8, 0),
+                          _currentIndex == 5
+                              ? WidgetUtils.showImages(
+                                  'assets/images/guizu_xian.png',
+                                  ScreenUtil().setHeight(3),
+                                  ScreenUtil().setHeight(65))
+                              : WidgetUtils.commonSizedBox(
+                                  ScreenUtil().setHeight(3),
+                                  ScreenUtil().setHeight(65)),
                         ],
                       ),
                     ),
-                    WidgetUtils.commonSizedBox(0, 20),
+                    WidgetUtils.commonSizedBox(0, 15),
                     GestureDetector(
                       onTap: (() {
                         setState(() {
                           _currentIndex = 6;
                           _controller.jumpToPage(6);
+                          priceDou=580000;
+                          priceYue=58000;
                         });
                       }),
                       child: Column(
                         children: [
-                          WidgetUtils.onlyText('帝王', StyleUtils.getCommonTextStyle(
-                              color: _currentIndex == 6
-                                  ? Colors.white
-                                  : MyColors.zhuangbanWZ,
-                              fontSize: ScreenUtil().setSp(29),
-                              fontWeight: FontWeight.bold)),
-                          _currentIndex == 6 ? WidgetUtils.showImages('assets/images/zhuxiao.jpg', ScreenUtil().setHeight(3), ScreenUtil().setHeight(65)) : const Text(''),
+                          WidgetUtils.onlyText(
+                              '帝王',
+                              StyleUtils.getCommonTextStyle(
+                                  color: _currentIndex == 6
+                                      ? Colors.white
+                                      : MyColors.zhuangbanWZ,
+                                  fontSize: ScreenUtil().setSp(29),
+                                  fontWeight: FontWeight.bold)),
+                          WidgetUtils.commonSizedBox(8, 0),
+                          _currentIndex == 6
+                              ? WidgetUtils.showImages(
+                                  'assets/images/guizu_xian.png',
+                                  ScreenUtil().setHeight(3),
+                                  ScreenUtil().setHeight(65))
+                              : WidgetUtils.commonSizedBox(
+                                  ScreenUtil().setHeight(3),
+                                  ScreenUtil().setHeight(65)),
                         ],
                       ),
                     ),
                   ],
                 ),
-              ),
-              WidgetUtils.commonSizedBox(10, 0),
-              Expanded(
-                child: PageView(
-                  controller: _controller,
-                  onPageChanged: (index) {
-                    setState(() {
-                      // 更新当前的索引值
-                      _currentIndex = index;
-                    });
-                  },
-                  children: const [
-                    YongshiPage(),
-                    QishiPage(),
-                    BojuePage(),
-                    HoujuePage(),
-                    GongjuePage(),
-                    GuowangPage(),
-                    DiwangPage()
-                  ],
+                WidgetUtils.commonSizedBox(10, 0),
+                Expanded(
+                  child: PageView(
+                    controller: _controller,
+                    onPageChanged: (index) {
+                      setState(() {
+                        // 更新当前的索引值
+                        _currentIndex = index;
+                        if(index == 0){
+                          priceDou=360;
+                          priceYue=36;
+                        }else if(index == 1){
+                          priceDou=2800;
+                          priceYue=280;
+                        }else if(index == 2){
+                          priceDou=9000;
+                          priceYue=900;
+                        }else if(index == 3){
+                          priceDou=50000;
+                          priceYue=5000;
+                        }else if(index == 4){
+                          priceDou=120000;
+                          priceYue=12000;
+                        }else if(index == 5){
+                          priceDou=360000;
+                          priceYue=36000;
+                        }else if(index == 6){
+                          priceDou=580000;
+                          priceYue=58000;
+                        }
+                      });
+                    },
+                    children: const [
+                      YongshiPage(),
+                      QishiPage(),
+                      BojuePage(),
+                      HoujuePage(),
+                      GongjuePage(),
+                      GuowangPage(),
+                      DiwangPage()
+                    ],
+                  ),
                 ),
-              ),
-              WidgetUtils.commonSizedBox(80, 0),
-            ],
+                WidgetUtils.commonSizedBox(80, 0),
+              ],
+            ),
           ),
           Container(
             height: ScreenUtil().setHeight(206),
@@ -271,44 +410,44 @@ class _TequanPageState extends State<TequanPage> {
                 WidgetUtils.commonSizedBox(10, 0),
                 Expanded(
                     child: Row(
-                      children: [
-                        WidgetUtils.commonSizedBox(0, 20),
-                        WidgetUtils.onlyText(
-                            '开通 ',
-                            StyleUtils.getCommonTextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: ScreenUtil().setSp(33))),
-                        WidgetUtils.onlyText(
-                            '36',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.guizuYellow,
-                                fontWeight: FontWeight.bold,
-                                fontSize: ScreenUtil().setSp(33))),
-                        WidgetUtils.onlyText(
-                            ' 元 / 月',
-                            StyleUtils.getCommonTextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: ScreenUtil().setSp(33))),
-                        WidgetUtils.commonSizedBox(0, 20),
-                        WidgetUtils.onlyText(
-                            '赠送 ',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.guizuGrey,
-                                fontSize: ScreenUtil().setSp(25))),
-                        WidgetUtils.onlyText(
-                            '360',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.guizuYellow,
-                                fontSize: ScreenUtil().setSp(25))),
-                        WidgetUtils.onlyText(
-                            ' 金豆',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.guizuGrey,
-                                fontSize: ScreenUtil().setSp(25))),
-                      ],
-                    )),
+                  children: [
+                    WidgetUtils.commonSizedBox(0, 20),
+                    WidgetUtils.onlyText(
+                        '开通 ',
+                        StyleUtils.getCommonTextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: ScreenUtil().setSp(33))),
+                    WidgetUtils.onlyText(
+                        priceYue.toString(),
+                        StyleUtils.getCommonTextStyle(
+                            color: MyColors.guizuYellow,
+                            fontWeight: FontWeight.bold,
+                            fontSize: ScreenUtil().setSp(33))),
+                    WidgetUtils.onlyText(
+                        ' 元 / 月',
+                        StyleUtils.getCommonTextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: ScreenUtil().setSp(33))),
+                    WidgetUtils.commonSizedBox(0, 20),
+                    WidgetUtils.onlyText(
+                        '赠送 ',
+                        StyleUtils.getCommonTextStyle(
+                            color: MyColors.guizuGrey,
+                            fontSize: ScreenUtil().setSp(25))),
+                    WidgetUtils.onlyText(
+                        priceDou.toString(),
+                        StyleUtils.getCommonTextStyle(
+                            color: MyColors.guizuYellow,
+                            fontSize: ScreenUtil().setSp(25))),
+                    WidgetUtils.onlyText(
+                        ' 金豆',
+                        StyleUtils.getCommonTextStyle(
+                            color: MyColors.guizuGrey,
+                            fontSize: ScreenUtil().setSp(25))),
+                  ],
+                )),
                 GestureDetector(
                   onTap: (() {}),
                   child: Container(
@@ -322,7 +461,12 @@ class _TequanPageState extends State<TequanPage> {
                       //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                       borderRadius: BorderRadius.all(Radius.circular(37.0)),
                     ),
-                    child: WidgetUtils.onlyTextCenter('开通贵族', StyleUtils.getCommonTextStyle(color: MyColors.guizuYellow2, fontSize: ScreenUtil().setSp(33), fontWeight: FontWeight.bold)),
+                    child: WidgetUtils.onlyTextCenter(
+                        '开通贵族',
+                        StyleUtils.getCommonTextStyle(
+                            color: MyColors.guizuYellow2,
+                            fontSize: ScreenUtil().setSp(33),
+                            fontWeight: FontWeight.bold)),
                   ),
                 ),
                 WidgetUtils.commonSizedBox(20, 0),

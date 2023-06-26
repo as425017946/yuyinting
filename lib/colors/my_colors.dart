@@ -86,7 +86,27 @@ class MyColors{
   static const Color roomID = Color(0xFFBFCCE9);
   static const Color roomHot = Color(0xFF18293E);
   static const Color roomMaiWZ = Color(0xFF97A2AE);
-  static const Color roomMaiLiao = Color(0xFF3886B7);
+  static const Color roomMaiLiao = Color(0xFF5590B1);
+  static const Color roomMaiLiao2 = Color(0xFF253F55);
+  static const Color roomMaiLiao3 = Color(0xFF69809F);
+  static const Color roomShangMaiWZ = Color(0xFFCCD9F7);
+  static const Color roomTCBlack = Color(0xFF07061E);
+  static const Color roomTCWZ1 = Color(0xFF858CA9);
+  static const Color roomTCWZ2 = Color(0xFFD5E0FF);
+  static const Color roomTCWZ3 = Color(0xFF8C94B3);
+  static const Color roomTCYellow = Color(0xFFF7D465);
+  static const Color roomTCWhitw = Color(0xFFD2DDFC);
+  static const Color roomPHWZBlack = Color(0xFF14222E);
+  static const Color roomBlue = Color(0xFF3982F7);
+  static const Color roomMessageYellow = Color(0xFFCEB258);
+  static const Color roomMessageYellow2 = Color(0xFFFFDC6D);
+  static const Color roomMessageBlackBG = Color(0xFF201F3B);
+  static const Color roomMessageLiaotian = Color(0xFF43456E);
+  static const Color roomPassXian = Color(0xFF363657);
+  static const Color roomCirle = Color(0xFF2F2876);
+
+
+
 
 
 }

@@ -397,10 +397,7 @@ class WidgetUtils {
           borderRadius: BorderRadius.all(Radius.circular(25)),
         ),
         onPressed: (() {
-          // eventBus.fire(SubmitButtonBack(title: title));
-          // if (MyUtils.checkClick()) {
-          //   eventBus.fire(SubmitButtonBack(title: title));
-          // }
+          eventBus.fire(SubmitButtonBack(title: title));
         }),
         child: Text(
           title,
@@ -490,7 +487,7 @@ class WidgetUtils {
   static Widget CircleImageNet(
       double height, double width, double radius, String url) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
+      borderRadius: BorderRadius.circular(radius),
       child: Image.network(
         url,
         width: width,

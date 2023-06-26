@@ -55,6 +55,8 @@ import '../pages/mine/who_lock_me_page.dart';
 import '../pages/mine/zhuangban/shop_page.dart';
 import '../pages/mine/zhuangban/zhuangban_page.dart';
 import '../pages/room/room_page.dart';
+import '../pages/room/room_people_info_page.dart';
+import '../pages/room/room_redu_page.dart';
 import '../pages/trends/trends_hi_page.dart';
 import '../pages/trends/trends_send_page.dart';
 
@@ -119,6 +121,8 @@ var staticRoutes = {
   'ShopPage':(context) => const ShopPage(),// 装扮商城
   'TequanPage':(context) => const TequanPage(),// 特权页面
   'RoomPage':(context) => RoomPage(type: 0,),// 房间页面
+  'RoomPeopleInfoPage':(context) => const RoomPeopleInfoPage(),// 房间他人信息详情
+  'RoomReDuPage':(context) => const RoomReDuPage(),// 房间内的热度
 
 
 

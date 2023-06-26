@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yuyinting/pages/room/room_ts_mima_page.dart';
 
 import '../../colors/my_colors.dart';
 import '../../utils/style_utils.dart';
@@ -20,6 +21,13 @@ class _ShoucangPageState extends State<ShoucangPage> {
   Widget _initlistdata(context, index) {
     return GestureDetector(
       onTap: ((){
+        // Future.delayed(const Duration(seconds: 0), (){
+        //   Navigator.of(context).push(PageRouteBuilder(
+        //       opaque: false,
+        //       pageBuilder: (context, animation, secondaryAnimation) {
+        //         return const RoomTSMiMaPage();
+        //       }));
+        // });
         if(index%2 == 0){
           Future.delayed(const Duration(seconds: 0), (){
             Navigator.of(context).push(PageRouteBuilder(

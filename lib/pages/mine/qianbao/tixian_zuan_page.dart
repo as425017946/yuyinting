@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yuyinting/pages/mine/qianbao/pay_mima_page.dart';
+import 'package:yuyinting/utils/log_util.dart';
 
 import '../../../colors/my_colors.dart';
+import '../../../utils/event_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 
@@ -18,12 +21,32 @@ class _TixianZuanPageState extends State<TixianZuanPage> {
   int type = 0;
   TextEditingController controllerAccount = TextEditingController();
   TextEditingController controllerNumber = TextEditingController();
-
+  var listen;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     appBar = WidgetUtils.getAppBar('提现', true, context, false, 0);
+
+    listen = eventBus.on<SubmitButtonBack>().listen((event) {
+      LogE('申请提现***${event.title}');
+      if(event.title == '申请提现'){
+        Future.delayed(const Duration(seconds: 0), () {
+          Navigator.of(context).push(PageRouteBuilder(
+              opaque: false,
+              pageBuilder: (context, animation, secondaryAnimation) {
+                return const PayMiMaPage();
+              }));
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    listen.cancel();
   }
 
   @override
@@ -254,7 +277,8 @@ class _TixianZuanPageState extends State<TixianZuanPage> {
                       WidgetUtils.commonSizedBox(20, 20),
                     ],
                   ),
-            WidgetUtils.commonSubmitButton2('申请提现', MyColors.walletWZBlue),
+            WidgetUtils.commonSubmitButton2(
+                '申请提现', MyColors.walletWZBlue),
           ],
         ),
       )),

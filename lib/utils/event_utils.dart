@@ -22,3 +22,10 @@ class InfoBack {
 
   InfoBack({required this.info});
 }
+
+///贵族使用
+class GuizuButtonBack {
+  int index;
+  String title;
+  GuizuButtonBack({required this.index, required this.title});
+}

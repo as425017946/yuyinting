@@ -1,0 +1,116 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:yuyinting/utils/widget_utils.dart';
+import '../../utils/log_util.dart';
+import '../../utils/style_utils.dart';
+
+/// 进入房间前输入密码
+class RoomTSMiMaPage extends StatefulWidget {
+  const RoomTSMiMaPage({super.key});
+
+  @override
+  State<RoomTSMiMaPage> createState() => _RoomTSMiMaPageState();
+}
+
+class _RoomTSMiMaPageState extends State<RoomTSMiMaPage> {
+  TextEditingController textEditingController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: Colors.black54,
+        resizeToAvoidBottomInset: false, // 解决键盘顶起页面
+        body: Column(
+          children: [
+            Expanded(
+              child: GestureDetector(
+                onTap: (() {
+                  Navigator.pop(context);
+                }),
+                child: Container(
+                  height: double.infinity,
+                  width: double.infinity,
+                  color: Colors.transparent,
+                ),
+              ),
+            ),
+            Container(
+              width: ScreenUtil().setHeight(506),
+              height: ScreenUtil().setHeight(262),
+              decoration: const BoxDecoration(
+                //设置Container修饰
+                image: DecorationImage(
+                  //背景图片修饰
+                  image: AssetImage("assets/images/room_fangmm.png"),
+                  fit: BoxFit.fill, //覆盖
+                ),
+              ),
+              child: Column(
+                children: [
+                  WidgetUtils.commonSizedBox(20, 0),
+                  WidgetUtils.onlyTextCenter(
+                      '请输入房间密码',
+                      StyleUtils.getCommonTextStyle(
+                          color: Colors.white,
+                          fontSize: ScreenUtil().setSp(29))),
+                  WidgetUtils.commonSizedBox(50, 0),
+                  Container(
+                    width: double.infinity,
+                    color: Colors.transparent,
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.only(left: ScreenUtil().setHeight(80), right: ScreenUtil().setHeight(80),),
+                    child: PinCodeTextField(
+                      length: 4,
+                      inputFormatters: [
+                        // 表示只能输入字母大写小写都可以
+                        FilteringTextInputFormatter.allow(RegExp('[0-9]')),
+                      ],
+                      // animationDuration: const Duration(milliseconds: 300),
+                      controller: textEditingController,
+                      onChanged: (value) {
+                        LogE('返回数据$value');
+                      },
+                      textStyle: StyleUtils.getCommonTextStyle(
+                          color: Colors.white,
+                          fontSize: ScreenUtil().setSp(38)),
+                      appContext: context,
+                      keyboardType: TextInputType.number,
+                      autoFocus: true,
+                      // enableActiveFill: true,
+                      pinTheme: PinTheme(
+                        shape: PinCodeFieldShape.box,
+                        borderRadius: BorderRadius.circular(2),
+                        fieldHeight: ScreenUtil().setHeight(64),
+                        fieldWidth: ScreenUtil().setHeight(43),
+                        activeFillColor: Colors.transparent,
+                        //填充背景色
+                        activeColor: Colors.white,
+                        //下划线颜色
+                        inactiveFillColor: Colors.white,
+                        inactiveColor: Colors.white,
+                        selectedColor: Colors.white,
+                        selectedFillColor: Colors.white,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Expanded(
+              child: GestureDetector(
+                onTap: (() {
+                  Navigator.pop(context);
+                }),
+                child: Container(
+                  height: double.infinity,
+                  width: double.infinity,
+                  color: Colors.transparent,
+                ),
+              ),
+            ),
+          ],
+        ));
+  }
+}
