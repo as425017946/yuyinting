@@ -5,6 +5,7 @@ import '../../../colors/my_colors.dart';
 import '../../../utils/event_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
+
 class HoujuePage extends StatefulWidget {
   const HoujuePage({Key? key}) : super(key: key);
 
@@ -12,7 +13,7 @@ class HoujuePage extends StatefulWidget {
   State<HoujuePage> createState() => _HoujuePageState();
 }
 
-class _HoujuePageState extends State<HoujuePage>   with TickerProviderStateMixin {
+class _HoujuePageState extends State<HoujuePage> with TickerProviderStateMixin {
   /// 会重复播放的控制器
   late AnimationController _repeatController;
 
@@ -49,10 +50,10 @@ class _HoujuePageState extends State<HoujuePage>   with TickerProviderStateMixin
           children: [
             WidgetUtils.commonSizedBox(0, 15),
             GestureDetector(
-              onTap: ((){
+              onTap: (() {
                 eventBus.fire(GuizuButtonBack(index: 3, title: '左'));
               }),
-              child:  WidgetUtils.showImages('assets/images/guizu_left.png',
+              child: WidgetUtils.showImages('assets/images/guizu_left.png',
                   ScreenUtil().setHeight(52), ScreenUtil().setHeight(26)),
             ),
             const Expanded(child: Text('')),
@@ -72,7 +73,7 @@ class _HoujuePageState extends State<HoujuePage>   with TickerProviderStateMixin
             ),
             const Expanded(child: Text('')),
             GestureDetector(
-              onTap: ((){
+              onTap: (() {
                 eventBus.fire(GuizuButtonBack(index: 3, title: '右'));
               }),
               child: WidgetUtils.showImages('assets/images/guizu_right.png',
@@ -91,138 +92,236 @@ class _HoujuePageState extends State<HoujuePage>   with TickerProviderStateMixin
 
         /// 特权展示
         WidgetUtils.commonSizedBox(70, 0),
-        Row(
-          children: [
-            WidgetUtils.commonSizedBox(0, 20),
-            SizedBox(
-                width: ScreenUtil().setWidth(200),
-                child: Column(
+        SizedBox(
+          height: ScreenUtil().setHeight(500),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Row(
                   children: [
-                    WidgetUtils.showImages(
-                        'assets/images/guizu_xunzhang.png',
-                        ScreenUtil().setHeight(103),
-                        ScreenUtil().setHeight(103)),
-                    WidgetUtils.onlyTextCenter(
-                        '贵族专属勋章',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.guizuYellow,
-                            fontSize: ScreenUtil().setSp(25))),
+                    WidgetUtils.commonSizedBox(0, 20),
+                    SizedBox(
+                        width: ScreenUtil().setWidth(200),
+                        child: Column(
+                          children: [
+                            WidgetUtils.showImages(
+                                'assets/images/guizu_xunzhang.png',
+                                ScreenUtil().setHeight(103),
+                                ScreenUtil().setHeight(103)),
+                            WidgetUtils.onlyTextCenter(
+                                '贵族专属勋章',
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.guizuYellow,
+                                    fontSize: ScreenUtil().setSp(25))),
+                          ],
+                        )),
+                    const Expanded(child: Text('')),
+                    SizedBox(
+                        width: ScreenUtil().setWidth(200),
+                        child: Column(
+                          children: [
+                            WidgetUtils.showImages(
+                                'assets/images/guizu_guangquan.png',
+                                ScreenUtil().setHeight(103),
+                                ScreenUtil().setHeight(103)),
+                            WidgetUtils.onlyTextCenter(
+                                '发言光圈',
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.guizuYellow,
+                                    fontSize: ScreenUtil().setSp(25))),
+                          ],
+                        )),
+                    const Expanded(child: Text('')),
+                    SizedBox(
+                        width: ScreenUtil().setWidth(200),
+                        child: Column(
+                          children: [
+                            WidgetUtils.showImages(
+                                'assets/images/guizu_fayan.png',
+                                ScreenUtil().setHeight(103),
+                                ScreenUtil().setHeight(103)),
+                            WidgetUtils.onlyTextCenter(
+                                '无发言间隔',
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.guizuYellow,
+                                    fontSize: ScreenUtil().setSp(25))),
+                          ],
+                        )),
+                    WidgetUtils.commonSizedBox(0, 20),
                   ],
-                )),
-            const Expanded(child: Text('')),
-            SizedBox(
-                width: ScreenUtil().setWidth(200),
-                child: Column(
+                ),
+                WidgetUtils.commonSizedBox(10, 0),
+                Row(
                   children: [
-                    WidgetUtils.showImages(
-                        'assets/images/guizu_guangquan.png',
-                        ScreenUtil().setHeight(103),
-                        ScreenUtil().setHeight(103)),
-                    WidgetUtils.onlyTextCenter(
-                        '发言光圈',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.guizuYellow,
-                            fontSize: ScreenUtil().setSp(25))),
+                    WidgetUtils.commonSizedBox(0, 20),
+                    SizedBox(
+                        width: ScreenUtil().setWidth(200),
+                        child: Column(
+                          children: [
+                            WidgetUtils.showImages(
+                                'assets/images/guizu_liwu.png',
+                                ScreenUtil().setHeight(103),
+                                ScreenUtil().setHeight(103)),
+                            WidgetUtils.onlyTextCenter(
+                                '贵族专属礼物',
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.guizuYellow,
+                                    fontSize: ScreenUtil().setSp(25))),
+                          ],
+                        )),
+                    const Expanded(child: Text('')),
+                    SizedBox(
+                        width: ScreenUtil().setWidth(200),
+                        child: Column(
+                          children: [
+                            WidgetUtils.showImages(
+                                'assets/images/guizu_guangbo.png',
+                                ScreenUtil().setHeight(103),
+                                ScreenUtil().setHeight(103)),
+                            WidgetUtils.onlyTextCenter(
+                                '开通公屏广播',
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.guizuYellow,
+                                    fontSize: ScreenUtil().setSp(25))),
+                          ],
+                        )),
+                    const Expanded(child: Text('')),
+                    SizedBox(
+                        width: ScreenUtil().setWidth(200),
+                        child: Column(
+                          children: [
+                            WidgetUtils.showImages(
+                                'assets/images/guizu_texiao.png',
+                                ScreenUtil().setHeight(103),
+                                ScreenUtil().setHeight(103)),
+                            WidgetUtils.onlyTextCenter(
+                                '进场特效',
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.guizuYellow,
+                                    fontSize: ScreenUtil().setSp(25))),
+                          ],
+                        )),
+                    WidgetUtils.commonSizedBox(0, 20),
                   ],
-                )),
-            const Expanded(child: Text('')),
-            SizedBox(
-                width: ScreenUtil().setWidth(200),
-                child: Column(
+                ),
+                WidgetUtils.commonSizedBox(10, 0),
+                Row(
                   children: [
-                    WidgetUtils.showImages(
-                        'assets/images/guizu_fayan.png',
-                        ScreenUtil().setHeight(103),
-                        ScreenUtil().setHeight(103)),
-                    WidgetUtils.onlyTextCenter(
-                        '无发言间隔',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.guizuYellow,
-                            fontSize: ScreenUtil().setSp(25))),
+                    WidgetUtils.commonSizedBox(0, 20),
+                    SizedBox(
+                        width: ScreenUtil().setWidth(200),
+                        child: Column(
+                          children: [
+                            WidgetUtils.showImages(
+                                'assets/images/guizu_yanse.png',
+                                ScreenUtil().setHeight(103),
+                                ScreenUtil().setHeight(103)),
+                            WidgetUtils.onlyTextCenter(
+                                '昵称颜色特权',
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.guizuYellow,
+                                    fontSize: ScreenUtil().setSp(25))),
+                          ],
+                        )),
+                    const Expanded(child: Text('')),
+                    SizedBox(
+                        width: ScreenUtil().setWidth(200),
+                        child: Column(
+                          children: [
+                            WidgetUtils.showImages(
+                                'assets/images/guizu_zuoqi.png',
+                                ScreenUtil().setHeight(103),
+                                ScreenUtil().setHeight(103)),
+                            WidgetUtils.onlyTextCenter(
+                                '专属贵族坐骑',
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.guizuYellow,
+                                    fontSize: ScreenUtil().setSp(25))),
+                          ],
+                        )),
+                    const Expanded(child: Text('')),
+                    SizedBox(
+                        width: ScreenUtil().setWidth(200),
+                        child: Column(
+                          children: [
+                            WidgetUtils.showImages(
+                                'assets/images/guizu_jiasu.png',
+                                ScreenUtil().setHeight(103),
+                                ScreenUtil().setHeight(103)),
+                            WidgetUtils.onlyTextCenter(
+                                '升级经验加速',
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.guizuYellow,
+                                    fontSize: ScreenUtil().setSp(25))),
+                          ],
+                        )),
+                    WidgetUtils.commonSizedBox(0, 20),
                   ],
-                )),
-            WidgetUtils.commonSizedBox(0, 20),
-          ],
-        ),
-        WidgetUtils.commonSizedBox(10, 0),
-        Row(
-          children: [
-            WidgetUtils.commonSizedBox(0, 20),
-            SizedBox(
-                width: ScreenUtil().setWidth(200),
-                child: Column(
+                ),
+                WidgetUtils.commonSizedBox(10, 0),
+                Row(
                   children: [
-                    WidgetUtils.showImages(
-                        'assets/images/guizu_liwu.png',
-                        ScreenUtil().setHeight(103),
-                        ScreenUtil().setHeight(103)),
-                    WidgetUtils.onlyTextCenter(
-                        '贵族专属礼物',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.guizuYellow,
-                            fontSize: ScreenUtil().setSp(25))),
+                    WidgetUtils.commonSizedBox(0, 20),
+                    SizedBox(
+                        width: ScreenUtil().setWidth(200),
+                        child: Column(
+                          children: [
+                            WidgetUtils.showImages(
+                                'assets/images/guizu_renqi.png',
+                                ScreenUtil().setHeight(103),
+                                ScreenUtil().setHeight(103)),
+                            WidgetUtils.onlyTextCenter(
+                                '房间人气加成',
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.guizuYellow,
+                                    fontSize: ScreenUtil().setSp(25))),
+                          ],
+                        )),
+                    const Expanded(child: Text('')),
+                    SizedBox(
+                        width: ScreenUtil().setWidth(200),
+                        child: Column(
+                          children: [
+                            WidgetUtils.showImages(
+                                'assets/images/guizu_touxiang.png',
+                                ScreenUtil().setHeight(103),
+                                ScreenUtil().setHeight(103)),
+                            WidgetUtils.onlyTextCenter(
+                                '贵族头像框',
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.guizuYellow,
+                                    fontSize: ScreenUtil().setSp(25))),
+                          ],
+                        )),
+                    const Expanded(child: Text('')),
+                    Opacity(
+                      opacity: 0,
+                      child: SizedBox(
+                          width: ScreenUtil().setWidth(200),
+                          child: Column(
+                            children: [
+                              WidgetUtils.showImages(
+                                  'assets/images/guizu_touxiang.png',
+                                  ScreenUtil().setHeight(103),
+                                  ScreenUtil().setHeight(103)),
+                              WidgetUtils.onlyTextCenter(
+                                  '贵族头像框',
+                                  StyleUtils.getCommonTextStyle(
+                                      color: MyColors.guizuYellow,
+                                      fontSize: ScreenUtil().setSp(25))),
+                            ],
+                          )),
+                    ),
+                    WidgetUtils.commonSizedBox(0, 20),
                   ],
-                )),
-            const Expanded(child: Text('')),
-            SizedBox(
-                width: ScreenUtil().setWidth(200),
-                child: Column(
-                  children: [
-                    WidgetUtils.showImages(
-                        'assets/images/guizu_guangbo.png',
-                        ScreenUtil().setHeight(103),
-                        ScreenUtil().setHeight(103)),
-                    WidgetUtils.onlyTextCenter(
-                        '开通公屏广播',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.guizuYellow,
-                            fontSize: ScreenUtil().setSp(25))),
-                  ],
-                )),
-            const Expanded(child: Text('')),
-            SizedBox(
-                width: ScreenUtil().setWidth(200),
-                child: Column(
-                  children: [
-                    WidgetUtils.showImages(
-                        'assets/images/guizu_texiao.png',
-                        ScreenUtil().setHeight(103),
-                        ScreenUtil().setHeight(103)),
-                    WidgetUtils.onlyTextCenter(
-                        '进场特效',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.guizuYellow,
-                            fontSize: ScreenUtil().setSp(25))),
-                  ],
-                )),
-            WidgetUtils.commonSizedBox(0, 20),
-          ],
-        ),
-        WidgetUtils.commonSizedBox(10, 0),
-        Row(
-          children: [
-            WidgetUtils.commonSizedBox(0, 20),
-            SizedBox(
-                width: ScreenUtil().setWidth(200),
-                child: Column(
-                  children: [
-                    WidgetUtils.showImages(
-                        'assets/images/guizu_yanse.png',
-                        ScreenUtil().setHeight(103),
-                        ScreenUtil().setHeight(103)),
-                    WidgetUtils.onlyTextCenter(
-                        '昵称颜色特权',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.guizuYellow,
-                            fontSize: ScreenUtil().setSp(25))),
-                  ],
-                )),
-            const Expanded(child: Text('')),
-          ],
+                ),
+                WidgetUtils.commonSizedBox(10, 0),
+                WidgetUtils.commonSizedBox(50, 0),
+              ],
+            ),
+          ),
         ),
       ],
     );
   }
 }
-
-

@@ -164,6 +164,60 @@ class _QishiPageState extends State<QishiPage>  with TickerProviderStateMixin {
                   ],
                 )),
             const Expanded(child: Text('')),
+            SizedBox(
+                width: ScreenUtil().setWidth(200),
+                child: Column(
+                  children: [
+                    WidgetUtils.showImages(
+                        'assets/images/guizu_jiasu.png',
+                        ScreenUtil().setHeight(103),
+                        ScreenUtil().setHeight(103)),
+                    WidgetUtils.onlyTextCenter(
+                        '升级经验加速',
+                        StyleUtils.getCommonTextStyle(
+                            color: MyColors.guizuYellow,
+                            fontSize: ScreenUtil().setSp(25))),
+                  ],
+                )),
+            const Expanded(child: Text('')),
+            SizedBox(
+                width: ScreenUtil().setWidth(200),
+                child: Column(
+                  children: [
+                    WidgetUtils.showImages(
+                        'assets/images/guizu_renqi.png',
+                        ScreenUtil().setHeight(103),
+                        ScreenUtil().setHeight(103)),
+                    WidgetUtils.onlyTextCenter(
+                        '房间人气加成',
+                        StyleUtils.getCommonTextStyle(
+                            color: MyColors.guizuYellow,
+                            fontSize: ScreenUtil().setSp(25))),
+                  ],
+                )),
+            WidgetUtils.commonSizedBox(0, 20),
+          ],
+        ),
+        WidgetUtils.commonSizedBox(10, 0),
+        Row(
+          children: [
+            WidgetUtils.commonSizedBox(0, 20),
+            SizedBox(
+                width: ScreenUtil().setWidth(200),
+                child: Column(
+                  children: [
+                    WidgetUtils.showImages(
+                        'assets/images/guizu_touxiang.png',
+                        ScreenUtil().setHeight(103),
+                        ScreenUtil().setHeight(103)),
+                    WidgetUtils.onlyTextCenter(
+                        '贵族头像框',
+                        StyleUtils.getCommonTextStyle(
+                            color: MyColors.guizuYellow,
+                            fontSize: ScreenUtil().setSp(25))),
+                  ],
+                )),
+            const Expanded(child: Text('')),
           ],
         ),
       ],

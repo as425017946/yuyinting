@@ -1,8 +1,11 @@
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:svgaplayer_flutter/player.dart';
 import 'package:yuyinting/colors/my_colors.dart';
+import 'package:yuyinting/config/my_config.dart';
 import 'package:yuyinting/pages/room/room_back_page.dart';
 import 'package:yuyinting/pages/room/room_gongneng.dart';
 import 'package:yuyinting/pages/room/room_liwu_page.dart';
@@ -38,6 +41,94 @@ class _RoomPageState extends State<RoomPage> {
       m8 = false;
   bool isBoss = true;
   var listen;
+  /// 声网使用
+  int? _remoteUid;
+  bool _localUserJoined = false;
+  late RtcEngine _engine;
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //初始化声网的音频插件
+    initAgora();
+
+    listen = eventBus.on<SubmitButtonBack>().listen((event) {
+      if (event.title == '清除公屏') {
+      } else if (event.title == '清除魅力') {
+      } else if (event.title == '老板位') {
+        setState(() {
+          isBoss = !isBoss;
+        });
+      } else if (event.title == '动效') {
+      } else if (event.title == '房间声音') {
+
+      } else if (event.title == '退出房间') {
+        Navigator.pop(context);
+      } else if (event.title == '收起房间') {
+        Navigator.pop(context);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    listen.cancel();
+  }
+
+  // 初始化应用
+  Future<void> initAgora() async {
+    // 获取权限
+    await [Permission.microphone].request();
+
+    // 创建 RtcEngine
+    _engine = await createAgoraRtcEngine();
+
+
+    // 初始化 RtcEngine，设置频道场景为直播场景
+    await _engine.initialize(const RtcEngineContext(
+      appId: MyConfig.appId,
+      channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
+    ));
+
+    _engine.registerEventHandler(
+      RtcEngineEventHandler(
+        onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
+          LogE("local user ${connection.localUid} joined");
+          // 本地用户加入
+          setState(() {
+            _localUserJoined = true;
+          });
+        },
+        onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
+          LogE("remote user $remoteUid joined");
+          // 远程用户加入
+          setState(() {
+            _remoteUid = remoteUid;
+          });
+        },
+        onUserOffline: (RtcConnection connection, int remoteUid,
+            UserOfflineReasonType reason) {
+          LogE("remote user $remoteUid left channel");
+          // 用户离开房间
+          setState(() {
+            _remoteUid = null;
+          });
+        },
+      ),
+    );
+    // 加入频道，设置用户角色为主播
+    await _engine.joinChannel(
+      token: MyConfig.token,
+      channelId: MyConfig.channel,
+      options: const ChannelMediaOptions(
+          clientRoleType: ClientRoleType.clientRoleBroadcaster),
+      uid: 0,
+    );
+  }
 
   Widget _itemTuiJian(BuildContext context, int i) {
     return GestureDetector(
@@ -131,35 +222,6 @@ class _RoomPageState extends State<RoomPage> {
         ],
       ),
     );
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    listen = eventBus.on<SubmitButtonBack>().listen((event) {
-      if (event.title == '清除公屏') {
-      } else if (event.title == '清除魅力') {
-      } else if (event.title == '老板位') {
-        setState(() {
-          isBoss = !isBoss;
-        });
-      } else if (event.title == '动效') {
-      } else if (event.title == '房间声音') {
-
-      } else if (event.title == '退出房间') {
-        Navigator.pop(context);
-      } else if (event.title == '收起房间') {
-        Navigator.pop(context);
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    listen.cancel();
   }
 
   @override
