@@ -5,6 +5,7 @@ import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/pages/login/login_page.dart';
 import 'package:yuyinting/utils/line_painter.dart';
 
+import '../../../config/config_screen_util.dart';
 import '../../../main.dart';
 import '../../../utils/custom_dialog.dart';
 import '../../../utils/my_utils.dart';
@@ -40,9 +41,9 @@ class _SettingPageState extends State<SettingPage> {
           WidgetUtils.commonSizedBox(10, 0),
           Container(
             width: double.infinity,
-            height: ScreenUtil().setHeight(110),
+            height: ScreenUtil().setHeight(90),
             color: Colors.white,
-            padding: const EdgeInsets.only(left: 20, right: 20),
+            padding: EdgeInsets.only(left: ConfigScreenUtil.autoHeight20, right: ConfigScreenUtil.autoHeight20),
             child: Row(
               children: [
                 WidgetUtils.onlyText(
@@ -116,9 +117,9 @@ class _SettingPageState extends State<SettingPage> {
             }),
             child: Container(
               width: double.infinity,
-              height: ScreenUtil().setHeight(110),
+              height: ScreenUtil().setHeight(90),
               color: Colors.white,
-              padding: const EdgeInsets.only(left: 20, right: 20),
+              padding: EdgeInsets.only(left: ScreenUtil().setHeight(20), right: ScreenUtil().setHeight(20)),
               child: Row(
                 children: [
                   WidgetUtils.onlyText(
@@ -138,9 +139,9 @@ class _SettingPageState extends State<SettingPage> {
             }),
             child: Container(
               width: double.infinity,
-              height: ScreenUtil().setHeight(110),
+              height: ScreenUtil().setHeight(90),
               color: Colors.white,
-              padding: const EdgeInsets.only(left: 20, right: 20),
+              padding: EdgeInsets.only(left: ScreenUtil().setHeight(20), right: ScreenUtil().setHeight(20)),
               child: Row(
                 children: [
                   WidgetUtils.onlyText(
@@ -158,16 +159,16 @@ class _SettingPageState extends State<SettingPage> {
               ),
             ),
           ),
-          const Expanded(child: Text('')),
+          WidgetUtils.commonSizedBox(10, 0),
           GestureDetector(
             onTap: ((){
                 Navigator.pushNamed(context, 'QiehuanAccountPage');
             }),
             child: Container(
               width: double.infinity,
-              height: ScreenUtil().setHeight(100),
+              height: ScreenUtil().setHeight(90),
               color: Colors.white,
-              padding: const EdgeInsets.only(left: 20, right: 20),
+              padding: EdgeInsets.only(left: ScreenUtil().setHeight(20), right: ScreenUtil().setHeight(20)),
               child: WidgetUtils.onlyTextCenter(
                   '切换账号',
                   StyleUtils.getCommonTextStyle(
@@ -183,15 +184,17 @@ class _SettingPageState extends State<SettingPage> {
             }),
             child: Container(
               width: double.infinity,
-              height: ScreenUtil().setHeight(100),
+              height: ScreenUtil().setHeight(90),
               color: Colors.white,
-              padding: const EdgeInsets.only(left: 20, right: 20),
+              padding: EdgeInsets.only(left: ScreenUtil().setHeight(20), right: ScreenUtil().setHeight(20)),
               child: WidgetUtils.onlyTextCenter(
                   '退出当前账号',
                   StyleUtils.getCommonTextStyle(
                       color: MyColors.homeTopBG, fontSize: ScreenUtil().setSp(29), fontWeight: FontWeight.bold)),
             ),
           ),
+
+          const Expanded(child: Text('')),
         ],
       ),
     );

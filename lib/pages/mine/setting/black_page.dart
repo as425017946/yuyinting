@@ -34,15 +34,15 @@ class _BlackPageState extends State<BlackPage> {
       height: ScreenUtil().setHeight(120),
       child: Row(
         children: [
-          WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(110), ScreenUtil().setWidth(110), 'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
+          WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(100), ScreenUtil().setWidth(100), 'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
           WidgetUtils.commonSizedBox(0, 10),
           Expanded(
             child: Column(
               children: [
                 const Expanded(child: Text('')),
-                WidgetUtils.onlyText('用户名$i', StyleUtils.getCommonTextStyle(color: Colors.black,fontWeight: FontWeight.bold, fontSize: 16)),
+                WidgetUtils.onlyText('用户名$i', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: 14)),
                 WidgetUtils.commonSizedBox(5, 10),
-                WidgetUtils.onlyText('ID: 123456', StyleUtils.getCommonTextStyle(color: MyColors.g9,fontWeight: FontWeight.bold, fontSize: 14)),
+                WidgetUtils.onlyText('ID: 123456', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: 12)),
                 const Expanded(child: Text('')),
               ],
             ),
@@ -51,7 +51,7 @@ class _BlackPageState extends State<BlackPage> {
             onTap: ((){
 
             }),
-            child: WidgetUtils.myContainer(ScreenUtil().setHeight(50), ScreenUtil().setHeight(120), Colors.white, MyColors.homeTopBG, '解除', ScreenUtil().setSp(25), MyColors.homeTopBG),
+            child: WidgetUtils.myContainer(ScreenUtil().setHeight(45), ScreenUtil().setHeight(100), Colors.white, MyColors.homeTopBG, '解除', ScreenUtil().setSp(25), MyColors.homeTopBG),
           ),
           WidgetUtils.commonSizedBox(0, 20),
 

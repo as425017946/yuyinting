@@ -47,7 +47,7 @@ class _RankingPageState extends State<RankingPage> {
                       Navigator.pop(context);
                     }),
                     child: WidgetUtils.showImages('assets/images/back.jpg',
-                        ScreenUtil().setHeight(46), ScreenUtil().setHeight(32)),
+                        ScreenUtil().setHeight(35), ScreenUtil().setHeight(25)),
                   ),
                   const Expanded(child: Text('')),
                   GestureDetector(
@@ -61,7 +61,7 @@ class _RankingPageState extends State<RankingPage> {
                         StyleUtils.getCommonTextStyle(
                             color: Colors.black,
                             fontSize: index == 0
-                                ? ScreenUtil().setSp(48)
+                                ? ScreenUtil().setSp(40)
                                 : ScreenUtil().setSp(32),
                             fontWeight: index == 0
                                 ? FontWeight.bold
@@ -79,14 +79,14 @@ class _RankingPageState extends State<RankingPage> {
                         StyleUtils.getCommonTextStyle(
                             color: Colors.black,
                             fontSize: index == 1
-                                ? ScreenUtil().setSp(48)
+                                ? ScreenUtil().setSp(40)
                                 : ScreenUtil().setSp(32),
                             fontWeight: index == 1
                                 ? FontWeight.bold
                                 : FontWeight.w100)),
                   ),
                   const Expanded(child: Text('')),
-                  WidgetUtils.commonSizedBox(0, 56),
+                  WidgetUtils.commonSizedBox(0, 45),
                 ],
               ),
             ),

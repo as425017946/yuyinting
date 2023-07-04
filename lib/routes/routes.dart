@@ -52,7 +52,7 @@ import '../pages/mine/setting/password_page.dart';
 import '../pages/mine/setting/shimingzhi_card_page.dart';
 import '../pages/mine/setting/shimingzhi_page.dart';
 import '../pages/mine/tequan/tequan_page.dart';
-import '../pages/mine/who_lock_me_page.dart';
+import '../pages/message/geren/who_lock_me_page.dart';
 import '../pages/mine/zhuangban/shop_page.dart';
 import '../pages/mine/zhuangban/zhuangban_page.dart';
 import '../pages/room/room_page.dart';

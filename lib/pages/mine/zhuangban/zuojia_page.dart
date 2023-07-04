@@ -5,6 +5,7 @@ import 'package:yuyinting/main.dart';
 import '../../../colors/my_colors.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
+import '../../../widget/OptionGridView.dart';
 
 /// 座驾
 class ZuojiaPage extends StatefulWidget {
@@ -42,6 +43,8 @@ class _ZuojiaPageState extends State<ZuojiaPage> {
               });
             }),
             child: Container(
+              width: ScreenUtil().setHeight(211),
+              height: ScreenUtil().setHeight(325),
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 //设置Container修饰
@@ -78,7 +81,7 @@ class _ZuojiaPageState extends State<ZuojiaPage> {
           )
         : Container(
             width: ScreenUtil().setHeight(211),
-            height: ScreenUtil().setHeight(315),
+            height: ScreenUtil().setHeight(325),
             alignment: Alignment.center,
             decoration: BoxDecoration(
               //设置Container修饰
@@ -99,7 +102,7 @@ class _ZuojiaPageState extends State<ZuojiaPage> {
                     ScreenUtil().setHeight(200)),
                 WidgetUtils.commonSizedBox(10, 20),
                 WidgetUtils.onlyTextCenter(
-                    '礼物名称',
+                    '礼物名称2',
                     StyleUtils.getCommonTextStyle(
                         color: Colors.white,
                         fontSize: ScreenUtil().setSp(25))),
@@ -117,16 +120,18 @@ class _ZuojiaPageState extends State<ZuojiaPage> {
   @override
   Widget build(BuildContext context) {
     return length > 0
-        ? GridView.builder(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-            itemCount: length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 20, //设置列间距
-              mainAxisSpacing: 20, //设置行间距
-              childAspectRatio: 4 / 5,
+        ? SingleChildScrollView(
+          child: Container(
+            margin: const EdgeInsets.only(left: 20, right: 20, top: 10),
+            child: OptionGridView(
+              itemCount: 20,
+              rowCount: 2,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+              itemBuilder: _itemLiwu,
             ),
-            itemBuilder: _itemLiwu)
+          ),
+        )
         : Container(
             height: double.infinity,
             alignment: Alignment.center,

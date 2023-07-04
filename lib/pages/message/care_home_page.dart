@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yuyinting/pages/message/geren/who_lock_me_page.dart';
 
 import '../../colors/my_colors.dart';
 import '../../utils/widget_utils.dart';
@@ -45,7 +46,7 @@ class _CareHomePageState extends State<CareHomePage> {
             child: Row(
               children: [
                 Container(
-                  width: ScreenUtil().setWidth(50),
+                  width: ScreenUtil().setWidth(100),
                   padding: const EdgeInsets.only(left: 15),
                   child: IconButton(
                     icon: const Icon(Icons.arrow_back_ios),
@@ -57,8 +58,7 @@ class _CareHomePageState extends State<CareHomePage> {
                 ),
                 const Expanded(child: Text('')),
                 /// 关注被关注切换按钮
-                Container(
-                  alignment: Alignment.bottomLeft,
+                SizedBox(
                   height: ScreenUtil().setHeight(80),
                   child: Row(
                     children: [
@@ -72,7 +72,7 @@ class _CareHomePageState extends State<CareHomePage> {
                           style: TextStyle(
                               overflow: TextOverflow.ellipsis,
                               color: Colors.black,
-                              fontSize:_currentIndex == 0 ? ScreenUtil().setSp(48) : ScreenUtil().setSp(36),
+                              fontSize:_currentIndex == 0 ? ScreenUtil().setSp(46) : ScreenUtil().setSp(32),
                               fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -87,7 +87,22 @@ class _CareHomePageState extends State<CareHomePage> {
                           style: TextStyle(
                               overflow: TextOverflow.ellipsis,
                               color: Colors.black,
-                              fontSize: _currentIndex == 1 ? ScreenUtil().setSp(48) : ScreenUtil().setSp(36),
+                              fontSize: _currentIndex == 1 ? ScreenUtil().setSp(46) : ScreenUtil().setSp(32),
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      WidgetUtils.commonSizedBox(0, 20),
+                      GestureDetector(
+                        onTap: ((){
+                          _currentIndex = 2;
+                          _controller.jumpToPage(2);
+                        }),
+                        child: Text(
+                          '谁看过我',
+                          style: TextStyle(
+                              overflow: TextOverflow.ellipsis,
+                              color: Colors.black,
+                              fontSize: _currentIndex == 2 ? ScreenUtil().setSp(46) : ScreenUtil().setSp(32),
                               fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -95,13 +110,13 @@ class _CareHomePageState extends State<CareHomePage> {
                   )
                 ),
                 const Expanded(child: Text('')),
-                WidgetUtils.commonSizedBox(0, 50),
+                WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(100)),
               ],
             ),
           ),
-          WidgetUtils.commonSizedBox(20, 0),
+          _currentIndex != 2 ? WidgetUtils.commonSizedBox(20, 0) : const Text(''),
           ///搜索按钮
-          Container(
+          _currentIndex != 2 ? Container(
             margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
             height: ScreenUtil().setHeight(70),
             alignment: Alignment.centerLeft,
@@ -124,7 +139,7 @@ class _CareHomePageState extends State<CareHomePage> {
                 Expanded(child: WidgetUtils.commonTextField(_souSuoName, '请搜索昵称或ID')),
               ],
             ),
-          ),
+          ) : WidgetUtils.commonSizedBox(0, 0),
           WidgetUtils.commonSizedBox(10, 0),
           Expanded(
             child: PageView(
@@ -138,6 +153,7 @@ class _CareHomePageState extends State<CareHomePage> {
               children: const [
                 CarePage(),
                 BeCarePage(),
+                WhoLockMePage(),
               ],
             ),
           )

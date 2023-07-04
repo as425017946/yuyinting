@@ -41,12 +41,12 @@ class _GonghuiPeoplePageState extends State<GonghuiPeoplePage> {
             Stack(
               alignment: Alignment.center,
               children: [
-                WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(110), ScreenUtil().setWidth(110), 'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
-                WidgetUtils.showImages('assets/images/zhibozhong.webp', ScreenUtil().setHeight(110), ScreenUtil().setWidth(110),),
+                WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(100), ScreenUtil().setWidth(100), 'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
+                WidgetUtils.showImages('assets/images/zhibozhong.webp', ScreenUtil().setHeight(100), ScreenUtil().setWidth(100),),
               ],
             ),
             WidgetUtils.commonSizedBox(0, 10),
-            WidgetUtils.onlyText('用户名$i', StyleUtils.getCommonTextStyle(color: Colors.black,fontWeight: FontWeight.bold, fontSize: 16)),
+            WidgetUtils.onlyText('用户名$i', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: 14)),
             WidgetUtils.commonSizedBox(0, 5),
             Container(
               height: ScreenUtil().setHeight(25),
@@ -72,7 +72,7 @@ class _GonghuiPeoplePageState extends State<GonghuiPeoplePage> {
               onTap: ((){
 
               }),
-              child: WidgetUtils.myContainer(ScreenUtil().setHeight(50), ScreenUtil().setHeight(120), Colors.white, MyColors.homeTopBG, '移出', ScreenUtil().setSp(25), MyColors.homeTopBG),
+              child: WidgetUtils.myContainer(ScreenUtil().setHeight(45), ScreenUtil().setHeight(100), Colors.white, MyColors.homeTopBG, '移出', ScreenUtil().setSp(25), MyColors.homeTopBG),
             ),
             WidgetUtils.commonSizedBox(0, 20),
 

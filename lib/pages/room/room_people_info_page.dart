@@ -145,66 +145,6 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                   children: [
                                     Container(
                                       height: ScreenUtil().setHeight(60),
-                                      width: ScreenUtil().setHeight(130),
-                                      //边框设置
-                                      decoration: const BoxDecoration(
-                                        //背景
-                                        color: MyColors.roomMaiLiao2,
-                                        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                        borderRadius:
-                                        BorderRadius.all(Radius.circular(30.0)),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              WidgetUtils.onlyTextCenter(
-                                  '抱Ta下麦',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: MyColors.roomTCWZ1,
-                                      fontSize: ScreenUtil().setSp(24))),
-                            ],
-                          ),
-                          const Expanded(child: Text('')),
-                          Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              Opacity(
-                                opacity: 0.6,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      height: ScreenUtil().setHeight(60),
-                                      width: ScreenUtil().setHeight(130),
-                                      //边框设置
-                                      decoration: const BoxDecoration(
-                                        //背景
-                                        color: MyColors.roomMaiLiao2,
-                                        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                        borderRadius:
-                                        BorderRadius.all(Radius.circular(30.0)),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              WidgetUtils.onlyTextCenter(
-                                  '抱Ta上麦',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: MyColors.roomTCWZ1,
-                                      fontSize: ScreenUtil().setSp(24))),
-                            ],
-                          ),
-                          const Expanded(child: Text('')),
-                          Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              Opacity(
-                                opacity: 0.6,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      height: ScreenUtil().setHeight(60),
                                       width: ScreenUtil().setHeight(110),
                                       //边框设置
                                       decoration: const BoxDecoration(
@@ -250,6 +190,36 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                               ),
                               WidgetUtils.onlyTextCenter(
                                   '上麦',
+                                  StyleUtils.getCommonTextStyle(
+                                      color: MyColors.roomTCWZ1,
+                                      fontSize: ScreenUtil().setSp(24))),
+                            ],
+                          ),
+                          const Expanded(child: Text('')),
+                          Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Opacity(
+                                opacity: 0.6,
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      height: ScreenUtil().setHeight(60),
+                                      width: ScreenUtil().setHeight(110),
+                                      //边框设置
+                                      decoration: const BoxDecoration(
+                                        //背景
+                                        color: MyColors.roomMaiLiao2,
+                                        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                        borderRadius:
+                                        BorderRadius.all(Radius.circular(30.0)),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              WidgetUtils.onlyTextCenter(
+                                  '闭麦',
                                   StyleUtils.getCommonTextStyle(
                                       color: MyColors.roomTCWZ1,
                                       fontSize: ScreenUtil().setSp(24))),

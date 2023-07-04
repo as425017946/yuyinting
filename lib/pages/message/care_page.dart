@@ -19,7 +19,7 @@ class _CarePageState extends State<CarePage> {
       margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
       child: Column(
         children: [
-          WidgetUtils.onlyText('关注数（5）', StyleUtils.getCommonTextStyle(color: Colors.black , fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(28))),
+          WidgetUtils.onlyText('关注数（5）', StyleUtils.getCommonTextStyle(color: Colors.black , fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25))),
 
           SizedBox(
             height: ScreenUtil().setHeight(130),
@@ -50,11 +50,12 @@ class _CarePageState extends State<CarePage> {
                           children: [
                             Text(
                               '系统消息',
-                              style: StyleUtils.getCommonTextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(38)),
+                              style: StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(32)),
                             ),
                               Container(
-                                height: ScreenUtil().setHeight(25),
-                                width: ScreenUtil().setWidth(50),
+                                height: ScreenUtil().setHeight(20),
+                                width: ScreenUtil().setWidth(40),
+                                margin: const EdgeInsets.only(left: 5),
                                 alignment: Alignment.center,
                                 //边框设置
                                 decoration: const BoxDecoration(
@@ -66,8 +67,8 @@ class _CarePageState extends State<CarePage> {
                                 ),
                                 child: WidgetUtils.showImages(
                                         'assets/images/nv.png',
-                                    12,
-                                    12),
+                                    10,
+                                    10),
                               ),
                           ],
                         ),
@@ -85,8 +86,8 @@ class _CarePageState extends State<CarePage> {
                   ),
                 ),
                 Container(
-                  height: ScreenUtil().setHeight(60),
-                  width: ScreenUtil().setWidth(180),
+                  height: ScreenUtil().setHeight(50),
+                  width: ScreenUtil().setWidth(150),
                   alignment: Alignment.center,
                   //边框设置
                   decoration: const BoxDecoration(
@@ -99,9 +100,9 @@ class _CarePageState extends State<CarePage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      WidgetUtils.showImages('assets/images/care_guanzhu.png', 15, 20),
+                      WidgetUtils.showImages('assets/images/care_guanzhu.png', 8, 12),
                       WidgetUtils.commonSizedBox(0, 5),
-                      WidgetUtils.onlyText('已关注', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(30)))
+                      WidgetUtils.onlyText('已关注', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(22)))
                     ],
                   ),
                 ),

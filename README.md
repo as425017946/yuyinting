@@ -1,6 +1,11 @@
 # yuyinting
 # fluttter sdk 3.7.3
 # xcode 14.2
+
+> Android 打包 flutter build apk  --no-sound-null-safety
+> iOS 打包  flutter build ios  --no-sound-null-safety
+
+
 A new Flutter project.
 
 ## Getting Started

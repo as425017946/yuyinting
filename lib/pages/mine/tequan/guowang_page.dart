@@ -124,7 +124,7 @@ class _GuowangPageState extends State<GuowangPage>  with TickerProviderStateMixi
                                 ScreenUtil().setHeight(103),
                                 ScreenUtil().setHeight(103)),
                             WidgetUtils.onlyTextCenter(
-                                '发言光圈',
+                                '麦上声波',
                                 StyleUtils.getCommonTextStyle(
                                     color: MyColors.guizuYellow,
                                     fontSize: ScreenUtil().setSp(25))),

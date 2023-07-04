@@ -23,13 +23,13 @@ class _MinePageState extends State<MinePage> {
     super.initState();
     eventBus.on<SubmitButtonBack>().listen((event) {
       if(event.title == '我的装扮'){
-        Navigator.pushNamed(context, 'DengjiPage');
-        // Navigator.pushNamed(context, 'ZhuangbanPage');
+        // Navigator.pushNamed(context, 'DengjiPage');
+        Navigator.pushNamed(context, 'ZhuangbanPage');
       }else if(event.title == '公会中心'){
-        // Navigator.pushNamed(context, 'GonghuiHomePage');
-        if(mounted){
-          Navigator.pushNamed(context, 'MyGonghuiPage');
-        }
+        Navigator.pushNamed(context, 'GonghuiHomePage');
+        // if(mounted){
+        //   Navigator.pushNamed(context, 'MyGonghuiPage');
+        // }
       }else if(event.title == '全民代理'){
         if(mounted) {
           Navigator.pushNamed(context, 'DailiHomePage');
@@ -79,8 +79,8 @@ class _MinePageState extends State<MinePage> {
                     Navigator.pushNamed(context, 'MyInfoPage');
                   }),
                   child: WidgetUtils.CircleHeadImage(
-                      ScreenUtil().setHeight(153),
-                      ScreenUtil().setHeight(153),
+                      ScreenUtil().setHeight(130),
+                      ScreenUtil().setHeight(130),
                       'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
                 ),
                 WidgetUtils.commonSizedBox(0, 15),
@@ -96,13 +96,12 @@ class _MinePageState extends State<MinePage> {
                               style: StyleUtils.getCommonTextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: ScreenUtil().setSp(42)),
+                                  fontSize: ScreenUtil().setSp(38)),
                             ),
                             WidgetUtils.commonSizedBox(0, 5),
                             Container(
                               height: ScreenUtil().setHeight(25),
                               width: ScreenUtil().setWidth(50),
-                              margin: const EdgeInsets.only(top: 10),
                               alignment: Alignment.center,
                               //边框设置
                               decoration: const BoxDecoration(
@@ -125,14 +124,13 @@ class _MinePageState extends State<MinePage> {
                             'ID:12345678',
                             style: StyleUtils.getCommonTextStyle(
                                 color: MyColors.mineGrey,
-                                fontWeight: FontWeight.bold,
-                                fontSize: ScreenUtil().setSp(21)),
+                                fontSize: ScreenUtil().setSp(25)),
                           ),
                           WidgetUtils.commonSizedBox(0, 10),
                           WidgetUtils.showImages(
                               'assets/images/mine_fuzhi.png',
-                              ScreenUtil().setHeight(25),
-                              ScreenUtil().setHeight(25))
+                              ScreenUtil().setHeight(20),
+                              ScreenUtil().setHeight(20))
                         ],
                       )
                     ],
@@ -149,7 +147,7 @@ class _MinePageState extends State<MinePage> {
                           StyleUtils.getCommonTextStyle(
                               color: MyColors.mineGrey,
                               fontWeight: FontWeight.bold,
-                              fontSize: ScreenUtil().setSp(21))),
+                              fontSize: ScreenUtil().setSp(25))),
                       WidgetUtils.commonSizedBox(0, 5),
                       WidgetUtils.showImages('assets/images/mine_more.png',
                           ScreenUtil().setHeight(22), ScreenUtil().setHeight(10))
@@ -163,7 +161,7 @@ class _MinePageState extends State<MinePage> {
             /// 升级贵族
             Container(
               width: double.infinity,
-              height: ScreenUtil().setHeight(250),
+              height: ScreenUtil().setHeight(220),
               padding: const EdgeInsets.only(left: 20, right: 20),
               decoration: const BoxDecoration(
                 //设置Container修饰
@@ -181,7 +179,7 @@ class _MinePageState extends State<MinePage> {
                     }),
                     child: Container(
                       alignment: Alignment.bottomRight,
-                      padding: const EdgeInsets.only(right: 30, top: 20),
+                      padding: const EdgeInsets.only(right: 10, top: 20),
                       child: guizuType == 0
                           ? WidgetUtils.myContainer(
                           ScreenUtil().setHeight(39),
@@ -211,7 +209,7 @@ class _MinePageState extends State<MinePage> {
                       ),
                     ),
                   ),
-                  WidgetUtils.commonSizedBox(50, 0),
+                  WidgetUtils.commonSizedBox(25, 0),
 
                   /// 关注
                   Row(
@@ -331,8 +329,8 @@ class _MinePageState extends State<MinePage> {
                               child: Column(
                                 children: [
                                   const Expanded(child: Text('')),
-                                  WidgetUtils.onlyText('我的钱包', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(36), fontWeight: FontWeight.bold)),
-                                  WidgetUtils.onlyText('充值、兑换', StyleUtils.getCommonTextStyle(color: MyColors.mineGrey, fontSize: ScreenUtil().setSp(25))),
+                                  WidgetUtils.onlyText('我的钱包', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(32), fontWeight: FontWeight.bold)),
+                                  WidgetUtils.onlyText('充值、兑换', StyleUtils.getCommonTextStyle(color: MyColors.mineGrey, fontSize: ScreenUtil().setSp(22))),
                                   const Expanded(child: Text('')),
                                 ],
                               ),
@@ -356,8 +354,8 @@ class _MinePageState extends State<MinePage> {
                               child: Column(
                                 children: [
                                   const Expanded(child: Text('')),
-                                  WidgetUtils.onlyText('礼物记录', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(36), fontWeight: FontWeight.bold)),
-                                  WidgetUtils.onlyText('收送礼物明细', StyleUtils.getCommonTextStyle(color: MyColors.mineGrey, fontSize: ScreenUtil().setSp(25))),
+                                  WidgetUtils.onlyText('礼物记录', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(32), fontWeight: FontWeight.bold)),
+                                  WidgetUtils.onlyText('收送礼物明细', StyleUtils.getCommonTextStyle(color: MyColors.mineGrey, fontSize: ScreenUtil().setSp(22))),
                                   const Expanded(child: Text('')),
                                 ],
                               ),

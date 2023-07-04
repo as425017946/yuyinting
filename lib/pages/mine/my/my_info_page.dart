@@ -55,7 +55,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
               child: Row(
                 children: [
                   Container(
-                    width: ScreenUtil().setWidth(50),
+                    width: ScreenUtil().setWidth(100),
                     padding: const EdgeInsets.only(left: 15),
                     child: IconButton(
                       icon: const Icon(Icons.arrow_back_ios),
@@ -71,8 +71,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
                       Navigator.pushNamed(context, 'EditMyInfoPage');
                     }),
                     child: Container(
-                      width: ScreenUtil().setWidth(50),
-                      margin: const EdgeInsets.only(right: 15),
+                      width: ScreenUtil().setWidth(100),
                       child: WidgetUtils.showImages('assets/images/mine_edit.png', ScreenUtil().setHeight(33), ScreenUtil().setHeight(33)),
                     ),
                   ),
@@ -88,7 +87,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
               alignment: Alignment.centerLeft,
               child: Row(
                 children: [
-                  WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(130), ScreenUtil().setWidth(130), 'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
+                  WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(140), ScreenUtil().setWidth(140), 'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
                   WidgetUtils.commonSizedBox(0, 10),
                   ///昵称等信息
                   Expanded(
@@ -96,7 +95,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Expanded(child: Text('')),
-                        WidgetUtils.onlyText('昵称', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(40), fontWeight: FontWeight.bold)),
+                        WidgetUtils.onlyText('昵称', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(38), fontWeight: FontWeight.bold)),
                         WidgetUtils.commonSizedBox(5, 0),
                         Row(
                           children: [
@@ -135,7 +134,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
                           ),
                           child: Row(
                             children: [
-                              WidgetUtils.onlyText('ID:12345678', StyleUtils.getCommonTextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(26))),
+                              WidgetUtils.onlyText('ID:12345678', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(26))),
                               WidgetUtils.commonSizedBox(0, 5),
                               WidgetUtils.showImages('assets/images/people_fuzhi.png', ScreenUtil().setHeight(22), ScreenUtil().setWidth(22)),
                             ],
@@ -154,8 +153,8 @@ class _MyInfoPageState extends State<MyInfoPage> {
               children: [
                 Container(
                   height: ScreenUtil().setHeight(50),
-                  width: ScreenUtil().setWidth(220),
-                  margin: EdgeInsets.only(left: 20),
+                  width: ScreenUtil().setWidth(180),
+                  margin: const EdgeInsets.only(left: 20),
                   padding: const EdgeInsets.only(left: 8),
                   alignment: Alignment.topLeft,
                   //边框设置
@@ -213,8 +212,8 @@ class _MyInfoPageState extends State<MyInfoPage> {
                                     style: TextStyle(
                                         overflow: TextOverflow.ellipsis,
                                         color: _currentIndex == 0 ? Colors.black : MyColors.g6,
-                                        fontSize:_currentIndex == 0 ? ScreenUtil().setSp(48) : ScreenUtil().setSp(36),
-                                        fontWeight: FontWeight.bold),
+                                        fontSize:ScreenUtil().setSp(36) ,
+                                        fontWeight: _currentIndex == 0 ? FontWeight.bold : FontWeight.normal),
                                   ),
                                 ),
                                 WidgetUtils.commonSizedBox(0, 20),
@@ -230,8 +229,8 @@ class _MyInfoPageState extends State<MyInfoPage> {
                                     style: TextStyle(
                                         overflow: TextOverflow.ellipsis,
                                         color: _currentIndex == 1 ? Colors.black : MyColors.g6,
-                                        fontSize: _currentIndex == 1 ? ScreenUtil().setSp(48) : ScreenUtil().setSp(36),
-                                        fontWeight: FontWeight.bold),
+                                        fontSize:ScreenUtil().setSp(36) ,
+                                        fontWeight: _currentIndex == 1 ? FontWeight.bold : FontWeight.normal),
                                   ),
                                 ),
                               ],

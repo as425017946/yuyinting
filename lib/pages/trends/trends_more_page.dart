@@ -34,7 +34,7 @@ class _TrendsMorePageState extends State<TrendsMorePage> {
               Stack(
                 alignment: Alignment.bottomRight,
                 children: [
-                  WidgetUtils.CircleHeadImage(50, 50,
+                  WidgetUtils.CircleHeadImage(35, 35,
                       'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
                   Container(
                     height: ScreenUtil().setHeight(25),
@@ -68,18 +68,17 @@ class _TrendsMorePageState extends State<TrendsMorePage> {
                         '张三',
                         style: StyleUtils.getCommonTextStyle(
                             color: MyColors.g6,
-                            fontSize: ScreenUtil().setSp(36),
+                            fontSize: ScreenUtil().setSp(30),
                             fontWeight: FontWeight.bold),
                       ),
                     ),
                     SizedBox(
                       width: double.infinity,
                       child: Text(
-                        '张三张三',
+                        '回复的消息内容',
                         style: StyleUtils.getCommonTextStyle(
                             color: Colors.black,
-                            fontSize: ScreenUtil().setSp(30),
-                            fontWeight: FontWeight.bold),
+                            fontSize: ScreenUtil().setSp(28)),
                       ),
                     ),
                     const Expanded(child: Text('')),
@@ -91,14 +90,13 @@ class _TrendsMorePageState extends State<TrendsMorePage> {
         ),
         Row(
           children: [
-            WidgetUtils.commonSizedBox(0, 60),
+            WidgetUtils.commonSizedBox(0, 45),
             Expanded(
                 child: Text(
               '20223-05-25 · IP属地：唐山',
               style: StyleUtils.getCommonTextStyle(
                   color: MyColors.g9,
-                  fontSize: ScreenUtil().setSp(28),
-                  fontWeight: FontWeight.bold),
+                  fontSize: ScreenUtil().setSp(26)),
             )),
           ],
         ),
@@ -126,7 +124,7 @@ class _TrendsMorePageState extends State<TrendsMorePage> {
                         alignment: Alignment.centerLeft,
                         child: Row(
                           children: [
-                            WidgetUtils.CircleHeadImage(50, 50,
+                            WidgetUtils.CircleHeadImage(40, 40,
                                 'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
                             WidgetUtils.commonSizedBox(0, 10),
                             Column(
@@ -144,7 +142,7 @@ class _TrendsMorePageState extends State<TrendsMorePage> {
                                 ),
                                 Container(
                                   padding:
-                                      const EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                      const EdgeInsets.fromLTRB(5, 1, 5, 1),
                                   alignment: Alignment.center,
                                   //边框设置
                                   decoration: const BoxDecoration(
@@ -182,8 +180,7 @@ class _TrendsMorePageState extends State<TrendsMorePage> {
                           '哈哈哈哈哈哈',
                           StyleUtils.getCommonTextStyle(
                               color: Colors.black,
-                              fontSize: ScreenUtil().setSp(32),
-                              fontWeight: FontWeight.bold)),
+                              fontSize: ScreenUtil().setSp(32))),
                       WidgetUtils.commonSizedBox(5, 0),
                       Row(
                         children: [
@@ -201,7 +198,7 @@ class _TrendsMorePageState extends State<TrendsMorePage> {
                               '刚刚·IP属地：唐山',
                               StyleUtils.getCommonTextStyle(
                                   color: Colors.grey,
-                                  fontSize: ScreenUtil().setSp(28),
+                                  fontSize: ScreenUtil().setSp(24),
                                   fontWeight: FontWeight.bold)),
                           const Expanded(child: Text('')),
                           WidgetUtils.showImages(
@@ -211,7 +208,7 @@ class _TrendsMorePageState extends State<TrendsMorePage> {
                               '抢首赞',
                               StyleUtils.getCommonTextStyle(
                                   color: Colors.grey,
-                                  fontSize: ScreenUtil().setSp(28),
+                                  fontSize: ScreenUtil().setSp(24),
                                   fontWeight: FontWeight.bold)),
                           WidgetUtils.commonSizedBox(0, 20),
                           WidgetUtils.showImages(
@@ -221,7 +218,7 @@ class _TrendsMorePageState extends State<TrendsMorePage> {
                               '评论',
                               StyleUtils.getCommonTextStyle(
                                   color: Colors.grey,
-                                  fontSize: ScreenUtil().setSp(28),
+                                  fontSize: ScreenUtil().setSp(24),
                                   fontWeight: FontWeight.bold)),
                         ],
                       )
@@ -275,7 +272,7 @@ class _TrendsMorePageState extends State<TrendsMorePage> {
                   Expanded(
                     child: Container(
                       width: double.infinity,
-                      height: ScreenUtil().setHeight(70),
+                      height: ScreenUtil().setHeight(60),
                       padding: const EdgeInsets.only(left: 10, right: 10),
                       alignment: Alignment.center,
                       //边框设置
@@ -290,11 +287,11 @@ class _TrendsMorePageState extends State<TrendsMorePage> {
                     ),
                   ),
                   WidgetUtils.commonSizedBox(0, 10),
-                  WidgetUtils.showImages('assets/images/trends_biaoqing.png', 25, 25),
+                  WidgetUtils.showImages('assets/images/trends_biaoqing.png', 22, 22),
                   WidgetUtils.commonSizedBox(0, 10),
                   Container(
-                    height: ScreenUtil().setHeight(70),
-                    padding: EdgeInsets.only(left: 10, right: 10),
+                    height: ScreenUtil().setHeight(60),
+                    padding: const EdgeInsets.only(left: 10, right: 10),
                     alignment: Alignment.center,
                     //边框设置
                     decoration: const BoxDecoration(
@@ -304,7 +301,7 @@ class _TrendsMorePageState extends State<TrendsMorePage> {
                       borderRadius:
                       BorderRadius.all(Radius.circular(20.0)),
                     ),
-                    child: WidgetUtils.onlyText('发送', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(36))),
+                    child: WidgetUtils.onlyText('发送', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(28))),
                   ),
                   WidgetUtils.commonSizedBox(0, 20),                  
                 ],

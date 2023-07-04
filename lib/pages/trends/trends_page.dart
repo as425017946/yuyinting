@@ -37,7 +37,7 @@ class _TrendsPageState extends State<TrendsPage> {
             alignment: Alignment.centerLeft,
             child: Row(
               children: [
-                WidgetUtils.CircleHeadImage(50, 50, 'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
+                WidgetUtils.CircleHeadImage(40, 40, 'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
                 WidgetUtils.commonSizedBox(0, 10),
                 Column(
                   children: [
@@ -50,7 +50,7 @@ class _TrendsPageState extends State<TrendsPage> {
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
+                      padding: const EdgeInsets.fromLTRB(5, 1, 5, 1),
                       alignment: Alignment.center,
                       //边框设置
                       decoration: const BoxDecoration(
@@ -77,7 +77,7 @@ class _TrendsPageState extends State<TrendsPage> {
             ),
           ),
           WidgetUtils.commonSizedBox(5, 0),
-          WidgetUtils.onlyText('哈哈哈哈哈哈', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(32), fontWeight: FontWeight.bold)),
+          WidgetUtils.onlyText('哈哈哈哈哈哈', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(32),)),
           WidgetUtils.commonSizedBox(5, 0),
           Row(
             children: [
@@ -89,15 +89,15 @@ class _TrendsPageState extends State<TrendsPage> {
           WidgetUtils.commonSizedBox(10, 0),
           Row(
             children: [
-              WidgetUtils.onlyText('刚刚·IP属地：唐山', StyleUtils.getCommonTextStyle(color: Colors.grey, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.bold)),
+              WidgetUtils.onlyText('刚刚·IP属地：唐山', StyleUtils.getCommonTextStyle(color: Colors.grey, fontSize: ScreenUtil().setSp(24), )),
               const Expanded(child: Text('')),
               WidgetUtils.showImages('assets/images/trends_zan1.png', 18, 18),
               WidgetUtils.commonSizedBox(0, 5),
-              WidgetUtils.onlyText('抢首赞', StyleUtils.getCommonTextStyle(color: Colors.grey, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.bold)),
+              WidgetUtils.onlyText('抢首赞', StyleUtils.getCommonTextStyle(color: Colors.grey, fontSize: ScreenUtil().setSp(24), )),
               WidgetUtils.commonSizedBox(0, 20),
               WidgetUtils.showImages('assets/images/trends_message.png', 18, 18),
               WidgetUtils.commonSizedBox(0, 5),
-              WidgetUtils.onlyText('评论', StyleUtils.getCommonTextStyle(color: Colors.grey, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.bold)),
+              WidgetUtils.onlyText('评论', StyleUtils.getCommonTextStyle(color: Colors.grey, fontSize: ScreenUtil().setSp(24), )),
             ],
           ),
           WidgetUtils.commonSizedBox(10, 0),
@@ -166,8 +166,9 @@ class _TrendsPageState extends State<TrendsPage> {
                         WidgetUtils.showImages('assets/images/trends_fabu_btn.png', ScreenUtil().setHeight(60), ScreenUtil().setWidth(174)),
                         Row(
                           children: [
+                            WidgetUtils.commonSizedBox(0, 5),
                             WidgetUtils.showImages('assets/images/trends_xiangji.webp', 30, 30),
-                            WidgetUtils.onlyText('发动态', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(32), fontWeight: FontWeight.bold)),
+                            WidgetUtils.onlyText('发动态', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.bold)),
                             const Expanded(child: Text('')),
 
                           ],
@@ -193,7 +194,9 @@ class _TrendsPageState extends State<TrendsPage> {
                         '您还没有关注的人',
                         StyleUtils.getCommonTextStyle(
                             color: MyColors.homeNoHave,
-                            fontSize: ScreenUtil().setSp(36))),
+                            fontSize: ScreenUtil().setSp(32))),
+                    WidgetUtils.commonSizedBox(10, 0),
+                   WidgetUtils.myLine(),
                    GestureDetector(
                      onTap: ((){
                         Navigator.pushNamed(context, 'TrendsMorePage');
@@ -202,14 +205,12 @@ class _TrendsPageState extends State<TrendsPage> {
                        child: Column(
                          children: [
                            WidgetUtils.commonSizedBox(10, 0),
-                           WidgetUtils.myLine(),
-                           WidgetUtils.commonSizedBox(10, 0),
                            Container(
                              height: ScreenUtil().setHeight(100),
                              alignment: Alignment.centerLeft,
                              child: Row(
                                children: [
-                                 WidgetUtils.CircleHeadImage(50, 50, 'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
+                                 WidgetUtils.CircleHeadImage(40, 40, 'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
                                  WidgetUtils.commonSizedBox(0, 10),
                                  Column(
                                    children: [
@@ -222,7 +223,7 @@ class _TrendsPageState extends State<TrendsPage> {
                                        ),
                                      ),
                                      Container(
-                                       padding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
+                                       padding: const EdgeInsets.fromLTRB(5, 1, 5, 1),
                                        alignment: Alignment.center,
                                        //边框设置
                                        decoration: const BoxDecoration(
@@ -244,24 +245,12 @@ class _TrendsPageState extends State<TrendsPage> {
                                    ],
                                  ),
                                  const Expanded(child: Text('')),
-                                 GestureDetector(
-                                   onTap: ((){
-                                     Future.delayed(Duration(seconds: 0), (){
-                                       Navigator.of(context).push(PageRouteBuilder(
-                                           opaque: false,
-                                           pageBuilder: (context, animation, secondaryAnimation) {
-                                             return TrendsHiPage();
-                                           }));
-                                     });
-                                   }),
-                                   child: WidgetUtils.showImages('assets/images/trends_hi.png', 124, 59),
-                                 )
-                                 ,
+                                 WidgetUtils.showImages('assets/images/trends_hi.png', 124, 59),
                                ],
                              ),
                            ),
                            WidgetUtils.commonSizedBox(5, 0),
-                           WidgetUtils.onlyText('哈哈哈哈哈哈', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(32), fontWeight: FontWeight.bold)),
+                           WidgetUtils.onlyText('哈哈哈哈哈哈', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(32),)),
                            WidgetUtils.commonSizedBox(5, 0),
                            Row(
                              children: [
@@ -273,17 +262,19 @@ class _TrendsPageState extends State<TrendsPage> {
                            WidgetUtils.commonSizedBox(10, 0),
                            Row(
                              children: [
-                               WidgetUtils.onlyText('刚刚·IP属地：唐山', StyleUtils.getCommonTextStyle(color: Colors.grey, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.bold)),
+                               WidgetUtils.onlyText('刚刚·IP属地：唐山', StyleUtils.getCommonTextStyle(color: Colors.grey, fontSize: ScreenUtil().setSp(24), )),
                                const Expanded(child: Text('')),
                                WidgetUtils.showImages('assets/images/trends_zan1.png', 18, 18),
                                WidgetUtils.commonSizedBox(0, 5),
-                               WidgetUtils.onlyText('抢首赞', StyleUtils.getCommonTextStyle(color: Colors.grey, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.bold)),
+                               WidgetUtils.onlyText('抢首赞', StyleUtils.getCommonTextStyle(color: Colors.grey, fontSize: ScreenUtil().setSp(24), )),
                                WidgetUtils.commonSizedBox(0, 20),
                                WidgetUtils.showImages('assets/images/trends_message.png', 18, 18),
                                WidgetUtils.commonSizedBox(0, 5),
-                               WidgetUtils.onlyText('评论', StyleUtils.getCommonTextStyle(color: Colors.grey, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.bold)),
+                               WidgetUtils.onlyText('评论', StyleUtils.getCommonTextStyle(color: Colors.grey, fontSize: ScreenUtil().setSp(24), )),
                              ],
-                           )
+                           ),
+                           WidgetUtils.commonSizedBox(10, 0),
+                           WidgetUtils.myLine()
                          ],
                        ),
                      ),

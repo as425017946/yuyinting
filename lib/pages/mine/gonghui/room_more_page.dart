@@ -32,7 +32,7 @@ class _RoomMorePageState extends State<RoomMorePage> {
       margin: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
       child: Row(
         children: [
-          WidgetUtils.CircleImageNet(ScreenUtil().setHeight(110), ScreenUtil().setHeight(110), 28, 'http://b.hiphotos.baidu.com/image/pic/item/359b033b5bb5c9ea5c0e3c23d139b6003bf3b374.jpg'),
+          WidgetUtils.CircleImageNet(ScreenUtil().setHeight(110), ScreenUtil().setHeight(110), 10, 'http://b.hiphotos.baidu.com/image/pic/item/359b033b5bb5c9ea5c0e3c23d139b6003bf3b374.jpg'),
           WidgetUtils.commonSizedBox(10, 20),
           WidgetUtils.onlyText('房间名称3', StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(29), fontWeight: FontWeight.bold)),
         ],

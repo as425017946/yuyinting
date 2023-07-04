@@ -38,7 +38,7 @@ class _GonghuiMorePageState extends State<GonghuiMorePage> {
                   Row(
                     children: [
                       WidgetUtils.commonSizedBox(20, 20),
-                      WidgetUtils.CircleImageNet(ScreenUtil().setHeight(144), ScreenUtil().setHeight(144), 28, 'http://b.hiphotos.baidu.com/image/pic/item/359b033b5bb5c9ea5c0e3c23d139b6003bf3b374.jpg'),
+                      WidgetUtils.CircleImageNet(ScreenUtil().setHeight(144), ScreenUtil().setHeight(144), 10, 'http://b.hiphotos.baidu.com/image/pic/item/359b033b5bb5c9ea5c0e3c23d139b6003bf3b374.jpg'),
                       WidgetUtils.commonSizedBox(0, 20),
                       Expanded(
                         child: Column(

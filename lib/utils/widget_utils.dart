@@ -87,7 +87,8 @@ class WidgetUtils {
                             '完成',
                             style: StyleUtils.getCommonTextStyle(
                                 color: Colors.black,
-                                fontSize: ScreenUtil().setSp(25)),
+                                fontSize: ScreenUtil().setSp(32),
+                            fontWeight: FontWeight.bold),
                           ),
                         )
                       : index == 2
@@ -586,7 +587,6 @@ class WidgetUtils {
               title,
               style: StyleUtils.getCommonTextStyle(
                   color: Colors.black,
-                  fontWeight: FontWeight.bold,
                   fontSize: ScreenUtil().setSp(29)),
             ),
             const Expanded(child: Text('')),
@@ -809,7 +809,7 @@ class WidgetUtils {
   static Widget onlyTextLeftRightImg(
       String title, TextStyle leftStyle, String url) {
     return Container(
-      height: ConfigScreenUtil.autoHeight110,
+      height: ConfigScreenUtil.autoHeight90,
       width: double.infinity,
       color: Colors.white,
       child: Row(
@@ -1010,11 +1010,11 @@ class WidgetUtils {
               ),
               child: Row(
                 children: [
-                  WidgetUtils.commonSizedBox(0, 25),
+                  WidgetUtils.commonSizedBox(0, 22),
                   Text(
                     title,
                     style: StyleUtils.getCommonTextStyle(
-                        color: Colors.white, fontSize: ScreenUtil().setSp(18)),
+                        color: Colors.white, fontSize: ScreenUtil().setSp(22), fontWeight: FontWeight.bold),
                   )
                 ],
               ),
@@ -1105,6 +1105,50 @@ class WidgetUtils {
       child: Text(
         title,
         style: style,
+      ),
+    );
+  }
+
+  ///编辑个人
+  static Widget bianjiTextField(
+      TextEditingController controller, String hintText) {
+    return TextField(
+      controller: controller,
+      inputFormatters: [
+        RegexFormatter(regex: MyUtils.regexFirstNotNull),
+      ],
+      style: StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: ScreenUtil().setSp(25)),
+      onChanged: (value) {
+        LogE('长度$value');
+        // eventBus.fire(InfoBack(infos: value));
+      },
+      decoration: InputDecoration(
+        // border: InputBorder.none,
+        // labelText: "请输入用户名",
+        // icon: Icon(Icons.people), //前面的图标
+        hintText: hintText,
+        hintStyle: StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(25)),
+
+        contentPadding: const EdgeInsets.only(top: 0, bottom: 0),
+        border: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.transparent),
+        ),
+        enabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.transparent,
+          ),
+        ),
+        disabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.transparent,
+          ),
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.transparent,
+          ),
+        ),
+        // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
       ),
     );
   }

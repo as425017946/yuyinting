@@ -36,7 +36,7 @@ class _TuijianPageState extends State<TuijianPage> {
             padding: const EdgeInsets.only(top: 10, bottom: 10),
             color: MyColors.homeTopBG,
             child: Container(
-              margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+              margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
               height: ScreenUtil().setHeight(50),
               alignment: Alignment.centerLeft,
               width: double.infinity,
@@ -61,353 +61,351 @@ class _TuijianPageState extends State<TuijianPage> {
             ),
           ),
           Transform.translate(offset: Offset(0,-1),
-            child: Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                      width: double.infinity,
-                      decoration: const BoxDecoration(
-                          gradient: LinearGradient(      //渐变位置
-                              begin: Alignment.topCenter, //右上
-                              end: Alignment.bottomCenter, //左下
-                              stops: [0.0, 1.0],         //[渐变起始点, 渐变结束点]
-                              //渐变颜色[始点颜色, 结束颜色]
-                              colors: [Color.fromRGBO(91, 70, 185, 1), Color.fromRGBO(255, 255, 255, 1)]
-                          )
-                      ),
-                      child: Column(
-                        children: [
-                          ///轮播图
-                          Container(
-                            height:ScreenUtil().setHeight(140),
-                            //超出部分，可裁剪
-                            clipBehavior: Clip.hardEdge,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Swiper(
-                              itemBuilder: (BuildContext context,int index){
-                                // 配置图片地址
-                                return Image.network(imgList[index]["url"],fit: BoxFit.fill,);
-                              },
-                              // 配置图片数量
-                              itemCount: imgList.length ,
-                              // 无限循环
-                              loop: true,
-                              // 自动轮播
-                              autoplay: true,
-                              duration: 5,
-                            ),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                        gradient: LinearGradient(      //渐变位置
+                            begin: Alignment.topCenter, //右上
+                            end: Alignment.bottomCenter, //左下
+                            stops: [0.0, 1.0],         //[渐变起始点, 渐变结束点]
+                            //渐变颜色[始点颜色, 结束颜色]
+                            colors: [Color.fromRGBO(91, 70, 185, 1), Color.fromRGBO(255, 255, 255, 1)]
+                        )
+                    ),
+                    child: Column(
+                      children: [
+                        ///轮播图
+                        Container(
+                          height:ScreenUtil().setHeight(140),
+                          //超出部分，可裁剪
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
                           ),
-                          ///热门推荐
-                          WidgetUtils.commonSizedBox(10, 0),
-                          WidgetUtils.onlyText('热门推荐', StyleUtils.getCommonTextStyle(color: Colors.black,fontSize: ScreenUtil().setSp(28),fontWeight: FontWeight.bold)),
-                          WidgetUtils.commonSizedBox(10, 0),
-                          SizedBox(
-                            width: double.infinity,
-                            height: ScreenUtil().setHeight(350),
-                            child: Row(
-                              children: [
-                                ///热门推荐第一个大的轮播图
-                                Container(
-                                  height:ScreenUtil().setHeight(350),
-                                  width: ScreenUtil().setWidth(450),
-                                  //超出部分，可裁剪
-                                  clipBehavior: Clip.hardEdge,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  child: Swiper(
-                                    itemBuilder: (BuildContext context,int index){
-                                      // 配置图片地址
-                                      return Image.network(imgList[index]["url"],fit: BoxFit.fill,);
-                                    },
-                                    // 配置图片数量
-                                    itemCount: imgList.length ,
-                                    // 无限循环
-                                    loop: true,
-                                    // 自动轮播
-                                    autoplay: true,
-                                    duration: 7,
-                                  ),
+                          child: Swiper(
+                            itemBuilder: (BuildContext context,int index){
+                              // 配置图片地址
+                              return Image.network(imgList[index]["url"],fit: BoxFit.fill,);
+                            },
+                            // 配置图片数量
+                            itemCount: imgList.length ,
+                            // 无限循环
+                            loop: true,
+                            // 自动轮播
+                            autoplay: true,
+                            duration: 5,
+                          ),
+                        ),
+                        ///热门推荐
+                        WidgetUtils.commonSizedBox(10, 0),
+                        WidgetUtils.onlyText('热门推荐', StyleUtils.getCommonTextStyle(color: Colors.black,fontSize: ScreenUtil().setSp(28),fontWeight: FontWeight.bold)),
+                        WidgetUtils.commonSizedBox(10, 0),
+                        SizedBox(
+                          width: double.infinity,
+                          height: ScreenUtil().setHeight(350),
+                          child: Row(
+                            children: [
+                              ///热门推荐第一个大的轮播图
+                              Container(
+                                height:ScreenUtil().setHeight(350),
+                                width: ScreenUtil().setWidth(450),
+                                //超出部分，可裁剪
+                                clipBehavior: Clip.hardEdge,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
                                 ),
-                                WidgetUtils.commonSizedBox(0, 10),
-                                Expanded(child: Column(
-                                  children: [
-                                    ///热门推荐 小的轮播图1
-                                    Expanded(child: Container(
-                                      height: ScreenUtil().setHeight(170),
-                                      //超出部分，可裁剪
-                                      clipBehavior: Clip.hardEdge,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      child: Swiper(
-                                        itemBuilder: (BuildContext context,int index){
-                                          // 配置图片地址
-                                          return Image.network(imgList[index]["url"],fit: BoxFit.fill,);
-                                        },
-                                        // 配置图片数量
-                                        itemCount: imgList.length ,
-                                        // 无限循环
-                                        loop: true,
-                                        // 自动轮播
-                                        autoplay: true,
-                                        duration: 7,
-                                      ),
-                                    )),
-                                    WidgetUtils.commonSizedBox(10, 0),
-                                    ///热门推荐 小的轮播图2
-                                    Expanded(child: Container(
-                                      height: ScreenUtil().setHeight(170),
-                                      //超出部分，可裁剪
-                                      clipBehavior: Clip.hardEdge,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      child: Swiper(
-                                        itemBuilder: (BuildContext context,int index){
-                                          // 配置图片地址
-                                          return Image.network(imgList[index]["url"],fit: BoxFit.fill,);
-                                        },
-                                        // 配置图片数量
-                                        itemCount: imgList.length ,
-                                        // 无限循环
-                                        loop: true,
-                                        // 自动轮播
-                                        autoplay: true,
-                                        duration: 7,
-                                      ),
-                                    )),
-                                  ],
-                                ))
+                                child: Swiper(
+                                  itemBuilder: (BuildContext context,int index){
+                                    // 配置图片地址
+                                    return Image.network(imgList[index]["url"],fit: BoxFit.fill,);
+                                  },
+                                  // 配置图片数量
+                                  itemCount: imgList.length ,
+                                  // 无限循环
+                                  loop: true,
+                                  // 自动轮播
+                                  autoplay: true,
+                                  duration: 7,
+                                ),
+                              ),
+                              WidgetUtils.commonSizedBox(0, 10),
+                              Expanded(child: Column(
+                                children: [
+                                  ///热门推荐 小的轮播图1
+                                  Expanded(child: Container(
+                                    height: ScreenUtil().setHeight(170),
+                                    //超出部分，可裁剪
+                                    clipBehavior: Clip.hardEdge,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Swiper(
+                                      itemBuilder: (BuildContext context,int index){
+                                        // 配置图片地址
+                                        return Image.network(imgList[index]["url"],fit: BoxFit.fill,);
+                                      },
+                                      // 配置图片数量
+                                      itemCount: imgList.length ,
+                                      // 无限循环
+                                      loop: true,
+                                      // 自动轮播
+                                      autoplay: true,
+                                      duration: 7,
+                                    ),
+                                  )),
+                                  WidgetUtils.commonSizedBox(10, 0),
+                                  ///热门推荐 小的轮播图2
+                                  Expanded(child: Container(
+                                    height: ScreenUtil().setHeight(170),
+                                    //超出部分，可裁剪
+                                    clipBehavior: Clip.hardEdge,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Swiper(
+                                      itemBuilder: (BuildContext context,int index){
+                                        // 配置图片地址
+                                        return Image.network(imgList[index]["url"],fit: BoxFit.fill,);
+                                      },
+                                      // 配置图片数量
+                                      itemCount: imgList.length ,
+                                      // 无限循环
+                                      loop: true,
+                                      // 自动轮播
+                                      autoplay: true,
+                                      duration: 7,
+                                    ),
+                                  )),
+                                ],
+                              ))
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  ///推荐主播
+                  WidgetUtils.commonSizedBox(20, 0),
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    child: WidgetUtils.onlyText('推荐主播', StyleUtils.getCommonTextStyle(color: Colors.black,fontSize: ScreenUtil().setSp(28),fontWeight: FontWeight.bold)),
+                  ),
+                  WidgetUtils.commonSizedBox(20, 0),
+                  GestureDetector(
+                    onTap: ((){
+                      MyToastUtils.showToastBottom('点击了');
+                    }),
+                    child: Container(
+                      margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                      width: double.infinity,
+                      height: ScreenUtil().setHeight(80),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: ScreenUtil().setWidth(80),
+                            height: ScreenUtil().setHeight(80),
+                            alignment: Alignment.centerLeft,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                WidgetUtils.CircleHeadImage(40, 40, 'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
+                                WidgetUtils.showImages( 'assets/images/zhibozhong.webp', 80, 80),
                               ],
                             ),
-                          )
+                          ),
+                          WidgetUtils.commonSizedBox(0, 10),
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: Row(
+                                    children: [
+                                      WidgetUtils.onlyText('亦亦12121', StyleUtils.getCommonTextStyle(color: Colors.black,fontWeight: FontWeight.bold, fontSize: 16)),
+                                      WidgetUtils.commonSizedBox(0, 5),
+                                      Stack(
+                                        children: [
+                                          WidgetUtils.showImages('assets/images/avk.png', 15, 45),
+                                          Container(
+                                            padding: const EdgeInsets.only(right: 7),
+                                            width: 45,
+                                            height: 15,
+                                            alignment: Alignment.centerRight,
+                                            child: Text(
+                                              '21',
+                                              style: StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 12),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.only(top: 5),
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    'a...',
+                                    textAlign: TextAlign.left,
+                                    style: StyleUtils.getCommonTextStyle(color: Colors.grey,fontWeight: FontWeight.bold, fontSize: 14),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          WidgetUtils.showImages('assets/images/Hi.png', 30, 80),
+                          WidgetUtils.commonSizedBox(0, 20),
+
                         ],
                       ),
                     ),
-                    ///推荐主播
-                    WidgetUtils.commonSizedBox(20, 0),
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                      child: WidgetUtils.onlyText('推荐主播', StyleUtils.getCommonTextStyle(color: Colors.black,fontSize: ScreenUtil().setSp(28),fontWeight: FontWeight.bold)),
-                    ),
-                    WidgetUtils.commonSizedBox(20, 0),
-                    GestureDetector(
-                      onTap: ((){
-                        MyToastUtils.showToastBottom('点击了');
-                      }),
-                      child: Container(
-                        margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                        width: double.infinity,
-                        height: ScreenUtil().setHeight(80),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: ScreenUtil().setWidth(80),
-                              height: ScreenUtil().setHeight(80),
-                              alignment: Alignment.centerLeft,
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  WidgetUtils.CircleHeadImage(40, 40, 'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
-                                  WidgetUtils.showImages( 'assets/images/zhibozhong.webp', 80, 80),
-                                ],
-                              ),
+                  ),
+                  WidgetUtils.myLine(indent: 20,endIndent: 20),
+                  GestureDetector(
+                    onTap: ((){
+                      MyToastUtils.showToastBottom('点击了');
+                    }),
+                    child: Container(
+                      margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                      width: double.infinity,
+                      height: ScreenUtil().setHeight(80),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: ScreenUtil().setWidth(80),
+                            height: ScreenUtil().setHeight(80),
+                            alignment: Alignment.centerLeft,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                WidgetUtils.CircleHeadImage(40, 40, 'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
+                                WidgetUtils.showImages( 'assets/images/zhibozhong.webp', 80, 80),
+                              ],
                             ),
-                            WidgetUtils.commonSizedBox(0, 10),
-                            Expanded(
-                              child: Column(
-                                children: [
-                                  Container(
-                                    alignment: Alignment.centerLeft,
-                                    child: Row(
-                                      children: [
-                                        WidgetUtils.onlyText('亦亦12121', StyleUtils.getCommonTextStyle(color: Colors.black,fontWeight: FontWeight.bold, fontSize: 16)),
-                                        WidgetUtils.commonSizedBox(0, 5),
-                                        Stack(
-                                          children: [
-                                            WidgetUtils.showImages('assets/images/avk.png', 15, 45),
-                                            Container(
-                                              padding: const EdgeInsets.only(right: 7),
-                                              width: 45,
-                                              height: 15,
-                                              alignment: Alignment.centerRight,
-                                              child: Text(
-                                                '21',
-                                                style: StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 12),
-                                              ),
+                          ),
+                          WidgetUtils.commonSizedBox(0, 10),
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: Row(
+                                    children: [
+                                      WidgetUtils.onlyText('亦亦12121', StyleUtils.getCommonTextStyle(color: Colors.black,fontWeight: FontWeight.bold, fontSize: 16)),
+                                      WidgetUtils.commonSizedBox(0, 5),
+                                      Stack(
+                                        children: [
+                                          WidgetUtils.showImages('assets/images/avk.png', 15, 45),
+                                          Container(
+                                            padding: const EdgeInsets.only(right: 7),
+                                            width: 45,
+                                            height: 15,
+                                            alignment: Alignment.centerRight,
+                                            child: Text(
+                                              '21',
+                                              style: StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 12),
                                             ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
-                                  Container(
-                                    margin: const EdgeInsets.only(top: 5),
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      'a...',
-                                      textAlign: TextAlign.left,
-                                      style: StyleUtils.getCommonTextStyle(color: Colors.grey,fontWeight: FontWeight.bold, fontSize: 14),
-                                    ),
-                                  )
-                                ],
-                              ),
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.only(top: 5),
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    'a...',
+                                    textAlign: TextAlign.left,
+                                    style: StyleUtils.getCommonTextStyle(color: Colors.grey,fontWeight: FontWeight.bold, fontSize: 14),
+                                  ),
+                                )
+                              ],
                             ),
-                            WidgetUtils.showImages('assets/images/Hi.png', 30, 80),
-                            WidgetUtils.commonSizedBox(0, 20),
+                          ),
+                          WidgetUtils.showImages('assets/images/Hi.png', 30, 80),
+                          WidgetUtils.commonSizedBox(0, 20),
 
-                          ],
-                        ),
+                        ],
                       ),
                     ),
-                    WidgetUtils.myLine(indent: 20,endIndent: 20),
-                    GestureDetector(
-                      onTap: ((){
-                        MyToastUtils.showToastBottom('点击了');
-                      }),
-                      child: Container(
-                        margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                        width: double.infinity,
-                        height: ScreenUtil().setHeight(80),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: ScreenUtil().setWidth(80),
-                              height: ScreenUtil().setHeight(80),
-                              alignment: Alignment.centerLeft,
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  WidgetUtils.CircleHeadImage(40, 40, 'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
-                                  WidgetUtils.showImages( 'assets/images/zhibozhong.webp', 80, 80),
-                                ],
-                              ),
+                  ),
+                  WidgetUtils.myLine(indent: 20,endIndent: 20),
+                  GestureDetector(
+                    onTap: ((){
+                      MyToastUtils.showToastBottom('点击了');
+                    }),
+                    child: Container(
+                      margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                      width: double.infinity,
+                      height: ScreenUtil().setHeight(80),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: ScreenUtil().setWidth(80),
+                            height: ScreenUtil().setHeight(80),
+                            alignment: Alignment.centerLeft,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                WidgetUtils.CircleHeadImage(40, 40, 'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
+                                WidgetUtils.showImages( 'assets/images/zhibozhong.webp', 80, 80),
+                              ],
                             ),
-                            WidgetUtils.commonSizedBox(0, 10),
-                            Expanded(
-                              child: Column(
-                                children: [
-                                  Container(
-                                    alignment: Alignment.centerLeft,
-                                    child: Row(
-                                      children: [
-                                        WidgetUtils.onlyText('亦亦12121', StyleUtils.getCommonTextStyle(color: Colors.black,fontWeight: FontWeight.bold, fontSize: 16)),
-                                        WidgetUtils.commonSizedBox(0, 5),
-                                        Stack(
-                                          children: [
-                                            WidgetUtils.showImages('assets/images/avk.png', 15, 45),
-                                            Container(
-                                              padding: const EdgeInsets.only(right: 7),
-                                              width: 45,
-                                              height: 15,
-                                              alignment: Alignment.centerRight,
-                                              child: Text(
-                                                '21',
-                                                style: StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 12),
-                                              ),
+                          ),
+                          WidgetUtils.commonSizedBox(0, 10),
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: Row(
+                                    children: [
+                                      WidgetUtils.onlyText('亦亦12121', StyleUtils.getCommonTextStyle(color: Colors.black,fontWeight: FontWeight.bold, fontSize: 16)),
+                                      WidgetUtils.commonSizedBox(0, 5),
+                                      Stack(
+                                        children: [
+                                          WidgetUtils.showImages('assets/images/avk.png', 15, 45),
+                                          Container(
+                                            padding: const EdgeInsets.only(right: 7),
+                                            width: 45,
+                                            height: 15,
+                                            alignment: Alignment.centerRight,
+                                            child: Text(
+                                              '21',
+                                              style: StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 12),
                                             ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
-                                  Container(
-                                    margin: const EdgeInsets.only(top: 5),
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      'a...',
-                                      textAlign: TextAlign.left,
-                                      style: StyleUtils.getCommonTextStyle(color: Colors.grey,fontWeight: FontWeight.bold, fontSize: 14),
-                                    ),
-                                  )
-                                ],
-                              ),
+                                ),
+                                Container(
+                                  margin: const EdgeInsets.only(top: 5),
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    'a...',
+                                    textAlign: TextAlign.left,
+                                    style: StyleUtils.getCommonTextStyle(color: Colors.grey,fontWeight: FontWeight.bold, fontSize: 14),
+                                  ),
+                                )
+                              ],
                             ),
-                            WidgetUtils.showImages('assets/images/Hi.png', 30, 80),
-                            WidgetUtils.commonSizedBox(0, 20),
+                          ),
+                          WidgetUtils.showImages('assets/images/Hi.png', 30, 80),
+                          WidgetUtils.commonSizedBox(0, 20),
 
-                          ],
-                        ),
+                        ],
                       ),
                     ),
-                    WidgetUtils.myLine(indent: 20,endIndent: 20),
-                    GestureDetector(
-                      onTap: ((){
-                        MyToastUtils.showToastBottom('点击了');
-                      }),
-                      child: Container(
-                        margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                        width: double.infinity,
-                        height: ScreenUtil().setHeight(80),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: ScreenUtil().setWidth(80),
-                              height: ScreenUtil().setHeight(80),
-                              alignment: Alignment.centerLeft,
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  WidgetUtils.CircleHeadImage(40, 40, 'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
-                                  WidgetUtils.showImages( 'assets/images/zhibozhong.webp', 80, 80),
-                                ],
-                              ),
-                            ),
-                            WidgetUtils.commonSizedBox(0, 10),
-                            Expanded(
-                              child: Column(
-                                children: [
-                                  Container(
-                                    alignment: Alignment.centerLeft,
-                                    child: Row(
-                                      children: [
-                                        WidgetUtils.onlyText('亦亦12121', StyleUtils.getCommonTextStyle(color: Colors.black,fontWeight: FontWeight.bold, fontSize: 16)),
-                                        WidgetUtils.commonSizedBox(0, 5),
-                                        Stack(
-                                          children: [
-                                            WidgetUtils.showImages('assets/images/avk.png', 15, 45),
-                                            Container(
-                                              padding: const EdgeInsets.only(right: 7),
-                                              width: 45,
-                                              height: 15,
-                                              alignment: Alignment.centerRight,
-                                              child: Text(
-                                                '21',
-                                                style: StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 12),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: const EdgeInsets.only(top: 5),
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      'a...',
-                                      textAlign: TextAlign.left,
-                                      style: StyleUtils.getCommonTextStyle(color: Colors.grey,fontWeight: FontWeight.bold, fontSize: 14),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            WidgetUtils.showImages('assets/images/Hi.png', 30, 80),
-                            WidgetUtils.commonSizedBox(0, 20),
-
-                          ],
-                        ),
-                      ),
-                    ),
-                    WidgetUtils.myLine(indent: 20,endIndent: 20),
-                  ],
-                ),
+                  ),
+                  WidgetUtils.myLine(indent: 20,endIndent: 20),
+                ],
               ),
             ),
           ),

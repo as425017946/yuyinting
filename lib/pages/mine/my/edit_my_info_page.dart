@@ -25,9 +25,11 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
   TextEditingController controllerGexing = TextEditingController();
   var appBar;
   List<File> imgArray = [];
+
   //0-未知 1-男 2-女
   int sex = 0;
   late List<String> list_sex = [];
+
   @override
   void initState() {
     // TODO: implement initState
@@ -48,13 +50,11 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
         print('longer >>> 返回数据下标：$position');
         print('longer >>> 返回数据：$p');
         print('longer >>> 返回数据类型：${p.runtimeType}');
-        setState(() {
-
-        });
+        setState(() {});
       },
     );
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,10 +64,11 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
         child: Column(
           children: [
             WidgetUtils.commonSizedBox(20, 0),
+
             /// 头像
             GestureDetector(
-              onTap: ((){
-                Future.delayed(const Duration(seconds: 0), (){
+              onTap: (() {
+                Future.delayed(const Duration(seconds: 0), () {
                   Navigator.of(context).push(PageRouteBuilder(
                       opaque: false,
                       pageBuilder: (context, animation, secondaryAnimation) {
@@ -76,7 +77,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                 });
               }),
               child: Container(
-                height: ScreenUtil().setHeight(140),
+                height: ScreenUtil().setHeight(110),
                 alignment: Alignment.center,
                 padding: const EdgeInsets.only(left: 20, right: 20),
                 child: Row(
@@ -88,8 +89,8 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                             fontSize: ScreenUtil().setSp(28))),
                     const Expanded(child: Text('')),
                     WidgetUtils.CircleHeadImage(
-                        ScreenUtil().setHeight(130),
-                        ScreenUtil().setWidth(130),
+                        ScreenUtil().setHeight(120),
+                        ScreenUtil().setWidth(120),
                         'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
                     WidgetUtils.commonSizedBox(0, 10),
                     WidgetUtils.showImages('assets/images/mine_more2.png',
@@ -102,7 +103,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
 
             /// 昵称
             Container(
-              height: ScreenUtil().setHeight(140),
+              height: ScreenUtil().setHeight(100),
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: Column(
@@ -113,7 +114,10 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                       StyleUtils.getCommonTextStyle(
                           color: Colors.black,
                           fontSize: ScreenUtil().setSp(28))),
-                  WidgetUtils.commonTextField(controller, '请输入昵称')
+                  SizedBox(
+                    height: ScreenUtil().setHeight(60),
+                    child: WidgetUtils.bianjiTextField(controller, '请输入昵称'),
+                  )
                 ],
               ),
             ),
@@ -121,11 +125,11 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
 
             /// 性别
             GestureDetector(
-              onTap: ((){
+              onTap: (() {
                 _onClickItem(list_sex, '非必选');
               }),
               child: Container(
-                height: ScreenUtil().setHeight(140),
+                height: ScreenUtil().setHeight(80),
                 alignment: Alignment.center,
                 padding: const EdgeInsets.only(left: 20, right: 20),
                 child: Row(
@@ -152,7 +156,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
 
             /// 个性签名
             Container(
-              height: ScreenUtil().setHeight(140),
+              height: ScreenUtil().setHeight(100),
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: Column(
@@ -163,8 +167,11 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                       StyleUtils.getCommonTextStyle(
                           color: Colors.black,
                           fontSize: ScreenUtil().setSp(28))),
-                  WidgetUtils.commonTextField(
-                      controllerGexing, '输入签名，展示你的独特个性吧')
+                  SizedBox(
+                    height: ScreenUtil().setHeight(60),
+                    child: WidgetUtils.bianjiTextField(
+                        controllerGexing, '输入签名，展示你的独特个性吧'),
+                  )
                 ],
               ),
             ),
@@ -172,40 +179,39 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
 
             /// 生日
             GestureDetector(
-              onTap: ((){
+              onTap: (() {
                 DatePicker.show(
                   context,
-                  startDate: DateTime(2022, 2, 2),
+                  startDate: DateTime(1970, 2, 2),
                   selectedDate: DateTime(2023, 3, 3),
                   endDate: DateTime(2025, 5, 5),
-                  onSelected: (date) {
-
-                  },
+                  onSelected: (date) {},
                 );
               }),
               child: Container(
-                height: ScreenUtil().setHeight(140),
+                height: ScreenUtil().setHeight(100),
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.only(left: 20, right: 20),
+                color: Colors.white,
                 child: Row(
                   children: [
                     Expanded(
                         child: Column(
-                          children: [
-                            const Expanded(child: Text('')),
-                            WidgetUtils.onlyText(
-                                '生日',
-                                StyleUtils.getCommonTextStyle(
-                                    color: Colors.black,
-                                    fontSize: ScreenUtil().setSp(28))),
-                            WidgetUtils.commonSizedBox(10, 0),
-                            WidgetUtils.onlyText(
-                                '未填写',
-                                StyleUtils.getCommonTextStyle(
-                                    color: MyColors.g6,
-                                    fontSize: ScreenUtil().setSp(28))),
-                          ],
-                        )),
+                      children: [
+                        const Expanded(child: Text('')),
+                        WidgetUtils.onlyText(
+                            '生日',
+                            StyleUtils.getCommonTextStyle(
+                                color: Colors.black,
+                                fontSize: ScreenUtil().setSp(28))),
+                        WidgetUtils.commonSizedBox(10, 0),
+                        WidgetUtils.onlyText(
+                            '未填写',
+                            StyleUtils.getCommonTextStyle(
+                                color: MyColors.g6,
+                                fontSize: ScreenUtil().setSp(28))),
+                      ],
+                    )),
                     WidgetUtils.showImages('assets/images/mine_more2.png',
                         ScreenUtil().setHeight(27), ScreenUtil().setHeight(16))
                   ],
@@ -216,11 +222,11 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
 
             /// 声音名片
             GestureDetector(
-              onTap: ((){
+              onTap: (() {
                 Navigator.pushNamed(context, 'EditAudioPage');
               }),
               child: Container(
-                height: ScreenUtil().setHeight(140),
+                height: ScreenUtil().setHeight(100),
                 alignment: Alignment.center,
                 padding: const EdgeInsets.only(left: 20, right: 20),
                 child: Row(
@@ -241,10 +247,9 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
 
             /// 所在城市
             GestureDetector(
-              onTap: ((){
-              }),
+              onTap: (() {}),
               child: Container(
-                height: ScreenUtil().setHeight(140),
+                height: ScreenUtil().setHeight(100),
                 alignment: Alignment.center,
                 padding: const EdgeInsets.only(left: 20, right: 20),
                 child: Row(
@@ -271,8 +276,8 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
 
             /// 我的标签
             GestureDetector(
-              onTap: ((){
-                Future.delayed(const Duration(seconds: 0), (){
+              onTap: (() {
+                Future.delayed(const Duration(seconds: 0), () {
                   Navigator.of(context).push(PageRouteBuilder(
                       opaque: false,
                       pageBuilder: (context, animation, secondaryAnimation) {
@@ -281,7 +286,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                 });
               }),
               child: Container(
-                height: ScreenUtil().setHeight(140),
+                height: ScreenUtil().setHeight(120),
                 alignment: Alignment.center,
                 padding: const EdgeInsets.only(left: 20, right: 20),
                 child: Column(
@@ -374,5 +379,4 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
       ),
     );
   }
-
 }

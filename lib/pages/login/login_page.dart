@@ -233,7 +233,7 @@ class _LoginPageState extends State<LoginPage> {
                         controller: controllerPass, hintText: '请输入密码'),
                   ),
             WidgetUtils.commonSizedBox(30, 0),
-            Padding(
+            Container(
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: WidgetUtils.commonSubmitButton('立即登录'),
             ),

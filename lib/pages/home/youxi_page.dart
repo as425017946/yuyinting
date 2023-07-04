@@ -16,22 +16,29 @@ class _YouxiPageState extends State<YouxiPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: MyColors.homeBG,
+      color: Colors.white,
       child: SingleChildScrollView(
         child: Container(
-          margin: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+          margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
           child: Column(
             children: [
-              WidgetUtils.onlyText('热门游戏', StyleUtils.getCommonTextStyle(color: Colors.black,fontSize: ScreenUtil().setSp(28),fontWeight: FontWeight.bold)),
+              Row(
+                children: [
+                  WidgetUtils.commonSizedBox(0, 20),
+                  WidgetUtils.onlyText('热门游戏', StyleUtils.getCommonTextStyle(color: Colors.black,fontSize: ScreenUtil().setSp(28),fontWeight: FontWeight.bold))
+                ],
+              ),
               WidgetUtils.commonSizedBox(20, 0),
-              SizedBox(
+              Container(
                 height: ScreenUtil().setHeight(300),
                 width: double.infinity,
+                margin: const EdgeInsets.only(left: 20, right: 20),
                 child: WidgetUtils.CircleImageNet(300, double.infinity, 10, 'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
               ),
               WidgetUtils.commonSizedBox(10, 0),
-              SizedBox(
+              Container(
                 height: ScreenUtil().setHeight(80),
+                margin: const EdgeInsets.only(left: 20, right: 20),
                 child: Row(
                   children: [
                     Expanded(
@@ -42,20 +49,22 @@ class _YouxiPageState extends State<YouxiPage> {
                         ],
                       ),
                     ),
-                    WidgetUtils.showImages('assets/images/quliaojie.png', 35, 90),
+                    WidgetUtils.showImages('assets/images/quliaojie.png', 30, 80),
                   ],
                 ),
               ),
-              WidgetUtils.myLine(thickness: 10),
+              WidgetUtils.myLine(color: MyColors.f6,thickness: 10),
               WidgetUtils.commonSizedBox(20, 0),
-              SizedBox(
+              Container(
                 height: ScreenUtil().setHeight(300),
                 width: double.infinity,
+                margin: const EdgeInsets.only(left: 20, right: 20),
                 child: WidgetUtils.CircleImageNet(300, double.infinity, 10, 'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
               ),
               WidgetUtils.commonSizedBox(10, 0),
-              SizedBox(
+              Container(
                 height: ScreenUtil().setHeight(80),
+                margin: const EdgeInsets.only(left: 20, right: 20),
                 child: Row(
                   children: [
                     Expanded(
@@ -66,7 +75,7 @@ class _YouxiPageState extends State<YouxiPage> {
                         ],
                       ),
                     ),
-                    WidgetUtils.showImages('assets/images/quliaojie.png', 35, 90),
+                    WidgetUtils.showImages('assets/images/quliaojie.png', 30, 80),
                   ],
                 ),
               ),

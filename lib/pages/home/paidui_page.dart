@@ -16,6 +16,7 @@ class PaiduiPage extends StatefulWidget {
 
 class _PaiduiPageState extends State<PaiduiPage> {
   final TextEditingController _souSuoName = TextEditingController();
+  //0 女神 1 男神 2 新厅 3 游戏电台
   int index = 0;
 
   Widget _itemPaihang(BuildContext context, int i) {
@@ -53,7 +54,7 @@ class _PaiduiPageState extends State<PaiduiPage> {
                           StyleUtils.getCommonTextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
-                              fontSize: 16)),
+                              fontSize: 14)),
                       const Expanded(child: Text('')),
                       Row(
                         children: [
@@ -65,7 +66,7 @@ class _PaiduiPageState extends State<PaiduiPage> {
                               StyleUtils.getCommonTextStyle(
                                   color: MyColors.paiduiPurple,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: ScreenUtil().setSp(20)))
+                                  fontSize: ScreenUtil().setSp(18)))
                         ],
                       ),
                       const Expanded(child: Text('')),
@@ -79,8 +80,7 @@ class _PaiduiPageState extends State<PaiduiPage> {
                           WidgetUtils.onlyText(
                               '张三',
                               StyleUtils.getCommonTextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
+                                  color: MyColors.mineGrey,
                                   fontSize: ScreenUtil().setSp(20))),
                           WidgetUtils.commonSizedBox(0, 20),
                           WidgetUtils.CircleHeadImage(
@@ -107,32 +107,33 @@ class _PaiduiPageState extends State<PaiduiPage> {
                                 ScreenUtil().setHeight(30),
                                 ScreenUtil().setHeight(30),
                                 'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
-                          ),Transform.translate(
+                          ),
+                          Transform.translate(
                             offset: const Offset(-25, 0),
                             child: WidgetUtils.CircleHeadImage(
                                 ScreenUtil().setHeight(30),
                                 ScreenUtil().setHeight(30),
                                 'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
                           ),
+                          const Expanded(child: Text('')),
+                          /// 热度
+                          Row(
+                            children: [
+                              WidgetUtils.showImages('assets/images/paidui_redu.png',
+                                  ScreenUtil().setHeight(22), ScreenUtil().setHeight(14)),
+                              WidgetUtils.commonSizedBox(0, 5),
+                              WidgetUtils.onlyText(
+                                  '1.0w',
+                                  StyleUtils.getCommonTextStyle(
+                                      color: MyColors.g6,
+                                      fontSize: ScreenUtil().setSp(24)))
+                            ],
+                          ),
                         ],
                       ),
                       WidgetUtils.commonSizedBox(10, 0),
                     ],
                   ),
-                ),
-
-                /// 热度
-                Row(
-                  children: [
-                    WidgetUtils.showImages('assets/images/paidui_redu.png',
-                        ScreenUtil().setHeight(30), ScreenUtil().setHeight(24)),
-                    WidgetUtils.commonSizedBox(0, 5),
-                    WidgetUtils.onlyText(
-                        '1.0w',
-                        StyleUtils.getCommonTextStyle(
-                            color: Colors.black,
-                            fontSize: ScreenUtil().setSp(30)))
-                  ],
                 ),
                 WidgetUtils.commonSizedBox(0, 10),
               ],
@@ -148,7 +149,7 @@ class _PaiduiPageState extends State<PaiduiPage> {
   Widget build(BuildContext context) {
     return Container(
       color: MyColors.homeBG,
-      padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+      padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
       child: SingleChildScrollView(
         child: Column(
           children: [
@@ -165,103 +166,113 @@ class _PaiduiPageState extends State<PaiduiPage> {
             ///顶部排行
             SizedBox(
               width: double.infinity,
-              height: ScreenUtil().setHeight(300),
+              height: ScreenUtil().setHeight(280),
               child: Row(
                 children: [
-                  Expanded(
-                    flex: 2,
-                    child: Stack(
-                      alignment: Alignment.topRight,
-                      children: [
-                        WidgetUtils.CircleImageNet(
-                            double.infinity,
-                            double.infinity,
-                            10,
-                            'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
-                        Transform.translate(
-                          offset: const Offset(-5, -5),
-                          child: WidgetUtils.showImages(
-                              'assets/images/paidui_one.png',
-                              ScreenUtil().setHeight(84),
-                              ScreenUtil().setWidth(79)),
-                        )
-                      ],
-                    ),
+                  Stack(
+                    alignment: Alignment.topRight,
+                    children: [
+                      WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(280),
+                          ScreenUtil().setHeight(280),
+                          10,
+                          'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
+                      Transform.translate(
+                        offset: const Offset(-5, -5),
+                        child: WidgetUtils.showImages(
+                            'assets/images/paidui_one.png',
+                            ScreenUtil().setHeight(84),
+                            ScreenUtil().setWidth(79)),
+                      )
+                    ],
                   ),
-                  WidgetUtils.commonSizedBox(0, 5),
-                  Expanded(
-                    flex: 1,
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: Stack(
-                            alignment: Alignment.topRight,
-                            children: [
-                              WidgetUtils.CircleImageNet(
-                                  double.infinity,
-                                  double.infinity,
-                                  10,
-                                  'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
-                              Transform.translate(
-                                offset: const Offset(-5, -4),
-                                child: WidgetUtils.showImages(
-                                    'assets/images/paidui_two.png',
-                                    ScreenUtil().setHeight(60),
-                                    ScreenUtil().setWidth(55)),
-                              )
-                            ],
-                          ),
-                        ),
-                        WidgetUtils.commonSizedBox(5, 0),
-                        Expanded(
-                          child: WidgetUtils.CircleImageNet(
-                              double.infinity,
-                              double.infinity,
+                  const Expanded(child: Text('')),
+                  Column(
+                    children: [
+                      Stack(
+                        alignment: Alignment.topRight,
+                        children: [
+                          WidgetUtils.CircleImageNet(
+                              ScreenUtil().setHeight(137.5),
+                              ScreenUtil().setHeight(137.5),
                               10,
                               'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
-                        )
-                      ],
-                    ),
+                          Transform.translate(
+                            offset: const Offset(-5, -4),
+                            child: WidgetUtils.showImages(
+                                'assets/images/paidui_two.png',
+                                ScreenUtil().setHeight(60),
+                                ScreenUtil().setWidth(55)),
+                          )
+                        ],
+                      ),
+                      const Expanded(child: Text('')),
+                      WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(137.5),
+                          ScreenUtil().setHeight(137.5),
+                          10,
+                          'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342')
+                    ],
                   ),
-                  WidgetUtils.commonSizedBox(0, 5),
-                  Expanded(
-                    flex: 1,
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: Stack(
-                            alignment: Alignment.topRight,
-                            children: [
-                              WidgetUtils.CircleImageNet(
-                                  double.infinity,
-                                  double.infinity,
-                                  10,
-                                  'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
-                              Transform.translate(
-                                offset: const Offset(-5, -4),
-                                child: WidgetUtils.showImages(
-                                    'assets/images/paidui_three.png',
-                                    ScreenUtil().setHeight(60),
-                                    ScreenUtil().setWidth(42)),
-                              )
-                            ],
-                          ),
-                        ),
-                        WidgetUtils.commonSizedBox(5, 0),
-                        Expanded(
-                          child: WidgetUtils.CircleImageNet(
-                              double.infinity,
-                              double.infinity,
+                  const Expanded(child: Text('')),
+                  Column(
+                    children: [
+                      Stack(
+                        alignment: Alignment.topRight,
+                        children: [
+                          WidgetUtils.CircleImageNet(
+                              ScreenUtil().setHeight(137.5),
+                              ScreenUtil().setHeight(137.5),
                               10,
                               'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
-                        )
-                      ],
-                    ),
+                          Transform.translate(
+                            offset: const Offset(-5, -3),
+                            child: WidgetUtils.showImages(
+                                'assets/images/paidui_three.png',
+                                ScreenUtil().setHeight(60),
+                                ScreenUtil().setWidth(42)),
+                          )
+                        ],
+                      ),
+                      const Expanded(child: Text('')),
+                      WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(137.5),
+                          ScreenUtil().setHeight(137.5),
+                          10,
+                          'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342')
+                    ],
                   ),
+                  // Column(
+                  //   children: [
+                  //     Stack(
+                  //       alignment: Alignment.topRight,
+                  //       children: [
+                  //         WidgetUtils.CircleImageNet(
+                  //             double.infinity,
+                  //             double.infinity,
+                  //             10,
+                  //             'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
+                  //         Transform.translate(
+                  //           offset: const Offset(-5, -4),
+                  //           child: WidgetUtils.showImages(
+                  //               'assets/images/paidui_three.png',
+                  //               ScreenUtil().setHeight(60),
+                  //               ScreenUtil().setWidth(42)),
+                  //         )
+                  //       ],
+                  //     ),
+                  //     const Expanded(child: Text('')),
+                  //     WidgetUtils.CircleImageNet(
+                  //         double.infinity,
+                  //         double.infinity,
+                  //         10,
+                  //         'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342')
+                  //   ],
+                  // ),
                 ],
               ),
             ),
-            WidgetUtils.commonSizedBox(5, 0),
+            WidgetUtils.commonSizedBox(10, 0),
             /// 标题栏 、 导航栏
             Row(
               children: [
@@ -272,11 +283,11 @@ class _PaiduiPageState extends State<PaiduiPage> {
                     });
                   }),
                   child: WidgetUtils.myContainer(
-                      ScreenUtil().setHeight(56),
-                      ScreenUtil().setHeight(140),
+                      ScreenUtil().setHeight(40),
+                      ScreenUtil().setHeight(100),
                       index == 0 ? MyColors.btn_d : MyColors.homeBG,
                       index == 0 ? MyColors.btn_d : MyColors.homeBG,
-                      '声音派对',
+                      '女神',
                       ScreenUtil().setSp(28),
                       index == 0 ? Colors.white : MyColors.g6),
                 ),
@@ -287,13 +298,45 @@ class _PaiduiPageState extends State<PaiduiPage> {
                       index = 1;
                     });
                   }),
+                  child: WidgetUtils.myContainer(
+                      ScreenUtil().setHeight(40),
+                      ScreenUtil().setHeight(100),
+                      index == 1 ? MyColors.btn_d : MyColors.homeBG,
+                      index == 1 ? MyColors.btn_d : MyColors.homeBG,
+                      '男神',
+                      ScreenUtil().setSp(28),
+                      index == 1 ? Colors.white : MyColors.g6),
+                ),
+                WidgetUtils.commonSizedBox(0, 10),
+                GestureDetector(
+                  onTap: (() {
+                    setState(() {
+                      index = 2;
+                    });
+                  }),
+                  child: WidgetUtils.myContainer(
+                      ScreenUtil().setHeight(40),
+                      ScreenUtil().setHeight(100),
+                      index == 2 ? MyColors.btn_d : MyColors.homeBG,
+                      index == 2 ? MyColors.btn_d : MyColors.homeBG,
+                      '新厅',
+                      ScreenUtil().setSp(28),
+                      index == 2 ? Colors.white : MyColors.g6),
+                ),
+                WidgetUtils.commonSizedBox(0, 10),
+                GestureDetector(
+                  onTap: (() {
+                    setState(() {
+                      index = 3;
+                    });
+                  }),
                   child: SizedBox(
-                    height: ScreenUtil().setHeight(56),
+                    height: ScreenUtil().setHeight(40),
                     width: ScreenUtil().setHeight(160),
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        index == 1
+                        index == 3
                             ? WidgetUtils.showImagesFill(
                                 'assets/images/paidui_diantai_bg.png',
                                 ScreenUtil().setHeight(56),
@@ -312,26 +355,10 @@ class _PaiduiPageState extends State<PaiduiPage> {
                     ),
                   ),
                 ),
-                WidgetUtils.commonSizedBox(0, 10),
-                GestureDetector(
-                  onTap: (() {
-                    setState(() {
-                      index = 2;
-                    });
-                  }),
-                  child: WidgetUtils.myContainer(
-                      ScreenUtil().setHeight(56),
-                      ScreenUtil().setHeight(100),
-                      index == 2 ? MyColors.btn_d : MyColors.homeBG,
-                      index == 2 ? MyColors.btn_d : MyColors.homeBG,
-                      '新厅',
-                      ScreenUtil().setSp(28),
-                      index == 2 ? Colors.white : MyColors.g6),
-                ),
               ],
             ),
             ListView.builder(
-              padding: EdgeInsets.only(top: ScreenUtil().setHeight(10)),
+              padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: _itemPaihang,

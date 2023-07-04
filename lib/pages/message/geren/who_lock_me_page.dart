@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 
-import '../../colors/my_colors.dart';
-import '../../utils/style_utils.dart';
+import '../../../colors/my_colors.dart';
+import '../../../utils/style_utils.dart';
 /// 谁看过我
 class WhoLockMePage extends StatefulWidget {
   const WhoLockMePage({Key? key}) : super(key: key);
@@ -13,20 +13,20 @@ class WhoLockMePage extends StatefulWidget {
 }
 
 class _WhoLockMePageState extends State<WhoLockMePage> {
-  var appbar;
+  // var appbar;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    appbar = WidgetUtils.getAppBar('谁看过我', true, context, false, 0);
+    // appbar = WidgetUtils.getAppBar('谁看过我', true, context, false, 0);
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appbar,
       backgroundColor: Colors.white,
-      body: SizedBox(
+      body: Container(
         height: ScreenUtil().setHeight(130),
+        margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
         width: double.infinity,
         child: Row(
           children: [
@@ -54,11 +54,12 @@ class _WhoLockMePageState extends State<WhoLockMePage> {
                       children: [
                         Text(
                           '系统消息',
-                          style: StyleUtils.getCommonTextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(38)),
+                          style: StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(32)),
                         ),
                         Container(
-                          height: ScreenUtil().setHeight(25),
-                          width: ScreenUtil().setWidth(50),
+                          height: ScreenUtil().setHeight(20),
+                          width: ScreenUtil().setWidth(40),
+                          margin: const EdgeInsets.only(left: 5),
                           alignment: Alignment.center,
                           //边框设置
                           decoration: const BoxDecoration(
@@ -70,8 +71,8 @@ class _WhoLockMePageState extends State<WhoLockMePage> {
                           ),
                           child: WidgetUtils.showImages(
                               'assets/images/nv.png',
-                              12,
-                              12),
+                              10,
+                              10),
                         ),
                       ],
                     ),
