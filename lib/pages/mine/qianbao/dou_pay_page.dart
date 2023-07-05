@@ -112,7 +112,7 @@ class _DouPayPageState extends State<DouPayPage> {
                                     ),
                                   ),
                                   WidgetUtils.commonSizedBox(0, 50),
-                                  WidgetUtils.onlyText('1000000', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(56), fontWeight: FontWeight.bold)),
+                                  WidgetUtils.onlyText('1000000', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(56), fontWeight: FontWeight.w600)),
                                   const Expanded(child: Text('')),
                                 ],
                               ),
@@ -133,7 +133,7 @@ class _DouPayPageState extends State<DouPayPage> {
                   ),
                 ),
                 WidgetUtils.commonSizedBox(20, 20),
-                WidgetUtils.onlyText('请选择充值金额', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(33), fontWeight: FontWeight.bold)),
+                WidgetUtils.onlyText('请选择充值金额', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(33), fontWeight: FontWeight.w600)),
                 WidgetUtils.commonSizedBox(15, 20),
                 GridView.builder(
                     shrinkWrap: true,

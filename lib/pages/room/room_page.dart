@@ -19,7 +19,7 @@ import 'package:yuyinting/pages/room/room_ts_gonggao_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
-
+import 'dart:ui' as ui;
 import '../../utils/log_util.dart';
 import '../../utils/style_utils.dart';
 
@@ -51,6 +51,7 @@ class _RoomPageState extends State<RoomPage> {
   bool _localUserJoined = false;
   late RtcEngine _engine;
 
+  late final Gradient gradient;
 
   @override
   void initState() {
@@ -314,7 +315,7 @@ class _RoomPageState extends State<RoomPage> {
                               StyleUtils.getCommonTextStyle(
                                   color: Colors.white,
                                   fontSize: ScreenUtil().setSp(21),
-                                  fontWeight: FontWeight.bold)),
+                                  fontWeight: FontWeight.w600)),
                         ),
                         WidgetUtils.commonSizedBox(5, 0),
                         SizedBox(
@@ -353,6 +354,42 @@ class _RoomPageState extends State<RoomPage> {
                           )
                         ],
                       ),
+                    ),
+                    Stack(
+                      children: [
+                        Opacity(
+                            opacity: 0.3,
+                            child: Container(
+                              width: ScreenUtil().setHeight(80),
+                              height: ScreenUtil().setHeight(38),
+                              //边框设置
+                              decoration: const BoxDecoration(
+                                //背景
+                                color: MyColors.roomMaiLiao,
+                                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(30.0)),
+                              ),
+                            )),
+                        GestureDetector(
+                          onTap: (() {                            
+                          }),
+                          child: Container(
+                            width: ScreenUtil().setHeight(80),
+                            height: ScreenUtil().setHeight(38),
+                            alignment: Alignment.center,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '已收藏',
+                                  style: StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(21)),
+                                )
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                     const Expanded(child: Text('')),
 
@@ -1167,12 +1204,19 @@ class _RoomPageState extends State<RoomPage> {
                                     children: [
                                       const Expanded(child: Text('')),
                                       m8 == false
-                                          ? WidgetUtils.onlyTextCenter(
-                                          '老板位',
-                                          StyleUtils.getCommonTextStyle(
-                                              color: MyColors.roomMaiWZ,
-                                              fontSize:
-                                              ScreenUtil().setSp(19)))
+                                          ? ShaderMask(
+                                        shaderCallback: (Rect bounds) {
+                                          return const LinearGradient(
+                                            begin: Alignment.centerLeft,
+                                            end: Alignment.centerRight,
+                                            colors: [ Color(0xFF6ffffd),Color(0xFFf8fec4)],).createShader(Offset.zero & bounds.size);
+                                        },
+                                        blendMode: BlendMode.srcATop,
+                                        child: Text(
+                                          "老板位",
+                                          style: TextStyle(fontSize: ScreenUtil().setSp(19), color: const Color(0xffffffff),fontWeight: FontWeight.w700),
+                                        ),
+                                      )
                                           : WidgetUtils.commonSizedBox(0, 0),
                                       m8 == false
                                           ? WidgetUtils.commonSizedBox(10, 0)

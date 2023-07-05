@@ -88,7 +88,7 @@ class _HoujuePageState extends State<HoujuePage> with TickerProviderStateMixin {
             StyleUtils.getCommonTextStyle(
                 color: Colors.white,
                 fontSize: ScreenUtil().setSp(33),
-                fontWeight: FontWeight.bold)),
+                fontWeight: FontWeight.w600)),
 
         /// 特权展示
         WidgetUtils.commonSizedBox(70, 0),

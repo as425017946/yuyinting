@@ -113,7 +113,7 @@ class _RoomBGPageState extends State<RoomBGPage> {
                               style: StyleUtils.getCommonTextStyle(
                                   color: _currentIndex == 0 ? MyColors.roomTCWZ2 : MyColors.roomTCWZ3,
                                   fontSize: ScreenUtil().setSp(28),
-                                  fontWeight: FontWeight.bold),
+                                  fontWeight: FontWeight.w600),
                             ),
                             WidgetUtils.commonSizedBox(5, 0),
                             Opacity(
@@ -149,7 +149,7 @@ class _RoomBGPageState extends State<RoomBGPage> {
                               style: StyleUtils.getCommonTextStyle(
                                   color: _currentIndex == 1 ? MyColors.roomTCWZ2 : MyColors.roomTCWZ3,
                                   fontSize: ScreenUtil().setSp(28),
-                                  fontWeight: FontWeight.bold),
+                                  fontWeight: FontWeight.w600),
                             ),
                             WidgetUtils.commonSizedBox(5, 0),
                             Opacity(

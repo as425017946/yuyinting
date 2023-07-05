@@ -59,7 +59,7 @@ class _WalletMorePageState extends State<WalletMorePage> {
                           color: Colors.white,
                         ),
                         const Expanded(child: Text('')),
-                        WidgetUtils.onlyTextCenter('收入', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(33), fontWeight: _currentIndex == 0 ? FontWeight.bold : FontWeight.w400)),
+                        WidgetUtils.onlyTextCenter('收入', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(33), fontWeight: _currentIndex == 0 ? FontWeight.w600 : FontWeight.w400)),
                         const Expanded(child: Text('')),
                         Container(
                           width: ScreenUtil().setHeight(50),
@@ -86,7 +86,7 @@ class _WalletMorePageState extends State<WalletMorePage> {
                           color: Colors.white,
                         ),
                         const Expanded(child: Text('')),
-                        WidgetUtils.onlyTextCenter('支出', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(33), fontWeight: _currentIndex == 1 ? FontWeight.bold : FontWeight.w400)),
+                        WidgetUtils.onlyTextCenter('支出', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(33), fontWeight: _currentIndex == 1 ? FontWeight.w600 : FontWeight.w400)),
                         const Expanded(child: Text('')),
                         Container(
                           width: ScreenUtil().setHeight(50),

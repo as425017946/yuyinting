@@ -72,8 +72,8 @@ class _CareHomePageState extends State<CareHomePage> {
                           style: TextStyle(
                               overflow: TextOverflow.ellipsis,
                               color: Colors.black,
-                              fontSize:_currentIndex == 0 ? ScreenUtil().setSp(46) : ScreenUtil().setSp(32),
-                              fontWeight: FontWeight.bold),
+                              fontSize:_currentIndex == 0 ? ScreenUtil().setSp(38) : ScreenUtil().setSp(30),
+                              fontWeight: _currentIndex == 0 ? FontWeight.w600 : FontWeight.normal),
                         ),
                       ),
                       WidgetUtils.commonSizedBox(0, 20),
@@ -87,8 +87,8 @@ class _CareHomePageState extends State<CareHomePage> {
                           style: TextStyle(
                               overflow: TextOverflow.ellipsis,
                               color: Colors.black,
-                              fontSize: _currentIndex == 1 ? ScreenUtil().setSp(46) : ScreenUtil().setSp(32),
-                              fontWeight: FontWeight.bold),
+                              fontSize: _currentIndex == 1 ? ScreenUtil().setSp(38) : ScreenUtil().setSp(30),
+                              fontWeight: _currentIndex == 1 ? FontWeight.w600 : FontWeight.normal),
                         ),
                       ),
                       WidgetUtils.commonSizedBox(0, 20),
@@ -102,8 +102,8 @@ class _CareHomePageState extends State<CareHomePage> {
                           style: TextStyle(
                               overflow: TextOverflow.ellipsis,
                               color: Colors.black,
-                              fontSize: _currentIndex == 2 ? ScreenUtil().setSp(46) : ScreenUtil().setSp(32),
-                              fontWeight: FontWeight.bold),
+                              fontSize: _currentIndex == 2 ? ScreenUtil().setSp(38) : ScreenUtil().setSp(30),
+                              fontWeight:  _currentIndex == 2 ? FontWeight.w600 : FontWeight.normal),
                         ),
                       ),
                     ],

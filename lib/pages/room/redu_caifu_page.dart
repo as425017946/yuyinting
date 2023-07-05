@@ -229,7 +229,7 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage> {
                               StyleUtils.getCommonTextStyle(
                                   color: MyColors.roomPHWZBlack,
                                   fontSize: ScreenUtil().setSp(21),
-                                  fontWeight: FontWeight.bold)),
+                                  fontWeight: FontWeight.w600)),
                         )
                       ],
                     )
@@ -256,7 +256,7 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage> {
                               StyleUtils.getCommonTextStyle(
                                   color: MyColors.roomPHWZBlack,
                                   fontSize: ScreenUtil().setSp(21),
-                                  fontWeight: FontWeight.bold)),
+                                  fontWeight: FontWeight.w600)),
                         )
                       ],
                     )
@@ -283,7 +283,7 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage> {
                               StyleUtils.getCommonTextStyle(
                                   color: MyColors.roomPHWZBlack,
                                   fontSize: ScreenUtil().setSp(21),
-                                  fontWeight: FontWeight.bold)),
+                                  fontWeight: FontWeight.w600)),
                         )
                       ],
                     )

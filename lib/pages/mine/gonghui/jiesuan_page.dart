@@ -50,30 +50,30 @@ class _JiesuanPageState extends State<JiesuanPage> {
             Row(
               children: [
                 WidgetUtils.onlyText('周流水：', StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
-                WidgetUtils.onlyText('11', StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(25), fontWeight: FontWeight.bold)),
+                WidgetUtils.onlyText('11', StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(25), fontWeight: FontWeight.w600)),
                 const Expanded(child: Text('')),
                 WidgetUtils.onlyText('无效流水：', StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
-                WidgetUtils.onlyText('11', StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(25), fontWeight: FontWeight.bold)),
+                WidgetUtils.onlyText('11', StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(25), fontWeight: FontWeight.w600)),
               ],
             ),
             WidgetUtils.commonSizedBox(10, 10),
             Row(
               children: [
                 WidgetUtils.onlyText('背包流水：', StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
-                WidgetUtils.onlyText('11', StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(25), fontWeight: FontWeight.bold)),
+                WidgetUtils.onlyText('11', StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(25), fontWeight: FontWeight.w600)),
                 const Expanded(child: Text('')),
                 WidgetUtils.onlyText('直刷流水：', StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
-                WidgetUtils.onlyText('11', StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(25), fontWeight: FontWeight.bold)),
+                WidgetUtils.onlyText('11', StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(25), fontWeight: FontWeight.w600)),
               ],
             ),
             WidgetUtils.commonSizedBox(10, 10),
             Row(
               children: [
                 WidgetUtils.onlyText('砖石游戏：', StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
-                WidgetUtils.onlyText('11', StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(25), fontWeight: FontWeight.bold)),
+                WidgetUtils.onlyText('11', StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(25), fontWeight: FontWeight.w600)),
                 const Expanded(child: Text('')),
                 WidgetUtils.onlyText('周分润：', StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
-                WidgetUtils.onlyText('11', StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(25), fontWeight: FontWeight.bold)),
+                WidgetUtils.onlyText('11', StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(25), fontWeight: FontWeight.w600)),
               ],
             ),
             WidgetUtils.onlyTextCenter('查明细>', StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
@@ -109,9 +109,9 @@ class _JiesuanPageState extends State<JiesuanPage> {
                               WidgetUtils.commonSizedBox(0, 140),
                               SizedBox(
                                 width: ScreenUtil().setHeight(200),
-                                child: WidgetUtils.onlyText('直刷流水返点', StyleUtils.getCommonTextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25))),
+                                child: WidgetUtils.onlyText('直刷流水返点', StyleUtils.getCommonTextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(25))),
                               ),
-                              WidgetUtils.onlyText('10%', StyleUtils.getCommonTextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(33)))
+                              WidgetUtils.onlyText('10%', StyleUtils.getCommonTextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(33)))
                             ],
                           ),
                           WidgetUtils.commonSizedBox(8, 5),
@@ -120,9 +120,9 @@ class _JiesuanPageState extends State<JiesuanPage> {
                               WidgetUtils.commonSizedBox(0, 140),
                               SizedBox(
                                 width: ScreenUtil().setHeight(200),
-                                child: WidgetUtils.onlyText('背包流水返点', StyleUtils.getCommonTextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25))),
+                                child: WidgetUtils.onlyText('背包流水返点', StyleUtils.getCommonTextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(25))),
                               ),
-                              WidgetUtils.onlyText('10%', StyleUtils.getCommonTextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(33)))
+                              WidgetUtils.onlyText('10%', StyleUtils.getCommonTextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(33)))
                             ],
                           ),
                           WidgetUtils.commonSizedBox(8, 5),
@@ -131,9 +131,9 @@ class _JiesuanPageState extends State<JiesuanPage> {
                               WidgetUtils.commonSizedBox(0, 140),
                               SizedBox(
                                 width: ScreenUtil().setHeight(200),
-                                child: WidgetUtils.onlyText('钻石游戏流水返点', StyleUtils.getCommonTextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25))),
+                                child: WidgetUtils.onlyText('钻石游戏流水返点', StyleUtils.getCommonTextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(25))),
                               ),
-                              WidgetUtils.onlyText('10%', StyleUtils.getCommonTextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(33)))
+                              WidgetUtils.onlyText('10%', StyleUtils.getCommonTextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(33)))
                             ],
                           ),
                           const Expanded(child: Text('')),

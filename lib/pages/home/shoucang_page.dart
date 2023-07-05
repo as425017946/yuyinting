@@ -108,8 +108,8 @@ class _ShoucangPageState extends State<ShoucangPage> {
                 child: OptionGridView(
                   itemCount: 20,
                   rowCount: 2,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 15,// 上下间距
+                  crossAxisSpacing: 30,//左右间距
                   itemBuilder: _initlistdata,
                 ),
               ),

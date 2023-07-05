@@ -33,7 +33,7 @@ class _SettingGonghuiPageState extends State<SettingGonghuiPage> {
           Row(
             children: [
               WidgetUtils.commonSizedBox(20, 20),
-              Expanded(child: WidgetUtils.onlyText('公会头像', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(29), fontWeight: FontWeight.bold))),
+              Expanded(child: WidgetUtils.onlyText('公会头像', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(29), fontWeight: FontWeight.w600))),
               WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(100), ScreenUtil().setHeight(100), 'http://b.hiphotos.baidu.com/image/pic/item/359b033b5bb5c9ea5c0e3c23d139b6003bf3b374.jpg'),
               WidgetUtils.commonSizedBox(10, 10),
               Image(
@@ -50,7 +50,7 @@ class _SettingGonghuiPageState extends State<SettingGonghuiPage> {
                Row(
                  children: [
                    WidgetUtils.commonSizedBox(20, 20),
-                   Expanded(child: WidgetUtils.onlyText('公会公告', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(29), fontWeight: FontWeight.bold))),
+                   Expanded(child: WidgetUtils.onlyText('公会公告', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(29), fontWeight: FontWeight.w600))),
                  ],
                ),
               Row(

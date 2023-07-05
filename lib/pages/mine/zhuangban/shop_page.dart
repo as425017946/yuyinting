@@ -67,7 +67,7 @@ class _ShopPageState extends State<ShopPage> {
                     StyleUtils.getCommonTextStyle(
                         color: Colors.white,
                         fontSize: ScreenUtil().setSp(34),
-                        fontWeight: FontWeight.bold)),
+                        fontWeight: FontWeight.w600)),
                 const Expanded(child: Text('')),
                 GestureDetector(
                   onTap: (() {}),
@@ -99,7 +99,7 @@ class _ShopPageState extends State<ShopPage> {
                       _controller.animateToPage(0, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                     });
                   }),
-                  child: WidgetUtils.myContainerZhuangban(_currentIndex == 0 ? MyColors.zhuangbanWZBg : MyColors.zhuangbanBg, '座驾', StyleUtils.getCommonTextStyle(color: _currentIndex == 0 ? Colors.white : MyColors.zhuangbanWZ, fontSize: ScreenUtil().setSp(29), fontWeight: FontWeight.bold)),
+                  child: WidgetUtils.myContainerZhuangban(_currentIndex == 0 ? MyColors.zhuangbanWZBg : MyColors.zhuangbanBg, '座驾', StyleUtils.getCommonTextStyle(color: _currentIndex == 0 ? Colors.white : MyColors.zhuangbanWZ, fontSize: ScreenUtil().setSp(29), fontWeight: FontWeight.w600)),
                 ),
                 WidgetUtils.commonSizedBox(0, 10),
                 GestureDetector(
@@ -109,7 +109,7 @@ class _ShopPageState extends State<ShopPage> {
                       _controller.animateToPage(1, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                     });
                   }),
-                  child: WidgetUtils.myContainerZhuangban(_currentIndex == 1 ? MyColors.zhuangbanWZBg : MyColors.zhuangbanBg, '头像框', StyleUtils.getCommonTextStyle(color: _currentIndex == 1 ? Colors.white : MyColors.zhuangbanWZ, fontSize: ScreenUtil().setSp(29), fontWeight: FontWeight.bold)),
+                  child: WidgetUtils.myContainerZhuangban(_currentIndex == 1 ? MyColors.zhuangbanWZBg : MyColors.zhuangbanBg, '头像框', StyleUtils.getCommonTextStyle(color: _currentIndex == 1 ? Colors.white : MyColors.zhuangbanWZ, fontSize: ScreenUtil().setSp(29), fontWeight: FontWeight.w600)),
                 ),
                 WidgetUtils.commonSizedBox(0, 10),
                 GestureDetector(
@@ -119,7 +119,7 @@ class _ShopPageState extends State<ShopPage> {
                       _controller.animateToPage(2, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                     });
                   }),
-                  child: WidgetUtils.myContainerZhuangban(_currentIndex == 2 ? MyColors.zhuangbanWZBg : MyColors.zhuangbanBg, '公屏气泡', StyleUtils.getCommonTextStyle(color: _currentIndex == 2 ? Colors.white : MyColors.zhuangbanWZ, fontSize: ScreenUtil().setSp(29), fontWeight: FontWeight.bold)),
+                  child: WidgetUtils.myContainerZhuangban(_currentIndex == 2 ? MyColors.zhuangbanWZBg : MyColors.zhuangbanBg, '公屏气泡', StyleUtils.getCommonTextStyle(color: _currentIndex == 2 ? Colors.white : MyColors.zhuangbanWZ, fontSize: ScreenUtil().setSp(29), fontWeight: FontWeight.w600)),
                 ),
                 WidgetUtils.commonSizedBox(0, 10),
                 GestureDetector(
@@ -129,7 +129,7 @@ class _ShopPageState extends State<ShopPage> {
                       _controller.animateToPage(3, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                     });
                   }),
-                  child: WidgetUtils.myContainerZhuangban(_currentIndex == 3 ? MyColors.zhuangbanWZBg : MyColors.zhuangbanBg, '麦上声波', StyleUtils.getCommonTextStyle(color: _currentIndex == 3 ? Colors.white : MyColors.zhuangbanWZ, fontSize: ScreenUtil().setSp(29), fontWeight: FontWeight.bold)),
+                  child: WidgetUtils.myContainerZhuangban(_currentIndex == 3 ? MyColors.zhuangbanWZBg : MyColors.zhuangbanBg, '麦上声波', StyleUtils.getCommonTextStyle(color: _currentIndex == 3 ? Colors.white : MyColors.zhuangbanWZ, fontSize: ScreenUtil().setSp(29), fontWeight: FontWeight.w600)),
                 ),
               ],
             ),

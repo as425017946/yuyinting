@@ -37,6 +37,7 @@ import '../pages/mine/my/edit_biaoqian_page.dart';
 import '../pages/mine/my/edit_head_page.dart';
 import '../pages/mine/my/edit_my_info_page.dart';
 import '../pages/mine/my/my_info_page.dart';
+import '../pages/mine/my_kefu_page.dart';
 import '../pages/mine/qianbao/bi_zhuan_dou_page.dart';
 import '../pages/mine/qianbao/dou_pay_page.dart';
 import '../pages/mine/qianbao/tixian_bi_page.dart';
@@ -126,6 +127,7 @@ var staticRoutes = {
   'RoomPeopleInfoPage':(context) => const RoomPeopleInfoPage(),// 房间他人信息详情
   'RoomReDuPage':(context) => const RoomReDuPage(),// 房间内的热度
   'RoomTSGongGaoPage':(context) => const RoomTSGongGaoPage(),// 房间内弹窗公告
+  'MyKeFuPage':(context) => const MyKeFuPage(),// 新客服页面
 
   'DengjiPage':(context) => const DengjiPage(),// 测试等级描边
 

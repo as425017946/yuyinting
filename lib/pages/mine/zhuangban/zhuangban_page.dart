@@ -70,7 +70,7 @@ class _ZhuangbanPageState extends State<ZhuangbanPage> {
                         StyleUtils.getCommonTextStyle(
                             color: Colors.white,
                             fontSize: ScreenUtil().setSp(34),
-                            fontWeight: FontWeight.bold)),
+                            fontWeight: FontWeight.w600)),
                     const Expanded(child: Text('')),
                     GestureDetector(
                       onTap: (() {
@@ -114,7 +114,7 @@ class _ZhuangbanPageState extends State<ZhuangbanPage> {
                                   ? Colors.white
                                   : MyColors.zhuangbanWZ,
                               fontSize: ScreenUtil().setSp(29),
-                              fontWeight: FontWeight.bold)),
+                              fontWeight: FontWeight.w600)),
                     ),
                     WidgetUtils.commonSizedBox(0, 10),
                     GestureDetector(
@@ -134,7 +134,7 @@ class _ZhuangbanPageState extends State<ZhuangbanPage> {
                                   ? Colors.white
                                   : MyColors.zhuangbanWZ,
                               fontSize: ScreenUtil().setSp(29),
-                              fontWeight: FontWeight.bold)),
+                              fontWeight: FontWeight.w600)),
                     ),
                     WidgetUtils.commonSizedBox(0, 10),
                     GestureDetector(
@@ -154,7 +154,7 @@ class _ZhuangbanPageState extends State<ZhuangbanPage> {
                                   ? Colors.white
                                   : MyColors.zhuangbanWZ,
                               fontSize: ScreenUtil().setSp(29),
-                              fontWeight: FontWeight.bold)),
+                              fontWeight: FontWeight.w600)),
                     ),
                     WidgetUtils.commonSizedBox(0, 10),
                     GestureDetector(
@@ -174,7 +174,7 @@ class _ZhuangbanPageState extends State<ZhuangbanPage> {
                                   ? Colors.white
                                   : MyColors.zhuangbanWZ,
                               fontSize: ScreenUtil().setSp(29),
-                              fontWeight: FontWeight.bold)),
+                              fontWeight: FontWeight.w600)),
                     ),
                   ],
                 ),
@@ -217,7 +217,7 @@ class _ZhuangbanPageState extends State<ZhuangbanPage> {
                                 '1000',
                                 StyleUtils.getCommonTextStyle(
                                     color: Colors.white,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w600,
                                     fontSize: ScreenUtil().setSp(50))),
                             WidgetUtils.commonSizedBox(0, 10),
                             WidgetUtils.onlyText(

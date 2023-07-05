@@ -19,7 +19,7 @@ class _BeCarePageState extends State<BeCarePage> {
       margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
       child: Column(
         children: [
-          WidgetUtils.onlyText('被关注数（5）', StyleUtils.getCommonTextStyle(color: Colors.black , fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(25))),
+          WidgetUtils.onlyText('被关注数（5）', StyleUtils.getCommonTextStyle(color: Colors.black , fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(25))),
 
           SizedBox(
             height: ScreenUtil().setHeight(130),

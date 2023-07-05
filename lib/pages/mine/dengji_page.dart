@@ -40,7 +40,7 @@ class _DengjiPageState extends State<DengjiPage> {
                     '50',
                     style: TextStyle(
                         fontSize: ScreenUtil().setSp(16),
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         fontFamily: 'ARIAL',
                         foreground: Paint()
                           ..style = PaintingStyle.stroke
@@ -52,7 +52,7 @@ class _DengjiPageState extends State<DengjiPage> {
                     style: TextStyle(
                         color: MyColors.djOne,
                         fontSize: ScreenUtil().setSp(16),
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         fontFamily: 'ARIAL'),
                   ),
                 ],
@@ -70,7 +70,7 @@ class _DengjiPageState extends State<DengjiPage> {
                     '100',
                     style: TextStyle(
                         fontSize: ScreenUtil().setSp(30),
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         fontFamily: 'Impact',
                         foreground: Paint()
                           ..style = PaintingStyle.stroke
@@ -82,7 +82,7 @@ class _DengjiPageState extends State<DengjiPage> {
                     style: TextStyle(
                         color: MyColors.djOne,
                         fontSize: ScreenUtil().setSp(30),
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         fontFamily: 'Impact'),
                   ),
                 ],
@@ -100,7 +100,7 @@ class _DengjiPageState extends State<DengjiPage> {
                     '100',
                     style: TextStyle(
                         fontSize: ScreenUtil().setSp(30),
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         fontFamily: 'Impact',
                         foreground: Paint()
                           ..style = PaintingStyle.stroke
@@ -112,7 +112,7 @@ class _DengjiPageState extends State<DengjiPage> {
                     style: TextStyle(
                         color: MyColors.djOne,
                         fontSize: ScreenUtil().setSp(30),
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         fontFamily: 'Impact'),
                   ),
                 ],

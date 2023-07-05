@@ -68,8 +68,8 @@ class _ZonglanPageState extends State<ZonglanPage> {
               WidgetUtils.commonSizedBox(20, 10),
               Row(
                 children: [
-                  Expanded(child: WidgetUtils.onlyTextCenter('100', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.bold))),
-                  Expanded(child: WidgetUtils.onlyTextCenter('100', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.bold))),
+                  Expanded(child: WidgetUtils.onlyTextCenter('100', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.w600))),
+                  Expanded(child: WidgetUtils.onlyTextCenter('100', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.w600))),
                 ],
               ),
               WidgetUtils.commonSizedBox(20, 10),
@@ -82,8 +82,8 @@ class _ZonglanPageState extends State<ZonglanPage> {
               WidgetUtils.commonSizedBox(20, 10),
               Row(
                 children: [
-                  Expanded(child: WidgetUtils.onlyTextCenter('100', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.bold))),
-                  Expanded(child: WidgetUtils.onlyTextCenter('100', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.bold))),
+                  Expanded(child: WidgetUtils.onlyTextCenter('100', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.w600))),
+                  Expanded(child: WidgetUtils.onlyTextCenter('100', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.w600))),
                 ],
               ),
               WidgetUtils.commonSizedBox(20, 10),
@@ -96,8 +96,8 @@ class _ZonglanPageState extends State<ZonglanPage> {
               WidgetUtils.commonSizedBox(20, 10),
               Row(
                 children: [
-                  Expanded(child: WidgetUtils.onlyTextCenter('100', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.bold))),
-                  Expanded(child: WidgetUtils.onlyTextCenter('100', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.bold))),
+                  Expanded(child: WidgetUtils.onlyTextCenter('100', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.w600))),
+                  Expanded(child: WidgetUtils.onlyTextCenter('100', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.w600))),
                 ],
               ),
               WidgetUtils.commonSizedBox(20, 10),
@@ -110,8 +110,8 @@ class _ZonglanPageState extends State<ZonglanPage> {
               WidgetUtils.commonSizedBox(20, 10),
               Row(
                 children: [
-                  Expanded(child: WidgetUtils.onlyTextCenter('100', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.bold))),
-                  Expanded(child: WidgetUtils.onlyTextCenter('100', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.bold))),
+                  Expanded(child: WidgetUtils.onlyTextCenter('100', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.w600))),
+                  Expanded(child: WidgetUtils.onlyTextCenter('100', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.w600))),
                 ],
               ),
             ],

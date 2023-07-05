@@ -57,7 +57,7 @@ class _WalletMoreShouruPageState extends State<WalletMoreShouruPage> {
                       children: [
                         WidgetUtils.onlyText('时间：2023-06-09 13:00:00', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(25))),
                         const Expanded(child: Text('')),
-                        WidgetUtils.onlyText('+1000', StyleUtils.getCommonTextStyle(color: MyColors.walletMingxi, fontSize: ScreenUtil().setSp(42), fontWeight: FontWeight.bold)),
+                        WidgetUtils.onlyText('+1000', StyleUtils.getCommonTextStyle(color: MyColors.walletMingxi, fontSize: ScreenUtil().setSp(42), fontWeight: FontWeight.w600)),
                         WidgetUtils.commonSizedBox(0, 20),
                       ],
                     ),

@@ -96,7 +96,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          WidgetUtils.onlyText('昵称', StyleUtils.getCommonTextStyle(color: MyColors.roomTCWZ2, fontSize: ScreenUtil().setSp(32), fontWeight: FontWeight.bold)),
+                          WidgetUtils.onlyText('昵称', StyleUtils.getCommonTextStyle(color: MyColors.roomTCWZ2, fontSize: ScreenUtil().setSp(32), fontWeight: FontWeight.w600)),
                           WidgetUtils.commonSizedBox(0, 10),
                           WidgetUtils.showImages('assets/images/room_nan.png', ScreenUtil().setHeight(31), ScreenUtil().setHeight(29)),
                         ],
@@ -108,7 +108,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                         children: [
                           WidgetUtils.showImages('assets/images/room_id.png', ScreenUtil().setHeight(26), ScreenUtil().setHeight(18)),
                           WidgetUtils.commonSizedBox(0, 2),
-                          WidgetUtils.onlyText('12345678', StyleUtils.getCommonTextStyle(color: MyColors.roomTCWZ2, fontSize: ScreenUtil().setSp(25), fontWeight: FontWeight.bold)),
+                          WidgetUtils.onlyText('12345678', StyleUtils.getCommonTextStyle(color: MyColors.roomTCWZ2, fontSize: ScreenUtil().setSp(25), fontWeight: FontWeight.w600)),
                           WidgetUtils.commonSizedBox(0, 5),
                           WidgetUtils.showImages('assets/images/room_fuzhu.png', ScreenUtil().setHeight(18), ScreenUtil().setHeight(18)),
                           WidgetUtils.commonSizedBox(0, 20),

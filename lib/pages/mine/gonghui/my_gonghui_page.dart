@@ -45,7 +45,7 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                           children: [
                             Row(
                               children: [
-                                WidgetUtils.onlyText('公会名称', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(36), fontWeight: FontWeight.bold)),
+                                WidgetUtils.onlyText('公会名称', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(36), fontWeight: FontWeight.w600)),
                                 // WidgetUtils.showImages(, height, width)
                               ],
                             ),
@@ -143,7 +143,7 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                             children: [
                               WidgetUtils.CircleImageNet(ScreenUtil().setHeight(110), ScreenUtil().setHeight(110), 10, 'http://b.hiphotos.baidu.com/image/pic/item/359b033b5bb5c9ea5c0e3c23d139b6003bf3b374.jpg'),
                               WidgetUtils.commonSizedBox(10, 20),
-                              WidgetUtils.onlyText('房间名称', StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(25), fontWeight: FontWeight.bold)),
+                              WidgetUtils.onlyText('房间名称', StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(25), fontWeight: FontWeight.w600)),
                             ],
                           ),
                         ),
@@ -157,7 +157,7 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                             children: [
                               WidgetUtils.CircleImageNet(ScreenUtil().setHeight(110), ScreenUtil().setHeight(110), 10, 'http://b.hiphotos.baidu.com/image/pic/item/359b033b5bb5c9ea5c0e3c23d139b6003bf3b374.jpg'),
                               WidgetUtils.commonSizedBox(10, 20),
-                              WidgetUtils.onlyText('房间名称2', StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(25), fontWeight: FontWeight.bold)),
+                              WidgetUtils.onlyText('房间名称2', StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(25), fontWeight: FontWeight.w600)),
                             ],
                           ),
                         ),
@@ -171,7 +171,7 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                             children: [
                               WidgetUtils.CircleImageNet(ScreenUtil().setHeight(110), ScreenUtil().setHeight(110), 10, 'http://b.hiphotos.baidu.com/image/pic/item/359b033b5bb5c9ea5c0e3c23d139b6003bf3b374.jpg'),
                               WidgetUtils.commonSizedBox(10, 20),
-                              WidgetUtils.onlyText('房间名称3', StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(25), fontWeight: FontWeight.bold)),
+                              WidgetUtils.onlyText('房间名称3', StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(25), fontWeight: FontWeight.w600)),
                             ],
                           ),
                         ),

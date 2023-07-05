@@ -40,7 +40,7 @@ class _ZaixianPageState extends State<ZaixianPage> {
                         alignment: Alignment.centerLeft,
                         child: Row(
                           children: [
-                            WidgetUtils.onlyText('用户名$i', StyleUtils.getCommonTextStyle(color: Colors.black,fontWeight: FontWeight.bold, fontSize: 14)),
+                            WidgetUtils.onlyText('用户名$i', StyleUtils.getCommonTextStyle(color: Colors.black,fontWeight: FontWeight.w600, fontSize: 14)),
                             WidgetUtils.commonSizedBox(0, 5),
                             Stack(
                               children: [
@@ -66,7 +66,7 @@ class _ZaixianPageState extends State<ZaixianPage> {
                         child: Text(
                           'a...',
                           textAlign: TextAlign.left,
-                          style: StyleUtils.getCommonTextStyle(color: Colors.grey,fontWeight: FontWeight.bold, fontSize: 14),
+                          style: StyleUtils.getCommonTextStyle(color: Colors.grey,fontWeight: FontWeight.w600, fontSize: 14),
                         ),
                       )
                     ],

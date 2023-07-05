@@ -64,14 +64,14 @@ class _MessagePageState extends State<MessagePage> {
                           '昵称$i',
                           style: StyleUtils.getCommonTextStyle(
                               color: Colors.black,
-                              fontSize: ScreenUtil().setSp(35)),
+                              fontSize: ScreenUtil().setSp(32)),
                         ),
                         const Expanded(child: Text('')),
                         Text(
                           '10:59',
                           style: StyleUtils.getCommonTextStyle(
                               color: MyColors.g9,
-                              fontSize: ScreenUtil().setSp(30)),
+                              fontSize: ScreenUtil().setSp(25)),
                         ),
                       ],
                     ),
@@ -81,16 +81,16 @@ class _MessagePageState extends State<MessagePage> {
                     width: double.infinity,
                     child: i % 2 == 0
                         ? Text(
-                            'aaaaaa',
+                            '测试',
                             style: StyleUtils.getCommonTextStyle(
                                 color: MyColors.g9,
-                                fontSize: ScreenUtil().setSp(30)),
+                                fontSize: ScreenUtil().setSp(25)),
                           )
                         : Text(
                             '[图片] [语音]',
                             style: StyleUtils.getCommonTextStyle(
                                 color: MyColors.homeTopBG,
-                                fontSize: ScreenUtil().setSp(30)),
+                                fontSize: ScreenUtil().setSp(23)),
                           ),
                   ),
                   const Expanded(child: Text('')),
@@ -123,23 +123,13 @@ class _MessagePageState extends State<MessagePage> {
                       StyleUtils.getCommonTextStyle(
                           color: Colors.black,
                           fontSize: ScreenUtil().setSp(46),
-                          fontWeight: FontWeight.bold)),
+                          fontWeight: FontWeight.w600)),
                   const Expanded(child: Text('')),
                   GestureDetector(
                     onTap: (() {
                       exitLogin(context);
                     }),
-                    child: Container(
-                      height: ScreenUtil().setHeight(81),
-                      width: ScreenUtil().setWidth(200),
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        '一键已读',
-                        style: StyleUtils.getCommonTextStyle(
-                            color: Colors.black,
-                            fontSize: ScreenUtil().setSp(30)),
-                      ),
-                    ),
+                    child: WidgetUtils.showImages('assets/images/messages_yidu.png', ScreenUtil().setHeight(30), ScreenUtil().setHeight(30)),
                   )
                 ],
               ),
@@ -175,14 +165,14 @@ class _MessagePageState extends State<MessagePage> {
                                   '系统消息',
                                   style: StyleUtils.getCommonTextStyle(
                                       color: Colors.black,
-                                      fontSize: ScreenUtil().setSp(35)),
+                                      fontSize: ScreenUtil().setSp(32)),
                                 ),
                                 const Expanded(child: Text('')),
                                 Text(
                                   '10:59',
                                   style: StyleUtils.getCommonTextStyle(
                                       color: MyColors.g9,
-                                      fontSize: ScreenUtil().setSp(30)),
+                                      fontSize: ScreenUtil().setSp(25)),
                                 ),
                               ],
                             ),
@@ -194,7 +184,7 @@ class _MessagePageState extends State<MessagePage> {
                               'aaaaaa',
                               style: StyleUtils.getCommonTextStyle(
                                   color: MyColors.g9,
-                                  fontSize: ScreenUtil().setSp(30)),
+                                  fontSize: ScreenUtil().setSp(25)),
                             ),
                           ),
                           const Expanded(child: Text('')),

@@ -62,7 +62,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
                             StyleUtils.getCommonTextStyle(
                                 color: Colors.white,
                                 fontSize: ScreenUtil().setSp(36),
-                                fontWeight: FontWeight.bold)),
+                                fontWeight: FontWeight.w600)),
                       ],
                     ),
                     WidgetUtils.commonSizedBox(20, 0),
@@ -71,7 +71,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
                         StyleUtils.getCommonTextStyle(
                             color: Colors.white,
                             fontSize: ScreenUtil().setSp(28),
-                            fontWeight: FontWeight.bold)),
+                            fontWeight: FontWeight.w600)),
                     WidgetUtils.commonSizedBox(10, 0),
                     Container(
                       height: ScreenUtil().setHeight(50),
@@ -97,7 +97,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
                               '晴天少女',
                               StyleUtils.getCommonTextStyle(
                                   color: Colors.black,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w600,
                                   fontSize: ScreenUtil().setSp(18))),
                         ],
                       ),
@@ -136,7 +136,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
                       '声音标签',
                       StyleUtils.getCommonTextStyle(
                           color: Colors.black,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                           fontSize: ScreenUtil().setSp(32))),
                   WidgetUtils.commonSizedBox(10, 0),
                   Row(

@@ -133,7 +133,7 @@ class _LoginPageState extends State<LoginPage> {
                                   StyleUtils.getCommonTextStyle(
                                       color: MyColors.g3,
                                       fontSize: ScreenUtil().setSp(38),
-                                      fontWeight: FontWeight.bold)),
+                                      fontWeight: FontWeight.w600)),
                               WidgetUtils.commonSizedBox(0, 5),
                               WidgetUtils.showImages(
                                   'assets/images/login_xia.png',
@@ -144,8 +144,13 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         WidgetUtils.commonSizedBox(0, 20),
                         Expanded(
-                          child: WidgetUtils.commonTextFieldNumber(
-                              controller: controllerPhone, hintText: '请输入手机号'),
+                          child: Container(
+                            height: ScreenUtil().setHeight(60),
+                            width: double.infinity,
+                            alignment: Alignment.center,
+                            child: WidgetUtils.commonTextFieldNumber(
+                                controller: controllerPhone, hintText: '请输入手机号'),
+                          ),
                         )
                       ],
                     )
@@ -153,8 +158,13 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         WidgetUtils.commonSizedBox(0, 20),
                         Expanded(
-                          child: WidgetUtils.commonTextFieldNumber(
-                              controller: controllerAccount, hintText: '请输入账号'),
+                          child: Container(
+                            height: ScreenUtil().setHeight(60),
+                            width: double.infinity,
+                            alignment: Alignment.center,
+                            child: WidgetUtils.commonTextFieldNumber(
+                                controller: controllerAccount, hintText: '请输入账号'),
+                          ),
                         )
                       ],
                     ),
@@ -168,7 +178,7 @@ class _LoginPageState extends State<LoginPage> {
                         Expanded(
                           child: Container(
                             height: ScreenUtil().setHeight(80),
-                            padding: const EdgeInsets.only(left: 15),
+                            padding: const EdgeInsets.only(left: 15, bottom: 3),
                             width: double.infinity,
                             //边框设置
                             decoration: const BoxDecoration(
@@ -205,7 +215,7 @@ class _LoginPageState extends State<LoginPage> {
                   )
                 : Container(
                     height: ScreenUtil().setHeight(80),
-                    padding: const EdgeInsets.only(left: 15),
+                    padding: const EdgeInsets.only(left: 15, bottom: 3),
                     margin: const EdgeInsets.only(left: 40, right: 40),
                     width: double.infinity,
                     //边框设置

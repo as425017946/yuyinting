@@ -69,7 +69,7 @@ class _TrendsMorePageState extends State<TrendsMorePage> {
                         style: StyleUtils.getCommonTextStyle(
                             color: MyColors.g6,
                             fontSize: ScreenUtil().setSp(30),
-                            fontWeight: FontWeight.bold),
+                            fontWeight: FontWeight.w600),
                       ),
                     ),
                     SizedBox(
@@ -137,7 +137,7 @@ class _TrendsMorePageState extends State<TrendsMorePage> {
                                     style: StyleUtils.getCommonTextStyle(
                                         color: Colors.black,
                                         fontSize: ScreenUtil().setSp(36),
-                                        fontWeight: FontWeight.bold),
+                                        fontWeight: FontWeight.w600),
                                   ),
                                 ),
                                 Container(
@@ -199,7 +199,7 @@ class _TrendsMorePageState extends State<TrendsMorePage> {
                               StyleUtils.getCommonTextStyle(
                                   color: Colors.grey,
                                   fontSize: ScreenUtil().setSp(24),
-                                  fontWeight: FontWeight.bold)),
+                                  fontWeight: FontWeight.w600)),
                           const Expanded(child: Text('')),
                           WidgetUtils.showImages(
                               'assets/images/trends_zan1.png', 18, 18),
@@ -209,7 +209,7 @@ class _TrendsMorePageState extends State<TrendsMorePage> {
                               StyleUtils.getCommonTextStyle(
                                   color: Colors.grey,
                                   fontSize: ScreenUtil().setSp(24),
-                                  fontWeight: FontWeight.bold)),
+                                  fontWeight: FontWeight.w600)),
                           WidgetUtils.commonSizedBox(0, 20),
                           WidgetUtils.showImages(
                               'assets/images/trends_message.png', 18, 18),
@@ -219,7 +219,7 @@ class _TrendsMorePageState extends State<TrendsMorePage> {
                               StyleUtils.getCommonTextStyle(
                                   color: Colors.grey,
                                   fontSize: ScreenUtil().setSp(24),
-                                  fontWeight: FontWeight.bold)),
+                                  fontWeight: FontWeight.w600)),
                         ],
                       )
                     ],
@@ -238,7 +238,7 @@ class _TrendsMorePageState extends State<TrendsMorePage> {
                         StyleUtils.getCommonTextStyle(
                             color: Colors.black,
                             fontSize: ScreenUtil().setSp(32),
-                            fontWeight: FontWeight.bold)),
+                            fontWeight: FontWeight.w600)),
                   ],
                 ),
                 ListView.builder(

@@ -76,7 +76,7 @@ class _ZuanPayPageState extends State<ZuanPayPage> {
                                           StyleUtils.getCommonTextStyle(
                                               color: Colors.white,
                                               fontSize: ScreenUtil().setSp(56),
-                                              fontWeight: FontWeight.bold)),
+                                              fontWeight: FontWeight.w600)),
                                       const Expanded(child: Text('')),
                                     ],
                                   ),

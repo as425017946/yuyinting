@@ -45,7 +45,7 @@ class _GonghuiMorePageState extends State<GonghuiMorePage> {
                           children: [
                             Row(
                               children: [
-                                WidgetUtils.onlyText('公会名称', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(36), fontWeight: FontWeight.bold)),
+                                WidgetUtils.onlyText('公会名称', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(36), fontWeight: FontWeight.w600)),
                                 // WidgetUtils.showImages(, height, width)
                               ],
                             ),

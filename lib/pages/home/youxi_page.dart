@@ -25,7 +25,7 @@ class _YouxiPageState extends State<YouxiPage> {
               Row(
                 children: [
                   WidgetUtils.commonSizedBox(0, 20),
-                  WidgetUtils.onlyText('热门游戏', StyleUtils.getCommonTextStyle(color: Colors.black,fontSize: ScreenUtil().setSp(28),fontWeight: FontWeight.bold))
+                  WidgetUtils.onlyText('热门游戏', StyleUtils.getCommonTextStyle(color: Colors.black,fontSize: ScreenUtil().setSp(28),fontWeight: FontWeight.w600))
                 ],
               ),
               WidgetUtils.commonSizedBox(20, 0),
@@ -44,8 +44,8 @@ class _YouxiPageState extends State<YouxiPage> {
                     Expanded(
                       child: Column(
                         children: [
-                          WidgetUtils.onlyText('幸运大转盘', StyleUtils.getCommonTextStyle(color: Colors.black,fontSize: ScreenUtil().setSp(29),fontWeight: FontWeight.bold)),
-                          WidgetUtils.onlyText('流光溢彩，霓虹再现', StyleUtils.getCommonTextStyle(color: MyColors.g6,fontSize: ScreenUtil().setSp(26),fontWeight: FontWeight.bold)),
+                          WidgetUtils.onlyText('幸运大转盘', StyleUtils.getCommonTextStyle(color: Colors.black,fontSize: ScreenUtil().setSp(29),fontWeight: FontWeight.w600)),
+                          WidgetUtils.onlyText('流光溢彩，霓虹再现', StyleUtils.getCommonTextStyle(color: MyColors.g6,fontSize: ScreenUtil().setSp(26),fontWeight: FontWeight.w600)),
                         ],
                       ),
                     ),
@@ -70,8 +70,8 @@ class _YouxiPageState extends State<YouxiPage> {
                     Expanded(
                       child: Column(
                         children: [
-                          WidgetUtils.onlyText('幸运大转盘', StyleUtils.getCommonTextStyle(color: Colors.black,fontSize: ScreenUtil().setSp(29),fontWeight: FontWeight.bold)),
-                          WidgetUtils.onlyText('流光溢彩，霓虹再现', StyleUtils.getCommonTextStyle(color: MyColors.g6,fontSize: ScreenUtil().setSp(26),fontWeight: FontWeight.bold)),
+                          WidgetUtils.onlyText('幸运大转盘', StyleUtils.getCommonTextStyle(color: Colors.black,fontSize: ScreenUtil().setSp(29),fontWeight: FontWeight.w600)),
+                          WidgetUtils.onlyText('流光溢彩，霓虹再现', StyleUtils.getCommonTextStyle(color: MyColors.g6,fontSize: ScreenUtil().setSp(26),fontWeight: FontWeight.w600)),
                         ],
                       ),
                     ),

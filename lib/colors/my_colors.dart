@@ -109,6 +109,10 @@ class MyColors{
   static const Color djOneM = Color(0xFF3D4C57);
   static const Color djTwoM = Color(0xFF1A0096);
   static const Color djThreeM = Color(0xFF025C69);
+  /// 老板位渐变色
+  static const Color lbL = Color(0xFF6ffffd);
+  static const Color lbR = Color(0xFFf8fec4);
+
 
 
 

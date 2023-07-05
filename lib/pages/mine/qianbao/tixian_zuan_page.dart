@@ -99,7 +99,7 @@ class _TixianZuanPageState extends State<TixianZuanPage> {
                                   StyleUtils.getCommonTextStyle(
                                       color: Colors.white,
                                       fontSize: ScreenUtil().setSp(56),
-                                      fontWeight: FontWeight.bold)),
+                                      fontWeight: FontWeight.w600)),
                               const Expanded(child: Text('')),
                             ],
                           ),

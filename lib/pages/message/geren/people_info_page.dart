@@ -90,7 +90,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Expanded(child: Text('')),
-                            WidgetUtils.onlyText('昵称', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(40), fontWeight: FontWeight.bold)),
+                            WidgetUtils.onlyText('昵称', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(40), fontWeight: FontWeight.w600)),
                             WidgetUtils.commonSizedBox(5, 0),
                             Row(
                               children: [
@@ -129,7 +129,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                               ),
                               child: Row(
                                 children: [
-                                  WidgetUtils.onlyText('ID:12345678', StyleUtils.getCommonTextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(26))),
+                                  WidgetUtils.onlyText('ID:12345678', StyleUtils.getCommonTextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(26))),
                                   WidgetUtils.commonSizedBox(0, 5),
                                   WidgetUtils.showImages('assets/images/people_fuzhi.png', ScreenUtil().setHeight(22), ScreenUtil().setWidth(22)),
                                 ],
@@ -158,7 +158,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                           children: [
                             WidgetUtils.showImages('assets/images/zhibozhong2.webp', ScreenUtil().setHeight(22), ScreenUtil().setWidth(22)),
                             WidgetUtils.commonSizedBox(0, 5),
-                            WidgetUtils.onlyText('踩房间', StyleUtils.getCommonTextStyle(color: MyColors.careBlue, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(30))),
+                            WidgetUtils.onlyText('踩房间', StyleUtils.getCommonTextStyle(color: MyColors.careBlue, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(30))),
                           ],
                         ),
                       ),
@@ -187,7 +187,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                         children: [
                           WidgetUtils.showImages('assets/images/people_bofang.png', ScreenUtil().setHeight(35), ScreenUtil().setWidth(35)),
                           WidgetUtils.commonSizedBox(0, 5),
-                          WidgetUtils.onlyText('晴天少女', StyleUtils.getCommonTextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(18))),
+                          WidgetUtils.onlyText('晴天少女', StyleUtils.getCommonTextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(18))),
                         ],
                       ),
                     ),
@@ -231,7 +231,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                                             overflow: TextOverflow.ellipsis,
                                             color: _currentIndex == 0 ? Colors.black : MyColors.g6,
                                             fontSize:_currentIndex == 0 ? ScreenUtil().setSp(48) : ScreenUtil().setSp(36),
-                                            fontWeight: FontWeight.bold),
+                                            fontWeight: FontWeight.w600),
                                       ),
                                     ),
                                     WidgetUtils.commonSizedBox(0, 20),
@@ -248,7 +248,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                                             overflow: TextOverflow.ellipsis,
                                             color: _currentIndex == 1 ? Colors.black : MyColors.g6,
                                             fontSize: _currentIndex == 1 ? ScreenUtil().setSp(48) : ScreenUtil().setSp(36),
-                                            fontWeight: FontWeight.bold),
+                                            fontWeight: FontWeight.w600),
                                       ),
                                     ),
                                   ],

@@ -59,7 +59,7 @@ class _WalletPageState extends State<WalletPage> {
                                   children: [
                                     WidgetUtils.onlyText('豆', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(38))),
                                     const Expanded(child: Text('')),
-                                    WidgetUtils.onlyText('1000000', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(56), fontWeight: FontWeight.bold)),
+                                    WidgetUtils.onlyText('1000000', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(56), fontWeight: FontWeight.w600)),
                                     WidgetUtils.commonSizedBox(0, 15),
                                   ],
                                 ),
@@ -120,7 +120,7 @@ class _WalletPageState extends State<WalletPage> {
                                   children: [
                                     WidgetUtils.onlyText('币', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(38))),
                                     const Expanded(child: Text('')),
-                                    WidgetUtils.onlyText('1000000', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(56), fontWeight: FontWeight.bold)),
+                                    WidgetUtils.onlyText('1000000', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(56), fontWeight: FontWeight.w600)),
                                     WidgetUtils.commonSizedBox(0, 15),
                                   ],
                                 ),
@@ -204,7 +204,7 @@ class _WalletPageState extends State<WalletPage> {
                                   children: [
                                     WidgetUtils.onlyText('钻', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(38))),
                                     const Expanded(child: Text('')),
-                                    WidgetUtils.onlyText('1000000', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(56), fontWeight: FontWeight.bold)),
+                                    WidgetUtils.onlyText('1000000', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(56), fontWeight: FontWeight.w600)),
                                     WidgetUtils.commonSizedBox(0, 15),
                                   ],
                                 ),

@@ -66,7 +66,7 @@ class _TrendsHiPageState extends State<TrendsHiPage> {
                       ],
                     ),
                     const SizedBox(height: 40,),
-                    const Text('给TA别致打招呼',style: TextStyle(fontSize: 18,color: MyColors.black_3, fontWeight: FontWeight.bold),),
+                    const Text('给TA别致打招呼',style: TextStyle(fontSize: 18,color: MyColors.black_3, fontWeight: FontWeight.w600),),
                     const SizedBox(height: 10,),
                     Container(
                       width: double.infinity,

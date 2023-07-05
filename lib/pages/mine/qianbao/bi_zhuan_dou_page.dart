@@ -75,7 +75,7 @@ class _BiZhuanDouPageState extends State<BiZhuanDouPage> {
                                           StyleUtils.getCommonTextStyle(
                                               color: Colors.white,
                                               fontSize: ScreenUtil().setSp(56),
-                                              fontWeight: FontWeight.bold)),
+                                              fontWeight: FontWeight.w600)),
                                       const Expanded(child: Text('')),
                                     ],
                                   ),
@@ -135,7 +135,7 @@ class _BiZhuanDouPageState extends State<BiZhuanDouPage> {
                         children: [
                           WidgetUtils.onlyText('到账豆', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(32))),
                           WidgetUtils.commonSizedBox(0, 10),
-                          WidgetUtils.onlyText('￥0', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(32), fontWeight: FontWeight.bold)),
+                          WidgetUtils.onlyText('￥0', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(32), fontWeight: FontWeight.w600)),
                         ],
                       )
                     ],

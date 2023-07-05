@@ -36,9 +36,9 @@ class _ChooseCountryPageState extends State<ChooseCountryPage> {
             height: ScreenUtil().setHeight(80),
             child: Row(
               children: [
-                WidgetUtils.onlyText('中国$i', StyleUtils.getCommonTextStyle(color: MyColors.g3,fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(33))),
+                WidgetUtils.onlyText('中国$i', StyleUtils.getCommonTextStyle(color: MyColors.g3,fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(33))),
                 const Expanded(child: Text('')),
-                WidgetUtils.onlyText('+86', StyleUtils.getCommonTextStyle(color: MyColors.g9,fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(31))),
+                WidgetUtils.onlyText('+86', StyleUtils.getCommonTextStyle(color: MyColors.g9,fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(31))),
               ],
             ),
           ),
@@ -99,7 +99,7 @@ class _ChooseCountryPageState extends State<ChooseCountryPage> {
               ),
               WidgetUtils.commonSizedBox(20, 0),
               WidgetUtils.onlyText('常用', StyleUtils.getCommonTextStyle(
-                  color: MyColors.g3, fontSize: ScreenUtil().setSp(42), fontWeight: FontWeight.bold)),
+                  color: MyColors.g3, fontSize: ScreenUtil().setSp(42), fontWeight: FontWeight.w600)),
               WidgetUtils.commonSizedBox(20, 0),
               ListView.builder(
                 padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
@@ -110,7 +110,7 @@ class _ChooseCountryPageState extends State<ChooseCountryPage> {
               ),
               WidgetUtils.commonSizedBox(20, 0),
               WidgetUtils.onlyText('#', StyleUtils.getCommonTextStyle(
-                  color: MyColors.g3, fontSize: ScreenUtil().setSp(42), fontWeight: FontWeight.bold)),
+                  color: MyColors.g3, fontSize: ScreenUtil().setSp(42), fontWeight: FontWeight.w600)),
               WidgetUtils.commonSizedBox(20, 0),
               ListView.builder(
                 padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),

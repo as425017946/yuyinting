@@ -35,9 +35,9 @@ class _EditBiaoqianPageState extends State<EditBiaoqianPage> {
                     children: [
                       WidgetUtils.showImages('assets/images/mine_biaoqian_ren.png', ScreenUtil().setHeight(42), ScreenUtil().setHeight(42)),
                       WidgetUtils.commonSizedBox(0, 5),
-                      WidgetUtils.onlyText('你是？', StyleUtils.getCommonTextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(35))),
+                      WidgetUtils.onlyText('你是？', StyleUtils.getCommonTextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(35))),
                       WidgetUtils.commonSizedBox(0, 10),
-                      WidgetUtils.onlyText('0/3', StyleUtils.getCommonTextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(35))),
+                      WidgetUtils.onlyText('0/3', StyleUtils.getCommonTextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(35))),
 
                     ],
                   ),

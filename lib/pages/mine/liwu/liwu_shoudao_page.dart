@@ -35,7 +35,7 @@ class _LiwuShoudaoPageState extends State<LiwuShoudaoPage> {
               WidgetUtils.commonSizedBox(0, 20),
               WidgetUtils.CircleHeadImage(30, 30, 'https://img-blog.csdnimg.cn/3d809148c83f4720b5e2a6567f816d89.jpeg'),
               WidgetUtils.commonSizedBox(0, 10),
-              WidgetUtils.onlyText('用户名$i', StyleUtils.getCommonTextStyle(color: Colors.black,fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(31))),
+              WidgetUtils.onlyText('用户名$i', StyleUtils.getCommonTextStyle(color: Colors.black,fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(31))),
               const Expanded(child: Text('')),
               WidgetUtils.onlyText('送给您的礼物', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(31))),
               WidgetUtils.commonSizedBox(0, 20),

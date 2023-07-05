@@ -34,7 +34,7 @@ class _RoomMorePageState extends State<RoomMorePage> {
         children: [
           WidgetUtils.CircleImageNet(ScreenUtil().setHeight(110), ScreenUtil().setHeight(110), 10, 'http://b.hiphotos.baidu.com/image/pic/item/359b033b5bb5c9ea5c0e3c23d139b6003bf3b374.jpg'),
           WidgetUtils.commonSizedBox(10, 20),
-          WidgetUtils.onlyText('房间名称3', StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(29), fontWeight: FontWeight.bold)),
+          WidgetUtils.onlyText('房间名称3', StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(29), fontWeight: FontWeight.w600)),
         ],
       ),
     );

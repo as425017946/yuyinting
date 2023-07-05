@@ -90,7 +90,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           StyleUtils.getCommonTextStyle(
                               color: MyColors.g3,
                               fontSize: ScreenUtil().setSp(38),
-                              fontWeight: FontWeight.bold)),
+                              fontWeight: FontWeight.w600)),
                       WidgetUtils.commonSizedBox(0, 5),
                       WidgetUtils.showImages(
                           'assets/images/login_xia.png',
@@ -101,8 +101,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 ),
                 WidgetUtils.commonSizedBox(0, 20),
                 Expanded(
-                  child: WidgetUtils.commonTextFieldNumber(
-                      controller: controllerPhone, hintText: '请输入手机号'),
+                  child: SizedBox(
+                    height: ScreenUtil().setHeight(60),
+                    width: double.infinity,
+                    child: WidgetUtils.commonTextFieldNumber(
+                        controller: controllerPhone, hintText: '请输入手机号'),
+                  ),
                 )
               ],
             ),
@@ -115,7 +119,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 Expanded(
                   child: Container(
                     height: ScreenUtil().setHeight(80),
-                    padding: const EdgeInsets.only(left: 15),
+                    padding: const EdgeInsets.only(left: 15, bottom: 3),
                     width: double.infinity,
                     //边框设置
                     decoration: const BoxDecoration(
@@ -153,7 +157,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           WidgetUtils.commonSizedBox(20, 15),
           Container(
             height: ScreenUtil().setHeight(80),
-            padding: const EdgeInsets.only(left: 15),
+            padding: const EdgeInsets.only(left: 15, bottom: 3),
             margin: const EdgeInsets.only(left: 40, right: 40),
             width: double.infinity,
             //边框设置

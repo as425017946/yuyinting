@@ -53,7 +53,7 @@ class _PaiduiPageState extends State<PaiduiPage> {
                           '用户名$i',
                           StyleUtils.getCommonTextStyle(
                               color: Colors.black,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w600,
                               fontSize: 14)),
                       const Expanded(child: Text('')),
                       Row(
@@ -65,7 +65,7 @@ class _PaiduiPageState extends State<PaiduiPage> {
                               '正在玩大转盘',
                               StyleUtils.getCommonTextStyle(
                                   color: MyColors.paiduiPurple,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w600,
                                   fontSize: ScreenUtil().setSp(18)))
                         ],
                       ),
@@ -159,7 +159,7 @@ class _PaiduiPageState extends State<PaiduiPage> {
                   StyleUtils.getCommonTextStyle(
                       color: Colors.black,
                       fontSize: ScreenUtil().setSp(28),
-                      fontWeight: FontWeight.bold)),
+                      fontWeight: FontWeight.w600)),
             ),
             WidgetUtils.commonSizedBox(10, 0),
 

@@ -71,7 +71,7 @@ class _EditInfoPageState extends State<EditInfoPage> {
                     //     ],
                     //   ),
                     // ),
-                    WidgetUtils.onlyTextCenter('填写个人信息', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(46), fontWeight: FontWeight.bold)),
+                    WidgetUtils.onlyTextCenter('填写个人信息', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(46), fontWeight: FontWeight.w600)),
                     WidgetUtils.onlyTextCenter('更容易遇到合拍的小伙伴哦', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(29))),
                     WidgetUtils.commonSizedBox(50, 0),
                     SizedBox(

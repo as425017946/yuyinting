@@ -83,9 +83,9 @@ class _QiehuanAccountPageState extends State<QiehuanAccountPage> {
                       child: Column(
                         children: [
                           const Expanded(child: Text('')),
-                          WidgetUtils.onlyText('昵称', StyleUtils.getCommonTextStyle(color: MyColors.g2,fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(30))),
+                          WidgetUtils.onlyText('昵称', StyleUtils.getCommonTextStyle(color: MyColors.g2,fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(30))),
                           WidgetUtils.commonSizedBox(5, 20),
-                          WidgetUtils.onlyText('ID：123456', StyleUtils.getCommonTextStyle(color: MyColors.g9,fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(24))),
+                          WidgetUtils.onlyText('ID：123456', StyleUtils.getCommonTextStyle(color: MyColors.g9,fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24))),
                           const Expanded(child: Text('')),
                         ],
                       ),
@@ -139,9 +139,9 @@ class _QiehuanAccountPageState extends State<QiehuanAccountPage> {
                       child: Column(
                         children: [
                           const Expanded(child: Text('')),
-                          WidgetUtils.onlyText('昵称', StyleUtils.getCommonTextStyle(color: MyColors.g2,fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(30))),
+                          WidgetUtils.onlyText('昵称', StyleUtils.getCommonTextStyle(color: MyColors.g2,fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(30))),
                           WidgetUtils.commonSizedBox(5, 20),
-                          WidgetUtils.onlyText('ID：123456', StyleUtils.getCommonTextStyle(color: MyColors.g9,fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(24))),
+                          WidgetUtils.onlyText('ID：123456', StyleUtils.getCommonTextStyle(color: MyColors.g9,fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24))),
                           const Expanded(child: Text('')),
                         ],
                       ),
@@ -195,9 +195,9 @@ class _QiehuanAccountPageState extends State<QiehuanAccountPage> {
                       child: Column(
                         children: [
                           const Expanded(child: Text('')),
-                          WidgetUtils.onlyText('昵称', StyleUtils.getCommonTextStyle(color: MyColors.g2,fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(30))),
+                          WidgetUtils.onlyText('昵称', StyleUtils.getCommonTextStyle(color: MyColors.g2,fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(30))),
                           WidgetUtils.commonSizedBox(5, 20),
-                          WidgetUtils.onlyText('ID：123456', StyleUtils.getCommonTextStyle(color: MyColors.g9,fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(24))),
+                          WidgetUtils.onlyText('ID：123456', StyleUtils.getCommonTextStyle(color: MyColors.g9,fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24))),
                           const Expanded(child: Text('')),
                         ],
                       ),

@@ -44,11 +44,11 @@ class _ZiliaoPageState extends State<ZiliaoPage> {
                     children: [
                       WidgetUtils.showImages('assets/images/people_liwu.png', ScreenUtil().setHeight(44), ScreenUtil().setHeight(44)),
                       WidgetUtils.commonSizedBox(0, 5),
-                      WidgetUtils.onlyText('礼物墙', StyleUtils.getCommonTextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(36))),
+                      WidgetUtils.onlyText('礼物墙', StyleUtils.getCommonTextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(36))),
                       WidgetUtils.commonSizedBox(0, 5),
-                      WidgetUtils.onlyText('共收到0/300款', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(26))),
+                      WidgetUtils.onlyText('共收到0/300款', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(26))),
                       const Expanded(child: Text('')),
-                      WidgetUtils.onlyText('查看', StyleUtils.getCommonTextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(26))),
+                      WidgetUtils.onlyText('查看', StyleUtils.getCommonTextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(26))),
                       WidgetUtils.commonSizedBox(0, 5),
                       WidgetUtils.showImages('assets/images/people_right.png', ScreenUtil().setHeight(25), ScreenUtil().setHeight(15)),
                       WidgetUtils.commonSizedBox(0, 10),
@@ -74,7 +74,7 @@ class _ZiliaoPageState extends State<ZiliaoPage> {
           ),
         ),
         WidgetUtils.commonSizedBox(20, 0),
-        WidgetUtils.onlyText('关于我', StyleUtils.getCommonTextStyle(color: Colors.black , fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(36))),
+        WidgetUtils.onlyText('关于我', StyleUtils.getCommonTextStyle(color: Colors.black , fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(36))),
         Container(
           height: ScreenUtil().setHeight(70),
           width: double.infinity,
@@ -113,9 +113,9 @@ class _ZiliaoPageState extends State<ZiliaoPage> {
         ),
         WidgetUtils.myLine(thickness: 5),
         WidgetUtils.commonSizedBox(10, 0),
-        WidgetUtils.onlyText('签名', StyleUtils.getCommonTextStyle(color: Colors.black , fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(36))),
+        WidgetUtils.onlyText('签名', StyleUtils.getCommonTextStyle(color: Colors.black , fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(36))),
         WidgetUtils.commonSizedBox(10, 0),
-        WidgetUtils.onlyText('努力赚钱！！！！！', StyleUtils.getCommonTextStyle(color: Colors.black , fontWeight: FontWeight.bold, fontSize: ScreenUtil().setSp(28))),
+        WidgetUtils.onlyText('努力赚钱！！！！！', StyleUtils.getCommonTextStyle(color: Colors.black , fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(28))),
         WidgetUtils.commonSizedBox(20, 0),
         Row(
           children: [

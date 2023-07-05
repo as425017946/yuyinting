@@ -299,7 +299,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                             StyleUtils.getCommonTextStyle(
                                 color: Colors.black,
                                 fontSize: ScreenUtil().setSp(28),
-                                fontWeight: FontWeight.bold)),
+                                fontWeight: FontWeight.w600)),
                         const Expanded(child: Text('')),
                         WidgetUtils.showImages(
                             'assets/images/mine_more2.png',
@@ -351,7 +351,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                       StyleUtils.getCommonTextStyle(
                           color: Colors.black,
                           fontSize: ScreenUtil().setSp(28),
-                          fontWeight: FontWeight.bold)),
+                          fontWeight: FontWeight.w600)),
                   WidgetUtils.commonSizedBox(10, 0),
                   Row(
                     children: [

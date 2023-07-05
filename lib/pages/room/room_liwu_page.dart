@@ -51,7 +51,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage> {
                 '1',
                 style: StyleUtils.getCommonTextStyle(
                     color: Colors.white,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                     fontSize: ScreenUtil().setSp(14)),
               ),
             )

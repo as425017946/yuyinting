@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:svgaplayer_flutter/player.dart';
 import 'package:yuyinting/colors/my_colors.dart';
-import 'package:yuyinting/pages/trends/trends_hi_page.dart';
-import 'package:yuyinting/utils/my_toast_utils.dart';
+import 'package:yuyinting/pages/trends/trends_guanzhu_page.dart';
+import 'package:yuyinting/pages/trends/trends_tuijian_page.dart';
 
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
@@ -17,100 +18,24 @@ class TrendsPage extends StatefulWidget {
 }
 
 class _TrendsPageState extends State<TrendsPage> {
-  int index = 0;
-  int length = 0;
+  int _currentIndex = 0;
+  late final PageController _controller;
 
-
-  List<Map> imgList = [
-    {"url": "https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500"},
-    {"url": "https://lmg.jj20.com/up/allimg/4k/s/02/21092423014IX6-0-lp.jpg"},
-    {"url": "https://img0.baidu.com/it/u=2252164664,3334752698&fm=253&fmt=auto&app=138&f=JPEG?w=667&h=500"},
-  ];
-
-  Widget _itemsTuijian(BuildContext context, int i){
-    return
-      Column(
-        children: [
-          WidgetUtils.commonSizedBox(10, 0),
-          Container(
-            height: ScreenUtil().setHeight(100),
-            alignment: Alignment.centerLeft,
-            child: Row(
-              children: [
-                WidgetUtils.CircleHeadImage(40, 40, 'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
-                WidgetUtils.commonSizedBox(0, 10),
-                Column(
-                  children: [
-                    const Expanded(child: Text('')),
-                    SizedBox(
-                      width: ScreenUtil().setWidth(130),
-                      child: Text(
-                        '张三',
-                        style: StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(36), fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(5, 1, 5, 1),
-                      alignment: Alignment.center,
-                      //边框设置
-                      decoration: const BoxDecoration(
-                        //背景
-                        color: MyColors.dtPink,
-                        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          WidgetUtils.showImages('assets/images/nv.png', 10, 10),
-                          WidgetUtils.commonSizedBox(0, 5),
-                          WidgetUtils.onlyText('21·天秤', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 11)),
-                        ],
-                      ),
-                    ),
-                    const Expanded(child: Text('')),
-                  ],
-                ),
-                const Expanded(child: Text('')),
-                WidgetUtils.showImages('assets/images/trends_hi.png', 124, 59),
-              ],
-            ),
-          ),
-          WidgetUtils.commonSizedBox(5, 0),
-          WidgetUtils.onlyText('哈哈哈哈哈哈', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(32),)),
-          WidgetUtils.commonSizedBox(5, 0),
-          Row(
-            children: [
-              WidgetUtils.CircleImageNet(150, 150, 10, 'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
-              const Expanded(child: Text('')),
-              WidgetUtils.CircleImageNet(150, 150, 10, 'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
-            ],
-          ),
-          WidgetUtils.commonSizedBox(10, 0),
-          Row(
-            children: [
-              WidgetUtils.onlyText('刚刚·IP属地：唐山', StyleUtils.getCommonTextStyle(color: Colors.grey, fontSize: ScreenUtil().setSp(24), )),
-              const Expanded(child: Text('')),
-              WidgetUtils.showImages('assets/images/trends_zan1.png', 18, 18),
-              WidgetUtils.commonSizedBox(0, 5),
-              WidgetUtils.onlyText('抢首赞', StyleUtils.getCommonTextStyle(color: Colors.grey, fontSize: ScreenUtil().setSp(24), )),
-              WidgetUtils.commonSizedBox(0, 20),
-              WidgetUtils.showImages('assets/images/trends_message.png', 18, 18),
-              WidgetUtils.commonSizedBox(0, 5),
-              WidgetUtils.onlyText('评论', StyleUtils.getCommonTextStyle(color: Colors.grey, fontSize: ScreenUtil().setSp(24), )),
-            ],
-          ),
-          WidgetUtils.commonSizedBox(10, 0),
-          WidgetUtils.myLine()
-        ],
-      );
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _currentIndex = 0;
+    _controller = PageController(
+      initialPage: 0,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
+      body:Column(
         children: [
           WidgetUtils.commonSizedBox(35, 0),
           ///头部信息
@@ -119,38 +44,40 @@ class _TrendsPageState extends State<TrendsPage> {
             height: ScreenUtil().setHeight(60),
             width: double.infinity,
             alignment: Alignment.bottomLeft,
-            child: Row(
+            child:Row(
               children: [
                 GestureDetector(
                   onTap: ((){
                     setState(() {
-                      index = 0;
+                      _currentIndex = 0;
+                      _controller.animateToPage(0, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                     });
                   }),
                   child: WidgetUtils.onlyTextBottom(
                       '关注',
                       StyleUtils.getCommonTextStyle(
                           color: Colors.black,
-                          fontSize: index == 0
-                              ? ScreenUtil().setSp(46)
+                          fontSize: _currentIndex == 0
+                              ? ScreenUtil().setSp(42)
                               : ScreenUtil().setSp(32),
-                          fontWeight: FontWeight.bold)),
+                          fontWeight: _currentIndex == 0 ? FontWeight.w600 : FontWeight.normal)),
                 ),
-                WidgetUtils.commonSizedBox(0, 5),
+                WidgetUtils.commonSizedBox(0, 10),
                 GestureDetector(
                   onTap: ((){
                     setState(() {
-                      index = 1;
+                      _currentIndex = 1;
+                      _controller.animateToPage(1, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                     });
                   }),
                   child: WidgetUtils.onlyTextBottom(
                       '推荐',
                       StyleUtils.getCommonTextStyle(
                           color: Colors.black,
-                          fontSize: index == 1
-                              ? ScreenUtil().setSp(46)
+                          fontSize: _currentIndex == 1
+                              ? ScreenUtil().setSp(42)
                               : ScreenUtil().setSp(32),
-                          fontWeight: FontWeight.bold)),
+                          fontWeight: _currentIndex == 1 ? FontWeight.w600 : FontWeight.normal)),
                 ),
                 const Expanded(child: Text('')),
                 GestureDetector(
@@ -168,7 +95,7 @@ class _TrendsPageState extends State<TrendsPage> {
                           children: [
                             WidgetUtils.commonSizedBox(0, 5),
                             WidgetUtils.showImages('assets/images/trends_xiangji.webp', 30, 30),
-                            WidgetUtils.onlyText('发动态', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.bold)),
+                            WidgetUtils.onlyText('发动态', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.w600)),
                             const Expanded(child: Text('')),
 
                           ],
@@ -180,216 +107,72 @@ class _TrendsPageState extends State<TrendsPage> {
               ],
             ),
           ),
-          ///内容展示
-          index == 0 ? SingleChildScrollView(
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            child:Column(
-              children: [
-                length == 0 ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+          Row(
+            children: [
+              WidgetUtils.commonSizedBox(0, 20),
+              _currentIndex == 0 ? SizedBox(
+                width: ScreenUtil().setHeight(68),
+                height: ScreenUtil().setHeight(10),
+                child: Row(
                   children: [
-                    WidgetUtils.commonSizedBox(50, 0),
-                    WidgetUtils.showImages('assets/images/trends_no.jpg', ScreenUtil().setHeight(242), ScreenUtil().setWidth(221)),
-                    WidgetUtils.onlyTextBottom(
-                        '您还没有关注的人',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.homeNoHave,
-                            fontSize: ScreenUtil().setSp(32))),
-                    WidgetUtils.commonSizedBox(10, 0),
-                   WidgetUtils.myLine(),
-                   GestureDetector(
-                     onTap: ((){
-                        Navigator.pushNamed(context, 'TrendsMorePage');
-                     }),
-                     child:  SizedBox(
-                       child: Column(
-                         children: [
-                           WidgetUtils.commonSizedBox(10, 0),
-                           Container(
-                             height: ScreenUtil().setHeight(100),
-                             alignment: Alignment.centerLeft,
-                             child: Row(
-                               children: [
-                                 WidgetUtils.CircleHeadImage(40, 40, 'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
-                                 WidgetUtils.commonSizedBox(0, 10),
-                                 Column(
-                                   children: [
-                                     const Expanded(child: Text('')),
-                                     SizedBox(
-                                       width: ScreenUtil().setWidth(130),
-                                       child: Text(
-                                         '张三',
-                                         style: StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(36), fontWeight: FontWeight.bold),
-                                       ),
-                                     ),
-                                     Container(
-                                       padding: const EdgeInsets.fromLTRB(5, 1, 5, 1),
-                                       alignment: Alignment.center,
-                                       //边框设置
-                                       decoration: const BoxDecoration(
-                                         //背景
-                                         color: MyColors.dtPink,
-                                         //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                         borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                                       ),
-                                       child: Row(
-                                         mainAxisAlignment: MainAxisAlignment.center,
-                                         children: [
-                                           WidgetUtils.showImages('assets/images/nv.png', 10, 10),
-                                           WidgetUtils.commonSizedBox(0, 5),
-                                           WidgetUtils.onlyText('21·天秤', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 11)),
-                                         ],
-                                       ),
-                                     ),
-                                     const Expanded(child: Text('')),
-                                   ],
-                                 ),
-                                 const Expanded(child: Text('')),
-                                 WidgetUtils.showImages('assets/images/trends_hi.png', 124, 59),
-                               ],
-                             ),
-                           ),
-                           WidgetUtils.commonSizedBox(5, 0),
-                           WidgetUtils.onlyText('哈哈哈哈哈哈', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(32),)),
-                           WidgetUtils.commonSizedBox(5, 0),
-                           Row(
-                             children: [
-                               WidgetUtils.CircleImageNet(150, 150, 10, 'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
-                               const Expanded(child: Text('')),
-                               WidgetUtils.CircleImageNet(150, 150, 10, 'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
-                             ],
-                           ),
-                           WidgetUtils.commonSizedBox(10, 0),
-                           Row(
-                             children: [
-                               WidgetUtils.onlyText('刚刚·IP属地：唐山', StyleUtils.getCommonTextStyle(color: Colors.grey, fontSize: ScreenUtil().setSp(24), )),
-                               const Expanded(child: Text('')),
-                               WidgetUtils.showImages('assets/images/trends_zan1.png', 18, 18),
-                               WidgetUtils.commonSizedBox(0, 5),
-                               WidgetUtils.onlyText('抢首赞', StyleUtils.getCommonTextStyle(color: Colors.grey, fontSize: ScreenUtil().setSp(24), )),
-                               WidgetUtils.commonSizedBox(0, 20),
-                               WidgetUtils.showImages('assets/images/trends_message.png', 18, 18),
-                               WidgetUtils.commonSizedBox(0, 5),
-                               WidgetUtils.onlyText('评论', StyleUtils.getCommonTextStyle(color: Colors.grey, fontSize: ScreenUtil().setSp(24), )),
-                             ],
-                           ),
-                           WidgetUtils.commonSizedBox(10, 0),
-                           WidgetUtils.myLine()
-                         ],
-                       ),
-                     ),
-                   )
-                  ],
-                ) : Column(
-                  children: [
-                    WidgetUtils.commonSizedBox(20, 0),
+                    const Expanded(child: Text('')),
                     Container(
-                      height: ScreenUtil().setHeight(100),
-                      alignment: Alignment.centerLeft,
-                      child: Row(
-                        children: [
-                          WidgetUtils.CircleHeadImage(50, 50, 'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
-                          WidgetUtils.commonSizedBox(0, 10),
-                          Column(
-                            children: [
-                              const Expanded(child: Text('')),
-                              SizedBox(
-                                width: ScreenUtil().setWidth(130),
-                                child: Text(
-                                  '张三',
-                                  style: StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(36), fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
-                                alignment: Alignment.center,
-                                //边框设置
-                                decoration: const BoxDecoration(
-                                  //背景
-                                  color: MyColors.dtPink,
-                                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    WidgetUtils.showImages('assets/images/nv.png', 10, 10),
-                                    WidgetUtils.commonSizedBox(0, 5),
-                                    WidgetUtils.onlyText('21·天秤', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 11)),
-                                  ],
-                                ),
-                              ),
-                              const Expanded(child: Text('')),
-                            ],
-                          ),
-                          const Expanded(child: Text('')),
-                          WidgetUtils.showImages('assets/images/trends_hi.png', 124, 59),
-                        ],
+                      width: ScreenUtil().setHeight(20),
+                      height: ScreenUtil().setHeight(4),
+                      //边框设置
+                      decoration: const BoxDecoration(
+                        //背景
+                        color: MyColors.homeTopBG,
+                        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
                       ),
                     ),
-                    WidgetUtils.commonSizedBox(5, 0),
-                    WidgetUtils.onlyText('哈哈哈哈哈哈', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(32), fontWeight: FontWeight.bold)),
-                    WidgetUtils.commonSizedBox(5, 0),
-                    Row(
-                      children: [
-                        WidgetUtils.CircleImageNet(150, 150, 10, 'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
-                        const Expanded(child: Text('')),
-                        WidgetUtils.CircleImageNet(150, 150, 10, 'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
-                      ],
-                    ),
-                    WidgetUtils.commonSizedBox(10, 0),
-                    Row(
-                      children: [
-                        WidgetUtils.onlyText('刚刚·IP属地：唐山', StyleUtils.getCommonTextStyle(color: Colors.grey, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.bold)),
-                        const Expanded(child: Text('')),
-                        WidgetUtils.showImages('assets/images/trends_zan1.png', 18, 18),
-                        WidgetUtils.commonSizedBox(0, 5),
-                        WidgetUtils.onlyText('抢首赞', StyleUtils.getCommonTextStyle(color: Colors.grey, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.bold)),
-                        WidgetUtils.commonSizedBox(0, 20),
-                        WidgetUtils.showImages('assets/images/trends_message.png', 18, 18),
-                        WidgetUtils.commonSizedBox(0, 5),
-                        WidgetUtils.onlyText('评论', StyleUtils.getCommonTextStyle(color: Colors.grey, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.bold)),
-                      ],
-                    )
+                    const Expanded(child: Text('')),
                   ],
-                )
-              ],
-            )
-          )
-              :
-          index == 1 ? WidgetUtils.commonSizedBox(20, 0) : const Text(''),
-          ///轮播图
-          index == 1 ? Container(
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            height:ScreenUtil().setHeight(140),
-            //超出部分，可裁剪
-            clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: Swiper(
-              itemBuilder: (BuildContext context,int index){
-                // 配置图片地址
-                return Image.network(imgList[index]["url"],fit: BoxFit.fill,);
+                ),
+              ) : WidgetUtils.commonSizedBox(ScreenUtil().setHeight(10), ScreenUtil().setHeight(68)),
+              WidgetUtils.commonSizedBox(0, 5),
+              _currentIndex == 1 ? SizedBox(
+                width: ScreenUtil().setHeight(68),
+                height: ScreenUtil().setHeight(10),
+                child: Row(
+                  children: [
+                    const Expanded(child: Text('')),
+                    Container(
+                      width: ScreenUtil().setHeight(20),
+                      height: ScreenUtil().setHeight(4),
+                      //边框设置
+                      decoration: const BoxDecoration(
+                        //背景
+                        color: MyColors.homeTopBG,
+                        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      ),
+                    ),
+                    const Expanded(child: Text('')),
+                  ],
+                ),
+              ) : WidgetUtils.commonSizedBox(ScreenUtil().setHeight(10), ScreenUtil().setHeight(68))
+            ],
+          ),
+          Expanded(
+            child: PageView(
+              controller: _controller,
+              onPageChanged: (index) {
+                setState(() {
+                  // 更新当前的索引值
+                  _currentIndex = index;
+                });
               },
-              // 配置图片数量
-              itemCount: imgList.length ,
-              // 无限循环
-              loop: true,
-              // 自动轮播
-              autoplay: true,
-              duration: 5,
+              children: const [
+                TrendsGuanZhuPage(),
+                TrendsTuiJianPage()
+              ],
             ),
-          ) : const Text(''),
-          index == 1 ? Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                itemBuilder: _itemsTuijian,
-                itemCount: 5,
-              )
-          ) : const Text(''),
+          )
         ],
       ),
     );
   }
 }
+

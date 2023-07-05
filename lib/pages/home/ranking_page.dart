@@ -64,7 +64,7 @@ class _RankingPageState extends State<RankingPage> {
                                 ? ScreenUtil().setSp(40)
                                 : ScreenUtil().setSp(32),
                             fontWeight: index == 0
-                                ? FontWeight.bold
+                                ? FontWeight.w600
                                 : FontWeight.w100)),
                   ),
                   WidgetUtils.commonSizedBox(0, 20),
@@ -82,7 +82,7 @@ class _RankingPageState extends State<RankingPage> {
                                 ? ScreenUtil().setSp(40)
                                 : ScreenUtil().setSp(32),
                             fontWeight: index == 1
-                                ? FontWeight.bold
+                                ? FontWeight.w600
                                 : FontWeight.w100)),
                   ),
                   const Expanded(child: Text('')),
@@ -178,7 +178,7 @@ class _RankingPageState extends State<RankingPage> {
                             StyleUtils.getCommonTextStyle(
                                 color: MyColors.pyWenZiBlue,
                                 fontSize: ScreenUtil().setSp(30),
-                                fontWeight: FontWeight.bold)),
+                                fontWeight: FontWeight.w600)),
                         Container(
                           margin:
                           EdgeInsets.only(top: ScreenUtil().setHeight(98)),
@@ -230,7 +230,7 @@ class _RankingPageState extends State<RankingPage> {
                             StyleUtils.getCommonTextStyle(
                                 color: MyColors.pyWenZiBlue,
                                 fontSize: ScreenUtil().setSp(30),
-                                fontWeight: FontWeight.bold)),
+                                fontWeight: FontWeight.w600)),
                         Container(
                           margin:
                           EdgeInsets.only(top: ScreenUtil().setHeight(155)),
@@ -282,7 +282,7 @@ class _RankingPageState extends State<RankingPage> {
                             StyleUtils.getCommonTextStyle(
                                 color: MyColors.pyWenZiBlue,
                                 fontSize: ScreenUtil().setSp(30),
-                                fontWeight: FontWeight.bold)),
+                                fontWeight: FontWeight.w600)),
                         Container(
                           margin:
                           EdgeInsets.only(top: ScreenUtil().setHeight(98)),
@@ -336,7 +336,7 @@ class _RankingPageState extends State<RankingPage> {
                             '4',
                             StyleUtils.getCommonTextStyle(
                                 color: MyColors.pyWenZiGrey,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w600,
                                 fontSize: ScreenUtil().setSp(40))),
                         WidgetUtils.commonSizedBox(0, 15),
                         Container(
@@ -398,7 +398,7 @@ class _RankingPageState extends State<RankingPage> {
                             '5',
                             StyleUtils.getCommonTextStyle(
                                 color: MyColors.pyWenZiGrey,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w600,
                                 fontSize: ScreenUtil().setSp(40))),
                         WidgetUtils.commonSizedBox(0, 15),
                         Container(
@@ -471,7 +471,7 @@ class _RankingPageState extends State<RankingPage> {
                             '4',
                             StyleUtils.getCommonTextStyle(
                                 color: MyColors.pyWenZiGrey,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w600,
                                 fontSize: ScreenUtil().setSp(40))),
                         WidgetUtils.commonSizedBox(0, 15),
                         Container(
@@ -533,7 +533,7 @@ class _RankingPageState extends State<RankingPage> {
                             '5',
                             StyleUtils.getCommonTextStyle(
                                 color: MyColors.pyWenZiGrey,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w600,
                                 fontSize: ScreenUtil().setSp(40))),
                         WidgetUtils.commonSizedBox(0, 15),
                         Container(

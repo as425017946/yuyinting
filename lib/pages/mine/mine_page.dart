@@ -5,6 +5,7 @@ import 'package:yuyinting/utils/style_utils.dart';
 
 import '../../colors/my_colors.dart';
 import '../../utils/widget_utils.dart';
+import 'my_kefu_page.dart';
 
 ///我的
 class MinePage extends StatefulWidget {
@@ -36,7 +37,14 @@ class _MinePageState extends State<MinePage> {
         }
       }else if(event.title == '联系客服'){
         if(mounted) {
-          Navigator.pushNamed(context, 'KefuPage');
+          // Navigator.pushNamed(context, 'KefuPage');
+          Future.delayed(const Duration(seconds: 0), () {
+            Navigator.of(context).push(PageRouteBuilder(
+                opaque: false,
+                pageBuilder: (context, animation, secondaryAnimation) {
+                  return const MyKeFuPage();
+                }));
+          });
         }
       }
     });
@@ -79,8 +87,8 @@ class _MinePageState extends State<MinePage> {
                     Navigator.pushNamed(context, 'MyInfoPage');
                   }),
                   child: WidgetUtils.CircleHeadImage(
-                      ScreenUtil().setHeight(130),
-                      ScreenUtil().setHeight(130),
+                      ScreenUtil().setHeight(90),
+                      ScreenUtil().setHeight(90),
                       'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
                 ),
                 WidgetUtils.commonSizedBox(0, 15),
@@ -95,7 +103,7 @@ class _MinePageState extends State<MinePage> {
                               '昵称',
                               style: StyleUtils.getCommonTextStyle(
                                   color: Colors.black,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w600,
                                   fontSize: ScreenUtil().setSp(38)),
                             ),
                             WidgetUtils.commonSizedBox(0, 5),
@@ -146,7 +154,7 @@ class _MinePageState extends State<MinePage> {
                           '主页',
                           StyleUtils.getCommonTextStyle(
                               color: MyColors.mineGrey,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w600,
                               fontSize: ScreenUtil().setSp(25))),
                       WidgetUtils.commonSizedBox(0, 5),
                       WidgetUtils.showImages('assets/images/mine_more.png',
@@ -157,33 +165,26 @@ class _MinePageState extends State<MinePage> {
               ],
             ),
             WidgetUtils.commonSizedBox(18, 0),
-
             /// 升级贵族
-            Container(
+            SizedBox(
               width: double.infinity,
-              height: ScreenUtil().setHeight(220),
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              decoration: const BoxDecoration(
-                //设置Container修饰
-                image: DecorationImage(
-                  //背景图片修饰
-                  image: AssetImage("assets/images/mine_guizu_bg.png"),
-                  fit: BoxFit.fill, //覆盖
-                ),
-              ),
-              child: Column(
+              height: ScreenUtil().setHeight(200),
+              child: Stack(
                 children: [
-                  GestureDetector(
-                    onTap: ((){
-                      Navigator.pushNamed(context, 'TequanPage');
-                    }),
-                    child: Container(
-                      alignment: Alignment.bottomRight,
-                      padding: const EdgeInsets.only(right: 10, top: 20),
+                  WidgetUtils.showImagesFill('assets/images/mine_gz_bg.png', ScreenUtil().setHeight(130), double.infinity),
+                  Container(
+                    width: double.infinity,
+                    height: ScreenUtil().setHeight(100),
+                    padding: const EdgeInsets.only(right: 10),
+                    alignment: Alignment.centerRight,
+                    child: GestureDetector(
+                      onTap: ((){
+                        Navigator.pushNamed(context, 'TequanPage');
+                      }),
                       child: guizuType == 0
                           ? WidgetUtils.myContainer(
-                          ScreenUtil().setHeight(39),
-                          ScreenUtil().setHeight(116),
+                          ScreenUtil().setHeight(45),
+                          ScreenUtil().setHeight(100),
                           Colors.transparent,
                           MyColors.mineOrange,
                           '已开通',
@@ -197,8 +198,8 @@ class _MinePageState extends State<MinePage> {
                           children: [
                             WidgetUtils.showImages(
                                 'assets/images/mine_kaitong_bg.png',
-                                ScreenUtil().setHeight(39),
-                                ScreenUtil().setHeight(116)),
+                                ScreenUtil().setHeight(45),
+                                ScreenUtil().setHeight(100)),
                             WidgetUtils.onlyTextCenter(
                                 '开通',
                                 StyleUtils.getCommonTextStyle(
@@ -209,103 +210,117 @@ class _MinePageState extends State<MinePage> {
                       ),
                     ),
                   ),
-                  WidgetUtils.commonSizedBox(25, 0),
-
-                  /// 关注
-                  Row(
-                    children: [
-                      const Expanded(child: Text('')),
-                      GestureDetector(
-                        onTap: ((){
-                          Navigator.pushNamed(context, 'CareHomePage');
-                        }),
-                        child: Column(
-                          children: [
-                            // Container(
-                            //   width: ScreenUtil().setHeight(80),
-                            //   alignment: Alignment.topRight,
-                            //   child: Text(
-                            //       '+1',
-                            //       style : StyleUtils.getCommonTextStyle(
-                            //           color: MyColors.mineRed,
-                            //           fontSize: ScreenUtil().setSp(25))),
-                            // ),
-                            WidgetUtils.onlyText(
-                                '8',
-                                StyleUtils.getCommonTextStyle(
-                                    color: Colors.black,
-                                    fontSize: ScreenUtil().setSp(42),
-                                    fontWeight: FontWeight.bold)),
-                            WidgetUtils.onlyText(
-                                '关注',
-                                StyleUtils.getCommonTextStyle(
-                                    color: MyColors.mineGrey,
-                                    fontSize: ScreenUtil().setSp(25))),
-                          ],
+                  Container(
+                    height: ScreenUtil().setHeight(150),
+                    margin: EdgeInsets.only(top: ScreenUtil().setHeight(100)),
+                    decoration: const BoxDecoration(
+                      //背景
+                      color: Colors.white,
+                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                      borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                    ),
+                    child:             /// 关注
+                    Row(
+                      children: [
+                        const Expanded(child: Text('')),
+                        GestureDetector(
+                          onTap: ((){
+                            Navigator.pushNamed(context, 'CareHomePage');
+                          }),
+                          child: Column(
+                            children: [
+                              // Container(
+                              //   width: ScreenUtil().setHeight(80),
+                              //   alignment: Alignment.topRight,
+                              //   child: Text(
+                              //       '+1',
+                              //       style : StyleUtils.getCommonTextStyle(
+                              //           color: MyColors.mineRed,
+                              //           fontSize: ScreenUtil().setSp(25))),
+                              // ),
+                              const Expanded(child: Text('')),
+                              WidgetUtils.onlyText(
+                                  '8',
+                                  StyleUtils.getCommonTextStyle(
+                                      color: Colors.black,
+                                      fontSize: ScreenUtil().setSp(38),
+                                      fontWeight: FontWeight.w600)),
+                              WidgetUtils.onlyText(
+                                  '关注',
+                                  StyleUtils.getCommonTextStyle(
+                                      color: MyColors.mineGrey,
+                                      fontSize: ScreenUtil().setSp(21))),
+                              const Expanded(child: Text('')),
+                            ],
+                          ),
                         ),
-                      ),
-                      const Expanded(flex: 2, child: Text('')),
-                      GestureDetector(
-                        onTap: ((){
-                          Navigator.pushNamed(context, 'CareHomePage');
-                        }),
-                        child: Column(
-                          children: [
-                            // Container(
-                            //   width: ScreenUtil().setHeight(80),
-                            //   alignment: Alignment.topRight,
-                            //   child: Text(
-                            //       '+1',
-                            //       style : StyleUtils.getCommonTextStyle(
-                            //           color: MyColors.mineRed,
-                            //           fontSize: ScreenUtil().setSp(25))),
-                            // ),
-                            WidgetUtils.onlyText(
-                                '8',
-                                StyleUtils.getCommonTextStyle(
-                                    color: Colors.black,
-                                    fontSize: ScreenUtil().setSp(42),
-                                    fontWeight: FontWeight.bold)),
-                            WidgetUtils.onlyText(
-                                '被关注',
-                                StyleUtils.getCommonTextStyle(
-                                    color: MyColors.mineGrey,
-                                    fontSize: ScreenUtil().setSp(25))),
-                          ],
+                        const Expanded(flex: 2, child: Text('')),
+                        GestureDetector(
+                          onTap: ((){
+                            Navigator.pushNamed(context, 'CareHomePage');
+                          }),
+                          child: Column(
+                            children: [
+                              // Container(
+                              //   width: ScreenUtil().setHeight(80),
+                              //   alignment: Alignment.topRight,
+                              //   child: Text(
+                              //       '+1',
+                              //       style : StyleUtils.getCommonTextStyle(
+                              //           color: MyColors.mineRed,
+                              //           fontSize: ScreenUtil().setSp(25))),
+                              // ),
+                              const Expanded(child: Text('')),
+                              WidgetUtils.onlyText(
+                                  '8',
+                                  StyleUtils.getCommonTextStyle(
+                                      color: Colors.black,
+                                      fontSize: ScreenUtil().setSp(38),
+                                      fontWeight: FontWeight.w600)),
+                              WidgetUtils.onlyText(
+                                  '被关注',
+                                  StyleUtils.getCommonTextStyle(
+                                      color: MyColors.mineGrey,
+                                      fontSize: ScreenUtil().setSp(21))),
+                              const Expanded(child: Text('')),
+                            ],
+                          ),
                         ),
-                      ),
-                      const Expanded(flex: 2, child: Text('')),
-                      GestureDetector(
-                        onTap: ((){
-                          Navigator.pushNamed(context, 'WhoLockMePage');
-                        }),
-                        child: Column(
-                          children: [
-                            // Container(
-                            //   width: ScreenUtil().setHeight(80),
-                            //   alignment: Alignment.topRight,
-                            //   child: Text(
-                            //       '+1',
-                            //       style : StyleUtils.getCommonTextStyle(
-                            //           color: MyColors.mineRed,
-                            //           fontSize: ScreenUtil().setSp(25))),
-                            // ),
-                            WidgetUtils.onlyText(
-                                '8',
-                                StyleUtils.getCommonTextStyle(
-                                    color: Colors.black,
-                                    fontSize: ScreenUtil().setSp(42),
-                                    fontWeight: FontWeight.bold)),
-                            WidgetUtils.onlyText(
-                                '看过我',
-                                StyleUtils.getCommonTextStyle(
-                                    color: MyColors.mineGrey,
-                                    fontSize: ScreenUtil().setSp(25))),
-                          ],
+                        const Expanded(flex: 2, child: Text('')),
+                        GestureDetector(
+                          onTap: ((){
+                            Navigator.pushNamed(context, 'WhoLockMePage');
+                          }),
+                          child: Column(
+                            children: [
+                              // Container(
+                              //   width: ScreenUtil().setHeight(80),
+                              //   alignment: Alignment.topRight,
+                              //   child: Text(
+                              //       '+1',
+                              //       style : StyleUtils.getCommonTextStyle(
+                              //           color: MyColors.mineRed,
+                              //           fontSize: ScreenUtil().setSp(25))),
+                              // ),
+                              const Expanded(child: Text('')),
+                              WidgetUtils.onlyText(
+                                  '8',
+                                  StyleUtils.getCommonTextStyle(
+                                      color: Colors.black,
+                                      fontSize: ScreenUtil().setSp(38),
+                                      fontWeight: FontWeight.w600)),
+                              WidgetUtils.onlyText(
+                                  '看过我',
+                                  StyleUtils.getCommonTextStyle(
+                                      color: MyColors.mineGrey,
+                                      fontSize: ScreenUtil().setSp(21))),
+                              const Expanded(child: Text('')),
+                            ],
+                          ),
                         ),
-                      ),
-                      const Expanded(child: Text('')),
-                    ],
+                        const Expanded(child: Text('')),
+                      ],
+                    )
                   )
                 ],
               ),
@@ -322,14 +337,14 @@ class _MinePageState extends State<MinePage> {
                         onTap: ((){
                           Navigator.pushNamed(context, 'WalletPage');
                         }),
-                        child: WidgetUtils.containerNo(height: ScreenUtil().setHeight(133), width: double.infinity, color: MyColors.mineYellow, ra: 10, w: Row(
+                        child: WidgetUtils.containerNo(height: ScreenUtil().setHeight(110), width: double.infinity, color: MyColors.mineYellow, ra: 10, w: Row(
                           children: [
                             WidgetUtils.commonSizedBox(0, 10),
                             Expanded(
                               child: Column(
                                 children: [
                                   const Expanded(child: Text('')),
-                                  WidgetUtils.onlyText('我的钱包', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(32), fontWeight: FontWeight.bold)),
+                                  WidgetUtils.onlyText('我的钱包', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(32), fontWeight: FontWeight.w600)),
                                   WidgetUtils.onlyText('充值、兑换', StyleUtils.getCommonTextStyle(color: MyColors.mineGrey, fontSize: ScreenUtil().setSp(22))),
                                   const Expanded(child: Text('')),
                                 ],
@@ -347,14 +362,14 @@ class _MinePageState extends State<MinePage> {
                         onTap: ((){
                           Navigator.pushNamed(context, 'LiwuPage');
                         }),
-                        child: WidgetUtils.containerNo(height: ScreenUtil().setHeight(133), width: double.infinity, color: MyColors.minePink, ra: 10, w: Row(
+                        child: WidgetUtils.containerNo(height: ScreenUtil().setHeight(110), width: double.infinity, color: MyColors.minePink, ra: 10, w: Row(
                           children: [
                             WidgetUtils.commonSizedBox(0, 10),
                             Expanded(
                               child: Column(
                                 children: [
                                   const Expanded(child: Text('')),
-                                  WidgetUtils.onlyText('礼物记录', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(32), fontWeight: FontWeight.bold)),
+                                  WidgetUtils.onlyText('礼物记录', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(32), fontWeight: FontWeight.w600)),
                                   WidgetUtils.onlyText('收送礼物明细', StyleUtils.getCommonTextStyle(color: MyColors.mineGrey, fontSize: ScreenUtil().setSp(22))),
                                   const Expanded(child: Text('')),
                                 ],

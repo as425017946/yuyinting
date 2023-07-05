@@ -223,7 +223,7 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
                               overflow: TextOverflow.ellipsis,
                               color: Colors.black,
                               fontSize: ScreenUtil().setSp(36),
-                              fontWeight: FontWeight.bold),
+                              fontWeight: FontWeight.w600),
                         ),
                         const Expanded(child: Text('')),
                         GestureDetector(

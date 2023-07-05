@@ -172,7 +172,7 @@ class _SettingPageState extends State<SettingPage> {
               child: WidgetUtils.onlyTextCenter(
                   '切换账号',
                   StyleUtils.getCommonTextStyle(
-                      color: Colors.black, fontSize: ScreenUtil().setSp(29), fontWeight: FontWeight.bold)),
+                      color: Colors.black, fontSize: ScreenUtil().setSp(29), fontWeight: FontWeight.w600)),
             ),
           ),
           WidgetUtils.commonSizedBox(10, 0),
@@ -190,7 +190,7 @@ class _SettingPageState extends State<SettingPage> {
               child: WidgetUtils.onlyTextCenter(
                   '退出当前账号',
                   StyleUtils.getCommonTextStyle(
-                      color: MyColors.homeTopBG, fontSize: ScreenUtil().setSp(29), fontWeight: FontWeight.bold)),
+                      color: MyColors.homeTopBG, fontSize: ScreenUtil().setSp(29), fontWeight: FontWeight.w600)),
             ),
           ),
 

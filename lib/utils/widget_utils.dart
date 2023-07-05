@@ -88,7 +88,7 @@ class WidgetUtils {
                             style: StyleUtils.getCommonTextStyle(
                                 color: Colors.black,
                                 fontSize: ScreenUtil().setSp(32),
-                            fontWeight: FontWeight.bold),
+                            fontWeight: FontWeight.w600),
                           ),
                         )
                       : index == 2
@@ -160,7 +160,7 @@ class WidgetUtils {
             overflow: TextOverflow.ellipsis,
             color: Colors.black,
             fontSize: ScreenUtil().setSp(34),
-            fontWeight: FontWeight.bold),
+            fontWeight: FontWeight.w600),
       ),
       elevation: 0,
       //去掉Appbar底部阴影
@@ -849,7 +849,15 @@ class WidgetUtils {
         //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
         borderRadius: const BorderRadius.all(Radius.circular(30.0)),
       ),
-      child: WidgetUtils.onlyTextCenter(title, StyleUtils.getCommonTextStyle(color: txtColors, fontSize: size)),
+      child: Column(
+        children: [
+          WidgetUtils.commonSizedBox(1, 0),
+          Text(
+            title,
+            style: StyleUtils.getCommonTextStyle(color: txtColors, fontSize: size),
+          )
+        ],
+      ),
     );
   }
 
@@ -1005,11 +1013,11 @@ class WidgetUtils {
               ),
               child: Row(
                 children: [
-                  WidgetUtils.commonSizedBox(0, 22),
+                  WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(30)),
                   Text(
                     title,
                     style: StyleUtils.getCommonTextStyle(
-                        color: Colors.white, fontSize: ScreenUtil().setSp(18), fontWeight: FontWeight.bold),
+                        color: Colors.white, fontSize: ScreenUtil().setSp(18), fontWeight: FontWeight.w600),
                   )
                 ],
               ),

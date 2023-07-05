@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage> {
                 ///头部
                 Container(
                   color: MyColors.homeTopBG,
-                  height: ScreenUtil().setHeight(140),
+                  height: ScreenUtil().setHeight(150),
                   width: double.infinity,
                   child: Column(
                     children: [
@@ -96,7 +96,7 @@ class _HomePageState extends State<HomePage> {
                                       fontSize: _currentIndex == 0
                                           ? ScreenUtil().setSp(38)
                                           : ScreenUtil().setSp(32),
-                                      fontWeight: _currentIndex == 4 ? FontWeight.bold : FontWeight.normal)),
+                                      fontWeight: _currentIndex == 0 ? FontWeight.w600 : FontWeight.normal)),
                             ),
                             const Expanded(flex: 1, child: Text('')),
                             GestureDetector(
@@ -113,7 +113,7 @@ class _HomePageState extends State<HomePage> {
                                       fontSize: _currentIndex == 1
                                           ? ScreenUtil().setSp(38)
                                           : ScreenUtil().setSp(32),
-                                      fontWeight: _currentIndex == 4 ? FontWeight.bold : FontWeight.normal)),
+                                      fontWeight: _currentIndex == 1 ? FontWeight.w600 : FontWeight.normal)),
                             ),
                             const Expanded(flex: 1, child: Text('')),
                             GestureDetector(
@@ -130,7 +130,7 @@ class _HomePageState extends State<HomePage> {
                                       fontSize: _currentIndex == 2
                                           ? ScreenUtil().setSp(38)
                                           : ScreenUtil().setSp(32),
-                                      fontWeight: _currentIndex == 4 ? FontWeight.bold : FontWeight.normal)),
+                                      fontWeight: _currentIndex == 2 ? FontWeight.w600 : FontWeight.normal)),
                             ),
                             const Expanded(flex: 1, child: Text('')),
                             GestureDetector(
@@ -175,7 +175,7 @@ class _HomePageState extends State<HomePage> {
                                       fontSize: _currentIndex == 4
                                           ? ScreenUtil().setSp(38)
                                           : ScreenUtil().setSp(32),
-                                  fontWeight: _currentIndex == 4 ? FontWeight.bold : FontWeight.normal)),
+                                  fontWeight: _currentIndex == 4 ? FontWeight.w600 : FontWeight.normal)),
                             ),
                             const Expanded(flex: 2, child: Text('')),
                             GestureDetector(
@@ -189,6 +189,124 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                       ),
+                      Container(
+                        width: double.infinity,
+                        height: ScreenUtil().setHeight(5),
+                        margin: EdgeInsets.only(left: 20, right: ScreenUtil().setHeight(150)),
+                        child: Row(
+                          children: [
+                            _currentIndex == 0 ? SizedBox(
+                              width: ScreenUtil().setHeight(68),
+                              height: ScreenUtil().setHeight(10),
+                              child: Row(
+                                children: [
+                                  const Expanded(child: Text('')),
+                                  Container(
+                                    width: ScreenUtil().setHeight(20),
+                                    height: ScreenUtil().setHeight(4),
+                                    //边框设置
+                                    decoration: const BoxDecoration(
+                                      //背景
+                                      color: Colors.white,
+                                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                    ),
+                                  ),
+                                  const Expanded(child: Text('')),
+                                ],
+                              ),
+                            ) : WidgetUtils.commonSizedBox(ScreenUtil().setHeight(10), ScreenUtil().setHeight(68)),
+                            const Expanded(child: Text('')),
+                            _currentIndex == 1 ? SizedBox(
+                              width: ScreenUtil().setHeight(68),
+                              height: ScreenUtil().setHeight(10),
+                              child: Row(
+                                children: [
+                                  const Expanded(child: Text('')),
+                                  Container(
+                                    width: ScreenUtil().setHeight(20),
+                                    height: ScreenUtil().setHeight(4),
+                                    //边框设置
+                                    decoration: const BoxDecoration(
+                                      //背景
+                                      color: Colors.white,
+                                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                    ),
+                                  ),
+                                  const Expanded(child: Text('')),
+                                ],
+                              ),
+                            ) : WidgetUtils.commonSizedBox(ScreenUtil().setHeight(10), ScreenUtil().setHeight(68)),
+                            const Expanded(child: Text('')),
+                            _currentIndex == 2 ? SizedBox(
+                              width: ScreenUtil().setHeight(68),
+                              height: ScreenUtil().setHeight(10),
+                              child: Row(
+                                children: [
+                                  const Expanded(child: Text('')),
+                                  Container(
+                                    width: ScreenUtil().setHeight(20),
+                                    height: ScreenUtil().setHeight(4),
+                                    //边框设置
+                                    decoration: const BoxDecoration(
+                                      //背景
+                                      color: Colors.white,
+                                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                    ),
+                                  ),
+                                  const Expanded(child: Text('')),
+                                ],
+                              ),
+                            ) : WidgetUtils.commonSizedBox(ScreenUtil().setHeight(10), ScreenUtil().setHeight(68)),
+                            const Expanded(child: Text('')),
+                            _currentIndex == 3 ? SizedBox(
+                              width: ScreenUtil().setHeight(68),
+                              height: ScreenUtil().setHeight(10),
+                              child: Row(
+                                children: [
+                                  const Expanded(child: Text('')),
+                                  Container(
+                                    width: ScreenUtil().setHeight(20),
+                                    height: ScreenUtil().setHeight(4),
+                                    //边框设置
+                                    decoration: const BoxDecoration(
+                                      //背景
+                                      color: Colors.white,
+                                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                    ),
+                                  ),
+                                  const Expanded(child: Text('')),
+                                ],
+                              ),
+                            ) : WidgetUtils.commonSizedBox(ScreenUtil().setHeight(10), ScreenUtil().setHeight(68)),
+                            const Expanded(child: Text('')),
+                            _currentIndex == 4 ? SizedBox(
+                              width: ScreenUtil().setHeight(68),
+                              height: ScreenUtil().setHeight(10),
+                              child: Row(
+                                children: [
+                                  const Expanded(child: Text('')),
+                                  Container(
+                                    width: ScreenUtil().setHeight(20),
+                                    height: ScreenUtil().setHeight(4),
+                                    //边框设置
+                                    decoration: const BoxDecoration(
+                                      //背景
+                                      color: Colors.white,
+                                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                    ),
+                                  ),
+                                  const Expanded(child: Text('')),
+                                ],
+                              ),
+                            ) : WidgetUtils.commonSizedBox(ScreenUtil().setHeight(10), ScreenUtil().setHeight(68)),
+                          ],
+                        ),
+                      )
                     ],
                   ),
                 ),

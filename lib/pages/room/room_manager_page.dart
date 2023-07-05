@@ -90,7 +90,7 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
                                   StyleUtils.getCommonTextStyle(
                                       color: MyColors.roomTCWZ2,
                                       fontSize: ScreenUtil().setSp(25),
-                                      fontWeight: FontWeight.bold)),
+                                      fontWeight: FontWeight.w600)),
                               WidgetUtils.commonSizedBox(0, 5),
                               WidgetUtils.showImages(
                                   'assets/images/room_fuzhu.png',
@@ -138,7 +138,7 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
           )
               :
           Container(
-            height: ScreenUtil().setHeight(917),
+            height: ScreenUtil().setHeight(950),
             width: double.infinity,
             decoration: const BoxDecoration(
               //设置Container修饰
@@ -187,7 +187,7 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
                                   StyleUtils.getCommonTextStyle(
                                       color: MyColors.roomTCWZ2,
                                       fontSize: ScreenUtil().setSp(25),
-                                      fontWeight: FontWeight.bold)),
+                                      fontWeight: FontWeight.w600)),
                               WidgetUtils.commonSizedBox(0, 5),
                               WidgetUtils.showImages(
                                   'assets/images/room_fuzhu.png',

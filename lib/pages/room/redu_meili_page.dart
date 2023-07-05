@@ -227,7 +227,7 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage> {
                               StyleUtils.getCommonTextStyle(
                                   color: MyColors.roomPHWZBlack,
                                   fontSize: ScreenUtil().setSp(21),
-                                  fontWeight: FontWeight.bold)),
+                                  fontWeight: FontWeight.w600)),
                         )
                       ],
                     )
@@ -254,7 +254,7 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage> {
                               StyleUtils.getCommonTextStyle(
                                   color: MyColors.roomPHWZBlack,
                                   fontSize: ScreenUtil().setSp(21),
-                                  fontWeight: FontWeight.bold)),
+                                  fontWeight: FontWeight.w600)),
                         )
                       ],
                     )
@@ -281,7 +281,7 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage> {
                               StyleUtils.getCommonTextStyle(
                                   color: MyColors.roomPHWZBlack,
                                   fontSize: ScreenUtil().setSp(21),
-                                  fontWeight: FontWeight.bold)),
+                                  fontWeight: FontWeight.w600)),
                         )
                       ],
                     )

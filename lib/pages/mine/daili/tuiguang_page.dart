@@ -51,8 +51,8 @@ class _TuiguangPageState extends State<TuiguangPage> {
               WidgetUtils.commonSizedBox(20, 10),
               Row(
                 children: [
-                  Expanded(child: WidgetUtils.onlyTextCenter('100', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.bold))),
-                  Expanded(child: WidgetUtils.onlyTextCenter('100', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.bold))),
+                  Expanded(child: WidgetUtils.onlyTextCenter('100', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.w600))),
+                  Expanded(child: WidgetUtils.onlyTextCenter('100', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.w600))),
                 ],
               ),
               WidgetUtils.commonSizedBox(20, 10),
@@ -65,8 +65,8 @@ class _TuiguangPageState extends State<TuiguangPage> {
               WidgetUtils.commonSizedBox(20, 10),
               Row(
                 children: [
-                  Expanded(child: WidgetUtils.onlyTextCenter('100', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.bold))),
-                  Expanded(child: WidgetUtils.onlyTextCenter('100', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.bold))),
+                  Expanded(child: WidgetUtils.onlyTextCenter('100', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.w600))),
+                  Expanded(child: WidgetUtils.onlyTextCenter('100', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.w600))),
                 ],
               ),
               WidgetUtils.commonSizedBox(20, 10),
@@ -79,8 +79,8 @@ class _TuiguangPageState extends State<TuiguangPage> {
               WidgetUtils.commonSizedBox(20, 10),
               Row(
                 children: [
-                  Expanded(child: WidgetUtils.onlyTextCenter('100', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.bold))),
-                  Expanded(child: WidgetUtils.onlyTextCenter('100', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.bold))),
+                  Expanded(child: WidgetUtils.onlyTextCenter('100', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.w600))),
+                  Expanded(child: WidgetUtils.onlyTextCenter('100', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28), fontWeight: FontWeight.w600))),
                 ],
               ),
               WidgetUtils.commonSizedBox(30, 10),
@@ -108,7 +108,7 @@ class _TuiguangPageState extends State<TuiguangPage> {
                     const Expanded(child: Text('')),
                     WidgetUtils.onlyTextCenter('历史总分润', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28))),
                     WidgetUtils.commonSizedBox(15, 10),
-                    WidgetUtils.onlyTextCenter('100.00', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(33), fontWeight: FontWeight.bold)),
+                    WidgetUtils.onlyTextCenter('100.00', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(33), fontWeight: FontWeight.w600)),
                     const Expanded(child: Text('')),
                   ],
                 ),
@@ -131,7 +131,7 @@ class _TuiguangPageState extends State<TuiguangPage> {
                     const Expanded(child: Text('')),
                     WidgetUtils.onlyTextCenter('可领取分润', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28))),
                     WidgetUtils.commonSizedBox(15, 10),
-                    WidgetUtils.onlyTextCenter('100.00', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(33), fontWeight: FontWeight.bold)),
+                    WidgetUtils.onlyTextCenter('100.00', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(33), fontWeight: FontWeight.w600)),
                     const Expanded(child: Text('')),
                   ],
                 ),

@@ -107,7 +107,7 @@ class _TequanPageState extends State<TequanPage> {
                           StyleUtils.getCommonTextStyle(
                               color: Colors.white,
                               fontSize: ScreenUtil().setSp(34),
-                              fontWeight: FontWeight.bold)),
+                              fontWeight: FontWeight.w600)),
                       const Expanded(child: Text('')),
                       GestureDetector(
                         onTap: (() {}),
@@ -149,7 +149,7 @@ class _TequanPageState extends State<TequanPage> {
                                       ? Colors.white
                                       : MyColors.zhuangbanWZ,
                                   fontSize: ScreenUtil().setSp(29),
-                                  fontWeight: FontWeight.bold)),
+                                  fontWeight: FontWeight.w600)),
                           WidgetUtils.commonSizedBox(8, 0),
                           _currentIndex == 0
                               ? WidgetUtils.showImages(
@@ -181,7 +181,7 @@ class _TequanPageState extends State<TequanPage> {
                                       ? Colors.white
                                       : MyColors.zhuangbanWZ,
                                   fontSize: ScreenUtil().setSp(29),
-                                  fontWeight: FontWeight.bold)),
+                                  fontWeight: FontWeight.w600)),
                           WidgetUtils.commonSizedBox(8, 0),
                           _currentIndex == 1
                               ? WidgetUtils.showImages(
@@ -213,7 +213,7 @@ class _TequanPageState extends State<TequanPage> {
                                       ? Colors.white
                                       : MyColors.zhuangbanWZ,
                                   fontSize: ScreenUtil().setSp(29),
-                                  fontWeight: FontWeight.bold)),
+                                  fontWeight: FontWeight.w600)),
                           WidgetUtils.commonSizedBox(8, 0),
                           _currentIndex == 2
                               ? WidgetUtils.showImages(
@@ -245,7 +245,7 @@ class _TequanPageState extends State<TequanPage> {
                                       ? Colors.white
                                       : MyColors.zhuangbanWZ,
                                   fontSize: ScreenUtil().setSp(29),
-                                  fontWeight: FontWeight.bold)),
+                                  fontWeight: FontWeight.w600)),
                           WidgetUtils.commonSizedBox(8, 0),
                           _currentIndex == 3
                               ? WidgetUtils.showImages(
@@ -277,7 +277,7 @@ class _TequanPageState extends State<TequanPage> {
                                       ? Colors.white
                                       : MyColors.zhuangbanWZ,
                                   fontSize: ScreenUtil().setSp(29),
-                                  fontWeight: FontWeight.bold)),
+                                  fontWeight: FontWeight.w600)),
                           WidgetUtils.commonSizedBox(8, 0),
                           _currentIndex == 4
                               ? WidgetUtils.showImages(
@@ -309,7 +309,7 @@ class _TequanPageState extends State<TequanPage> {
                                       ? Colors.white
                                       : MyColors.zhuangbanWZ,
                                   fontSize: ScreenUtil().setSp(29),
-                                  fontWeight: FontWeight.bold)),
+                                  fontWeight: FontWeight.w600)),
                           WidgetUtils.commonSizedBox(8, 0),
                           _currentIndex == 5
                               ? WidgetUtils.showImages(
@@ -341,7 +341,7 @@ class _TequanPageState extends State<TequanPage> {
                                       ? Colors.white
                                       : MyColors.zhuangbanWZ,
                                   fontSize: ScreenUtil().setSp(29),
-                                  fontWeight: FontWeight.bold)),
+                                  fontWeight: FontWeight.w600)),
                           WidgetUtils.commonSizedBox(8, 0),
                           _currentIndex == 6
                               ? WidgetUtils.showImages(
@@ -418,19 +418,19 @@ class _TequanPageState extends State<TequanPage> {
                         '开通 ',
                         StyleUtils.getCommonTextStyle(
                             color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w600,
                             fontSize: ScreenUtil().setSp(33))),
                     WidgetUtils.onlyText(
                         priceYue.toString(),
                         StyleUtils.getCommonTextStyle(
                             color: MyColors.guizuYellow,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w600,
                             fontSize: ScreenUtil().setSp(33))),
                     WidgetUtils.onlyText(
                         ' 元 / 月',
                         StyleUtils.getCommonTextStyle(
                             color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w600,
                             fontSize: ScreenUtil().setSp(33))),
                     WidgetUtils.commonSizedBox(0, 20),
                     WidgetUtils.onlyText(
@@ -468,7 +468,7 @@ class _TequanPageState extends State<TequanPage> {
                         StyleUtils.getCommonTextStyle(
                             color: MyColors.guizuYellow2,
                             fontSize: ScreenUtil().setSp(33),
-                            fontWeight: FontWeight.bold)),
+                            fontWeight: FontWeight.w600)),
                   ),
                 ),
                 WidgetUtils.commonSizedBox(20, 0),

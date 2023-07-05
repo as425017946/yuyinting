@@ -58,7 +58,7 @@ class _KefuPageState extends State<KefuPage> {
                 children: [
                   WidgetUtils.showImages('assets/images/mine_kefu1.png', ScreenUtil().setHeight(61), ScreenUtil().setHeight(59)),
                   WidgetUtils.commonSizedBox(0, 10),
-                  WidgetUtils.onlyText('我的钱包', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(38), fontWeight: FontWeight.bold)),
+                  WidgetUtils.onlyText('在线客服', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(38), fontWeight: FontWeight.w600)),
                 ],
               ),
             ),
@@ -87,7 +87,7 @@ class _KefuPageState extends State<KefuPage> {
                 children: [
                   WidgetUtils.showImages('assets/images/mine_kefu2.png', ScreenUtil().setHeight(54), ScreenUtil().setHeight(46)),
                   WidgetUtils.commonSizedBox(0, 10),
-                  WidgetUtils.onlyText('QQ客服', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(38), fontWeight: FontWeight.bold)),
+                  WidgetUtils.onlyText('QQ客服', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(38), fontWeight: FontWeight.w600)),
                 ],
               ),
             ),
@@ -116,7 +116,7 @@ class _KefuPageState extends State<KefuPage> {
                 children: [
                   WidgetUtils.showImages('assets/images/mine_kefu3.png', ScreenUtil().setHeight(60), ScreenUtil().setHeight(60)),
                   WidgetUtils.commonSizedBox(0, 10),
-                  WidgetUtils.onlyText('Telegram客服', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(38), fontWeight: FontWeight.bold)),
+                  WidgetUtils.onlyText('Telegram客服', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(38), fontWeight: FontWeight.w600)),
                 ],
               ),
             ),
