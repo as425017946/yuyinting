@@ -110,7 +110,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black54,
+      backgroundColor: Colors.transparent,
       body: Column(
         children: [
           Expanded(

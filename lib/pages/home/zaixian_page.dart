@@ -72,7 +72,7 @@ class _ZaixianPageState extends State<ZaixianPage> {
                     ],
                   ),
                 ),
-                WidgetUtils.showImages('assets/images/trends_hi.png', 30, 80),
+                WidgetUtils.showImages('assets/images/trends_hi.png', 22, 60),
                 WidgetUtils.commonSizedBox(0, 20),
 
               ],

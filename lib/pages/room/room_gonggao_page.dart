@@ -22,7 +22,7 @@ class _RoomGongGaoPageState extends State<RoomGongGaoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black54,
+      backgroundColor: Colors.transparent,
       body: Column(
         children: [
           Expanded(

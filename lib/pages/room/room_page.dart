@@ -34,9 +34,9 @@ class RoomPage extends StatefulWidget {
 }
 
 class _RoomPageState extends State<RoomPage> {
-  bool m0 = true,
-      m1 = true,
-      m2 = true,
+  bool m0 = false,
+      m1 = false,
+      m2 = false,
       m3 = false,
       m4 = false,
       m5 = false,
@@ -308,7 +308,7 @@ class _RoomPageState extends State<RoomPage> {
                     Column(
                       children: [
                         SizedBox(
-                          width: ScreenUtil().setHeight(120),
+                          width: ScreenUtil().setHeight(100),
                           child: WidgetUtils.onlyText(
                               '房间名称',
                               StyleUtils.getCommonTextStyle(
@@ -318,7 +318,7 @@ class _RoomPageState extends State<RoomPage> {
                         ),
                         WidgetUtils.commonSizedBox(5, 0),
                         SizedBox(
-                          width: ScreenUtil().setHeight(120),
+                          width: ScreenUtil().setHeight(100),
                           child: WidgetUtils.onlyText(
                               'ID 298113',
                               StyleUtils.getCommonTextStyle(
@@ -341,11 +341,14 @@ class _RoomPageState extends State<RoomPage> {
                             width: ScreenUtil().setHeight(60),
                             height: ScreenUtil().setHeight(32),
                             alignment: Alignment.center,
-                            child: Text(
-                              '收藏',
-                              style: StyleUtils.getCommonTextStyle(
-                                  color: MyColors.roomID,
-                                  fontSize: ScreenUtil().setSp(20)),
+                            child: Column(
+                              children: [
+                                WidgetUtils.commonSizedBox(ScreenUtil().setHeight(2), 0),
+                                Text(
+                                  '收藏',
+                                  style: StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(21)),
+                                )
+                              ],
                             ),
                           )
                         ],
@@ -546,10 +549,10 @@ class _RoomPageState extends State<RoomPage> {
                                     :Row(
                                   children: [
                                     const Expanded(child: Text('')),
-                                    WidgetUtils.showImages(
-                                        'assets/images/room_tingzhu.png',
-                                        ScreenUtil().setHeight(27),
-                                        ScreenUtil().setHeight(25)),
+                                    // WidgetUtils.showImages(
+                                    //     'assets/images/room_tingzhu.png',
+                                    //     ScreenUtil().setHeight(27),
+                                    //     ScreenUtil().setHeight(25)),
                                     WidgetUtils.commonSizedBox(0, 5),
                                     WidgetUtils.onlyText(
                                         '名称',
@@ -637,10 +640,6 @@ class _RoomPageState extends State<RoomPage> {
                                           ? Row(
                                         children: [
                                           const Expanded(child: Text('')),
-                                          WidgetUtils.showImages(
-                                              'assets/images/room_fangguan.png',
-                                              ScreenUtil().setHeight(27),
-                                              ScreenUtil().setHeight(25)),
                                           WidgetUtils.commonSizedBox(0, 5),
                                           WidgetUtils.onlyText(
                                               '名称',
@@ -716,10 +715,10 @@ class _RoomPageState extends State<RoomPage> {
                                         ? Row(
                                       children: [
                                         const Expanded(child: Text('')),
-                                        WidgetUtils.showImages(
-                                            'assets/images/room_fangguan.png',
-                                            ScreenUtil().setHeight(27),
-                                            ScreenUtil().setHeight(25)),
+                                        // WidgetUtils.showImages(
+                                        //     'assets/images/room_fangguan.png',
+                                        //     ScreenUtil().setHeight(27),
+                                        //     ScreenUtil().setHeight(25)),
                                         WidgetUtils.commonSizedBox(0, 5),
                                         WidgetUtils.onlyText(
                                             '名称',
@@ -794,10 +793,10 @@ class _RoomPageState extends State<RoomPage> {
                                         ? Row(
                                       children: [
                                         const Expanded(child: Text('')),
-                                        WidgetUtils.showImages(
-                                            'assets/images/room_fangguan.png',
-                                            ScreenUtil().setHeight(27),
-                                            ScreenUtil().setHeight(25)),
+                                        // WidgetUtils.showImages(
+                                        //     'assets/images/room_fangguan.png',
+                                        //     ScreenUtil().setHeight(27),
+                                        //     ScreenUtil().setHeight(25)),
                                         WidgetUtils.commonSizedBox(0, 5),
                                         WidgetUtils.onlyText(
                                             '名称',
@@ -872,10 +871,10 @@ class _RoomPageState extends State<RoomPage> {
                                         ? Row(
                                       children: [
                                         const Expanded(child: Text('')),
-                                        WidgetUtils.showImages(
-                                            'assets/images/room_fangguan.png',
-                                            ScreenUtil().setHeight(27),
-                                            ScreenUtil().setHeight(25)),
+                                        // WidgetUtils.showImages(
+                                        //     'assets/images/room_fangguan.png',
+                                        //     ScreenUtil().setHeight(27),
+                                        //     ScreenUtil().setHeight(25)),
                                         WidgetUtils.commonSizedBox(0, 5),
                                         WidgetUtils.onlyText(
                                             '名称',
@@ -958,10 +957,6 @@ class _RoomPageState extends State<RoomPage> {
                                           ? Row(
                                         children: [
                                           const Expanded(child: Text('')),
-                                          WidgetUtils.showImages(
-                                              'assets/images/room_fangguan.png',
-                                              ScreenUtil().setHeight(27),
-                                              ScreenUtil().setHeight(25)),
                                           WidgetUtils.commonSizedBox(0, 5),
                                           WidgetUtils.onlyText(
                                               '名称',
@@ -1035,10 +1030,6 @@ class _RoomPageState extends State<RoomPage> {
                                           ? Row(
                                         children: [
                                           const Expanded(child: Text('')),
-                                          WidgetUtils.showImages(
-                                              'assets/images/room_fangguan.png',
-                                              ScreenUtil().setHeight(27),
-                                              ScreenUtil().setHeight(25)),
                                           WidgetUtils.commonSizedBox(0, 5),
                                           WidgetUtils.onlyText(
                                               '名称',
@@ -1112,10 +1103,6 @@ class _RoomPageState extends State<RoomPage> {
                                           ? Row(
                                         children: [
                                           const Expanded(child: Text('')),
-                                          WidgetUtils.showImages(
-                                              'assets/images/room_fangguan.png',
-                                              ScreenUtil().setHeight(27),
-                                              ScreenUtil().setHeight(25)),
                                           WidgetUtils.commonSizedBox(0, 5),
                                           WidgetUtils.onlyText(
                                               '名称',
@@ -1195,12 +1182,12 @@ class _RoomPageState extends State<RoomPage> {
                                         children: [
                                           const Expanded(
                                               child: Text('')),
-                                          WidgetUtils.showImages(
-                                              'assets/images/room_fangguan.png',
-                                              ScreenUtil()
-                                                  .setHeight(27),
-                                              ScreenUtil()
-                                                  .setHeight(25)),
+                                          // WidgetUtils.showImages(
+                                          //     'assets/images/room_fangguan.png',
+                                          //     ScreenUtil()
+                                          //         .setHeight(27),
+                                          //     ScreenUtil()
+                                          //         .setHeight(25)),
                                           WidgetUtils.commonSizedBox(
                                               0, 5),
                                           WidgetUtils.onlyText(
@@ -1290,12 +1277,12 @@ class _RoomPageState extends State<RoomPage> {
                                         children: [
                                           const Expanded(
                                               child: Text('')),
-                                          WidgetUtils.showImages(
-                                              'assets/images/room_fangguan.png',
-                                              ScreenUtil()
-                                                  .setHeight(27),
-                                              ScreenUtil()
-                                                  .setHeight(25)),
+                                          // WidgetUtils.showImages(
+                                          //     'assets/images/room_fangguan.png',
+                                          //     ScreenUtil()
+                                          //         .setHeight(27),
+                                          //     ScreenUtil()
+                                          //         .setHeight(25)),
                                           WidgetUtils.commonSizedBox(
                                               0, 5),
                                           WidgetUtils.onlyText(

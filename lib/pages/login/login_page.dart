@@ -27,7 +27,6 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController controllerPass = TextEditingController();
   var qiehuan = '密码登录';
   var zhanghao = '账号登录';
-  var listen;
   bool gz = true;
   bool isClick = false;
 
@@ -41,7 +40,6 @@ class _LoginPageState extends State<LoginPage> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    listen.cancel();
   }
 
   late Timer _timer;

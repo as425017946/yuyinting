@@ -141,18 +141,23 @@ class _HomePageState extends State<HomePage> {
                                 });
                               }),
                               child: Container(
-                                width: ScreenUtil().setHeight(111),
-                                height: ScreenUtil().setHeight(38),
+                                height: ScreenUtil().setHeight(80),
                                 alignment: Alignment.bottomCenter,
-                                child: _currentIndex == 3
-                                    ? WidgetUtils.showImages(
+                                child: Column(
+                                  children: [
+                                    const Spacer(),
+                                    _currentIndex == 3
+                                        ? WidgetUtils.showImages(
                                         'assets/images/home_yx2.png',
                                         ScreenUtil().setHeight(40),
-                                        ScreenUtil().setHeight(80))
-                                    : WidgetUtils.showImagesFill(
+                                        ScreenUtil().setHeight(75))
+                                        : WidgetUtils.showImagesFill(
                                         'assets/images/home_yx1.png',
-                                        ScreenUtil().setHeight(28),
-                                        ScreenUtil().setHeight(65)),
+                                        ScreenUtil().setHeight(25),
+                                        ScreenUtil().setHeight(62)),
+                                    _currentIndex != 3 ? WidgetUtils.commonSizedBox(3, 0) : WidgetUtils.commonSizedBox(0, 0)
+                                  ],
+                                ),
                               ),
                             ),
                             const Expanded(flex: 1, child: Text('')),

@@ -93,7 +93,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black54,
+      backgroundColor: Colors.transparent,
       body: Column(
         children: [
           Expanded(
@@ -184,7 +184,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage> {
                         });
                       }),
                       child: WidgetUtils.onlyTextCenter(
-                          '背包',
+                          '特权',
                           StyleUtils.getCommonTextStyle(
                               color: leixing == 1
                                   ? MyColors.roomTCWZ2
@@ -205,7 +205,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage> {
                         });
                       }),
                       child: WidgetUtils.onlyTextCenter(
-                          '特权',
+                          '背包',
                           StyleUtils.getCommonTextStyle(
                               color: leixing == 2
                                   ? MyColors.roomTCWZ2
@@ -213,7 +213,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage> {
                               fontSize: leixing == 2 ? ScreenUtil().setSp(28) : ScreenUtil().setSp(25))),
                     ),
                     const Expanded(child: Text('')),
-                    leixing == 1 ? GestureDetector(
+                    leixing == 2 ? GestureDetector(
                       onTap: (() {
                         setState(() {});
                       }),

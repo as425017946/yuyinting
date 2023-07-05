@@ -20,7 +20,7 @@ class _RoomTSMiMaPageState extends State<RoomTSMiMaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.black54,
+        backgroundColor: Colors.transparent,
         resizeToAvoidBottomInset: false, // 解决键盘顶起页面
         body: Column(
           children: [

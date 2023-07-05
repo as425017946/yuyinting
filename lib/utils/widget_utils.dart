@@ -993,8 +993,8 @@ class WidgetUtils {
           alignment: Alignment.centerLeft,
           children: [
             Container(
-              width: ScreenUtil().setHeight(94),
-              height: ScreenUtil().setHeight(30),
+              width: ScreenUtil().setHeight(75),
+              height: ScreenUtil().setHeight(25),
               margin: const EdgeInsets.only(left: 5),
               //边框设置
               decoration: BoxDecoration(
@@ -1009,13 +1009,13 @@ class WidgetUtils {
                   Text(
                     title,
                     style: StyleUtils.getCommonTextStyle(
-                        color: Colors.white, fontSize: ScreenUtil().setSp(22), fontWeight: FontWeight.bold),
+                        color: Colors.white, fontSize: ScreenUtil().setSp(18), fontWeight: FontWeight.bold),
                   )
                 ],
               ),
             ),
             WidgetUtils.showImages(
-                imgUrl, ScreenUtil().setHeight(36), ScreenUtil().setHeight(36))
+                imgUrl, ScreenUtil().setHeight(30), ScreenUtil().setHeight(30))
           ],
         )
       ],
