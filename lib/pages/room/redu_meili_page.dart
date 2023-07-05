@@ -31,8 +31,8 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage> {
             child: Row(
               children: [
                 WidgetUtils.CircleHeadImage(
-                    ScreenUtil().setHeight(90),
-                    ScreenUtil().setHeight(90),
+                    ScreenUtil().setHeight(80),
+                    ScreenUtil().setHeight(80),
                     'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
                 WidgetUtils.commonSizedBox(0, 10),
                 Expanded(
@@ -47,19 +47,9 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage> {
                                 '用户名$i',
                                 StyleUtils.getCommonTextStyle(
                                     color: MyColors.roomTCWZ2,
-                                    fontSize: ScreenUtil().setSp(28))),
+                                    fontSize: ScreenUtil().setSp(25))),
                           ],
                         ),
-                      ),
-                      WidgetUtils.commonSizedBox(2, 0),
-                      Row(
-                        children: [
-                          WidgetUtils.showImages(
-                              'assets/images/room_fangguan.png',
-                              ScreenUtil().setHeight(33),
-                              ScreenUtil().setHeight(33)),
-                          const Expanded(child: Text(''))
-                        ],
                       ),
                       const Expanded(child: Text(''))
                     ],
@@ -211,7 +201,6 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage> {
               const Expanded(child: Text('')),
             ],
           ),
-          WidgetUtils.commonSizedBox(20, 20),
           SizedBox(
             height: ScreenUtil().setHeight(323),
             width: double.infinity,
@@ -221,8 +210,8 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage> {
                 Column(
                   children: [
                     const Expanded(child: Text('')),
-                    WidgetUtils.showImages('assets/images/py_two.png',
-                        ScreenUtil().setHeight(102), ScreenUtil().setHeight(107)),
+                    WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(100), ScreenUtil().setHeight(100), 'https://img-blog.csdnimg.cn/6d15082ac7234ec7a16065e74f689590.jpeg'),
+                    WidgetUtils.commonSizedBox(5, 0),
                     Stack(
                       children: [
                         WidgetUtils.showImagesFill(
@@ -248,8 +237,8 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage> {
                 Column(
                   children: [
                     const Expanded(child: Text('')),
-                    WidgetUtils.showImages('assets/images/py_one.png',
-                        ScreenUtil().setHeight(158), ScreenUtil().setHeight(160)),
+                    WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(120), ScreenUtil().setHeight(120), 'https://img-blog.csdnimg.cn/6d15082ac7234ec7a16065e74f689590.jpeg'),
+                    WidgetUtils.commonSizedBox(5, 0),
                     Stack(
                       children: [
                         WidgetUtils.showImages(
@@ -275,8 +264,8 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage> {
                 Column(
                   children: [
                     const Expanded(child: Text('')),
-                    WidgetUtils.showImages('assets/images/py_three.png',
-                        ScreenUtil().setHeight(102), ScreenUtil().setHeight(107)),
+                    WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(100), ScreenUtil().setHeight(100), 'https://img-blog.csdnimg.cn/6d15082ac7234ec7a16065e74f689590.jpeg'),
+                    WidgetUtils.commonSizedBox(5, 0),
                     Stack(
                       children: [
                         WidgetUtils.showImagesFill(

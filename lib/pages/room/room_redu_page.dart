@@ -72,7 +72,7 @@ class _RoomReDuPageState extends State<RoomReDuPage> {
                             onTap: (() {
                               setState(() {
                                 _currentIndex = 0;
-                                _controller.jumpToPage(0);
+                                _controller.animateToPage(0, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                               });
                             }),
                             child: Opacity(
@@ -89,7 +89,7 @@ class _RoomReDuPageState extends State<RoomReDuPage> {
                             onTap: (() {
                               setState(() {
                                 _currentIndex = 1;
-                                _controller.jumpToPage(1);
+                                _controller.animateToPage(1, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                               });
                             }),
                             child: Opacity(
@@ -106,7 +106,7 @@ class _RoomReDuPageState extends State<RoomReDuPage> {
                             onTap: (() {
                               setState(() {
                                 _currentIndex = 2;
-                                _controller.jumpToPage(2);
+                                _controller.animateToPage(2, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                               });
                             }),
                             child: Opacity(

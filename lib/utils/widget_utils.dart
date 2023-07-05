@@ -848,13 +848,8 @@ class WidgetUtils {
         color: boxColors,
         //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
         borderRadius: const BorderRadius.all(Radius.circular(30.0)),
-        //设置四周边框
-        border: Border.all(width: 1, color: borderColors),
       ),
-      child: Text(
-        title,
-        style: TextStyle(fontSize: size, color: txtColors),
-      ),
+      child: WidgetUtils.onlyTextCenter(title, StyleUtils.getCommonTextStyle(color: txtColors, fontSize: size)),
     );
   }
 

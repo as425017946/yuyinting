@@ -86,7 +86,7 @@ class _HomePageState extends State<HomePage> {
                               onTap: (() {
                                 setState(() {
                                   _currentIndex = 0;
-                                  _controller.jumpToPage(0);
+                                  _controller.animateToPage(0, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                                 });
                               }),
                               child: WidgetUtils.onlyTextBottom(
@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                               onTap: (() {
                                 setState(() {
                                   _currentIndex = 1;
-                                  _controller.jumpToPage(1);
+                                  _controller.animateToPage(1, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                                 });
                               }),
                               child: WidgetUtils.onlyTextBottom(
@@ -120,7 +120,7 @@ class _HomePageState extends State<HomePage> {
                               onTap: (() {
                                 setState(() {
                                   _currentIndex = 2;
-                                  _controller.jumpToPage(2);
+                                  _controller.animateToPage(2, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                                 });
                               }),
                               child: WidgetUtils.onlyTextBottom(
@@ -137,7 +137,7 @@ class _HomePageState extends State<HomePage> {
                               onTap: (() {
                                 setState(() {
                                   _currentIndex = 3;
-                                  _controller.jumpToPage(3);
+                                  _controller.animateToPage(3, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                                 });
                               }),
                               child: Container(
@@ -160,7 +160,7 @@ class _HomePageState extends State<HomePage> {
                               onTap: (() {
                                 setState(() {
                                   _currentIndex = 4;
-                                  _controller.jumpToPage(4);
+                                  _controller.animateToPage(4, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                                 });
                               }),
                               child: WidgetUtils.onlyTextBottom(

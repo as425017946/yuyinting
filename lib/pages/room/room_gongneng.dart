@@ -39,7 +39,7 @@ class _RoomGongNengState extends State<RoomGongNeng> {
             ),
           ),
           widget.type == 1 ? Container(
-            height: ScreenUtil().setHeight(530),
+            height: ScreenUtil().setHeight(450),
             width: double.infinity,
             decoration: const BoxDecoration(
               //设置Container修饰
@@ -71,7 +71,7 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                           Stack(
                             alignment: Alignment.bottomCenter,
                             children: [
-                              WidgetUtils.showImages('assets/images/room_shouye.png', ScreenUtil().setHeight(100), ScreenUtil().setHeight(100)),
+                              WidgetUtils.showImages('assets/images/room_shouye.png', ScreenUtil().setHeight(80), ScreenUtil().setHeight(80)),
                               Container(
                                 height: ScreenUtil().setHeight(25),
                                 width: ScreenUtil().setHeight(70),
@@ -108,7 +108,7 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                           Stack(
                             alignment: Alignment.bottomCenter,
                             children: [
-                              WidgetUtils.showImages('assets/images/room_mima.png', ScreenUtil().setHeight(100), ScreenUtil().setHeight(100)),
+                              WidgetUtils.showImages('assets/images/room_mima.png', ScreenUtil().setHeight(80), ScreenUtil().setHeight(80)),
                               Opacity(
                                 opacity: mima == false ? 0 : 1,
                                 child: Container(
@@ -141,7 +141,7 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                           Stack(
                             alignment: Alignment.bottomCenter,
                             children: [
-                              WidgetUtils.showImages('assets/images/room_qingchu.png', ScreenUtil().setHeight(100), ScreenUtil().setHeight(100)),
+                              WidgetUtils.showImages('assets/images/room_qingchu.png', ScreenUtil().setHeight(80), ScreenUtil().setHeight(80)),
                             ],
                           ),
                           WidgetUtils.commonSizedBox(5, 0),
@@ -159,7 +159,7 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                           Stack(
                             alignment: Alignment.bottomCenter,
                             children: [
-                              WidgetUtils.showImages('assets/images/room_meili.png', ScreenUtil().setHeight(100), ScreenUtil().setHeight(100)),
+                              WidgetUtils.showImages('assets/images/room_meili.png', ScreenUtil().setHeight(80), ScreenUtil().setHeight(80)),
                             ],
                           ),
                           WidgetUtils.commonSizedBox(5, 0),
@@ -178,7 +178,7 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                           Stack(
                             alignment: Alignment.bottomCenter,
                             children: [
-                              WidgetUtils.showImages('assets/images/room_laoban.png', ScreenUtil().setHeight(100), ScreenUtil().setHeight(100)),
+                              WidgetUtils.showImages('assets/images/room_laoban.png', ScreenUtil().setHeight(80), ScreenUtil().setHeight(80)),
                               Opacity(
                                 opacity: laobanwei== false ? 0 : 1,
                                 child: Container(
@@ -218,7 +218,7 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                           Stack(
                             alignment: Alignment.bottomCenter,
                             children: [
-                              WidgetUtils.showImages('assets/images/room_dongxiao.png', ScreenUtil().setHeight(100), ScreenUtil().setHeight(100)),
+                              WidgetUtils.showImages('assets/images/room_dongxiao.png', ScreenUtil().setHeight(80), ScreenUtil().setHeight(80)),
                               Container(
                                 height: ScreenUtil().setHeight(25),
                                 width: ScreenUtil().setHeight(70),
@@ -248,7 +248,7 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                           Stack(
                             alignment: Alignment.bottomCenter,
                             children: [
-                              WidgetUtils.showImages('assets/images/room_shengyin.png', ScreenUtil().setHeight(100), ScreenUtil().setHeight(100)),
+                              WidgetUtils.showImages('assets/images/room_shengyin.png', ScreenUtil().setHeight(80), ScreenUtil().setHeight(80)),
                               Container(
                                 height: ScreenUtil().setHeight(25),
                                 width: ScreenUtil().setHeight(70),
@@ -285,7 +285,7 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                           Stack(
                             alignment: Alignment.bottomCenter,
                             children: [
-                              WidgetUtils.showImages('assets/images/room_shezhi.png', ScreenUtil().setHeight(100), ScreenUtil().setHeight(100)),
+                              WidgetUtils.showImages('assets/images/room_shezhi.png', ScreenUtil().setHeight(80), ScreenUtil().setHeight(80)),
                             ],
                           ),
                           WidgetUtils.commonSizedBox(5, 0),
@@ -353,7 +353,7 @@ class _RoomGongNengState extends State<RoomGongNeng> {
           )
               :
           Container(
-            height: ScreenUtil().setHeight(350),
+            height: ScreenUtil().setHeight(300),
             width: double.infinity,
             decoration: const BoxDecoration(
               //设置Container修饰
@@ -386,7 +386,7 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                           Stack(
                             alignment: Alignment.bottomCenter,
                             children: [
-                              WidgetUtils.showImages('assets/images/room_dongxiao.png', ScreenUtil().setHeight(100), ScreenUtil().setHeight(100)),
+                              WidgetUtils.showImages('assets/images/room_dongxiao.png', ScreenUtil().setHeight(80), ScreenUtil().setHeight(80)),
                               Container(
                                 height: ScreenUtil().setHeight(25),
                                 width: ScreenUtil().setHeight(70),
@@ -416,7 +416,7 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                           Stack(
                             alignment: Alignment.bottomCenter,
                             children: [
-                              WidgetUtils.showImages('assets/images/room_shengyin.png', ScreenUtil().setHeight(100), ScreenUtil().setHeight(100)),
+                              WidgetUtils.showImages('assets/images/room_shengyin.png', ScreenUtil().setHeight(80), ScreenUtil().setHeight(80)),
                               Container(
                                 height: ScreenUtil().setHeight(25),
                                 width: ScreenUtil().setHeight(70),

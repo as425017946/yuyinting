@@ -293,24 +293,21 @@ class _GuowangPageState extends State<GuowangPage>  with TickerProviderStateMixi
                           ],
                         )),
                     const Expanded(child: Text('')),
-                    Opacity(
-                      opacity: 0,
-                      child: SizedBox(
-                          width: ScreenUtil().setWidth(200),
-                          child: Column(
-                            children: [
-                              WidgetUtils.showImages(
-                                  'assets/images/guizu_touxiang.png',
-                                  ScreenUtil().setHeight(103),
-                                  ScreenUtil().setHeight(103)),
-                              WidgetUtils.onlyTextCenter(
-                                  '贵族头像框',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: MyColors.guizuYellow,
-                                      fontSize: ScreenUtil().setSp(25))),
-                            ],
-                          )),
-                    ),
+                    SizedBox(
+                        width: ScreenUtil().setWidth(200),
+                        child: Column(
+                          children: [
+                            WidgetUtils.showImages(
+                                'assets/images/guizu_kefu.jpg',
+                                ScreenUtil().setHeight(103),
+                                ScreenUtil().setHeight(103)),
+                            WidgetUtils.onlyTextCenter(
+                                '专属客服',
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.guizuYellow,
+                                    fontSize: ScreenUtil().setSp(25))),
+                          ],
+                        )),
                     WidgetUtils.commonSizedBox(0, 20),
                   ],
                 ),

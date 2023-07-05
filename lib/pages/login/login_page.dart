@@ -35,18 +35,6 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    listen = eventBus.on<SubmitButtonBack>().listen((event) {
-      if (MyUtils.compare('立即登录', event.title) == 0) {
-        //跳转并关闭当前页面
-        // ignore: use_build_context_synchronously
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const Tab_Navigator()),
-          // ignore: unnecessary_null_comparison
-          (route) => route == null,
-        );
-      }
-    });
   }
 
   @override
@@ -233,9 +221,39 @@ class _LoginPageState extends State<LoginPage> {
                         controller: controllerPass, hintText: '请输入密码'),
                   ),
             WidgetUtils.commonSizedBox(30, 0),
-            Container(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: WidgetUtils.commonSubmitButton('立即登录'),
+            GestureDetector(
+              onTap: ((){
+                if (MyUtils.checkClick()) {
+                  //跳转并关闭当前页面
+                  // ignore: use_build_context_synchronously
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Tab_Navigator()),
+                    // ignore: unnecessary_null_comparison
+                        (route) => route == null,
+                  );
+                }
+              }),
+              child: Container(
+                margin: const EdgeInsets.fromLTRB(30, 20, 30, 0),
+                height: ScreenUtil().setHeight(80),
+                alignment: Alignment.center,
+                width: double.infinity,
+                //边框设置
+                decoration: const BoxDecoration(
+                  //背景
+                  color: MyColors.homeTopBG,
+                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                  borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                ),
+                child: Text(
+                  '立即登录',
+                  style: TextStyle(
+                    fontSize: ScreenUtil().setSp(36),
+                    color: Colors.white,
+                  ),
+                ),
+              ),
             ),
             WidgetUtils.commonSizedBox(15, 0),
             Container(

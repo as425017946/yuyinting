@@ -28,8 +28,8 @@ class _RoomBlackPageState extends State<RoomBlackPage> {
             child: Row(
               children: [
                 WidgetUtils.CircleHeadImage(
-                    ScreenUtil().setHeight(90),
-                    ScreenUtil().setHeight(90),
+                    ScreenUtil().setHeight(80),
+                    ScreenUtil().setHeight(80),
                     'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
                 WidgetUtils.commonSizedBox(0, 10),
                 Expanded(
@@ -44,27 +44,17 @@ class _RoomBlackPageState extends State<RoomBlackPage> {
                                 '用户名$i',
                                 StyleUtils.getCommonTextStyle(
                                     color: MyColors.roomTCWZ2,
-                                    fontSize: ScreenUtil().setSp(28))),
+                                    fontSize: ScreenUtil().setSp(25))),
                           ],
                         ),
-                      ),
-                      WidgetUtils.commonSizedBox(2, 0),
-                      Row(
-                        children: [
-                          WidgetUtils.showImages(
-                              'assets/images/room_fangguan.png',
-                              ScreenUtil().setHeight(33),
-                              ScreenUtil().setHeight(33)),
-                          const Expanded(child: Text(''))
-                        ],
                       ),
                       const Expanded(child: Text(''))
                     ],
                   ),
                 ),
                 Container(
-                  width: ScreenUtil().setHeight(120),
-                  height: ScreenUtil().setHeight(56),
+                  width: ScreenUtil().setHeight(100),
+                  height: ScreenUtil().setHeight(45),
                   //边框设置
                   decoration: BoxDecoration(
                     //背景

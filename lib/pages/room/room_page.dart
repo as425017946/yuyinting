@@ -15,6 +15,7 @@ import 'package:yuyinting/pages/room/room_manager_page.dart';
 import 'package:yuyinting/pages/room/room_messages_page.dart';
 import 'package:yuyinting/pages/room/room_people_info_page.dart';
 import 'package:yuyinting/pages/room/room_redu_page.dart';
+import 'package:yuyinting/pages/room/room_ts_gonggao_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
@@ -34,8 +35,8 @@ class RoomPage extends StatefulWidget {
 
 class _RoomPageState extends State<RoomPage> {
   bool m0 = true,
-      m1 = false,
-      m2 = false,
+      m1 = true,
+      m2 = true,
       m3 = false,
       m4 = false,
       m5 = false,
@@ -43,6 +44,7 @@ class _RoomPageState extends State<RoomPage> {
       m7 = false,
       m8 = false;
   bool isBoss = true;
+  bool isJinyiin = false;
   var listen;
   /// 声网使用
   int? _remoteUid;
@@ -54,12 +56,12 @@ class _RoomPageState extends State<RoomPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    //初始化声网的音频插件
-    initAgora();
-    //初始化声卡采集
-    if(Platform.isWindows || Platform.isMacOS){
-      starSK();
-    }
+    // //初始化声网的音频插件
+    // initAgora();
+    // //初始化声卡采集
+    // if(Platform.isWindows || Platform.isMacOS){
+    //   starSK();
+    // }
     listen = eventBus.on<SubmitButtonBack>().listen((event) {
       if (event.title == '清除公屏') {
       } else if (event.title == '清除魅力') {
@@ -175,14 +177,14 @@ class _RoomPageState extends State<RoomPage> {
               WidgetUtils.onlyText(
                   '昵称',
                   StyleUtils.getCommonTextStyle(
-                      color: Colors.white, fontSize: ScreenUtil().setSp(24)))
+                      color: MyColors.roomMaiWZ, fontSize: ScreenUtil().setSp(24)))
             ],
           ),
           WidgetUtils.commonSizedBox(5, 0),
           Stack(
             children: [
               Opacity(
-                opacity: 0.5,
+                opacity: 0.3,
                 child: Row(
                   children: [
                     Container(
@@ -244,7 +246,7 @@ class _RoomPageState extends State<RoomPage> {
               ),
             ],
           ),
-          WidgetUtils.commonSizedBox(20, 0),
+          WidgetUtils.commonSizedBox(10, 0),
         ],
       ),
     );
@@ -275,17 +277,31 @@ class _RoomPageState extends State<RoomPage> {
                     GestureDetector(
                       onTap: (() {
                         Future.delayed(const Duration(seconds: 0), () {
-                          Navigator.of(context).push(PageRouteBuilder(
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(//自定义路由
                               opaque: false,
-                              pageBuilder:
-                                  (context, animation, secondaryAnimation) {
-                                return RoomManagerPage(type: 1);
-                              }));
+                              pageBuilder: (context, a, _) => RoomManagerPage(type: 1),//需要跳转的页面
+                              transitionsBuilder: (context, a, _, child) {
+                                const begin =
+                                Offset(0, 1); //Offset是一个2D小部件，他将记录坐标轴的x,y前者为宽，后者为高 如果将begin =Offset(1,0)改为(0,1),效果则会变成从下到上
+                                const end = Offset.zero; //得到Offset.zero坐标值
+                                const curve = Curves.ease; //这是一个曲线动画
+                                var tween = Tween(begin: begin, end: end)
+                                    .chain(CurveTween(curve: curve)); //使用补间动画转换为动画
+                                return SlideTransition(
+                                  //转场动画//目前我认为只能用于跳转效果
+                                  position: a.drive(tween), //这里将获得一个新的动画
+                                  child: child,
+                                );
+                              },
+                            ),
+                          );
                         });
                       }),
                       child: WidgetUtils.CircleHeadImage(
-                          ScreenUtil().setHeight(40),
-                          ScreenUtil().setHeight(40),
+                          ScreenUtil().setHeight(55),
+                          ScreenUtil().setHeight(55),
                           'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
                     ),
                     WidgetUtils.commonSizedBox(0, 5),
@@ -297,22 +313,23 @@ class _RoomPageState extends State<RoomPage> {
                               '房间名称',
                               StyleUtils.getCommonTextStyle(
                                   color: Colors.white,
-                                  fontSize: ScreenUtil().setSp(25),
+                                  fontSize: ScreenUtil().setSp(21),
                                   fontWeight: FontWeight.bold)),
                         ),
+                        WidgetUtils.commonSizedBox(5, 0),
                         SizedBox(
                           width: ScreenUtil().setHeight(120),
                           child: WidgetUtils.onlyText(
                               'ID 298113',
                               StyleUtils.getCommonTextStyle(
                                   color: MyColors.roomID,
-                                  fontSize: ScreenUtil().setSp(21))),
+                                  fontSize: ScreenUtil().setSp(18))),
                         ),
                       ],
                     ),
                     SizedBox(
-                      width: ScreenUtil().setHeight(80),
-                      height: ScreenUtil().setHeight(40),
+                      width: ScreenUtil().setHeight(60),
+                      height: ScreenUtil().setHeight(32),
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
@@ -320,11 +337,17 @@ class _RoomPageState extends State<RoomPage> {
                               'assets/images/room_shoucang.png',
                               double.infinity,
                               double.infinity),
-                          WidgetUtils.onlyTextCenter(
+                          Container(
+                            width: ScreenUtil().setHeight(60),
+                            height: ScreenUtil().setHeight(32),
+                            alignment: Alignment.center,
+                            child: Text(
                               '收藏',
-                              StyleUtils.getCommonTextStyle(
+                              style: StyleUtils.getCommonTextStyle(
                                   color: MyColors.roomID,
-                                  fontSize: ScreenUtil().setSp(21)))
+                                  fontSize: ScreenUtil().setSp(20)),
+                            ),
+                          )
                         ],
                       ),
                     ),
@@ -334,14 +357,14 @@ class _RoomPageState extends State<RoomPage> {
                     Stack(
                       children: [
                         Opacity(
-                            opacity: 0.6,
+                            opacity: 0.3,
                             child: Container(
-                              width: ScreenUtil().setHeight(90),
+                              width: ScreenUtil().setHeight(70),
                               height: ScreenUtil().setHeight(30),
                               //边框设置
                               decoration: const BoxDecoration(
                                 //背景
-                                color: MyColors.roomHot,
+                                color: MyColors.roomMaiLiao,
                                 //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                                 borderRadius:
                                 BorderRadius.all(Radius.circular(30.0)),
@@ -351,16 +374,30 @@ class _RoomPageState extends State<RoomPage> {
                           onTap: (() {
                             LogE('热度点击');
                             Future.delayed(const Duration(seconds: 0), () {
-                              Navigator.of(context).push(PageRouteBuilder(
+                              Navigator.push(
+                                context,
+                                PageRouteBuilder(//自定义路由
                                   opaque: false,
-                                  pageBuilder:
-                                      (context, animation, secondaryAnimation) {
-                                    return const RoomReDuPage();
-                                  }));
+                                  pageBuilder: (context, a, _) => const RoomReDuPage(),//需要跳转的页面
+                                  transitionsBuilder: (context, a, _, child) {
+                                    const begin =
+                                    Offset(0, 1); //Offset是一个2D小部件，他将记录坐标轴的x,y前者为宽，后者为高
+                                    const end = Offset.zero; //得到Offset.zero坐标值
+                                    const curve = Curves.ease; //这是一个曲线动画
+                                    var tween = Tween(begin: begin, end: end)
+                                        .chain(CurveTween(curve: curve)); //使用补间动画转换为动画
+                                    return SlideTransition(
+                                      //转场动画//目前我认为只能用于跳转效果
+                                      position: a.drive(tween), //这里将获得一个新的动画
+                                      child: child,
+                                    );
+                                  },
+                                ),
+                              );
                             });
                           }),
                           child: SizedBox(
-                            width: ScreenUtil().setHeight(90),
+                            width: ScreenUtil().setHeight(70),
                             height: ScreenUtil().setHeight(30),
                             child: Row(
                               children: [
@@ -420,19 +457,28 @@ class _RoomPageState extends State<RoomPage> {
                               child: Column(
                                 children: [
                                   GestureDetector(
-                                    onTap: (() {}),
+                                    onTap: (() {
+                                      Future.delayed(const Duration(seconds: 0), () {
+                                        Navigator.of(context).push(PageRouteBuilder(
+                                            opaque: false,
+                                            pageBuilder:
+                                                (context, animation, secondaryAnimation) {
+                                              return const RoomTSGongGaoPage();
+                                            }));
+                                      });
+                                    }),
                                     child: Stack(
                                       alignment: Alignment.center,
                                       children: [
                                         Opacity(
-                                          opacity: 0.6,
+                                          opacity: 0.3,
                                           child: Container(
                                             width: ScreenUtil().setHeight(80),
                                             height: ScreenUtil().setHeight(30),
                                             //边框设置
                                             decoration: const BoxDecoration(
                                               //背景
-                                              color: MyColors.roomMaiLiao2,
+                                              color: MyColors.roomMaiLiao,
                                               //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                                               borderRadius: BorderRadius.all(
                                                   Radius.circular(30.0)),
@@ -482,11 +528,11 @@ class _RoomPageState extends State<RoomPage> {
                             m0 == true ? const SVGASimpleImage(
                                 assetsName: 'assets/svga/wave_normal.svga') : WidgetUtils.showImages(
                                 'assets/images/room_mai.png',
-                                ScreenUtil().setHeight(120),
-                                ScreenUtil().setHeight(120)),
+                                ScreenUtil().setHeight(110),
+                                ScreenUtil().setHeight(110)),
                             m0 == true ? WidgetUtils.CircleHeadImage(
-                                ScreenUtil().setHeight(120),
-                                ScreenUtil().setHeight(120),
+                                ScreenUtil().setHeight(110),
+                                ScreenUtil().setHeight(110),
                                 'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500') : const Text(''),
                             Column(
                               children: [
@@ -555,7 +601,7 @@ class _RoomPageState extends State<RoomPage> {
                             }),
                             child: SizedBox(
                               width: ScreenUtil().setHeight(140),
-                              height: ScreenUtil().setHeight(220),
+                              height: ScreenUtil().setHeight(190),
                               child: Stack(
                                 alignment: Alignment.center,
                                 children: [
@@ -565,13 +611,13 @@ class _RoomPageState extends State<RoomPage> {
                                       : const Text(''),
                                   m1 == true
                                       ? WidgetUtils.CircleHeadImage(
-                                      ScreenUtil().setHeight(100),
-                                      ScreenUtil().setHeight(100),
+                                      ScreenUtil().setHeight(80),
+                                      ScreenUtil().setHeight(80),
                                       'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500')
                                       : WidgetUtils.showImages(
                                       'assets/images/room_mai.png',
-                                      ScreenUtil().setHeight(100),
-                                      ScreenUtil().setHeight(100)),
+                                      ScreenUtil().setHeight(80),
+                                      ScreenUtil().setHeight(80)),
                                   Column(
                                     children: [
                                       const Expanded(child: Text('')),
@@ -582,6 +628,8 @@ class _RoomPageState extends State<RoomPage> {
                                               color: MyColors.roomMaiWZ,
                                               fontSize: ScreenUtil().setSp(19)))
                                           : WidgetUtils.commonSizedBox(0, 0),
+                                      m1 == false
+                                          ? WidgetUtils.commonSizedBox(15, 0) : WidgetUtils.commonSizedBox(0, 0),
                                       m1 == false
                                           ? WidgetUtils.commonSizedBox(10, 0)
                                           : WidgetUtils.commonSizedBox(0, 0),
@@ -632,7 +680,7 @@ class _RoomPageState extends State<RoomPage> {
                           const Expanded(child: Text('')),
                           SizedBox(
                             width: ScreenUtil().setHeight(140),
-                            height: ScreenUtil().setHeight(220),
+                            height: ScreenUtil().setHeight(190),
                             child: Stack(
                               alignment: Alignment.center,
                               children: [
@@ -642,13 +690,13 @@ class _RoomPageState extends State<RoomPage> {
                                     : const Text(''),
                                 m2 == true
                                     ? WidgetUtils.CircleHeadImage(
-                                    ScreenUtil().setHeight(100),
-                                    ScreenUtil().setHeight(100),
+                                    ScreenUtil().setHeight(80),
+                                    ScreenUtil().setHeight(80),
                                     'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500')
                                     : WidgetUtils.showImages(
                                     'assets/images/room_mai.png',
-                                    ScreenUtil().setHeight(100),
-                                    ScreenUtil().setHeight(100)),
+                                    ScreenUtil().setHeight(80),
+                                    ScreenUtil().setHeight(80)),
                                 Column(
                                   children: [
                                     const Expanded(child: Text('')),
@@ -660,6 +708,8 @@ class _RoomPageState extends State<RoomPage> {
                                             fontSize: ScreenUtil().setSp(19)))
                                         : WidgetUtils.commonSizedBox(0, 0),
                                     m2 == false
+                                        ? WidgetUtils.commonSizedBox(15, 0) : WidgetUtils.commonSizedBox(0, 0),
+                                    m2 == false
                                         ? WidgetUtils.commonSizedBox(10, 0)
                                         : WidgetUtils.commonSizedBox(0, 0),
                                     m2 == true
@@ -708,7 +758,7 @@ class _RoomPageState extends State<RoomPage> {
                           const Expanded(child: Text('')),
                           SizedBox(
                             width: ScreenUtil().setHeight(140),
-                            height: ScreenUtil().setHeight(220),
+                            height: ScreenUtil().setHeight(190),
                             child: Stack(
                               alignment: Alignment.center,
                               children: [
@@ -718,13 +768,13 @@ class _RoomPageState extends State<RoomPage> {
                                     : const Text(''),
                                 m3 == true
                                     ? WidgetUtils.CircleHeadImage(
-                                    ScreenUtil().setHeight(100),
-                                    ScreenUtil().setHeight(100),
+                                    ScreenUtil().setHeight(80),
+                                    ScreenUtil().setHeight(80),
                                     'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500')
                                     : WidgetUtils.showImages(
                                     'assets/images/room_mai.png',
-                                    ScreenUtil().setHeight(100),
-                                    ScreenUtil().setHeight(100)),
+                                    ScreenUtil().setHeight(80),
+                                    ScreenUtil().setHeight(80)),
                                 Column(
                                   children: [
                                     const Expanded(child: Text('')),
@@ -736,6 +786,8 @@ class _RoomPageState extends State<RoomPage> {
                                             fontSize: ScreenUtil().setSp(19)))
                                         : WidgetUtils.commonSizedBox(0, 0),
                                     m3 == false
+                                        ? WidgetUtils.commonSizedBox(15, 0) : WidgetUtils.commonSizedBox(0, 0),
+                                    m3 == false
                                         ? WidgetUtils.commonSizedBox(10, 0)
                                         : WidgetUtils.commonSizedBox(0, 0),
                                     m3 == true
@@ -784,7 +836,7 @@ class _RoomPageState extends State<RoomPage> {
                           const Expanded(child: Text('')),
                           SizedBox(
                             width: ScreenUtil().setHeight(140),
-                            height: ScreenUtil().setHeight(220),
+                            height: ScreenUtil().setHeight(190),
                             child: Stack(
                               alignment: Alignment.center,
                               children: [
@@ -794,13 +846,13 @@ class _RoomPageState extends State<RoomPage> {
                                     : const Text(''),
                                 m4 == true
                                     ? WidgetUtils.CircleHeadImage(
-                                    ScreenUtil().setHeight(100),
-                                    ScreenUtil().setHeight(100),
+                                    ScreenUtil().setHeight(80),
+                                    ScreenUtil().setHeight(80),
                                     'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500')
                                     : WidgetUtils.showImages(
                                     'assets/images/room_mai.png',
-                                    ScreenUtil().setHeight(100),
-                                    ScreenUtil().setHeight(100)),
+                                    ScreenUtil().setHeight(80),
+                                    ScreenUtil().setHeight(80)),
                                 Column(
                                   children: [
                                     const Expanded(child: Text('')),
@@ -811,6 +863,8 @@ class _RoomPageState extends State<RoomPage> {
                                             color: MyColors.roomMaiWZ,
                                             fontSize: ScreenUtil().setSp(19)))
                                         : WidgetUtils.commonSizedBox(0, 0),
+                                    m4 == false
+                                        ? WidgetUtils.commonSizedBox(15, 0) : WidgetUtils.commonSizedBox(0, 0),
                                     m4 == false
                                         ? WidgetUtils.commonSizedBox(10, 0)
                                         : WidgetUtils.commonSizedBox(0, 0),
@@ -869,7 +923,7 @@ class _RoomPageState extends State<RoomPage> {
                             WidgetUtils.commonSizedBox(0, 10),
                             SizedBox(
                               width: ScreenUtil().setHeight(140),
-                              height: ScreenUtil().setHeight(220),
+                              height: ScreenUtil().setHeight(190),
                               child: Stack(
                                 alignment: Alignment.center,
                                 children: [
@@ -880,13 +934,13 @@ class _RoomPageState extends State<RoomPage> {
                                       : const Text(''),
                                   m5 == true
                                       ? WidgetUtils.CircleHeadImage(
-                                      ScreenUtil().setHeight(100),
-                                      ScreenUtil().setHeight(100),
+                                      ScreenUtil().setHeight(80),
+                                      ScreenUtil().setHeight(80),
                                       'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500')
                                       : WidgetUtils.showImages(
                                       'assets/images/room_mai.png',
-                                      ScreenUtil().setHeight(100),
-                                      ScreenUtil().setHeight(100)),
+                                      ScreenUtil().setHeight(80),
+                                      ScreenUtil().setHeight(80)),
                                   Column(
                                     children: [
                                       const Expanded(child: Text('')),
@@ -929,7 +983,7 @@ class _RoomPageState extends State<RoomPage> {
                                               ScreenUtil().setHeight(15)),
                                           WidgetUtils.commonSizedBox(0, 5),
                                           WidgetUtils.onlyText(
-                                              '100',
+                                              '80',
                                               StyleUtils.getCommonTextStyle(
                                                   color: Colors.white,
                                                   fontSize: ScreenUtil()
@@ -946,7 +1000,7 @@ class _RoomPageState extends State<RoomPage> {
                             const Expanded(child: Text('')),
                             SizedBox(
                               width: ScreenUtil().setHeight(140),
-                              height: ScreenUtil().setHeight(220),
+                              height: ScreenUtil().setHeight(190),
                               child: Stack(
                                 alignment: Alignment.center,
                                 children: [
@@ -957,13 +1011,13 @@ class _RoomPageState extends State<RoomPage> {
                                       : const Text(''),
                                   m6 == true
                                       ? WidgetUtils.CircleHeadImage(
-                                      ScreenUtil().setHeight(100),
-                                      ScreenUtil().setHeight(100),
+                                      ScreenUtil().setHeight(80),
+                                      ScreenUtil().setHeight(80),
                                       'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500')
                                       : WidgetUtils.showImages(
                                       'assets/images/room_mai.png',
-                                      ScreenUtil().setHeight(100),
-                                      ScreenUtil().setHeight(100)),
+                                      ScreenUtil().setHeight(80),
+                                      ScreenUtil().setHeight(80)),
                                   Column(
                                     children: [
                                       const Expanded(child: Text('')),
@@ -1006,7 +1060,7 @@ class _RoomPageState extends State<RoomPage> {
                                               ScreenUtil().setHeight(15)),
                                           WidgetUtils.commonSizedBox(0, 5),
                                           WidgetUtils.onlyText(
-                                              '100',
+                                              '80',
                                               StyleUtils.getCommonTextStyle(
                                                   color: Colors.white,
                                                   fontSize: ScreenUtil()
@@ -1023,7 +1077,7 @@ class _RoomPageState extends State<RoomPage> {
                             const Expanded(child: Text('')),
                             SizedBox(
                               width: ScreenUtil().setHeight(140),
-                              height: ScreenUtil().setHeight(220),
+                              height: ScreenUtil().setHeight(190),
                               child: Stack(
                                 alignment: Alignment.center,
                                 children: [
@@ -1034,13 +1088,13 @@ class _RoomPageState extends State<RoomPage> {
                                       : const Text(''),
                                   m7 == true
                                       ? WidgetUtils.CircleHeadImage(
-                                      ScreenUtil().setHeight(100),
-                                      ScreenUtil().setHeight(100),
+                                      ScreenUtil().setHeight(80),
+                                      ScreenUtil().setHeight(80),
                                       'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500')
                                       : WidgetUtils.showImages(
                                       'assets/images/room_mai.png',
-                                      ScreenUtil().setHeight(100),
-                                      ScreenUtil().setHeight(100)),
+                                      ScreenUtil().setHeight(80),
+                                      ScreenUtil().setHeight(80)),
                                   Column(
                                     children: [
                                       const Expanded(child: Text('')),
@@ -1083,7 +1137,7 @@ class _RoomPageState extends State<RoomPage> {
                                               ScreenUtil().setHeight(15)),
                                           WidgetUtils.commonSizedBox(0, 5),
                                           WidgetUtils.onlyText(
-                                              '100',
+                                              '80',
                                               StyleUtils.getCommonTextStyle(
                                                   color: Colors.white,
                                                   fontSize: ScreenUtil()
@@ -1101,7 +1155,7 @@ class _RoomPageState extends State<RoomPage> {
                             isBoss == true
                                 ? SizedBox(
                               width: ScreenUtil().setHeight(140),
-                              height: ScreenUtil().setHeight(220),
+                              height: ScreenUtil().setHeight(190),
                               child: Stack(
                                 alignment: Alignment.center,
                                 children: [
@@ -1112,12 +1166,12 @@ class _RoomPageState extends State<RoomPage> {
                                       : const Text(''),
                                   m8 == true
                                       ? WidgetUtils.CircleHeadImage(
-                                      ScreenUtil().setHeight(100),
-                                      ScreenUtil().setHeight(100),
+                                      ScreenUtil().setHeight(80),
+                                      ScreenUtil().setHeight(80),
                                       'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500')
                                       : SizedBox(
-                                    height: ScreenUtil().setHeight(100),
-                                    width: ScreenUtil().setHeight(100),
+                                    height: ScreenUtil().setHeight(80),
+                                    width: ScreenUtil().setHeight(80),
                                     child: const SVGASimpleImage(
                                         assetsName:
                                         'assets/svga/laobanwei.svga'),
@@ -1178,7 +1232,7 @@ class _RoomPageState extends State<RoomPage> {
                                           WidgetUtils.commonSizedBox(
                                               0, 5),
                                           WidgetUtils.onlyText(
-                                              '100',
+                                              '80',
                                               StyleUtils
                                                   .getCommonTextStyle(
                                                   color:
@@ -1199,7 +1253,7 @@ class _RoomPageState extends State<RoomPage> {
                             )
                                 : SizedBox(
                               width: ScreenUtil().setHeight(140),
-                              height: ScreenUtil().setHeight(220),
+                              height: ScreenUtil().setHeight(190),
                               child: Stack(
                                 alignment: Alignment.center,
                                 children: [
@@ -1210,13 +1264,13 @@ class _RoomPageState extends State<RoomPage> {
                                       : const Text(''),
                                   m8 == true
                                       ? WidgetUtils.CircleHeadImage(
-                                      ScreenUtil().setHeight(100),
-                                      ScreenUtil().setHeight(100),
+                                      ScreenUtil().setHeight(80),
+                                      ScreenUtil().setHeight(80),
                                       'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500')
                                       : WidgetUtils.showImages(
                                       'assets/images/room_mai.png',
-                                      ScreenUtil().setHeight(100),
-                                      ScreenUtil().setHeight(100)),
+                                      ScreenUtil().setHeight(80),
+                                      ScreenUtil().setHeight(80)),
                                   Column(
                                     children: [
                                       const Expanded(child: Text('')),
@@ -1336,16 +1390,16 @@ class _RoomPageState extends State<RoomPage> {
                         alignment: Alignment.center,
                         children: [
                           Opacity(
-                            opacity: 0.6,
+                            opacity: 0.3,
                             child: Row(
                               children: [
                                 Container(
-                                  height: ScreenUtil().setHeight(60),
-                                  width: ScreenUtil().setHeight(150),
+                                  height: ScreenUtil().setHeight(50),
+                                  width: ScreenUtil().setHeight(120),
                                   //边框设置
                                   decoration: const BoxDecoration(
                                     //背景
-                                    color: MyColors.roomMaiLiao2,
+                                    color: MyColors.roomMaiLiao,
                                     //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                                     borderRadius:
                                     BorderRadius.all(Radius.circular(30.0)),
@@ -1358,55 +1412,41 @@ class _RoomPageState extends State<RoomPage> {
                               '聊聊...',
                               StyleUtils.getCommonTextStyle(
                                   color: MyColors.roomMaiLiao3,
-                                  fontSize: ScreenUtil().setSp(21))),
+                                  fontSize: ScreenUtil().setSp(25))),
                         ],
                       ),
                       const Expanded(child: Text('')),
                       Stack(
                         children: [
                           SizedBox(
-                            height: ScreenUtil().setHeight(70),
-                            width: ScreenUtil().setHeight(70),
+                            height: ScreenUtil().setHeight(60),
+                            width: ScreenUtil().setHeight(60),
                             child: const SVGASimpleImage(
                                 assetsName: 'assets/svga/room_liwu.svga'),
                           ),
                           GestureDetector(
                             onTap: ((){
                               Future.delayed(const Duration(seconds: 0), () {
-                                Navigator.of(context).push(PageRouteBuilder(
+                                Navigator.push(
+                                  context,
+                                  PageRouteBuilder(//自定义路由
                                     opaque: false,
-                                    pageBuilder:
-                                        (context, animation, secondaryAnimation) {
-                                      return const RoomLiWuPage();
-                                    }));
-                              });
-                            }),
-                            child:Container(
-                                height: ScreenUtil().setHeight(70),
-                                width: ScreenUtil().setHeight(70),
-                                color: Colors.transparent
-                            ),
-                          )
-                        ],
-                      ),
-                      WidgetUtils.commonSizedBox(0, 5),
-                      Stack(
-                        children: [
-                          SizedBox(
-                            height: ScreenUtil().setHeight(60),
-                            width: ScreenUtil().setHeight(60),
-                            child: const SVGASimpleImage(
-                                assetsName: 'assets/svga/room_huodong.svga'),
-                          ),
-                          GestureDetector(
-                            onTap: ((){
-                              Future.delayed(const Duration(seconds: 0), () {
-                                Navigator.of(context).push(PageRouteBuilder(
-                                    opaque: false,
-                                    pageBuilder:
-                                        (context, animation, secondaryAnimation) {
-                                      return const RoomLiWuPage();
-                                    }));
+                                    pageBuilder: (context, a, _) => const RoomLiWuPage(),//需要跳转的页面
+                                    transitionsBuilder: (context, a, _, child) {
+                                      const begin =
+                                      Offset(0, 1); //Offset是一个2D小部件，他将记录坐标轴的x,y前者为宽，后者为高
+                                      const end = Offset.zero; //得到Offset.zero坐标值
+                                      const curve = Curves.ease; //这是一个曲线动画
+                                      var tween = Tween(begin: begin, end: end)
+                                          .chain(CurveTween(curve: curve)); //使用补间动画转换为动画
+                                      return SlideTransition(
+                                        //转场动画//目前我认为只能用于跳转效果
+                                        position: a.drive(tween), //这里将获得一个新的动画
+                                        child: child,
+                                      );
+                                    },
+                                  ),
+                                );
                               });
                             }),
                             child:Container(
@@ -1417,41 +1457,121 @@ class _RoomPageState extends State<RoomPage> {
                           )
                         ],
                       ),
-                      WidgetUtils.commonSizedBox(0, 10),
-                      GestureDetector(
-                        onTap: (() {
-                          Future.delayed(const Duration(seconds: 0), () {
-                            Navigator.of(context).push(PageRouteBuilder(
-                                opaque: false,
-                                pageBuilder:
-                                    (context, animation, secondaryAnimation) {
-                                  return const RoomMessagesPage();
-                                }));
-                          });
-                        }),
-                        child: WidgetUtils.showImages(
-                            'assets/images/room_message.png',
-                            ScreenUtil().setHeight(60),
-                            ScreenUtil().setHeight(60)),
+                      WidgetUtils.commonSizedBox(0, 5),
+                      Stack(
+                        children: [
+                          SizedBox(
+                            height: ScreenUtil().setHeight(50),
+                            width: ScreenUtil().setHeight(50),
+                            child: const SVGASimpleImage(
+                                assetsName: 'assets/svga/room_huodong.svga'),
+                          ),
+                          GestureDetector(
+                            onTap: ((){
+                              Future.delayed(const Duration(seconds: 0), () {
+                                Navigator.push(
+                                  context,
+                                  PageRouteBuilder(//自定义路由
+                                    opaque: false,
+                                    pageBuilder: (context, a, _) => const RoomLiWuPage(),//需要跳转的页面
+                                    transitionsBuilder: (context, a, _, child) {
+                                      const begin =
+                                      Offset(0, 1); //Offset是一个2D小部件，他将记录坐标轴的x,y前者为宽，后者为高
+                                      const end = Offset.zero; //得到Offset.zero坐标值
+                                      const curve = Curves.ease; //这是一个曲线动画
+                                      var tween = Tween(begin: begin, end: end)
+                                          .chain(CurveTween(curve: curve)); //使用补间动画转换为动画
+                                      return SlideTransition(
+                                        //转场动画//目前我认为只能用于跳转效果
+                                        position: a.drive(tween), //这里将获得一个新的动画
+                                        child: child,
+                                      );
+                                    },
+                                  ),
+                                );
+                              });
+                            }),
+                            child:Container(
+                                height: ScreenUtil().setHeight(50),
+                                width: ScreenUtil().setHeight(50),
+                                color: Colors.transparent
+                            ),
+                          )
+                        ],
                       ),
                       WidgetUtils.commonSizedBox(0, 10),
                       GestureDetector(
                         onTap: (() {
                           Future.delayed(const Duration(seconds: 0), () {
-                            Navigator.of(context).push(PageRouteBuilder(
+                            Navigator.push(
+                              context,
+                              PageRouteBuilder(//自定义路由
                                 opaque: false,
-                                pageBuilder:
-                                    (context, animation, secondaryAnimation) {
-                                  return RoomGongNeng(
-                                    type: 1,
+                                pageBuilder: (context, a, _) => const RoomMessagesPage(),//需要跳转的页面
+                                transitionsBuilder: (context, a, _, child) {
+                                  const begin =
+                                  Offset(0, 1); //Offset是一个2D小部件，他将记录坐标轴的x,y前者为宽，后者为高
+                                  const end = Offset.zero; //得到Offset.zero坐标值
+                                  const curve = Curves.ease; //这是一个曲线动画
+                                  var tween = Tween(begin: begin, end: end)
+                                      .chain(CurveTween(curve: curve)); //使用补间动画转换为动画
+                                  return SlideTransition(
+                                    //转场动画//目前我认为只能用于跳转效果
+                                    position: a.drive(tween), //这里将获得一个新的动画
+                                    child: child,
                                   );
-                                }));
+                                },
+                              ),
+                            );
+                          });
+                        }),
+                        child: WidgetUtils.showImages(
+                            'assets/images/room_message.png',
+                            ScreenUtil().setHeight(50),
+                            ScreenUtil().setHeight(50)),
+                      ),
+                      WidgetUtils.commonSizedBox(0, 10),
+                      GestureDetector(
+                        onTap: (() {
+                          Future.delayed(const Duration(seconds: 0), () {
+                            Navigator.push(
+                              context,
+                              PageRouteBuilder(//自定义路由
+                                opaque: false,
+                                pageBuilder: (context, a, _) => RoomGongNeng(type: 1),//需要跳转的页面
+                                transitionsBuilder: (context, a, _, child) {
+                                  const begin =
+                                  Offset(0, 1); //Offset是一个2D小部件，他将记录坐标轴的x,y前者为宽，后者为高
+                                  const end = Offset.zero; //得到Offset.zero坐标值
+                                  const curve = Curves.ease; //这是一个曲线动画
+                                  var tween = Tween(begin: begin, end: end)
+                                      .chain(CurveTween(curve: curve)); //使用补间动画转换为动画
+                                  return SlideTransition(
+                                    //转场动画//目前我认为只能用于跳转效果
+                                    position: a.drive(tween), //这里将获得一个新的动画
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
                           });
                         }),
                         child: WidgetUtils.showImages(
                             'assets/images/room_gongneng.png',
-                            ScreenUtil().setHeight(60),
-                            ScreenUtil().setHeight(60)),
+                            ScreenUtil().setHeight(50),
+                            ScreenUtil().setHeight(50)),
+                      ),
+                      WidgetUtils.commonSizedBox(0, 10),
+                      GestureDetector(
+                        onTap: (() {
+                          setState(() {
+                            isJinyiin = !isJinyiin;
+                          });
+                        }),
+                        child: WidgetUtils.showImages(
+                            isJinyiin ? 'assets/images/room_yin_off.png' : 'assets/images/room_yin_on.png',
+                            ScreenUtil().setHeight(50),
+                            ScreenUtil().setHeight(50)),
                       ),
                       // WidgetUtils.commonSizedBox(0, 10),
                       // Stack(

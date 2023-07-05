@@ -53,7 +53,7 @@ class _DailiHomePageState extends State<DailiHomePage> {
                   onTap: ((){
                     setState(() {
                       _currentIndex = 0;
-                      _controller.jumpToPage(0);
+                      _controller.animateToPage(0, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                     });
                   }),
                   child: WidgetUtils.myContainer(ScreenUtil().setHeight(50), ScreenUtil().setHeight(120), _currentIndex == 0 ? MyColors.homeTopBG : Colors.white, _currentIndex == 0 ? MyColors.homeTopBG : Colors.white, '我的推广', ScreenUtil().setSp(25), _currentIndex == 0 ? Colors.white : Colors.black),
@@ -63,7 +63,7 @@ class _DailiHomePageState extends State<DailiHomePage> {
                   onTap: ((){
                     setState(() {
                       _currentIndex = 1;
-                      _controller.jumpToPage(1);
+                      _controller.animateToPage(1, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                     });
                   }),
                   child: WidgetUtils.myContainer(ScreenUtil().setHeight(50), ScreenUtil().setHeight(120), _currentIndex == 1 ? MyColors.homeTopBG : Colors.white, _currentIndex == 1 ? MyColors.homeTopBG : Colors.white, '团队总览', ScreenUtil().setSp(25), _currentIndex == 1 ? Colors.white : Colors.black),
@@ -73,7 +73,7 @@ class _DailiHomePageState extends State<DailiHomePage> {
                   onTap: ((){
                     setState(() {
                       _currentIndex = 2;
-                      _controller.jumpToPage(2);
+                      _controller.animateToPage(2, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                     });
                   }),
                   child: WidgetUtils.myContainer(ScreenUtil().setHeight(50), ScreenUtil().setHeight(120), _currentIndex == 2 ? MyColors.homeTopBG : Colors.white, _currentIndex == 2 ? MyColors.homeTopBG : Colors.white, '团队报表', ScreenUtil().setSp(25), _currentIndex == 2 ? Colors.white : Colors.black),
@@ -83,7 +83,7 @@ class _DailiHomePageState extends State<DailiHomePage> {
                   onTap: ((){
                     setState(() {
                       _currentIndex = 3;
-                      _controller.jumpToPage(3);
+                      _controller.animateToPage(3, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                     });
                   }),
                   child: WidgetUtils.myContainer(ScreenUtil().setHeight(50), ScreenUtil().setHeight(120), _currentIndex == 3 ? MyColors.homeTopBG : Colors.white, _currentIndex == 3 ? MyColors.homeTopBG : Colors.white, '手工开户', ScreenUtil().setSp(25), _currentIndex == 3 ? Colors.white : Colors.black),

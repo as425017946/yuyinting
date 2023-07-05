@@ -58,6 +58,7 @@ import '../pages/mine/zhuangban/zhuangban_page.dart';
 import '../pages/room/room_page.dart';
 import '../pages/room/room_people_info_page.dart';
 import '../pages/room/room_redu_page.dart';
+import '../pages/room/room_ts_gonggao_page.dart';
 import '../pages/trends/trends_hi_page.dart';
 import '../pages/trends/trends_send_page.dart';
 
@@ -124,9 +125,9 @@ var staticRoutes = {
   'RoomPage':(context) => RoomPage(type: 0,),// 房间页面
   'RoomPeopleInfoPage':(context) => const RoomPeopleInfoPage(),// 房间他人信息详情
   'RoomReDuPage':(context) => const RoomReDuPage(),// 房间内的热度
+  'RoomTSGongGaoPage':(context) => const RoomTSGongGaoPage(),// 房间内弹窗公告
 
   'DengjiPage':(context) => const DengjiPage(),// 测试等级描边
-
 
 
 };

@@ -53,6 +53,8 @@ class _ShoucangPageState extends State<ShoucangPage> {
         }
       }),
       child: Container(
+        height: ScreenUtil().setHeight(260),
+        width: ScreenUtil().setHeight(260),
         alignment: Alignment.bottomLeft,
         child: Stack(
           children: [
@@ -61,29 +63,34 @@ class _ShoucangPageState extends State<ShoucangPage> {
                 ScreenUtil().setHeight(260),
                 10.0,
                 'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
-            Container(
-              margin: const EdgeInsets.fromLTRB(10, 110, 10, 0),
-              child: Text(
-                '欲望女神  全麦等一个...',
-                style: StyleUtils.getCommonTextStyle(
-                    color: Colors.white, fontSize: ScreenUtil().setSp(26)),
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.fromLTRB(10, 132, 10, 0),
-              child: Row(
+            Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: Column(
                 children: [
-                  WidgetUtils.showImages('assets/images/zhibo2.webp', 10, 15),
-                  Text(
-                    '10000',
-                    style: StyleUtils.getCommonTextStyle(
-                        color: Colors.white,
-                        fontSize: ScreenUtil().setSp(18),
-                        fontWeight: FontWeight.w500),
-                  )
+                  const Spacer(),
+                  WidgetUtils.onlyText(
+                      '房间标题',
+                      StyleUtils.getCommonTextStyle(
+                          color: Colors.white,
+                          fontSize: ScreenUtil().setSp(26))),
+                  WidgetUtils.commonSizedBox(5, 0),
+                  Row(
+                    children: [
+                      WidgetUtils.showImages(
+                          'assets/images/zhibo2.webp', 10, 15),
+                      Text(
+                        '10000',
+                        style: StyleUtils.getCommonTextStyle(
+                            color: Colors.white,
+                            fontSize: ScreenUtil().setSp(18),
+                            fontWeight: FontWeight.w500),
+                      )
+                    ],
+                  ),
+                  WidgetUtils.commonSizedBox(10, 0),
                 ],
               ),
-            ),
+            )
           ],
         ),
       ),

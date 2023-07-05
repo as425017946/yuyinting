@@ -27,10 +27,6 @@ class _RoomBG2PageState extends State<RoomBG2Page> {
             children: [
               WidgetUtils.CircleImageNet(ScreenUtil().setHeight(320),ScreenUtil().setHeight(180),20.0,'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
               WidgetUtils.showImagesFill('assets/images/room_bg_xzk.png', ScreenUtil().setHeight(320),ScreenUtil().setHeight(180)),
-              Container(
-                margin: const EdgeInsets.only(top: 10,right: 10),
-                child: WidgetUtils.showImagesFill('assets/images/room_bg_dui.png', ScreenUtil().setHeight(54),ScreenUtil().setHeight(54)),
-              ),
             ],
           ),
           WidgetUtils.commonSizedBox(5, 0),
@@ -47,7 +43,7 @@ class _RoomBG2PageState extends State<RoomBG2Page> {
       child: Container(
         margin: const EdgeInsets.all(20),
         child: OptionGridView(
-          itemCount: 1,
+          itemCount: 2,
           rowCount: 3,
           mainAxisSpacing: 10,
           crossAxisSpacing: 10,

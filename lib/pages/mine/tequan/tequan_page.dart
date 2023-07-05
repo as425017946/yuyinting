@@ -41,13 +41,15 @@ class _TequanPageState extends State<TequanPage> {
       if(event.title == '右'){
         setState(() {
           _currentIndex = event.index+1;
-          _controller.jumpToPage(_currentIndex);
+          _controller.animateToPage(_currentIndex, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+          // _controller.jumpToPage(_currentIndex);
         });
       }
       if(event.title == '左'){
         setState(() {
           _currentIndex = event.index-1;
-          _controller.jumpToPage(_currentIndex);
+          // _controller.jumpToPage(_currentIndex);
+          _controller.animateToPage(_currentIndex, duration: const Duration(milliseconds: 500), curve: Curves.ease);
         });
       }
     });
@@ -132,7 +134,7 @@ class _TequanPageState extends State<TequanPage> {
                       onTap: (() {
                         setState(() {
                           _currentIndex = 0;
-                          _controller.jumpToPage(0);
+                          _controller.animateToPage(0, duration: const Duration(milliseconds: 500), curve: Curves.ease);
 
                           priceDou=360;
                           priceYue=36;
@@ -165,7 +167,7 @@ class _TequanPageState extends State<TequanPage> {
                       onTap: (() {
                         setState(() {
                           _currentIndex = 1;
-                          _controller.jumpToPage(1);
+                          _controller.animateToPage(1, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                           priceDou=2800;
                           priceYue=280;
                         });
@@ -197,7 +199,7 @@ class _TequanPageState extends State<TequanPage> {
                       onTap: (() {
                         setState(() {
                           _currentIndex = 2;
-                          _controller.jumpToPage(2);
+                          _controller.animateToPage(2, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                           priceDou=9000;
                           priceYue=900;
                         });
@@ -229,7 +231,7 @@ class _TequanPageState extends State<TequanPage> {
                       onTap: (() {
                         setState(() {
                           _currentIndex = 3;
-                          _controller.jumpToPage(3);
+                          _controller.animateToPage(3, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                           priceDou=50000;
                           priceYue=5000;
                         });
@@ -261,7 +263,7 @@ class _TequanPageState extends State<TequanPage> {
                       onTap: (() {
                         setState(() {
                           _currentIndex = 4;
-                          _controller.jumpToPage(4);
+                          _controller.animateToPage(4, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                           priceDou=120000;
                           priceYue=12000;
                         });
@@ -293,7 +295,7 @@ class _TequanPageState extends State<TequanPage> {
                       onTap: (() {
                         setState(() {
                           _currentIndex = 5;
-                          _controller.jumpToPage(5);
+                          _controller.animateToPage(5, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                           priceDou=360000;
                           priceYue=36000;
                         });
@@ -325,7 +327,7 @@ class _TequanPageState extends State<TequanPage> {
                       onTap: (() {
                         setState(() {
                           _currentIndex = 6;
-                          _controller.jumpToPage(6);
+                          _controller.animateToPage(6, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                           priceDou=580000;
                           priceYue=58000;
                         });

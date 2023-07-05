@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/colors/my_colors.dart';
+import '../../utils/custom_dialog.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 
@@ -63,8 +64,7 @@ class _MessagePageState extends State<MessagePage> {
                           '昵称$i',
                           style: StyleUtils.getCommonTextStyle(
                               color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: ScreenUtil().setSp(38)),
+                              fontSize: ScreenUtil().setSp(35)),
                         ),
                         const Expanded(child: Text('')),
                         Text(
@@ -127,16 +127,18 @@ class _MessagePageState extends State<MessagePage> {
                   const Expanded(child: Text('')),
                   GestureDetector(
                     onTap: (() {
-                      Navigator.pushNamed(context, 'CareHomePage');
+                      exitLogin(context);
                     }),
                     child: Container(
                       height: ScreenUtil().setHeight(81),
-                      width: ScreenUtil().setWidth(38),
-                      alignment: Alignment.center,
-                      child: WidgetUtils.showImages(
-                          'assets/images/messages_ren.png',
-                          ScreenUtil().setHeight(41),
-                          ScreenUtil().setWidth(38)),
+                      width: ScreenUtil().setWidth(200),
+                      alignment: Alignment.centerRight,
+                      child: Text(
+                        '一键已读',
+                        style: StyleUtils.getCommonTextStyle(
+                            color: Colors.black,
+                            fontSize: ScreenUtil().setSp(30)),
+                      ),
                     ),
                   )
                 ],
@@ -173,8 +175,7 @@ class _MessagePageState extends State<MessagePage> {
                                   '系统消息',
                                   style: StyleUtils.getCommonTextStyle(
                                       color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: ScreenUtil().setSp(38)),
+                                      fontSize: ScreenUtil().setSp(35)),
                                 ),
                                 const Expanded(child: Text('')),
                                 Text(
@@ -213,5 +214,20 @@ class _MessagePageState extends State<MessagePage> {
             )
           ],
         ));
+  }
+
+  /// 退出登录
+  Future<void> exitLogin(BuildContext context) async {
+    return  showDialog(
+        context: context,
+        builder: (context) {
+          return CustomDialog(
+            title: '是否标记一键已读？',
+            callback: (res) {
+
+            },
+            content: '',
+          );
+        });
   }
 }

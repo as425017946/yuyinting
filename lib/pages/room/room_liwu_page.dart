@@ -213,7 +213,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage> {
                               fontSize: leixing == 2 ? ScreenUtil().setSp(28) : ScreenUtil().setSp(25))),
                     ),
                     const Expanded(child: Text('')),
-                    GestureDetector(
+                    leixing == 1 ? GestureDetector(
                       onTap: (() {
                         setState(() {});
                       }),
@@ -222,7 +222,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage> {
                           StyleUtils.getCommonTextStyle(
                               color: MyColors.roomMessageYellow,
                               fontSize: ScreenUtil().setSp(28))),
-                    ),
+                    ) : const Text(''),
                     WidgetUtils.commonSizedBox(0, 20),
                   ],
                 ),

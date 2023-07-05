@@ -209,12 +209,26 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
                 GestureDetector(
                   onTap: ((){
                     Future.delayed(const Duration(seconds: 0), () {
-                      Navigator.of(context).push(PageRouteBuilder(
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(//自定义路由
                           opaque: false,
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) {
-                            return RoomGuanLiYuanPage(type: 1);
-                          }));
+                          pageBuilder: (context, a, _) => RoomGuanLiYuanPage(type: 1),//需要跳转的页面
+                          transitionsBuilder: (context, a, _, child) {
+                            const begin =
+                            Offset(0, 1); //Offset是一个2D小部件，他将记录坐标轴的x,y前者为宽，后者为高
+                            const end = Offset.zero; //得到Offset.zero坐标值
+                            const curve = Curves.ease; //这是一个曲线动画
+                            var tween = Tween(begin: begin, end: end)
+                                .chain(CurveTween(curve: curve)); //使用补间动画转换为动画
+                            return SlideTransition(
+                              //转场动画//目前我认为只能用于跳转效果
+                              position: a.drive(tween), //这里将获得一个新的动画
+                              child: child,
+                            );
+                          },
+                        ),
+                      );
                     });
                   }),
                   child: SizedBox(
@@ -252,12 +266,26 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
                   onTap: ((){
                     Navigator.pop(context);
                     Future.delayed(const Duration(seconds: 0), () {
-                      Navigator.of(context).push(PageRouteBuilder(
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(//自定义路由
                           opaque: false,
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) {
-                            return const RoomGongGaoPage();
-                          }));
+                          pageBuilder: (context, a, _) => const RoomGongGaoPage(),//需要跳转的页面
+                          transitionsBuilder: (context, a, _, child) {
+                            const begin =
+                            Offset(0, 1); //Offset是一个2D小部件，他将记录坐标轴的x,y前者为宽，后者为高
+                            const end = Offset.zero; //得到Offset.zero坐标值
+                            const curve = Curves.ease; //这是一个曲线动画
+                            var tween = Tween(begin: begin, end: end)
+                                .chain(CurveTween(curve: curve)); //使用补间动画转换为动画
+                            return SlideTransition(
+                              //转场动画//目前我认为只能用于跳转效果
+                              position: a.drive(tween), //这里将获得一个新的动画
+                              child: child,
+                            );
+                          },
+                        ),
+                      );
                     });
                   }),
                   child: SizedBox(
@@ -289,12 +317,26 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
                 GestureDetector(
                   onTap: ((){
                     Future.delayed(const Duration(seconds: 0), () {
-                      Navigator.of(context).push(PageRouteBuilder(
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(//自定义路由
                           opaque: false,
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) {
-                            return const RoomBGPage();
-                          }));
+                          pageBuilder: (context, a, _) => const RoomBGPage(),//需要跳转的页面
+                          transitionsBuilder: (context, a, _, child) {
+                            const begin =
+                            Offset(0, 1); //Offset是一个2D小部件，他将记录坐标轴的x,y前者为宽，后者为高
+                            const end = Offset.zero; //得到Offset.zero坐标值
+                            const curve = Curves.ease; //这是一个曲线动画
+                            var tween = Tween(begin: begin, end: end)
+                                .chain(CurveTween(curve: curve)); //使用补间动画转换为动画
+                            return SlideTransition(
+                              //转场动画//目前我认为只能用于跳转效果
+                              position: a.drive(tween), //这里将获得一个新的动画
+                              child: child,
+                            );
+                          },
+                        ),
+                      );
                     });
                   }),
                   child: SizedBox(
@@ -327,12 +369,26 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
                   onTap: ((){
                     Navigator.pop(context);
                     Future.delayed(const Duration(seconds: 0), () {
-                      Navigator.of(context).push(PageRouteBuilder(
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(//自定义路由
                           opaque: false,
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) {
-                            return RoomPasswordPage(type: 0,);
-                          }));
+                          pageBuilder: (context, a, _) => RoomPasswordPage(type: 0),//需要跳转的页面
+                          transitionsBuilder: (context, a, _, child) {
+                            const begin =
+                            Offset(0, 1); //Offset是一个2D小部件，他将记录坐标轴的x,y前者为宽，后者为高
+                            const end = Offset.zero; //得到Offset.zero坐标值
+                            const curve = Curves.ease; //这是一个曲线动画
+                            var tween = Tween(begin: begin, end: end)
+                                .chain(CurveTween(curve: curve)); //使用补间动画转换为动画
+                            return SlideTransition(
+                              //转场动画//目前我认为只能用于跳转效果
+                              position: a.drive(tween), //这里将获得一个新的动画
+                              child: child,
+                            );
+                          },
+                        ),
+                      );
                     });
                   }),
                   child: SizedBox(
@@ -364,12 +420,26 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
                 GestureDetector(
                   onTap: ((){
                     Future.delayed(const Duration(seconds: 0), () {
-                      Navigator.of(context).push(PageRouteBuilder(
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(//自定义路由
                           opaque: false,
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) {
-                            return RoomBlackPage();
-                          }));
+                          pageBuilder: (context, a, _) => RoomBlackPage(),//需要跳转的页面
+                          transitionsBuilder: (context, a, _, child) {
+                            const begin =
+                            Offset(0, 1); //Offset是一个2D小部件，他将记录坐标轴的x,y前者为宽，后者为高
+                            const end = Offset.zero; //得到Offset.zero坐标值
+                            const curve = Curves.ease; //这是一个曲线动画
+                            var tween = Tween(begin: begin, end: end)
+                                .chain(CurveTween(curve: curve)); //使用补间动画转换为动画
+                            return SlideTransition(
+                              //转场动画//目前我认为只能用于跳转效果
+                              position: a.drive(tween), //这里将获得一个新的动画
+                              child: child,
+                            );
+                          },
+                        ),
+                      );
                     });
                   }),
                   child: SizedBox(
@@ -400,12 +470,26 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
                 GestureDetector(
                   onTap: ((){
                     Future.delayed(const Duration(seconds: 0), () {
-                      Navigator.of(context).push(PageRouteBuilder(
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(//自定义路由
                           opaque: false,
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) {
-                            return const RoomJinYanPage();
-                          }));
+                          pageBuilder: (context, a, _) => const RoomJinYanPage(),//需要跳转的页面
+                          transitionsBuilder: (context, a, _, child) {
+                            const begin =
+                            Offset(0, 1); //Offset是一个2D小部件，他将记录坐标轴的x,y前者为宽，后者为高
+                            const end = Offset.zero; //得到Offset.zero坐标值
+                            const curve = Curves.ease; //这是一个曲线动画
+                            var tween = Tween(begin: begin, end: end)
+                                .chain(CurveTween(curve: curve)); //使用补间动画转换为动画
+                            return SlideTransition(
+                              //转场动画//目前我认为只能用于跳转效果
+                              position: a.drive(tween), //这里将获得一个新的动画
+                              child: child,
+                            );
+                          },
+                        ),
+                      );
                     });
                   }),
                   child: SizedBox(

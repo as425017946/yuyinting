@@ -96,7 +96,7 @@ class _ShopPageState extends State<ShopPage> {
                   onTap: ((){
                     setState(() {
                       _currentIndex = 0;
-                      _controller.jumpToPage(0);
+                      _controller.animateToPage(0, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                     });
                   }),
                   child: WidgetUtils.myContainerZhuangban(_currentIndex == 0 ? MyColors.zhuangbanWZBg : MyColors.zhuangbanBg, '座驾', StyleUtils.getCommonTextStyle(color: _currentIndex == 0 ? Colors.white : MyColors.zhuangbanWZ, fontSize: ScreenUtil().setSp(29), fontWeight: FontWeight.bold)),
@@ -106,7 +106,7 @@ class _ShopPageState extends State<ShopPage> {
                   onTap: ((){
                     setState(() {
                       _currentIndex = 1;
-                      _controller.jumpToPage(1);
+                      _controller.animateToPage(1, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                     });
                   }),
                   child: WidgetUtils.myContainerZhuangban(_currentIndex == 1 ? MyColors.zhuangbanWZBg : MyColors.zhuangbanBg, '头像框', StyleUtils.getCommonTextStyle(color: _currentIndex == 1 ? Colors.white : MyColors.zhuangbanWZ, fontSize: ScreenUtil().setSp(29), fontWeight: FontWeight.bold)),
@@ -116,7 +116,7 @@ class _ShopPageState extends State<ShopPage> {
                   onTap: ((){
                     setState(() {
                       _currentIndex = 2;
-                      _controller.jumpToPage(2);
+                      _controller.animateToPage(2, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                     });
                   }),
                   child: WidgetUtils.myContainerZhuangban(_currentIndex == 2 ? MyColors.zhuangbanWZBg : MyColors.zhuangbanBg, '公屏气泡', StyleUtils.getCommonTextStyle(color: _currentIndex == 2 ? Colors.white : MyColors.zhuangbanWZ, fontSize: ScreenUtil().setSp(29), fontWeight: FontWeight.bold)),
@@ -126,7 +126,7 @@ class _ShopPageState extends State<ShopPage> {
                   onTap: ((){
                     setState(() {
                       _currentIndex = 3;
-                      _controller.jumpToPage(3);
+                      _controller.animateToPage(3, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                     });
                   }),
                   child: WidgetUtils.myContainerZhuangban(_currentIndex == 3 ? MyColors.zhuangbanWZBg : MyColors.zhuangbanBg, '麦上声波', StyleUtils.getCommonTextStyle(color: _currentIndex == 3 ? Colors.white : MyColors.zhuangbanWZ, fontSize: ScreenUtil().setSp(29), fontWeight: FontWeight.bold)),
