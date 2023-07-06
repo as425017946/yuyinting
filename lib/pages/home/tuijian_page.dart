@@ -102,6 +102,7 @@ class _TuijianPageState extends State<TuijianPage> {
                             loop: true,
                             // 自动轮播
                             autoplay: true,
+                            autoplayDelay: 5000,
                             duration: 2000,
                             onIndexChanged: (index){
                               LogE('用户拖动或者自动播放引起下标改变调用');
