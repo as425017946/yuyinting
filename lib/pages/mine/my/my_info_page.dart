@@ -73,7 +73,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
                       onTap: (() {
                         Navigator.pushNamed(context, 'EditMyInfoPage');
                       }),
-                      child: Container(
+                      child: SizedBox(
                         width: ScreenUtil().setWidth(100),
                         child: WidgetUtils.showImages(
                             'assets/images/mine_edit.png',

@@ -4,10 +4,13 @@ import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:svgaplayer_flutter/player.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/config/my_config.dart';
+import 'package:yuyinting/pages/game/zhuanpan_page.dart';
+import 'package:yuyinting/pages/mine/zhuangban/zhuangban_page.dart';
 import 'package:yuyinting/pages/room/room_back_page.dart';
 import 'package:yuyinting/pages/room/room_gongneng.dart';
 import 'package:yuyinting/pages/room/room_liwu_page.dart';
@@ -52,6 +55,14 @@ class _RoomPageState extends State<RoomPage> {
   late RtcEngine _engine;
 
   late final Gradient gradient;
+
+  ///大厅使用
+  List<Map> imgList = [
+    {"url": "https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500"},
+    {"url": "https://lmg.jj20.com/up/allimg/4k/s/02/21092423014IX6-0-lp.jpg"},
+    {"url": "https://img0.baidu.com/it/u=2252164664,3334752698&fm=253&fmt=auto&app=138&f=JPEG?w=667&h=500"},
+  ];
+
 
   @override
   void initState() {
@@ -1396,11 +1407,62 @@ class _RoomPageState extends State<RoomPage> {
                       Positioned(
                         top: 10,
                         right: 15,
-                        child: WidgetUtils.showImages(
-                            'assets/images/room_hudong.png',
-                            ScreenUtil().setHeight(100),
-                            ScreenUtil().setHeight(150)),
-                      ),
+                        child: Container(
+                          height:ScreenUtil().setHeight(100),
+                          width:ScreenUtil().setHeight(150),
+                          //超出部分，可裁剪
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Swiper(
+                            itemBuilder: (BuildContext context,int index){
+                              // 配置图片地址
+                              return FadeInImage.assetNetwork(
+                                placeholder: 'assets/images/img_placeholder.png',
+                                image: imgList[index]["url"],
+                                fit: BoxFit.fill,
+                              );
+                            },
+                            // 配置图片数量
+                            itemCount: imgList.length ,
+                            // 无限循环
+                            loop: true,
+                            // 自动轮播
+                            autoplay: true,
+                            autoplayDelay: 5000,
+                            duration: 2000,
+                            onIndexChanged: (index){
+                              // LogE('用户拖动或者自动播放引起下标改变调用');
+                            },
+                            onTap: (index){
+                              // LogE('用户点击引起下标改变调用');
+                              Future.delayed(const Duration(seconds: 0), () {
+                                Navigator.push(
+                                  context,
+                                  PageRouteBuilder(//自定义路由
+                                    opaque: false,
+                                    pageBuilder: (context, a, _) => const ZhuanPanPage(),//需要跳转的页面
+                                    transitionsBuilder: (context, a, _, child) {
+                                      const begin =
+                                      Offset(0, 1); //Offset是一个2D小部件，他将记录坐标轴的x,y前者为宽，后者为高 如果将begin =Offset(1,0)改为(0,1),效果则会变成从下到上
+                                      const end = Offset.zero; //得到Offset.zero坐标值
+                                      const curve = Curves.ease; //这是一个曲线动画
+                                      var tween = Tween(begin: begin, end: end)
+                                          .chain(CurveTween(curve: curve)); //使用补间动画转换为动画
+                                      return SlideTransition(
+                                        //转场动画//目前我认为只能用于跳转效果
+                                        position: a.drive(tween), //这里将获得一个新的动画
+                                        child: child,
+                                      );
+                                    },
+                                  ),
+                                );
+                              });
+                            },
+                          ),
+                        ),
+                      )
                       // Positioned(
                       //   bottom: 10,
                       //   right: 15,

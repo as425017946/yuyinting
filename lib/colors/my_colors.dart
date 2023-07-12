@@ -112,6 +112,13 @@ class MyColors{
   /// 老板位渐变色
   static const Color lbL = Color(0xFF6ffffd);
   static const Color lbR = Color(0xFFf8fec4);
+  /// 转盘颜色
+  static const Color zpBG = Color(0xFF100B43);
+  static const Color zpBGJ1 = Color(0xFFF9F0BF);
+  static const Color zpBGJ2 = Color(0xFFFFB48C);
+  static const Color zpWZ1 = Color(0xFFDF4424);
+  static const Color zpJD = Color(0xFF1644ce);
+
 
 
 
