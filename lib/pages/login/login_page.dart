@@ -373,9 +373,6 @@ class _LoginPageState extends State<LoginPage> {
               ],
             ),
           ),
-          SVGASimpleImage(
-              assetsName: 'assets/svga/img_2_00109.svga')
-
         ],
       ),
     );

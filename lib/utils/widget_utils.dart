@@ -527,7 +527,7 @@ class WidgetUtils {
 
   ///展示图片使用
   static Widget showImages(String url, double height, double width) {
-    return Image(image: AssetImage(url), width: width, height: height);
+    return Image(image: AssetImage(url), width: width, height: height, gaplessPlayback: true,);
   }
 
   ///展示图片使用
@@ -537,6 +537,7 @@ class WidgetUtils {
       width: width,
       height: height,
       fit: BoxFit.cover,
+        gaplessPlayback: true
     );
   }
 
@@ -547,6 +548,7 @@ class WidgetUtils {
       width: width,
       height: height,
       fit: BoxFit.fill,
+        gaplessPlayback: true
     );
   }
 

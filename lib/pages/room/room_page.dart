@@ -9,6 +9,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:svgaplayer_flutter/player.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/config/my_config.dart';
+import 'package:yuyinting/pages/game/car_page.dart';
+import 'package:yuyinting/pages/game/mofang_page.dart';
 import 'package:yuyinting/pages/game/zhuanpan_page.dart';
 import 'package:yuyinting/pages/mine/zhuangban/zhuangban_page.dart';
 import 'package:yuyinting/pages/room/room_back_page.dart';
@@ -21,6 +23,7 @@ import 'package:yuyinting/pages/room/room_redu_page.dart';
 import 'package:yuyinting/pages/room/room_ts_gonggao_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
+import 'package:yuyinting/utils/my_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import 'dart:ui' as ui;
 import '../../utils/log_util.dart';
@@ -1437,28 +1440,14 @@ class _RoomPageState extends State<RoomPage> {
                             },
                             onTap: (index){
                               // LogE('用户点击引起下标改变调用');
-                              Future.delayed(const Duration(seconds: 0), () {
-                                Navigator.push(
-                                  context,
-                                  PageRouteBuilder(//自定义路由
-                                    opaque: false,
-                                    pageBuilder: (context, a, _) => const ZhuanPanPage(),//需要跳转的页面
-                                    transitionsBuilder: (context, a, _, child) {
-                                      const begin =
-                                      Offset(0, 1); //Offset是一个2D小部件，他将记录坐标轴的x,y前者为宽，后者为高 如果将begin =Offset(1,0)改为(0,1),效果则会变成从下到上
-                                      const end = Offset.zero; //得到Offset.zero坐标值
-                                      const curve = Curves.ease; //这是一个曲线动画
-                                      var tween = Tween(begin: begin, end: end)
-                                          .chain(CurveTween(curve: curve)); //使用补间动画转换为动画
-                                      return SlideTransition(
-                                        //转场动画//目前我认为只能用于跳转效果
-                                        position: a.drive(tween), //这里将获得一个新的动画
-                                        child: child,
-                                      );
-                                    },
-                                  ),
-                                );
-                              });
+                              if(index == 0){
+                                MyUtils.goTransparentPage(context, const ZhuanPanPage() );
+                              }else if(index == 1){
+                                MyUtils.goTransparentPage(context, const MoFangPage());
+                              }else{
+                                MyUtils.goTransparentPage(context, const Carpage());
+                              }
+
                             },
                           ),
                         ),
