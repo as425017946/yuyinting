@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:yuyinting/bean/BlackListBean.dart';
+import 'package:yuyinting/bean/Common_bean.dart';
 import '../../../colors/my_colors.dart';
+import '../../../http/data_utils.dart';
+import '../../../http/my_http_config.dart';
+import '../../../utils/loading.dart';
+import '../../../utils/my_toast_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 /// 黑名单
@@ -14,12 +19,15 @@ class BlackPage extends StatefulWidget {
 
 class _BlackPageState extends State<BlackPage> {
   var appBar;
-  var length = 10;
+  List<Data> _list = [];
+  var length  = 1;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     appBar = WidgetUtils.getAppBar('黑名单', true, context, false, 0);
+    doBlackList();
   }
   @override
   void dispose() {
@@ -34,24 +42,24 @@ class _BlackPageState extends State<BlackPage> {
       height: ScreenUtil().setHeight(120),
       child: Row(
         children: [
-          WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(100), ScreenUtil().setWidth(100), 'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
+          WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(100), ScreenUtil().setWidth(100), _list[i].avatar!),
           WidgetUtils.commonSizedBox(0, 10),
           Expanded(
             child: Column(
               children: [
                 const Expanded(child: Text('')),
-                WidgetUtils.onlyText('用户名$i', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: 14)),
+                WidgetUtils.onlyText(_list[i].nickname!, StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: 14)),
                 WidgetUtils.commonSizedBox(5, 10),
-                WidgetUtils.onlyText('ID: 123456', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: 12)),
+                WidgetUtils.onlyText('ID: ${_list[i].number!}', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: 12)),
                 const Expanded(child: Text('')),
               ],
             ),
           ),
           GestureDetector(
             onTap: ((){
-
+              doPostUpdateList(_list[i].blackUid!,i);
             }),
-            child: WidgetUtils.myContainer(ScreenUtil().setHeight(45), ScreenUtil().setHeight(100), Colors.white, MyColors.homeTopBG, '解除', ScreenUtil().setSp(25), MyColors.homeTopBG),
+            child: WidgetUtils.myContainer(ScreenUtil().setHeight(45), ScreenUtil().setHeight(100), MyColors.homeTopBG, MyColors.homeTopBG, '解除', ScreenUtil().setSp(25), Colors.white),
           ),
           WidgetUtils.commonSizedBox(0, 20),
 
@@ -68,7 +76,7 @@ class _BlackPageState extends State<BlackPage> {
       body: length > 0 ? ListView.builder(
         padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
         itemBuilder: _itemPeople,
-        itemCount: length,
+        itemCount: _list.length,
       )
           :
       Container(
@@ -85,5 +93,64 @@ class _BlackPageState extends State<BlackPage> {
         ),
       ),
     );
+  }
+
+  /// 黑名单列表
+  Future<void> doBlackList() async {
+
+    try {
+      Loading.show("加载中...");
+      BlackListBean bean = await DataUtils.postBlackList();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          _list.clear();
+          if(bean.data!.isNotEmpty) {
+            setState(() {
+              _list = bean.data!;
+              length = _list.length;
+            });
+          }else{
+            setState(() {
+              length = 0;
+            });
+          }
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+  }
+
+
+  /// 解除黑名单
+  Future<void> doPostUpdateList(blackUid,index) async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'type': '0',
+      'black_uid': blackUid,
+    };
+    try {
+      Loading.show("提交中...");
+      CommonBean bean = await DataUtils.postUpdateList(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          MyToastUtils.showToastBottom("解除成功！");
+          setState(() {
+            _list.remove(index);
+          });
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
   }
 }

@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yuyinting/main.dart';
+import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 
+import '../../../bean/Common_bean.dart';
 import '../../../colors/my_colors.dart';
+import '../../../http/data_utils.dart';
+import '../../../http/my_http_config.dart';
+import '../../../utils/loading.dart';
 import '../../../utils/widget_utils.dart';
+import '../../login/login_page.dart';
 /// 注销账号
 class ZhuxiaoPage extends StatefulWidget {
   const ZhuxiaoPage({Key? key}) : super(key: key);
@@ -70,12 +77,18 @@ class _ZhuxiaoPageState extends State<ZhuxiaoPage> {
             WidgetUtils.commonSizedBox(10, 0),
             GestureDetector(
               onTap: (() {
+                Navigator.pop(context);
               }),
               child: WidgetUtils.myContainer(ScreenUtil().setHeight(80), double.infinity, MyColors.homeTopBG, MyColors.homeTopBG, '我再想想', ScreenUtil().setSp(33), Colors.white),
             ),
             WidgetUtils.commonSizedBox(10, 0),
             GestureDetector(
               onTap: (() {
+                if(gz == false){
+                  MyToastUtils.showToastBottom('请勾选我已阅读按钮');
+                }else{
+                  doPostWrittenOff();
+                }
               }),
               child: WidgetUtils.myContainer(ScreenUtil().setHeight(80), double.infinity, MyColors.d8, MyColors.f7, '确认注销', ScreenUtil().setSp(33), MyColors.homeTopBG),
             ),
@@ -84,4 +97,35 @@ class _ZhuxiaoPageState extends State<ZhuxiaoPage> {
       ),
     );
   }
+
+
+  /// 绑定手机号
+  Future<void> doPostWrittenOff() async {
+    try {
+      Loading.show("提交中...");
+      CommonBean commonBean = await DataUtils.postWrittenOff();
+      switch (commonBean.code) {
+        case MyHttpConfig.successCode:
+          MyToastUtils.showToastBottom('注销成功！');
+          sp.setString('user_token', '');
+          Future.delayed(Duration.zero, () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginPage()),
+              // ignore: unnecessary_null_comparison
+                  (route) => route == null,
+            );
+          });
+          break;
+        default:
+          MyToastUtils.showToastBottom(commonBean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+  }
+
 }

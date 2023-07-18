@@ -22,7 +22,7 @@ class SettingPage extends StatefulWidget {
 
 class _SettingPageState extends State<SettingPage> {
   var appBar;
-  var _switchValue = false;
+  var _switchValue = true;
 
   @override
   void initState() {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/colors/my_colors.dart';
+import 'package:yuyinting/main.dart';
 import 'package:yuyinting/pages/mine/setting/password_page.dart';
 
 import '../../../utils/style_utils.dart';
@@ -32,6 +33,7 @@ class _ZhanghaoShezhipageState extends State<ZhanghaoShezhipage> {
       body: Column(
         children: [
           WidgetUtils.commonSizedBox(10, 0),
+          sp.getString('user_phone').toString().isEmpty ?
           GestureDetector(
             onTap: (() {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -43,8 +45,8 @@ class _ZhanghaoShezhipageState extends State<ZhanghaoShezhipage> {
                 StyleUtils.getCommonTextStyle(
                     color: Colors.black, fontSize: ScreenUtil().setSp(29)),
                 'assets/images/mine_more.png'),
-          ),
-          WidgetUtils.commonSizedBox(1, 0),
+          )
+          :
           GestureDetector(
             onTap: (() {
               Navigator.pushNamed(context, 'ChangePhonePage');

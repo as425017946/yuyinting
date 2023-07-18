@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../bean/Common_bean.dart';
 import '../../../colors/my_colors.dart';
+import '../../../http/data_utils.dart';
+import '../../../http/my_http_config.dart';
 import '../../../utils/event_utils.dart';
+import '../../../utils/loading.dart';
+import '../../../utils/my_toast_utils.dart';
+import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 
@@ -65,8 +71,7 @@ class _PasswordPageState extends State<PasswordPage> {
               children: [
                 WidgetUtils.onlyText('旧密码', StyleUtils.getCommonTextStyle(color: MyColors.g3,fontSize: ScreenUtil().setSp(33))),
                 WidgetUtils.commonSizedBox(0, 20),
-                Expanded(child: WidgetUtils.commonTextFieldNumber(
-                    controller: controllerPas1, hintText: '请输入旧密码(未设置可不填)', enabled: true)),
+                Expanded(child: WidgetUtils.commonTextFieldIsShow(controllerPas1, '请输入旧密码（未设置可不填）', true)),
               ],
             ),
           ),
@@ -87,7 +92,7 @@ class _PasswordPageState extends State<PasswordPage> {
               children: [
                 WidgetUtils.onlyText('新密码', StyleUtils.getCommonTextStyle(color: MyColors.g3,fontSize: ScreenUtil().setSp(33))),
                 WidgetUtils.commonSizedBox(0, 20),
-                Expanded(child: WidgetUtils.commonTextField(controllerPas2, '请输入新密码')),
+                Expanded(child: WidgetUtils.commonTextFieldIsShow(controllerPas2, '请输入新密码', true)),
               ],
             ),
           ),
@@ -108,7 +113,7 @@ class _PasswordPageState extends State<PasswordPage> {
               children: [
                 WidgetUtils.onlyText('确认密码', StyleUtils.getCommonTextStyle(color: MyColors.g3,fontSize: ScreenUtil().setSp(33))),
                 WidgetUtils.commonSizedBox(0, 20),
-                Expanded(child: WidgetUtils.commonTextField(controllerPas3, '请输入确认密码')),
+                Expanded(child: WidgetUtils.commonTextFieldIsShow(controllerPas3, '请输入确认密码', true)),
               ],
             ),
           ),
@@ -121,7 +126,7 @@ class _PasswordPageState extends State<PasswordPage> {
           WidgetUtils.commonSizedBox(100, 0),
           GestureDetector(
             onTap: (() {
-
+              doForgetPassword();
             }),
             child: Container(
               margin: const EdgeInsets.only(left: 20, right: 20),
@@ -138,5 +143,54 @@ class _PasswordPageState extends State<PasswordPage> {
         ],
       ),
     );
+  }
+
+  /// 设置交易密码
+  Future<void> doForgetPassword() async {
+    String p1 = controllerPas1.text.trim();
+    String p2 = controllerPas2.text.trim();
+    String p3 = controllerPas3.text.trim();
+    if (p2.isEmpty) {
+      MyToastUtils.showToastBottom("新密码不能为空");
+      return;
+    }
+    if (p3.isEmpty) {
+      MyToastUtils.showToastBottom("确认密码不能为空");
+      return;
+    }
+
+    if (p2.length>16 || p3.length>16 || p2.length<6 || p3.length<6) {
+      MyToastUtils.showToastBottom("密码长度只能为6-16位");
+      return;
+    }
+
+    if (p2 != p3) {
+      MyToastUtils.showToastBottom("俩次密码输入的不一致");
+      return;
+    }
+    MyUtils.hideKeyboard(context);
+    Map<String, dynamic> params = <String, dynamic>{
+      'old_pwd': p1,
+      'new_pwd': p2,
+      'confirm_pwd': p3,
+    };
+    try {
+      Loading.show("提交中...");
+      CommonBean commonBean = await DataUtils.postUpdatePwd(params);
+      switch (commonBean.code) {
+        case MyHttpConfig.successCode:
+          MyToastUtils.showToastBottom('设置成功！');
+          // ignore: use_build_context_synchronously
+          Navigator.pop(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(commonBean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
   }
 }

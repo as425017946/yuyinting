@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yuyinting/main.dart';
+import 'package:yuyinting/utils/log_util.dart';
 
+import '../../bean/Common_bean.dart';
 import '../../colors/my_colors.dart';
+import '../../http/data_utils.dart';
+import '../../http/my_http_config.dart';
+import '../../utils/loading.dart';
+import '../../utils/my_toast_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 /// 填写个人信息
@@ -15,6 +22,16 @@ class EditInfoPage extends StatefulWidget {
 class _EditInfoPageState extends State<EditInfoPage> {
   TextEditingController controller = TextEditingController();
   var sex = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+      controller.text = sp.getString('nickname').toString();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +44,7 @@ class _EditInfoPageState extends State<EditInfoPage> {
         },
         child: Column(
           children: [
-            WidgetUtils.commonSizedBox(260, 0),
+            WidgetUtils.commonSizedBox(380, 0),
             Expanded(
               child: Container(
                 width: double.infinity,
@@ -43,54 +60,26 @@ class _EditInfoPageState extends State<EditInfoPage> {
                 child: Column(
                   children: [
                     WidgetUtils.commonSizedBox(15, 0),
-                    // GestureDetector(
-                    //   onTap: ((){
-                    //     Navigator.pop(context);
-                    //   }),
-                    //   child: Row(
-                    //     children: [
-                    //       const Expanded(child: Text('')),
-                    //       Container(
-                    //         height: ScreenUtil().setHeight(40),
-                    //         width: ScreenUtil().setHeight(80),
-                    //         alignment: Alignment.center,
-                    //         //边框设置
-                    //         decoration: const BoxDecoration(
-                    //           //背景
-                    //           color: MyColors.f2,
-                    //           //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                    //           borderRadius:
-                    //           BorderRadius.all(Radius.circular(20.0)),
-                    //         ),
-                    //         child: Text(
-                    //           '跳过',
-                    //           style: StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: 14),
-                    //         ),
-                    //       ),
-                    //       WidgetUtils.commonSizedBox(0, 15),
-                    //     ],
-                    //   ),
-                    // ),
-                    WidgetUtils.onlyTextCenter('填写个人信息', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(46), fontWeight: FontWeight.w600)),
-                    WidgetUtils.onlyTextCenter('更容易遇到合拍的小伙伴哦', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(29))),
+                    WidgetUtils.onlyTextCenter('填写个人信息', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(36), fontWeight: FontWeight.w600)),
+                    WidgetUtils.onlyTextCenter('更容易遇到合拍的小伙伴哦', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(21))),
                     WidgetUtils.commonSizedBox(50, 0),
                     SizedBox(
-                      height: ScreenUtil().setHeight(200),
-                      width: ScreenUtil().setHeight(200),
+                      height: ScreenUtil().setHeight(130),
+                      width: ScreenUtil().setHeight(130),
                       child: Stack(
                         alignment: Alignment.bottomRight,
                         children: [
                           WidgetUtils.CircleHeadImage(
-                              ScreenUtil().setHeight(200),
-                              ScreenUtil().setHeight(200),
+                              ScreenUtil().setHeight(130),
+                              ScreenUtil().setHeight(130),
                               'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
-                          WidgetUtils.showImages('assets/images/login_paizhao.png', ScreenUtil().setHeight(63), ScreenUtil().setHeight(63)),
+                          WidgetUtils.showImages('assets/images/login_paizhao.png', ScreenUtil().setHeight(40), ScreenUtil().setHeight(40)),
                         ],
                       ),
                     ),
                     WidgetUtils.commonSizedBox(40, 0),
                     Container(
-                      height: ScreenUtil().setHeight(110),
+                      height: ScreenUtil().setHeight(80),
                       width: double.infinity,
                       margin: const EdgeInsets.only(left: 40, right: 40),
                       //边框设置
@@ -128,7 +117,7 @@ class _EditInfoPageState extends State<EditInfoPage> {
                               });
                             }),
                             child: Container(
-                              height: ScreenUtil().setHeight(110),
+                              height: ScreenUtil().setHeight(80),
                               width: double.infinity,
                               margin: const EdgeInsets.only(left: 40),
                               //边框设置
@@ -160,7 +149,7 @@ class _EditInfoPageState extends State<EditInfoPage> {
                               });
                             }),
                             child: Container(
-                              height: ScreenUtil().setHeight(110),
+                              height: ScreenUtil().setHeight(80),
                               width: double.infinity,
                               margin: const EdgeInsets.only(right: 40),
                               //边框设置
@@ -190,7 +179,7 @@ class _EditInfoPageState extends State<EditInfoPage> {
                     const Expanded(child: Text('')),
                     GestureDetector(
                       onTap: ((){
-                        Navigator.pop(context);
+                        doSaveInfo();
                       }),
                       child: Container(
                         height: ScreenUtil().setHeight(80),
@@ -217,5 +206,44 @@ class _EditInfoPageState extends State<EditInfoPage> {
         ),
       ),
     );
+  }
+
+
+  /// 首次填写个人信息
+  Future<void> doSaveInfo() async {
+    String userNick = controller.text.trim();
+    if (userNick.isEmpty) {
+      MyToastUtils.showToastBottom("请输入昵称");
+      return;
+    }
+    if (sex == 0) {
+      MyToastUtils.showToastBottom("请选择性别");
+      return;
+    }
+    Map<String, dynamic> params = <String, dynamic>{
+      'avatar': '66',
+      'nickname': userNick,
+      'gender': sex,
+    };
+    try {
+      Loading.show("提交中...");
+      CommonBean commonBean = await DataUtils.postIsFirst(params);
+      switch (commonBean.code) {
+        case MyHttpConfig.successCode:
+          sp.setBool("isFirst", false);
+          LogE('更换值${sp.getBool('isFirst')}');
+          MyToastUtils.showToastBottom('提交成功！');
+          // ignore: use_build_context_synchronously
+          Navigator.pop(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(commonBean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
   }
 }

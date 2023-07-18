@@ -1421,11 +1421,12 @@ class _RoomPageState extends State<RoomPage> {
                           child: Swiper(
                             itemBuilder: (BuildContext context,int index){
                               // 配置图片地址
-                              return FadeInImage.assetNetwork(
-                                placeholder: 'assets/images/img_placeholder.png',
-                                image: imgList[index]["url"],
-                                fit: BoxFit.fill,
-                              );
+                              // return FadeInImage.assetNetwork(
+                              //   placeholder: 'assets/images/img_placeholder.png',
+                              //   image: imgList[index]["url"],
+                              //   fit: BoxFit.fill,
+                              // );
+                              return SVGASimpleImage(assetsName: 'assets/svga/mofang_jin_show.svga');
                             },
                             // 配置图片数量
                             itemCount: imgList.length ,

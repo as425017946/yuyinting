@@ -10,9 +10,11 @@ import 'package:yuyinting/pages/home/tuijian_page.dart';
 import 'package:yuyinting/pages/home/youxi_page.dart';
 import 'package:yuyinting/pages/home/zaixian_page.dart';
 import 'package:yuyinting/pages/login/edit_info_page.dart';
+import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 
+import '../../main.dart';
 import '../../utils/loading.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
@@ -41,15 +43,10 @@ class _HomePageState extends State<HomePage> {
     _controller = PageController(
       initialPage: 0,
     );
-    // if(isFirst){
-    //   Future.delayed(const Duration(seconds: 0), (){
-    //     Navigator.of(context).push(PageRouteBuilder(
-    //         opaque: false,
-    //         pageBuilder: (context, animation, secondaryAnimation) {
-    //           return const EditInfoPage();
-    //         }));
-    //   });
-    // }
+    LogE('是否第一次登录${sp.getBool('isFirst')}');
+    if(sp.getBool('isFirst') == true){
+      MyUtils.goTransparentPageCom(context, const EditInfoPage());
+    }
   }
 
   @override

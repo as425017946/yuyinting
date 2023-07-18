@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yuyinting/main.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 
 import '../../../colors/my_colors.dart';
@@ -21,12 +22,13 @@ class _ChangePhonePageState extends State<ChangePhonePage> {
   bool isShow = false;
   TextEditingController controllerMsg = TextEditingController();
   var appBar;
+  var listen;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     appBar = WidgetUtils.getAppBar('更换手机号', true, context, false, 0);
-    eventBus.on<InfoBack>().listen((event) {
+    listen = eventBus.on<InfoBack>().listen((event) {
       if(event.info.length >= 4){
         setState(() {
           isShow = true;
@@ -37,6 +39,15 @@ class _ChangePhonePageState extends State<ChangePhonePage> {
         });
       }
     });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    if(listen != null){
+      listen.cancel();
+    }
   }
 
 
@@ -67,37 +78,6 @@ class _ChangePhonePageState extends State<ChangePhonePage> {
       body: Column(
         children: [
           WidgetUtils.commonSizedBox(10, 0),
-          GestureDetector(
-            onTap: ((){
-              Navigator.pushNamed(context, 'ChooseCountryPage');
-            }),
-            child: Container(
-              height: ScreenUtil().setHeight(90),
-              margin: const EdgeInsets.only(left: 20, right: 20),
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              //边框设置
-              decoration: BoxDecoration(
-                //背景
-                color: Colors.white,
-                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                //设置四周边框
-                border: Border.all(width: 1, color: Colors.white),
-              ),
-              child: Row(
-                children: [
-                  WidgetUtils.onlyText('手机号归属地', StyleUtils.getCommonTextStyle(
-                      color: MyColors.g6, fontSize: ScreenUtil().setSp(32))),
-                  const Expanded(child: Text('')),
-                  WidgetUtils.onlyText('+86', StyleUtils.getCommonTextStyle(
-                      color: MyColors.g6, fontSize: ScreenUtil().setSp(29))),
-                  WidgetUtils.commonSizedBox(0, 5),
-                  WidgetUtils.showImages('assets/images/mine_more.png', ScreenUtil().setHeight(15), ScreenUtil().setHeight(26)),
-                ],
-              ),
-            ),
-          ),
-          WidgetUtils.commonSizedBox(20, 0),
           Container(
             height: ScreenUtil().setHeight(90),
             margin: const EdgeInsets.only(left: 20, right: 20),
@@ -114,7 +94,7 @@ class _ChangePhonePageState extends State<ChangePhonePage> {
             child: Row(
               children: [
                 Expanded(
-                    child: WidgetUtils.onlyText('18911111111', StyleUtils.getCommonTextStyle(
+                    child: WidgetUtils.onlyText('${sp.getString('user_phone').toString().substring(0,3)}****${sp.getString('user_phone').toString().substring(sp.getString('user_phone').toString().length!-3,sp.getString('user_phone').toString().length)}', StyleUtils.getCommonTextStyle(
                         color: MyColors.g6, fontSize: ScreenUtil().setSp(32)))
                 ),
                 GestureDetector(

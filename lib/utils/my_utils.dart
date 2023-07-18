@@ -87,4 +87,16 @@ class MyUtils{
     });
   }
 
+
+  /// 通用跳转到一个透明页面，从底部向上滚出的方法
+  static void goTransparentPageCom(BuildContext context,Widget  page){
+    Future.delayed(const Duration(seconds: 0), (){
+      Navigator.of(context).push(PageRouteBuilder(
+          opaque: false,
+          pageBuilder: (context, animation, secondaryAnimation) {
+            return page;
+          }));
+    });
+  }
+
 }

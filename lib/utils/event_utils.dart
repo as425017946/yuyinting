@@ -29,3 +29,9 @@ class GuizuButtonBack {
   String title;
   GuizuButtonBack({required this.index, required this.title});
 }
+
+///选择地区使用
+class AddressBack {
+  String info;
+  AddressBack({required this.info});
+}

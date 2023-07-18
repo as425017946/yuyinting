@@ -5,6 +5,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 
+import '../../../bean/Common_bean.dart';
+import '../../../http/data_utils.dart';
+import '../../../http/my_http_config.dart';
+import '../../../main.dart';
+import '../../../utils/event_utils.dart';
+import '../../../utils/loading.dart';
+import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 /// 绑定手机号
@@ -20,11 +27,29 @@ class _BingPhonePageState extends State<BingPhonePage> {
   TextEditingController controllerPhone = TextEditingController();
   TextEditingController controllerMsg = TextEditingController();
   var appBar;
+  var listen;
+  String quhao = '+86';
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     appBar = WidgetUtils.getAppBar(widget.title, true, context, false, 0);
+
+
+    listen = eventBus.on<AddressBack>().listen((event) {
+      setState(() {
+        quhao = event.info;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    if(listen != null){
+      listen.cancel();
+    }
   }
 
 
@@ -77,7 +102,7 @@ class _BingPhonePageState extends State<BingPhonePage> {
                   WidgetUtils.onlyText('手机号归属地', StyleUtils.getCommonTextStyle(
                       color: MyColors.g6, fontSize: ScreenUtil().setSp(32))),
                   const Expanded(child: Text('')),
-                  WidgetUtils.onlyText('+86', StyleUtils.getCommonTextStyle(
+                  WidgetUtils.onlyText(quhao, StyleUtils.getCommonTextStyle(
                       color: MyColors.g6, fontSize: ScreenUtil().setSp(29))),
                   WidgetUtils.commonSizedBox(0, 5),
                   WidgetUtils.showImages('assets/images/mine_more.png', 15, 20)
@@ -137,7 +162,7 @@ class _BingPhonePageState extends State<BingPhonePage> {
           WidgetUtils.commonSizedBox(100, 0),
           GestureDetector(
             onTap: ((){
-              Navigator.pushNamed(context, 'JiesuanPage');
+              doChangeUserPhone();
             }),
             child: Container(
               margin: const EdgeInsets.only(left: 20, right: 20),
@@ -147,5 +172,45 @@ class _BingPhonePageState extends State<BingPhonePage> {
         ],
       ),
     );
+  }
+
+  /// 绑定手机号
+  Future<void> doChangeUserPhone() async {
+    String p1 = controllerPhone.text.trim();
+    String p2 = controllerMsg.text.trim();
+    if (p1.isEmpty) {
+      MyToastUtils.showToastBottom("手机号不能为空");
+      return;
+    }
+    if (p2.isEmpty) {
+      MyToastUtils.showToastBottom("验证码不能为空");
+      return;
+    }
+
+    MyUtils.hideKeyboard(context);
+    Map<String, dynamic> params = <String, dynamic>{
+      'phone': p1,
+      'code': p2,
+      'area_code': quhao,
+    };
+    try {
+      Loading.show("提交中...");
+      CommonBean commonBean = await DataUtils.postChangeUserPhone(params);
+      switch (commonBean.code) {
+        case MyHttpConfig.successCode:
+          sp.setString('user_phone', p1);
+          MyToastUtils.showToastBottom('设置成功！');
+          // ignore: use_build_context_synchronously
+          Navigator.pop(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(commonBean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
   }
 }

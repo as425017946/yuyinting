@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:yuyinting/pages/room/room_ts_mima_page.dart';
 
 import '../../colors/my_colors.dart';
 import '../../utils/style_utils.dart';

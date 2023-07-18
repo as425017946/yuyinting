@@ -177,7 +177,7 @@ class _MoFangPageState extends State<MoFangPage> with SingleTickerProviderStateM
                               child: SVGASimpleImage(
                                   assetsName: page == false
                                       ? 'assets/svga/mofang_lan_show.svga'
-                                      : 'assets/svga/mofang_lan_show.svga'),
+                                      : 'assets/svga/mofang_jin_show.svga'),
                             ),
                             Opacity(
                               opacity: 0.4,

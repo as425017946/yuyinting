@@ -4,7 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 
+import '../../bean/Common_bean.dart';
 import '../../colors/my_colors.dart';
+import '../../http/data_utils.dart';
+import '../../http/my_http_config.dart';
+import '../../utils/loading.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
@@ -21,17 +25,33 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   TextEditingController controllerPhone = TextEditingController();
   TextEditingController controllerMsg = TextEditingController();
   TextEditingController controllerPass = TextEditingController();
-  var listen;
+  var listen,listen2;
+  String quhao = '+86';
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     appBar = WidgetUtils.getAppBar('忘记密码', true, context, false,0);
     listen = eventBus.on<SubmitButtonBack>().listen((event) {
-      if(event.title == '确认'){
-        
+      // LogE('忘记密码${event.title}');
+      if(event.title == '确定'){
+        doForgetPassword();
       }
     });
+
+    listen2 = eventBus.on<AddressBack>().listen((event) {
+      setState(() {
+        quhao = event.info;
+      });
+    });
+
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    listen2.cancel();
   }
 
   late Timer _timer;
@@ -41,7 +61,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   void _startTimer() {
     MyToastUtils.showToastBottom('短信验证码已发送，请注意查收');
     _timer = Timer.periodic(
-        Duration(seconds: 1),
+        const Duration(seconds: 1),
             (Timer timer) => {
           setState(() {
             if (_timeCount <= 0) {
@@ -86,16 +106,16 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     children: [
                       WidgetUtils.commonSizedBox(0, 15),
                       WidgetUtils.onlyText(
-                          '+86',
+                          quhao,
                           StyleUtils.getCommonTextStyle(
                               color: MyColors.g3,
-                              fontSize: ScreenUtil().setSp(38),
+                              fontSize: ScreenUtil().setSp(30),
                               fontWeight: FontWeight.w600)),
                       WidgetUtils.commonSizedBox(0, 5),
                       WidgetUtils.showImages(
                           'assets/images/login_xia.png',
-                          ScreenUtil().setHeight(15),
-                          ScreenUtil().setHeight(26))
+                          ScreenUtil().setHeight(12),
+                          ScreenUtil().setHeight(18))
                     ],
                   ),
                 ),
@@ -167,8 +187,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
               borderRadius: BorderRadius.all(Radius.circular(30.0)),
             ),
-            child: WidgetUtils.commonTextFieldNumber(
-                controller: controllerPass, hintText: '请输入密码'),
+            child: WidgetUtils.commonTextFieldIsShow(
+                 controllerPass,  '请输入密码', true),
           ),
           WidgetUtils.commonSizedBox(30, 0),
           Padding(
@@ -178,5 +198,48 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         ],
       ),
     );
+  }
+
+  /// 忘记密码
+  Future<void> doForgetPassword() async {
+    String userPhone = controllerPhone.text.trim();
+    String userMsg = controllerMsg.text.trim();
+    String userPass = controllerPass.text.trim();
+    if (userPhone.isEmpty) {
+      MyToastUtils.showToastBottom("手机号不能为空");
+      return;
+    }
+    if (userMsg.isEmpty) {
+      MyToastUtils.showToastBottom("验证码不能为空");
+      return;
+    }
+    if (userPass.isEmpty) {
+      MyToastUtils.showToastBottom("密码不能为空");
+      return;
+    }
+    Map<String, dynamic> params = <String, dynamic>{
+      'phone': userPhone,
+      'password': userPass,
+      'area_code': quhao,
+      'code':userMsg
+    };
+    try {
+      Loading.show("提交中...");
+      CommonBean commonBean = await DataUtils.forgetPassword(params);
+      switch (commonBean.code) {
+        case MyHttpConfig.successCode:
+          MyToastUtils.showToastBottom('密码修改成功！');
+          // ignore: use_build_context_synchronously
+          Navigator.pop(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(commonBean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
   }
 }

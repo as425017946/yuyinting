@@ -1,13 +1,18 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:svgaplayer_flutter/player.dart';
+import 'package:logger/logger.dart';
+import 'package:yuyinting/bean/login_bean.dart';
 import 'package:yuyinting/pages/navigator/tabnavigator.dart';
-import 'package:yuyinting/utils/event_utils.dart';
-import 'package:yuyinting/utils/my_utils.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yuyinting/utils/event_utils.dart';
 
 import '../../colors/my_colors.dart';
+import '../../config/my_config.dart';
+import '../../http/data_utils.dart';
+import '../../http/my_http_config.dart';
+import '../../main.dart';
+import '../../utils/loading.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
@@ -27,19 +32,31 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController controllerPass = TextEditingController();
   var qiehuan = '密码登录';
   var zhanghao = '账号登录';
+  String quhao = '+86';
   bool gz = true;
   bool isClick = false;
+  var listen;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    listen = eventBus.on<AddressBack>().listen((event) {
+      setState(() {
+        quhao = event.info;
+      });
+    });
+
+    if(sp.getString('user_token').toString().isNotEmpty){
+      doGo();
+    }
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    listen.cancel();
   }
 
   late Timer _timer;
@@ -67,7 +84,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     //设置字体大小根据系统的“字体大小”辅助选项来进行缩放,默认为false : 字体随着系统的“字体大小”辅助选项来进行缩放
-    ScreenUtil.init(context, designSize: const Size(750, 1334));
+    ScreenUtil.init(context,
+        designSize: const Size(750, 1334), splitScreenMode: false);
     return Scaffold(
       resizeToAvoidBottomInset: false, // 解决键盘顶起页面
       backgroundColor: Colors.transparent,
@@ -104,8 +122,10 @@ class _LoginPageState extends State<LoginPage> {
                               ScreenUtil().setHeight(19))
                         ],
                       ),
-                      WidgetUtils.showImages('assets/images/login_wz.png',
-                          ScreenUtil().setHeight(43), ScreenUtil().setHeight(356)),
+                      WidgetUtils.showImages(
+                          'assets/images/login_wz.png',
+                          ScreenUtil().setHeight(43),
+                          ScreenUtil().setHeight(356)),
                     ],
                   ),
                 ),
@@ -123,127 +143,121 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   child: isClick == false
                       ? Row(
-                    children: [
-                      GestureDetector(
-                        onTap: (() {
-                          Navigator.pushNamed(context, 'ChooseCountryPage');
-                        }),
-                        child: Row(
                           children: [
-                            WidgetUtils.commonSizedBox(0, 15),
-                            WidgetUtils.onlyText(
-                                '+86',
-                                StyleUtils.getCommonTextStyle(
-                                    color: MyColors.g3,
-                                    fontSize: ScreenUtil().setSp(38),
-                                    fontWeight: FontWeight.w600)),
-                            WidgetUtils.commonSizedBox(0, 5),
-                            WidgetUtils.showImages(
-                                'assets/images/login_xia.png',
-                                ScreenUtil().setHeight(15),
-                                ScreenUtil().setHeight(26))
+                            GestureDetector(
+                              onTap: (() {
+                                Navigator.pushNamed(
+                                    context, 'ChooseCountryPage');
+                              }),
+                              child: Row(
+                                children: [
+                                  WidgetUtils.commonSizedBox(0, 15),
+                                  WidgetUtils.onlyText(
+                                      quhao,
+                                      StyleUtils.getCommonTextStyle(
+                                          color: MyColors.g3,
+                                          fontSize: ScreenUtil().setSp(30),
+                                          fontWeight: FontWeight.w600)),
+                                  WidgetUtils.commonSizedBox(0, 5),
+                                  WidgetUtils.showImages(
+                                      'assets/images/login_xia.png',
+                                      ScreenUtil().setHeight(12),
+                                      ScreenUtil().setHeight(18))
+                                ],
+                              ),
+                            ),
+                            WidgetUtils.commonSizedBox(0, 20),
+                            Expanded(
+                              child: Container(
+                                height: ScreenUtil().setHeight(60),
+                                width: double.infinity,
+                                alignment: Alignment.center,
+                                child: WidgetUtils.commonTextFieldNumber(
+                                    controller: controllerPhone,
+                                    hintText: '请输入手机号'),
+                              ),
+                            )
+                          ],
+                        )
+                      : Row(
+                          children: [
+                            WidgetUtils.commonSizedBox(0, 20),
+                            Expanded(
+                              child: Container(
+                                height: ScreenUtil().setHeight(60),
+                                width: double.infinity,
+                                alignment: Alignment.center,
+                                child: WidgetUtils.commonTextField(
+                                    controllerAccount, '请输入账号'),
+                              ),
+                            )
                           ],
                         ),
-                      ),
-                      WidgetUtils.commonSizedBox(0, 20),
-                      Expanded(
-                        child: Container(
-                          height: ScreenUtil().setHeight(60),
-                          width: double.infinity,
-                          alignment: Alignment.center,
-                          child: WidgetUtils.commonTextFieldNumber(
-                              controller: controllerPhone, hintText: '请输入手机号'),
-                        ),
-                      )
-                    ],
-                  )
-                      : Row(
-                    children: [
-                      WidgetUtils.commonSizedBox(0, 20),
-                      Expanded(
-                        child: Container(
-                          height: ScreenUtil().setHeight(60),
-                          width: double.infinity,
-                          alignment: Alignment.center,
-                          child: WidgetUtils.commonTextFieldNumber(
-                              controller: controllerAccount, hintText: '请输入账号'),
-                        ),
-                      )
-                    ],
-                  ),
                 ),
-                qiehuan == '密码登录'
+                qiehuan == '密码登录' && isClick == false
                     ? SizedBox(
-                  height: ScreenUtil().setHeight(80),
-                  child: Row(
-                    children: [
-                      WidgetUtils.commonSizedBox(0, 40),
-                      Expanded(
-                        child: Container(
-                          height: ScreenUtil().setHeight(80),
-                          padding: const EdgeInsets.only(left: 15, bottom: 3),
-                          width: double.infinity,
-                          //边框设置
-                          decoration: const BoxDecoration(
-                            //背景
-                            color: Colors.white,
-                            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(30.0)),
-                          ),
-                          child: WidgetUtils.commonTextFieldNumber(
-                              controller: controllerSmg, hintText: '请输入验证码'),
+                        height: ScreenUtil().setHeight(80),
+                        child: Row(
+                          children: [
+                            WidgetUtils.commonSizedBox(0, 40),
+                            Expanded(
+                              child: Container(
+                                height: ScreenUtil().setHeight(80),
+                                padding:
+                                    const EdgeInsets.only(left: 15, bottom: 3),
+                                width: double.infinity,
+                                //边框设置
+                                decoration: const BoxDecoration(
+                                  //背景
+                                  color: Colors.white,
+                                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(30.0)),
+                                ),
+                                child: WidgetUtils.commonTextFieldNumber(
+                                    controller: controllerSmg,
+                                    hintText: '请输入验证码'),
+                              ),
+                            ),
+                            WidgetUtils.commonSizedBox(0, 20),
+                            GestureDetector(
+                              onTap: (() {
+                                if (_autoCodeText == '发送验证码' ||
+                                    _autoCodeText == '重新获取') {
+                                  _startTimer();
+                                }
+                              }),
+                              child: SizedBox(
+                                width: ScreenUtil().setHeight(150),
+                                child: WidgetUtils.onlyText(
+                                    _autoCodeText,
+                                    StyleUtils.getCommonTextStyle(
+                                        color: MyColors.homeTopBG,
+                                        fontSize: ScreenUtil().setSp(33))),
+                              ),
+                            ),
+                            WidgetUtils.commonSizedBox(0, 40),
+                          ],
                         ),
-                      ),
-                      WidgetUtils.commonSizedBox(0, 20),
-                      GestureDetector(
-                        onTap: (() {
-                          if (_autoCodeText == '发送验证码' ||
-                              _autoCodeText == '重新获取') {
-                            _startTimer();
-                          }
-                        }),
-                        child: SizedBox(
-                          width: ScreenUtil().setHeight(150),
-                          child: WidgetUtils.onlyText(
-                              _autoCodeText,
-                              StyleUtils.getCommonTextStyle(
-                                  color: MyColors.homeTopBG,
-                                  fontSize: ScreenUtil().setSp(33))),
-                        ),
-                      ),
-                      WidgetUtils.commonSizedBox(0, 40),
-                    ],
-                  ),
-                )
+                      )
                     : Container(
-                  height: ScreenUtil().setHeight(80),
-                  padding: const EdgeInsets.only(left: 15, bottom: 3),
-                  margin: const EdgeInsets.only(left: 40, right: 40),
-                  width: double.infinity,
-                  //边框设置
-                  decoration: const BoxDecoration(
-                    //背景
-                    color: Colors.white,
-                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                    borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                  ),
-                  child: WidgetUtils.commonTextFieldNumber(
-                      controller: controllerPass, hintText: '请输入密码'),
-                ),
+                        height: ScreenUtil().setHeight(80),
+                        padding: const EdgeInsets.only(left: 15, bottom: 3),
+                        margin: const EdgeInsets.only(left: 40, right: 40),
+                        width: double.infinity,
+                        //边框设置
+                        decoration: const BoxDecoration(
+                          //背景
+                          color: Colors.white,
+                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                          borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                        ),
+                        child: WidgetUtils.commonTextFieldIsShow(
+                            controllerPass, '请输入密码', true)),
                 WidgetUtils.commonSizedBox(30, 0),
                 GestureDetector(
-                  onTap: ((){
-                    if (MyUtils.checkClick()) {
-                      //跳转并关闭当前页面
-                      // ignore: use_build_context_synchronously
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => const Tab_Navigator()),
-                        // ignore: unnecessary_null_comparison
-                            (route) => route == null,
-                      );
-                    }
+                  onTap: (() {
+                    doLogin();
                   }),
                   child: Container(
                     margin: const EdgeInsets.fromLTRB(30, 20, 30, 0),
@@ -273,21 +287,21 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       isClick == false
                           ? GestureDetector(
-                        onTap: (() {
-                          setState(() {
-                            if (qiehuan == '密码登录') {
-                              qiehuan = '短信登录';
-                            } else {
-                              qiehuan = '密码登录';
-                            }
-                          });
-                        }),
-                        child: WidgetUtils.onlyText(
-                            qiehuan,
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.homeTopBG,
-                                fontSize: ScreenUtil().setSp(28))),
-                      )
+                              onTap: (() {
+                                setState(() {
+                                  if (qiehuan == '密码登录') {
+                                    qiehuan = '短信登录';
+                                  } else {
+                                    qiehuan = '密码登录';
+                                  }
+                                });
+                              }),
+                              child: WidgetUtils.onlyText(
+                                  qiehuan,
+                                  StyleUtils.getCommonTextStyle(
+                                      color: MyColors.homeTopBG,
+                                      fontSize: ScreenUtil().setSp(28))),
+                            )
                           : const Text(''),
                       const Expanded(child: Text('')),
                       GestureDetector(
@@ -318,7 +332,8 @@ class _LoginPageState extends State<LoginPage> {
                   child: WidgetUtils.onlyTextCenter(
                       zhanghao,
                       StyleUtils.getCommonTextStyle(
-                          color: MyColors.g6, fontSize: ScreenUtil().setSp(32))),
+                          color: MyColors.g6,
+                          fontSize: ScreenUtil().setSp(32))),
                 ),
                 WidgetUtils.commonSizedBox(15, 0),
                 Row(
@@ -341,7 +356,8 @@ class _LoginPageState extends State<LoginPage> {
                     WidgetUtils.onlyText(
                         '继续即表示同意',
                         StyleUtils.getCommonTextStyle(
-                            color: MyColors.g6, fontSize: ScreenUtil().setSp(28))),
+                            color: MyColors.g6,
+                            fontSize: ScreenUtil().setSp(28))),
                     GestureDetector(
                       onTap: (() {
                         Navigator.pushNamed(context, 'YonghuPage');
@@ -355,7 +371,8 @@ class _LoginPageState extends State<LoginPage> {
                     WidgetUtils.onlyText(
                         '和',
                         StyleUtils.getCommonTextStyle(
-                            color: MyColors.g6, fontSize: ScreenUtil().setSp(25))),
+                            color: MyColors.g6,
+                            fontSize: ScreenUtil().setSp(25))),
                     GestureDetector(
                       onTap: (() {
                         Navigator.pushNamed(context, 'YinsiPage');
@@ -376,5 +393,118 @@ class _LoginPageState extends State<LoginPage> {
         ],
       ),
     );
+  }
+
+  Future<void> doGo() async {
+    Future.delayed(const Duration(microseconds: 500), (){
+      //跳转并关闭当前页面
+      // ignore: use_build_context_synchronously
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const Tab_Navigator()),
+        // ignore: unnecessary_null_comparison
+            (route) => route == null,
+      );
+    });
+
+  }
+  ///登录
+  Future<void> doLogin() async {
+    final String userName = controllerAccount.text.trim();
+    final String passWord = controllerPass.text.trim();
+    final String userPhone = controllerPhone.text.trim();
+    final String userMsg = controllerSmg.text.trim();
+    FocusScope.of(context).requestFocus(FocusNode());
+    Map<String, dynamic> params;
+
+    /// 测试使用后期删除
+    if (userPhone == '1' && userMsg == '1') {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const Tab_Navigator()),
+        // ignore: unnecessary_null_comparison
+        (route) => route == null,
+      );
+      return;
+    }
+
+    if (isClick) {
+      if (userName.isEmpty) {
+        MyToastUtils.showToastBottom("用户名不能为空");
+        return;
+      }
+      if (passWord.isEmpty) {
+        MyToastUtils.showToastBottom("用户密码不能为空");
+        return;
+      }
+      params = <String, dynamic>{
+        'username': userName,
+        'password': passWord,
+        'type': '1'
+      };
+    } else {
+      String type = '';
+      if (userPhone.isEmpty) {
+        MyToastUtils.showToastBottom("手机号不能为空");
+        return;
+      }
+
+      if (qiehuan == '密码登录') {
+        type = '2';
+        if (userMsg.isEmpty) {
+          MyToastUtils.showToastBottom("验证码不能为空");
+          return;
+        }
+      } else {
+        type = '3';
+        if (passWord.isEmpty) {
+          MyToastUtils.showToastBottom("用户密码不能为空");
+          return;
+        }
+      }
+
+      params = <String, dynamic>{
+        'phone': userPhone,
+        'password': passWord,
+        'type': type,
+        'area_code': quhao,
+        'code': userMsg
+      };
+    }
+
+    try {
+      Loading.show("登录中...");
+      LoginBean loginBean = await DataUtils.login(params);
+      switch (loginBean.code) {
+        case MyHttpConfig.successCode:
+          // MyToastUtils.showToastBottom("登录成功");
+          sp.setString("user_account", userName);
+          sp.setString("user_password", passWord);
+          if (loginBean.data!.gender == 0) {
+            sp.setBool("isFirst", true);
+          } else {
+            sp.setBool("isFirst", false);
+          }
+          sp.setString('user_phone', loginBean.data!.phone!);
+          sp.setString('nickname', loginBean.data!.nickname!);
+          sp.setString("user_token", loginBean.data!.token!);
+          //跳转并关闭当前页面
+          // ignore: use_build_context_synchronously
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const Tab_Navigator()),
+            // ignore: unnecessary_null_comparison
+            (route) => route == null,
+          );
+          break;
+        default:
+          MyToastUtils.showToastBottom(loginBean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
   }
 }

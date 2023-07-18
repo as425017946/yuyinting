@@ -224,9 +224,8 @@ class WidgetUtils {
     );
   }
 
-  ///通用
-  static Widget commonTextField(
-      TextEditingController controller, String hintText) {
+  ///通用 输入文本
+  static Widget commonTextField(TextEditingController controller, String hintText) {
     return TextField(
       controller: controller,
       inputFormatters: [
@@ -268,7 +267,52 @@ class WidgetUtils {
     );
   }
 
-  ///通用
+  ///通用 输入文本是否显示密码
+  static Widget commonTextFieldIsShow(TextEditingController controller,
+  String hintText,
+  bool obscureText) {
+    return TextField(
+      obscureText: obscureText,
+      controller: controller,
+      inputFormatters: [
+        RegexFormatter(regex: MyUtils.regexFirstNotNull),
+      ],
+      style: StyleUtils.loginTextStyle,
+      onChanged: (value) {
+        // eventBus.fire(InfoBack(infos: value));
+      },
+      decoration: InputDecoration(
+        // border: InputBorder.none,
+        // labelText: "请输入用户名",
+        // icon: Icon(Icons.people), //前面的图标
+        hintText: hintText,
+        hintStyle: StyleUtils.loginHintTextStyle,
+
+        contentPadding: const EdgeInsets.only(top: 0, bottom: 0),
+        border: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.transparent),
+        ),
+        enabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.transparent,
+          ),
+        ),
+        disabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.transparent,
+          ),
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.transparent,
+          ),
+        ),
+        // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
+      ),
+    );
+  }
+
+  ///通用 显示可输入多少数字
   static Widget commonTextFieldDT(
       TextEditingController controller, String hintText) {
     return TextField(
@@ -317,9 +361,11 @@ class WidgetUtils {
   static Widget commonTextFieldNumber(
       {required TextEditingController controller,
       required String hintText,
-      bool? enabled = false}) {
+      bool? enabled = true,
+      bool? obscureText = false}) {
     return TextField(
       enabled: enabled,
+      obscureText: obscureText!,
       controller: controller,
       inputFormatters: [
         RegexFormatter(regex: MyUtils.regexFirstNotNull),
@@ -468,6 +514,7 @@ class WidgetUtils {
       height: height,
       width: width,
       child: CircleAvatar(
+        backgroundColor: Colors.transparent,
         backgroundImage: NetworkImage(imgUrl),
       ),
     );
@@ -850,15 +897,11 @@ class WidgetUtils {
         color: boxColors,
         //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
         borderRadius: const BorderRadius.all(Radius.circular(30.0)),
+        border: Border.all(width: 1, color: borderColors),
       ),
-      child: Column(
-        children: [
-          WidgetUtils.commonSizedBox(1, 0),
-          Text(
-            title,
-            style: StyleUtils.getCommonTextStyle(color: txtColors, fontSize: size),
-          )
-        ],
+      child: Text(
+        title,
+        style: StyleUtils.getCommonTextStyle(color: txtColors, fontSize: size),
       ),
     );
   }
