@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:logger/logger.dart';
 import 'package:yuyinting/colors/my_colors.dart';
+import 'package:yuyinting/config/my_config.dart';
+import 'package:yuyinting/main.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 
+import '../../../bean/Common_bean.dart';
+import '../../../http/data_utils.dart';
+import '../../../http/my_http_config.dart';
+import '../../../utils/loading.dart';
+import '../../../utils/log_util.dart';
 import '../../../utils/my_toast_utils.dart';
+import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
+import '../../login/login_page.dart';
 /// 切换账号
 class QiehuanAccountPage extends StatefulWidget {
   const QiehuanAccountPage({Key? key}) : super(key: key);
@@ -37,6 +47,9 @@ class _QiehuanAccountPageState extends State<QiehuanAccountPage> {
         });
       }
     });
+
+    LogE('*****${sp.getString(MyConfig.userTwoToken).toString().isNotEmpty}');
+    LogE('*****///${sp.getString(MyConfig.userTwoUID).toString()}');
   }
 
   @override
@@ -57,9 +70,46 @@ class _QiehuanAccountPageState extends State<QiehuanAccountPage> {
         child: Column(
           children: [
             WidgetUtils.commonSizedBox(20, 10),
-            GestureDetector(
+            sp.getString(MyConfig.userOneToken).toString() != 'null' && sp.getString(MyConfig.userOneToken).toString().isNotEmpty ? GestureDetector(
               onTap: ((){
-                MyToastUtils.showToastBottom('点击了');
+                if(sp.getString('user_token') != sp.getString(MyConfig.userOneToken)){
+                  if(isClick){
+                    MyToastUtils.showToastBottom('删除成功');
+                    setState(() {
+                      sp.setString('user_token', '');
+                      sp.setString(MyConfig.userOneUID, '');
+                      sp.setString(MyConfig.userOneHeaderImg, '');
+                      sp.setString(MyConfig.userOneName, '');
+                      sp.setString(MyConfig.userOneToken, '');
+                      sp.setString(MyConfig.userOneID, '');
+                    });
+                  }else{
+                    setState(() {
+                      MyConfig.clickIndex = 1;
+                      doPostCheckToken(1);
+                    });
+                  }
+
+                }else{
+                  if(isClick){
+                    MyConfig.clickIndex = 1;
+                    MyToastUtils.showToastBottom('删除成功');
+                    sp.setString('user_token', '');
+                    sp.setString(MyConfig.userOneUID, '');
+                    sp.setString(MyConfig.userOneHeaderImg, '');
+                    sp.setString(MyConfig.userOneName, '');
+                    sp.setString(MyConfig.userOneToken, '');
+                    sp.setString(MyConfig.userOneID, '');
+                    Future.delayed(Duration.zero, () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => const LoginPage()),
+                        // ignore: unnecessary_null_comparison
+                            (route) => route == null,
+                      );
+                    });
+                  }
+                }
               }),
               child: Container(
                 width: double.infinity,
@@ -77,20 +127,21 @@ class _QiehuanAccountPageState extends State<QiehuanAccountPage> {
                     WidgetUtils.CircleHeadImage(
                         ScreenUtil().setHeight(80),
                         ScreenUtil().setHeight(80),
-                        'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
+                        sp.getString(MyConfig.userOneHeaderImg).toString()),
                     WidgetUtils.commonSizedBox(5, 20),
                     Expanded(
                       child: Column(
                         children: [
                           const Expanded(child: Text('')),
-                          WidgetUtils.onlyText('昵称', StyleUtils.getCommonTextStyle(color: MyColors.g2,fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(30))),
+                          WidgetUtils.onlyText(sp.getString(MyConfig.userOneName).toString(), StyleUtils.getCommonTextStyle(color: MyColors.g2,fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(30))),
                           WidgetUtils.commonSizedBox(5, 20),
-                          WidgetUtils.onlyText('ID：123456', StyleUtils.getCommonTextStyle(color: MyColors.g9,fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24))),
+                          WidgetUtils.onlyText('ID：${sp.getString(MyConfig.userOneID).toString()}', StyleUtils.getCommonTextStyle(color: MyColors.g9,fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24))),
                           const Expanded(child: Text('')),
                         ],
                       ),
                     ),
-                    show == true ? WidgetUtils.onlyText('当前登录', StyleUtils.getCommonTextStyle(color: MyColors.homeTopBG, fontSize: ScreenUtil().setSp(20))) : const Text(''),
+                    sp.getString('user_token') == sp.getString(MyConfig.userOneToken) ? WidgetUtils.onlyText('当前登录', StyleUtils.getCommonTextStyle(color: MyColors.homeTopBG, fontSize: ScreenUtil().setSp(20))) : const Text(''),
+                    WidgetUtils.commonSizedBox(0, 10),
                     isClick == true ? Container(
                       width: ScreenUtil().setHeight(80),
                       height: ScreenUtil().setHeight(40),
@@ -111,11 +162,48 @@ class _QiehuanAccountPageState extends State<QiehuanAccountPage> {
                   ],
                 ),
               ),
-            ),
+            ): const Text(''),
             WidgetUtils.commonSizedBox(10, 10),
-            GestureDetector(
+            sp.getString(MyConfig.userTwoToken).toString() != 'null' && sp.getString(MyConfig.userTwoToken).toString().isNotEmpty ?  GestureDetector(
               onTap: ((){
-                MyToastUtils.showToastBottom('点击了');
+                if(sp.getString('user_token') != sp.getString(MyConfig.userTwoToken)){
+                  if(isClick){
+                    MyToastUtils.showToastBottom('删除成功');
+                    setState(() {
+                      sp.setString('user_token', '');
+                      sp.setString(MyConfig.userTwoUID, '');
+                      sp.setString(MyConfig.userTwoHeaderImg, '');
+                      sp.setString(MyConfig.userTwoName, '');
+                      sp.setString(MyConfig.userTwoToken, '');
+                      sp.setString(MyConfig.userTwoID, '');
+                    });
+                  }else{
+                    setState(() {
+                      MyConfig.clickIndex = 2;
+                      doPostCheckToken(2);
+                    });
+                  }
+
+                }else{
+                  if(isClick){
+                    MyConfig.clickIndex = 2;
+                    MyToastUtils.showToastBottom('删除成功');
+                    sp.setString('user_token', '');
+                    sp.setString(MyConfig.userTwoUID, '');
+                    sp.setString(MyConfig.userTwoHeaderImg, '');
+                    sp.setString(MyConfig.userTwoName, '');
+                    sp.setString(MyConfig.userTwoToken, '');
+                    sp.setString(MyConfig.userTwoID, '');
+                    Future.delayed(Duration.zero, () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => const LoginPage()),
+                        // ignore: unnecessary_null_comparison
+                            (route) => route == null,
+                      );
+                    });
+                  }
+                }
               }),
               child: Container(
                 width: double.infinity,
@@ -133,20 +221,21 @@ class _QiehuanAccountPageState extends State<QiehuanAccountPage> {
                     WidgetUtils.CircleHeadImage(
                         ScreenUtil().setHeight(80),
                         ScreenUtil().setHeight(80),
-                        'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
+                        sp.getString(MyConfig.userTwoHeaderImg).toString()),
                     WidgetUtils.commonSizedBox(5, 20),
                     Expanded(
                       child: Column(
                         children: [
                           const Expanded(child: Text('')),
-                          WidgetUtils.onlyText('昵称', StyleUtils.getCommonTextStyle(color: MyColors.g2,fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(30))),
+                          WidgetUtils.onlyText(sp.getString(MyConfig.userTwoName).toString(), StyleUtils.getCommonTextStyle(color: MyColors.g2,fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(30))),
                           WidgetUtils.commonSizedBox(5, 20),
-                          WidgetUtils.onlyText('ID：123456', StyleUtils.getCommonTextStyle(color: MyColors.g9,fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24))),
+                          WidgetUtils.onlyText('ID：${sp.getString(MyConfig.userTwoID).toString()}', StyleUtils.getCommonTextStyle(color: MyColors.g9,fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24))),
                           const Expanded(child: Text('')),
                         ],
                       ),
                     ),
-                    show == true ? WidgetUtils.onlyText('当前登录', StyleUtils.getCommonTextStyle(color: MyColors.homeTopBG, fontSize: ScreenUtil().setSp(20))) : const Text(''),
+                    sp.getString('user_token') == sp.getString(MyConfig.userTwoToken)  ? WidgetUtils.onlyText('当前登录', StyleUtils.getCommonTextStyle(color: MyColors.homeTopBG, fontSize: ScreenUtil().setSp(20))) : const Text(''),
+                    WidgetUtils.commonSizedBox(0, 10),
                     isClick == true ? Container(
                       width: ScreenUtil().setHeight(80),
                       height: ScreenUtil().setHeight(40),
@@ -167,11 +256,49 @@ class _QiehuanAccountPageState extends State<QiehuanAccountPage> {
                   ],
                 ),
               ),
-            ),
-            WidgetUtils.commonSizedBox(10, 10),
-            GestureDetector(
+            ) : WidgetUtils.commonSizedBox(0, 0),
+            sp.getString(MyConfig.userTwoToken).toString() != 'null' && sp.getString(MyConfig.userTwoToken).toString().isNotEmpty ? WidgetUtils.commonSizedBox(10, 10) : WidgetUtils.commonSizedBox(0, 0),
+            sp.getString(MyConfig.userThreeToken).toString() != 'null' && sp.getString(MyConfig.userThreeToken).toString().isNotEmpty ? GestureDetector(
               onTap: ((){
-                MyToastUtils.showToastBottom('点击了');
+
+                if(sp.getString('user_token') != sp.getString(MyConfig.userThreeToken)){
+                  if(isClick){
+                    MyToastUtils.showToastBottom('删除成功');
+                    setState(() {
+                      sp.setString('user_token', '');
+                      sp.setString(MyConfig.userThreeUID, '');
+                      sp.setString(MyConfig.userThreeHeaderImg, '');
+                      sp.setString(MyConfig.userThreeName, '');
+                      sp.setString(MyConfig.userThreeToken, '');
+                      sp.setString(MyConfig.userThreeID, '');
+                    });
+                  }else{
+                    setState(() {
+                      MyConfig.clickIndex = 3;
+                      doPostCheckToken(3);
+                    });
+                  }
+
+                }else{
+                  if(isClick){
+                    MyConfig.clickIndex = 3;
+                    MyToastUtils.showToastBottom('删除成功');
+                    sp.setString('user_token', '');
+                    sp.setString(MyConfig.userThreeUID, '');
+                    sp.setString(MyConfig.userThreeHeaderImg, '');
+                    sp.setString(MyConfig.userThreeName, '');
+                    sp.setString(MyConfig.userThreeToken, '');
+                    sp.setString(MyConfig.userThreeID, '');
+                    Future.delayed(Duration.zero, () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => const LoginPage()),
+                        // ignore: unnecessary_null_comparison
+                            (route) => route == null,
+                      );
+                    });
+                  }
+                }
               }),
               child: Container(
                 width: double.infinity,
@@ -189,20 +316,21 @@ class _QiehuanAccountPageState extends State<QiehuanAccountPage> {
                     WidgetUtils.CircleHeadImage(
                         ScreenUtil().setHeight(80),
                         ScreenUtil().setHeight(80),
-                        'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
+                        sp.getString(MyConfig.userThreeHeaderImg).toString()),
                     WidgetUtils.commonSizedBox(5, 20),
                     Expanded(
                       child: Column(
                         children: [
                           const Expanded(child: Text('')),
-                          WidgetUtils.onlyText('昵称', StyleUtils.getCommonTextStyle(color: MyColors.g2,fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(30))),
+                          WidgetUtils.onlyText(sp.getString(MyConfig.userThreeName).toString(), StyleUtils.getCommonTextStyle(color: MyColors.g2,fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(30))),
                           WidgetUtils.commonSizedBox(5, 20),
-                          WidgetUtils.onlyText('ID：123456', StyleUtils.getCommonTextStyle(color: MyColors.g9,fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24))),
+                          WidgetUtils.onlyText('ID：${sp.getString(MyConfig.userThreeID).toString()}', StyleUtils.getCommonTextStyle(color: MyColors.g9,fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(24))),
                           const Expanded(child: Text('')),
                         ],
                       ),
                     ),
-                    show == true ? WidgetUtils.onlyText('当前登录', StyleUtils.getCommonTextStyle(color: MyColors.homeTopBG, fontSize: ScreenUtil().setSp(20))) : const Text(''),
+                    sp.getString('user_token') == sp.getString(MyConfig.userThreeToken)  ? WidgetUtils.onlyText('当前登录', StyleUtils.getCommonTextStyle(color: MyColors.homeTopBG, fontSize: ScreenUtil().setSp(20))) : const Text(''),
+                    WidgetUtils.commonSizedBox(0, 10),
                     isClick == true ? Container(
                       width: ScreenUtil().setHeight(80),
                       height: ScreenUtil().setHeight(40),
@@ -223,11 +351,14 @@ class _QiehuanAccountPageState extends State<QiehuanAccountPage> {
                   ],
                 ),
               ),
-            ),
-            WidgetUtils.commonSizedBox(10, 10),
-            GestureDetector(
+            ) : WidgetUtils.commonSizedBox(0, 0),
+            sp.getString(MyConfig.userThreeToken).toString() != 'null' && sp.getString(MyConfig.userThreeToken).toString().isNotEmpty ? WidgetUtils.commonSizedBox(10, 10) : WidgetUtils.commonSizedBox(0, 0),
+            sp.getString(MyConfig.userOneToken).toString() != 'null' && sp.getString(MyConfig.userTwoToken).toString() != 'null' && sp.getString(MyConfig.userThreeToken).toString() != 'null' && sp.getString(MyConfig.userOneToken).toString().isNotEmpty && sp.getString(MyConfig.userTwoToken).toString().isNotEmpty && sp.getString(MyConfig.userThreeToken).toString().isNotEmpty ? const Text('') : GestureDetector(
               onTap: ((){
-                MyToastUtils.showToastBottom('点击了');
+                setState(() {
+                  MyConfig.issAdd = true;
+                });
+                Navigator.pushNamed(context, 'LoginPage');
               }),
               child: Container(
                 width: double.infinity,
@@ -260,4 +391,42 @@ class _QiehuanAccountPageState extends State<QiehuanAccountPage> {
       ),
     );
   }
+
+  /// 设置交易密码
+  Future<void> doPostCheckToken(v1) async {
+    try {
+      Loading.show("切换中...");
+      CommonBean commonBean = await DataUtils.postCheckToken();
+      switch (commonBean.code) {
+        case MyHttpConfig.successCode:
+          MyToastUtils.showToastBottom('成功切换');
+          if(v1 == 1){
+            setState(() {
+              sp.setString('user_token', sp.getString(MyConfig.userOneToken).toString());
+            });
+          }else if(v1 == 2){
+            setState(() {
+              sp.setString('user_token', sp.getString(MyConfig.userTwoToken).toString());
+            });
+          }else{
+            setState(() {
+              sp.setString('user_token', sp.getString(MyConfig.userThreeToken).toString());
+            });
+          }
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(commonBean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+  }
+
 }

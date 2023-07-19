@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:yuyinting/colors/my_colors.dart';
-import 'package:yuyinting/config/config_screen_util.dart';
 import 'package:yuyinting/pages/home/paidui_page.dart';
 import 'package:yuyinting/pages/home/shoucang_page.dart';
 import 'package:yuyinting/pages/home/tuijian_page.dart';
@@ -15,11 +12,7 @@ import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 
 import '../../main.dart';
-import '../../utils/loading.dart';
-import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
-import '../../widget/customrefreshfooter.dart';
-import '../../widget/customrefreshheader.dart';
 
 ///首页
 class HomePage extends StatefulWidget {
@@ -29,7 +22,11 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin{
+
+  @override
+  bool get wantKeepAlive => true;
+
   int _currentIndex = 0;
   late final PageController _controller;
 

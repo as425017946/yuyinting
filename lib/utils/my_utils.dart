@@ -1,18 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:yuyinting/pages/game/mofang_page.dart';
+import 'package:yuyinting/utils/widget_utils.dart';
 import '../pages/login/login_page.dart';
 import 'my_toast_utils.dart';
 
-class MyUtils{
+class MyUtils {
   ///字符串比较,返回0相等，返回1不想等
-  static int compare(String str1, String str2){
+  static int compare(String str1, String str2) {
     return Comparable.compare(str1, str2);
   }
 
   /// 防重复提交
   // ignore: prefer_typing_uninitialized_variables
   static var lastPopTime;
+
   static bool checkClick({int needTime = 1}) {
     if (lastPopTime == null ||
         DateTime.now().difference(lastPopTime) > Duration(seconds: needTime)) {
@@ -28,7 +32,8 @@ class MyUtils{
   ///手机正则验证
   static bool chinaPhoneNumber(String input) {
     if (input == null || input.isEmpty) return false;
-    String regexPhoneNumber =  "^((13[0-9])|(15[^4])|(166)|(17[0-8])|(18[0-9])|(19[8-9])|(147,145))\\d{8}\$";
+    String regexPhoneNumber =
+        "^((13[0-9])|(15[^4])|(166)|(17[0-8])|(18[0-9])|(19[8-9])|(147,145))\\d{8}\$";
     return RegExp(regexPhoneNumber).hasMatch(input);
   }
 
@@ -49,29 +54,30 @@ class MyUtils{
   }
 
   ///跳转到登录页面
-  static void jumpLogin(BuildContext context){
+  static void jumpLogin(BuildContext context) {
     MyToastUtils.showToastBottom('登录超时，请重新登录！');
     Future.delayed(Duration.zero, () {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const LoginPage()),
         // ignore: unnecessary_null_comparison
-            (route) => route == null,
+        (route) => route == null,
       );
     });
   }
 
   /// 通用跳转到一个透明页面，从底部向上滚出的方法
-  static void goTransparentPage(BuildContext context,Widget  page){
+  static void goTransparentPage(BuildContext context, Widget page) {
     Future.delayed(const Duration(seconds: 0), () {
       Navigator.push(
         context,
-        PageRouteBuilder(//自定义路由
+        PageRouteBuilder(
+          //自定义路由
           opaque: false,
-          pageBuilder: (context, a, _) =>  page,//需要跳转的页面
+          pageBuilder: (context, a, _) => page, //需要跳转的页面
           transitionsBuilder: (context, a, _, child) {
-            const begin =
-            Offset(0, 1); //Offset是一个2D小部件，他将记录坐标轴的x,y前者为宽，后者为高 如果将begin =Offset(1,0)改为(0,1),效果则会变成从下到上
+            const begin = Offset(0,
+                1); //Offset是一个2D小部件，他将记录坐标轴的x,y前者为宽，后者为高 如果将begin =Offset(1,0)改为(0,1),效果则会变成从下到上
             const end = Offset.zero; //得到Offset.zero坐标值
             const curve = Curves.ease; //这是一个曲线动画
             var tween = Tween(begin: begin, end: end)
@@ -87,10 +93,9 @@ class MyUtils{
     });
   }
 
-
   /// 通用跳转到一个透明页面，从底部向上滚出的方法
-  static void goTransparentPageCom(BuildContext context,Widget  page){
-    Future.delayed(const Duration(seconds: 0), (){
+  static void goTransparentPageCom(BuildContext context, Widget page) {
+    Future.delayed(const Duration(seconds: 0), () {
       Navigator.of(context).push(PageRouteBuilder(
           opaque: false,
           pageBuilder: (context, animation, secondaryAnimation) {
@@ -99,4 +104,53 @@ class MyUtils{
     });
   }
 
+  static Widget myHeader() {
+    return CustomHeader(
+      builder: (BuildContext context, RefreshStatus? mode) {
+        Widget headerBody;
+        if (mode == RefreshStatus.idle) {
+          headerBody = const Text('下拉刷新');
+        } else if (mode == RefreshStatus.refreshing) {
+          // headerBody = Text('刷新中...');
+          headerBody = WidgetUtils.showImages('assets/images/a1.gif',
+              ScreenUtil().setHeight(50), ScreenUtil().setHeight(50));
+        } else if (mode == RefreshStatus.failed) {
+          headerBody = const Text('刷新失败');
+        } else if (mode == RefreshStatus.completed) {
+          headerBody = const Text('刷新完成');
+        } else if (mode == RefreshStatus.canRefresh) {
+          headerBody = const Text('松手刷新');
+        } else {
+          headerBody = const Text("完成");
+        }
+        return SizedBox(
+          height: ScreenUtil().setHeight(50),
+          child: Center(child: headerBody),
+        );
+      },
+    );
+  }
+
+  static Widget myFotter() {
+    return CustomFooter(
+      builder: (BuildContext context, LoadStatus? mode) {
+        Widget body;
+        if (mode == LoadStatus.idle) {
+          body = const Text("上拉加载");
+        } else if (mode == LoadStatus.loading) {
+          body = const Text("加载中");
+        } else if (mode == LoadStatus.failed) {
+          body = const Text("加载更多失败");
+        } else if (mode == LoadStatus.canLoading) {
+          body = const Text("松手加载更多");
+        } else {
+          body = const Text("没有更多");
+        }
+        return SizedBox(
+          height: ScreenUtil().setHeight(50),
+          child: Center(child: body),
+        );
+      },
+    );
+  }
 }

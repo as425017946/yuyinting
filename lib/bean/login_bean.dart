@@ -4,15 +4,17 @@
 
 class LoginBean {
   LoginBean({
-      this.code, 
-      this.msg, 
-      this.data,});
+    this.code,
+    this.msg,
+    this.data,
+  });
 
   LoginBean.fromJson(dynamic json) {
     code = json['code'];
     msg = json['msg'];
     data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
+
   int? code;
   String? msg;
   Data? data;
@@ -26,7 +28,6 @@ class LoginBean {
     }
     return map;
   }
-
 }
 
 /// token : "a3ebb48841a80143508825c9958fadb3"
@@ -41,17 +42,18 @@ class LoginBean {
 /// em_token : "YWMtfZP2ah73Ee6F6X2fNoo332XJlMP37UsNrUbZVOvmTKu5c-ZgHW8R7peP_0zAiTrvAwMAAAGJPs6yPjeeSACqPl-vGHB35FYGgGiNwE_1o1C3tvGr4QM00aNv1fSKKQ"
 
 class Data {
-  Data({
-      this.token, 
-      this.nickname, 
-      this.gender, 
-      this.avatar, 
-      this.isSetPwd, 
-      this.phone, 
-      this.areaCode, 
-      this.uid, 
-      this.emPwd, 
-      this.emToken,});
+  Data(
+      {this.token,
+      this.nickname,
+      this.gender,
+      this.avatar,
+      this.isSetPwd,
+      this.phone,
+      this.areaCode,
+      this.uid,
+      this.emPwd,
+      this.emToken,
+      this.number});
 
   Data.fromJson(dynamic json) {
     token = json['token'];
@@ -64,7 +66,9 @@ class Data {
     uid = json['uid'];
     emPwd = json['em_pwd'];
     emToken = json['em_token'];
+    number = json['number'];
   }
+
   String? token;
   String? nickname;
   int? gender;
@@ -75,6 +79,7 @@ class Data {
   int? uid;
   String? emPwd;
   String? emToken;
+  int? number;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -88,7 +93,7 @@ class Data {
     map['uid'] = uid;
     map['em_pwd'] = emPwd;
     map['em_token'] = emToken;
+    map['number'] = number;
     return map;
   }
-
 }

@@ -191,6 +191,10 @@ class _PasswordPayPageState extends State<PasswordPayPage> {
           // ignore: use_build_context_synchronously
           Navigator.pop(context);
           break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
         default:
           MyToastUtils.showToastBottom(commonBean.msg!);
           break;

@@ -14,6 +14,7 @@ import 'package:yuyinting/pages/mine/setting/zhanghao_shezhi_page.dart';
 import 'package:yuyinting/pages/mine/setting/zhuxiao_page.dart';
 import 'package:yuyinting/pages/trends/trends_more_page.dart';
 
+import '../pages/game/loge_page.dart';
 import '../pages/login/forgot_password_page.dart';
 import '../pages/message/be_care_page.dart';
 import '../pages/message/geren/people_info_page.dart';
@@ -130,6 +131,7 @@ var staticRoutes = {
   'MyKeFuPage':(context) => const MyKeFuPage(),// 新客服页面
 
   'DengjiPage':(context) => const DengjiPage(),// 测试等级描边
+  'LongPage':(context) => const LongPage(),// 新客服页面
 
 
 };

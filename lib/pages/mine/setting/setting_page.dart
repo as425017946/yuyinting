@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/pages/login/login_page.dart';
 import 'package:yuyinting/utils/line_painter.dart';
+import 'package:yuyinting/utils/log_util.dart';
 
 import '../../../config/config_screen_util.dart';
 import '../../../main.dart';
@@ -23,12 +24,20 @@ class SettingPage extends StatefulWidget {
 class _SettingPageState extends State<SettingPage> {
   var appBar;
   var _switchValue = true;
-
+  String shiming = '';
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     appBar = WidgetUtils.getAppBar('设置', true, context, false, 0);
+    ///是否认证 0未认证 1已审核 2待审核
+    if(sp.getString('shimingzhi').toString() == '0'){
+      shiming = '未认证';
+    }else if(sp.getString('shimingzhi').toString() == '1'){
+      shiming = '已审核';
+    }else{
+      shiming = '待审核';
+    }
   }
 
   @override
@@ -43,7 +52,9 @@ class _SettingPageState extends State<SettingPage> {
             width: double.infinity,
             height: ScreenUtil().setHeight(90),
             color: Colors.white,
-            padding: EdgeInsets.only(left: ConfigScreenUtil.autoHeight20, right: ConfigScreenUtil.autoHeight20),
+            padding: EdgeInsets.only(
+                left: ConfigScreenUtil.autoHeight20,
+                right: ConfigScreenUtil.autoHeight20),
             child: Row(
               children: [
                 WidgetUtils.onlyText(
@@ -93,11 +104,31 @@ class _SettingPageState extends State<SettingPage> {
             onTap: (() {
               Navigator.pushNamed(context, 'ShimingzhiPage');
             }),
-            child: WidgetUtils.onlyTextLeftRightImg(
-                '实名制认证',
-                StyleUtils.getCommonTextStyle(
-                    color: Colors.black, fontSize: ScreenUtil().setSp(29)),
-                'assets/images/mine_more.png'),
+            child: Container(
+              width: double.infinity,
+              height: ScreenUtil().setHeight(90),
+              color: Colors.white,
+              padding: EdgeInsets.only(
+                  left: ScreenUtil().setHeight(20),
+                  right: ScreenUtil().setHeight(20)),
+              child: Row(
+                children: [
+                  WidgetUtils.onlyText(
+                      '实名制认证',
+                      StyleUtils.getCommonTextStyle(
+                          color: Colors.black,
+                          fontSize: ScreenUtil().setSp(29))),
+                  const Expanded(child: Text('')),
+                  WidgetUtils.commonSizedBox(0, 10),
+                  WidgetUtils.onlyText(
+                      shiming,
+                      StyleUtils.getCommonTextStyle(
+                          color: MyColors.g9,
+                          fontSize: ScreenUtil().setSp(25))),
+                  WidgetUtils.showImages('assets/images/mine_more.png', 15, 20)
+                ],
+              ),
+            ),
           ),
           WidgetUtils.commonSizedBox(1, 0),
           GestureDetector(
@@ -112,48 +143,63 @@ class _SettingPageState extends State<SettingPage> {
           ),
           WidgetUtils.commonSizedBox(10, 0),
           GestureDetector(
-            onTap: ((){
-              
-            }),
+            onTap: (() {}),
             child: Container(
               width: double.infinity,
               height: ScreenUtil().setHeight(90),
               color: Colors.white,
-              padding: EdgeInsets.only(left: ScreenUtil().setHeight(20), right: ScreenUtil().setHeight(20)),
+              padding: EdgeInsets.only(
+                  left: ScreenUtil().setHeight(20),
+                  right: ScreenUtil().setHeight(20)),
               child: Row(
                 children: [
                   WidgetUtils.onlyText(
                       '清除缓存',
                       StyleUtils.getCommonTextStyle(
-                          color: Colors.black, fontSize: ScreenUtil().setSp(29))),
+                          color: Colors.black,
+                          fontSize: ScreenUtil().setSp(29))),
                   const Expanded(child: Text('')),
-                  WidgetUtils.onlyText('0MB', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(25))),
+                  WidgetUtils.onlyText(
+                      '0MB',
+                      StyleUtils.getCommonTextStyle(
+                          color: MyColors.g9,
+                          fontSize: ScreenUtil().setSp(25))),
                 ],
               ),
             ),
           ),
           WidgetUtils.commonSizedBox(10, 0),
           GestureDetector(
-            onTap: ((){
-                Navigator.pushNamed(context, 'AboutPage');
+            onTap: (() {
+              Navigator.pushNamed(context, 'AboutPage');
             }),
             child: Container(
               width: double.infinity,
               height: ScreenUtil().setHeight(90),
               color: Colors.white,
-              padding: EdgeInsets.only(left: ScreenUtil().setHeight(20), right: ScreenUtil().setHeight(20)),
+              padding: EdgeInsets.only(
+                  left: ScreenUtil().setHeight(20),
+                  right: ScreenUtil().setHeight(20)),
               child: Row(
                 children: [
                   WidgetUtils.onlyText(
                       '关于',
                       StyleUtils.getCommonTextStyle(
-                          color: Colors.black, fontSize: ScreenUtil().setSp(29))),
+                          color: Colors.black,
+                          fontSize: ScreenUtil().setSp(29))),
                   const Expanded(child: Text('')),
-                  CustomPaint(
-                    painter: LinePainter(colors: Colors.red),
-                  ),
+                  // ignore: unrelated_type_equality_checks
+                  sp.getString('versionStatus').toString() == '1'
+                      ? CustomPaint(
+                          painter: LinePainter(colors: Colors.red),
+                        )
+                      : const Text(''),
                   WidgetUtils.commonSizedBox(0, 10),
-                  WidgetUtils.onlyText('1.0.0', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(25))),
+                  WidgetUtils.onlyText(
+                      sp.getString('myVersion2').toString(),
+                      StyleUtils.getCommonTextStyle(
+                          color: MyColors.g9,
+                          fontSize: ScreenUtil().setSp(25))),
                   WidgetUtils.showImages('assets/images/mine_more.png', 15, 20)
                 ],
               ),
@@ -161,23 +207,27 @@ class _SettingPageState extends State<SettingPage> {
           ),
           WidgetUtils.commonSizedBox(10, 0),
           GestureDetector(
-            onTap: ((){
-                Navigator.pushNamed(context, 'QiehuanAccountPage');
+            onTap: (() {
+              Navigator.pushNamed(context, 'QiehuanAccountPage');
             }),
             child: Container(
               width: double.infinity,
               height: ScreenUtil().setHeight(90),
               color: Colors.white,
-              padding: EdgeInsets.only(left: ScreenUtil().setHeight(20), right: ScreenUtil().setHeight(20)),
+              padding: EdgeInsets.only(
+                  left: ScreenUtil().setHeight(20),
+                  right: ScreenUtil().setHeight(20)),
               child: WidgetUtils.onlyTextCenter(
                   '切换账号',
                   StyleUtils.getCommonTextStyle(
-                      color: Colors.black, fontSize: ScreenUtil().setSp(29), fontWeight: FontWeight.w600)),
+                      color: Colors.black,
+                      fontSize: ScreenUtil().setSp(29),
+                      fontWeight: FontWeight.w600)),
             ),
           ),
           WidgetUtils.commonSizedBox(10, 0),
           GestureDetector(
-            onTap: ((){
+            onTap: (() {
               if (MyUtils.checkClick()) {
                 exitLogin(context);
               }
@@ -186,38 +236,40 @@ class _SettingPageState extends State<SettingPage> {
               width: double.infinity,
               height: ScreenUtil().setHeight(90),
               color: Colors.white,
-              padding: EdgeInsets.only(left: ScreenUtil().setHeight(20), right: ScreenUtil().setHeight(20)),
+              padding: EdgeInsets.only(
+                  left: ScreenUtil().setHeight(20),
+                  right: ScreenUtil().setHeight(20)),
               child: WidgetUtils.onlyTextCenter(
                   '退出当前账号',
                   StyleUtils.getCommonTextStyle(
-                      color: MyColors.homeTopBG, fontSize: ScreenUtil().setSp(29), fontWeight: FontWeight.w600)),
+                      color: MyColors.homeTopBG,
+                      fontSize: ScreenUtil().setSp(29),
+                      fontWeight: FontWeight.w600)),
             ),
           ),
-
           const Expanded(child: Text('')),
         ],
       ),
     );
   }
 
-
   /// 退出登录
   Future<void> exitLogin(BuildContext context) async {
-    return  showDialog(
+    return showDialog(
         context: context,
         builder: (context) {
           return CustomDialog(
             title: '是否确认退出登录？',
             callback: (res) {
-              setState((){
-                sp.setString('user_password', '');
+              setState(() {
+                sp.setString('user_token', '');
               });
               Future.delayed(Duration.zero, () {
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => const LoginPage()),
                   // ignore: unnecessary_null_comparison
-                      (route) => route == null,
+                  (route) => route == null,
                 );
               });
             },

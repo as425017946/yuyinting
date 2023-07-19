@@ -2,10 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:yuyinting/bean/login_bean.dart';
 import 'package:yuyinting/pages/navigator/tabnavigator.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/utils/event_utils.dart';
+import 'package:yuyinting/utils/log_util.dart';
+import 'package:yuyinting/utils/my_utils.dart';
 
 import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
@@ -47,7 +50,20 @@ class _LoginPageState extends State<LoginPage> {
       });
     });
 
-    if(sp.getString('user_token').toString().isNotEmpty){
+    if(sp.getString(MyConfig.userOneToken).toString() == 'null'){
+      sp.setString(MyConfig.userOneToken,'');
+    }
+    if(sp.getString(MyConfig.userTwoToken).toString() == 'null'){
+      sp.setString(MyConfig.userTwoToken,'');
+    }
+    if(sp.getString(MyConfig.userThreeToken).toString() == 'null'){
+      sp.setString(MyConfig.userThreeToken,'');
+    }
+    if(sp.getString('user_token').toString() == 'null'){
+      sp.setString('user_token','');
+    }
+
+    if(sp.getString('user_token').toString().isNotEmpty && MyConfig.issAdd == false){
       doGo();
     }
   }
@@ -257,7 +273,9 @@ class _LoginPageState extends State<LoginPage> {
                 WidgetUtils.commonSizedBox(30, 0),
                 GestureDetector(
                   onTap: (() {
-                    doLogin();
+                    if(MyUtils.checkClick()){
+                      doLogin();
+                    }
                   }),
                   child: Container(
                     margin: const EdgeInsets.fromLTRB(30, 20, 30, 0),
@@ -410,6 +428,10 @@ class _LoginPageState extends State<LoginPage> {
   }
   ///登录
   Future<void> doLogin() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String versions = packageInfo.version;
+    sp.setString('myVersion1', versions);
+
     final String userName = controllerAccount.text.trim();
     final String passWord = controllerPass.text.trim();
     final String userPhone = controllerPhone.text.trim();
@@ -477,6 +499,62 @@ class _LoginPageState extends State<LoginPage> {
       LoginBean loginBean = await DataUtils.login(params);
       switch (loginBean.code) {
         case MyHttpConfig.successCode:
+          LogE('登录${sp.getString(MyConfig.userOneToken).toString()}');
+          if(MyConfig.issAdd == false){
+            sp.setString(MyConfig.userOneUID, loginBean.data!.uid.toString());
+            sp.setString(MyConfig.userOneHeaderImg, loginBean.data!.avatar!);
+            sp.setString(MyConfig.userOneName, loginBean.data!.nickname!);
+            sp.setString(MyConfig.userOneToken, loginBean.data!.token!);
+            sp.setString(MyConfig.userOneID, loginBean.data!.number.toString());
+          }else{
+            if(sp.getString(MyConfig.userOneToken).toString().isEmpty){
+              sp.setString(MyConfig.userOneUID, loginBean.data!.uid.toString());
+              sp.setString(MyConfig.userOneHeaderImg, loginBean.data!.avatar!);
+              sp.setString(MyConfig.userOneName, loginBean.data!.nickname!);
+              sp.setString(MyConfig.userOneToken, loginBean.data!.token!);
+              sp.setString(MyConfig.userOneID, loginBean.data!.number.toString());
+            }else{
+              if(sp.getString(MyConfig.userOneToken).toString().isNotEmpty && sp.getString(MyConfig.userTwoToken).toString().isEmpty){
+                sp.setString(MyConfig.userTwoUID, loginBean.data!.uid.toString());
+                sp.setString(MyConfig.userTwoHeaderImg, loginBean.data!.avatar!);
+                sp.setString(MyConfig.userTwoName, loginBean.data!.nickname!);
+                sp.setString(MyConfig.userTwoToken, loginBean.data!.token!);
+                sp.setString(MyConfig.userTwoID, loginBean.data!.number.toString());
+              }else if(sp.getString(MyConfig.userOneToken).toString().isNotEmpty && sp.getString(MyConfig.userTwoToken).toString().isNotEmpty && sp.getString(MyConfig.userThreeToken).toString().isEmpty){
+                sp.setString(MyConfig.userThreeUID, loginBean.data!.uid.toString());
+                sp.setString(MyConfig.userThreeHeaderImg, loginBean.data!.avatar!);
+                sp.setString(MyConfig.userThreeName, loginBean.data!.nickname!);
+                sp.setString(MyConfig.userThreeToken, loginBean.data!.token!);
+                sp.setString(MyConfig.userThreeID, loginBean.data!.number.toString());
+              }else if(sp.getString(MyConfig.userOneToken).toString().isNotEmpty && sp.getString(MyConfig.userTwoToken).toString().isNotEmpty && sp.getString(MyConfig.userThreeToken).toString().isEmpty){
+                if(MyConfig.clickIndex == 1){
+                  sp.setString(MyConfig.userOneUID, loginBean.data!.uid.toString());
+                  sp.setString(MyConfig.userOneHeaderImg, loginBean.data!.avatar!);
+                  sp.setString(MyConfig.userOneName, loginBean.data!.nickname!);
+                  sp.setString(MyConfig.userOneToken, loginBean.data!.token!);
+                  sp.setString(MyConfig.userOneID, loginBean.data!.number.toString());
+                }
+                if(MyConfig.clickIndex == 2){
+                  sp.setString(MyConfig.userTwoUID, loginBean.data!.uid.toString());
+                  sp.setString(MyConfig.userTwoHeaderImg, loginBean.data!.avatar!);
+                  sp.setString(MyConfig.userTwoName, loginBean.data!.nickname!);
+                  sp.setString(MyConfig.userTwoToken, loginBean.data!.token!);
+                  sp.setString(MyConfig.userTwoID, loginBean.data!.number.toString());
+                }
+                if(MyConfig.clickIndex == 3){
+                  sp.setString(MyConfig.userThreeUID, loginBean.data!.uid.toString());
+                  sp.setString(MyConfig.userThreeHeaderImg, loginBean.data!.avatar!);
+                  sp.setString(MyConfig.userThreeName, loginBean.data!.nickname!);
+                  sp.setString(MyConfig.userThreeToken, loginBean.data!.token!);
+                  sp.setString(MyConfig.userThreeID, loginBean.data!.number.toString());
+                }
+              }
+            }
+            setState(() {
+              MyConfig.issAdd = false;
+            });
+          }
+
           // MyToastUtils.showToastBottom("登录成功");
           sp.setString("user_account", userName);
           sp.setString("user_password", passWord);
@@ -490,12 +568,12 @@ class _LoginPageState extends State<LoginPage> {
           sp.setString("user_token", loginBean.data!.token!);
           //跳转并关闭当前页面
           // ignore: use_build_context_synchronously
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => const Tab_Navigator()),
-            // ignore: unnecessary_null_comparison
-            (route) => route == null,
-          );
+          // Navigator.pushAndRemoveUntil(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => const Tab_Navigator()),
+          //   // ignore: unnecessary_null_comparison
+          //   (route) => route == null,
+          // );
           break;
         default:
           MyToastUtils.showToastBottom(loginBean.msg!);

@@ -238,6 +238,10 @@ class _ChooseCountryPageState extends State<ChooseCountryPage> {
             list_n = quhaoBean.data!.normal!;
           });
           break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
         default:
           MyToastUtils.showToastBottom(quhaoBean.msg!);
           break;
@@ -272,6 +276,10 @@ class _ChooseCountryPageState extends State<ChooseCountryPage> {
               list_s = quhaoSearcheBean.data!;
             });
           }
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
           break;
         default:
           MyToastUtils.showToastBottom(quhaoSearcheBean.msg!);

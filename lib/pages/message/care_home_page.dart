@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/pages/message/geren/who_lock_me_page.dart';
 
@@ -19,7 +18,6 @@ class CareHomePage extends StatefulWidget {
 class _CareHomePageState extends State<CareHomePage> {
   int _currentIndex = 0;
   late final PageController _controller ;
-  EasyRefreshController easyRefreshController = EasyRefreshController();
   final TextEditingController _souSuoName = TextEditingController();
 
   @override

@@ -9,6 +9,7 @@ import '../../../colors/my_colors.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../utils/loading.dart';
+import '../../../utils/my_utils.dart';
 import '../../../utils/widget_utils.dart';
 import '../../login/login_page.dart';
 /// 注销账号
@@ -116,6 +117,10 @@ class _ZhuxiaoPageState extends State<ZhuxiaoPage> {
                   (route) => route == null,
             );
           });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
           break;
         default:
           MyToastUtils.showToastBottom(commonBean.msg!);

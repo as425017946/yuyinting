@@ -17,7 +17,11 @@ class TrendsPage extends StatefulWidget {
   State<TrendsPage> createState() => _TrendsPageState();
 }
 
-class _TrendsPageState extends State<TrendsPage> {
+class _TrendsPageState extends State<TrendsPage> with AutomaticKeepAliveClientMixin{
+
+  @override
+  bool get wantKeepAlive => true;
+
   int _currentIndex = 0;
   late final PageController _controller;
 

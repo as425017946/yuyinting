@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yuyinting/config/my_config.dart';
 import 'package:yuyinting/pages/message/message_page.dart';
 import 'package:yuyinting/pages/trends/trends_page.dart';
 import 'package:yuyinting/utils/style_utils.dart';
@@ -41,6 +42,8 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
 
   /// 线性动画
   late Animation<double> _animation;
+
+
 
   @override
   void initState() {

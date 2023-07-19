@@ -35,6 +35,10 @@ class _LongPageState extends State<LongPage> with SingleTickerProviderStateMixin
     controller.forward();
     print('图片长度'+images.length.toDouble().toString());
 
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+
+    });
+
     controller.addListener(() {
       if (controller.status == AnimationStatus.completed) {
         print('返回结果***'+animation.value.toInt().toString());
@@ -64,6 +68,7 @@ class _LongPageState extends State<LongPage> with SingleTickerProviderStateMixin
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    controller.dispose();
   }
 
   @override

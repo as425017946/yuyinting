@@ -88,7 +88,7 @@ class WidgetUtils {
                             style: StyleUtils.getCommonTextStyle(
                                 color: Colors.black,
                                 fontSize: ScreenUtil().setSp(32),
-                            fontWeight: FontWeight.w600),
+                                fontWeight: FontWeight.w600),
                           ),
                         )
                       : index == 2
@@ -225,7 +225,8 @@ class WidgetUtils {
   }
 
   ///通用 输入文本
-  static Widget commonTextField(TextEditingController controller, String hintText) {
+  static Widget commonTextField(
+      TextEditingController controller, String hintText) {
     return TextField(
       controller: controller,
       inputFormatters: [
@@ -268,9 +269,8 @@ class WidgetUtils {
   }
 
   ///通用 输入文本是否显示密码
-  static Widget commonTextFieldIsShow(TextEditingController controller,
-  String hintText,
-  bool obscureText) {
+  static Widget commonTextFieldIsShow(
+      TextEditingController controller, String hintText, bool obscureText) {
     return TextField(
       obscureText: obscureText,
       controller: controller,
@@ -526,6 +526,7 @@ class WidgetUtils {
       height: height,
       width: width,
       child: CircleAvatar(
+        backgroundColor: Colors.transparent,
         backgroundImage: AssetImage(imgUrl),
       ),
     );
@@ -541,6 +542,7 @@ class WidgetUtils {
         width: width,
         height: height,
         fit: BoxFit.cover,
+        gaplessPlayback: true,
       ),
     );
   }
@@ -556,7 +558,12 @@ class WidgetUtils {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(radius),
       ),
-      child: Image(image: AssetImage(url), width: width, height: height),
+      child: Image(
+        image: AssetImage(url),
+        width: width,
+        height: height,
+        gaplessPlayback: true,
+      ),
     );
   }
 
@@ -568,35 +575,35 @@ class WidgetUtils {
         width: width,
         height: height,
         fit: BoxFit.cover,
+        gaplessPlayback: true,
       ),
     );
   }
 
   ///展示图片使用
   static Widget showImages(String url, double height, double width) {
-    return Image(image: AssetImage(url), width: width, height: height, gaplessPlayback: true,);
+    return Image(
+      image: AssetImage(url),
+      width: width,
+      height: height,
+      gaplessPlayback: true,
+    );
   }
 
   ///展示图片使用
   static Widget showImagesNet(String url, double height, double width) {
-    return Image.network(
-      url,
-      width: width,
-      height: height,
-      fit: BoxFit.cover,
-        gaplessPlayback: true
-    );
+    return Image.network(url,
+        width: width, height: height, fit: BoxFit.cover, gaplessPlayback: true);
   }
 
   ///展示图片使用
   static Widget showImagesFill(String url, double height, double width) {
     return Image(
-      image: AssetImage(url),
-      width: width,
-      height: height,
-      fit: BoxFit.fill,
-        gaplessPlayback: true
-    );
+        image: AssetImage(url),
+        width: width,
+        height: height,
+        fit: BoxFit.fill,
+        gaplessPlayback: true);
   }
 
   ///通用我的横条白底选择框
@@ -635,8 +642,7 @@ class WidgetUtils {
             Text(
               title,
               style: StyleUtils.getCommonTextStyle(
-                  color: Colors.black,
-                  fontSize: ScreenUtil().setSp(29)),
+                  color: Colors.black, fontSize: ScreenUtil().setSp(29)),
             ),
             const Expanded(child: Text('')),
             Text(
@@ -1062,7 +1068,9 @@ class WidgetUtils {
                   Text(
                     title,
                     style: StyleUtils.getCommonTextStyle(
-                        color: Colors.white, fontSize: ScreenUtil().setSp(18), fontWeight: FontWeight.w600),
+                        color: Colors.white,
+                        fontSize: ScreenUtil().setSp(18),
+                        fontWeight: FontWeight.w600),
                   )
                 ],
               ),
@@ -1165,7 +1173,8 @@ class WidgetUtils {
       inputFormatters: [
         RegexFormatter(regex: MyUtils.regexFirstNotNull),
       ],
-      style: StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: ScreenUtil().setSp(25)),
+      style: StyleUtils.getCommonTextStyle(
+          color: MyColors.g3, fontSize: ScreenUtil().setSp(25)),
       onChanged: (value) {
         LogE('长度$value');
         // eventBus.fire(InfoBack(infos: value));
@@ -1175,7 +1184,8 @@ class WidgetUtils {
         // labelText: "请输入用户名",
         // icon: Icon(Icons.people), //前面的图标
         hintText: hintText,
-        hintStyle: StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(25)),
+        hintStyle: StyleUtils.getCommonTextStyle(
+            color: MyColors.g9, fontSize: ScreenUtil().setSp(25)),
 
         contentPadding: const EdgeInsets.only(top: 0, bottom: 0),
         border: const OutlineInputBorder(

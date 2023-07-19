@@ -1,9 +1,20 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:yuyinting/colors/my_colors.dart';
+import 'package:yuyinting/main.dart';
+import 'package:yuyinting/utils/my_utils.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 
+import '../../../bean/aboutUsBean.dart';
+import '../../../http/data_utils.dart';
+import '../../../http/my_http_config.dart';
 import '../../../utils/line_painter.dart';
+import '../../../utils/loading.dart';
+import '../../../utils/my_toast_utils.dart';
 import '../../../utils/widget_utils.dart';
 /// 关于
 class AboutPage extends StatefulWidget {
@@ -15,11 +26,13 @@ class AboutPage extends StatefulWidget {
 
 class _AboutPageState extends State<AboutPage> {
   var appBar;
+  String  gzh = '', gs = '';
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     appBar = WidgetUtils.getAppBar('关于', true, context, false, 0);
+    doPostUserAbout();
   }
 
   @override
@@ -41,7 +54,7 @@ class _AboutPageState extends State<AboutPage> {
           Row(
             children: [
               const Expanded(child: Text('')),
-              WidgetUtils.onlyText('版本 1.0.0', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: 14)),
+              WidgetUtils.onlyText('当前版本 ${sp.getString('myVersion1')}', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: 14)),
               const Expanded(child: Text('')),
             ],
           ),
@@ -55,16 +68,17 @@ class _AboutPageState extends State<AboutPage> {
               children: [
                 WidgetUtils.onlyText('版本检查', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: 14)),
                 const Expanded(child: Text('')),
-                Column(
+                // ignore: unrelated_type_equality_checks
+                sp.getString('versionStatus').toString() == '1' ? Column(
                   children: [
                     WidgetUtils.commonSizedBox(24, 10),
                     CustomPaint(
                       painter: LinePainter(colors: Colors.red),
                     )
                   ],
-                ),
+                ): const Text(''),
                 WidgetUtils.commonSizedBox(10, 10),
-                WidgetUtils.onlyText('1.0.0', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: 12)),
+                WidgetUtils.onlyText(sp.getString('myVersion2').toString(), StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: 12)),
                 WidgetUtils.commonSizedBox(10, 10),
                 Image(
                   image: const AssetImage('assets/images/mine_more.png'),
@@ -84,12 +98,18 @@ class _AboutPageState extends State<AboutPage> {
               children: [
                 WidgetUtils.onlyText('官方公众号', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: 14)),
                 const Expanded(child: Text('')),
-                WidgetUtils.onlyText('123456', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: 12)),
+                WidgetUtils.onlyText(gzh, StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: 12)),
                 WidgetUtils.commonSizedBox(10, 10),
-                WidgetUtils.showImages(
-                    'assets/images/mine_fuzhi.png',
-                    ScreenUtil().setHeight(15),
-                    ScreenUtil().setHeight(15)),
+                GestureDetector(
+                  onTap: ((){
+                    Clipboard.setData( ClipboardData(text:gzh,));
+                    MyToastUtils.showToastBottom('已成功复制到剪切板');
+                  }),
+                  child: WidgetUtils.showImages(
+                      'assets/images/mine_fuzhi.png',
+                      ScreenUtil().setHeight(15),
+                      ScreenUtil().setHeight(15)),
+                ),
               ],
             ),
           ),
@@ -103,7 +123,7 @@ class _AboutPageState extends State<AboutPage> {
               children: [
                 WidgetUtils.onlyText('版权所属', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: 14)),
                 const Expanded(child: Text('')),
-                WidgetUtils.onlyText('某某公司', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: 12)),
+                WidgetUtils.onlyText(gs, StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: 12)),
               ],
             ),
           ),
@@ -123,4 +143,47 @@ class _AboutPageState extends State<AboutPage> {
       ),
     );
   }
+
+
+  /// 关于我们
+  Future<void> doPostUserAbout() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String versions = packageInfo.version;
+    var type;
+    // 透明状态栏
+    if (Platform.isAndroid) {
+      type = '2';
+    }
+    if (Platform.isIOS) {
+      type = '1';
+    }
+
+    Map<String, dynamic> params = <String, dynamic>{
+      'system': type,
+    };
+    try {
+      Loading.show("加载中...");
+      AboutUsBean bean = await DataUtils.postUserAbout(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            gzh = bean.data!.wechatPublic!;
+            gs = bean.data!.copyright!;
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+          // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+  }
+
 }

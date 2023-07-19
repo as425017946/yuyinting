@@ -1,6 +1,8 @@
 import 'package:yuyinting/bean/BlackListBean.dart';
 import 'package:yuyinting/bean/Common_bean.dart';
+import 'package:yuyinting/bean/aboutUsBean.dart';
 import '../bean/login_bean.dart';
+import '../bean/myInfoBean.dart';
 import '../bean/quhao_bean.dart';
 import '../bean/quhao_searche_bean.dart';
 import 'my_http_config.dart';
@@ -99,4 +101,27 @@ class DataUtils{
     print("黑名单：${respons}");
     return CommonBean.fromJson(respons!);
   }
+
+  /// 关于我们
+  static Future<AboutUsBean> postUserAbout(Map<String,dynamic> params) async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.userAbout, {}, params);
+    print("关于我们：${respons}");
+    return AboutUsBean.fromJson(respons!);
+  }
+
+  /// 我的详情
+  static Future<MyInfoBean> postMyIfon(Map<String,dynamic> params) async {
+    print("我的详情：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.myInfo, {}, params);
+    print("我的详情：${respons}");
+    return MyInfoBean.fromJson(respons!);
+  }
+
+  /// 切换账号验证token
+  static Future<CommonBean> postCheckToken() async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.checkToken, {}, {});
+    print("切换账号验证token：${respons}");
+    return CommonBean.fromJson(respons!);
+  }
+
 }

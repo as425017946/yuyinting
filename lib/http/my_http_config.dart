@@ -8,9 +8,9 @@ class MyHttpConfig{
   //测试上传
   static const String uploadUrl = 'http://192.168.100.121:18089/upload';
   //鹏飞测试环境
-  static const String baseURL = "http://192.168.0.51/api";
+  // static const String baseURL = "http://192.168.0.51/api";
   //赵增测试环境
-  // static const String baseURL = "http://192.168.0.53/api";
+  static const String baseURL = "http://192.168.0.53/api";
   //正式环境
   // static const String baseURL = "https://yy.sunvua.com/api";
 
@@ -40,6 +40,12 @@ class MyHttpConfig{
   static const String blackList = "$baseURL/mine/blackList";
   //解除/添加黑名单
   static const String updateBlack = "$baseURL/mine/black";
+  //关于我们
+  static const String userAbout = "$baseURL/mine/userAbout";
+  //我的详情
+  static const String myInfo = "$baseURL/mine/index";
+  //切换账号验证token
+  static const String checkToken = "$baseURL/login/checkToken";
 
 
 

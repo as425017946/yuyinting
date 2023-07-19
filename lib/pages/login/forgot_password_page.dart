@@ -10,6 +10,7 @@ import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../utils/loading.dart';
 import '../../utils/my_toast_utils.dart';
+import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 /// 忘记密码
@@ -231,6 +232,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           MyToastUtils.showToastBottom('密码修改成功！');
           // ignore: use_build_context_synchronously
           Navigator.pop(context);
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
           break;
         default:
           MyToastUtils.showToastBottom(commonBean.msg!);
