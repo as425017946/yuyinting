@@ -8,11 +8,17 @@ class MyHttpConfig{
   //测试上传
   static const String uploadUrl = 'http://192.168.100.121:18089/upload';
   //鹏飞测试环境
-  // static const String baseURL = "http://192.168.0.51/api";
+  static const String baseURL = "http://192.168.0.51/api";
   //赵增测试环境
-  static const String baseURL = "http://192.168.0.53/api";
+  // static const String baseURL = "http://192.168.0.53/api";
   //正式环境
   // static const String baseURL = "https://yy.sunvua.com/api";
+
+  /// 文件上传
+  // file方式上传
+  static const String fileUpload = '$baseURL/upload/fileUpload';
+
+
 
   //登录接口
   static const String login = "$baseURL/login/login";
@@ -46,7 +52,14 @@ class MyHttpConfig{
   static const String myInfo = "$baseURL/mine/index";
   //切换账号验证token
   static const String checkToken = "$baseURL/login/checkToken";
-
+  //实名制
+  static const String realAuth = "$baseURL/mine/realAuth";
+  //关注与被关注列表
+  static const String followList = "$baseURL/mine/followList";
+  //用户关注和取关
+  static const String follow = "$baseURL/mine/follow";
+  //谁看过我
+  static const String history = "$baseURL/mine/history";
 
 
 }

@@ -33,7 +33,7 @@ class _YouxiPageState extends State<YouxiPage> {
                 height: ScreenUtil().setHeight(300),
                 width: double.infinity,
                 margin: const EdgeInsets.only(left: 20, right: 20),
-                child: WidgetUtils.CircleImageNet(300, double.infinity, 10, 'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
+                child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(300), double.infinity, 10, 'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
               ),
               WidgetUtils.commonSizedBox(10, 0),
               Container(

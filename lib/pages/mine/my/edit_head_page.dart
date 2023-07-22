@@ -1,13 +1,22 @@
+import 'dart:convert';
 import 'dart:io';
-
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
-
-import '../../../colors/my_colors.dart';
+import 'package:yuyinting/utils/event_utils.dart';
+import '../../../http/my_http_config.dart';
+import '../../../main.dart';
+import '../../../utils/loading.dart';
+import '../../../utils/my_toast_utils.dart';
+import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
+
+
 
 /// 编辑头像显示
 class EditHeadPage extends StatefulWidget {
@@ -19,24 +28,34 @@ class EditHeadPage extends StatefulWidget {
 
 class _EditHeadPageState extends State<EditHeadPage> {
   List<File> imgArray = [];
+  var imagesUrl, imagesType;
+  String origin_path = '', origin_url = '';
 
   onTapPickFromGallery() async {
     Navigator.pop(context);
-    final List<AssetEntity>? entitys = await AssetPicker.pickAssets(context,
-        pickerConfig: const AssetPickerConfig(
-            maxAssets: 6, requestType: RequestType.image));
-    if (entitys == null) return;
+    // final List<AssetEntity>? entitys = await AssetPicker.pickAssets(context,
+    //     pickerConfig: const AssetPickerConfig(
+    //         maxAssets: 1, requestType: RequestType.image));
+    // if (entitys == null) return;
+    //
+    // List<String> chooseImagesPath = [];
+    // //遍历
+    // for (var entity in entitys) {
+    //   File? imgFile = await entity.file;
+    //   if (imgFile != null){
+    //     chooseImagesPath.add(imgFile.path);
+    //     print('选择照片路径:${imgFile?.path}');
+    //     imagesUrl = imgFile.path.split('/');
+    //     imagesType = imagesUrl[imagesUrl.length-1].split('.');
+    //     doForgetPassword(imagesType[imagesType.length - 1],imagesUrl);
+    //   }
+    //
+    // }
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+        print('选择照片路径:${image?.path}');
 
-    List<String> chooseImagesPath = [];
-    //遍历
-    for (var entity in entitys) {
-      File? imgFile = await entity.file;
-      if (imgFile != null) chooseImagesPath.add(imgFile.path);
-      setState(() {
-        imgArray.add(imgFile!);
-      });
-    }
-    print('选择照片路径:$chooseImagesPath');
+    doPostPostFileUpload(image!.path);
   }
 
   onTapPickFromCamera() async {
@@ -47,15 +66,17 @@ class _EditHeadPageState extends State<EditHeadPage> {
     File? imgFile = await entity.file;
     if (imgFile == null) return;
     print('照片路径:${imgFile.path}');
-    setState(() {
-      imgArray.add(imgFile!);
-    });
+
+
+
+    doPostPostFileUpload(imgFile.path);
   }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.black45,
+        backgroundColor: Colors.transparent,
         body: Column(
           children: [
             const Expanded(child: Text('')),
@@ -147,4 +168,47 @@ class _EditHeadPageState extends State<EditHeadPage> {
           ],
         ));
   }
+
+  /// 获取文件url
+  Future<void> doPostPostFileUpload(path) async {
+    Loading.show("头像上传中...");
+    var name = path.substring(path.lastIndexOf("/") + 1, path.length);
+    FormData formdata = FormData.fromMap(
+      {
+        'type': 'image',
+        "file": await MultipartFile.fromFile(path,
+          filename: name,)
+      },
+    );
+    BaseOptions option = BaseOptions(
+        contentType: 'multipart/form-data', responseType: ResponseType.plain);
+    option.headers["Authorization"] = sp.getString('user_token')??'';
+    Dio dio = Dio(option);
+    //application/json
+    try {
+      var respone = await dio.post(
+          MyHttpConfig.fileUpload,
+          data: formdata);
+      Map jsonResponse = json.decode(respone.data.toString());
+      if (respone.statusCode == 200) {
+        eventBus.fire(FileBack(info: path, id: jsonResponse['data'].toString()));
+        MyToastUtils.showToastBottom('头像上传成功');
+        Loading.dismiss();
+        // ignore: use_build_context_synchronously
+        Navigator.pop(context);
+      }else if(respone.statusCode == 401){
+        // ignore: use_build_context_synchronously
+        MyUtils.jumpLogin(context);
+      }else{
+        MyToastUtils.showToastBottom(jsonResponse['msg']);
+      }
+
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      // MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+
+  }
+
 }

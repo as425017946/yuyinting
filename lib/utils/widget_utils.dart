@@ -535,12 +535,18 @@ class WidgetUtils {
   ///圆角图片 网络
   static Widget CircleImageNet(
       double height, double width, double radius, String url) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(radius),
-      child: Image.network(
+    return Container(
+      height: height,
+      width: width,
+      //超出部分，可裁剪
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(radius),
+      ),
+      child: url.contains('com.leimu.yuyinting')
+          ? Image.file(File(url),fit: BoxFit.cover, gaplessPlayback: true,)
+          : Image.network(
         url,
-        width: width,
-        height: height,
         fit: BoxFit.cover,
         gaplessPlayback: true,
       ),
@@ -558,12 +564,14 @@ class WidgetUtils {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(radius),
       ),
-      child: Image(
-        image: AssetImage(url),
-        width: width,
-        height: height,
-        gaplessPlayback: true,
-      ),
+      child: url.contains('com.leimu.yuyinting')
+          ? Image.file(File(url), fit: BoxFit.fill,)
+          : Image(
+              image: AssetImage(url),
+              width: width,
+              height: height,
+              gaplessPlayback: true,
+            ),
     );
   }
 
@@ -582,7 +590,7 @@ class WidgetUtils {
 
   ///展示图片使用
   static Widget showImages(String url, double height, double width) {
-    return Image(
+    return url.contains('com.leimu.yuyinting') ? Image.file(File(url), fit: BoxFit.fill,) : Image(
       image: AssetImage(url),
       width: width,
       height: height,
@@ -1102,7 +1110,7 @@ class WidgetUtils {
         // icon: Icon(Icons.people), //前面的图标
         hintText: hintText,
         hintStyle: StyleUtils.getCommonTextStyle(
-            color: MyColors.g9, fontSize: ScreenUtil().setSp(38)),
+            color: MyColors.g9, fontSize: ScreenUtil().setSp(32)),
 
         contentPadding: const EdgeInsets.only(top: 0, bottom: 0),
         border: const OutlineInputBorder(

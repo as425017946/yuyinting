@@ -53,7 +53,8 @@ class Data {
       this.uid,
       this.emPwd,
       this.emToken,
-      this.number});
+      this.number,
+      this.avatarUrl});
 
   Data.fromJson(dynamic json) {
     token = json['token'];
@@ -67,12 +68,14 @@ class Data {
     emPwd = json['em_pwd'];
     emToken = json['em_token'];
     number = json['number'];
+    avatarUrl = json['avatar_url'];
   }
 
   String? token;
   String? nickname;
   int? gender;
-  String? avatar;
+  int? avatar;
+  String? avatarUrl;
   int? isSetPwd;
   String? phone;
   String? areaCode;
@@ -94,6 +97,7 @@ class Data {
     map['em_pwd'] = emPwd;
     map['em_token'] = emToken;
     map['number'] = number;
+    map['avatar_url'] = avatarUrl;
     return map;
   }
 }

@@ -499,51 +499,52 @@ class _LoginPageState extends State<LoginPage> {
       LoginBean loginBean = await DataUtils.login(params);
       switch (loginBean.code) {
         case MyHttpConfig.successCode:
+          LogE('登录${MyConfig.issAdd}');
           LogE('登录${sp.getString(MyConfig.userOneToken).toString()}');
           if(MyConfig.issAdd == false){
             sp.setString(MyConfig.userOneUID, loginBean.data!.uid.toString());
-            sp.setString(MyConfig.userOneHeaderImg, loginBean.data!.avatar!);
+            sp.setString(MyConfig.userOneHeaderImg, loginBean.data!.avatarUrl!);
             sp.setString(MyConfig.userOneName, loginBean.data!.nickname!);
             sp.setString(MyConfig.userOneToken, loginBean.data!.token!);
             sp.setString(MyConfig.userOneID, loginBean.data!.number.toString());
           }else{
             if(sp.getString(MyConfig.userOneToken).toString().isEmpty){
               sp.setString(MyConfig.userOneUID, loginBean.data!.uid.toString());
-              sp.setString(MyConfig.userOneHeaderImg, loginBean.data!.avatar!);
+              sp.setString(MyConfig.userOneHeaderImg, loginBean.data!.avatarUrl!);
               sp.setString(MyConfig.userOneName, loginBean.data!.nickname!);
               sp.setString(MyConfig.userOneToken, loginBean.data!.token!);
               sp.setString(MyConfig.userOneID, loginBean.data!.number.toString());
             }else{
               if(sp.getString(MyConfig.userOneToken).toString().isNotEmpty && sp.getString(MyConfig.userTwoToken).toString().isEmpty){
                 sp.setString(MyConfig.userTwoUID, loginBean.data!.uid.toString());
-                sp.setString(MyConfig.userTwoHeaderImg, loginBean.data!.avatar!);
+                sp.setString(MyConfig.userTwoHeaderImg, loginBean.data!.avatarUrl!);
                 sp.setString(MyConfig.userTwoName, loginBean.data!.nickname!);
                 sp.setString(MyConfig.userTwoToken, loginBean.data!.token!);
                 sp.setString(MyConfig.userTwoID, loginBean.data!.number.toString());
               }else if(sp.getString(MyConfig.userOneToken).toString().isNotEmpty && sp.getString(MyConfig.userTwoToken).toString().isNotEmpty && sp.getString(MyConfig.userThreeToken).toString().isEmpty){
                 sp.setString(MyConfig.userThreeUID, loginBean.data!.uid.toString());
-                sp.setString(MyConfig.userThreeHeaderImg, loginBean.data!.avatar!);
+                sp.setString(MyConfig.userThreeHeaderImg, loginBean.data!.avatarUrl!);
                 sp.setString(MyConfig.userThreeName, loginBean.data!.nickname!);
                 sp.setString(MyConfig.userThreeToken, loginBean.data!.token!);
                 sp.setString(MyConfig.userThreeID, loginBean.data!.number.toString());
               }else if(sp.getString(MyConfig.userOneToken).toString().isNotEmpty && sp.getString(MyConfig.userTwoToken).toString().isNotEmpty && sp.getString(MyConfig.userThreeToken).toString().isEmpty){
                 if(MyConfig.clickIndex == 1){
                   sp.setString(MyConfig.userOneUID, loginBean.data!.uid.toString());
-                  sp.setString(MyConfig.userOneHeaderImg, loginBean.data!.avatar!);
+                  sp.setString(MyConfig.userOneHeaderImg, loginBean.data!.avatarUrl!);
                   sp.setString(MyConfig.userOneName, loginBean.data!.nickname!);
                   sp.setString(MyConfig.userOneToken, loginBean.data!.token!);
                   sp.setString(MyConfig.userOneID, loginBean.data!.number.toString());
                 }
                 if(MyConfig.clickIndex == 2){
                   sp.setString(MyConfig.userTwoUID, loginBean.data!.uid.toString());
-                  sp.setString(MyConfig.userTwoHeaderImg, loginBean.data!.avatar!);
+                  sp.setString(MyConfig.userTwoHeaderImg, loginBean.data!.avatarUrl!);
                   sp.setString(MyConfig.userTwoName, loginBean.data!.nickname!);
                   sp.setString(MyConfig.userTwoToken, loginBean.data!.token!);
                   sp.setString(MyConfig.userTwoID, loginBean.data!.number.toString());
                 }
                 if(MyConfig.clickIndex == 3){
                   sp.setString(MyConfig.userThreeUID, loginBean.data!.uid.toString());
-                  sp.setString(MyConfig.userThreeHeaderImg, loginBean.data!.avatar!);
+                  sp.setString(MyConfig.userThreeHeaderImg, loginBean.data!.avatarUrl!);
                   sp.setString(MyConfig.userThreeName, loginBean.data!.nickname!);
                   sp.setString(MyConfig.userThreeToken, loginBean.data!.token!);
                   sp.setString(MyConfig.userThreeID, loginBean.data!.number.toString());
@@ -566,14 +567,16 @@ class _LoginPageState extends State<LoginPage> {
           sp.setString('user_phone', loginBean.data!.phone!);
           sp.setString('nickname', loginBean.data!.nickname!);
           sp.setString("user_token", loginBean.data!.token!);
+          sp.setString("user_headimg_id", loginBean.data!.avatar.toString());
+          sp.setString("user_headimg", loginBean.data!.avatarUrl!);
           //跳转并关闭当前页面
-          // ignore: use_build_context_synchronously
-          // Navigator.pushAndRemoveUntil(
-          //   context,
-          //   MaterialPageRoute(builder: (context) => const Tab_Navigator()),
-          //   // ignore: unnecessary_null_comparison
-          //   (route) => route == null,
-          // );
+          //ignore: use_build_context_synchronously
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const Tab_Navigator()),
+            // ignore: unnecessary_null_comparison
+            (route) => route == null,
+          );
           break;
         default:
           MyToastUtils.showToastBottom(loginBean.msg!);

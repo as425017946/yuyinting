@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/pages/login/login_page.dart';
 import 'package:yuyinting/utils/line_painter.dart';
-import 'package:yuyinting/utils/log_util.dart';
+import 'package:yuyinting/utils/my_toast_utils.dart';
 
 import '../../../config/config_screen_util.dart';
 import '../../../main.dart';
@@ -30,13 +30,15 @@ class _SettingPageState extends State<SettingPage> {
     // TODO: implement initState
     super.initState();
     appBar = WidgetUtils.getAppBar('设置', true, context, false, 0);
-    ///是否认证 0未认证 1已审核 2待审核
+    ///是否认证 0待审核1已审核 2已驳回 3未认证
     if(sp.getString('shimingzhi').toString() == '0'){
-      shiming = '未认证';
+      shiming = '待审核';
     }else if(sp.getString('shimingzhi').toString() == '1'){
       shiming = '已审核';
+    }else if(sp.getString('shimingzhi').toString() == '1'){
+      shiming = '已驳回';
     }else{
-      shiming = '待审核';
+      shiming = '未认证';
     }
   }
 
@@ -102,7 +104,14 @@ class _SettingPageState extends State<SettingPage> {
           WidgetUtils.commonSizedBox(10, 0),
           GestureDetector(
             onTap: (() {
-              Navigator.pushNamed(context, 'ShimingzhiPage');
+              if(sp.getString('shimingzhi').toString() == '2' || sp.getString('shimingzhi').toString() == '3'){
+                Navigator.pushNamed(context, 'ShimingzhiPage');
+              }else if(sp.getString('shimingzhi').toString() == '1'){
+                MyToastUtils.showToastBottom('已认证');
+              }else if(sp.getString('shimingzhi').toString() == '0'){
+                MyToastUtils.showToastBottom('审核中，请耐心等待');
+              }
+
             }),
             child: Container(
               width: double.infinity,

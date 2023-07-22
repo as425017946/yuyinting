@@ -35,3 +35,29 @@ class AddressBack {
   String info;
   AddressBack({required this.info});
 }
+
+///上传文件返回
+class FileBack {
+  String info;
+  String id;
+  FileBack({required this.info, required this.id});
+}
+
+///切换魔方
+class MofangBack {
+  int info;
+  MofangBack({required this.info});
+}
+
+
+///实名认证
+class RenzhengBack {
+  bool isBack;
+  RenzhengBack({required this.isBack});
+}
+
+///关注使用
+class CareBack {
+  String info;
+  CareBack({required this.info});
+}

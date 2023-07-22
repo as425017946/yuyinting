@@ -64,8 +64,6 @@ dependencies:
 #  flutter_easyrefresh: ^2.2.2
   # 轮播图
   flutter_swiper: ^1.1.6
-  # 视频播放器
-  video_player: ^2.6.1
   # 图片选择器
   wechat_assets_picker: ^7.0.0
   # 相机
@@ -86,6 +84,11 @@ dependencies:
   pull_to_refresh_flutter3: ^2.0.1
   # 动画库
   lottie: ^2.3.0
+  # 选择相机
+  image_picker: ^0.8.6
+  #
+  http: ^0.13.5
+
 
 dev_dependencies:
   flutter_test:

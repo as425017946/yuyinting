@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/pages/message/geren/who_lock_me_page.dart';
+import 'package:yuyinting/utils/event_utils.dart';
+import 'package:yuyinting/utils/log_util.dart';
+import 'package:yuyinting/utils/my_utils.dart';
 
 import '../../colors/my_colors.dart';
 import '../../utils/widget_utils.dart';
@@ -9,7 +12,8 @@ import 'care_page.dart';
 /// 关注和被关注整合页面
 
 class CareHomePage extends StatefulWidget {
-  const CareHomePage({Key? key}) : super(key: key);
+  int index;
+  CareHomePage({Key? key, required this.index}) : super(key: key);
 
   @override
   State<CareHomePage> createState() => _CareHomePageState();
@@ -23,9 +27,9 @@ class _CareHomePageState extends State<CareHomePage> {
   @override
   void initState() {
     super.initState();
-    _currentIndex = 0;
+    _currentIndex = widget.index;
     _controller = PageController(
-      initialPage: 0,
+      initialPage: widget.index,
     );
   }
 
@@ -131,8 +135,14 @@ class _CareHomePageState extends State<CareHomePage> {
             child: Row(
               children: [
                 WidgetUtils.commonSizedBox(0, 10),
-                WidgetUtils.showImages('assets/images/messages_sousuo.png',
-                    ScreenUtil().setHeight(30), ScreenUtil().setHeight(30)),
+                GestureDetector(
+                  onTap: ((){
+                    MyUtils.hideKeyboard(context);
+                     eventBus.fire(CareBack(info: _souSuoName.text.trim()));
+                  }),
+                  child: WidgetUtils.showImages('assets/images/messages_sousuo.png',
+                      ScreenUtil().setHeight(30), ScreenUtil().setHeight(30)),
+                ),
                 WidgetUtils.commonSizedBox(0, 10),
                 Expanded(child: WidgetUtils.commonTextField(_souSuoName, '请搜索昵称或ID')),
               ],

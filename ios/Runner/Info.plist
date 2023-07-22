@@ -48,5 +48,23 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 
+    <key>NSCameraUsageDescription</key>
+    <string>这是你的自拍照</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>用于音频插件</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>用于相册选择插件</string>
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>remote-notification</string>
+    </array>
+
+    <key>NSAppTransportSecurity</key>
+    <dict>
+      <key>NSAllowsArbitraryLoads</key>
+      <true/>
+    </dict>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>获取图片及使用相册拍照以便上传动态图片。</string>
 </dict>
 </plist>

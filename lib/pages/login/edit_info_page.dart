@@ -7,11 +7,14 @@ import '../../bean/Common_bean.dart';
 import '../../colors/my_colors.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
+import '../../utils/event_utils.dart';
 import '../../utils/loading.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
+import '../mine/my/edit_head_page.dart';
+
 /// 填写个人信息
 class EditInfoPage extends StatefulWidget {
   const EditInfoPage({Key? key}) : super(key: key);
@@ -23,14 +26,30 @@ class EditInfoPage extends StatefulWidget {
 class _EditInfoPageState extends State<EditInfoPage> {
   TextEditingController controller = TextEditingController();
   var sex = 0;
-
+  String avatar = '';
+  var listen;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     setState(() {
+      avatar = sp.getString('user_headimg').toString();
       controller.text = sp.getString('nickname').toString();
     });
+    listen = eventBus.on<FileBack>().listen((event) {
+      setState(() {
+        avatar = event.info;
+        sp.setString("user_headimg", event.info);
+        sp.setString("user_headimg_id", event.id);
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    listen.cancel();
   }
 
   @override
@@ -45,7 +64,7 @@ class _EditInfoPageState extends State<EditInfoPage> {
         },
         child: Column(
           children: [
-            WidgetUtils.commonSizedBox(380, 0),
+            WidgetUtils.commonSizedBox(ScreenUtil().setHeight(450), 0),
             Expanded(
               child: Container(
                 width: double.infinity,
@@ -61,21 +80,36 @@ class _EditInfoPageState extends State<EditInfoPage> {
                 child: Column(
                   children: [
                     WidgetUtils.commonSizedBox(15, 0),
-                    WidgetUtils.onlyTextCenter('填写个人信息', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(36), fontWeight: FontWeight.w600)),
-                    WidgetUtils.onlyTextCenter('更容易遇到合拍的小伙伴哦', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(21))),
+                    WidgetUtils.onlyTextCenter(
+                        '填写个人信息',
+                        StyleUtils.getCommonTextStyle(
+                            color: Colors.black,
+                            fontSize: ScreenUtil().setSp(36),
+                            fontWeight: FontWeight.w600)),
+                    WidgetUtils.onlyTextCenter(
+                        '更容易遇到合拍的小伙伴哦',
+                        StyleUtils.getCommonTextStyle(
+                            color: MyColors.g9,
+                            fontSize: ScreenUtil().setSp(21))),
                     WidgetUtils.commonSizedBox(50, 0),
-                    SizedBox(
-                      height: ScreenUtil().setHeight(130),
-                      width: ScreenUtil().setHeight(130),
-                      child: Stack(
-                        alignment: Alignment.bottomRight,
-                        children: [
-                          WidgetUtils.CircleHeadImage(
-                              ScreenUtil().setHeight(130),
-                              ScreenUtil().setHeight(130),
-                              'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
-                          WidgetUtils.showImages('assets/images/login_paizhao.png', ScreenUtil().setHeight(40), ScreenUtil().setHeight(40)),
-                        ],
+                    GestureDetector(
+                      onTap: (() {
+                        MyUtils.goTransparentPage(
+                            context, const EditHeadPage());
+                      }),
+                      child: SizedBox(
+                        height: ScreenUtil().setHeight(130),
+                        width: ScreenUtil().setHeight(130),
+                        child: Stack(
+                          alignment: Alignment.bottomRight,
+                          children: [
+                            WidgetUtils.CircleImageNet(ScreenUtil().setHeight(130), ScreenUtil().setHeight(130), ScreenUtil().setHeight(65), avatar),
+                            WidgetUtils.showImages(
+                                'assets/images/login_paizhao.png',
+                                ScreenUtil().setHeight(40),
+                                ScreenUtil().setHeight(40)),
+                          ],
+                        ),
                       ),
                     ),
                     WidgetUtils.commonSizedBox(40, 0),
@@ -88,20 +122,24 @@ class _EditInfoPageState extends State<EditInfoPage> {
                         //背景
                         color: MyColors.f2,
                         //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(17.0)),
+                        borderRadius: BorderRadius.all(Radius.circular(17.0)),
                       ),
                       child: Row(
                         children: [
                           WidgetUtils.commonSizedBox(0, 20),
-                          Expanded(child: WidgetUtils.commonTextField(controller, '请输入昵称')),
+                          Expanded(
+                              child: WidgetUtils.commonTextField(
+                                  controller, '请输入昵称')),
                           GestureDetector(
-                            onTap: ((){
+                            onTap: (() {
                               setState(() {
                                 controller.text = '';
                               });
                             }),
-                            child: WidgetUtils.showImages('assets/images/login_colse.png', ScreenUtil().setHeight(24), ScreenUtil().setHeight(24)),
+                            child: WidgetUtils.showImages(
+                                'assets/images/login_colse.png',
+                                ScreenUtil().setHeight(24),
+                                ScreenUtil().setHeight(24)),
                           ),
                           WidgetUtils.commonSizedBox(0, 20),
                         ],
@@ -112,7 +150,7 @@ class _EditInfoPageState extends State<EditInfoPage> {
                       children: [
                         Expanded(
                           child: GestureDetector(
-                            onTap: ((){
+                            onTap: (() {
                               setState(() {
                                 sex = 1;
                               });
@@ -124,17 +162,26 @@ class _EditInfoPageState extends State<EditInfoPage> {
                               //边框设置
                               decoration: BoxDecoration(
                                 //背景
-                                color: sex == 1 ? MyColors.loginBlue : MyColors.loginBlue2,
+                                color: sex == 1
+                                    ? MyColors.loginBlue
+                                    : MyColors.loginBlue2,
                                 //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                borderRadius:
-                                const BorderRadius.all(Radius.circular(17.0)),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(17.0)),
                               ),
                               child: Row(
                                 children: [
                                   const Expanded(child: Text('')),
-                                  WidgetUtils.showImages('assets/images/nan.png', ScreenUtil().setHeight(26), ScreenUtil().setHeight(26)),
+                                  WidgetUtils.showImages(
+                                      'assets/images/nan.png',
+                                      ScreenUtil().setHeight(26),
+                                      ScreenUtil().setHeight(26)),
                                   WidgetUtils.commonSizedBox(0, 10),
-                                  WidgetUtils.onlyTextCenter('男生', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(33))),
+                                  WidgetUtils.onlyTextCenter(
+                                      '男生',
+                                      StyleUtils.getCommonTextStyle(
+                                          color: Colors.white,
+                                          fontSize: ScreenUtil().setSp(33))),
                                   const Expanded(child: Text('')),
                                 ],
                               ),
@@ -144,7 +191,7 @@ class _EditInfoPageState extends State<EditInfoPage> {
                         WidgetUtils.commonSizedBox(0, 10),
                         Expanded(
                           child: GestureDetector(
-                            onTap: ((){
+                            onTap: (() {
                               setState(() {
                                 sex = 2;
                               });
@@ -156,17 +203,26 @@ class _EditInfoPageState extends State<EditInfoPage> {
                               //边框设置
                               decoration: BoxDecoration(
                                 //背景
-                                color: sex == 2 ? MyColors.loginPink : MyColors.loginPink2,
+                                color: sex == 2
+                                    ? MyColors.loginPink
+                                    : MyColors.loginPink2,
                                 //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                borderRadius:
-                                const BorderRadius.all(Radius.circular(17.0)),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(17.0)),
                               ),
                               child: Row(
                                 children: [
                                   const Expanded(child: Text('')),
-                                  WidgetUtils.showImages('assets/images/nv.png', ScreenUtil().setHeight(26), ScreenUtil().setHeight(26)),
+                                  WidgetUtils.showImages(
+                                      'assets/images/nv.png',
+                                      ScreenUtil().setHeight(26),
+                                      ScreenUtil().setHeight(26)),
                                   WidgetUtils.commonSizedBox(0, 10),
-                                  WidgetUtils.onlyTextCenter('女生', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(33))),
+                                  WidgetUtils.onlyTextCenter(
+                                      '女生',
+                                      StyleUtils.getCommonTextStyle(
+                                          color: Colors.white,
+                                          fontSize: ScreenUtil().setSp(33))),
                                   const Expanded(child: Text('')),
                                 ],
                               ),
@@ -176,10 +232,14 @@ class _EditInfoPageState extends State<EditInfoPage> {
                       ],
                     ),
                     WidgetUtils.commonSizedBox(10, 10),
-                    WidgetUtils.onlyTextCenter('性别后续不可修改', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(29))),
+                    WidgetUtils.onlyTextCenter(
+                        '性别后续不可修改',
+                        StyleUtils.getCommonTextStyle(
+                            color: MyColors.g9,
+                            fontSize: ScreenUtil().setSp(29))),
                     const Expanded(child: Text('')),
                     GestureDetector(
-                      onTap: ((){
+                      onTap: (() {
                         doSaveInfo();
                       }),
                       child: Container(
@@ -189,13 +249,17 @@ class _EditInfoPageState extends State<EditInfoPage> {
                         //边框设置
                         decoration: const BoxDecoration(
                           //背景
-                          color: MyColors.loginPurple,
+                          color: MyColors.walletWZBlue,
                           //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(30.0)),
+                          borderRadius: BorderRadius.all(Radius.circular(30.0)),
                         ),
                         margin: const EdgeInsets.only(left: 40, right: 40),
-                        child: Text('去听好声音', style: StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(33)),),
+                        child: Text(
+                          '去听好声音',
+                          style: StyleUtils.getCommonTextStyle(
+                              color: Colors.white,
+                              fontSize: ScreenUtil().setSp(33)),
+                        ),
                       ),
                     ),
                     WidgetUtils.commonSizedBox(20, 10),
@@ -209,7 +273,6 @@ class _EditInfoPageState extends State<EditInfoPage> {
     );
   }
 
-
   /// 首次填写个人信息
   Future<void> doSaveInfo() async {
     String userNick = controller.text.trim();
@@ -222,7 +285,7 @@ class _EditInfoPageState extends State<EditInfoPage> {
       return;
     }
     Map<String, dynamic> params = <String, dynamic>{
-      'avatar': '66',
+      'avatar': sp.getString('user_headimg_id').toString(),
       'nickname': userNick,
       'gender': sex,
     };
@@ -238,7 +301,7 @@ class _EditInfoPageState extends State<EditInfoPage> {
           Navigator.pop(context);
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:

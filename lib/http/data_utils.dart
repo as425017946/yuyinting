@@ -1,10 +1,13 @@
 import 'package:yuyinting/bean/BlackListBean.dart';
 import 'package:yuyinting/bean/Common_bean.dart';
 import 'package:yuyinting/bean/aboutUsBean.dart';
+import '../bean/careListBean.dart';
+import '../bean/fileUpdateBean.dart';
 import '../bean/login_bean.dart';
 import '../bean/myInfoBean.dart';
 import '../bean/quhao_bean.dart';
 import '../bean/quhao_searche_bean.dart';
+import '../bean/whoLockMe.dart';
 import 'my_http_config.dart';
 import 'my_http_request.dart';
 
@@ -122,6 +125,38 @@ class DataUtils{
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.checkToken, {}, {});
     print("切换账号验证token：${respons}");
     return CommonBean.fromJson(respons!);
+  }
+
+
+  /// file方式上传
+  static Future<fileUpdateBean> postPostFileUpload(Map<String,dynamic> params) async {
+    print("file方式上传：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.fileUpload(MyHttpConfig.fileUpload, {}, params);
+    print("file方式上传：$respons");
+    return fileUpdateBean.fromJson(respons!);
+  }
+
+  /// 实名制
+  static Future<CommonBean> postRealAuth(Map<String,dynamic> params) async {
+    print("实名制：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.realAuth, {}, params);
+    print("实名制：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 用户关注和取关
+  static Future<careListBean> postFollowList(Map<String,dynamic> params) async {
+    print("用户关注和取关：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.followList, {}, params);
+    print("用户关注和取关：$respons");
+    return careListBean.fromJson(respons!);
+  }
+
+  /// 谁看过我
+  static Future<whoLockMe> postHistoryList() async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.history, {}, {});
+    print("谁看过我：$respons");
+    return whoLockMe.fromJson(respons!);
   }
 
 }

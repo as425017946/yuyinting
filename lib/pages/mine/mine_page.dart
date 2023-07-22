@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:yuyinting/pages/message/care_home_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
@@ -277,7 +278,9 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin{
                           const Expanded(child: Text('')),
                           GestureDetector(
                             onTap: (() {
-                              Navigator.pushNamed(context, 'CareHomePage');
+                              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                return CareHomePage(index: 0);
+                              }));
                             }),
                             child: Column(
                               children: [
@@ -309,7 +312,9 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin{
                           const Expanded(flex: 2, child: Text('')),
                           GestureDetector(
                             onTap: (() {
-                              Navigator.pushNamed(context, 'CareHomePage');
+                              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                return CareHomePage(index: 1);
+                              }));
                             }),
                             child: Column(
                               children: [
@@ -341,7 +346,9 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin{
                           const Expanded(flex: 2, child: Text('')),
                           GestureDetector(
                             onTap: (() {
-                              Navigator.pushNamed(context, 'WhoLockMePage');
+                              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                return CareHomePage(index: 2);
+                              }));
                             }),
                             child: Column(
                               children: [

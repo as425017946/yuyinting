@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/colors/my_colors.dart';
+import 'package:yuyinting/main.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/log_util.dart';
+import 'package:yuyinting/utils/my_toast_utils.dart';
+import 'package:yuyinting/utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 
@@ -19,11 +22,15 @@ class _ShimingzhiPageState extends State<ShimingzhiPage> {
   TextEditingController controllerCard = TextEditingController();
   var appBar;
   bool isShow = false;
-  var listen;
+  var listen,listen2;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    //设置身份证号和姓名为空
+    sp.setString('identity', '');
+    sp.setString('realname', '');
+
     appBar = WidgetUtils.getAppBar('实名认证', true, context, false, 0);
     listen = eventBus.on<InfoBack>().listen((event) {
         if(event.info.isNotEmpty){
@@ -40,6 +47,20 @@ class _ShimingzhiPageState extends State<ShimingzhiPage> {
         }
     });
 
+    listen2 = eventBus.on<RenzhengBack>().listen((event) {
+      if(event.isBack){
+        Navigator.pop(context);
+      }
+    });
+
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    listen.cancel();
+    listen2.cancel();
   }
 
   @override
@@ -162,7 +183,15 @@ class _ShimingzhiPageState extends State<ShimingzhiPage> {
           WidgetUtils.commonSizedBox(20, 10),
           GestureDetector(
             onTap: (() {
-              Navigator.pushNamed(context, 'ShimingzhiCardPage');
+              MyUtils.hideKeyboard(context);
+              if(MyUtils.verifyCardId(controllerCard.text.trim())){
+                sp.setString('identity', controllerCard.text.trim());
+                sp.setString('realname', controllerName.text.trim());
+                Navigator.pushNamed(context, 'ShimingzhiCardPage');
+              }else{
+                MyToastUtils.showToastBottom('输入的身份证号不合法');
+              }
+
             }),
             child: Container(
               margin: const EdgeInsets.only(left: 20, right: 20),

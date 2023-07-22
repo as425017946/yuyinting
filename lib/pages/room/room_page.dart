@@ -1426,7 +1426,7 @@ class _RoomPageState extends State<RoomPage> {
                               //   image: imgList[index]["url"],
                               //   fit: BoxFit.fill,
                               // );
-                              return SVGASimpleImage(assetsName: 'assets/svga/mofang_jin_show.svga');
+                              return SVGASimpleImage(assetsName: 'assets/svga/mofang_jin_room_show.svga');
                             },
                             // 配置图片数量
                             itemCount: imgList.length ,
