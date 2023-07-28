@@ -4,8 +4,10 @@ import 'package:lottie/lottie.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:yuyinting/bean/BlackListBean.dart';
 import 'package:yuyinting/bean/Common_bean.dart';
+import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/my_utils.dart';
 import '../../../colors/my_colors.dart';
+import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../utils/loading.dart';
@@ -28,13 +30,21 @@ class _BlackPageState extends State<BlackPage> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
+  int page = 1;
+  /// 是否允许上拉
+  bool isUp = true;
+
+
+
   void _onRefresh() async {
     // monitor network fetch
     await Future.delayed(const Duration(milliseconds: 1000));
     // if failed,use refreshFailed()
     _refreshController.refreshCompleted();
     if (mounted) {
-      setState(() {});
+      setState(() {
+        page = 1;
+      });
     }
   }
 
@@ -43,7 +53,9 @@ class _BlackPageState extends State<BlackPage> {
     await Future.delayed(const Duration(milliseconds: 1000));
     // if failed,use loadFailed(),if no data return,use LoadNodata()
     if (mounted) {
-      setState(() {});
+      setState(() {
+        page++;
+      });
     }
     _refreshController.loadComplete();
   }
@@ -54,10 +66,11 @@ class _BlackPageState extends State<BlackPage> {
     super.initState();
     appBar = WidgetUtils.getAppBar('黑名单', true, context, false, 0);
     doBlackList();
-    setState(() {
-      length = 0;
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+
     });
   }
+
 
   @override
   void dispose() {
@@ -121,7 +134,7 @@ class _BlackPageState extends State<BlackPage> {
               header: MyUtils.myHeader(),
               footer: MyUtils.myFotter(),
               controller: _refreshController,
-              enablePullUp: true,
+              enablePullUp: isUp,
               onLoading: _onLoading,
               onRefresh: _onRefresh,
               child: ListView.builder(
@@ -154,11 +167,24 @@ class _BlackPageState extends State<BlackPage> {
   Future<void> doBlackList() async {
     try {
       Loading.show("加载中...");
-      BlackListBean bean = await DataUtils.postBlackList();
+      Map<String, dynamic> params = <String, dynamic>{
+        'page': page,
+        'pageSize': MyConfig.pageSize
+      };
+      BlackListBean bean = await DataUtils.postBlackList(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
           _list.clear();
           if (bean.data!.isNotEmpty) {
+            if(bean.data!.length > MyConfig.pageSize){
+              setState(() {
+                isUp = true;
+              });
+            }else{
+              setState(() {
+                isUp = false;
+              });
+            }
             setState(() {
               _list = bean.data!;
               length = _list.length;
@@ -197,7 +223,7 @@ class _BlackPageState extends State<BlackPage> {
         case MyHttpConfig.successCode:
           MyToastUtils.showToastBottom("解除成功！");
           setState(() {
-            _list.remove(index);
+            _list.removeAt(index);
           });
           break;
         case MyHttpConfig.errorloginCode:

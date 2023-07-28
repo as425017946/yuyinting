@@ -4,11 +4,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_pickers/pickers.dart';
 import 'package:flutter_pickers/style/default_style.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:wechat_assets_picker/wechat_assets_picker.dart';
+import 'package:yuyinting/bean/Common_bean.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/pages/mine/my/edit_biaoqian_page.dart';
+import 'package:yuyinting/pages/mine/my/edit_photo_page.dart';
+import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 
+import '../../../bean/cityBean.dart';
+import '../../../bean/userInfoBean.dart';
+import '../../../http/data_utils.dart';
+import '../../../http/my_http_config.dart';
+import '../../../main.dart';
 import '../../../utils/date_picker.dart';
+import '../../../utils/loading.dart';
+import '../../../utils/log_util.dart';
+import '../../../utils/my_toast_utils.dart';
+import '../../../utils/my_utils.dart';
 import '../../../utils/widget_utils.dart';
 import 'edit_head_page.dart';
 
@@ -23,20 +36,80 @@ class EditMyInfoPage extends StatefulWidget {
 class _EditMyInfoPageState extends State<EditMyInfoPage> {
   TextEditingController controller = TextEditingController();
   TextEditingController controllerGexing = TextEditingController();
-  var appBar;
+  var appBar,listen,listen2,listen3;
   List<File> imgArray = [];
 
-  //0-未知 1-男 2-女
+  // //0-未知 1-男 2-女
   int sex = 0;
-  late List<String> list_sex = [];
+  // late List<String> list_sex = [];
+  late List<String> listCity = [];
+  List<String> list_p = [];
+  List<String> list_pID = [];
+  List<String> list_label = [];
+  List<AssetEntity> lista = [];
+  
+  String headImg = '',
+      headImgID = '',
+      nickName = '',
+      userNumber = '',
+      voice_card = '',
+      voice_cardID = '',
+      description = '',
+      city = '',
+      photo_id = '',
+      constellation = '',
+      birthday = '';
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     appBar = WidgetUtils.getAppBar('编辑个人资料', true, context, true, 1);
-    list_sex.add('男');
-    list_sex.add('女');
+    // list_sex.add('男');
+    // list_sex.add('女');
+    doPostMyIfon();
+    doPstGetCity();
+    listen = eventBus.on<FileBack>().listen((event) {
+      if(event.type == 0){
+        setState(() {
+          headImg = event.info;
+          headImgID = event.id;
+        });
+      }else if(event.type == 1){
+        setState(() {
+          voice_cardID = event.id;
+        });
+      }
+    });
+
+    listen2 = eventBus.on<SubmitButtonBack>().listen((event) {
+      if(event.title == '完成' && MyUtils.checkClick()){
+        doPostModifyUserInfo();
+      }
+    });
+    listen3 = eventBus.on<PhotoBack>().listen((event) {
+        setState(() {
+          lista = event.selectAss!;
+          photo_id = '';
+          for(int i = 0; i < list_pID.length; i++){
+            if(photo_id.isNotEmpty) {
+              photo_id = '$photo_id,${list_pID[i]},';
+            }else{
+              photo_id = '${list_pID[i]},';
+            }
+          }
+          photo_id = '$photo_id,${event.id}';
+        });
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    listen.cancel();
+    listen2.cancel();
+    listen3.cancel();
   }
 
   ///data设置数据源，selectData设置选中下标
@@ -50,8 +123,66 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
         print('longer >>> 返回数据下标：$position');
         print('longer >>> 返回数据：$p');
         print('longer >>> 返回数据类型：${p.runtimeType}');
-        setState(() {});
+        setState(() {
+          city = p;
+        });
       },
+    );
+  }
+
+  void _removeImage(int index) {
+    setState(() {
+      list_p.removeAt(index);
+      list_pID.removeAt(index);
+    });
+  }
+
+  void _removeImage2(int index) {
+    setState(() {
+      lista.removeAt(index);
+    });
+  }
+
+  Widget _itemLiwu(BuildContext context, int i) {
+    return Container(
+      height: ScreenUtil().setHeight(110),
+      width: ScreenUtil().setHeight(110),
+      margin: const EdgeInsets.only(right: 10),
+      child: Stack(
+        children: [
+          WidgetUtils.CircleImageNet(ScreenUtil().setHeight(110), ScreenUtil().setHeight(110), ScreenUtil().setHeight(20), list_p[i]),
+          Positioned(
+            right: 0,
+            top: 0,
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  _removeImage(i);
+                });
+              },
+              child: ClipOval(
+                child: Container(
+                  color: Colors.white.withOpacity(0.7),
+                  width: 20,
+                  height: 20,
+                  child: const Icon(
+                    Icons.close,
+                    size: 20,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget ShowImage(){
+    return Wrap(
+      children: [
+
+      ],
     );
   }
 
@@ -91,7 +222,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                     WidgetUtils.CircleHeadImage(
                         ScreenUtil().setHeight(120),
                         ScreenUtil().setWidth(120),
-                        'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
+                        headImg),
                     WidgetUtils.commonSizedBox(0, 10),
                     WidgetUtils.showImages('assets/images/mine_more2.png',
                         ScreenUtil().setHeight(27), ScreenUtil().setHeight(16))
@@ -124,32 +255,29 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
             WidgetUtils.myLine(indent: 20, endIndent: 20),
 
             /// 性别
-            GestureDetector(
-              onTap: (() {
-                _onClickItem(list_sex, '非必选');
-              }),
-              child: Container(
-                height: ScreenUtil().setHeight(80),
-                alignment: Alignment.center,
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: Row(
-                  children: [
-                    WidgetUtils.onlyText(
-                        '性别',
-                        StyleUtils.getCommonTextStyle(
-                            color: Colors.black,
-                            fontSize: ScreenUtil().setSp(28))),
-                    const Expanded(child: Text('')),
-                    WidgetUtils.onlyText(
-                        '男',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.g6,
-                            fontSize: ScreenUtil().setSp(28))),
-                    WidgetUtils.commonSizedBox(0, 10),
-                    WidgetUtils.showImages('assets/images/mine_more2.png',
-                        ScreenUtil().setHeight(27), ScreenUtil().setHeight(16))
-                  ],
-                ),
+            Container(
+              height: ScreenUtil().setHeight(80),
+              alignment: Alignment.center,
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Row(
+                children: [
+                  WidgetUtils.onlyText(
+                      '性别',
+                      StyleUtils.getCommonTextStyle(
+                          color: Colors.black,
+                          fontSize: ScreenUtil().setSp(28))),
+                  const Expanded(child: Text('')),
+                  WidgetUtils.onlyText(
+                      '男',
+                      StyleUtils.getCommonTextStyle(
+                          color: MyColors.g6,
+                          fontSize: ScreenUtil().setSp(28))),
+                  WidgetUtils.commonSizedBox(0, 10),
+                  Opacity(opacity: 0,
+                    child: WidgetUtils.showImages('assets/images/mine_more2.png',
+                        ScreenUtil().setHeight(27), ScreenUtil().setHeight(16)),
+                  )
+                ],
               ),
             ),
             WidgetUtils.myLine(indent: 20, endIndent: 20),
@@ -185,7 +313,11 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                   startDate: DateTime(1970, 2, 2),
                   selectedDate: DateTime(2023, 3, 3),
                   endDate: DateTime(2025, 5, 5),
-                  onSelected: (date) {},
+                  onSelected: (date) {
+                    setState(() {
+                      birthday = date.toString().substring(0,10);
+                    });
+                  },
                 );
               }),
               child: Container(
@@ -206,7 +338,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                                 fontSize: ScreenUtil().setSp(28))),
                         WidgetUtils.commonSizedBox(10, 0),
                         WidgetUtils.onlyText(
-                            '未填写',
+                            birthday == '0' ? '未填写' : birthday,
                             StyleUtils.getCommonTextStyle(
                                 color: MyColors.g6,
                                 fontSize: ScreenUtil().setSp(28))),
@@ -247,7 +379,9 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
 
             /// 所在城市
             GestureDetector(
-              onTap: (() {}),
+              onTap: (() {
+                _onClickItem(listCity, '未知');
+              }),
               child: Container(
                 height: ScreenUtil().setHeight(100),
                 alignment: Alignment.center,
@@ -261,7 +395,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                             fontSize: ScreenUtil().setSp(28))),
                     const Expanded(child: Text('')),
                     WidgetUtils.onlyText(
-                        '唐山',
+                        city.isEmpty ? '未知' : city,
                         StyleUtils.getCommonTextStyle(
                             color: MyColors.g6,
                             fontSize: ScreenUtil().setSp(28))),
@@ -308,29 +442,21 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                       ],
                     ),
                     WidgetUtils.commonSizedBox(10, 0),
-                    Row(
-                      children: [
-                        WidgetUtils.myContainerZishiying(
-                            MyColors.f2,
-                            '唱歌',
-                            StyleUtils.getCommonTextStyle(
-                                color: Colors.black,
-                                fontSize: ScreenUtil().setSp(26))),
-                        WidgetUtils.commonSizedBox(0, 10),
-                        WidgetUtils.myContainerZishiying(
-                            MyColors.f2,
-                            '二次元',
-                            StyleUtils.getCommonTextStyle(
-                                color: Colors.black,
-                                fontSize: ScreenUtil().setSp(26))),
-                        WidgetUtils.commonSizedBox(0, 10),
-                        WidgetUtils.myContainerZishiying(
-                            MyColors.f2,
-                            '二次元',
-                            StyleUtils.getCommonTextStyle(
-                                color: Colors.black,
-                                fontSize: ScreenUtil().setSp(26))),
-                      ],
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: Wrap(
+                        alignment: WrapAlignment.start,
+                        spacing: ScreenUtil().setHeight(15),
+                        runSpacing: ScreenUtil().setHeight(15),
+                        children: List.generate(list_label.length, (index) =>
+                            WidgetUtils.myContainerZishiying(
+                                MyColors.f2,
+                                list_label[index],
+                                StyleUtils.getCommonTextStyle(
+                                    color: Colors.black,
+                                    fontSize: ScreenUtil().setSp(26)))
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -341,7 +467,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
             /// 照片墙
             Container(
               height: ScreenUtil().setHeight(220),
-              alignment: Alignment.center,
+              alignment: Alignment.centerLeft,
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: Column(
                 children: [
@@ -353,24 +479,102 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                           fontSize: ScreenUtil().setSp(28),
                           fontWeight: FontWeight.w600)),
                   WidgetUtils.commonSizedBox(10, 0),
-                  Row(
-                    children: [
-                      WidgetUtils.CircleImageNet(55, 55, 10,
-                          'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
-                      const Expanded(child: Text('')),
-                      WidgetUtils.CircleImageNet(55, 55, 10,
-                          'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
-                      const Expanded(child: Text('')),
-                      WidgetUtils.CircleImageNet(55, 55, 10,
-                          'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
-                      const Expanded(child: Text('')),
-                      WidgetUtils.CircleImageNet(55, 55, 10,
-                          'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
-                      const Expanded(child: Text('')),
-                      WidgetUtils.CircleImageNet(55, 55, 10,
-                          'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
-                    ],
-                  )
+                  SizedBox(
+                    width: double.infinity,
+                    child: Wrap(
+                      direction: Axis.horizontal,
+                      spacing: 10,
+                      children: [
+                        for(int i = 0; i < list_p.length; i++)
+                          SizedBox(
+                            height: ScreenUtil().setHeight(110),
+                            width: ScreenUtil().setHeight(110),
+                            child: Stack(
+                              children: [
+                                WidgetUtils.CircleImageNet(ScreenUtil().setHeight(110), ScreenUtil().setHeight(110), ScreenUtil().setHeight(20), list_p[i]),
+                                Positioned(
+                                  right: 0,
+                                  top: 0,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        _removeImage(i);
+                                      });
+                                    },
+                                    child: ClipOval(
+                                      child: Container(
+                                        color: Colors.white.withOpacity(0.7),
+                                        width: 20,
+                                        height: 20,
+                                        child: const Icon(
+                                          Icons.close,
+                                          size: 20,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        for(int i = 0; i < lista.length; i++)
+                          Stack(
+                            children: [
+                              Container(
+                                height: ScreenUtil().setHeight(110),
+                                width: ScreenUtil().setHeight(110),
+                                //超出部分，可裁剪
+                                clipBehavior: Clip.hardEdge,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(ScreenUtil().setHeight(20)),
+                                ),
+                                child: AssetEntityImage(
+                                  lista[i],
+                                  width: ScreenUtil().setHeight(110),
+                                  height: ScreenUtil().setHeight(110),
+                                  fit: BoxFit.cover,
+                                  isOriginal: false,
+                                ),
+                              ),
+                              Positioned(
+                                right: 0,
+                                top: 0,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _removeImage2(i);
+                                    });
+                                  },
+                                  child: ClipOval(
+                                    child: Container(
+                                      color: Colors.white.withOpacity(0.7),
+                                      width: 20,
+                                      height: 20,
+                                      child: const Icon(
+                                        Icons.close,
+                                        size: 20,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        list_p.length+lista.length < 4 ? GestureDetector(
+                          onTap: ((){
+                            Future.delayed(const Duration(seconds: 0), () {
+                              Navigator.of(context).push(PageRouteBuilder(
+                                  opaque: false,
+                                  pageBuilder: (context, animation, secondaryAnimation) {
+                                    return EditPhotoPage(length: 4-list_p.length-lista.length,);
+                                  }));
+                            });
+                          }),
+                          child: WidgetUtils.showImages('assets/images/images_add.png',ScreenUtil().setHeight(110), ScreenUtil().setHeight(110)),
+                        ): const Text(''),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -378,5 +582,128 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
         ),
       ),
     );
+  }
+
+  /// 关于我们
+  Future<void> doPostMyIfon() async {
+    Loading.show('加载中...');
+    LogE('用户id${sp.getString('user_id')}');
+    Map<String, dynamic> params = <String, dynamic>{
+      'uid': sp.getString('user_id')
+    };
+    try {
+      userInfoBean bean = await DataUtils.postUserInfo(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          list_p.clear();
+          setState(() {
+            sp.setString("user_headimg", bean.data!.avatarUrl!);
+            sp.setString("label_id", bean.data!.labelId!);
+            headImg = bean.data!.avatarUrl!;
+            headImgID = bean.data!.avatar.toString();
+            sex = bean.data!.gender as int;
+            nickName = bean.data!.nickname!;
+            userNumber = bean.data!.number.toString();
+            voice_card = bean.data!.voiceLabelName!;
+            voice_cardID = bean.data!.voiceCard.toString();
+            birthday = bean.data!.birthday!;
+            description = bean.data!.description!;
+            controller.text = nickName;
+            controllerGexing.text = description;
+            city = bean.data!.city!;
+            if(bean.data!.label!.isNotEmpty){
+              list_label = bean.data!.label!.split(',');
+            }
+            if(bean.data!.photoId!.isNotEmpty){
+              list_pID = bean.data!.photoId!.split(',');
+              if(bean.data!.photoUrl!.length > 4){
+                list_p.add(bean.data!.photoUrl![0]);
+                list_p.add(bean.data!.photoUrl![1]);
+                list_p.add(bean.data!.photoUrl![2]);
+                list_p.add(bean.data!.photoUrl![3]);
+              }else{
+                list_p = bean.data!.photoUrl!;
+              }
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+  }
+
+  /// 获取城市
+  Future<void> doPstGetCity() async {
+    try {
+      cityBean bean = await DataUtils.postGetCity();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          listCity.clear();
+          setState(() {
+            listCity = bean.data!;
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+  }
+
+  /// 修改个人资料
+  Future<void> doPostModifyUserInfo() async {
+
+    if(controller.text.trim().isEmpty){
+      MyToastUtils.showToastBottom('昵称不为空');
+      return;
+    }
+    Loading.show('提交中...');
+    Map<String, dynamic> params = <String, dynamic>{
+      'avatar': headImgID,
+      'nickname': controller.text.trim(),
+      'description': controllerGexing.text.trim(),
+      'birthday': birthday,
+      'voice_card': voice_cardID,
+      'city': city,
+      'label_id': sp.getString('label_id'),
+      'photo_id': photo_id
+
+    };
+    try {
+      CommonBean bean = await DataUtils.postModifyUserInfo(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          MyToastUtils.showToastBottom('资料修改成功');
+          Navigator.pop(context);
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
   }
 }

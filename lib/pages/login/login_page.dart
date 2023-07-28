@@ -1,15 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:yuyinting/bean/login_bean.dart';
 import 'package:yuyinting/pages/navigator/tabnavigator.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/my_utils.dart';
 
+import '../../bean/loginBean.dart';
 import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
@@ -73,21 +72,22 @@ class _LoginPageState extends State<LoginPage> {
     // TODO: implement dispose
     super.dispose();
     listen.cancel();
+    _timer!.cancel();
   }
 
-  late Timer _timer;
+  Timer? _timer;
   int _timeCount = 10;
   var _autoCodeText = '发送验证码';
 
   void _startTimer() {
     MyToastUtils.showToastBottom('短信验证码已发送，请注意查收');
     _timer = Timer.periodic(
-        Duration(seconds: 1),
+        const Duration(seconds: 1),
         (Timer timer) => {
               setState(() {
                 if (_timeCount <= 0) {
                   _autoCodeText = '重新获取';
-                  _timer.cancel();
+                  _timer!.cancel();
                   _timeCount = 10;
                 } else {
                   _timeCount -= 1;
@@ -558,6 +558,7 @@ class _LoginPageState extends State<LoginPage> {
 
           // MyToastUtils.showToastBottom("登录成功");
           sp.setString("user_account", userName);
+          sp.setString("user_id", loginBean.data!.uid.toString());
           sp.setString("user_password", passWord);
           if (loginBean.data!.gender == 0) {
             sp.setBool("isFirst", true);
@@ -567,7 +568,7 @@ class _LoginPageState extends State<LoginPage> {
           sp.setString('user_phone', loginBean.data!.phone!);
           sp.setString('nickname', loginBean.data!.nickname!);
           sp.setString("user_token", loginBean.data!.token!);
-          sp.setString("user_headimg_id", loginBean.data!.avatar.toString());
+          // sp.setString("user_headimg_id", loginBean.data!.avatar.toString());
           sp.setString("user_headimg", loginBean.data!.avatarUrl!);
           //跳转并关闭当前页面
           //ignore: use_build_context_synchronously
@@ -584,6 +585,8 @@ class _LoginPageState extends State<LoginPage> {
       }
       Loading.dismiss();
     } catch (e) {
+
+      LogE('登录返回*${e.toString()}');
       Loading.dismiss();
       MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
     }

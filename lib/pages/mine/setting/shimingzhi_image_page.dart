@@ -161,7 +161,7 @@ Future<void> doPostPostFileUpload(path) async {
         data: formdata);
     Map jsonResponse = json.decode(respone.data.toString());
     if (respone.statusCode == 200) {
-      eventBus.fire(FileBack(info: path, id: jsonResponse['data'].toString()));
+      eventBus.fire(FileBack(info: path, id: jsonResponse['data'].toString(), type: 0));
       MyToastUtils.showToastBottom('上传成功');
       Loading.dismiss();
       // ignore: use_build_context_synchronously

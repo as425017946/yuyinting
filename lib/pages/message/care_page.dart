@@ -7,6 +7,7 @@ import 'package:yuyinting/utils/widget_utils.dart';
 
 import '../../bean/careListBean.dart';
 import '../../colors/my_colors.dart';
+import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../utils/loading.dart';
@@ -29,13 +30,19 @@ class _CarePageState extends State<CarePage> {
   final RefreshController _refreshController =
   RefreshController(initialRefresh: false);
 
+  int page = 1;
+  /// 是否允许上拉
+  bool isUp = true;
+
   void _onRefresh() async {
     // monitor network fetch
     await Future.delayed(const Duration(milliseconds: 1000));
     // if failed,use refreshFailed()
     _refreshController.refreshCompleted();
     if (mounted) {
-      setState(() {});
+      setState(() {
+        page = 1;
+      });
     }
   }
 
@@ -44,7 +51,9 @@ class _CarePageState extends State<CarePage> {
     await Future.delayed(const Duration(milliseconds: 1000));
     // if failed,use loadFailed(),if no data return,use LoadNodata()
     if (mounted) {
-      setState(() {});
+      setState(() {
+        page++;
+      });
     }
     _refreshController.loadComplete();
   }
@@ -176,7 +185,7 @@ class _CarePageState extends State<CarePage> {
               header: MyUtils.myHeader(),
               footer: MyUtils.myFotter(),
               controller: _refreshController,
-              enablePullUp: true,
+              enablePullUp: isUp,
               onLoading: _onLoading,
               onRefresh: _onRefresh,
               child: ListView.builder(
@@ -215,6 +224,8 @@ class _CarePageState extends State<CarePage> {
       'type': '1',
       'keywords': infos,
       'is_follow': '1',
+      'page': page,
+      'pageSize': MyConfig.pageSize
     };
     try {
       Loading.show("加载中...");
@@ -223,6 +234,16 @@ class _CarePageState extends State<CarePage> {
         case MyHttpConfig.successCode:
           _list.clear();
           if (bean.data!.list!.isNotEmpty) {
+            if(bean.data!.list!.length > MyConfig.pageSize){
+              setState(() {
+                isUp = true;
+              });
+            }else{
+              setState(() {
+                isUp = false;
+              });
+            }
+
             setState(() {
               _list = bean.data!.list!;
               length = _list.length;

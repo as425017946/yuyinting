@@ -3,16 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:yuyinting/pages/message/care_home_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
-import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 
 import '../../bean/myInfoBean.dart';
 import '../../colors/my_colors.dart';
-import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
@@ -34,7 +31,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin{
   @override
   bool get wantKeepAlive => true;
 
-  var guizuType = 1, gender = 0, isFirst = 0;
+  var guizuType = 0, gender = 0, isFirst = 0;
   var listen;
   String headImg = '',
       nickName = '',
@@ -232,7 +229,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin{
                       onTap: (() {
                         Navigator.pushNamed(context, 'TequanPage');
                       }),
-                      child: guizuType == 0
+                      child: guizuType == 1
                           ? WidgetUtils.myContainer(
                               ScreenUtil().setHeight(45),
                               ScreenUtil().setHeight(100),
@@ -525,6 +522,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin{
             sp.setString('myVersion2', bean.data!.currentVersion!);
             sp.setString('versionStatus', bean.data!.status!);
             sp.setString('shimingzhi', bean.data!.auditStatus.toString());
+            sp.setString("user_headimg", bean.data!.avatar!);
             headImg = bean.data!.avatar!;
             gender = bean.data!.gender as int;
             nickName = bean.data!.nickname!;
@@ -532,6 +530,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin{
             care = bean.data!.followNum.toString();
             beCare = bean.data!.isFollowNum.toString();
             lookMe = bean.data!.lookNum.toString();
+            guizuType = bean.data!.nobleID as int;
           });
           break;
         case MyHttpConfig.errorloginCode:

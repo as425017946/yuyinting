@@ -30,7 +30,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  flutter_localizations:
+    sdk: flutter
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -65,7 +66,7 @@ dependencies:
   # 轮播图
   flutter_swiper: ^1.1.6
   # 图片选择器
-  wechat_assets_picker: ^7.0.0
+  wechat_assets_picker: ^8.3.0
   # 相机
   wechat_camera_picker: ^3.0.0
   # 文件路径
@@ -86,8 +87,10 @@ dependencies:
   lottie: ^2.3.0
   # 选择相机
   image_picker: ^0.8.6
-  #
-  http: ^0.13.5
+  # 录音
+  flutter_sound: ^9.2.13
+  audio_session: ^0.1.12
+
 
 
 dev_dependencies:

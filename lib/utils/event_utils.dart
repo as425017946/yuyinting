@@ -1,4 +1,5 @@
 import 'package:event_bus/event_bus.dart';
+import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 
 EventBus eventBus = new EventBus();
@@ -40,8 +41,17 @@ class AddressBack {
 class FileBack {
   String info;
   String id;
-  FileBack({required this.info, required this.id});
+  int type; // 0 图片 1音频 2视频
+  FileBack({required this.info, required this.id, required this.type});
 }
+
+///上传文件返回
+class PhotoBack {
+  List<AssetEntity>? selectAss;
+  String id;
+  PhotoBack({required this.selectAss, required this.id});
+}
+
 
 ///切换魔方
 class MofangBack {

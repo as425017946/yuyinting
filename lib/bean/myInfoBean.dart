@@ -4,15 +4,17 @@
 
 class MyInfoBean {
   MyInfoBean({
-      this.code, 
-      this.msg, 
-      this.data,});
+    this.code,
+    this.msg,
+    this.data,
+  });
 
   MyInfoBean.fromJson(dynamic json) {
     code = json['code'];
     msg = json['msg'];
     data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
+
   num? code;
   String? msg;
   Data? data;
@@ -26,7 +28,6 @@ class MyInfoBean {
     }
     return map;
   }
-
 }
 
 /// nickname : "默认昵称2721"
@@ -41,18 +42,19 @@ class MyInfoBean {
 /// forceUpdate : "1"
 
 class Data {
-  Data({
-      this.nickname, 
-      this.number, 
-      this.avatar, 
-      this.gender, 
-      this.followNum, 
-      this.isFollowNum, 
-      this.lookNum, 
-      this.currentVersion, 
-      this.status, 
+  Data(
+      {this.nickname,
+      this.number,
+      this.avatar,
+      this.gender,
+      this.followNum,
+      this.isFollowNum,
+      this.lookNum,
+      this.currentVersion,
+      this.status,
       this.forceUpdate,
-      this.auditStatus});
+      this.auditStatus,
+      this.nobleID});
 
   Data.fromJson(dynamic json) {
     nickname = json['nickname'];
@@ -66,7 +68,9 @@ class Data {
     status = json['status'];
     forceUpdate = json['forceUpdate'];
     auditStatus = json['audit_status'];
+    nobleID = json['noble_id'];
   }
+
   String? nickname;
   num? number;
   String? avatar;
@@ -78,6 +82,7 @@ class Data {
   String? status;
   String? forceUpdate;
   num? auditStatus;
+  num? nobleID;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -92,7 +97,7 @@ class Data {
     map['status'] = status;
     map['forceUpdate'] = forceUpdate;
     map['audit_status'] = auditStatus;
+    map['noble_id'] = nobleID;
     return map;
   }
-
 }

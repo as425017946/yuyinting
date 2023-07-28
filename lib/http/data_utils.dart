@@ -2,11 +2,16 @@ import 'package:yuyinting/bean/BlackListBean.dart';
 import 'package:yuyinting/bean/Common_bean.dart';
 import 'package:yuyinting/bean/aboutUsBean.dart';
 import '../bean/careListBean.dart';
+import '../bean/cityBean.dart';
 import '../bean/fileUpdateBean.dart';
-import '../bean/login_bean.dart';
+import '../bean/labelListBean.dart';
+import '../bean/liwuMoreBean.dart';
+import '../bean/loginBean.dart';
+import '../bean/myHomeBean.dart';
 import '../bean/myInfoBean.dart';
 import '../bean/quhao_bean.dart';
 import '../bean/quhao_searche_bean.dart';
+import '../bean/userInfoBean.dart';
 import '../bean/whoLockMe.dart';
 import 'my_http_config.dart';
 import 'my_http_request.dart';
@@ -91,8 +96,8 @@ class DataUtils{
   }
 
   /// 黑名单列表
-  static Future<BlackListBean> postBlackList() async {
-    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.blackList, {}, {});
+  static Future<BlackListBean> postBlackList(Map<String,dynamic> params) async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.blackList, {}, params);
     print("黑名单列表：${respons}");
     return BlackListBean.fromJson(respons!);
   }
@@ -153,10 +158,52 @@ class DataUtils{
   }
 
   /// 谁看过我
-  static Future<whoLockMe> postHistoryList() async {
-    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.history, {}, {});
+  static Future<whoLockMe> postHistoryList(Map<String,dynamic> params) async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.history, {}, params);
     print("谁看过我：$respons");
     return whoLockMe.fromJson(respons!);
   }
 
+  /// 用户个人主页详情
+  static Future<myHomeBean> postMyHome(Map<String,dynamic> params) async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.myHome, {}, params);
+    print("用户个人主页详情：$respons");
+    return myHomeBean.fromJson(respons!);
+  }
+
+  /// 用户个人主页详情
+  static Future<userInfoBean> postUserInfo(Map<String,dynamic> params) async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.userInfo, {}, params);
+    print("用户个人主页详情：$respons");
+    return userInfoBean.fromJson(respons!);
+  }
+
+  /// 礼物明细
+  static Future<liwuMoreBean> postGiftDetail(Map<String,dynamic> params) async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.giftDetail, {}, params);
+    print("礼物明细：$respons");
+    return liwuMoreBean.fromJson(respons!);
+  }
+
+  /// 个性标签列表
+  static Future<labelListBean> postLabelList(Map<String,dynamic> params) async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.labelList, {}, params);
+    print("个性标签列表：$respons");
+    return labelListBean.fromJson(respons!);
+  }
+
+  /// 修改个人资料
+  static Future<CommonBean> postModifyUserInfo(Map<String,dynamic> params) async {
+    print("修改个人资料：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.modifyUserInfo, {}, params);
+    print("修改个人资料：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 获取城市
+  static Future<cityBean> postGetCity() async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.getCity, {}, {});
+    print("获取城市：$respons");
+    return cityBean.fromJson(respons!);
+  }
 }

@@ -4,6 +4,7 @@ import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import '../../../bean/whoLockMe.dart';
 import '../../../colors/my_colors.dart';
+import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../utils/loading.dart';
@@ -27,13 +28,19 @@ class _WhoLockMePageState extends State<WhoLockMePage> {
   final RefreshController _refreshController =
   RefreshController(initialRefresh: false);
 
+  int page = 1;
+  /// 是否允许上拉
+  bool isUp = true;
+
   void _onRefresh() async {
     // monitor network fetch
     await Future.delayed(const Duration(milliseconds: 1000));
     // if failed,use refreshFailed()
     _refreshController.refreshCompleted();
     if (mounted) {
-      setState(() {});
+      setState(() {
+        page = 1;
+      });
     }
   }
 
@@ -42,7 +49,9 @@ class _WhoLockMePageState extends State<WhoLockMePage> {
     await Future.delayed(const Duration(milliseconds: 1000));
     // if failed,use loadFailed(),if no data return,use LoadNodata()
     if (mounted) {
-      setState(() {});
+      setState(() {
+        page++;
+      });
     }
     _refreshController.loadComplete();
   }
@@ -143,7 +152,7 @@ class _WhoLockMePageState extends State<WhoLockMePage> {
         header: MyUtils.myHeader(),
         footer: MyUtils.myFotter(),
         controller: _refreshController,
-        enablePullUp: true,
+        enablePullUp: isUp,
         onLoading: _onLoading,
         onRefresh: _onRefresh,
         child: ListView.builder(
@@ -177,11 +186,24 @@ class _WhoLockMePageState extends State<WhoLockMePage> {
   Future<void> doPostHistoryList() async {
     try {
       Loading.show("加载中...");
-      whoLockMe bean = await DataUtils.postHistoryList();
+      Map<String, dynamic> params = <String, dynamic>{
+        'page': page,
+        'pageSize': MyConfig.pageSize
+      };
+      whoLockMe bean = await DataUtils.postHistoryList(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
           _list.clear();
           if (bean.data!.isNotEmpty) {
+            if(bean.data!.length > MyConfig.pageSize){
+              setState(() {
+                isUp = true;
+              });
+            }else{
+              setState(() {
+                isUp = false;
+              });
+            }
             setState(() {
               _list = bean.data!;
               length = _list.length;

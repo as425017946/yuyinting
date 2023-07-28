@@ -1,14 +1,12 @@
 import 'dart:io';
 
-import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/pages/login/login_page.dart';
 import 'package:yuyinting/routes/routes.dart';
+
 //定义一个全局的存储对象
 late SharedPreferences sp;
 void main() async{
@@ -50,9 +48,6 @@ MaterialColor my_green = const MaterialColor(
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-
-
-  @override
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -65,6 +60,9 @@ class MyApp extends StatelessWidget {
       builder: EasyLoading.init(),
       //配置路由  -- map格式
       routes: staticRoutes,
+      // supportedLocales: const [
+      //   Locale('zh')
+      // ],
     );
   }
 }

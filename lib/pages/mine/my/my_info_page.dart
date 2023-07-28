@@ -1,10 +1,21 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:svgaplayer_flutter/player.dart';
+import 'package:yuyinting/bean/myHomeBean.dart';
+import 'package:yuyinting/main.dart';
+import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 
 import '../../../colors/my_colors.dart';
+import '../../../http/data_utils.dart';
+import '../../../http/my_http_config.dart';
+import '../../../utils/loading.dart';
+import '../../../utils/my_toast_utils.dart';
+import '../../../utils/my_utils.dart';
 import '../../../utils/widget_utils.dart';
+import 'edit_my_info_page.dart';
 import 'my_dongtai_page.dart';
 import 'my_ziliao_page.dart';
 
@@ -17,9 +28,14 @@ class MyInfoPage extends StatefulWidget {
 }
 
 class _MyInfoPageState extends State<MyInfoPage> {
-  int _currentIndex = 0;
+  int _currentIndex = 0, gender = 0, is_pretty = 0, all_gift_type = 0;
   late final PageController _controller;
-
+  String
+      userNumber = '',
+      voice_card = '',
+      description = '',
+      city = '',
+      constellation = '';
   final TextEditingController _souSuoName = TextEditingController();
 
   @override
@@ -29,6 +45,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
     _controller = PageController(
       initialPage: 0,
     );
+    doPostMyIfon();
   }
 
   @override
@@ -71,7 +88,15 @@ class _MyInfoPageState extends State<MyInfoPage> {
                     const Expanded(child: Text('')),
                     GestureDetector(
                       onTap: (() {
-                        Navigator.pushNamed(context, 'EditMyInfoPage');
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const EditMyInfoPage(),
+                          ),
+                        ).then((value) {
+                          doPostMyIfon();
+                        });
+
                       }),
                       child: SizedBox(
                         width: ScreenUtil().setWidth(100),
@@ -96,7 +121,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
                     WidgetUtils.CircleHeadImage(
                         ScreenUtil().setHeight(140),
                         ScreenUtil().setWidth(140),
-                        'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
+                        sp.getString('user_headimg').toString()),
                     WidgetUtils.commonSizedBox(0, 10),
 
                     ///昵称等信息
@@ -106,7 +131,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
                         children: [
                           const Expanded(child: Text('')),
                           WidgetUtils.onlyText(
-                              '昵称',
+                              sp.getString('nickname').toString(),
                               StyleUtils.getCommonTextStyle(
                                   color: Colors.white,
                                   fontSize: ScreenUtil().setSp(38),
@@ -119,45 +144,56 @@ class _MyInfoPageState extends State<MyInfoPage> {
                                 width: ScreenUtil().setWidth(50),
                                 alignment: Alignment.center,
                                 //边框设置
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
                                   //背景
-                                  color: MyColors.dtPink,
+                                  color: gender == 1 ?  MyColors.dtBlue : MyColors.dtPink,
                                   //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(20.0)),
+                                      const BorderRadius.all(Radius.circular(20.0)),
                                 ),
                                 child: WidgetUtils.showImages(
-                                    'assets/images/nv.png', 12, 12),
+                                    gender == 1 ? 'assets/images/nan.png' : 'assets/images/nv.png', 12, 12),
                               ),
                             ],
                           ),
                           WidgetUtils.commonSizedBox(5, 0),
-                          Container(
-                            height: ScreenUtil().setHeight(38),
-                            width: ScreenUtil().setWidth(208),
-                            padding: const EdgeInsets.only(left: 8),
-                            alignment: Alignment.center,
-                            //边框设置
-                            decoration: const BoxDecoration(
-                              //背景
-                              color: MyColors.peopleBlue,
-                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20.0)),
-                            ),
-                            child: Row(
-                              children: [
-                                WidgetUtils.onlyText(
-                                    'ID:12345678',
-                                    StyleUtils.getCommonTextStyle(
-                                        color: Colors.white,
-                                        fontSize: ScreenUtil().setSp(26))),
-                                WidgetUtils.commonSizedBox(0, 5),
-                                WidgetUtils.showImages(
-                                    'assets/images/people_fuzhi.png',
-                                    ScreenUtil().setHeight(22),
-                                    ScreenUtil().setWidth(22)),
-                              ],
+                          GestureDetector(
+                            onTap: ((){
+                              Clipboard.setData(ClipboardData(
+                                text: userNumber,
+                              ));
+                              MyToastUtils.showToastBottom('已成功复制到剪切板');
+                            }),
+                            child: Container(
+                              constraints: BoxConstraints(
+                                maxWidth: ScreenUtil().setHeight(150),
+                                minHeight: ScreenUtil().setHeight(38),
+                              ),
+                              padding: const EdgeInsets.only(left: 8, right: 8),
+                              alignment: Alignment.center,
+                              //边框设置
+                              decoration: const BoxDecoration(
+                                //背景
+                                color: MyColors.peopleBlue,
+                                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(20.0)),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  WidgetUtils.onlyText(
+                                      'ID:$userNumber',
+                                      StyleUtils.getCommonTextStyle(
+                                          color: Colors.white,
+                                          fontSize: ScreenUtil().setSp(26))),
+                                  WidgetUtils.commonSizedBox(0, 5),
+                                  WidgetUtils.showImages(
+                                      'assets/images/people_fuzhi.png',
+                                      ScreenUtil().setHeight(22),
+                                      ScreenUtil().setWidth(22)),
+                                ],
+                              ),
                             ),
                           ),
                           const Expanded(child: Text('')),
@@ -177,7 +213,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
                     width: ScreenUtil().setWidth(220),
                     margin: const EdgeInsets.only(left: 20),
                     padding: const EdgeInsets.only(left: 8),
-                    alignment: Alignment.topLeft,
+                    alignment: Alignment.center,
                     //边框设置
                     decoration: const BoxDecoration(
                       //背景
@@ -186,33 +222,35 @@ class _MyInfoPageState extends State<MyInfoPage> {
                       borderRadius:
                       BorderRadius.all(Radius.circular(20.0)),
                     ),
-                    child: Row(
-                      children: [
-                        WidgetUtils.showImages('assets/images/people_bofang.png', ScreenUtil().setHeight(35), ScreenUtil().setWidth(35)),
-                        WidgetUtils.commonSizedBox(0, 20),
-                        WidgetUtils.onlyText('晴天少女', StyleUtils.getCommonTextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(22))),
-                      ],
-                    ),
+                    child: WidgetUtils.showImages('assets/images/people_bofang.png', ScreenUtil().setHeight(35), ScreenUtil().setWidth(35))
+                    // Row(
+                    //   children: [
+                    //     // WidgetUtils.showImages('assets/images/people_bofang.png', ScreenUtil().setHeight(35), ScreenUtil().setWidth(35)),
+                    //     // WidgetUtils.commonSizedBox(0, 20),
+                    //     // WidgetUtils.onlyText('晴天少女', StyleUtils.getCommonTextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(22))),
+                    //   ],
+                    // ),
                   ),
                   const Expanded(child: Text('')),
                 ],
               ),
-              Container(
-                height: ScreenUtil().setHeight(50),
-                width: double.infinity,
-                child: Row(
-                  children: [
-                    Container(
-                      width: ScreenUtil().setHeight(180),
-                      height: ScreenUtil().setHeight(50),
-                      margin: const EdgeInsets.only(left: 20),
-                      child: const SVGASimpleImage(
-                          assetsName: 'assets/svga/shengyin_bg.svga'),
-                    ),
-                    const Expanded(child: Text('')),
-                  ],
-                ),
-              ),
+              /// 播放音频时展示
+              // Container(
+              //   height: ScreenUtil().setHeight(50),
+              //   width: double.infinity,
+              //   child: Row(
+              //     children: [
+              //       Container(
+              //         width: ScreenUtil().setHeight(180),
+              //         height: ScreenUtil().setHeight(50),
+              //         margin: const EdgeInsets.only(left: 20),
+              //         child: const SVGASimpleImage(
+              //             assetsName: 'assets/svga/shengyin_bg.svga'),
+              //       ),
+              //       const Expanded(child: Text('')),
+              //     ],
+              //   ),
+              // ),
               WidgetUtils.commonSizedBox(15, 0),
               Expanded(
                 child: Container(
@@ -368,5 +406,40 @@ class _MyInfoPageState extends State<MyInfoPage> {
             ],
           ),
         ));
+  }
+
+  /// 关于我们
+  Future<void> doPostMyIfon() async {
+    LogE('token ${sp.getString('user_token')}');
+    Loading.show('加载中...');
+    Map<String, dynamic> params = <String, dynamic>{
+      'uid': sp.getString('user_id')
+    };
+    try {
+      myHomeBean bean = await DataUtils.postMyHome(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            sp.setString("user_headimg", bean.data!.userInfo!.avatarUrl!);
+            sp.setString("nickname", bean.data!.userInfo!.nickname!);
+            gender = bean.data!.userInfo!.gender as int;
+            userNumber = bean.data!.userInfo!.number.toString();
+            voice_card = bean.data!.userInfo!.voiceCardUrl!;
+            is_pretty = bean.data!.userInfo!.isPretty as int;
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
   }
 }

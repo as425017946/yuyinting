@@ -60,6 +60,19 @@ class MyHttpConfig{
   static const String follow = "$baseURL/mine/follow";
   //谁看过我
   static const String history = "$baseURL/mine/history";
+  //个人主页
+  static const String myHome = "$baseURL/mine/home";
+  //查看用户详情
+  static const String userInfo = "$baseURL/mine/userInfo";
+  //礼物明细
+  static const String giftDetail = "$baseURL/gift/giftDetail";
+  //个性标签列表
+  static const String labelList = "$baseURL/mine/label";
+  //修改个人资料
+  static const String modifyUserInfo = "$baseURL/mine/modifyUserInfo";
+  //获取城市
+  static const String getCity = "$baseURL/system/getCity";
+
 
 
 }

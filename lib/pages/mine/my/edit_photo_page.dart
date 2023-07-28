@@ -1,61 +1,50 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
-import 'package:yuyinting/utils/event_utils.dart';
+import 'package:yuyinting/utils/log_util.dart';
+
 import '../../../http/my_http_config.dart';
 import '../../../main.dart';
+import '../../../utils/event_utils.dart';
 import '../../../utils/loading.dart';
 import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
-
-
-
-/// 编辑头像显示
-class EditHeadPage extends StatefulWidget {
-  const EditHeadPage({Key? key}) : super(key: key);
+class EditPhotoPage extends StatefulWidget {
+  int length;
+  EditPhotoPage({super.key, required this.length});
 
   @override
-  State<EditHeadPage> createState() => _EditHeadPageState();
+  State<EditPhotoPage> createState() => _EditPhotoPageState();
 }
 
-class _EditHeadPageState extends State<EditHeadPage> {
+class _EditPhotoPageState extends State<EditPhotoPage> {
   List<File> imgArray = [];
   var imagesUrl, imagesType;
   String origin_path = '', origin_url = '';
-
+  List<AssetEntity> selectAss = [];
   onTapPickFromGallery() async {
     Navigator.pop(context);
-    // final List<AssetEntity>? entitys = await AssetPicker.pickAssets(context,
-    //     pickerConfig: const AssetPickerConfig(
-    //         maxAssets: 1, requestType: RequestType.image));
-    // if (entitys == null) return;
-    //
-    // List<String> chooseImagesPath = [];
-    // //遍历
-    // for (var entity in entitys) {
-    //   File? imgFile = await entity.file;
-    //   if (imgFile != null){
-    //     chooseImagesPath.add(imgFile.path);
-    //     print('选择照片路径:${imgFile?.path}');
-    //     imagesUrl = imgFile.path.split('/');
-    //     imagesType = imagesUrl[imagesUrl.length-1].split('.');
-    //     doForgetPassword(imagesType[imagesType.length - 1],imagesUrl);
-    //   }
-    //
-    // }
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-        print('选择照片路径:${image?.path}');
+    final List<AssetEntity>? entitys = await AssetPicker.pickAssets(context,
+        pickerConfig: AssetPickerConfig(
+            maxAssets: widget.length, requestType: RequestType.image,
+        selectedAssets: selectAss),);
 
-    doPostPostFileUpload(image!.path);
+    selectAss = entitys!;
+
+    if (entitys == null) return;
+
+    doPostPostFileUpload2(entitys);
+    // final ImagePicker _picker = ImagePicker();
+    // final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    // print('选择照片路径:${image?.path}');
+
   }
 
   onTapPickFromCamera() async {
@@ -67,7 +56,7 @@ class _EditHeadPageState extends State<EditHeadPage> {
     if (imgFile == null) return;
     print('照片路径:${imgFile.path}');
 
-
+    selectAss.add(entity);
 
     doPostPostFileUpload(imgFile.path);
   }
@@ -171,7 +160,7 @@ class _EditHeadPageState extends State<EditHeadPage> {
 
   /// 获取文件url
   Future<void> doPostPostFileUpload(path) async {
-    Loading.show("头像上传中...");
+    Loading.show("上传中...");
     var name = path.substring(path.lastIndexOf("/") + 1, path.length);
     FormData formdata = FormData.fromMap(
       {
@@ -191,8 +180,8 @@ class _EditHeadPageState extends State<EditHeadPage> {
           data: formdata);
       Map jsonResponse = json.decode(respone.data.toString());
       if (respone.statusCode == 200) {
-        eventBus.fire(FileBack(info: path, id: jsonResponse['data'].toString(), type: 0));
-        MyToastUtils.showToastBottom('头像上传成功');
+        eventBus.fire(PhotoBack(selectAss: selectAss, id: jsonResponse['data'].toString()));
+        MyToastUtils.showToastBottom('上传成功');
         Loading.dismiss();
         // ignore: use_build_context_synchronously
         Navigator.pop(context);
@@ -207,6 +196,61 @@ class _EditHeadPageState extends State<EditHeadPage> {
     } catch (e) {
       Loading.dismiss();
       // MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+
+  }
+
+  /// 获取文件url
+  Future<void> doPostPostFileUpload2(List<AssetEntity> lists) async {
+    Loading.show("上传中...");
+    String id = '';
+    for (int i = 0; i < lists.length; i++) {
+      File? imgFile = await lists[i].file;
+
+      var name = imgFile!.path.substring(imgFile!.path.lastIndexOf("/") + 1, imgFile!.path.length);
+      FormData formdata = FormData.fromMap(
+        {
+          'type': 'image',
+          "file": await MultipartFile.fromFile(imgFile!.path,
+            filename: name,)
+        },
+      );
+      BaseOptions option = BaseOptions(
+          contentType: 'multipart/form-data', responseType: ResponseType.plain);
+      option.headers["Authorization"] = sp.getString('user_token') ?? '';
+      Dio dio = Dio(option);
+      //application/json
+      try {
+        var respone = await dio.post(
+            MyHttpConfig.fileUpload,
+            data: formdata);
+        Map jsonResponse = json.decode(respone.data.toString());
+
+        LogE('上传id$id');
+        if (respone.statusCode == 200) {
+          if(id.isEmpty){
+            id = jsonResponse['data'].toString();
+          }else{
+            id = '$id,${jsonResponse['data'].toString()}';
+          }
+          if(i == lists.length - 1){
+            eventBus.fire(PhotoBack(
+                selectAss: lists, id: id));
+            MyToastUtils.showToastBottom('上传成功');
+            Loading.dismiss();
+            // ignore: use_build_context_synchronously
+            Navigator.pop(context);
+          }
+        } else if (respone.statusCode == 401) {
+          // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+        } else {
+          MyToastUtils.showToastBottom(jsonResponse['msg']);
+        }
+      } catch (e) {
+        Loading.dismiss();
+        // MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      }
     }
 
   }

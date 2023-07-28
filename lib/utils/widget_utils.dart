@@ -509,13 +509,35 @@ class WidgetUtils {
   }
 
   /// 圆形图片
+  static Widget CircleGreyImage(
+      double height, double width, double radius, String imgUrl) {
+    return Container(
+      height: height,
+      width: width,
+      //超出部分，可裁剪
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(radius),
+        image: DecorationImage(
+          image: NetworkImage(imgUrl),
+          fit: BoxFit.cover,
+          colorFilter: ColorFilter.mode(Colors.grey, BlendMode.color),
+        ),
+      ),
+    );
+  }
+
+  /// 圆形图片
   static Widget CircleHeadImage(double height, double width, String imgUrl) {
     return SizedBox(
       height: height,
       width: width,
       child: CircleAvatar(
         backgroundColor: Colors.transparent,
-        backgroundImage: NetworkImage(imgUrl),
+        backgroundImage: imgUrl.isNotEmpty
+            ? NetworkImage(imgUrl)
+            : const AssetImage("assets/images/img_placeholder.png")
+                as ImageProvider,
       ),
     );
   }
@@ -544,12 +566,23 @@ class WidgetUtils {
         borderRadius: BorderRadius.circular(radius),
       ),
       child: url.contains('com.leimu.yuyinting')
-          ? Image.file(File(url),fit: BoxFit.cover, gaplessPlayback: true,)
-          : Image.network(
-        url,
-        fit: BoxFit.cover,
-        gaplessPlayback: true,
-      ),
+          ? Image.file(
+              File(url),
+              fit: BoxFit.cover,
+              gaplessPlayback: true,
+            )
+          : url.isNotEmpty
+              ? Image.network(
+                  url,
+                  fit: BoxFit.cover,
+                  gaplessPlayback: true,
+                )
+              : Image(
+                  image: const AssetImage('assets/images/img_placeholder.png'),
+                  width: width,
+                  height: height,
+                  gaplessPlayback: true,
+                ),
     );
   }
 
@@ -565,7 +598,11 @@ class WidgetUtils {
         borderRadius: BorderRadius.circular(radius),
       ),
       child: url.contains('com.leimu.yuyinting')
-          ? Image.file(File(url), fit: BoxFit.fill,)
+          ? Image.file(
+              File(url),
+              fit: BoxFit.fill,
+              gaplessPlayback: true,
+            )
           : Image(
               image: AssetImage(url),
               width: width,
@@ -590,12 +627,18 @@ class WidgetUtils {
 
   ///展示图片使用
   static Widget showImages(String url, double height, double width) {
-    return url.contains('com.leimu.yuyinting') ? Image.file(File(url), fit: BoxFit.fill,) : Image(
-      image: AssetImage(url),
-      width: width,
-      height: height,
-      gaplessPlayback: true,
-    );
+    return url.contains('com.leimu.yuyinting')
+        ? Image.file(
+            File(url),
+            fit: BoxFit.fill,
+            gaplessPlayback: true,
+          )
+        : Image(
+            image: AssetImage(url),
+            width: width,
+            height: height,
+            gaplessPlayback: true,
+          );
   }
 
   ///展示图片使用
@@ -946,42 +989,53 @@ class WidgetUtils {
   ///自定义圆角背景框自适应长度
   static Widget myContainerZishiying(
       Color boxColors, String title, TextStyle style) {
-    return Container(
-      padding: const EdgeInsets.only(left: 10, top: 5, right: 10, bottom: 5),
-      alignment: Alignment.center,
-      //边框设置
-      decoration: BoxDecoration(
-        //背景
-        color: boxColors,
-        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-        borderRadius: const BorderRadius.all(Radius.circular(20.0)),
-      ),
-      child: Text(
-        title,
-        style: style,
-      ),
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          padding: const EdgeInsets.only(left: 10, top: 5, right: 10, bottom: 5),
+          alignment: Alignment.center,
+          //边框设置
+          decoration: BoxDecoration(
+            //背景
+            color: boxColors,
+            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+            borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+          ),
+          child: Text(
+            title,
+            style: style,
+          ),
+        )
+      ],
     );
   }
 
   ///自定义圆角背景框自适应长度
   static Widget myContainerZishiying2(
       Color boxColors, Color borderColors, String title, TextStyle style) {
-    return Container(
-      padding: const EdgeInsets.only(left: 10, top: 5, right: 10, bottom: 5),
-      alignment: Alignment.center,
-      //边框设置
-      decoration: BoxDecoration(
-        //背景
-        color: boxColors,
-        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-        borderRadius: const BorderRadius.all(Radius.circular(20.0)),
-        //设置四周边框
-        border: Border.all(width: 1, color: borderColors),
-      ),
-      child: Text(
-        title,
-        style: style,
-      ),
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+
+          padding: const EdgeInsets.only(left: 10, top: 5, right: 10, bottom: 5),
+          alignment: Alignment.center,
+          //边框设置
+          decoration: BoxDecoration(
+            //背景
+            color: boxColors,
+            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+            borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+            //设置四周边框
+            border: Border.all(width: 1, color: borderColors),
+          ),
+          child: Text(
+            title,
+            style: style,
+          ),
+        )
+      ],
     );
   }
 

@@ -32,4 +32,9 @@ class MyConfig{
   static bool issAdd = false;
   /// 切换账号点击的是第几个
   static int clickIndex = 1;
+  /// 每页显示多少条
+  static const int pageSize = 20;
+
+
+
 }

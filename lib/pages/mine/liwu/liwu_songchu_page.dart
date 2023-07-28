@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+import 'package:yuyinting/utils/log_util.dart';
 
+import '../../../bean/liwuMoreBean.dart';
 import '../../../colors/my_colors.dart';
+import '../../../config/my_config.dart';
+import '../../../http/data_utils.dart';
+import '../../../http/my_http_config.dart';
+import '../../../utils/loading.dart';
+import '../../../utils/my_toast_utils.dart';
+import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 /// 送出
@@ -13,8 +22,47 @@ class LiwuSongchuPage extends StatefulWidget {
 }
 
 class _LiwuSongchuPageState extends State<LiwuSongchuPage> {
+  var length = 1;
+  List<Data> list = [];
+  /// 当前页码
+  int page = 1;
+  /// 是否允许上拉
+  bool isUp = true;
+  final RefreshController _refreshController =
+  RefreshController(initialRefresh: false);
 
-  var length = 10;
+  void _onRefresh() async {
+    // monitor network fetch
+    await Future.delayed(const Duration(milliseconds: 1000));
+    // if failed,use refreshFailed()
+    _refreshController.refreshCompleted();
+    if (mounted) {
+      setState(() {
+        page = 1;
+      });
+      doPostGiftDetail();
+    }
+  }
+
+  void _onLoading() async {
+    // monitor network fetch
+    await Future.delayed(const Duration(milliseconds: 1000));
+    // if failed,use loadFailed(),if no data return,use LoadNodata()
+    if (mounted) {
+      setState(() {
+        page++;
+      });
+    }
+    doPostGiftDetail();
+    _refreshController.loadComplete();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    doPostGiftDetail();
+  }
 
   Widget _itemLiwu(BuildContext context, int i) {
     return Column(
@@ -34,9 +82,9 @@ class _LiwuSongchuPageState extends State<LiwuSongchuPage> {
           child: Row(
             children: [
               WidgetUtils.commonSizedBox(0, 20),
-              WidgetUtils.CircleHeadImage(30, 30, 'https://img-blog.csdnimg.cn/e469a7c53f274934abc357af019c90d4.jpeg'),
+              WidgetUtils.CircleHeadImage(30, 30, list[i].avatar!),
               WidgetUtils.commonSizedBox(0, 10),
-              WidgetUtils.onlyText('用户名$i', StyleUtils.getCommonTextStyle(color: Colors.black,fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(31))),
+              WidgetUtils.onlyText(list[i].username!, StyleUtils.getCommonTextStyle(color: Colors.black,fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(31))),
               const Expanded(child: Text('')),
               WidgetUtils.onlyText('收到您的礼物', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(31))),
               WidgetUtils.commonSizedBox(0, 20),
@@ -56,17 +104,17 @@ class _LiwuSongchuPageState extends State<LiwuSongchuPage> {
           child: Row(
             children: [
               WidgetUtils.commonSizedBox(0, 20),
-              WidgetUtils.showImagesNet('https://img-blog.csdnimg.cn/e469a7c53f274934abc357af019c90d4.jpeg', ScreenUtil().setHeight(125), ScreenUtil().setHeight(125)),
+              WidgetUtils.showImagesNet(list[i].giftImg!, ScreenUtil().setHeight(125), ScreenUtil().setHeight(125)),
               WidgetUtils.commonSizedBox(0, 20),
               Expanded(
                 child: Column(
                   children: [
                     const Expanded(child: Text('')),
-                    WidgetUtils.onlyText('礼物：魔法星球x10', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(25))),
+                    WidgetUtils.onlyText('礼物：${list[i].giftName!}', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(25))),
                     WidgetUtils.commonSizedBox(10, 0),
-                    WidgetUtils.onlyText('价格：1999 金币', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(25))),
+                    WidgetUtils.onlyText('价格：${list[i].amount!}', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(25))),
                     WidgetUtils.commonSizedBox(10, 0),
-                    WidgetUtils.onlyText('时间：2023-06-09 13:00:00', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(25))),
+                    WidgetUtils.onlyText('时间：${list[i].addTime!}', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(25))),
                     const Expanded(child: Text('')),
                   ],
                 ),
@@ -80,12 +128,21 @@ class _LiwuSongchuPageState extends State<LiwuSongchuPage> {
 
   @override
   Widget build(BuildContext context) {
-    return length > 0 ? ListView.builder(
-      itemBuilder: _itemLiwu,
-      itemCount: length,
+    return   length > 0
+        ? SmartRefresher(
+      header: MyUtils.myHeader(),
+      footer: MyUtils.myFotter(),
+      controller: _refreshController,
+      enablePullUp: isUp,
+      onLoading: _onLoading,
+      onRefresh: _onRefresh,
+      child: ListView.builder(
+        padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
+        itemBuilder: _itemLiwu,
+        itemCount: list.length,
+      ),
     )
-        :
-    Container(
+        : Container(
       height: double.infinity,
       alignment: Alignment.center,
       child: Column(
@@ -93,10 +150,64 @@ class _LiwuSongchuPageState extends State<LiwuSongchuPage> {
           const Expanded(child: Text('')),
           WidgetUtils.showImages('assets/images/no_have.png', 100, 100),
           WidgetUtils.commonSizedBox(10, 0),
-          WidgetUtils.onlyTextCenter('暂无礼物', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(26))),
+          WidgetUtils.onlyTextCenter(
+              '暂无送出礼物',
+              StyleUtils.getCommonTextStyle(
+                  color: MyColors.g6,
+                  fontSize: ScreenUtil().setSp(26))),
           const Expanded(child: Text('')),
         ],
       ),
     );
+  }
+
+
+
+  /// 礼物记录
+  Future<void> doPostGiftDetail() async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'type': '2',
+      'page': page,
+      'pageSize': MyConfig.pageSize
+    };
+    try {
+      Loading.show("加载中...");
+      liwuMoreBean bean = await DataUtils.postGiftDetail(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          list.clear();
+          if(bean.data!.isNotEmpty){
+            LogE('礼物记录${bean.data!.length > MyConfig.pageSize}');
+            if(bean.data!.length > MyConfig.pageSize){
+              setState(() {
+                isUp = true;
+              });
+            }else{
+              setState(() {
+                isUp = false;
+              });
+            }
+            setState(() {
+              list = bean.data!;
+            });
+          }else{
+            setState(() {
+              isUp = false;
+            });
+          }
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
   }
 }
