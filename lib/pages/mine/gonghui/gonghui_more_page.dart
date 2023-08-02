@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/colors/my_colors.dart';
+import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 
+import '../../../bean/Common_bean.dart';
+import '../../../bean/searchGonghuiBean.dart';
+import '../../../http/data_utils.dart';
+import '../../../http/my_http_config.dart';
+import '../../../utils/loading.dart';
+import '../../../utils/my_utils.dart';
 import '../../../utils/widget_utils.dart';
 /// 无工会的详情
 class GonghuiMorePage extends StatefulWidget {
-  const GonghuiMorePage({Key? key}) : super(key: key);
+  searchGonghuiBean bean;
+  GonghuiMorePage({Key? key, required this.bean}) : super(key: key);
 
   @override
   State<GonghuiMorePage> createState() => _GonghuiMorePageState();
@@ -38,21 +46,21 @@ class _GonghuiMorePageState extends State<GonghuiMorePage> {
                   Row(
                     children: [
                       WidgetUtils.commonSizedBox(20, 20),
-                      WidgetUtils.CircleImageNet(ScreenUtil().setHeight(144), ScreenUtil().setHeight(144), 10, 'http://b.hiphotos.baidu.com/image/pic/item/359b033b5bb5c9ea5c0e3c23d139b6003bf3b374.jpg'),
+                      WidgetUtils.CircleImageNet(ScreenUtil().setHeight(144), ScreenUtil().setHeight(144), 10, widget.bean.data!.logo!),
                       WidgetUtils.commonSizedBox(0, 20),
                       Expanded(
                         child: Column(
                           children: [
                             Row(
                               children: [
-                                WidgetUtils.onlyText('公会名称', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(36), fontWeight: FontWeight.w600)),
+                                WidgetUtils.onlyText(widget.bean.data!.title!, StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(36), fontWeight: FontWeight.w600)),
                                 // WidgetUtils.showImages(, height, width)
                               ],
                             ),
                             WidgetUtils.commonSizedBox(10, 20),
-                            WidgetUtils.onlyText('ID: 888', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(25),)),
+                            WidgetUtils.onlyText('ID: ${widget.bean.data!.number}', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(25),)),
                             WidgetUtils.commonSizedBox(10, 20),
-                            WidgetUtils.onlyText('创建时间: 2023-06-15', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(25),)),
+                            WidgetUtils.onlyText('创建时间: ${widget.bean.data!.addTime!}', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(25),)),
                           ],
                         ),
                       ),
@@ -81,22 +89,22 @@ class _GonghuiMorePageState extends State<GonghuiMorePage> {
                     child: Column(
                       children: [
                         WidgetUtils.commonSizedBox(20, 20),
-                        WidgetUtils.onlyText('公会简介', StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(29),)),
+                        WidgetUtils.onlyText('公会公告', StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(29),)),
                         WidgetUtils.commonSizedBox(10, 20),
-                        WidgetUtils.onlyText('暂未设置公会简介', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(26),)),
+                        WidgetUtils.onlyText(widget.bean.data!.notice!, StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(26),)),
                         WidgetUtils.commonSizedBox(20, 20),
                         WidgetUtils.onlyText('公会会长', StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(29),)),
                         WidgetUtils.commonSizedBox(10, 20),
                         Row(
                           children: [
-                            WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(120), ScreenUtil().setHeight(120), 'http://b.hiphotos.baidu.com/image/pic/item/359b033b5bb5c9ea5c0e3c23d139b6003bf3b374.jpg'),
+                            WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(120), ScreenUtil().setHeight(120), widget.bean.data!.leaderAvatar!),
                             WidgetUtils.commonSizedBox(10, 20),
                             Expanded(
                               child: Column(
                                 children: [
-                                  WidgetUtils.onlyText('会长名称', StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(29),)),
+                                  WidgetUtils.onlyText(widget.bean.data!.leaderNickname!, StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(29),)),
                                   WidgetUtils.commonSizedBox(10, 20),
-                                  WidgetUtils.onlyText('ID: 888', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(25),)),
+                                  WidgetUtils.onlyText('ID: ${widget.bean.data!.leaderNumber}', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(25),)),
                                 ],
                               ),
                             )
@@ -109,7 +117,7 @@ class _GonghuiMorePageState extends State<GonghuiMorePage> {
                           child: Container(
                             alignment: Alignment.topLeft,
                             child: Text(
-                              '1.请先完成实名制认证，才能申请公会签约。',
+                              widget.bean.data!.signNotice!,
                               maxLines: 20,
                               style: StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(25)),
                             ),
@@ -139,9 +147,16 @@ class _GonghuiMorePageState extends State<GonghuiMorePage> {
                 Expanded(
                   child: GestureDetector(
                     onTap: ((){
-
+                      if(MyUtils.checkClick()) {
+                        if (widget.bean.data!.isApply != 1) {
+                          doPostApplySign(widget.bean.data!.id.toString());
+                        } else {
+                          MyToastUtils.showToastBottom(
+                              '您已经申请该公会，请耐心等待审核！');
+                        }
+                      }
                     }),
-                    child: WidgetUtils.myContainer(ScreenUtil().setHeight(70), double.infinity, MyColors.homeTopBG, MyColors.homeTopBG, '申请签约', ScreenUtil().setSp(33), Colors.white) ,
+                    child: WidgetUtils.myContainer(ScreenUtil().setHeight(70), double.infinity, widget.bean.data!.isApply == 1 ? MyColors.mineGrey : MyColors.homeTopBG, widget.bean.data!.isApply == 1 ? MyColors.mineGrey : MyColors.homeTopBG, '申请签约', ScreenUtil().setSp(33), Colors.white) ,
                   ),
                 ),
               ],
@@ -150,5 +165,34 @@ class _GonghuiMorePageState extends State<GonghuiMorePage> {
         ],
       ),
     );
+  }
+
+
+  /// 申请签约
+  Future<void> doPostApplySign(id) async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'id': id,
+    };
+    try {
+      CommonBean bean = await DataUtils.postApplySign(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          MyToastUtils.showToastBottom("申请成功，请您耐心等待审核！");
+          // ignore: use_build_context_synchronously
+          Navigator.pop(context);
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
   }
 }

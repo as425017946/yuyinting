@@ -16,7 +16,7 @@ class LinePainter2 extends CustomPainter {
 
   void paint(Canvas canvas, Size size) {
     //绘制圆 参数为中心点 半径 画笔
-    canvas.drawCircle(const Offset(8,8), 16, _paint);
+    canvas.drawCircle(const Offset(3,3), 6, _paint);
   }
 
   @override

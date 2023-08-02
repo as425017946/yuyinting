@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yuyinting/main.dart';
 
+import '../../bean/kefuBean.dart';
+import '../../http/data_utils.dart';
+import '../../http/my_http_config.dart';
+import '../../utils/loading.dart';
+import '../../utils/my_toast_utils.dart';
+import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 
@@ -13,6 +21,14 @@ class MyKeFuPage extends StatefulWidget {
 }
 
 class _MyKeFuPageState extends State<MyKeFuPage> {
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +55,13 @@ class _MyKeFuPageState extends State<MyKeFuPage> {
               child: Column(
                 children: [
                   GestureDetector(
-                    onTap: (() {}),
+                    onTap: (() {
+                      Clipboard.setData(ClipboardData(
+                        text: sp.getString('my_online').toString(),
+                      ));
+                      MyToastUtils.showToastBottom('已成功复制到剪切板');
+                      Navigator.pop(context);
+                    }),
                     child: Container(
                       width: double.infinity,
                       height: ScreenUtil().setHeight(70),
@@ -56,7 +78,13 @@ class _MyKeFuPageState extends State<MyKeFuPage> {
                   ),
                   WidgetUtils.myLine(thickness: 1),
                   GestureDetector(
-                    onTap: (() {}),
+                    onTap: (() {
+                      Clipboard.setData(ClipboardData(
+                        text: sp.getString('my_qq').toString(),
+                      ));
+                      MyToastUtils.showToastBottom('已成功复制到剪切板');
+                      Navigator.pop(context);
+                    }),
                     child: Container(
                       width: double.infinity,
                       height: ScreenUtil().setHeight(70),
@@ -73,7 +101,13 @@ class _MyKeFuPageState extends State<MyKeFuPage> {
                   ),
                   WidgetUtils.myLine(thickness: 1),
                   GestureDetector(
-                    onTap: (() {}),
+                    onTap: (() {
+                      Clipboard.setData(ClipboardData(
+                        text: sp.getString('my_telegram').toString(),
+                      ));
+                      MyToastUtils.showToastBottom('已成功复制到剪切板');
+                      Navigator.pop(context);
+                    }),
                     child: Container(
                       width: double.infinity,
                       height: ScreenUtil().setHeight(70),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
+import '../../bean/Common_bean.dart';
 import '../../bean/careListBean.dart';
 import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
@@ -30,8 +31,6 @@ class _BeCarePageState extends State<BeCarePage> {
   final RefreshController _refreshController =
   RefreshController(initialRefresh: false);
   int page = 1;
-  /// 是否允许上拉
-  bool isUp = true;
   void _onRefresh() async {
     // monitor network fetch
     await Future.delayed(const Duration(milliseconds: 1000));
@@ -42,6 +41,7 @@ class _BeCarePageState extends State<BeCarePage> {
         page = 1;
       });
     }
+    doPostFollowList();
   }
 
   void _onLoading() async {
@@ -53,6 +53,7 @@ class _BeCarePageState extends State<BeCarePage> {
         page++;
       });
     }
+    doPostFollowList();
     _refreshController.loadComplete();
   }
 
@@ -124,25 +125,39 @@ class _BeCarePageState extends State<BeCarePage> {
               ],
             ),
           ),
-          Container(
-            height: ScreenUtil().setHeight(50),
-            width: ScreenUtil().setWidth(150),
-            alignment: Alignment.center,
-            //边框设置
-            decoration: const BoxDecoration(
-              //背景
-              color: MyColors.f6 ,
-              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-              borderRadius:
-              BorderRadius.all(Radius.circular(20.0)),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _list[i].follow == '0' ? WidgetUtils.showImages('assets/images/care_guanzhu.png', 8, 12) : WidgetUtils.commonSizedBox(0, 0),
-                WidgetUtils.commonSizedBox(0, 5),
-                WidgetUtils.onlyText(_list[i].follow == '0' ? '回关' : '相互关注', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(22)))
-              ],
+          GestureDetector(
+            onTap: ((){
+              doPostFollow(_list[i].uid, i,_list[i].follow);
+              if(_list[i].follow == '0'){
+                setState(() {
+                  _list[i].follow = '2';
+                });
+              }else{
+                setState(() {
+                  _list[i].follow = '0';
+                });
+              }
+            }),
+            child: Container(
+              height: ScreenUtil().setHeight(50),
+              width: ScreenUtil().setWidth(150),
+              alignment: Alignment.center,
+              //边框设置
+              decoration: const BoxDecoration(
+                //背景
+                color: MyColors.f6 ,
+                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                borderRadius:
+                BorderRadius.all(Radius.circular(20.0)),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _list[i].follow == '0' ? WidgetUtils.showImages('assets/images/care_guanzhu.png', 8, 12) : WidgetUtils.commonSizedBox(0, 0),
+                  WidgetUtils.commonSizedBox(0, 5),
+                  WidgetUtils.onlyText(_list[i].follow == '0' ? '回关' : '相互关注', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(22)))
+                ],
+              ),
             ),
           ),
         ],
@@ -157,10 +172,10 @@ class _BeCarePageState extends State<BeCarePage> {
     listen = eventBus.on<CareBack>().listen((event) {
       setState(() {
         infos = event.info;
-        doPostFollow();
+        doPostFollowList();
       });
     });
-    doPostFollow();
+    doPostFollowList();
   }
 
   @override
@@ -183,7 +198,7 @@ class _BeCarePageState extends State<BeCarePage> {
               header: MyUtils.myHeader(),
               footer: MyUtils.myFotter(),
               controller: _refreshController,
-              enablePullUp: isUp,
+              enablePullUp: true,
               onLoading: _onLoading,
               onRefresh: _onRefresh,
               child: ListView.builder(
@@ -217,7 +232,7 @@ class _BeCarePageState extends State<BeCarePage> {
 
 
   /// 关注列表
-  Future<void> doPostFollow() async {
+  Future<void> doPostFollowList() async {
     Map<String, dynamic> params = <String, dynamic>{
       'type': '1',
       'keywords': infos,
@@ -230,27 +245,59 @@ class _BeCarePageState extends State<BeCarePage> {
       careListBean bean = await DataUtils.postFollowList(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          _list.clear();
-          if (bean.data!.list!.isNotEmpty) {
-            if(bean.data!.list!.length > MyConfig.pageSize){
-              setState(() {
-                isUp = true;
-              });
-            }else{
-              setState(() {
-                isUp = false;
-              });
+          setState(() {
+            if (page == 1) {
+              _list.clear();
             }
-            setState(() {
-              _list = bean.data!.list!;
-              length = _list.length;
-              number = bean.data!.count!;
-            });
-          } else {
-            setState(() {
-              length = 0;
-              number = 0;
-            });
+            if(bean.data!.list!.isNotEmpty){
+              for(int i =0; i < bean.data!.list!.length; i++){
+                _list.add(bean.data!.list![i]);
+              }
+              if(bean.data!.list!.length < MyConfig.pageSize){
+                _refreshController.loadNoData();
+              }
+
+              length = bean.data!.list!.length;
+            }else{
+              if (page == 1) {
+                length = 0;
+              }
+              _refreshController.loadNoData();
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+  }
+
+
+  /// 取消关注
+  Future<void> doPostFollow(follow_id, index, type) async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'type': '1',
+      'status': type == '0' ? '1' : '0',
+      'follow_id': follow_id,
+    };
+    try {
+      Loading.show("提交中...");
+      CommonBean bean = await DataUtils.postFollow(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          if(type == '0'){
+            MyToastUtils.showToastBottom("关注成功！");
+          }else{
+            MyToastUtils.showToastBottom("取关成功！");
           }
           break;
         case MyHttpConfig.errorloginCode:

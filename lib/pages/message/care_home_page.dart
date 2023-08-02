@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/pages/message/geren/who_lock_me_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
-import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/my_utils.dart';
-
 import '../../colors/my_colors.dart';
 import '../../utils/widget_utils.dart';
 import 'be_care_page.dart';

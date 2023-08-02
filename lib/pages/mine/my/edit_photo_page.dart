@@ -16,6 +16,11 @@ import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
+
+
+
 class EditPhotoPage extends StatefulWidget {
   int length;
   EditPhotoPage({super.key, required this.length});
@@ -160,12 +165,19 @@ class _EditPhotoPageState extends State<EditPhotoPage> {
 
   /// 获取文件url
   Future<void> doPostPostFileUpload(path) async {
+    var dir = await path_provider.getTemporaryDirectory();
+    var targetPath = "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
+    var result = await FlutterImageCompress.compressAndGetFile(
+      path, targetPath,
+      quality: 50,
+      rotate: 180,
+    );
     Loading.show("上传中...");
     var name = path.substring(path.lastIndexOf("/") + 1, path.length);
     FormData formdata = FormData.fromMap(
       {
         'type': 'image',
-        "file": await MultipartFile.fromFile(path,
+        "file": await MultipartFile.fromFile(result!.path,
           filename: name,)
       },
     );
@@ -206,12 +218,18 @@ class _EditPhotoPageState extends State<EditPhotoPage> {
     String id = '';
     for (int i = 0; i < lists.length; i++) {
       File? imgFile = await lists[i].file;
-
+      var dir = await path_provider.getTemporaryDirectory();
+      var targetPath = "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
+      var result = await FlutterImageCompress.compressAndGetFile(
+        imgFile!.path, targetPath,
+        quality: 50,
+        rotate: 180,
+      );
       var name = imgFile!.path.substring(imgFile!.path.lastIndexOf("/") + 1, imgFile!.path.length);
       FormData formdata = FormData.fromMap(
         {
           'type': 'image',
-          "file": await MultipartFile.fromFile(imgFile!.path,
+          "file": await MultipartFile.fromFile(result!.path,
             filename: name,)
         },
       );

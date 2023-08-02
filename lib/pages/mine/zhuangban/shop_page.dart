@@ -31,7 +31,7 @@ class _ShopPageState extends State<ShopPage> {
     _controller = PageController(
       initialPage: 0,
     );
-    sp.setString('isShop', '1');
+    sp.setString('isShop', '0');
   }
 
   @override

@@ -5,8 +5,13 @@ import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/my_utils.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 
+import '../../../bean/searchGonghuiBean.dart';
 import '../../../colors/my_colors.dart';
+import '../../../http/data_utils.dart';
+import '../../../http/my_http_config.dart';
+import '../../../utils/loading.dart';
 import '../../../utils/widget_utils.dart';
+import 'gonghui_more_page.dart';
 /// 公会中心
 class GonghuiHomePage extends StatefulWidget {
   const GonghuiHomePage({Key? key}) : super(key: key);
@@ -75,9 +80,9 @@ class _GonghuiHomePageState extends State<GonghuiHomePage> {
                 WidgetUtils.commonSizedBox(0, 10),
                 GestureDetector(
                   onTap: ((){
-                    if(_souSuoName.text.isNotEmpty){
+                    if(_souSuoName.text.trim().isNotEmpty){
+                      doPostSearchGuild(_souSuoName.text.trim());
                       MyUtils.hideKeyboard(context);
-                      Navigator.pushNamed(context, 'GonghuiMorePage');
                     }else{
                       MyToastUtils.showToastBottom('请输入公会名称/公会ID');
                     }
@@ -90,5 +95,42 @@ class _GonghuiHomePageState extends State<GonghuiHomePage> {
         ),
       ),
     );
+  }
+
+
+  /// 搜索公会
+  Future<void> doPostSearchGuild(keyword) async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'keyword': keyword,
+    };
+    try {
+      searchGonghuiBean bean = await DataUtils.postSearchGuild(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          if(bean.data!.uid == null){
+            MyToastUtils.showToastBottom("暂无搜索公会");
+          }else{
+            Future.delayed(const Duration(seconds: 0), () {
+              Navigator.of(context).push(PageRouteBuilder(
+                  opaque: false,
+                  pageBuilder: (context, animation, secondaryAnimation) {
+                    return GonghuiMorePage(bean: bean,);
+                  }));
+            });
+          }
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
   }
 }

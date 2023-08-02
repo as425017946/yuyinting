@@ -4,18 +4,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/pages/message/care_home_page.dart';
+import 'package:yuyinting/pages/mine/setting/setting_page.dart';
+import 'package:yuyinting/pages/mine/zhuangban/zhuangban_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
+import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 
+import '../../bean/kefuBean.dart';
 import '../../bean/myInfoBean.dart';
 import '../../colors/my_colors.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
+import '../../utils/custom_dialog.dart';
 import '../../utils/loading.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/widget_utils.dart';
+import 'gonghui/gonghui_home_page.dart';
+import 'gonghui/my_gonghui_page.dart';
+import 'my/my_info_page.dart';
 import 'my_kefu_page.dart';
 
 ///我的
@@ -26,10 +34,8 @@ class MinePage extends StatefulWidget {
   State<MinePage> createState() => _MinePageState();
 }
 
-class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin{
+class _MinePageState extends State<MinePage>{
 
-  @override
-  bool get wantKeepAlive => true;
 
   var guizuType = 0, gender = 0, isFirst = 0;
   var listen;
@@ -38,7 +44,8 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin{
       userNumber = '',
       care = '',
       beCare = '',
-      lookMe = '';
+      lookMe = '',
+      identity = '';
 
   @override
   void initState() {
@@ -47,12 +54,46 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin{
     listen = eventBus.on<SubmitButtonBack>().listen((event) {
       if (event.title == '我的装扮') {
         // Navigator.pushNamed(context, 'DengjiPage');
-        Navigator.pushNamed(context, 'ZhuangbanPage');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+            const ZhuangbanPage(),
+          ),
+        ).then((value) {
+          doPostMyIfon();
+        });
       } else if (event.title == '公会中心') {
-        Navigator.pushNamed(context, 'GonghuiHomePage');
-        // if(mounted){
-        //   Navigator.pushNamed(context, 'MyGonghuiPage');
-        // }
+        if(sp.getString('shimingzhi').toString() == '2' || sp.getString('shimingzhi').toString() == '3'){
+          isShiMing(context);
+        }else if(sp.getString('shimingzhi').toString() == '1'){
+          //身份 user普通用户，未加入公会 streamer主播 leader会长
+          if(identity == 'user'){
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                const GonghuiHomePage(),
+              ),
+            ).then((value) {
+              doPostMyIfon();
+            });
+          }else{
+            if(mounted){
+              Future.delayed(const Duration(seconds: 0), () {
+                Navigator.of(context).push(PageRouteBuilder(
+                    opaque: false,
+                    pageBuilder: (context, animation, secondaryAnimation) {
+                      return MyGonghuiPage(type: identity,);
+                    }));
+              }).then((value){
+                doPostMyIfon();
+              });
+            }
+          }
+        }else if(sp.getString('shimingzhi').toString() == '0'){
+          MyToastUtils.showToastBottom('审核中，请耐心等待');
+        }
       } else if (event.title == '全民代理') {
         if (mounted) {
           Navigator.pushNamed(context, 'DailiHomePage');
@@ -72,7 +113,7 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin{
     });
 
     doPostMyIfon();
-
+    doPostKefu();
   }
 
   @override
@@ -100,7 +141,15 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin{
             WidgetUtils.commonSizedBox(35, 0),
             GestureDetector(
               onTap: (() {
-                Navigator.pushNamed(context, 'SettingPage');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                    const SettingPage(),
+                  ),
+                ).then((value) {
+                  doPostMyIfon();
+                });
               }),
               child: Row(
                 children: [
@@ -116,7 +165,15 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin{
               children: [
                 GestureDetector(
                   onTap: (() {
-                    Navigator.pushNamed(context, 'MyInfoPage');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                        const MyInfoPage(),
+                      ),
+                    ).then((value) {
+                      doPostMyIfon();
+                    });
                   }),
                   child: WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(90),
                       ScreenUtil().setHeight(90), headImg),
@@ -530,8 +587,10 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin{
             care = bean.data!.followNum.toString();
             beCare = bean.data!.isFollowNum.toString();
             lookMe = bean.data!.lookNum.toString();
-            guizuType = bean.data!.nobleID as int;
+            guizuType = bean.data!.nobleId as int;
+            identity = bean.data!.identity!;
           });
+          LogE('身份$identity');
           break;
         case MyHttpConfig.errorloginCode:
           // ignore: use_build_context_synchronously
@@ -544,6 +603,54 @@ class _MinePageState extends State<MinePage> with AutomaticKeepAliveClientMixin{
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+  }
+
+  /// 点击公会判断是否进行了实名制
+  Future<void> isShiMing(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return CustomDialog(
+            title: '',
+            callback: (res) {
+              if(sp.getString('shimingzhi').toString() == '2' || sp.getString('shimingzhi').toString() == '3'){
+                Navigator.pushNamed(context, 'ShimingzhiPage');
+              }else if(sp.getString('shimingzhi').toString() == '1'){
+                MyToastUtils.showToastBottom('已认证');
+              }else if(sp.getString('shimingzhi').toString() == '0'){
+                MyToastUtils.showToastBottom('审核中，请耐心等待');
+              }
+            },
+            content: '尚未实名制，请前往实名制页面上传信息后在使用！',
+          );
+        });
+  }
+
+
+
+  /// 客服
+  Future<void> doPostKefu() async {
+    try {
+      kefuBean bean = await DataUtils.postKefu();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            sp.setString('my_online', bean.data!.online!);
+            sp.setString('my_qq', bean.data!.online!);
+            sp.setString('my_telegram', bean.data!.online!);
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
       MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
     }
   }

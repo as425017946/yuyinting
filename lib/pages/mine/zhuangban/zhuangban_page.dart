@@ -30,7 +30,7 @@ class _ZhuangbanPageState extends State<ZhuangbanPage> {
       initialPage: 0,
     );
     /// 是不是点击装扮商城
-    sp.setString('isShop', '0');
+    sp.setString('isShop', '1');
   }
 
   @override
@@ -197,64 +197,9 @@ class _ZhuangbanPageState extends State<ZhuangbanPage> {
                   ],
                 ),
               ),
-              WidgetUtils.commonSizedBox(80, 0),
             ],
           ),
-          Container(
-            height: ScreenUtil().setHeight(110),
-            width: double.infinity,
-            color: MyColors.zhuangbanBottomBG,
-            child: Row(
-              children: [
-                WidgetUtils.commonSizedBox(0, 20),
-                Expanded(
-                    child: Column(
-                      children: [
-                        const Expanded(child: Text('')),
-                        Row(
-                          children: [
-                            WidgetUtils.onlyText(
-                                '1000',
-                                StyleUtils.getCommonTextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: ScreenUtil().setSp(50))),
-                            WidgetUtils.commonSizedBox(0, 10),
-                            WidgetUtils.onlyText(
-                                '钻/豆',
-                                StyleUtils.getCommonTextStyle(
-                                    color: Colors.white,
-                                    fontSize: ScreenUtil().setSp(25))),
-                          ],
-                        ),
-                        GestureDetector(
-                          onTap: ((){
-                            Navigator.pushNamed(context, 'DouPayPage');
-                          }),
-                          child: WidgetUtils.onlyText(
-                              '0 钻 | 充值 >',
-                              StyleUtils.getCommonTextStyle(
-                                  color: MyColors.zhuangbanWZ,
-                                  fontSize: ScreenUtil().setSp(25))),
-                        ),
-                        WidgetUtils.commonSizedBox(10, 0),
-                      ],
-                    )),
-                GestureDetector(
-                  onTap: (() {}),
-                  child: WidgetUtils.myContainer(
-                      ScreenUtil().setHeight(70),
-                      ScreenUtil().setHeight(200),
-                      MyColors.homeTopBG,
-                      MyColors.homeTopBG,
-                      '立即购买',
-                      ScreenUtil().setSp(33),
-                      Colors.white),
-                ),
-                WidgetUtils.commonSizedBox(0, 20),
-              ],
-            ),
-          )
+
         ],
       ),
     );

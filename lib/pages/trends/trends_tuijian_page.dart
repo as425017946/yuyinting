@@ -13,7 +13,10 @@ class TrendsTuiJianPage extends StatefulWidget {
   State<TrendsTuiJianPage> createState() => _TrendsTuiJianPageState();
 }
 
-class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> {
+class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> with AutomaticKeepAliveClientMixin{
+  @override
+  bool get wantKeepAlive => true;
+
   int length = 1;
   double x = 0 , y = 0;
 
@@ -131,12 +134,16 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> {
                 //超出部分，可裁剪
                 clipBehavior: Clip.hardEdge,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: Swiper(
                   itemBuilder: (BuildContext context,int index){
                     // 配置图片地址
-                    return Image.network(imgList[index]["url"],fit: BoxFit.fill,);
+                    return FadeInImage.assetNetwork(
+                      placeholder: 'assets/images/img_placeholder.png',
+                      image: imgList[index]["url"],
+                      fit: BoxFit.fill,
+                    );
                   },
                   // 配置图片数量
                   itemCount: imgList.length ,
@@ -144,7 +151,7 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> {
                   loop: true,
                   // 自动轮播
                   autoplay: true,
-                  duration: 5,
+                  duration: 3000,
                 ),
               ),
               Expanded(

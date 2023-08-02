@@ -31,8 +31,6 @@ class _BlackPageState extends State<BlackPage> {
       RefreshController(initialRefresh: false);
 
   int page = 1;
-  /// 是否允许上拉
-  bool isUp = true;
 
 
 
@@ -46,6 +44,7 @@ class _BlackPageState extends State<BlackPage> {
         page = 1;
       });
     }
+    doBlackList();
   }
 
   void _onLoading() async {
@@ -57,6 +56,7 @@ class _BlackPageState extends State<BlackPage> {
         page++;
       });
     }
+    doBlackList();
     _refreshController.loadComplete();
   }
 
@@ -134,7 +134,7 @@ class _BlackPageState extends State<BlackPage> {
               header: MyUtils.myHeader(),
               footer: MyUtils.myFotter(),
               controller: _refreshController,
-              enablePullUp: isUp,
+              enablePullUp: true,
               onLoading: _onLoading,
               onRefresh: _onRefresh,
               child: ListView.builder(
@@ -174,26 +174,25 @@ class _BlackPageState extends State<BlackPage> {
       BlackListBean bean = await DataUtils.postBlackList(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          _list.clear();
-          if (bean.data!.isNotEmpty) {
-            if(bean.data!.length > MyConfig.pageSize){
-              setState(() {
-                isUp = true;
-              });
-            }else{
-              setState(() {
-                isUp = false;
-              });
+          setState(() {
+            if (page == 1) {
+              _list.clear();
             }
-            setState(() {
-              _list = bean.data!;
-              length = _list.length;
-            });
-          } else {
-            setState(() {
-              length = 0;
-            });
-          }
+            if (bean.data!.isNotEmpty) {
+              for(int i =0; i < bean.data!.length; i++){
+                _list.add(bean.data![i]);
+              }
+
+              length = bean.data!.length;
+            }else{
+              if (page == 1) {
+                length = 0;
+              }
+            }
+            if(bean.data!.length < MyConfig.pageSize){
+              _refreshController.loadNoData();
+            }
+          });
           break;
         case MyHttpConfig.errorloginCode:
         // ignore: use_build_context_synchronously

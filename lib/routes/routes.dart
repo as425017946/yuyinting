@@ -63,6 +63,7 @@ import '../pages/room/room_redu_page.dart';
 import '../pages/room/room_ts_gonggao_page.dart';
 import '../pages/trends/trends_hi_page.dart';
 import '../pages/trends/trends_send_page.dart';
+import '../widget/SwiperPage.dart';
 
 
 /// 静态路由
@@ -96,8 +97,6 @@ var staticRoutes = {
   'ShareTuiguangPage':(context) => const ShareTuiguangPage(),// 推广分享
   'KefuPage':(context) => const KefuPage(),// 客服中心
   'GonghuiHomePage':(context) => const GonghuiHomePage(),// 公会中心
-  'GonghuiMorePage':(context) => const GonghuiMorePage(),// 无公会得详情
-  'MyGonghuiPage':(context) => const MyGonghuiPage(),// 我的公会
   'SettingGonghuiPage':(context) => const SettingGonghuiPage(),// 公会设置
   'GonghuiPeoplePage':(context) => const GonghuiPeoplePage(),// 公会成员
   'ShenhePage':(context) => const ShenhePage(),// 入驻审核

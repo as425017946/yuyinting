@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
@@ -16,47 +15,31 @@ import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 
 
 
-/// 编辑头像显示
-class EditHeadPage extends StatefulWidget {
-  const EditHeadPage({Key? key}) : super(key: key);
+/// 编辑公会头像显示
+class EditGHHeadPage extends StatefulWidget {
+  const EditGHHeadPage({Key? key}) : super(key: key);
 
   @override
-  State<EditHeadPage> createState() => _EditHeadPageState();
+  State<EditGHHeadPage> createState() => _EditGHHeadPageState();
 }
 
-class _EditHeadPageState extends State<EditHeadPage> {
+class _EditGHHeadPageState extends State<EditGHHeadPage> {
   List<File> imgArray = [];
   var imagesUrl, imagesType;
   String origin_path = '', origin_url = '';
 
   onTapPickFromGallery() async {
     Navigator.pop(context);
-    // final List<AssetEntity>? entitys = await AssetPicker.pickAssets(context,
-    //     pickerConfig: const AssetPickerConfig(
-    //         maxAssets: 1, requestType: RequestType.image));
-    // if (entitys == null) return;
-    //
-    // List<String> chooseImagesPath = [];
-    // //遍历
-    // for (var entity in entitys) {
-    //   File? imgFile = await entity.file;
-    //   if (imgFile != null){
-    //     chooseImagesPath.add(imgFile.path);
-    //     print('选择照片路径:${imgFile?.path}');
-    //     imagesUrl = imgFile.path.split('/');
-    //     imagesType = imagesUrl[imagesUrl.length-1].split('.');
-    //     doForgetPassword(imagesType[imagesType.length - 1],imagesUrl);
-    //   }
-    //
-    // }
     final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
         print('选择照片路径:${image?.path}');
 
+   print('压缩后路径 }');
     doPostPostFileUpload(image!.path);
   }
 
@@ -68,7 +51,6 @@ class _EditHeadPageState extends State<EditHeadPage> {
     File? imgFile = await entity.file;
     if (imgFile == null) return;
     print('照片路径:${imgFile.path}');
-
 
 
     doPostPostFileUpload(imgFile.path);
@@ -94,15 +76,6 @@ class _EditHeadPageState extends State<EditHeadPage> {
               ),
               child: Column(
                 children: [
-                  Container(
-                    height: ScreenUtil().setHeight(540),
-                    padding: const EdgeInsets.only(left: 20, right: 20),
-                    alignment: Alignment.center,
-                    child: WidgetUtils.showImages(
-                        'assets/images/mine_head_shili.png',
-                        ScreenUtil().setHeight(520),
-                        double.infinity),
-                  ),
                   WidgetUtils.myLine(thickness: 10),
                   GestureDetector(
                     onTap: (() {
@@ -171,6 +144,7 @@ class _EditHeadPageState extends State<EditHeadPage> {
         ));
   }
 
+
   /// 获取文件url
   Future<void> doPostPostFileUpload(path) async {
     var dir = await path_provider.getTemporaryDirectory();
@@ -185,7 +159,7 @@ class _EditHeadPageState extends State<EditHeadPage> {
     FormData formdata = FormData.fromMap(
       {
         'type': 'image',
-        "file": await MultipartFile.fromFile(result!.path,
+        "file": await MultipartFile.fromFile(result!.path.toString(),
           filename: name,)
       },
     );

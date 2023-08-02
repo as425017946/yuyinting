@@ -5,6 +5,7 @@ import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 
+import '../../bean/Common_bean.dart';
 import '../../bean/careListBean.dart';
 import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
@@ -31,8 +32,6 @@ class _CarePageState extends State<CarePage> {
   RefreshController(initialRefresh: false);
 
   int page = 1;
-  /// 是否允许上拉
-  bool isUp = true;
 
   void _onRefresh() async {
     // monitor network fetch
@@ -44,6 +43,7 @@ class _CarePageState extends State<CarePage> {
         page = 1;
       });
     }
+    doPostFollowList();
   }
 
   void _onLoading() async {
@@ -55,6 +55,7 @@ class _CarePageState extends State<CarePage> {
         page++;
       });
     }
+    doPostFollowList();
     _refreshController.loadComplete();
   }
 
@@ -126,25 +127,30 @@ class _CarePageState extends State<CarePage> {
               ],
             ),
           ),
-          Container(
-            height: ScreenUtil().setHeight(50),
-            width: ScreenUtil().setWidth(150),
-            alignment: Alignment.center,
-            //边框设置
-            decoration: const BoxDecoration(
-              //背景
-              color: MyColors.f6 ,
-              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-              borderRadius:
-              BorderRadius.all(Radius.circular(20.0)),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                WidgetUtils.showImages('assets/images/care_guanzhu.png', 8, 12),
-                WidgetUtils.commonSizedBox(0, 5),
-                WidgetUtils.onlyText(_list[i].follow == '0' ? '已关注' : '相互关注', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(22)))
-              ],
+          GestureDetector(
+            onTap: ((){
+              doPostFollow(_list[i].uid, i);
+            }),
+            child: Container(
+              height: ScreenUtil().setHeight(50),
+              width: ScreenUtil().setWidth(150),
+              alignment: Alignment.center,
+              //边框设置
+              decoration: const BoxDecoration(
+                //背景
+                color: MyColors.f6 ,
+                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                borderRadius:
+                BorderRadius.all(Radius.circular(20.0)),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  WidgetUtils.showImages('assets/images/care_guanzhu.png', 8, 12),
+                  WidgetUtils.commonSizedBox(0, 5),
+                  WidgetUtils.onlyText(_list[i].follow == '0' ? '已关注' : '相互关注', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(22)))
+                ],
+              ),
             ),
           ),
         ],
@@ -159,10 +165,10 @@ class _CarePageState extends State<CarePage> {
     listen = eventBus.on<CareBack>().listen((event) {
         setState(() {
           infos = event.info;
-          doPostFollow();
+          doPostFollowList();
         });
     });
-    doPostFollow();
+    doPostFollowList();
   }
 
   @override
@@ -185,7 +191,7 @@ class _CarePageState extends State<CarePage> {
               header: MyUtils.myHeader(),
               footer: MyUtils.myFotter(),
               controller: _refreshController,
-              enablePullUp: isUp,
+              enablePullUp: true,
               onLoading: _onLoading,
               onRefresh: _onRefresh,
               child: ListView.builder(
@@ -219,7 +225,7 @@ class _CarePageState extends State<CarePage> {
 
 
   /// 关注列表
-  Future<void> doPostFollow() async {
+  Future<void> doPostFollowList() async {
     Map<String, dynamic> params = <String, dynamic>{
       'type': '1',
       'keywords': infos,
@@ -232,29 +238,58 @@ class _CarePageState extends State<CarePage> {
       careListBean bean = await DataUtils.postFollowList(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          _list.clear();
-          if (bean.data!.list!.isNotEmpty) {
-            if(bean.data!.list!.length > MyConfig.pageSize){
-              setState(() {
-                isUp = true;
-              });
-            }else{
-              setState(() {
-                isUp = false;
-              });
+          setState(() {
+            if (page == 1) {
+              _list.clear();
             }
+            if(bean.data!.list!.isNotEmpty){
+              for(int i =0; i < bean.data!.list!.length; i++){
+                _list.add(bean.data!.list![i]);
+              }
+              if(bean.data!.list!.length < MyConfig.pageSize){
+                _refreshController.loadNoData();
+              }
 
-            setState(() {
-              _list = bean.data!.list!;
-              length = _list.length;
-              number = bean.data!.count!;
-            });
-          } else {
-            setState(() {
-              length = 0;
-              number = 0;
-            });
-          }
+              length = bean.data!.list!.length;
+            }else{
+              if (page == 1) {
+                length = 0;
+              }
+              _refreshController.loadNoData();
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+  }
+
+  /// 取消关注
+  Future<void> doPostFollow(follow_id, index) async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'type': '1',
+      'status':'0',
+      'follow_id': follow_id,
+    };
+    try {
+      Loading.show("提交中...");
+      CommonBean bean = await DataUtils.postFollow(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          MyToastUtils.showToastBottom("取关成功！");
+          setState(() {
+            _list.removeAt(index);
+          });
           break;
         case MyHttpConfig.errorloginCode:
         // ignore: use_build_context_synchronously

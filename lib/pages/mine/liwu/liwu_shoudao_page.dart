@@ -25,8 +25,6 @@ class _LiwuShoudaoPageState extends State<LiwuShoudaoPage> {
   List<Data> list = [];
   /// 当前页码
   int page = 1;
-  /// 是否允许上拉
-  bool isUp = true;
   final RefreshController _refreshController =
   RefreshController(initialRefresh: false);
 
@@ -132,7 +130,7 @@ class _LiwuShoudaoPageState extends State<LiwuShoudaoPage> {
       header: MyUtils.myHeader(),
       footer: MyUtils.myFotter(),
       controller: _refreshController,
-      enablePullUp: isUp,
+      enablePullUp: true,
       onLoading: _onLoading,
       onRefresh: _onRefresh,
       child: ListView.builder(
@@ -173,25 +171,26 @@ class _LiwuShoudaoPageState extends State<LiwuShoudaoPage> {
       liwuMoreBean bean = await DataUtils.postGiftDetail(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          list.clear();
-          if(bean.data!.isNotEmpty){
-            if(bean.data!.length > MyConfig.pageSize){
-              setState(() {
-                isUp = true;
-              });
-            }else{
-              setState(() {
-                isUp = false;
-              });
+          setState(() {
+            if (page == 1) {
+              list.clear();
             }
-            setState(() {
-               list = bean.data!;
-            });
-          }else{
-            setState(() {
-              isUp = false;
-            });
-          }
+            if(bean.data!.isNotEmpty){
+              for(int i =0; i < bean.data!.length; i++){
+                list.add(bean.data![i]);
+              }
+              if(bean.data!.length < MyConfig.pageSize){
+                _refreshController.loadNoData();
+              }
+
+              length = bean.data!.length;
+            }else{
+              if (page == 1) {
+                length = 0;
+              }
+              _refreshController.loadNoData();
+            }
+          });
           break;
         case MyHttpConfig.errorloginCode:
         // ignore: use_build_context_synchronously

@@ -29,8 +29,6 @@ class _WhoLockMePageState extends State<WhoLockMePage> {
   RefreshController(initialRefresh: false);
 
   int page = 1;
-  /// 是否允许上拉
-  bool isUp = true;
 
   void _onRefresh() async {
     // monitor network fetch
@@ -42,6 +40,7 @@ class _WhoLockMePageState extends State<WhoLockMePage> {
         page = 1;
       });
     }
+    doPostHistoryList();
   }
 
   void _onLoading() async {
@@ -53,6 +52,7 @@ class _WhoLockMePageState extends State<WhoLockMePage> {
         page++;
       });
     }
+    doPostHistoryList();
     _refreshController.loadComplete();
   }
 
@@ -152,7 +152,7 @@ class _WhoLockMePageState extends State<WhoLockMePage> {
         header: MyUtils.myHeader(),
         footer: MyUtils.myFotter(),
         controller: _refreshController,
-        enablePullUp: isUp,
+        enablePullUp: true,
         onLoading: _onLoading,
         onRefresh: _onRefresh,
         child: ListView.builder(
@@ -193,26 +193,25 @@ class _WhoLockMePageState extends State<WhoLockMePage> {
       whoLockMe bean = await DataUtils.postHistoryList(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          _list.clear();
-          if (bean.data!.isNotEmpty) {
-            if(bean.data!.length > MyConfig.pageSize){
-              setState(() {
-                isUp = true;
-              });
-            }else{
-              setState(() {
-                isUp = false;
-              });
+          setState(() {
+            if (page == 1) {
+              _list.clear();
             }
-            setState(() {
-              _list = bean.data!;
-              length = _list.length;
-            });
-          } else {
-            setState(() {
-              length = 0;
-            });
-          }
+            if(bean.data!.isNotEmpty){
+              for(int i =0; i < bean.data!.length; i++){
+                _list.add(bean.data![i]);
+              }
+              if(bean.data!.length < MyConfig.pageSize){
+                _refreshController.loadNoData();
+              }
+              length = bean.data!.length;
+            }else{
+              if (page == 1) {
+                length = 0;
+              }
+              _refreshController.loadNoData();
+            }
+          });
           break;
         case MyHttpConfig.errorloginCode:
         // ignore: use_build_context_synchronously

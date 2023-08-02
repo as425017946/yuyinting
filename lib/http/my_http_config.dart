@@ -8,9 +8,9 @@ class MyHttpConfig{
   //测试上传
   static const String uploadUrl = 'http://192.168.100.121:18089/upload';
   //鹏飞测试环境
-  static const String baseURL = "http://192.168.0.51/api";
+  // static const String baseURL = "http://192.168.0.51/api";
   //赵增测试环境
-  // static const String baseURL = "http://192.168.0.53/api";
+  static const String baseURL = "http://192.168.0.53/api";
   //正式环境
   // static const String baseURL = "https://yy.sunvua.com/api";
 
@@ -72,7 +72,38 @@ class MyHttpConfig{
   static const String modifyUserInfo = "$baseURL/mine/modifyUserInfo";
   //获取城市
   static const String getCity = "$baseURL/system/getCity";
+  //商城列表
+  static const String shopList = "$baseURL/shop/index";
+  //装扮背包列表
+  static const String myShopList = "$baseURL/shop/myPackage";
+  //搜索公会
+  static const String searchGuild = "$baseURL/guild/searchGuild";
+  //申请签约
+  static const String applySign = "$baseURL/streamer/applySign";
+  //我的公会
+  static const String myGh = "$baseURL/guild/homepage";
+  //搜索公会成员
+  static const String searchGuildStreamer = "$baseURL/guild/searchGuildStreamer";
+  //搜索公会房间
+  static const String searchGuildRoom = "$baseURL/guild/searchGuildRoom";
+  //申请签约列表
+  static const String applySignList = "$baseURL/guild/applySignList";
+  //签约审核
+  static const String signExamine = "$baseURL/guild/signExamine";
+  //踢出公会
+  static const String kickOut = "$baseURL/guild/kickOut";
+  //公会设置
+  static const String ghSave = "$baseURL/guild/save";
+  //公会设置
+  static const String kefu = "$baseURL/mine/kefu";
 
+  /// 动态模块
+  //关注动态列表
+  static const String gzFollowList = "$baseURL/note/followList";
+  //推荐动态列表
+  static const String recommendList = "$baseURL/note/recommendList";
+  //用户动态列表
+  static const String userList = "$baseURL/note/userList";
 
 
 }

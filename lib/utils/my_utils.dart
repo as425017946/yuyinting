@@ -6,6 +6,7 @@ import 'package:yuyinting/pages/game/mofang_page.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import '../main.dart';
 import '../pages/login/login_page.dart';
+import 'log_util.dart';
 import 'my_toast_utils.dart';
 
 class MyUtils {
@@ -147,23 +148,14 @@ class MyUtils {
     if (!isRight) {
       return 0;
     }
-    int len = (cardId + "").length;
+    int len = (cardId).length;
     String strBirthday = "";
     if (len == 18) {
       //处理18位的身份证号码从号码中得到生日和性别代码
-      strBirthday = cardId.substring(6, 10) +
-          "-" +
-          cardId.substring(10, 12) +
-          "-" +
-          cardId.substring(12, 14);
+      strBirthday = "${cardId.substring(6, 10)}-${cardId.substring(10, 12)}-${cardId.substring(12, 14)}";
     }
     if (len == 15) {
-      strBirthday = "19" +
-          cardId.substring(6, 8) +
-          "-" +
-          cardId.substring(8, 10) +
-          "-" +
-          cardId.substring(10, 12);
+      strBirthday = "19${cardId.substring(6, 8)}-${cardId.substring(8, 10)}-${cardId.substring(10, 12)}";
     }
     int age = getAgeFromBirthday(strBirthday);
     return age;
@@ -224,6 +216,7 @@ class MyUtils {
       );
     });
   }
+
 
   /// 通用跳转到一个透明页面，从底部向上滚出的方法
   static void goTransparentPage(BuildContext context, Widget page) {
@@ -294,6 +287,7 @@ class MyUtils {
     return CustomFooter(
       builder: (BuildContext context, LoadStatus? mode) {
         Widget body;
+        LogE('返回状态${LoadStatus.idle}');
         if (mode == LoadStatus.idle) {
           body = const Text("上拉加载");
         } else if (mode == LoadStatus.loading) {

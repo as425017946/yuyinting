@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_pickers/pickers.dart';
@@ -21,6 +22,7 @@ import 'style_utils.dart';
 
 ///组件工具类
 class WidgetUtils {
+
   ///appbar 头部
   static Widget getAppBar(String title, bool isBack, BuildContext context,
       bool isCreate, int index) {
@@ -572,10 +574,11 @@ class WidgetUtils {
               gaplessPlayback: true,
             )
           : url.isNotEmpty
-              ? Image.network(
-                  url,
+              ? CachedNetworkImage(
+                  imageUrl: url,
                   fit: BoxFit.cover,
-                  gaplessPlayback: true,
+                  placeholder: (context, url) => CircleImageAss(height, width, ScreenUtil().setHeight(10) , 'assets/images/img_placeholder.png',),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                 )
               : Image(
                   image: const AssetImage('assets/images/img_placeholder.png'),
@@ -607,6 +610,7 @@ class WidgetUtils {
               image: AssetImage(url),
               width: width,
               height: height,
+              fit: BoxFit.cover,
               gaplessPlayback: true,
             ),
     );
@@ -615,12 +619,15 @@ class WidgetUtils {
   ///圆形图片网络
   static Widget CricleImagess(double height, double width, String url) {
     return ClipOval(
-      child: Image.network(
-        url,
-        width: width,
+      child: SizedBox(
         height: height,
-        fit: BoxFit.cover,
-        gaplessPlayback: true,
+        width: width,
+        child: CachedNetworkImage(
+          imageUrl: url,
+          fit: BoxFit.cover,
+          placeholder: (context, url) => CircleImageAss(height, width, ScreenUtil().setHeight(10) , 'assets/images/img_placeholder.png',),
+          errorWidget: (context, url, error) => const Icon(Icons.error),
+        ),
       ),
     );
   }
@@ -643,8 +650,16 @@ class WidgetUtils {
 
   ///展示图片使用
   static Widget showImagesNet(String url, double height, double width) {
-    return Image.network(url,
-        width: width, height: height, fit: BoxFit.cover, gaplessPlayback: true);
+    return SizedBox(
+      height: height,
+      width: width,
+      child: CachedNetworkImage(
+        imageUrl: url,
+        fit: BoxFit.cover,
+        placeholder: (context, url) => CircleImageAss(height, width, ScreenUtil().setHeight(10) , 'assets/images/img_placeholder.png',),
+        errorWidget: (context, url, error) => const Icon(Icons.error),
+      ),
+    );
   }
 
   ///展示图片使用
@@ -993,7 +1008,8 @@ class WidgetUtils {
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          padding: const EdgeInsets.only(left: 10, top: 5, right: 10, bottom: 5),
+          padding:
+              const EdgeInsets.only(left: 10, top: 5, right: 10, bottom: 5),
           alignment: Alignment.center,
           //边框设置
           decoration: BoxDecoration(
@@ -1018,8 +1034,8 @@ class WidgetUtils {
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-
-          padding: const EdgeInsets.only(left: 10, top: 5, right: 10, bottom: 5),
+          padding:
+              const EdgeInsets.only(left: 10, top: 5, right: 10, bottom: 5),
           alignment: Alignment.center,
           //边框设置
           decoration: BoxDecoration(

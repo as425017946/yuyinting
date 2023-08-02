@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yuyinting/bean/Common_bean.dart';
 
+import '../../../bean/qyListBean.dart';
 import '../../../colors/my_colors.dart';
+import '../../../http/data_utils.dart';
+import '../../../http/my_http_config.dart';
+import '../../../main.dart';
+import '../../../utils/loading.dart';
+import '../../../utils/my_toast_utils.dart';
+import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 /// 入驻审核
@@ -14,12 +22,14 @@ class ShenhePage extends StatefulWidget {
 
 class _ShenhePageState extends State<ShenhePage> {
   var appBar;
-  var length = 10;
+  var length = 1;
+  List<Data> list = [];
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     appBar = WidgetUtils.getAppBar('入驻审核', true, context, false, 0);
+    doPostApplySignList();
   }
   @override
   void dispose() {
@@ -34,9 +44,9 @@ class _ShenhePageState extends State<ShenhePage> {
       height: ScreenUtil().setHeight(120),
       child: Row(
         children: [
-          WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(100), ScreenUtil().setWidth(100), 'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
+          WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(100), ScreenUtil().setWidth(100), list[i].avatar!),
           WidgetUtils.commonSizedBox(0, 10),
-          WidgetUtils.onlyText('用户名$i', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: 14)),
+          WidgetUtils.onlyText(list[i].nickname!, StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: 14)),
           WidgetUtils.commonSizedBox(0, 5),
           Container(
             height: ScreenUtil().setHeight(25),
@@ -45,13 +55,13 @@ class _ShenhePageState extends State<ShenhePage> {
             //边框设置
             decoration: BoxDecoration(
               //背景
-              color: i % 2 == 0 ? MyColors.dtPink : MyColors.dtBlue,
+              color: list[i].gender == 0 ? MyColors.dtPink : MyColors.dtBlue,
               //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
               borderRadius:
               const BorderRadius.all(Radius.circular(30.0)),
             ),
             child: WidgetUtils.showImages(
-                i % 2 == 0
+                list[i].gender == 0
                     ? 'assets/images/nv.png'
                     : 'assets/images/nan.png',
                 10,
@@ -60,14 +70,14 @@ class _ShenhePageState extends State<ShenhePage> {
           const Expanded(child: Text('')),
           GestureDetector(
             onTap: ((){
-
+              doPostSignExamine(list[i].streamerUid,'2',i);
             }),
             child: WidgetUtils.myContainer(ScreenUtil().setHeight(45), ScreenUtil().setHeight(90), Colors.white, MyColors.homeTopBG, '同意', ScreenUtil().setSp(25), MyColors.homeTopBG),
           ),
           WidgetUtils.commonSizedBox(0, 10),
           GestureDetector(
             onTap: ((){
-
+              doPostSignExamine(list[i].streamerUid,'3',i);
             }),
             child: WidgetUtils.myContainer(ScreenUtil().setHeight(45), ScreenUtil().setHeight(90), Colors.white, MyColors.peopleRed, '拒绝', ScreenUtil().setSp(25), MyColors.peopleRed),
           ),
@@ -86,7 +96,7 @@ class _ShenhePageState extends State<ShenhePage> {
       body: length > 0 ? ListView.builder(
         padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
         itemBuilder: _itemPeople,
-        itemCount: length,
+        itemCount: list.length,
       )
       :
       Container(
@@ -103,5 +113,73 @@ class _ShenhePageState extends State<ShenhePage> {
         ),
       ),
     );
+  }
+
+
+  /// 签约列表
+  Future<void> doPostApplySignList() async {
+    Loading.show('加载中...');
+    Map<String, dynamic> params = <String, dynamic>{
+      'guild_id': sp.getString('guild_id'),
+    };
+    try {
+      qyListBean bean = await DataUtils.postApplySignList(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            if(bean.data!.isNotEmpty){
+              list = bean.data!;
+              length = list.length;
+            }else{
+              length = 0;
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+  }
+
+
+  /// 签约状态
+  Future<void> doPostSignExamine(streamer_uid,status,index) async {
+    Loading.show();
+    Map<String, dynamic> params = <String, dynamic>{
+      'guild_id': sp.getString('guild_id'),
+      'streamer_uid': streamer_uid,
+      'status': status //2通过 3拒绝
+    };
+    try {
+      CommonBean bean = await DataUtils.postSignExamine(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          MyToastUtils.showToastBottom('操作成功！');
+          setState(() {
+            list.removeAt(index);
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
   }
 }

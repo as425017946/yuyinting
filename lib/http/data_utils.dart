@@ -1,16 +1,26 @@
 import 'package:yuyinting/bean/BlackListBean.dart';
 import 'package:yuyinting/bean/Common_bean.dart';
 import 'package:yuyinting/bean/aboutUsBean.dart';
+import '../bean/DTListBean.dart';
 import '../bean/careListBean.dart';
 import '../bean/cityBean.dart';
 import '../bean/fileUpdateBean.dart';
+import '../bean/ghPeopleBean.dart';
+import '../bean/ghRoomBean.dart';
+import '../bean/kefuBean.dart';
 import '../bean/labelListBean.dart';
 import '../bean/liwuMoreBean.dart';
 import '../bean/loginBean.dart';
+import '../bean/myGhBean.dart';
 import '../bean/myHomeBean.dart';
 import '../bean/myInfoBean.dart';
+import '../bean/myShopListBean.dart';
 import '../bean/quhao_bean.dart';
 import '../bean/quhao_searche_bean.dart';
+import '../bean/qyListBean.dart';
+import '../bean/searchGonghuiBean.dart';
+import '../bean/shopListBean.dart';
+import '../bean/userDTListBean.dart';
 import '../bean/userInfoBean.dart';
 import '../bean/whoLockMe.dart';
 import 'my_http_config.dart';
@@ -149,12 +159,20 @@ class DataUtils{
     return CommonBean.fromJson(respons!);
   }
 
-  /// 用户关注和取关
+  /// 用户关注和取关列表
   static Future<careListBean> postFollowList(Map<String,dynamic> params) async {
-    print("用户关注和取关：$params");
+    print("用户关注和取关列表：$params");
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.followList, {}, params);
-    print("用户关注和取关：$respons");
+    print("用户关注和取关列表：$respons");
     return careListBean.fromJson(respons!);
+  }
+
+  /// 用户关注和取关
+  static Future<CommonBean> postFollow(Map<String,dynamic> params) async {
+    print("用户关注和取关：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.follow, {}, params);
+    print("用户关注和取关：$respons");
+    return CommonBean.fromJson(respons!);
   }
 
   /// 谁看过我
@@ -205,5 +223,113 @@ class DataUtils{
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.getCity, {}, {});
     print("获取城市：$respons");
     return cityBean.fromJson(respons!);
+  }
+
+  /// 装扮商城列表
+  static Future<shopListBean> postShopList(Map<String,dynamic> params) async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.shopList, {}, params);
+    print("装扮商城列表：$respons");
+    return shopListBean.fromJson(respons!);
+  }
+
+
+  /// 装扮背包列表
+  static Future<myShopListBean> postMyShopList(Map<String,dynamic> params) async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.myShopList, {}, params);
+    print("装扮背包列表：$respons");
+    return myShopListBean.fromJson(respons!);
+  }
+
+  /// 搜索公会
+  static Future<searchGonghuiBean> postSearchGuild(Map<String,dynamic> params) async {
+    print("搜索公会*：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.searchGuild, {}, params);
+    print("搜索公会：$respons");
+    return searchGonghuiBean.fromJson(respons!);
+  }
+
+  /// 申请签约
+  static Future<CommonBean> postApplySign(Map<String,dynamic> params) async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.applySign, {}, params);
+    print("申请签约：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 我的公会
+  static Future<myGhBean> postMyGh() async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.myGh, {}, {});
+    print("我的公会：$respons");
+    return myGhBean.fromJson(respons!);
+  }
+
+  /// 公会成员列表
+  static Future<ghPeopleBean> postSearchGuildStreamer(Map<String,dynamic> params) async {
+    print("公会成员列表：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.searchGuildStreamer, {}, params);
+    print("公会成员列表：$respons");
+    return ghPeopleBean.fromJson(respons!);
+  }
+
+  /// 公会房间列表
+  static Future<ghRoomBean> postSearchGuildRoom(Map<String,dynamic> params) async {
+    print("公会房间列表：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.searchGuildRoom, {}, params);
+    print("公会房间列表：$respons");
+    return ghRoomBean.fromJson(respons!);
+  }
+
+  /// 申请签约列表
+  static Future<qyListBean> postApplySignList(Map<String,dynamic> params) async {
+    print("申请签约列表：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.applySignList, {}, params);
+    print("申请签约列表：$respons");
+    return qyListBean.fromJson(respons!);
+  }
+
+  /// 签约审核
+  static Future<CommonBean> postSignExamine(Map<String,dynamic> params) async {
+    print("签约审核：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.signExamine, {}, params);
+    print("签约审核：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 公会设置
+  static Future<CommonBean> postGhSave(Map<String,dynamic> params) async {
+    print("公会设置：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.ghSave, {}, params);
+    print("公会设置：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 踢出公会
+  static Future<CommonBean> postKickOut(Map<String,dynamic> params) async {
+    print("踢出公会：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.kickOut, {}, params);
+    print("踢出公会：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 客服联系方式
+  static Future<kefuBean> postKefu() async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.kefu, {}, {});
+    print("客服联系方式：$respons");
+    return kefuBean.fromJson(respons!);
+  }
+
+  /// 用户动态列表
+  static Future<userDTListBean> postUserList(Map<String,dynamic> params) async {
+    print("用户动态列表：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.userList, {}, params);
+    print("用户动态列表：$respons");
+    return userDTListBean.fromJson(respons!);
+  }
+
+  /// 关注动态列表
+  static Future<DTListBean> postGZFollowList(Map<String,dynamic> params) async {
+    print("用户动态列表：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.gzFollowList, {}, params);
+    print("用户动态列表：$respons");
+    return DTListBean.fromJson(respons!);
   }
 }
