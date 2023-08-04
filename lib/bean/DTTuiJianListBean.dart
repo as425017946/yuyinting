@@ -1,11 +1,11 @@
-class DTListBean {
+class DTTuiJianListBean {
   int? code;
   String? msg;
   Data? data;
 
-  DTListBean({this.code, this.msg, this.data});
+  DTTuiJianListBean({this.code, this.msg, this.data});
 
-  DTListBean.fromJson(Map<String, dynamic> json) {
+  DTTuiJianListBean.fromJson(Map<String, dynamic> json) {
     code = json['code'];
     msg = json['msg'];
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
@@ -23,19 +23,26 @@ class DTListBean {
 }
 
 class Data {
-  List<ListDT>? list;
+  List<ListTJ>? list;
   String? isEnd;
+  List<BannerTJ>? banner;
 
-  Data({this.list, this.isEnd});
+  Data({this.list, this.isEnd, this.banner});
 
   Data.fromJson(Map<String, dynamic> json) {
     if (json['list'] != null) {
-      list = <ListDT>[];
+      list = <ListTJ>[];
       json['list'].forEach((v) {
-        list!.add(new ListDT.fromJson(v));
+        list!.add(new ListTJ.fromJson(v));
       });
     }
     isEnd = json['is_end'];
+    if (json['banner'] != null) {
+      banner = <BannerTJ>[];
+      json['banner'].forEach((v) {
+        banner!.add(new BannerTJ.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -44,11 +51,14 @@ class Data {
       data['list'] = this.list!.map((v) => v.toJson()).toList();
     }
     data['is_end'] = this.isEnd;
+    if (this.banner != null) {
+      data['banner'] = this.banner!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }
 
-class ListDT {
+class ListTJ {
   int? id;
   int? uid;
   String? text;
@@ -72,7 +82,7 @@ class ListDT {
   int? isLike;
   int? type;
 
-  ListDT(
+  ListTJ(
       {this.id,
         this.uid,
         this.text,
@@ -94,9 +104,9 @@ class ListDT {
         this.imgUrl,
         this.isHi,
         this.isLike,
-      this.type});
+        this.type});
 
-  ListDT.fromJson(Map<String, dynamic> json) {
+  ListTJ.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     uid = json['uid'];
     text = json['text'];
@@ -145,6 +155,25 @@ class ListDT {
     data['is_hi'] = this.isHi;
     data['is_like'] = this.isLike;
     data['type'] = this.type;
+    return data;
+  }
+}
+
+class BannerTJ {
+  String? img;
+  String? url;
+
+  BannerTJ({this.img, this.url});
+
+  BannerTJ.fromJson(Map<String, dynamic> json) {
+    img = json['img'];
+    url = json['url'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['img'] = this.img;
+    data['url'] = this.url;
     return data;
   }
 }

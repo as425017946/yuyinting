@@ -72,8 +72,8 @@ class _CarePageState extends State<CarePage> {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(105), ScreenUtil().setWidth(105), _list[i].avatar!),
-                _list[i].liveStatus == 1 ? WidgetUtils.showImages('assets/images/zhibozhong.webp', ScreenUtil().setHeight(110), ScreenUtil().setWidth(110),) : WidgetUtils.commonSizedBox(0, 0),
+                WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(90), ScreenUtil().setHeight(90), _list[i].avatar!),
+                _list[i].liveStatus == 1 ? WidgetUtils.showImages('assets/images/zhibozhong.webp', ScreenUtil().setHeight(90), ScreenUtil().setHeight(90),) : WidgetUtils.commonSizedBox(0, 0),
               ],
             ),
           ),

@@ -5,10 +5,17 @@ import 'package:yuyinting/utils/my_utils.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 
+import '../../bean/Common_bean.dart';
 import '../../colors/my_colors.dart';
+import '../../http/data_utils.dart';
+import '../../http/my_http_config.dart';
+import '../../utils/my_toast_utils.dart';
 ///打招呼弹窗
 class TrendsHiPage extends StatefulWidget {
-  const TrendsHiPage({Key? key}) : super(key: key);
+  String imgUrl;
+  String uid;
+  int index;
+  TrendsHiPage({Key? key, required this.imgUrl, required this.uid, required this.index}) : super(key: key);
 
   @override
   State<TrendsHiPage> createState() => _TrendsHiPageState();
@@ -21,10 +28,11 @@ class _TrendsHiPageState extends State<TrendsHiPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
     eventBus.on<SubmitButtonBack>().listen((event) {
         if(MyUtils.compare('发送', event.title) == 0){
-          Navigator.pop(context);
+          if(mounted) {
+            doPostHi();
+          }
         }
     });
   }
@@ -105,11 +113,40 @@ class _TrendsHiPageState extends State<TrendsHiPage> {
                   ],
                 ),
               ),
-              WidgetUtils.CircleHeadImage(80, 80, 'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342')
+              WidgetUtils.CircleHeadImage(80, 80, widget.imgUrl)
             ],
           ),
         ),
       ),
     );
+  }
+
+  /// 点赞
+  Future<void> doPostHi() async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'uid': widget.uid,
+    };
+    try {
+      CommonBean bean = await DataUtils.postHi(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          eventBus.fire(HiBack(isBack: true, index: widget.index));
+          Navigator.pop(context);
+          break;
+        case MyHttpConfig.errorHiCode:
+          eventBus.fire(HiBack(isBack: true, index: widget.index));
+          Navigator.pop(context);
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
   }
 }

@@ -320,6 +320,7 @@ class WidgetUtils {
     return TextField(
       controller: controller,
       maxLength: 150,
+      maxLines: 8,
       inputFormatters: [
         RegexFormatter(regex: MyUtils.regexFirstNotNull),
       ],
@@ -511,47 +512,17 @@ class WidgetUtils {
   }
 
   /// 圆形图片
-  static Widget CircleGreyImage(
-      double height, double width, double radius, String imgUrl) {
-    return Container(
-      height: height,
-      width: width,
-      //超出部分，可裁剪
-      clipBehavior: Clip.hardEdge,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(radius),
-        image: DecorationImage(
-          image: NetworkImage(imgUrl),
-          fit: BoxFit.cover,
-          colorFilter: ColorFilter.mode(Colors.grey, BlendMode.color),
-        ),
-      ),
-    );
-  }
-
-  /// 圆形图片
   static Widget CircleHeadImage(double height, double width, String imgUrl) {
     return SizedBox(
       height: height,
       width: width,
-      child: CircleAvatar(
-        backgroundColor: Colors.transparent,
-        backgroundImage: imgUrl.isNotEmpty
-            ? NetworkImage(imgUrl)
-            : const AssetImage("assets/images/img_placeholder.png")
-                as ImageProvider,
-      ),
-    );
-  }
-
-  /// 圆形图片
-  static Widget CircleHeadImage2(double height, double width, String imgUrl) {
-    return SizedBox(
-      height: height,
-      width: width,
-      child: CircleAvatar(
-        backgroundColor: Colors.transparent,
-        backgroundImage: AssetImage(imgUrl),
+      child: ClipOval(
+        child: CachedNetworkImage(
+          imageUrl: imgUrl,
+          fit: BoxFit.cover,
+          placeholder: (context, url) => CircleImageAss(height, width, ScreenUtil().setHeight(10) , 'assets/images/img_placeholder.png',),
+          errorWidget: (context, url, error) => const Icon(Icons.error),
+        ),
       ),
     );
   }

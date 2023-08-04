@@ -36,7 +36,6 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
     super.initState();
     animationController = SVGAAnimationController(vsync: this);
     loadAnimation();
-
   }
   void loadAnimation() async {
     final videoItem = await _loadSVGA(false, 'assets/svga/mofang_lan_baozha.svga');

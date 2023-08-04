@@ -66,6 +66,9 @@ class ListDT {
   String? city;
   int? liveStatus;
   List<String>? imgUrl;
+  int? type;
+  int? isLike;
+
 
   ListDT(
       {this.id,
@@ -84,7 +87,9 @@ class ListDT {
         this.gender,
         this.city,
         this.liveStatus,
-        this.imgUrl});
+        this.imgUrl,
+        this.type,
+        this.isLike});
 
   ListDT.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -102,6 +107,8 @@ class ListDT {
     number = json['number'];
     gender = json['gender'];
     city = json['city'];
+    type = json['type'];
+    isLike = json['is_like'];
     liveStatus = json['live_status'];
     imgUrl = json['img_url'].cast<String>();
   }
@@ -125,6 +132,8 @@ class ListDT {
     data['city'] = this.city;
     data['live_status'] = this.liveStatus;
     data['img_url'] = this.imgUrl;
+    data['type'] = this.type;
+    data['is_like'] = this.isLike;
     return data;
   }
 }

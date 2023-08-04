@@ -119,8 +119,8 @@ class _MyInfoPageState extends State<MyInfoPage> {
                 child: Row(
                   children: [
                     WidgetUtils.CircleHeadImage(
-                        ScreenUtil().setHeight(140),
-                        ScreenUtil().setWidth(140),
+                        ScreenUtil().setHeight(150),
+                        ScreenUtil().setHeight(150),
                         sp.getString('user_headimg').toString()),
                     WidgetUtils.commonSizedBox(0, 10),
 

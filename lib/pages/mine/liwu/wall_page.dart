@@ -36,7 +36,7 @@ class _WallPageState extends State<WallPage> {
   Widget _initlistdata(context, index) {
     return Column(
       children: [
-        list_a[index].status == 0 ? WidgetUtils.CircleGreyImage(ScreenUtil().setHeight(130), ScreenUtil().setHeight(150), ScreenUtil().setHeight(75), list_a[index].img!) : WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(130), ScreenUtil().setHeight(150), list_a[index].img!),
+        list_a[index].status == 0 ? WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(130), ScreenUtil().setHeight(150), list_a[index].img!) : WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(130), ScreenUtil().setHeight(150), list_a[index].img!),
         WidgetUtils.onlyTextCenter(list_a[index].name!, StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(25))),
         WidgetUtils.onlyTextCenter('x${list_a[index].count.toString()}', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(25))),
       ],

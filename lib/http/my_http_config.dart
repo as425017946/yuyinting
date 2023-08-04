@@ -4,6 +4,7 @@ class MyHttpConfig{
   static const int successCode = 200;//成功返回的标识
   static const int noinfoCode = 400;//失败
   static const int errorloginCode = 401;//登录失效
+  static const int errorHiCode = 20001;//
 
   //测试上传
   static const String uploadUrl = 'http://192.168.100.121:18089/upload';
@@ -104,6 +105,16 @@ class MyHttpConfig{
   static const String recommendList = "$baseURL/note/recommendList";
   //用户动态列表
   static const String userList = "$baseURL/note/userList";
+  //点赞
+  static const String like = "$baseURL/note/like";
+  //评论
+  static const String comment = "$baseURL/note/comment";
+  // 动态详情
+  static const String dtDetail = "$baseURL/note/detail";
+  //打招呼
+  static const String hi = "$baseURL/chat/hi";
+  //发布动态
+  static const String sendDT = "$baseURL/note/post";
 
 
 }

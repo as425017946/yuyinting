@@ -23,7 +23,11 @@ class MyZiliaoPage extends StatefulWidget {
 }
 
 class _MyZiliaoPageState extends State<MyZiliaoPage> {
-  int  gender = 0, is_pretty = 0, all_gift_type = 0, age = 0, receive_gift_type = 0;
+  int gender = 0,
+      is_pretty = 0,
+      all_gift_type = 0,
+      age = 0,
+      receive_gift_type = 0;
   String headImg = '',
       nickName = '',
       userNumber = '',
@@ -39,15 +43,16 @@ class _MyZiliaoPageState extends State<MyZiliaoPage> {
   Widget _itemTuiJian(BuildContext context, int i) {
     return Container(
       margin: const EdgeInsets.only(right: 10),
-      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(110), ScreenUtil().setHeight(110), ScreenUtil().setHeight(20), list_p[i]),
+      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(110),
+          ScreenUtil().setHeight(110), ScreenUtil().setHeight(20), list_p[i]),
     );
   }
-
 
   Widget _itemLiwu(BuildContext context, int i) {
     return Container(
       margin: const EdgeInsets.only(right: 10),
-      child: WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(110), ScreenUtil().setHeight(110), list_a[i].img!),
+      child: WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(110),
+          ScreenUtil().setHeight(110), list_a[i].img!),
     );
   }
 
@@ -77,7 +82,7 @@ class _MyZiliaoPageState extends State<MyZiliaoPage> {
             child: Column(
               children: [
                 GestureDetector(
-                  onTap: ((){
+                  onTap: (() {
                     Navigator.pushNamed(context, 'WallPage');
                   }),
                   child: Container(
@@ -86,47 +91,91 @@ class _MyZiliaoPageState extends State<MyZiliaoPage> {
                     margin: const EdgeInsets.only(top: 10),
                     child: Row(
                       children: [
-                        WidgetUtils.showImages('assets/images/people_liwu.png', ScreenUtil().setHeight(35), ScreenUtil().setHeight(35)),
+                        WidgetUtils.showImages(
+                            'assets/images/people_liwu.png',
+                            ScreenUtil().setHeight(35),
+                            ScreenUtil().setHeight(35)),
                         WidgetUtils.commonSizedBox(0, 5),
-                        WidgetUtils.onlyText('礼物墙', StyleUtils.getCommonTextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(32))),
+                        WidgetUtils.onlyText(
+                            '礼物墙',
+                            StyleUtils.getCommonTextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
+                                fontSize: ScreenUtil().setSp(32))),
                         WidgetUtils.commonSizedBox(0, 5),
-                        WidgetUtils.onlyText('共收到$receive_gift_type/$all_gift_type款', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(26))),
+                        WidgetUtils.onlyText(
+                            '共收到$receive_gift_type/$all_gift_type款',
+                            StyleUtils.getCommonTextStyle(
+                                color: MyColors.g9,
+                                fontWeight: FontWeight.w600,
+                                fontSize: ScreenUtil().setSp(26))),
                         const Expanded(child: Text('')),
-                        WidgetUtils.onlyText('查看', StyleUtils.getCommonTextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(26))),
+                        WidgetUtils.onlyText(
+                            '查看',
+                            StyleUtils.getCommonTextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
+                                fontSize: ScreenUtil().setSp(26))),
                         WidgetUtils.commonSizedBox(0, 5),
-                        WidgetUtils.showImages('assets/images/people_right.png', ScreenUtil().setHeight(25), ScreenUtil().setHeight(15)),
+                        WidgetUtils.showImages(
+                            'assets/images/people_right.png',
+                            ScreenUtil().setHeight(25),
+                            ScreenUtil().setHeight(15)),
                         WidgetUtils.commonSizedBox(0, 10),
                       ],
                     ),
                   ),
                 ),
                 Expanded(
-                  child: list_a.isNotEmpty ?  SizedBox(
-                    height: ScreenUtil().setHeight(110),
-                    width: double.infinity,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: _itemLiwu,
-                      itemCount: list_a.length > 4 ? 4 : list_a.length,
-                    ),
-                  ): const Text(''),
+                  child: list_a.isNotEmpty
+                      ? SizedBox(
+                          height: ScreenUtil().setHeight(110),
+                          width: double.infinity,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemBuilder: _itemLiwu,
+                            itemCount: list_a.length > 4 ? 4 : list_a.length,
+                          ),
+                        )
+                      : Column(
+                          children: [
+                            const Expanded(child: Text('')),
+                            WidgetUtils.showImages(
+                                'assets/images/no_have.png', 60, 60),
+                            WidgetUtils.onlyTextCenter(
+                                '暂无收到礼物',
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.g6,
+                                    fontSize: ScreenUtil().setSp(18))),
+                            const Expanded(child: Text('')),
+                          ],
+                        ),
                 )
               ],
             ),
           ),
           WidgetUtils.commonSizedBox(20, 0),
-          WidgetUtils.onlyText('关于我', StyleUtils.getCommonTextStyle(color: Colors.black , fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(28))),
+          WidgetUtils.onlyText(
+              '关于我',
+              StyleUtils.getCommonTextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+                  fontSize: ScreenUtil().setSp(28))),
           Container(
             height: ScreenUtil().setHeight(70),
             width: double.infinity,
             alignment: Alignment.centerLeft,
             child: Row(
               children: [
-                WidgetUtils.showImages('assets/images/people_xingzuo.png', ScreenUtil().setHeight(40), ScreenUtil().setHeight(40)),
+                WidgetUtils.showImages('assets/images/people_xingzuo.png',
+                    ScreenUtil().setHeight(40), ScreenUtil().setHeight(40)),
                 WidgetUtils.commonSizedBox(0, 10),
-                WidgetUtils.onlyText( constellation.isEmpty ? '未知' : constellation, StyleUtils.getCommonTextStyle(color: MyColors.g3 ,  fontSize: ScreenUtil().setSp(25))),
+                WidgetUtils.onlyText(
+                    constellation.isEmpty ? '未知' : constellation,
+                    StyleUtils.getCommonTextStyle(
+                        color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
               ],
             ),
           ),
@@ -136,9 +185,13 @@ class _MyZiliaoPageState extends State<MyZiliaoPage> {
             alignment: Alignment.centerLeft,
             child: Row(
               children: [
-                WidgetUtils.showImages('assets/images/people_age.png', ScreenUtil().setHeight(40), ScreenUtil().setHeight(40)),
+                WidgetUtils.showImages('assets/images/people_age.png',
+                    ScreenUtil().setHeight(40), ScreenUtil().setHeight(40)),
                 WidgetUtils.commonSizedBox(0, 10),
-                WidgetUtils.onlyText(age.toString(), StyleUtils.getCommonTextStyle(color: MyColors.g3 ,  fontSize: ScreenUtil().setSp(25))),
+                WidgetUtils.onlyText(
+                    age.toString(),
+                    StyleUtils.getCommonTextStyle(
+                        color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
               ],
             ),
           ),
@@ -148,35 +201,50 @@ class _MyZiliaoPageState extends State<MyZiliaoPage> {
             alignment: Alignment.centerLeft,
             child: Row(
               children: [
-                WidgetUtils.showImages('assets/images/people_dingwei.png', ScreenUtil().setHeight(40), ScreenUtil().setHeight(40)),
+                WidgetUtils.showImages('assets/images/people_dingwei.png',
+                    ScreenUtil().setHeight(40), ScreenUtil().setHeight(40)),
                 WidgetUtils.commonSizedBox(0, 10),
-                WidgetUtils.onlyText(city.isEmpty ? '未知' : city, StyleUtils.getCommonTextStyle(color: MyColors.g3 , fontSize: ScreenUtil().setSp(25))),
+                WidgetUtils.onlyText(
+                    city.isEmpty ? '未知' : city,
+                    StyleUtils.getCommonTextStyle(
+                        color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
               ],
             ),
           ),
           WidgetUtils.myLine(thickness: 5),
           WidgetUtils.commonSizedBox(10, 0),
-          WidgetUtils.onlyText('签名', StyleUtils.getCommonTextStyle(color: Colors.black , fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(28))),
+          WidgetUtils.onlyText(
+              '签名',
+              StyleUtils.getCommonTextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+                  fontSize: ScreenUtil().setSp(28))),
           WidgetUtils.commonSizedBox(10, 0),
-          WidgetUtils.onlyText(description, StyleUtils.getCommonTextStyle(color: Colors.black , fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(25))),
+          WidgetUtils.onlyText(
+              description,
+              StyleUtils.getCommonTextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+                  fontSize: ScreenUtil().setSp(25))),
           WidgetUtils.commonSizedBox(20, 0),
-          list_p.isNotEmpty ? SizedBox(
-            height: ScreenUtil().setHeight(110),
-            width: double.infinity,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: _itemTuiJian,
-              itemCount: list_p.length > 4 ? 4 : list_p.length,
-            ),
-          ): const Text(''),
+          list_p.isNotEmpty
+              ? SizedBox(
+                  height: ScreenUtil().setHeight(110),
+                  width: double.infinity,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: _itemTuiJian,
+                    itemCount: list_p.length > 4 ? 4 : list_p.length,
+                  ),
+                )
+              : const Text(''),
           WidgetUtils.commonSizedBox(20, 0),
         ],
       ),
     );
   }
-
 
   /// 个人主页
   Future<void> doPostMyIfon() async {
@@ -202,10 +270,10 @@ class _MyZiliaoPageState extends State<MyZiliaoPage> {
             constellation = bean.data!.userInfo!.constellation!;
             city = bean.data!.userInfo!.city!;
             description = bean.data!.userInfo!.description!;
-            if(bean.data!.userInfo!.photoId!.isNotEmpty){
+            if (bean.data!.userInfo!.photoId!.isNotEmpty) {
               list_p = bean.data!.userInfo!.photoUrl!;
             }
-            if(bean.data!.giftList!.receiveGift!.isNotEmpty){
+            if (bean.data!.giftList!.receiveGift!.isNotEmpty) {
               list_a = bean.data!.giftList!.receiveGift!;
             }
             all_gift_type = bean.data!.giftList!.allGiftType!;
@@ -213,7 +281,7 @@ class _MyZiliaoPageState extends State<MyZiliaoPage> {
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -226,5 +294,4 @@ class _MyZiliaoPageState extends State<MyZiliaoPage> {
       MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
     }
   }
-
 }

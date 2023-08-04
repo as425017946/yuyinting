@@ -1,18 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+import 'package:svgaplayer_flutter/parser.dart';
+import 'package:svgaplayer_flutter/player.dart';
+import 'package:yuyinting/pages/trends/trends_hi_page.dart';
+import 'package:yuyinting/pages/trends/trends_more_page.dart';
+import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/log_util.dart';
+import '../../bean/Common_bean.dart';
 import '../../bean/DTListBean.dart';
+import '../../bean/DTTuiJianListBean.dart';
 import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
+import '../../main.dart';
 import '../../utils/loading.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../../widget/SwiperPage.dart';
+import 'package:video_player/video_player.dart';
+import '../message/geren/people_info_page.dart';
+import 'PagePreviewVideo.dart';
 
 /// 动态-关注页面
 class TrendsGuanZhuPage extends StatefulWidget {
@@ -23,15 +34,21 @@ class TrendsGuanZhuPage extends StatefulWidget {
 }
 
 class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
   @override
   bool get wantKeepAlive => true;
-
+  String action = 'create';
   int index = 0;
   double x = 0, y = 0;
-
+  var listen;
   List<ListDT> _list = [];
   List<String> imgList = [];
+
+
+  List<ListTJ> _list_tj = [];
+  List<String> imgListUrl = [];
+  List<BannerTJ> imgList_tj = [];
+
   var length = 1;
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -48,7 +65,11 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
         page = 1;
       });
     }
-    doPostGZFollowList();
+    if(length > 0){
+      doPostGZFollowList();
+    }else{
+      doPostRecommendList("1");
+    }
   }
 
   void _onLoading() async {
@@ -61,7 +82,11 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
         page++;
       });
     }
-    doPostGZFollowList();
+    if(length > 0){
+      doPostGZFollowList();
+    }else{
+      doPostRecommendList("1");
+    }
   }
 
   @override
@@ -69,6 +94,63 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
     // TODO: implement initState
     super.initState();
     doPostGZFollowList();
+    doPostRecommendList("1");
+    animationController = SVGAAnimationController(vsync: this);
+    loadAnimation();
+
+    listen = eventBus.on<HiBack>().listen((event) {
+      if (event.isBack) {
+        setState(() {
+          _list[event.index].isHi = 1;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    animationController?.stop(); // 停止动画播放
+    animationController?.dispose();
+    animationController = null;
+    super.dispose();
+    listen.cancel();
+    _videoController.dispose();
+  }
+
+  SVGAAnimationController? animationController;
+
+  //动画是否在播放
+  bool isShow = false;
+
+  void loadAnimation() async {
+    final videoItem = await _loadSVGA(false, 'assets/svga/dianzan_2.svga');
+    videoItem.autorelease = false;
+    animationController?.videoItem = videoItem;
+    animationController
+        ?.repeat() // Try to use .forward() .reverse()
+        .whenComplete(() => animationController?.videoItem = null);
+
+    // 监听动画
+    animationController?.addListener(() {
+      if (animationController!.currentFrame >=
+          animationController!.frames - 1) {
+        // 动画播放到最后一帧时停止播放
+        animationController?.stop();
+        setState(() {
+          isShow = false;
+        });
+      }
+    });
+  }
+
+  Future _loadSVGA(isUrl, svgaUrl) {
+    Future Function(String) decoder;
+    if (isUrl) {
+      decoder = SVGAParser.shared.decodeFromURL;
+    } else {
+      decoder = SVGAParser.shared.decodeFromAssets;
+    }
+    return decoder(svgaUrl);
   }
 
   Widget _itemsTuijian(BuildContext context, int i) {
@@ -82,7 +164,14 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
             alignment: Alignment.centerLeft,
             child: Row(
               children: [
-                WidgetUtils.CircleHeadImage(40, 40, _list[i].avatar!),
+                GestureDetector(
+                  onTap: (() {
+                    sp.setString('other_id', _list[i].uid.toString());
+                    MyUtils.goTransparentRFPage(
+                        context, const PeopleInfoPage());
+                  }),
+                  child: WidgetUtils.CircleHeadImage(40, 40, _list[i].avatar!),
+                ),
                 WidgetUtils.commonSizedBox(0, 8),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -100,7 +189,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
                       ),
                     ),
                     SizedBox(
-                      height: ScreenUtil().setHeight(25),
+                      height: ScreenUtil().setHeight(30),
                       width: ScreenUtil().setWidth(300),
                       child: Row(
                         children: [
@@ -130,7 +219,9 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
                                     10),
                                 WidgetUtils.commonSizedBox(0, 5),
                                 WidgetUtils.onlyText(
-                                    _list[i].age == -1 ? '0·${_list[i].constellation!}' : '${_list[i].age.toString()}·${_list[i].constellation!}',
+                                    _list[i].age == -1
+                                        ? '0·${_list[i].constellation!}'
+                                        : '${_list[i].age.toString()}·${_list[i].constellation!}',
                                     StyleUtils.getCommonTextStyle(
                                         color: Colors.white, fontSize: 10)),
                               ],
@@ -144,9 +235,19 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
                   ],
                 ),
                 const Expanded(child: Text('')),
-                _list[i].gender == 0
-                    ? WidgetUtils.showImages(
-                        'assets/images/trends_hi.png', 124, 59)
+                _list[i].isHi == 0
+                    ? GestureDetector(
+                        onTap: (() {
+                          MyUtils.goTransparentPageCom(
+                              context,
+                              TrendsHiPage(
+                                  imgUrl: _list[i].avatar!,
+                                  uid: _list[i].uid.toString(),
+                                  index: i));
+                        }),
+                        child: WidgetUtils.showImages(
+                            'assets/images/trends_hi.png', 124, 59),
+                      )
                     : GestureDetector(
                         onTap: (() {}),
                         child: WidgetUtils.myContainer(
@@ -162,14 +263,25 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
             ),
           ),
           WidgetUtils.commonSizedBox(5, 0),
-          WidgetUtils.onlyText(
-              _list[i].text!,
-              StyleUtils.getCommonTextStyle(
-                color: Colors.black,
-                fontSize: ScreenUtil().setSp(28),
-              )),
+          GestureDetector(
+            onTap: (() {
+              MyUtils.goTransparentRFPage(
+                  context,
+                  TrendsMorePage(
+                    note_id: _list[i].id.toString(),
+                  ));
+            }),
+            child: WidgetUtils.onlyText(
+                _list[i].text!,
+                StyleUtils.getCommonTextStyle(
+                  color: Colors.black,
+                  fontSize: ScreenUtil().setSp(28),
+                )),
+          ),
           WidgetUtils.commonSizedBox(10, 0),
-          showImag(_list[i].imgUrl!, i),
+          _list[i].type == 2
+              ? showVideo(_list[i].imgUrl!)
+              : showImag(_list[i].imgUrl!, i),
           WidgetUtils.commonSizedBox(20, 0),
           Row(
             children: [
@@ -180,30 +292,330 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
                     fontSize: ScreenUtil().setSp(21),
                   )),
               const Expanded(child: Text('')),
-              WidgetUtils.showImages('assets/images/trends_zan1.png', 18, 18),
+              GestureDetector(
+                onTap: (() {
+                  setState(() {
+                    if (_list[i].isLike == 1) {
+                      action = 'delete';
+                    } else {
+                      action = 'create';
+                      isShow = true;
+                    }
+                  });
+                  if (_list[i].isLike == 0) {
+                    animationController?.reset();
+                    animationController?.forward();
+                  }
+                  doPostLike(_list[i].id.toString(), i);
+                }),
+                child: WidgetUtils.showImages(
+                    _list[i].isLike == 0
+                        ? 'assets/images/trends_zan1.png'
+                        : 'assets/images/trends_zan_2.png',
+                    18,
+                    18),
+              ),
               WidgetUtils.commonSizedBox(0, 5),
-              WidgetUtils.onlyText(
-                  _list[i].like == 0 ? '抢首赞' : _list[i].like.toString(),
-                  StyleUtils.getCommonTextStyle(
-                    color: Colors.grey,
-                    fontSize: ScreenUtil().setSp(21),
-                  )),
-              WidgetUtils.commonSizedBox(0, 20),
-              WidgetUtils.showImages(
-                  'assets/images/trends_message.png', 18, 18),
+              SizedBox(
+                width: ScreenUtil().setHeight(80),
+                child: WidgetUtils.onlyText(
+                    _list[i].like == 0 ? '抢首赞' : _list[i].like.toString(),
+                    StyleUtils.getCommonTextStyle(
+                      color: Colors.grey,
+                      fontSize: ScreenUtil().setSp(21),
+                    )),
+              ),
+              GestureDetector(
+                onTap: (() {
+                  MyUtils.goTransparentRFPage(
+                      context,
+                      TrendsMorePage(
+                        note_id: _list[i].id.toString(),
+                      ));
+                }),
+                child: WidgetUtils.showImages(
+                    'assets/images/trends_message.png', 18, 18),
+              ),
               WidgetUtils.commonSizedBox(0, 5),
-              WidgetUtils.onlyText(
-                  _list[i].comment == 0 ? '评论' : _list[i].comment.toString(),
-                  StyleUtils.getCommonTextStyle(
-                    color: Colors.grey,
-                    fontSize: ScreenUtil().setSp(21),
-                  )),
+              GestureDetector(
+                onTap: (() {
+                  MyUtils.goTransparentRFPage(
+                      context,
+                      TrendsMorePage(
+                        note_id: _list[i].id.toString(),
+                      ));
+                }),
+                child: WidgetUtils.onlyText(
+                    _list[i].comment == 0 ? '评论' : _list[i].comment.toString(),
+                    StyleUtils.getCommonTextStyle(
+                      color: Colors.grey,
+                      fontSize: ScreenUtil().setSp(21),
+                    )),
+              ),
             ],
           ),
           WidgetUtils.commonSizedBox(10, 0),
           WidgetUtils.myLine()
         ],
       ),
+    );
+  }
+
+
+  Widget _itemsTuijian2(BuildContext context, int i) {
+    return GestureDetector(
+      onTap: (() {}),
+      child: Column(
+        children: [
+          WidgetUtils.commonSizedBox(10, 0),
+          Container(
+            height: ScreenUtil().setHeight(100),
+            alignment: Alignment.centerLeft,
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: (() {
+                    sp.setString('other_id', _list_tj[i].uid.toString());
+                    MyUtils.goTransparentRFPage(
+                        context, const PeopleInfoPage());
+                  }),
+                  child: WidgetUtils.CircleHeadImage(40, 40, _list_tj[i].avatar!),
+                ),
+                WidgetUtils.commonSizedBox(0, 8),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const Expanded(child: Text('')),
+                    Container(
+                      width: ScreenUtil().setWidth(300),
+                      padding: EdgeInsets.only(left: ScreenUtil().setHeight(8)),
+                      child: Text(
+                        _list_tj[i].nickname!,
+                        style: StyleUtils.getCommonTextStyle(
+                            color: Colors.black,
+                            fontSize: ScreenUtil().setSp(30),
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    SizedBox(
+                      height: ScreenUtil().setHeight(30),
+                      width: ScreenUtil().setWidth(300),
+                      child: Row(
+                        children: [
+                          Container(
+                            height: ScreenUtil().setHeight(25),
+                            padding: const EdgeInsets.only(left: 5, right: 5),
+                            margin: const EdgeInsets.only(top: 2),
+                            alignment: Alignment.center,
+                            //边框设置
+                            decoration: BoxDecoration(
+                              //背景
+                              color: _list_tj[i].gender == 1
+                                  ? MyColors.dtBlue
+                                  : MyColors.dtPink,
+                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                              borderRadius:
+                              const BorderRadius.all(Radius.circular(15.0)),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                WidgetUtils.showImages(
+                                    _list_tj[i].gender == 1
+                                        ? 'assets/images/nan.png'
+                                        : 'assets/images/nv.png',
+                                    10,
+                                    10),
+                                WidgetUtils.commonSizedBox(0, 5),
+                                WidgetUtils.onlyText(
+                                    _list_tj[i].age == -1
+                                        ? '0·${_list_tj[i].constellation!}'
+                                        : '${_list_tj[i].age.toString()}·${_list_tj[i].constellation!}',
+                                    StyleUtils.getCommonTextStyle(
+                                        color: Colors.white, fontSize: 10)),
+                              ],
+                            ),
+                          ),
+                          const Expanded(child: Text('')),
+                        ],
+                      ),
+                    ),
+                    const Expanded(child: Text('')),
+                  ],
+                ),
+                const Expanded(child: Text('')),
+                _list_tj[i].isHi == 0
+                    ? GestureDetector(
+                  onTap: (() {
+                    MyUtils.goTransparentPageCom(
+                        context,
+                        TrendsHiPage(
+                            imgUrl: _list_tj[i].avatar!,
+                            uid: _list_tj[i].uid.toString(),
+                            index: i));
+                  }),
+                  child: WidgetUtils.showImages(
+                      'assets/images/trends_hi.png', 124, 59),
+                )
+                    : GestureDetector(
+                  onTap: (() {}),
+                  child: WidgetUtils.myContainer(
+                      ScreenUtil().setHeight(45),
+                      ScreenUtil().setHeight(100),
+                      Colors.white,
+                      MyColors.homeTopBG,
+                      '私信',
+                      ScreenUtil().setSp(25),
+                      MyColors.homeTopBG),
+                ),
+              ],
+            ),
+          ),
+          WidgetUtils.commonSizedBox(5, 0),
+          GestureDetector(
+            onTap: (() {
+              MyUtils.goTransparentRFPage(
+                  context,
+                  TrendsMorePage(
+                    note_id: _list_tj[i].id.toString(),
+                  ));
+            }),
+            child: WidgetUtils.onlyText(
+                _list_tj[i].text!,
+                StyleUtils.getCommonTextStyle(
+                  color: Colors.black,
+                  fontSize: ScreenUtil().setSp(28),
+                )),
+          ),
+          WidgetUtils.commonSizedBox(10, 0),
+          _list_tj[i].type == 2
+              ? showVideo(_list_tj[i].imgUrl!)
+              : showImag(_list_tj[i].imgUrl!, i),
+          WidgetUtils.commonSizedBox(20, 0),
+          Row(
+            children: [
+              WidgetUtils.onlyText(
+                  '${_list_tj[i].addTime}·来自：${_list_tj[i].city}',
+                  StyleUtils.getCommonTextStyle(
+                    color: Colors.grey,
+                    fontSize: ScreenUtil().setSp(21),
+                  )),
+              const Expanded(child: Text('')),
+              GestureDetector(
+                onTap: (() {
+                  setState(() {
+                    if (_list_tj[i].isLike == 1) {
+                      action = 'delete';
+                    } else {
+                      action = 'create';
+                      isShow = true;
+                    }
+                  });
+                  if (_list_tj[i].isLike == 0) {
+                    animationController?.reset();
+                    animationController?.forward();
+                  }
+                  doPostLike(_list_tj[i].id.toString(), i);
+                }),
+                child: WidgetUtils.showImages(
+                    _list_tj[i].isLike == 0
+                        ? 'assets/images/trends_zan1.png'
+                        : 'assets/images/trends_zan_2.png',
+                    18,
+                    18),
+              ),
+              WidgetUtils.commonSizedBox(0, 5),
+              SizedBox(
+                width: ScreenUtil().setHeight(80),
+                child: WidgetUtils.onlyText(
+                    _list_tj[i].like == 0 ? '抢首赞' : _list_tj[i].like.toString(),
+                    StyleUtils.getCommonTextStyle(
+                      color: Colors.grey,
+                      fontSize: ScreenUtil().setSp(21),
+                    )),
+              ),
+              GestureDetector(
+                onTap: (() {
+                  MyUtils.goTransparentRFPage(
+                      context,
+                      TrendsMorePage(
+                        note_id: _list_tj[i].id.toString(),
+                      ));
+                }),
+                child: WidgetUtils.showImages(
+                    'assets/images/trends_message.png', 18, 18),
+              ),
+              WidgetUtils.commonSizedBox(0, 5),
+              GestureDetector(
+                onTap: (() {
+                  MyUtils.goTransparentRFPage(
+                      context,
+                      TrendsMorePage(
+                        note_id: _list_tj[i].id.toString(),
+                      ));
+                }),
+                child: WidgetUtils.onlyText(
+                    _list_tj[i].comment == 0 ? '评论' : _list_tj[i].comment.toString(),
+                    StyleUtils.getCommonTextStyle(
+                      color: Colors.grey,
+                      fontSize: ScreenUtil().setSp(21),
+                    )),
+              ),
+            ],
+          ),
+          WidgetUtils.commonSizedBox(10, 0),
+          WidgetUtils.myLine()
+        ],
+      ),
+    );
+  }
+
+  late VideoPlayerController _videoController;
+
+  Widget showVideo(List<String> listImg) {
+    String a = listImg[0];
+    _videoController = VideoPlayerController.network(
+      a,
+      videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+    );
+    return Row(
+      children: [
+        Container(
+          width: ScreenUtil().setHeight(200),
+          height: ScreenUtil().setHeight(200),
+          decoration: const BoxDecoration(
+            //背景
+            color: Colors.black87,
+            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          ),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              SizedBox(
+                width: ScreenUtil().setHeight(200),
+                height: ScreenUtil().setHeight(200),
+                child: AspectRatio(
+                  aspectRatio: _videoController.value.aspectRatio,
+                  child: VideoPlayer(_videoController),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  MyUtils.goTransparentRFPage(
+                      context, PagePreviewVideo(url: a));
+                },
+                child: const Icon(
+                  Icons.play_circle_fill_outlined,
+                  color: Colors.white,
+                  size: 50,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const Spacer(),
+      ],
     );
   }
 
@@ -268,8 +680,11 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
           height: ScreenUtil().setHeight(350),
           child: Row(
             children: [
-              WidgetUtils.CircleImageNet(ScreenUtil().setHeight(350),
-                  ScreenUtil().setHeight(350), ScreenUtil().setHeight(10), listImg[0]),
+              WidgetUtils.CircleImageNet(
+                  ScreenUtil().setHeight(350),
+                  ScreenUtil().setHeight(350),
+                  ScreenUtil().setHeight(10),
+                  listImg[0]),
               WidgetUtils.commonSizedBox(0, 10),
               Expanded(
                   child: Column(
@@ -302,24 +717,36 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
               Row(
                 children: [
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(240),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[0])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(240),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[0])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(240),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[1])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(240),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[1])),
                 ],
               ),
               WidgetUtils.commonSizedBox(ScreenUtil().setHeight(10), 10),
               Row(
                 children: [
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(240),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[2])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(240),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[2])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(240),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[3])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(240),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[3])),
                 ],
               )
             ],
@@ -343,35 +770,53 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
               Row(
                 children: [
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[0])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[0])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[1])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[1])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[2])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[2])),
                 ],
               ),
               WidgetUtils.commonSizedBox(ScreenUtil().setHeight(10), 10),
               Row(
                 children: [
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[3])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[3])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[4])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[4])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
                       child: Opacity(
-                        opacity: 0,
-                        child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                            double.infinity, ScreenUtil().setHeight(10), listImg[0]),
-                      )),
+                    opacity: 0,
+                    child: WidgetUtils.CircleImageNet(
+                        ScreenUtil().setHeight(180),
+                        double.infinity,
+                        ScreenUtil().setHeight(10),
+                        listImg[0]),
+                  )),
                 ],
               )
             ],
@@ -395,32 +840,50 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
               Row(
                 children: [
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[0])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[0])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[1])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[1])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[2])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[2])),
                 ],
               ),
               WidgetUtils.commonSizedBox(ScreenUtil().setHeight(10), 10),
               Row(
                 children: [
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[3])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[3])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[4])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[4])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[5])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[5])),
                 ],
               )
             ],
@@ -428,24 +891,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
         ),
       );
     } else {
-      return GestureDetector(
-        onTap: (() {
-          imgList = listImg;
-          Navigator.of(context).push(PageRouteBuilder(
-              opaque: false,
-              pageBuilder: (context, animation, secondaryAnimation) {
-                return SwiperPage(imgList: imgList);
-              }));
-        }),
-        child: Container(
-          alignment: Alignment.centerLeft,
-          child: WidgetUtils.CircleImageNet(
-              ScreenUtil().setHeight(300),
-              ScreenUtil().setHeight(280),
-              ScreenUtil().setHeight(10),
-              listImg[0]),
-        ),
-      );
+      return const Text('');
     }
   }
 
@@ -464,149 +910,39 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
         body: Stack(
           children: [
             length == 0
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      WidgetUtils.commonSizedBox(50, 0),
-                      WidgetUtils.showImages(
-                          'assets/images/trends_no.jpg',
-                          ScreenUtil().setHeight(242),
-                          ScreenUtil().setWidth(221)),
-                      WidgetUtils.onlyTextBottom(
-                          '您还没有关注的人',
-                          StyleUtils.getCommonTextStyle(
-                              color: MyColors.homeNoHave,
-                              fontSize: ScreenUtil().setSp(32))),
-                      WidgetUtils.commonSizedBox(10, 0),
-                      WidgetUtils.myLine(),
-                      GestureDetector(
-                        onTap: (() {
-                          Navigator.pushNamed(context, 'TrendsMorePage');
-                        }),
-                        child: Column(
-                          children: [
-                            WidgetUtils.commonSizedBox(10, 0),
-                            Container(
-                              height: ScreenUtil().setHeight(100),
-                              alignment: Alignment.centerLeft,
-                              child: Row(
-                                children: [
-                                  WidgetUtils.CircleHeadImage(40, 40,
-                                      'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
-                                  WidgetUtils.commonSizedBox(0, 8),
-                                  Column(
-                                    children: [
-                                      const Expanded(child: Text('')),
-                                      Container(
-                                        width: ScreenUtil().setWidth(130),
-                                        padding: EdgeInsets.only(
-                                            left: ScreenUtil().setHeight(8)),
-                                        child: Text(
-                                          '张三',
-                                          style: StyleUtils.getCommonTextStyle(
-                                              color: Colors.black,
-                                              fontSize: ScreenUtil().setSp(30),
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                      ),
-                                      Container(
-                                        height: ScreenUtil().setHeight(25),
-                                        padding: const EdgeInsets.only(
-                                            left: 5, right: 5),
-                                        margin: const EdgeInsets.only(top: 2),
-                                        alignment: Alignment.center,
-                                        //边框设置
-                                        decoration: const BoxDecoration(
-                                          //背景
-                                          color: MyColors.dtPink,
-                                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(15.0)),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            WidgetUtils.showImages(
-                                                'assets/images/nv.png', 10, 10),
-                                            WidgetUtils.commonSizedBox(0, 5),
-                                            Column(
-                                              children: [
-                                                WidgetUtils.onlyText(
-                                                    '21·天秤',
-                                                    StyleUtils
-                                                        .getCommonTextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 10)),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      const Expanded(child: Text('')),
-                                    ],
-                                  ),
-                                  const Expanded(child: Text('')),
-                                  WidgetUtils.showImages(
-                                      'assets/images/trends_hi.png', 124, 59),
-                                ],
-                              ),
-                            ),
-                            WidgetUtils.commonSizedBox(5, 0),
-                            WidgetUtils.onlyText(
-                                '哈哈哈哈哈哈',
-                                StyleUtils.getCommonTextStyle(
-                                  color: Colors.black,
-                                  fontSize: ScreenUtil().setSp(28),
-                                )),
-                            WidgetUtils.commonSizedBox(10, 0),
-                            Row(
-                              children: [
-                                WidgetUtils.CircleImageNet(150, 150, 10,
-                                    'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
-                                const Expanded(child: Text('')),
-                                WidgetUtils.CircleImageNet(150, 150, 10,
-                                    'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
-                              ],
-                            ),
-                            WidgetUtils.commonSizedBox(20, 0),
-                            Row(
-                              children: [
-                                WidgetUtils.onlyText(
-                                    '刚刚·来自：唐山',
-                                    StyleUtils.getCommonTextStyle(
-                                      color: Colors.grey,
-                                      fontSize: ScreenUtil().setSp(21),
-                                    )),
-                                const Expanded(child: Text('')),
-                                WidgetUtils.showImages(
-                                    'assets/images/trends_zan1.png', 18, 18),
-                                WidgetUtils.commonSizedBox(0, 5),
-                                WidgetUtils.onlyText(
-                                    '抢首赞',
-                                    StyleUtils.getCommonTextStyle(
-                                      color: Colors.grey,
-                                      fontSize: ScreenUtil().setSp(21),
-                                    )),
-                                WidgetUtils.commonSizedBox(0, 20),
-                                WidgetUtils.showImages(
-                                    'assets/images/trends_message.png', 18, 18),
-                                WidgetUtils.commonSizedBox(0, 5),
-                                WidgetUtils.onlyText(
-                                    '评论',
-                                    StyleUtils.getCommonTextStyle(
-                                      color: Colors.grey,
-                                      fontSize: ScreenUtil().setSp(21),
-                                    )),
-                              ],
-                            ),
-                            WidgetUtils.commonSizedBox(10, 0),
-                            WidgetUtils.myLine()
-                          ],
-                        ),
-                      )
-                    ],
-                  )
+                ? SmartRefresher(
+                  header: MyUtils.myHeader(),
+                  footer: MyUtils.myFotter(),
+                  controller: _refreshController,
+                  enablePullUp: true,
+                  onLoading: _onLoading,
+                  onRefresh: _onRefresh,
+                  child: SingleChildScrollView(
+                    child: Wrap(
+                      alignment: WrapAlignment.center,
+                      children: [
+                        WidgetUtils.showImages(
+                            'assets/images/trends_no.jpg',
+                            ScreenUtil().setHeight(242),
+                            ScreenUtil().setWidth(221)),
+                        WidgetUtils.onlyTextBottom(
+                            '您还没有关注的人',
+                            StyleUtils.getCommonTextStyle(
+                                color: MyColors.homeNoHave,
+                                fontSize: ScreenUtil().setSp(32))),
+                        WidgetUtils.commonSizedBox(10, 0),
+                        WidgetUtils.myLine(),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          padding: const EdgeInsets.all(20),
+                          itemBuilder: _itemsTuijian2,
+                          itemCount: _list_tj.length,
+                        )
+                      ],
+                    ),
+                  ),
+                )
                 : SmartRefresher(
                     header: MyUtils.myHeader(),
                     footer: MyUtils.myFotter(),
@@ -622,14 +958,15 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
                   ),
 
             ///点赞显示样式
-            // Positioned(
-            //   left: x-ScreenUtil().setHeight(100),
-            //   top: y-ScreenUtil().setHeight(100),
-            //   height: ScreenUtil().setHeight(200),
-            //   width: ScreenUtil().setHeight(200),
-            //   child: const SVGASimpleImage(
-            //       assetsName: 'assets/svga/dianzan_2.svga'),
-            // )
+            isShow
+                ? Positioned(
+                    left: x - ScreenUtil().setHeight(50),
+                    top: y - ScreenUtil().setHeight(175),
+                    height: ScreenUtil().setHeight(100),
+                    width: ScreenUtil().setHeight(100),
+                    child: SVGAImage(animationController!),
+                  )
+                : const Text('')
           ],
         ),
       ),
@@ -652,17 +989,17 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
               _list.clear();
             }
             if (bean.data!.list!.isNotEmpty) {
-              for(int i =0; i < bean.data!.list!.length; i++){
+              for (int i = 0; i < bean.data!.list!.length; i++) {
                 _list.add(bean.data!.list![i]);
               }
 
               length = bean.data!.list!.length;
-            }else{
+            } else {
               if (page == 1) {
                 length = 0;
               }
             }
-            if(bean.data!.list!.length < MyConfig.pageSize){
+            if (bean.data!.list!.length < MyConfig.pageSize) {
               _refreshController.loadNoData();
             }
           });
@@ -678,6 +1015,101 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+  }
+
+
+  /// 关注列表
+  Future<void> doPostRecommendList(is_refresh) async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'page': page,
+      'pageSize': MyConfig.pageSize,
+      'is_refresh': is_refresh
+    };
+    try {
+      Loading.show("加载中...");
+      DTTuiJianListBean bean = await DataUtils.postRecommendList(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            if (page == 1) {
+              _list_tj.clear();
+            }
+            if(bean.data!.banner!.isNotEmpty){
+              imgList_tj = bean.data!.banner!;
+            }
+            if (bean.data!.list!.isNotEmpty) {
+              for(int i =0; i < bean.data!.list!.length; i++){
+                _list_tj.add(bean.data!.list![i]);
+              }
+              LogE('推荐${_list_tj.length}');
+            }else{
+
+            }
+            if(bean.data!.list!.length < MyConfig.pageSize){
+              _refreshController.loadNoData();
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+  }
+  /// 点赞
+  Future<void> doPostLike(note_id, index) async {
+    LogE('点赞数据$note_id');
+    Map<String, dynamic> params = <String, dynamic>{
+      'note_id': note_id,
+      'action': action
+    };
+    try {
+      CommonBean bean = await DataUtils.postLike(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          if(length > 0){
+            int a = _list[index].like as int;
+            setState(() {
+              if (action == 'delete') {
+                _list[index].isLike = 0;
+                _list[index].like = a - 1;
+              } else {
+                _list[index].isLike = 1;
+                _list[index].like = a + 1;
+              }
+            });
+          }else{
+            int a = _list_tj[index].like as int;
+            setState(() {
+              if (action == 'delete') {
+                _list_tj[index].isLike = 0;
+                _list_tj[index].like = a - 1;
+              } else {
+                _list_tj[index].isLike = 1;
+                _list_tj[index].like = a + 1;
+              }
+            });
+          }
+          break;
+        case MyHttpConfig.errorloginCode:
+          // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
       MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
     }
   }

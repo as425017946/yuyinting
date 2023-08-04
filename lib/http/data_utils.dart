@@ -2,6 +2,8 @@ import 'package:yuyinting/bean/BlackListBean.dart';
 import 'package:yuyinting/bean/Common_bean.dart';
 import 'package:yuyinting/bean/aboutUsBean.dart';
 import '../bean/DTListBean.dart';
+import '../bean/DTMoreBean.dart';
+import '../bean/DTTuiJianListBean.dart';
 import '../bean/careListBean.dart';
 import '../bean/cityBean.dart';
 import '../bean/fileUpdateBean.dart';
@@ -15,6 +17,7 @@ import '../bean/myGhBean.dart';
 import '../bean/myHomeBean.dart';
 import '../bean/myInfoBean.dart';
 import '../bean/myShopListBean.dart';
+import '../bean/plBean.dart';
 import '../bean/quhao_bean.dart';
 import '../bean/quhao_searche_bean.dart';
 import '../bean/qyListBean.dart';
@@ -331,5 +334,55 @@ class DataUtils{
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.gzFollowList, {}, params);
     print("用户动态列表：$respons");
     return DTListBean.fromJson(respons!);
+  }
+
+  /// 推荐动态列表
+  static Future<DTTuiJianListBean> postRecommendList(Map<String,dynamic> params) async {
+    print("推荐动态列表：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.recommendList, {}, params);
+    print("推荐动态列表：$respons");
+    return DTTuiJianListBean.fromJson(respons!);
+  }
+
+
+  /// 点赞
+  static Future<CommonBean> postLike(Map<String,dynamic> params) async {
+    print("点赞：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.like, {}, params);
+    print("点赞：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 评论
+  static Future<plBean> postComment(Map<String,dynamic> params) async {
+    print("评论：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.comment, {}, params);
+    print("评论：$respons");
+    return plBean.fromJson(respons!);
+  }
+
+  /// 动态详情
+  static Future<DTMoreBean> postDtDetail(Map<String,dynamic> params) async {
+    print("动态详情：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.dtDetail, {}, params);
+    print("动态详情：$respons");
+    return DTMoreBean.fromJson(respons!);
+  }
+
+  /// 打招呼
+  static Future<CommonBean> postHi(Map<String,dynamic> params) async {
+    print("打招呼：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.hi, {}, params);
+    print("打招呼：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+
+  /// 发动态
+  static Future<CommonBean> postSendDT(Map<String,dynamic> params) async {
+    print("发动态：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.sendDT, {}, params);
+    print("发动态：$respons");
+    return CommonBean.fromJson(respons!);
   }
 }

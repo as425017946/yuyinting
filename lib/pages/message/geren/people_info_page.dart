@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/pages/message/geren/ziliao_page.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 
+import '../../../bean/userInfoBean.dart';
 import '../../../colors/my_colors.dart';
+import '../../../http/data_utils.dart';
+import '../../../http/my_http_config.dart';
+import '../../../main.dart';
+import '../../../utils/loading.dart';
+import '../../../utils/my_toast_utils.dart';
+import '../../../utils/my_utils.dart';
 import '../../../utils/widget_utils.dart';
 import 'dongtai_page.dart';
 
@@ -16,9 +24,25 @@ class PeopleInfoPage extends StatefulWidget {
 }
 
 class _PeopleInfoPageState extends State<PeopleInfoPage> {
-  int _currentIndex = 0;
-  late final PageController _controller ;
-  final TextEditingController _souSuoName = TextEditingController();
+  int _currentIndex = 0, gender = 0, is_pretty = 0, all_gift_type = 0, live = 0;
+  late final PageController _controller;//
+  // 0-未知 1-男 2-女
+  int sex = 0;
+  String headImg = '',
+      headImgID = '',
+      nickName = '',
+      userNumber = '',
+      voice_card = '',
+      voice_cardID = '',
+      description = '',
+      city = '',
+      photo_id = '',
+      constellation = '',
+      birthday = '';
+
+  List<String> list_p = [];
+  List<String> list_pID = [];
+  List<String> list_label = [];
 
   @override
   void initState() {
@@ -27,7 +51,9 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
     _controller = PageController(
       initialPage: 0,
     );
+    doPostMyIfon();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -66,11 +92,6 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                         ),
                       ),
                       const Expanded(child: Text('')),
-                      Container(
-                        width: ScreenUtil().setWidth(50),
-                        margin: const EdgeInsets.only(right: 15),
-                        child: WidgetUtils.showImages('assets/images/dian_white.png', 15, 45),
-                      ),
                     ],
                   ),
                 ),
@@ -82,7 +103,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                   alignment: Alignment.centerLeft,
                   child: Row(
                     children: [
-                      WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(130), ScreenUtil().setWidth(130), 'https://img2.baidu.com/it/u=3119889017,2293875546&fm=253&fmt=auto&app=120&f=JPEG?w=608&h=342'),
+                      WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(130), ScreenUtil().setHeight(130), headImg),
                       WidgetUtils.commonSizedBox(0, 10),
                       ///昵称等信息
                       Expanded(
@@ -90,7 +111,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Expanded(child: Text('')),
-                            WidgetUtils.onlyText('昵称', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(40), fontWeight: FontWeight.w600)),
+                            WidgetUtils.onlyText(nickName, StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(38), fontWeight: FontWeight.w600)),
                             WidgetUtils.commonSizedBox(5, 0),
                             Row(
                               children: [
@@ -99,69 +120,90 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                                   width: ScreenUtil().setWidth(50),
                                   alignment: Alignment.center,
                                   //边框设置
-                                  decoration: const BoxDecoration(
+                                  decoration: BoxDecoration(
                                     //背景
-                                    color: MyColors.dtPink ,
+                                    color: gender == 1 ?  MyColors.dtBlue : MyColors.dtPink,
                                     //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                                     borderRadius:
-                                    BorderRadius.all(Radius.circular(20.0)),
+                                    const BorderRadius.all(Radius.circular(20.0)),
                                   ),
                                   child: WidgetUtils.showImages(
-                                      'assets/images/nv.png',
-                                      12,
-                                      12),
+                                      gender == 1 ? 'assets/images/nan.png' : 'assets/images/nv.png', 12, 12),
                                 ),
                               ],
                             ),
                             WidgetUtils.commonSizedBox(5, 0),
-                            Container(
-                              height: ScreenUtil().setHeight(38),
-                              width: ScreenUtil().setWidth(208),
-                              padding: const EdgeInsets.only(left: 8),
-                              alignment: Alignment.center,
-                              //边框设置
-                              decoration: const BoxDecoration(
-                                //背景
-                                color: MyColors.peopleBlue ,
-                                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
-                              ),
-                              child: Row(
-                                children: [
-                                  WidgetUtils.onlyText('ID:12345678', StyleUtils.getCommonTextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(26))),
-                                  WidgetUtils.commonSizedBox(0, 5),
-                                  WidgetUtils.showImages('assets/images/people_fuzhi.png', ScreenUtil().setHeight(22), ScreenUtil().setWidth(22)),
-                                ],
+                            GestureDetector(
+                              onTap: ((){
+                                Clipboard.setData(ClipboardData(
+                                  text: userNumber,
+                                ));
+                                MyToastUtils.showToastBottom('已成功复制到剪切板');
+                              }),
+                              child: Container(
+                                constraints: BoxConstraints(
+                                  maxWidth: ScreenUtil().setHeight(150),
+                                  minHeight: ScreenUtil().setHeight(38),
+                                ),
+                                padding: const EdgeInsets.only(left: 8, right: 8),
+                                alignment: Alignment.center,
+                                //边框设置
+                                decoration: const BoxDecoration(
+                                  //背景
+                                  color: MyColors.peopleBlue,
+                                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(20.0)),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    WidgetUtils.onlyText(
+                                        'ID:$userNumber',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: Colors.white,
+                                            fontSize: ScreenUtil().setSp(26))),
+                                    WidgetUtils.commonSizedBox(0, 5),
+                                    WidgetUtils.showImages(
+                                        'assets/images/people_fuzhi.png',
+                                        ScreenUtil().setHeight(22),
+                                        ScreenUtil().setWidth(22)),
+                                  ],
+                                ),
                               ),
                             ),
                             const Expanded(child: Text('')),
                           ],
                         ),
                       ),
-                      Container(
-                        height: ScreenUtil().setHeight(68),
-                        width: ScreenUtil().setWidth(151),
-                        padding: const EdgeInsets.only(left: 8),
-                        alignment: Alignment.center,
-                        //边框设置
-                        decoration: const BoxDecoration(
-                          //背景
-                          color: Colors.white ,
-                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20.0),
-                            bottomLeft: Radius.circular(20.0),
+                      live == 1 ? GestureDetector(
+                        onTap: ((){
+
+                        }),
+                        child: Container(
+                          height: ScreenUtil().setHeight(50),
+                          width: ScreenUtil().setWidth(151),
+                          padding: const EdgeInsets.only(left: 8),
+                          alignment: Alignment.center,
+                          //边框设置
+                          decoration: const BoxDecoration(
+                            //背景
+                            color: Colors.white ,
+                            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(20.0),
+                              bottomLeft: Radius.circular(20.0),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              WidgetUtils.showImages('assets/images/zhibozhong2.webp', ScreenUtil().setHeight(22), ScreenUtil().setWidth(22)),
+                              WidgetUtils.commonSizedBox(0, 5),
+                              WidgetUtils.onlyText('踩房间', StyleUtils.getCommonTextStyle(color: MyColors.careBlue, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(28))),
+                            ],
                           ),
                         ),
-                        child: Row(
-                          children: [
-                            WidgetUtils.showImages('assets/images/zhibozhong2.webp', ScreenUtil().setHeight(22), ScreenUtil().setWidth(22)),
-                            WidgetUtils.commonSizedBox(0, 5),
-                            WidgetUtils.onlyText('踩房间', StyleUtils.getCommonTextStyle(color: MyColors.careBlue, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(30))),
-                          ],
-                        ),
-                      ),
+                      ) : const Text(''),
                     ],
                   ),
                 ),
@@ -170,26 +212,27 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                 Row(
                   children: [
                     Container(
-                      height: ScreenUtil().setHeight(50),
-                      width: ScreenUtil().setWidth(220),
-                      margin: EdgeInsets.only(left: 20),
-                      padding: const EdgeInsets.only(left: 8),
-                      alignment: Alignment.topLeft,
-                      //边框设置
-                      decoration: const BoxDecoration(
-                        //背景
-                        color: MyColors.peopleYellow ,
-                        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(20.0)),
-                      ),
-                      child: Row(
-                        children: [
-                          WidgetUtils.showImages('assets/images/people_bofang.png', ScreenUtil().setHeight(35), ScreenUtil().setWidth(35)),
-                          WidgetUtils.commonSizedBox(0, 5),
-                          WidgetUtils.onlyText('晴天少女', StyleUtils.getCommonTextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(18))),
-                        ],
-                      ),
+                        height: ScreenUtil().setHeight(45),
+                        width: ScreenUtil().setWidth(220),
+                        margin: const EdgeInsets.only(left: 20),
+                        padding: const EdgeInsets.only(left: 8),
+                        alignment: Alignment.center,
+                        //边框设置
+                        decoration: const BoxDecoration(
+                          //背景
+                          color: MyColors.peopleYellow ,
+                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(20.0)),
+                        ),
+                        child: WidgetUtils.showImages('assets/images/people_bofang.png', ScreenUtil().setHeight(35), ScreenUtil().setWidth(35))
+                      // Row(
+                      //   children: [
+                      //     // WidgetUtils.showImages('assets/images/people_bofang.png', ScreenUtil().setHeight(35), ScreenUtil().setWidth(35)),
+                      //     // WidgetUtils.commonSizedBox(0, 20),
+                      //     // WidgetUtils.onlyText('晴天少女', StyleUtils.getCommonTextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(22))),
+                      //   ],
+                      // ),
                     ),
                     const Expanded(child: Text('')),
                   ],
@@ -202,7 +245,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                     //边框设置
                     decoration: const BoxDecoration(
                       //背景
-                      color: Colors.white ,
+                      color: Colors.white,
                       //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(20.0),
@@ -219,45 +262,116 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                                 child: Row(
                                   children: [
                                     GestureDetector(
-                                      onTap: ((){
+                                      onTap: (() {
                                         setState(() {
                                           _currentIndex = 0;
-                                          _controller.animateToPage(0, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                                          _controller.animateToPage(0,
+                                              duration: const Duration(
+                                                  milliseconds: 500),
+                                              curve: Curves.ease);
                                         });
                                       }),
                                       child: Text(
                                         '资料',
                                         style: TextStyle(
                                             overflow: TextOverflow.ellipsis,
-                                            color: _currentIndex == 0 ? Colors.black : MyColors.g6,
-                                            fontSize:_currentIndex == 0 ? ScreenUtil().setSp(48) : ScreenUtil().setSp(36),
-                                            fontWeight: FontWeight.w600),
+                                            color: _currentIndex == 0
+                                                ? Colors.black
+                                                : MyColors.g6,
+                                            fontSize: ScreenUtil().setSp(36),
+                                            fontWeight: _currentIndex == 0
+                                                ? FontWeight.w600
+                                                : FontWeight.normal),
                                       ),
                                     ),
                                     WidgetUtils.commonSizedBox(0, 20),
                                     GestureDetector(
-                                      onTap: ((){
+                                      onTap: (() {
                                         setState(() {
                                           _currentIndex = 1;
-                                          _controller.animateToPage(1, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                                          _controller.animateToPage(1,
+                                              duration: const Duration(
+                                                  milliseconds: 500),
+                                              curve: Curves.ease);
                                         });
                                       }),
                                       child: Text(
                                         '动态',
                                         style: TextStyle(
                                             overflow: TextOverflow.ellipsis,
-                                            color: _currentIndex == 1 ? Colors.black : MyColors.g6,
-                                            fontSize: _currentIndex == 1 ? ScreenUtil().setSp(48) : ScreenUtil().setSp(36),
-                                            fontWeight: FontWeight.w600),
+                                            color: _currentIndex == 1
+                                                ? Colors.black
+                                                : MyColors.g6,
+                                            fontSize: ScreenUtil().setSp(36),
+                                            fontWeight: _currentIndex == 1
+                                                ? FontWeight.w600
+                                                : FontWeight.normal),
                                       ),
                                     ),
                                   ],
-                                )
-                            ),
+                                )),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            _currentIndex == 0
+                                ? SizedBox(
+                              width: ScreenUtil().setHeight(55),
+                              height: ScreenUtil().setHeight(10),
+                              child: Row(
+                                children: [
+                                  const Expanded(child: Text('')),
+                                  Container(
+                                    width: ScreenUtil().setHeight(20),
+                                    height: ScreenUtil().setHeight(4),
+                                    //边框设置
+                                    decoration: const BoxDecoration(
+                                      //背景
+                                      color: MyColors.homeTopBG,
+                                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10.0)),
+                                    ),
+                                  ),
+                                  const Expanded(child: Text('')),
+                                ],
+                              ),
+                            )
+                                : WidgetUtils.commonSizedBox(
+                                ScreenUtil().setHeight(10),
+                                ScreenUtil().setHeight(55)),
+                            WidgetUtils.commonSizedBox(0, 20),
+                            _currentIndex == 1
+                                ? SizedBox(
+                              width: ScreenUtil().setHeight(68),
+                              height: ScreenUtil().setHeight(10),
+                              child: Row(
+                                children: [
+                                  const Expanded(child: Text('')),
+                                  Container(
+                                    width: ScreenUtil().setHeight(20),
+                                    height: ScreenUtil().setHeight(4),
+                                    //边框设置
+                                    decoration: const BoxDecoration(
+                                      //背景
+                                      color: MyColors.homeTopBG,
+                                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10.0)),
+                                    ),
+                                  ),
+                                  const Expanded(child: Text('')),
+                                ],
+                              ),
+                            )
+                                : WidgetUtils.commonSizedBox(
+                                ScreenUtil().setHeight(10),
+                                ScreenUtil().setHeight(68)),
                           ],
                         ),
                         Expanded(
                           child: PageView(
+                            reverse: false,
                             controller: _controller,
                             onPageChanged: (index) {
                               setState(() {
@@ -308,5 +422,61 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
         ],
       )
     );
+  }
+
+  /// 关于我们
+  Future<void> doPostMyIfon() async {
+    Loading.show('加载中...');
+    Map<String, dynamic> params = <String, dynamic>{
+      'uid': sp.getString('other_id')
+    };
+    try {
+      userInfoBean bean = await DataUtils.postUserInfo(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          list_p.clear();
+          setState(() {
+            sp.setString("user_headimg", bean.data!.avatarUrl!);
+            sp.setString("label_id", bean.data!.labelId!);
+            headImg = bean.data!.avatarUrl!;
+            headImgID = bean.data!.avatar.toString();
+            sex = bean.data!.gender as int;
+            nickName = bean.data!.nickname!;
+            userNumber = bean.data!.number.toString();
+            voice_card = bean.data!.voiceLabelName!;
+            voice_cardID = bean.data!.voiceCard.toString();
+            birthday = bean.data!.birthday!;
+            description = bean.data!.description!;
+            city = bean.data!.city!;
+            live = bean.data!.live as int;
+            if(bean.data!.label!.isNotEmpty){
+              list_label = bean.data!.label!.split(',');
+            }
+            if(bean.data!.photoId!.isNotEmpty){
+              list_pID = bean.data!.photoId!.split(',');
+              if(bean.data!.photoUrl!.length > 4){
+                list_p.add(bean.data!.photoUrl![0]);
+                list_p.add(bean.data!.photoUrl![1]);
+                list_p.add(bean.data!.photoUrl![2]);
+                list_p.add(bean.data!.photoUrl![3]);
+              }else{
+                list_p = bean.data!.photoUrl!;
+              }
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
   }
 }

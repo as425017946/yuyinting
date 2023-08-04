@@ -70,7 +70,7 @@ class _WhoLockMePageState extends State<WhoLockMePage> {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(110), ScreenUtil().setWidth(110), _list[i].avatar!),
+                WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(90), ScreenUtil().setHeight(90), _list[i].avatar!),
                 // WidgetUtils.showImages('assets/images/zhibozhong.webp', ScreenUtil().setHeight(110), ScreenUtil().setWidth(110),),
               ],
             ),

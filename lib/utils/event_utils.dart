@@ -71,3 +71,10 @@ class CareBack {
   String info;
   CareBack({required this.info});
 }
+
+///打招呼使用
+class HiBack {
+  bool isBack;
+  int index;
+  HiBack({required this.isBack, required this.index});
+}

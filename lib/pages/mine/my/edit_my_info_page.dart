@@ -143,48 +143,6 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
     });
   }
 
-  Widget _itemLiwu(BuildContext context, int i) {
-    return Container(
-      height: ScreenUtil().setHeight(110),
-      width: ScreenUtil().setHeight(110),
-      margin: const EdgeInsets.only(right: 10),
-      child: Stack(
-        children: [
-          WidgetUtils.CircleImageNet(ScreenUtil().setHeight(110), ScreenUtil().setHeight(110), ScreenUtil().setHeight(20), list_p[i]),
-          Positioned(
-            right: 0,
-            top: 0,
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  _removeImage(i);
-                });
-              },
-              child: ClipOval(
-                child: Container(
-                  color: Colors.white.withOpacity(0.7),
-                  width: 20,
-                  height: 20,
-                  child: const Icon(
-                    Icons.close,
-                    size: 20,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget ShowImage(){
-    return Wrap(
-      children: [
-
-      ],
-    );
-  }
 
   @override
   Widget build(BuildContext context) {

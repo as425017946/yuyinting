@@ -70,8 +70,6 @@ import '../widget/SwiperPage.dart';
 var staticRoutes = {
   'LoginPage':(context) => const LoginPage(),//登录
   'RankingPage':(context,{id}) =>  const RankingPage(),//排行榜
-  'TrendsMorePage':(context) => const TrendsMorePage(),//动态详情
-  'TrendsHiPage':(context) => const TrendsHiPage(),//动态打招呼提示框
   'TrendsSendPage':(context) => const TrendsSendPage(),// 发布动态页面
   'CareHomePage':(context) => CareHomePage(index: 0),// 关注被关注整合页面
   'CarePage':(context) => const CarePage(),// 关注页面

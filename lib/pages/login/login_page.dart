@@ -72,7 +72,6 @@ class _LoginPageState extends State<LoginPage> {
     // TODO: implement dispose
     super.dispose();
     listen.cancel();
-    _timer!.cancel();
   }
 
   Timer? _timer;

@@ -1,12 +1,26 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
+import 'package:yuyinting/bean/Common_bean.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import '../../colors/my_colors.dart';
+import '../../http/data_utils.dart';
+import '../../http/my_http_config.dart';
+import '../../main.dart';
+import '../../utils/loading.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
+import '../../utils/my_utils.dart';
+import 'package:video_player/video_player.dart';
+
+import 'PagePreviewVideo.dart';
 
 ///发布动态页面
 class TrendsSendPage extends StatefulWidget {
@@ -19,15 +33,16 @@ class TrendsSendPage extends StatefulWidget {
 class _TrendsSendPageState extends State<TrendsSendPage> {
   TextEditingController controller = TextEditingController();
   List<File> imgArray = [];
+  int type = 0; // 0 图片 1 视频
   // List<AssetEntity>? assets;
-
-
+  String imgID = '', videoId = '', videoUrl = '';
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
   }
+
   _showSheetAction() {
     showModalBottomSheet(
         context: context,
@@ -37,7 +52,10 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
               children: [
                 Expanded(
                   child: GestureDetector(
-                    onTap: ((){
+                    onTap: (() {
+                      setState(() {
+                        type = 0;
+                      });
                       onTapPickFromCamera();
                     }),
                     child: Container(
@@ -55,8 +73,10 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
                 ),
                 Expanded(
                   child: GestureDetector(
-                    onTap: ((){
-                      // selectAssets();
+                    onTap: (() {
+                      setState(() {
+                        type = 0;
+                      });
                       onTapPickFromGallery();
                     }),
                     child: Container(
@@ -74,8 +94,10 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
                 ),
                 Expanded(
                   child: GestureDetector(
-                    onTap: ((){
-                      // selectAssets();
+                    onTap: (() {
+                      setState(() {
+                        type = 1;
+                      });
                       onTapVideoFromGallery();
                     }),
                     child: Container(
@@ -90,103 +112,81 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
                 )
               ],
             )));
-    }
+  }
 
-  onTapPickFromGallery() async{
+  onTapPickFromGallery() async {
     Navigator.pop(context);
-    final List<AssetEntity>? entitys = await AssetPicker.pickAssets(context,pickerConfig: const AssetPickerConfig(
-      maxAssets: 6,
-      requestType: RequestType.image
-    ));
-    if(entitys == null) return;
-
+    final List<AssetEntity>? entitys = await AssetPicker.pickAssets(context,
+        pickerConfig: const AssetPickerConfig(
+            maxAssets: 6, requestType: RequestType.image));
+    if (entitys == null) return;
+    setState(() {
+      videoId = '';
+    });
     List<String> chooseImagesPath = [];
     //遍历
-    for(var entity in entitys){
+    for (var entity in entitys) {
       File? imgFile = await entity.file;
-      if(imgFile != null) chooseImagesPath.add(imgFile.path);
+      if (imgFile != null) chooseImagesPath.add(imgFile.path);
       setState(() {
         imgArray.add(imgFile!);
       });
     }
-    print('选择照片路径:$chooseImagesPath');
 
+    doPostPostFileUpload2(entitys);
+    // print('选择照片路径:$chooseImagesPath');
   }
-  onTapVideoFromGallery() async{
-    Navigator.pop(context);
-    final List<AssetEntity>? entitys = await AssetPicker.pickAssets(context,pickerConfig: const AssetPickerConfig(
-        maxAssets: 1,
-        requestType: RequestType.video
-    ));
-    if(entitys == null) return;
 
-    List<String> chooseImagesPath = [];
-    //遍历
-    for(var entity in entitys){
-      File? imgFile = await entity.file;
-      if(imgFile != null) chooseImagesPath.add(imgFile.path);
+  late VideoPlayerController _videoController;
+  bool _isVideoSelected = false;
+  onTapVideoFromGallery() async {
+    Navigator.pop(context);
+    final pickedFile = await ImagePicker().getVideo(
+      source: ImageSource.gallery,
+      maxDuration: const Duration(seconds: 15),
+    );
+    if (pickedFile == null) return;
+    if (pickedFile != null) {
+      _videoController = VideoPlayerController.file(File(pickedFile.path));
+      await _videoController.initialize();
       setState(() {
-        imgArray.add(imgFile!);
+        videoUrl = pickedFile.path;
+        _isVideoSelected = true;
+        imgArray.clear();
       });
     }
-    print('选择照片路径:$chooseImagesPath');
-
+    doPostPostFileUpload(pickedFile.path);
   }
 
-  onTapPickFromCamera() async{
+  onTapPickFromCamera() async {
     Navigator.pop(context);
 
     final AssetEntity? entity = await CameraPicker.pickFromCamera(context);
-    if(entity == null) return;
+    if (entity == null) return;
     File? imgFile = await entity.file;
-    if(imgFile == null) return;
+    if (imgFile == null) return;
+    setState(() {
+      videoId = '';
+    });
     print('照片路径:${imgFile.path}');
     setState(() {
       imgArray.add(imgFile!);
     });
+
+    doPostPostFileUpload(imgFile.path);
   }
 
+  void _removeImage2(int index) {
+    setState(() {
+      imgArray.removeAt(index);
+    });
+  }
 
-  Widget _imageItem({required File imagePth}) {
-    return Stack(
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(7),
-          child: Image.file(
-            imagePth,
-            width: ScreenUtil().setWidth(250),
-            height: ScreenUtil().setHeight(200),
-            fit: BoxFit.cover,
-          ),
-        ),
-        Positioned(
-          right: 5,
-          top: 5,
-          child: GestureDetector(
-            onTap: () {
-              //print('点击了删除');
-              // List<File> cacheList = [];
-              // cacheList.addAll(imgArray);
-              // cacheList.remove(imagePth);
-              setState(() {
-                imgArray.remove(imagePth);
-              });
-            },
-            child: ClipOval(
-              child: Container(
-                color: Colors.white.withOpacity(0.7),
-                width: 20,
-                height: 20,
-                child: const Icon(
-                  Icons.close,
-                  size: 20,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _videoController?.dispose();
   }
 
   @override
@@ -196,7 +196,8 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
         body: Stack(
           children: [
             Padding(
-              padding: EdgeInsets.only(left: ScreenUtil().setWidth(10),
+              padding: EdgeInsets.only(
+                  left: ScreenUtil().setWidth(10),
                   right: ScreenUtil().setWidth(20)),
               child: Column(
                 children: [
@@ -228,7 +229,8 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
                         const Expanded(child: Text('')),
                         GestureDetector(
                           onTap: (() {
-
+                            doPostSendDT();
+                            MyUtils.hideKeyboard(context);
                           }),
                           child: WidgetUtils.myContainer(
                               ScreenUtil().setHeight(55),
@@ -245,50 +247,105 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
                   WidgetUtils.commonSizedBox(15, 0),
                   Container(
                     margin: const EdgeInsets.only(left: 10),
-                    child: WidgetUtils.commonTextFieldDT(
-                        controller, '记录一下此刻的想法~'),
+                    child:
+                        WidgetUtils.commonTextFieldDT(controller, '记录一下此刻的想法~'),
                   ),
                   WidgetUtils.commonSizedBox(15, 0),
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: (() {
-                          _showSheetAction();
-                        }),
-                        child: Container(
-                          width: ScreenUtil().setWidth(200),
-                          height: ScreenUtil().setHeight(200),
-                          alignment: Alignment.center,
-                          //边框设置
-                          decoration: const BoxDecoration(
-                            //背景
-                            color: MyColors.f2,
-                            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                            borderRadius: BorderRadius.all(Radius.circular(
-                                10.0)),
+                  videoId.isEmpty ? Container(
+                    width: double.infinity,
+                    margin: const EdgeInsets.only(left: 10, right: 10),
+                    child: Wrap(
+                      direction: Axis.horizontal,
+                      spacing: 10,
+                      children: [
+                        for (int i = 0; i < imgArray.length; i++)
+                          Stack(
+                            children: [
+                              Container(
+                                height: ScreenUtil().setHeight(180),
+                                width: ScreenUtil().setHeight(180),
+                                //超出部分，可裁剪
+                                clipBehavior: Clip.hardEdge,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(
+                                      ScreenUtil().setHeight(20)),
+                                ),
+                                child: WidgetUtils.showImages(
+                                  imgArray[i].path,
+                                  ScreenUtil().setHeight(180),
+                                  ScreenUtil().setHeight(180),
+                                ),
+                              ),
+                              Positioned(
+                                right: 0,
+                                top: 0,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _removeImage2(i);
+                                    });
+                                  },
+                                  child: ClipOval(
+                                    child: Container(
+                                      color: Colors.white.withOpacity(0.7),
+                                      width: 20,
+                                      height: 20,
+                                      child: const Icon(
+                                        Icons.close,
+                                        size: 20,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                          child: const Text(
-                            '+',
-                            style: TextStyle(fontSize: 40, color: MyColors.g6),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-
-                  Container(
-                    child: imgArray.isNotEmpty
-                        ? Wrap(
-                      spacing: 5,
-                      runSpacing: 5,
-                      children: imgArray
-                          .map((item) => _imageItem(imagePth: item))
-                          .toList(),
-                    )
-                        : const Text(''),
-                  )
-
-
+                        imgArray.length < 6
+                            ? GestureDetector(
+                                onTap: (() {
+                                  _showSheetAction();
+                                }),
+                                child: WidgetUtils.showImages(
+                                    'assets/images/images_add.png',
+                                    ScreenUtil().setHeight(180),
+                                    ScreenUtil().setHeight(180)),
+                              )
+                            : const Text(''),
+                      ],
+                    ),
+                  ) :
+                 Row(
+                   children: [
+                     SizedBox(
+                       width: ScreenUtil().setHeight(200),
+                       height: ScreenUtil().setHeight(200),
+                       child: Stack(
+                         alignment: Alignment.center,
+                         children: [
+                           SizedBox(
+                             width: ScreenUtil().setHeight(200),
+                             height: ScreenUtil().setHeight(200),
+                             child: AspectRatio(
+                               aspectRatio: _videoController.value.aspectRatio,
+                               child: VideoPlayer(_videoController),
+                             ),
+                           ),
+                           GestureDetector(
+                             onTap: () {
+                                MyUtils.goTransparentRFPage(context, PagePreviewVideo(url: videoUrl));
+                             },
+                             child: const Icon(
+                               Icons.play_circle_fill_outlined,
+                               color: Colors.white,
+                               size: 50,
+                             ),
+                           ),
+                         ],
+                       ),
+                     ),
+                     const Spacer(),
+                   ],
+                 )
                 ],
               ),
             )
@@ -304,9 +361,171 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
             //   ),
             // )
           ],
-        )
-    );
+        ));
   }
 
+  /// 获取文件url
+  Future<void> doPostPostFileUpload(path) async {
+    Loading.show("上传中...");
+    FormData formdata;
+    if(type == 0) {
+      var dir = await path_provider.getTemporaryDirectory();
+      var targetPath =
+          "${dir.absolute.path}/${DateTime
+          .now()
+          .millisecondsSinceEpoch}.jpg";
+      var result = await FlutterImageCompress.compressAndGetFile(
+        path,
+        targetPath,
+        quality: 50,
+        rotate: 180,
+      );
+      var name = path.substring(path.lastIndexOf("/") + 1, path.length);
+      formdata = FormData.fromMap(
+        {
+          'type': 'image',
+          "file": await MultipartFile.fromFile(
+            result!.path,
+            filename: name,
+          ),
+        },
+      );
+    }else{
+      var name = path.substring(path.lastIndexOf("/") + 1, path.length);
+      formdata = FormData.fromMap(
+        {
+          'type': 'video',
+          "file": await MultipartFile.fromFile(
+            path,
+            filename: name,
+          )
+        },
+      );
+    }
 
+    BaseOptions option = BaseOptions(
+        contentType: 'multipart/form-data', responseType: ResponseType.plain);
+    option.headers["Authorization"] = sp.getString('user_token') ?? '';
+    Dio dio = Dio(option);
+    //application/json
+    try {
+      var respone = await dio.post(MyHttpConfig.fileUpload, data: formdata);
+      Map jsonResponse = json.decode(respone.data.toString());
+      if (respone.statusCode == 200) {
+        setState(() {
+          if(type == 0){
+            imgID = jsonResponse['data'].toString();
+          }else{
+            videoId = jsonResponse['data'].toString();
+          }
+        });
+
+        MyToastUtils.showToastBottom('上传成功');
+        Loading.dismiss();
+      } else if (respone.statusCode == 401) {
+        // ignore: use_build_context_synchronously
+        MyUtils.jumpLogin(context);
+      } else {
+        MyToastUtils.showToastBottom(jsonResponse['msg']);
+      }
+
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      // MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+  }
+
+  /// 获取文件url
+  Future<void> doPostPostFileUpload2(List<AssetEntity> lists) async {
+    Loading.show("上传中...");
+    String id = '';
+    for (int i = 0; i < lists.length; i++) {
+      File? imgFile = await lists[i].file;
+      var dir = await path_provider.getTemporaryDirectory();
+      var targetPath =
+          "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
+      var result = await FlutterImageCompress.compressAndGetFile(
+        imgFile!.path,
+        targetPath,
+        quality: 50,
+        rotate: 180,
+      );
+      var name = imgFile!.path
+          .substring(imgFile!.path.lastIndexOf("/") + 1, imgFile!.path.length);
+      FormData formdata = FormData.fromMap(
+        {
+          'type': 'image',
+          "file": await MultipartFile.fromFile(
+            result!.path,
+            filename: name,
+          )
+        },
+      );
+      BaseOptions option = BaseOptions(
+          contentType: 'multipart/form-data', responseType: ResponseType.plain);
+      option.headers["Authorization"] = sp.getString('user_token') ?? '';
+      Dio dio = Dio(option);
+      //application/json
+      try {
+        var respone = await dio.post(MyHttpConfig.fileUpload, data: formdata);
+        Map jsonResponse = json.decode(respone.data.toString());
+
+        if (respone.statusCode == 200) {
+          if (id.isEmpty) {
+            id = jsonResponse['data'].toString();
+          } else {
+            id = '$id,${jsonResponse['data'].toString()}';
+          }
+          if (i == lists.length - 1) {
+            setState(() {
+              imgID = id;
+            });
+            MyToastUtils.showToastBottom('上传成功');
+            Loading.dismiss();
+          }
+        } else if (respone.statusCode == 401) {
+          // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+        } else {
+          MyToastUtils.showToastBottom(jsonResponse['msg']);
+        }
+      } catch (e) {
+        Loading.dismiss();
+        // MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      }
+    }
+  }
+
+  /// 上传动态
+  Future<void> doPostSendDT() async {
+    if (controller.text.trim().isEmpty && imgID.isEmpty && videoId.isEmpty) {
+      MyToastUtils.showToastBottom("发布信息为空！");
+      return;
+    }
+
+    Map<String, dynamic> params = <String, dynamic>{
+      'text': controller.text.trim(),
+      'img_id': type == 0 ? imgID : videoId,
+      'type': type == 0 ? '1' : '2'
+    };
+    try {
+      CommonBean bean = await DataUtils.postSendDT(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          MyToastUtils.showToastBottom("发布成功！");
+          Navigator.pop(context);
+          break;
+        case MyHttpConfig.errorloginCode:
+          // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+  }
 }

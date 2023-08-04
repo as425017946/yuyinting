@@ -373,7 +373,7 @@ class _QiehuanAccountPageState extends State<QiehuanAccountPage> {
                 child: Row(
                   children: [
                     WidgetUtils.commonSizedBox(0, 20),
-                    WidgetUtils.CircleHeadImage2(
+                    WidgetUtils.CircleHeadImage(
                         ScreenUtil().setHeight(80),
                         ScreenUtil().setHeight(80),
                         'assets/images/trends_jiahao.png'),

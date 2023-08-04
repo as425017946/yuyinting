@@ -41,7 +41,9 @@ class Data {
   int? age;
   String? label;
   String? voiceLabelName;
+  int? live;
   List<String>? photoUrl;
+  int? isHi;
 
   Data(
       {this.number,
@@ -62,7 +64,9 @@ class Data {
         this.age,
         this.label,
         this.voiceLabelName,
-        this.photoUrl});
+        this.live,
+        this.photoUrl,
+        this.isHi});
 
   Data.fromJson(Map<String, dynamic> json) {
     number = json['number'];
@@ -83,7 +87,9 @@ class Data {
     age = json['age'];
     label = json['label'];
     voiceLabelName = json['voice_label_name'];
+    live = json['live'];
     photoUrl = json['photo_url'].cast<String>();
+    isHi = json['is_hi'];
   }
 
   Map<String, dynamic> toJson() {
@@ -106,7 +112,9 @@ class Data {
     data['age'] = this.age;
     data['label'] = this.label;
     data['voice_label_name'] = this.voiceLabelName;
+    data['live'] = this.live;
     data['photo_url'] = this.photoUrl;
+    data['is_hi'] = this.isHi;
     return data;
   }
 }

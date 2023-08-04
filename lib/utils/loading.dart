@@ -16,13 +16,13 @@ class Loading {
       ..indicatorColor = Colors.white
       ..textColor = Colors.white
       ..maskColor = Colors.black.withOpacity(0.6)
-      ..userInteractions = false
+      ..userInteractions = true
       ..dismissOnTap = false
       ..maskType = EasyLoadingMaskType.custom;
   }
 
   static void show([String? text]) {
-    EasyLoading.instance.userInteractions = false;
+    EasyLoading.instance.userInteractions = true;
     EasyLoading.show(status: text ?? '加载中...');
   }
 
@@ -31,7 +31,7 @@ class Loading {
   }
 
   static void dismiss() {
-    EasyLoading.instance.userInteractions = false;
+    EasyLoading.instance.userInteractions = true;
     EasyLoading.dismiss();
   }
 }

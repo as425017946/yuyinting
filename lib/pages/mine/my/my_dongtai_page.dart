@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+import 'package:video_player/video_player.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 
@@ -13,6 +14,9 @@ import '../../../main.dart';
 import '../../../utils/loading.dart';
 import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
+import '../../../widget/SwiperPage.dart';
+import '../../trends/PagePreviewVideo.dart';
+import '../../trends/trends_more_page.dart';
 ///动态
 
 class MyDongtaiPage extends StatefulWidget {
@@ -59,35 +63,320 @@ class _MyDongtaiPageState extends State<MyDongtaiPage> {
 
 
   Widget _itemPeople(BuildContext context, int i) {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(20, 0, 0, 10),
-      width: double.infinity,
-      height: ScreenUtil().setHeight(120),
-      child: Row(
-        children: [
-          WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(100),
-              ScreenUtil().setWidth(100), _list[i].avatar!),
-          WidgetUtils.commonSizedBox(0, 10),
-          Expanded(
-            child: Column(
+    return GestureDetector(
+      onTap: ((){
+        MyUtils.goTransparentRFPage(context, TrendsMorePage( note_id: _list[i].id.toString(),));
+      }),
+      child: Container(
+        width: double.infinity,
+        color: Colors.white,
+        child: Column(
+          children: [
+            WidgetUtils.onlyText(
+                _list[i].text!,
+                StyleUtils.getCommonTextStyle(
+                  color: Colors.black,
+                  fontSize: ScreenUtil().setSp(28),
+                )),
+            WidgetUtils.commonSizedBox(10, 0),
+            _list[i].type == 2 ? showVideo(_list[i].imgUrl!) : showImag(_list[i].imgUrl!, i),
+            WidgetUtils.commonSizedBox(10, 0),
+            Row(
               children: [
-                const Expanded(child: Text('')),
+                WidgetUtils.showImages(_list[i].isLike == 0 ? 'assets/images/trends_zan1.png' : 'assets/images/trends_zan_2.png', 18, 18),
+                WidgetUtils.commonSizedBox(0, 5),
+                SizedBox(
+                  width: ScreenUtil().setHeight(80),
+                  child: WidgetUtils.onlyText(
+                      _list[i].like == 0 ? '抢首赞' : _list[i].like.toString(),
+                      StyleUtils.getCommonTextStyle(
+                        color: Colors.grey,
+                        fontSize: ScreenUtil().setSp(21),
+                      )),
+                ),
+                WidgetUtils.showImages(
+                    'assets/images/trends_message.png', 18, 18),
+                WidgetUtils.commonSizedBox(0, 5),
                 WidgetUtils.onlyText(
-                    _list[i].nickname!,
+                    _list[i].comment == 0 ? '评论' : _list[i].comment.toString(),
                     StyleUtils.getCommonTextStyle(
-                        color: Colors.black, fontSize: 14)),
-                WidgetUtils.commonSizedBox(5, 10),
-                WidgetUtils.onlyText(
-                    'ID: ${_list[i].number!}',
-                    StyleUtils.getCommonTextStyle(
-                        color: MyColors.g9, fontSize: 12)),
-                const Expanded(child: Text('')),
+                      color: Colors.grey,
+                      fontSize: ScreenUtil().setSp(21),
+                    )),
               ],
             ),
-          ),
-        ],
+            WidgetUtils.commonSizedBox(10, 0),
+            WidgetUtils.myLine()
+          ],
+        ),
       ),
     );
+  }
+
+
+  late VideoPlayerController _videoController;
+  Widget showVideo(List<String> listImg) {
+    String a = listImg[0];
+    _videoController = VideoPlayerController.network(a,
+      videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+    );
+    return Row(
+      children: [
+        Container(
+          width: ScreenUtil().setHeight(200),
+          height: ScreenUtil().setHeight(200),
+          decoration: const BoxDecoration(
+            //背景
+            color: Colors.black87,
+            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          ),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              SizedBox(
+                width: ScreenUtil().setHeight(200),
+                height: ScreenUtil().setHeight(200),
+                child: AspectRatio(
+                  aspectRatio: _videoController.value.aspectRatio,
+                  child: VideoPlayer(_videoController),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  MyUtils.goTransparentRFPage(context, PagePreviewVideo(url: a));
+                },
+                child: const Icon(
+                  Icons.play_circle_fill_outlined,
+                  color: Colors.white,
+                  size: 50,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const Spacer(),
+      ],
+    );
+  }
+
+  ///显示图片
+  Widget showImag(List<String> listImg, int i) {
+    if (listImg.length == 1) {
+      return GestureDetector(
+        onTap: (() {
+          Navigator.of(context).push(PageRouteBuilder(
+              opaque: false,
+              pageBuilder: (context, animation, secondaryAnimation) {
+                return SwiperPage(imgList: listImg);
+              }));
+        }),
+        child: Container(
+          height: ScreenUtil().setHeight(300),
+          alignment: Alignment.centerLeft,
+          child: WidgetUtils.CircleImageNet(
+              ScreenUtil().setHeight(300),
+              ScreenUtil().setHeight(280),
+              ScreenUtil().setHeight(10),
+              listImg[0]),
+        ),
+      );
+    } else if (listImg.length == 2) {
+      return GestureDetector(
+        onTap: (() {
+          Navigator.of(context).push(PageRouteBuilder(
+              opaque: false,
+              pageBuilder: (context, animation, secondaryAnimation) {
+                return SwiperPage(imgList: listImg);
+              }));
+        }),
+        child: SizedBox(
+          height: ScreenUtil().setHeight(240),
+          child: Row(
+            children: [
+              Expanded(
+                  child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(240),
+                      double.infinity, ScreenUtil().setHeight(10), listImg[0])),
+              WidgetUtils.commonSizedBox(0, 10),
+              Expanded(
+                  child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(240),
+                      double.infinity, ScreenUtil().setHeight(10), listImg[1])),
+            ],
+          ),
+        ),
+      );
+    } else if (listImg.length == 3) {
+      return GestureDetector(
+        onTap: (() {
+          Navigator.of(context).push(PageRouteBuilder(
+              opaque: false,
+              pageBuilder: (context, animation, secondaryAnimation) {
+                return SwiperPage(imgList: listImg);
+              }));
+        }),
+        child: SizedBox(
+          height: ScreenUtil().setHeight(350),
+          child: Row(
+            children: [
+              WidgetUtils.CircleImageNet(ScreenUtil().setHeight(350),
+                  ScreenUtil().setHeight(350), ScreenUtil().setHeight(10), listImg[0]),
+              WidgetUtils.commonSizedBox(0, 10),
+              Expanded(
+                  child: Column(
+                    children: [
+                      WidgetUtils.CircleImageNet(ScreenUtil().setHeight(170),
+                          double.infinity, ScreenUtil().setHeight(10), listImg[1]),
+                      const Spacer(),
+                      WidgetUtils.CircleImageNet(ScreenUtil().setHeight(170),
+                          double.infinity, ScreenUtil().setHeight(10), listImg[2]),
+                    ],
+                  )),
+            ],
+          ),
+        ),
+      );
+    } else if (listImg.length == 4) {
+      return GestureDetector(
+        onTap: (() {
+          Navigator.of(context).push(PageRouteBuilder(
+              opaque: false,
+              pageBuilder: (context, animation, secondaryAnimation) {
+                return SwiperPage(imgList: listImg);
+              }));
+        }),
+        child: SizedBox(
+          height: ScreenUtil().setHeight(490),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(240),
+                          double.infinity, ScreenUtil().setHeight(10), listImg[0])),
+                  WidgetUtils.commonSizedBox(0, 10),
+                  Expanded(
+                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(240),
+                          double.infinity, ScreenUtil().setHeight(10), listImg[1])),
+                ],
+              ),
+              WidgetUtils.commonSizedBox(ScreenUtil().setHeight(10), 10),
+              Row(
+                children: [
+                  Expanded(
+                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(240),
+                          double.infinity, ScreenUtil().setHeight(10), listImg[2])),
+                  WidgetUtils.commonSizedBox(0, 10),
+                  Expanded(
+                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(240),
+                          double.infinity, ScreenUtil().setHeight(10), listImg[3])),
+                ],
+              )
+            ],
+          ),
+        ),
+      );
+    } else if (listImg.length == 5) {
+      return GestureDetector(
+        onTap: (() {
+          Navigator.of(context).push(PageRouteBuilder(
+              opaque: false,
+              pageBuilder: (context, animation, secondaryAnimation) {
+                return SwiperPage(imgList: listImg);
+              }));
+        }),
+        child: SizedBox(
+          height: ScreenUtil().setHeight(370),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
+                          double.infinity, ScreenUtil().setHeight(10), listImg[0])),
+                  WidgetUtils.commonSizedBox(0, 10),
+                  Expanded(
+                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
+                          double.infinity, ScreenUtil().setHeight(10), listImg[1])),
+                  WidgetUtils.commonSizedBox(0, 10),
+                  Expanded(
+                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
+                          double.infinity, ScreenUtil().setHeight(10), listImg[2])),
+                ],
+              ),
+              WidgetUtils.commonSizedBox(ScreenUtil().setHeight(10), 10),
+              Row(
+                children: [
+                  Expanded(
+                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
+                          double.infinity, ScreenUtil().setHeight(10), listImg[3])),
+                  WidgetUtils.commonSizedBox(0, 10),
+                  Expanded(
+                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
+                          double.infinity, ScreenUtil().setHeight(10), listImg[4])),
+                  WidgetUtils.commonSizedBox(0, 10),
+                  Expanded(
+                      child: Opacity(
+                        opacity: 0,
+                        child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
+                            double.infinity, ScreenUtil().setHeight(10), listImg[0]),
+                      )),
+                ],
+              )
+            ],
+          ),
+        ),
+      );
+    } else if (listImg.length == 6) {
+      return GestureDetector(
+        onTap: (() {
+          Navigator.of(context).push(PageRouteBuilder(
+              opaque: false,
+              pageBuilder: (context, animation, secondaryAnimation) {
+                return SwiperPage(imgList: listImg);
+              }));
+        }),
+        child: SizedBox(
+          height: ScreenUtil().setHeight(370),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
+                          double.infinity, ScreenUtil().setHeight(10), listImg[0])),
+                  WidgetUtils.commonSizedBox(0, 10),
+                  Expanded(
+                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
+                          double.infinity, ScreenUtil().setHeight(10), listImg[1])),
+                  WidgetUtils.commonSizedBox(0, 10),
+                  Expanded(
+                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
+                          double.infinity, ScreenUtil().setHeight(10), listImg[2])),
+                ],
+              ),
+              WidgetUtils.commonSizedBox(ScreenUtil().setHeight(10), 10),
+              Row(
+                children: [
+                  Expanded(
+                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
+                          double.infinity, ScreenUtil().setHeight(10), listImg[3])),
+                  WidgetUtils.commonSizedBox(0, 10),
+                  Expanded(
+                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
+                          double.infinity, ScreenUtil().setHeight(10), listImg[4])),
+                  WidgetUtils.commonSizedBox(0, 10),
+                  Expanded(
+                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
+                          double.infinity, ScreenUtil().setHeight(10), listImg[5])),
+                ],
+              )
+            ],
+          ),
+        ),
+      );
+    } else {
+      return const Text('');
+    }
   }
 
   @override
@@ -95,6 +384,12 @@ class _MyDongtaiPageState extends State<MyDongtaiPage> {
     // TODO: implement initState
     super.initState();
     doPostUserList();
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _videoController.dispose();
   }
 
   @override
@@ -122,7 +417,7 @@ class _MyDongtaiPageState extends State<MyDongtaiPage> {
           WidgetUtils.showImages('assets/images/no_have.png', 100, 100),
           WidgetUtils.commonSizedBox(10, 0),
           WidgetUtils.onlyTextCenter(
-              '暂无黑名单人员',
+              '暂无动态信息',
               StyleUtils.getCommonTextStyle(
                   color: MyColors.g6,
                   fontSize: ScreenUtil().setSp(26))),
