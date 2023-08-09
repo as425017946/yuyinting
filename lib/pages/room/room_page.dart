@@ -31,9 +31,7 @@ import '../../utils/style_utils.dart';
 
 /// 厅内
 class RoomPage extends StatefulWidget {
-  int type;
-
-  RoomPage({Key? key, required this.type}) : super(key: key);
+  const RoomPage({Key? key}) : super(key: key);
 
   @override
   State<RoomPage> createState() => _RoomPageState();

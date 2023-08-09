@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin{
   @override
   bool get wantKeepAlive => true;
 
-  int _currentIndex = 0;
+  int _currentIndex = 1;
   late final PageController _controller;
 
   bool isFirst = true;
@@ -36,9 +36,9 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin{
   void initState() {
     // TODO: implement initState
     super.initState();
-    _currentIndex = 0;
+    _currentIndex = 1;
     _controller = PageController(
-      initialPage: 0,
+      initialPage: 1,
     );
     LogE('是否第一次登录${sp.getBool('isFirst')}');
     if(sp.getBool('isFirst') == true){
@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: MyColors.homeTopBG,
+        backgroundColor: Colors.white,
         body: Column(
           children: [
             ///头部

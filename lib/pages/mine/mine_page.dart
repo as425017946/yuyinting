@@ -53,7 +53,8 @@ class _MinePageState extends State<MinePage>{
     super.initState();
     listen = eventBus.on<SubmitButtonBack>().listen((event) {
       if (event.title == '我的装扮') {
-        // Navigator.pushNamed(context, 'DengjiPage');
+        // Navigator.pushNamed(context, 'JiesuanPage');
+
         Navigator.push(
           context,
           MaterialPageRoute(

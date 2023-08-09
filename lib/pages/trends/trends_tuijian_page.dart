@@ -164,7 +164,7 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> with AutomaticKee
                 GestureDetector(
                   onTap: ((){
                     sp.setString('other_id', _list[i].uid.toString());
-                    MyUtils.goTransparentRFPage(context, const PeopleInfoPage());
+                    MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[i].uid.toString(),));
                   }),
                   child: WidgetUtils.CircleHeadImage(40, 40, _list[i].avatar!),
                 ),
@@ -697,11 +697,13 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> with AutomaticKee
             }else{
               if (page == 1) {
                 length = 0;
+              }else{
+                if(bean.data!.list!.length < MyConfig.pageSize){
+                  _refreshController.loadNoData();
+                }
               }
             }
-            if(bean.data!.list!.length < MyConfig.pageSize){
-              _refreshController.loadNoData();
-            }
+
           });
           break;
         case MyHttpConfig.errorloginCode:

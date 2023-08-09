@@ -96,6 +96,7 @@ dependencies:
   cached_network_image: ^3.2.3
   # 播放视频
   video_player: ^2.7.0
+  flutter_cache_manager: ^3.1.2
 
 
 dev_dependencies:
@@ -129,6 +130,7 @@ flutter:
     - assets/images/feilong/
     - assets/images/saiche/
     - assets/svga/
+    - assets/svga/gp/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

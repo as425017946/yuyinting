@@ -166,9 +166,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
               children: [
                 GestureDetector(
                   onTap: (() {
-                    sp.setString('other_id', _list[i].uid.toString());
-                    MyUtils.goTransparentRFPage(
-                        context, const PeopleInfoPage());
+                    MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[i].uid.toString(),));
                   }),
                   child: WidgetUtils.CircleHeadImage(40, 40, _list[i].avatar!),
                 ),
@@ -375,9 +373,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
               children: [
                 GestureDetector(
                   onTap: (() {
-                    sp.setString('other_id', _list_tj[i].uid.toString());
-                    MyUtils.goTransparentRFPage(
-                        context, const PeopleInfoPage());
+                    MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list_tj[i].uid.toString(),));
                   }),
                   child: WidgetUtils.CircleHeadImage(40, 40, _list_tj[i].avatar!),
                 ),
@@ -930,8 +926,20 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
                             StyleUtils.getCommonTextStyle(
                                 color: MyColors.homeNoHave,
                                 fontSize: ScreenUtil().setSp(32))),
-                        WidgetUtils.commonSizedBox(10, 0),
-                        WidgetUtils.myLine(),
+                        WidgetUtils.commonSizedBox(50, 0),
+                        Row(
+                          children: [
+                            Expanded(child: WidgetUtils.myLine()),
+                            WidgetUtils.commonSizedBox(0, 10),
+                            WidgetUtils.onlyTextBottom(
+                                '为您推荐一些有趣的内容',
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.homeNoHave,
+                                    fontSize: ScreenUtil().setSp(25))),
+                            WidgetUtils.commonSizedBox(0, 10),
+                            Expanded(child: WidgetUtils.myLine()),
+                          ],
+                        ),
                         ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
@@ -997,11 +1005,13 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
             } else {
               if (page == 1) {
                 length = 0;
+              }else{
+                if (bean.data!.list!.length < MyConfig.pageSize) {
+                  _refreshController.loadNoData();
+                }
               }
             }
-            if (bean.data!.list!.length < MyConfig.pageSize) {
-              _refreshController.loadNoData();
-            }
+
           });
           break;
         case MyHttpConfig.errorloginCode:
@@ -1045,11 +1055,13 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
               }
               LogE('推荐${_list_tj.length}');
             }else{
+              if(page > 1){
+                if(bean.data!.list!.length < MyConfig.pageSize){
+                  _refreshController.loadNoData();
+                }
+              }
+            }
 
-            }
-            if(bean.data!.list!.length < MyConfig.pageSize){
-              _refreshController.loadNoData();
-            }
           });
           break;
         case MyHttpConfig.errorloginCode:

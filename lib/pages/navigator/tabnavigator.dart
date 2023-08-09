@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:yuyinting/config/my_config.dart';
 import 'package:yuyinting/pages/message/message_page.dart';
 import 'package:yuyinting/pages/trends/trends_page.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import '../../colors/my_colors.dart';
 import '../../utils/my_toast_utils.dart';
+import '../../utils/my_utils.dart';
 import '../../utils/widget_utils.dart';
+import '../gongping/gp_show_one_page.dart';
 import '../home/home_page.dart';
 import '../mine/mine_page.dart';
 

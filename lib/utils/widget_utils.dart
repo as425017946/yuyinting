@@ -518,6 +518,7 @@ class WidgetUtils {
       width: width,
       child: ClipOval(
         child: CachedNetworkImage(
+          memCacheHeight: height.round(),
           imageUrl: imgUrl,
           fit: BoxFit.cover,
           placeholder: (context, url) => CircleImageAss(height, width, ScreenUtil().setHeight(10) , 'assets/images/img_placeholder.png',),
@@ -546,6 +547,7 @@ class WidgetUtils {
             )
           : url.isNotEmpty
               ? CachedNetworkImage(
+                  memCacheHeight: height.round(),
                   imageUrl: url,
                   fit: BoxFit.cover,
                   placeholder: (context, url) => CircleImageAss(height, width, ScreenUtil().setHeight(10) , 'assets/images/img_placeholder.png',),
@@ -594,6 +596,7 @@ class WidgetUtils {
         height: height,
         width: width,
         child: CachedNetworkImage(
+          memCacheHeight: height.round(),
           imageUrl: url,
           fit: BoxFit.cover,
           placeholder: (context, url) => CircleImageAss(height, width, ScreenUtil().setHeight(10) , 'assets/images/img_placeholder.png',),
@@ -625,6 +628,7 @@ class WidgetUtils {
       height: height,
       width: width,
       child: CachedNetworkImage(
+        memCacheHeight: height.round(),
         imageUrl: url,
         fit: BoxFit.cover,
         placeholder: (context, url) => CircleImageAss(height, width, ScreenUtil().setHeight(10) , 'assets/images/img_placeholder.png',),
@@ -1094,14 +1098,14 @@ class WidgetUtils {
   }
 
   ///派对使用
-  static Widget paiduiBtn(Color color, String title, String imgUrl) {
+  static Widget paiduiBtn(Color color, String title, String imgUrl,double width) {
     return Row(
       children: [
         Stack(
           alignment: Alignment.centerLeft,
           children: [
             Container(
-              width: ScreenUtil().setHeight(75),
+              width: width,
               height: ScreenUtil().setHeight(25),
               margin: const EdgeInsets.only(left: 5),
               //边框设置

@@ -254,8 +254,9 @@ class _CarePageState extends State<CarePage> {
             }else{
               if (page == 1) {
                 length = 0;
+              }else{
+                _refreshController.loadNoData();
               }
-              _refreshController.loadNoData();
             }
           });
           break;

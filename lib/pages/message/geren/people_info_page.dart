@@ -17,7 +17,8 @@ import 'dongtai_page.dart';
 
 /// 个人主页
 class PeopleInfoPage extends StatefulWidget {
-  const PeopleInfoPage({Key? key}) : super(key: key);
+  String otherId;
+  PeopleInfoPage({Key? key,required this.otherId}) : super(key: key);
 
   @override
   State<PeopleInfoPage> createState() => _PeopleInfoPageState();
@@ -428,7 +429,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
   Future<void> doPostMyIfon() async {
     Loading.show('加载中...');
     Map<String, dynamic> params = <String, dynamic>{
-      'uid': sp.getString('other_id')
+      'uid': widget.otherId
     };
     try {
       userInfoBean bean = await DataUtils.postUserInfo(params);

@@ -2,13 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:yuyinting/pages/room/room_page.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
-import '../../utils/log_util.dart';
+import '../../bean/Common_bean.dart';
+import '../../http/data_utils.dart';
+import '../../http/my_http_config.dart';
+import '../../utils/loading.dart';
+import '../../utils/my_toast_utils.dart';
+import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 
 /// 进入房间前输入密码
 class RoomTSMiMaPage extends StatefulWidget {
-  const RoomTSMiMaPage({super.key});
+  String roomID;
+  RoomTSMiMaPage({super.key, required this.roomID});
 
   @override
   State<RoomTSMiMaPage> createState() => _RoomTSMiMaPageState();
@@ -70,7 +77,10 @@ class _RoomTSMiMaPageState extends State<RoomTSMiMaPage> {
                       // animationDuration: const Duration(milliseconds: 300),
                       controller: textEditingController,
                       onChanged: (value) {
-                        LogE('返回数据$value');
+                        // LogE('返回数据$value');
+                        if(value.length == 4){
+                          doPostCheckPwd();
+                        }
                       },
                       textStyle: StyleUtils.getCommonTextStyle(
                           color: Colors.white,
@@ -112,5 +122,62 @@ class _RoomTSMiMaPageState extends State<RoomTSMiMaPage> {
             ),
           ],
         ));
+  }
+
+  /// 校验密码
+  Future<void> doPostCheckPwd() async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'room_id': widget.roomID,
+      'password': textEditingController.text.trim()
+    };
+    try {
+      Loading.show("校验中...");
+      CommonBean bean = await DataUtils.postCheckPwd(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          doPostRoomJoin(widget.roomID,textEditingController.text.trim());
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+  }
+
+  /// 加入房间
+  Future<void> doPostRoomJoin(roomID, password) async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'room_id': roomID,
+      'password': password
+    };
+    try {
+      Loading.show();
+      CommonBean bean = await DataUtils.postRoomJoin(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.goTransparentRFPage(context, const RoomPage());
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
   }
 }

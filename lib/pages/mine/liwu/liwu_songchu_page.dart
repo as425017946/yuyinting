@@ -189,8 +189,9 @@ class _LiwuSongchuPageState extends State<LiwuSongchuPage> {
             }else{
               if (page == 1) {
                 length = 0;
+              }else{
+                _refreshController.loadNoData();
               }
-              _refreshController.loadNoData();
             }
           });
           break;

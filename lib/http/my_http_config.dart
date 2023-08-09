@@ -5,6 +5,7 @@ class MyHttpConfig{
   static const int noinfoCode = 400;//失败
   static const int errorloginCode = 401;//登录失效
   static const int errorHiCode = 20001;//
+  static const int errorRoomCode = 10001;//10001需输入密码
 
   //测试上传
   static const String uploadUrl = 'http://192.168.100.121:18089/upload';
@@ -115,6 +116,29 @@ class MyHttpConfig{
   static const String hi = "$baseURL/chat/hi";
   //发布动态
   static const String sendDT = "$baseURL/note/post";
+
+  /// 首页
+  //推荐房间/海报轮播/推荐主播
+  static const String pushRoom = "$baseURL/room/pushRoom";
+  //收藏页4个推荐房间
+  static const String recommendRoom = "$baseURL/mine/recommendRoom";
+  //加入房间前
+  static const String beforeJoin = "$baseURL/room/beforeJoin";
+  //校验密码
+  static const String checkPwd = "$baseURL/room/checkPwd";
+  //加入房间
+  static const String roomJoin = "$baseURL/room/join";
+  //在线用户
+  static const String userOnline = "$baseURL/user/userOnline";
+  //首页派对房间列表
+  static const String tjRoomList = "$baseURL/room/list";
+  //首页榜单
+  static const String rankList = "$baseURL/rank/list";
+  //首页 游戏
+  static const String gameList = "$baseURL/game/list";
+
+
+
 
 
 }

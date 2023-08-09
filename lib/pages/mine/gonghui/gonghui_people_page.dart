@@ -232,8 +232,9 @@ class _GonghuiPeoplePageState extends State<GonghuiPeoplePage> {
             }else{
               if (page == 1) {
                 length = 0;
+              }else{
+                _refreshController.loadNoData();
               }
-              _refreshController.loadNoData();
             }
           });
           break;
