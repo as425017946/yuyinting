@@ -74,6 +74,7 @@ class _LoginPageState extends State<LoginPage> {
     listen.cancel();
   }
 
+
   Timer? _timer;
   int _timeCount = 10;
   var _autoCodeText = '发送验证码';
@@ -558,6 +559,8 @@ class _LoginPageState extends State<LoginPage> {
           // MyToastUtils.showToastBottom("登录成功");
           sp.setString("user_account", userName);
           sp.setString("user_id", loginBean.data!.uid.toString());
+          sp.setString("em_pwd", loginBean.data!.emPwd.toString());
+          sp.setString("em_token", loginBean.data!.emToken.toString());
           sp.setString("user_password", passWord);
           if (loginBean.data!.gender == 0) {
             sp.setBool("isFirst", true);

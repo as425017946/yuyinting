@@ -80,14 +80,14 @@ class _ShoucangPageState extends State<ShoucangPage> with AutomaticKeepAliveClie
                 ScreenUtil().setHeight(260),
                 ScreenUtil().setHeight(260),
                 10.0,
-                'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
+                listTJ[index].coverImg!),
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: Column(
                 children: [
                   const Spacer(),
                   WidgetUtils.onlyText(
-                      '房间标题',
+                      listTJ[index].roomName!,
                       StyleUtils.getCommonTextStyle(
                           color: Colors.white,
                           fontSize: ScreenUtil().setSp(26))),
@@ -97,7 +97,7 @@ class _ShoucangPageState extends State<ShoucangPage> with AutomaticKeepAliveClie
                       WidgetUtils.showImages(
                           'assets/images/zhibo2.webp', 10, 15),
                       Text(
-                        '10000',
+                        listTJ[index].hotDegree.toString(),
                         style: StyleUtils.getCommonTextStyle(
                             color: Colors.white,
                             fontSize: ScreenUtil().setSp(18),

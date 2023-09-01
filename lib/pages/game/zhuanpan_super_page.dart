@@ -1,10 +1,17 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:soundpool/soundpool.dart';
 import 'package:yuyinting/colors/my_colors.dart';
+import 'package:yuyinting/pages/game/zhuanpan/zhuanpan_guize_page.dart';
+import 'package:yuyinting/pages/game/zhuanpan/zhuanpan_jiangchi2_page.dart';
+import 'package:yuyinting/pages/game/zhuanpan/zhuanpan_jilu_page.dart';
 
 import '../../utils/log_util.dart';
+import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../../widget/CircleProgressView.dart';
@@ -35,6 +42,16 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
 
   int isCheck = 1;
 
+  bool isClose = false;
+
+  /// 播放音频
+  Soundpool soundpool = Soundpool(streamType: StreamType.notification);
+  Future<void> playSound() async {
+    int soundId = await rootBundle.load('assets/audio/zhuanpan_jin.MP3').then(((ByteData soundDate){
+      return soundpool.load(soundDate);
+    }));
+    await soundpool.play(soundId);
+  }
 
 
   @override
@@ -75,6 +92,9 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
   }
 
   void start() {
+    if(!isClose){
+      playSound();
+    }
     ///中奖编号
     int luckyName = Random().nextInt(20);
     // LogE('中奖号码$luckyName');
@@ -135,60 +155,16 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
               Positioned(
                   top: ScreenUtil().setHeight(30),
                   left: ScreenUtil().setHeight(20),
-                  child: WidgetUtils.showImages(
-                      'assets/images/zhuanpan_one_baoxiang.png',
-                      ScreenUtil().setHeight(72),
-                      ScreenUtil().setHeight(89))),
-              // 规则说明
-              Positioned(
-                  right: 0,
-                  top: ScreenUtil().setHeight(15),
-                  child: Container(
-                    height: ScreenUtil().setHeight(45),
-                    width: ScreenUtil().setHeight(120),
-                    decoration: const BoxDecoration(
-                      //设置Container修饰
-                      image: DecorationImage(
-                        //背景图片修饰
-                        image: AssetImage(
-                            "assets/images/zhuanpan_btn.png"),
-                        fit: BoxFit.fill, //覆盖
-                      ),
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      '规则说明',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: ScreenUtil().setSp(22),
-                          fontWeight: FontWeight.w600),
-                    ),
+                  child: GestureDetector(
+                    onTap: ((){
+                      MyUtils.goTransparentPage(context, const ZhuanPanJiangChi2Page());
+                    }),
+                    child: WidgetUtils.showImages(
+                        'assets/images/zhuanpan_one_baoxiang.png',
+                        ScreenUtil().setHeight(72),
+                        ScreenUtil().setHeight(89)),
                   )),
-              // 我的记录
-              Positioned(
-                  right: 0,
-                  top: ScreenUtil().setHeight(70),
-                  child: Container(
-                    height: ScreenUtil().setHeight(45),
-                    width: ScreenUtil().setHeight(120),
-                    decoration: const BoxDecoration(
-                      //设置Container修饰
-                      image: DecorationImage(
-                        //背景图片修饰
-                        image: AssetImage(
-                            "assets/images/zhuanpan_btn.png"),
-                        fit: BoxFit.fill, //覆盖
-                      ),
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      '我的记录',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: ScreenUtil().setSp(22),
-                          fontWeight: FontWeight.w600),
-                    ),
-                  )),
+
               // 转盘
               Positioned(
                 top: ScreenUtil().setHeight(70),
@@ -211,7 +187,8 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                           ScreenUtil().setHeight(400)),
                     ),
                     GestureDetector(
-                      onTap: (() {
+                      onTap: (() async {
+                        Vibrate.vibrate(); // 触发震动效果
                         buttonOnClickStartRun();
                       }),
                       child: WidgetUtils.showImages(
@@ -238,6 +215,99 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                   ],
                 ),
               ),
+              // 规则说明
+              Positioned(
+                  right: 0,
+                  top: ScreenUtil().setHeight(15),
+                  child: GestureDetector(
+                    onTap: ((){
+                      MyUtils.goTransparentPageCom(context, const ZhuanPanGuiZePage());
+                    }),
+                    child: Container(
+                      height: ScreenUtil().setHeight(45),
+                      width: ScreenUtil().setHeight(120),
+                      decoration: const BoxDecoration(
+                        //设置Container修饰
+                        image: DecorationImage(
+                          //背景图片修饰
+                          image: AssetImage(
+                              "assets/images/zhuanpan_btn.png"),
+                          fit: BoxFit.fill, //覆盖
+                        ),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        '规则说明',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: ScreenUtil().setSp(22),
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  )
+              ),
+              // 我的记录
+              Positioned(
+                  right: 0,
+                  top: ScreenUtil().setHeight(70),
+                  child: GestureDetector(
+                    onTap: ((){
+                      MyUtils.goTransparentPageCom(context, const ZhuanPanJiLuPage());
+                    }),
+                    child: Container(
+                      height: ScreenUtil().setHeight(45),
+                      width: ScreenUtil().setHeight(120),
+                      decoration: const BoxDecoration(
+                        //设置Container修饰
+                        image: DecorationImage(
+                          //背景图片修饰
+                          image: AssetImage(
+                              "assets/images/zhuanpan_btn.png"),
+                          fit: BoxFit.fill, //覆盖
+                        ),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        '我的记录',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: ScreenUtil().setSp(22),
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  )
+              ),
+              // 关闭音效
+              Positioned(
+                  right: 0,
+                  top: ScreenUtil().setHeight(130),
+                  child: GestureDetector(
+                    onTap: ((){
+                      setState(() {
+                        isClose = !isClose;
+                      });
+                    }),
+                    child: Container(
+                      height: ScreenUtil().setHeight(45),
+                      width: ScreenUtil().setHeight(120),
+                      decoration: const BoxDecoration(
+                        //设置Container修饰
+                        image: DecorationImage(
+                          //背景图片修饰
+                          image: AssetImage("assets/images/zhuanpan_btn.png"),
+                          fit: BoxFit.fill, //覆盖
+                        ),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        isClose == false ? '关闭音效' : '开启音效',
+                        style: TextStyle(
+                            color: isClose == false ? Colors.white : MyColors.paiduiBlue,
+                            fontSize: ScreenUtil().setSp(22),
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  )),
             ],
           ),
         ),
@@ -260,27 +330,10 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                   image: DecorationImage(
                     //背景图片修饰
                     image: AssetImage(isCheck == 1
-                        ? "assets/images/zhuanpan_one_zhuan_check.png"
-                        : 'assets/images/zhuanpan_one_zhuan_no.png'),
+                        ? "assets/images/zhuanpan_one_11.png"
+                        : 'assets/images/zhuanpan_one_1.png'),
                     fit: BoxFit.fill, //覆盖
                   ),
-                ),
-                child: Row(
-                  children: [
-                    WidgetUtils.commonSizedBox(
-                        0, ScreenUtil().setHeight(55)),
-                    Column(
-                      children: [
-                        WidgetUtils.commonSizedBox(7, 0),
-                        Text(
-                          '转  1  次',
-                          style: StyleUtils.getCommonTextStyle(
-                              color: Colors.white,
-                              fontSize: ScreenUtil().setSp(28)),
-                        ),
-                      ],
-                    )
-                  ],
                 ),
               ),
             ),
@@ -299,27 +352,10 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                   image: DecorationImage(
                     //背景图片修饰
                     image: AssetImage(isCheck == 2
-                        ? "assets/images/zhuanpan_one_zhuan_check.png"
-                        : 'assets/images/zhuanpan_one_zhuan_no.png'),
+                        ? "assets/images/zhuanpan_one_101.png"
+                        : 'assets/images/zhuanpan_one_10.png'),
                     fit: BoxFit.fill, //覆盖
                   ),
-                ),
-                child: Row(
-                  children: [
-                    WidgetUtils.commonSizedBox(
-                        0, ScreenUtil().setHeight(55)),
-                    Column(
-                      children: [
-                        WidgetUtils.commonSizedBox(7, 0),
-                        Text(
-                          '转 10 次',
-                          style: StyleUtils.getCommonTextStyle(
-                              color: Colors.white,
-                              fontSize: ScreenUtil().setSp(28)),
-                        ),
-                      ],
-                    )
-                  ],
                 ),
               ),
             ),
@@ -338,27 +374,10 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                   image: DecorationImage(
                     //背景图片修饰
                     image: AssetImage(isCheck == 3
-                        ? "assets/images/zhuanpan_one_zhuan_check.png"
-                        : 'assets/images/zhuanpan_one_zhuan_no.png'),
+                        ? "assets/images/zhuanpan_one_1001.png"
+                        : 'assets/images/zhuanpan_one_100.png'),
                     fit: BoxFit.fill, //覆盖
                   ),
-                ),
-                child: Row(
-                  children: [
-                    WidgetUtils.commonSizedBox(
-                        0, ScreenUtil().setHeight(55)),
-                    Column(
-                      children: [
-                        WidgetUtils.commonSizedBox(7, 0),
-                        Text(
-                          '转100次',
-                          style: StyleUtils.getCommonTextStyle(
-                              color: Colors.white,
-                              fontSize: ScreenUtil().setSp(28)),
-                        ),
-                      ],
-                    )
-                  ],
                 ),
               ),
             ),

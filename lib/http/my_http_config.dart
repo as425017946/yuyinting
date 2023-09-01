@@ -10,9 +10,9 @@ class MyHttpConfig{
   //测试上传
   static const String uploadUrl = 'http://192.168.100.121:18089/upload';
   //鹏飞测试环境
-  // static const String baseURL = "http://192.168.0.51/api";
+  static const String baseURL = "http://192.168.0.51/api";
   //赵增测试环境
-  static const String baseURL = "http://192.168.0.53/api";
+  // static const String baseURL = "http://192.168.0.53/api";
   //正式环境
   // static const String baseURL = "https://yy.sunvua.com/api";
 
@@ -136,8 +136,16 @@ class MyHttpConfig{
   static const String rankList = "$baseURL/rank/list";
   //首页 游戏
   static const String gameList = "$baseURL/game/list";
-
-
+  //系统消息列表
+  static const String systemMsgList = "$baseURL/chat/systemMsgList";
+  //聊天 获取用户动态信息
+  static const String chatUserInfo = "$baseURL/chat/userInfo";
+  //发私聊
+  static const String sendUserMsg = "$baseURL/chat/sendUserMsg";
+  //用户开播、在线状态
+  static const String userStatus = "$baseURL/chat/userStatus";
+  //能否发私聊
+  static const String canSendUser = "$baseURL/chat/canSendUser";
 
 
 

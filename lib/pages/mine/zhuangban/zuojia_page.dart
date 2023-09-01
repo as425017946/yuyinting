@@ -262,14 +262,26 @@ class _ZuojiaPageState extends State<ZuojiaPage> with AutomaticKeepAliveClientMi
                   )),
               GestureDetector(
                 onTap: (() {}),
-                child: WidgetUtils.myContainer(
-                    ScreenUtil().setHeight(70),
-                    ScreenUtil().setHeight(200),
+                child: WidgetUtils.myContainerZB(
+                    ScreenUtil().setHeight(50),
+                    ScreenUtil().setHeight(130),
                     MyColors.homeTopBG,
                     MyColors.homeTopBG,
-                    '立即购买',
-                    ScreenUtil().setSp(33),
-                    Colors.white),
+                    'V豆购买',
+                    ScreenUtil().setSp(25),
+                    Colors.white,'assets/images/mine_wallet_dd.png'),
+              ),
+              WidgetUtils.commonSizedBox(0, 10),
+              GestureDetector(
+                onTap: (() {}),
+                child: WidgetUtils.myContainerZB(
+                    ScreenUtil().setHeight(50),
+                    ScreenUtil().setHeight(130),
+                    MyColors.homeTopBG,
+                    MyColors.homeTopBG,
+                    '钻石购买',
+                    ScreenUtil().setSp(25),
+                    Colors.white,'assets/images/mine_wallet_zz.png'),
               ),
               WidgetUtils.commonSizedBox(0, 20),
             ],

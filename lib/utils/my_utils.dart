@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:im_flutter_sdk/im_flutter_sdk.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:yuyinting/pages/game/mofang_page.dart';
+import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
+import '../db/DatabaseHelper.dart';
 import '../main.dart';
 import '../pages/login/login_page.dart';
 import 'log_util.dart';
@@ -152,10 +155,12 @@ class MyUtils {
     String strBirthday = "";
     if (len == 18) {
       //处理18位的身份证号码从号码中得到生日和性别代码
-      strBirthday = "${cardId.substring(6, 10)}-${cardId.substring(10, 12)}-${cardId.substring(12, 14)}";
+      strBirthday =
+          "${cardId.substring(6, 10)}-${cardId.substring(10, 12)}-${cardId.substring(12, 14)}";
     }
     if (len == 15) {
-      strBirthday = "19${cardId.substring(6, 8)}-${cardId.substring(8, 10)}-${cardId.substring(10, 12)}";
+      strBirthday =
+          "19${cardId.substring(6, 8)}-${cardId.substring(8, 10)}-${cardId.substring(10, 12)}";
     }
     int age = getAgeFromBirthday(strBirthday);
     return age;
@@ -331,4 +336,287 @@ class MyUtils {
       },
     );
   }
+
+  //初始化sdk
+  static void initSDK() async {
+    EMOptions options = EMOptions(
+        appKey: "1199230605161000#demo", autoLogin: false, debugModel: true, isAutoDownloadThumbnail: true);
+    await EMClient.getInstance.init(options);
+    // 通知 SDK UI 已准备好。该方法执行后才会收到 `EMChatRoomEventHandler`、`EMContactEventHandler` 和 `EMGroupEventHandler` 回调。
+    await EMClient.getInstance.startCallback();
+  }
+
+  //添加监听
+  static void addChatListener() async{
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    await databaseHelper.database;
+
+    // 注册连接状态监听
+    EMClient.getInstance.addConnectionEventHandler(
+      "UNIQUE_HANDLER_ID",
+      EMConnectionEventHandler(
+        // sdk 连接成功;
+        onConnected: () => {LogE('im登录成功')},
+        // 由于网络问题导致的断开，sdk会尝试自动重连，连接成功后会回调 "onConnected";
+        onDisconnected: () => {},
+        // 用户 token 鉴权失败;
+        onUserAuthenticationFailed: () => {},
+        // 由于密码变更被踢下线;
+        onUserDidChangePassword: () => {},
+        // 用户被连接被服务器禁止;
+        onUserDidForbidByServer: () => {},
+        // 用户登录设备超出数量限制;
+        onUserDidLoginTooManyDevice: () => {},
+        // 用户从服务器删除;
+        onUserDidRemoveFromServer: () => {},
+        // 调用 `kickDevice` 方法将设备踢下线，被踢设备会收到该回调；
+        onUserKickedByOtherDevice: () => {},
+        // 登录新设备时因达到了登录设备数量限制而导致当前设备被踢下线，被踢设备收到该回调；
+        onUserDidLoginFromOtherDevice: (String deviceName) => {},
+        // Token 过期;
+        onTokenDidExpire: () => {},
+        // Token 即将过期，需要调用 renewToken;
+        onTokenWillExpire: () => {},
+      ),
+    );
+
+    // 添加收消息监听
+    EMClient.getInstance.chatManager.addEventHandler(
+      // EMChatEventHandler 对应的 key。
+      "UNIQUE_HANDLER_ID",
+      EMChatEventHandler(
+        onMessagesReceived: (messages) async {
+          for (var msg in messages) {
+            LogE('接收数据${msg.body.type}');
+            switch (msg.body.type) {
+              case MessageType.TXT:
+                {
+                  EMTextMessageBody body = msg.body as EMTextMessageBody;
+                  LogE('接受文本信息${msg.attributes}');
+                  Map info = msg.attributes!;
+                  String nickName = info['nickname'];
+                  String headImg = info['avatar'];
+                  String combineID = '';
+                  if(int.parse(sp.getString('user_id').toString()) > int.parse(msg.from!)){
+                    combineID = '${msg.from}-${sp.getString('user_id').toString()}';
+                  }else{
+                    combineID = '${sp.getString('user_id').toString()}-${msg.from}';
+                  }
+                  Map<String, dynamic> params = <String, dynamic>{
+                    'uid': sp.getString('user_id').toString(),
+                    'otherUid': msg.from,
+                    'whoUid':msg.from,
+                    'combineID': combineID,
+                    'nickName': nickName,
+                    'content': body.content,
+                    'bigImg' : '',
+                    'headImg': headImg,
+                    'otherHeadImg': sp.getString('user_headimg'),
+                    'add_time': msg.serverTime,
+                    'type': 1,
+                    'number': 0,
+                    'status': 1,
+                    'readStatus': 0,
+                    'liveStatus': 0,
+                    'loginStatus': 0,
+                  };
+                  // 插入数据
+                  await databaseHelper.insertData('messageSLTable', params);
+
+                  eventBus.fire(SendMessageBack(type: 1, msgID: '0'));
+                }
+                break;
+              case MessageType.IMAGE:
+                {
+                  // 下载附件
+                  EMClient.getInstance.chatManager.downloadAttachment(msg);
+                  EMImageMessageBody body = msg.body as EMImageMessageBody;
+                  Map? info = msg.attributes;
+                  String? nickName = info!['nickname'];
+                  String? headImg = info!['avatar'];
+                  String combineID = '';
+                  if(int.parse(sp.getString('user_id').toString()) > int.parse(msg.from!)){
+                    combineID = '${msg.from}-${sp.getString('user_id').toString()}';
+                  }else{
+                    combineID = '${sp.getString('user_id').toString()}-${msg.from}';
+                  }
+                  Map<String, dynamic> params = <String, dynamic>{
+                    'uid': sp.getString('user_id').toString(),
+                    'otherUid': msg.from,
+                    'whoUid':msg.from,
+                    'combineID': combineID,
+                    'nickName': nickName,
+                    'content': body.thumbnailLocalPath,
+                    'bigImg' : body.localPath,
+                    'headImg': headImg,
+                    'otherHeadImg': sp.getString('user_headimg'),
+                    'add_time': msg.serverTime,
+                    'type': 2,
+                    'number': 0,
+                    'status': 1,
+                    'readStatus': 0,
+                    'liveStatus': 0,
+                    'loginStatus': 0,
+                  };
+                  // 插入数据
+                  await databaseHelper.insertData('messageSLTable', params);
+
+                }
+                break;
+              case MessageType.VIDEO:
+                {
+                  LogE('VIDEO消息${msg.from}');
+                  // addLogToConsole(
+                  //   "receive video message, from: ${msg.from}",
+                  // );
+                }
+                break;
+              case MessageType.LOCATION:
+                {
+                  LogE('LOCATION消息${msg.from}');
+                  addLogToConsole(
+                    "receive location message, from: ${msg.from}",
+                  );
+                }
+                break;
+              case MessageType.VOICE:
+                {
+                  LogE('VOICE消息${msg.from}');
+                  EMVoiceMessageBody body = msg.body as EMVoiceMessageBody;
+                  Map? info = msg.attributes;
+                  String? nickName = info!['nickname'];
+                  String? headImg = info!['avatar'];
+                  String combineID = '';
+                  if(int.parse(sp.getString('user_id').toString()) > int.parse(msg.from!)){
+                    combineID = '${msg.from}-${sp.getString('user_id').toString()}';
+                  }else{
+                    combineID = '${sp.getString('user_id').toString()}-${msg.from}';
+                  }
+                  Map<String, dynamic> params = <String, dynamic>{
+                    'uid': sp.getString('user_id').toString(),
+                    'otherUid': msg.from,
+                    'whoUid':msg.from,
+                    'combineID': combineID,
+                    'nickName': nickName,
+                    'content': body.localPath,
+                    'bigImg' : body.localPath,
+                    'headImg': headImg,
+                    'otherHeadImg': sp.getString('user_headimg'),
+                    'add_time': msg.serverTime,
+                    'type': 3,
+                    'number': body.duration,
+                    'status': 1,
+                    'readStatus': 0,
+                    'liveStatus': 0,
+                    'loginStatus': 0,
+                  };
+                  // 插入数据
+                  await databaseHelper.insertData('messageSLTable', params);
+
+                  eventBus.fire(SendMessageBack(type: 3, msgID: '3'));
+                }
+                break;
+              case MessageType.FILE:
+                {
+                  LogE('FILE消息${msg.from}');
+                  addLogToConsole(
+                    "receive image message, from: ${msg.from}",
+                  );
+                }
+                break;
+              case MessageType.CUSTOM:
+                {
+                  LogE('CUSTOM消息${msg.from}');
+                  addLogToConsole(
+                    "receive custom message, from: ${msg.from}",
+                  );
+                }
+                break;
+              case MessageType.CMD:
+                {
+                  LogE('文本消息cmd');
+                  // 当前回调中不会有 CMD 类型消息，CMD 类型消息通过 `EMChatEventHandler#onCmdMessagesReceived` 回调接收
+                }
+                break;
+            }
+          }
+        },
+      ),
+    );
+    // 添加消息状态变更监听
+    EMClient.getInstance.chatManager.addMessageEvent(
+        // ChatMessageEvent 对应的 key。
+        "UNIQUE_HANDLER_ID",
+        ChatMessageEvent(
+          onSuccess: (msgId, msg) {
+            switch(msg.body.type){
+              case MessageType.TXT:
+                break;
+              case MessageType.IMAGE:
+                eventBus.fire(SendMessageBack(type: 2, msgID: msgId));
+                break;
+              case MessageType.VIDEO:
+                break;
+              case MessageType.VOICE:
+                LogE('语音发送成功');
+                break;
+            }
+            addLogToConsole("send message succeed");
+          },
+          onProgress: (msgId, progress) {
+            addLogToConsole("send message succeed");
+          },
+          onError: (msgId, msg, error) {
+            addLogToConsole(
+              "send message failed, code: ${error.code}, desc: ${error.description}",
+            );
+          },
+        ));
+
+  }
+
+  //添加登录
+  static void signIn() async {
+    try {
+      await EMClient.getInstance.login(sp.getString('user_id').toString(),
+          sp.getString('em_pwd').toString());
+    } on EMError catch (e) {
+      addLogToConsole("sign in failed, e: ${e.code} , ${e.description}");
+    }
+  }
+
+  //退出登录
+  static void signOut() async {
+    try {
+      await EMClient.getInstance.logout(true);
+      addLogToConsole("sign out succeed");
+    } on EMError catch (e) {
+      addLogToConsole(
+          "sign out failed, code: ${e.code}, desc: ${e.description}");
+    }
+  }
+
+  //注册环信 IM 用户
+  static void signUp() async {
+    // try {
+    //   await EMClient.getInstance.createAccount(_username, _password);
+    //   _addLogToConsole("sign up succeed, username: $_username");
+    // } on EMError catch (e) {
+    //   _addLogToConsole("sign up failed, e: ${e.code} , ${e.description}");
+    // }
+  }
+
+  //发送消息
+  static void sendMessage(String conversationId, String content) async {
+    // 创建一条文本消息，`content` 为消息文字内容，`conversationId` 为会话 ID，在单聊时为对端用户 ID、群聊时为群组 ID，聊天室时为聊天室 ID。
+    final msg = EMMessage.createTxtSendMessage(
+      targetId: conversationId,
+      content: content,
+    );
+
+// 发送消息。
+    EMClient.getInstance.chatManager.sendMessage(msg);
+  }
+
+  static void addLogToConsole(String log) {}
 }

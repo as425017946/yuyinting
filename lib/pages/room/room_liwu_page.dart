@@ -249,7 +249,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage> {
                         child: Row(
                           children: [
                             WidgetUtils.showImages(
-                                'assets/images/room_liwu_dou.png',
+                                'assets/images/mine_wallet_dd.png',
                                 ScreenUtil().setHeight(26),
                                 ScreenUtil().setHeight(24)),
                             WidgetUtils.commonSizedBox(0, 5),
@@ -260,7 +260,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage> {
                                     fontSize: ScreenUtil().setSp(25))),
                             WidgetUtils.commonSizedBox(0, 5),
                             WidgetUtils.showImages(
-                                'assets/images/room_liwu_zuan.png',
+                                'assets/images/mine_wallet_zz.png',
                                 ScreenUtil().setHeight(26),
                                 ScreenUtil().setHeight(24)),
                             WidgetUtils.commonSizedBox(0, 5),

@@ -5,6 +5,7 @@ import '../bean/DTListBean.dart';
 import '../bean/DTMoreBean.dart';
 import '../bean/DTTuiJianListBean.dart';
 import '../bean/careListBean.dart';
+import '../bean/chatUserInfoBean.dart';
 import '../bean/cityBean.dart';
 import '../bean/fileUpdateBean.dart';
 import '../bean/gameListBean.dart';
@@ -31,7 +32,9 @@ import '../bean/tjRoomListBean.dart';
 import '../bean/userDTListBean.dart';
 import '../bean/userInfoBean.dart';
 import '../bean/userOnlineBean.dart';
+import '../bean/userStatusBean.dart';
 import '../bean/whoLockMe.dart';
+import '../bean/xtListBean.dart';
 import 'my_http_config.dart';
 import 'my_http_request.dart';
 
@@ -122,7 +125,7 @@ class DataUtils{
   }
 
   /// 解除/添加黑名单
-  static Future<CommonBean> postUpdateList(Map<String,dynamic> params) async {
+  static Future<CommonBean> postUpdateBlack(Map<String,dynamic> params) async {
     print("黑名单：$params");
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.updateBlack, {}, params);
     print("黑名单：${respons}");
@@ -458,5 +461,45 @@ class DataUtils{
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.gameList, {}, {});
     print("游戏列表：$respons");
     return gameListBean.fromJson(respons!);
+  }
+
+
+  /// 获取系统消息
+  static Future<xtListBean> postSystemMsgList() async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.systemMsgList, {}, {});
+    print("获取系统消息：$respons");
+    return xtListBean.fromJson(respons!);
+  }
+
+
+  /// 聊天获取用户信息
+  static Future<chatUserInfoBean> postChatUserInfo(Map<String,dynamic> params) async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.chatUserInfo, {}, params);
+    print("聊天获取用户信息：$respons");
+    return chatUserInfoBean.fromJson(respons!);
+  }
+
+  /// 发私聊
+  static Future<CommonBean> postSendUserMsg(Map<String,dynamic> params) async {
+    print("发私聊：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.sendUserMsg, {}, params);
+    print("发私聊：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 用户开播、在线状态
+  static Future<userStatusBean> postUserStatus(Map<String,dynamic> params) async {
+    print("用户开播、在线状态：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.userStatus, {}, params);
+    print("用户开播、在线状态：$respons");
+    return userStatusBean.fromJson(respons!);
+  }
+
+  /// 能否私聊
+  static Future<CommonBean> postCanSendUser(Map<String,dynamic> params) async {
+    print("能否私聊：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.canSendUser, {}, params);
+    print("能否私聊：$respons");
+    return CommonBean.fromJson(respons!);
   }
 }

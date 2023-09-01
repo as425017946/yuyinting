@@ -31,6 +31,7 @@ class Data {
   int? id;
   String? title;
   String? couverImg;
+  String? svga_img;
   String? content;
   int? isShow;
 
@@ -41,6 +42,7 @@ class Data {
     title = json['title'];
     couverImg = json['couver_img'];
     content = json['content'];
+    svga_img = json['svga_img'];
     isShow = json['is_show'];
   }
 
@@ -49,6 +51,7 @@ class Data {
     data['id'] = this.id;
     data['title'] = this.title;
     data['couver_img'] = this.couverImg;
+    data['svga_img'] = this.svga_img;
     data['content'] = this.content;
     data['is_show'] = this.isShow;
     return data;

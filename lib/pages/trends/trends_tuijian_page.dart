@@ -27,6 +27,7 @@ import '../../utils/widget_utils.dart';
 import '../../widget/SwiperPage.dart';
 import 'package:video_player/video_player.dart';
 
+import '../message/chat_page.dart';
 import '../message/geren/people_info_page.dart';
 import 'PagePreviewVideo.dart';
 /// 动态-推荐页面
@@ -229,7 +230,9 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> with AutomaticKee
                       'assets/images/trends_hi.png', 124, 59),
                 )
                     : GestureDetector(
-                  onTap: (() {}),
+                  onTap: (() {
+                    MyUtils.goTransparentRFPage(context, ChatPage(nickName: _list[i].nickname!, otherUid: _list[i].uid.toString(), otherImg: _list[i].avatar!));
+                  }),
                   child: WidgetUtils.myContainer(
                       ScreenUtil().setHeight(45),
                       ScreenUtil().setHeight(100),

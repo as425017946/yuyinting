@@ -225,6 +225,7 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                             )),
                         WidgetUtils.commonSizedBox(20, 20),
                         Wrap(
+                          runSpacing: 20.h,
                           children: [
                             if (listRoom.length > 3)
                               for (int i = 0; i < 3; i++)
@@ -257,7 +258,6 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                                     ],
                                   ),
                                 ),
-                            WidgetUtils.commonSizedBox(10, 20),
                             WidgetUtils.myLine(color: MyColors.f4),
                             if (listRoom.length <= 3)
                               for (int i = 0; i < listRoom.length; i++)

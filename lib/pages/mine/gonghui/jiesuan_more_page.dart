@@ -25,7 +25,9 @@ class _JiesuanMorePageState extends State<JiesuanMorePage> {
   Widget _itemZhangdan(BuildContext context, int i) {
     return Container(
       width: double.infinity,
-      height: ScreenUtil().setHeight(190),
+      constraints: BoxConstraints(
+        minHeight: 190.h
+      ),
       padding: const EdgeInsets.only(left: 20, right: 20,),
       margin: const EdgeInsets.only(bottom: 10),
       color: MyColors.dailiBaobiao,
@@ -62,6 +64,14 @@ class _JiesuanMorePageState extends State<JiesuanMorePage> {
               WidgetUtils.onlyText('11', StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(25), fontWeight: FontWeight.w600)),
             ],
           ),
+          WidgetUtils.commonSizedBox(10, 10),
+          Row(
+            children: [
+              WidgetUtils.onlyText('扣款：', StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
+              WidgetUtils.onlyText('0', StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(25), fontWeight: FontWeight.w600)),
+            ],
+          ),
+          WidgetUtils.commonSizedBox(10, 10),
         ],
       ),
     );

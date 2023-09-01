@@ -20,16 +20,16 @@ class _GPShowOnePageState extends State<GPShowOnePage> {
       appBar: null,
       backgroundColor: Colors.transparent,
       body: Container(
-        height: ScreenUtil().setHeight(400),
+        height: ScreenUtil().setHeight(340),
         width: double.infinity,
         child: Stack(
           children: [
             SVGASimpleImage(
-              assetsName: 'assets/svga/gp/gp_1.svga',
+              assetsName: 'assets/svga/gp/gp_maliao.svga',
             ),
             Padding(
               padding: EdgeInsets.only(
-                  top: ScreenUtil().setHeight(230),
+                  top: ScreenUtil().setHeight(160),
                   left: ScreenUtil().setHeight(50),
                   right: ScreenUtil().setHeight(50)
               ),

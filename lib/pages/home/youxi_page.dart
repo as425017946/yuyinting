@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:svgaplayer_flutter/parser.dart';
+import 'package:svgaplayer_flutter/player.dart';
 
 import '../../bean/gameListBean.dart';
 import '../../colors/my_colors.dart';
@@ -18,7 +20,10 @@ class YouxiPage extends StatefulWidget {
   State<YouxiPage> createState() => _YouxiPageState();
 }
 
-class _YouxiPageState extends State<YouxiPage> {
+class _YouxiPageState extends State<YouxiPage>  with AutomaticKeepAliveClientMixin{
+
+  @override
+  bool get wantKeepAlive => true;
 
   List<Data> list = [];
 
@@ -37,7 +42,36 @@ class _YouxiPageState extends State<YouxiPage> {
           height: ScreenUtil().setHeight(300),
           width: double.infinity,
           margin: const EdgeInsets.only(left: 20, right: 20),
-          child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(300), double.infinity, 10, list[i].couverImg!),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              i == 0 ? WidgetUtils.CircleImageAss(ScreenUtil().setHeight(300), double.infinity, 10, 'assets/images/yx_zp.jpg') : i == 1 ? WidgetUtils.CircleImageAss(ScreenUtil().setHeight(300), double.infinity, 10, 'assets/images/yx_car.jpg') : WidgetUtils.CircleImageAss(ScreenUtil().setHeight(300), double.infinity, 10, 'assets/images/yx_mf.jpg'),
+              i == 0 ? Positioned(
+                  top: 0,
+                  child: SizedBox(
+                height: 270.h,
+                width: 270.h,
+                child: SVGASimpleImage(
+                    resUrl: list[i].svga_img!),
+              )) : i == 1 ? Positioned(
+                  top: 0,
+                  right: 0,
+                  child: SizedBox(
+                    height: 280.h,
+                    width: 280.h,
+                    child: SVGASimpleImage(
+                        resUrl: list[i].svga_img!),
+                  )) : Positioned(
+                  top: -20,
+                  right: 25,
+                  child: SizedBox(
+                    height: 260.h,
+                    width: 260.h,
+                    child: SVGASimpleImage(
+                        resUrl: list[i].svga_img!),
+                  )),
+            ],
+          ),
         ),
         WidgetUtils.commonSizedBox(10, 0),
         Container(

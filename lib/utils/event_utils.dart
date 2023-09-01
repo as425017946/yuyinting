@@ -78,3 +78,10 @@ class HiBack {
   int index;
   HiBack({required this.isBack, required this.index});
 }
+
+///打招呼使用
+class SendMessageBack {
+  int type;
+  String msgID;
+  SendMessageBack({required this.type, required this.msgID});
+}

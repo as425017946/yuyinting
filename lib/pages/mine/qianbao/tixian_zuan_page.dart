@@ -87,7 +87,7 @@ class _TixianZuanPageState extends State<TixianZuanPage> {
                                 height: ScreenUtil().setHeight(250),
                                 padding: const EdgeInsets.only(top: 50),
                                 child: Text(
-                                  '币',
+                                  '钻',
                                   style: StyleUtils.getCommonTextStyle(
                                       color: Colors.white,
                                       fontSize: ScreenUtil().setSp(38)),
@@ -176,7 +176,7 @@ class _TixianZuanPageState extends State<TixianZuanPage> {
                   Row(
                     children: [
                       WidgetUtils.showImages(
-                          'assets/images/mine_wallet_zuanshi.png',
+                          'assets/images/mine_wallet_zz.png',
                           ScreenUtil().setHeight(48),
                           ScreenUtil().setHeight(48)),
                       WidgetUtils.commonSizedBox(0, 20),

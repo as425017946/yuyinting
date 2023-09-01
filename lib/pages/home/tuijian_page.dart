@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+import 'package:sqflite/sqflite.dart';
 import '../../bean/Common_bean.dart';
 import '../../bean/homeTJBean.dart';
 import '../../colors/my_colors.dart';
+import '../../db/DatabaseHelper.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../utils/loading.dart';
@@ -88,17 +90,12 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
             height: ScreenUtil().setHeight(80),
             child: Row(
               children: [
-                Container(
-                  width: ScreenUtil().setWidth(80),
-                  height: ScreenUtil().setHeight(80),
-                  alignment: Alignment.centerLeft,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      WidgetUtils.CircleHeadImage(40, 40, listAnchor[i].avatar!),
-                      listAnchor[i].live == 1 ? WidgetUtils.showImages( 'assets/images/zhibozhong.webp', 80, 80) : const Text(''),
-                    ],
-                  ),
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    WidgetUtils.CircleHeadImage(78.h, 78.h, listAnchor[i].avatar!),
+                    listAnchor[i].live == 1 ? WidgetUtils.showImages( 'assets/images/zhibozhong.webp', 80.h, 80.h) : const Text(''),
+                  ],
                 ),
                 WidgetUtils.commonSizedBox(0, 10),
                 Expanded(
@@ -393,6 +390,8 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
 
   /// 首页 推荐房间/海报轮播/推荐主播
   Future<void> doPostPushRoom() async {
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    Database? db = await databaseHelper.database;
     try {
       Loading.show("加载中...");
       homeTJBean bean = await DataUtils.postPushRoom();

@@ -119,10 +119,13 @@ class MyColors{
   static const Color zpBGJ2 = Color(0xFFFFB48C);
   static const Color zpWZ1 = Color(0xFFDF4424);
   static const Color zpJD = Color(0xFF1644ce);
-
-
-
-
+  static const Color chatBlue = Color(0xFFE4DFF7);
+  static const Color zpJLYellow = Color(0xFFD9C4AB);
+  static const Color zpJLHX = Color(0xFF76819F);
+  static const Color zpGZYellow = Color(0xFFFEC25E);
+  static const Color mfZGBlue = Color(0xFF7EEEFF);
+  static const Color zpJCWhite = Color(0xFFACA3C5);
+  static const Color zpJCWhite2 = Color(0xFF9195C5);
 
 
 

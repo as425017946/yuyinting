@@ -48,7 +48,7 @@ class _WalletMoreShouruPageState extends State<WalletMoreShouruPage> {
                       children: [
                         WidgetUtils.onlyText('礼物：魔法星球x10', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(25))),
                         const Expanded(child: Text('')),
-                        WidgetUtils.onlyText('金币', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(25))),
+                        WidgetUtils.onlyText('V币', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(25))),
                         WidgetUtils.commonSizedBox(0, 20),
                       ],
                     ),

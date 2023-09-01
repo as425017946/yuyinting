@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:yuyinting/colors/my_colors.dart';
+import 'package:yuyinting/pages/home/agree_ts_page.dart';
 import 'package:yuyinting/pages/home/paidui_page.dart';
 import 'package:yuyinting/pages/home/shoucang_page.dart';
 import 'package:yuyinting/pages/home/tuijian_page.dart';
@@ -11,6 +13,7 @@ import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 
+import '../../db/DatabaseHelper.dart';
 import '../../main.dart';
 import '../../utils/my_utils.dart';
 
@@ -40,10 +43,10 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin{
     _controller = PageController(
       initialPage: 1,
     );
-    LogE('是否第一次登录${sp.getBool('isFirst')}');
     if(sp.getBool('isFirst') == true){
       MyUtils.goTransparentPageCom(context, const EditInfoPage());
     }
+    MyUtils.goTransparentPageCom(context, const AgreeTSPage());
   }
 
   @override

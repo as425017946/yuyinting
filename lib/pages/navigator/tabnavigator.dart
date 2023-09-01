@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:im_flutter_sdk/im_flutter_sdk.dart';
 import 'package:yuyinting/pages/message/message_page.dart';
 import 'package:yuyinting/pages/trends/trends_page.dart';
+import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import '../../colors/my_colors.dart';
+import '../../main.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/widget_utils.dart';
@@ -62,6 +65,13 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
 
     // 创建一个从0到360弧度的补间动画 v * 2 * π
     _animation = Tween<double>(begin: 0, end: 1).animate(_repeatController);
+
+
+    // MyUtils.goTransparentPageCom(context, GPShowOnePage());
+
+    MyUtils.initSDK();
+    MyUtils.addChatListener();
+    MyUtils.signIn();
   }
 
   @override

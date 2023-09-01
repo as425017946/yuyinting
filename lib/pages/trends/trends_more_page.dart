@@ -20,6 +20,7 @@ import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../widget/SwiperPage.dart';
+import '../message/chat_page.dart';
 import 'PagePreviewVideo.dart';
 import 'package:video_player/video_player.dart';
 import 'PagePreviewVideo.dart';
@@ -547,7 +548,7 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
                                   'assets/images/trends_hi.png', 124, 59)
                                   : GestureDetector(
                                 onTap: (() {
-
+                                  MyUtils.goTransparentRFPage(context, ChatPage(nickName: nickName, otherUid: sp.getString('user_id').toString(), otherImg: headImage));
                                 }),
                                 child: WidgetUtils.myContainer(
                                     ScreenUtil().setHeight(45),

@@ -2,13 +2,18 @@
     package="com.leimu.yuyinting">
     <!-- 在application标签后添加权限设置 -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION"/>
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!--    震动-->
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
-   <application
+
+    <application
         android:label="yuyinting"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"

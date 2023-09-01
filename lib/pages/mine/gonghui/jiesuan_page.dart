@@ -29,7 +29,9 @@ class _JiesuanPageState extends State<JiesuanPage> {
       }),
       child: Container(
         width: double.infinity,
-        height: ScreenUtil().setHeight(260),
+        constraints: BoxConstraints(
+          minHeight: 260.h
+        ),
         padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
         margin: const EdgeInsets.only(bottom: 10),
         color: MyColors.dailiBaobiao,
@@ -76,7 +78,15 @@ class _JiesuanPageState extends State<JiesuanPage> {
                 WidgetUtils.onlyText('11', StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(25), fontWeight: FontWeight.w600)),
               ],
             ),
+            WidgetUtils.commonSizedBox(10, 10),
+            Row(
+              children: [
+                WidgetUtils.onlyText('扣款：', StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
+                WidgetUtils.onlyText('0', StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(25), fontWeight: FontWeight.w600)),
+              ],
+            ),
             WidgetUtils.onlyTextCenter('查明细>', StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
+            WidgetUtils.commonSizedBox(10, 10),
           ],
         ),
       ),

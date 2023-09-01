@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:soundpool/soundpool.dart';
 import 'package:svgaplayer_flutter/parser.dart';
 import 'package:svgaplayer_flutter/player.dart';
 
 import '../../colors/my_colors.dart';
 import '../../utils/event_utils.dart';
 import '../../utils/log_util.dart';
+import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../../widget/Marquee.dart';
+import 'mofang/mofang_daoju_page.dart';
 
 /// 金色魔方
 class MofangJinPage extends StatefulWidget {
@@ -40,6 +44,16 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
     loadAnimation();
 
   }
+
+  /// 播放音频
+  Soundpool soundpool = Soundpool(streamType: StreamType.notification);
+  Future<void> playSound() async {
+    int soundId = await rootBundle.load('assets/audio/mofang_jin.wav').then(((ByteData soundDate){
+      return soundpool.load(soundDate);
+    }));
+    await soundpool.play(soundId);
+  }
+
   void loadAnimation() async {
     final videoItem = await _loadSVGA(false, 'assets/svga/mofang_jin_baozha.svga');
     videoItem.autorelease = false;
@@ -190,11 +204,16 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                             ),
                             GestureDetector(
                               onTap: ((){
-                                setState(() {
-                                  isShow = true;
-                                });
-                                animationController?.reset();
-                                animationController?.forward();
+                                if(isTiaoguo){
+                                  MyUtils.goTransparentPage(context, const MoFangDaoJuPage());
+                                }else{
+                                  playSound();
+                                  setState(() {
+                                    isShow = true;
+                                  });
+                                  animationController?.reset();
+                                  animationController?.forward();
+                                }
                               }),
                               child: SizedBox(
                                 width: ScreenUtil().setHeight(120),

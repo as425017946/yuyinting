@@ -12,7 +12,6 @@ import 'package:yuyinting/config/my_config.dart';
 import 'package:yuyinting/pages/game/car_page.dart';
 import 'package:yuyinting/pages/game/mofang_page.dart';
 import 'package:yuyinting/pages/game/zhuanpan_page.dart';
-import 'package:yuyinting/pages/mine/zhuangban/zhuangban_page.dart';
 import 'package:yuyinting/pages/room/room_back_page.dart';
 import 'package:yuyinting/pages/room/room_gongneng.dart';
 import 'package:yuyinting/pages/room/room_liwu_page.dart';
@@ -25,7 +24,6 @@ import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/my_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
-import 'dart:ui' as ui;
 import '../../utils/log_util.dart';
 import '../../utils/style_utils.dart';
 
@@ -59,9 +57,12 @@ class _RoomPageState extends State<RoomPage> {
 
   ///大厅使用
   List<Map> imgList = [
-    {"url": "https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500"},
-    {"url": "https://lmg.jj20.com/up/allimg/4k/s/02/21092423014IX6-0-lp.jpg"},
-    {"url": "https://img0.baidu.com/it/u=2252164664,3334752698&fm=253&fmt=auto&app=138&f=JPEG?w=667&h=500"},
+    {"url": "assets/svga/gp/l_maliao.svga"},
+    {"url": "assets/svga/gp/l_sc.svga"},
+  ];
+  List<Map> imgList2 = [
+    {"url": "assets/svga/gp/l_zp.svga"},
+    {"url": "assets/svga/gp/l_mf.svga"},
   ];
 
 
@@ -91,6 +92,7 @@ class _RoomPageState extends State<RoomPage> {
         Navigator.pop(context);
       }
     });
+    // MyUtils.goTransparentPageCom(context, GPShowOnePage());
   }
 
   @override
@@ -1409,8 +1411,8 @@ class _RoomPageState extends State<RoomPage> {
                         top: 10,
                         right: 15,
                         child: Container(
-                          height:ScreenUtil().setHeight(100),
-                          width:ScreenUtil().setHeight(150),
+                          height:ScreenUtil().setHeight(130),
+                          width:ScreenUtil().setHeight(130),
                           //超出部分，可裁剪
                           clipBehavior: Clip.hardEdge,
                           decoration: BoxDecoration(
@@ -1419,12 +1421,7 @@ class _RoomPageState extends State<RoomPage> {
                           child: Swiper(
                             itemBuilder: (BuildContext context,int index){
                               // 配置图片地址
-                              // return FadeInImage.assetNetwork(
-                              //   placeholder: 'assets/images/img_placeholder.png',
-                              //   image: imgList[index]["url"],
-                              //   fit: BoxFit.fill,
-                              // );
-                              return SVGASimpleImage(assetsName: 'assets/svga/mofang_jin_room_show.svga');
+                              return SVGASimpleImage(assetsName: imgList[index]["url"]);
                             },
                             // 配置图片数量
                             itemCount: imgList.length ,
@@ -1440,25 +1437,54 @@ class _RoomPageState extends State<RoomPage> {
                             onTap: (index){
                               // LogE('用户点击引起下标改变调用');
                               if(index == 0){
-                                MyUtils.goTransparentPage(context, const ZhuanPanPage() );
+                                MyUtils.goTransparentPage(context, const Carpage() );
                               }else if(index == 1){
-                                MyUtils.goTransparentPage(context, const MoFangPage());
-                              }else{
                                 MyUtils.goTransparentPage(context, const Carpage());
                               }
 
                             },
                           ),
                         ),
+                      ),
+                      Positioned(
+                        top: 110,
+                        right: 15,
+                        child: Container(
+                          height:ScreenUtil().setHeight(130),
+                          width:ScreenUtil().setHeight(130),
+                          //超出部分，可裁剪
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Swiper(
+                            itemBuilder: (BuildContext context,int index){
+                              // 配置图片地址
+                              return SVGASimpleImage(assetsName: imgList2[index]["url"]);
+                            },
+                            // 配置图片数量
+                            itemCount: imgList2.length ,
+                            // 无限循环
+                            loop: true,
+                            // 自动轮播
+                            autoplay: true,
+                            autoplayDelay: 3000,
+                            duration: 2000,
+                            onIndexChanged: (index){
+                              // LogE('用户拖动或者自动播放引起下标改变调用');
+                            },
+                            onTap: (index){
+                              // LogE('用户点击引起下标改变调用');
+                              if(index == 0){
+                                MyUtils.goTransparentPage(context, const ZhuanPanPage() );
+                              }else if(index == 1){
+                                MyUtils.goTransparentPage(context, const MoFangPage());
+                              }
+
+                            },
+                          ),
+                        ),
                       )
-                      // Positioned(
-                      //   bottom: 10,
-                      //   right: 15,
-                      //   child: WidgetUtils.showImages(
-                      //       'assets/images/room_hudong.png',
-                      //       ScreenUtil().setHeight(63),
-                      //       ScreenUtil().setHeight(112)),
-                      // )
                     ],
                   ),
                 ),

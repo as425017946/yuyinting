@@ -13,6 +13,7 @@ import '../../../utils/loading.dart';
 import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
 import '../../../utils/widget_utils.dart';
+import '../chat_page.dart';
 import 'dongtai_page.dart';
 
 /// 个人主页
@@ -415,7 +416,12 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                   const Expanded(child: Text('')),
                   WidgetUtils.PeopleButton('assets/images/people_jia.png', '加关注', MyColors.peopleYellow),
                   const Expanded(child: Text('')),
-                  WidgetUtils.PeopleButton('assets/images/people_sixin.png', '私信', MyColors.peopleBlue2),
+                  GestureDetector(
+                    onTap: ((){
+                      MyUtils.goTransparentRFPage(context, ChatPage(nickName: nickName, otherUid: widget.otherId, otherImg: headImg));
+                    }),
+                    child: WidgetUtils.PeopleButton('assets/images/people_sixin.png', '私信', MyColors.peopleBlue2),
+                  ),
                 ],
               ),
             ),

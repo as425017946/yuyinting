@@ -22,6 +22,7 @@ import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../../widget/SwiperPage.dart';
 import 'package:video_player/video_player.dart';
+import '../message/chat_page.dart';
 import '../message/geren/people_info_page.dart';
 import 'PagePreviewVideo.dart';
 
@@ -100,6 +101,8 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
 
     listen = eventBus.on<HiBack>().listen((event) {
       if (event.isBack) {
+        LogE('-***-${event.index}');
+        LogE('////${_list.length}');
         setState(() {
           _list[event.index].isHi = 1;
         });
@@ -247,7 +250,9 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
                             'assets/images/trends_hi.png', 124, 59),
                       )
                     : GestureDetector(
-                        onTap: (() {}),
+                        onTap: (() {
+                          MyUtils.goTransparentRFPage(context, ChatPage(nickName: _list[i].nickname!, otherUid: _list[i].uid.toString(), otherImg: _list[i].avatar!));
+                        }),
                         child: WidgetUtils.myContainer(
                             ScreenUtil().setHeight(45),
                             ScreenUtil().setHeight(100),
@@ -454,7 +459,9 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
                       'assets/images/trends_hi.png', 124, 59),
                 )
                     : GestureDetector(
-                  onTap: (() {}),
+                  onTap: (() {
+                    MyUtils.goTransparentRFPage(context, ChatPage(nickName: _list_tj[i].nickname!, otherUid: _list_tj[i].uid.toString(), otherImg: _list_tj[i].avatar!));
+                  }),
                   child: WidgetUtils.myContainer(
                       ScreenUtil().setHeight(45),
                       ScreenUtil().setHeight(100),

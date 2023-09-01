@@ -522,7 +522,11 @@ class WidgetUtils {
           imageUrl: imgUrl,
           fit: BoxFit.cover,
           placeholder: (context, url) => CircleImageAss(height, width, ScreenUtil().setHeight(10) , 'assets/images/img_placeholder.png',),
-          errorWidget: (context, url, error) => const Icon(Icons.error),
+          errorWidget: (context, url, error) {
+            LogE('加载错误提示 $error');
+            // return const Icon(Icons.error);
+            return CircleImageAss(height, width, ScreenUtil().setHeight(10) , 'assets/images/img_error.png',);
+          },
         ),
       ),
     );
@@ -545,14 +549,19 @@ class WidgetUtils {
               fit: BoxFit.cover,
               gaplessPlayback: true,
             )
-          : url.isNotEmpty
-              ? CachedNetworkImage(
-                  memCacheHeight: height.round(),
-                  imageUrl: url,
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => CircleImageAss(height, width, ScreenUtil().setHeight(10) , 'assets/images/img_placeholder.png',),
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
-                )
+          : url.isNotEmpty ?
+              // ? CachedNetworkImage(
+              //     memCacheHeight: height.round(),
+              //     imageUrl: url,
+              //     fit: BoxFit.fill,
+              //     placeholder: (context, url) => CircleImageAss(height, width, ScreenUtil().setHeight(10) , 'assets/images/img_placeholder.png',),
+              //     errorWidget: (context, url, error) {
+              //       LogE('加载错误提示 $error');
+              //       // return const Icon(Icons.error);
+              //       return CircleImageAss(height, width, ScreenUtil().setHeight(10) , 'assets/images/img_error.png',);
+              //     },
+              //   )
+      Image.network(url, fit: BoxFit.fill,)
               : Image(
                   image: const AssetImage('assets/images/img_placeholder.png'),
                   width: width,
@@ -566,8 +575,8 @@ class WidgetUtils {
   static Widget CircleImageAss(
       double height, double width, double radius, String url) {
     return Container(
-      width: ScreenUtil().setHeight(width),
-      height: ScreenUtil().setHeight(height),
+      width: width,
+      height: height,
       //超出部分，可裁剪
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
@@ -600,7 +609,11 @@ class WidgetUtils {
           imageUrl: url,
           fit: BoxFit.cover,
           placeholder: (context, url) => CircleImageAss(height, width, ScreenUtil().setHeight(10) , 'assets/images/img_placeholder.png',),
-          errorWidget: (context, url, error) => const Icon(Icons.error),
+          errorWidget: (context, url, error) {
+            LogE('加载错误提示 $error');
+            // return const Icon(Icons.error);
+            return CircleImageAss(height, width, ScreenUtil().setHeight(10) , 'assets/images/img_error.png',);
+          },
         ),
       ),
     );
@@ -632,7 +645,11 @@ class WidgetUtils {
         imageUrl: url,
         fit: BoxFit.cover,
         placeholder: (context, url) => CircleImageAss(height, width, ScreenUtil().setHeight(10) , 'assets/images/img_placeholder.png',),
-        errorWidget: (context, url, error) => const Icon(Icons.error),
+        errorWidget: (context, url, error) {
+          LogE('加载错误提示 $error');
+          // return const Icon(Icons.error);
+          return CircleImageAss(height, width, ScreenUtil().setHeight(10) , 'assets/images/img_error.png',);
+        },
       ),
     );
   }
@@ -1261,6 +1278,36 @@ class WidgetUtils {
         ),
         // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
       ),
+    );
+  }
+
+  /// 装扮购买使用
+  static Widget myContainerZB(double height, double width, Color boxColors,
+      Color borderColors, String title, double size, Color txtColors, String url) {
+    return Container(
+      width: width,
+      height: height,
+      alignment: Alignment.center,
+      //边框设置
+      decoration: BoxDecoration(
+        //背景
+        color: boxColors,
+        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+        borderRadius: const BorderRadius.all(Radius.circular(30.0)),
+        border: Border.all(width: 1, color: borderColors),
+      ),
+      child: Row(
+        children: [
+          const Spacer(),
+          WidgetUtils.showImages(url, 25.h, 25.h),
+          WidgetUtils.commonSizedBox(0, 5.h),
+          Text(
+            title,
+            style: StyleUtils.getCommonTextStyle(color: txtColors, fontSize: size),
+          ),
+          const Spacer(),
+        ],
+      )
     );
   }
 }

@@ -117,11 +117,19 @@ class _PaiduiPageState extends State<PaiduiPage>
             width: double.infinity,
             height: ScreenUtil().setHeight(160),
             //边框设置
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               //背景
               color: Colors.white,
               //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: const Offset(0, 3), // 阴影偏移量
+                ),
+              ],
             ),
             child: Row(
               children: [
@@ -142,18 +150,29 @@ class _PaiduiPageState extends State<PaiduiPage>
                   child: Column(
                     children: [
                       WidgetUtils.commonSizedBox(10, 0),
-                      WidgetUtils.onlyText(
-                          index == 2
-                              ? list2[i].roomName!
-                              : index == 3
-                                  ? list3[i].roomName!
-                                  : index == 4
-                                      ? list4[i].roomName!
-                                      : list5[i].roomName!,
-                          StyleUtils.getCommonTextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14)),
+                      Row(
+                        children: [
+                          Expanded(
+                              child: WidgetUtils.onlyText(
+                                  index == 2
+                                      ? list2[i].roomName!
+                                      : index == 3
+                                          ? list3[i].roomName!
+                                          : index == 4
+                                              ? list4[i].roomName!
+                                              : list5[i].roomName!,
+                                  StyleUtils.getCommonTextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14))),
+                          index == 4
+                              ? WidgetUtils.showImages(
+                                  'assets/images/room_xinting_tj.png',
+                                  30.h,
+                                  100.h)
+                              : const Text('')
+                        ],
+                      ),
                       const Expanded(child: Text('')),
                       Row(
                         children: [
@@ -188,7 +207,7 @@ class _PaiduiPageState extends State<PaiduiPage>
                         ],
                       ),
                       const Expanded(child: Text('')),
-                      roomInfo(i,hotDegree),
+                      roomInfo(i, hotDegree),
                       WidgetUtils.commonSizedBox(10, 0),
                     ],
                   ),
@@ -198,35 +217,31 @@ class _PaiduiPageState extends State<PaiduiPage>
             ),
           ),
         ),
-        WidgetUtils.commonSizedBox(8, 0),
+        WidgetUtils.commonSizedBox(10, 0),
       ],
     );
   }
 
-  Widget roomInfo(i,hotDegree){
-    if(index == 2) {
+  Widget roomInfo(i, hotDegree) {
+    if (index == 2) {
       return Row(
         children: [
           list2[i].hostInfo!.isNotEmpty
-              ? WidgetUtils.CircleHeadImage(
-              ScreenUtil().setHeight(30),
-              ScreenUtil().setHeight(30),
-              list2[i].hostInfo![1])
+              ? WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(30),
+                  ScreenUtil().setHeight(30), list2[i].hostInfo![1])
               : WidgetUtils.commonSizedBox(
-              ScreenUtil().setHeight(30),
-              ScreenUtil().setHeight(30)),
+                  ScreenUtil().setHeight(30), ScreenUtil().setHeight(30)),
           WidgetUtils.commonSizedBox(0, 5),
           SizedBox(
             width: ScreenUtil().setHeight(60),
             child: list2[i].hostInfo!.isNotEmpty
-                ?  Text(
-              list2[i].hostInfo![0],
-              style: TextStyle(
-                  fontSize: ScreenUtil().setSp(20),
-                  color: MyColors.mineGrey,
-                  overflow: TextOverflow.ellipsis
-              ),
-            )
+                ? Text(
+                    list2[i].hostInfo![0],
+                    style: TextStyle(
+                        fontSize: ScreenUtil().setSp(20),
+                        color: MyColors.mineGrey,
+                        overflow: TextOverflow.ellipsis),
+                  )
                 : const Text(''),
           ),
           WidgetUtils.commonSizedBox(0, 20),
@@ -236,45 +251,38 @@ class _PaiduiPageState extends State<PaiduiPage>
           /// 热度
           Row(
             children: [
-              WidgetUtils.showImages(
-                  'assets/images/paidui_redu.png',
-                  ScreenUtil().setHeight(22),
-                  ScreenUtil().setHeight(14)),
+              WidgetUtils.showImages('assets/images/paidui_redu.png',
+                  40.h, 20.h),
               WidgetUtils.commonSizedBox(0, 5),
               WidgetUtils.onlyText(
                   hotDegree > 10000
                       ? (hotDegree / 10000).toStringAsFixed(2)
                       : hotDegree.toString(),
                   StyleUtils.getCommonTextStyle(
-                      color: MyColors.g6,
-                      fontSize: ScreenUtil().setSp(24)))
+                      color: MyColors.g6, fontSize: ScreenUtil().setSp(24)))
             ],
           ),
         ],
       );
-    }else if(index == 3) {
+    } else if (index == 3) {
       return Row(
         children: [
           list3[i].hostInfo!.isNotEmpty
-              ? WidgetUtils.CircleHeadImage(
-              ScreenUtil().setHeight(30),
-              ScreenUtil().setHeight(30),
-              list3[i].hostInfo![1])
+              ? WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(30),
+                  ScreenUtil().setHeight(30), list3[i].hostInfo![1])
               : WidgetUtils.commonSizedBox(
-              ScreenUtil().setHeight(30),
-              ScreenUtil().setHeight(30)),
+                  ScreenUtil().setHeight(30), ScreenUtil().setHeight(30)),
           WidgetUtils.commonSizedBox(0, 5),
           SizedBox(
             width: ScreenUtil().setHeight(50),
             child: list3[i].hostInfo!.isNotEmpty
                 ? Text(
-              list3[i].hostInfo![0],
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(20),
-                color: MyColors.mineGrey,
-                overflow: TextOverflow.ellipsis
-              ),
-            )
+                    list3[i].hostInfo![0],
+                    style: TextStyle(
+                        fontSize: ScreenUtil().setSp(20),
+                        color: MyColors.mineGrey,
+                        overflow: TextOverflow.ellipsis),
+                  )
                 : const Text(''),
           ),
           WidgetUtils.commonSizedBox(0, 20),
@@ -284,45 +292,38 @@ class _PaiduiPageState extends State<PaiduiPage>
           /// 热度
           Row(
             children: [
-              WidgetUtils.showImages(
-                  'assets/images/paidui_redu.png',
-                  ScreenUtil().setHeight(22),
-                  ScreenUtil().setHeight(14)),
+              WidgetUtils.showImages('assets/images/paidui_redu.png',
+                  ScreenUtil().setHeight(22), ScreenUtil().setHeight(14)),
               WidgetUtils.commonSizedBox(0, 5),
               WidgetUtils.onlyText(
                   hotDegree > 10000
                       ? (hotDegree / 10000).toStringAsFixed(2)
                       : hotDegree.toString(),
                   StyleUtils.getCommonTextStyle(
-                      color: MyColors.g6,
-                      fontSize: ScreenUtil().setSp(24)))
+                      color: MyColors.g6, fontSize: ScreenUtil().setSp(24)))
             ],
           ),
         ],
       );
-    }else if(index == 4) {
+    } else if (index == 4) {
       return Row(
         children: [
           list4[i].hostInfo!.isNotEmpty
-              ? WidgetUtils.CircleHeadImage(
-              ScreenUtil().setHeight(30),
-              ScreenUtil().setHeight(30),
-              list4[i].hostInfo![1])
+              ? WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(30),
+                  ScreenUtil().setHeight(30), list4[i].hostInfo![1])
               : WidgetUtils.commonSizedBox(
-              ScreenUtil().setHeight(30),
-              ScreenUtil().setHeight(30)),
+                  ScreenUtil().setHeight(30), ScreenUtil().setHeight(30)),
           WidgetUtils.commonSizedBox(0, 5),
           SizedBox(
             width: ScreenUtil().setHeight(60),
             child: list4[i].hostInfo!.isNotEmpty
-                ?  Text(
-              list4[i].hostInfo![0],
-              style: TextStyle(
-                  fontSize: ScreenUtil().setSp(20),
-                  color: MyColors.mineGrey,
-                  overflow: TextOverflow.ellipsis
-              ),
-            )
+                ? Text(
+                    list4[i].hostInfo![0],
+                    style: TextStyle(
+                        fontSize: ScreenUtil().setSp(20),
+                        color: MyColors.mineGrey,
+                        overflow: TextOverflow.ellipsis),
+                  )
                 : const Text(''),
           ),
           WidgetUtils.commonSizedBox(0, 20),
@@ -332,45 +333,38 @@ class _PaiduiPageState extends State<PaiduiPage>
           /// 热度
           Row(
             children: [
-              WidgetUtils.showImages(
-                  'assets/images/paidui_redu.png',
-                  ScreenUtil().setHeight(22),
-                  ScreenUtil().setHeight(14)),
+              WidgetUtils.showImages('assets/images/paidui_redu.png',
+                  ScreenUtil().setHeight(22), ScreenUtil().setHeight(14)),
               WidgetUtils.commonSizedBox(0, 5),
               WidgetUtils.onlyText(
                   hotDegree > 10000
                       ? (hotDegree / 10000).toStringAsFixed(2)
                       : hotDegree.toString(),
                   StyleUtils.getCommonTextStyle(
-                      color: MyColors.g6,
-                      fontSize: ScreenUtil().setSp(24)))
+                      color: MyColors.g6, fontSize: ScreenUtil().setSp(24)))
             ],
           ),
         ],
       );
-    }else{
+    } else {
       return Row(
         children: [
           list5[i].hostInfo!.isNotEmpty
-              ? WidgetUtils.CircleHeadImage(
-              ScreenUtil().setHeight(30),
-              ScreenUtil().setHeight(30),
-              list5[i].hostInfo![1])
+              ? WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(30),
+                  ScreenUtil().setHeight(30), list5[i].hostInfo![1])
               : WidgetUtils.commonSizedBox(
-              ScreenUtil().setHeight(30),
-              ScreenUtil().setHeight(30)),
+                  ScreenUtil().setHeight(30), ScreenUtil().setHeight(30)),
           WidgetUtils.commonSizedBox(0, 5),
           SizedBox(
             width: ScreenUtil().setHeight(60),
             child: list5[i].hostInfo!.isNotEmpty
-                ?  Text(
-              list5[i].hostInfo![0],
-              style: TextStyle(
-                  fontSize: ScreenUtil().setSp(20),
-                  color: MyColors.mineGrey,
-                  overflow: TextOverflow.ellipsis
-              ),
-            )
+                ? Text(
+                    list5[i].hostInfo![0],
+                    style: TextStyle(
+                        fontSize: ScreenUtil().setSp(20),
+                        color: MyColors.mineGrey,
+                        overflow: TextOverflow.ellipsis),
+                  )
                 : const Text(''),
           ),
           WidgetUtils.commonSizedBox(0, 20),
@@ -380,18 +374,15 @@ class _PaiduiPageState extends State<PaiduiPage>
           /// 热度
           Row(
             children: [
-              WidgetUtils.showImages(
-                  'assets/images/paidui_redu.png',
-                  ScreenUtil().setHeight(22),
-                  ScreenUtil().setHeight(14)),
+              WidgetUtils.showImages('assets/images/paidui_redu.png',
+                  ScreenUtil().setHeight(22), ScreenUtil().setHeight(14)),
               WidgetUtils.commonSizedBox(0, 5),
               WidgetUtils.onlyText(
                   hotDegree > 10000
                       ? (hotDegree / 10000).toStringAsFixed(2)
                       : hotDegree.toString(),
                   StyleUtils.getCommonTextStyle(
-                      color: MyColors.g6,
-                      fontSize: ScreenUtil().setSp(24)))
+                      color: MyColors.g6, fontSize: ScreenUtil().setSp(24)))
             ],
           ),
         ],
@@ -399,119 +390,92 @@ class _PaiduiPageState extends State<PaiduiPage>
     }
   }
 
-  Widget showHead(List<MemberList> listm){
-    if(listm.length == 1){
-      return WidgetUtils.CircleHeadImage(
-          ScreenUtil().setHeight(30),
-          ScreenUtil().setHeight(30),
-          listm[0].avatar!);
-    }else if(listm.length == 2){
+  Widget showHead(List<MemberList> listm) {
+    if (listm.length == 1) {
+      return WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(30),
+          ScreenUtil().setHeight(30), listm[0].avatar!);
+    } else if (listm.length == 2) {
       return Row(
         children: [
-          WidgetUtils.CircleHeadImage(
-              ScreenUtil().setHeight(30),
-              ScreenUtil().setHeight(30),
-              listm[0].avatar!),
+          WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(30),
+              ScreenUtil().setHeight(30), listm[0].avatar!),
           Transform.translate(
             offset: const Offset(-8, 0),
-            child: WidgetUtils.CircleHeadImage(
-                ScreenUtil().setHeight(30),
-                ScreenUtil().setHeight(30),
-                listm[1].avatar!),
+            child: WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(30),
+                ScreenUtil().setHeight(30), listm[1].avatar!),
           ),
         ],
       );
-    }if(listm.length == 3){
+    }
+    if (listm.length == 3) {
       return Row(
         children: [
-          WidgetUtils.CircleHeadImage(
-              ScreenUtil().setHeight(30),
-              ScreenUtil().setHeight(30),
-              listm[0].avatar!),
+          WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(30),
+              ScreenUtil().setHeight(30), listm[0].avatar!),
           Transform.translate(
             offset: const Offset(-8, 0),
-            child: WidgetUtils.CircleHeadImage(
-                ScreenUtil().setHeight(30),
-                ScreenUtil().setHeight(30),
-                listm[1].avatar!),
+            child: WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(30),
+                ScreenUtil().setHeight(30), listm[1].avatar!),
           ),
           Transform.translate(
             offset: const Offset(-15, 0),
-            child: WidgetUtils.CircleHeadImage(
-                ScreenUtil().setHeight(30),
-                ScreenUtil().setHeight(30),
-                listm[2].avatar!),
+            child: WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(30),
+                ScreenUtil().setHeight(30), listm[2].avatar!),
           ),
         ],
       );
-    }if(listm.length == 4){
+    }
+    if (listm.length == 4) {
       return Row(
         children: [
-          WidgetUtils.CircleHeadImage(
-              ScreenUtil().setHeight(30),
-              ScreenUtil().setHeight(30),
-              listm[0].avatar!),
+          WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(30),
+              ScreenUtil().setHeight(30), listm[0].avatar!),
           Transform.translate(
             offset: const Offset(-8, 0),
-            child: WidgetUtils.CircleHeadImage(
-                ScreenUtil().setHeight(30),
-                ScreenUtil().setHeight(30),
-                listm[1].avatar!),
+            child: WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(30),
+                ScreenUtil().setHeight(30), listm[1].avatar!),
           ),
           Transform.translate(
             offset: const Offset(-15, 0),
-            child: WidgetUtils.CircleHeadImage(
-                ScreenUtil().setHeight(30),
-                ScreenUtil().setHeight(30),
-                listm[2].avatar!),
+            child: WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(30),
+                ScreenUtil().setHeight(30), listm[2].avatar!),
           ),
           Transform.translate(
             offset: const Offset(-20, 0),
-            child: WidgetUtils.CircleHeadImage(
-                ScreenUtil().setHeight(30),
-                ScreenUtil().setHeight(30),
-                listm[3].avatar!),
+            child: WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(30),
+                ScreenUtil().setHeight(30), listm[3].avatar!),
           ),
         ],
       );
-    }if(listm.length == 5){
+    }
+    if (listm.length == 5) {
       return Row(
         children: [
-          WidgetUtils.CircleHeadImage(
-              ScreenUtil().setHeight(30),
-              ScreenUtil().setHeight(30),
-              listm[0].avatar!),
+          WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(30),
+              ScreenUtil().setHeight(30), listm[0].avatar!),
           Transform.translate(
             offset: const Offset(-8, 0),
-            child: WidgetUtils.CircleHeadImage(
-                ScreenUtil().setHeight(30),
-                ScreenUtil().setHeight(30),
-                listm[1].avatar!),
+            child: WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(30),
+                ScreenUtil().setHeight(30), listm[1].avatar!),
           ),
           Transform.translate(
             offset: const Offset(-15, 0),
-            child: WidgetUtils.CircleHeadImage(
-                ScreenUtil().setHeight(30),
-                ScreenUtil().setHeight(30),
-                listm[2].avatar!),
+            child: WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(30),
+                ScreenUtil().setHeight(30), listm[2].avatar!),
           ),
           Transform.translate(
             offset: const Offset(-20, 0),
-            child: WidgetUtils.CircleHeadImage(
-                ScreenUtil().setHeight(30),
-                ScreenUtil().setHeight(30),
-                listm[3].avatar!),
+            child: WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(30),
+                ScreenUtil().setHeight(30), listm[3].avatar!),
           ),
           Transform.translate(
             offset: const Offset(-25, 0),
-            child: WidgetUtils.CircleHeadImage(
-                ScreenUtil().setHeight(30),
-                ScreenUtil().setHeight(30),
-                listm[4].avatar!),
+            child: WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(30),
+                ScreenUtil().setHeight(30), listm[4].avatar!),
           ),
         ],
       );
-    }else{
+    } else {
       return const Text('');
     }
   }
@@ -821,7 +785,7 @@ class _PaiduiPageState extends State<PaiduiPage>
               list2.clear();
             } else if (page == 1 && type == "3") {
               list3.clear();
-            } else if (page == 1 && type =="4") {
+            } else if (page == 1 && type == "4") {
               list4.clear();
             } else if (page == 1 && type == "5") {
               list5.clear();

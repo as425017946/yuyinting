@@ -13,6 +13,7 @@ import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
+import '../message/chat_page.dart';
 import '../message/geren/people_info_page.dart';
 import '../trends/trends_hi_page.dart';
 
@@ -93,17 +94,12 @@ class _ZaixianPageState extends State<ZaixianPage> with AutomaticKeepAliveClient
                   onTap: ((){
                     MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: list[i].uid.toString(),));
                   }),
-                  child: Container(
-                    width: ScreenUtil().setWidth(80),
-                    height: ScreenUtil().setHeight(80),
-                    alignment: Alignment.centerLeft,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        WidgetUtils.CircleHeadImage(40, 40, list[i].avatar!),
-                        list[i].live == 1 ? WidgetUtils.showImages( 'assets/images/zhibozhong.webp', 80, 80) : const Text(''),
-                      ],
-                    ),
+                  child:  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      WidgetUtils.CircleHeadImage(78.h, 78.h, list[i].avatar!),
+                      list[i].live == 1 ? WidgetUtils.showImages( 'assets/images/zhibozhong.webp', 80.h, 80.h) : const Text(''),
+                    ],
                   ),
                 ),
                 WidgetUtils.commonSizedBox(0, 10),
@@ -176,7 +172,9 @@ class _ZaixianPageState extends State<ZaixianPage> with AutomaticKeepAliveClient
                             ScreenUtil().setHeight(90)),
                       )
                     : GestureDetector(
-                        onTap: (() {}),
+                        onTap: (() {
+                          MyUtils.goTransparentRFPage(context, ChatPage(nickName: list[i].nickname!, otherUid: list[i].uid.toString(), otherImg: list[i].avatar!,));
+                        }),
                         child: WidgetUtils.myContainer(
                             ScreenUtil().setHeight(40),
                             ScreenUtil().setHeight(90),

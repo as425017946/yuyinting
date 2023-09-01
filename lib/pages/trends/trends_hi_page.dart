@@ -121,8 +121,11 @@ class _TrendsHiPageState extends State<TrendsHiPage> {
     );
   }
 
-  /// 点赞
+  /// 打招呼
   Future<void> doPostHi() async {
+    if(gz){
+      doPostFollow();
+    }
     Map<String, dynamic> params = <String, dynamic>{
       'uid': widget.uid,
     };
@@ -149,4 +152,31 @@ class _TrendsHiPageState extends State<TrendsHiPage> {
       MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
     }
   }
+
+  /// 关注
+  Future<void> doPostFollow() async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'type': '1',
+      'status':'1',
+      'follow_id': widget.uid,
+    };
+    try {
+      CommonBean bean = await DataUtils.postFollow(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+  }
+
 }

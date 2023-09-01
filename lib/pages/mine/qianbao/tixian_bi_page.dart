@@ -5,7 +5,7 @@ import '../../../colors/my_colors.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 
-/// 金币提现
+/// V币提现
 class TixianBiPage extends StatefulWidget {
   const TixianBiPage({Key? key}) : super(key: key);
 
@@ -49,10 +49,19 @@ class _TixianBiPageState extends State<TixianBiPage> {
                     Row(
                       children: [
                         WidgetUtils.commonSizedBox(0, 20),
-                        WidgetUtils.showImages(
-                            'assets/images/mine_wallet_bb.png',
-                            ScreenUtil().setHeight(100),
-                            ScreenUtil().setHeight(100)),
+                        Container(
+                          height: 100.h,
+                          width: 100.h,
+                          alignment: Alignment.center,
+                          //边框设置
+                          decoration: BoxDecoration(
+                            //背景
+                            color: Colors.white,
+                            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                            borderRadius: BorderRadius.all(Radius.circular(50.h)),
+                          ),
+                          child: WidgetUtils.showImages('assets/images/mine_wallet_bb.png', 650.h, 65.h),
+                        ),
                         WidgetUtils.commonSizedBox(0, 15),
                         Expanded(
                             child: Column(
@@ -143,10 +152,10 @@ class _TixianBiPageState extends State<TixianBiPage> {
                       ],
                     ),
                     WidgetUtils.myLine(),
-                    WidgetUtils.onlyText('提取金币', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(32))),
+                    WidgetUtils.onlyText('提取V币', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(32))),
                     Row(
                       children: [
-                        WidgetUtils.showImages('assets/images/mine_wallet_jinbi.png', ScreenUtil().setHeight(48), ScreenUtil().setHeight(48)),
+                        WidgetUtils.showImages('assets/images/mine_wallet_dd.png', ScreenUtil().setHeight(48), ScreenUtil().setHeight(48)),
                         WidgetUtils.commonSizedBox(0, 20),
                         Expanded(
                           child: WidgetUtils.commonTextField(
@@ -163,7 +172,7 @@ class _TixianBiPageState extends State<TixianBiPage> {
                     WidgetUtils.myLine(),
                     Row(
                       children: [
-                        WidgetUtils.onlyText('到账金币', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(32))),
+                        WidgetUtils.onlyText('到账V币', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(32))),
                         WidgetUtils.commonSizedBox(0, 10),
                         WidgetUtils.onlyText('￥0', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(32), fontWeight: FontWeight.w600)),
                       ],
@@ -178,7 +187,7 @@ class _TixianBiPageState extends State<TixianBiPage> {
               WidgetUtils.commonSizedBox(5, 20),
               WidgetUtils.onlyText('2.提取金额必须为10的倍数且大于等于50，否则无法申请', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(25))),
               WidgetUtils.commonSizedBox(5, 20),
-              WidgetUtils.onlyText('3.金币提现收取', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(25))),
+              WidgetUtils.onlyText('3.V币提现收取', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(25))),
               WidgetUtils.commonSizedBox(5, 20),
               WidgetUtils.onlyText('4.提款次日到账，节假日另行通知', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(25))),
               WidgetUtils.commonSizedBox(20, 20),

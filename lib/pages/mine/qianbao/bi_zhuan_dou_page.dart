@@ -112,7 +112,7 @@ class _BiZhuanDouPageState extends State<BiZhuanDouPage> {
                   child: Column(
                     children: [
                       WidgetUtils.commonSizedBox(30, 20),
-                      WidgetUtils.onlyText('提取金币', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(32))),
+                      WidgetUtils.onlyText('提取V币', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(32))),
                       Row(
                         children: [
                           WidgetUtils.showImages('assets/images/mine_wallet_jinbi.png', ScreenUtil().setHeight(48), ScreenUtil().setHeight(48)),

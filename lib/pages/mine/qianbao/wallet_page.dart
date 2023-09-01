@@ -50,7 +50,19 @@ class _WalletPageState extends State<WalletPage> {
                         Row(
                           children: [
                             WidgetUtils.commonSizedBox(0, 20),
-                            WidgetUtils.showImages('assets/images/mine_wallet_dd.png', ScreenUtil().setHeight(100), ScreenUtil().setHeight(100)),
+                            Container(
+                              height: 100.h,
+                              width: 100.h,
+                              alignment: Alignment.center,
+                              //边框设置
+                              decoration: BoxDecoration(
+                                //背景
+                                color: Colors.white,
+                                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                borderRadius: BorderRadius.all(Radius.circular(50.h)),
+                              ),
+                              child: WidgetUtils.showImages('assets/images/mine_wallet_dd.png', 65.h, 65.h),
+                            ),
                             WidgetUtils.commonSizedBox(0, 15),
                             Expanded(child: Column(
                               children: [
@@ -101,7 +113,7 @@ class _WalletPageState extends State<WalletPage> {
                     ),
                   ),
                   WidgetUtils.commonSizedBox(20, 20),
-                  /// 金币
+                  /// V币
                   SizedBox(
                     height: ScreenUtil().setHeight(250),
                     child: Stack(
@@ -111,7 +123,19 @@ class _WalletPageState extends State<WalletPage> {
                         Row(
                           children: [
                             WidgetUtils.commonSizedBox(0, 20),
-                            WidgetUtils.showImages('assets/images/mine_wallet_bb.png', ScreenUtil().setHeight(100), ScreenUtil().setHeight(100)),
+                            Container(
+                              height: 100.h,
+                              width: 100.h,
+                              alignment: Alignment.center,
+                              //边框设置
+                              decoration: BoxDecoration(
+                                //背景
+                                color: Colors.white,
+                                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                borderRadius: BorderRadius.all(Radius.circular(50.h)),
+                              ),
+                              child: WidgetUtils.showImages('assets/images/mine_wallet_bb.png', 650.h, 65.h),
+                            ),
                             WidgetUtils.commonSizedBox(0, 15),
                             Expanded(child: Column(
                               children: [
@@ -195,7 +219,19 @@ class _WalletPageState extends State<WalletPage> {
                         Row(
                           children: [
                             WidgetUtils.commonSizedBox(0, 20),
-                            WidgetUtils.showImages('assets/images/mine_wallet_zz.png', ScreenUtil().setHeight(100), ScreenUtil().setHeight(100)),
+                            Container(
+                              height: 100.h,
+                              width: 100.h,
+                              alignment: Alignment.center,
+                              //边框设置
+                              decoration: BoxDecoration(
+                                //背景
+                                color: Colors.white,
+                                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                borderRadius: BorderRadius.all(Radius.circular(50.h)),
+                              ),
+                              child: WidgetUtils.showImages('assets/images/mine_wallet_zz.png', 650.h, 65.h),
+                            ),
                             WidgetUtils.commonSizedBox(0, 15),
                             Expanded(child: Column(
                               children: [

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:soundpool/soundpool.dart';
 import 'package:svgaplayer_flutter/parser.dart';
 import 'package:svgaplayer_flutter/player.dart';
 import 'package:yuyinting/colors/my_colors.dart';
@@ -8,6 +10,13 @@ import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import 'package:yuyinting/widget/Marquee.dart';
+
+import '../../utils/my_utils.dart';
+import 'mofang/mofang_beibao_page.dart';
+import 'mofang/mofang_daoju_page.dart';
+import 'mofang/mofang_guize_page.dart';
+import 'mofang/mofang_jiangchi_page.dart';
+import 'mofang/mofang_jilu_page.dart';
 /// 蓝色魔方
 class MofangLanPage extends StatefulWidget {
   const MofangLanPage({super.key});
@@ -58,6 +67,14 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
     });
   }
 
+  /// 播放音频
+  Soundpool soundpool = Soundpool(streamType: StreamType.notification);
+  Future<void> playSound() async {
+    int soundId = await rootBundle.load('assets/audio/mofang_lan.wav').then(((ByteData soundDate){
+      return soundpool.load(soundDate);
+    }));
+    await soundpool.play(soundId);
+  }
 
   Future _loadSVGA(isUrl, svgaUrl) {
     Future Function(String) decoder;
@@ -86,7 +103,7 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
       body: Center(
         child: Stack(
           children: [
-            Container(
+            SizedBox(
               height: ScreenUtil().setHeight(900),
               width: double.infinity,
               child: WidgetUtils.showImagesFill(
@@ -189,11 +206,16 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
                             ),
                             GestureDetector(
                               onTap: ((){
-                                setState(() {
-                                  isShow = true;
-                                });
-                                animationController?.reset();
-                                animationController?.forward();
+                                if(isTiaoguo){
+                                  MyUtils.goTransparentPage(context, const MoFangDaoJuPage());
+                                }else{
+                                  playSound();
+                                  setState(() {
+                                    isShow = true;
+                                  });
+                                  animationController?.reset();
+                                  animationController?.forward();
+                                }
                               }),
                               child: SizedBox(
                                 width: ScreenUtil().setHeight(120),
@@ -346,25 +368,31 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
                   Positioned(
                       right: ScreenUtil().setHeight(10),
                       top: ScreenUtil().setHeight(150),
-                      child: Stack(
-                        children: [
-                          WidgetUtils.showImages(
-                              'assets/images/mofang_jin_jiangchi.png',
-                              ScreenUtil().setHeight(90),
-                              ScreenUtil().setHeight(109)),
-                          Container(
-                            height: ScreenUtil().setHeight(90),
-                            width: ScreenUtil().setHeight(109),
-                            padding: EdgeInsets.only(
-                                top: ScreenUtil().setHeight(58)),
-                            child: WidgetUtils.onlyTextCenter(
-                                '魔方奖池',
-                                StyleUtils.getCommonTextStyle(
-                                    color: Colors.white,
-                                    fontSize: ScreenUtil().setSp(22))),
-                          )
-                        ],
-                      )),
+                      child: GestureDetector(
+                        onTap: ((){
+                          MyUtils.goTransparentPage(context, const MoFangJiangChiPage());
+                        }),
+                        child: Stack(
+                          children: [
+                            WidgetUtils.showImages(
+                                'assets/images/mofang_jin_jiangchi.png',
+                                ScreenUtil().setHeight(90),
+                                ScreenUtil().setHeight(109)),
+                            Container(
+                              height: ScreenUtil().setHeight(90),
+                              width: ScreenUtil().setHeight(109),
+                              padding: EdgeInsets.only(
+                                  top: ScreenUtil().setHeight(58)),
+                              child: WidgetUtils.onlyTextCenter(
+                                  '魔方奖池',
+                                  StyleUtils.getCommonTextStyle(
+                                      color: Colors.white,
+                                      fontSize: ScreenUtil().setSp(22))),
+                            )
+                          ],
+                        ),
+                      )
+                  ),
                   // 跳过动画
                   Positioned(
                     left: ScreenUtil().setHeight(15),
@@ -377,7 +405,7 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
                       }),
                       child: Row(
                         children: [
-                          WidgetUtils.showImages(isTiaoguo ? 'assets/images/mofang_check_no.png' : 'assets/images/mofang_check_yes.png', ScreenUtil().setHeight(24), ScreenUtil().setHeight(24)),
+                          WidgetUtils.showImages(isTiaoguo==false ? 'assets/images/mofang_check_no.png' : 'assets/images/mofang_check_yes.png', ScreenUtil().setHeight(24), ScreenUtil().setHeight(24)),
                           WidgetUtils.commonSizedBox(0, 5),
                           WidgetUtils.onlyText('跳过动画', StyleUtils.getCommonTextStyle(color: MyColors.roomTCWZ2, fontSize: ScreenUtil().setSp(20)))
                         ],
@@ -412,11 +440,17 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
                           child: Column(
                             children: [
                               Expanded(
-                                  child: WidgetUtils.onlyTextCenter(
-                                      '玩法规则',
-                                      StyleUtils.getCommonTextStyle(
-                                          color: MyColors.roomTCWZ2,
-                                          fontSize: ScreenUtil().setSp(21)))),
+                                  child: GestureDetector(
+                                    onTap: ((){
+                                      MyUtils.goTransparentPageCom(context, const MoFangGuiZePage());
+                                    }),
+                                    child: WidgetUtils.onlyTextCenter(
+                                        '玩法规则',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: MyColors.roomTCWZ2,
+                                            fontSize: ScreenUtil().setSp(21))),
+                                  )
+                              ),
                               Container(
                                 width: double.infinity,
                                 height: ScreenUtil().setHeight(1),
@@ -426,11 +460,17 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
                                 color: MyColors.roomTCWZ1,
                               ),
                               Expanded(
-                                  child: WidgetUtils.onlyTextCenter(
-                                      '我的记录',
-                                      StyleUtils.getCommonTextStyle(
-                                          color: MyColors.roomTCWZ2,
-                                          fontSize: ScreenUtil().setSp(21)))),
+                                  child: GestureDetector(
+                                    onTap: ((){
+                                      MyUtils.goTransparentPageCom(context, const MoFangJiLuPage());
+                                    }),
+                                    child: WidgetUtils.onlyTextCenter(
+                                        '我的记录',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: MyColors.roomTCWZ2,
+                                            fontSize: ScreenUtil().setSp(21))),
+                                  )
+                              ),
                               Container(
                                 width: double.infinity,
                                 height: ScreenUtil().setHeight(1),
@@ -440,11 +480,17 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
                                 color: MyColors.roomTCWZ1,
                               ),
                               Expanded(
-                                  child: WidgetUtils.onlyTextCenter(
-                                      '我的背包',
-                                      StyleUtils.getCommonTextStyle(
-                                          color: MyColors.roomTCWZ2,
-                                          fontSize: ScreenUtil().setSp(21)))),
+                                  child: GestureDetector(
+                                    onTap: ((){
+                                      MyUtils.goTransparentPageCom(context, const MoFangBeiBaoPage());
+                                    }),
+                                    child: WidgetUtils.onlyTextCenter(
+                                        '我的背包',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: MyColors.roomTCWZ2,
+                                            fontSize: ScreenUtil().setSp(21))),
+                                  )
+                              ),
                             ],
                           ),
                         )

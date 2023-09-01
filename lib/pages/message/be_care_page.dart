@@ -14,7 +14,7 @@ import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
-///被关注
+///被 关注
 class BeCarePage extends StatefulWidget {
   const BeCarePage({Key? key}) : super(key: key);
 

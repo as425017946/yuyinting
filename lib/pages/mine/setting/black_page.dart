@@ -217,7 +217,7 @@ class _BlackPageState extends State<BlackPage> {
     };
     try {
       Loading.show("提交中...");
-      CommonBean bean = await DataUtils.postUpdateList(params);
+      CommonBean bean = await DataUtils.postUpdateBlack(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
           MyToastUtils.showToastBottom("解除成功！");
