@@ -393,6 +393,7 @@ class MyUtils {
                 {
                   EMTextMessageBody body = msg.body as EMTextMessageBody;
                   LogE('接受文本信息${msg.attributes}');
+                  LogE('发送人id${msg.from!}');
                   Map info = msg.attributes!;
                   String nickName = info['nickname'];
                   String headImg = info['avatar'];

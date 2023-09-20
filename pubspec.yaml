@@ -107,6 +107,10 @@ dependencies:
   flutter_vibrate: ^1.3.0
   # 播放本地音频
   soundpool: ^2.3.0
+  # 关于横竖屏转屏
+  auto_orientation: ^2.0.0
+  # 背景svga
+  flutter_svg: ^2.0.5
 
 dev_dependencies:
   flutter_test:
@@ -138,6 +142,10 @@ flutter:
     - assets/images/
     - assets/images/feilong/
     - assets/images/saiche/
+    - assets/images/pt/
+    - assets/images/cs/
+    - assets/images/cy/
+    - assets/images/car/
     - assets/svga/
     - assets/svga/gp/
     - assets/audio/

@@ -1,3 +1,4 @@
+
 import 'package:yuyinting/pages/home/ranking_page.dart';
 import 'package:yuyinting/pages/login/login_page.dart';
 import 'package:yuyinting/pages/message/care_home_page.dart';
@@ -12,20 +13,16 @@ import 'package:yuyinting/pages/mine/setting/yinsi_page.dart';
 import 'package:yuyinting/pages/mine/setting/yonghu_page.dart';
 import 'package:yuyinting/pages/mine/setting/zhanghao_shezhi_page.dart';
 import 'package:yuyinting/pages/mine/setting/zhuxiao_page.dart';
-import 'package:yuyinting/pages/trends/trends_more_page.dart';
 
 import '../pages/game/loge_page.dart';
 import '../pages/login/forgot_password_page.dart';
 import '../pages/message/be_care_page.dart';
-import '../pages/message/geren/people_info_page.dart';
 import '../pages/message/xitong_more_page.dart';
 import '../pages/mine/daili/share_tuiguang_page.dart';
 import '../pages/mine/dengji_page.dart';
 import '../pages/mine/gonghui/gonghui_home_page.dart';
-import '../pages/mine/gonghui/gonghui_more_page.dart';
 import '../pages/mine/gonghui/gonghui_people_page.dart';
 import '../pages/mine/gonghui/jiesuan_more_page.dart';
-import '../pages/mine/gonghui/my_gonghui_page.dart';
 import '../pages/mine/gonghui/room_more_page.dart';
 import '../pages/mine/gonghui/setting_gonghui_page.dart';
 import '../pages/mine/kefu_page.dart';
@@ -57,13 +54,10 @@ import '../pages/mine/tequan/tequan_page.dart';
 import '../pages/message/geren/who_lock_me_page.dart';
 import '../pages/mine/zhuangban/shop_page.dart';
 import '../pages/mine/zhuangban/zhuangban_page.dart';
-import '../pages/room/room_page.dart';
 import '../pages/room/room_people_info_page.dart';
 import '../pages/room/room_redu_page.dart';
 import '../pages/room/room_ts_gonggao_page.dart';
-import '../pages/trends/trends_hi_page.dart';
 import '../pages/trends/trends_send_page.dart';
-import '../widget/SwiperPage.dart';
 
 
 /// 静态路由
@@ -122,10 +116,7 @@ var staticRoutes = {
   'ShopPage':(context) => const ShopPage(),// 装扮商城
   'TequanPage':(context) => const TequanPage(),// 特权页面
   'RoomPeopleInfoPage':(context) => const RoomPeopleInfoPage(),// 房间他人信息详情
-  'RoomReDuPage':(context) => const RoomReDuPage(),// 房间内的热度
-  'RoomTSGongGaoPage':(context) => const RoomTSGongGaoPage(),// 房间内弹窗公告
   'MyKeFuPage':(context) => const MyKeFuPage(),// 新客服页面
-
   'DengjiPage':(context) => const DengjiPage(),// 测试等级描边
   'LongPage':(context) => const LongPage(),// 新客服页面
 

@@ -46,13 +46,16 @@ class _BaobiaoPageState extends State<BaobiaoPage> {
                       padding: const EdgeInsets.all(2),
                       child: WidgetUtils.onlyText('2023-06-12', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(28))),
                     ),
-                    WidgetUtils.commonSizedBox(0, 10),
-                    WidgetUtils.onlyText('至', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(28))),
-                    WidgetUtils.commonSizedBox(0, 10),
-                    Container(
-                      color: MyColors.dailiTime,
-                      padding: const EdgeInsets.all(2),
-                      child: WidgetUtils.onlyText('2023-06-12', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(28))),
+                    Opacity(opacity:0,child: WidgetUtils.commonSizedBox(0, 10)),
+                    Opacity(opacity:0,child: WidgetUtils.onlyText('至', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(28)))),
+                    Opacity(opacity:0,child: WidgetUtils.commonSizedBox(0, 10)),
+                    Opacity(
+                      opacity:0,
+                      child: Container(
+                        color: MyColors.dailiTime,
+                        padding: const EdgeInsets.all(2),
+                        child: WidgetUtils.onlyText('2023-06-12', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(28))),
+                      ),
                     ),
                   ],
                 )

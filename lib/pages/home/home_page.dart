@@ -1,22 +1,19 @@
+import 'package:auto_orientation/auto_orientation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:yuyinting/colors/my_colors.dart';
-import 'package:yuyinting/pages/home/agree_ts_page.dart';
 import 'package:yuyinting/pages/home/paidui_page.dart';
 import 'package:yuyinting/pages/home/shoucang_page.dart';
+import 'package:yuyinting/pages/home/ts/ts_car_page.dart';
 import 'package:yuyinting/pages/home/tuijian_page.dart';
 import 'package:yuyinting/pages/home/youxi_page.dart';
 import 'package:yuyinting/pages/home/zaixian_page.dart';
 import 'package:yuyinting/pages/login/edit_info_page.dart';
-import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
-
-import '../../db/DatabaseHelper.dart';
 import '../../main.dart';
 import '../../utils/my_utils.dart';
-
 ///首页
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -38,6 +35,13 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin{
   @override
   void initState() {
     // TODO: implement initState
+
+    /// 如果是全屏就切换竖屏
+    AutoOrientation.portraitAutoMode();
+    ///显示状态栏，与底部虚拟操作按钮
+    SystemChrome.setEnabledSystemUIOverlays(
+        [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+
     super.initState();
     _currentIndex = 1;
     _controller = PageController(
@@ -46,7 +50,9 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin{
     if(sp.getBool('isFirst') == true){
       MyUtils.goTransparentPageCom(context, const EditInfoPage());
     }
-    MyUtils.goTransparentPageCom(context, const AgreeTSPage());
+
+    MyUtils.goTransparentPageCom(context, const TSCarPage());
+
   }
 
   @override
@@ -58,7 +64,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin{
             ///头部
             Container(
               color: MyColors.homeTopBG,
-              height: ScreenUtil().setHeight(150),
+              height: ScreenUtil().setHeight(152),
               width: double.infinity,
               child: Column(
                 children: [

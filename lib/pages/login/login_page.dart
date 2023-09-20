@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -18,6 +19,8 @@ import '../../utils/loading.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
+import '../../widget/SVGASimpleImage.dart';
+import '../home/agree_ts_page.dart';
 
 ///登录页面
 class LoginPage extends StatefulWidget {
@@ -32,12 +35,12 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController controllerSmg = TextEditingController();
   TextEditingController controllerAccount = TextEditingController();
   TextEditingController controllerPass = TextEditingController();
-  var qiehuan = '密码登录';
   var zhanghao = '账号登录';
   String quhao = '+86';
   bool gz = true;
   bool isClick = false;
-  var listen;
+  bool isMiMa = false;
+  var listen,listen2;
 
   @override
   void initState() {
@@ -49,21 +52,31 @@ class _LoginPageState extends State<LoginPage> {
       });
     });
 
-    if(sp.getString(MyConfig.userOneToken).toString() == 'null'){
-      sp.setString(MyConfig.userOneToken,'');
+    listen2 = eventBus.on<LoginBack>().listen((event) {
+      // Future.value(true);
+      exit(0);
+    });
+
+    if (sp.getString(MyConfig.userOneToken).toString() == 'null') {
+      sp.setString(MyConfig.userOneToken, '');
     }
-    if(sp.getString(MyConfig.userTwoToken).toString() == 'null'){
-      sp.setString(MyConfig.userTwoToken,'');
+    if (sp.getString(MyConfig.userTwoToken).toString() == 'null') {
+      sp.setString(MyConfig.userTwoToken, '');
     }
-    if(sp.getString(MyConfig.userThreeToken).toString() == 'null'){
-      sp.setString(MyConfig.userThreeToken,'');
+    if (sp.getString(MyConfig.userThreeToken).toString() == 'null') {
+      sp.setString(MyConfig.userThreeToken, '');
     }
-    if(sp.getString('user_token').toString() == 'null'){
-      sp.setString('user_token','');
+    if (sp.getString('user_token').toString() == 'null') {
+      sp.setString('user_token', '');
     }
 
-    if(sp.getString('user_token').toString().isNotEmpty && MyConfig.issAdd == false){
+    if (sp.getString('user_token').toString().isNotEmpty &&
+        MyConfig.issAdd == false) {
       doGo();
+    }
+
+    if (sp.getString('myAgree').toString() == 'null' || sp.getString('myAgree').toString() == '0') {
+      MyUtils.goTransparentPageCom(context, const AgreeTSPage());
     }
   }
 
@@ -72,8 +85,8 @@ class _LoginPageState extends State<LoginPage> {
     // TODO: implement dispose
     super.dispose();
     listen.cancel();
+    listen2.cancel();
   }
-
 
   Timer? _timer;
   int _timeCount = 10;
@@ -110,52 +123,27 @@ class _LoginPageState extends State<LoginPage> {
           Container(
             width: double.infinity,
             height: double.infinity,
-            decoration: const BoxDecoration(
-              //设置Container修饰
-              image: DecorationImage(
-                //背景图片修饰
-                image: AssetImage("assets/images/login_bg.jpg"),
-                fit: BoxFit.fill, //覆盖
-              ),
-            ),
+            color: MyColors.loginBG,
             child: Column(
               children: [
-                WidgetUtils.commonSizedBox(100, 0),
-                WidgetUtils.showImages('assets/images/login_top.png',
-                    ScreenUtil().setHeight(136), ScreenUtil().setHeight(153)),
-                WidgetUtils.commonSizedBox(10, 0),
-                Container(
-                  width: ScreenUtil().setHeight(370),
-                  alignment: Alignment.topRight,
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          const Expanded(child: Text('')),
-                          WidgetUtils.showImages(
-                              'assets/images/login_xin.png',
-                              ScreenUtil().setHeight(17),
-                              ScreenUtil().setHeight(19))
-                        ],
-                      ),
-                      WidgetUtils.showImages(
-                          'assets/images/login_wz.png',
-                          ScreenUtil().setHeight(43),
-                          ScreenUtil().setHeight(356)),
-                    ],
+                SizedBox(
+                  height: 630.h,
+                  width: double.infinity,
+                  child: const SVGASimpleImage(
+                    assetsName: 'assets/svga/login.svga',
                   ),
                 ),
                 Container(
                   height: ScreenUtil().setHeight(80),
                   width: double.infinity,
                   margin: const EdgeInsets.only(
-                      top: 70, left: 40, right: 40, bottom: 20),
+                      top: 10, left: 40, right: 40, bottom: 20),
                   //边框设置
                   decoration: const BoxDecoration(
                     //背景
                     color: Colors.white,
                     //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                    borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                    borderRadius: BorderRadius.all(Radius.circular(25.0)),
                   ),
                   child: isClick == false
                       ? Row(
@@ -210,7 +198,7 @@ class _LoginPageState extends State<LoginPage> {
                           ],
                         ),
                 ),
-                qiehuan == '密码登录' && isClick == false
+                isMiMa == false && isClick == false
                     ? SizedBox(
                         height: ScreenUtil().setHeight(80),
                         child: Row(
@@ -218,39 +206,66 @@ class _LoginPageState extends State<LoginPage> {
                             WidgetUtils.commonSizedBox(0, 40),
                             Expanded(
                               child: Container(
-                                height: ScreenUtil().setHeight(80),
-                                padding:
-                                    const EdgeInsets.only(left: 15, bottom: 3),
-                                width: double.infinity,
-                                //边框设置
-                                decoration: const BoxDecoration(
-                                  //背景
-                                  color: Colors.white,
-                                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(30.0)),
-                                ),
-                                child: WidgetUtils.commonTextFieldNumber(
-                                    controller: controllerSmg,
-                                    hintText: '请输入验证码'),
-                              ),
+                                  height: ScreenUtil().setHeight(80),
+                                  padding: const EdgeInsets.only(left: 15),
+                                  width: double.infinity,
+                                  //边框设置
+                                  decoration: const BoxDecoration(
+                                    //背景
+                                    color: Colors.white,
+                                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(25.0)),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                          child:
+                                              WidgetUtils.commonTextFieldNumber(
+                                                  controller: controllerSmg,
+                                                  hintText: '请输入验证码')),
+                                      GestureDetector(
+                                        onTap: (() {
+                                          if (_autoCodeText == '发送验证码' ||
+                                              _autoCodeText == '重新获取') {
+                                            _startTimer();
+                                          }
+                                        }),
+                                        child: Container(
+                                          height: 60.h,
+                                          width: ScreenUtil().setHeight(150),
+                                          //边框设置
+                                          decoration: const BoxDecoration(
+                                            //背景
+                                            color: MyColors.dailiBaobiao,
+                                            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(25.0)),
+                                          ),
+                                          child: WidgetUtils.onlyTextCenter(
+                                              _autoCodeText,
+                                              StyleUtils.getCommonTextStyle(
+                                                  color: MyColors.homeTopBG,
+                                                  fontSize: 26.sp)),
+                                        ),
+                                      ),
+                                      WidgetUtils.commonSizedBox(0, 5),
+                                    ],
+                                  )),
                             ),
-                            WidgetUtils.commonSizedBox(0, 20),
+                            WidgetUtils.commonSizedBox(0, 10),
                             GestureDetector(
                               onTap: (() {
-                                if (_autoCodeText == '发送验证码' ||
-                                    _autoCodeText == '重新获取') {
-                                  _startTimer();
-                                }
+                                setState(() {
+                                  isMiMa = !isMiMa;
+                                });
                               }),
-                              child: SizedBox(
-                                width: ScreenUtil().setHeight(150),
-                                child: WidgetUtils.onlyText(
-                                    _autoCodeText,
-                                    StyleUtils.getCommonTextStyle(
-                                        color: MyColors.homeTopBG,
-                                        fontSize: ScreenUtil().setSp(33))),
-                              ),
+                              child: WidgetUtils.showImages(
+                                  isMiMa
+                                      ? 'assets/images/login_sms.png'
+                                      : 'assets/images/login_password.png',
+                                  80.h,
+                                  50.h),
                             ),
                             WidgetUtils.commonSizedBox(0, 40),
                           ],
@@ -258,41 +273,64 @@ class _LoginPageState extends State<LoginPage> {
                       )
                     : Container(
                         height: ScreenUtil().setHeight(80),
-                        padding: const EdgeInsets.only(left: 15, bottom: 3),
                         margin: const EdgeInsets.only(left: 40, right: 40),
                         width: double.infinity,
-                        //边框设置
-                        decoration: const BoxDecoration(
-                          //背景
-                          color: Colors.white,
-                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                          borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                        ),
-                        child: WidgetUtils.commonTextFieldIsShow(
-                            controllerPass, '请输入密码', true)),
+                        child: Row(
+                          children: [
+                            Expanded(
+                                child: Container(
+                              height: ScreenUtil().setHeight(80),
+                              padding: EdgeInsets.only(left: 15, top: 5.h),
+                              //边框设置
+                              decoration: const BoxDecoration(
+                                //背景
+                                color: Colors.white,
+                                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(25.0)),
+                              ),
+                              child: WidgetUtils.commonTextFieldIsShow(
+                                  controllerPass, '请输入密码', true),
+                            )),
+                            WidgetUtils.commonSizedBox(0, 10),
+                            zhanghao == '账号登录' ? GestureDetector(
+                              onTap: (() {
+                                setState(() {
+                                  isMiMa = !isMiMa;
+                                });
+                              }),
+                              child: WidgetUtils.showImages(
+                                  isMiMa
+                                      ? 'assets/images/login_sms.png'
+                                      : 'assets/images/login_password.png',
+                                  80.h,
+                                  50.h),
+                            ) : const Text(''),
+                          ],
+                        )),
                 WidgetUtils.commonSizedBox(30, 0),
                 GestureDetector(
                   onTap: (() {
-                    if(MyUtils.checkClick()){
+                    if (MyUtils.checkClick()) {
                       doLogin();
                     }
                   }),
                   child: Container(
-                    margin: const EdgeInsets.fromLTRB(30, 20, 30, 0),
+                    margin: const EdgeInsets.fromLTRB(30, 0, 30, 0),
                     height: ScreenUtil().setHeight(80),
                     alignment: Alignment.center,
                     width: double.infinity,
                     //边框设置
                     decoration: const BoxDecoration(
                       //背景
-                      color: MyColors.homeTopBG,
+                      color: MyColors.loginBtnP,
                       //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                       borderRadius: BorderRadius.all(Radius.circular(25.0)),
                     ),
                     child: Text(
                       '立即登录',
                       style: TextStyle(
-                        fontSize: ScreenUtil().setSp(36),
+                        fontSize: ScreenUtil().setSp(28),
                         color: Colors.white,
                       ),
                     ),
@@ -303,24 +341,23 @@ class _LoginPageState extends State<LoginPage> {
                   margin: const EdgeInsets.only(left: 40, right: 40),
                   child: Row(
                     children: [
-                      isClick == false
-                          ? GestureDetector(
-                              onTap: (() {
-                                setState(() {
-                                  if (qiehuan == '密码登录') {
-                                    qiehuan = '短信登录';
-                                  } else {
-                                    qiehuan = '密码登录';
-                                  }
-                                });
-                              }),
-                              child: WidgetUtils.onlyText(
-                                  qiehuan,
-                                  StyleUtils.getCommonTextStyle(
-                                      color: MyColors.homeTopBG,
-                                      fontSize: ScreenUtil().setSp(28))),
-                            )
-                          : const Text(''),
+                      GestureDetector(
+                        onTap: (() {
+                          setState(() {
+                            isClick = !isClick;
+                            if (zhanghao == '账号登录') {
+                              zhanghao = '手机号登录';
+                            } else {
+                              zhanghao = '账号登录';
+                            }
+                          });
+                        }),
+                        child: WidgetUtils.onlyText(
+                            zhanghao,
+                            StyleUtils.getCommonTextStyle(
+                                color: MyColors.homeTopBG,
+                                fontSize: ScreenUtil().setSp(28))),
+                      ),
                       const Expanded(child: Text('')),
                       GestureDetector(
                         onTap: (() {
@@ -336,23 +373,6 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 const Expanded(child: Text('')),
-                GestureDetector(
-                  onTap: (() {
-                    setState(() {
-                      isClick = !isClick;
-                      if (zhanghao == '账号登录') {
-                        zhanghao = '手机号登录';
-                      } else {
-                        zhanghao = '账号登录';
-                      }
-                    });
-                  }),
-                  child: WidgetUtils.onlyTextCenter(
-                      zhanghao,
-                      StyleUtils.getCommonTextStyle(
-                          color: MyColors.g6,
-                          fontSize: ScreenUtil().setSp(32))),
-                ),
                 WidgetUtils.commonSizedBox(15, 0),
                 Row(
                   children: [
@@ -414,18 +434,18 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> doGo() async {
-    Future.delayed(const Duration(microseconds: 500), (){
+    Future.delayed(const Duration(microseconds: 500), () {
       //跳转并关闭当前页面
       // ignore: use_build_context_synchronously
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const Tab_Navigator()),
         // ignore: unnecessary_null_comparison
-            (route) => route == null,
+        (route) => route == null,
       );
     });
-
   }
+
   ///登录
   Future<void> doLogin() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
@@ -471,7 +491,7 @@ class _LoginPageState extends State<LoginPage> {
         return;
       }
 
-      if (qiehuan == '密码登录') {
+      if (isMiMa == false) {
         type = '2';
         if (userMsg.isEmpty) {
           MyToastUtils.showToastBottom("验证码不能为空");
@@ -501,53 +521,82 @@ class _LoginPageState extends State<LoginPage> {
         case MyHttpConfig.successCode:
           LogE('登录${MyConfig.issAdd}');
           LogE('登录${sp.getString(MyConfig.userOneToken).toString()}');
-          if(MyConfig.issAdd == false){
+          if (MyConfig.issAdd == false) {
             sp.setString(MyConfig.userOneUID, loginBean.data!.uid.toString());
             sp.setString(MyConfig.userOneHeaderImg, loginBean.data!.avatarUrl!);
             sp.setString(MyConfig.userOneName, loginBean.data!.nickname!);
             sp.setString(MyConfig.userOneToken, loginBean.data!.token!);
             sp.setString(MyConfig.userOneID, loginBean.data!.number.toString());
-          }else{
-            if(sp.getString(MyConfig.userOneToken).toString().isEmpty){
+          } else {
+            if (sp.getString(MyConfig.userOneToken).toString().isEmpty) {
               sp.setString(MyConfig.userOneUID, loginBean.data!.uid.toString());
-              sp.setString(MyConfig.userOneHeaderImg, loginBean.data!.avatarUrl!);
+              sp.setString(
+                  MyConfig.userOneHeaderImg, loginBean.data!.avatarUrl!);
               sp.setString(MyConfig.userOneName, loginBean.data!.nickname!);
               sp.setString(MyConfig.userOneToken, loginBean.data!.token!);
-              sp.setString(MyConfig.userOneID, loginBean.data!.number.toString());
-            }else{
-              if(sp.getString(MyConfig.userOneToken).toString().isNotEmpty && sp.getString(MyConfig.userTwoToken).toString().isEmpty){
-                sp.setString(MyConfig.userTwoUID, loginBean.data!.uid.toString());
-                sp.setString(MyConfig.userTwoHeaderImg, loginBean.data!.avatarUrl!);
+              sp.setString(
+                  MyConfig.userOneID, loginBean.data!.number.toString());
+            } else {
+              if (sp.getString(MyConfig.userOneToken).toString().isNotEmpty &&
+                  sp.getString(MyConfig.userTwoToken).toString().isEmpty) {
+                sp.setString(
+                    MyConfig.userTwoUID, loginBean.data!.uid.toString());
+                sp.setString(
+                    MyConfig.userTwoHeaderImg, loginBean.data!.avatarUrl!);
                 sp.setString(MyConfig.userTwoName, loginBean.data!.nickname!);
                 sp.setString(MyConfig.userTwoToken, loginBean.data!.token!);
-                sp.setString(MyConfig.userTwoID, loginBean.data!.number.toString());
-              }else if(sp.getString(MyConfig.userOneToken).toString().isNotEmpty && sp.getString(MyConfig.userTwoToken).toString().isNotEmpty && sp.getString(MyConfig.userThreeToken).toString().isEmpty){
-                sp.setString(MyConfig.userThreeUID, loginBean.data!.uid.toString());
-                sp.setString(MyConfig.userThreeHeaderImg, loginBean.data!.avatarUrl!);
+                sp.setString(
+                    MyConfig.userTwoID, loginBean.data!.number.toString());
+              } else if (sp
+                      .getString(MyConfig.userOneToken)
+                      .toString()
+                      .isNotEmpty &&
+                  sp.getString(MyConfig.userTwoToken).toString().isNotEmpty &&
+                  sp.getString(MyConfig.userThreeToken).toString().isEmpty) {
+                sp.setString(
+                    MyConfig.userThreeUID, loginBean.data!.uid.toString());
+                sp.setString(
+                    MyConfig.userThreeHeaderImg, loginBean.data!.avatarUrl!);
                 sp.setString(MyConfig.userThreeName, loginBean.data!.nickname!);
                 sp.setString(MyConfig.userThreeToken, loginBean.data!.token!);
-                sp.setString(MyConfig.userThreeID, loginBean.data!.number.toString());
-              }else if(sp.getString(MyConfig.userOneToken).toString().isNotEmpty && sp.getString(MyConfig.userTwoToken).toString().isNotEmpty && sp.getString(MyConfig.userThreeToken).toString().isEmpty){
-                if(MyConfig.clickIndex == 1){
-                  sp.setString(MyConfig.userOneUID, loginBean.data!.uid.toString());
-                  sp.setString(MyConfig.userOneHeaderImg, loginBean.data!.avatarUrl!);
+                sp.setString(
+                    MyConfig.userThreeID, loginBean.data!.number.toString());
+              } else if (sp
+                      .getString(MyConfig.userOneToken)
+                      .toString()
+                      .isNotEmpty &&
+                  sp.getString(MyConfig.userTwoToken).toString().isNotEmpty &&
+                  sp.getString(MyConfig.userThreeToken).toString().isEmpty) {
+                if (MyConfig.clickIndex == 1) {
+                  sp.setString(
+                      MyConfig.userOneUID, loginBean.data!.uid.toString());
+                  sp.setString(
+                      MyConfig.userOneHeaderImg, loginBean.data!.avatarUrl!);
                   sp.setString(MyConfig.userOneName, loginBean.data!.nickname!);
                   sp.setString(MyConfig.userOneToken, loginBean.data!.token!);
-                  sp.setString(MyConfig.userOneID, loginBean.data!.number.toString());
+                  sp.setString(
+                      MyConfig.userOneID, loginBean.data!.number.toString());
                 }
-                if(MyConfig.clickIndex == 2){
-                  sp.setString(MyConfig.userTwoUID, loginBean.data!.uid.toString());
-                  sp.setString(MyConfig.userTwoHeaderImg, loginBean.data!.avatarUrl!);
+                if (MyConfig.clickIndex == 2) {
+                  sp.setString(
+                      MyConfig.userTwoUID, loginBean.data!.uid.toString());
+                  sp.setString(
+                      MyConfig.userTwoHeaderImg, loginBean.data!.avatarUrl!);
                   sp.setString(MyConfig.userTwoName, loginBean.data!.nickname!);
                   sp.setString(MyConfig.userTwoToken, loginBean.data!.token!);
-                  sp.setString(MyConfig.userTwoID, loginBean.data!.number.toString());
+                  sp.setString(
+                      MyConfig.userTwoID, loginBean.data!.number.toString());
                 }
-                if(MyConfig.clickIndex == 3){
-                  sp.setString(MyConfig.userThreeUID, loginBean.data!.uid.toString());
-                  sp.setString(MyConfig.userThreeHeaderImg, loginBean.data!.avatarUrl!);
-                  sp.setString(MyConfig.userThreeName, loginBean.data!.nickname!);
+                if (MyConfig.clickIndex == 3) {
+                  sp.setString(
+                      MyConfig.userThreeUID, loginBean.data!.uid.toString());
+                  sp.setString(
+                      MyConfig.userThreeHeaderImg, loginBean.data!.avatarUrl!);
+                  sp.setString(
+                      MyConfig.userThreeName, loginBean.data!.nickname!);
                   sp.setString(MyConfig.userThreeToken, loginBean.data!.token!);
-                  sp.setString(MyConfig.userThreeID, loginBean.data!.number.toString());
+                  sp.setString(
+                      MyConfig.userThreeID, loginBean.data!.number.toString());
                 }
               }
             }
@@ -587,7 +636,6 @@ class _LoginPageState extends State<LoginPage> {
       }
       Loading.dismiss();
     } catch (e) {
-
       LogE('登录返回*${e.toString()}');
       Loading.dismiss();
       MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");

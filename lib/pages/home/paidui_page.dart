@@ -871,7 +871,7 @@ class _PaiduiPageState extends State<PaiduiPage>
       switch (bean.code) {
         case MyHttpConfig.successCode:
           // ignore: use_build_context_synchronously
-          MyUtils.goTransparentRFPage(context, const RoomPage());
+          MyUtils.goTransparentRFPage(context, RoomPage(roomId: roomID,));
           break;
         case MyHttpConfig.errorloginCode:
           // ignore: use_build_context_synchronously

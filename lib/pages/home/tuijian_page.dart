@@ -93,7 +93,7 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
                 Stack(
                   alignment: Alignment.center,
                   children: [
-                    WidgetUtils.CircleHeadImage(78.h, 78.h, listAnchor[i].avatar!),
+                    WidgetUtils.CircleHeadImage(76.h, 76.h, listAnchor[i].avatar!),
                     listAnchor[i].live == 1 ? WidgetUtils.showImages( 'assets/images/zhibozhong.webp', 80.h, 80.h) : const Text(''),
                   ],
                 ),
@@ -193,192 +193,190 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
                   ),
                 ),
               ),
-              Transform.translate(offset: const Offset(0,-1),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                        width: double.infinity,
-                        decoration: const BoxDecoration(
-                            gradient: LinearGradient(      //渐变位置
-                                begin: Alignment.topCenter, //右上
-                                end: Alignment.bottomCenter, //左下
-                                stops: [0.0, 1.0],         //[渐变起始点, 渐变结束点]
-                                //渐变颜色[始点颜色, 结束颜色]
-                                colors: [Color.fromRGBO(91, 70, 185, 1), Color.fromRGBO(255, 255, 255, 1)]
-                            )
-                        ),
-                        child: Column(
-                          children: [
-                            ///轮播图
-                            Container(
-                              height:ScreenUtil().setHeight(140),
-                              //超出部分，可裁剪
-                              clipBehavior: Clip.hardEdge,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Swiper(
-                                key: UniqueKey(),
-                                itemBuilder: (BuildContext context,int index){
-                                  // 配置图片地址
-                                  return CachedNetworkImage(
-                                    imageUrl: listBanner[index].img!,
-                                    fit: BoxFit.cover,
-                                    placeholder: (context, url) => WidgetUtils.CircleImageAss(ScreenUtil().setHeight(140), double.infinity, ScreenUtil().setHeight(10) , 'assets/images/img_placeholder.png',),
-                                    errorWidget: (context, url, error) => const Icon(Icons.error),
-                                  );
-                                },
-                                // 配置图片数量
-                                itemCount: listBanner.length ,
-                                // 无限循环
-                                loop: true,
-                                // 自动轮播
-                                autoplay: true,
-                                autoplayDelay: 5000,
-                                duration: 2000,
-                                onIndexChanged: (index){
-                                  // LogE('用户拖动或者自动播放引起下标改变调用');
-                                },
-                                onTap: (index){
-                                  // LogE('用户点击引起下标改变调用');
-                                },
-                              ),
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                      width: double.infinity,
+                      decoration: const BoxDecoration(
+                          gradient: LinearGradient(      //渐变位置
+                              begin: Alignment.topCenter, //右上
+                              end: Alignment.bottomCenter, //左下
+                              stops: [0.0, 1.0],         //[渐变起始点, 渐变结束点]
+                              //渐变颜色[始点颜色, 结束颜色]
+                              colors: [Color.fromRGBO(91, 70, 185, 1), Color.fromRGBO(255, 255, 255, 1)]
+                          )
+                      ),
+                      child: Column(
+                        children: [
+                          ///轮播图
+                          Container(
+                            height:ScreenUtil().setHeight(140),
+                            //超出部分，可裁剪
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
                             ),
-                            ///热门推荐
-                            WidgetUtils.commonSizedBox(10, 0),
-                            WidgetUtils.onlyText('热门推荐', StyleUtils.getCommonTextStyle(color: Colors.black,fontSize: ScreenUtil().setSp(28),fontWeight: FontWeight.w600)),
-                            WidgetUtils.commonSizedBox(10, 0),
-                            SizedBox(
-                              width: double.infinity,
-                              height: ScreenUtil().setHeight(350),
-                              child: Row(
-                                children: [
-                                  ///热门推荐第一个大的轮播图
-                                  Container(
-                                    height:ScreenUtil().setHeight(350),
-                                    width: ScreenUtil().setWidth(450),
-                                    //超出部分，可裁剪
-                                    clipBehavior: Clip.hardEdge,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    child: Swiper(
-                                      key: UniqueKey(),
-                                      itemBuilder: (BuildContext context,int index){
-                                        // 配置图片地址
-                                        return FadeInImage.assetNetwork(
-                                          placeholder: 'assets/images/img_placeholder.png',
-                                          image: listRoom[index].coverImg!,
-                                          fit: BoxFit.fill,
-                                        );
-                                      },
-                                      // 配置图片数量
-                                      itemCount: listRoom.isEmpty ? 0 : listRoom.length ,
-                                      // 无限循环
-                                      loop: true,
-                                      // 自动轮播
-                                      autoplay: true,
-                                      autoplayDelay: 4000,
-                                      duration: 2500,
-                                      onIndexChanged: (index){
-                                      },
-                                      onTap: (index){
-                                        doPostBeforeJoin(listRoom[index].id.toString());
-                                      },
-                                    ),
+                            child: Swiper(
+                              key: UniqueKey(),
+                              itemBuilder: (BuildContext context,int index){
+                                // 配置图片地址
+                                return CachedNetworkImage(
+                                  imageUrl: listBanner[index].img!,
+                                  fit: BoxFit.cover,
+                                  placeholder: (context, url) => WidgetUtils.CircleImageAss(ScreenUtil().setHeight(140), double.infinity, ScreenUtil().setHeight(10) , 'assets/images/img_placeholder.png',),
+                                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                                );
+                              },
+                              // 配置图片数量
+                              itemCount: listBanner.length ,
+                              // 无限循环
+                              loop: true,
+                              // 自动轮播
+                              autoplay: true,
+                              autoplayDelay: 5000,
+                              duration: 2000,
+                              onIndexChanged: (index){
+                                // LogE('用户拖动或者自动播放引起下标改变调用');
+                              },
+                              onTap: (index){
+                                // LogE('用户点击引起下标改变调用');
+                              },
+                            ),
+                          ),
+                          ///热门推荐
+                          WidgetUtils.commonSizedBox(10, 0),
+                          WidgetUtils.onlyText('热门推荐', StyleUtils.getCommonTextStyle(color: Colors.black,fontSize: ScreenUtil().setSp(28),fontWeight: FontWeight.w600)),
+                          WidgetUtils.commonSizedBox(10, 0),
+                          SizedBox(
+                            width: double.infinity,
+                            height: ScreenUtil().setHeight(350),
+                            child: Row(
+                              children: [
+                                ///热门推荐第一个大的轮播图
+                                Container(
+                                  height:ScreenUtil().setHeight(350),
+                                  width: ScreenUtil().setWidth(450),
+                                  //超出部分，可裁剪
+                                  clipBehavior: Clip.hardEdge,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
                                   ),
-                                  WidgetUtils.commonSizedBox(0, 10),
-                                  Expanded(child: Column(
-                                    children: [
-                                      ///热门推荐 小的轮播图1
-                                      Expanded(child: Container(
-                                        height: ScreenUtil().setHeight(170),
-                                        //超出部分，可裁剪
-                                        clipBehavior: Clip.hardEdge,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(5),
-                                        ),
-                                        child: Swiper(
-                                          key: UniqueKey(),
-                                          itemBuilder: (BuildContext context,int index){
-                                            // 配置图片地址
-                                            return FadeInImage.assetNetwork(
-                                              placeholder: 'assets/images/img_placeholder.png',
-                                              image: listRoom2[index].coverImg!,
-                                              fit: BoxFit.fill,
-                                            );
-                                          },
-                                          // 配置图片数量
-                                          itemCount: listRoom2.length ,
-                                          // 无限循环
-                                          loop: true,
-                                          // 自动轮播
-                                          autoplay: true,
-                                          autoplayDelay: 4000,
-                                          duration: 2000,
-                                          onTap: (index){
-                                            doPostBeforeJoin(listRoom[index].id.toString());
-                                          },
-                                        ),
-                                      )),
-                                      WidgetUtils.commonSizedBox(10, 0),
-                                      ///热门推荐 小的轮播图2
-                                      Expanded(child: Container(
-                                        height: ScreenUtil().setHeight(170),
-                                        //超出部分，可裁剪
-                                        clipBehavior: Clip.hardEdge,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(5),
-                                        ),
-                                        child: Swiper(
-                                          key: UniqueKey(),
-                                          itemBuilder: (BuildContext context,int index){
-                                            // 配置图片地址
-                                            return FadeInImage.assetNetwork(
-                                              placeholder: 'assets/images/img_placeholder.png',
-                                              image: listRoom3[index].coverImg!,
-                                              fit: BoxFit.fill,
-                                            );
-                                          },
-                                          // 配置图片数量
-                                          itemCount: listRoom3.length ,
-                                          // 无限循环
-                                          loop: true,
-                                          // 自动轮播
-                                          autoplay: true,
-                                          autoplayDelay: 4000,
-                                          duration: 2000,
-                                          onTap: (index){
-                                            doPostBeforeJoin(listRoom[index].id.toString());
-                                          },
-                                        ),
-                                      )),
-                                    ],
-                                  ))
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
+                                  child: Swiper(
+                                    key: UniqueKey(),
+                                    itemBuilder: (BuildContext context,int index){
+                                      // 配置图片地址
+                                      return FadeInImage.assetNetwork(
+                                        placeholder: 'assets/images/img_placeholder.png',
+                                        image: listRoom[index].coverImg!,
+                                        fit: BoxFit.fill,
+                                      );
+                                    },
+                                    // 配置图片数量
+                                    itemCount: listRoom.isEmpty ? 0 : listRoom.length ,
+                                    // 无限循环
+                                    loop: true,
+                                    // 自动轮播
+                                    autoplay: true,
+                                    autoplayDelay: 4000,
+                                    duration: 2500,
+                                    onIndexChanged: (index){
+                                    },
+                                    onTap: (index){
+                                      doPostBeforeJoin(listRoom[index].id.toString());
+                                    },
+                                  ),
+                                ),
+                                WidgetUtils.commonSizedBox(0, 10),
+                                Expanded(child: Column(
+                                  children: [
+                                    ///热门推荐 小的轮播图1
+                                    Expanded(child: Container(
+                                      height: ScreenUtil().setHeight(170),
+                                      //超出部分，可裁剪
+                                      clipBehavior: Clip.hardEdge,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: Swiper(
+                                        key: UniqueKey(),
+                                        itemBuilder: (BuildContext context,int index){
+                                          // 配置图片地址
+                                          return FadeInImage.assetNetwork(
+                                            placeholder: 'assets/images/img_placeholder.png',
+                                            image: listRoom2[index].coverImg!,
+                                            fit: BoxFit.fill,
+                                          );
+                                        },
+                                        // 配置图片数量
+                                        itemCount: listRoom2.length ,
+                                        // 无限循环
+                                        loop: true,
+                                        // 自动轮播
+                                        autoplay: true,
+                                        autoplayDelay: 4000,
+                                        duration: 2000,
+                                        onTap: (index){
+                                          doPostBeforeJoin(listRoom2[index].id.toString());
+                                        },
+                                      ),
+                                    )),
+                                    WidgetUtils.commonSizedBox(10, 0),
+                                    ///热门推荐 小的轮播图2
+                                    Expanded(child: Container(
+                                      height: ScreenUtil().setHeight(170),
+                                      //超出部分，可裁剪
+                                      clipBehavior: Clip.hardEdge,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: Swiper(
+                                        key: UniqueKey(),
+                                        itemBuilder: (BuildContext context,int index){
+                                          // 配置图片地址
+                                          return FadeInImage.assetNetwork(
+                                            placeholder: 'assets/images/img_placeholder.png',
+                                            image: listRoom3[index].coverImg!,
+                                            fit: BoxFit.fill,
+                                          );
+                                        },
+                                        // 配置图片数量
+                                        itemCount: listRoom3.length ,
+                                        // 无限循环
+                                        loop: true,
+                                        // 自动轮播
+                                        autoplay: true,
+                                        autoplayDelay: 4000,
+                                        duration: 2000,
+                                        onTap: (index){
+                                          doPostBeforeJoin(listRoom3[index].id.toString());
+                                        },
+                                      ),
+                                    )),
+                                  ],
+                                ))
+                              ],
+                            ),
+                          )
+                        ],
                       ),
-                      ///推荐主播
-                      WidgetUtils.commonSizedBox(20, 0),
-                      Container(
-                        margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                        child: WidgetUtils.onlyText('推荐主播', StyleUtils.getCommonTextStyle(color: Colors.black,fontSize: ScreenUtil().setSp(28),fontWeight: FontWeight.w600)),
-                      ),
-                      ListView.builder(
-                        padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: tuijian,
-                        itemCount: listAnchor.length,
-                      ),
-                      WidgetUtils.commonSizedBox(20, 0),
-                    ],
-                  ),
+                    ),
+                    ///推荐主播
+                    WidgetUtils.commonSizedBox(20, 0),
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                      child: WidgetUtils.onlyText('推荐主播', StyleUtils.getCommonTextStyle(color: Colors.black,fontSize: ScreenUtil().setSp(28),fontWeight: FontWeight.w600)),
+                    ),
+                    ListView.builder(
+                      padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: tuijian,
+                      itemCount: listAnchor.length,
+                    ),
+                    WidgetUtils.commonSizedBox(20, 0),
+                  ],
                 ),
               ),
             ],
@@ -480,7 +478,7 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
       switch (bean.code) {
         case MyHttpConfig.successCode:
         // ignore: use_build_context_synchronously
-          MyUtils.goTransparentRFPage(context, const RoomPage());
+          MyUtils.goTransparentRFPage(context, RoomPage(roomId: roomID,));
           break;
         case MyHttpConfig.errorloginCode:
         // ignore: use_build_context_synchronously

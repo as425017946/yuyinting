@@ -85,3 +85,23 @@ class SendMessageBack {
   String msgID;
   SendMessageBack({required this.type, required this.msgID});
 }
+
+
+///登录弹窗使用
+class LoginBack {
+  bool isBack;
+  LoginBack({required this.isBack});
+}
+
+///二次确认弹窗使用
+class QuerenBack {
+  String title;
+  String jine;
+  QuerenBack({required this.title, required this.jine});
+}
+
+/// 厅内使用
+class RoomBack {
+  String title;
+  RoomBack({required this.title});
+}

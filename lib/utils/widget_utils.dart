@@ -290,7 +290,7 @@ class WidgetUtils {
         hintText: hintText,
         hintStyle: StyleUtils.loginHintTextStyle,
 
-        contentPadding: const EdgeInsets.only(top: 0, bottom: 0),
+        contentPadding: const EdgeInsets.only(bottom: 0),
         border: const OutlineInputBorder(
           borderSide: BorderSide(color: Colors.transparent),
         ),

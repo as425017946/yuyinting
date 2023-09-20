@@ -146,6 +146,11 @@ class MyHttpConfig{
   static const String userStatus = "$baseURL/chat/userStatus";
   //能否发私聊
   static const String canSendUser = "$baseURL/chat/canSendUser";
+  /// 厅内
+  //房间信息
+  static const String roomInfo = "$baseURL/room/info";
+  //房间在线用户列表
+  static const String memberList = "$baseURL/room/memberList";
 
 
 

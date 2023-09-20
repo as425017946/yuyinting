@@ -30,6 +30,7 @@ class MyColors{
   static const Color origin = Color(0xFFFF9601);
   static const Color btn_d = Color(0xFF8061FF);
   static const Color btn_a = Color(0xFF5b46b9);
+  static const Color loginBtnP = Color(0xFF7F61FF);
   static const Color homeTopBG = Color(0xFF5b46b9);
   static const Color homeBG = Color(0xFFF6F7F8);
   static const Color homeSoucuoBG = Color(0xFF7D68C1);
@@ -126,7 +127,10 @@ class MyColors{
   static const Color mfZGBlue = Color(0xFF7EEEFF);
   static const Color zpJCWhite = Color(0xFFACA3C5);
   static const Color zpJCWhite2 = Color(0xFF9195C5);
-
+  static const Color loginBG = Color(0xFFFBDFFD);
+  static const Color CarBG = Color(0xFF051339);
+  static const Color CarXian = Color(0xFF625F8F);
+  static const Color CarZJ = Color(0xFF4D1DAD);
 
 
 }

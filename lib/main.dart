@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:auto_orientation/auto_orientation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -21,11 +22,13 @@ void main() async{
     SystemUiOverlayStyle systemUiOverlayStyle = const SystemUiOverlayStyle(statusBarColor: Colors.transparent,statusBarIconBrightness: Brightness.dark,);
     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
   }
-  // 强制竖屏
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown
-  ]);
+  // // 强制竖屏
+  // SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp,
+  //   DeviceOrientation.portraitDown
+  // ]);
+  /// 如果是全屏就切换竖屏
+  AutoOrientation.portraitAutoMode();
 
   runApp(const MyApp());
 }

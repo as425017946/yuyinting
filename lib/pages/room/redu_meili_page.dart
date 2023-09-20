@@ -1,18 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../bean/rankListBean.dart';
 import '../../colors/my_colors.dart';
+import '../../http/data_utils.dart';
+import '../../http/my_http_config.dart';
+import '../../utils/my_toast_utils.dart';
+import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 /// 热度-魅力榜
 class ReDuMeiLiPage extends StatefulWidget {
-  const ReDuMeiLiPage({super.key});
+  String roomID;
+  ReDuMeiLiPage({super.key, required this.roomID});
 
   @override
   State<ReDuMeiLiPage> createState() => _ReDuMeiLiPageState();
 }
 
-class _ReDuMeiLiPageState extends State<ReDuMeiLiPage> {
+class _ReDuMeiLiPageState extends State<ReDuMeiLiPage>  with AutomaticKeepAliveClientMixin{
+
+  @override
+  bool get wantKeepAlive => true;
+  int page = 1;
+  // 财富榜传wealth 魅力榜传charm : 日榜day 周榜week 月榜month
+  String dateType = 'day';
+  List<ListBD> _list = [];
+  List<ListBD> _list2 = [];
 
   int showPage = 0;
 
@@ -33,7 +47,7 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage> {
                 WidgetUtils.CircleHeadImage(
                     ScreenUtil().setHeight(80),
                     ScreenUtil().setHeight(80),
-                    'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
+                    _list2[i].avatar!),
                 WidgetUtils.commonSizedBox(0, 10),
                 Expanded(
                   child: Column(
@@ -44,7 +58,7 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage> {
                         child: Row(
                           children: [
                             WidgetUtils.onlyText(
-                                '用户名$i',
+                                _list2[i].nickname!,
                                 StyleUtils.getCommonTextStyle(
                                     color: MyColors.roomTCWZ2,
                                     fontSize: ScreenUtil().setSp(25))),
@@ -61,6 +75,13 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage> {
         ),
       ],
     );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    doPostRankList();
   }
 
   @override
@@ -118,6 +139,7 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage> {
                                 onTap: ((){
                                   setState(() {
                                     showPage = 0;
+                                    dateType = 'day';
                                   });
                                 }),
                                 child: SizedBox(
@@ -150,6 +172,7 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage> {
                                 onTap: ((){
                                   setState(() {
                                     showPage = 1;
+                                    dateType = 'week';
                                   });
                                 }),
                                 child: SizedBox(
@@ -182,6 +205,7 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage> {
                                 onTap: ((){
                                   setState(() {
                                     showPage = 2;
+                                    dateType = 'month';
                                   });
                                 }),
                                 child: SizedBox(
@@ -210,7 +234,7 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage> {
                 Column(
                   children: [
                     const Expanded(child: Text('')),
-                    WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(100), ScreenUtil().setHeight(100), 'https://img-blog.csdnimg.cn/6d15082ac7234ec7a16065e74f689590.jpeg'),
+                    _list.length>1 ? WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(100), ScreenUtil().setHeight(100), 'https://img-blog.csdnimg.cn/6d15082ac7234ec7a16065e74f689590.jpeg'): const Text(''),
                     WidgetUtils.commonSizedBox(5, 0),
                     Stack(
                       children: [
@@ -223,7 +247,7 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage> {
                           margin: const EdgeInsets.only(top: 5),
                           alignment: Alignment.topCenter,
                           child: WidgetUtils.onlyTextCenter(
-                              '用户名1',
+                              _list.length>1 ? _list[1].nickname! : '',
                               StyleUtils.getCommonTextStyle(
                                   color: MyColors.roomPHWZBlack,
                                   fontSize: ScreenUtil().setSp(21),
@@ -237,7 +261,7 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage> {
                 Column(
                   children: [
                     const Expanded(child: Text('')),
-                    WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(120), ScreenUtil().setHeight(120), 'https://img-blog.csdnimg.cn/6d15082ac7234ec7a16065e74f689590.jpeg'),
+                    _list.isNotEmpty ? WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(120), ScreenUtil().setHeight(120), 'https://img-blog.csdnimg.cn/6d15082ac7234ec7a16065e74f689590.jpeg') : const Text(''),
                     WidgetUtils.commonSizedBox(5, 0),
                     Stack(
                       children: [
@@ -250,7 +274,7 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage> {
                           margin: const EdgeInsets.only(top: 5),
                           alignment: Alignment.topCenter,
                           child: WidgetUtils.onlyTextCenter(
-                              '用户名2',
+                              _list.isNotEmpty ? _list[0].nickname! : '',
                               StyleUtils.getCommonTextStyle(
                                   color: MyColors.roomPHWZBlack,
                                   fontSize: ScreenUtil().setSp(21),
@@ -264,7 +288,7 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage> {
                 Column(
                   children: [
                     const Expanded(child: Text('')),
-                    WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(100), ScreenUtil().setHeight(100), 'https://img-blog.csdnimg.cn/6d15082ac7234ec7a16065e74f689590.jpeg'),
+                    _list.length > 2 ? WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(100), ScreenUtil().setHeight(100), 'https://img-blog.csdnimg.cn/6d15082ac7234ec7a16065e74f689590.jpeg') : const Text(''),
                     WidgetUtils.commonSizedBox(5, 0),
                     Stack(
                       children: [
@@ -277,7 +301,7 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage> {
                           margin: const EdgeInsets.only(top: 5),
                           alignment: Alignment.topCenter,
                           child: WidgetUtils.onlyTextCenter(
-                              '用户名3',
+                              _list.length > 2 ? _list[2].nickname! : '',
                               StyleUtils.getCommonTextStyle(
                                   color: MyColors.roomPHWZBlack,
                                   fontSize: ScreenUtil().setSp(21),
@@ -298,10 +322,53 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage> {
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: _itemTuiJian,
-            itemCount: 10,
+            itemCount: _list2.length,
           )
         ],
       ),
     );
   }
+
+  /// 榜单
+  Future<void> doPostRankList() async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'category': 'charm',
+      'date_type': dateType,
+      'room_id': widget.roomID,
+      'page': page,
+      'pageSize': '30'
+    };
+    try {
+      rankListBean bean = await DataUtils.postRankList(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            if (page == 1) {
+              _list.clear();
+            }
+            if (bean.data!.list!.isNotEmpty) {
+              for (int i = 0; i < bean.data!.list!.length; i++) {
+                _list.add(bean.data!.list![i]);
+              }
+              if(bean.data!.list!.length>3){
+                for (int i = 3; i < bean.data!.list!.length; i++) {
+                  _list2.add(bean.data!.list![i]);
+                }
+              }
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+  }
+
 }

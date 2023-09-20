@@ -1,35 +1,27 @@
-import 'dart:io';
-
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:svgaplayer_flutter/player.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/config/my_config.dart';
-import 'package:yuyinting/pages/game/car_page.dart';
-import 'package:yuyinting/pages/game/mofang_page.dart';
-import 'package:yuyinting/pages/game/zhuanpan_page.dart';
-import 'package:yuyinting/pages/room/room_back_page.dart';
-import 'package:yuyinting/pages/room/room_gongneng.dart';
-import 'package:yuyinting/pages/room/room_liwu_page.dart';
-import 'package:yuyinting/pages/room/room_manager_page.dart';
-import 'package:yuyinting/pages/room/room_messages_page.dart';
-import 'package:yuyinting/pages/room/room_people_info_page.dart';
-import 'package:yuyinting/pages/room/room_redu_page.dart';
-import 'package:yuyinting/pages/room/room_ts_gonggao_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/my_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
+import '../../bean/Common_bean.dart';
+import '../../bean/roomInfoBean.dart';
+import '../../http/data_utils.dart';
+import '../../http/my_http_config.dart';
+import '../../main.dart';
 import '../../utils/log_util.dart';
 import '../../utils/style_utils.dart';
+import 'room_items.dart';
 
 /// 厅内
 class RoomPage extends StatefulWidget {
-  const RoomPage({Key? key}) : super(key: key);
+  String roomId;
+  RoomPage({Key? key, required this.roomId}) : super(key: key);
 
   @override
   State<RoomPage> createState() => _RoomPageState();
@@ -45,16 +37,22 @@ class _RoomPageState extends State<RoomPage> {
       m6 = false,
       m7 = false,
       m8 = false;
+  bool isOK = false;
+  // 老板位
   bool isBoss = true;
   bool isJinyiin = false;
-  var listen;
+  String BgType = '';
+  var listen, listenRoomback;
   /// 声网使用
   int? _remoteUid;
   bool _localUserJoined = false;
   late RtcEngine _engine;
-
+  bool isShow = false;
   late final Gradient gradient;
-
+  FocusNode? _focusNode;
+  // 房间名称、背景图、动态背景图热度、公告、关注状态、当前身份、贵族id、房间id
+  String roomName = '', bgImage = '', bgSVGA = '', hot_degree = '', notice = '', follow_status = '', role = '', noble_id = '', roomNumber = '',roomHeadImg = '';
+  List<MikeList> listM = [];
   ///大厅使用
   List<Map> imgList = [
     {"url": "assets/svga/gp/l_maliao.svga"},
@@ -92,7 +90,26 @@ class _RoomPageState extends State<RoomPage> {
         Navigator.pop(context);
       }
     });
-    // MyUtils.goTransparentPageCom(context, GPShowOnePage());
+
+    doPostRoomInfo(widget.roomId);
+
+    listenRoomback = eventBus.on<RoomBack>().listen((event) {
+      switch(event.title){
+        case '闭麦':
+          setState(() {
+            isJinyiin = !isJinyiin;
+          });
+          break;
+        case '收藏':
+          LogE('****===');
+          doPostFollow('2', widget.roomId, '1');
+          break;
+        case '取消收藏':
+          LogE('****===++++++');
+          doPostFollow('2', widget.roomId, '0');
+          break;
+      }
+    });
   }
 
   @override
@@ -171,113 +188,24 @@ class _RoomPageState extends State<RoomPage> {
     _engine.enableLoopbackRecording(enabled: true);
   }
 
-
-
-  Widget _itemTuiJian(BuildContext context, int i) {
-    return GestureDetector(
-      onTap: (() {
-        Future.delayed(const Duration(seconds: 0), () {
-          Navigator.of(context).push(PageRouteBuilder(
-              opaque: false,
-              pageBuilder: (context, animation, secondaryAnimation) {
-                return const RoomPeopleInfoPage();
-              }));
-        });
-      }),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              WidgetUtils.commonSizedBox(0, 20),
-              WidgetUtils.onlyText(
-                  '昵称',
-                  StyleUtils.getCommonTextStyle(
-                      color: MyColors.roomMaiWZ, fontSize: ScreenUtil().setSp(24)))
-            ],
-          ),
-          WidgetUtils.commonSizedBox(5, 0),
-          Stack(
-            children: [
-              Opacity(
-                opacity: 0.3,
-                child: Row(
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                      padding: const EdgeInsets.only(
-                          left: 15, right: 15, top: 10, bottom: 10),
-                      //边框设置
-                      decoration: const BoxDecoration(
-                        //背景
-                        color: MyColors.roomMaiLiao,
-                        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(7),
-                            topRight: Radius.circular(24),
-                            bottomLeft: Radius.circular(24),
-                            bottomRight: Radius.circular(24)),
-                      ),
-                      child: Row(
-                        children: [
-                          WidgetUtils.onlyText(
-                              '信息',
-                              StyleUtils.getCommonTextStyle(
-                                  color: Colors.transparent,
-                                  fontSize: ScreenUtil().setSp(21))),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Row(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                    padding: const EdgeInsets.only(
-                        left: 15, right: 15, top: 10, bottom: 10),
-                    //边框设置
-                    decoration: const BoxDecoration(
-                      //背景
-                      color: Colors.transparent,
-                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(7),
-                          topRight: Radius.circular(24),
-                          bottomLeft: Radius.circular(24),
-                          bottomRight: Radius.circular(24)),
-                    ),
-                    child: Row(
-                      children: [
-                        WidgetUtils.onlyText(
-                            '信息',
-                            StyleUtils.getCommonTextStyle(
-                                color: Colors.white,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ],
-          ),
-          WidgetUtils.commonSizedBox(10, 0),
-        ],
-      ),
-    );
+  Widget itemMessages(BuildContext context, int i) {
+    return RoomItems.itemMessages(context, i);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      body: isOK ? Container(
         height: double.infinity,
         width: double.infinity,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           //设置Container修饰
           image: DecorationImage(
             //背景图片修饰
-            image: AssetImage("assets/images/room_bg.webp"),
+            image: BgType.isEmpty ?  const AssetImage('assets/images/room_bg.png') :
+            (BgType == '1'
+                ? NetworkImage(bgImage)
+                : SvgPicture.asset(bgSVGA) as ImageProvider),
             fit: BoxFit.fill, //覆盖
           ),
         ),
@@ -286,1436 +214,29 @@ class _RoomPageState extends State<RoomPage> {
             Column(
               children: [
                 WidgetUtils.commonSizedBox(35, 0),
-                Row(
-                  children: [
-                    WidgetUtils.commonSizedBox(0, 20),
-                    GestureDetector(
-                      onTap: (() {
-                        Future.delayed(const Duration(seconds: 0), () {
-                          Navigator.push(
-                            context,
-                            PageRouteBuilder(//自定义路由
-                              opaque: false,
-                              pageBuilder: (context, a, _) => RoomManagerPage(type: 1),//需要跳转的页面
-                              transitionsBuilder: (context, a, _, child) {
-                                const begin =
-                                Offset(0, 1); //Offset是一个2D小部件，他将记录坐标轴的x,y前者为宽，后者为高 如果将begin =Offset(1,0)改为(0,1),效果则会变成从下到上
-                                const end = Offset.zero; //得到Offset.zero坐标值
-                                const curve = Curves.ease; //这是一个曲线动画
-                                var tween = Tween(begin: begin, end: end)
-                                    .chain(CurveTween(curve: curve)); //使用补间动画转换为动画
-                                return SlideTransition(
-                                  //转场动画//目前我认为只能用于跳转效果
-                                  position: a.drive(tween), //这里将获得一个新的动画
-                                  child: child,
-                                );
-                              },
-                            ),
-                          );
-                        });
-                      }),
-                      child: WidgetUtils.CircleHeadImage(
-                          ScreenUtil().setHeight(55),
-                          ScreenUtil().setHeight(55),
-                          'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
-                    ),
-                    WidgetUtils.commonSizedBox(0, 5),
-                    Column(
-                      children: [
-                        SizedBox(
-                          width: ScreenUtil().setHeight(100),
-                          child: WidgetUtils.onlyText(
-                              '房间名称',
-                              StyleUtils.getCommonTextStyle(
-                                  color: Colors.white,
-                                  fontSize: ScreenUtil().setSp(21),
-                                  fontWeight: FontWeight.w600)),
-                        ),
-                        WidgetUtils.commonSizedBox(5, 0),
-                        SizedBox(
-                          width: ScreenUtil().setHeight(100),
-                          child: WidgetUtils.onlyText(
-                              'ID 298113',
-                              StyleUtils.getCommonTextStyle(
-                                  color: MyColors.roomID,
-                                  fontSize: ScreenUtil().setSp(18))),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      width: ScreenUtil().setHeight(60),
-                      height: ScreenUtil().setHeight(32),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          WidgetUtils.showImagesFill(
-                              'assets/images/room_shoucang.png',
-                              double.infinity,
-                              double.infinity),
-                          Container(
-                            width: ScreenUtil().setHeight(60),
-                            height: ScreenUtil().setHeight(32),
-                            alignment: Alignment.center,
-                            child: Column(
-                              children: [
-                                WidgetUtils.commonSizedBox(ScreenUtil().setHeight(2), 0),
-                                Text(
-                                  '收藏',
-                                  style: StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(21)),
-                                )
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Stack(
-                      children: [
-                        Opacity(
-                            opacity: 0.3,
-                            child: Container(
-                              width: ScreenUtil().setHeight(80),
-                              height: ScreenUtil().setHeight(38),
-                              //边框设置
-                              decoration: const BoxDecoration(
-                                //背景
-                                color: MyColors.roomMaiLiao,
-                                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(30.0)),
-                              ),
-                            )),
-                        GestureDetector(
-                          onTap: (() {                            
-                          }),
-                          child: Container(
-                            width: ScreenUtil().setHeight(80),
-                            height: ScreenUtil().setHeight(38),
-                            alignment: Alignment.center,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  '已收藏',
-                                  style: StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(21)),
-                                )
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    const Expanded(child: Text('')),
-
-                    /// 热度
-                    Stack(
-                      children: [
-                        Opacity(
-                            opacity: 0.3,
-                            child: Container(
-                              width: ScreenUtil().setHeight(70),
-                              height: ScreenUtil().setHeight(30),
-                              //边框设置
-                              decoration: const BoxDecoration(
-                                //背景
-                                color: MyColors.roomMaiLiao,
-                                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(30.0)),
-                              ),
-                            )),
-                        GestureDetector(
-                          onTap: (() {
-                            LogE('热度点击');
-                            Future.delayed(const Duration(seconds: 0), () {
-                              Navigator.push(
-                                context,
-                                PageRouteBuilder(//自定义路由
-                                  opaque: false,
-                                  pageBuilder: (context, a, _) => const RoomReDuPage(),//需要跳转的页面
-                                  transitionsBuilder: (context, a, _, child) {
-                                    const begin =
-                                    Offset(0, 1); //Offset是一个2D小部件，他将记录坐标轴的x,y前者为宽，后者为高
-                                    const end = Offset.zero; //得到Offset.zero坐标值
-                                    const curve = Curves.ease; //这是一个曲线动画
-                                    var tween = Tween(begin: begin, end: end)
-                                        .chain(CurveTween(curve: curve)); //使用补间动画转换为动画
-                                    return SlideTransition(
-                                      //转场动画//目前我认为只能用于跳转效果
-                                      position: a.drive(tween), //这里将获得一个新的动画
-                                      child: child,
-                                    );
-                                  },
-                                ),
-                              );
-                            });
-                          }),
-                          child: SizedBox(
-                            width: ScreenUtil().setHeight(70),
-                            height: ScreenUtil().setHeight(30),
-                            child: Row(
-                              children: [
-                                const Expanded(child: Text('')),
-                                WidgetUtils.showImagesFill(
-                                    'assets/images/room_hot.png',
-                                    ScreenUtil().setHeight(18),
-                                    ScreenUtil().setHeight(15)),
-                                WidgetUtils.commonSizedBox(0, 2),
-                                WidgetUtils.onlyTextCenter(
-                                    '1800',
-                                    StyleUtils.getCommonTextStyle(
-                                        color: MyColors.roomID,
-                                        fontSize: ScreenUtil().setSp(18))),
-                                const Expanded(child: Text('')),
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-
-
-                    /// 退出的点
-                    GestureDetector(
-                      onTap: (() {
-                        Future.delayed(const Duration(seconds: 0), () {
-                          Navigator.of(context).push(PageRouteBuilder(
-                              opaque: false,
-                              pageBuilder:
-                                  (context, animation, secondaryAnimation) {
-                                return const RoomBackPage();
-                              }));
-                        });
-                      }),
-                      child: SizedBox(
-                          height: ScreenUtil().setHeight(32),
-                          width: ScreenUtil().setHeight(79),
-                          child: WidgetUtils.showImages(
-                              'assets/images/room_dian.png',
-                              ScreenUtil().setHeight(32),
-                              ScreenUtil().setHeight(7))
-                      ),
-                    ),
-                  ],
-                ),
+                // 头部
+                RoomItems.roomTop(context, roomHeadImg, roomName, roomNumber, follow_status, hot_degree, widget.roomId),
                 WidgetUtils.commonSizedBox(10, 0),
                 /// 公告 和 厅主
-                Row(
-                  children: [
-                    WidgetUtils.commonSizedBox(0, 20),
-                    Expanded(
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              height: ScreenUtil().setHeight(240),
-                              child: Column(
-                                children: [
-                                  GestureDetector(
-                                    onTap: (() {
-                                      Future.delayed(const Duration(seconds: 0), () {
-                                        Navigator.of(context).push(PageRouteBuilder(
-                                            opaque: false,
-                                            pageBuilder:
-                                                (context, animation, secondaryAnimation) {
-                                              return const RoomTSGongGaoPage();
-                                            }));
-                                      });
-                                    }),
-                                    child: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        Opacity(
-                                          opacity: 0.3,
-                                          child: Container(
-                                            width: ScreenUtil().setHeight(80),
-                                            height: ScreenUtil().setHeight(30),
-                                            //边框设置
-                                            decoration: const BoxDecoration(
-                                              //背景
-                                              color: MyColors.roomMaiLiao,
-                                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(30.0)),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: ScreenUtil().setHeight(80),
-                                          height: ScreenUtil().setHeight(30),
-                                          child: Row(
-                                            children: [
-                                              const Expanded(child: Text('')),
-                                              WidgetUtils.showImagesFill(
-                                                  'assets/images/room_gonggao.png',
-                                                  ScreenUtil().setHeight(30),
-                                                  ScreenUtil().setHeight(30)),
-                                              WidgetUtils.onlyTextCenter(
-                                                  '公告',
-                                                  StyleUtils.getCommonTextStyle(
-                                                      color: MyColors.roomID,
-                                                      fontSize:
-                                                      ScreenUtil().setSp(21))),
-                                              const Expanded(child: Text('')),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const Expanded(child: Text('')),
-                                ],
-                              ),
-                            ),
-                            const Expanded(child: Text('')),
-                          ],
-                        )),
-
-                    /// 厅主
-                    Transform.translate(
-                      offset: const Offset(0, -30),
-                      child: SizedBox(
-                        width: ScreenUtil().setHeight(180),
-                        height: ScreenUtil().setHeight(240),
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            m0 == true ? const SVGASimpleImage(
-                                assetsName: 'assets/svga/wave_normal.svga') : WidgetUtils.showImages(
-                                'assets/images/room_mai.png',
-                                ScreenUtil().setHeight(110),
-                                ScreenUtil().setHeight(110)),
-                            m0 == true ? WidgetUtils.CircleHeadImage(
-                                ScreenUtil().setHeight(110),
-                                ScreenUtil().setHeight(110),
-                                'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500') : const Text(''),
-                            Column(
-                              children: [
-                                const Expanded(child: Text('')),
-                                m0 == false
-                                    ? WidgetUtils.onlyTextCenter(
-                                    '主持麦',
-                                    StyleUtils.getCommonTextStyle(
-                                        color: MyColors.roomMaiWZ,
-                                        fontSize: ScreenUtil().setSp(21)))
-                                    :Row(
-                                  children: [
-                                    const Expanded(child: Text('')),
-                                    // WidgetUtils.showImages(
-                                    //     'assets/images/room_tingzhu.png',
-                                    //     ScreenUtil().setHeight(27),
-                                    //     ScreenUtil().setHeight(25)),
-                                    WidgetUtils.commonSizedBox(0, 5),
-                                    WidgetUtils.onlyText(
-                                        '名称',
-                                        StyleUtils.getCommonTextStyle(
-                                            color: Colors.white,
-                                            fontSize: ScreenUtil().setSp(21))),
-                                    const Expanded(child: Text('')),
-                                  ],
-                                ),
-                                m0 == true ? Row(
-                                  children: [
-                                    const Expanded(child: Text('')),
-                                    WidgetUtils.showImages(
-                                        'assets/images/room_xin.png',
-                                        ScreenUtil().setHeight(17),
-                                        ScreenUtil().setHeight(15)),
-                                    WidgetUtils.commonSizedBox(0, 5),
-                                    WidgetUtils.onlyText(
-                                        '100',
-                                        StyleUtils.getCommonTextStyle(
-                                            color: Colors.white,
-                                            fontSize: ScreenUtil().setSp(21))),
-                                    const Expanded(child: Text('')),
-                                  ],
-                                ) : const Text('')
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    const Expanded(child: Text('')),
-                  ],
-                ),
-                Transform.translate(
-                  offset: const Offset(0, -40),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          WidgetUtils.commonSizedBox(0, 10),
-                          GestureDetector(
-                            onTap: ((){
-                                setState(() {
-                                  MyToastUtils.showToastBottom('已上麦');
-                                  _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
-                                  _engine.enableLocalAudio(true);
-                                });
-                            }),
-                            child: SizedBox(
-                              width: ScreenUtil().setHeight(140),
-                              height: ScreenUtil().setHeight(190),
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  m1 == true
-                                      ? const SVGASimpleImage(
-                                      assetsName: 'assets/svga/wave_normal.svga')
-                                      : const Text(''),
-                                  m1 == true
-                                      ? WidgetUtils.CircleHeadImage(
-                                      ScreenUtil().setHeight(80),
-                                      ScreenUtil().setHeight(80),
-                                      'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500')
-                                      : WidgetUtils.showImages(
-                                      'assets/images/room_mai.png',
-                                      ScreenUtil().setHeight(80),
-                                      ScreenUtil().setHeight(80)),
-                                  Column(
-                                    children: [
-                                      const Expanded(child: Text('')),
-                                      m1 == false
-                                          ? WidgetUtils.onlyTextCenter(
-                                          '1号麦',
-                                          StyleUtils.getCommonTextStyle(
-                                              color: MyColors.roomMaiWZ,
-                                              fontSize: ScreenUtil().setSp(19)))
-                                          : WidgetUtils.commonSizedBox(0, 0),
-                                      m1 == false
-                                          ? WidgetUtils.commonSizedBox(15, 0) : WidgetUtils.commonSizedBox(0, 0),
-                                      m1 == false
-                                          ? WidgetUtils.commonSizedBox(10, 0)
-                                          : WidgetUtils.commonSizedBox(0, 0),
-                                      m1 == true
-                                          ? Row(
-                                        children: [
-                                          const Expanded(child: Text('')),
-                                          WidgetUtils.commonSizedBox(0, 5),
-                                          WidgetUtils.onlyText(
-                                              '名称',
-                                              StyleUtils.getCommonTextStyle(
-                                                  color: Colors.white,
-                                                  fontSize:
-                                                  ScreenUtil().setSp(21))),
-                                          const Expanded(child: Text('')),
-                                        ],
-                                      )
-                                          : WidgetUtils.commonSizedBox(0, 0),
-                                      m1 == true
-                                          ? Row(
-                                        children: [
-                                          const Expanded(child: Text('')),
-                                          WidgetUtils.showImages(
-                                              'assets/images/room_xin.png',
-                                              ScreenUtil().setHeight(17),
-                                              ScreenUtil().setHeight(15)),
-                                          WidgetUtils.commonSizedBox(0, 5),
-                                          WidgetUtils.onlyText(
-                                              '100',
-                                              StyleUtils.getCommonTextStyle(
-                                                  color: Colors.white,
-                                                  fontSize:
-                                                  ScreenUtil().setSp(21))),
-                                          const Expanded(child: Text('')),
-                                        ],
-                                      )
-                                          : WidgetUtils.commonSizedBox(0, 0),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                          const Expanded(child: Text('')),
-                          SizedBox(
-                            width: ScreenUtil().setHeight(140),
-                            height: ScreenUtil().setHeight(190),
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                m2 == true
-                                    ? const SVGASimpleImage(
-                                    assetsName: 'assets/svga/wave_normal.svga')
-                                    : const Text(''),
-                                m2 == true
-                                    ? WidgetUtils.CircleHeadImage(
-                                    ScreenUtil().setHeight(80),
-                                    ScreenUtil().setHeight(80),
-                                    'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500')
-                                    : WidgetUtils.showImages(
-                                    'assets/images/room_mai.png',
-                                    ScreenUtil().setHeight(80),
-                                    ScreenUtil().setHeight(80)),
-                                Column(
-                                  children: [
-                                    const Expanded(child: Text('')),
-                                    m2 == false
-                                        ? WidgetUtils.onlyTextCenter(
-                                        '2号麦',
-                                        StyleUtils.getCommonTextStyle(
-                                            color: MyColors.roomMaiWZ,
-                                            fontSize: ScreenUtil().setSp(19)))
-                                        : WidgetUtils.commonSizedBox(0, 0),
-                                    m2 == false
-                                        ? WidgetUtils.commonSizedBox(15, 0) : WidgetUtils.commonSizedBox(0, 0),
-                                    m2 == false
-                                        ? WidgetUtils.commonSizedBox(10, 0)
-                                        : WidgetUtils.commonSizedBox(0, 0),
-                                    m2 == true
-                                        ? Row(
-                                      children: [
-                                        const Expanded(child: Text('')),
-                                        // WidgetUtils.showImages(
-                                        //     'assets/images/room_fangguan.png',
-                                        //     ScreenUtil().setHeight(27),
-                                        //     ScreenUtil().setHeight(25)),
-                                        WidgetUtils.commonSizedBox(0, 5),
-                                        WidgetUtils.onlyText(
-                                            '名称',
-                                            StyleUtils.getCommonTextStyle(
-                                                color: Colors.white,
-                                                fontSize:
-                                                ScreenUtil().setSp(21))),
-                                        const Expanded(child: Text('')),
-                                      ],
-                                    )
-                                        : WidgetUtils.commonSizedBox(0, 0),
-                                    m2 == true
-                                        ? Row(
-                                      children: [
-                                        const Expanded(child: Text('')),
-                                        WidgetUtils.showImages(
-                                            'assets/images/room_xin.png',
-                                            ScreenUtil().setHeight(17),
-                                            ScreenUtil().setHeight(15)),
-                                        WidgetUtils.commonSizedBox(0, 5),
-                                        WidgetUtils.onlyText(
-                                            '100',
-                                            StyleUtils.getCommonTextStyle(
-                                                color: Colors.white,
-                                                fontSize:
-                                                ScreenUtil().setSp(21))),
-                                        const Expanded(child: Text('')),
-                                      ],
-                                    )
-                                        : WidgetUtils.commonSizedBox(0, 0),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                          const Expanded(child: Text('')),
-                          SizedBox(
-                            width: ScreenUtil().setHeight(140),
-                            height: ScreenUtil().setHeight(190),
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                m3 == true
-                                    ? const SVGASimpleImage(
-                                    assetsName: 'assets/svga/wave_normal.svga')
-                                    : const Text(''),
-                                m3 == true
-                                    ? WidgetUtils.CircleHeadImage(
-                                    ScreenUtil().setHeight(80),
-                                    ScreenUtil().setHeight(80),
-                                    'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500')
-                                    : WidgetUtils.showImages(
-                                    'assets/images/room_mai.png',
-                                    ScreenUtil().setHeight(80),
-                                    ScreenUtil().setHeight(80)),
-                                Column(
-                                  children: [
-                                    const Expanded(child: Text('')),
-                                    m3 == false
-                                        ? WidgetUtils.onlyTextCenter(
-                                        '3号麦',
-                                        StyleUtils.getCommonTextStyle(
-                                            color: MyColors.roomMaiWZ,
-                                            fontSize: ScreenUtil().setSp(19)))
-                                        : WidgetUtils.commonSizedBox(0, 0),
-                                    m3 == false
-                                        ? WidgetUtils.commonSizedBox(15, 0) : WidgetUtils.commonSizedBox(0, 0),
-                                    m3 == false
-                                        ? WidgetUtils.commonSizedBox(10, 0)
-                                        : WidgetUtils.commonSizedBox(0, 0),
-                                    m3 == true
-                                        ? Row(
-                                      children: [
-                                        const Expanded(child: Text('')),
-                                        // WidgetUtils.showImages(
-                                        //     'assets/images/room_fangguan.png',
-                                        //     ScreenUtil().setHeight(27),
-                                        //     ScreenUtil().setHeight(25)),
-                                        WidgetUtils.commonSizedBox(0, 5),
-                                        WidgetUtils.onlyText(
-                                            '名称',
-                                            StyleUtils.getCommonTextStyle(
-                                                color: Colors.white,
-                                                fontSize:
-                                                ScreenUtil().setSp(21))),
-                                        const Expanded(child: Text('')),
-                                      ],
-                                    )
-                                        : WidgetUtils.commonSizedBox(0, 0),
-                                    m3 == true
-                                        ? Row(
-                                      children: [
-                                        const Expanded(child: Text('')),
-                                        WidgetUtils.showImages(
-                                            'assets/images/room_xin.png',
-                                            ScreenUtil().setHeight(17),
-                                            ScreenUtil().setHeight(15)),
-                                        WidgetUtils.commonSizedBox(0, 5),
-                                        WidgetUtils.onlyText(
-                                            '100',
-                                            StyleUtils.getCommonTextStyle(
-                                                color: Colors.white,
-                                                fontSize:
-                                                ScreenUtil().setSp(21))),
-                                        const Expanded(child: Text('')),
-                                      ],
-                                    )
-                                        : WidgetUtils.commonSizedBox(0, 0),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                          const Expanded(child: Text('')),
-                          SizedBox(
-                            width: ScreenUtil().setHeight(140),
-                            height: ScreenUtil().setHeight(190),
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                m4 == true
-                                    ? const SVGASimpleImage(
-                                    assetsName: 'assets/svga/wave_normal.svga')
-                                    : const Text(''),
-                                m4 == true
-                                    ? WidgetUtils.CircleHeadImage(
-                                    ScreenUtil().setHeight(80),
-                                    ScreenUtil().setHeight(80),
-                                    'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500')
-                                    : WidgetUtils.showImages(
-                                    'assets/images/room_mai.png',
-                                    ScreenUtil().setHeight(80),
-                                    ScreenUtil().setHeight(80)),
-                                Column(
-                                  children: [
-                                    const Expanded(child: Text('')),
-                                    m4 == false
-                                        ? WidgetUtils.onlyTextCenter(
-                                        '4号麦',
-                                        StyleUtils.getCommonTextStyle(
-                                            color: MyColors.roomMaiWZ,
-                                            fontSize: ScreenUtil().setSp(19)))
-                                        : WidgetUtils.commonSizedBox(0, 0),
-                                    m4 == false
-                                        ? WidgetUtils.commonSizedBox(15, 0) : WidgetUtils.commonSizedBox(0, 0),
-                                    m4 == false
-                                        ? WidgetUtils.commonSizedBox(10, 0)
-                                        : WidgetUtils.commonSizedBox(0, 0),
-                                    m4 == true
-                                        ? Row(
-                                      children: [
-                                        const Expanded(child: Text('')),
-                                        // WidgetUtils.showImages(
-                                        //     'assets/images/room_fangguan.png',
-                                        //     ScreenUtil().setHeight(27),
-                                        //     ScreenUtil().setHeight(25)),
-                                        WidgetUtils.commonSizedBox(0, 5),
-                                        WidgetUtils.onlyText(
-                                            '名称',
-                                            StyleUtils.getCommonTextStyle(
-                                                color: Colors.white,
-                                                fontSize:
-                                                ScreenUtil().setSp(21))),
-                                        const Expanded(child: Text('')),
-                                      ],
-                                    )
-                                        : WidgetUtils.commonSizedBox(0, 0),
-                                    m4 == true
-                                        ? Row(
-                                      children: [
-                                        const Expanded(child: Text('')),
-                                        WidgetUtils.showImages(
-                                            'assets/images/room_xin.png',
-                                            ScreenUtil().setHeight(17),
-                                            ScreenUtil().setHeight(15)),
-                                        WidgetUtils.commonSizedBox(0, 5),
-                                        WidgetUtils.onlyText(
-                                            '100',
-                                            StyleUtils.getCommonTextStyle(
-                                                color: Colors.white,
-                                                fontSize:
-                                                ScreenUtil().setSp(21))),
-                                        const Expanded(child: Text('')),
-                                      ],
-                                    )
-                                        : WidgetUtils.commonSizedBox(0, 0),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                          WidgetUtils.commonSizedBox(0, 10),
-                        ],
-                      ),
-
-                      /// 第二排麦序
-                      Transform.translate(
-                        offset: const Offset(0, -20),
-                        child: Row(
-                          children: [
-                            WidgetUtils.commonSizedBox(0, 10),
-                            SizedBox(
-                              width: ScreenUtil().setHeight(140),
-                              height: ScreenUtil().setHeight(190),
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  m5 == true
-                                      ? const SVGASimpleImage(
-                                      assetsName:
-                                      'assets/svga/wave_normal.svga')
-                                      : const Text(''),
-                                  m5 == true
-                                      ? WidgetUtils.CircleHeadImage(
-                                      ScreenUtil().setHeight(80),
-                                      ScreenUtil().setHeight(80),
-                                      'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500')
-                                      : WidgetUtils.showImages(
-                                      'assets/images/room_mai.png',
-                                      ScreenUtil().setHeight(80),
-                                      ScreenUtil().setHeight(80)),
-                                  Column(
-                                    children: [
-                                      const Expanded(child: Text('')),
-                                      m5 == false
-                                          ? WidgetUtils.onlyTextCenter(
-                                          '5号麦',
-                                          StyleUtils.getCommonTextStyle(
-                                              color: MyColors.roomMaiWZ,
-                                              fontSize: ScreenUtil().setSp(19)))
-                                          : WidgetUtils.commonSizedBox(0, 0),
-                                      m5 == false
-                                          ? WidgetUtils.commonSizedBox(10, 0)
-                                          : WidgetUtils.commonSizedBox(0, 0),
-                                      m5 == true
-                                          ? Row(
-                                        children: [
-                                          const Expanded(child: Text('')),
-                                          WidgetUtils.commonSizedBox(0, 5),
-                                          WidgetUtils.onlyText(
-                                              '名称',
-                                              StyleUtils.getCommonTextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: ScreenUtil()
-                                                      .setSp(21))),
-                                          const Expanded(child: Text('')),
-                                        ],
-                                      )
-                                          : WidgetUtils.commonSizedBox(0, 0),
-                                      m5 == true
-                                          ? Row(
-                                        children: [
-                                          const Expanded(child: Text('')),
-                                          WidgetUtils.showImages(
-                                              'assets/images/room_xin.png',
-                                              ScreenUtil().setHeight(17),
-                                              ScreenUtil().setHeight(15)),
-                                          WidgetUtils.commonSizedBox(0, 5),
-                                          WidgetUtils.onlyText(
-                                              '80',
-                                              StyleUtils.getCommonTextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: ScreenUtil()
-                                                      .setSp(21))),
-                                          const Expanded(child: Text('')),
-                                        ],
-                                      )
-                                          : WidgetUtils.commonSizedBox(0, 0),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                            const Expanded(child: Text('')),
-                            SizedBox(
-                              width: ScreenUtil().setHeight(140),
-                              height: ScreenUtil().setHeight(190),
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  m6 == true
-                                      ? const SVGASimpleImage(
-                                      assetsName:
-                                      'assets/svga/wave_normal.svga')
-                                      : const Text(''),
-                                  m6 == true
-                                      ? WidgetUtils.CircleHeadImage(
-                                      ScreenUtil().setHeight(80),
-                                      ScreenUtil().setHeight(80),
-                                      'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500')
-                                      : WidgetUtils.showImages(
-                                      'assets/images/room_mai.png',
-                                      ScreenUtil().setHeight(80),
-                                      ScreenUtil().setHeight(80)),
-                                  Column(
-                                    children: [
-                                      const Expanded(child: Text('')),
-                                      m6 == false
-                                          ? WidgetUtils.onlyTextCenter(
-                                          '6号麦',
-                                          StyleUtils.getCommonTextStyle(
-                                              color: MyColors.roomMaiWZ,
-                                              fontSize: ScreenUtil().setSp(19)))
-                                          : WidgetUtils.commonSizedBox(0, 0),
-                                      m6 == false
-                                          ? WidgetUtils.commonSizedBox(10, 0)
-                                          : WidgetUtils.commonSizedBox(0, 0),
-                                      m6 == true
-                                          ? Row(
-                                        children: [
-                                          const Expanded(child: Text('')),
-                                          WidgetUtils.commonSizedBox(0, 5),
-                                          WidgetUtils.onlyText(
-                                              '名称',
-                                              StyleUtils.getCommonTextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: ScreenUtil()
-                                                      .setSp(21))),
-                                          const Expanded(child: Text('')),
-                                        ],
-                                      )
-                                          : WidgetUtils.commonSizedBox(0, 0),
-                                      m6 == true
-                                          ? Row(
-                                        children: [
-                                          const Expanded(child: Text('')),
-                                          WidgetUtils.showImages(
-                                              'assets/images/room_xin.png',
-                                              ScreenUtil().setHeight(17),
-                                              ScreenUtil().setHeight(15)),
-                                          WidgetUtils.commonSizedBox(0, 5),
-                                          WidgetUtils.onlyText(
-                                              '80',
-                                              StyleUtils.getCommonTextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: ScreenUtil()
-                                                      .setSp(21))),
-                                          const Expanded(child: Text('')),
-                                        ],
-                                      )
-                                          : WidgetUtils.commonSizedBox(0, 0),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                            const Expanded(child: Text('')),
-                            SizedBox(
-                              width: ScreenUtil().setHeight(140),
-                              height: ScreenUtil().setHeight(190),
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  m7 == true
-                                      ? const SVGASimpleImage(
-                                      assetsName:
-                                      'assets/svga/wave_normal.svga')
-                                      : const Text(''),
-                                  m7 == true
-                                      ? WidgetUtils.CircleHeadImage(
-                                      ScreenUtil().setHeight(80),
-                                      ScreenUtil().setHeight(80),
-                                      'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500')
-                                      : WidgetUtils.showImages(
-                                      'assets/images/room_mai.png',
-                                      ScreenUtil().setHeight(80),
-                                      ScreenUtil().setHeight(80)),
-                                  Column(
-                                    children: [
-                                      const Expanded(child: Text('')),
-                                      m7 == false
-                                          ? WidgetUtils.onlyTextCenter(
-                                          '7号麦',
-                                          StyleUtils.getCommonTextStyle(
-                                              color: MyColors.roomMaiWZ,
-                                              fontSize: ScreenUtil().setSp(19)))
-                                          : WidgetUtils.commonSizedBox(0, 0),
-                                      m7 == false
-                                          ? WidgetUtils.commonSizedBox(10, 0)
-                                          : WidgetUtils.commonSizedBox(10, 0),
-                                      m7 == true
-                                          ? Row(
-                                        children: [
-                                          const Expanded(child: Text('')),
-                                          WidgetUtils.commonSizedBox(0, 5),
-                                          WidgetUtils.onlyText(
-                                              '名称',
-                                              StyleUtils.getCommonTextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: ScreenUtil()
-                                                      .setSp(21))),
-                                          const Expanded(child: Text('')),
-                                        ],
-                                      )
-                                          : WidgetUtils.commonSizedBox(0, 0),
-                                      m7 == true
-                                          ? Row(
-                                        children: [
-                                          const Expanded(child: Text('')),
-                                          WidgetUtils.showImages(
-                                              'assets/images/room_xin.png',
-                                              ScreenUtil().setHeight(17),
-                                              ScreenUtil().setHeight(15)),
-                                          WidgetUtils.commonSizedBox(0, 5),
-                                          WidgetUtils.onlyText(
-                                              '80',
-                                              StyleUtils.getCommonTextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: ScreenUtil()
-                                                      .setSp(21))),
-                                          const Expanded(child: Text('')),
-                                        ],
-                                      )
-                                          : WidgetUtils.commonSizedBox(0, 0),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                            const Expanded(child: Text('')),
-                            isBoss == true
-                                ? SizedBox(
-                              width: ScreenUtil().setHeight(140),
-                              height: ScreenUtil().setHeight(190),
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  m8 == true
-                                      ? const SVGASimpleImage(
-                                      assetsName:
-                                      'assets/svga/wave_normal.svga')
-                                      : const Text(''),
-                                  m8 == true
-                                      ? WidgetUtils.CircleHeadImage(
-                                      ScreenUtil().setHeight(80),
-                                      ScreenUtil().setHeight(80),
-                                      'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500')
-                                      : SizedBox(
-                                    height: ScreenUtil().setHeight(80),
-                                    width: ScreenUtil().setHeight(80),
-                                    child: const SVGASimpleImage(
-                                        assetsName:
-                                        'assets/svga/laobanwei.svga'),
-                                  ),
-                                  Column(
-                                    children: [
-                                      const Expanded(child: Text('')),
-                                      m8 == false
-                                          ? ShaderMask(
-                                        shaderCallback: (Rect bounds) {
-                                          return const LinearGradient(
-                                            begin: Alignment.centerLeft,
-                                            end: Alignment.centerRight,
-                                            colors: [ Color(0xFF6ffffd),Color(0xFFf8fec4)],).createShader(Offset.zero & bounds.size);
-                                        },
-                                        blendMode: BlendMode.srcATop,
-                                        child: Text(
-                                          "老板位",
-                                          style: TextStyle(fontSize: ScreenUtil().setSp(19), color: const Color(0xffffffff),fontWeight: FontWeight.w700),
-                                        ),
-                                      )
-                                          : WidgetUtils.commonSizedBox(0, 0),
-                                      m8 == false
-                                          ? WidgetUtils.commonSizedBox(10, 0)
-                                          : WidgetUtils.commonSizedBox(0, 0),
-                                      m8 == true
-                                          ? Row(
-                                        children: [
-                                          const Expanded(
-                                              child: Text('')),
-                                          // WidgetUtils.showImages(
-                                          //     'assets/images/room_fangguan.png',
-                                          //     ScreenUtil()
-                                          //         .setHeight(27),
-                                          //     ScreenUtil()
-                                          //         .setHeight(25)),
-                                          WidgetUtils.commonSizedBox(
-                                              0, 5),
-                                          WidgetUtils.onlyText(
-                                              '名称',
-                                              StyleUtils
-                                                  .getCommonTextStyle(
-                                                  color:
-                                                  Colors.white,
-                                                  fontSize:
-                                                  ScreenUtil()
-                                                      .setSp(
-                                                      21))),
-                                          const Expanded(
-                                              child: Text('')),
-                                        ],
-                                      )
-                                          : WidgetUtils.commonSizedBox(0, 0),
-                                      m8 == true
-                                          ? Row(
-                                        children: [
-                                          const Expanded(
-                                              child: Text('')),
-                                          WidgetUtils.showImages(
-                                              'assets/images/room_xin.png',
-                                              ScreenUtil()
-                                                  .setHeight(17),
-                                              ScreenUtil()
-                                                  .setHeight(15)),
-                                          WidgetUtils.commonSizedBox(
-                                              0, 5),
-                                          WidgetUtils.onlyText(
-                                              '80',
-                                              StyleUtils
-                                                  .getCommonTextStyle(
-                                                  color:
-                                                  Colors.white,
-                                                  fontSize:
-                                                  ScreenUtil()
-                                                      .setSp(
-                                                      21))),
-                                          const Expanded(
-                                              child: Text('')),
-                                        ],
-                                      )
-                                          : WidgetUtils.commonSizedBox(0, 0),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            )
-                                : SizedBox(
-                              width: ScreenUtil().setHeight(140),
-                              height: ScreenUtil().setHeight(190),
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  m8 == true
-                                      ? const SVGASimpleImage(
-                                      assetsName:
-                                      'assets/svga/wave_normal.svga')
-                                      : const Text(''),
-                                  m8 == true
-                                      ? WidgetUtils.CircleHeadImage(
-                                      ScreenUtil().setHeight(80),
-                                      ScreenUtil().setHeight(80),
-                                      'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500')
-                                      : WidgetUtils.showImages(
-                                      'assets/images/room_mai.png',
-                                      ScreenUtil().setHeight(80),
-                                      ScreenUtil().setHeight(80)),
-                                  Column(
-                                    children: [
-                                      const Expanded(child: Text('')),
-                                      m8 == false
-                                          ? WidgetUtils.onlyTextCenter(
-                                          '8号麦',
-                                          StyleUtils.getCommonTextStyle(
-                                              color: MyColors.roomMaiWZ,
-                                              fontSize:
-                                              ScreenUtil().setSp(19)))
-                                          : WidgetUtils.commonSizedBox(0, 0),
-                                      m8 == false
-                                          ? WidgetUtils.commonSizedBox(10, 0)
-                                          : WidgetUtils.commonSizedBox(10, 0),
-                                      m8 == true
-                                          ? Row(
-                                        children: [
-                                          const Expanded(
-                                              child: Text('')),
-                                          // WidgetUtils.showImages(
-                                          //     'assets/images/room_fangguan.png',
-                                          //     ScreenUtil()
-                                          //         .setHeight(27),
-                                          //     ScreenUtil()
-                                          //         .setHeight(25)),
-                                          WidgetUtils.commonSizedBox(
-                                              0, 5),
-                                          WidgetUtils.onlyText(
-                                              '名称',
-                                              StyleUtils
-                                                  .getCommonTextStyle(
-                                                  color:
-                                                  Colors.white,
-                                                  fontSize:
-                                                  ScreenUtil()
-                                                      .setSp(
-                                                      21))),
-                                          const Expanded(
-                                              child: Text('')),
-                                        ],
-                                      )
-                                          : WidgetUtils.commonSizedBox(0, 0),
-                                      m8 == true
-                                          ? Row(
-                                        children: [
-                                          const Expanded(
-                                              child: Text('')),
-                                          WidgetUtils.showImages(
-                                              'assets/images/room_xin.png',
-                                              ScreenUtil()
-                                                  .setHeight(17),
-                                              ScreenUtil()
-                                                  .setHeight(15)),
-                                          WidgetUtils.commonSizedBox(
-                                              0, 5),
-                                          WidgetUtils.onlyText(
-                                              '100',
-                                              StyleUtils
-                                                  .getCommonTextStyle(
-                                                  color:
-                                                  Colors.white,
-                                                  fontSize:
-                                                  ScreenUtil()
-                                                      .setSp(
-                                                      21))),
-                                          const Expanded(
-                                              child: Text('')),
-                                        ],
-                                      )
-                                          : WidgetUtils.commonSizedBox(0, 0),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                            WidgetUtils.commonSizedBox(0, 10),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                RoomItems.notices(context, m0,notice, listM),
+                /// 麦序位
+                RoomItems.maixu(m1, m2, m3, m4, m5, m6, m7, m8, isBoss, listM),
                 Expanded(
                   child: Stack(
                     children: [
                       /// 消息列表
                       ListView.builder(
                         padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
-                        itemBuilder: _itemTuiJian,
+                        itemBuilder: itemMessages,
                         itemCount: 15,
                       ),
-                      Positioned(
-                        top: 10,
-                        right: 15,
-                        child: Container(
-                          height:ScreenUtil().setHeight(130),
-                          width:ScreenUtil().setHeight(130),
-                          //超出部分，可裁剪
-                          clipBehavior: Clip.hardEdge,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: Swiper(
-                            itemBuilder: (BuildContext context,int index){
-                              // 配置图片地址
-                              return SVGASimpleImage(assetsName: imgList[index]["url"]);
-                            },
-                            // 配置图片数量
-                            itemCount: imgList.length ,
-                            // 无限循环
-                            loop: true,
-                            // 自动轮播
-                            autoplay: true,
-                            autoplayDelay: 5000,
-                            duration: 2000,
-                            onIndexChanged: (index){
-                              // LogE('用户拖动或者自动播放引起下标改变调用');
-                            },
-                            onTap: (index){
-                              // LogE('用户点击引起下标改变调用');
-                              if(index == 0){
-                                MyUtils.goTransparentPage(context, const Carpage() );
-                              }else if(index == 1){
-                                MyUtils.goTransparentPage(context, const Carpage());
-                              }
-
-                            },
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        top: 110,
-                        right: 15,
-                        child: Container(
-                          height:ScreenUtil().setHeight(130),
-                          width:ScreenUtil().setHeight(130),
-                          //超出部分，可裁剪
-                          clipBehavior: Clip.hardEdge,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: Swiper(
-                            itemBuilder: (BuildContext context,int index){
-                              // 配置图片地址
-                              return SVGASimpleImage(assetsName: imgList2[index]["url"]);
-                            },
-                            // 配置图片数量
-                            itemCount: imgList2.length ,
-                            // 无限循环
-                            loop: true,
-                            // 自动轮播
-                            autoplay: true,
-                            autoplayDelay: 3000,
-                            duration: 2000,
-                            onIndexChanged: (index){
-                              // LogE('用户拖动或者自动播放引起下标改变调用');
-                            },
-                            onTap: (index){
-                              // LogE('用户点击引起下标改变调用');
-                              if(index == 0){
-                                MyUtils.goTransparentPage(context, const ZhuanPanPage() );
-                              }else if(index == 1){
-                                MyUtils.goTransparentPage(context, const MoFangPage());
-                              }
-
-                            },
-                          ),
-                        ),
-                      )
+                      RoomItems.lunbotu1(context, imgList),
+                      RoomItems.lunbotu2(context, imgList2),
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: ScreenUtil().setHeight(90),
-                  child: Row(
-                    children: [
-                      WidgetUtils.commonSizedBox(0, 20),
-                      Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Opacity(
-                            opacity: 0.3,
-                            child: Row(
-                              children: [
-                                Container(
-                                  height: ScreenUtil().setHeight(50),
-                                  width: ScreenUtil().setHeight(120),
-                                  //边框设置
-                                  decoration: const BoxDecoration(
-                                    //背景
-                                    color: MyColors.roomMaiLiao,
-                                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                    borderRadius:
-                                    BorderRadius.all(Radius.circular(30.0)),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          WidgetUtils.onlyTextCenter(
-                              '聊聊...',
-                              StyleUtils.getCommonTextStyle(
-                                  color: MyColors.roomMaiLiao3,
-                                  fontSize: ScreenUtil().setSp(25))),
-                        ],
-                      ),
-                      const Expanded(child: Text('')),
-                      Stack(
-                        children: [
-                          SizedBox(
-                            height: ScreenUtil().setHeight(60),
-                            width: ScreenUtil().setHeight(60),
-                            child: const SVGASimpleImage(
-                                assetsName: 'assets/svga/room_liwu.svga'),
-                          ),
-                          GestureDetector(
-                            onTap: ((){
-                              Future.delayed(const Duration(seconds: 0), () {
-                                Navigator.push(
-                                  context,
-                                  PageRouteBuilder(//自定义路由
-                                    opaque: false,
-                                    pageBuilder: (context, a, _) => const RoomLiWuPage(),//需要跳转的页面
-                                    transitionsBuilder: (context, a, _, child) {
-                                      const begin =
-                                      Offset(0, 1); //Offset是一个2D小部件，他将记录坐标轴的x,y前者为宽，后者为高
-                                      const end = Offset.zero; //得到Offset.zero坐标值
-                                      const curve = Curves.ease; //这是一个曲线动画
-                                      var tween = Tween(begin: begin, end: end)
-                                          .chain(CurveTween(curve: curve)); //使用补间动画转换为动画
-                                      return SlideTransition(
-                                        //转场动画//目前我认为只能用于跳转效果
-                                        position: a.drive(tween), //这里将获得一个新的动画
-                                        child: child,
-                                      );
-                                    },
-                                  ),
-                                );
-                              });
-                            }),
-                            child:Container(
-                                height: ScreenUtil().setHeight(60),
-                                width: ScreenUtil().setHeight(60),
-                                color: Colors.transparent
-                            ),
-                          )
-                        ],
-                      ),
-                      WidgetUtils.commonSizedBox(0, 5),
-                      Stack(
-                        children: [
-                          SizedBox(
-                            height: ScreenUtil().setHeight(50),
-                            width: ScreenUtil().setHeight(50),
-                            child: const SVGASimpleImage(
-                                assetsName: 'assets/svga/room_huodong.svga'),
-                          ),
-                          GestureDetector(
-                            onTap: ((){
-                              Future.delayed(const Duration(seconds: 0), () {
-                                Navigator.push(
-                                  context,
-                                  PageRouteBuilder(//自定义路由
-                                    opaque: false,
-                                    pageBuilder: (context, a, _) => const RoomLiWuPage(),//需要跳转的页面
-                                    transitionsBuilder: (context, a, _, child) {
-                                      const begin =
-                                      Offset(0, 1); //Offset是一个2D小部件，他将记录坐标轴的x,y前者为宽，后者为高
-                                      const end = Offset.zero; //得到Offset.zero坐标值
-                                      const curve = Curves.ease; //这是一个曲线动画
-                                      var tween = Tween(begin: begin, end: end)
-                                          .chain(CurveTween(curve: curve)); //使用补间动画转换为动画
-                                      return SlideTransition(
-                                        //转场动画//目前我认为只能用于跳转效果
-                                        position: a.drive(tween), //这里将获得一个新的动画
-                                        child: child,
-                                      );
-                                    },
-                                  ),
-                                );
-                              });
-                            }),
-                            child:Container(
-                                height: ScreenUtil().setHeight(50),
-                                width: ScreenUtil().setHeight(50),
-                                color: Colors.transparent
-                            ),
-                          )
-                        ],
-                      ),
-                      WidgetUtils.commonSizedBox(0, 10),
-                      GestureDetector(
-                        onTap: (() {
-                          Future.delayed(const Duration(seconds: 0), () {
-                            Navigator.push(
-                              context,
-                              PageRouteBuilder(//自定义路由
-                                opaque: false,
-                                pageBuilder: (context, a, _) => const RoomMessagesPage(),//需要跳转的页面
-                                transitionsBuilder: (context, a, _, child) {
-                                  const begin =
-                                  Offset(0, 1); //Offset是一个2D小部件，他将记录坐标轴的x,y前者为宽，后者为高
-                                  const end = Offset.zero; //得到Offset.zero坐标值
-                                  const curve = Curves.ease; //这是一个曲线动画
-                                  var tween = Tween(begin: begin, end: end)
-                                      .chain(CurveTween(curve: curve)); //使用补间动画转换为动画
-                                  return SlideTransition(
-                                    //转场动画//目前我认为只能用于跳转效果
-                                    position: a.drive(tween), //这里将获得一个新的动画
-                                    child: child,
-                                  );
-                                },
-                              ),
-                            );
-                          });
-                        }),
-                        child: WidgetUtils.showImages(
-                            'assets/images/room_message.png',
-                            ScreenUtil().setHeight(50),
-                            ScreenUtil().setHeight(50)),
-                      ),
-                      WidgetUtils.commonSizedBox(0, 10),
-                      GestureDetector(
-                        onTap: (() {
-                          Future.delayed(const Duration(seconds: 0), () {
-                            Navigator.push(
-                              context,
-                              PageRouteBuilder(//自定义路由
-                                opaque: false,
-                                pageBuilder: (context, a, _) => RoomGongNeng(type: 1),//需要跳转的页面
-                                transitionsBuilder: (context, a, _, child) {
-                                  const begin =
-                                  Offset(0, 1); //Offset是一个2D小部件，他将记录坐标轴的x,y前者为宽，后者为高
-                                  const end = Offset.zero; //得到Offset.zero坐标值
-                                  const curve = Curves.ease; //这是一个曲线动画
-                                  var tween = Tween(begin: begin, end: end)
-                                      .chain(CurveTween(curve: curve)); //使用补间动画转换为动画
-                                  return SlideTransition(
-                                    //转场动画//目前我认为只能用于跳转效果
-                                    position: a.drive(tween), //这里将获得一个新的动画
-                                    child: child,
-                                  );
-                                },
-                              ),
-                            );
-                          });
-                        }),
-                        child: WidgetUtils.showImages(
-                            'assets/images/room_gongneng.png',
-                            ScreenUtil().setHeight(50),
-                            ScreenUtil().setHeight(50)),
-                      ),
-                      WidgetUtils.commonSizedBox(0, 10),
-                      GestureDetector(
-                        onTap: (() {
-                          setState(() {
-                            isJinyiin = !isJinyiin;
-                          });
-                        }),
-                        child: WidgetUtils.showImages(
-                            isJinyiin ? 'assets/images/room_yin_off.png' : 'assets/images/room_yin_on.png',
-                            ScreenUtil().setHeight(50),
-                            ScreenUtil().setHeight(50)),
-                      ),
-                      // WidgetUtils.commonSizedBox(0, 10),
-                      // Stack(
-                      //   alignment: Alignment.center,
-                      //   children: [
-                      //     Opacity(
-                      //       opacity: 0.6,
-                      //       child: Row(
-                      //         children: [
-                      //           Container(
-                      //             height: ScreenUtil().setHeight(60),
-                      //             width: ScreenUtil().setHeight(80),
-                      //             //边框设置
-                      //             decoration: const BoxDecoration(
-                      //               //背景
-                      //               color: MyColors.roomMaiLiao2,
-                      //               //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                      //               borderRadius:
-                      //                   BorderRadius.all(Radius.circular(30.0)),
-                      //             ),
-                      //           )
-                      //         ],
-                      //       ),
-                      //     ),
-                      //     WidgetUtils.onlyTextCenter(
-                      //         '上麦',
-                      //         StyleUtils.getCommonTextStyle(
-                      //             color: MyColors.roomShangMaiWZ,
-                      //             fontSize: ScreenUtil().setSp(21))),
-                      //   ],
-                      // ),
-                      WidgetUtils.commonSizedBox(0, 10),
-                    ],
-                  ),
-                ),
-
-
+                /// 底部按钮信息
+                RoomItems.footBtn(context, isJinyiin),
               ],
             ),
             /// 禁言使用
@@ -1777,15 +298,92 @@ class _RoomPageState extends State<RoomPage> {
                 : const Text(''),
           ],
         ),
+      ) : Container(
+        height: double.infinity,
+        width: double.infinity,
+        color: Colors.black87,
       ),
 
-
-      // body: Container(
-      //   height: double.infinity,
-      //   child: SVGASimpleImage(
-      //     assetsName: 'assets/svga/twin_card_bg1.svga',
-      //   ),
-      // ),
     );
   }
+
+
+  /// 加入房间前
+  Future<void> doPostRoomInfo(roomID) async {
+    LogE('token== ${sp.getString('user_token')}');
+    Map<String, dynamic> params = <String, dynamic>{
+      'room_id': roomID,
+    };
+    try {
+      roomInfoBean bean = await DataUtils.postRoomInfo(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            isOK = true;
+            BgType = bean.data!.roomInfo!.bgType.toString();
+            roomName = bean.data!.roomInfo!.roomName!;
+            bgImage = bean.data!.roomInfo!.bg!;
+            notice = bean.data!.roomInfo!.notice!;
+            hot_degree = bean.data!.roomInfo!.hotDegree.toString();
+            follow_status = bean.data!.roomInfo!.followStatus!;
+            role = bean.data!.userInfo!.role!;
+            noble_id = bean.data!.userInfo!.nobleId!;
+            roomNumber = bean.data!.roomInfo!.roomNumber.toString();
+            roomHeadImg = bean.data!.roomInfo!.coverImg!;
+            isBoss = bean.data!.roomInfo!.mikeList![7].isBoss == 0 ? false : true;
+            m1 = bean.data!.roomInfo!.mikeList![0].uid == 0 ? false : true;
+            m2 = bean.data!.roomInfo!.mikeList![1].uid == 0 ? false : true;
+            m3 = bean.data!.roomInfo!.mikeList![2].uid == 0 ? false : true;
+            m4 = bean.data!.roomInfo!.mikeList![3].uid == 0 ? false : true;
+            m5 = bean.data!.roomInfo!.mikeList![4].uid == 0 ? false : true;
+            m6 = bean.data!.roomInfo!.mikeList![5].uid == 0 ? false : true;
+            m7 = bean.data!.roomInfo!.mikeList![6].uid == 0 ? false : true;
+            m8 = bean.data!.roomInfo!.mikeList![7].uid == 0 ? false : true;
+            m0 = bean.data!.roomInfo!.mikeList![8].uid == 0 ? false : true;
+
+            listM = bean.data!.roomInfo!.mikeList!;
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+  }
+
+
+  /// 关注用户或房间
+  Future<void> doPostFollow(String type, String follow_id, String status) async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'type': type,
+      'status': status,
+      'follow_id': follow_id,
+    };
+    try {
+      CommonBean bean = await DataUtils.postFollow(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            follow_status = status;
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+  }
+
 }

@@ -28,14 +28,6 @@ class _ZonglanPageState extends State<ZonglanPage> {
               child: WidgetUtils.onlyText('2023-06-12', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(28))),
             ),
             WidgetUtils.commonSizedBox(0, 10),
-            WidgetUtils.onlyText('至', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(28))),
-            WidgetUtils.commonSizedBox(0, 10),
-            Container(
-              color: MyColors.dailiTime,
-              padding: const EdgeInsets.all(2),
-              child: WidgetUtils.onlyText('2023-06-12', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(28))),
-            ),
-            WidgetUtils.commonSizedBox(0, 10),
             GestureDetector(
               onTap: ((){
                 
@@ -62,7 +54,7 @@ class _ZonglanPageState extends State<ZonglanPage> {
               Row(
                 children: [
                   Expanded(child: WidgetUtils.onlyTextCenter('推广人数', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28)))),
-                  Expanded(child: WidgetUtils.onlyTextCenter('总充值人数', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28)))),
+                  Expanded(child: WidgetUtils.onlyTextCenter('充值人数', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28)))),
                 ],
               ),
               WidgetUtils.commonSizedBox(20, 10),
@@ -75,8 +67,8 @@ class _ZonglanPageState extends State<ZonglanPage> {
               WidgetUtils.commonSizedBox(20, 10),
               Row(
                 children: [
-                  Expanded(child: WidgetUtils.onlyTextCenter('总充值金额', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28)))),
-                  Expanded(child: WidgetUtils.onlyTextCenter('总游戏参与额', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28)))),
+                  Expanded(child: WidgetUtils.onlyTextCenter('充值金额', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28)))),
+                  Expanded(child: WidgetUtils.onlyTextCenter('游戏参与额', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28)))),
                 ],
               ),
               WidgetUtils.commonSizedBox(20, 10),
@@ -89,8 +81,8 @@ class _ZonglanPageState extends State<ZonglanPage> {
               WidgetUtils.commonSizedBox(20, 10),
               Row(
                 children: [
-                  Expanded(child: WidgetUtils.onlyTextCenter('总中奖礼物额', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28)))),
-                  Expanded(child: WidgetUtils.onlyTextCenter('总直刷礼物额', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28)))),
+                  Expanded(child: WidgetUtils.onlyTextCenter('中奖礼物额', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28)))),
+                  Expanded(child: WidgetUtils.onlyTextCenter('直刷礼物额', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28)))),
                 ],
               ),
               WidgetUtils.commonSizedBox(20, 10),
@@ -104,7 +96,7 @@ class _ZonglanPageState extends State<ZonglanPage> {
               Row(
                 children: [
                   Expanded(child: WidgetUtils.onlyTextCenter('运营支出金额', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28)))),
-                  Expanded(child: WidgetUtils.onlyTextCenter('历史总分润', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28)))),
+                  Expanded(child: WidgetUtils.onlyTextCenter('总分润', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28)))),
                 ],
               ),
               WidgetUtils.commonSizedBox(20, 10),

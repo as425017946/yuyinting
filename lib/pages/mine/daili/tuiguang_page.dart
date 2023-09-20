@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/colors/my_colors.dart';
+import 'package:yuyinting/utils/my_utils.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
+
+import 'fenrun_ts_page.dart';
 /// 我的推广
 class TuiguangPage extends StatefulWidget {
   const TuiguangPage({Key? key}) : super(key: key);
@@ -17,17 +20,17 @@ class _TuiguangPageState extends State<TuiguangPage> {
     return Column(
       children: [
         WidgetUtils.commonSizedBox(20, 10),
-        Row(
-          children: [
-            const Expanded(child: Text('')),
-            WidgetUtils.onlyText('2023-06-12', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(33))),
-            WidgetUtils.commonSizedBox(0, 10),
-            WidgetUtils.onlyText('至', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(33))),
-            WidgetUtils.commonSizedBox(0, 10),
-            WidgetUtils.onlyText('2023-06-12', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(33))),
-            const Expanded(child: Text('')),
-          ],
-        ),
+        // Row(
+        //   children: [
+        //     const Expanded(child: Text('')),
+        //     WidgetUtils.onlyText('2023-06-12', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(33))),
+        //     WidgetUtils.commonSizedBox(0, 10),
+        //     WidgetUtils.onlyText('至', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(33))),
+        //     WidgetUtils.commonSizedBox(0, 10),
+        //     WidgetUtils.onlyText('2023-06-12', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(33))),
+        //     const Expanded(child: Text('')),
+        //   ],
+        // ),
         Container(
           width: double.infinity,
           height: ScreenUtil().setHeight(485),
@@ -45,7 +48,7 @@ class _TuiguangPageState extends State<TuiguangPage> {
               Row(
                 children: [
                   Expanded(child: WidgetUtils.onlyTextCenter('推广总人数', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28)))),
-                  Expanded(child: WidgetUtils.onlyTextCenter('本周有效用户', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28)))),
+                  Expanded(child: WidgetUtils.onlyTextCenter('今日推广人数', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28)))),
                 ],
               ),
               WidgetUtils.commonSizedBox(20, 10),
@@ -58,8 +61,8 @@ class _TuiguangPageState extends State<TuiguangPage> {
               WidgetUtils.commonSizedBox(20, 10),
               Row(
                 children: [
-                  Expanded(child: WidgetUtils.onlyTextCenter('本周团队游戏参与额', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28)))),
-                  Expanded(child: WidgetUtils.onlyTextCenter('本周团队中奖礼物额', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28)))),
+                  Expanded(child: WidgetUtils.onlyTextCenter('今日游戏参与额', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28)))),
+                  Expanded(child: WidgetUtils.onlyTextCenter('今日中奖礼物额', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28)))),
                 ],
               ),
               WidgetUtils.commonSizedBox(20, 10),
@@ -72,8 +75,21 @@ class _TuiguangPageState extends State<TuiguangPage> {
               WidgetUtils.commonSizedBox(20, 10),
               Row(
                 children: [
-                  Expanded(child: WidgetUtils.onlyTextCenter('本周直刷礼物额', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28)))),
-                  Expanded(child: WidgetUtils.onlyTextCenter('本周实际分润', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28)))),
+                  Expanded(child: WidgetUtils.onlyTextCenter('今日直刷礼物额', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28)))),
+                  Expanded(child: GestureDetector(
+                    onTap: ((){
+                        MyUtils.goTransparentPageCom(context, const FenRunTSPage());
+                    }),
+                    child: Row(
+                      children: [
+                        const Spacer(),
+                        WidgetUtils.onlyTextCenter('今日实时分润', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(28))),
+                        WidgetUtils.commonSizedBox(0, 5.h),
+                        WidgetUtils.showImages('assets/images/daili_wenti.png', 30.h, 30.h),
+                        const Spacer(),
+                      ],
+                    ),
+                  )),
                 ],
               ),
               WidgetUtils.commonSizedBox(20, 10),

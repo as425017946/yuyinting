@@ -12,7 +12,7 @@ class StyleUtils {
 
   //登录提示文字样式
   static TextStyle loginHintTextStyle =
-      TextStyle(color: MyColors.g9, fontSize: ConfigScreenUtil.autoSize30);
+      TextStyle(color: MyColors.g9, fontSize: ConfigScreenUtil.autoSize26);
 
   //登录提示文字样式
   static TextStyle buttonTextStyle =

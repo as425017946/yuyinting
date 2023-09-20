@@ -16,6 +16,7 @@ import '../bean/kefuBean.dart';
 import '../bean/labelListBean.dart';
 import '../bean/liwuMoreBean.dart';
 import '../bean/loginBean.dart';
+import '../bean/memberListBean.dart';
 import '../bean/myGhBean.dart';
 import '../bean/myHomeBean.dart';
 import '../bean/myInfoBean.dart';
@@ -26,6 +27,7 @@ import '../bean/quhao_searche_bean.dart';
 import '../bean/qyListBean.dart';
 import '../bean/rankListBean.dart';
 import '../bean/recommendRoomBean.dart';
+import '../bean/roomInfoBean.dart';
 import '../bean/searchGonghuiBean.dart';
 import '../bean/shopListBean.dart';
 import '../bean/tjRoomListBean.dart';
@@ -502,4 +504,23 @@ class DataUtils{
     print("能否私聊：$respons");
     return CommonBean.fromJson(respons!);
   }
+
+
+  /// 房间信息
+  static Future<roomInfoBean> postRoomInfo(Map<String,dynamic> params) async {
+    print("房间信息：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.roomInfo, {}, params);
+    print("房间信息：$respons");
+    return roomInfoBean.fromJson(respons!);
+  }
+
+
+  /// 房间在线用户列表
+  static Future<memberListBean> postMemberList(Map<String,dynamic> params) async {
+    print("房间在线用户列表：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.memberList, {}, params);
+    print("房间在线用户列表：$respons");
+    return memberListBean.fromJson(respons!);
+  }
+
 }

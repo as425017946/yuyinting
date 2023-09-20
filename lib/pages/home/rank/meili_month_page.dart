@@ -677,7 +677,7 @@ class _MeiLiMonthPageState extends State<MeiLiMonthPage> {
     );
   }
 
-  /// 关注列表
+  /// 榜单
   Future<void> doPostRankList() async {
     Map<String, dynamic> params = <String, dynamic>{
       'category': widget.category,
