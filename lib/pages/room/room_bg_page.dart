@@ -183,7 +183,7 @@ class _RoomBGPageState extends State<RoomBGPage> {
                         _currentIndex = index;
                       });
                     },
-                    children: const [
+                    children: [
                       RoomBG1Page(),
                       RoomBG2Page(),
                     ],

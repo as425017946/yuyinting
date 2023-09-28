@@ -9,7 +9,8 @@ import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 
 class RoomSendInfoPage extends StatefulWidget {
-  const RoomSendInfoPage({super.key});
+  String? info; ///@某人使用
+  RoomSendInfoPage({super.key, required this.info});
 
   @override
   State<RoomSendInfoPage> createState() => _RoomSendInfoPageState();
@@ -17,6 +18,14 @@ class RoomSendInfoPage extends StatefulWidget {
 
 class _RoomSendInfoPageState extends State<RoomSendInfoPage> {
   TextEditingController controller = TextEditingController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+      controller.text = '@${widget.info!}';
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

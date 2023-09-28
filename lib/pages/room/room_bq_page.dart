@@ -337,7 +337,7 @@ class _APageState extends State<RoomBQPage> {
                         GestureDetector(
                           onTap: ((){
                             Navigator.pop(context);
-                            MyUtils.goTransparentPage(context, const RoomSendInfoPage());
+                            MyUtils.goTransparentPage(context, RoomSendInfoPage(info: '',));
                           }),
                           child: WidgetUtils.showImages('assets/images/chat_jianpan.png', ScreenUtil().setHeight(50), ScreenUtil().setHeight(50)),
                         ),

@@ -7,6 +7,7 @@ import '../bean/DTTuiJianListBean.dart';
 import '../bean/careListBean.dart';
 import '../bean/chatUserInfoBean.dart';
 import '../bean/cityBean.dart';
+import '../bean/commonStringBean.dart';
 import '../bean/fileUpdateBean.dart';
 import '../bean/gameListBean.dart';
 import '../bean/ghPeopleBean.dart';
@@ -16,6 +17,7 @@ import '../bean/kefuBean.dart';
 import '../bean/labelListBean.dart';
 import '../bean/liwuMoreBean.dart';
 import '../bean/loginBean.dart';
+import '../bean/managerBean.dart';
 import '../bean/memberListBean.dart';
 import '../bean/myGhBean.dart';
 import '../bean/myHomeBean.dart';
@@ -27,9 +29,13 @@ import '../bean/quhao_searche_bean.dart';
 import '../bean/qyListBean.dart';
 import '../bean/rankListBean.dart';
 import '../bean/recommendRoomBean.dart';
+import '../bean/roomBGBean.dart';
 import '../bean/roomInfoBean.dart';
+import '../bean/roomInfoUserManagerBean.dart';
+import '../bean/roomUserInfoBean.dart';
 import '../bean/searchGonghuiBean.dart';
 import '../bean/shopListBean.dart';
+import '../bean/shoucangBean.dart';
 import '../bean/tjRoomListBean.dart';
 import '../bean/userDTListBean.dart';
 import '../bean/userInfoBean.dart';
@@ -179,6 +185,14 @@ class DataUtils{
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.followList, {}, params);
     print("用户关注和取关列表：$respons");
     return careListBean.fromJson(respons!);
+  }
+
+  /// 关注的房间
+  static Future<shoucangBean> postFollowListRoom(Map<String,dynamic> params) async {
+    print("关注的房间：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.followList, {}, params);
+    print("关注的房间：$respons");
+    return shoucangBean.fromJson(respons!);
   }
 
   /// 用户关注和取关
@@ -413,6 +427,7 @@ class DataUtils{
 
   /// 加入房间前
   static Future<CommonBean> postBeforeJoin(Map<String,dynamic> params) async {
+    print("加入房间前：$params");
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.beforeJoin, {}, params);
     print("加入房间前：$respons");
     return CommonBean.fromJson(respons!);
@@ -523,4 +538,116 @@ class DataUtils{
     return memberListBean.fromJson(respons!);
   }
 
+  /// 用户关注人或房间状态
+  static Future<CommonStringBean> postUserFollowStatus(Map<String,dynamic> params) async {
+    print("用户关注人或房间状态：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.userFollowStatus, {}, params);
+    print("用户关注人或房间状态：$respons");
+    return CommonStringBean.fromJson(respons!);
+  }
+
+
+  /// 上麦下麦
+  static Future<CommonBean> postSetmai(Map<String,dynamic> params) async {
+    print("上麦下麦：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.setmai, {}, params);
+    print("上麦下麦：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 房间内用户信息
+  static Future<roomUserInfoBean> postRoomUserInfo(Map<String,dynamic> params) async {
+    print("房间内用户信息：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.roomUserInfo, {}, params);
+    print("房间内用户信息：$respons");
+    return roomUserInfoBean.fromJson(respons!);
+  }
+
+  /// 设置/取消房间用户禁言
+  static Future<CommonBean> postSetRoomForbation(Map<String,dynamic> params) async {
+    print("设置/取消房间用户禁言：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.setRoomForbation, {}, params);
+    print("设置/取消房间用户禁言：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 设置/取消黑名单
+  static Future<CommonBean> postSetRoomBlack(Map<String,dynamic> params) async {
+    print("设置/取消黑名单：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.setRoomBlack, {}, params);
+    print("设置/取消黑名单：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 设置/取消管理员
+  static Future<CommonBean> postSetRoomAdmin(Map<String,dynamic> params) async {
+    print("设置/取消管理员：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.setRoomAdmin, {}, params);
+    print("设置/取消管理员：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 房间用户信息
+  static Future<roomInfoUserManagerBean> postRoomUserInfoManager(Map<String,dynamic> params) async {
+    print("房间用户信息：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.roomUserInfoManager, {}, params);
+    print("房间用户信息：$respons");
+    return roomInfoUserManagerBean.fromJson(respons!);
+  }
+
+  /// 房间首页展示
+  static Future<CommonBean> postSetShow(Map<String,dynamic> params) async {
+    print("房间首页展示：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.setShow, {}, params);
+    print("房间首页展示：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 房间老板位
+  static Future<CommonBean> postSetBoss(Map<String,dynamic> params) async {
+    print("房间老板位：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.setBoss, {}, params);
+    print("房间老板位：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 设置房间信息
+  static Future<CommonBean> postEditRoom(Map<String,dynamic> params) async {
+    print("设置房间信息：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.editRoom, {}, params);
+    print("设置房间信息：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 房间管理员列表
+  static Future<managerBean> postAdminList(Map<String,dynamic> params) async {
+    print("房间管理员列表：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.adminList, {}, params);
+    print("房间管理员列表：$respons");
+    return managerBean.fromJson(respons!);
+  }
+
+  /// 房间禁言列表
+  static Future<managerBean> postRoomForbationList(Map<String,dynamic> params) async {
+    print("房间禁言列表：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.roomForbationList, {}, params);
+    print("房间禁言列表：$respons");
+    return managerBean.fromJson(respons!);
+  }
+
+  /// 房间黑名单列表
+  static Future<managerBean> postRoomBlackList(Map<String,dynamic> params) async {
+    print("房间黑名单列表：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.roomBlackList, {}, params);
+    print("房间黑名单列表：$respons");
+    return managerBean.fromJson(respons!);
+  }
+
+  /// 房间背景图列表
+  static Future<roomBGBean> postBgList(Map<String,dynamic> params) async {
+    print("房间背景图列表：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.bgList, {}, params);
+    print("房间背景图列表：$respons");
+    return roomBGBean.fromJson(respons!);
+  }
 }

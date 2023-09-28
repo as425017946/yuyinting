@@ -7,13 +7,21 @@ import 'package:yuyinting/pages/room/room_manager_page.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 
+import '../../bean/Common_bean.dart';
 import '../../colors/my_colors.dart';
+import '../../http/data_utils.dart';
+import '../../http/my_http_config.dart';
+import '../../main.dart';
+import '../../utils/event_utils.dart';
+import '../../utils/my_toast_utils.dart';
+import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 
 /// 设置房间密码
 class RoomPasswordPage extends StatefulWidget {
+  String roomID;
   int type;
-  RoomPasswordPage({super.key,required this.type});
+  RoomPasswordPage({super.key,required this.type, required this.roomID});
 
   @override
   State<RoomPasswordPage> createState() => _RoomPasswordPageState();
@@ -33,26 +41,6 @@ class _RoomPasswordPageState extends State<RoomPasswordPage> {
             child: GestureDetector(
               onTap: (() {
                 Navigator.pop(context);
-                ///0 房间管理进来的  1点击功能进来的
-                if(widget.type == 0){
-                  Future.delayed(const Duration(seconds: 0), () {
-                    Navigator.of(context).push(PageRouteBuilder(
-                        opaque: false,
-                        pageBuilder:
-                            (context, animation, secondaryAnimation) {
-                          return RoomManagerPage(type: 1);
-                        }));
-                  });
-                }else{
-                  Future.delayed(const Duration(seconds: 0), () {
-                    Navigator.of(context).push(PageRouteBuilder(
-                        opaque: false,
-                        pageBuilder:
-                            (context, animation, secondaryAnimation) {
-                          return RoomGongNeng(type: 1);
-                        }));
-                  });
-                }
               }),
               child: Container(
                 height: double.infinity,
@@ -87,6 +75,7 @@ class _RoomPasswordPageState extends State<RoomPasswordPage> {
                     const Expanded(child: Text('')),
                     GestureDetector(
                       onTap: ((){
+                        doPostEditRoom();
                         Navigator.pop(context);
                       }),
                       child: Container(
@@ -148,5 +137,31 @@ class _RoomPasswordPageState extends State<RoomPasswordPage> {
         ],
       ),
     );
+  }
+
+  /// 设置房间信息
+  Future<void> doPostEditRoom() async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'room_id': widget.roomID,
+      'second_pwd': currentText,
+    };
+    try {
+      CommonBean bean = await DataUtils.postEditRoom(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          eventBus.fire(SubmitButtonBack(title: '设置密码成功'));
+          MyToastUtils.showToastBottom('房间密码已开启');
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
   }
 }

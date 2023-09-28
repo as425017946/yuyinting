@@ -151,6 +151,34 @@ class MyHttpConfig{
   static const String roomInfo = "$baseURL/room/info";
   //房间在线用户列表
   static const String memberList = "$baseURL/room/memberList";
+  //用户关注人或房间状态
+  static const String userFollowStatus = "$baseURL/mine/userFollowStatus";
+  //上麦下麦
+  static const String setmai = "$baseURL/room/setmai";
+  //设置/取消管理员
+  static const String setRoomAdmin = "$baseURL/room/setRoomAdmin";
+  //用户信息
+  static const String roomUserInfo = "$baseURL/room/userInfo";
+  //设置/取消黑名单
+  static const String setRoomBlack = "$baseURL/room/setRoomBlack";
+  //设置/取消房间用户禁言
+  static const String setRoomForbation = "$baseURL/room/setRoomForbation";
+  //房间用户信息
+  static const String roomUserInfoManager = "$baseURL/room/roomUserInfo";
+  //房间首页展示
+  static const String setShow = "$baseURL/room/setShow";
+  //房间老板位
+  static const String setBoss = "$baseURL/room/setBoss";
+  //设置房间信息
+  static const String editRoom = "$baseURL/room/editRoom";
+  //房间管理员列表
+  static const String adminList = "$baseURL/room/adminList";
+  //房间禁言列表
+  static const String roomForbationList = "$baseURL/room/roomForbationList";
+  //房间黑名单列表
+  static const String roomBlackList = "$baseURL/room/roomBlackList";
+  //房间背景图列表
+  static const String bgList = "$baseURL/room/bgList";
 
 
 

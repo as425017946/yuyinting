@@ -40,7 +40,7 @@ class _SVGASimpleImageState extends State<SVGASimpleImage>
     if (animationController == null) {
       return Container();
     }
-    return SVGAImage(animationController!,fit: BoxFit.fitWidth,preferredSize: Size(double.infinity,500.h),);
+    return SVGAImage(animationController!,fit: BoxFit.fitWidth,preferredSize: const Size(double.infinity,double.infinity), allowDrawingOverflow: false,);
   }
 
   @override

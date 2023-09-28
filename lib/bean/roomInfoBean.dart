@@ -52,13 +52,17 @@ class Data {
 class RoomInfo {
   int? roomNumber;
   String? roomName;
-  String? coverImg;
-  String? bg;
+  int? coverImg;
+  int? bg;
   int? bgType;
   String? notice;
   int? hotDegree;
   String? secondPwd;
+  int? isShow;
+  String? coverImgUrl;
+  String? bgUrl;
   String? followStatus;
+  int? isForbation;
   List<MikeList>? mikeList;
 
   RoomInfo(
@@ -70,7 +74,11 @@ class RoomInfo {
         this.notice,
         this.hotDegree,
         this.secondPwd,
+        this.isShow,
+        this.coverImgUrl,
+        this.bgUrl,
         this.followStatus,
+        this.isForbation,
         this.mikeList});
 
   RoomInfo.fromJson(Map<String, dynamic> json) {
@@ -82,7 +90,11 @@ class RoomInfo {
     notice = json['notice'];
     hotDegree = json['hot_degree'];
     secondPwd = json['second_pwd'];
+    isShow = json['is_show'];
+    coverImgUrl = json['cover_img_url'];
+    bgUrl = json['bg_url'];
     followStatus = json['follow_status'];
+    isForbation = json['isForbation'];
     if (json['mike_list'] != null) {
       mikeList = <MikeList>[];
       json['mike_list'].forEach((v) {
@@ -101,7 +113,11 @@ class RoomInfo {
     data['notice'] = this.notice;
     data['hot_degree'] = this.hotDegree;
     data['second_pwd'] = this.secondPwd;
+    data['is_show'] = this.isShow;
+    data['cover_img_url'] = this.coverImgUrl;
+    data['bg_url'] = this.bgUrl;
     data['follow_status'] = this.followStatus;
+    data['isForbation'] = this.isForbation;
     if (this.mikeList != null) {
       data['mike_list'] = this.mikeList!.map((v) => v.toJson()).toList();
     }

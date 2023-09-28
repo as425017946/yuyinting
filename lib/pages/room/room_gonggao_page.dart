@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/pages/room/room_manager_page.dart';
 
+import '../../bean/Common_bean.dart';
 import '../../colors/my_colors.dart';
+import '../../http/data_utils.dart';
+import '../../http/my_http_config.dart';
+import '../../utils/event_utils.dart';
 import '../../utils/log_util.dart';
+import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/regex_formatter.dart';
 import '../../utils/style_utils.dart';
@@ -11,7 +16,8 @@ import '../../utils/widget_utils.dart';
 
 /// 房间公告
 class RoomGongGaoPage extends StatefulWidget {
-  const RoomGongGaoPage({super.key});
+  String roomID;
+  RoomGongGaoPage({super.key, required this.roomID});
 
   @override
   State<RoomGongGaoPage> createState() => _RoomGongGaoPageState();
@@ -34,7 +40,7 @@ class _RoomGongGaoPageState extends State<RoomGongGaoPage> {
                       opaque: false,
                       pageBuilder:
                           (context, animation, secondaryAnimation) {
-                        return RoomManagerPage(type: 1);
+                        return RoomManagerPage(type: 1, roomID: widget.roomID,);
                       }));
                 });
               }),
@@ -71,15 +77,7 @@ class _RoomGongGaoPageState extends State<RoomGongGaoPage> {
                     const Expanded(child: Text('')),
                     GestureDetector(
                       onTap: (() {
-                        Navigator.pop(context);
-                        Future.delayed(const Duration(seconds: 0), () {
-                          Navigator.of(context).push(PageRouteBuilder(
-                              opaque: false,
-                              pageBuilder:
-                                  (context, animation, secondaryAnimation) {
-                                return RoomManagerPage(type: 1);
-                              }));
-                        });
+                        doPostEditRoom();
                       }),
                       child: Container(
                         width: ScreenUtil().setWidth(180),
@@ -169,5 +167,33 @@ class _RoomGongGaoPageState extends State<RoomGongGaoPage> {
         ],
       ),
     );
+  }
+
+  /// 设置房间信息
+  Future<void> doPostEditRoom() async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'room_id': widget.roomID,
+      'notice': controller.text.trim().toString(),
+    };
+    try {
+      CommonBean bean = await DataUtils.postEditRoom(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          eventBus.fire(RoomBack(title: '修改了公告', index: controller.text.trim().toString()));
+          MyToastUtils.showToastBottom('公告已修改');
+          // ignore: use_build_context_synchronously
+          Navigator.pop(context);
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
   }
 }

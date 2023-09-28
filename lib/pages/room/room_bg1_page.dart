@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/colors/my_colors.dart';
+import '../../widget/SVGASimpleImage.dart';
 
+import '../../bean/roomBGBean.dart';
+import '../../http/data_utils.dart';
+import '../../http/my_http_config.dart';
+import '../../main.dart';
+import '../../utils/my_toast_utils.dart';
+import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../../widget/OptionGridView.dart';
+
 /// 默认背景
 class RoomBG1Page extends StatefulWidget {
   const RoomBG1Page({super.key});
@@ -13,25 +21,63 @@ class RoomBG1Page extends StatefulWidget {
   State<RoomBG1Page> createState() => _RoomBG1PageState();
 }
 
-class _RoomBG1PageState extends State<RoomBG1Page> {
+class _RoomBG1PageState extends State<RoomBG1Page> with AutomaticKeepAliveClientMixin{
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    doPostBgList();
+  }
 
   ///收藏使用
   Widget _initlistdata(context, index) {
     return GestureDetector(
-      onTap: ((){
-
+      onTap: (() {
+        setState(() {
+          for(int i = 0; i < list.length; i++){
+            list[i].type = 0;
+          }
+          list[index].type = 1;
+        });
       }),
       child: Column(
         children: [
           Stack(
             alignment: Alignment.topRight,
             children: [
-              WidgetUtils.CircleImageNet(ScreenUtil().setHeight(320),ScreenUtil().setHeight(180),20.0,'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
-              WidgetUtils.showImagesFill('assets/images/room_bg_xzk.png', ScreenUtil().setHeight(320),ScreenUtil().setHeight(180)),
+              list[index].bgType == 0
+                  ? WidgetUtils.CircleImageNet(ScreenUtil().setHeight(320),
+                      ScreenUtil().setHeight(180), 20.0, list[index].img!)
+                  : Container(
+                      height: 320.h,
+                      width: 180.h,
+                      //超出部分，可裁剪
+                      clipBehavior: Clip.hardEdge,
+                      //边框设置
+                      decoration: const BoxDecoration(
+                        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                      ),
+                      child: SVGASimpleImage(
+                        resUrl: list[index].img!,
+
+                      ),
+                    ),
+              list[index].type == 1
+                  ? WidgetUtils.showImagesFill('assets/images/room_bg_xzk.png',
+                      ScreenUtil().setHeight(320), ScreenUtil().setHeight(180))
+                  : const Text(''),
             ],
           ),
           WidgetUtils.commonSizedBox(5, 0),
-          WidgetUtils.onlyTextCenter('默认一', StyleUtils.getCommonTextStyle(color: MyColors.roomTCWZ2, fontSize: ScreenUtil().setSp(28))),
+          WidgetUtils.onlyTextCenter(
+              '默认${index + 1}',
+              StyleUtils.getCommonTextStyle(
+                  color: MyColors.roomTCWZ2, fontSize: ScreenUtil().setSp(28))),
           WidgetUtils.commonSizedBox(15, 0),
         ],
       ),
@@ -44,7 +90,7 @@ class _RoomBG1PageState extends State<RoomBG1Page> {
       child: Container(
         margin: const EdgeInsets.all(20),
         child: OptionGridView(
-          itemCount: 12,
+          itemCount: list.length,
           rowCount: 3,
           mainAxisSpacing: 10,
           crossAxisSpacing: 10,
@@ -52,5 +98,34 @@ class _RoomBG1PageState extends State<RoomBG1Page> {
         ),
       ),
     );
+  }
+
+  List<DefaultBgList> list = [];
+
+  /// 房间默认背景
+  Future<void> doPostBgList() async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'room_id': sp.getString('roomID').toString(),
+    };
+    try {
+      roomBGBean bean = await DataUtils.postBgList(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          list.clear();
+          setState(() {
+            list = bean.data!.defaultBgList!;
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+          // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
   }
 }

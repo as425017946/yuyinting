@@ -163,6 +163,7 @@ class _RoomTSMiMaPageState extends State<RoomTSMiMaPage> {
       CommonBean bean = await DataUtils.postRoomJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
+          Navigator.pop(context);
         // ignore: use_build_context_synchronously
           MyUtils.goTransparentRFPage(context, RoomPage(roomId: roomID,));
           break;

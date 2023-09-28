@@ -103,5 +103,6 @@ class QuerenBack {
 /// 厅内使用
 class RoomBack {
   String title;
-  RoomBack({required this.title});
+  String? index;
+  RoomBack({required this.title, required this.index});
 }

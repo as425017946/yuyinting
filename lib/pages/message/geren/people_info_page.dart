@@ -53,7 +53,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
     _controller = PageController(
       initialPage: 0,
     );
-    doPostMyIfon();
+    doPostUserInfo();
   }
 
 
@@ -431,8 +431,8 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
     );
   }
 
-  /// 关于我们
-  Future<void> doPostMyIfon() async {
+  /// 查看用户
+  Future<void> doPostUserInfo() async {
     Loading.show('加载中...');
     Map<String, dynamic> params = <String, dynamic>{
       'uid': widget.otherId

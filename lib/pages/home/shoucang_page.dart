@@ -5,6 +5,7 @@ import 'package:yuyinting/bean/Common_bean.dart';
 
 import '../../bean/careListBean.dart';
 import '../../bean/recommendRoomBean.dart';
+import '../../bean/shoucangBean.dart';
 import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
@@ -31,11 +32,11 @@ class _ShoucangPageState extends State<ShoucangPage> with AutomaticKeepAliveClie
   @override
   bool get wantKeepAlive => true;
 
-  int length = 1;
+  int length = 0;
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   int page = 1;
-  List<Lista> _list = [];
+  List<ListSC> _list = [];
   List<DataTj> listTJ = [];
 
   void _onRefresh() async {
@@ -68,7 +69,7 @@ class _ShoucangPageState extends State<ShoucangPage> with AutomaticKeepAliveClie
   Widget _initlistdata(context, index) {
     return GestureDetector(
       onTap: (() {
-        doPostBeforeJoin(listTJ[index].id.toString());
+        doPostBeforeJoin(_list[index].id.toString());
       }),
       child: Container(
         height: ScreenUtil().setHeight(260),
@@ -80,14 +81,14 @@ class _ShoucangPageState extends State<ShoucangPage> with AutomaticKeepAliveClie
                 ScreenUtil().setHeight(260),
                 ScreenUtil().setHeight(260),
                 10.0,
-                listTJ[index].coverImg!),
+                _list[index].coverImg!),
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: Column(
                 children: [
                   const Spacer(),
                   WidgetUtils.onlyText(
-                      listTJ[index].roomName!,
+                      _list[index].roomName!,
                       StyleUtils.getCommonTextStyle(
                           color: Colors.white,
                           fontSize: ScreenUtil().setSp(26))),
@@ -97,7 +98,7 @@ class _ShoucangPageState extends State<ShoucangPage> with AutomaticKeepAliveClie
                       WidgetUtils.showImages(
                           'assets/images/zhibo2.webp', 10, 15),
                       Text(
-                        listTJ[index].hotDegree.toString(),
+                        _list[index].hotDegree.toString(),
                         style: StyleUtils.getCommonTextStyle(
                             color: Colors.white,
                             fontSize: ScreenUtil().setSp(18),
@@ -252,7 +253,7 @@ class _ShoucangPageState extends State<ShoucangPage> with AutomaticKeepAliveClie
     );
   }
 
-  /// 关注列表
+  /// 收藏列表
   Future<void> doPostFollowList() async {
     Map<String, dynamic> params = <String, dynamic>{
       'type': '2',
@@ -262,7 +263,7 @@ class _ShoucangPageState extends State<ShoucangPage> with AutomaticKeepAliveClie
     };
     try {
       Loading.show("加载中...");
-      careListBean bean = await DataUtils.postFollowList(params);
+      shoucangBean bean = await DataUtils.postFollowListRoom(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {

@@ -3,15 +3,24 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/pages/room/room_manager_page.dart';
 import 'package:yuyinting/pages/room/room_password_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
-import 'package:yuyinting/utils/my_toast_utils.dart';
-
+import '../../bean/Common_bean.dart';
 import '../../colors/my_colors.dart';
+import '../../http/data_utils.dart';
+import '../../http/my_http_config.dart';
+import '../../utils/my_toast_utils.dart';
+import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 /// 房间内功能
 class RoomGongNeng extends StatefulWidget {
+  int isShow;
+  int isBoss;
   int type;
-  RoomGongNeng({super.key, required this.type});
+  String roomID;
+  bool roomDX;
+  bool roomSY;
+  bool mima;
+  RoomGongNeng({super.key, required this.type, required this.roomID, required this.isShow, required this.isBoss, required this.roomDX, required this.roomSY, required this.mima});
 
   @override
   State<RoomGongNeng> createState() => _RoomGongNengState();
@@ -20,6 +29,20 @@ class RoomGongNeng extends StatefulWidget {
 class _RoomGongNengState extends State<RoomGongNeng> {
   var mima = false;
   var laobanwei = true;
+  int is_show = 1, is_boss = 1;
+  bool roomDX = true,roomSY = true;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+      is_show = widget.isShow;
+      is_boss = widget.isBoss;
+      roomDX = widget.roomDX;
+      roomSY = widget.roomSY;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,7 +87,7 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                     WidgetUtils.commonSizedBox(0, 20),
                     GestureDetector(
                       onTap: ((){
-
+                          doPostSetShow();
                       }),
                       child: Column(
                         children: [
@@ -82,7 +105,7 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                                   //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                                   borderRadius: BorderRadius.all(Radius.circular(20.0)),
                                 ),
-                                child: WidgetUtils.onlyTextCenter('已开启', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18))),
+                                child: WidgetUtils.onlyTextCenter(is_show == 1 ? '已开启' : '已关闭', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18))),
                               )
                             ],
                           ),
@@ -94,14 +117,18 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                     const Expanded(child: Text('')),
                     GestureDetector(
                       onTap: ((){
-                        Navigator.pop(context);
-                        Future.delayed(const Duration(seconds: 0), () {
-                          Navigator.of(context).push(PageRouteBuilder(
-                              opaque: false,
-                              pageBuilder: (context, animation, secondaryAnimation) {
-                                return RoomPasswordPage(type: 1,);
-                              }));
-                        });
+                        if(mima){
+                          eventBus.fire(SubmitButtonBack(title: '取消密码'));
+                        }else{
+                          Navigator.pop(context);
+                          Future.delayed(const Duration(seconds: 0), () {
+                            Navigator.of(context).push(PageRouteBuilder(
+                                opaque: false,
+                                pageBuilder: (context, animation, secondaryAnimation) {
+                                  return RoomPasswordPage(type: 1, roomID: widget.roomID,);
+                                }));
+                          });
+                        }
                       }),
                       child: Column(
                         children: [
@@ -170,8 +197,15 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                     const Expanded(child: Text('')),
                     GestureDetector(
                       onTap: ((){
+                        doPostSetBoss();
+                        setState(() {
+                          if(is_boss == 1){
+                            eventBus.fire(SubmitButtonBack(title: '老板位0'));
+                          }else{
+                            eventBus.fire(SubmitButtonBack(title: '老板位1'));
+                          }
+                        });
                         eventBus.fire(SubmitButtonBack(title: '老板位'));
-                        Navigator.pop(context);
                       }),
                       child: Column(
                         children: [
@@ -191,7 +225,7 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                                     //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                                     borderRadius: BorderRadius.all(Radius.circular(20.0)),
                                   ),
-                                  child: WidgetUtils.onlyTextCenter('已开启', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18))),
+                                  child: WidgetUtils.onlyTextCenter(is_boss == 1 ? '已开启' : '已关闭', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18))),
                                 ),
                               )
                             ],
@@ -211,6 +245,14 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                     WidgetUtils.commonSizedBox(0, 20),
                     GestureDetector(
                       onTap: ((){
+                        setState(() {
+                          roomDX = !roomDX;
+                        });
+                        if(roomDX){
+                          MyToastUtils.showToastBottom('动效已开启');
+                        }else{
+                          MyToastUtils.showToastBottom('动效已关闭');
+                        }
                         eventBus.fire(SubmitButtonBack(title: '动效'));
                       }),
                       child: Column(
@@ -229,7 +271,7 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                                   //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                                   borderRadius: BorderRadius.all(Radius.circular(20.0)),
                                 ),
-                                child: WidgetUtils.onlyTextCenter('已开启', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18))),
+                                child: WidgetUtils.onlyTextCenter(roomDX ? '已开启' : '已关闭', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18))),
                               )
                             ],
                           ),
@@ -241,6 +283,14 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                     const Expanded(child: Text('')),
                     GestureDetector(
                       onTap: ((){
+                        setState(() {
+                          roomSY = !roomSY;
+                        });
+                        if(roomSY){
+                          MyToastUtils.showToastBottom('房间声音已开启');
+                        }else{
+                          MyToastUtils.showToastBottom('房间声音已关闭');
+                        }
                         eventBus.fire(SubmitButtonBack(title: '房间声音'));
                       }),
                       child: Column(
@@ -259,7 +309,7 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                                   //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                                   borderRadius: BorderRadius.all(Radius.circular(20.0)),
                                 ),
-                                child: WidgetUtils.onlyTextCenter('已开启', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18))),
+                                child: WidgetUtils.onlyTextCenter(roomSY ? '已开启' : '已关闭', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18))),
                               )
                             ],
                           ),
@@ -276,7 +326,7 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                           Navigator.of(context).push(PageRouteBuilder(
                               opaque: false,
                               pageBuilder: (context, animation, secondaryAnimation) {
-                                return RoomManagerPage(type: 1);
+                                return RoomManagerPage(type: 1, roomID: widget.roomID,);
                               }));
                         });
                       }),
@@ -316,7 +366,7 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                           ],
                         ),
                         WidgetUtils.commonSizedBox(5, 0),
-                        WidgetUtils.onlyTextCenter('首页展示', StyleUtils.getCommonTextStyle(color: MyColors.roomTCWZ3, fontSize: ScreenUtil().setSp(18))),
+                        WidgetUtils.onlyTextCenter('', StyleUtils.getCommonTextStyle(color: MyColors.roomTCWZ3, fontSize: ScreenUtil().setSp(18))),
                       ],
                     ),),
                     const Expanded(child: Text('')),
@@ -342,7 +392,7 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                             ],
                           ),
                           WidgetUtils.commonSizedBox(5, 0),
-                          WidgetUtils.onlyTextCenter('首页展示', StyleUtils.getCommonTextStyle(color: MyColors.roomTCWZ3, fontSize: ScreenUtil().setSp(18))),
+                          WidgetUtils.onlyTextCenter('', StyleUtils.getCommonTextStyle(color: MyColors.roomTCWZ3, fontSize: ScreenUtil().setSp(18))),
                         ],
                       ),),
                     WidgetUtils.commonSizedBox(0, 20),
@@ -379,7 +429,15 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                     WidgetUtils.commonSizedBox(0, 20),
                     GestureDetector(
                       onTap: ((){
-                          eventBus.fire(SubmitButtonBack(title: '动效'));
+                        setState(() {
+                          roomDX = !roomDX;
+                        });
+                        if(roomDX){
+                          MyToastUtils.showToastBottom('动效已开启');
+                        }else{
+                          MyToastUtils.showToastBottom('动效已关闭');
+                        }
+                        eventBus.fire(SubmitButtonBack(title: '动效'));
                       }),
                       child: Column(
                         children: [
@@ -397,7 +455,7 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                                   //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                                   borderRadius: BorderRadius.all(Radius.circular(20.0)),
                                 ),
-                                child: WidgetUtils.onlyTextCenter('已开启', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18))),
+                                child: WidgetUtils.onlyTextCenter(roomDX ? '已开启' : '已关闭', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18))),
                               )
                             ],
                           ),
@@ -409,6 +467,14 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                     const Expanded(child: Text('')),
                     GestureDetector(
                       onTap: ((){
+                        setState(() {
+                          roomSY = !roomSY;
+                        });
+                        if(roomSY){
+                          MyToastUtils.showToastBottom('房间声音已开启');
+                        }else{
+                          MyToastUtils.showToastBottom('房间声音已关闭');
+                        }
                         eventBus.fire(SubmitButtonBack(title: '房间声音'));
                       }),
                       child: Column(
@@ -427,7 +493,7 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                                   //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                                   borderRadius: BorderRadius.all(Radius.circular(20.0)),
                                 ),
-                                child: WidgetUtils.onlyTextCenter('已开启', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18))),
+                                child: WidgetUtils.onlyTextCenter(roomSY ? '已开启' : '已关闭', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(18))),
                               )
                             ],
                           ),
@@ -512,4 +578,83 @@ class _RoomGongNengState extends State<RoomGongNeng> {
       ),
     );
   }
+
+  /// 首页展示
+  Future<void> doPostSetShow() async {
+    setState(() {
+      if(is_show == 1){
+        is_show = 0;
+      }else{
+        is_show = 1;
+      }
+    });
+    Map<String, dynamic> params = <String, dynamic>{
+      'room_id': widget.roomID,
+      'is_show': is_show,
+    };
+    try {
+      CommonBean bean = await DataUtils.postSetShow(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            if(is_show == 1){
+              MyToastUtils.showToastBottom('首页展示已开启');
+            }else{
+              MyToastUtils.showToastBottom('首页展示已关闭');
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+  }
+  /// 老板位
+  Future<void> doPostSetBoss() async {
+    String status = '';
+    setState(() {
+      if(is_boss == 1){
+        is_boss = 0;
+        status = 'no';
+      }else{
+        is_boss = 1;
+        status = 'yes';
+      }
+    });
+    Map<String, dynamic> params = <String, dynamic>{
+      'room_id': widget.roomID,
+      'status': status,
+    };
+    try {
+      CommonBean bean = await DataUtils.postSetBoss(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            if(is_boss == 1){
+              MyToastUtils.showToastBottom('老板位已开启');
+            }else{
+              MyToastUtils.showToastBottom('老板位已关闭');
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+  }
+
 }
