@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:im_flutter_sdk/im_flutter_sdk.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:yuyinting/pages/message/message_page.dart';
 import 'package:yuyinting/pages/trends/trends_page.dart';
 import 'package:yuyinting/utils/log_util.dart';
@@ -50,7 +51,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
 
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
     _currentIndex = 0;
     _controller = PageController(

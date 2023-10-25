@@ -70,8 +70,8 @@ class _MessagePageState extends State<MessagePage> {
             Stack(
               alignment: Alignment.center,
               children: [
-                WidgetUtils.CircleHeadImage(
-                    100.h, 100.h, listMessage[i]['otherHeadImg']),
+                WidgetUtils.CircleImageAss(
+                    100.h, 100.h, 50.h, listMessage[i]['otherHeadImg']),
                 listU[i].liveStatus == 1
                     ? WidgetUtils.showImages(
                         'assets/images/zhibozhong.webp',

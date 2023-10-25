@@ -7,6 +7,7 @@ import '../../bean/Common_bean.dart';
 import '../../colors/my_colors.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
+import '../../main.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
@@ -41,6 +42,11 @@ class _RoomGongNengState extends State<RoomGongNeng> {
       is_boss = widget.isBoss;
       roomDX = widget.roomDX;
       roomSY = widget.roomSY;
+      if(sp.getString('roomPass').toString() == 'null' || sp.getString('roomPass').toString().isEmpty){
+        mima = false;
+      }else{
+        mima = true;
+      }
     });
   }
   @override
@@ -117,18 +123,14 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                     const Expanded(child: Text('')),
                     GestureDetector(
                       onTap: ((){
-                        if(mima){
-                          eventBus.fire(SubmitButtonBack(title: '取消密码'));
-                        }else{
-                          Navigator.pop(context);
-                          Future.delayed(const Duration(seconds: 0), () {
-                            Navigator.of(context).push(PageRouteBuilder(
-                                opaque: false,
-                                pageBuilder: (context, animation, secondaryAnimation) {
-                                  return RoomPasswordPage(type: 1, roomID: widget.roomID,);
-                                }));
-                          });
-                        }
+                        Navigator.pop(context);
+                        Future.delayed(const Duration(seconds: 0), () {
+                          Navigator.of(context).push(PageRouteBuilder(
+                              opaque: false,
+                              pageBuilder: (context, animation, secondaryAnimation) {
+                                return RoomPasswordPage(type: 1, roomID: widget.roomID,);
+                              }));
+                        });
                       }),
                       child: Column(
                         children: [

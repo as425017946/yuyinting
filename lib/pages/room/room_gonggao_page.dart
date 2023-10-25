@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yuyinting/main.dart';
 import 'package:yuyinting/pages/room/room_manager_page.dart';
 
 import '../../bean/Common_bean.dart';
@@ -25,6 +26,14 @@ class RoomGongGaoPage extends StatefulWidget {
 
 class _RoomGongGaoPageState extends State<RoomGongGaoPage> {
   TextEditingController controller = TextEditingController();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+      controller.text = sp.getString('roomNotice').toString() ?? '';
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

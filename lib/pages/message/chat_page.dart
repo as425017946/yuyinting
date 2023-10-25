@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sound/flutter_sound.dart';
@@ -29,7 +28,6 @@ import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../trends/trends_more_page.dart';
 import 'package:flutter_sound/public/flutter_sound_player.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_sound_platform_interface/flutter_sound_recorder_platform_interface.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/foundation.dart' as foundation;
@@ -104,7 +102,19 @@ class _ChatPageState extends State<ChatPage> {
     });
     _focusNode = FocusNode();
     _focusNode!.addListener(_onFocusChange);
+    saveImages();
+  }
 
+  // 自己头像和他人头像
+  String myHeadImg = '', otherHeadImg = '';
+  saveImages() async{
+    //保存头像
+    MyUtils.saveImgTemp(sp.getString('user_headimg').toString(), sp.getString('user_id').toString());
+    MyUtils.saveImgTemp(widget.otherImg, widget.otherUid);
+    // 保存路径
+    Directory? directory = await getTemporaryDirectory();
+    myHeadImg = '${directory!.path}/${sp.getString('user_headimg')}.jpg';
+    otherHeadImg = '${directory!.path}/${widget.otherUid}.jpg';
   }
 
   void _initialize() async {
@@ -283,8 +293,8 @@ class _ChatPageState extends State<ChatPage> {
               ScreenUtil().setHeight(10), ScreenUtil().setHeight(10)),
           Row(
             children: [
-              WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(80),
-                  ScreenUtil().setHeight(80), allData2[i]['headImg']),
+              WidgetUtils.CircleImageAss(ScreenUtil().setHeight(80),
+                  ScreenUtil().setHeight(80), 40.h, allData2[i]['headImg']),
               WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(10)),
               Flexible(
                 child: Container(
@@ -313,6 +323,10 @@ class _ChatPageState extends State<ChatPage> {
                   child: allData2[i]['type'] == 1
                       ? Text(
                     allData2[i]['content'],
+                    style: TextStyle(
+                      fontSize: 40.sp,
+                      color: Colors.black,
+                    ),
                   )
                       : allData2[i]['type'] == 2 ? GestureDetector(
                     onTap: (() {
@@ -449,8 +463,8 @@ class _ChatPageState extends State<ChatPage> {
                 ),
               ),
               WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(10)),
-              WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(80),
-                  ScreenUtil().setHeight(80), allData2[i]['otherHeadImg']),
+              WidgetUtils.CircleImageAss(ScreenUtil().setHeight(80),
+                  ScreenUtil().setHeight(80), 40.h, allData2[i]['otherHeadImg']),
             ],
           ),
           WidgetUtils.commonSizedBox(20.h, ScreenUtil().setHeight(10)),
@@ -1236,8 +1250,6 @@ class _ChatPageState extends State<ChatPage> {
 
   /// 聊天获取用户动态信息
   Future<void> doPostChatUserInfo() async {
-    LogE('===${widget.otherUid}');
-    LogE('===${sp.getString('user_token')}');
     Map<String, dynamic> params = <String, dynamic>{
       'uid': widget.otherUid,
     };
@@ -1303,6 +1315,7 @@ class _ChatPageState extends State<ChatPage> {
     if(content.trim().isEmpty){
       return;
     }
+
     DatabaseHelper databaseHelper = DatabaseHelper();
     Database? db = await databaseHelper.database;
     Map<String, dynamic> params = <String, dynamic>{
@@ -1329,8 +1342,8 @@ class _ChatPageState extends State<ChatPage> {
             'combineID': combineID,
             'nickName': widget.nickName,
             'content': content,
-            'headImg': sp.getString('user_headimg'),
-            'otherHeadImg': widget.otherImg,
+            'headImg': myHeadImg,
+            'otherHeadImg': otherHeadImg,
             'add_time': DateTime.now().millisecondsSinceEpoch,
             'type': 1,
             'number': 0,
@@ -1357,8 +1370,8 @@ class _ChatPageState extends State<ChatPage> {
             'combineID': combineID,
             'nickName': widget.nickName,
             'content': content,
-            'headImg': sp.getString('user_headimg'),
-            'otherHeadImg': widget.otherImg,
+            'headImg': myHeadImg,
+            'otherHeadImg': otherHeadImg,
             'add_time': DateTime.now().millisecondsSinceEpoch,
             'type': 1,
             'number': 0,
@@ -1448,8 +1461,8 @@ class _ChatPageState extends State<ChatPage> {
       'combineID': combineID,
       'nickName': widget.nickName,
       'content': filePath,
-      'headImg': sp.getString('user_headimg'),
-      'otherHeadImg': widget.otherImg,
+      'headImg': myHeadImg,
+      'otherHeadImg': otherHeadImg,
       'add_time': DateTime.now().millisecondsSinceEpoch,
       'type': 2,
       'number': 0,
@@ -1502,8 +1515,8 @@ class _ChatPageState extends State<ChatPage> {
       'combineID': combineID,
       'nickName': widget.nickName,
       'content': _mPath,
-      'headImg': sp.getString('user_headimg'),
-      'otherHeadImg': widget.otherImg,
+      'headImg': myHeadImg,
+      'otherHeadImg': otherHeadImg,
       'add_time': DateTime.now().millisecondsSinceEpoch,
       'type': 3,
       'number': audioNum,

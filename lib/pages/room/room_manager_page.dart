@@ -1,22 +1,30 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:yuyinting/main.dart';
 import 'package:yuyinting/pages/room/room_bg_page.dart';
 import 'package:yuyinting/pages/room/room_black_page.dart';
 import 'package:yuyinting/pages/room/room_gonggao_page.dart';
 import 'package:yuyinting/pages/room/room_guanliyuan_page.dart';
 import 'package:yuyinting/pages/room/room_jinyan_page.dart';
+import 'package:yuyinting/pages/room/room_name.dart';
 import 'package:yuyinting/pages/room/room_password_page.dart';
 import '../../bean/Common_bean.dart';
 import '../../bean/managerBean.dart';
 import '../../colors/my_colors.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
+import '../../utils/loading.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
 
 /// 房间管理
 class RoomManagerPage extends StatefulWidget {
@@ -36,6 +44,15 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
     super.initState();
     doPostAdminList();
   }
+
+  onTapPickFromGallery() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    print('选择照片路径:${image?.path}');
+
+    doPostPostFileUpload(image!.path);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -182,20 +199,58 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
                 Row(
                   children: [
                     WidgetUtils.commonSizedBox(0, 20),
-                    WidgetUtils.CircleImageNet(
-                        ScreenUtil().setHeight(122),
-                        ScreenUtil().setHeight(122),
-                        15,
-                        sp.getString('roomImage').toString()),
+                    GestureDetector(
+                      onTap: ((){
+                        onTapPickFromGallery();
+                      }),
+                      child: Stack(
+                        alignment: Alignment.bottomCenter,
+                        children: [
+                          WidgetUtils.CircleImageNet(
+                              ScreenUtil().setHeight(122),
+                              ScreenUtil().setHeight(122),
+                              15,
+                              sp.getString('roomImage').toString()),
+                          Container(
+                            height: 30.h,
+                            width: 122.h,
+                            //边框设置
+                            decoration: const BoxDecoration(
+                              //背景
+                              color: Colors.black54,
+                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                              borderRadius: BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(15.0), bottomRight: Radius.circular(15.0)),
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              '编辑',
+                              style: StyleUtils.getCommonTextStyle(color: Colors.white70, fontSize: 25.sp),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                     WidgetUtils.commonSizedBox(0, 15),
                     Expanded(
                       child: Column(
                         children: [
-                          WidgetUtils.onlyText(
-                              sp.getString('roomName').toString(),
-                              StyleUtils.getCommonTextStyle(
-                                  color: MyColors.roomTCWZ2,
-                                  fontSize: ScreenUtil().setSp(30))),
+                          GestureDetector(
+                            onTap: ((){
+                              Navigator.pop(context);
+                              MyUtils.goTransparentPageCom(context, const RoomName());
+                            }),
+                            child: Row(
+                              children: [
+                                WidgetUtils.onlyText(
+                                    sp.getString('roomName').toString(),
+                                    StyleUtils.getCommonTextStyle(
+                                        color: MyColors.roomTCWZ2,
+                                        fontSize: ScreenUtil().setSp(30))),
+                                WidgetUtils.commonSizedBox(0, 5.h),
+                                WidgetUtils.showImages('assets/images/room_bianji.png', 20.h, 20.h)
+                              ],
+                            ),
+                          ),
                           WidgetUtils.commonSizedBox(20, 0),
                           Row(
                             children: [
@@ -485,4 +540,57 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
       MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
     }
   }
+
+  /// 上传房间缩略图
+  Future<void> doPostPostFileUpload(path) async {
+    var dir = await path_provider.getTemporaryDirectory();
+    String targetPath = '';
+    if(path.toString().contains('.gif') || path.toString().contains('.GIF')){
+      targetPath = "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.gif";
+    }else{
+      targetPath = "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
+    }
+    var result = await FlutterImageCompress.compressAndGetFile(
+      path, targetPath,
+      quality: 50,
+      rotate: 180,
+    );
+    Loading.show("上传中...");
+    var name = path.substring(path.lastIndexOf("/") + 1, path.length);
+    FormData formdata = FormData.fromMap(
+      {
+        'room_id': sp.getString('roomID').toString(),
+        "cover_img": await MultipartFile.fromFile(result!.path,
+          filename: name,)
+      },
+    );
+    BaseOptions option = BaseOptions(
+        contentType: 'multipart/form-data', responseType: ResponseType.plain);
+    option.headers["Authorization"] = sp.getString('user_token')??'';
+    Dio dio = Dio(option);
+    //application/json
+    try {
+      var respone = await dio.post(
+          MyHttpConfig.editRoom,
+          data: formdata);
+      Map jsonResponse = json.decode(respone.data.toString());
+      if (respone.statusCode == 200) {
+        MyToastUtils.showToastBottom('上传成功');
+
+        Loading.dismiss();
+      }else if(respone.statusCode == 401){
+        // ignore: use_build_context_synchronously
+        MyUtils.jumpLogin(context);
+      }else{
+        MyToastUtils.showToastBottom(jsonResponse['msg']);
+      }
+
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      // MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+
+  }
+
 }

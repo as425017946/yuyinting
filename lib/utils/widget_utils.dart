@@ -678,6 +678,9 @@ class WidgetUtils {
           case '全民代理':
             eventBus.fire(SubmitButtonBack(title: '全民代理'));
             break;
+          case '等级成就':
+            eventBus.fire(SubmitButtonBack(title: '等级成就'));
+            break;
           case '联系客服':
             eventBus.fire(SubmitButtonBack(title: '联系客服'));
             break;

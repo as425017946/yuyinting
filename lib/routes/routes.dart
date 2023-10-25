@@ -18,6 +18,7 @@ import '../pages/game/loge_page.dart';
 import '../pages/login/forgot_password_page.dart';
 import '../pages/message/be_care_page.dart';
 import '../pages/message/xitong_more_page.dart';
+import '../pages/mine/chengjiu/chengjiu_page.dart';
 import '../pages/mine/daili/share_tuiguang_page.dart';
 import '../pages/mine/dengji_page.dart';
 import '../pages/mine/gonghui/gonghui_home_page.dart';
@@ -118,6 +119,7 @@ var staticRoutes = {
   'MyKeFuPage':(context) => const MyKeFuPage(),// 新客服页面
   'DengjiPage':(context) => const DengjiPage(),// 测试等级描边
   'LongPage':(context) => const LongPage(),// 新客服页面
+  'ChengJiuPage':(context) => const ChengJiuPage(),// 等级成就
 
 
 };

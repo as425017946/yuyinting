@@ -179,6 +179,20 @@ class MyHttpConfig{
   static const String roomBlackList = "$baseURL/room/roomBlackList";
   //房间背景图列表
   static const String bgList = "$baseURL/room/bgList";
+  //选择房间背景图
+  static const String checkRoomBg = "$baseURL/room/checkRoomBg";
+  //房间上传背景图
+  static const String uploadBg = "$baseURL/room/uploadBg";
+  //房间闭麦
+  static const String setClose = "$baseURL/room/setClose";
+  //房间锁麦
+  static const String setLock = "$baseURL/room/setLock";
+  //获取头像信息
+  static const String getAvatars = "$baseURL/login/getAvatars";
+  //欢迎语
+  static const String roomWelcomeMsg = "$baseURL/room/roomWelcomeMsg";
+  //礼物列表
+  static const String giftList = "$baseURL/gift/list";
 
 
 

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/colors/my_colors.dart';
+import 'package:yuyinting/utils/event_utils.dart';
+import 'package:yuyinting/utils/log_util.dart';
 import '../../widget/SVGASimpleImage.dart';
 
 import '../../bean/roomBGBean.dart';
@@ -33,15 +35,18 @@ class _RoomBG1PageState extends State<RoomBG1Page> with AutomaticKeepAliveClient
     doPostBgList();
   }
 
-  ///收藏使用
+  ///默认背景图
   Widget _initlistdata(context, index) {
     return GestureDetector(
       onTap: (() {
         setState(() {
-          for(int i = 0; i < list.length; i++){
-            list[i].type = 0;
-          }
           list[index].type = 1;
+          for(int i = 0; i < list.length; i++){
+            if(index != i) {
+              list[i].type = 0;
+            }
+          }
+          eventBus.fire(RoomBGBack(bgID: list[index].bgId.toString(), bgType: list[index].bgType.toString(), bgImagUrl: list[index].img.toString()));
         });
       }),
       child: Column(
@@ -49,7 +54,7 @@ class _RoomBG1PageState extends State<RoomBG1Page> with AutomaticKeepAliveClient
           Stack(
             alignment: Alignment.topRight,
             children: [
-              list[index].bgType == 0
+              list[index].bgType == 1
                   ? WidgetUtils.CircleImageNet(ScreenUtil().setHeight(320),
                       ScreenUtil().setHeight(180), 20.0, list[index].img!)
                   : Container(
@@ -104,6 +109,7 @@ class _RoomBG1PageState extends State<RoomBG1Page> with AutomaticKeepAliveClient
 
   /// 房间默认背景
   Future<void> doPostBgList() async {
+    LogE('用户token${sp.getString('user_token')}');
     Map<String, dynamic> params = <String, dynamic>{
       'room_id': sp.getString('roomID').toString(),
     };

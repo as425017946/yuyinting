@@ -106,3 +106,51 @@ class RoomBack {
   String? index;
   RoomBack({required this.title, required this.index});
 }
+
+/// 房间背景
+class RoomBGBack {
+  String bgID;
+  String bgType;
+  String bgImagUrl;
+  RoomBGBack({required this.bgID, required this.bgType, required this.bgImagUrl});
+}
+
+/// 房间背景
+class CheckBGBack {
+  String bgType;
+  String bgImagUrl;
+  CheckBGBack({required this.bgType, required this.bgImagUrl});
+}
+
+/// 自定义消息
+class ZDYBack {
+  Map<String, String>? map;
+  String type;
+  ZDYBack({required this.map, required this.type});
+}
+
+/// im进入房间
+class JoinRoomYBack {
+  Map<dynamic, dynamic> map;
+  String type;
+  JoinRoomYBack({required this.map, required this.type});
+}
+
+
+/// 礼物显示效果使用
+class LiWuShowBack {
+  //礼物图地址
+  String url;
+  // 送到哪里
+  List<String> listPeople;
+  // 赠送数量
+  String numbers;
+  LiWuShowBack({required this.url, required this.listPeople, required this.numbers});
+}
+
+/// 选中送谁的时候使用
+class ChoosePeopleBack {
+  // 送到哪里
+  List<bool> listPeople;
+  ChoosePeopleBack({required this.listPeople});
+}

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:yuyinting/pages/room/room_messages_more_page.dart';
 import '../../colors/my_colors.dart';
 import '../../db/DatabaseHelper.dart';
-import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 
@@ -29,7 +27,7 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
     doPostSystemMsgList();
   }
 
-  /// 在线用户推荐使用
+  /// 消息列表
   Widget _itemTuiJian(BuildContext context, int i) {
     return Column(
       children: [
@@ -39,7 +37,7 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
               Navigator.of(context).push(PageRouteBuilder(
                   opaque: false,
                   pageBuilder: (context, animation, secondaryAnimation) {
-                    return const RoomMessagesMorePage();
+                    return RoomMessagesMorePage(otherUid: listMessage[i]['otherUid'], nickName: listMessage[i]['nickName'], otherImg: listMessage[i]['otherHeadImg'],);
                   }));
             });
           }),
@@ -49,9 +47,10 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
             height: ScreenUtil().setHeight(100),
             child: Row(
               children: [
-                WidgetUtils.CircleHeadImage(
+                WidgetUtils.CircleImageAss(
                     ScreenUtil().setHeight(90),
                     ScreenUtil().setHeight(90),
+                    45.h,
                     listMessage[i]['otherHeadImg']),
                 WidgetUtils.commonSizedBox(0, 10),
                 Expanded(
@@ -124,6 +123,7 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
+      resizeToAvoidBottomInset: false,
       body: Column(
         children: [
           Expanded(

@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yuyinting/bean/Common_bean.dart';
 import 'package:yuyinting/pages/room/room_bg1_page.dart';
 import 'package:yuyinting/pages/room/room_bg2_page.dart';
 import 'package:yuyinting/pages/room/room_manager_page.dart';
+import 'package:yuyinting/utils/event_utils.dart';
 
 import '../../colors/my_colors.dart';
+import '../../http/data_utils.dart';
+import '../../http/my_http_config.dart';
+import '../../main.dart';
+import '../../utils/my_toast_utils.dart';
+import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 
@@ -19,7 +26,9 @@ class RoomBGPage extends StatefulWidget {
 class _RoomBGPageState extends State<RoomBGPage> {
   int _currentIndex = 0;
   late final PageController _controller;
-
+  bool isOK = false;
+  var listen;
+  String bgID = '', bgType = '', bgImagUrl = '';
   @override
   void initState() {
     // TODO: implement initState
@@ -28,6 +37,24 @@ class _RoomBGPageState extends State<RoomBGPage> {
     _controller = PageController(
       initialPage: 0,
     );
+
+    listen = eventBus.on<RoomBGBack>().listen((event) {
+      if(event.bgID.isNotEmpty){
+        setState(() {
+          bgID = event.bgID;
+          bgType = event.bgType;
+          bgImagUrl = event.bgImagUrl;
+          isOK = true;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    listen.cancel();
   }
 
   @override
@@ -76,7 +103,10 @@ class _RoomBGPageState extends State<RoomBGPage> {
                     const Expanded(child: Text('')),
                     GestureDetector(
                       onTap: (() {
-                        Navigator.pop(context);
+                        if(isOK){
+                          doPostCheckRoomBg();
+                          Navigator.pop(context);
+                        }
                       }),
                       child: Container(
                         width: ScreenUtil().setHeight(180),
@@ -86,7 +116,7 @@ class _RoomBGPageState extends State<RoomBGPage> {
                         child: Text(
                           '确定',
                           style: StyleUtils.getCommonTextStyle(
-                              color: MyColors.roomTCWZ3,
+                              color: isOK ? Colors.white : MyColors.roomTCWZ3,
                               fontSize: ScreenUtil().setSp(28)),
                         ),
                       ),
@@ -183,7 +213,7 @@ class _RoomBGPageState extends State<RoomBGPage> {
                         _currentIndex = index;
                       });
                     },
-                    children: [
+                    children: const [
                       RoomBG1Page(),
                       RoomBG2Page(),
                     ],
@@ -195,5 +225,31 @@ class _RoomBGPageState extends State<RoomBGPage> {
         ],
       ),
     );
+  }
+  /// 选择房间背景图
+  Future<void> doPostCheckRoomBg() async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'room_id': sp.getString('roomID').toString(),
+      'bg_id': bgID,
+      'bg_type': bgType,
+    };
+    try {
+      CommonBean bean = await DataUtils.postCheckRoomBg(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          eventBus.fire(CheckBGBack(bgType: bgType, bgImagUrl: bgImagUrl));
+          MyToastUtils.showToastBottom('房间背景更换成功');
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
   }
 }

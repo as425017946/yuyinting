@@ -1,9 +1,14 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:im_flutter_sdk/im_flutter_sdk.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
-import 'package:yuyinting/pages/game/mofang_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import '../db/DatabaseHelper.dart';
@@ -11,6 +16,7 @@ import '../main.dart';
 import '../pages/login/login_page.dart';
 import 'log_util.dart';
 import 'my_toast_utils.dart';
+import 'package:http/http.dart' as http;
 
 class MyUtils {
   ///字符串比较,返回0相等，返回1不想等
@@ -337,6 +343,50 @@ class MyUtils {
     );
   }
 
+  // 保存网络图片到包下
+  static void saveImg(String imgUrl, String name) async {
+    if (await Permission.storage.request().isGranted) {
+      var response = await Dio()
+          .get(imgUrl, options: Options(responseType: ResponseType.bytes));
+      // 生成新的文件名
+      String fileName = "$name.jpg";
+
+      // 获取保存路径
+      Directory? directory = await getExternalStorageDirectory();
+      String savePath = "${directory!.path}/$fileName";
+
+      // 保存图片
+      File file = File(savePath);
+      await file.writeAsBytes(Uint8List.fromList(response.data));
+      if (await file.exists()) {
+        // MyToastUtils.showToastBottom("下载成功");
+        print("保存路径：$savePath");
+      } else {
+        // MyToastUtils.showToastBottom("下载失败");
+      }
+    }else{
+      MyToastUtils.showToastBottom("未获取存储权限");
+    }
+  }
+
+  // 保存网络图片到缓存目录
+  static void saveImgTemp(String imgUrl, String name) async {
+    var response = await http.get(Uri.parse(imgUrl));
+    // 生成新的文件名
+    String fileName = "$name.jpg";
+    // 获取保存路径
+    var tempDir = await getTemporaryDirectory();
+    String savePath = "${tempDir!.path}/$fileName";
+    // 保存图片
+    File file = File(savePath);
+    await file.writeAsBytes(response.bodyBytes);
+    if (await file.exists()) {
+      // MyToastUtils.showToastBottom("下载成功");
+    } else {
+      // MyToastUtils.showToastBottom("下载失败");
+    }
+  }
+
   //初始化sdk
   static void initSDK() async {
     EMOptions options = EMOptions(
@@ -392,39 +442,41 @@ class MyUtils {
               case MessageType.TXT:
                 {
                   EMTextMessageBody body = msg.body as EMTextMessageBody;
-                  LogE('接受文本信息${msg.attributes}');
-                  LogE('发送人id${msg.from!}');
+                  LogE('接受文本信息$msg');
                   Map info = msg.attributes!;
-                  String nickName = info['nickname'];
-                  String headImg = info['avatar'];
-                  String combineID = '';
-                  if(int.parse(sp.getString('user_id').toString()) > int.parse(msg.from!)){
-                    combineID = '${msg.from}-${sp.getString('user_id').toString()}';
+                  if(info['lv'] == '' || info['lv'] == null){
+                    String nickName = info['nickname'];
+                    String headImg = info['avatar'];
+                    String combineID = '';
+                    if(int.parse(sp.getString('user_id').toString()) > int.parse(msg.from!)){
+                      combineID = '${msg.from}-${sp.getString('user_id').toString()}';
+                    }else{
+                      combineID = '${sp.getString('user_id').toString()}-${msg.from}';
+                    }
+                    Map<String, dynamic> params = <String, dynamic>{
+                      'uid': sp.getString('user_id').toString(),
+                      'otherUid': msg.from,
+                      'whoUid':msg.from,
+                      'combineID': combineID,
+                      'nickName': nickName,
+                      'content': body.content,
+                      'bigImg' : '',
+                      'headImg': headImg,
+                      'otherHeadImg': sp.getString('user_headimg'),
+                      'add_time': msg.serverTime,
+                      'type': 1,
+                      'number': 0,
+                      'status': 1,
+                      'readStatus': 0,
+                      'liveStatus': 0,
+                      'loginStatus': 0,
+                    };
+                    // 插入数据
+                    await databaseHelper.insertData('messageSLTable', params);
+                    eventBus.fire(SendMessageBack(type: 1, msgID: '0'));
                   }else{
-                    combineID = '${sp.getString('user_id').toString()}-${msg.from}';
+                    eventBus.fire(JoinRoomYBack(map: info, type: '0'));
                   }
-                  Map<String, dynamic> params = <String, dynamic>{
-                    'uid': sp.getString('user_id').toString(),
-                    'otherUid': msg.from,
-                    'whoUid':msg.from,
-                    'combineID': combineID,
-                    'nickName': nickName,
-                    'content': body.content,
-                    'bigImg' : '',
-                    'headImg': headImg,
-                    'otherHeadImg': sp.getString('user_headimg'),
-                    'add_time': msg.serverTime,
-                    'type': 1,
-                    'number': 0,
-                    'status': 1,
-                    'readStatus': 0,
-                    'liveStatus': 0,
-                    'loginStatus': 0,
-                  };
-                  // 插入数据
-                  await databaseHelper.insertData('messageSLTable', params);
-
-                  eventBus.fire(SendMessageBack(type: 1, msgID: '0'));
                 }
                 break;
               case MessageType.IMAGE:
@@ -527,10 +579,9 @@ class MyUtils {
                 break;
               case MessageType.CUSTOM:
                 {
-                  LogE('CUSTOM消息${msg.from}');
-                  addLogToConsole(
-                    "receive custom message, from: ${msg.from}",
-                  );
+                  LogE('CUSTOM消息${msg.body}');
+                  EMCustomMessageBody body = msg.body as EMCustomMessageBody;
+                  eventBus.fire(ZDYBack(map: body.params, type: body.event));
                 }
                 break;
               case MessageType.CMD:

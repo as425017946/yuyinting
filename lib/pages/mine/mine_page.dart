@@ -99,6 +99,10 @@ class _MinePageState extends State<MinePage>{
         if (mounted) {
           Navigator.pushNamed(context, 'DailiHomePage');
         }
+      } else if (event.title == '等级成就') {
+        if (mounted) {
+          Navigator.pushNamed(context, 'ChengJiuPage');
+        }
       } else if (event.title == '联系客服') {
         if (mounted) {
           // Navigator.pushNamed(context, 'KefuPage');
@@ -443,7 +447,7 @@ class _MinePageState extends State<MinePage>{
             /// 展示信息
             WidgetUtils.containerNo(
                 pad: 20,
-                height: ScreenUtil().setHeight(600),
+                height: ScreenUtil().setHeight(650),
                 width: double.infinity,
                 color: Colors.white,
                 ra: 20,
@@ -546,7 +550,9 @@ class _MinePageState extends State<MinePage>{
                     WidgetUtils.whiteKuang(
                         'assets/images/mine_gonghui.png', '公会中心', false),
                     WidgetUtils.whiteKuang(
-                        'assets/images/mine_daili.png', '全民代理', false),
+                        'assets/images/mine_quan.png', '全民代理', false),
+                    WidgetUtils.whiteKuang(
+                        'assets/images/mine_daili.png', '等级成就', false),
                     WidgetUtils.whiteKuang(
                         'assets/images/mine_kefu.png', '联系客服', false),
                   ],

@@ -10,8 +10,10 @@ import '../bean/cityBean.dart';
 import '../bean/commonStringBean.dart';
 import '../bean/fileUpdateBean.dart';
 import '../bean/gameListBean.dart';
+import '../bean/getHeadImageBean.dart';
 import '../bean/ghPeopleBean.dart';
 import '../bean/ghRoomBean.dart';
+import '../bean/giftListBean.dart';
 import '../bean/homeTJBean.dart';
 import '../bean/kefuBean.dart';
 import '../bean/labelListBean.dart';
@@ -649,5 +651,60 @@ class DataUtils{
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.bgList, {}, params);
     print("房间背景图列表：$respons");
     return roomBGBean.fromJson(respons!);
+  }
+
+  /// 选择房间背景图
+  static Future<CommonBean> postCheckRoomBg(Map<String,dynamic> params) async {
+    print("选择房间背景图：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.checkRoomBg, {}, params);
+    print("选择房间背景图：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 房间上传背景图
+  static Future<CommonBean> postUploadBg(Map<String,dynamic> params) async {
+    print("房间上传背景图：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.uploadBg, {}, params);
+    print("房间上传背景图：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 房间闭麦
+  static Future<CommonBean> postSetClose(Map<String,dynamic> params) async {
+    print("房间闭麦：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.setClose, {}, params);
+    print("房间闭麦：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 房间锁麦
+  static Future<CommonBean> postSetLock(Map<String,dynamic> params) async {
+    print("房间锁麦：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.setLock, {}, params);
+    print("房间锁麦：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 获取头像信息
+  static Future<getHeadImageBean> postGetAvatars(Map<String,dynamic> params) async {
+    print("获取头像信息：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.getAvatars, {}, params);
+    print("获取头像信息：$respons");
+    return getHeadImageBean.fromJson(respons!);
+  }
+
+  /// 欢迎语
+  static Future<CommonBean> postRoomWelcomeMsg(Map<String,dynamic> params) async {
+    print("欢迎语：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.roomWelcomeMsg, {}, params);
+    print("欢迎语：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 礼物列表
+  static Future<giftListBean> postGiftList() async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.giftList, {}, {});
+    print("礼物列表：$respons");
+    return giftListBean.fromJson(respons!);
   }
 }

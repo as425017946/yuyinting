@@ -2,6 +2,7 @@ import 'package:auto_orientation/auto_orientation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/pages/home/paidui_page.dart';
 import 'package:yuyinting/pages/home/shoucang_page.dart';
@@ -13,6 +14,7 @@ import 'package:yuyinting/pages/login/edit_info_page.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import '../../main.dart';
+import '../../utils/log_util.dart';
 import '../../utils/my_utils.dart';
 ///首页
 class HomePage extends StatefulWidget {
@@ -47,12 +49,18 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin{
     _controller = PageController(
       initialPage: 1,
     );
+    ///首次打开app进入的，弹出编辑页面
     if(sp.getBool('isFirst') == true){
       MyUtils.goTransparentPageCom(context, const EditInfoPage());
     }
 
     MyUtils.goTransparentPageCom(context, const TSCarPage());
+    quanxian();
+  }
 
+  Future<void> quanxian() async {
+    PermissionStatus status = await Permission.storage.request();
+    LogE('权限状态$status');
   }
 
   @override

@@ -1,12 +1,19 @@
+import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 import 'package:yuyinting/utils/log_util.dart';
-
+import 'package:path_provider/path_provider.dart' as path_provider;
 import '../../bean/roomBGBean.dart';
 import '../../colors/my_colors.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
+import '../../utils/event_utils.dart';
+import '../../utils/loading.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
@@ -34,12 +41,23 @@ class _RoomBG2PageState extends State<RoomBG2Page> with AutomaticKeepAliveClient
     doPostBgList();
   }
 
+  onTapPickFromGallery() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    print('选择照片路径:${image?.path}');
+
+    doPostPostFileUpload(image!.path);
+  }
+
+
   ///收藏使用
   Widget _initlistdata(context, index) {
     LogE('返回下标$index');
     return index == list.length
         ? GestureDetector(
-            onTap: (() {}),
+            onTap: (() {
+              onTapPickFromGallery();
+            }),
             child: Column(
               children: [
                 WidgetUtils.showImagesFill('assets/images/room_my_jia.png',
@@ -57,10 +75,13 @@ class _RoomBG2PageState extends State<RoomBG2Page> with AutomaticKeepAliveClient
         : GestureDetector(
       onTap: (() {
         setState(() {
-          for(int i = 0; i < list.length; i++){
-            list[i].type = 0;
-          }
           list[index].type = 1;
+          for(int i = 0; i < list.length; i++){
+            if(index != i) {
+              list[i].type = 0;
+            }
+          }
+          eventBus.fire(RoomBGBack(bgID: list[index].bgId.toString(), bgType: list[index].bgType.toString(), bgImagUrl: list[index].img.toString()));
         });
       }),
       child: Column(
@@ -68,7 +89,7 @@ class _RoomBG2PageState extends State<RoomBG2Page> with AutomaticKeepAliveClient
           Stack(
             alignment: Alignment.topRight,
             children: [
-              list[index].bgType == 0
+              list[index].bgType == 1
                   ? WidgetUtils.CircleImageNet(ScreenUtil().setHeight(320),
                   ScreenUtil().setHeight(180), 20.0, list[index].img!)
                   : Container(
@@ -148,4 +169,57 @@ class _RoomBG2PageState extends State<RoomBG2Page> with AutomaticKeepAliveClient
       MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
     }
   }
+
+  /// 获取文件url
+  Future<void> doPostPostFileUpload(path) async {
+    var dir = await path_provider.getTemporaryDirectory();
+    String targetPath = '';
+    if(path.toString().contains('.gif') || path.toString().contains('.GIF')){
+      targetPath = "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.gif";
+    }else{
+      targetPath = "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
+    }
+    var result = await FlutterImageCompress.compressAndGetFile(
+      path, targetPath,
+      quality: 50,
+      rotate: 180,
+    );
+    Loading.show("上传中...");
+    var name = path.substring(path.lastIndexOf("/") + 1, path.length);
+    FormData formdata = FormData.fromMap(
+      {
+        'room_id': sp.getString('roomID').toString(),
+        'bg_type': '1',
+        "file": await MultipartFile.fromFile(result!.path,
+          filename: name,)
+      },
+    );
+    BaseOptions option = BaseOptions(
+        contentType: 'multipart/form-data', responseType: ResponseType.plain);
+    option.headers["Authorization"] = sp.getString('user_token')??'';
+    Dio dio = Dio(option);
+    //application/json
+    try {
+      var respone = await dio.post(
+          MyHttpConfig.uploadBg,
+          data: formdata);
+      Map jsonResponse = json.decode(respone.data.toString());
+      if (respone.statusCode == 200) {
+        MyToastUtils.showToastBottom('上传成功');
+        Loading.dismiss();
+      }else if(respone.statusCode == 401){
+        // ignore: use_build_context_synchronously
+        MyUtils.jumpLogin(context);
+      }else{
+        MyToastUtils.showToastBottom(jsonResponse['msg']);
+      }
+
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      // MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+
+  }
+
 }

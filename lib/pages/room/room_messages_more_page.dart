@@ -1,110 +1,340 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_sound/public/flutter_sound_player.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 
+import '../../bean/Common_bean.dart';
+import '../../bean/commonStringBean.dart';
 import '../../colors/my_colors.dart';
+import '../../db/DatabaseHelper.dart';
+import '../../http/data_utils.dart';
+import '../../http/my_http_config.dart';
+import '../../main.dart';
+import '../../utils/event_utils.dart';
+import '../../utils/my_toast_utils.dart';
+import '../../utils/my_utils.dart';
+import '../../utils/regex_formatter.dart';
 import '../../utils/style_utils.dart';
+import '../../widget/SwiperPage.dart';
 
 /// 厅内消息详情
 class RoomMessagesMorePage extends StatefulWidget {
-  const RoomMessagesMorePage({super.key});
+  String otherUid;
+  String otherImg;
+  String nickName;
+  RoomMessagesMorePage({super.key, required this.otherUid, required this.otherImg, required this.nickName});
 
   @override
   State<RoomMessagesMorePage> createState() => _RoomMessagesMorePageState();
 }
 
 class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
-  Widget _itemTuiJian(BuildContext context, int i) {
-    return Column(
-      children: [
-        Column(
-          children: [
-            WidgetUtils.commonSizedBox(10, 0),
-            WidgetUtils.onlyTextCenter(
-                '2023年6月21日14:29:56',
-                StyleUtils.getCommonTextStyle(
-                    color: MyColors.roomTCWZ3,
-                    fontSize: ScreenUtil().setSp(25))),
-            WidgetUtils.commonSizedBox(10, 0),
-            Row(
-              children: [
-                WidgetUtils.commonSizedBox(0, 20),
-                WidgetUtils.CircleHeadImage(
-                    ScreenUtil().setHeight(60),
-                    ScreenUtil().setHeight(60),
-                    'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
-                Stack(
-                  children: [
-                    Opacity(
-                      opacity: 0.4,
+
+  TextEditingController controller = TextEditingController();
+  ScrollController _scrollController = ScrollController();
+  FlutterSoundPlayer? _mPlayer = FlutterSoundPlayer();
+  bool playRecord = false; //音频文件播放状态
+  List<String> imgList = [];
+  var listen;
+  int length = 0;
+  String isGZ = '0';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    MyUtils.addChatListener();
+    doPostUserFollowStatus();
+    doLocationInfo();
+    listen = eventBus.on<SendMessageBack>().listen((event) {
+      doLocationInfo();
+    });
+    saveImages();
+  }
+
+  // 在数据变化后将滚动位置设置为最后一个item的位置
+  void scrollToLastItem() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 100),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  // 自己头像和他人头像
+  String myHeadImg = '', otherHeadImg = '';
+  saveImages() async{
+    //保存头像
+    MyUtils.saveImgTemp(sp.getString('user_headimg').toString(), sp.getString('user_id').toString());
+    MyUtils.saveImgTemp(widget.otherImg, widget.otherUid);
+    // 保存路径
+    Directory? directory = await getTemporaryDirectory();
+    myHeadImg = '${directory!.path}/${sp.getString('user_headimg')}.jpg';
+    otherHeadImg = '${directory!.path}/${widget.otherUid}.jpg';
+  }
+
+  Widget chatWidget(BuildContext context, int i) {
+    double widthAudio = 0;
+    if(allData2[i]['type'] == 3){
+      widthAudio = ScreenUtil().setHeight(60+allData2[i]['number']*4);
+    }
+
+
+    String addTime = '';
+    DateTime date = DateTime.parse(
+        DateTime.fromMillisecondsSinceEpoch(int.parse(allData2[i]['add_time']))
+            .toString());
+    //获取当前时间的月
+    int month = date.month;
+    //获取当前时间的日
+    int day = date.day;
+    //获取当前时间的时
+    int hour = date.hour;
+    //获取当前时间的分
+    int minute = date.minute;
+    // 获取当前时间对象
+    DateTime now = DateTime.now();
+    int month2 = now.month;
+    //获取当前时间的日
+    int day2 = now.day;
+    if (month == month2 && day == day2) {
+      addTime = '$hour:$minute';
+    } else if (month == month2 && day2 - day == 1) {
+      addTime = '昨天 $hour:$minute';
+    } else if (month == month2 && day2 - day > 1) {
+      addTime = '$month月$day日 $hour:$minute';
+    } else if (month != month2) {
+      addTime = '$month月$day日 $hour:$minute';
+    }
+
+    // 判断不是第一个，并且中间时间差距大于10分钟才显示时间
+    if (i > 0 &&
+        ((int.parse(allData2[i]['add_time']) -
+            int.parse(allData2[i - 1]['add_time'])) /
+            1000 <=
+            600)) {
+      addTime = '';
+    }
+
+    if (allData2[i]['whoUid'] != sp.getString('user_id')) {
+      return Column(
+        children: [
+          //左侧显示
+          WidgetUtils.onlyTextCenter(
+              addTime,
+              StyleUtils.getCommonTextStyle(
+                  color: MyColors.g9, fontSize: ScreenUtil().setSp(20))),
+          WidgetUtils.commonSizedBox(
+              ScreenUtil().setHeight(10), ScreenUtil().setHeight(10)),
+          Row(
+            children: [
+              WidgetUtils.CircleImageAss(60.h,
+                  60.h, 30.h, allData2[i]['headImg']),
+              WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(10)),
+              Flexible(
+                child: Container(
+                  constraints:
+                  BoxConstraints(minWidth: ScreenUtil().setHeight(60)),
+                  padding: EdgeInsets.all(ScreenUtil().setHeight(15)),
+                  //边框设置
+                  decoration: BoxDecoration(
+                    //背景
+                    color: Colors.white,
+                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(20.0),
+                        topRight: Radius.circular(0),
+                        bottomLeft: Radius.circular(20.0),
+                        bottomRight: Radius.circular(20.0)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.1),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: const Offset(0, 1), // 阴影的偏移量，向右下方偏移3像素
+                      ),
+                    ],
+                  ),
+                  child: allData2[i]['type'] == 1
+                      ? Text(
+                    allData2[i]['content'],
+                    style: TextStyle(
+                      fontSize: 32.sp,
+                      color: Colors.black,
+                    ),
+                  )
+                      : allData2[i]['type'] == 2 ? GestureDetector(
+                    onTap: (() {
+                      setState(() {
+                        imgList.clear();
+                        imgList.add(allData2[i]['content']);
+                      });
+                      MyUtils.goTransparentPageCom(
+                          context, SwiperPage(imgList: imgList));
+                    }),
+                    child: Image(
+                      image: FileImage(File(allData2[i]['content'])),
+                      width: 160.h,
+                      height: 200.h,
+                      errorBuilder: (BuildContext context, Object error,
+                          StackTrace? stackTrace) {
+                        return WidgetUtils.showImages(
+                            'assets/images/img_error.png', 200.h, 160.h);
+                      },
+                    ),
+                  ) : GestureDetector(
+                    onTap: (() {
+                      if(playRecord){
+                        stopPlayer();
+                      }else{
+                        play(allData2[i]['content']);
+                      }
+                    }),
+                    child: SizedBox(
+                      width: widthAudio,
                       child: Row(
                         children: [
-                          Container(
-                            margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                            padding: const EdgeInsets.only(
-                                left: 15, right: 15, top: 10, bottom: 10),
-                            //边框设置
-                            decoration: const BoxDecoration(
-                              //背景
-                              color: MyColors.roomMessageLiaotian,
-                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(7),
-                                  topRight: Radius.circular(24),
-                                  bottomLeft: Radius.circular(24),
-                                  bottomRight: Radius.circular(24)),
-                            ),
-                            child: Row(
-                              children: [
-                                WidgetUtils.onlyText(
-                                    '信息',
-                                    StyleUtils.getCommonTextStyle(
-                                        color: Colors.transparent,
-                                        fontSize: ScreenUtil().setSp(21))),
-                              ],
-                            ),
-                          )
+                          WidgetUtils.showImages('assets/images/chat_huatong.png', 20.h, 20.h),
+                          WidgetUtils.onlyText("${allData2[i]['number']}''", StyleUtils.textStyleb1),
+                          const Spacer(),
                         ],
                       ),
                     ),
-                    Row(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                          padding: const EdgeInsets.only(
-                              left: 15, right: 15, top: 10, bottom: 10),
-                          //边框设置
-                          decoration: const BoxDecoration(
-                            //背景
-                            color: Colors.transparent,
-                            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(7),
-                                topRight: Radius.circular(24),
-                                bottomLeft: Radius.circular(24),
-                                bottomRight: Radius.circular(24)),
-                          ),
-                          child: Row(
-                            children: [
-                              WidgetUtils.onlyText(
-                                  '信息',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: Colors.white,
-                                      fontSize: ScreenUtil().setSp(21))),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
+                  ),
                 ),
-              ],
-            ),
-          ],
-        ),
-        WidgetUtils.commonSizedBox(20, 0),
-      ],
-    );
+              ),
+            ],
+          ),
+          WidgetUtils.commonSizedBox(
+              ScreenUtil().setHeight(20), ScreenUtil().setHeight(10)),
+        ],
+      );
+    } else {
+      return Column(
+        children: [
+          //右侧显示
+          WidgetUtils.onlyTextCenter(
+              addTime,
+              StyleUtils.getCommonTextStyle(
+                  color: MyColors.g9, fontSize: ScreenUtil().setSp(20))),
+          WidgetUtils.commonSizedBox(
+              ScreenUtil().setHeight(10), ScreenUtil().setHeight(10)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(100)),
+              Flexible(
+                child: Container(
+                  constraints:
+                  BoxConstraints(minWidth: ScreenUtil().setHeight(60)),
+                  padding: EdgeInsets.all(ScreenUtil().setHeight(15)),
+                  //边框设置
+                  decoration: BoxDecoration(
+                    //背景
+                    color: Colors.white,
+                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(20.0),
+                        topRight: Radius.circular(0),
+                        bottomLeft: Radius.circular(20.0),
+                        bottomRight: Radius.circular(20.0)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.1),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: const Offset(0, 1), // 阴影的偏移量，向右下方偏移3像素
+                      ),
+                    ],
+                  ),
+                  child: allData2[i]['type'] == 1
+                      ? Text(
+                    allData2[i]['content'],
+                    style: TextStyle(
+                      fontSize: 32.sp,
+                      color: Colors.black,
+                    ),
+                  )
+                      : allData2[i]['type'] == 2 ? GestureDetector(
+                    onTap: (() {
+                      setState(() {
+                        imgList.clear();
+                        imgList.add(allData2[i]['content']);
+                      });
+                      MyUtils.goTransparentPageCom(
+                          context, SwiperPage(imgList: imgList));
+                    }),
+                    child: Image(
+                      image: FileImage(File(allData2[i]['content'])),
+                      width: 160.h,
+                      height: 200.h,
+                      errorBuilder: (BuildContext context, Object error,
+                          StackTrace? stackTrace) {
+                        return WidgetUtils.showImages(
+                            'assets/images/img_error.png', 200.h, 160.h);
+                      },
+                    ),
+                  ) : GestureDetector(
+                    onTap: (() {
+                      if(playRecord){
+                        stopPlayer();
+                      }else{
+                        play(allData2[i]['content']);
+                      }
+                    }),
+                    child: SizedBox(
+                      width: widthAudio,
+                      child: Row(
+                        children: [
+                          const Spacer(),
+                          WidgetUtils.onlyText("${allData2[i]['number']}''", StyleUtils.textStyleb1),
+                          WidgetUtils.showImages('assets/images/chat_huatong.png', 20.h, 20.h),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(10)),
+              WidgetUtils.CircleImageAss(60.h,
+                 60.h , 30.h, allData2[i]['otherHeadImg']),
+            ],
+          ),
+          WidgetUtils.commonSizedBox(20.h, ScreenUtil().setHeight(10)),
+        ],
+      );
+    }
+  }
+
+
+//播放录音
+  void play(String audioUrls) {
+    _mPlayer!
+        .startPlayer(
+        fromURI: audioUrls,
+        whenFinished: () {
+          setState(() {
+            playRecord = false;
+          });
+        })
+        .then((value) {
+      setState(() {
+        playRecord = true;
+      });
+    });
+  }
+
+//停止播放录音
+  void stopPlayer() {
+    _mPlayer!.stopPlayer().then((value) {
+      setState(() {
+        playRecord = false;
+      });
+    });
   }
 
   @override
@@ -135,76 +365,157 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                 fit: BoxFit.fill, //覆盖
               ),
             ),
-            child: Column(
+            child: Stack(
+              alignment: Alignment.bottomCenter,
               children: [
-                /// 头部展示
-                SizedBox(
-                  height: ScreenUtil().setHeight(80),
-                  child: Row(
-                    children: [
-                      WidgetUtils.commonSizedBox(0, 20),
-                      WidgetUtils.showImages(
-                          'assets/images/room_message_left.png',
-                          ScreenUtil().setHeight(22),
-                          ScreenUtil().setHeight(13)),
-                      WidgetUtils.commonSizedBox(0, 20),
-                      WidgetUtils.onlyText(
-                          '用户名昵称',
-                          StyleUtils.getCommonTextStyle(
-                              color: MyColors.roomTCWZ2,
-                              fontSize: ScreenUtil().setSp(28))),
-                      const Expanded(child: Text('')),
-                      Stack(
+                Column(
+                  children: [
+                    /// 头部展示
+                    SizedBox(
+                      height: ScreenUtil().setHeight(80),
+                      child: Row(
                         children: [
-                          Opacity(
-                            opacity: 0.7,
-                            child: Container(
-                              height: ScreenUtil().setHeight(42),
-                              width: ScreenUtil().setWidth(106),
-                              //边框设置
-                              decoration: const BoxDecoration(
-                                //背景
-                                color: MyColors.roomMessageYellow,
-                                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(30.0)),
+                          WidgetUtils.commonSizedBox(0, 20),
+                          WidgetUtils.showImages(
+                              'assets/images/room_message_left.png',
+                              ScreenUtil().setHeight(22),
+                              ScreenUtil().setHeight(13)),
+                          WidgetUtils.commonSizedBox(0, 20),
+                          WidgetUtils.onlyText(
+                              widget.nickName,
+                              StyleUtils.getCommonTextStyle(
+                                  color: MyColors.roomTCWZ2,
+                                  fontSize: ScreenUtil().setSp(28))),
+                          const Expanded(child: Text('')),
+                          Stack(
+                            children: [
+                              Opacity(
+                                opacity: 0.7,
+                                child: Container(
+                                  height: ScreenUtil().setHeight(42),
+                                  width: ScreenUtil().setWidth(106),
+                                  //边框设置
+                                  decoration: const BoxDecoration(
+                                    //背景
+                                    color: MyColors.roomMessageYellow,
+                                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(30.0)),
+                                  ),
+                                ),
                               ),
-                            ),
+                              GestureDetector(
+                                onTap: (() {
+                                  doPostFollow();
+                                }),
+                                child: Container(
+                                  height: ScreenUtil().setHeight(42),
+                                  width: ScreenUtil().setWidth(106),
+                                  //边框设置
+                                  decoration: BoxDecoration(
+                                    //背景
+                                    color: Colors.transparent,
+                                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(30.0)),
+                                    //设置四周边框
+                                    border: Border.all(
+                                        width: 1,
+                                        color: MyColors.roomMessageYellow),
+                                  ),
+                                  child: WidgetUtils.onlyTextCenter(
+                                      isGZ == '0' ? '关注' : '取关',
+                                      StyleUtils.getCommonTextStyle(
+                                          color: MyColors.roomMessageYellow2,
+                                          fontSize: ScreenUtil().setSp(25))),
+                                ),
+                              ),
+                            ],
                           ),
-                          Container(
-                            height: ScreenUtil().setHeight(42),
-                            width: ScreenUtil().setWidth(106),
-                            //边框设置
-                            decoration: BoxDecoration(
-                              //背景
-                              color: Colors.transparent,
-                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(30.0)),
-                              //设置四周边框
-                              border: Border.all(
-                                  width: 1, color: MyColors.roomMessageYellow),
-                            ),
-                            child: WidgetUtils.onlyTextCenter(
-                                '关注',
-                                StyleUtils.getCommonTextStyle(
-                                    color: MyColors.roomMessageYellow2,
-                                    fontSize: ScreenUtil().setSp(25))),
-                          ),
+                          WidgetUtils.commonSizedBox(0, 20),
                         ],
                       ),
-                      WidgetUtils.commonSizedBox(0, 20),
-                    ],
-                  ),
+                    ),
+                    length != 0 ? Expanded(
+                      child: Container(
+                        height: double.infinity,
+                        color: MyColors.roomMessageBlackBG,
+                        child: ListView.builder(
+                          padding:
+                              EdgeInsets.only(top: ScreenUtil().setHeight(10)),
+                          itemBuilder: chatWidget,
+                          itemCount: allData2.length,
+                        ),
+                      ),
+                    ) : const Text('')
+                  ],
                 ),
-                Expanded(
+                Container(
+                  height: 122.h,
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                    //背景
+                    color: MyColors.roomXZ1,
+                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(35),
+                        topRight: Radius.circular(35)),
+                  ),
+                  alignment: Alignment.center,
                   child: Container(
-                    height: double.infinity,
-                    color: MyColors.roomMessageBlackBG,
-                    child: ListView.builder(
-                      padding: EdgeInsets.only(top: ScreenUtil().setHeight(10)),
-                      itemBuilder: _itemTuiJian,
-                      itemCount: 1,
+                    height: 78.h,
+                    width: double.infinity,
+                    margin: EdgeInsets.only(left: 20.h, right: 20.h),
+                    padding: EdgeInsets.only(left: 20.h, right: 20.h),
+                    decoration: const BoxDecoration(
+                      //背景
+                      color: MyColors.roomXZ2,
+                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                      borderRadius: BorderRadius.all(Radius.circular(38)),
+                    ),
+                    child: TextField(
+                      textInputAction: TextInputAction.send,
+                      // 设置为发送按钮
+                      controller: controller,
+                      inputFormatters: [
+                        RegexFormatter(
+                            regex: MyUtils.regexFirstNotNull),
+                      ],
+                      style: StyleUtils.loginTextStyle,
+                      onSubmitted: (value) {
+                        MyUtils.sendMessage(widget.otherUid, value);
+                        doPostSendUserMsg(value);
+                      },
+                      decoration: InputDecoration(
+                        // border: InputBorder.none,
+                        // labelText: "请输入用户名",
+                        // icon: Icon(Icons.people), //前面的图标
+                        hintText: '请输入信息...',
+                        hintStyle: StyleUtils.loginHintTextStyle,
+
+                        contentPadding:
+                        const EdgeInsets.only(top: 0, bottom: 0),
+                        border: const OutlineInputBorder(
+                          borderSide:
+                          BorderSide(color: Colors.transparent),
+                        ),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                          ),
+                        ),
+                        disabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                          ),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                          ),
+                        ),
+                        // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
+                      ),
                     ),
                   ),
                 )
@@ -215,4 +526,181 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
       ),
     );
   }
+
+  /// 获取本地数据信息
+  Future<void> doLocationInfo() async {
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    Database? db = await databaseHelper.database;
+    // 展示聊天信息
+    String combineID = '';
+    if (int.parse(sp.getString('user_id').toString()) >
+        int.parse(widget.otherUid)) {
+      combineID = '${widget.otherUid}-${sp.getString('user_id').toString()}';
+    } else {
+      combineID = '${sp.getString('user_id').toString()}-${widget.otherUid}';
+    }
+    List<Map<String, dynamic>> result = await db.query('messageSLTable',
+        columns: null, whereArgs: [combineID], where: 'combineID = ?');
+
+    await db.update('messageSLTable',  {'readStatus': 1}, where: 'combineID = ?', whereArgs: [combineID]);
+
+    setState(() {
+      allData2 = result;
+      length = allData2.length;
+    });
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      scrollToLastItem(); // 在widget构建完成后滚动到底部
+    });
+  }
+  /// 发送消息
+  late List<Map<String, dynamic>> allData2;
+  Future<void> doPostSendUserMsg(String content) async {
+    if(content.trim().isEmpty){
+      return;
+    }
+
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    Database? db = await databaseHelper.database;
+    Map<String, dynamic> params = <String, dynamic>{
+      'uid': widget.otherUid,
+      'type': '1',
+      'content': content
+    };
+    try {
+      CommonBean bean = await DataUtils.postSendUserMsg(params);
+      String combineID = '';
+      if (int.parse(sp.getString('user_id').toString()) >
+          int.parse(widget.otherUid)) {
+        combineID = '${widget.otherUid}-${sp.getString('user_id').toString()}';
+      } else {
+        combineID = '${sp.getString('user_id').toString()}-${widget.otherUid}';
+      }
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          Map<String, dynamic> params = <String, dynamic>{
+            'uid': sp.getString('user_id').toString(),
+            'otherUid': widget.otherUid,
+            'whoUid': sp.getString('user_id').toString(),
+            'combineID': combineID,
+            'nickName': widget.nickName,
+            'content': content,
+            'headImg': myHeadImg,
+            'otherHeadImg': otherHeadImg,
+            'add_time': DateTime.now().millisecondsSinceEpoch,
+            'type': 1,
+            'number': 0,
+            'status': 1,
+            'readStatus': 1,
+            'liveStatus': 0,
+            'loginStatus': 0,
+          };
+          // 插入数据
+          await databaseHelper.insertData('messageSLTable', params);
+          setState(() {
+            controller.text = '';
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          Map<String, dynamic> params = <String, dynamic>{
+            'uid': sp.getString('user_id').toString(),
+            'otherUid': widget.otherUid,
+            'whoUid': sp.getString('user_id').toString(),
+            'combineID': combineID,
+            'nickName': widget.nickName,
+            'content': content,
+            'headImg': myHeadImg,
+            'otherHeadImg': otherHeadImg,
+            'add_time': DateTime.now().millisecondsSinceEpoch,
+            'type': 1,
+            'number': 0,
+            'status': 0,
+            'readStatus': 1,
+            'liveStatus': 0,
+            'loginStatus': 0,
+          };
+          // 插入数据
+          await databaseHelper.insertData('messageSLTable', params);
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      // 获取所有数据
+      List<Map<String, dynamic>> result = await db.query('messageSLTable',
+          columns: null, whereArgs: [combineID], where: 'combineID = ?');
+      setState(() {
+        allData2 = result;
+        length = allData2.length;
+      });
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
+        scrollToLastItem(); // 在widget构建完成后滚动到底部
+      });
+    } catch (e) {
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+  }
+  /// 查询关注状态
+  Future<void> doPostUserFollowStatus() async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'follow_id': widget.otherUid,
+      'type': '1',
+    };
+    try {
+      CommonStringBean bean = await DataUtils.postUserFollowStatus(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            isGZ = bean.data!.status!;
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+  }
+  /// 关注还是取关
+  Future<void> doPostFollow() async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'type': '1',
+      'status': isGZ == '0' ? '1' : '0',
+      'follow_id': widget.otherUid,
+    };
+    try {
+      CommonBean bean = await DataUtils.postFollow(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          if(isGZ == '0'){
+            setState(() {
+              isGZ = '1';
+            });
+            MyToastUtils.showToastBottom("关注成功！");
+          }else{
+            setState(() {
+              isGZ = '0';
+            });
+            MyToastUtils.showToastBottom("取关成功！");
+          }
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+  }
+
 }

@@ -5,10 +5,12 @@ import 'package:yuyinting/main.dart';
 import 'package:yuyinting/pages/room/room_liwu_page.dart';
 import 'package:yuyinting/pages/room/room_messages_more_page.dart';
 import 'package:yuyinting/pages/room/room_send_info_page.dart';
+import 'package:yuyinting/pages/room/room_show_status_page.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 
 import '../../bean/Common_bean.dart';
+import '../../bean/roomInfoBean.dart';
 import '../../bean/roomInfoUserManagerBean.dart';
 import '../../bean/roomUserInfoBean.dart';
 import '../../colors/my_colors.dart';
@@ -24,7 +26,9 @@ class RoomPeopleInfoPage extends StatefulWidget {
   String uid;
   String index;
   String roomID;
-  RoomPeopleInfoPage({super.key, required this.uid, required this.index, required this.roomID});
+  String isClose;
+  List<MikeList> listM;
+  RoomPeopleInfoPage({super.key, required this.uid, required this.index, required this.roomID, required this.isClose, required this.listM});
 
   @override
   State<RoomPeopleInfoPage> createState() => _RoomPeopleInfoPageState();
@@ -38,6 +42,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
   int sex = 0;
   String userNumber='', headImg = '', nickName = '', city = '', description = '', status = '0', is_admin = '0', is_forbation = '', is_black = '';
   List<String> list_p = [];
+  String zhuangtai = '闭麦';
 
   @override
   void initState() {
@@ -46,6 +51,11 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
     doPostRoomUserInfo();
     doPostRoomUserInfoManager();
     LogE('身份${sp.getString('role').toString()}');
+    if(widget.isClose == '0'){
+      zhuangtai = '闭麦';
+    }else{
+      zhuangtai = '开麦';
+    }
   }
 
   @override
@@ -67,13 +77,13 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
             ),
           ),
           SizedBox(
-            height: sp.getString('role').toString() == 'user' ? ScreenUtil().setHeight(430) : ScreenUtil().setHeight(500),
+            height: sp.getString('role').toString() == 'user' ? ScreenUtil().setHeight(450) : ScreenUtil().setHeight(530),
             width: double.infinity,
             child: Stack(
               alignment: Alignment.topCenter,
               children: [
                 Container(
-                  height: ScreenUtil().setHeight(530),
+                  height: sp.getString('role').toString() == 'user' ? ScreenUtil().setHeight(390) : ScreenUtil().setHeight(470),
                   width: double.infinity,
                   margin: EdgeInsets.only(top: ScreenUtil().setHeight(60)),
                   decoration: const BoxDecoration(
@@ -287,10 +297,10 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                               ),
                               GestureDetector(
                                 onTap: ((){
-                                  eventBus.fire(RoomBack(title: '闭麦', index: widget.index));
+                                  doPostSetClose(widget.index);
                                 }),
                                 child: WidgetUtils.onlyTextCenter(
-                                    '闭麦',
+                                    zhuangtai,
                                     StyleUtils.getCommonTextStyle(
                                         color: MyColors.roomTCWZ1,
                                         fontSize: ScreenUtil().setSp(24))),
@@ -321,7 +331,9 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                           ),
                           Expanded(child:  GestureDetector(
                             onTap: ((){
-                              MyUtils.goTransparentPage(context, const RoomLiWuPage());
+                              Navigator.pop(context);
+                              MyUtils.goTransparentPageCom(context, const RoomShowStatusPage());
+                              MyUtils.goTransparentPage(context, RoomLiWuPage(listM: widget.listM, uid: widget.uid,));
                             }),
                             child: WidgetUtils.onlyTextCenter(
                                 '送礼物',
@@ -338,7 +350,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                             onTap: ((){
                               MyUtils.goTransparentPageCom(
                                   context,
-                                  const RoomMessagesMorePage());
+                                  RoomMessagesMorePage(otherUid: widget.uid, otherImg: headImg, nickName: nickName,));
                             }),
                             child: WidgetUtils.onlyTextCenter(
                                 '私聊',
@@ -348,7 +360,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                           )),
                         ],
                       ),
-                      WidgetUtils.commonSizedBox(40, 0),
+                      const Spacer(),
                     ],
                   ),
                 ),
@@ -656,6 +668,51 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
           setState(() {
             is_admin = status;
           });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+  }
+
+  /// 闭麦/开麦
+  Future<void> doPostSetClose(String serial_number) async {
+    String status = '';
+    if(zhuangtai == '闭麦'){
+      status = 'no';
+    }else{
+      status = 'yes';
+    }
+    Map<String, dynamic> params = <String, dynamic>{
+      'room_id': widget.roomID,
+      'serial_number': int.parse(serial_number) + 1,
+      'uid': sp.getString('user_id').toString(),
+      'status': status
+    };
+    try {
+      CommonBean bean = await DataUtils.postSetClose(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          if(zhuangtai == '闭麦'){
+            eventBus.fire(RoomBack(title: '闭麦', index: serial_number));
+            setState(() {
+              zhuangtai = '开麦';
+            });
+            MyToastUtils.showToastBottom('已闭麦');
+          }else{
+            setState(() {
+              eventBus.fire(RoomBack(title: '开麦', index: serial_number));
+              zhuangtai = '闭麦';
+            });
+            MyToastUtils.showToastBottom('已开麦');
+          }
           break;
         case MyHttpConfig.errorloginCode:
         // ignore: use_build_context_synchronously

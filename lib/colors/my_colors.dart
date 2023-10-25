@@ -131,6 +131,8 @@ class MyColors{
   static const Color CarBG = Color(0xFF051339);
   static const Color CarXian = Color(0xFF625F8F);
   static const Color CarZJ = Color(0xFF4D1DAD);
+  static const Color roomXZ1 = Color(0xFF2D2F4E);
+  static const Color roomXZ2 = Color(0xFF201E3B);
 
 
 }

@@ -21,7 +21,8 @@ import '../../utils/style_utils.dart';
 class RoomPasswordPage extends StatefulWidget {
   String roomID;
   int type;
-  RoomPasswordPage({super.key,required this.type, required this.roomID});
+
+  RoomPasswordPage({super.key, required this.type, required this.roomID});
 
   @override
   State<RoomPasswordPage> createState() => _RoomPasswordPageState();
@@ -30,6 +31,16 @@ class RoomPasswordPage extends StatefulWidget {
 class _RoomPasswordPageState extends State<RoomPasswordPage> {
   TextEditingController textEditingController = TextEditingController();
   String currentText = "";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+      textEditingController.text = sp.getString('roomPass').toString();
+      currentText = sp.getString('roomPass').toString();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +76,27 @@ class _RoomPasswordPageState extends State<RoomPasswordPage> {
                 WidgetUtils.commonSizedBox(15, 0),
                 Row(
                   children: [
-                    WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(180)),
+                    GestureDetector(
+                      onTap: (() {
+                        setState(() {
+                          currentText = '';
+                        });
+                        doPostEditRoom();
+                        Navigator.pop(context);
+                      }),
+                      child: Container(
+                        width: ScreenUtil().setWidth(220),
+                        padding:
+                            EdgeInsets.only(right: ScreenUtil().setHeight(40)),
+                        alignment: Alignment.center,
+                        child: Text(
+                          '取消密码',
+                          style: StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ3,
+                              fontSize: ScreenUtil().setSp(28)),
+                        ),
+                      ),
+                    ),
                     const Expanded(child: Text('')),
                     WidgetUtils.onlyTextCenter(
                         '房间设置密码',
@@ -74,14 +105,14 @@ class _RoomPasswordPageState extends State<RoomPasswordPage> {
                             fontSize: ScreenUtil().setSp(32))),
                     const Expanded(child: Text('')),
                     GestureDetector(
-                      onTap: ((){
+                      onTap: (() {
                         doPostEditRoom();
                         Navigator.pop(context);
                       }),
                       child: Container(
-                        width: ScreenUtil().setWidth(180),
+                        width: ScreenUtil().setWidth(220),
                         padding:
-                        EdgeInsets.only(right: ScreenUtil().setHeight(40)),
+                            EdgeInsets.only(right: ScreenUtil().setHeight(40)),
                         alignment: Alignment.centerRight,
                         child: Text(
                           '保存',
@@ -113,7 +144,9 @@ class _RoomPasswordPageState extends State<RoomPasswordPage> {
                         currentText = value;
                       });
                     },
-                    textStyle: StyleUtils.getCommonTextStyle(color: MyColors.roomTCWZ2, fontSize: ScreenUtil().setSp(38)),
+                    textStyle: StyleUtils.getCommonTextStyle(
+                        color: MyColors.roomTCWZ2,
+                        fontSize: ScreenUtil().setSp(38)),
                     appContext: context,
                     keyboardType: TextInputType.number,
                     autoFocus: true,
@@ -122,8 +155,10 @@ class _RoomPasswordPageState extends State<RoomPasswordPage> {
                       shape: PinCodeFieldShape.underline,
                       fieldHeight: 40,
                       fieldWidth: 40,
-                      activeFillColor: Colors.transparent, //填充背景色
-                      activeColor: MyColors.roomPassXian, //下划线颜色
+                      activeFillColor: Colors.transparent,
+                      //填充背景色
+                      activeColor: MyColors.roomPassXian,
+                      //下划线颜色
                       inactiveFillColor: MyColors.roomPassXian,
                       inactiveColor: MyColors.roomPassXian,
                       selectedColor: MyColors.roomPassXian,
@@ -149,11 +184,16 @@ class _RoomPasswordPageState extends State<RoomPasswordPage> {
       CommonBean bean = await DataUtils.postEditRoom(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          eventBus.fire(SubmitButtonBack(title: '设置密码成功'));
-          MyToastUtils.showToastBottom('房间密码已开启');
+          if (currentText.isEmpty) {
+            eventBus.fire(SubmitButtonBack(title: '取消密码'));
+            MyToastUtils.showToastBottom('房间密码已关闭');
+          } else {
+            eventBus.fire(SubmitButtonBack(title: '设置密码成功'));
+            MyToastUtils.showToastBottom('房间密码已开启');
+          }
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
