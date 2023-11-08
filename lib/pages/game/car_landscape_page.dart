@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:auto_orientation/auto_orientation.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,18 +10,23 @@ import 'package:soundpool/soundpool.dart';
 import 'package:svgaplayer_flutter/parser.dart';
 import 'package:svgaplayer_flutter/player.dart';
 
+import '../../bean/Common_bean.dart';
+import '../../bean/carTimerBean.dart';
 import '../../colors/my_colors.dart';
+import '../../http/data_utils.dart';
+import '../../http/my_http_config.dart';
+import '../../main.dart';
+import '../../utils/event_utils.dart';
+import '../../utils/log_util.dart';
+import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
+import '../../widget/OptionGridView.dart';
 import '../../widget/queren_h_page.dart';
-import '../../widget/queren_page.dart';
 import 'car/car_h_shop_page.dart';
-import 'car/car_shop_page.dart';
 import 'car/lishi_h_page.dart';
-import 'car/lishi_page.dart';
 import 'car/zhongjian_h_page.dart';
-import 'car/zhongjian_page.dart';
 import 'car_page.dart';
 /// 横屏赛车游戏
 class CarLandScapePage extends StatefulWidget {
@@ -31,7 +37,6 @@ class CarLandScapePage extends StatefulWidget {
 }
 
 class _CarLandScapePageState extends State<CarLandScapePage> with TickerProviderStateMixin{
-  bool tishi = true;
   List<bool> listA = [
     false,
     false,
@@ -78,44 +83,12 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
         child: GestureDetector(
           onTap: (() {
             if (isShow) {
-              if(tishi){
-                int jine = 0;
-                for(int a = 0; a < 4; a++){
-                  if(listB[a]){
-                    if(a==0){
-                      jine = 10;
-                    }else if(a==1){
-                      jine = 100;
-                    }else if(a==2){
-                      jine = 1000;
-                    }else if(a==3){
-                      jine = 1000;
-                    }
-                  }
-                }
-                MyUtils.goTransparentPageCom(context, QueRenHPage(title: '赛车下注横屏', jine: jine.toString(), isDuiHuan: false));
+              if (sp.getBool('car_queren_h') == false ||
+                  sp.getBool('car_queren_h') == null) {
+                MyUtils.goTransparentPageCom(context, QueRenHPage(title: '赛车下注横屏', jine: xiazhujine, isDuiHuan: false, index: i.toString(),));
                 return;
               }
-              playSound2();
-              if (listA[i - 1] == false) {
-                setState(() {
-                  listA[i - 1] = true;
-                });
-              }
-              //点击播放点击特效
-              if (listA1[i - 1] == false) {
-                setState(() {
-                  listA1[i - 1] = true;
-                });
-                Future.delayed(
-                    const Duration(
-                      milliseconds: 400,
-                    ), () {
-                  setState(() {
-                    listA1[i - 1] = false;
-                  });
-                });
-              }
+              doPostCarBet(i.toString());
             }
           }),
           child: Stack(
@@ -154,7 +127,7 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
                 left: 5,
                 top: 5,
                 child: WidgetUtils.onlyText(
-                    '10000',
+                    listJL[i - 1].toString(),
                     StyleUtils.getCommonTextStyle(
                         color: Colors.white,
                         fontSize: 12,
@@ -180,30 +153,12 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
         child: GestureDetector(
           onTap: (() {
             if (isShow) {
-              if(tishi){
-                int jine = 0;
-                for(int a = 0; a < 4; a++){
-                  if(listB[a]){
-                    if(a==0){
-                      jine = 10;
-                    }else if(a==1){
-                      jine = 100;
-                    }else if(a==2){
-                      jine = 1000;
-                    }else if(a==3){
-                      jine = 1000;
-                    }
-                  }
-                }
-                MyUtils.goTransparentPageCom(context, QueRenHPage(title: '赛车下注横屏', jine: jine.toString(), isDuiHuan: false));
+              if (sp.getBool('car_queren_h') == false ||
+                  sp.getBool('car_queren_h') == null) {
+                MyUtils.goTransparentPageCom(context, QueRenHPage(title: '赛车下注横屏', jine: xiazhujine, isDuiHuan: false, index: (6 + one).toString(),));
                 return;
               }
-              playSound2();
-              if (listA[5 + one] == false) {
-                setState(() {
-                  listA[5 + one] = true;
-                });
-              }
+              doPostCarBet((6 + one).toString());
             }
           }),
           child: Stack(
@@ -224,7 +179,11 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
                 left: 5,
                 top: 5,
                 child: WidgetUtils.onlyText(
-                    '10000',
+                    one == 1
+                        ? listJL[6].toString()
+                        : one == 2
+                        ? listJL[7].toString()
+                        : listJL[8].toString(),
                     StyleUtils.getCommonTextStyle(
                         color: Colors.white,
                         fontSize: 12,
@@ -241,34 +200,12 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
         child: GestureDetector(
           onTap: (() {
             if (isShow) {
-              if(tishi){
-                int jine = 0;
-                for(int a = 0; a < 4; a++){
-                  if(listB[a]){
-                    if(a==0){
-                      jine = 10;
-                    }else if(a==1){
-                      jine = 100;
-                    }else if(a==2){
-                      jine = 1000;
-                    }else if(a==3){
-                      jine = 1000;
-                    }
-                  }
-                }
-                MyUtils.goTransparentPageCom(context, QueRenHPage(title: '赛车下注横屏', jine: jine.toString(), isDuiHuan: false));
+              if (sp.getBool('car_queren_h') == false ||
+                  sp.getBool('car_queren_h') == null) {
+                MyUtils.goTransparentPageCom(context, QueRenHPage(title: '赛车下注横屏', jine: xiazhujine, isDuiHuan: false, index: (9 + one).toString(),));
                 return;
               }
-              playSound2();
-              if (one == 1) {
-                setState(() {
-                  listA[9] = true;
-                });
-              } else {
-                setState(() {
-                  listA[10] = true;
-                });
-              }
+              doPostCarBet((9 + one).toString());
             }
           }),
           child: Stack(
@@ -289,7 +226,7 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
                 left: 5,
                 top: 5,
                 child: WidgetUtils.onlyText(
-                    '10000',
+                    one == 1 ? listJL[9].toString() : listJL[10].toString(),
                     StyleUtils.getCommonTextStyle(
                         color: Colors.white,
                         fontSize: 12,
@@ -312,7 +249,22 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
         setState(() {
           listB[i] = !listB[i];
         });
-        playSound();
+        for (int a = 0; a < 4; a++) {
+          if (listB[a]) {
+            setState(() {
+              if (a == 0) {
+                xiazhujine = 10;
+              } else if (a == 1) {
+                xiazhujine = 100;
+              } else if (a == 2) {
+                xiazhujine = 1000;
+              } else if (a == 3) {
+                xiazhujine = 10000;
+              }
+            });
+          }
+        }
+        LogE('选中金额$xiazhujine');
       }),
       child: SizedBox(
         height: 85,
@@ -425,14 +377,35 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
   late Animation<double> animationGO;
 
   late PageController _controller;
-  Timer? _timer, _timer2, _timer3;
+  Timer? _timer, _timer2, _timer3,_timer4;
   int _currentPage = 0;
 
-  int luck = 0, sum = 20, sumBG = 0;
+  int luck = 0, sum = 20, sumBG = 0, playTime = 46;
+  // 是否可以点击下注
   bool isShow = true;
+  // 游戏是否开始了
+  bool isStarGame = false;
 
   var a,a1,a2,a3,a4,a5,a6,b,b1,b2,b3,b4,b5,b6,c,c1,c2,c3,c4,c5,c6,d,d1,d2,d3,d4,d5,d6,e,e1,e2,e3,e4,e5,e6,f,f1,f2,f3,f4,f5,f6,g,g1,g2,g3,g4,g5,g6;
   var j,j1,j2,j3,j4,j5,j6;
+
+
+  // 记录下注情况
+  List<int> listJL = [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+  ];
+
 
   void suijishu(){
     a = Random().nextInt(10) / 10;
@@ -566,18 +539,37 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
   // 倒计时
   void starTimerDJS() {
     _timer2 = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        sum--;
+      });
       if (sum == 0) {
         playSound3();
-        timer.cancel();
+        _timer2!.cancel();
         setState(() {
           isShow = false;
           isPlay = true;
         });
+        // 开始倒计时动画
         loadAnimation();
-      } else {
-        // 开始321的倒计时动画
+      }
+    });
+  }
+
+  // 游戏进行中游戏的倒计时
+  void starTimerPlay() {
+    _timer4 = Timer.periodic(const Duration(seconds: 1), (timer) {
+      //游戏结束了
+      if (playTime == 0) {
+        _timer4!.cancel();
         setState(() {
-          sum--;
+          isShow = true;
+          isStarGame = false;
+        });
+        starTimerDJS();
+      } else {
+        // 游戏进行中的倒计时
+        setState(() {
+          playTime--;
         });
       }
     });
@@ -807,6 +799,9 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
   bool isPlay = false, isGo = false;
 
   void loadAnimation() async {
+    // 请求中奖赛道
+    doPostGetWinTrack();
+
     Future.delayed(const Duration(milliseconds: 2500,),(){
       startTimer();
     });
@@ -829,6 +824,7 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
         _timer2?.cancel();
       });
     });
+
   }
 
   //点击出星星使用
@@ -870,11 +866,59 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
     }
     return decoder(svgaUrl);
   }
+  // 监听弹窗返回的数据
+  var listen;
+  // 下注金额
+  int xiazhujine = 10;
+  // 及时展示im使用
+  var listenZDY;
+  List<Map> listZDY = [];
+  // 选择了哪个赛道
+  String chooseWho = '';
 
+  // 下注记录
+  Widget _initlistdata(context, index) {
+    return Container(
+      height: 150.h,
+      width: 150.h,
+      margin: EdgeInsets.only(left: 10.h, top: 25.h),
+      child: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          WidgetUtils.CircleHeadImage(
+              150.h, 150.h, listZDY[index]['avatar']),
+          Container(
+            height: 40.h,
+            width: 150.h,
+            //边框设置
+            decoration: const BoxDecoration(
+                image: DecorationImage(
+                  //背景图片修饰
+                  image:
+                  AssetImage("assets/images/car_btn2.png"),
+                  fit: BoxFit.fill, //覆盖
+                )),
+            child: WidgetUtils.onlyTextCenter(
+                listZDY[index]['amount'],
+                StyleUtils.getCommonTextStyle(
+                    color: Colors.white, fontSize: 8.sp)),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   void initState() {
     super.initState();
+    // 获取赛车倒计时
+    doPostGetCarTimer();
+    // 二次确认弹窗点击确认，开始下注
+    listen = eventBus.on<QuerenBack>().listen((event) {
+      setState(() {
+        doPostCarBet(event.index);
+      });
+    });
     AutoOrientation.landscapeAutoMode();
     ///关闭状态栏，与底部虚拟操作按钮
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);//隐藏状态栏，底部按钮栏
@@ -905,18 +949,30 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
             listCar[i] = false;
           });
         }
+        //下注状态
+        for (int i = 0; i < listA.length; i++) {
+          setState(() {
+            listA[i] = false;
+          });
+        }
+        // 下注记录清空
+        for (int i = 0; i < listJL.length; i++) {
+          setState(() {
+            listJL[i] = 0;
+          });
+        }
         controllerGO.reset();
         _timer3?.cancel();
         Future.delayed(const Duration(seconds: 2), () {
           setState(() {
             isShow = true;
           });
+          // 清空接受的im下注信息
+          listZDY.clear();
           starTimerDJS();
         });
       }
     });
-    //开启倒计时
-    starTimerDJS();
     // GO的动画
     controllerGO =
     AnimationController(duration: const Duration(milliseconds: 1000), vsync: this)
@@ -932,6 +988,57 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
       }
     });
 
+    // 接受下注的im信息
+    listenZDY = eventBus.on<ZDYBack>().listen((event) {
+      if (event.map!['avatar'].toString().isNotEmpty) {
+        if (listZDY.length < 6) {
+          Map<dynamic, dynamic> map = {};
+          map['avatar'] = event.map!['avatar'];
+          map['amount'] = event.map!['amount'];
+          setState(() {
+            listZDY.add(map);
+          });
+        } else {
+          setState(() {
+            for (int i = 0; i < 5; i++) {
+              listZDY[i] = listZDY[1 + 1];
+            }
+            Map<dynamic, dynamic> map = {};
+            map['avatar'] = event.map!['avatar'];
+            map['amount'] = event.map!['amount'];
+            listZDY[5] = map;
+          });
+        }
+      }
+    });
+
+    // 监听网络状态变化
+    startListening();
+
+    // 判断当前年月日是否为今天，如果不是，下注还是要提示
+    DateTime now = DateTime.now();
+    int year = now.year;
+    int month = now.month;
+    int day = now.day;
+    String time = '$year-$month-$day';
+    if(sp.getString('car_queren_time_h') == null || sp.getString('car_queren_time_h') != time){
+      sp.setBool('car_queren_h', false);
+    }
+  }
+  Connectivity connectivity = Connectivity();
+  late StreamSubscription<ConnectivityResult> subscription;
+
+  void startListening() {
+    subscription = connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.none) {
+        // 处理网络中断的逻辑
+        MyToastUtils.showToastCenter('网络中断，游戏暂时退出!');
+        Navigator.pop(context);
+      } else {
+        // 处理网络重连的逻辑
+
+      }
+    });
   }
 
   @override
@@ -947,6 +1054,9 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
     _timer?.cancel();
     _timer2?.cancel();
     _timer3?.cancel();
+    _timer4?.cancel();
+    listen.cancel();
+    subscription.cancel();
     super.dispose();
   }
 
@@ -1488,13 +1598,13 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
                           children: [
                             WidgetUtils.showImagesFill(
                                 'assets/images/car_b6.png', 35, 40),
-                            SixInfo(2),
-                            WidgetUtils.commonSizedBox(0, 2.5),
                             SixInfo(1),
                             WidgetUtils.commonSizedBox(0, 2.5),
-                            SixInfo(4),
+                            SixInfo(2),
                             WidgetUtils.commonSizedBox(0, 2.5),
                             SixInfo(3),
+                            WidgetUtils.commonSizedBox(0, 2.5),
+                            SixInfo(4),
                             WidgetUtils.commonSizedBox(0, 2.5),
                             SixInfo(5),
                             WidgetUtils.commonSizedBox(0, 2.5),
@@ -1536,31 +1646,19 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
                     ],
                   )),
                   WidgetUtils.commonSizedBox(0, 2.5),
-                  //8倍
+                  //12倍
                   Column(
                     children: [
                       WidgetUtils.commonSizedBox(5, 0),
                       Expanded(child: GestureDetector(
                         onTap: (() {
                           if (isShow) {
-                            if(tishi){
-                              int jine = 0;
-                              for(int a = 0; a < 4; a++){
-                                if(listB[a]){
-                                  if(a==0){
-                                    jine = 10;
-                                  }else if(a==1){
-                                    jine = 100;
-                                  }else if(a==2){
-                                    jine = 1000;
-                                  }else if(a==3){
-                                    jine = 1000;
-                                  }
-                                }
-                              }
-                              MyUtils.goTransparentPageCom(context, QueRenHPage(title: '赛车下注横屏', jine: jine.toString(), isDuiHuan: false));
+                            if (sp.getBool('car_queren_h') == false ||
+                                sp.getBool('car_queren_h') == null) {
+                              MyUtils.goTransparentPageCom(context, QueRenHPage(title: '赛车下注横屏', jine: xiazhujine, isDuiHuan: false, index: '12',));
                               return;
                             }
+                            doPostCarBet('12');
                             playSound2();
                             setState(() {
                               listA[11] = true;
@@ -1604,7 +1702,15 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
                           //设置四周边框
                           border: Border.all(width: 1, color: Colors.white),
                         ),
-                        child: Text('1111'),
+                        child: OptionGridView(
+                          itemCount: listZDY.length,
+                          rowCount: 4,
+                          mainAxisSpacing: 20.h,
+                          // 上下间距
+                          crossAxisSpacing: 20.h,
+                          //左右间距
+                          itemBuilder: _initlistdata,
+                        ),
                       )),
                       WidgetUtils.commonSizedBox(5, 0),
                     ],
@@ -1616,5 +1722,129 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
         ],
       ),
     );
+  }
+
+
+  /// 赛车押注
+  Future<void> doPostCarBet(String benSN) async {
+    setState(() {
+      chooseWho = benSN;
+    });
+    Map<String, dynamic> params = <String, dynamic>{
+      'bet_sn': benSN,
+      'bet_amount': xiazhujine.toString()
+    };
+    try {
+      CommonBean bean = await DataUtils.postCarBet(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            listJL[int.parse(benSN) - 1] =
+                listJL[int.parse(benSN) - 1] + xiazhujine;
+            playSound2();
+            if (listA[int.parse(benSN) - 1] == false) {
+              setState(() {
+                listA[int.parse(benSN) - 1] = true;
+              });
+            }
+            listA1[int.parse(benSN) - 1] = true;
+            //点击播放点击特效
+            Future.delayed(
+                const Duration(
+                  milliseconds: 400,
+                ), () {
+              listA1[int.parse(benSN) - 1] = false;
+            });
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+  }
+
+  /// 赛车倒计时
+  Future<void> doPostGetCarTimer() async {
+    try {
+      carTimerBean bean = await DataUtils.postGetCarTimer();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            //
+            if (bean.data! >= 20) {
+              playTime = playTime - bean.data!;
+              isShow = false;
+              isStarGame = true;
+              sum = 20;
+              starTimerPlay();
+            } else {
+              sum = 20 - bean.data!;
+              //开启倒计时
+              starTimerDJS();
+              isShow = true;
+              isStarGame = false;
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+  }
+
+  /// 赛车中奖赛道
+  Future<void> doPostGetWinTrack() async {
+    try {
+      carTimerBean bean = await DataUtils.postGetWinTrack();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            if (bean.data! == 7) {
+              //更新
+              luck = 0;
+            } else if (bean.data! == 6) {
+              //更新
+              luck = 1;
+            } else if (bean.data! == 5) {
+              //更新
+              luck = 2;
+            } else if (bean.data! == 4) {
+              //更新
+              luck = 3;
+            } else if (bean.data! == 3) {
+              //更新
+              luck = 4;
+            } else if (bean.data! == 2) {
+              //更新
+              luck = 5;
+            } else if (bean.data! == 1) {
+              //更新
+              luck = 6;
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom("数据异常,游戏即将关闭，稍后请在开奖记录查看！");
+          // ignore: use_build_context_synchronously
+          Navigator.pop(context);
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
   }
 }

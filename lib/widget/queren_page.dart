@@ -1,22 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/utils/event_utils.dart';
+import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 
 import '../colors/my_colors.dart';
+import '../main.dart';
 import '../utils/style_utils.dart';
 /// 二次确认弹窗
 class QueRenPage extends StatefulWidget {
   String title;
-  String jine;
+  int jine;
   bool isDuiHuan;
-  QueRenPage({super.key, required this.title, required this.jine, required this.isDuiHuan});
+  String index;
+  QueRenPage({super.key, required this.title, required this.jine, required this.isDuiHuan, required this.index});
 
   @override
   State<QueRenPage> createState() => _QueRenPageState();
 }
 
 class _QueRenPageState extends State<QueRenPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    LogE('接受到数据==${widget.jine}');
+  }
+  // 默认选中今日不在弹出
+  bool  isCheck = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,11 +54,11 @@ class _QueRenPageState extends State<QueRenPage> {
                         color: MyColors.g2, fontSize: 32.sp, fontWeight: FontWeight.w600),
                     children: [
                       TextSpan(
-                          text: widget.jine,
+                          text: '${widget.jine}',
                           style: StyleUtils.getCommonTextStyle(
                               color: MyColors.origin, fontSize: 32.sp, fontWeight: FontWeight.w600)),
                       TextSpan(
-                          text: widget.title == '赛车商店' && widget.isDuiHuan ? '蘑菇币，请确认' : 'V豆/钻石，请确认',
+                          text: widget.title == '赛车商店' && widget.isDuiHuan ? '蘑菇币，请确认' : '金蘑菇/V豆/钻石',
                           style: StyleUtils.getCommonTextStyle(
                               color: MyColors.g2, fontSize: 32.sp, fontWeight: FontWeight.w600)),
                     ]),
@@ -58,9 +69,11 @@ class _QueRenPageState extends State<QueRenPage> {
                   const Spacer(),
                   GestureDetector(
                     onTap: ((){
-
+                      setState(() {
+                        isCheck = !isCheck;
+                      });
                     }),
-                    child: WidgetUtils.showImages('assets/images/mofang_check_yes.png', 30.h, 30.h),
+                    child: WidgetUtils.showImages(isCheck ? 'assets/images/mofang_check_yes.png' : 'assets/images/mofang_check_no.png', 30.h, 30.h),
                   ),
                   WidgetUtils.commonSizedBox(0, 10.h),
                   WidgetUtils.onlyText('今日不在弹出', StyleUtils.getCommonTextStyle(
@@ -93,8 +106,18 @@ class _QueRenPageState extends State<QueRenPage> {
                   GestureDetector(
                     onTap: ((){
                       ///确认后请求接口
+                      if(isCheck){
+                        DateTime now = DateTime.now();
+                        int year = now.year;
+                        int month = now.month;
+                        int day = now.day;
+                        sp.setBool('car_queren', true);
+                        sp.setString('car_queren_time', '$year-$month-$day');
+                      }else{
+                        sp.setBool('car_queren', false);
+                      }
                       Navigator.pop(context);
-                      eventBus.fire(QuerenBack(title: widget.title, jine: widget.jine));
+                      eventBus.fire(QuerenBack(title: widget.title, jine: widget.jine, index: widget.index));
                     }),
                     child: Container(
                       width: 200.h,

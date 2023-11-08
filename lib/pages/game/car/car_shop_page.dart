@@ -87,7 +87,7 @@ class _CarShopPageState extends State<CarShopPage> {
                         WidgetUtils.commonSizedBox(10.h, 0.h),
                         GestureDetector(
                           onTap: ((){
-                            MyUtils.goTransparentPageCom(context, QueRenPage(title: '赛车商店', jine: '10', isDuiHuan: true,));
+                            MyUtils.goTransparentPageCom(context, QueRenPage(title: '赛车商店', jine: 0, isDuiHuan: true,index: '',));
                           }),
                           child: Container(
                             height: 35.h,

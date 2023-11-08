@@ -10,9 +10,9 @@ class MyHttpConfig{
   //测试上传
   static const String uploadUrl = 'http://192.168.100.121:18089/upload';
   //鹏飞测试环境
-  static const String baseURL = "http://192.168.0.51/api";
+  // static const String baseURL = "http://192.168.0.51/api";
   //赵增测试环境
-  // static const String baseURL = "http://192.168.0.53/api";
+  static const String baseURL = "http://192.168.0.53/api";
   //正式环境
   // static const String baseURL = "https://yy.sunvua.com/api";
 
@@ -193,7 +193,20 @@ class MyHttpConfig{
   static const String roomWelcomeMsg = "$baseURL/room/roomWelcomeMsg";
   //礼物列表
   static const String giftList = "$baseURL/gift/list";
-
+  //厅内发消息
+  static const String roomMessageSend = "$baseURL/room/roomMessageSend";
+  //房间麦序在线用户
+  static const String onlineRoomUser = "$baseURL/room/onlineRoomUser";
+  //赛车押注
+  static const String carBet = "$baseURL/game/carBet";
+  //赛车中奖赛道
+  static const String getWinTrack = "$baseURL/game/getWinTrack";
+  //赛车中奖赛道列表历史记录
+  static const String getWinTrackList = "$baseURL/game/getWinTrackList";
+  //赛车倒计时
+  static const String getCarTimer = "$baseURL/game/getCarTimer";
+  //赛车幸运用户
+  static const String carLuckyUser = "$baseURL/game/carLuckyUser";
 
 
 }

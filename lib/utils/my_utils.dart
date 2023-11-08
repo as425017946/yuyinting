@@ -444,6 +444,7 @@ class MyUtils {
                   EMTextMessageBody body = msg.body as EMTextMessageBody;
                   LogE('接受文本信息$msg');
                   Map info = msg.attributes!;
+                  LogE('接受文本信息${info['lv']}');
                   if(info['lv'] == '' || info['lv'] == null){
                     String nickName = info['nickname'];
                     String headImg = info['avatar'];
@@ -475,6 +476,7 @@ class MyUtils {
                     await databaseHelper.insertData('messageSLTable', params);
                     eventBus.fire(SendMessageBack(type: 1, msgID: '0'));
                   }else{
+                    LogE('接受文本信息=============');
                     eventBus.fire(JoinRoomYBack(map: info, type: '0'));
                   }
                 }
@@ -484,6 +486,7 @@ class MyUtils {
                   // 下载附件
                   EMClient.getInstance.chatManager.downloadAttachment(msg);
                   EMImageMessageBody body = msg.body as EMImageMessageBody;
+                  LogE('接受图片信息==$body');
                   Map? info = msg.attributes;
                   String? nickName = info!['nickname'];
                   String? headImg = info!['avatar'];

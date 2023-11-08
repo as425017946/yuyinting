@@ -113,6 +113,9 @@ dependencies:
   flutter_svg: ^2.0.5
   # 保存网络图片
   image_gallery_saver: ^2.0.3
+  # 监听网络状态
+  connectivity_plus: ^5.0.1
+
 
 dev_dependencies:
   flutter_test:
@@ -150,6 +153,7 @@ flutter:
     - assets/images/car/
     - assets/images/dj/
     - assets/images/cj/
+    - assets/images/hd/
     - assets/images/ceshi/
     - assets/svga/
     - assets/svga/gp/

@@ -96,8 +96,9 @@ class LoginBack {
 ///二次确认弹窗使用
 class QuerenBack {
   String title;
-  String jine;
-  QuerenBack({required this.title, required this.jine});
+  int jine;
+  String index;
+  QuerenBack({required this.title, required this.jine, required this.index});
 }
 
 /// 厅内使用
@@ -153,4 +154,17 @@ class ChoosePeopleBack {
   // 送到哪里
   List<bool> listPeople;
   ChoosePeopleBack({required this.listPeople});
+}
+
+
+/// 厅内聊天发消息
+class SendRoomInfoBack {
+  String info;
+  SendRoomInfoBack({required this.info});
+}
+
+/// 厅内聊天发图片
+class SendRoomImgBack {
+  String info;
+  SendRoomImgBack({required this.info});
 }

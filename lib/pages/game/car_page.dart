@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,11 +8,19 @@ import 'package:soundpool/soundpool.dart';
 import 'package:svgaplayer_flutter/parser.dart';
 import 'package:svgaplayer_flutter/player.dart';
 import 'package:yuyinting/colors/my_colors.dart';
+import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/my_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import 'package:yuyinting/widget/queren_page.dart';
 
+import '../../bean/Common_bean.dart';
+import '../../bean/carTimerBean.dart';
+import '../../bean/commonStringBean.dart';
+import '../../http/data_utils.dart';
+import '../../http/my_http_config.dart';
+import '../../main.dart';
+import '../../utils/my_toast_utils.dart';
 import '../../utils/style_utils.dart';
 import 'car/car_shop_page.dart';
 import 'car/lishi_page.dart';
@@ -27,7 +36,7 @@ class Carpage extends StatefulWidget {
 }
 
 class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
-  bool tishi = true;
+  // 下注区是否被选中
   List<bool> listA = [
     false,
     false,
@@ -56,6 +65,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
     false,
     false
   ];
+
   //赛车是否加速使用
   List<bool> listCar = [
     false,
@@ -74,44 +84,20 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
         child: GestureDetector(
       onTap: (() {
         if (isShow) {
-          if(tishi){
-            int jine = 0;
-            for(int a = 0; a < 4; a++){
-              if(listB[a]){
-                if(a==0){
-                  jine = 10;
-                }else if(a==1){
-                  jine = 100;
-                }else if(a==2){
-                  jine = 1000;
-                }else if(a==3){
-                  jine = 1000;
-                }
-              }
-            }
-            MyUtils.goTransparentPageCom(context, QueRenPage(title: '赛车下注', jine: jine.toString(), isDuiHuan: false));
+          LogE('*******************$xiazhujine');
+          if (sp.getBool('car_queren') == false ||
+              sp.getBool('car_queren') == null) {
+            LogE('*******************///$xiazhujine');
+            MyUtils.goTransparentPageCom(
+                context,
+                QueRenPage(
+                    title: '赛车下注',
+                    jine: xiazhujine,
+                    isDuiHuan: false,
+                    index: i.toString(),));
             return;
           }
-          playSound2();
-          if (listA[i - 1] == false) {
-            setState(() {
-              listA[i - 1] = true;
-            });
-          }
-          //点击播放点击特效
-          if (listA1[i - 1] == false) {
-            setState(() {
-              listA1[i - 1] = true;
-            });
-            Future.delayed(
-                const Duration(
-                  milliseconds: 400,
-                ), () {
-              setState(() {
-                listA1[i - 1] = false;
-              });
-            });
-          }
+          doPostCarBet(i.toString());
         }
       }),
       child: Stack(
@@ -122,7 +108,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                   : 'assets/images/car_jl_btn2.png',
               70.h,
               double.infinity),
-          i == 4
+          i == 3
               ? Positioned(
                   top: -2,
                   right: -20,
@@ -143,7 +129,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
             left: 5.h,
             top: 10.h,
             child: WidgetUtils.onlyText(
-                '10000',
+                listJL[i - 1].toString(),
                 StyleUtils.getCommonTextStyle(
                     color: Colors.white,
                     fontSize: 17.sp,
@@ -169,30 +155,18 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
         child: GestureDetector(
       onTap: (() {
         if (isShow) {
-          if(tishi){
-            int jine = 0;
-            for(int a = 0; a < 4; a++){
-              if(listB[a]){
-                if(a==0){
-                  jine = 10;
-                }else if(a==1){
-                  jine = 100;
-                }else if(a==2){
-                  jine = 1000;
-                }else if(a==3){
-                  jine = 1000;
-                }
-              }
-            }
-            MyUtils.goTransparentPageCom(context, QueRenPage(title: '赛车下注', jine: jine.toString(), isDuiHuan: false));
+          if (sp.getBool('car_queren') == false ||
+              sp.getBool('car_queren') == null) {
+            MyUtils.goTransparentPageCom(
+                context,
+                QueRenPage(
+                    title: '赛车下注',
+                    jine: xiazhujine,
+                    isDuiHuan: false,
+                    index: (6 + one).toString()));
             return;
           }
-          playSound2();
-          if (listA[5 + one] == false) {
-            setState(() {
-              listA[5 + one] = true;
-            });
-          }
+          doPostCarBet((6 + one).toString());
         }
       }),
       child: Stack(
@@ -213,7 +187,11 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
             left: 5.h,
             top: 10.h,
             child: WidgetUtils.onlyText(
-                '10000',
+                one == 1
+                    ? listJL[6].toString()
+                    : one == 2
+                        ? listJL[7].toString()
+                        : listJL[8].toString(),
                 StyleUtils.getCommonTextStyle(
                     color: Colors.white,
                     fontSize: 17.sp,
@@ -230,34 +208,18 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
         child: GestureDetector(
       onTap: (() {
         if (isShow) {
-          if(tishi){
-            int jine = 0;
-            for(int a = 0; a < 4; a++){
-              if(listB[a]){
-                if(a==0){
-                  jine = 10;
-                }else if(a==1){
-                  jine = 100;
-                }else if(a==2){
-                  jine = 1000;
-                }else if(a==3){
-                  jine = 1000;
-                }
-              }
-            }
-            MyUtils.goTransparentPageCom(context, QueRenPage(title: '赛车下注', jine: jine.toString(), isDuiHuan: false));
+          if (sp.getBool('car_queren') == false ||
+              sp.getBool('car_queren') == null) {
+            MyUtils.goTransparentPageCom(
+                context,
+                QueRenPage(
+                    title: '赛车下注',
+                    jine: xiazhujine,
+                    isDuiHuan: false,
+                    index: (9 + one).toString()));
             return;
           }
-          playSound2();
-          if (one == 1) {
-            setState(() {
-              listA[9] = true;
-            });
-          } else {
-            setState(() {
-              listA[10] = true;
-            });
-          }
+          doPostCarBet((9 + one).toString());
         }
       }),
       child: Stack(
@@ -278,7 +240,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
             left: 5.h,
             top: 10.h,
             child: WidgetUtils.onlyText(
-                '10000',
+                one == 1 ? listJL[9].toString() : listJL[10].toString(),
                 StyleUtils.getCommonTextStyle(
                     color: Colors.white,
                     fontSize: 17.sp,
@@ -302,7 +264,21 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
         setState(() {
           listB[i] = !listB[i];
         });
-        playSound();
+        for (int a = 0; a < 4; a++) {
+          if (listB[a]) {
+            setState(() {
+              if (a == 0) {
+                xiazhujine = 10;
+              } else if (a == 1) {
+                xiazhujine = 100;
+              } else if (a == 2) {
+                xiazhujine = 1000;
+              } else if (a == 3) {
+                xiazhujine = 10000;
+              }
+            });
+          }
+        }
       }),
       child: SizedBox(
         height: 47.h,
@@ -413,16 +389,71 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
   late Animation<double> animationGO;
 
   late PageController _controller;
-  Timer? _timer, _timer2, _timer3;
+  Timer? _timer, _timer2, _timer3, _timer4;
   int _currentPage = 0;
 
-  int luck = 0, sum = 20, sumBG = 0;
+  int luck = 0, sum = 20, sumBG = 0, playTime = 46;
+
+  // 是否可以点击下注
   bool isShow = true;
 
-  var a,a1,a2,a3,a4,a5,a6,b,b1,b2,b3,b4,b5,b6,c,c1,c2,c3,c4,c5,c6,d,d1,d2,d3,d4,d5,d6,e,e1,e2,e3,e4,e5,e6;
-  var j,j1,j2,j3,j4,j5,j6;
+  // 游戏是否开始了
+  bool isStarGame = false;
 
-  void suijishu(){
+  var a,
+      a1,
+      a2,
+      a3,
+      a4,
+      a5,
+      a6,
+      b,
+      b1,
+      b2,
+      b3,
+      b4,
+      b5,
+      b6,
+      c,
+      c1,
+      c2,
+      c3,
+      c4,
+      c5,
+      c6,
+      d,
+      d1,
+      d2,
+      d3,
+      d4,
+      d5,
+      d6,
+      e,
+      e1,
+      e2,
+      e3,
+      e4,
+      e5,
+      e6;
+  var j, j1, j2, j3, j4, j5, j6;
+
+  // 记录下注情况
+  List<int> listJL = [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+  ];
+
+  void suijishu() {
     a = Random().nextInt(10) / 10;
     b = Random().nextInt(10) / 10;
     c = Random().nextInt(10) / 10;
@@ -465,32 +496,33 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
     d6 = Random().nextInt(10) / 10;
     e6 = Random().nextInt(10) / 10;
 
-    j = Random().nextDouble()+Random().nextDouble();
-    j1 = Random().nextDouble()+Random().nextDouble();
-    j2 = Random().nextDouble()+Random().nextDouble();
-    j3 = Random().nextDouble()+Random().nextDouble();
-    j4 = Random().nextDouble()+Random().nextDouble();
-    j5 = Random().nextDouble()+Random().nextDouble();
-    j6 = Random().nextDouble()+Random().nextDouble();
+    j = Random().nextDouble() + Random().nextDouble();
+    j1 = Random().nextDouble() + Random().nextDouble();
+    j2 = Random().nextDouble() + Random().nextDouble();
+    j3 = Random().nextDouble() + Random().nextDouble();
+    j4 = Random().nextDouble() + Random().nextDouble();
+    j5 = Random().nextDouble() + Random().nextDouble();
+    j6 = Random().nextDouble() + Random().nextDouble();
   }
 
   List<int> listS = [];
+
   // 取3个随机数用于显示小车加速
-  void carSJS(){
+  void carSJS() {
     //数组清空
     listS.clear();
     //小车状态全部变成false状态
-    for(int i = 0; i < 7; i++){
+    for (int i = 0; i < 7; i++) {
       setState(() {
         listCar[i] = false;
       });
     }
     Random random = Random();
-    while(listS.length < 3){
+    while (listS.length < 3) {
       int numbers = random.nextInt(7);
       listS.add(numbers);
-      for(int i = 0; i < 7; i++){
-        if(numbers == i){
+      for (int i = 0; i < 7; i++) {
+        if (numbers == i) {
           setState(() {
             listCar[i] = true;
           });
@@ -498,8 +530,9 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
       }
     }
   }
+
   // 赛车2秒一换
-  void carTimer(){
+  void carTimer() {
     _timer3 = Timer.periodic(const Duration(seconds: 2), (timer) {
       carSJS();
     });
@@ -511,11 +544,10 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
       if (_controller.hasClients) {
         setState(() {
           sumBG++;
-          if(sumBG==19){
+          if (sumBG == 19) {
             MyUtils.goTransparentPageCom(context, ZhongJiangPage(type: luck));
           }
         });
-        LogE('********');
         if (_controller.page!.round() >= imagesa.length - 1) {
           LogE('********------');
           _controller.jumpToPage(0);
@@ -526,7 +558,6 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
           );
         }
       }
-
     });
   }
 
@@ -542,18 +573,37 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
   // 倒计时
   void starTimerDJS() {
     _timer2 = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        sum--;
+      });
       if (sum == 0) {
         playSound3();
-        timer.cancel();
+        _timer2!.cancel();
         setState(() {
           isShow = false;
           isPlay = true;
         });
+        // 开始倒计时动画
         loadAnimation();
-      } else {
-        // 开始321的倒计时动画
+      }
+    });
+  }
+
+  // 游戏进行中游戏的倒计时
+  void starTimerPlay() {
+    _timer4 = Timer.periodic(const Duration(seconds: 1), (timer) {
+      //游戏结束了
+      if (playTime == 0) {
+        _timer4!.cancel();
         setState(() {
-          sum--;
+          isShow = true;
+          isStarGame = false;
+        });
+        starTimerDJS();
+      } else {
+        // 游戏进行中的倒计时
+        setState(() {
+          playTime--;
         });
       }
     });
@@ -651,7 +701,9 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
               weight: 12),
           TweenSequenceItem(
               tween: Tween(
-                  begin: Offset(e3, 0), end: Offset(luck == i ? 2.3 : (2-double.parse(e3.toString())), 0)),
+                  begin: Offset(e3, 0),
+                  end: Offset(
+                      luck == i ? 2.3 : (2 - double.parse(e3.toString())), 0)),
               weight: 40),
         ]).animate(controller2);
         break;
@@ -673,7 +725,9 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
               weight: 12),
           TweenSequenceItem(
               tween: Tween(
-                  begin: Offset(e4, 0), end: Offset(luck == i ? 2.3 : (2-double.parse(e4.toString())), 0)),
+                  begin: Offset(e4, 0),
+                  end: Offset(
+                      luck == i ? 2.3 : (2 - double.parse(e4.toString())), 0)),
               weight: 40),
         ]).animate(controller2);
         break;
@@ -695,7 +749,9 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
               weight: 12),
           TweenSequenceItem(
               tween: Tween(
-                  begin: Offset(e5, 0), end: Offset(luck == i ? 2.3 : (2-double.parse(e5.toString())), 0)),
+                  begin: Offset(e5, 0),
+                  end: Offset(
+                      luck == i ? 2.3 : (2 - double.parse(e5.toString())), 0)),
               weight: 40),
         ]).animate(controller2);
         break;
@@ -717,7 +773,9 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
               weight: 12),
           TweenSequenceItem(
               tween: Tween(
-                  begin: Offset(e6, 0), end: Offset(luck == i ? 2.3 : (2-double.parse(e6.toString())), 0)),
+                  begin: Offset(e6, 0),
+                  end: Offset(
+                      luck == i ? 2.3 : (2 - double.parse(e6.toString())), 0)),
               weight: 40),
         ]).animate(controller2);
         break;
@@ -739,6 +797,8 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
   bool isPlay = false, isGo = false;
 
   void loadAnimation() async {
+    // 请求中奖赛道
+    doPostGetWinTrack();
     Future.delayed(const Duration(seconds: 3), () {
       setState(() {
         isPlay = false;
@@ -748,7 +808,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
         startTimer();
         controllerGO.forward();
         Future.delayed(const Duration(seconds: 1), () {
-          for(int i = 0; i < 7; i++){
+          for (int i = 0; i < 7; i++) {
             setState(() {
               listCar[i] = true;
             });
@@ -801,15 +861,32 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
     return decoder(svgaUrl);
   }
 
+  // 监听弹窗返回的数据
+  var listen;
+
+  // 下注金额
+  int xiazhujine = 10;
+
+  // 及时展示im使用
+  var listenZDY;
+  List<Map> listZDY = [];
 
   @override
   void initState() {
     super.initState();
+    // 获取赛车倒计时
+    doPostGetCarTimer();
+    // 二次确认弹窗点击确认，开始下注
+    listen = eventBus.on<QuerenBack>().listen((event) {
+      setState(() {
+        doPostCarBet(event.index);
+      });
+    });
     suijishu();
     animationController = SVGAAnimationController(vsync: this);
     // 背景图滚动
     _controller = PageController(
-      initialPage: imagesa.length-1,
+      initialPage: imagesa.length - 1,
     )..addListener(_onPageChanged);
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       _controller.jumpToPage(0);
@@ -826,9 +903,21 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
         pauseTimer();
         _controller.jumpToPage(0);
         //小车状态全部变成false状态
-        for(int i = 0; i < 7; i++){
+        for (int i = 0; i < 7; i++) {
           setState(() {
             listCar[i] = false;
+          });
+        }
+        //下注状态
+        for (int i = 0; i < listA.length; i++) {
+          setState(() {
+            listA[i] = false;
+          });
+        }
+        // 下注记录清空
+        for (int i = 0; i < listJL.length; i++) {
+          setState(() {
+            listJL[i] = 0;
           });
         }
         controllerGO.reset();
@@ -837,6 +926,8 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
           setState(() {
             isShow = true;
           });
+          // 清空接受的im下注信息
+          listZDY.clear();
           starTimerDJS();
         });
         // controllerZD.reset();
@@ -844,20 +935,70 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
         // MyUtils.goTransparentPageCom(context, const ZhongJiangPage());
       }
     });
-    //开启倒计时
-    starTimerDJS();
-    // GO的动画
-    controllerGO =
-    AnimationController(duration: const Duration(milliseconds: 1000), vsync: this)
-      ..addStatusListener((status) {
 
-      });
+    // GO的动画
+    controllerGO = AnimationController(
+        duration: const Duration(milliseconds: 1000), vsync: this)
+      ..addStatusListener((status) {});
     animationGO = Tween<double>(begin: 0, end: 1).animate(controllerGO);
     controllerGO.addListener(() {
       if (controllerGO.isCompleted) {
         setState(() {
           isGo = false;
         });
+      }
+    });
+
+    // 接受下注的im信息
+    listenZDY = eventBus.on<ZDYBack>().listen((event) {
+      if (event.map!['avatar'].toString().isNotEmpty) {
+        if (listZDY.length < 6) {
+          Map<dynamic, dynamic> map = {};
+          map['avatar'] = event.map!['avatar'];
+          map['amount'] = event.map!['amount'];
+          setState(() {
+            listZDY.add(map);
+          });
+        } else {
+          setState(() {
+            for (int i = 0; i < 5; i++) {
+              listZDY[i] = listZDY[1 + 1];
+            }
+            Map<dynamic, dynamic> map = {};
+            map['avatar'] = event.map!['avatar'];
+            map['amount'] = event.map!['amount'];
+            listZDY[5] = map;
+          });
+        }
+        LogE('**********${listZDY.length}');
+      }
+    });
+
+    // 监听网络状态变化
+    startListening();
+
+    // 判断当前年月日是否为今天，如果不是，下注还是要提示
+    DateTime now = DateTime.now();
+    int year = now.year;
+    int month = now.month;
+    int day = now.day;
+    String time = '$year-$month-$day';
+    if(sp.getString('car_queren_time') == null || sp.getString('car_queren_time') != time){
+      sp.setBool('car_queren', false);
+    }
+  }
+  Connectivity connectivity = Connectivity();
+  late StreamSubscription<ConnectivityResult> subscription;
+
+  void startListening() {
+    subscription = connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.none) {
+        // 处理网络中断的逻辑
+        MyToastUtils.showToastCenter('网络中断，游戏暂时退出!');
+        Navigator.pop(context);
+      } else {
+        // 处理网络重连的逻辑
+
       }
     });
   }
@@ -870,6 +1011,9 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
     _timer?.cancel();
     _timer2?.cancel();
     _timer3?.cancel();
+    _timer4?.cancel();
+    listen.cancel();
+    subscription.cancel();
     super.dispose();
   }
 
@@ -928,8 +1072,9 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                                     children: [
                                       WidgetUtils.commonSizedBox(20.h, 0),
                                       GestureDetector(
-                                        onTap: ((){
-                                          MyUtils.goTransparentPageCom(context, const CarLandScapePage());
+                                        onTap: (() {
+                                          MyUtils.goTransparentPageCom(context,
+                                              const CarLandScapePage());
                                           Navigator.pop(context);
                                         }),
                                         child: Container(
@@ -970,8 +1115,9 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                                       ),
                                       WidgetUtils.commonSizedBox(10.h, 0),
                                       GestureDetector(
-                                        onTap: ((){
-                                          MyUtils.goTransparentPageCom(context, const LiShiPage());
+                                        onTap: (() {
+                                          MyUtils.goTransparentPageCom(
+                                              context, const LiShiPage());
                                         }),
                                         child: Container(
                                           height: 38.h,
@@ -979,11 +1125,11 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                                           //边框设置
                                           decoration: const BoxDecoration(
                                               image: DecorationImage(
-                                                //背景图片修饰
-                                                image: AssetImage(
-                                                    "assets/images/car_anniu.png"),
-                                                fit: BoxFit.fill, //覆盖
-                                              )),
+                                            //背景图片修饰
+                                            image: AssetImage(
+                                                "assets/images/car_anniu.png"),
+                                            fit: BoxFit.fill, //覆盖
+                                          )),
                                           child: WidgetUtils.onlyTextCenter(
                                               '开奖记录',
                                               StyleUtils.getCommonTextStyle(
@@ -1089,7 +1235,8 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                                           const Spacer(),
                                           GestureDetector(
                                             onTap: (() {
-                                              MyUtils.goTransparentPageCom(context, const CarShopPage());
+                                              MyUtils.goTransparentPageCom(
+                                                  context, const CarShopPage());
                                             }),
                                             child: WidgetUtils.showImages(
                                                 'assets/images/car_shop.png',
@@ -1120,23 +1267,29 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                         Stack(
                           children: [
                             WidgetUtils.showImages(
-                                listCar[0] ? 'assets/images/car/xiaogui+.png' : 'assets/images/car/xiaogui.png',
+                                listCar[0]
+                                    ? 'assets/images/car/xiaogui+.png'
+                                    : 'assets/images/car/xiaogui.png',
                                 ScreenUtil().setHeight(102),
                                 ScreenUtil().setHeight(180)),
-                            isShow == false ? Positioned(
-                                left: 73.h,
-                                top: 78.h,
-                                child: WidgetUtils.showImages(
-                                    'assets/images/z_wheel.gif',
-                                    ScreenUtil().setHeight(15),
-                                    ScreenUtil().setHeight(15))) : const Text(''),
-                            isShow == false ? Positioned(
-                                left: 130.h,
-                                top: 78.h,
-                                child: WidgetUtils.showImages(
-                                    'assets/images/z_wheel.gif',
-                                    ScreenUtil().setHeight(15),
-                                    ScreenUtil().setHeight(15))) : const Text(''),
+                            isShow == false
+                                ? Positioned(
+                                    left: 73.h,
+                                    top: 78.h,
+                                    child: WidgetUtils.showImages(
+                                        'assets/images/z_wheel.gif',
+                                        ScreenUtil().setHeight(15),
+                                        ScreenUtil().setHeight(15)))
+                                : const Text(''),
+                            isShow == false
+                                ? Positioned(
+                                    left: 130.h,
+                                    top: 78.h,
+                                    child: WidgetUtils.showImages(
+                                        'assets/images/z_wheel.gif',
+                                        ScreenUtil().setHeight(15),
+                                        ScreenUtil().setHeight(15)))
+                                : const Text(''),
                           ],
                         )
                       ],
@@ -1153,23 +1306,29 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                         Stack(
                           children: [
                             WidgetUtils.showImages(
-                                listCar[1] ? 'assets/images/car/guigui+.png' : 'assets/images/car/guigui.png',
+                                listCar[1]
+                                    ? 'assets/images/car/guigui+.png'
+                                    : 'assets/images/car/guigui.png',
                                 ScreenUtil().setHeight(102),
                                 ScreenUtil().setHeight(180)),
-                            isShow == false ? Positioned(
-                                left: 66.h,
-                                top: 75.h,
-                                child: WidgetUtils.showImages(
-                                    'assets/images/z_wheel.gif',
-                                    ScreenUtil().setHeight(18),
-                                    ScreenUtil().setHeight(18))) : const Text(''),
-                            isShow == false ? Positioned(
-                                left: 120.h,
-                                top: 82.h,
-                                child: WidgetUtils.showImages(
-                                    'assets/images/z_wheel.gif',
-                                    ScreenUtil().setHeight(15),
-                                    ScreenUtil().setHeight(15))) : const Text(''),
+                            isShow == false
+                                ? Positioned(
+                                    left: 66.h,
+                                    top: 75.h,
+                                    child: WidgetUtils.showImages(
+                                        'assets/images/z_wheel.gif',
+                                        ScreenUtil().setHeight(18),
+                                        ScreenUtil().setHeight(18)))
+                                : const Text(''),
+                            isShow == false
+                                ? Positioned(
+                                    left: 120.h,
+                                    top: 82.h,
+                                    child: WidgetUtils.showImages(
+                                        'assets/images/z_wheel.gif',
+                                        ScreenUtil().setHeight(15),
+                                        ScreenUtil().setHeight(15)))
+                                : const Text(''),
                           ],
                         ),
                       ],
@@ -1186,23 +1345,29 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                         Stack(
                           children: [
                             WidgetUtils.showImages(
-                                listCar[2] ? 'assets/images/car/lan+.png' : 'assets/images/car/lan.png',
+                                listCar[2]
+                                    ? 'assets/images/car/lan+.png'
+                                    : 'assets/images/car/lan.png',
                                 ScreenUtil().setHeight(102),
                                 ScreenUtil().setHeight(180)),
-                            isShow == false ? Positioned(
-                                left: 58.h,
-                                top: 72.h,
-                                child: WidgetUtils.showImages(
-                                    'assets/images/z_wheel.gif',
-                                    ScreenUtil().setHeight(20),
-                                    ScreenUtil().setHeight(20))) : const Text(''),
-                            isShow == false ? Positioned(
-                                left: 112.h,
-                                top: 72.h,
-                                child: WidgetUtils.showImages(
-                                    'assets/images/z_wheel.gif',
-                                    ScreenUtil().setHeight(22),
-                                    ScreenUtil().setHeight(22))) : const Text(''),
+                            isShow == false
+                                ? Positioned(
+                                    left: 58.h,
+                                    top: 72.h,
+                                    child: WidgetUtils.showImages(
+                                        'assets/images/z_wheel.gif',
+                                        ScreenUtil().setHeight(20),
+                                        ScreenUtil().setHeight(20)))
+                                : const Text(''),
+                            isShow == false
+                                ? Positioned(
+                                    left: 112.h,
+                                    top: 72.h,
+                                    child: WidgetUtils.showImages(
+                                        'assets/images/z_wheel.gif',
+                                        ScreenUtil().setHeight(22),
+                                        ScreenUtil().setHeight(22)))
+                                : const Text(''),
                           ],
                         ),
                       ],
@@ -1219,23 +1384,29 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                         Stack(
                           children: [
                             WidgetUtils.showImages(
-                                listCar[3] ? 'assets/images/car/hou+.png' : 'assets/images/car/hou.png',
+                                listCar[3]
+                                    ? 'assets/images/car/hou+.png'
+                                    : 'assets/images/car/hou.png',
                                 ScreenUtil().setHeight(102),
                                 ScreenUtil().setHeight(180)),
-                            isShow == false ? Positioned(
-                                left: 54.h,
-                                top: 74.h,
-                                child: WidgetUtils.showImages(
-                                    'assets/images/z_wheel.gif',
-                                    ScreenUtil().setHeight(15),
-                                    ScreenUtil().setHeight(15))) : const Text(''),
-                            isShow == false ? Positioned(
-                                left: 128.h,
-                                top: 80.h,
-                                child: WidgetUtils.showImages(
-                                    'assets/images/z_wheel.gif',
-                                    ScreenUtil().setHeight(13),
-                                    ScreenUtil().setHeight(13))) : const Text(''),
+                            isShow == false
+                                ? Positioned(
+                                    left: 54.h,
+                                    top: 74.h,
+                                    child: WidgetUtils.showImages(
+                                        'assets/images/z_wheel.gif',
+                                        ScreenUtil().setHeight(15),
+                                        ScreenUtil().setHeight(15)))
+                                : const Text(''),
+                            isShow == false
+                                ? Positioned(
+                                    left: 128.h,
+                                    top: 80.h,
+                                    child: WidgetUtils.showImages(
+                                        'assets/images/z_wheel.gif',
+                                        ScreenUtil().setHeight(13),
+                                        ScreenUtil().setHeight(13)))
+                                : const Text(''),
                           ],
                         ),
                       ],
@@ -1252,23 +1423,29 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                         Stack(
                           children: [
                             WidgetUtils.showImages(
-                                listCar[4] ? 'assets/images/car/fen+.png' : 'assets/images/car/fen.png',
+                                listCar[4]
+                                    ? 'assets/images/car/fen+.png'
+                                    : 'assets/images/car/fen.png',
                                 ScreenUtil().setHeight(102),
                                 ScreenUtil().setHeight(180)),
-                            isShow == false ? Positioned(
-                                left: 58.h,
-                                top: 75.h,
-                                child: WidgetUtils.showImages(
-                                    'assets/images/z_wheel.gif',
-                                    ScreenUtil().setHeight(18),
-                                    ScreenUtil().setHeight(18))) : const Text(''),
-                            isShow == false ? Positioned(
-                                left: 117.h,
-                                top: 78.h,
-                                child: WidgetUtils.showImages(
-                                    'assets/images/z_wheel.gif',
-                                    ScreenUtil().setHeight(18),
-                                    ScreenUtil().setHeight(18))) : const Text(''),
+                            isShow == false
+                                ? Positioned(
+                                    left: 58.h,
+                                    top: 75.h,
+                                    child: WidgetUtils.showImages(
+                                        'assets/images/z_wheel.gif',
+                                        ScreenUtil().setHeight(18),
+                                        ScreenUtil().setHeight(18)))
+                                : const Text(''),
+                            isShow == false
+                                ? Positioned(
+                                    left: 117.h,
+                                    top: 78.h,
+                                    child: WidgetUtils.showImages(
+                                        'assets/images/z_wheel.gif',
+                                        ScreenUtil().setHeight(18),
+                                        ScreenUtil().setHeight(18)))
+                                : const Text(''),
                           ],
                         ),
                       ],
@@ -1285,23 +1462,29 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                         Stack(
                           children: [
                             WidgetUtils.showImages(
-                                listCar[5] ? 'assets/images/car/lv+.png' : 'assets/images/car/lv.png',
+                                listCar[5]
+                                    ? 'assets/images/car/lv+.png'
+                                    : 'assets/images/car/lv.png',
                                 ScreenUtil().setHeight(102),
                                 ScreenUtil().setHeight(180)),
-                            isShow == false ? Positioned(
-                                left: 60.h,
-                                top: 72.h,
-                                child: WidgetUtils.showImages(
-                                    'assets/images/z_wheel.gif',
-                                    ScreenUtil().setHeight(20),
-                                    ScreenUtil().setHeight(20))) : const Text(''),
-                            isShow == false ? Positioned(
-                                left: 114.h,
-                                top: 78.h,
-                                child: WidgetUtils.showImages(
-                                    'assets/images/z_wheel.gif',
-                                    ScreenUtil().setHeight(15),
-                                    ScreenUtil().setHeight(15))) : const Text(''),
+                            isShow == false
+                                ? Positioned(
+                                    left: 60.h,
+                                    top: 72.h,
+                                    child: WidgetUtils.showImages(
+                                        'assets/images/z_wheel.gif',
+                                        ScreenUtil().setHeight(20),
+                                        ScreenUtil().setHeight(20)))
+                                : const Text(''),
+                            isShow == false
+                                ? Positioned(
+                                    left: 114.h,
+                                    top: 78.h,
+                                    child: WidgetUtils.showImages(
+                                        'assets/images/z_wheel.gif',
+                                        ScreenUtil().setHeight(15),
+                                        ScreenUtil().setHeight(15)))
+                                : const Text(''),
                           ],
                         ),
                       ],
@@ -1318,23 +1501,29 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                         Stack(
                           children: [
                             WidgetUtils.showImages(
-                                listCar[6] ? 'assets/images/car/maliao+.png' : 'assets/images/car/maliao.png',
+                                listCar[6]
+                                    ? 'assets/images/car/maliao+.png'
+                                    : 'assets/images/car/maliao.png',
                                 ScreenUtil().setHeight(102),
                                 ScreenUtil().setHeight(180)),
-                            isShow == false ? Positioned(
-                                left: 58.h,
-                                top: 67.h,
-                                child: WidgetUtils.showImages(
-                                    'assets/images/z_wheel.gif',
-                                    ScreenUtil().setHeight(22),
-                                    ScreenUtil().setHeight(22))) : const Text(''),
-                            isShow == false ? Positioned(
-                                left: 112.h,
-                                top: 75.h,
-                                child: WidgetUtils.showImages(
-                                    'assets/images/z_wheel.gif',
-                                    ScreenUtil().setHeight(18),
-                                    ScreenUtil().setHeight(18))) : const Text(''),
+                            isShow == false
+                                ? Positioned(
+                                    left: 58.h,
+                                    top: 67.h,
+                                    child: WidgetUtils.showImages(
+                                        'assets/images/z_wheel.gif',
+                                        ScreenUtil().setHeight(22),
+                                        ScreenUtil().setHeight(22)))
+                                : const Text(''),
+                            isShow == false
+                                ? Positioned(
+                                    left: 112.h,
+                                    top: 75.h,
+                                    child: WidgetUtils.showImages(
+                                        'assets/images/z_wheel.gif',
+                                        ScreenUtil().setHeight(18),
+                                        ScreenUtil().setHeight(18)))
+                                : const Text(''),
                           ],
                         ),
                       ],
@@ -1376,15 +1565,85 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                         ),
                       )
                     : const Text(''),
-                isGo ? Positioned(
-                  top: 230.h,
-                  left: 180.h,
-                  child: ScaleTransition(
-                    scale: animationGO,
-                    child: WidgetUtils.showImages('assets/images/car_go.png', 300.h, 260.h),
+                isGo
+                    ? Positioned(
+                        top: 230.h,
+                        left: 180.h,
+                        child: ScaleTransition(
+                          scale: animationGO,
+                          child: WidgetUtils.showImages(
+                              'assets/images/car_go.png', 300.h, 260.h),
+                        ),
+                      )
+                    : const Text(''),
+                // 中途进来
+                isStarGame
+                    ? Center(
+                        child: SizedBox(
+                          height: 550.h,
+                          width: 450.h,
+                          child: Stack(
+                            children: [
+                              WidgetUtils.showImages(
+                                  'assets/images/car/car_star.png',
+                                  550.h,
+                                  450.h),
+                              Container(
+                                height: 140.h,
+                                width: 450.h,
+                                margin: EdgeInsets.only(top: 410.h),
+                                child: WidgetUtils.onlyTextCenter(
+                                    '本场竞赛已开始，请耐心等待~',
+                                    StyleUtils.getCommonTextStyle(
+                                        color: Colors.black87,
+                                        fontSize: 26.sp,
+                                        fontWeight: FontWeight.w600)),
+                              )
+                            ],
+                          ),
+                        ),
+                      )
+                    : const Text(''),
+                // 及时接受im下注信息
+                Container(
+                  height: 100.h,
+                  margin: EdgeInsets.only(top: 170.h),
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  child: Row(
+                    children: [
+                      for (int i = 0; i < listZDY.length; i++)
+                        Container(
+                          height: 90.h,
+                          width: 90.h,
+                          margin: EdgeInsets.only(left: 10.h),
+                          child: Stack(
+                            alignment: Alignment.bottomCenter,
+                            children: [
+                              WidgetUtils.CircleHeadImage(
+                                  90.h, 90.h, listZDY[i]['avatar']),
+                              Container(
+                                height: 25.h,
+                                width: 90.h,
+                                //边框设置
+                                decoration: const BoxDecoration(
+                                    image: DecorationImage(
+                                  //背景图片修饰
+                                  image:
+                                      AssetImage("assets/images/car_btn2.png"),
+                                  fit: BoxFit.fill, //覆盖
+                                )),
+                                child: WidgetUtils.onlyTextCenter(
+                                    listZDY[i]['amount'].toString(),
+                                    StyleUtils.getCommonTextStyle(
+                                        color: Colors.white, fontSize: 22.sp)),
+                              ),
+                            ],
+                          ),
+                        )
+                    ],
                   ),
-                ): const Text(''),
-
+                )
               ],
             ),
           ),
@@ -1401,13 +1660,13 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                   children: [
                     WidgetUtils.showImagesFill(
                         'assets/images/car_b6.png', 73.h, 69.h),
-                    SixInfo(2),
-                    WidgetUtils.commonSizedBox(0, 5.h),
                     SixInfo(1),
                     WidgetUtils.commonSizedBox(0, 5.h),
-                    SixInfo(4),
+                    SixInfo(2),
                     WidgetUtils.commonSizedBox(0, 5.h),
                     SixInfo(3),
+                    WidgetUtils.commonSizedBox(0, 5.h),
+                    SixInfo(4),
                     WidgetUtils.commonSizedBox(0, 5.h),
                     SixInfo(5),
                     WidgetUtils.commonSizedBox(0, 5.h),
@@ -1439,7 +1698,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                   ],
                 ),
                 WidgetUtils.commonSizedBox(4.h, 0),
-                //8倍
+                //12倍
                 Row(
                   children: [
                     WidgetUtils.showImagesFill(
@@ -1448,28 +1707,18 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                         child: GestureDetector(
                       onTap: (() {
                         if (isShow) {
-                          if(tishi){
-                            int jine = 0;
-                            for(int a = 0; a < 4; a++){
-                              if(listB[a]){
-                                if(a==0){
-                                  jine = 10;
-                                }else if(a==1){
-                                  jine = 100;
-                                }else if(a==2){
-                                  jine = 1000;
-                                }else if(a==3){
-                                  jine = 1000;
-                                }
-                              }
-                            }
-                            MyUtils.goTransparentPageCom(context, QueRenPage(title: '赛车下注', jine: jine.toString(), isDuiHuan: false));
+                          if (sp.getBool('car_queren') == false ||
+                              sp.getBool('car_queren') == null) {
+                            MyUtils.goTransparentPageCom(
+                                context,
+                                QueRenPage(
+                                    title: '赛车下注',
+                                    jine: xiazhujine,
+                                    isDuiHuan: false,
+                                    index: '12'));
                             return;
                           }
-                          playSound2();
-                          setState(() {
-                            listA[11] = true;
-                          });
+                          doPostCarBet('12');
                         }
                       }),
                       child: Stack(
@@ -1484,7 +1733,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                             left: 5.h,
                             top: 10.h,
                             child: WidgetUtils.onlyText(
-                                '10000',
+                                listJL[11].toString(),
                                 StyleUtils.getCommonTextStyle(
                                     color: Colors.white,
                                     fontSize: 17.sp,
@@ -1515,5 +1764,125 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
         ],
       ),
     );
+  }
+
+  /// 赛车押注
+  Future<void> doPostCarBet(String benSN) async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'bet_sn': benSN,
+      'bet_amount': xiazhujine.toString()
+    };
+    try {
+      CommonBean bean = await DataUtils.postCarBet(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            listJL[int.parse(benSN) - 1] =
+                listJL[int.parse(benSN) - 1] + xiazhujine;
+            playSound2();
+            if (listA[int.parse(benSN) - 1] == false) {
+              setState(() {
+                listA[int.parse(benSN) - 1] = true;
+              });
+            }
+            listA1[int.parse(benSN) - 1] = true;
+            //点击播放点击特效
+            Future.delayed(
+                const Duration(
+                  milliseconds: 400,
+                ), () {
+              listA1[int.parse(benSN) - 1] = false;
+            });
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+          // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+  }
+
+  /// 赛车倒计时
+  Future<void> doPostGetCarTimer() async {
+    try {
+      carTimerBean bean = await DataUtils.postGetCarTimer();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            //
+            if (bean.data! >= 20) {
+              playTime = playTime - bean.data!;
+              isShow = false;
+              isStarGame = true;
+              sum = 20;
+              starTimerPlay();
+            } else {
+              sum = 20 - bean.data!;
+              //开启倒计时
+              starTimerDJS();
+              isShow = true;
+              isStarGame = false;
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+          // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+  }
+
+  /// 赛车中奖赛道
+  Future<void> doPostGetWinTrack() async {
+    try {
+      carTimerBean bean = await DataUtils.postGetWinTrack();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            if (bean.data! == 7) {
+              //更新
+              luck = 0;
+            } else if (bean.data! == 6) {
+              //更新
+              luck = 1;
+            } else if (bean.data! == 5) {
+              //更新
+              luck = 2;
+            } else if (bean.data! == 4) {
+              //更新
+              luck = 3;
+            } else if (bean.data! == 3) {
+              //更新
+              luck = 4;
+            } else if (bean.data! == 2) {
+              //更新
+              luck = 5;
+            } else if (bean.data! == 1) {
+              //更新
+              luck = 6;
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+          // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom("数据异常,游戏即将关闭，稍后请在开奖记录查看！");
+          // ignore: use_build_context_synchronously
+          Navigator.pop(context);
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
   }
 }

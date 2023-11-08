@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:svgaplayer_flutter/player.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
+import 'package:yuyinting/utils/log_util.dart';
+
 class SVGASimpleImage extends StatefulWidget {
   final String? resUrl;
   final String? assetsName;
@@ -30,7 +32,8 @@ class _SVGASimpleImageState extends State<SVGASimpleImage>
   @override
   void didUpdateWidget(covariant SVGASimpleImage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.resUrl != widget.resUrl || oldWidget.assetsName != widget.assetsName) {
+    if (oldWidget.resUrl != widget.resUrl ||
+        oldWidget.assetsName != widget.assetsName) {
       _tryDecodeSvga();
     }
   }
@@ -40,7 +43,13 @@ class _SVGASimpleImageState extends State<SVGASimpleImage>
     if (animationController == null) {
       return Container();
     }
-    return SVGAImage(animationController!,fit: BoxFit.fitWidth,preferredSize: const Size(double.infinity,double.infinity), allowDrawingOverflow: false,);
+    return SVGAImage(
+      animationController!,
+      fit: BoxFit.fitWidth,
+      preferredSize: const Size(double.infinity, double.infinity),
+      allowDrawingOverflow: false,
+      clearsAfterStop: false,
+    );
   }
 
   @override

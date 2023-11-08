@@ -6,7 +6,9 @@ import '../../utils/widget_utils.dart';
 class RoomShowLiWuPage extends StatefulWidget {
   // 选择需要赠送的哪个人
   List<bool> listPeople = [];
-  RoomShowLiWuPage({super.key, required this.listPeople});
+  String url;
+  String svga;
+  RoomShowLiWuPage({super.key, required this.listPeople, required this.url, required this.svga});
 
   @override
   State<RoomShowLiWuPage> createState() => _RoomShowLiWuPageState();
@@ -398,7 +400,7 @@ class _RoomShowLiWuPageState extends State<RoomShowLiWuPage>  with TickerProvide
                         height: 100.h,
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: AssetImage('assets/images/ceshi/siyecao.png'),
+                            image: NetworkImage(widget.url),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -422,7 +424,7 @@ class _RoomShowLiWuPageState extends State<RoomShowLiWuPage>  with TickerProvide
                         height: 100.h,
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: AssetImage('assets/images/ceshi/siyecao.png'),
+                            image: NetworkImage(widget.url),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -446,7 +448,7 @@ class _RoomShowLiWuPageState extends State<RoomShowLiWuPage>  with TickerProvide
                         height: 100.h,
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: AssetImage('assets/images/ceshi/siyecao.png'),
+                            image: NetworkImage(widget.url),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -470,7 +472,7 @@ class _RoomShowLiWuPageState extends State<RoomShowLiWuPage>  with TickerProvide
                         height: 100.h,
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: AssetImage('assets/images/ceshi/siyecao.png'),
+                            image: NetworkImage(widget.url),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -494,7 +496,7 @@ class _RoomShowLiWuPageState extends State<RoomShowLiWuPage>  with TickerProvide
                         height: 100.h,
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: AssetImage('assets/images/ceshi/siyecao.png'),
+                            image: NetworkImage(widget.url),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -518,7 +520,7 @@ class _RoomShowLiWuPageState extends State<RoomShowLiWuPage>  with TickerProvide
                         height: 100.h,
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: AssetImage('assets/images/ceshi/siyecao.png'),
+                            image: NetworkImage(widget.url),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -542,7 +544,7 @@ class _RoomShowLiWuPageState extends State<RoomShowLiWuPage>  with TickerProvide
                         height: 100.h,
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: AssetImage('assets/images/ceshi/siyecao.png'),
+                            image: NetworkImage(widget.url),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -566,7 +568,7 @@ class _RoomShowLiWuPageState extends State<RoomShowLiWuPage>  with TickerProvide
                         height: 100.h,
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: AssetImage('assets/images/ceshi/siyecao.png'),
+                            image: NetworkImage(widget.url),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -590,7 +592,7 @@ class _RoomShowLiWuPageState extends State<RoomShowLiWuPage>  with TickerProvide
                         height: 100.h,
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: AssetImage('assets/images/ceshi/siyecao.png'),
+                            image: NetworkImage(widget.url),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -614,7 +616,7 @@ class _RoomShowLiWuPageState extends State<RoomShowLiWuPage>  with TickerProvide
                         height: 100.h,
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: AssetImage('assets/images/ceshi/siyecao.png'),
+                            image: NetworkImage(widget.url),
                             fit: BoxFit.cover,
                           ),
                         ),

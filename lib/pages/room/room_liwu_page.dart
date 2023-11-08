@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yuyinting/bean/liwuBean.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/pages/room/room_show_liwu_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
@@ -7,11 +8,10 @@ import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import 'package:yuyinting/widget/SVGASimpleImage.dart';
-
-import '../../bean/giftListBean.dart';
 import '../../bean/roomInfoBean.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
+import '../../main.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 
@@ -30,15 +30,15 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
   int leixing = 0;
 
   // 经典
-  List<ClassicList> listC = [];
+  List<DataL> listC = [];
   List<bool> listCBool = [];
 
   // 特权
-  List<PrivilegeList> listPV = [];
+  List<DataL> listPV = [];
   List<bool> listPVBool = [];
 
   // 背包
-  List<PackList> listPl = [];
+  List<DataL> listPl = [];
   List<bool> listPlBool = [];
 
   // 麦上有几个人是否点击了选中
@@ -59,6 +59,8 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
   bool isMaiPeople = false;
   // 是否全麦
   bool isAll = false;
+  // 要送的礼物地址
+  String url = '', svga = '';
 
   Widget _itemPeople(BuildContext context, int i) {
     return GestureDetector(
@@ -151,6 +153,8 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
     return GestureDetector(
       onTap: (() {
         setState(() {
+          url = listC[index].img.toString();
+          svga = listC[index].imgRendering.toString();
           for (int i = 0; i < listC.length; i++) {
             listCBool[i] = false;
           }
@@ -170,38 +174,21 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
               child: Column(
                 children: [
                   WidgetUtils.commonSizedBox(20.h, 0),
-                  // listCBool[index]
-                  //     ? AnimatedBuilder(
-                  //         animation: _animation,
-                  //         builder: (context, child) {
-                  //           return Transform.scale(
-                  //             scale: _animation.value,
-                  //             child: WidgetUtils.showImagesNet(
-                  //                 listC[index].img!,
-                  //                 ScreenUtil().setHeight(80),
-                  //                 ScreenUtil().setHeight(120)),
-                  //           );
-                  //         },
-                  //       )
-                  //     : WidgetUtils.showImagesNet(
-                  //         listC[index].img!,
-                  //         ScreenUtil().setHeight(80),
-                  //         ScreenUtil().setHeight(120)),
                   listCBool[index]
                       ? AnimatedBuilder(
                           animation: _animation,
                           builder: (context, child) {
                             return Transform.scale(
                               scale: _animation.value,
-                              child: WidgetUtils.showImages(
-                                  'assets/images/ceshi/siyecao.png',
+                              child: WidgetUtils.showImagesNet(
+                                  listC[index].img!,
                                   ScreenUtil().setHeight(90),
                                   ScreenUtil().setHeight(80)),
                             );
                           },
                         )
-                      : WidgetUtils.showImages(
-                          'assets/images/ceshi/siyecao.png',
+                      : WidgetUtils.showImagesNet(
+                          listC[index].img!,
                           ScreenUtil().setHeight(90),
                           ScreenUtil().setHeight(80)),
                   WidgetUtils.onlyTextCenter(
@@ -389,6 +376,8 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                             GestureDetector(
                               onTap: (() {
                                 setState(() {
+                                  url = '';
+                                  svga = '';
                                   leixing = 0;
                                 });
                               }),
@@ -412,6 +401,8 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                             GestureDetector(
                               onTap: (() {
                                 setState(() {
+                                  url = '';
+                                  svga = '';
                                   leixing = 1;
                                 });
                               }),
@@ -435,6 +426,8 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                             GestureDetector(
                               onTap: (() {
                                 setState(() {
+                                  url = '';
+                                  svga = '';
                                   leixing = 2;
                                 });
                               }),
@@ -570,7 +563,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                               });
                                               eventBus.fire(ResidentBack(isBack: true));
                                               Navigator.pop(context);
-                                              MyUtils.goTransparentPage(context, RoomShowLiWuPage(listPeople: listPeople,));
+                                              MyUtils.goTransparentPage(context, RoomShowLiWuPage(listPeople: listPeople,url: url , svga:svga));
                                             }else{
                                               if(isChoosePeople == false){
                                                 MyToastUtils.showToastBottom('请选择要送的对象');
@@ -578,7 +571,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                               }else{
                                                 eventBus.fire(ResidentBack(isBack: true));
                                                 Navigator.pop(context);
-                                                MyUtils.goTransparentPage(context, RoomShowLiWuPage(listPeople: listPeople,));
+                                                MyUtils.goTransparentPage(context, RoomShowLiWuPage(listPeople: listPeople,url: url, svga:svga));
                                               }
                                             }
                                           }),
@@ -933,28 +926,36 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
 
   /// 获取礼物列表
   Future<void> doPostGiftList() async {
+    LogE('token ${sp.getString('user_token')}');
+    Map<String, dynamic> params = <String, dynamic>{
+      'type': leixing,
+    };
     try {
-      giftListBean bean = await DataUtils.postGiftList();
+      liwuBean bean = await DataUtils.postGiftList(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
-            listC.clear();
-            listPV.clear();
-            listPl.clear();
-            listCBool.clear();
-            listPVBool.clear();
-            listPlBool.clear();
-            listC = bean.data!.classicList!;
-            listPV = bean.data!.privilegeList!;
-            listPl = bean.data!.packList!;
-            for (int i = 0; i < listC.length; i++) {
-              listCBool.add(false);
-            }
-            for (int i = 0; i < listPV.length; i++) {
-              listPVBool.add(false);
-            }
-            for (int i = 0; i < listPl.length; i++) {
-              listPlBool.add(false);
+            if(leixing == 0){
+              listC.clear();
+              listCBool.clear();
+              listC = bean.data!;
+              for (int i = 0; i < listC.length; i++) {
+                listCBool.add(false);
+              }
+            }else if(leixing == 1){
+              listPV.clear();
+              listPVBool.clear();
+              listPV = bean.data!;
+              for (int i = 0; i < listPV.length; i++) {
+                listPVBool.add(false);
+              }
+            }else if(leixing == 2){
+              listPl.clear();
+              listPlBool.clear();
+              listPl = bean.data!;
+              for (int i = 0; i < listPl.length; i++) {
+                listPlBool.add(false);
+              }
             }
           });
           break;

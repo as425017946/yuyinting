@@ -88,7 +88,7 @@ class _RoomShowStatusPageState extends State<RoomShowStatusPage> {
                 Row(
                   children: [
                     WidgetUtils.commonSizedBox(0, 10),
-                     SizedBox(
+                    SizedBox(
                       width: ScreenUtil().setHeight(140),
                       height: ScreenUtil().setHeight(190),
                       child: Stack(

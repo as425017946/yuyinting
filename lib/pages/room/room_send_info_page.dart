@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/pages/room/room_bq_page.dart';
+import 'package:yuyinting/utils/event_utils.dart';
+import 'package:yuyinting/utils/my_toast_utils.dart';
 
 import '../../colors/my_colors.dart';
 import '../../utils/my_utils.dart';
@@ -22,9 +24,11 @@ class _RoomSendInfoPageState extends State<RoomSendInfoPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    setState(() {
-      controller.text = '@${widget.info!}';
-    });
+    if(widget.info!.isNotEmpty){
+      setState(() {
+        controller.text = '@${widget.info!}';
+      });
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -71,11 +75,14 @@ class _RoomSendInfoPageState extends State<RoomSendInfoPage> {
                       ],
                       style: StyleUtils.loginTextStyle,
                       onSubmitted: (value) {
+                        if(value.isEmpty){
+                          MyToastUtils.showToastBottom('请输入要发送的信息');
+                          return;
+                        }
+                        eventBus.fire(SendRoomInfoBack(info: value));
                         setState(() {
                           Navigator.pop(context);
                         });
-                        // MyUtils.sendMessage(widget.otherUid, value);
-                        // doPostSendUserMsg(value);
                       },
                       decoration: InputDecoration(
                         // border: InputBorder.none,

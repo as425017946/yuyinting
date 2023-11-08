@@ -4,6 +4,8 @@ import 'package:yuyinting/bean/aboutUsBean.dart';
 import '../bean/DTListBean.dart';
 import '../bean/DTMoreBean.dart';
 import '../bean/DTTuiJianListBean.dart';
+import '../bean/carTimerBean.dart';
+import '../bean/carZJLiShiBean.dart';
 import '../bean/careListBean.dart';
 import '../bean/chatUserInfoBean.dart';
 import '../bean/cityBean.dart';
@@ -17,14 +19,17 @@ import '../bean/giftListBean.dart';
 import '../bean/homeTJBean.dart';
 import '../bean/kefuBean.dart';
 import '../bean/labelListBean.dart';
+import '../bean/liwuBean.dart';
 import '../bean/liwuMoreBean.dart';
 import '../bean/loginBean.dart';
+import '../bean/luckUserBean.dart';
 import '../bean/managerBean.dart';
 import '../bean/memberListBean.dart';
 import '../bean/myGhBean.dart';
 import '../bean/myHomeBean.dart';
 import '../bean/myInfoBean.dart';
 import '../bean/myShopListBean.dart';
+import '../bean/onlineRoomUserBean.dart';
 import '../bean/plBean.dart';
 import '../bean/quhao_bean.dart';
 import '../bean/quhao_searche_bean.dart';
@@ -702,9 +707,64 @@ class DataUtils{
   }
 
   /// 礼物列表
-  static Future<giftListBean> postGiftList() async {
-    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.giftList, {}, {});
+  static Future<liwuBean> postGiftList(Map<String,dynamic> params) async {
+    print("礼物列表：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.giftList, {}, params);
     print("礼物列表：$respons");
-    return giftListBean.fromJson(respons!);
+    return liwuBean.fromJson(respons!);
+  }
+
+
+  /// 厅内发消息
+  static Future<CommonBean> postRoomMessageSend(Map<String,dynamic> params) async {
+    print("厅内发消息：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.roomMessageSend, {}, params);
+    print("厅内发消息：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+
+  /// 房间麦序在线用户
+  static Future<onlineRoomUserBean> postOnlineRoomUser(Map<String,dynamic> params) async {
+    print("房间麦序在线用户：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.onlineRoomUser, {}, params);
+    print("房间麦序在线用户：$respons");
+    return onlineRoomUserBean.fromJson(respons!);
+  }
+
+  /// 赛车押注
+  static Future<CommonBean> postCarBet(Map<String,dynamic> params) async {
+    print("赛车押注：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.carBet, {}, params);
+    print("赛车押注：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 赛车中奖赛道
+  static Future<carTimerBean> postGetWinTrack() async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.getWinTrack, {}, {});
+    print("赛车中奖赛道：$respons");
+    return carTimerBean.fromJson(respons!);
+  }
+
+  /// 赛车中奖赛道列表历史
+  static Future<carZJLiShiBean> postGetWinTrackList() async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.getWinTrackList, {}, {});
+    print("赛车中奖赛道列表历史：$respons");
+    return carZJLiShiBean.fromJson(respons!);
+  }
+
+  /// 赛车倒计时
+  static Future<carTimerBean> postGetCarTimer() async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.getCarTimer, {}, {});
+    print("赛车倒计时：$respons");
+    return carTimerBean.fromJson(respons!);
+  }
+
+  /// 赛车幸运用户
+  static Future<luckUserBean> postCarLuckyUser() async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.carLuckyUser, {}, {});
+    print("赛车幸运用户：$respons");
+    return luckUserBean.fromJson(respons!);
   }
 }

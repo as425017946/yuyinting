@@ -5,6 +5,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 
+import '../../../bean/luckUserBean.dart';
+import '../../../http/data_utils.dart';
+import '../../../http/my_http_config.dart';
+import '../../../utils/my_toast_utils.dart';
+import '../../../utils/my_utils.dart';
+
 /// 中奖页面
 class ZhongJiangPage extends StatefulWidget {
   int type;
@@ -15,11 +21,12 @@ class ZhongJiangPage extends StatefulWidget {
 }
 
 class _ZhongJiangPageState extends State<ZhongJiangPage> {
-  int length = 3;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    doPostCarLuckyUser();
+    // 4秒后关闭页面
     Future.delayed(const Duration(seconds: 4),(){
       if(mounted) {
         Navigator.pop(context);
@@ -53,8 +60,8 @@ class _ZhongJiangPageState extends State<ZhongJiangPage> {
                       Column(
                         children: [
                           const Spacer(),
-                          length == 0 ?
-                          const Text('') : length == 1 ? Row(
+                          list.isEmpty ?
+                          const Text('') : list.length == 1 ? Row(
                             children: [
                               const Spacer(),
                               SizedBox(
@@ -64,7 +71,7 @@ class _ZhongJiangPageState extends State<ZhongJiangPage> {
                                   alignment: Alignment.bottomCenter,
                                   children: [
                                     WidgetUtils.CircleHeadImage(90.h, 90.h,
-                                        'http://image.nbd.com.cn/uploads/articles/images/673466/500352700_banner.jpg'),
+                                        list[0].avatar!),
                                     SizedBox(
                                       height: 25.h,
                                       child: Stack(
@@ -76,15 +83,15 @@ class _ZhongJiangPageState extends State<ZhongJiangPage> {
                                           Row(
                                             children: [
                                               WidgetUtils.commonSizedBox(
-                                                  0, 5.h),
-                                              WidgetUtils.showImages(
-                                                  'assets/images/car_mogubi.png',
-                                                  15.h,
-                                                  15.h),
+                                                  0, 20.h),
+                                              // WidgetUtils.showImages(
+                                              //     'assets/images/car_mogubi.png',
+                                              //     15.h,
+                                              //     15.h),
                                               Expanded(
                                                   child: WidgetUtils
                                                       .onlyTextCenter(
-                                                      '10',
+                                                      list[0].amount.toString(),
                                                       StyleUtils
                                                           .getCommonTextStyle(
                                                           color: Colors
@@ -106,7 +113,7 @@ class _ZhongJiangPageState extends State<ZhongJiangPage> {
                               ),
                               const Spacer(),
                             ],
-                          ) : length == 2 ? Row(
+                          ) : list.length == 2 ? Row(
                             children: [
                               const Spacer(),
                               SizedBox(
@@ -116,7 +123,7 @@ class _ZhongJiangPageState extends State<ZhongJiangPage> {
                                   alignment: Alignment.bottomCenter,
                                   children: [
                                     WidgetUtils.CircleHeadImage(90.h, 90.h,
-                                        'http://image.nbd.com.cn/uploads/articles/images/673466/500352700_banner.jpg'),
+                                        list[0].avatar!),
                                     SizedBox(
                                       height: 25.h,
                                       child: Stack(
@@ -128,15 +135,15 @@ class _ZhongJiangPageState extends State<ZhongJiangPage> {
                                           Row(
                                             children: [
                                               WidgetUtils.commonSizedBox(
-                                                  0, 5.h),
-                                              WidgetUtils.showImages(
-                                                  'assets/images/car_mogubi.png',
-                                                  15.h,
-                                                  15.h),
+                                                  0, 20.h),
+                                              // WidgetUtils.showImages(
+                                              //     'assets/images/car_mogubi.png',
+                                              //     15.h,
+                                              //     15.h),
                                               Expanded(
                                                   child: WidgetUtils
                                                       .onlyTextCenter(
-                                                      '10',
+                                                      list[0].amount.toString(),
                                                       StyleUtils
                                                           .getCommonTextStyle(
                                                           color: Colors
@@ -164,7 +171,7 @@ class _ZhongJiangPageState extends State<ZhongJiangPage> {
                                   alignment: Alignment.bottomCenter,
                                   children: [
                                     WidgetUtils.CircleHeadImage(90.h, 90.h,
-                                        'http://image.nbd.com.cn/uploads/articles/images/673466/500352700_banner.jpg'),
+                                        list[1].avatar!),
                                     SizedBox(
                                       height: 25.h,
                                       child: Stack(
@@ -176,15 +183,15 @@ class _ZhongJiangPageState extends State<ZhongJiangPage> {
                                           Row(
                                             children: [
                                               WidgetUtils.commonSizedBox(
-                                                  0, 5.h),
-                                              WidgetUtils.showImages(
-                                                  'assets/images/car_mogubi.png',
-                                                  15.h,
-                                                  15.h),
+                                                  0, 20.h),
+                                              // WidgetUtils.showImages(
+                                              //     'assets/images/car_mogubi.png',
+                                              //     15.h,
+                                              //     15.h),
                                               Expanded(
                                                   child: WidgetUtils
                                                       .onlyTextCenter(
-                                                      '10000',
+                                                      list[1].amount.toString(),
                                                       StyleUtils
                                                           .getCommonTextStyle(
                                                           color: Colors
@@ -216,7 +223,7 @@ class _ZhongJiangPageState extends State<ZhongJiangPage> {
                                   alignment: Alignment.bottomCenter,
                                   children: [
                                     WidgetUtils.CircleHeadImage(90.h, 90.h,
-                                        'http://image.nbd.com.cn/uploads/articles/images/673466/500352700_banner.jpg'),
+                                        list[0].avatar!),
                                     SizedBox(
                                       height: 25.h,
                                       child: Stack(
@@ -228,15 +235,15 @@ class _ZhongJiangPageState extends State<ZhongJiangPage> {
                                           Row(
                                             children: [
                                               WidgetUtils.commonSizedBox(
-                                                  0, 5.h),
-                                              WidgetUtils.showImages(
-                                                  'assets/images/car_mogubi.png',
-                                                  15.h,
-                                                  15.h),
+                                                  0, 20.h),
+                                              // WidgetUtils.showImages(
+                                              //     'assets/images/car_mogubi.png',
+                                              //     15.h,
+                                              //     15.h),
                                               Expanded(
                                                   child: WidgetUtils
                                                       .onlyTextCenter(
-                                                      '10',
+                                                      list[0].amount.toString(),
                                                       StyleUtils
                                                           .getCommonTextStyle(
                                                           color: Colors
@@ -264,7 +271,7 @@ class _ZhongJiangPageState extends State<ZhongJiangPage> {
                                   alignment: Alignment.bottomCenter,
                                   children: [
                                     WidgetUtils.CircleHeadImage(90.h, 90.h,
-                                        'http://image.nbd.com.cn/uploads/articles/images/673466/500352700_banner.jpg'),
+                                        list[1].avatar!),
                                     SizedBox(
                                       height: 25.h,
                                       child: Stack(
@@ -276,15 +283,15 @@ class _ZhongJiangPageState extends State<ZhongJiangPage> {
                                           Row(
                                             children: [
                                               WidgetUtils.commonSizedBox(
-                                                  0, 5.h),
-                                              WidgetUtils.showImages(
-                                                  'assets/images/car_mogubi.png',
-                                                  15.h,
-                                                  15.h),
+                                                  0, 20.h),
+                                              // WidgetUtils.showImages(
+                                              //     'assets/images/car_mogubi.png',
+                                              //     15.h,
+                                              //     15.h),
                                               Expanded(
                                                   child: WidgetUtils
                                                       .onlyTextCenter(
-                                                      '10000',
+                                                      list[1].amount.toString(),
                                                       StyleUtils
                                                           .getCommonTextStyle(
                                                           color: Colors
@@ -312,7 +319,7 @@ class _ZhongJiangPageState extends State<ZhongJiangPage> {
                                   alignment: Alignment.bottomCenter,
                                   children: [
                                     WidgetUtils.CircleHeadImage(90.h, 90.h,
-                                        'http://image.nbd.com.cn/uploads/articles/images/673466/500352700_banner.jpg'),
+                                        list[2].avatar!),
                                     SizedBox(
                                       height: 25.h,
                                       child: Stack(
@@ -324,15 +331,15 @@ class _ZhongJiangPageState extends State<ZhongJiangPage> {
                                           Row(
                                             children: [
                                               WidgetUtils.commonSizedBox(
-                                                  0, 5.h),
-                                              WidgetUtils.showImages(
-                                                  'assets/images/car_mogubi.png',
-                                                  15.h,
-                                                  15.h),
+                                                  0, 20.h),
+                                              // WidgetUtils.showImages(
+                                              //     'assets/images/car_mogubi.png',
+                                              //     15.h,
+                                              //     15.h),
                                               Expanded(
                                                   child: WidgetUtils
                                                       .onlyTextCenter(
-                                                      '10000',
+                                                      list[2].amount.toString(),
                                                       StyleUtils
                                                           .getCommonTextStyle(
                                                           color: Colors
@@ -377,5 +384,27 @@ class _ZhongJiangPageState extends State<ZhongJiangPage> {
             ],
           ),
         ));
+  }
+
+  List<LuckyList> list = [];
+  /// 赛车中奖用户
+  Future<void> doPostCarLuckyUser() async {
+    try {
+      luckUserBean bean = await DataUtils.postCarLuckyUser();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            list.clear();
+            list = bean.data!.luckyList!;
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
   }
 }

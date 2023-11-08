@@ -5,6 +5,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 
+import '../../../bean/luckUserBean.dart';
+import '../../../http/data_utils.dart';
+import '../../../http/my_http_config.dart';
+import '../../../utils/my_toast_utils.dart';
+import '../../../utils/my_utils.dart';
+
 /// 中奖横页面
 class ZhongJiangHPage extends StatefulWidget {
   int type;
@@ -20,6 +26,7 @@ class _ZhongJiangHPageState extends State<ZhongJiangHPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    doPostCarLuckyUser();
     Future.delayed(const Duration(seconds: 4),(){
       if(mounted) {
         Navigator.pop(context);
@@ -53,8 +60,8 @@ class _ZhongJiangHPageState extends State<ZhongJiangHPage> {
                         Column(
                           children: [
                             const Spacer(),
-                            length == 0 ?
-                            const Text('') : length == 1 ? Row(
+                            list.isEmpty ?
+                            const Text('') : list.length == 1 ? Row(
                               children: [
                                 const Spacer(),
                                 SizedBox(
@@ -73,31 +80,18 @@ class _ZhongJiangHPageState extends State<ZhongJiangHPage> {
                                                 'assets/images/car_btn2.png',
                                                 12,
                                                 45),
-                                            Row(
-                                              children: [
-                                                WidgetUtils.commonSizedBox(
-                                                    0, 2.5),
-                                                WidgetUtils.showImages(
-                                                    'assets/images/car_mogubi.png',
-                                                    12.5,
-                                                    12.5),
-                                                Expanded(
-                                                    child: WidgetUtils
-                                                        .onlyTextCenter(
-                                                        '10',
-                                                        StyleUtils
-                                                            .getCommonTextStyle(
-                                                            color: Colors
-                                                                .white,
-                                                            fontWeight:
-                                                            FontWeight
-                                                                .w600,
-                                                            fontSize:
-                                                            7))),
-                                                WidgetUtils.commonSizedBox(
-                                                    0, 10),
-                                              ],
-                                            )
+                                            WidgetUtils
+                                                .onlyTextCenter(
+                                                list[0].amount.toString(),
+                                                StyleUtils
+                                                    .getCommonTextStyle(
+                                                    color: Colors
+                                                        .white,
+                                                    fontWeight:
+                                                    FontWeight
+                                                        .w600,
+                                                    fontSize:
+                                                    8.sp)),
                                           ],
                                         ),
                                       )
@@ -125,31 +119,18 @@ class _ZhongJiangHPageState extends State<ZhongJiangHPage> {
                                                 'assets/images/car_btn2.png',
                                                 12,
                                                 45),
-                                            Row(
-                                              children: [
-                                                WidgetUtils.commonSizedBox(
-                                                    0, 2.5),
-                                                WidgetUtils.showImages(
-                                                    'assets/images/car_mogubi.png',
-                                                    12.5,
-                                                    12.5),
-                                                Expanded(
-                                                    child: WidgetUtils
-                                                        .onlyTextCenter(
-                                                        '10',
-                                                        StyleUtils
-                                                            .getCommonTextStyle(
-                                                            color: Colors
-                                                                .white,
-                                                            fontWeight:
-                                                            FontWeight
-                                                                .w600,
-                                                            fontSize:
-                                                            7))),
-                                                WidgetUtils.commonSizedBox(
-                                                    0, 10),
-                                              ],
-                                            )
+                                            WidgetUtils
+                                                .onlyTextCenter(
+                                                list[0].amount.toString(),
+                                                StyleUtils
+                                                    .getCommonTextStyle(
+                                                    color: Colors
+                                                        .white,
+                                                    fontWeight:
+                                                    FontWeight
+                                                        .w600,
+                                                    fontSize:
+                                                    8.sp)),
                                           ],
                                         ),
                                       )
@@ -173,31 +154,18 @@ class _ZhongJiangHPageState extends State<ZhongJiangHPage> {
                                                 'assets/images/car_btn2.png',
                                                 12,
                                                 45),
-                                            Row(
-                                              children: [
-                                                WidgetUtils.commonSizedBox(
-                                                    0, 2.5),
-                                                WidgetUtils.showImages(
-                                                    'assets/images/car_mogubi.png',
-                                                    12.5,
-                                                    12.5),
-                                                Expanded(
-                                                    child: WidgetUtils
-                                                        .onlyTextCenter(
-                                                        '10000',
-                                                        StyleUtils
-                                                            .getCommonTextStyle(
-                                                            color: Colors
-                                                                .white,
-                                                            fontWeight:
-                                                            FontWeight
-                                                                .w600,
-                                                            fontSize:
-                                                            7))),
-                                                WidgetUtils.commonSizedBox(
-                                                    0, 10),
-                                              ],
-                                            )
+                                            WidgetUtils
+                                                .onlyTextCenter(
+                                                list[1].amount.toString(),
+                                                StyleUtils
+                                                    .getCommonTextStyle(
+                                                    color: Colors
+                                                        .white,
+                                                    fontWeight:
+                                                    FontWeight
+                                                        .w600,
+                                                    fontSize:
+                                                    8.sp)),
                                           ],
                                         ),
                                       )
@@ -225,31 +193,18 @@ class _ZhongJiangHPageState extends State<ZhongJiangHPage> {
                                                 'assets/images/car_btn2.png',
                                                 12,
                                                 45),
-                                            Row(
-                                              children: [
-                                                WidgetUtils.commonSizedBox(
-                                                    0, 2.5),
-                                                WidgetUtils.showImages(
-                                                    'assets/images/car_mogubi.png',
-                                                    8,
-                                                    8),
-                                                Expanded(
-                                                    child: WidgetUtils
-                                                        .onlyTextCenter(
-                                                        '10',
-                                                        StyleUtils
-                                                            .getCommonTextStyle(
-                                                            color: Colors
-                                                                .white,
-                                                            fontWeight:
-                                                            FontWeight
-                                                                .w600,
-                                                            fontSize:
-                                                            7))),
-                                                WidgetUtils.commonSizedBox(
-                                                    0, 10),
-                                              ],
-                                            )
+                                            WidgetUtils
+                                                .onlyTextCenter(
+                                                list[0].amount.toString(),
+                                                StyleUtils
+                                                    .getCommonTextStyle(
+                                                    color: Colors
+                                                        .white,
+                                                    fontWeight:
+                                                    FontWeight
+                                                        .w600,
+                                                    fontSize:
+                                                    8.sp)),
                                           ],
                                         ),
                                       )
@@ -273,31 +228,18 @@ class _ZhongJiangHPageState extends State<ZhongJiangHPage> {
                                                 'assets/images/car_btn2.png',
                                                 12,
                                                 45),
-                                            Row(
-                                              children: [
-                                                WidgetUtils.commonSizedBox(
-                                                    0, 2.5),
-                                                WidgetUtils.showImages(
-                                                    'assets/images/car_mogubi.png',
-                                                    8,
-                                                    8),
-                                                Expanded(
-                                                    child: WidgetUtils
-                                                        .onlyTextCenter(
-                                                        '100',
-                                                        StyleUtils
-                                                            .getCommonTextStyle(
-                                                            color: Colors
-                                                                .white,
-                                                            fontWeight:
-                                                            FontWeight
-                                                                .w600,
-                                                            fontSize:
-                                                            7))),
-                                                WidgetUtils.commonSizedBox(
-                                                    0, 10),
-                                              ],
-                                            )
+                                            WidgetUtils
+                                                .onlyTextCenter(
+                                                list[1].amount.toString(),
+                                                StyleUtils
+                                                    .getCommonTextStyle(
+                                                    color: Colors
+                                                        .white,
+                                                    fontWeight:
+                                                    FontWeight
+                                                        .w600,
+                                                    fontSize:
+                                                    8.sp)),
                                           ],
                                         ),
                                       )
@@ -321,31 +263,18 @@ class _ZhongJiangHPageState extends State<ZhongJiangHPage> {
                                                 'assets/images/car_btn2.png',
                                                 12,
                                                 45),
-                                            Row(
-                                              children: [
-                                                WidgetUtils.commonSizedBox(
-                                                    0, 2.5),
-                                                WidgetUtils.showImages(
-                                                    'assets/images/car_mogubi.png',
-                                                    8,
-                                                    8),
-                                                Expanded(
-                                                    child: WidgetUtils
-                                                        .onlyTextCenter(
-                                                        '10000',
-                                                        StyleUtils
-                                                            .getCommonTextStyle(
-                                                            color: Colors
-                                                                .white,
-                                                            fontWeight:
-                                                            FontWeight
-                                                                .w600,
-                                                            fontSize:
-                                                            7))),
-                                                WidgetUtils.commonSizedBox(
-                                                    0, 10),
-                                              ],
-                                            )
+                                            WidgetUtils
+                                                .onlyTextCenter(
+                                                list[2].amount.toString(),
+                                                StyleUtils
+                                                    .getCommonTextStyle(
+                                                    color: Colors
+                                                        .white,
+                                                    fontWeight:
+                                                    FontWeight
+                                                        .w600,
+                                                    fontSize:
+                                                    8.sp)),
                                           ],
                                         ),
                                       )
@@ -376,5 +305,27 @@ class _ZhongJiangHPageState extends State<ZhongJiangHPage> {
             ],
           ),
         ));
+  }
+
+  List<LuckyList> list = [];
+  /// 赛车中奖用户
+  Future<void> doPostCarLuckyUser() async {
+    try {
+      luckUserBean bean = await DataUtils.postCarLuckyUser();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            list.clear();
+            list = bean.data!.luckyList!;
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
   }
 }

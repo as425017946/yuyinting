@@ -1,24 +1,26 @@
 import 'package:auto_orientation/auto_orientation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
-
 import '../colors/my_colors.dart';
+import '../main.dart';
 import '../utils/style_utils.dart';
 /// 二次确认弹窗
 class QueRenHPage extends StatefulWidget {
   String title;
-  String jine;
+  int jine;
   bool isDuiHuan;
-  QueRenHPage({super.key, required this.title, required this.jine, required this.isDuiHuan});
+  String index;
+  QueRenHPage({super.key, required this.title, required this.jine, required this.isDuiHuan, required this.index});
 
   @override
   State<QueRenHPage> createState() => _QueRenPageState();
 }
 
 class _QueRenPageState extends State<QueRenHPage> {
+  // 默认选中今日不在弹出
+  bool  isCheck = true;
   @override
   void initState() {
     super.initState();
@@ -52,7 +54,7 @@ class _QueRenPageState extends State<QueRenHPage> {
                         color: MyColors.g2, fontSize: 16, fontWeight: FontWeight.w600),
                     children: [
                       TextSpan(
-                          text: widget.jine,
+                          text: '${widget.jine}',
                           style: StyleUtils.getCommonTextStyle(
                               color: MyColors.origin, fontSize: 16, fontWeight: FontWeight.w600)),
                       TextSpan(
@@ -67,9 +69,11 @@ class _QueRenPageState extends State<QueRenHPage> {
                   const Spacer(),
                   GestureDetector(
                     onTap: ((){
-
+                      setState(() {
+                        isCheck = !isCheck;
+                      });
                     }),
-                    child: WidgetUtils.showImages('assets/images/mofang_check_yes.png', 15, 15),
+                    child: WidgetUtils.showImages(isCheck ? 'assets/images/mofang_check_yes.png' : 'assets/images/mofang_check_no.png', 15, 15),
                   ),
                   WidgetUtils.commonSizedBox(0, 5),
                   WidgetUtils.onlyText('今日不在弹出', StyleUtils.getCommonTextStyle(
@@ -102,8 +106,19 @@ class _QueRenPageState extends State<QueRenHPage> {
                   GestureDetector(
                     onTap: ((){
                       ///确认后请求接口
+                      if(isCheck){
+                        DateTime now = DateTime.now();
+                        int year = now.year;
+                        int month = now.month;
+                        int day = now.day;
+                        sp.setBool('car_queren_h', true);
+                        sp.setString('car_queren_time_h', '$year-$month-$day');
+                      }else{
+                        sp.setBool('car_queren_h', false);
+                      }
+                      ///确认后请求接口
                       Navigator.pop(context);
-                      eventBus.fire(QuerenBack(title: widget.title, jine: widget.jine));
+                      eventBus.fire(QuerenBack(title: widget.title, jine: widget.jine, index: widget.index));
                     }),
                     child: Container(
                       width: 100,
