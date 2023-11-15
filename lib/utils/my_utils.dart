@@ -580,7 +580,7 @@ class MyUtils {
                   );
                 }
                 break;
-              case MessageType.CUSTOM:
+              case MessageType.CUSTOM: //自定义消息
                 {
                   LogE('CUSTOM消息${msg.body}');
                   EMCustomMessageBody body = msg.body as EMCustomMessageBody;

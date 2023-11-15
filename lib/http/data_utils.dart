@@ -1,9 +1,11 @@
 import 'package:yuyinting/bean/BlackListBean.dart';
 import 'package:yuyinting/bean/Common_bean.dart';
 import 'package:yuyinting/bean/aboutUsBean.dart';
+import '../bean/CommonIntBean.dart';
 import '../bean/DTListBean.dart';
 import '../bean/DTMoreBean.dart';
 import '../bean/DTTuiJianListBean.dart';
+import '../bean/balanceBean.dart';
 import '../bean/carTimerBean.dart';
 import '../bean/carZJLiShiBean.dart';
 import '../bean/careListBean.dart';
@@ -12,6 +14,7 @@ import '../bean/cityBean.dart';
 import '../bean/commonStringBean.dart';
 import '../bean/fileUpdateBean.dart';
 import '../bean/gameListBean.dart';
+import '../bean/gameStoreBean.dart';
 import '../bean/getHeadImageBean.dart';
 import '../bean/ghPeopleBean.dart';
 import '../bean/ghRoomBean.dart';
@@ -25,12 +28,14 @@ import '../bean/loginBean.dart';
 import '../bean/luckUserBean.dart';
 import '../bean/managerBean.dart';
 import '../bean/memberListBean.dart';
+import '../bean/mofangJCBean.dart';
 import '../bean/myGhBean.dart';
 import '../bean/myHomeBean.dart';
 import '../bean/myInfoBean.dart';
 import '../bean/myShopListBean.dart';
 import '../bean/onlineRoomUserBean.dart';
 import '../bean/plBean.dart';
+import '../bean/playRouletteBean.dart';
 import '../bean/quhao_bean.dart';
 import '../bean/quhao_searche_bean.dart';
 import '../bean/qyListBean.dart';
@@ -48,7 +53,9 @@ import '../bean/userDTListBean.dart';
 import '../bean/userInfoBean.dart';
 import '../bean/userOnlineBean.dart';
 import '../bean/userStatusBean.dart';
+import '../bean/walletListBean.dart';
 import '../bean/whoLockMe.dart';
+import '../bean/winListBean.dart';
 import '../bean/xtListBean.dart';
 import 'my_http_config.dart';
 import 'my_http_request.dart';
@@ -714,6 +721,30 @@ class DataUtils{
     return liwuBean.fromJson(respons!);
   }
 
+  /// 送礼物
+  static Future<CommonBean> postSendGift(Map<String,dynamic> params) async {
+    print("送礼物：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.sendGift, {}, params);
+    print("送礼物：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 钱包明细
+  static Future<walletListBean> postWalletList(Map<String,dynamic> params) async {
+    print("钱包明细：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.walletList, {}, params);
+    print("钱包明细：$respons");
+    return walletListBean.fromJson(respons!);
+  }
+
+
+  /// 钱包余额
+  static Future<balanceBean> postBalance() async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.balance, {}, {});
+    print("钱包余额：$respons");
+    return balanceBean.fromJson(respons!);
+  }
+
 
   /// 厅内发消息
   static Future<CommonBean> postRoomMessageSend(Map<String,dynamic> params) async {
@@ -766,5 +797,50 @@ class DataUtils{
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.carLuckyUser, {}, {});
     print("赛车幸运用户：$respons");
     return luckUserBean.fromJson(respons!);
+  }
+
+  /// 魔方转盘竞猜
+  static Future<playRouletteBean> postPlayRoulette(Map<String,dynamic> params) async {
+    print("魔方转盘竞猜：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.playRoulette, {}, params);
+    print("魔方转盘竞猜：$respons");
+    return playRouletteBean.fromJson(respons!);
+  }
+
+  /// 游戏商店
+  static Future<gameStoreBean> postGameStore(Map<String,dynamic> params) async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.gameStore, {}, params);
+    print("游戏商店：$respons");
+    return gameStoreBean.fromJson(respons!);
+  }
+
+  /// 兑换游戏商店商品
+  static Future<CommonBean> postExchangeGoods(Map<String,dynamic> params) async {
+    print("兑换游戏商店商品：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.exchangeGoods, {}, params);
+    print("兑换游戏商店商品：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 魔方转盘我的中奖记录
+  static Future<winListBean> postGetMineRouletteWinList(Map<String,dynamic> params) async {
+    print("魔方转盘我的中奖记录：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.getMineRouletteWinList, {}, params);
+    print("魔方转盘我的中奖记录：$respons");
+    return winListBean.fromJson(respons!);
+  }
+
+  /// 大转盘幸运值
+  static Future<CommonIntBean> postGetGameLuck() async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.getGameLuck, {}, {});
+    print("大转盘幸运值：$respons");
+    return CommonIntBean.fromJson(respons!);
+  }
+
+  /// 魔方奖池
+  static Future<mofangJCBean> postRoulettePrizeList(Map<String,dynamic> params) async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.roulettePrizeList, {}, params);
+    print("魔方奖池：$respons");
+    return mofangJCBean.fromJson(respons!);
   }
 }

@@ -1,21 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../bean/mofangJCBean.dart';
 import '../../../colors/my_colors.dart';
+import '../../../http/data_utils.dart';
+import '../../../http/my_http_config.dart';
+import '../../../utils/my_toast_utils.dart';
+import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 import '../../../widget/OptionGridView.dart';
 
 /// 魔方奖池
 class MoFangJiangChiPage extends StatefulWidget {
-  const MoFangJiangChiPage({super.key});
+  String type;
+  MoFangJiangChiPage({super.key, required this.type});
 
   @override
   State<MoFangJiangChiPage> createState() => _MoFangJiangChiPageState();
 }
 
 class _MoFangJiangChiPageState extends State<MoFangJiangChiPage> {
-
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    doPostRoulettePrizeList();
+  }
   Widget jiangChiWidget(BuildContext context, int i){
     return Container(
       height: 266.h,
@@ -29,15 +40,15 @@ class _MoFangJiangChiPageState extends State<MoFangJiangChiPage> {
         children: [
           const Spacer(),
           WidgetUtils.showImagesNet(
-              'http://static.runoob.com/images/demo/demo2.jpg', 100.h, 100.h),
+              list[i].img!, 100.h, 100.h),
           WidgetUtils.commonSizedBox(10.h, 0),
           WidgetUtils.onlyTextCenter(
-              '58000豆/钻',
+              '${list[i].price!}V豆/钻',
               StyleUtils.getCommonTextStyle(
                   color: MyColors.loginBlue2, fontSize: 18.sp)),
           WidgetUtils.commonSizedBox(5.h, 0),
           WidgetUtils.onlyTextCenter(
-              '小西几',
+              list[i].name!,
               StyleUtils.getCommonTextStyle(
                   color: MyColors.zpGZYellow, fontSize: 22.sp)),
           const Spacer(),
@@ -89,7 +100,7 @@ class _MoFangJiangChiPageState extends State<MoFangJiangChiPage> {
                 WidgetUtils.commonSizedBox(30.h, 0),
                 OptionGridView(
                   padding: EdgeInsets.only(left: 20.h, right: 20.h),
-                  itemCount: 9,
+                  itemCount: list.length,
                   rowCount: 3,
                   mainAxisSpacing: 10.h,
                   // 上下间距
@@ -103,5 +114,32 @@ class _MoFangJiangChiPageState extends State<MoFangJiangChiPage> {
         ],
       ),
     );
+  }
+  List<Data> list = [];
+  /// 魔方奖池
+  Future<void> doPostRoulettePrizeList() async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'price_id': widget.type, //1小金额 2大金额
+    };
+    try {
+      mofangJCBean bean = await DataUtils.postRoulettePrizeList(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            list.clear();
+            list = bean.data!;
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
   }
 }

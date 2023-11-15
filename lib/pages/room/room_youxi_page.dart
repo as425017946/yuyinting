@@ -10,7 +10,8 @@ import '../game/mofang_page.dart';
 import '../game/zhuanpan_page.dart';
 /// 房间游戏使用
 class RoomYouXiPage extends StatefulWidget {
-  const RoomYouXiPage({super.key});
+  String roomID;
+  RoomYouXiPage({super.key, required this.roomID});
 
   @override
   State<RoomYouXiPage> createState() => _RoomYouXiPageState();
@@ -61,7 +62,7 @@ class _RoomYouXiPageState extends State<RoomYouXiPage> {
                       onTap: ((){
                         // 转盘
                         Navigator.pop(context);
-                        MyUtils.goTransparentPage(context, const ZhuanPanPage());
+                        MyUtils.goTransparentPage(context, ZhuanPanPage(roomId: widget.roomID,));
                       }),
                       child: WidgetUtils.showImages('assets/images/room_yx_2.png', 120.h, 120.h),
                     ),
@@ -70,7 +71,7 @@ class _RoomYouXiPageState extends State<RoomYouXiPage> {
                       onTap: ((){
                         // 魔方
                         Navigator.pop(context);
-                        MyUtils.goTransparentPage(context, const MoFangPage());
+                        MyUtils.goTransparentPage(context, MoFangPage(roomID: widget.roomID,));
                       }),
                       child: WidgetUtils.showImages('assets/images/room_yx_3.png', 120.h, 120.h),
                     ),

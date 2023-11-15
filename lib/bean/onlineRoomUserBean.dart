@@ -1,7 +1,7 @@
 class onlineRoomUserBean {
   int? code;
   String? msg;
-  List<Data>? data;
+  List<DataMX>? data;
 
   onlineRoomUserBean({this.code, this.msg, this.data});
 
@@ -9,9 +9,9 @@ class onlineRoomUserBean {
     code = json['code'];
     msg = json['msg'];
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <DataMX>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(new DataMX.fromJson(v));
       });
     }
   }
@@ -27,7 +27,7 @@ class onlineRoomUserBean {
   }
 }
 
-class Data {
+class DataMX {
   int? id;
   int? uid;
   int? roomId;
@@ -38,7 +38,7 @@ class Data {
   String? nickname;
   String? avatar;
 
-  Data(
+  DataMX(
       {this.id,
         this.uid,
         this.roomId,
@@ -49,7 +49,7 @@ class Data {
         this.nickname,
         this.avatar});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  DataMX.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     uid = json['uid'];
     roomId = json['room_id'];

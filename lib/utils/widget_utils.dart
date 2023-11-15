@@ -518,7 +518,6 @@ class WidgetUtils {
       width: width,
       child: ClipOval(
         child: CachedNetworkImage(
-          memCacheHeight: height.round(),
           imageUrl: imgUrl,
           fit: BoxFit.cover,
           placeholder: (context, url) => CircleImageAss(height, width, ScreenUtil().setHeight(10) , 'assets/images/img_placeholder.png',),
@@ -551,7 +550,6 @@ class WidgetUtils {
             )
           : url.isNotEmpty ?
               // ? CachedNetworkImage(
-              //     memCacheHeight: height.round(),
               //     imageUrl: url,
               //     fit: BoxFit.fill,
               //     placeholder: (context, url) => CircleImageAss(height, width, ScreenUtil().setHeight(10) , 'assets/images/img_placeholder.png',),
@@ -605,7 +603,6 @@ class WidgetUtils {
         height: height,
         width: width,
         child: CachedNetworkImage(
-          memCacheHeight: height.round(),
           imageUrl: url,
           fit: BoxFit.cover,
           placeholder: (context, url) => CircleImageAss(height, width, ScreenUtil().setHeight(10) , 'assets/images/img_placeholder.png',),
@@ -641,7 +638,6 @@ class WidgetUtils {
       height: height,
       width: width,
       child: CachedNetworkImage(
-        memCacheHeight: height.round(),
         imageUrl: url,
         fit: BoxFit.cover,
         placeholder: (context, url) => CircleImageAss(height, width, ScreenUtil().setHeight(10) , 'assets/images/img_placeholder.png',),

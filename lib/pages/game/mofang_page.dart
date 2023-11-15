@@ -7,7 +7,8 @@ import 'mofang_lan_page.dart';
 
 /// 魔方模块
 class MoFangPage extends StatefulWidget {
-  const MoFangPage({super.key});
+  String roomID;
+  MoFangPage({super.key, required this.roomID});
 
   @override
   State<MoFangPage> createState() => _MoFangPageState();
@@ -49,7 +50,7 @@ class _MoFangPageState extends State<MoFangPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
+      backgroundColor: widget.roomID == '0' ? Colors.black54 :Colors.transparent,
       body: Center(
         child: Stack(
           children: [
@@ -65,9 +66,9 @@ class _MoFangPageState extends State<MoFangPage> with TickerProviderStateMixin {
                     _currentIndex = index;
                   });
                 },
-                children: const [
-                  MofangLanPage(),
-                  MofangJinPage(),
+                children: [
+                  MofangLanPage(roomId: widget.roomID,),
+                  MofangJinPage(roomId: widget.roomID,),
                 ],
               ),
             ),

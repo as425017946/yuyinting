@@ -101,6 +101,22 @@ class QuerenBack {
   QuerenBack({required this.title, required this.jine, required this.index});
 }
 
+/// 兑换商品二次确认弹窗使用
+class DHQuerenBack {
+  String goodsId;
+  String goodsType;
+  int exchangeCost;
+  DHQuerenBack({required this.goodsId, required this.goodsType, required this.exchangeCost});
+}
+
+
+/// 魔方或转盘二次确认弹窗使用
+class XZQuerenBack {
+  String cishu;
+  String feiyong;
+  XZQuerenBack({required this.cishu, required this.feiyong});
+}
+
 /// 厅内使用
 class RoomBack {
   String title;
@@ -167,4 +183,10 @@ class SendRoomInfoBack {
 class SendRoomImgBack {
   String info;
   SendRoomImgBack({required this.info});
+}
+
+/// 魔方转盘下注
+class XiaZhuBack {
+  int jine;
+  XiaZhuBack({required this.jine});
 }

@@ -3,13 +3,20 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/pages/game/zhuanpan_super_page.dart';
 import 'package:yuyinting/pages/game/zhuanpan_xin_page.dart';
+import 'package:yuyinting/utils/event_utils.dart';
 
+import '../../bean/balanceBean.dart';
+import '../../http/data_utils.dart';
+import '../../http/my_http_config.dart';
+import '../../utils/my_toast_utils.dart';
+import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 
 /// 转盘主页
 class ZhuanPanPage extends StatefulWidget {
-  const ZhuanPanPage({super.key});
+  String roomId;
+  ZhuanPanPage({super.key, required this.roomId});
 
   @override
   State<ZhuanPanPage> createState() => _ZhuanPanPageState();
@@ -17,10 +24,10 @@ class ZhuanPanPage extends StatefulWidget {
 
 class _ZhuanPanPageState extends State<ZhuanPanPage> {
   int isCheck = 1;
-
   int _currentIndex = 0;
   late final PageController _controller;
-
+  var listen, listen2;
+  bool isBack = false;
   @override
   void initState() {
     super.initState();
@@ -28,8 +35,33 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
     _controller = PageController(
       initialPage: 0,
     );
-  }
+    doPostWalletList();
+    listen = eventBus.on<XiaZhuBack>().listen((event) {
+      setState(() {
+        if(jinbi.contains('w')){
+          // 目的是先把 1w 转换成 10000
+          jinbi = (double.parse(jinbi.substring(0,jinbi.length - 1)) * 1000).toString();
+          // 减去花费的V豆
+          jinbi = '${(double.parse(jinbi) - event.jine)/1000}w';
+        }else{
+          jinbi = (double.parse(jinbi) - event.jine).toString();
+        }
+      });
+    });
 
+    listen2 = eventBus.on<ResidentBack>().listen((event) {
+      setState(() {
+        isBack = event.isBack;
+      });
+    });
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    listen.cancel();
+    listen2.cancel();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +72,9 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
           Expanded(
             child: GestureDetector(
               onTap: (() {
+                if(isBack){
+                  return;
+                }
                 Navigator.pop(context);
               }),
               child: Container(
@@ -219,12 +254,12 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
                           children: [
                             WidgetUtils.commonSizedBox(0, 5),
                             WidgetUtils.showImages(
-                                'assets/images/room_liwu_dou.png',
-                                ScreenUtil().setHeight(24),
-                                ScreenUtil().setHeight(22)),
+                                'assets/images/mine_wallet_dd.png',
+                                ScreenUtil().setHeight(26),
+                                ScreenUtil().setHeight(24)),
                             WidgetUtils.commonSizedBox(0, 5),
                             WidgetUtils.onlyTextCenter(
-                                '10000',
+                                jinbi,
                                 StyleUtils.getCommonTextStyle(
                                     color: Colors.white,
                                     fontSize: ScreenUtil().setSp(23),
@@ -238,14 +273,14 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
                                 color: MyColors.home_hx,
                               ),
                             ),
-                            WidgetUtils.commonSizedBox(0, 5),
+                            WidgetUtils.commonSizedBox(0, 10),
                             WidgetUtils.showImages(
-                                'assets/images/room_liwu_zuan.png',
-                                ScreenUtil().setHeight(30),
-                                ScreenUtil().setHeight(30)),
+                                'assets/images/mine_wallet_zz.png',
+                                ScreenUtil().setHeight(26),
+                                ScreenUtil().setHeight(24)),
                             WidgetUtils.commonSizedBox(0, 5),
                             WidgetUtils.onlyTextCenter(
-                                '100',
+                                zuanshi,
                                 StyleUtils.getCommonTextStyle(
                                     color: Colors.white,
                                     fontSize: ScreenUtil().setSp(23),
@@ -268,9 +303,9 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
                         _currentIndex = index;
                       });
                     },
-                    children: const [
-                      ZhuanPanXinPage(),
-                      ZhuanPanSuperPage(),
+                    children: [
+                      ZhuanPanXinPage(roomId: widget.roomId,),
+                      ZhuanPanSuperPage(roomId: widget.roomId,),
                     ],
                   ),
                 )
@@ -280,5 +315,40 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
         ],
       ),
     );
+  }
+
+
+  // 金币 钻石
+  String jinbi = '', zuanshi = '';
+  /// 钱包明细
+  Future<void> doPostWalletList() async {
+    try {
+      balanceBean bean = await DataUtils.postBalance();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            if(double.parse(bean.data!.goldBean!) > 10000){
+              jinbi = '${(double.parse(bean.data!.goldBean!)/10000)}w';
+            }else{
+              jinbi = bean.data!.goldBean!;
+            }
+            if(double.parse(bean.data!.diamond!) > 10000){
+              zuanshi = '${(double.parse(bean.data!.diamond!)/10000)}w';
+            }else{
+              zuanshi = bean.data!.diamond!;
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:yuyinting/pages/room/room_show_status_page.dart';
 import 'package:yuyinting/pages/room/room_youxi_page.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/my_utils.dart';
@@ -9,7 +8,6 @@ import '../../bean/roomInfoBean.dart';
 import '../../colors/my_colors.dart';
 import '../../main.dart';
 import '../../utils/event_utils.dart';
-import '../../utils/log_util.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../../widget/Marquee.dart';
@@ -33,6 +31,7 @@ class RoomItems {
   /// 互动消息
   static Widget itemMessages(BuildContext context, int i, String uid,
       String roomID, List<Map> list, List<MikeList> listm) {
+    // 系统公告
     if (list[i]['type'] == '0') {
       return Container(
         margin: EdgeInsets.only(bottom: 5.h),
@@ -48,6 +47,7 @@ class RoomItems {
         ),
       );
     } else if (list[i]['type'] == '1') {
+      // 房间公告
       return Container(
         margin: EdgeInsets.only(bottom: 5.h),
         child: Text(
@@ -62,6 +62,7 @@ class RoomItems {
         ),
       );
     } else if (list[i]['type'] == '2') {
+      // 用户进入房间
       return Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -294,6 +295,7 @@ class RoomItems {
         ],
       );
     } else if (list[i]['type'] == '3') {
+      // 点击了欢迎某某人
       return Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -490,6 +492,7 @@ class RoomItems {
         ],
       );
     } else {
+      // 厅内正常发送消息
       return GestureDetector(
         onTap: (() {
           MyUtils.goTransparentPage(
@@ -1009,7 +1012,7 @@ class RoomItems {
 
   /// 公告厅主
   static Widget notices(BuildContext context, bool m0, String notice,
-      List<MikeList> listm, String roomID, int wherePeople) {
+      List<MikeList> listm, String roomID, int wherePeople, List<bool> listPeople) {
     return Row(
       children: [
         WidgetUtils.commonSizedBox(0, 20),
@@ -1188,6 +1191,19 @@ class RoomItems {
                       child: const SVGASimpleImage(
                         assetsName: 'assets/svga/baodeng.svga',),
                     ),
+                  ) : const Text(''),
+                  listPeople[8] ? Positioned(
+                    child: Container(
+                      height: 180.h,
+                      width: 180.h,
+                      //超出部分，可裁剪
+                      clipBehavior: Clip.hardEdge,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50.h),
+                      ),
+                      child: const SVGASimpleImage(
+                        assetsName: 'assets/svga/room_choose_people.svga',),
+                    ),
                   ) : const Text('')
                 ],
               ),
@@ -1213,7 +1229,8 @@ class RoomItems {
       bool isBoss,
       List<MikeList> listm,
       String roomID,
-      int wherePeople) {
+      int wherePeople,
+      List<bool> listPeople) {
     return Transform.translate(
       offset: const Offset(0, -40),
       child: Column(
@@ -1338,6 +1355,19 @@ class RoomItems {
                         ),
                         child: const SVGASimpleImage(
                           assetsName: 'assets/svga/baodeng.svga',),
+                      ) : const Text(''),
+                      listPeople[0] ? Positioned(
+                        child: Container(
+                          height: 130.h,
+                          width: 130.h,
+                          //超出部分，可裁剪
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50.h),
+                          ),
+                          child: const SVGASimpleImage(
+                            assetsName: 'assets/svga/room_choose_people.svga',),
+                        ),
                       ) : const Text('')
                     ],
                   ),
@@ -1461,6 +1491,19 @@ class RoomItems {
                         ),
                         child: const SVGASimpleImage(
                           assetsName: 'assets/svga/baodeng.svga',),
+                      ) : const Text(''),
+                      listPeople[1] ? Positioned(
+                        child: Container(
+                          height: 130.h,
+                          width: 130.h,
+                          //超出部分，可裁剪
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50.h),
+                          ),
+                          child: const SVGASimpleImage(
+                            assetsName: 'assets/svga/room_choose_people.svga',),
+                        ),
                       ) : const Text('')
                     ],
                   ),
@@ -1584,6 +1627,19 @@ class RoomItems {
                         ),
                         child: const SVGASimpleImage(
                           assetsName: 'assets/svga/baodeng.svga',),
+                      ) : const Text(''),
+                      listPeople[2] ? Positioned(
+                        child: Container(
+                          height: 130.h,
+                          width: 130.h,
+                          //超出部分，可裁剪
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50.h),
+                          ),
+                          child: const SVGASimpleImage(
+                            assetsName: 'assets/svga/room_choose_people.svga',),
+                        ),
                       ) : const Text('')
                     ],
                   ),
@@ -1707,6 +1763,19 @@ class RoomItems {
                         ),
                         child: const SVGASimpleImage(
                           assetsName: 'assets/svga/baodeng.svga',),
+                      ) : const Text(''),
+                      listPeople[3] ? Positioned(
+                        child: Container(
+                          height: 130.h,
+                          width: 130.h,
+                          //超出部分，可裁剪
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50.h),
+                          ),
+                          child: const SVGASimpleImage(
+                            assetsName: 'assets/svga/room_choose_people.svga',),
+                        ),
                       ) : const Text('')
                     ],
                   ),
@@ -1838,6 +1907,19 @@ class RoomItems {
                           ),
                           child: const SVGASimpleImage(
                             assetsName: 'assets/svga/baodeng.svga',),
+                        ) : const Text(''),
+                        listPeople[4] ? Positioned(
+                          child: Container(
+                            height: 130.h,
+                            width: 130.h,
+                            //超出部分，可裁剪
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50.h),
+                            ),
+                            child: const SVGASimpleImage(
+                              assetsName: 'assets/svga/room_choose_people.svga',),
+                          ),
                         ) : const Text('')
                       ],
                     ),
@@ -1960,6 +2042,19 @@ class RoomItems {
                           ),
                           child: const SVGASimpleImage(
                             assetsName: 'assets/svga/baodeng.svga',),
+                        ) : const Text(''),
+                        listPeople[5] ? Positioned(
+                          child: Container(
+                            height: 130.h,
+                            width: 130.h,
+                            //超出部分，可裁剪
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50.h),
+                            ),
+                            child: const SVGASimpleImage(
+                              assetsName: 'assets/svga/room_choose_people.svga',),
+                          ),
                         ) : const Text('')
                       ],
                     ),
@@ -2082,6 +2177,19 @@ class RoomItems {
                           ),
                           child: const SVGASimpleImage(
                             assetsName: 'assets/svga/baodeng.svga',),
+                        ) : const Text(''),
+                        listPeople[6] ? Positioned(
+                          child: Container(
+                            height: 130.h,
+                            width: 130.h,
+                            //超出部分，可裁剪
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50.h),
+                            ),
+                            child: const SVGASimpleImage(
+                              assetsName: 'assets/svga/room_choose_people.svga',),
+                          ),
                         ) : const Text('')
                       ],
                     ),
@@ -2239,6 +2347,19 @@ class RoomItems {
                           ),
                           child: const SVGASimpleImage(
                             assetsName: 'assets/svga/baodeng.svga',),
+                        ) : const Text(''),
+                        listPeople[7] ? Positioned(
+                          child: Container(
+                            height: 130.h,
+                            width: 130.h,
+                            //超出部分，可裁剪
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50.h),
+                            ),
+                            child: const SVGASimpleImage(
+                              assetsName: 'assets/svga/room_choose_people.svga',),
+                          ),
                         ) : const Text('')
                       ],
                     ),
@@ -2361,6 +2482,19 @@ class RoomItems {
                           ),
                           child: const SVGASimpleImage(
                             assetsName: 'assets/svga/baodeng.svga',),
+                        ) : const Text(''),
+                        listPeople[7] ? Positioned(
+                          child: Container(
+                            height: 130.h,
+                            width: 130.h,
+                            //超出部分，可裁剪
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50.h),
+                            ),
+                            child: const SVGASimpleImage(
+                              assetsName: 'assets/svga/room_choose_people.svga',),
+                          ),
                         ) : const Text('')
                       ],
                     ),
@@ -2420,7 +2554,7 @@ class RoomItems {
 
   /// 轮播图2
   static Widget lunbotu2(BuildContext context,
-      List<Map> imgList2,) {
+      List<Map> imgList2, String roomid) {
     return Positioned(
       top: 110,
       right: 15,
@@ -2451,9 +2585,11 @@ class RoomItems {
           onTap: (index) {
             // LogE('用户点击引起下标改变调用');
             if (index == 0) {
-              MyUtils.goTransparentPage(context, const ZhuanPanPage());
+              // 转盘
+              MyUtils.goTransparentPage(context, ZhuanPanPage(roomId: roomid,));
             } else if (index == 1) {
-              MyUtils.goTransparentPage(context, const MoFangPage());
+              // 魔方
+              MyUtils.goTransparentPage(context, MoFangPage(roomID: roomid,));
             }
           },
         ),
@@ -2531,8 +2667,6 @@ class RoomItems {
               ),
               GestureDetector(
                 onTap: (() {
-                  MyUtils.goTransparentPageCom(
-                      context, const RoomShowStatusPage());
                   MyUtils.goTransparentPage(
                       context, RoomLiWuPage(listM: listM, uid: '',));
                 }),
@@ -2555,7 +2689,7 @@ class RoomItems {
               GestureDetector(
                 onTap: (() {
                   MyUtils.goTransparentPageCom(
-                      context, const RoomYouXiPage());
+                      context, RoomYouXiPage(roomID: roomID));
                 }),
                 child: Container(
                     height: ScreenUtil().setHeight(50),

@@ -15,6 +15,7 @@ import 'package:yuyinting/utils/widget_utils.dart';
 import 'package:yuyinting/widget/queren_page.dart';
 
 import '../../bean/Common_bean.dart';
+import '../../bean/balanceBean.dart';
 import '../../bean/carTimerBean.dart';
 import '../../bean/commonStringBean.dart';
 import '../../http/data_utils.dart';
@@ -84,10 +85,8 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
         child: GestureDetector(
       onTap: (() {
         if (isShow) {
-          LogE('*******************$xiazhujine');
           if (sp.getBool('car_queren') == false ||
               sp.getBool('car_queren') == null) {
-            LogE('*******************///$xiazhujine');
             MyUtils.goTransparentPageCom(
                 context,
                 QueRenPage(
@@ -797,6 +796,8 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
   bool isPlay = false, isGo = false;
 
   void loadAnimation() async {
+    // 清空接受的im下注信息
+    listZDY.clear();
     // 请求中奖赛道
     doPostGetWinTrack();
     Future.delayed(const Duration(seconds: 3), () {
@@ -874,8 +875,10 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    // 获取赛车倒计时
+    // // 获取赛车倒计时
     doPostGetCarTimer();
+    // 钱包余额
+    doPostWalletList();
     // 二次确认弹窗点击确认，开始下注
     listen = eventBus.on<QuerenBack>().listen((event) {
       setState(() {
@@ -926,8 +929,6 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
           setState(() {
             isShow = true;
           });
-          // 清空接受的im下注信息
-          listZDY.clear();
           starTimerDJS();
         });
         // controllerZD.reset();
@@ -1013,6 +1014,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
     _timer3?.cancel();
     _timer4?.cancel();
     listen.cancel();
+    listenZDY.cancel();
     subscription.cancel();
     super.dispose();
   }
@@ -1056,207 +1058,200 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                     },
                   ),
                 ),
-                isShow
-                    ? Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    // 顶部信息
+                    isShow ? SizedBox(
+                      height: 200.h,
+                      child: Row(
                         children: [
-                          // 顶部信息
+                          // 左侧按键
                           SizedBox(
                             height: 200.h,
-                            child: Row(
+                            child: Column(
                               children: [
-                                // 左侧按键
-                                SizedBox(
-                                  height: 200.h,
-                                  child: Column(
-                                    children: [
-                                      WidgetUtils.commonSizedBox(20.h, 0),
-                                      GestureDetector(
-                                        onTap: (() {
-                                          MyUtils.goTransparentPageCom(context,
-                                              const CarLandScapePage());
-                                          Navigator.pop(context);
-                                        }),
-                                        child: Container(
-                                          height: 38.h,
-                                          width: 100.h,
-                                          //边框设置
-                                          decoration: const BoxDecoration(
-                                              image: DecorationImage(
-                                            //背景图片修饰
-                                            image: AssetImage(
-                                                "assets/images/car_anniu.png"),
-                                            fit: BoxFit.fill, //覆盖
-                                          )),
-                                          child: WidgetUtils.onlyTextCenter(
-                                              '横屏模式',
-                                              StyleUtils.getCommonTextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 22.sp)),
-                                        ),
-                                      ),
-                                      WidgetUtils.commonSizedBox(10.h, 0),
-                                      Container(
-                                        height: 38.h,
-                                        width: 100.h,
-                                        //边框设置
-                                        decoration: const BoxDecoration(
-                                            image: DecorationImage(
+                                WidgetUtils.commonSizedBox(20.h, 0),
+                                GestureDetector(
+                                  onTap: (() {
+                                    MyUtils.goTransparentPageCom(context,
+                                        const CarLandScapePage());
+                                    Navigator.pop(context);
+                                  }),
+                                  child: Container(
+                                    height: 38.h,
+                                    width: 100.h,
+                                    //边框设置
+                                    decoration: const BoxDecoration(
+                                        image: DecorationImage(
                                           //背景图片修饰
                                           image: AssetImage(
                                               "assets/images/car_anniu.png"),
                                           fit: BoxFit.fill, //覆盖
                                         )),
-                                        child: WidgetUtils.onlyTextCenter(
-                                            '游戏规则',
-                                            StyleUtils.getCommonTextStyle(
-                                                color: Colors.white,
-                                                fontSize: 22.sp)),
-                                      ),
-                                      WidgetUtils.commonSizedBox(10.h, 0),
-                                      GestureDetector(
-                                        onTap: (() {
-                                          MyUtils.goTransparentPageCom(
-                                              context, const LiShiPage());
-                                        }),
-                                        child: Container(
-                                          height: 38.h,
-                                          width: 100.h,
-                                          //边框设置
-                                          decoration: const BoxDecoration(
-                                              image: DecorationImage(
-                                            //背景图片修饰
-                                            image: AssetImage(
-                                                "assets/images/car_anniu.png"),
-                                            fit: BoxFit.fill, //覆盖
-                                          )),
-                                          child: WidgetUtils.onlyTextCenter(
-                                              '开奖记录',
-                                              StyleUtils.getCommonTextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 22.sp)),
-                                        ),
-                                      )
-                                    ],
+                                    child: WidgetUtils.onlyTextCenter(
+                                        '横屏模式',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: Colors.white,
+                                            fontSize: 22.sp)),
                                   ),
                                 ),
-                                const Spacer(),
-                                // 右侧按键
-                                SizedBox(
-                                  height: 200.h,
-                                  width: 300.h,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      WidgetUtils.commonSizedBox(20.h, 10.h),
-                                      Container(
-                                        height: 38.h,
-                                        constraints: BoxConstraints(
-                                          minWidth: 100.h,
-                                        ),
-                                        margin: EdgeInsets.only(bottom: 10.h),
-                                        //边框设置
-                                        decoration: const BoxDecoration(
-                                            image: DecorationImage(
+                                WidgetUtils.commonSizedBox(10.h, 0),
+                                Container(
+                                  height: 38.h,
+                                  width: 100.h,
+                                  //边框设置
+                                  decoration: const BoxDecoration(
+                                      image: DecorationImage(
+                                        //背景图片修饰
+                                        image: AssetImage(
+                                            "assets/images/car_anniu.png"),
+                                        fit: BoxFit.fill, //覆盖
+                                      )),
+                                  child: WidgetUtils.onlyTextCenter(
+                                      '游戏规则',
+                                      StyleUtils.getCommonTextStyle(
+                                          color: Colors.white,
+                                          fontSize: 22.sp)),
+                                ),
+                                WidgetUtils.commonSizedBox(10.h, 0),
+                                GestureDetector(
+                                  onTap: (() {
+                                    MyUtils.goTransparentPageCom(
+                                        context, const LiShiPage());
+                                  }),
+                                  child: Container(
+                                    height: 38.h,
+                                    width: 100.h,
+                                    //边框设置
+                                    decoration: const BoxDecoration(
+                                        image: DecorationImage(
                                           //背景图片修饰
                                           image: AssetImage(
-                                              "assets/images/car_top_bg.png"),
+                                              "assets/images/car_anniu.png"),
                                           fit: BoxFit.fill, //覆盖
                                         )),
-                                        child: GestureDetector(
-                                          onTap: (() {}),
-                                          child: Row(
-                                            children: [
-                                              const Spacer(),
-                                              WidgetUtils.showImages(
-                                                  'assets/images/car_mogubi.png',
-                                                  25.h,
-                                                  25.h),
-                                              WidgetUtils.commonSizedBox(
-                                                  0, 5.h),
-                                              WidgetUtils.onlyText(
-                                                  '10w+',
-                                                  StyleUtils.getCommonTextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 20.sp)),
-                                              WidgetUtils.commonSizedBox(
-                                                  0, 10.h),
-                                              Container(
-                                                height: 22.h,
-                                                width: 1.h,
-                                                color: MyColors.CarXian,
-                                              ),
-                                              WidgetUtils.commonSizedBox(
-                                                  0, 10.h),
-                                              WidgetUtils.showImages(
-                                                  'assets/images/mine_wallet_dd.png',
-                                                  25.h,
-                                                  25.h),
-                                              WidgetUtils.commonSizedBox(
-                                                  0, 5.h),
-                                              WidgetUtils.onlyText(
-                                                  '10w+',
-                                                  StyleUtils.getCommonTextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 20.sp)),
-                                              WidgetUtils.commonSizedBox(
-                                                  0, 10.h),
-                                              Container(
-                                                height: 22.h,
-                                                width: 1.h,
-                                                color: MyColors.CarXian,
-                                              ),
-                                              WidgetUtils.commonSizedBox(
-                                                  0, 10.h),
-                                              WidgetUtils.showImages(
-                                                  'assets/images/mine_wallet_zz.png',
-                                                  25.h,
-                                                  25.h),
-                                              WidgetUtils.commonSizedBox(
-                                                  0, 5.h),
-                                              WidgetUtils.onlyText(
-                                                  '10w+',
-                                                  StyleUtils.getCommonTextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 20.sp)),
-                                              WidgetUtils.commonSizedBox(
-                                                  0, 10.h),
-                                              WidgetUtils.showImages(
-                                                  'assets/images/car_more.png',
-                                                  8.h,
-                                                  14.h),
-                                              const Spacer(),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Row(
-                                        children: [
-                                          const Spacer(),
-                                          GestureDetector(
-                                            onTap: (() {
-                                              MyUtils.goTransparentPageCom(
-                                                  context, const CarShopPage());
-                                            }),
-                                            child: WidgetUtils.showImages(
-                                                'assets/images/car_shop.png',
-                                                100.h,
-                                                100.h),
-                                          )
-                                        ],
-                                      ),
-                                      const Spacer(),
-                                    ],
+                                    child: WidgetUtils.onlyTextCenter(
+                                        '开奖记录',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: Colors.white,
+                                            fontSize: 22.sp)),
                                   ),
-                                ),
-                                WidgetUtils.commonSizedBox(0, 10.h),
+                                )
                               ],
                             ),
                           ),
-                          WidgetUtils.commonSizedBox(140.h, 0),
+                          const Spacer(),
+                          // 右侧按键
+                          Stack(
+                            children: [
+                              Column(
+                                children: [
+                                  WidgetUtils.commonSizedBox(20.h, 0),
+                                  Container(
+                                    height: ScreenUtil().setHeight(45),
+                                    margin: EdgeInsets.only(right: 10.h),
+                                    padding: const EdgeInsets.only(
+                                        left: 5, right: 5, top: 1, bottom: 1),
+                                    //边框设置
+                                    decoration: const BoxDecoration(
+                                      //背景
+                                      color: MyColors.zpJLHX,
+                                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                      borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        WidgetUtils.commonSizedBox(0, 5),
+                                        WidgetUtils.showImages(
+                                            'assets/images/car_mogubi.png',
+                                            25.h,
+                                            25.h),
+                                        WidgetUtils.commonSizedBox(
+                                            0, 5.h),
+                                        WidgetUtils.onlyText(
+                                            mogubi,
+                                            StyleUtils.getCommonTextStyle(
+                                                color: Colors.white,
+                                                fontSize: 20.sp)),
+                                        WidgetUtils.commonSizedBox(
+                                            0, 10.h),
+                                        Opacity(
+                                          opacity: 0.8,
+                                          child: Container(
+                                            height: ScreenUtil().setHeight(20),
+                                            width: ScreenUtil().setHeight(1),
+                                            color: MyColors.home_hx,
+                                          ),
+                                        ),
+                                        WidgetUtils.commonSizedBox(
+                                            0, 10.h),
+                                        WidgetUtils.showImages(
+                                            'assets/images/mine_wallet_dd.png',
+                                            ScreenUtil().setHeight(26),
+                                            ScreenUtil().setHeight(24)),
+                                        WidgetUtils.commonSizedBox(
+                                            0, 10.h),
+                                        WidgetUtils.onlyTextCenter(
+                                            jinbi,
+                                            StyleUtils.getCommonTextStyle(
+                                                color: Colors.white,
+                                                fontSize: ScreenUtil().setSp(23),
+                                                fontWeight: FontWeight.w600)),
+                                        WidgetUtils.commonSizedBox(
+                                            0, 10.h),
+                                        Opacity(
+                                          opacity: 0.8,
+                                          child: Container(
+                                            height: ScreenUtil().setHeight(20),
+                                            width: ScreenUtil().setHeight(1),
+                                            color: MyColors.home_hx,
+                                          ),
+                                        ),
+                                        WidgetUtils.commonSizedBox(
+                                            0, 10.h),
+                                        WidgetUtils.showImages(
+                                            'assets/images/mine_wallet_zz.png',
+                                            ScreenUtil().setHeight(26),
+                                            ScreenUtil().setHeight(24)),
+                                        WidgetUtils.commonSizedBox(
+                                            0, 10.h),
+                                        WidgetUtils.onlyTextCenter(
+                                            zuanshi,
+                                            StyleUtils.getCommonTextStyle(
+                                                color: Colors.white,
+                                                fontSize: ScreenUtil().setSp(23),
+                                                fontWeight: FontWeight.w600)),
+                                        WidgetUtils.commonSizedBox(
+                                            0, 10.h),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Positioned(
+                                right: 10.h,
+                                top: 80.h,
+                                child: GestureDetector(
+                                    onTap: (() {
+                                      MyUtils.goTransparentPageCom(
+                                          context, const CarShopPage());
+                                    }),
+                                    child: WidgetUtils.showImages(
+                                        'assets/images/car_shop.png',
+                                        100.h,
+                                        100.h)
+                                ),
+                              ),
+                            ],
+                          ),
+                          WidgetUtils.commonSizedBox(0, 10.h),
                         ],
-                      )
-                    : const Text(''),
+                      ),
+                    ) : const Text(''),
+                    WidgetUtils.commonSizedBox(140.h, 0),
+                  ],
+                ),
                 Positioned(
                   top: 330.h,
                   left: 25.h,
@@ -1880,6 +1875,45 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
           MyToastUtils.showToastBottom("数据异常,游戏即将关闭，稍后请在开奖记录查看！");
           // ignore: use_build_context_synchronously
           Navigator.pop(context);
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+  }
+
+  // 金币 钻石 蘑菇币
+  String jinbi = '', zuanshi = '', mogubi = '';
+  /// 钱包明细
+  Future<void> doPostWalletList() async {
+    try {
+      balanceBean bean = await DataUtils.postBalance();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            if(double.parse(bean.data!.goldBean!) > 10000){
+              jinbi = '${(double.parse(bean.data!.goldBean!)/10000)}w';
+            }else{
+              jinbi = bean.data!.goldBean!;
+            }
+            if(double.parse(bean.data!.diamond!) > 10000){
+              zuanshi = '${(double.parse(bean.data!.diamond!)/10000)}w';
+            }else{
+              zuanshi = bean.data!.diamond!;
+            }
+            if(bean.data!.mushroom! > 10000){
+              mogubi = '${bean.data!.mushroom!/10000}w';
+            }else{
+              mogubi = bean.data!.mushroom!.toString();
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
       }
     } catch (e) {
       MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");

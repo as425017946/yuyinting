@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/colors/my_colors.dart';
+import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 
+import '../../../bean/liwuBean.dart';
+import '../../../http/data_utils.dart';
+import '../../../http/my_http_config.dart';
+import '../../../main.dart';
+import '../../../utils/loading.dart';
 import '../../../utils/my_toast_utils.dart';
+import '../../../utils/my_utils.dart';
+import '../../../widget/OptionGridView.dart';
 
 /// 厅内礼物
 class MoFangBeiBaoPage extends StatefulWidget {
@@ -17,47 +25,11 @@ class MoFangBeiBaoPage extends StatefulWidget {
 class _MoFangBeiBaoPageState extends State<MoFangBeiBaoPage> {
   int leixing = 0;
 
-  Widget _itemPeople(BuildContext context, int i) {
-    return GestureDetector(
-      onTap: (() {
-        MyToastUtils.showToastBottom('点击了');
-      }),
-      child: Container(
-        margin: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-        height: ScreenUtil().setHeight(60),
-        child: Stack(
-          alignment: Alignment.bottomRight,
-          children: [
-            WidgetUtils.CircleHeadImage(
-                ScreenUtil().setHeight(50),
-                ScreenUtil().setHeight(50),
-                'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
-            WidgetUtils.showImages('assets/images/room_tingzhu.png',
-                ScreenUtil().setHeight(20), ScreenUtil().setHeight(20)),
-            Container(
-              width: ScreenUtil().setHeight(20),
-              height: ScreenUtil().setHeight(20),
-              alignment: Alignment.center,
-              //边框设置
-              decoration: BoxDecoration(
-                //背景
-                color: MyColors.roomCirle,
-                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-                border: Border.all(width: 0.5, color: MyColors.roomTCWZ2),
-              ),
-              child: Text(
-                '1',
-                style: StyleUtils.getCommonTextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                    fontSize: ScreenUtil().setSp(14)),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    doPostGiftList();
   }
 
   /// 礼物
@@ -74,15 +46,26 @@ class _MoFangBeiBaoPageState extends State<MoFangBeiBaoPage> {
               child: Column(
                 children: [
                   WidgetUtils.commonSizedBox(5, 0),
-                  WidgetUtils.showImagesNet('https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500',
+                  WidgetUtils.showImagesNet(listPl[index].img!,
                       ScreenUtil().setHeight(100), ScreenUtil().setHeight(140)),
-                  WidgetUtils.onlyTextCenter('礼物名称', StyleUtils.getCommonTextStyle(color: MyColors.roomTCWZ2, fontSize: ScreenUtil().setSp(25))),
-                  WidgetUtils.onlyTextCenter('1999钻', StyleUtils.getCommonTextStyle(color: MyColors.roomTCWZ3, fontSize: ScreenUtil().setSp(21))),
+                  WidgetUtils.onlyTextCenter(
+                      listPl[index].name!,
+                      StyleUtils.getCommonTextStyle(
+                          color: MyColors.roomTCWZ2,
+                          fontSize: ScreenUtil().setSp(25))),
+                  WidgetUtils.onlyTextCenter(
+                      '${listPl[index].price!}钻',
+                      StyleUtils.getCommonTextStyle(
+                          color: MyColors.roomTCWZ3,
+                          fontSize: ScreenUtil().setSp(21))),
+                  WidgetUtils.onlyTextCenter(
+                      'x${listPl[index].number!}',
+                      StyleUtils.getCommonTextStyle(
+                          color: MyColors.roomMessageYellow2,
+                          fontSize: ScreenUtil().setSp(22))),
                 ],
               ),
             ),
-            WidgetUtils.showImagesFill('assets/images/room_liwu_bg.png',
-                ScreenUtil().setHeight(200), ScreenUtil().setHeight(150)),
           ],
         ),
       ),
@@ -136,26 +119,66 @@ class _MoFangBeiBaoPageState extends State<MoFangBeiBaoPage> {
                               color: leixing == 0
                                   ? MyColors.roomTCWZ2
                                   : MyColors.roomTCWZ3,
-                              fontSize: leixing == 0 ? ScreenUtil().setSp(28) : ScreenUtil().setSp(25))),
+                              fontSize: leixing == 0
+                                  ? ScreenUtil().setSp(28)
+                                  : ScreenUtil().setSp(25))),
                     ),
                   ],
                 ),
+
                 /// 展示礼物
-                Expanded(child: GridView.builder(
-                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
-                    itemCount: 10,
-                    scrollDirection: Axis.horizontal,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 30.h, //设置列间距
-                      mainAxisSpacing: 0.h, //设置行间距
-                    ),
-                    itemBuilder: _initlistdata)),
+                Expanded(
+                    child: SingleChildScrollView(
+                  child: OptionGridView(
+                    itemCount: listPl.length,
+                    rowCount: 4,
+                    mainAxisSpacing: 10.h,
+                    // 上下间距
+                    crossAxisSpacing: 0.h,
+                    //左右间距
+                    itemBuilder: _initlistdata,
+                  ),
+                )),
               ],
             ),
           )
         ],
       ),
     );
+  }
+
+  // 背包
+  List<DataL> listPl = [];
+
+  /// 获取礼物列表
+  Future<void> doPostGiftList() async {
+    LogE('token ${sp.getString('user_token')}');
+    Map<String, dynamic> params = <String, dynamic>{
+      'type': 2,
+    };
+    Loading.show('加载中...');
+    try {
+      liwuBean bean = await DataUtils.postGiftList(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            listPl.clear();
+            listPl = bean.data!;
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+          // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      LogE('错误信息提示$e');
+      Loading.dismiss();
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
   }
 }

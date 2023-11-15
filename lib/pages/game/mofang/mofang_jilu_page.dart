@@ -1,18 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+import '../../../bean/winListBean.dart';
 import '../../../colors/my_colors.dart';
+import '../../../config/my_config.dart';
+import '../../../http/data_utils.dart';
+import '../../../http/my_http_config.dart';
+import '../../../utils/loading.dart';
+import '../../../utils/my_toast_utils.dart';
+import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 /// 魔方的获奖记录
 class MoFangJiLuPage extends StatefulWidget {
-  const MoFangJiLuPage({super.key});
+  int type;
+  MoFangJiLuPage({super.key, required this.type});
 
   @override
   State<MoFangJiLuPage> createState() => _MoFangJiLuPageState();
 }
 
 class _MoFangJiLuPageState extends State<MoFangJiLuPage> {
+  int page = 1;
+  final RefreshController _refreshController =
+  RefreshController(initialRefresh: false);
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    doPostGetMineRouletteWinList();
+  }
+
+
+  void _onRefresh() async {
+    // monitor network fetch
+    await Future.delayed(const Duration(milliseconds: 1000));
+    // if failed,use refreshFailed()
+    _refreshController.refreshCompleted();
+    if (mounted) {
+      setState(() {
+        page = 1;
+      });
+    }
+    doPostGetMineRouletteWinList();
+  }
+
+  void _onLoading() async {
+    // monitor network fetch
+    await Future.delayed(const Duration(milliseconds: 1000));
+    // if failed,use loadFailed(),if no data return,use LoadNodata()
+    if (mounted) {
+      setState(() {
+        page++;
+      });
+    }
+    doPostGetMineRouletteWinList();
+    _refreshController.loadComplete();
+  }
+
   Widget Jilu(BuildContext context, int i) {
     return Column(
       children: [
@@ -22,26 +68,26 @@ class _MoFangJiLuPageState extends State<MoFangJiLuPage> {
             children: [
               WidgetUtils.commonSizedBox(0, 20.h),
               WidgetUtils.showImagesNet(
-                  'http://static.runoob.com/images/demo/demo2.jpg', 60.h, 60.h),
+                  list[i].giftImg!, 60.h, 60.h),
               WidgetUtils.commonSizedBox(0, 10.h),
               Expanded(
                   child: Column(
                     children: [
                       const Spacer(),
                       WidgetUtils.onlyText(
-                          '道具名称',
+                          list[i].giftName!,
                           StyleUtils.getCommonTextStyle(
                               color: Colors.white, fontSize: 28.sp)),
                       WidgetUtils.commonSizedBox(5.h, 0),
                       WidgetUtils.onlyText(
-                          '2023年8月30日11:52:20',
+                          list[i].addTime!,
                           StyleUtils.getCommonTextStyle(
                               color: MyColors.zpJLYellow, fontSize: 24.sp)),
                       const Spacer(),
                     ],
                   )),
               WidgetUtils.onlyText(
-                  'x1',
+                  'x${list[i].number!}',
                   StyleUtils.getCommonTextStyle(
                       color: MyColors.roomTCYellow, fontSize: 48.sp)),
               WidgetUtils.commonSizedBox(0, 20.h),
@@ -94,16 +140,70 @@ class _MoFangJiLuPageState extends State<MoFangJiLuPage> {
                     ),
                     WidgetUtils.commonSizedBox(20.h, 0),
                     Expanded(
-                        child: ListView.builder(
-                          padding: EdgeInsets.only(bottom: 20.h, top: 10.h),
-                          itemBuilder: Jilu,
-                          itemCount: 15,
-                        )),
+                        child: SmartRefresher(
+                          header: MyUtils.myHeader(),
+                          footer: MyUtils.myFotter(),
+                          controller: _refreshController,
+                          enablePullUp: true,
+                          onLoading: _onLoading,
+                          onRefresh: _onRefresh,
+                          child: ListView.builder(
+                            padding: EdgeInsets.only(bottom: 20.h, top: 10.h),
+                            itemBuilder: Jilu,
+                            itemCount: list.length,
+                          ),
+                        )
+                    ),
                   ],
                 ),
               ))
         ],
       ),
     );
+  }
+
+
+  List<Data> list = [];
+  /// 魔方转盘我的中奖记录
+  Future<void> doPostGetMineRouletteWinList() async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'game_id': '1', // 1魔方2转盘
+      'price': widget.type == 0 ? '20' : '500',
+      'page': page,
+      'pageSize': MyConfig.pageSize,
+    };
+    Loading.show('加载中...');
+    try {
+      winListBean bean = await DataUtils.postGetMineRouletteWinList(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            if (page == 1) {
+              list.clear();
+            }
+            if (bean.data!.isNotEmpty) {
+              list = bean.data!;
+            }else{
+              if(page > 1){
+                if(bean.data!.length < MyConfig.pageSize){
+                  _refreshController.loadNoData();
+                }
+              }
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
   }
 }

@@ -3,11 +3,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 
+import '../../../bean/playRouletteBean.dart';
 import '../../../utils/widget_utils.dart';
 
 /// 展示获得的道具
 class ZhuanPanDaoJuPage extends StatefulWidget {
-  const ZhuanPanDaoJuPage({super.key});
+  List<Gifts> list;
+  int zonge;
+  String title;
+  ZhuanPanDaoJuPage({super.key, required this.list, required this.zonge, required this.title});
 
   @override
   State<ZhuanPanDaoJuPage> createState() => _ZhuanPanDaoJuPageState();
@@ -28,17 +32,16 @@ class _ZhuanPanDaoJuPageState extends State<ZhuanPanDaoJuPage> {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                WidgetUtils.showImages(
-                    'assets/images/zhuanpan_dj_bg.png', 630.h, 600.h),
+                WidgetUtils.showImages(widget.title == '心动转盘' ? 'assets/images/zhuanpan_dj_bg.png' : 'assets/images/zhuanpan_dj_bg2.png', 630.h, 600.h),
                 Container(
                   margin: EdgeInsets.only(left: 20.w, right: 20.w, top: 20.h),
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: <Widget>[
-                        for (int i = 0; i < 20; i++)
+                        for (int i = 0; i < widget.list.length; i++)
                           Container(
-                            height: 160.h,
+                            height: 170.h,
                             width: 110.h,
                             margin: const EdgeInsets.all(10),
                             child: Column(
@@ -53,39 +56,51 @@ class _ZhuanPanDaoJuPageState extends State<ZhuanPanDaoJuPage> {
                                       fit: BoxFit.fill,
                                     ),
                                   ),
-                                  child: Column(
+                                  child: Stack(
+                                    alignment: Alignment.center,
                                     children: [
-                                      WidgetUtils.commonSizedBox(15.h, 0),
                                       WidgetUtils.showImagesNet(
-                                          'http://static.runoob.com/images/demo/demo2.jpg',
-                                          60.h,
-                                          60.h),
-                                      WidgetUtils.commonSizedBox(12.h, 0),
-                                      Row(
-                                        children: [
-                                          const Spacer(),
-                                          SizedBox(
-                                            width: 40.h,
-                                            height: 20.h,
-                                            child: WidgetUtils.onlyTextCenter(
-                                                '1',
-                                                StyleUtils.getCommonTextStyle(
-                                                    color: MyColors.roomTCYellow,
-                                                    fontSize: 18.sp,
-                                                    fontWeight: FontWeight.w600)),
+                                          widget.list[i].img!,
+                                          100.h,
+                                          100.h),
+                                      Positioned(
+                                        bottom: 5.h,
+                                        right: 5.h,
+                                        child: Container(
+                                          width: 50.h,
+                                          height: 20.h,
+                                          decoration: const BoxDecoration(
+                                            //设置Container修饰
+                                            image: DecorationImage(
+                                              //背景图片修饰
+                                              image: AssetImage("assets/images/zhuanpan_dj_lw_sl.png"),
+                                              fit: BoxFit.fill, //覆盖
+                                            ),
                                           ),
-                                          WidgetUtils.commonSizedBox(0, 2.h),
-                                        ],
+                                          child: WidgetUtils.onlyTextCenter(
+                                              'x${widget.list[i].count}',
+                                              StyleUtils.getCommonTextStyle(
+                                                  color: MyColors.roomTCYellow,
+                                                  fontSize: 19.sp,
+                                                  fontWeight: FontWeight.w600)),
+                                        ),
                                       )
                                     ],
                                   ),
                                 ),
                                 WidgetUtils.commonSizedBox(2.h, 0),
                                 WidgetUtils.onlyTextCenter(
-                                    '礼物名称',
+                                    widget.list[i].name!,
                                     StyleUtils.getCommonTextStyle(
                                         color: MyColors.roomTCYellow,
-                                        fontSize: 22.sp))
+                                        fontSize: 22.sp)),
+                                WidgetUtils.commonSizedBox(2.h, 0),
+                                WidgetUtils.onlyTextCenter(
+                                widget.list[i].price.toString(),
+                                    StyleUtils.getCommonTextStyle(
+                                        color: MyColors.roomTCYellow,
+                                        fontSize: 20.sp,
+                                        fontWeight: FontWeight.w600))
                               ],
                             ),
                           ),
@@ -94,7 +109,17 @@ class _ZhuanPanDaoJuPageState extends State<ZhuanPanDaoJuPage> {
                   ),
                 ),
                 Positioned(
-                  bottom: 100.h,
+                    bottom: 170.h,
+                    child: Container(
+                  child: WidgetUtils.onlyTextCenter(
+                      '总价值：${widget.zonge}',
+                      StyleUtils.getCommonTextStyle(
+                          color: MyColors.roomTCYellow,
+                          fontSize: 24.sp,
+                          fontWeight: FontWeight.w600)),
+                )),
+                Positioned(
+                  bottom: 80.h,
                   child: GestureDetector(
                       onTap: (() {
                         Navigator.pop(context);

@@ -5,7 +5,6 @@ import 'package:yuyinting/main.dart';
 import 'package:yuyinting/pages/room/room_liwu_page.dart';
 import 'package:yuyinting/pages/room/room_messages_more_page.dart';
 import 'package:yuyinting/pages/room/room_send_info_page.dart';
-import 'package:yuyinting/pages/room/room_show_status_page.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 
@@ -332,7 +331,6 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                           Expanded(child:  GestureDetector(
                             onTap: ((){
                               Navigator.pop(context);
-                              MyUtils.goTransparentPageCom(context, const RoomShowStatusPage());
                               MyUtils.goTransparentPage(context, RoomLiWuPage(listM: widget.listM, uid: widget.uid,));
                             }),
                             child: WidgetUtils.onlyTextCenter(

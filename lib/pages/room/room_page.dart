@@ -14,10 +14,12 @@ import 'package:yuyinting/utils/my_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import '../../bean/Common_bean.dart';
 import '../../bean/roomInfoBean.dart';
+import '../../colors/my_colors.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
 import '../../utils/log_util.dart';
+import '../../utils/style_utils.dart';
 import '../../widget/SVGASimpleImage.dart';
 import 'room_items.dart';
 
@@ -31,10 +33,12 @@ class RoomPage extends StatefulWidget {
   State<RoomPage> createState() => _RoomPageState();
 }
 
-class _RoomPageState extends State<RoomPage> with SingleTickerProviderStateMixin,AutomaticKeepAliveClientMixin  {
+class _RoomPageState extends State<RoomPage>
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-
+  // 点击的类型
+  int leixing = 0;
   bool m0 = false,
       m1 = false,
       m2 = false,
@@ -46,6 +50,7 @@ class _RoomPageState extends State<RoomPage> with SingleTickerProviderStateMixin
       m8 = false;
   List<bool> upOrDown = [];
   List<bool> isMy = [];
+
   //页面是否加载完成
   bool isOK = false;
 
@@ -59,9 +64,18 @@ class _RoomPageState extends State<RoomPage> with SingleTickerProviderStateMixin
   //是否被禁言了
   int isForbation = 0;
   String BgType = '';
-  var listen, listenRoomback, listenCheckBG, listenZDY, listJoin, listenShowLiWu, listenSend,listenSendImg;
+  var listen,
+      listenRoomback,
+      listenCheckBG,
+      listenZDY,
+      listJoin,
+      listenShowLiWu,
+      listenSend,
+      listenSendImg;
+
   // 是否展示礼物动效
   bool isLWShow = false;
+
   /// 声网使用
   int? _remoteUid;
   bool _localUserJoined = false;
@@ -96,9 +110,13 @@ class _RoomPageState extends State<RoomPage> with SingleTickerProviderStateMixin
 
   // list里面的type 0 代表系统公告 1 房间内的公告 2谁进入了房间 3厅内用户正常聊天
   List<Map> list = [];
+  // 这个只存用户聊天信息
+  List<Map> list2 = [];
+
   // 发言倒计时
   Timer? _timer;
   int _timeCount = 5;
+
   // 发送爆灯使用 wherePeople在哪个麦序上，0不在麦上  _timer2和_timeCount2是爆灯的倒计时
   int wherePeople = 0;
   Timer? _timer2;
@@ -107,45 +125,49 @@ class _RoomPageState extends State<RoomPage> with SingleTickerProviderStateMixin
   void _startTimer() {
     _timer = Timer.periodic(
         const Duration(seconds: 1),
-            (Timer timer) => {
-          setState(() {
-            if (_timeCount <= 0) {
-              _timer!.cancel();
-              _timeCount = 5;
-            } else {
-              _timeCount -= 1;
-            }
-          })
-        });
+        (Timer timer) => {
+              setState(() {
+                if (_timeCount <= 0) {
+                  _timer!.cancel();
+                  _timeCount = 5;
+                } else {
+                  _timeCount -= 1;
+                }
+              })
+            });
   }
 
   void _startTimer2() {
     _timer2 = Timer.periodic(
         const Duration(seconds: 1),
-            (Timer timer) => {
-          setState(() {
-            if (_timeCount2 <= 0) {
-              _timer2!.cancel();
-              _timeCount2 = 10;
+        (Timer timer) => {
               setState(() {
-                wherePeople = 0;
-              });
-            } else {
-              _timeCount2 -= 1;
-            }
-          })
-        });
+                if (_timeCount2 <= 0) {
+                  _timer2!.cancel();
+                  _timeCount2 = 10;
+                  setState(() {
+                    wherePeople = 0;
+                  });
+                } else {
+                  _timeCount2 -= 1;
+                }
+              })
+            });
   }
+
+  // 送礼选中了那个用户
+  var listenPeople;
+  List<bool> listPeople = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
     //添加系统公告
     setState(() {
       Map<String, String> map = {};
-      map['info'] = '官方倡导绿色聊天，对聊天内容24小时在线巡查，严禁未成年人充值消费，严禁宣传与政治、色情、敏感话题等相关内容，任何传播违法/违规/低俗/暴力等不良信息的行为会导致封禁账号。';
+      map['info'] =
+          '官方倡导绿色聊天，对聊天内容24小时在线巡查，严禁未成年人充值消费，严禁宣传与政治、色情、敏感话题等相关内容，任何传播违法/违规/低俗/暴力等不良信息的行为会导致封禁账号。';
       map['type'] = '0';
       list.add(map);
     });
@@ -154,6 +176,7 @@ class _RoomPageState extends State<RoomPage> with SingleTickerProviderStateMixin
     for (int i = 0; i < 9; i++) {
       upOrDown.add(false);
       isMy.add(false);
+      listPeople.add(false);
     }
     // //初始化声网的音频插件
     // initAgora();
@@ -199,29 +222,26 @@ class _RoomPageState extends State<RoomPage> with SingleTickerProviderStateMixin
         });
       } else if (event.title == '表情') {
         // 判断是不是贵族，除了0都是贵族身份
-        if(noble_id == '0'){
-          if(_timeCount == 5){
+        if (noble_id == '0') {
+          if (_timeCount == 5) {
             if (isForbation == 0) {
-              MyUtils.goTransparentPage(
-                  context, const RoomBQPage());
+              MyUtils.goTransparentPage(context, const RoomBQPage());
             } else {
               MyToastUtils.showToastBottom('你已被房间禁言！');
             }
-          }else{
+          } else {
             MyToastUtils.showToastBottom('太频繁啦，请歇一歇~');
           }
-        }else{
+        } else {
           if (isForbation == 0) {
-            MyUtils.goTransparentPage(
-                context, const RoomBQPage());
+            MyUtils.goTransparentPage(context, const RoomBQPage());
           } else {
             MyToastUtils.showToastBottom('你已被房间禁言！');
           }
         }
-
       } else if (event.title == '聊天') {
         // 判断是不是贵族，除了0都是贵族身份
-        if(noble_id == '0') {
+        if (noble_id == '0') {
           if (_timeCount == 5) {
             if (isForbation == 0) {
               MyUtils.goTransparentPage(
@@ -235,7 +255,7 @@ class _RoomPageState extends State<RoomPage> with SingleTickerProviderStateMixin
           } else {
             MyToastUtils.showToastBottom('太频繁啦，请歇一歇~');
           }
-        }else{
+        } else {
           if (isForbation == 0) {
             MyUtils.goTransparentPage(
                 context,
@@ -247,17 +267,17 @@ class _RoomPageState extends State<RoomPage> with SingleTickerProviderStateMixin
           }
         }
       } else if (event.title == '爆灯') {
-        for(int i = 0; i < listM.length; i++){
-          if(sp.getString('user_id').toString() == listM[i].uid.toString()){
-           setState(() {
-             wherePeople = i+1;
-           });
+        for (int i = 0; i < listM.length; i++) {
+          if (sp.getString('user_id').toString() == listM[i].uid.toString()) {
+            setState(() {
+              wherePeople = i + 1;
+            });
           }
         }
         // 如果在麦上，就开启爆灯模式
-        if(wherePeople != 0){
+        if (wherePeople != 0) {
           _startTimer2();
-        }else{
+        } else {
           MyToastUtils.showToastBottom('上麦后才可以使用哦~');
         }
       }
@@ -350,7 +370,7 @@ class _RoomPageState extends State<RoomPage> with SingleTickerProviderStateMixin
             notice = event.index!;
           });
           break;
-        case '欢迎TA':
+        case '欢迎':
           // 用户id
           String uid = event.index!.split(',')[0];
           // 点击的list里面的第几个
@@ -389,7 +409,9 @@ class _RoomPageState extends State<RoomPage> with SingleTickerProviderStateMixin
                 upOrDown[i] = false;
               }
             });
-            doPostRoomInfo2((int.parse(event.map!['serial_number'].toString())-1).toString());
+            doPostRoomInfo2(
+                (int.parse(event.map!['serial_number'].toString()) - 1)
+                    .toString());
             break;
           case 'down_mic': //下麦
             setState(() {
@@ -400,16 +422,20 @@ class _RoomPageState extends State<RoomPage> with SingleTickerProviderStateMixin
                 upOrDown[i] = false;
               }
             });
-            doPostRoomInfo2((int.parse(event.map!['serial_number'].toString())-1).toString());
+            doPostRoomInfo2(
+                (int.parse(event.map!['serial_number'].toString()) - 1)
+                    .toString());
             break;
           case 'lock_mic': //锁麦
             setState(() {
-              listM[int.parse(event.map!['serial_number'].toString())-1].isLock = 1;
+              listM[int.parse(event.map!['serial_number'].toString()) - 1]
+                  .isLock = 1;
             });
             break;
           case 'unlock_mic': //未锁麦
             setState(() {
-              listM[int.parse(event.map!['serial_number'].toString())-1].isLock = 0;
+              listM[int.parse(event.map!['serial_number'].toString()) - 1]
+                  .isLock = 0;
             });
             break;
           case 'set_boss': //设置老板位
@@ -426,12 +452,14 @@ class _RoomPageState extends State<RoomPage> with SingleTickerProviderStateMixin
             break;
           case 'close_mic': //闭麦
             setState(() {
-              listM[int.parse(event.map!['serial_number'].toString())-1].isClose = 1;
+              listM[int.parse(event.map!['serial_number'].toString()) - 1]
+                  .isClose = 1;
             });
             break;
           case 'un_close_mic': //开麦
             setState(() {
-              listM[int.parse(event.map!['serial_number'].toString())-1].isClose = 0;
+              listM[int.parse(event.map!['serial_number'].toString()) - 1]
+                  .isClose = 0;
             });
             break;
         }
@@ -440,15 +468,16 @@ class _RoomPageState extends State<RoomPage> with SingleTickerProviderStateMixin
     // 加入房间监听
     listJoin = eventBus.on<JoinRoomYBack>().listen((event) {
       LogE('接收到了信息${event.map!['type']}');
-      if(event.map!['room_id'].toString() == widget.roomId){
+      if (event.map!['room_id'].toString() == widget.roomId) {
         // 判断是不是点击了欢迎某某人
-        if(event.map!['type'] == 'welcome_msg'){
+        if (event.map!['type'] == 'welcome_msg') {
           Map<dynamic, dynamic> map = {};
           map['info'] = event.map!['send_nickname'];
           map['uid'] = event.map!['uid'];
           map['type'] = '3';
           // 欢迎语信息
-          map['content'] = '${event.map!['send_nickname']},${event.map!['content']}';
+          map['content'] =
+              '${event.map!['send_nickname']},${event.map!['content']}';
           // 身份
           map['identity'] = event.map!['identity'];
           // 等级
@@ -467,7 +496,8 @@ class _RoomPageState extends State<RoomPage> with SingleTickerProviderStateMixin
           setState(() {
             list.add(map);
           });
-        }else if(event.map!['type'] == 'chatroom_msg'){//厅内发送的文字消息
+        } else if (event.map!['type'] == 'chatroom_msg') {
+          //厅内发送的文字消息
           Map<dynamic, dynamic> map = {};
           map['info'] = event.map!['nickname'];
           map['uid'] = event.map!['uid'];
@@ -495,18 +525,18 @@ class _RoomPageState extends State<RoomPage> with SingleTickerProviderStateMixin
 
           setState(() {
             list.add(map);
+            list2.add(map);
           });
-
-        }else{
+        } else {
           bool isHave = false;
-          for(int i = 0 ; i < list.length; i++){
-            if(list[i]['type'] == '1'){
+          for (int i = 0; i < list.length; i++) {
+            if (list[i]['type'] == '1') {
               setState(() {
                 isHave = true;
               });
             }
           }
-          if(!isHave){
+          if (!isHave) {
             Map<dynamic, dynamic> mapg = {};
             mapg['info'] = event.map!['notice'];
             mapg['type'] = '1';
@@ -545,17 +575,27 @@ class _RoomPageState extends State<RoomPage> with SingleTickerProviderStateMixin
     });
     // 发消息监听
     listenSend = eventBus.on<SendRoomInfoBack>().listen((event) {
-        _startTimer();
-        doPostRoomMessageSend(event.info,0);
+      _startTimer();
+      doPostRoomMessageSend(event.info, 0);
     });
     // 发图片监听
     listenSendImg = eventBus.on<SendRoomImgBack>().listen((event) {
       _startTimer();
-      doPostRoomMessageSend(event.info,1);
+      doPostRoomMessageSend(event.info, 1);
+    });
+    // 送礼选中了那个用户监听
+    listenPeople = eventBus.on<ChoosePeopleBack>().listen((event) {
+      setState(() {
+        for (int i = 0; i < 9; i++) {
+          listPeople[i] = event.listPeople[i];
+        }
+      });
     });
   }
 
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController2 = ScrollController();
+
   // 在数据变化后将滚动位置设置为最后一个item的位置
   void scrollToLastItem() {
     _scrollController.animateTo(
@@ -570,7 +610,7 @@ class _RoomPageState extends State<RoomPage> with SingleTickerProviderStateMixin
         if (_scrollController.position.pixels == 0) {
           // ListView已经滚动到顶部
           print('ListView已经滚动到顶部');
-          for(int i = 0; i < list.length; i++){
+          for (int i = 0; i < list.length; i++) {
             list[i]['isOk'] = 'true';
           }
           // 执行你的操作
@@ -578,13 +618,39 @@ class _RoomPageState extends State<RoomPage> with SingleTickerProviderStateMixin
           // ListView已经滚动到底部
           print('ListView已经滚动到底部');
           // 执行你的操作
-          for(int i = 0; i < list.length; i++){
+          for (int i = 0; i < list.length; i++) {
             list[i]['isOk'] = 'true';
           }
         }
       }
     });
 
+    _scrollController2.animateTo(
+      _scrollController2.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 100),
+      curve: Curves.easeInOut,
+    );
+
+    _scrollController2.addListener(() {
+      // 在这里处理滚动事件
+      if (_scrollController2.position.atEdge) {
+        if (_scrollController2.position.pixels == 0) {
+          // ListView已经滚动到顶部
+          print('ListView已经滚动到顶部');
+          for (int i = 0; i < list2.length; i++) {
+            list2[i]['isOk'] = 'true';
+          }
+          // 执行你的操作
+        } else {
+          // ListView已经滚动到底部
+          print('ListView已经滚动到底部');
+          // 执行你的操作
+          for (int i = 0; i < list2.length; i++) {
+            list2[i]['isOk'] = 'true';
+          }
+        }
+      }
+    });
   }
 
   @override
@@ -600,6 +666,7 @@ class _RoomPageState extends State<RoomPage> with SingleTickerProviderStateMixin
     listenSendImg.cancel();
     _engine.disableAudio();
     _scrollController.dispose();
+    listenPeople.cancel();
   }
 
   // 初始化应用
@@ -673,12 +740,13 @@ class _RoomPageState extends State<RoomPage> with SingleTickerProviderStateMixin
 
   /// 展示消息地方
   Widget itemMessages(BuildContext context, int i) {
-    LogE('isOk ${list.length}');
-    for(int i = 0; i < list.length; i++){
-      LogE('isOk ${list[i]['isOk']}');
-    }
     // 这里后续要改，要传一个用户的id，目前没有，先写一个0
     return RoomItems.itemMessages(context, i, '0', widget.roomId, list, listM);
+  }
+  /// 纯用户聊天使用展示消息地方
+  Widget itemMessages2(BuildContext context, int i) {
+    // 这里后续要改，要传一个用户的id，目前没有，先写一个0
+    return RoomItems.itemMessages(context, i, '0', widget.roomId, list2, listM);
   }
 
   @override
@@ -712,13 +780,15 @@ class _RoomPageState extends State<RoomPage> with SingleTickerProviderStateMixin
                               fit: BoxFit.fill,
                             ),
                           )
-                        : BgType == '2'  ? SizedBox(
-                            height: double.infinity,
-                            width: double.infinity,
-                            child: SVGASimpleImage(
-                              resUrl: bgSVGA,
-                            ),
-                          ) : const Text(''),
+                        : BgType == '2'
+                            ? SizedBox(
+                                height: double.infinity,
+                                width: double.infinity,
+                                child: SVGASimpleImage(
+                                  resUrl: bgSVGA,
+                                ),
+                              )
+                            : const Text(''),
                     Column(
                       children: [
                         WidgetUtils.commonSizedBox(35, 0),
@@ -734,27 +804,32 @@ class _RoomPageState extends State<RoomPage> with SingleTickerProviderStateMixin
                         WidgetUtils.commonSizedBox(10, 0),
 
                         /// 公告 和 厅主
-                        RoomItems.notices(
-                            context, m0, notice, listM, widget.roomId, wherePeople),
+                        RoomItems.notices(context, m0, notice, listM,
+                            widget.roomId, wherePeople, listPeople),
 
                         /// 麦序位
-                        RoomItems.maixu(context, m1, m2, m3, m4, m5, m6, m7, m8,
-                            isBoss, listM, widget.roomId, wherePeople),
+                        RoomItems.maixu(
+                            context,
+                            m1,
+                            m2,
+                            m3,
+                            m4,
+                            m5,
+                            m6,
+                            m7,
+                            m8,
+                            isBoss,
+                            listM,
+                            widget.roomId,
+                            wherePeople,
+                            listPeople),
                         Expanded(
                           child: Transform.translate(
                             offset: Offset(0, -80.h),
                             child: Stack(
                               children: [
-                                /// 消息列表
-                                ListView.builder(
-                                  padding: EdgeInsets.only(
-                                      top: ScreenUtil().setHeight(20), left: 20.h, right: 160.h),
-                                  itemBuilder: itemMessages,
-                                  controller: _scrollController,
-                                  itemCount: list.length,
-                                ),
                                 RoomItems.lunbotu1(context, imgList),
-                                RoomItems.lunbotu2(context, imgList2),
+                                RoomItems.lunbotu2(context, imgList2, widget.roomId),
                               ],
                             ),
                           ),
@@ -787,6 +862,68 @@ class _RoomPageState extends State<RoomPage> with SingleTickerProviderStateMixin
                     RoomItems.isMe(6, listM, isMy[6]),
                     RoomItems.isMe(7, listM, isMy[7]),
                     RoomItems.isMe(8, listM, isMy[8]),
+
+                    /// 聊天除使用
+                    Positioned(
+                      bottom: 60.h,
+                      child:
+                          /// 消息列表最外层
+                          SizedBox(
+                            height: 590.h,
+                            width: 465.h,
+                            child: Column(
+                              children: [
+                                //分类使用
+                                SizedBox(
+                                  height: 50.h,
+                                  child: Row(
+                                    children: [
+                                      WidgetUtils.commonSizedBox(0, 20),
+                                      GestureDetector(
+                                        onTap: (() {
+                                          setState(() {
+                                            leixing = 0;
+                                          });
+                                        }),
+                                        child: WidgetUtils.showImages(leixing == 0 ? 'assets/images/room_gp1.png' : 'assets/images/room_gp2.png', 25.h, 60.h),
+                                      ),
+                                      WidgetUtils.commonSizedBox(0, 10),
+                                      Container(
+                                        height: ScreenUtil().setHeight(10),
+                                        width: ScreenUtil().setWidth(1),
+                                        color: MyColors.roomTCWZ3,
+                                      ),
+                                      WidgetUtils.commonSizedBox(0, 10),
+                                      GestureDetector(
+                                        onTap: (() {
+                                          setState(() {
+                                            leixing = 1;
+                                          });
+                                        }),
+                                        child: WidgetUtils.showImages(leixing == 1 ? 'assets/images/room_lt1.png' : 'assets/images/room_lt2.png', 25.h, 60.h),
+                                      ),
+                                      WidgetUtils.commonSizedBox(0, 10),
+                                    ],
+                                  ),
+                                ),
+                                Expanded(child: leixing == 0 ? ListView.builder(
+                                  padding: EdgeInsets.only(
+                                      left: 20.h,),
+                                  itemBuilder: itemMessages,
+                                  controller: _scrollController,
+                                  itemCount: list.length,
+                                ) : ListView.builder(
+                                  padding: EdgeInsets.only(
+                                    top: ScreenUtil().setHeight(10),
+                                    left: 20.h,),
+                                  itemBuilder: itemMessages2,
+                                  controller: _scrollController,
+                                  itemCount: list2.length,
+                                ))
+                              ],
+                            ),
+                          ),
+                    ),
                   ],
                 ),
               ),
@@ -950,7 +1087,8 @@ class _RoomPageState extends State<RoomPage> with SingleTickerProviderStateMixin
                 break;
               case '6':
                 LogE('*****上下麦位置****$index');
-                LogE('*****上下麦位置****${bean.data!.roomInfo!.mikeList![6].uid == 0}');
+                LogE(
+                    '*****上下麦位置****${bean.data!.roomInfo!.mikeList![6].uid == 0}');
                 m7 = bean.data!.roomInfo!.mikeList![6].uid == 0 ? false : true;
                 break;
               case '7':
@@ -1084,10 +1222,9 @@ class _RoomPageState extends State<RoomPage> with SingleTickerProviderStateMixin
       CommonBean bean = await DataUtils.postRoomWelcomeMsg(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -1098,7 +1235,6 @@ class _RoomPageState extends State<RoomPage> with SingleTickerProviderStateMixin
       MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
     }
   }
-
 
   /// 厅内发消息
   Future<void> doPostRoomMessageSend(String content, int type) async {
@@ -1112,10 +1248,9 @@ class _RoomPageState extends State<RoomPage> with SingleTickerProviderStateMixin
       CommonBean bean = await DataUtils.postRoomMessageSend(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -1126,5 +1261,4 @@ class _RoomPageState extends State<RoomPage> with SingleTickerProviderStateMixin
       MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
     }
   }
-
 }

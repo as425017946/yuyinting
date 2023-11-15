@@ -11,6 +11,7 @@ import 'package:svgaplayer_flutter/parser.dart';
 import 'package:svgaplayer_flutter/player.dart';
 
 import '../../bean/Common_bean.dart';
+import '../../bean/balanceBean.dart';
 import '../../bean/carTimerBean.dart';
 import '../../colors/my_colors.dart';
 import '../../http/data_utils.dart';
@@ -807,6 +808,8 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
     });
     Future.delayed(const Duration(seconds: 3), () {
       setState(() {
+        // 清空接受的im下注信息
+        listZDY.clear();
         isPlay = false;
         isGo = true;
         sum = 20;
@@ -911,6 +914,8 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
   @override
   void initState() {
     super.initState();
+    // 获取账户余额
+    doPostWalletList();
     // 获取赛车倒计时
     doPostGetCarTimer();
     // 二次确认弹窗点击确认，开始下注
@@ -967,8 +972,6 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
           setState(() {
             isShow = true;
           });
-          // 清空接受的im下注信息
-          listZDY.clear();
           starTimerDJS();
         });
       }
@@ -991,7 +994,7 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
     // 接受下注的im信息
     listenZDY = eventBus.on<ZDYBack>().listen((event) {
       if (event.map!['avatar'].toString().isNotEmpty) {
-        if (listZDY.length < 6) {
+        if (listZDY.length < 8) {
           Map<dynamic, dynamic> map = {};
           map['avatar'] = event.map!['avatar'];
           map['amount'] = event.map!['amount'];
@@ -1000,13 +1003,13 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
           });
         } else {
           setState(() {
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 7; i++) {
               listZDY[i] = listZDY[1 + 1];
             }
             Map<dynamic, dynamic> map = {};
             map['avatar'] = event.map!['avatar'];
             map['amount'] = event.map!['amount'];
-            listZDY[5] = map;
+            listZDY[7] = map;
           });
         }
       }
@@ -1056,6 +1059,7 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
     _timer3?.cancel();
     _timer4?.cancel();
     listen.cancel();
+    listenZDY.cancel();
     subscription.cancel();
     super.dispose();
   }
@@ -1383,8 +1387,7 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
                 ),) : const Text(''),
 
                 //左侧按钮
-                isShow
-                    ? SizedBox(
+                SizedBox(
                   height: 100,
                   child: Row(
                     children: [
@@ -1468,47 +1471,46 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
                       ),
                       const Spacer(),
                       // 右侧按键
-                      SizedBox(
-                        height: 100,
-                        width: 180,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            WidgetUtils.commonSizedBox(10, 5),
-                            Container(
-                              height: 20,
-                              width: 180,
-                              margin: const EdgeInsets.only(bottom: 5),
-                              //边框设置
-                              decoration: const BoxDecoration(
-                                  image: DecorationImage(
-                                    //背景图片修饰
-                                    image: AssetImage(
-                                        "assets/images/car_top_bg.png"),
-                                    fit: BoxFit.fill, //覆盖
-                                  )),
-                              child: GestureDetector(
-                                onTap: (() {}),
+                      Stack(
+                        children: [
+                          Column(
+                            children: [
+                              WidgetUtils.commonSizedBox(10, 0),
+                              Container(
+                                height: 20,
+                                margin: const EdgeInsets.only(right: 5),
+                                padding: const EdgeInsets.only(
+                                    left: 5, right: 5, top: 1, bottom: 1),
+                                //边框设置
+                                decoration: const BoxDecoration(
+                                  //背景
+                                  color: MyColors.zpJLHX,
+                                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                  borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                                ),
                                 child: Row(
                                   children: [
-                                    const Spacer(),
+                                    WidgetUtils.commonSizedBox(0, 5),
                                     WidgetUtils.showImages(
                                         'assets/images/car_mogubi.png',
                                         12,
                                         12),
                                     WidgetUtils.commonSizedBox(
-                                        0, 2.5),
+                                        0, 2),
                                     WidgetUtils.onlyText(
-                                        '10w+',
+                                        mogubi,
                                         StyleUtils.getCommonTextStyle(
                                             color: Colors.white,
                                             fontSize: 10)),
                                     WidgetUtils.commonSizedBox(
                                         0, 5),
-                                    Container(
-                                      height: 11,
-                                      width: 1,
-                                      color: MyColors.CarXian,
+                                    Opacity(
+                                      opacity: 0.8,
+                                      child: Container(
+                                        height: 10,
+                                        width: 1,
+                                        color: MyColors.home_hx,
+                                      ),
                                     ),
                                     WidgetUtils.commonSizedBox(
                                         0, 5),
@@ -1517,18 +1519,22 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
                                         12,
                                         12),
                                     WidgetUtils.commonSizedBox(
-                                        0, 2.5),
-                                    WidgetUtils.onlyText(
-                                        '10w+',
+                                        0, 5),
+                                    WidgetUtils.onlyTextCenter(
+                                        jinbi,
                                         StyleUtils.getCommonTextStyle(
                                             color: Colors.white,
-                                            fontSize: 10)),
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w600)),
                                     WidgetUtils.commonSizedBox(
                                         0, 5),
-                                    Container(
-                                      height: 11,
-                                      width: 1,
-                                      color: MyColors.CarXian,
+                                    Opacity(
+                                      opacity: 0.8,
+                                      child: Container(
+                                        height: 10,
+                                        width: 1,
+                                        color: MyColors.home_hx,
+                                      ),
                                     ),
                                     WidgetUtils.commonSizedBox(
                                         0, 5),
@@ -1537,46 +1543,40 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
                                         12,
                                         12),
                                     WidgetUtils.commonSizedBox(
-                                        0, 2.5),
-                                    WidgetUtils.onlyText(
-                                        '10w+',
+                                        0, 5),
+                                    WidgetUtils.onlyTextCenter(
+                                        zuanshi,
                                         StyleUtils.getCommonTextStyle(
                                             color: Colors.white,
-                                            fontSize: 10)),
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w600)),
                                     WidgetUtils.commonSizedBox(
                                         0, 5),
-                                    WidgetUtils.showImages(
-                                        'assets/images/car_more.png',
-                                        4,
-                                        7),
-                                    const Spacer(),
                                   ],
                                 ),
                               ),
+                            ],
+                          ),
+                          Positioned(
+                            right: 10.h,
+                            top: 100.h,
+                            child: GestureDetector(
+                                onTap: (() {
+                                  MyUtils.goTransparentPageCom(
+                                      context, const CarHShopPage());
+                                }),
+                                child: WidgetUtils.showImages(
+                                    'assets/images/car_shop.png',
+                                    50,
+                                    50)
                             ),
-                            Row(
-                              children: [
-                                const Spacer(),
-                                GestureDetector(
-                                  onTap: (() {
-                                    MyUtils.goTransparentPageCom(context, const CarHShopPage());
-                                  }),
-                                  child: WidgetUtils.showImages(
-                                      'assets/images/car_shop.png',
-                                      50,
-                                      50),
-                                )
-                              ],
-                            ),
-                            const Spacer(),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                       WidgetUtils.commonSizedBox(0, 5),
                     ],
                   ),
                 )
-                    : const Text(''),
               ],
             ),
           ),
@@ -1842,6 +1842,45 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
           MyToastUtils.showToastBottom("数据异常,游戏即将关闭，稍后请在开奖记录查看！");
           // ignore: use_build_context_synchronously
           Navigator.pop(context);
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+    }
+  }
+
+  // 金币 钻石 蘑菇币
+  String jinbi = '', zuanshi = '', mogubi = '';
+  /// 钱包明细
+  Future<void> doPostWalletList() async {
+    try {
+      balanceBean bean = await DataUtils.postBalance();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            if(double.parse(bean.data!.goldBean!) > 10000){
+              jinbi = '${(double.parse(bean.data!.goldBean!)/10000)}w';
+            }else{
+              jinbi = bean.data!.goldBean!;
+            }
+            if(double.parse(bean.data!.diamond!) > 10000){
+              zuanshi = '${(double.parse(bean.data!.diamond!)/10000)}w';
+            }else{
+              zuanshi = bean.data!.diamond!;
+            }
+            if(bean.data!.mushroom! > 10000){
+              mogubi = '${bean.data!.mushroom!/10000}w';
+            }else{
+              mogubi = bean.data!.mushroom!.toString();
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
       }
     } catch (e) {
       MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");

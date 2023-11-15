@@ -193,6 +193,12 @@ class MyHttpConfig{
   static const String roomWelcomeMsg = "$baseURL/room/roomWelcomeMsg";
   //礼物列表
   static const String giftList = "$baseURL/gift/list";
+  //送礼物
+  static const String sendGift = "$baseURL/gift/sendGift";
+  //钱包明细
+  static const String walletList = "$baseURL/user/walletList";
+  //钱包余额
+  static const String balance = "$baseURL/user/balance";
   //厅内发消息
   static const String roomMessageSend = "$baseURL/room/roomMessageSend";
   //房间麦序在线用户
@@ -207,6 +213,17 @@ class MyHttpConfig{
   static const String getCarTimer = "$baseURL/game/getCarTimer";
   //赛车幸运用户
   static const String carLuckyUser = "$baseURL/game/carLuckyUser";
-
+  //魔方转盘竞猜
+  static const String playRoulette = "$baseURL/game/playRoulette";
+  //游戏商店 1小转盘 2大转盘 3蘑菇
+  static const String gameStore = "$baseURL/game/gameStore";
+  //兑换游戏商店商品 1转盘 2大转盘 3赛车
+  static const String exchangeGoods = "$baseURL/game/exchangeGoods";
+  //魔方转盘我的中奖记录
+  static const String getMineRouletteWinList = "$baseURL/game/getMineRouletteWinList";
+  //大转盘幸运值
+  static const String getGameLuck = "$baseURL/game/getGameLuck";
+  //魔方奖池
+  static const String roulettePrizeList = "$baseURL/game/roulettePrizeList";
 
 }

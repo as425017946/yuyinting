@@ -1,25 +1,25 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:svgaplayer_flutter/player.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:yuyinting/utils/log_util.dart';
 
-class SVGASimpleImage2 extends StatefulWidget {
+import '../utils/event_utils.dart';
+
+class SVGASimpleImage3 extends StatefulWidget {
   final String? resUrl;
   final String? assetsName;
-  final String? isOk;
-  final int? index;
-  const SVGASimpleImage2({Key? key, this.resUrl, this.assetsName, this.isOk, this.index})
+
+  const SVGASimpleImage3({Key? key, this.resUrl, this.assetsName})
       : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _SVGASimpleImageState();
+    return _SVGASimpleImage3State();
   }
 }
 
-class _SVGASimpleImageState extends State<SVGASimpleImage2>
+class _SVGASimpleImage3State extends State<SVGASimpleImage3>
     with SingleTickerProviderStateMixin {
   SVGAAnimationController? animationController;
 
@@ -28,16 +28,15 @@ class _SVGASimpleImageState extends State<SVGASimpleImage2>
     super.initState();
     animationController = SVGAAnimationController(vsync: this);
     animationController!.addListener(() {
-      if (animationController!.isCompleted) {
-        // 动画播放完成时的处理
-        print("SVGA animation completed");
+      if(animationController!.isCompleted){
+        eventBus.fire(ResidentBack(isBack: true));
       }
     });
     _tryDecodeSvga();
   }
 
   @override
-  void didUpdateWidget(covariant SVGASimpleImage2 oldWidget) {
+  void didUpdateWidget(covariant SVGASimpleImage3 oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.resUrl != widget.resUrl ||
         oldWidget.assetsName != widget.assetsName) {
@@ -47,7 +46,6 @@ class _SVGASimpleImageState extends State<SVGASimpleImage2>
 
   @override
   Widget build(BuildContext context) {
-    LogE('============');
     if (animationController == null) {
       return Container();
     }
@@ -78,15 +76,9 @@ class _SVGASimpleImageState extends State<SVGASimpleImage2>
     }
     decode.then((videoItem) {
       if (mounted && animationController != null) {
-        if(widget.isOk!.toString() == 'true'){
-          animationController!
-            ..videoItem = videoItem
-            ..reset();
-        }else{
-          animationController!
-            ..videoItem = videoItem
-            ..forward();
-        }
+        animationController!
+          ..videoItem = videoItem
+          ..forward();
       } else {
         videoItem.dispose();
       }
