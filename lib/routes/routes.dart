@@ -13,8 +13,6 @@ import 'package:yuyinting/pages/mine/setting/yinsi_page.dart';
 import 'package:yuyinting/pages/mine/setting/yonghu_page.dart';
 import 'package:yuyinting/pages/mine/setting/zhanghao_shezhi_page.dart';
 import 'package:yuyinting/pages/mine/setting/zhuxiao_page.dart';
-
-import '../pages/game/loge_page.dart';
 import '../pages/login/forgot_password_page.dart';
 import '../pages/message/be_care_page.dart';
 import '../pages/message/xitong_more_page.dart';
@@ -118,7 +116,6 @@ var staticRoutes = {
   'TequanPage':(context) => const TequanPage(),// 特权页面
   'MyKeFuPage':(context) => const MyKeFuPage(),// 新客服页面
   'DengjiPage':(context) => const DengjiPage(),// 测试等级描边
-  'LongPage':(context) => const LongPage(),// 新客服页面
   'ChengJiuPage':(context) => const ChengJiuPage(),// 等级成就
 
 

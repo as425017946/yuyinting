@@ -7,6 +7,7 @@ import 'package:yuyinting/utils/style_utils.dart';
 import '../../../bean/Common_bean.dart';
 import '../../../bean/balanceBean.dart';
 import '../../../bean/gameStoreBean.dart';
+import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../utils/custom_dialog.dart';
@@ -194,7 +195,7 @@ class _CarShopPageState extends State<CarShopPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -230,7 +231,7 @@ class _CarShopPageState extends State<CarShopPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 
 import '../../../bean/myHomeBean.dart';
+import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../main.dart';
@@ -62,7 +63,7 @@ class _WallPageState extends State<WallPage> {
   }
 
   Future<void> doPostMyIfon() async {
-    Loading.show('加载中...');
+    Loading.show(MyConfig.successTitle);
     Map<String, dynamic> params = <String, dynamic>{
       'uid': sp.getString('user_id')
     };
@@ -88,7 +89,7 @@ class _WallPageState extends State<WallPage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

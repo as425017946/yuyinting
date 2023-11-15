@@ -8,6 +8,7 @@ import 'package:yuyinting/utils/my_utils.dart';
 
 import '../../../bean/Common_bean.dart';
 import '../../../colors/my_colors.dart';
+import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../utils/loading.dart';
@@ -317,7 +318,7 @@ class _ShimingzhiCardPageState extends State<ShimingzhiCardPage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 

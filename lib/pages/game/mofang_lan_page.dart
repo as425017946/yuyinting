@@ -11,6 +11,7 @@ import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import '../../bean/balanceBean.dart';
 import '../../bean/playRouletteBean.dart';
+import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
@@ -730,7 +731,7 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -789,7 +790,7 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

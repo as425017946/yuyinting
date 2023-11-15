@@ -14,6 +14,7 @@ import 'package:yuyinting/utils/style_utils.dart';
 
 import '../../../bean/cityBean.dart';
 import '../../../bean/userInfoBean.dart';
+import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../main.dart';
@@ -544,7 +545,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
 
   /// 关于我们
   Future<void> doPostMyIfon() async {
-    Loading.show('加载中...');
+    Loading.show(MyConfig.successTitle);
     LogE('用户id${sp.getString('user_id')}');
     Map<String, dynamic> params = <String, dynamic>{
       'uid': sp.getString('user_id')
@@ -596,7 +597,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -620,7 +621,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -661,7 +662,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

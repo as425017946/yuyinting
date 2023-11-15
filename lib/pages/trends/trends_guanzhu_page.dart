@@ -995,7 +995,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
       'pageSize': MyConfig.pageSize
     };
     try {
-      Loading.show("加载中...");
+      Loading.show(MyConfig.successTitle);
       DTListBean bean = await DataUtils.postGZFollowList(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
@@ -1032,7 +1032,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1045,7 +1045,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
       'is_refresh': is_refresh
     };
     try {
-      Loading.show("加载中...");
+      Loading.show(MyConfig.successTitle);
       DTTuiJianListBean bean = await DataUtils.postRecommendList(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
@@ -1082,7 +1082,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
   /// 点赞
@@ -1129,7 +1129,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

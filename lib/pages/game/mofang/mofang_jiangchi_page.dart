@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../bean/mofangJCBean.dart';
 import '../../../colors/my_colors.dart';
+import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../utils/my_toast_utils.dart';
@@ -139,7 +140,7 @@ class _MoFangJiangChiPageState extends State<MoFangJiangChiPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

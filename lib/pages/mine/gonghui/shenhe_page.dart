@@ -4,6 +4,7 @@ import 'package:yuyinting/bean/Common_bean.dart';
 
 import '../../../bean/qyListBean.dart';
 import '../../../colors/my_colors.dart';
+import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../main.dart';
@@ -118,7 +119,7 @@ class _ShenhePageState extends State<ShenhePage> {
 
   /// 签约列表
   Future<void> doPostApplySignList() async {
-    Loading.show('加载中...');
+    Loading.show(MyConfig.successTitle);
     Map<String, dynamic> params = <String, dynamic>{
       'guild_id': sp.getString('guild_id'),
     };
@@ -146,7 +147,7 @@ class _ShenhePageState extends State<ShenhePage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -179,7 +180,7 @@ class _ShenhePageState extends State<ShenhePage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

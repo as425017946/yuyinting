@@ -638,7 +638,7 @@ class _LoginPageState extends State<LoginPage> {
     } catch (e) {
       LogE('登录返回*${e.toString()}');
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

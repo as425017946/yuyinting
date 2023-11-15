@@ -322,7 +322,7 @@ class _ShengboPageState extends State<ShengboPage>  with AutomaticKeepAliveClien
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -367,7 +367,7 @@ class _ShengboPageState extends State<ShengboPage>  with AutomaticKeepAliveClien
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

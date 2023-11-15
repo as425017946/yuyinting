@@ -10,6 +10,7 @@ import 'package:yuyinting/utils/widget_utils.dart';
 import '../../bean/Common_bean.dart';
 import '../../bean/commonStringBean.dart';
 import '../../colors/my_colors.dart';
+import '../../config/my_config.dart';
 import '../../db/DatabaseHelper.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
@@ -638,7 +639,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
         scrollToLastItem(); // 在widget构建完成后滚动到底部
       });
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
   /// 查询关注状态
@@ -664,7 +665,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
   /// 关注还是取关
@@ -699,7 +700,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 

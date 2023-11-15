@@ -81,7 +81,7 @@ class _RoomMorePageState extends State<RoomMorePage> {
 
   /// 我的公会
   Future<void> doPostSearchGuildRoom() async {
-    Loading.show('加载中...');
+    Loading.show(MyConfig.successTitle);
     try {
       Map<String, dynamic> params = <String, dynamic>{
         'guild_id': sp.getString('guild_id'),
@@ -111,7 +111,7 @@ class _RoomMorePageState extends State<RoomMorePage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

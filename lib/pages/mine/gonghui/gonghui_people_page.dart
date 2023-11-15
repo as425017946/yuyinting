@@ -207,7 +207,7 @@ class _GonghuiPeoplePageState extends State<GonghuiPeoplePage> {
 
   /// 我的公会
   Future<void> doPostSearchGuildStreamer(keyword) async {
-    Loading.show('加载中...');
+    Loading.show(MyConfig.successTitle);
     try {
       Map<String, dynamic> params = <String, dynamic>{
         'guild_id': sp.getString('guild_id'),
@@ -249,7 +249,7 @@ class _GonghuiPeoplePageState extends State<GonghuiPeoplePage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -294,7 +294,7 @@ class _GonghuiPeoplePageState extends State<GonghuiPeoplePage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

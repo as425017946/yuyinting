@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soundpool/soundpool.dart';
 import 'package:svgaplayer_flutter/parser.dart';
 import 'package:svgaplayer_flutter/player.dart';
+import 'package:yuyinting/config/my_config.dart';
 
 import '../../bean/balanceBean.dart';
 import '../../bean/playRouletteBean.dart';
@@ -728,7 +729,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -787,7 +788,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

@@ -14,6 +14,7 @@ import '../../bean/Common_bean.dart';
 import '../../bean/balanceBean.dart';
 import '../../bean/carTimerBean.dart';
 import '../../colors/my_colors.dart';
+import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
@@ -1766,7 +1767,7 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1799,7 +1800,7 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1844,7 +1845,7 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
           Navigator.pop(context);
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1883,7 +1884,7 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

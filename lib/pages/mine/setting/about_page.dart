@@ -10,6 +10,7 @@ import 'package:yuyinting/utils/my_utils.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 
 import '../../../bean/aboutUsBean.dart';
+import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../utils/line_painter.dart';
@@ -162,7 +163,7 @@ class _AboutPageState extends State<AboutPage> {
       'system': type,
     };
     try {
-      Loading.show("加载中...");
+      Loading.show(MyConfig.successTitle);
       AboutUsBean bean = await DataUtils.postUserAbout(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
@@ -182,7 +183,7 @@ class _AboutPageState extends State<AboutPage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 

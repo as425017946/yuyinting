@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/log_util.dart';
+import '../../config/my_config.dart';
 import '../../widget/SVGASimpleImage.dart';
 
 import '../../bean/roomBGBean.dart';
@@ -131,7 +132,7 @@ class _RoomBG1PageState extends State<RoomBG1Page> with AutomaticKeepAliveClient
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

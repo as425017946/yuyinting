@@ -167,7 +167,7 @@ class _LiwuShoudaoPageState extends State<LiwuShoudaoPage> {
       'pageSize': MyConfig.pageSize
     };
     try {
-      Loading.show("加载中...");
+      Loading.show(MyConfig.successTitle);
       liwuMoreBean bean = await DataUtils.postGiftDetail(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
@@ -204,7 +204,7 @@ class _LiwuShoudaoPageState extends State<LiwuShoudaoPage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

@@ -248,7 +248,7 @@ class _ZaixianPageState extends State<ZaixianPage> with AutomaticKeepAliveClient
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

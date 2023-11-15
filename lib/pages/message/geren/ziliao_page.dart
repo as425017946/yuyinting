@@ -5,6 +5,7 @@ import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 
 import '../../../bean/myHomeBean.dart';
+import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../main.dart';
@@ -247,7 +248,7 @@ class _ZiliaoPageState extends State<ZiliaoPage> {
 
   /// 个人主页
   Future<void> doPostMyIfon() async {
-    Loading.show('加载中...');
+    Loading.show(MyConfig.successTitle);
     Map<String, dynamic> params = <String, dynamic>{
       'uid': sp.getString('other_id')
     };
@@ -289,7 +290,7 @@ class _ZiliaoPageState extends State<ZiliaoPage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

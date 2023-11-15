@@ -185,7 +185,7 @@ class _WhoLockMePageState extends State<WhoLockMePage> {
   /// 谁看过我
   Future<void> doPostHistoryList() async {
     try {
-      Loading.show("加载中...");
+      Loading.show(MyConfig.successTitle);
       Map<String, dynamic> params = <String, dynamic>{
         'page': page,
         'pageSize': MyConfig.pageSize
@@ -225,7 +225,7 @@ class _WhoLockMePageState extends State<WhoLockMePage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

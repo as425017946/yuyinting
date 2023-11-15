@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../bean/Common_bean.dart';
 import '../../bean/managerBean.dart';
 import '../../colors/my_colors.dart';
+import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../utils/my_toast_utils.dart';
@@ -170,7 +171,7 @@ class _RoomJinYanPageState extends State<RoomJinYanPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -199,7 +200,7 @@ class _RoomJinYanPageState extends State<RoomJinYanPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

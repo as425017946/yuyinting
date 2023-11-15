@@ -13,6 +13,7 @@ import '../../bean/balanceBean.dart';
 import '../../bean/onlineRoomUserBean.dart';
 import '../../bean/roomInfoBean.dart';
 import '../../bean/walletListBean.dart';
+import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
@@ -1113,7 +1114,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1150,7 +1151,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1188,7 +1189,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1210,7 +1211,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

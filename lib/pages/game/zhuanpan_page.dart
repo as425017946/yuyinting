@@ -6,6 +6,7 @@ import 'package:yuyinting/pages/game/zhuanpan_xin_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 
 import '../../bean/balanceBean.dart';
+import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../utils/my_toast_utils.dart';
@@ -348,7 +349,7 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

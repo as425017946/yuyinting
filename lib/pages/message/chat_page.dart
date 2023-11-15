@@ -17,6 +17,7 @@ import 'package:yuyinting/widget/SwiperPage.dart';
 
 import '../../bean/Common_bean.dart';
 import '../../bean/chatUserInfoBean.dart';
+import '../../config/my_config.dart';
 import '../../config/smile_utils.dart';
 import '../../db/DatabaseHelper.dart';
 import '../../http/data_utils.dart';
@@ -1205,7 +1206,7 @@ class _ChatPageState extends State<ChatPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1244,7 +1245,7 @@ class _ChatPageState extends State<ChatPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1278,7 +1279,7 @@ class _ChatPageState extends State<ChatPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1396,7 +1397,7 @@ class _ChatPageState extends State<ChatPage> {
         scrollToLastItem(); // 在widget构建完成后滚动到底部
       });
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1418,7 +1419,7 @@ class _ChatPageState extends State<ChatPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 

@@ -262,7 +262,7 @@ class _ShoucangPageState extends State<ShoucangPage> with AutomaticKeepAliveClie
       'pageSize': MyConfig.pageSize
     };
     try {
-      Loading.show("加载中...");
+      Loading.show(MyConfig.successTitle);
       shoucangBean bean = await DataUtils.postFollowListRoom(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
@@ -299,7 +299,7 @@ class _ShoucangPageState extends State<ShoucangPage> with AutomaticKeepAliveClie
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -324,7 +324,7 @@ class _ShoucangPageState extends State<ShoucangPage> with AutomaticKeepAliveClie
       }
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -356,7 +356,7 @@ class _ShoucangPageState extends State<ShoucangPage> with AutomaticKeepAliveClie
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -385,7 +385,7 @@ class _ShoucangPageState extends State<ShoucangPage> with AutomaticKeepAliveClie
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

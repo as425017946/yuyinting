@@ -198,7 +198,7 @@ class _ReDuZaiXianPageState extends State<ReDuZaiXianPage> with AutomaticKeepAli
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

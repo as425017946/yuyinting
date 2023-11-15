@@ -5,6 +5,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:yuyinting/pages/room/room_page.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import '../../bean/Common_bean.dart';
+import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../utils/loading.dart';
@@ -148,7 +149,7 @@ class _RoomTSMiMaPageState extends State<RoomTSMiMaPage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -178,7 +179,7 @@ class _RoomTSMiMaPageState extends State<RoomTSMiMaPage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 

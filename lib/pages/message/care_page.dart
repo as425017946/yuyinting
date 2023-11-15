@@ -234,7 +234,7 @@ class _CarePageState extends State<CarePage> {
       'pageSize': MyConfig.pageSize
     };
     try {
-      Loading.show("加载中...");
+      Loading.show(MyConfig.successTitle);
       careListBean bean = await DataUtils.postFollowList(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
@@ -271,7 +271,7 @@ class _CarePageState extends State<CarePage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -303,7 +303,7 @@ class _CarePageState extends State<CarePage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

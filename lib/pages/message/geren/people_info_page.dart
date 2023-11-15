@@ -6,6 +6,7 @@ import 'package:yuyinting/utils/style_utils.dart';
 
 import '../../../bean/userInfoBean.dart';
 import '../../../colors/my_colors.dart';
+import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../main.dart';
@@ -433,7 +434,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
 
   /// 查看用户
   Future<void> doPostUserInfo() async {
-    Loading.show('加载中...');
+    Loading.show(MyConfig.successTitle);
     Map<String, dynamic> params = <String, dynamic>{
       'uid': widget.otherId
     };
@@ -483,7 +484,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

@@ -173,7 +173,7 @@ class _ZhuanPanJiLuPageState extends State<ZhuanPanJiLuPage> {
       'page': page,
       'pageSize': MyConfig.pageSize,
     };
-    Loading.show('加载中...');
+    Loading.show(MyConfig.successTitle);
     try {
       winListBean bean = await DataUtils.postGetMineRouletteWinList(params);
       switch (bean.code) {
@@ -204,7 +204,7 @@ class _ZhuanPanJiLuPageState extends State<ZhuanPanJiLuPage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

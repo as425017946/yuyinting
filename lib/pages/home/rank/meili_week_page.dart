@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../bean/rankListBean.dart';
 import '../../../colors/my_colors.dart';
+import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../utils/loading.dart';
@@ -685,7 +686,7 @@ class _MeiLiWeekPageState extends State<MeiLiWeekPage> {
       'pageSize': '30'
     };
     try {
-      Loading.show("加载中...");
+      Loading.show(MyConfig.successTitle);
       rankListBean bean = await DataUtils.postRankList(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
@@ -716,7 +717,7 @@ class _MeiLiWeekPageState extends State<MeiLiWeekPage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

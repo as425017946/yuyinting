@@ -8,6 +8,7 @@ import 'package:yuyinting/pages/message/xitong_more_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import '../../bean/xtListBean.dart';
+import '../../config/my_config.dart';
 import '../../db/DatabaseHelper.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
@@ -437,7 +438,7 @@ class _MessagePageState extends State<MessagePage> {
     } catch (e) {
       LogE('错误信息$e');
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -466,7 +467,7 @@ class _MessagePageState extends State<MessagePage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

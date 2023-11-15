@@ -6,6 +6,7 @@ import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 
 import '../../../bean/Common_bean.dart';
+import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../main.dart';
@@ -214,7 +215,7 @@ class _BingPhonePageState extends State<BingPhonePage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

@@ -35,6 +35,11 @@ class MyConfig{
   /// 每页显示多少条
   static const int pageSize = 20;
 
+  /// 默认加载中的提示语
+  static const String successTitle = '加载中...';
+  /// 加载失败的提示语
+  static const String errorTitle = '数据请求超时，请检查网络状况!';
+
 
 
 }

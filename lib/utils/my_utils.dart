@@ -230,67 +230,73 @@ class MyUtils {
 
   /// 通用跳转到一个透明页面，从右到左滚出的方法
   static void goTransparentRFPage(BuildContext context, Widget page) {
-    Future.delayed(const Duration(seconds: 0), () {
-      Navigator.push(
-        context,
-        PageRouteBuilder(
-          //自定义路由
-          opaque: false,
-          pageBuilder: (context, a, _) => page, //需要跳转的页面
-          transitionsBuilder: (context, a, _, child) {
-            const begin = Offset(1,
-                0); //Offset是一个2D小部件，他将记录坐标轴的x,y前者为宽，后者为高 如果将begin =Offset(1,0)为从右到左 改为(0,1),效果则会变成从下到上
-            const end = Offset.zero; //得到Offset.zero坐标值
-            const curve = Curves.ease; //这是一个曲线动画
-            var tween = Tween(begin: begin, end: end)
-                .chain(CurveTween(curve: curve)); //使用补间动画转换为动画
-            return SlideTransition(
-              //转场动画//目前我认为只能用于跳转效果
-              position: a.drive(tween), //这里将获得一个新的动画
-              child: child,
-            );
-          },
-        ),
-      );
-    });
+    if(checkClick()) {
+      Future.delayed(const Duration(seconds: 0), () {
+        Navigator.push(
+          context,
+          PageRouteBuilder(
+            //自定义路由
+            opaque: false,
+            pageBuilder: (context, a, _) => page, //需要跳转的页面
+            transitionsBuilder: (context, a, _, child) {
+              const begin = Offset(1,
+                  0); //Offset是一个2D小部件，他将记录坐标轴的x,y前者为宽，后者为高 如果将begin =Offset(1,0)为从右到左 改为(0,1),效果则会变成从下到上
+              const end = Offset.zero; //得到Offset.zero坐标值
+              const curve = Curves.ease; //这是一个曲线动画
+              var tween = Tween(begin: begin, end: end)
+                  .chain(CurveTween(curve: curve)); //使用补间动画转换为动画
+              return SlideTransition(
+                //转场动画//目前我认为只能用于跳转效果
+                position: a.drive(tween), //这里将获得一个新的动画
+                child: child,
+              );
+            },
+          ),
+        );
+      });
+    }
   }
 
   /// 通用跳转到一个透明页面，从底部向上滚出的方法
   static void goTransparentPage(BuildContext context, Widget page) {
-    Future.delayed(const Duration(seconds: 0), () {
-      Navigator.push(
-        context,
-        PageRouteBuilder(
-          //自定义路由
-          opaque: false,
-          pageBuilder: (context, a, _) => page, //需要跳转的页面
-          transitionsBuilder: (context, a, _, child) {
-            const begin = Offset(0,
-                1); //Offset是一个2D小部件，他将记录坐标轴的x,y前者为宽，后者为高 如果将begin =Offset(1,0)为从右到左 改为(0,1),效果则会变成从下到上
-            const end = Offset.zero; //得到Offset.zero坐标值
-            const curve = Curves.ease; //这是一个曲线动画
-            var tween = Tween(begin: begin, end: end)
-                .chain(CurveTween(curve: curve)); //使用补间动画转换为动画
-            return SlideTransition(
-              //转场动画//目前我认为只能用于跳转效果
-              position: a.drive(tween), //这里将获得一个新的动画
-              child: child,
-            );
-          },
-        ),
-      );
-    });
+    if(checkClick()) {
+      Future.delayed(const Duration(seconds: 0), () {
+        Navigator.push(
+          context,
+          PageRouteBuilder(
+            //自定义路由
+            opaque: false,
+            pageBuilder: (context, a, _) => page, //需要跳转的页面
+            transitionsBuilder: (context, a, _, child) {
+              const begin = Offset(0,
+                  1); //Offset是一个2D小部件，他将记录坐标轴的x,y前者为宽，后者为高 如果将begin =Offset(1,0)为从右到左 改为(0,1),效果则会变成从下到上
+              const end = Offset.zero; //得到Offset.zero坐标值
+              const curve = Curves.ease; //这是一个曲线动画
+              var tween = Tween(begin: begin, end: end)
+                  .chain(CurveTween(curve: curve)); //使用补间动画转换为动画
+              return SlideTransition(
+                //转场动画//目前我认为只能用于跳转效果
+                position: a.drive(tween), //这里将获得一个新的动画
+                child: child,
+              );
+            },
+          ),
+        );
+      });
+    }
   }
 
   /// 通用跳转到一个透明页面
   static void goTransparentPageCom(BuildContext context, Widget page) {
-    Future.delayed(const Duration(seconds: 0), () {
-      Navigator.of(context).push(PageRouteBuilder(
-          opaque: false,
-          pageBuilder: (context, animation, secondaryAnimation) {
-            return page;
-          }));
-    });
+    if(checkClick()) {
+      Future.delayed(const Duration(seconds: 0), () {
+        Navigator.of(context).push(PageRouteBuilder(
+            opaque: false,
+            pageBuilder: (context, animation, secondaryAnimation) {
+              return page;
+            }));
+      });
+    }
   }
 
   static Widget myHeader() {

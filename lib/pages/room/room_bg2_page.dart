@@ -9,6 +9,7 @@ import 'package:yuyinting/utils/log_util.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import '../../bean/roomBGBean.dart';
 import '../../colors/my_colors.dart';
+import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
@@ -166,7 +167,7 @@ class _RoomBG2PageState extends State<RoomBG2Page> with AutomaticKeepAliveClient
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -217,7 +218,7 @@ class _RoomBG2PageState extends State<RoomBG2Page> with AutomaticKeepAliveClient
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      // MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
 
   }

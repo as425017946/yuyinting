@@ -166,7 +166,7 @@ class _BlackPageState extends State<BlackPage> {
   /// 黑名单列表
   Future<void> doBlackList() async {
     try {
-      Loading.show("加载中...");
+      Loading.show(MyConfig.successTitle);
       Map<String, dynamic> params = <String, dynamic>{
         'page': page,
         'pageSize': MyConfig.pageSize
@@ -205,7 +205,7 @@ class _BlackPageState extends State<BlackPage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -236,7 +236,7 @@ class _BlackPageState extends State<BlackPage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

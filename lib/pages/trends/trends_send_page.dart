@@ -11,6 +11,7 @@ import 'package:yuyinting/bean/Common_bean.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import '../../colors/my_colors.dart';
+import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
@@ -432,7 +433,7 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      // MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -492,7 +493,7 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
         }
       } catch (e) {
         Loading.dismiss();
-        // MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+        // MyToastUtils.showToastBottom(MyConfig.errorTitle);
       }
     }
   }
@@ -525,7 +526,7 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
+import '../config/my_config.dart';
+
 class Loading {
   Loading() {
     EasyLoading.instance
@@ -23,7 +25,7 @@ class Loading {
 
   static void show([String? text]) {
     EasyLoading.instance.userInteractions = true;
-    EasyLoading.show(status: text ?? '加载中...');
+    EasyLoading.show(status: text ?? MyConfig.successTitle);
   }
 
   static void toast(String text) {

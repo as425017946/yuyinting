@@ -775,10 +775,7 @@ class _RoomPageState extends State<RoomPage>
                         ? SizedBox(
                             height: double.infinity,
                             width: double.infinity,
-                            child: Image(
-                              image: NetworkImage(bgImage),
-                              fit: BoxFit.fill,
-                            ),
+                            child: WidgetUtils.showImagesNet(bgImage, double.infinity, double.infinity),
                           )
                         : BgType == '2'
                             ? SizedBox(
@@ -994,7 +991,7 @@ class _RoomPageState extends State<RoomPage>
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1023,7 +1020,7 @@ class _RoomPageState extends State<RoomPage>
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1050,7 +1047,7 @@ class _RoomPageState extends State<RoomPage>
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1109,7 +1106,7 @@ class _RoomPageState extends State<RoomPage>
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1136,7 +1133,7 @@ class _RoomPageState extends State<RoomPage>
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1176,7 +1173,7 @@ class _RoomPageState extends State<RoomPage>
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1207,7 +1204,7 @@ class _RoomPageState extends State<RoomPage>
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1232,7 +1229,7 @@ class _RoomPageState extends State<RoomPage>
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1258,7 +1255,7 @@ class _RoomPageState extends State<RoomPage>
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

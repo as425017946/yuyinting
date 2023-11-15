@@ -8,6 +8,7 @@ import 'package:yuyinting/pages/mine/gonghui/shenhe_page.dart';
 
 import '../../../bean/qyListBean.dart';
 import '../../../colors/my_colors.dart';
+import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../utils/line_painter2.dart';
@@ -381,7 +382,7 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
 
   /// 我的公会
   Future<void> doPostMyGh() async {
-    Loading.show('加载中...');
+    Loading.show(MyConfig.successTitle);
     try {
       myGhBean bean = await DataUtils.postMyGh();
       switch (bean.code) {
@@ -414,7 +415,7 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -441,7 +442,7 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 

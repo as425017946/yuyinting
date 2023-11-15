@@ -6,6 +6,7 @@ import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 
 import '../../../bean/liwuBean.dart';
+import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../main.dart';
@@ -156,7 +157,7 @@ class _MoFangBeiBaoPageState extends State<MoFangBeiBaoPage> {
     Map<String, dynamic> params = <String, dynamic>{
       'type': 2,
     };
-    Loading.show('加载中...');
+    Loading.show(MyConfig.successTitle);
     try {
       liwuBean bean = await DataUtils.postGiftList(params);
       switch (bean.code) {
@@ -178,7 +179,7 @@ class _MoFangBeiBaoPageState extends State<MoFangBeiBaoPage> {
     } catch (e) {
       LogE('错误信息提示$e');
       Loading.dismiss();
-      MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }
