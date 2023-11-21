@@ -45,6 +45,8 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
   bool isShow = false;
   // 是否跳过动画
   bool isTiaoguo = false;
+  // 是否跳过动画展示图片使用
+  bool isTiaoguoLW = false;
   // 是否点击更多
   bool isMore = false;
   SVGAAnimationController? animationController;
@@ -52,6 +54,8 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
   int cishu = 1, feiyong = 500;
   // 监听
   var listenXZ;
+  // 是否可以点击启动
+  bool isXiazhu = true;
 
   @override
   void initState() {
@@ -100,6 +104,8 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
         animationController?.stop();
         setState(() {
           isShow = false;
+          isTiaoguoLW = false;
+          isXiazhu = true;
         });
       }
     });
@@ -242,7 +248,9 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                                 if(sp.getBool('mf2_queren') == null || sp.getBool('mf2_queren') == false){
                                   MyUtils.goTransparentPageCom(context, XiaZhuQueRenPage(cishu: cishu.toString(), feiyong: feiyong.toString(), title: '金星魔方',));
                                 }else{
-                                  doPostPlayRoulette(cishu.toString());
+                                  if(MyUtils.checkClick() && isShow == false && isXiazhu) {
+                                    doPostPlayRoulette(cishu.toString());
+                                  }
                                 }
                               }),
                               child: SizedBox(
@@ -490,7 +498,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                           ),
                         ],
                       ),
-                      WidgetUtils.commonSizedBox(30, 0),
+                      const Spacer(),
                     ],
                   ),
                   //奖池
@@ -689,7 +697,20 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                     margin: EdgeInsets.only(top: ScreenUtil().setHeight(140)),
                     alignment: Alignment.center,
                     child: SVGAImage(animationController!),
-                  ) : WidgetUtils.commonSizedBox(0, 0)
+                  ) : WidgetUtils.commonSizedBox(0, 0),
+                  // 如果没有跳过动画，则直接显示图片
+                  isTiaoguoLW ? Center(
+                    child: SizedBox(
+                      height: 250.h,
+                      width: 250.h,
+                      child: Column(
+                        children: [
+                          WidgetUtils.commonSizedBox(30.h, 0),
+                          WidgetUtils.showImagesNet(list[0].img!, 180.h, 180.h),
+                        ],
+                      ),
+                    ),
+                  ) : const Text('')
                 ],
               ),
             ),
@@ -737,6 +758,9 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
   int zonge =0;
   /// 魔方转盘竞猜
   Future<void> doPostPlayRoulette(String number) async {
+    setState(() {
+      isXiazhu = false;
+    });
     Map<String, dynamic> params = <String, dynamic>{
       'number': number, //数量
       'room_id': widget.roomId, //房间id
@@ -753,16 +777,25 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
           zonge = bean.data!.total as int;
           // 如果是跳过动画，直接展示数据
           if(isTiaoguo){
+            setState(() {
+              isTiaoguoLW = false;
+            });
             // ignore: use_build_context_synchronously
             MyUtils.goTransparentPageCom(context, MoFangDaoJuPage(list: list, zonge: zonge, title: '金星魔方'));
           }else{
+            Future.delayed(const Duration(milliseconds: 400), () {
+              // 延迟执行的代码
+              setState(() {
+                isTiaoguoLW = true;
+              });
+            });
             playSound();
             setState(() {
               isShow = true;
             });
             animationController?.reset();
             animationController?.forward();
-            Future.delayed(const Duration(milliseconds: 2000), () {
+            Future.delayed(const Duration(milliseconds: 3000), () {
               // 延迟执行的代码
               MyUtils.goTransparentPageCom(context, MoFangDaoJuPage(list: list, zonge: zonge, title: '金星魔方'));
             });
@@ -771,9 +804,9 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
           setState(() {
             if(jinbi.contains('w')){
               // 目的是先把 1w 转换成 10000
-              jinbi = (double.parse(jinbi.substring(0,jinbi.length - 1)) * 1000).toString();
+              jinbi = (double.parse(jinbi.substring(0,jinbi.length - 1)) * 10000).toString();
               // 减去花费的V豆
-              jinbi = '${(double.parse(jinbi) - int.parse(number)*20)/1000}w';
+              jinbi = '${(double.parse(jinbi) - int.parse(number)*20)/10000}w';
             }else{
               jinbi = (double.parse(jinbi) - int.parse(number)*20).toString();
             }

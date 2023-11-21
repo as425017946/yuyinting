@@ -1,20 +1,18 @@
 class MyHttpConfig{
-  static const int connectTimeOut = 5000;//连接超时时间毫秒
-  static const int receiveTimeout = 5000;//接收超时时间毫秒
+  static const int connectTimeOut = 10000;//连接超时时间毫秒
+  static const int receiveTimeout = 10000;//接收超时时间毫秒
   static const int successCode = 200;//成功返回的标识
   static const int noinfoCode = 400;//失败
   static const int errorloginCode = 401;//登录失效
   static const int errorHiCode = 20001;//
   static const int errorRoomCode = 10001;//10001需输入密码
 
-  //测试上传
-  static const String uploadUrl = 'http://192.168.100.121:18089/upload';
   //鹏飞测试环境
   // static const String baseURL = "http://192.168.0.51/api";
   //赵增测试环境
-  static const String baseURL = "http://192.168.0.53/api";
+  // static const String baseURL = "http://192.168.0.53/api";
   //正式环境
-  // static const String baseURL = "https://yy.sunvua.com/api";
+  static const String baseURL = "http://18.163.74.49:8080/api";
 
   /// 文件上传
   // file方式上传

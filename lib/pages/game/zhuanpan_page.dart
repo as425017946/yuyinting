@@ -41,9 +41,9 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
       setState(() {
         if(jinbi.contains('w')){
           // 目的是先把 1w 转换成 10000
-          jinbi = (double.parse(jinbi.substring(0,jinbi.length - 1)) * 1000).toString();
+          jinbi = (double.parse(jinbi.substring(0,jinbi.length - 1)) * 10000).toString();
           // 减去花费的V豆
-          jinbi = '${(double.parse(jinbi) - event.jine)/1000}w';
+          jinbi = '${(double.parse(jinbi) - event.jine)/10000}w';
         }else{
           jinbi = (double.parse(jinbi) - event.jine).toString();
         }

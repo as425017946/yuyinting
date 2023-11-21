@@ -82,10 +82,6 @@ class _GPShowOnePageState extends State<GPShowOnePage> with TickerProviderStateM
                   ),
                 ),
               ),
-              // SlideTransition(
-              //   position: animation,
-              //   child: WidgetUtils.showImages('assets/images/saiche/car1.png', 30.h, 60.h),
-              // )
             ],
           ),
         ),

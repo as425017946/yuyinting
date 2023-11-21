@@ -48,7 +48,7 @@ class _MoFangBeiBaoPageState extends State<MoFangBeiBaoPage> {
                 children: [
                   WidgetUtils.commonSizedBox(5, 0),
                   WidgetUtils.showImagesNet(listPl[index].img!,
-                      ScreenUtil().setHeight(100), ScreenUtil().setHeight(140)),
+                      ScreenUtil().setHeight(120), ScreenUtil().setHeight(110)),
                   WidgetUtils.onlyTextCenter(
                       listPl[index].name!,
                       StyleUtils.getCommonTextStyle(
@@ -140,6 +140,7 @@ class _MoFangBeiBaoPageState extends State<MoFangBeiBaoPage> {
                     itemBuilder: _initlistdata,
                   ),
                 )),
+                WidgetUtils.commonSizedBox(20.h, 0),
               ],
             ),
           )

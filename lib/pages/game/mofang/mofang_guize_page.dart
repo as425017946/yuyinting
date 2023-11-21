@@ -20,7 +20,16 @@ class _MoFangGuiZePageState extends State<MoFangGuiZePage> {
       backgroundColor: Colors.black54,
       body: Column(
         children: [
-          WidgetUtils.commonSizedBox(380.h, 0),
+          GestureDetector(
+            onTap: (() {
+              Navigator.pop(context);
+            }),
+            child: Container(
+              height: 380.h,
+              width: double.infinity,
+              color: Colors.transparent,
+            ),
+          ),
           Expanded(
               child: Container(
             decoration: const BoxDecoration(
@@ -146,54 +155,54 @@ class _MoFangGuiZePageState extends State<MoFangGuiZePage> {
                         ],
                       ),
                       WidgetUtils.commonSizedBox(30.h, 0),
+                      // Container(
+                      //   height: 54.h,
+                      //   width: 400.h,
+                      //   decoration: const BoxDecoration(
+                      //     image: DecorationImage(
+                      //       image:
+                      //           AssetImage('assets/images/mofang_gz_btn2.png'),
+                      //       fit: BoxFit.fill,
+                      //     ),
+                      //   ),
+                      //   child: WidgetUtils.onlyTextCenter(
+                      //       '蓝色魔方（20V豆、钻石/次）奖励概率：',
+                      //       StyleUtils.getCommonTextStyle(
+                      //           color: Colors.white, fontSize: 24.sp)),
+                      // ),
                       Container(
-                        height: 54.h,
-                        width: 400.h,
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            image:
-                                AssetImage('assets/images/mofang_gz_btn2.png'),
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                        child: WidgetUtils.onlyTextCenter(
-                            '蓝色魔方（20V豆、钻石/次）奖励概率：',
-                            StyleUtils.getCommonTextStyle(
-                                color: Colors.white, fontSize: 24.sp)),
-                      ),
-                      Container(
-                        height: 500.h,
+                        height: 580.h,
                         margin: EdgeInsets.only(left: 20.h, right: 20.h),
                         decoration: const BoxDecoration(
                           image: DecorationImage(
                             image:
-                                AssetImage('assets/images/zhuanpan_gz_sm1.png'),
+                                AssetImage('assets/images/mofang_jc_bg1.png'),
                             fit: BoxFit.fitWidth,
                           ),
                         ),
                       ),
+                      // Container(
+                      //   height: 54.h,
+                      //   width: 400.h,
+                      //   decoration: const BoxDecoration(
+                      //     image: DecorationImage(
+                      //       image:
+                      //           AssetImage('assets/images/mofang_gz_btn2.png'),
+                      //       fit: BoxFit.fill,
+                      //     ),
+                      //   ),
+                      //   child: WidgetUtils.onlyTextCenter(
+                      //       '金色魔方（500V豆、钻石/次）奖励概率：',
+                      //       StyleUtils.getCommonTextStyle(
+                      //           color: Colors.white, fontSize: 24.sp)),
+                      // ),
                       Container(
-                        height: 54.h,
-                        width: 400.h,
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            image:
-                                AssetImage('assets/images/mofang_gz_btn2.png'),
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                        child: WidgetUtils.onlyTextCenter(
-                            '金色魔方（500V豆、钻石/次）奖励概率：',
-                            StyleUtils.getCommonTextStyle(
-                                color: Colors.white, fontSize: 24.sp)),
-                      ),
-                      Container(
-                        height: 500.h,
+                        height: 600.h,
                         margin: EdgeInsets.only(left: 20.h, right: 20.h),
                         decoration: const BoxDecoration(
                           image: DecorationImage(
                             image:
-                                AssetImage('assets/images/zhuanpan_gz_sm1.png'),
+                            AssetImage('assets/images/mofang_jc_bg2.png'),
                             fit: BoxFit.fitWidth,
                           ),
                         ),

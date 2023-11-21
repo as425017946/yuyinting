@@ -38,11 +38,9 @@ class MinePage extends StatefulWidget {
 class _MinePageState extends State<MinePage>{
 
 
-  var guizuType = 0, gender = 0, isFirst = 0;
+  var guizuType = 0, isFirst = 0;
   var listen;
-  String headImg = '',
-      nickName = '',
-      userNumber = '',
+  String userNumber = '',
       care = '',
       beCare = '',
       lookMe = '',
@@ -63,7 +61,7 @@ class _MinePageState extends State<MinePage>{
             const ZhuangbanPage(),
           ),
         ).then((value) {
-          doPostMyIfon();
+          // doPostMyIfon();
         });
       } else if (event.title == '公会中心') {
         if(sp.getString('shimingzhi').toString() == '2' || sp.getString('shimingzhi').toString() == '3'){
@@ -78,7 +76,7 @@ class _MinePageState extends State<MinePage>{
                 const GonghuiHomePage(),
               ),
             ).then((value) {
-              doPostMyIfon();
+              // doPostMyIfon();
             });
           }else{
             if(mounted){
@@ -89,7 +87,7 @@ class _MinePageState extends State<MinePage>{
                       return MyGonghuiPage(type: identity,);
                     }));
               }).then((value){
-                doPostMyIfon();
+                // doPostMyIfon();
               });
             }
           }
@@ -178,11 +176,11 @@ class _MinePageState extends State<MinePage>{
                         const MyInfoPage(),
                       ),
                     ).then((value) {
-                      doPostMyIfon();
+                      // doPostMyIfon();
                     });
                   }),
                   child: WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(90),
-                      ScreenUtil().setHeight(90), headImg),
+                      ScreenUtil().setHeight(90), sp.getString('user_headimg').toString()),
                 ),
                 WidgetUtils.commonSizedBox(0, 15),
                 Expanded(
@@ -193,7 +191,7 @@ class _MinePageState extends State<MinePage>{
                         child: Row(
                           children: [
                             Text(
-                              nickName,
+                              sp.getString('nickname').toString(),
                               style: StyleUtils.getCommonTextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.w600,
@@ -207,7 +205,7 @@ class _MinePageState extends State<MinePage>{
                               //边框设置
                               decoration: BoxDecoration(
                                 //背景
-                                color: gender == 1
+                                color: sp.getInt('user_gender') == 1
                                     ? MyColors.dtBlue
                                     : MyColors.dtPink,
                                 //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
@@ -215,7 +213,7 @@ class _MinePageState extends State<MinePage>{
                                     Radius.circular(20.0)),
                               ),
                               child: WidgetUtils.showImages(
-                                  gender == 1
+                                  sp.getInt('user_gender') == 1
                                       ? 'assets/images/nan.png'
                                       : 'assets/images/nv.png',
                                   12,
@@ -448,7 +446,7 @@ class _MinePageState extends State<MinePage>{
             /// 展示信息
             WidgetUtils.containerNo(
                 pad: 20,
-                height: ScreenUtil().setHeight(650),
+                height: 670.h,
                 width: double.infinity,
                 color: Colors.white,
                 ra: 20,
@@ -588,9 +586,6 @@ class _MinePageState extends State<MinePage>{
             sp.setString('versionStatus', bean.data!.status!);
             sp.setString('shimingzhi', bean.data!.auditStatus.toString());
             sp.setString("user_headimg", bean.data!.avatar!);
-            headImg = bean.data!.avatar!;
-            gender = bean.data!.gender as int;
-            nickName = bean.data!.nickname!;
             userNumber = bean.data!.number.toString();
             care = bean.data!.followNum.toString();
             beCare = bean.data!.isFollowNum.toString();
@@ -598,7 +593,6 @@ class _MinePageState extends State<MinePage>{
             guizuType = bean.data!.nobleId as int;
             identity = bean.data!.identity!;
           });
-          LogE('身份$identity');
           break;
         case MyHttpConfig.errorloginCode:
           // ignore: use_build_context_synchronously

@@ -152,7 +152,7 @@ class _EditGHHeadPageState extends State<EditGHHeadPage> {
     var result = await FlutterImageCompress.compressAndGetFile(
       path, targetPath,
       quality: 50,
-      rotate: 180,
+      rotate: 0, // 旋转角度
     );
     Loading.show("头像上传中...");
     var name = path.substring(path.lastIndexOf("/") + 1, path.length);

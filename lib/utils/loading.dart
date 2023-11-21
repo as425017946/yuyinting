@@ -10,14 +10,20 @@ class Loading {
       ..displayDuration = const Duration(milliseconds: 2000)
       ..indicatorType = EasyLoadingIndicatorType.ring
       ..loadingStyle = EasyLoadingStyle.custom
+      /// 指示器的大小, 默认40.0.
       ..indicatorSize = 35.0
       ..lineWidth = 2
+      /// loading的圆角大小, 默认5.0.
       ..radius = 10.0
+      /// 进度条指示器的颜色, 仅对[EasyLoadingStyle.custom]有效.
       ..progressColor = Colors.white
+      /// loading的背景色, 仅对[EasyLoadingStyle.custom]有效.
       ..backgroundColor = Colors.black.withOpacity(0.7)
+      /// 指示器的颜色, 仅对[EasyLoadingStyle.custom]有效.
       ..indicatorColor = Colors.white
       ..textColor = Colors.white
       ..maskColor = Colors.black.withOpacity(0.6)
+      /// 当loading展示的时候，是否允许用户操作.
       ..userInteractions = true
       ..dismissOnTap = false
       ..maskType = EasyLoadingMaskType.custom;

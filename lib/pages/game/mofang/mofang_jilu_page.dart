@@ -109,7 +109,16 @@ class _MoFangJiLuPageState extends State<MoFangJiLuPage> {
       backgroundColor: Colors.black54,
       body: Column(
         children: [
-          WidgetUtils.commonSizedBox(380.h, 0),
+          GestureDetector(
+            onTap: (() {
+              Navigator.pop(context);
+            }),
+            child: Container(
+              height: 380.h,
+              width: double.infinity,
+              color: Colors.transparent,
+            ),
+          ),
           Expanded(
               child: Container(
                 decoration: const BoxDecoration(

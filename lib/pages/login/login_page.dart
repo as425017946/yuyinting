@@ -619,8 +619,9 @@ class _LoginPageState extends State<LoginPage> {
           sp.setString('user_phone', loginBean.data!.phone!);
           sp.setString('nickname', loginBean.data!.nickname!);
           sp.setString("user_token", loginBean.data!.token!);
-          // sp.setString("user_headimg_id", loginBean.data!.avatar.toString());
           sp.setString("user_headimg", loginBean.data!.avatarUrl!);
+          sp.setString("user_headimg_id", loginBean.data!.avatar!.toString());
+          sp.setInt("user_gender", loginBean.data!.gender!);
           //跳转并关闭当前页面
           //ignore: use_build_context_synchronously
           Navigator.pushAndRemoveUntil(

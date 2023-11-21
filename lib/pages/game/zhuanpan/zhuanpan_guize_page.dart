@@ -22,7 +22,16 @@ class _ZhuanPanGuiZePageState extends State<ZhuanPanGuiZePage> {
       backgroundColor: Colors.black54,
       body: Column(
         children: [
-          WidgetUtils.commonSizedBox(500.h, 0),
+          GestureDetector(
+            onTap: (() {
+              Navigator.pop(context);
+            }),
+            child: Container(
+              height: 500.h,
+              width: double.infinity,
+              color: Colors.transparent,
+            ),
+          ),
           Expanded(
               child: Container(
             height: 1000.h,

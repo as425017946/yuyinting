@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:auto_orientation/auto_orientation.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:yuyinting/colors/my_colors.dart';
+import 'package:yuyinting/pages/gongping/gp_hi_page.dart';
 import 'package:yuyinting/pages/home/paidui_page.dart';
 import 'package:yuyinting/pages/home/shoucang_page.dart';
 import 'package:yuyinting/pages/home/ts/ts_car_page.dart';
@@ -14,8 +18,11 @@ import 'package:yuyinting/pages/login/edit_info_page.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import '../../main.dart';
+import '../../utils/SlideAnimationController.dart';
 import '../../utils/log_util.dart';
+import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
+import 'home_items.dart';
 ///首页
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -24,14 +31,13 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin{
+class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin,SingleTickerProviderStateMixin{
 
   @override
   bool get wantKeepAlive => true;
 
   int _currentIndex = 1;
   late final PageController _controller;
-
   bool isFirst = true;
 
   @override
@@ -54,13 +60,54 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin{
       MyUtils.goTransparentPageCom(context, const EditInfoPage());
     }
 
-    MyUtils.goTransparentPageCom(context, const TSCarPage());
+    // MyUtils.goTransparentPageCom(context, const TSCarPage());
     quanxian();
+
   }
 
   Future<void> quanxian() async {
-    PermissionStatus status = await Permission.storage.request();
-    LogE('权限状态$status');
+    if (Platform.isAndroid) {
+      var androidInfo = await DeviceInfoPlugin().androidInfo;
+      var release = androidInfo.version.release;
+      // 判断android版本是否大于13
+      if(int.parse(release) >= 13){
+        Map<Permission, PermissionStatus> statuses = await [
+          Permission.audio,
+          Permission.videos,
+          Permission.camera,
+          Permission.photos,
+          Permission.microphone,
+        ].request();
+        // 检查权限状态
+        if (statuses[Permission.audio] == PermissionStatus.granted &&
+            statuses[Permission.videos] == PermissionStatus.granted &&
+            statuses[Permission.camera] == PermissionStatus.granted &&
+            statuses[Permission.photos] == PermissionStatus.granted &&
+            statuses[Permission.microphone] == PermissionStatus.granted) {
+          // 所有权限都已授予，执行你的操作
+
+        } else {
+          // 用户拒绝了某些权限，后弹提示语
+          MyToastUtils.showToastBottom('您拒绝了一些权限申请，后续使用app需要在app设置权限里面打开后才能正常使用！');
+        }
+      }else{
+        Map<Permission, PermissionStatus> statuses = await [
+          Permission.storage,
+          Permission.camera,
+          Permission.microphone,
+        ].request();
+        // 检查权限状态
+        if (statuses[Permission.storage] == PermissionStatus.granted &&
+            statuses[Permission.camera] == PermissionStatus.granted &&
+            statuses[Permission.microphone] == PermissionStatus.granted) {
+          // 所有权限都已授予，执行你的操作
+
+        } else {
+          // 用户拒绝了某些权限，后弹提示语
+          MyToastUtils.showToastBottom('您拒绝了一些权限申请，后续使用app需要在app设置权限里面打开后才能正常使用！');
+        }
+      }
+    }
   }
 
   @override
@@ -347,25 +394,28 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin{
               ),
             ),
             Expanded(
-              child: PageView(
-                controller: _controller,
-                onPageChanged: (index) {
-                  setState(() {
-                    // 更新当前的索引值
-                    _currentIndex = index;
-                  });
-                },
-                children: const [
-                  ShoucangPage(),
-                  TuijianPage(),
-                  PaiduiPage(),
-                  YouxiPage(),
-                  ZaixianPage(),
-                ],
+              child: Transform.translate(
+                offset: Offset(0, -2.h),
+                child: PageView(
+                  controller: _controller,
+                  onPageChanged: (index) {
+                    setState(() {
+                      // 更新当前的索引值
+                      _currentIndex = index;
+                    });
+                  },
+                  children: const [
+                    ShoucangPage(),
+                    TuijianPage(),
+                    PaiduiPage(),
+                    YouxiPage(),
+                    ZaixianPage(),
+                  ],
+                ),
               ),
             )
           ],
-        )
+        ),
     );
   }
 }

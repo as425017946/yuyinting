@@ -224,10 +224,10 @@ class DataUtils{
     return whoLockMe.fromJson(respons!);
   }
 
-  /// 用户个人主页详情
+  /// 个人主页
   static Future<myHomeBean> postMyHome(Map<String,dynamic> params) async {
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.myHome, {}, params);
-    print("用户个人主页详情：$respons");
+    print("个人主页：$respons");
     return myHomeBean.fromJson(respons!);
   }
 

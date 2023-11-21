@@ -177,13 +177,17 @@ class _RoomBG2PageState extends State<RoomBG2Page> with AutomaticKeepAliveClient
     String targetPath = '';
     if(path.toString().contains('.gif') || path.toString().contains('.GIF')){
       targetPath = "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.gif";
-    }else{
+    }else if(path.toString().contains('.jpg') || path.toString().contains('.GPG')){
       targetPath = "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
+    }else if(path.toString().contains('.jpeg') || path.toString().contains('.GPEG')){
+      targetPath = "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpeg";
+    }else{
+      targetPath = "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.png";
     }
     var result = await FlutterImageCompress.compressAndGetFile(
       path, targetPath,
       quality: 50,
-      rotate: 180,
+      rotate: 0, // 旋转角度
     );
     Loading.show("上传中...");
     var name = path.substring(path.lastIndexOf("/") + 1, path.length);

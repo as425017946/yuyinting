@@ -135,7 +135,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
                               sp.getString('nickname').toString(),
                               StyleUtils.getCommonTextStyle(
                                   color: Colors.white,
-                                  fontSize: ScreenUtil().setSp(38),
+                                  fontSize: 35.sp,
                                   fontWeight: FontWeight.w600)),
                           WidgetUtils.commonSizedBox(5, 0),
                           Row(
@@ -167,7 +167,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
                             }),
                             child: Container(
                               constraints: BoxConstraints(
-                                maxWidth: ScreenUtil().setHeight(150),
+                                maxWidth: ScreenUtil().setHeight(180),
                                 minHeight: ScreenUtil().setHeight(38),
                               ),
                               padding: const EdgeInsets.only(left: 8, right: 8),
@@ -411,7 +411,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
 
   /// 关于我们
   Future<void> doPostMyIfon() async {
-    LogE('token ${sp.getString('user_token')}');
+    LogE('token ${sp.getString('user_id')}');
     Loading.show(MyConfig.successTitle);
     Map<String, dynamic> params = <String, dynamic>{
       'uid': sp.getString('user_id')

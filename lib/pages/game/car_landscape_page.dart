@@ -382,7 +382,7 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
   Timer? _timer, _timer2, _timer3,_timer4;
   int _currentPage = 0;
 
-  int luck = 0, sum = 20, sumBG = 0, playTime = 46;
+  int luck = 6, sum = 20, sumBG = 0, playTime = 46;
   // 是否可以点击下注
   bool isShow = true;
   // 游戏是否开始了
@@ -545,7 +545,9 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
         sum--;
       });
       if (sum == 0) {
-        playSound3();
+        if(sp.getString('car_audio') == null || sp.getString('car_audio').toString() == '开启') {
+          playSound3();
+        }
         _timer2!.cancel();
         setState(() {
           isShow = false;
@@ -994,7 +996,7 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
 
     // 接受下注的im信息
     listenZDY = eventBus.on<ZDYBack>().listen((event) {
-      if (event.map!['avatar'].toString().isNotEmpty) {
+      if (event.map!['avatar'].toString().isNotEmpty && isShow) {
         if (listZDY.length < 8) {
           Map<dynamic, dynamic> map = {};
           map['avatar'] = event.map!['avatar'];
@@ -1427,22 +1429,31 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
                               ),
                             ),
                             WidgetUtils.commonSizedBox(2.5, 0),
-                            Container(
-                              height: 20,
-                              width: 55,
-                              //边框设置
-                              decoration: const BoxDecoration(
-                                  image: DecorationImage(
-                                    //背景图片修饰
-                                    image: AssetImage(
-                                        "assets/images/car_anniu.png"),
-                                    fit: BoxFit.fill, //覆盖
-                                  )),
-                              child: WidgetUtils.onlyTextCenter(
-                                  '游戏规则',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: Colors.white,
-                                      fontSize: 11)),
+                            GestureDetector(
+                              onTap: ((){
+                                if(sp.getString('car_audio') == null || sp.getString('car_audio').toString() == '开启'){
+                                  sp.setString('car_audio', '关闭');
+                                }else{
+                                  sp.setString('car_audio', '开启');
+                                }
+                              }),
+                              child: Container(
+                                height: 20,
+                                width: 55,
+                                //边框设置
+                                decoration: const BoxDecoration(
+                                    image: DecorationImage(
+                                      //背景图片修饰
+                                      image: AssetImage(
+                                          "assets/images/car_anniu.png"),
+                                      fit: BoxFit.fill, //覆盖
+                                    )),
+                                child: WidgetUtils.onlyTextCenter(
+                                    sp.getString('car_audio') == null || sp.getString('car_audio').toString() == '开启' ? '关闭音效' : '开启音效',
+                                    StyleUtils.getCommonTextStyle(
+                                        color: sp.getString('car_audio') == null || sp.getString('car_audio').toString() == '开启' ? Colors.white :  MyColors.peopleYellow,
+                                        fontSize: 11)),
+                              ),
                             ),
                             WidgetUtils.commonSizedBox(2.5, 0),
                             GestureDetector(
@@ -1660,10 +1671,6 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
                               return;
                             }
                             doPostCarBet('12');
-                            playSound2();
-                            setState(() {
-                              listA[11] = true;
-                            });
                           }
                         }),
                         child: Stack(
@@ -1676,7 +1683,7 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
                                 double.infinity,
                                 50),
                             WidgetUtils.onlyText(
-                                '10000',
+                                listJL[11].toString(),
                                 StyleUtils.getCommonTextStyle(
                                     color: Colors.white,
                                     fontSize: 12,
@@ -1742,7 +1749,9 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
           setState(() {
             listJL[int.parse(benSN) - 1] =
                 listJL[int.parse(benSN) - 1] + xiazhujine;
-            playSound2();
+            if(sp.getString('car_audio') == null || sp.getString('car_audio').toString() == '开启') {
+              playSound2();
+            }
             if (listA[int.parse(benSN) - 1] == false) {
               setState(() {
                 listA[int.parse(benSN) - 1] = true;

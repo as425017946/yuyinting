@@ -3,8 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:yuyinting/widget/SVGASimpleImage.dart';
 import '../../bean/Common_bean.dart';
 import '../../bean/homeTJBean.dart';
 import '../../colors/my_colors.dart';
@@ -13,10 +15,12 @@ import '../../db/DatabaseHelper.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../utils/loading.dart';
+import '../../utils/log_util.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
+import '../gongping/gp_quanxian_page.dart';
 import '../room/room_page.dart';
 import '../room/room_ts_mima_page.dart';
 ///推荐页面
@@ -138,7 +142,11 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
                     ],
                   ),
                 ),
-                WidgetUtils.showImages('assets/images/Hi.png', 25, 60),
+                SizedBox(
+                  height: 80.h,
+                  width: 120.h,
+                  child: const SVGASimpleImage(assetsName: 'assets/svga/home_gensui.svga',),
+                ),
                 WidgetUtils.commonSizedBox(0, 20),
 
               ],
@@ -147,6 +155,25 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
         ),
       ],
     );
+  }
+
+  Future<void> quanxian(String roomId) async {
+    // PermissionStatus status = await Permission.storage.request();
+    // LogE('权限状态$status');
+    // 请求多个权限
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.microphone,
+    ].request();
+    // 检查权限状态
+    if (statuses[Permission.microphone] == PermissionStatus.granted) {
+      LogE('权限状态$statuses');
+      // 所有权限都已授予，执行你的操作
+      doPostBeforeJoin(roomId);
+    } else {
+      // 用户拒绝了某些权限，后弹提示语
+      // ignore: use_build_context_synchronously
+      MyUtils.goTransparentPageRoom(context, const GPQuanXianPage());
+    }
   }
 
 
@@ -162,13 +189,23 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
       onRefresh: _onRefresh,
       child: SingleChildScrollView(
         child: Container(
-          color: Colors.white,
+            decoration: const BoxDecoration(
+                gradient: LinearGradient(      //渐变位置
+                    begin: Alignment.topCenter, //右上
+                    end: Alignment.bottomCenter, //左下
+                    stops: [0.0, 1.0],         //[渐变起始点, 渐变结束点]
+                    //渐变颜色[始点颜色, 结束颜色]
+                    colors: [
+                      MyColors.homeTopBG,
+                      Colors.white
+                    ]
+                )
+            ),
           child: Column(
             children: [
               Container(
                 height: ScreenUtil().setHeight(80),
                 padding: const EdgeInsets.only(top: 10, bottom: 10),
-                color: MyColors.homeTopBG,
                 child: Container(
                   margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                   height: ScreenUtil().setHeight(50),
@@ -200,15 +237,6 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
                     Container(
                       padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                       width: double.infinity,
-                      decoration: const BoxDecoration(
-                          gradient: LinearGradient(      //渐变位置
-                              begin: Alignment.topCenter, //右上
-                              end: Alignment.bottomCenter, //左下
-                              stops: [0.0, 1.0],         //[渐变起始点, 渐变结束点]
-                              //渐变颜色[始点颜色, 结束颜色]
-                              colors: [Color.fromRGBO(91, 70, 185, 1), Color.fromRGBO(255, 255, 255, 1)]
-                          )
-                      ),
                       child: Column(
                         children: [
                           ///轮播图
@@ -285,7 +313,7 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
                                     onIndexChanged: (index){
                                     },
                                     onTap: (index){
-                                      doPostBeforeJoin(listRoom[index].id.toString());
+                                      quanxian(listRoom[index].id.toString());
                                     },
                                   ),
                                 ),
@@ -319,7 +347,7 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
                                         autoplayDelay: 4000,
                                         duration: 2000,
                                         onTap: (index){
-                                          doPostBeforeJoin(listRoom2[index].id.toString());
+                                          quanxian(listRoom2[index].id.toString());
                                         },
                                       ),
                                     )),
@@ -351,7 +379,8 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
                                         autoplayDelay: 4000,
                                         duration: 2000,
                                         onTap: (index){
-                                          doPostBeforeJoin(listRoom3[index].id.toString());
+                                          quanxian(listRoom3[index].id.toString());
+                                          // doPostBeforeJoin(listRoom3[index].id.toString());
                                         },
                                       ),
                                     )),

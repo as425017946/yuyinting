@@ -43,6 +43,8 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
   bool isShow = false;
   // 是否跳过动画
   bool isTiaoguo = false;
+  // 是否跳过动画展示图片使用
+  bool isTiaoguoLW = false;
   // 是否点击更多
   bool isMore = false;
   SVGAAnimationController? animationController;
@@ -50,6 +52,8 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
   int cishu = 1, feiyong = 20;
   // 监听
   var listenXZ;
+  // 是否可以点击启动
+  bool isXiazhu = true;
 
   @override
   void initState() {
@@ -88,6 +92,8 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
         animationController?.stop();
         setState(() {
           isShow = false;
+          isTiaoguoLW = false;
+          isXiazhu = true;
         });
       }
     });
@@ -178,38 +184,6 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
                         ],
                       ),
                       WidgetUtils.commonSizedBox(40.h, 0),
-                      // // 中奖信息滚动
-                      // Stack(
-                      //   children: [
-                      //     Opacity(
-                      //       opacity: 0.14,
-                      //       child: Container(
-                      //         width: ScreenUtil().setHeight(310),
-                      //         height: ScreenUtil().setHeight(42),
-                      //         decoration: const BoxDecoration(
-                      //           //背景
-                      //           color: Colors.white,
-                      //           //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                      //           borderRadius:
-                      //           BorderRadius.all(Radius.circular(21)),
-                      //         ),
-                      //       ),
-                      //     ),
-                      //     SizedBox(
-                      //       width: ScreenUtil().setHeight(310),
-                      //       height: ScreenUtil().setHeight(42),
-                      //       child: Marquee(
-                      //         speed: 10,
-                      //         child: Text(
-                      //           '恭喜某某用户单抽喜中价值500元的小柴一个',
-                      //           style: TextStyle(
-                      //               color: Colors.white,
-                      //               fontSize: ScreenUtil().setSp(21)),
-                      //         ),
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
                       // 切换魔方svga图
                       Opacity(opacity: isShow == false ? 1 : 0 ,
                         child: Stack(
@@ -240,7 +214,9 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
                                 if(sp.getBool('mf1_queren') == null || sp.getBool('mf1_queren') == false){
                                   MyUtils.goTransparentPageCom(context, XiaZhuQueRenPage(cishu: cishu.toString(), feiyong: feiyong.toString(), title: '水星魔方',));
                                 }else{
-                                  doPostPlayRoulette(cishu.toString());
+                                  if(MyUtils.checkClick() && isShow == false && isXiazhu) {
+                                    doPostPlayRoulette(cishu.toString());
+                                  }
                                 }
                               }),
                               child: SizedBox(
@@ -487,7 +463,7 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
                           ),
                         ],
                       ),
-                      WidgetUtils.commonSizedBox(30, 0),
+                      const Spacer(),
                     ],
                   ),
                   //奖池
@@ -690,7 +666,20 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
                     margin: EdgeInsets.only(top: ScreenUtil().setHeight(140)),
                     alignment: Alignment.center,
                     child: SVGAImage(animationController!),
-                  ) : WidgetUtils.commonSizedBox(0, 0)
+                  ) : WidgetUtils.commonSizedBox(0, 0),
+                  // 如果没有跳过动画，则直接显示图片
+                  isTiaoguoLW ? Center(
+                    child: SizedBox(
+                      height: 250.h,
+                      width: 250.h,
+                      child: Column(
+                        children: [
+                          WidgetUtils.commonSizedBox(20.h, 0),
+                          WidgetUtils.showImagesNet(list[0].img!, 180.h, 180.h),
+                        ],
+                      ),
+                    ),
+                  ) : const Text('')
                 ],
               ),
             ),
@@ -739,6 +728,9 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
   int zonge =0;
   /// 魔方转盘竞猜
   Future<void> doPostPlayRoulette(String number) async {
+    setState(() {
+      isXiazhu = false;
+    });
     Map<String, dynamic> params = <String, dynamic>{
       'number': number, //数量
       'room_id': widget.roomId, //房间id
@@ -755,16 +747,25 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
           zonge = bean.data!.total as int;
           // 如果是跳过动画，直接展示数据
           if(isTiaoguo){
+            setState(() {
+              isTiaoguoLW = false;
+            });
             // ignore: use_build_context_synchronously
             MyUtils.goTransparentPageCom(context, MoFangDaoJuPage(list: list, zonge: zonge, title: '水星魔方'));
           }else{
             playSound();
+            Future.delayed(const Duration(milliseconds: 400), () {
+              // 延迟执行的代码
+              setState(() {
+                isTiaoguoLW = true;
+              });
+            });
             setState(() {
               isShow = true;
             });
             animationController?.reset();
             animationController?.forward();
-            Future.delayed(const Duration(milliseconds: 2000), () {
+            Future.delayed(const Duration(milliseconds: 3000), () {
               // 延迟执行的代码
               MyUtils.goTransparentPageCom(context, MoFangDaoJuPage(list: list, zonge: zonge, title: '水星魔方'));
             });
@@ -773,13 +774,14 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
           setState(() {
             if(jinbi.contains('w')){
               // 目的是先把 1w 转换成 10000
-              jinbi = (double.parse(jinbi.substring(0,jinbi.length - 1)) * 1000).toString();
+              jinbi = (double.parse(jinbi.substring(0,jinbi.length - 1)) * 10000).toString();
               // 减去花费的V豆
-              jinbi = '${(double.parse(jinbi) - int.parse(number)*20)/1000}w';
+              jinbi = '${(double.parse(jinbi) - int.parse(number)*20)/10000}w';
             }else{
               jinbi = (double.parse(jinbi) - int.parse(number)*20).toString();
             }
           });
+
           break;
         case MyHttpConfig.errorloginCode:
         // ignore: use_build_context_synchronously

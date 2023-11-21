@@ -80,7 +80,7 @@ dependencies:
   # 环信
   im_flutter_sdk: ^4.1.0
   #  权限处理插件依赖项
-  permission_handler: ^8.3.0
+  permission_handler: ^11.0.0
   # 验证码
   pin_code_fields: ^8.0.1
   # 刷新插件
@@ -115,6 +115,10 @@ dependencies:
   image_gallery_saver: ^2.0.3
   # 监听网络状态
   connectivity_plus: ^5.0.1
+  # bugly
+  flutter_bugly: ^0.4.4
+  # 查看设备版本
+  device_info_plus: ^8.0.0
 
 
 dev_dependencies:

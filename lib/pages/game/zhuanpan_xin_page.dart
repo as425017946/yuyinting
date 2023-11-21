@@ -56,6 +56,8 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
   bool isClose = false;
   // 转几次 要花费多少
   int cishu = 1, feiyong = 100;
+  // 是否可以点击启动
+  bool isXiazhu = true;
 
   /// 播放音频
   Soundpool soundpool = Soundpool(streamType: StreamType.notification);
@@ -84,6 +86,7 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
         LogE('停止了');
         setState(() {
           isRunning = false;
+          isXiazhu = true;
         });
         // 通知用户游戏结束，可以离开页面
         eventBus.fire(ResidentBack(isBack: false));
@@ -222,7 +225,9 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
                         if(sp.getBool('zp1_queren') == null || sp.getBool('zp1_queren') == false){
                           MyUtils.goTransparentPageCom(context, XiaZhuQueRenPage(cishu: cishu.toString(), feiyong: feiyong.toString(), title: '心动转盘',));
                         }else{
-                          doPostPlayRoulette(cishu.toString());
+                          if(MyUtils.checkClick() && isRunning == false && isXiazhu) {
+                            doPostPlayRoulette(cishu.toString());
+                          }
                         }
                       }),
                       child: WidgetUtils.showImages(
@@ -322,7 +327,7 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
                       ),
                       alignment: Alignment.center,
                       child: Text(
-                        isClose == false ? '关闭音效' : '开启音效',
+                        isClose == false ? '关闭动效' : '开启动效',
                         style: TextStyle(
                             color: isClose == false
                                 ? Colors.white
@@ -518,6 +523,9 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
   int zonge =0;
   /// 魔方转盘竞猜
   Future<void> doPostPlayRoulette(String number) async {
+    setState(() {
+      isXiazhu = false;
+    });
     Map<String, dynamic> params = <String, dynamic>{
       'number': number, //数量
       'room_id': widget.roomId, //房间id
@@ -538,59 +546,59 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
           zonge = bean.data!.total as int;
           setState(() {
             switch(bean.data!.gifts![0].giftId){
-              case 5: // 心之钥
+              case 41: // 心之钥
                 int randomNum = Random().nextInt(6);
                 luckyName = randomNum;
                 break;
-              case 50: // 御龙豪杰
+              case 8: // 御龙豪杰
                 int min = 7;
                 int max = 18; // 注意这里是 18 而不是 17，因为范围是左闭右开的
                 int randomNumber = Random().nextInt(max - min) + min;
                 luckyName = randomNumber;
                 break;
-              case 130: // 甜甜圈
+              case 1: // 甜甜圈
                 int min = 19;
                 int max = 30;
                 int randomNumber = Random().nextInt(max - min) + min;
                 luckyName = randomNumber;
                 break;
-              case 160: // 云顶天宫
+              case 7: // 云顶天宫
                 int min = 31;
                 int max = 42;
                 int randomNumber = Random().nextInt(max - min) + min;
                 luckyName = randomNumber;
                 break;
-              case 260: // 魔法池
+              case 3: // 魔法池
                 int min = 43;
                 int max = 54;
                 int randomNumber = Random().nextInt(max - min) + min;
                 luckyName = randomNumber;
                 break;
-              case 560: // 电竞小柴
+              case 5: // 电竞小柴
                 int min = 55;
                 int max = 66;
                 int randomNumber = Random().nextInt(max - min) + min;
                 luckyName = randomNumber;
                 break;
-              case 990: // 蝴蝶荷塘
+              case 4: // 蝴蝶荷塘
                 int min = 67;
                 int max = 78;
                 int randomNumber = Random().nextInt(max - min) + min;
                 luckyName = randomNumber;
                 break;
-              case 400: // 幸运热气球
+              case 6: // 幸运热气球
                 int min = 79;
                 int max = 90;
                 int randomNumber = Random().nextInt(max - min) + min;
                 luckyName = randomNumber;
                 break;
-              case 1280: // 纸箱姑娘
+              case 2: // 纸箱姑娘
                 int min = 91;
                 int max = 102;
                 int randomNumber = Random().nextInt(max - min) + min;
                 luckyName = randomNumber;
                 break;
-              case 5880: // 梦回长安
+              case 9: // 梦回长安
                 int min = 103;
                 int max = 114;
                 int randomNumber = Random().nextInt(max - min) + min;
@@ -599,7 +607,9 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
             }
           });
           LogE('中奖位置$luckyName');
-          Vibrate.vibrate(); // 触发震动效果
+          if(isClose == false){
+            Vibrate.vibrate(); // 触发震动效果
+          }
           buttonOnClickStartRun();
           break;
         case MyHttpConfig.errorloginCode:

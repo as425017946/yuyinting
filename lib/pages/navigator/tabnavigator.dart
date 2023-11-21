@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:im_flutter_sdk/im_flutter_sdk.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:yuyinting/pages/message/message_page.dart';
 import 'package:yuyinting/pages/trends/trends_page.dart';
-import 'package:yuyinting/utils/log_util.dart';
+import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import '../../colors/my_colors.dart';
-import '../../main.dart';
+import '../../utils/SlideAnimationController.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/widget_utils.dart';
-import '../gongping/gp_show_one_page.dart';
+import '../gongping/gp_hi_page.dart';
+import '../gongping/gp_quanxian_page.dart';
+import '../gongping/gp_room_page.dart';
+import '../home/home_items.dart';
 import '../home/home_page.dart';
 import '../mine/mine_page.dart';
 
@@ -48,10 +49,17 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
   /// 线性动画
   late Animation<double> _animation;
 
+  /// 公屏使用
+  late SlideAnimationController slideAnimationController;
+  String path = ''; // 图片地址
+  String name = '1q直刷'; // 要展示公屏的名称
 
+  ///爆出大礼物使用
+  bool isBig = false;
+  var listen;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _currentIndex = 0;
     _controller = PageController(
@@ -67,17 +75,90 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     // 创建一个从0到360弧度的补间动画 v * 2 * π
     _animation = Tween<double>(begin: 0, end: 1).animate(_repeatController);
 
-
-    // MyUtils.goTransparentPageCom(context, GPShowOnePage());
-
     MyUtils.initSDK();
     MyUtils.addChatListener();
     MyUtils.signIn();
+
+    switch (name) {
+      case '超级转盘':
+        setState(() {
+          path = 'assets/svga/gp/gp_zp2.svga';
+        });
+        break;
+      case '心动转盘':
+        setState(() {
+          path = 'assets/svga/gp/gp_zp1.svga';
+        });
+        break;
+      case '马里奥':
+        setState(() {
+          path = 'assets/svga/gp/gp_maliao.svga';
+        });
+        break;
+      case '白鬼':
+        setState(() {
+          path = 'assets/svga/gp/gp_gui.svga';
+        });
+        break;
+      case '低贵族':
+        setState(() {
+          path = 'assets/svga/gp/gp_guizu_d.svga';
+        });
+        break;
+      case '高贵族':
+        setState(() {
+          path = 'assets/svga/gp/gp_guizu_g.svga';
+        });
+        break;
+      case '蓝魔方':
+        setState(() {
+          path = 'assets/svga/gp/gp_lan.svga';
+        });
+        break;
+      case '金魔方':
+        setState(() {
+          path = 'assets/svga/gp/gp_jin.svga';
+        });
+        break;
+      case '1q直刷':
+        setState(() {
+          path = 'assets/svga/gp/gp_1q.svga';
+        });
+        break;
+      case '1w直刷':
+        setState(() {
+          path = 'assets/svga/gp/gp_1w.svga';
+        });
+        break;
+    }
+    // 在页面中使用自定义时间和图片地址
+    slideAnimationController = SlideAnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 30), // 自定义时间
+    );
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      slideAnimationController.playAnimation();
+    });
+
+    // 中大奖使用，目前接口没有接，所以先注释
+    // setState(() {
+    //   isBig = true;
+    // });
+    listen = eventBus.on<ResidentBack>().listen((event) {
+      setState(() {
+        isBig = false;
+      });
+    });
+
+
+    // MyUtils.goTransparentPageRoom(context, const GPHiPage());
   }
 
   @override
   void dispose() {
     _repeatController.dispose();
+    slideAnimationController.dispose();
+    listen.cancel();
     super.dispose();
   }
 
@@ -138,6 +219,17 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
                       '我的', 'assets/images/ic_bottom_menu3.png', 3),
                 ]),
           ),
+
+          /// 公屏推送使用
+          HomeItems.itemAnimation(
+              path,
+              slideAnimationController.controller,
+              slideAnimationController.animation,
+              '恭喜某某用户单抽喜中价值500元的小柴一个',
+              name),
+
+          /// 爆出5w2的礼物推送使用
+          isBig ? HomeItems.itemBig('恭喜某某用户单抽喜中价值500元的小柴一个') : const Text(''),
 
           /// 房间图标转动
           isJoinRoom
@@ -206,7 +298,9 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
                             //背景
                             color: isRemove ? Colors.red[500] : Colors.red[200],
                             //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                            borderRadius: const BorderRadius.only(topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0)),
+                            borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(15.0),
+                                topRight: Radius.circular(15.0)),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,

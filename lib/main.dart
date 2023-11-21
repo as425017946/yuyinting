@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:auto_orientation/auto_orientation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yuyinting/pages/login/login_page.dart';
 import 'package:yuyinting/routes/routes.dart';
+import 'package:yuyinting/utils/log_util.dart';
 
 //定义一个全局的存储对象
 late SharedPreferences sp;
@@ -30,7 +32,18 @@ void main() async{
   /// 如果是全屏就切换竖屏
   AutoOrientation.portraitAutoMode();
 
-  runApp(const MyApp());
+  FlutterBugly.postCatchedException(() {
+    // 初始化 Bugly
+    FlutterBugly.init(
+      androidAppId: "5a93eefd46",
+      customUpgrade: true, // 调用 Android 原生升级方式
+    ).then((_result) {
+      LogE('Bugly 返回id ${_result.appId}');
+    });
+
+    runApp(const MyApp());
+  });
+
 }
 MaterialColor my_green = const MaterialColor(
   0xFF5B46B9,

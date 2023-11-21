@@ -61,6 +61,8 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
   var listen, listenZDY;
   // 当前欢乐值进度，展示值
   int huanlezhi = 0, zhanshizhi = 0;
+  // 是否可以点击启动
+  bool isXiazhu = true;
 
   /// 播放音频
   Soundpool soundpool = Soundpool(streamType: StreamType.notification);
@@ -86,6 +88,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
         LogE('停止了');
         setState(() {
           isRunning = false;
+          isXiazhu = true;
         });
         // 通知用户游戏结束，可以离开页面
         eventBus.fire(ResidentBack(isBack: false));
@@ -237,7 +240,9 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                         if(sp.getBool('zp2_queren') == null || sp.getBool('zp2_queren') == false){
                           MyUtils.goTransparentPageCom(context, XiaZhuQueRenPage(cishu: cishu.toString(), feiyong: feiyong.toString(), title: '超级转盘',));
                         }else{
-                          doPostPlayRoulette(cishu.toString());
+                          if(MyUtils.checkClick() && isRunning == false && isXiazhu) {
+                            doPostPlayRoulette(cishu.toString());
+                          }
                         }
                       }),
                       child: WidgetUtils.showImages(
@@ -353,7 +358,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                       ),
                       alignment: Alignment.center,
                       child: Text(
-                        isClose == false ? '关闭音效' : '开启音效',
+                        isClose == false ? '关闭动效' : '开启动效',
                         style: TextStyle(
                             color: isClose == false ? Colors.white : MyColors.paiduiBlue,
                             fontSize: ScreenUtil().setSp(22),
@@ -548,6 +553,9 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
   int zonge =0;
   /// 魔方转盘竞猜
   Future<void> doPostPlayRoulette(String number) async {
+    setState(() {
+      isXiazhu = false;
+    });
     Map<String, dynamic> params = <String, dynamic>{
       'number': number, //数量
       'room_id': widget.roomId, //房间id
@@ -568,59 +576,59 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
           zonge = bean.data!.total as int;
           setState(() {
             switch(bean.data!.gifts![0].giftId){
-              case 50: // 星之钥
+              case 42: // 星之钥
                 int randomNum = Random().nextInt(6);
                 luckyName = randomNum;
                 break;
-              case 1300: // 瑞麟
+              case 18: // 瑞麟
                 int min = 7;
                 int max = 18; // 注意这里是 18 而不是 17，因为范围是左闭右开的
                 int randomNumber = Random().nextInt(max - min) + min;
                 luckyName = randomNumber;
                 break;
-              case 1880: // 情定埃菲尔
+              case 12: // 情定埃菲尔
                 int min = 19;
                 int max = 30;
                 int randomNumber = Random().nextInt(max - min) + min;
                 luckyName = randomNumber;
                 break;
-              case 2660: // 霸下
+              case 17: // 霸下
                 int min = 31;
                 int max = 42;
                 int randomNumber = Random().nextInt(max - min) + min;
                 luckyName = randomNumber;
                 break;
-              case 5660: // 秒见财神
+              case 13: // 秒见财神
                 int min = 43;
                 int max = 54;
                 int randomNumber = Random().nextInt(max - min) + min;
                 luckyName = randomNumber;
                 break;
-              case 9990: // 宝象传说
+              case 14: // 宝象传说
                 int min = 55;
                 int max = 66;
                 int randomNumber = Random().nextInt(max - min) + min;
                 luckyName = randomNumber;
                 break;
-              case 12000: // 为爱起航
+              case 11: // 为爱起航
                 int min = 67;
                 int max = 78;
                 int randomNumber = Random().nextInt(max - min) + min;
                 luckyName = randomNumber;
                 break;
-              case 24880: // 北欧天马
+              case 15: // 北欧天马
                 int min = 79;
                 int max = 90;
                 int randomNumber = Random().nextInt(max - min) + min;
                 luckyName = randomNumber;
                 break;
-              case 188800: // 晚安
+              case 10: // 晚安
                 int min = 91;
                 int max = 102;
                 int randomNumber = Random().nextInt(max - min) + min;
                 luckyName = randomNumber;
                 break;
-              case 388800: // 远古巨鲲
+              case 16: // 远古巨鲲
                 int min = 103;
                 int max = 114;
                 int randomNumber = Random().nextInt(max - min) + min;
@@ -628,8 +636,9 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                 break;
             }
           });
-          LogE('中奖位置$luckyName');
-          Vibrate.vibrate(); // 触发震动效果
+          if(isClose == false){
+            Vibrate.vibrate(); // 触发震动效果
+          }
           buttonOnClickStartRun();
           break;
         case MyHttpConfig.errorloginCode:

@@ -170,7 +170,7 @@ class _EditPhotoPageState extends State<EditPhotoPage> {
     var result = await FlutterImageCompress.compressAndGetFile(
       path, targetPath,
       quality: 50,
-      rotate: 180,
+      rotate: 0, // 旋转角度
     );
     Loading.show("上传中...");
     var name = path.substring(path.lastIndexOf("/") + 1, path.length);
@@ -223,7 +223,7 @@ class _EditPhotoPageState extends State<EditPhotoPage> {
       var result = await FlutterImageCompress.compressAndGetFile(
         imgFile!.path, targetPath,
         quality: 50,
-        rotate: 180,
+        rotate: 0, // 旋转角度
       );
       var name = imgFile!.path.substring(imgFile!.path.lastIndexOf("/") + 1, imgFile!.path.length);
       FormData formdata = FormData.fromMap(

@@ -299,6 +299,17 @@ class MyUtils {
     }
   }
 
+  /// 这个是弹出有人跟你打招呼或者邀请你进入房间使用
+  static void goTransparentPageRoom(BuildContext context, Widget page) {
+    Future.delayed(const Duration(seconds: 0), () {
+      Navigator.of(context).push(PageRouteBuilder(
+          opaque: false,
+          pageBuilder: (context, animation, secondaryAnimation) {
+            return page;
+          }));
+    });
+  }
+
   static Widget myHeader() {
     return CustomHeader(
       builder: (BuildContext context, RefreshStatus? mode) {

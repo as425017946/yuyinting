@@ -12,15 +12,19 @@ import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/my_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
+import 'package:yuyinting/widget/SVGASimpleImage2.dart';
 import '../../bean/Common_bean.dart';
 import '../../bean/roomInfoBean.dart';
 import '../../colors/my_colors.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
+import '../../utils/SlideAnimationController.dart';
 import '../../utils/log_util.dart';
 import '../../utils/style_utils.dart';
 import '../../widget/SVGASimpleImage.dart';
+import '../../widget/SVGASimpleImage3.dart';
+import '../home/home_items.dart';
 import 'room_items.dart';
 
 /// 厅内
@@ -158,6 +162,11 @@ class _RoomPageState extends State<RoomPage>
   // 送礼选中了那个用户
   var listenPeople;
   List<bool> listPeople = [];
+  /// 公屏使用
+  late SlideAnimationController slideAnimationController;
+  String path = ''; // 图片地址
+  String name = '蓝魔方'; // 要展示公屏的名称
+
 
   @override
   void initState() {
@@ -591,6 +600,67 @@ class _RoomPageState extends State<RoomPage>
         }
       });
     });
+
+    switch (name) {
+      case '超级转盘':
+        setState(() {
+          path = 'assets/svga/gp/gp_zp2.svga';
+        });
+        break;
+      case '心动转盘':
+        setState(() {
+          path = 'assets/svga/gp/gp_zp1.svga';
+        });
+        break;
+      case '马里奥':
+        setState(() {
+          path = 'assets/svga/gp/gp_maliao.svga';
+        });
+        break;
+      case '白鬼':
+        setState(() {
+          path = 'assets/svga/gp/gp_gui.svga';
+        });
+        break;
+      case '低贵族':
+        setState(() {
+          path = 'assets/svga/gp/gp_guizu_d.svga';
+        });
+        break;
+      case '高贵族':
+        setState(() {
+          path = 'assets/svga/gp/gp_guizu_g.svga';
+        });
+        break;
+      case '蓝魔方':
+        setState(() {
+          path = 'assets/svga/gp/gp_lan.svga';
+        });
+        break;
+      case '金魔方':
+        setState(() {
+          path = 'assets/svga/gp/gp_jin.svga';
+        });
+        break;
+      case '1q直刷':
+        setState(() {
+          path = 'assets/svga/gp/gp_1q.svga';
+        });
+        break;
+      case '1w直刷':
+        setState(() {
+          path = 'assets/svga/gp/gp_1w.svga';
+        });
+        break;
+    }
+    // 在页面中使用自定义时间和图片地址
+    slideAnimationController = SlideAnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 30), // 自定义时间
+    );
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      slideAnimationController.playAnimation();
+    });
   }
 
   final ScrollController _scrollController = ScrollController();
@@ -921,6 +991,14 @@ class _RoomPageState extends State<RoomPage>
                             ),
                           ),
                     ),
+
+                    /// 公屏推送使用
+                    HomeItems.itemAnimation(
+                        path,
+                        slideAnimationController.controller,
+                        slideAnimationController.animation,
+                        '恭喜某某用户单抽喜中价值500元的小柴一个',
+                        name),
                   ],
                 ),
               ),
@@ -935,6 +1013,7 @@ class _RoomPageState extends State<RoomPage>
 
   /// 房间信息
   Future<void> doPostRoomInfo() async {
+    LogE('userToken ${sp.getString('user_token')}');
     Map<String, dynamic> params = <String, dynamic>{
       'room_id': widget.roomId,
     };

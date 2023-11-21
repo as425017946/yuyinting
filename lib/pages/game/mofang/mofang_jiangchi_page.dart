@@ -64,7 +64,16 @@ class _MoFangJiangChiPageState extends State<MoFangJiangChiPage> {
       backgroundColor: Colors.black54,
       body: Column(
         children: [
-          WidgetUtils.commonSizedBox(380.h, 0),
+          GestureDetector(
+            onTap: (() {
+              Navigator.pop(context);
+            }),
+            child: Container(
+              height: 380.h,
+              width: double.infinity,
+              color: Colors.transparent,
+            ),
+          ),
           Expanded(
               child: Container(
             decoration: const BoxDecoration(
@@ -99,15 +108,19 @@ class _MoFangJiangChiPageState extends State<MoFangJiangChiPage> {
                   ],
                 ),
                 WidgetUtils.commonSizedBox(30.h, 0),
-                OptionGridView(
-                  padding: EdgeInsets.only(left: 20.h, right: 20.h),
-                  itemCount: list.length,
-                  rowCount: 3,
-                  mainAxisSpacing: 10.h,
-                  // 上下间距
-                  crossAxisSpacing: 20.h,
-                  //左右间距
-                  itemBuilder: jiangChiWidget,
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: OptionGridView(
+                      padding: EdgeInsets.only(left: 20.h, right: 20.h),
+                      itemCount: list.length,
+                      rowCount: 3,
+                      mainAxisSpacing: 10.h,
+                      // 上下间距
+                      crossAxisSpacing: 20.h,
+                      //左右间距
+                      itemBuilder: jiangChiWidget,
+                    ),
+                  ),
                 )
               ],
             ),

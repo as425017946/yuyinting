@@ -577,7 +577,9 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
         sum--;
       });
       if (sum == 0) {
-        playSound3();
+        if(sp.getString('car_audio') == null || sp.getString('car_audio').toString() == '开启') {
+          playSound3();
+        }
         _timer2!.cancel();
         setState(() {
           isShow = false;
@@ -953,7 +955,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
 
     // 接受下注的im信息
     listenZDY = eventBus.on<ZDYBack>().listen((event) {
-      if (event.map!['avatar'].toString().isNotEmpty) {
+      if (event.map!['avatar'].toString().isNotEmpty && isShow) {
         if (listZDY.length < 6) {
           Map<dynamic, dynamic> map = {};
           map['avatar'] = event.map!['avatar'];
@@ -1064,12 +1066,12 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                   children: [
                     // 顶部信息
                     isShow ? SizedBox(
-                      height: 200.h,
+                      height: 240.h,
                       child: Row(
                         children: [
                           // 左侧按键
                           SizedBox(
-                            height: 200.h,
+                            height: 240.h,
                             child: Column(
                               children: [
                                 WidgetUtils.commonSizedBox(20.h, 0),
@@ -1136,6 +1138,33 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                                         '开奖记录',
                                         StyleUtils.getCommonTextStyle(
                                             color: Colors.white,
+                                            fontSize: 22.sp)),
+                                  ),
+                                ),
+                                WidgetUtils.commonSizedBox(10.h, 0),
+                                GestureDetector(
+                                  onTap: (() {
+                                    if(sp.getString('car_audio') == null || sp.getString('car_audio').toString() == '开启'){
+                                      sp.setString('car_audio', '关闭');
+                                    }else{
+                                      sp.setString('car_audio', '开启');
+                                    }
+                                  }),
+                                  child: Container(
+                                    height: 38.h,
+                                    width: 100.h,
+                                    //边框设置
+                                    decoration: const BoxDecoration(
+                                        image: DecorationImage(
+                                          //背景图片修饰
+                                          image: AssetImage(
+                                              "assets/images/car_anniu.png"),
+                                          fit: BoxFit.fill, //覆盖
+                                        )),
+                                    child: WidgetUtils.onlyTextCenter(
+                                        sp.getString('car_audio') == null || sp.getString('car_audio').toString() == '开启' ? '关闭音效' : '开启音效',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: sp.getString('car_audio') == null || sp.getString('car_audio').toString() == '开启' ? Colors.white :  MyColors.peopleYellow,
                                             fontSize: 22.sp)),
                                   ),
                                 )
@@ -1576,23 +1605,23 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                 isStarGame
                     ? Center(
                         child: SizedBox(
-                          height: 550.h,
-                          width: 450.h,
+                          height: 450.h,
+                          width: 350.h,
                           child: Stack(
                             children: [
                               WidgetUtils.showImages(
                                   'assets/images/car/car_star.png',
-                                  550.h,
-                                  450.h),
+                                  450.h,
+                                  350.h),
                               Container(
-                                height: 140.h,
-                                width: 450.h,
-                                margin: EdgeInsets.only(top: 410.h),
+                                height: 120.h,
+                                width: 350.h,
+                                margin: EdgeInsets.only(top: 320.h),
                                 child: WidgetUtils.onlyTextCenter(
                                     '本场竞赛已开始，请耐心等待~',
                                     StyleUtils.getCommonTextStyle(
                                         color: Colors.black87,
-                                        fontSize: 26.sp,
+                                        fontSize: 28.sp,
                                         fontWeight: FontWeight.w600)),
                               )
                             ],
@@ -1775,7 +1804,9 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
           setState(() {
             listJL[int.parse(benSN) - 1] =
                 listJL[int.parse(benSN) - 1] + xiazhujine;
-            playSound2();
+            if(sp.getString('car_audio') == null || sp.getString('car_audio').toString() == '开启') {
+              playSound2();
+            }
             if (listA[int.parse(benSN) - 1] == false) {
               setState(() {
                 listA[int.parse(benSN) - 1] = true;

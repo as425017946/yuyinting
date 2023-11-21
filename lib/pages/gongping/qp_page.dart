@@ -13,7 +13,7 @@ class _QPPageState extends State<QPPage> {
   Widget build(BuildContext context) {
     return const Scaffold(
       backgroundColor: Colors.transparent,
-      body: SVGASimpleImage(assetsName: 'assets/svga/gp/52.svga',),
+      body: SVGASimpleImage(assetsName: 'assets/svga/gp/gp_52.svga',),
     );
   }
 }

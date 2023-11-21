@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/log_util.dart';
+import 'package:yuyinting/utils/my_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 
 import '../colors/my_colors.dart';
@@ -104,37 +105,39 @@ class _QueRenPageState extends State<XiaZhuQueRenPage> {
                   WidgetUtils.commonSizedBox(0, 20.h),
                   GestureDetector(
                     onTap: ((){
-                      if(isCheck){
-                        DateTime now = DateTime.now();
-                        int year = now.year;
-                        int month = now.month;
-                        int day = now.day;
-                        if(widget.title == '心动转盘') {
-                          sp.setBool('zp1_queren', true);
-                          sp.setString('zp1_queren_time', '$year-$month-$day');
-                        }else if(widget.title == '超级转盘'){
-                          sp.setBool('zp2_queren', true);
-                          sp.setString('zp2_queren_time', '$year-$month-$day');
-                        }else if(widget.title == '水星魔方'){
-                          sp.setBool('mf1_queren', true);
-                          sp.setString('mf1_queren_time', '$year-$month-$day');
-                        }else if(widget.title == '金星魔方'){
-                          sp.setBool('mf2_queren', true);
-                          sp.setString('mf2_queren_time', '$year-$month-$day');
+                      if(MyUtils.checkClick()){
+                        if(isCheck){
+                          DateTime now = DateTime.now();
+                          int year = now.year;
+                          int month = now.month;
+                          int day = now.day;
+                          if(widget.title == '心动转盘') {
+                            sp.setBool('zp1_queren', true);
+                            sp.setString('zp1_queren_time', '$year-$month-$day');
+                          }else if(widget.title == '超级转盘'){
+                            sp.setBool('zp2_queren', true);
+                            sp.setString('zp2_queren_time', '$year-$month-$day');
+                          }else if(widget.title == '水星魔方'){
+                            sp.setBool('mf1_queren', true);
+                            sp.setString('mf1_queren_time', '$year-$month-$day');
+                          }else if(widget.title == '金星魔方'){
+                            sp.setBool('mf2_queren', true);
+                            sp.setString('mf2_queren_time', '$year-$month-$day');
+                          }
+                        }else{
+                          if(widget.title == '心动转盘') {
+                            sp.setBool('zp1_queren', false);
+                          }else if(widget.title == '超级转盘') {
+                            sp.setBool('zp2_queren', false);
+                          }else if(widget.title == '水星魔方') {
+                            sp.setBool('mf1_queren', false);
+                          }else if(widget.title == '金星魔方') {
+                            sp.setBool('mf2_queren', false);
+                          }
                         }
-                      }else{
-                        if(widget.title == '心动转盘') {
-                          sp.setBool('zp1_queren', false);
-                        }else if(widget.title == '超级转盘') {
-                          sp.setBool('zp2_queren', false);
-                        }else if(widget.title == '水星魔方') {
-                          sp.setBool('mf1_queren', false);
-                        }else if(widget.title == '金星魔方') {
-                          sp.setBool('mf2_queren', false);
-                        }
+                        Navigator.pop(context);
+                        eventBus.fire(XZQuerenBack(cishu: widget.cishu, feiyong: widget.feiyong));
                       }
-                      Navigator.pop(context);
-                      eventBus.fire(XZQuerenBack(cishu: widget.cishu, feiyong: widget.feiyong));
                     }),
                     child: Container(
                       width: 200.h,

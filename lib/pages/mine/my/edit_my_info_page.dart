@@ -178,10 +178,8 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                             color: Colors.black,
                             fontSize: ScreenUtil().setSp(28))),
                     const Expanded(child: Text('')),
-                    WidgetUtils.CircleHeadImage(
-                        ScreenUtil().setHeight(120),
-                        ScreenUtil().setWidth(120),
-                        headImg),
+                    WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(90),
+                        ScreenUtil().setHeight(90), headImg),
                     WidgetUtils.commonSizedBox(0, 10),
                     WidgetUtils.showImages('assets/images/mine_more2.png',
                         ScreenUtil().setHeight(27), ScreenUtil().setHeight(16))
@@ -379,9 +377,11 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                 });
               }),
               child: Container(
-                height: ScreenUtil().setHeight(120),
+                constraints: BoxConstraints(
+                  minHeight: ScreenUtil().setHeight(120),
+                ),
                 alignment: Alignment.center,
-                padding: const EdgeInsets.only(left: 20, right: 20),
+                padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
                 child: Column(
                   children: [
                     WidgetUtils.commonSizedBox(10, 0),
