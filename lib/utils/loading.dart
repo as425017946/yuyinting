@@ -7,8 +7,11 @@ import '../config/my_config.dart';
 class Loading {
   Loading() {
     EasyLoading.instance
+      /// 加载时间
       ..displayDuration = const Duration(milliseconds: 2000)
+      /// 加载类型
       ..indicatorType = EasyLoadingIndicatorType.ring
+      /// 加载样式
       ..loadingStyle = EasyLoadingStyle.custom
       /// 指示器的大小, 默认40.0.
       ..indicatorSize = 35.0
@@ -24,13 +27,14 @@ class Loading {
       ..textColor = Colors.white
       ..maskColor = Colors.black.withOpacity(0.6)
       /// 当loading展示的时候，是否允许用户操作.
-      ..userInteractions = true
+      ..userInteractions = false
       ..dismissOnTap = false
       ..maskType = EasyLoadingMaskType.custom;
   }
 
   static void show([String? text]) {
-    EasyLoading.instance.userInteractions = true;
+    EasyLoading.instance.userInteractions = false;
+    EasyLoading.instance.indicatorType = EasyLoadingIndicatorType.pumpingHeart;
     EasyLoading.show(status: text ?? MyConfig.successTitle);
   }
 

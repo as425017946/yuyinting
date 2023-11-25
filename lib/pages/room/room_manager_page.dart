@@ -546,22 +546,38 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
   Future<void> doPostPostFileUpload(path) async {
     var dir = await path_provider.getTemporaryDirectory();
     String targetPath = '';
+    var result;
     if(path.toString().contains('.gif') || path.toString().contains('.GIF')){
-      targetPath = "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.gif";
-    }else{
+      targetPath = path;
+    }else if(path.toString().contains('.jpg') || path.toString().contains('.GPG')){
       targetPath = "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
+      result = await FlutterImageCompress.compressAndGetFile(
+        path, targetPath,
+        quality: 50,
+        rotate: 0, // 旋转角度
+      );
+    }else if(path.toString().contains('.jpeg') || path.toString().contains('.GPEG')){
+      targetPath = "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpeg";
+      result = await FlutterImageCompress.compressAndGetFile(
+        path, targetPath,
+        quality: 50,
+        rotate: 0, // 旋转角度
+      );
+    }else{
+      targetPath = "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.png";
+      result = await FlutterImageCompress.compressAndGetFile(
+        path, targetPath,
+        quality: 50,
+        rotate: 0, // 旋转角度
+      );
     }
-    var result = await FlutterImageCompress.compressAndGetFile(
-      path, targetPath,
-      quality: 50,
-      rotate: 0, // 旋转角度
-    );
+
     Loading.show("上传中...");
     var name = path.substring(path.lastIndexOf("/") + 1, path.length);
     FormData formdata = FormData.fromMap(
       {
         'room_id': sp.getString('roomID').toString(),
-        "cover_img": await MultipartFile.fromFile(result!.path,
+        "cover_img": await MultipartFile.fromFile(path.toString().contains('.gif') || path.toString().contains('.GIF') ? targetPath : result!.path,
           filename: name,)
       },
     );
@@ -577,7 +593,6 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
       Map jsonResponse = json.decode(respone.data.toString());
       if (respone.statusCode == 200) {
         MyToastUtils.showToastBottom('上传成功');
-
         Loading.dismiss();
       }else if(respone.statusCode == 401){
         // ignore: use_build_context_synchronously

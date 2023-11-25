@@ -112,9 +112,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    //设置字体大小根据系统的“字体大小”辅助选项来进行缩放,默认为false : 字体随着系统的“字体大小”辅助选项来进行缩放
-    ScreenUtil.init(context,
-        designSize: const Size(750, 1334), splitScreenMode: false);
     return Scaffold(
       resizeToAvoidBottomInset: false, // 解决键盘顶起页面
       backgroundColor: Colors.transparent,

@@ -35,6 +35,7 @@ class _MessagePageState extends State<MessagePage> {
   String info = '', time = '';
   int unRead = 0;
   int length = 0;
+  var list1,list2;
 
   @override
   void initState() {
@@ -42,14 +43,23 @@ class _MessagePageState extends State<MessagePage> {
     super.initState();
     doPostSystemMsgList();
     MyUtils.addChatListener();
-    eventBus.on<ResidentBack>().listen((event) {
+    list1 = eventBus.on<ResidentBack>().listen((event) {
       setState(() {
         unRead = 0;
       });
     });
-    eventBus.on<SendMessageBack>().listen((event) {
+    list2 = eventBus.on<SendMessageBack>().listen((event) {
       doPostSystemMsgList();
     });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    list1.cancel();
+    list2.cancel();
+    super.dispose();
+
   }
 
   Widget message(BuildContext context, int i) {

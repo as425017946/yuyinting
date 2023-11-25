@@ -15,6 +15,7 @@ import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../../widget/OptionGridView.dart';
+import '../../widget/SVGASimpleImage4.dart';
 
 /// 默认背景
 class RoomBG1Page extends StatefulWidget {
@@ -68,7 +69,7 @@ class _RoomBG1PageState extends State<RoomBG1Page> with AutomaticKeepAliveClient
                         //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                         borderRadius: BorderRadius.all(Radius.circular(20.0)),
                       ),
-                      child: SVGASimpleImage(
+                      child: SVGASimpleImage4(
                         resUrl: list[index].img!,
 
                       ),

@@ -1,20 +1,27 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yuyinting/main.dart';
 import 'package:yuyinting/pages/message/message_page.dart';
 import 'package:yuyinting/pages/trends/trends_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/style_utils.dart';
+import '../../bean/Common_bean.dart';
 import '../../colors/my_colors.dart';
+import '../../config/my_config.dart';
+import '../../http/data_utils.dart';
+import '../../http/my_http_config.dart';
 import '../../utils/SlideAnimationController.dart';
+import '../../utils/loading.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/widget_utils.dart';
-import '../gongping/gp_hi_page.dart';
-import '../gongping/gp_quanxian_page.dart';
-import '../gongping/gp_room_page.dart';
 import '../home/home_items.dart';
 import '../home/home_page.dart';
 import '../mine/mine_page.dart';
+import '../room/room_page.dart';
+import '../room/room_ts_mima_page.dart';
 
 class Tab_Navigator extends StatefulWidget {
   const Tab_Navigator({Key? key}) : super(key: key);
@@ -41,7 +48,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
   bool isRemove = false;
 
   // 是否有进入房间返回出来
-  bool isJoinRoom = true;
+  bool isJoinRoom = false;
 
   /// 会重复播放的控制器
   late AnimationController _repeatController;
@@ -52,11 +59,15 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
   /// 公屏使用
   late SlideAnimationController slideAnimationController;
   String path = ''; // 图片地址
-  String name = '1q直刷'; // 要展示公屏的名称
+  String name = ''; // 要展示公屏的名称
+  bool isShowHF = false;// 是否显示横幅
+  String msg = ''; // 拼接显示数据
+  Map<String, String>? map; //存放接收自定义的数据使用
+  List<Map<String, String>?> listMP = []; // 存放每个进来的公屏，按顺序播放
 
   ///爆出大礼物使用
   bool isBig = false;
-  var listen;
+  var listen,listenZdy,listenRoomBack;
 
   @override
   void initState() {
@@ -79,67 +90,6 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     MyUtils.addChatListener();
     MyUtils.signIn();
 
-    switch (name) {
-      case '超级转盘':
-        setState(() {
-          path = 'assets/svga/gp/gp_zp2.svga';
-        });
-        break;
-      case '心动转盘':
-        setState(() {
-          path = 'assets/svga/gp/gp_zp1.svga';
-        });
-        break;
-      case '马里奥':
-        setState(() {
-          path = 'assets/svga/gp/gp_maliao.svga';
-        });
-        break;
-      case '白鬼':
-        setState(() {
-          path = 'assets/svga/gp/gp_gui.svga';
-        });
-        break;
-      case '低贵族':
-        setState(() {
-          path = 'assets/svga/gp/gp_guizu_d.svga';
-        });
-        break;
-      case '高贵族':
-        setState(() {
-          path = 'assets/svga/gp/gp_guizu_g.svga';
-        });
-        break;
-      case '蓝魔方':
-        setState(() {
-          path = 'assets/svga/gp/gp_lan.svga';
-        });
-        break;
-      case '金魔方':
-        setState(() {
-          path = 'assets/svga/gp/gp_jin.svga';
-        });
-        break;
-      case '1q直刷':
-        setState(() {
-          path = 'assets/svga/gp/gp_1q.svga';
-        });
-        break;
-      case '1w直刷':
-        setState(() {
-          path = 'assets/svga/gp/gp_1w.svga';
-        });
-        break;
-    }
-    // 在页面中使用自定义时间和图片地址
-    slideAnimationController = SlideAnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 30), // 自定义时间
-    );
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      slideAnimationController.playAnimation();
-    });
-
     // 中大奖使用，目前接口没有接，所以先注释
     // setState(() {
     //   isBig = true;
@@ -149,9 +99,133 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         isBig = false;
       });
     });
-
-
+    // 接受自定义消息
+    listenZdy = eventBus.on<ZDYHFBack>().listen((event) {
+      if(listMP.isEmpty){
+        //显示横幅、map赋值
+        setState(() {
+          isShowHF = true;
+          map = event.map!;
+          listMP.add(event.map!);
+        });
+        // 判断数据显示使用
+        showInfo(event.map!);
+      }else{
+        setState(() {
+          listMP.add(event.map!);
+        });
+      }
+      // 看看集合里面有几个，10s一执行
+      hpTimer();
+    });
+    // 收起房间使用
+    listenRoomBack = eventBus.on<SubmitButtonBack>().listen((event) {
+      if(event.title == '收起房间'){
+        setState(() {
+          isJoinRoom = true;
+        });
+      }else{
+        setState(() {
+          isJoinRoom = false;
+        });
+      }
+    });
     // MyUtils.goTransparentPageRoom(context, const GPHiPage());
+  }
+
+  Timer? _timer;
+  // 18秒后请求一遍
+  void hpTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 18), (timer) {
+      setState(() {
+        listMP.removeAt(0);
+      });
+      if(listMP.isEmpty){
+        _timer!.cancel();
+      }else{
+        setState(() {
+          isShowHF = true;
+        });
+        // 判断数据显示使用
+        showInfo(listMP[0]);
+      }
+    });
+  }
+  // 接受到数据进行判断使用
+  void showInfo(Map<String, String>? map){
+    switch(map!['title'].toString()){
+      case '贵族':
+        if(int.parse(map!['noble_id'].toString()) > 1 && int.parse(map!['noble_id'].toString()) < 5 ){
+          // 低贵族
+          setState(() {
+            name = '低贵族';
+            path = 'assets/svga/gp/gp_guizu_d.svga';
+          });
+        }else if(int.parse(map!['noble_id'].toString()) > 4 && int.parse(map!['noble_id'].toString()) < 8 ){
+          // 高贵族
+          setState(() {
+            name = '高贵族';
+            path = 'assets/svga/gp/gp_guizu_g.svga';
+          });
+        }
+        break;
+      case '超级转盘':
+        setState(() {
+          name = '超级转盘';
+          path = 'assets/svga/gp/gp_zp2.svga';
+        });
+        break;
+      case '心动转盘':
+        setState(() {
+          name = '心动转盘';
+          path = 'assets/svga/gp/gp_zp1.svga';
+        });
+        break;
+      case '马里奥':
+        setState(() {
+          name = '马里奥';
+          path = 'assets/svga/gp/gp_maliao.svga';
+        });
+        break;
+      case '白鬼':
+        setState(() {
+          name = '白鬼';
+          path = 'assets/svga/gp/gp_gui.svga';
+        });
+        break;
+      case '蓝魔方':
+        setState(() {
+          name = '蓝魔方';
+          path = 'assets/svga/gp/gp_lan.svga';
+        });
+        break;
+      case '金魔方':
+        setState(() {
+          name = '金魔方';
+          path = 'assets/svga/gp/gp_jin.svga';
+        });
+        break;
+      case '1q直刷':
+        setState(() {
+          name = '1q直刷';
+          path = 'assets/svga/gp/gp_1q.svga';
+        });
+        break;
+      case '1w直刷':
+        setState(() {
+          name = '1w直刷';
+          path = 'assets/svga/gp/gp_1w.svga';
+        });
+        break;
+    }
+    // 在页面中使用自定义时间和图片地址
+    slideAnimationController = SlideAnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 15), // 自定义时间
+    );
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      slideAnimationController.playAnimation();
+    });
   }
 
   @override
@@ -159,6 +233,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     _repeatController.dispose();
     slideAnimationController.dispose();
     listen.cancel();
+    listenZdy.cancel();
     super.dispose();
   }
 
@@ -221,64 +296,69 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           ),
 
           /// 公屏推送使用
-          HomeItems.itemAnimation(
+          isShowHF ? HomeItems.itemAnimation(
               path,
               slideAnimationController.controller,
               slideAnimationController.animation,
-              '恭喜某某用户单抽喜中价值500元的小柴一个',
-              name),
+              name,
+              map) : const Text(''),
 
           /// 爆出5w2的礼物推送使用
-          isBig ? HomeItems.itemBig('恭喜某某用户单抽喜中价值500元的小柴一个') : const Text(''),
+          isBig ? HomeItems.itemBig('aaaaaaa') : const Text(''),
 
           /// 房间图标转动
           isJoinRoom
               ? Positioned(
-                  bottom: 200,
+                  bottom: 240,
                   right: 20,
-                  child: RotationTransition(
-                    turns: _animation,
-                    child: Draggable(
-                        data: '1',
-                        //当拖动对象开始被拖动时调用
-                        onDragStarted: () {
-                          setState(() {
-                            isDragNow = true;
-                          });
-                        },
-                        //当拖动对象被放下时调用
-                        onDragEnd: (va) {
-                          setState(() {
-                            isDragNow = false;
-                          });
-                        },
-                        //当draggable 被放置并被【DragTarget】 接受时调用
-                        onDragCompleted: () {},
-                        //当draggable 被放置但未被【DragTarget】 接受时调用
-                        onDraggableCanceled: (velocity, offset) {},
+                  child: GestureDetector(
+                    onTap: ((){
+                      doPostBeforeJoin(sp.getString('roomID'));
+                    }),
+                    child: RotationTransition(
+                      turns: _animation,
+                      child: Draggable(
+                          data: '1',
+                          //当拖动对象开始被拖动时调用
+                          onDragStarted: () {
+                            setState(() {
+                              isDragNow = true;
+                            });
+                          },
+                          //当拖动对象被放下时调用
+                          onDragEnd: (va) {
+                            setState(() {
+                              isDragNow = false;
+                            });
+                          },
+                          //当draggable 被放置并被【DragTarget】 接受时调用
+                          onDragCompleted: () {},
+                          //当draggable 被放置但未被【DragTarget】 接受时调用
+                          onDraggableCanceled: (velocity, offset) {},
 
-                        //拖动显示
-                        feedback: Container(
-                          clipBehavior: Clip.antiAlias,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(3)),
+                          //拖动显示
+                          feedback: Container(
+                            clipBehavior: Clip.antiAlias,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(3)),
+                            child: WidgetUtils.CircleHeadImage(
+                                ScreenUtil().setHeight(90),
+                                ScreenUtil().setHeight(90),
+                                sp.getString('roomImage').toString()),
+                          ),
+                          //拖动占位
+                          childWhenDragging: Opacity(
+                            opacity: 0,
+                            child: WidgetUtils.CircleHeadImage(
+                                ScreenUtil().setHeight(90),
+                                ScreenUtil().setHeight(90),
+                                sp.getString('roomImage').toString()),
+                          ),
                           child: WidgetUtils.CircleHeadImage(
                               ScreenUtil().setHeight(90),
                               ScreenUtil().setHeight(90),
-                              'https://img-blog.csdnimg.cn/6d15082ac7234ec7a16065e74f689590.jpeg'),
-                        ),
-                        //拖动占位
-                        childWhenDragging: Opacity(
-                          opacity: 0,
-                          child: WidgetUtils.CircleHeadImage(
-                              ScreenUtil().setHeight(90),
-                              ScreenUtil().setHeight(90),
-                              'https://img-blog.csdnimg.cn/6d15082ac7234ec7a16065e74f689590.jpeg'),
-                        ),
-                        child: WidgetUtils.CircleHeadImage(
-                            ScreenUtil().setHeight(90),
-                            ScreenUtil().setHeight(90),
-                            'https://img-blog.csdnimg.cn/6d15082ac7234ec7a16065e74f689590.jpeg')),
+                              sp.getString('roomImage').toString())),
+                    ),
                   ),
                 )
               : const Text(''),
@@ -381,5 +461,74 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         height: 25,
       ),
     );
+  }
+
+
+  /// 加入房间前
+  Future<void> doPostBeforeJoin(roomID) async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'room_id': roomID,
+    };
+    try {
+      Loading.show();
+      CommonBean bean = await DataUtils.postBeforeJoin(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          doPostRoomJoin(roomID, '');
+          break;
+        case MyHttpConfig.errorRoomCode: //需要密码
+        // ignore: use_build_context_synchronously
+          MyUtils.goTransparentPageCom(
+              context,
+              RoomTSMiMaPage(
+                roomID: roomID,
+              ));
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+  /// 加入房间
+  Future<void> doPostRoomJoin(roomID, password) async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'room_id': roomID,
+      'password': password
+    };
+    try {
+      Loading.show();
+      CommonBean bean = await DataUtils.postRoomJoin(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.goTransparentRFPage(
+              context,
+              RoomPage(
+                roomId: roomID,
+              ));
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
   }
 }

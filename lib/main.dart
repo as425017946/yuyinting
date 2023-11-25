@@ -7,6 +7,7 @@ import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yuyinting/pages/login/login_page.dart';
+import 'package:yuyinting/pages/login/star_page.dart';
 import 'package:yuyinting/routes/routes.dart';
 import 'package:yuyinting/utils/log_util.dart';
 
@@ -72,7 +73,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: my_green,
       ),
       debugShowCheckedModeBanner: false,
-      home: const LoginPage(),
+      home: const StarPage(),
       builder: EasyLoading.init(),
       //配置路由  -- map格式
       routes: staticRoutes,

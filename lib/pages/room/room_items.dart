@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:yuyinting/pages/room/room_youxi_page.dart';
+import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/my_utils.dart';
 import '../../bean/roomInfoBean.dart';
@@ -861,7 +862,7 @@ class RoomItems {
                     double.infinity),
                 Container(
                   width: ScreenUtil().setHeight(60),
-                  height: ScreenUtil().setHeight(32),
+                  height: 50.h,
                   alignment: Alignment.center,
                   child: Column(
                     children: [
@@ -871,7 +872,7 @@ class RoomItems {
                         '收藏',
                         style: StyleUtils.getCommonTextStyle(
                             color: Colors.white,
-                            fontSize: ScreenUtil().setSp(21)),
+                            fontSize: ScreenUtil().setSp(18)),
                       )
                     ],
                   ),
@@ -1303,9 +1304,6 @@ class RoomItems {
                                   fontSize: ScreenUtil().setSp(19)))
                               : WidgetUtils.commonSizedBox(0, 0),
                           m1 == false
-                              ? WidgetUtils.commonSizedBox(15, 0)
-                              : WidgetUtils.commonSizedBox(0, 0),
-                          m1 == false
                               ? WidgetUtils.commonSizedBox(10, 0)
                               : WidgetUtils.commonSizedBox(0, 0),
                           m1 == true
@@ -1437,9 +1435,6 @@ class RoomItems {
                               StyleUtils.getCommonTextStyle(
                                   color: MyColors.roomMaiWZ,
                                   fontSize: ScreenUtil().setSp(19)))
-                              : WidgetUtils.commonSizedBox(0, 0),
-                          m2 == false
-                              ? WidgetUtils.commonSizedBox(15, 0)
                               : WidgetUtils.commonSizedBox(0, 0),
                           m2 == false
                               ? WidgetUtils.commonSizedBox(10, 0)
@@ -1575,9 +1570,6 @@ class RoomItems {
                                   fontSize: ScreenUtil().setSp(19)))
                               : WidgetUtils.commonSizedBox(0, 0),
                           m3 == false
-                              ? WidgetUtils.commonSizedBox(15, 0)
-                              : WidgetUtils.commonSizedBox(0, 0),
-                          m3 == false
                               ? WidgetUtils.commonSizedBox(10, 0)
                               : WidgetUtils.commonSizedBox(0, 0),
                           m3 == true
@@ -1709,9 +1701,6 @@ class RoomItems {
                               StyleUtils.getCommonTextStyle(
                                   color: MyColors.roomMaiWZ,
                                   fontSize: ScreenUtil().setSp(19)))
-                              : WidgetUtils.commonSizedBox(0, 0),
-                          m4 == false
-                              ? WidgetUtils.commonSizedBox(15, 0)
                               : WidgetUtils.commonSizedBox(0, 0),
                           m4 == false
                               ? WidgetUtils.commonSizedBox(10, 0)
@@ -2759,10 +2748,10 @@ class RoomItems {
   /// 厅内麦上无人
   static Widget noPeople(List<bool> upOrDown, int i, List<MikeList> listM) {
     if (i == 8) {
-      return upOrDown[i] && sp.getString('role').toString() == 'adminer' ||
-          sp.getString('role').toString() == 'leader'
+      return upOrDown[i] == true && (sp.getString('role').toString() == 'adminer' ||
+          sp.getString('role').toString() == 'leader')
           ? Positioned(
-        left: 265.h,
+        left: 250.h,
         top: 200.h,
         child: Container(
           height: ScreenUtil().setHeight(104),
@@ -2820,8 +2809,8 @@ class RoomItems {
           ? shangmai(265.h, 200.h, i)
           : const Text('');
     } else if (i == 0) {
-      return upOrDown[i] && sp.getString('role').toString() == 'adminer' ||
-          sp.getString('role').toString() == 'leader'
+      return upOrDown[i] && (sp.getString('role').toString() == 'adminer' ||
+          sp.getString('role').toString() == 'leader')
           ? Positioned(
         left: 25.h,
         top: 400.h,
@@ -2881,8 +2870,8 @@ class RoomItems {
           ? shangmai(25.h, 400.h, i)
           : const Text('');
     } else if (i == 1) {
-      return upOrDown[i] && sp.getString('role').toString() == 'adminer' ||
-          sp.getString('role').toString() == 'leader'
+      return upOrDown[i] && (sp.getString('role').toString() == 'adminer' ||
+          sp.getString('role').toString() == 'leader')
           ? Positioned(
         left: 175.h,
         top: 400.h,
@@ -2942,8 +2931,8 @@ class RoomItems {
           ? shangmai(175.h, 400.h, i)
           : const Text('');
     } else if (i == 2) {
-      return upOrDown[i] && sp.getString('role').toString() == 'adminer' ||
-          sp.getString('role').toString() == 'leader'
+      return upOrDown[i] && (sp.getString('role').toString() == 'adminer' ||
+          sp.getString('role').toString() == 'leader')
           ? Positioned(
         left: 325.h,
         top: 400.h,
@@ -3003,8 +2992,8 @@ class RoomItems {
           ? shangmai(325.h, 400.h, i)
           : const Text('');
     } else if (i == 3) {
-      return upOrDown[i] && sp.getString('role').toString() == 'adminer' ||
-          sp.getString('role').toString() == 'leader'
+      return upOrDown[i] && (sp.getString('role').toString() == 'adminer' ||
+          sp.getString('role').toString() == 'leader')
           ? Positioned(
         left: 475.h,
         top: 400.h,
@@ -3064,8 +3053,8 @@ class RoomItems {
           ? shangmai(475.h, 400.h, i)
           : const Text('');
     } else if (i == 4) {
-      return upOrDown[i] && sp.getString('role').toString() == 'adminer' ||
-          sp.getString('role').toString() == 'leader'
+      return upOrDown[i] && (sp.getString('role').toString() == 'adminer' ||
+          sp.getString('role').toString() == 'leader')
           ? Positioned(
         left: 25.h,
         top: 560.h,
@@ -3125,8 +3114,8 @@ class RoomItems {
           ? shangmai(25.h, 560.h, i)
           : const Text('');
     } else if (i == 5) {
-      return upOrDown[i] && sp.getString('role').toString() == 'adminer' ||
-          sp.getString('role').toString() == 'leader'
+      return upOrDown[i] && (sp.getString('role').toString() == 'adminer' ||
+          sp.getString('role').toString() == 'leader')
           ? Positioned(
         left: 175.h,
         top: 560.h,
@@ -3186,8 +3175,8 @@ class RoomItems {
           ? shangmai(175.h, 560.h, i)
           : const Text('');
     } else if (i == 6) {
-      return upOrDown[i] && sp.getString('role').toString() == 'adminer' ||
-          sp.getString('role').toString() == 'leader'
+      return upOrDown[i] && (sp.getString('role').toString() == 'adminer' ||
+          sp.getString('role').toString() == 'leader')
           ? Positioned(
         left: 325.h,
         top: 560.h,
@@ -3247,8 +3236,8 @@ class RoomItems {
           ? shangmai(325.h, 560.h, i)
           : const Text('');
     } else {
-      return upOrDown[i] && sp.getString('role').toString() == 'adminer' ||
-          sp.getString('role').toString() == 'leader'
+      return upOrDown[i] && (sp.getString('role').toString() == 'adminer' ||
+          sp.getString('role').toString() == 'leader')
           ? Positioned(
         left: 475.h,
         top: 560.h,

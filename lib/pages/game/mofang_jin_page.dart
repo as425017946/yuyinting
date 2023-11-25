@@ -282,7 +282,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                           Container(
                             height: ScreenUtil().setHeight(40),
                             width: ScreenUtil().setHeight(130),
-                            margin: EdgeInsets.only(left: 20.h, right: 20.h),
+                            margin: EdgeInsets.only(left: 15.h, right: 15.h),
                             decoration: const BoxDecoration(
                               //背景
                               color: Colors.black38,
@@ -301,7 +301,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                                       '500V豆',
                                       StyleUtils.getCommonTextStyle(
                                           color: Colors.white,
-                                          fontSize: ScreenUtil().setSp(23),
+                                          fontSize: ScreenUtil().setSp(21),
                                           fontWeight: FontWeight.w600)),
                                 ),
                                 const Spacer(),
@@ -312,7 +312,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                           Container(
                             height: ScreenUtil().setHeight(40),
                             width: ScreenUtil().setHeight(130),
-                            margin: EdgeInsets.only(left: 20.h, right: 20.h),
+                            margin: EdgeInsets.only(left: 15.h, right: 15.h),
                             decoration: const BoxDecoration(
                               //背景
                               color: Colors.black38,
@@ -331,7 +331,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                                       '5000V豆',
                                       StyleUtils.getCommonTextStyle(
                                           color: Colors.white,
-                                          fontSize: ScreenUtil().setSp(23),
+                                          fontSize: ScreenUtil().setSp(21),
                                           fontWeight: FontWeight.w600)),
                                 ),
                                 const Spacer(),
@@ -342,7 +342,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                           Container(
                             height: ScreenUtil().setHeight(40),
                             width: ScreenUtil().setHeight(130),
-                            margin: EdgeInsets.only(left: 20.h, right: 20.h),
+                            margin: EdgeInsets.only(left: 15.h, right: 15.h),
                             decoration: const BoxDecoration(
                               //背景
                               color: Colors.black38,
@@ -361,7 +361,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                                       '50000V豆',
                                       StyleUtils.getCommonTextStyle(
                                           color: Colors.white,
-                                          fontSize: ScreenUtil().setSp(23),
+                                          fontSize: ScreenUtil().setSp(21),
                                           fontWeight: FontWeight.w600)),
                                 ),
                                 const Spacer(),
@@ -384,7 +384,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                             }),
                             child: Container(
                               height: ScreenUtil().setHeight(60),
-                              width: ScreenUtil().setHeight(170),
+                              width: ScreenUtil().setHeight(160),
                               decoration: BoxDecoration(
                                 //设置Container修饰
                                 image: DecorationImage(
@@ -395,23 +395,9 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                                   fit: BoxFit.fill, //覆盖
                                 ),
                               ),
-                              child: Row(
-                                children: [
-                                  WidgetUtils.commonSizedBox(
-                                      0, ScreenUtil().setHeight(55)),
-                                  Column(
-                                    children: [
-                                      WidgetUtils.commonSizedBox(7, 0),
-                                      Text(
-                                        '转  1  次',
-                                        style: StyleUtils.getCommonTextStyle(
-                                            color: Colors.white,
-                                            fontSize: ScreenUtil().setSp(28)),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
+                              child: WidgetUtils.onlyTextCenter('转1次', StyleUtils.getCommonTextStyle(
+                                  color: Colors.white,
+                                  fontSize: ScreenUtil().setSp(28))),
                             ),
                           ),
                           const Spacer(),
@@ -425,7 +411,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                             }),
                             child: Container(
                               height: ScreenUtil().setHeight(60),
-                              width: ScreenUtil().setHeight(170),
+                              width: ScreenUtil().setHeight(160),
                               decoration: BoxDecoration(
                                 //设置Container修饰
                                 image: DecorationImage(
@@ -436,23 +422,9 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                                   fit: BoxFit.fill, //覆盖
                                 ),
                               ),
-                              child: Row(
-                                children: [
-                                  WidgetUtils.commonSizedBox(
-                                      0, ScreenUtil().setHeight(55)),
-                                  Column(
-                                    children: [
-                                      WidgetUtils.commonSizedBox(7, 0),
-                                      Text(
-                                        '转 10 次',
-                                        style: StyleUtils.getCommonTextStyle(
-                                            color: Colors.white,
-                                            fontSize: ScreenUtil().setSp(28)),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
+                              child: WidgetUtils.onlyTextCenter('转10次', StyleUtils.getCommonTextStyle(
+                                  color: Colors.white,
+                                  fontSize: ScreenUtil().setSp(28))),
                             ),
                           ),
                           const Spacer(),
@@ -466,7 +438,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                             }),
                             child: Container(
                               height: ScreenUtil().setHeight(60),
-                              width: ScreenUtil().setHeight(170),
+                              width: ScreenUtil().setHeight(160),
                               decoration: BoxDecoration(
                                 //设置Container修饰
                                 image: DecorationImage(
@@ -477,23 +449,9 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                                   fit: BoxFit.fill, //覆盖
                                 ),
                               ),
-                              child: Row(
-                                children: [
-                                  WidgetUtils.commonSizedBox(
-                                      0, ScreenUtil().setHeight(55)),
-                                  Column(
-                                    children: [
-                                      WidgetUtils.commonSizedBox(7, 0),
-                                      Text(
-                                        '转100次',
-                                        style: StyleUtils.getCommonTextStyle(
-                                            color: Colors.white,
-                                            fontSize: ScreenUtil().setSp(28)),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
+                              child: WidgetUtils.onlyTextCenter('转100次', StyleUtils.getCommonTextStyle(
+                                  color: Colors.white,
+                                  fontSize: ScreenUtil().setSp(28))),
                             ),
                           ),
                         ],
@@ -591,7 +549,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                       }),
                       child: Row(
                         children: [
-                          WidgetUtils.showImages(isTiaoguo==false ? 'assets/images/mofang_check_no.png' : 'assets/images/mofang_check_yes.png', ScreenUtil().setHeight(24), ScreenUtil().setHeight(24)),
+                          WidgetUtils.showImages(isTiaoguo==false ? 'assets/images/mofang_tg_no.png' : 'assets/images/mofang_tg_yes.png', ScreenUtil().setHeight(24), ScreenUtil().setHeight(24)),
                           WidgetUtils.commonSizedBox(0, 5),
                           WidgetUtils.onlyText('跳过动画', StyleUtils.getCommonTextStyle(color: MyColors.roomTCWZ2, fontSize: ScreenUtil().setSp(20)))
                         ],

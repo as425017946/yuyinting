@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/pages/room/room_page.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import '../../bean/Common_bean.dart';
@@ -46,24 +47,25 @@ class _RoomTSMiMaPageState extends State<RoomTSMiMaPage> {
             ),
             Container(
               width: ScreenUtil().setHeight(506),
-              height: ScreenUtil().setHeight(262),
+              height: ScreenUtil().setHeight(400),
               decoration: const BoxDecoration(
                 //设置Container修饰
                 image: DecorationImage(
                   //背景图片修饰
-                  image: AssetImage("assets/images/room_fangmm.png"),
+                  image: AssetImage("assets/images/room_mima_bg.png"),
                   fit: BoxFit.fill, //覆盖
                 ),
               ),
               child: Column(
                 children: [
-                  WidgetUtils.commonSizedBox(20, 0),
+                  WidgetUtils.commonSizedBox(120, 0),
                   WidgetUtils.onlyTextCenter(
                       '请输入房间密码',
                       StyleUtils.getCommonTextStyle(
-                          color: Colors.white,
-                          fontSize: ScreenUtil().setSp(29))),
-                  WidgetUtils.commonSizedBox(50, 0),
+                          color: Colors.black87,
+                          fontSize: 32.sp,
+                          fontWeight: FontWeight.w600)),
+                  WidgetUtils.commonSizedBox(30, 0),
                   Container(
                     width: double.infinity,
                     color: Colors.transparent,
@@ -84,8 +86,8 @@ class _RoomTSMiMaPageState extends State<RoomTSMiMaPage> {
                         }
                       },
                       textStyle: StyleUtils.getCommonTextStyle(
-                          color: Colors.white,
-                          fontSize: ScreenUtil().setSp(38)),
+                          color: MyColors.btn_a,
+                          fontSize: 38.sp),
                       appContext: context,
                       keyboardType: TextInputType.number,
                       autoFocus: true,
@@ -93,11 +95,11 @@ class _RoomTSMiMaPageState extends State<RoomTSMiMaPage> {
                       pinTheme: PinTheme(
                         shape: PinCodeFieldShape.box,
                         borderRadius: BorderRadius.circular(2),
-                        fieldHeight: ScreenUtil().setHeight(64),
-                        fieldWidth: ScreenUtil().setHeight(43),
+                        fieldHeight: 70.h,
+                        fieldWidth: 55.h,
                         activeFillColor: Colors.transparent,
                         //填充背景色
-                        activeColor: Colors.white,
+                        activeColor: MyColors.btn_a,
                         //下划线颜色
                         inactiveFillColor: Colors.white,
                         inactiveColor: Colors.white,

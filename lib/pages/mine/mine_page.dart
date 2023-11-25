@@ -24,6 +24,7 @@ import '../../utils/my_utils.dart';
 import '../../utils/widget_utils.dart';
 import 'gonghui/gonghui_home_page.dart';
 import 'gonghui/my_gonghui_page.dart';
+import 'mine_smz_page.dart';
 import 'my/my_info_page.dart';
 import 'my_kefu_page.dart';
 
@@ -65,7 +66,8 @@ class _MinePageState extends State<MinePage>{
         });
       } else if (event.title == '公会中心') {
         if(sp.getString('shimingzhi').toString() == '2' || sp.getString('shimingzhi').toString() == '3'){
-          isShiMing(context);
+          // isShiMing(context);
+          MyUtils.goTransparentPageCom(context, const MineSMZPage());
         }else if(sp.getString('shimingzhi').toString() == '1'){
           //身份 user普通用户，未加入公会 streamer主播 leader会长
           if(identity == 'user'){
@@ -610,25 +612,25 @@ class _MinePageState extends State<MinePage>{
   }
 
   /// 点击公会判断是否进行了实名制
-  Future<void> isShiMing(BuildContext context) async {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return CustomDialog(
-            title: '',
-            callback: (res) {
-              if(sp.getString('shimingzhi').toString() == '2' || sp.getString('shimingzhi').toString() == '3'){
-                Navigator.pushNamed(context, 'ShimingzhiPage');
-              }else if(sp.getString('shimingzhi').toString() == '1'){
-                MyToastUtils.showToastBottom('已认证');
-              }else if(sp.getString('shimingzhi').toString() == '0'){
-                MyToastUtils.showToastBottom('审核中，请耐心等待');
-              }
-            },
-            content: '尚未实名制，请前往实名制页面上传信息后在使用！',
-          );
-        });
-  }
+  // Future<void> isShiMing(BuildContext context) async {
+  //   return showDialog(
+  //       context: context,
+  //       builder: (context) {
+  //         return CustomDialog(
+  //           title: '',
+  //           callback: (res) {
+  //             if(sp.getString('shimingzhi').toString() == '2' || sp.getString('shimingzhi').toString() == '3'){
+  //               Navigator.pushNamed(context, 'ShimingzhiPage');
+  //             }else if(sp.getString('shimingzhi').toString() == '1'){
+  //               MyToastUtils.showToastBottom('已认证');
+  //             }else if(sp.getString('shimingzhi').toString() == '0'){
+  //               MyToastUtils.showToastBottom('审核中，请耐心等待');
+  //             }
+  //           },
+  //           content: '尚未实名制，请前往实名制页面上传信息后在使用！',
+  //         );
+  //       });
+  // }
 
 
 

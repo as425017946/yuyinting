@@ -145,6 +145,19 @@ class ZDYBack {
   String type;
   ZDYBack({required this.map, required this.type});
 }
+/// 自定义消息 横幅
+class ZDYHFBack {
+  Map<String, String>? map;
+  String type;
+  ZDYHFBack({required this.map, required this.type});
+}
+/// 自定义消息 红包
+class ZDYHBBack {
+  Map<String, String>? map;
+  ZDYHBBack({required this.map});
+}
+
+
 
 /// im进入房间
 class JoinRoomYBack {
@@ -189,4 +202,11 @@ class SendRoomImgBack {
 class XiaZhuBack {
   int jine;
   XiaZhuBack({required this.jine});
+}
+
+
+/// 发送包使用
+class HongBaoBack {
+  String info;
+  HongBaoBack({required this.info});
 }

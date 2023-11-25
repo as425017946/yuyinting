@@ -129,7 +129,7 @@ class _TequanPageState extends State<TequanPage> {
                 WidgetUtils.commonSizedBox(10, 0),
                 Row(
                   children: [
-                    WidgetUtils.commonSizedBox(0, 10),
+                    WidgetUtils.commonSizedBox(0, 10.h),
                     GestureDetector(
                       onTap: (() {
                         setState(() {
@@ -162,7 +162,7 @@ class _TequanPageState extends State<TequanPage> {
                         ],
                       ),
                     ),
-                    WidgetUtils.commonSizedBox(0, 15),
+                    const Spacer(),
                     GestureDetector(
                       onTap: (() {
                         setState(() {
@@ -194,7 +194,7 @@ class _TequanPageState extends State<TequanPage> {
                         ],
                       ),
                     ),
-                    WidgetUtils.commonSizedBox(0, 15),
+                    const Spacer(),
                     GestureDetector(
                       onTap: (() {
                         setState(() {
@@ -226,7 +226,7 @@ class _TequanPageState extends State<TequanPage> {
                         ],
                       ),
                     ),
-                    WidgetUtils.commonSizedBox(0, 15),
+                    const Spacer(),
                     GestureDetector(
                       onTap: (() {
                         setState(() {
@@ -258,7 +258,7 @@ class _TequanPageState extends State<TequanPage> {
                         ],
                       ),
                     ),
-                    WidgetUtils.commonSizedBox(0, 15),
+                    const Spacer(),
                     GestureDetector(
                       onTap: (() {
                         setState(() {
@@ -290,7 +290,7 @@ class _TequanPageState extends State<TequanPage> {
                         ],
                       ),
                     ),
-                    WidgetUtils.commonSizedBox(0, 15),
+                    const Spacer(),
                     GestureDetector(
                       onTap: (() {
                         setState(() {
@@ -322,7 +322,7 @@ class _TequanPageState extends State<TequanPage> {
                         ],
                       ),
                     ),
-                    WidgetUtils.commonSizedBox(0, 15),
+                    const Spacer(),
                     GestureDetector(
                       onTap: (() {
                         setState(() {
@@ -354,6 +354,7 @@ class _TequanPageState extends State<TequanPage> {
                         ],
                       ),
                     ),
+                    WidgetUtils.commonSizedBox(0, 10.h),
                   ],
                 ),
                 WidgetUtils.commonSizedBox(10, 0),

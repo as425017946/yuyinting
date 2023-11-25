@@ -599,9 +599,45 @@ class MyUtils {
                 break;
               case MessageType.CUSTOM: //自定义消息
                 {
-                  LogE('CUSTOM消息${msg.body}');
+                  LogE('CUSTOM消息****${msg.from}');
                   EMCustomMessageBody body = msg.body as EMCustomMessageBody;
-                  eventBus.fire(ZDYBack(map: body.params, type: body.event));
+                  LogE('判断 ${body.event == 'send_all_user'}'); //横幅
+                  if(body.event == 'send_all_user'){
+                    eventBus.fire(ZDYHFBack(map: body.params, type: body.event));
+                  }else if(body.event == 'red_package'){ //接受到红包
+                    Map info = body.params!;
+                    String nickName = info['nickname'];
+                    String headImg = info['avatar'];
+                    String combineID = '';
+                    if(int.parse(sp.getString('user_id').toString()) > int.parse(msg.from!)){
+                      combineID = '${msg.from}-${sp.getString('user_id').toString()}';
+                    }else{
+                      combineID = '${sp.getString('user_id').toString()}-${msg.from}';
+                    }
+                    Map<String, dynamic> params = <String, dynamic>{
+                      'uid': sp.getString('user_id').toString(),
+                      'otherUid': msg.from,
+                      'whoUid':msg.from,
+                      'combineID': combineID,
+                      'nickName': nickName,
+                      'content': '收到${info['value']}个V豆',
+                      'bigImg' : '',
+                      'headImg': headImg,
+                      'otherHeadImg': sp.getString('user_headimg'),
+                      'add_time': msg.serverTime,
+                      'type': 6,
+                      'number': 0,
+                      'status': 1,
+                      'readStatus': 0,
+                      'liveStatus': 0,
+                      'loginStatus': 0,
+                    };
+                    // 插入数据
+                    await databaseHelper.insertData('messageSLTable', params);
+                    eventBus.fire(SendMessageBack(type: 1, msgID: '0'));
+                  }else{
+                    eventBus.fire(ZDYBack(map: body.params, type: body.event));
+                  }
                 }
                 break;
               case MessageType.CMD:

@@ -172,7 +172,7 @@ class _DiwangPageState extends State<DiwangPage>  with TickerProviderStateMixin 
                                 ScreenUtil().setHeight(103),
                                 ScreenUtil().setHeight(103)),
                             WidgetUtils.onlyTextCenter(
-                                '开通公屏广播',
+                                '开通全服广播',
                                 StyleUtils.getCommonTextStyle(
                                     color: MyColors.guizuYellow,
                                     fontSize: ScreenUtil().setSp(25))),

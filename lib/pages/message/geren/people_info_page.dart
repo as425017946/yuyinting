@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/pages/message/geren/ziliao_page.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 
+import '../../../bean/Common_bean.dart';
 import '../../../bean/userInfoBean.dart';
 import '../../../colors/my_colors.dart';
 import '../../../config/my_config.dart';
@@ -17,7 +18,7 @@ import '../../../utils/widget_utils.dart';
 import '../chat_page.dart';
 import 'dongtai_page.dart';
 
-/// 个人主页
+/// 他人主页
 class PeopleInfoPage extends StatefulWidget {
   String otherId;
   PeopleInfoPage({Key? key,required this.otherId}) : super(key: key);
@@ -419,7 +420,8 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                   const Expanded(child: Text('')),
                   GestureDetector(
                     onTap: ((){
-                      MyUtils.goTransparentRFPage(context, ChatPage(nickName: nickName, otherUid: widget.otherId, otherImg: headImg));
+                      // 先判断能否发私聊
+                      doPostCanSendUser();
                     }),
                     child: WidgetUtils.PeopleButton('assets/images/people_sixin.png', '私信', MyColors.peopleBlue2),
                   ),
@@ -486,5 +488,69 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
       Loading.dismiss();
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
+  }
+
+
+  /// 能否发私聊
+  Future<void> doPostCanSendUser() async {
+    Map<String, dynamic> params = <String, dynamic>{'uid': widget.otherId};
+    try {
+      CommonBean bean = await DataUtils.postCanSendUser(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          //可以发私聊跳转
+          // ignore: use_build_context_synchronously
+          MyUtils.goTransparentRFPage(context, ChatPage(nickName: nickName, otherUid: widget.otherId, otherImg: headImg));
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+  /// 取消关注
+  Future<void> doPostFollow() async {
+    // //是否关注 1关注 0取关
+    // String type = '';
+    // if(status == '1'){
+    //   type = '0';
+    // }else{
+    //   type = '1';
+    // }
+    // Map<String, dynamic> params = <String, dynamic>{
+    //   'type': '1',
+    //   'status': type,
+    //   'follow_id': widget.otherId,
+    // };
+    // try {
+    //   CommonBean bean = await DataUtils.postFollow(params);
+    //   switch (bean.code) {
+    //     case MyHttpConfig.successCode:
+    //       setState(() {
+    //         if(status == '1'){
+    //           status = '0';
+    //         }else{
+    //           status = '1';
+    //         }
+    //       });
+    //       break;
+    //     case MyHttpConfig.errorloginCode:
+    //     // ignore: use_build_context_synchronously
+    //       MyUtils.jumpLogin(context);
+    //       break;
+    //     default:
+    //       MyToastUtils.showToastBottom(bean.msg!);
+    //       break;
+    //   }
+    // } catch (e) {
+    //   MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    // }
   }
 }

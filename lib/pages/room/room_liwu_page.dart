@@ -4,6 +4,7 @@ import 'package:yuyinting/bean/liwuBean.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/pages/room/room_show_liwu_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
+import 'package:yuyinting/utils/loading.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
@@ -12,7 +13,6 @@ import '../../bean/Common_bean.dart';
 import '../../bean/balanceBean.dart';
 import '../../bean/onlineRoomUserBean.dart';
 import '../../bean/roomInfoBean.dart';
-import '../../bean/walletListBean.dart';
 import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
@@ -122,7 +122,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                     : const Text(''),
               ],
             ),
-            i == 0 ? WidgetUtils.showImages('assets/images/room_tingzhu.png',
+            i == 0 && listMaiXu[i].serialNumber == 9 ? WidgetUtils.showImages('assets/images/room_tingzhu.png',
                 ScreenUtil().setHeight(20), ScreenUtil().setHeight(20))
             :
             Container(
@@ -138,7 +138,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                 border: Border.all(width: 0.5, color: MyColors.roomTCWZ2),
               ),
               child: Text(
-                i.toString(),
+                  listMaiXu[0].serialNumber != 9  ? (i+1).toString() : i.toString(),
                 style: StyleUtils.getCommonTextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
@@ -158,6 +158,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
       onTap: (() {
         setState(() {
           if(leixing == 0){
+            giftId = listC[index].id.toString();
             for (int i = 0; i < listC.length; i++) {
               listCBool[i] = false;
             }
@@ -166,6 +167,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
             url = listC[index].img.toString();
             svga = listC[index].imgRendering.toString();
           }else if(leixing == 1){
+            giftId = listPV[index].id.toString();
             for (int i = 0; i < listPV.length; i++) {
               listPVBool[i] = false;
             }
@@ -174,6 +176,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
             url = listPV[index].img.toString();
             svga = listPV[index].imgRendering.toString();
           }else{
+            giftId = listPl[index].id.toString();
             for (int i = 0; i < listPl.length; i++) {
               listPlBool[i] = false;
             }
@@ -287,24 +290,48 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
               child: Column(
                 children: [
                   WidgetUtils.commonSizedBox(10.h, 0),
-                  listPlBool[index]
-                      ? AnimatedBuilder(
-                    animation: _animation,
-                    builder: (context, child) {
-                      return Transform.scale(
-                        scale: _animation.value,
-                        child: WidgetUtils.showImagesNet(
-                            listPl[index].img!,
-                            ScreenUtil().setHeight(110),
-                            ScreenUtil().setHeight(100)),
-                      );
-                    },
-                  )
-                      :
-                  WidgetUtils.showImagesNet(
-                      listPl[index].img!,
-                      ScreenUtil().setHeight(110),
-                      ScreenUtil().setHeight(100)),
+                  Stack(
+                    children: [
+                      listPlBool[index]
+                          ? AnimatedBuilder(
+                        animation: _animation,
+                        builder: (context, child) {
+                          return Transform.scale(
+                            scale: _animation.value,
+                            child: WidgetUtils.showImagesNet(
+                                listPl[index].img!,
+                                ScreenUtil().setHeight(110),
+                                ScreenUtil().setHeight(100)),
+                          );
+                        },
+                      )
+                          :
+                      WidgetUtils.showImagesNet(
+                          listPl[index].img!,
+                          ScreenUtil().setHeight(110),
+                          ScreenUtil().setHeight(100)),
+                      Positioned(
+                        top: 0,
+                          right: 0,
+                          child: Container(
+                        padding: EdgeInsets.all(5.h),
+                        decoration: BoxDecoration(
+                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                          borderRadius: BorderRadius.all(Radius.circular(10.h)),
+                          //设置四周边框
+                          border: Border.all(width: 1, color: MyColors.lbL),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          listPl[index].number!.toString(),
+                          style: TextStyle(
+                            color: MyColors.lbL,
+                            fontSize: 16.sp,
+                          ),
+                        ),
+                      ))
+                    ],
+                  ),
                   WidgetUtils.onlyTextCenter(
                       listPl[index].name!,
                       StyleUtils.getCommonTextStyle(
@@ -332,7 +359,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
   void initState() {
     // TODO: implement initState
     super.initState();
-    for(int i = 0; i < 10; i++){
+    for(int i = 0; i < 9; i++){
       listPeople.add(false);
     }
     setState(() {
@@ -1076,6 +1103,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
     Map<String, dynamic> params = <String, dynamic>{
       'type': leixing,
     };
+    Loading.show();
     try {
       liwuBean bean = await DataUtils.postGiftList(params);
       switch (bean.code) {
@@ -1113,7 +1141,9 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
+      Loading.dismiss();
     } catch (e) {
+      Loading.dismiss();
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
@@ -1136,7 +1166,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                 break;
               }
             }
-            for(int i = 0; i < bean.data!.length - 1; i++){
+            for(int i = 0; i < bean.data!.length; i++){
               listMaiXu.add(bean.data![i]);
             }
             changdu = listMaiXu.length;
@@ -1157,11 +1187,21 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
 
   /// 送礼物
   Future<void> doPostSendGift() async {
+    String toUids = '';
+    for(int i = 0; i < listPeople.length; i++){
+      if(listPeople[i]){
+        if(toUids.isEmpty){
+          toUids = listMaiXu[i].uid.toString();
+        }else{
+          toUids = '$toUids,${listMaiXu[i].uid}';
+        }
+      }
+    }
     Map<String, dynamic> params = <String, dynamic>{
       'room_id': sp.getString('roomID').toString(),
-      'receive_id': sp.getString('roomID').toString(),
+      'to_uids': toUids, //收礼物用户uid（多个用户,分割 2,26,32）
       'gift_id': giftId,
-      'number': shuliang,
+      'gift_number': shuliang.toString(),
       'gift_type': (leixing+1).toString(),
     };
     try {
@@ -1193,25 +1233,4 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
     }
   }
 
-  /// 钱包明细
-  Future<void> doPostWalletList() async {
-    try {
-      balanceBean bean = await DataUtils.postBalance();
-      switch (bean.code) {
-        case MyHttpConfig.successCode:
-          setState(() {
-          });
-          break;
-        case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
-          MyUtils.jumpLogin(context);
-          break;
-        default:
-          MyToastUtils.showToastBottom(bean.msg!);
-          break;
-      }
-    } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
-    }
-  }
 }

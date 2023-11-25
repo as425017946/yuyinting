@@ -390,6 +390,7 @@ class WidgetUtils {
     );
   }
 
+
   ///通用登录大按钮
   static Widget commonSubmitButton(String title) {
     return Container(
@@ -573,20 +574,15 @@ class WidgetUtils {
               gaplessPlayback: true,
             )
           : url.isNotEmpty
-              ?
-              // ? CachedNetworkImage(
-              //     imageUrl: url,
-              //     fit: BoxFit.fill,
-              //     placeholder: (context, url) => CircleImageAss(height, width, ScreenUtil().setHeight(10) , 'assets/images/img_placeholder.png',),
-              //     errorWidget: (context, url, error) {
-              //       LogE('加载错误提示 $error');
-              //       // return const Icon(Icons.error);
-              //       return CircleImageAss(height, width, ScreenUtil().setHeight(10) , 'assets/images/img_error.png',);
-              //     },
-              //   )
-              Image.network(
-                  url,
+              ? CachedNetworkImage(
+                  imageUrl: url,
                   fit: BoxFit.fill,
+                  placeholder: (context, url) => CircleImageAss(height, width, ScreenUtil().setHeight(10) , 'assets/images/img_placeholder.png',),
+                  errorWidget: (context, url, error) {
+                    LogE('加载错误提示 $error');
+                    // return const Icon(Icons.error);
+                    return CircleImageAss(height, width, ScreenUtil().setHeight(10) , 'assets/images/img_error.png',);
+                  },
                 )
               : Image(
                   image: const AssetImage('assets/images/img_placeholder.png'),
@@ -677,7 +673,7 @@ class WidgetUtils {
       width: width,
       child: CachedNetworkImage(
         imageUrl: url,
-        fit: BoxFit.cover,
+        fit: BoxFit.fill,
         placeholder: (context, url) => CircleImageAss(
           height,
           width,
@@ -1364,5 +1360,37 @@ class WidgetUtils {
             const Spacer(),
           ],
         ));
+  }
+
+  ///通用数字键盘，只能输入数字, 发红包使用
+  static Widget commonTextFieldNumberHB(
+      {required TextEditingController controller,
+        required String hintText,
+        bool? enabled = true,
+        bool? obscureText = false}) {
+    return TextField(
+      enabled: enabled,
+      obscureText: obscureText!,
+      controller: controller,
+      textAlign: TextAlign.end,
+      inputFormatters: [
+        RegexFormatter(regex: MyUtils.regexFirstNotNull),
+        FilteringTextInputFormatter.digitsOnly
+      ],
+      keyboardType: TextInputType.number,
+      //设置键盘为数字
+      style: StyleUtils.getCommonTextStyle(color: Colors.black87, fontSize: 32.sp, fontWeight: FontWeight.w500),
+      onChanged: (value) {
+        eventBus.fire(InfoBack(info: value));
+      },
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        // labelText: "请输入用户名",
+        // icon: Icon(Icons.people), //前面的图标
+        hintText: hintText,
+        hintStyle: StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: 32.sp, fontWeight: FontWeight.w500),
+        // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
+      ),
+    );
   }
 }

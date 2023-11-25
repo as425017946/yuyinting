@@ -33,6 +33,7 @@ import 'package:flutter_sound_platform_interface/flutter_sound_recorder_platform
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/foundation.dart' as foundation;
 
+import 'hongbao_page.dart';
 
 /// 聊天页面
 class ChatPage extends StatefulWidget {
@@ -58,7 +59,7 @@ class _ChatPageState extends State<ChatPage> {
   List<String> imgList = [];
   TextEditingController controller = TextEditingController();
   ScrollController _scrollController = ScrollController();
-  var listen;
+  var listen, listenHB;
 
   // 录音使用
   Codec _codec = Codec.aacADTS;
@@ -101,16 +102,67 @@ class _ChatPageState extends State<ChatPage> {
     listen = eventBus.on<SendMessageBack>().listen((event) {
       doLocationInfo();
     });
+    listenHB = eventBus.on<HongBaoBack>().listen((event) {
+      LogE('发送了===');
+      if(MyUtils.checkClick()){
+        saveHBinfo(event.info);
+      }
+    });
+
     _focusNode = FocusNode();
     _focusNode!.addListener(_onFocusChange);
     saveImages();
   }
 
+  // 保存发红包的信息 type 1自己给别人发，2收到别人发的红包
+  saveHBinfo(String info) async {
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    Database? db = await databaseHelper.database;
+    String combineID = '';
+    if (int.parse(sp.getString('user_id').toString()) >
+        int.parse(widget.otherUid)) {
+      combineID = '${widget.otherUid}-${sp.getString('user_id').toString()}';
+    } else {
+      combineID = '${sp.getString('user_id').toString()}-${widget.otherUid}';
+    }
+    Map<String, dynamic> params = <String, dynamic>{
+      'uid': sp.getString('user_id').toString(),
+      'otherUid': widget.otherUid,
+      'whoUid': sp.getString('user_id').toString(),
+      'combineID': combineID,
+      'nickName': widget.nickName,
+      'content': '送出$info个V豆',
+      'headImg': myHeadImg,
+      'otherHeadImg': otherHeadImg,
+      'add_time': DateTime.now().millisecondsSinceEpoch,
+      'type': 6,
+      'number': 0,
+      'status': 1,
+      'readStatus': 1,
+      'liveStatus': 0,
+      'loginStatus': 0,
+    };
+    // 插入数据
+    await databaseHelper.insertData('messageSLTable', params);
+    // 获取所有数据
+    List<Map<String, dynamic>> result = await db.query('messageSLTable',
+        columns: null, whereArgs: [combineID], where: 'combineID = ?');
+    setState(() {
+      allData2 = result;
+      length = allData2.length;
+    });
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      scrollToLastItem(); // 在widget构建完成后滚动到底部
+    });
+  }
+
   // 自己头像和他人头像
   String myHeadImg = '', otherHeadImg = '';
-  saveImages() async{
+
+  saveImages() async {
     //保存头像
-    MyUtils.saveImgTemp(sp.getString('user_headimg').toString(), sp.getString('user_id').toString());
+    MyUtils.saveImgTemp(sp.getString('user_headimg').toString(),
+        sp.getString('user_id').toString());
     MyUtils.saveImgTemp(widget.otherImg, widget.otherUid);
     // 保存路径
     Directory? directory = await getTemporaryDirectory();
@@ -136,8 +188,9 @@ class _ChatPageState extends State<ChatPage> {
     if (_timer != null && _timer.isActive) {
       _timer.cancel();
     }
-    super.dispose();
     listen.cancel();
+    listenHB.cancel();
+    super.dispose();
   }
 
   // 在数据变化后将滚动位置设置为最后一个item的位置
@@ -239,12 +292,12 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
+  // 显示聊天信息
   Widget chatWidget(BuildContext context, int i) {
     double widthAudio = 0;
-    if(allData2[i]['type'] == 3){
-      widthAudio = ScreenUtil().setHeight(60+allData2[i]['number']*4);
+    if (allData2[i]['type'] == 3) {
+      widthAudio = ScreenUtil().setHeight(60 + allData2[i]['number'] * 4);
     }
-
 
     String addTime = '';
     DateTime date = DateTime.parse(
@@ -294,10 +347,167 @@ class _ChatPageState extends State<ChatPage> {
               ScreenUtil().setHeight(10), ScreenUtil().setHeight(10)),
           Row(
             children: [
-              WidgetUtils.CircleImageAss(ScreenUtil().setHeight(80),
-                  ScreenUtil().setHeight(80), 40.h, allData2[i]['headImg']),
+              WidgetUtils.CircleImageAss(
+                  ScreenUtil().setHeight(80),
+                  ScreenUtil().setHeight(80),
+                  40.h,
+                  allData2[i]['otherHeadImg']),
               WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(10)),
-              Flexible(
+              // 6v豆红包
+              allData2[i]['type'] == 6 ? SizedBox(
+                height: 130.h,
+                width: 300.h,
+                child: Stack(
+                  children: [
+                    WidgetUtils.showImages(
+                        'assets/images/chat_hongbao_bg.png',
+                        130.h,
+                        300.h),
+                    Positioned(
+                        top: 40.h,
+                        left: 60.w,
+                        child: Row(
+                          children: [
+                            WidgetUtils.commonSizedBox(
+                                0, 50.h),
+                            WidgetUtils.onlyText(
+                                allData2[i]['content'],
+                                StyleUtils.getCommonTextStyle(
+                                    color: Colors.white,
+                                    fontSize: 25.sp)),
+                          ],
+                        ))
+                  ],
+                ),
+              ): Flexible(
+                child: Container(
+                  constraints:
+                      BoxConstraints(minWidth: ScreenUtil().setHeight(60)),
+                  padding: EdgeInsets.all(ScreenUtil().setHeight(20)),
+                  //边框设置
+                  decoration: BoxDecoration(
+                    //背景
+                    color: Colors.white,
+                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(20.0),
+                        topRight: Radius.circular(0),
+                        bottomLeft: Radius.circular(20.0),
+                        bottomRight: Radius.circular(20.0)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.1),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: const Offset(0, 1), // 阴影的偏移量，向右下方偏移3像素
+                      ),
+                    ],
+                  ),
+                  child: allData2[i]['type'] == 1
+                      ? Text(
+                          allData2[i]['content'],
+                          style: TextStyle(
+                            fontSize: 40.sp,
+                            color: Colors.black,
+                          ),
+                        )
+                      : allData2[i]['type'] == 2
+                          ? GestureDetector(
+                              onTap: (() {
+                                setState(() {
+                                  imgList.clear();
+                                  imgList.add(allData2[i]['content']);
+                                });
+                                MyUtils.goTransparentPageCom(
+                                    context, SwiperPage(imgList: imgList));
+                              }),
+                              child: Image(
+                                image: FileImage(File(allData2[i]['content'])),
+                                width: 160.h,
+                                height: 200.h,
+                                errorBuilder: (BuildContext context,
+                                    Object error, StackTrace? stackTrace) {
+                                  return WidgetUtils.showImages(
+                                      'assets/images/img_error.png',
+                                      200.h,
+                                      160.h);
+                                },
+                              ),
+                            )
+                          : GestureDetector(
+                              onTap: (() {
+                                LogD('************');
+                                if (playRecord) {
+                                  stopPlayer();
+                                } else {
+                                  play(allData2[i]['content']);
+                                }
+                              }),
+                              child: SizedBox(
+                                width: widthAudio,
+                                child: Row(
+                                  children: [
+                                    WidgetUtils.showImages(
+                                        'assets/images/chat_huatong.png',
+                                        20.h,
+                                        20.h),
+                                    WidgetUtils.onlyText(
+                                        "${allData2[i]['number']}''",
+                                        StyleUtils.textStyleb1),
+                                    const Spacer(),
+                                  ],
+                                ),
+                              ),
+                            ),
+                ),
+              ),
+            ],
+          ),
+          WidgetUtils.commonSizedBox(
+              ScreenUtil().setHeight(20), ScreenUtil().setHeight(10)),
+        ],
+      );
+    } else {
+      return Column(
+        children: [
+          //右侧显示
+          WidgetUtils.onlyTextCenter(
+              addTime,
+              StyleUtils.getCommonTextStyle(
+                  color: MyColors.g9, fontSize: ScreenUtil().setSp(20))),
+          WidgetUtils.commonSizedBox(
+              ScreenUtil().setHeight(10), ScreenUtil().setHeight(10)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(100)),
+              // 6v豆红包
+              allData2[i]['type'] == 6 ? SizedBox(
+                height: 130.h,
+                width: 300.h,
+                child: Stack(
+                  children: [
+                    WidgetUtils.showImages(
+                        'assets/images/chat_hongbao_bg.png',
+                        130.h,
+                        300.h),
+                    Positioned(
+                        top: 40.h,
+                        left: 60.w,
+                        child: Row(
+                          children: [
+                            WidgetUtils.commonSizedBox(
+                                0, 50.h),
+                            WidgetUtils.onlyText(
+                                allData2[i]['content'],
+                                StyleUtils.getCommonTextStyle(
+                                    color: Colors.white,
+                                    fontSize: 25.sp)),
+                          ],
+                        ))
+                  ],
+                ),
+              ): Flexible(
                 child: Container(
                   constraints:
                   BoxConstraints(minWidth: ScreenUtil().setHeight(60)),
@@ -325,11 +535,12 @@ class _ChatPageState extends State<ChatPage> {
                       ? Text(
                     allData2[i]['content'],
                     style: TextStyle(
-                      fontSize: 40.sp,
+                      fontSize: 30.sp,
                       color: Colors.black,
                     ),
                   )
-                      : allData2[i]['type'] == 2 ? GestureDetector(
+                      : allData2[i]['type'] == 2
+                      ? GestureDetector(
                     onTap: (() {
                       setState(() {
                         imgList.clear();
@@ -342,111 +553,22 @@ class _ChatPageState extends State<ChatPage> {
                       image: FileImage(File(allData2[i]['content'])),
                       width: 160.h,
                       height: 200.h,
-                      errorBuilder: (BuildContext context, Object error,
-                          StackTrace? stackTrace) {
+                      errorBuilder: (BuildContext context,
+                          Object error, StackTrace? stackTrace) {
                         return WidgetUtils.showImages(
-                            'assets/images/img_error.png', 200.h, 160.h);
+                            'assets/images/img_error.png',
+                            200.h,
+                            160.h);
                       },
                     ),
-                  ) : GestureDetector(
+                  )
+                      : allData2[i]['type'] == 3
+                      ? GestureDetector(
                     onTap: (() {
                       LogD('************');
-                      if(playRecord){
+                      if (playRecord) {
                         stopPlayer();
-                      }else{
-                        play(allData2[i]['content']);
-                      }
-                    }),
-                    child: SizedBox(
-                      width: widthAudio,
-                      child: Row(
-                        children: [
-                          WidgetUtils.showImages('assets/images/chat_huatong.png', 20.h, 20.h),
-                          WidgetUtils.onlyText("${allData2[i]['number']}''", StyleUtils.textStyleb1),
-                          const Spacer(),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          WidgetUtils.commonSizedBox(
-              ScreenUtil().setHeight(20), ScreenUtil().setHeight(10)),
-        ],
-      );
-    } else {
-      return Column(
-        children: [
-          //右侧显示
-          WidgetUtils.onlyTextCenter(
-              addTime,
-              StyleUtils.getCommonTextStyle(
-                  color: MyColors.g9, fontSize: ScreenUtil().setSp(20))),
-          WidgetUtils.commonSizedBox(
-              ScreenUtil().setHeight(10), ScreenUtil().setHeight(10)),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(100)),
-              Flexible(
-                child: Container(
-                  constraints:
-                      BoxConstraints(minWidth: ScreenUtil().setHeight(60)),
-                  padding: EdgeInsets.all(ScreenUtil().setHeight(20)),
-                  //边框设置
-                  decoration: BoxDecoration(
-                    //背景
-                    color: Colors.white,
-                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                    borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(20.0),
-                        topRight: Radius.circular(0),
-                        bottomLeft: Radius.circular(20.0),
-                        bottomRight: Radius.circular(20.0)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.1),
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                        offset: const Offset(0, 1), // 阴影的偏移量，向右下方偏移3像素
-                      ),
-                    ],
-                  ),
-                  child: allData2[i]['type'] == 1
-                      ? Text(
-                          allData2[i]['content'],
-                    style: TextStyle(
-                      fontSize: 40.sp,
-                      color: Colors.black,
-                    ),
-                        )
-                      : allData2[i]['type'] == 2 ? GestureDetector(
-                    onTap: (() {
-                      setState(() {
-                        imgList.clear();
-                        imgList.add(allData2[i]['content']);
-                      });
-                      MyUtils.goTransparentPageCom(
-                          context, SwiperPage(imgList: imgList));
-                    }),
-                    child: Image(
-                      image: FileImage(File(allData2[i]['content'])),
-                      width: 160.h,
-                      height: 200.h,
-                      errorBuilder: (BuildContext context, Object error,
-                          StackTrace? stackTrace) {
-                        return WidgetUtils.showImages(
-                            'assets/images/img_error.png', 200.h, 160.h);
-                      },
-                    ),
-                  ) : GestureDetector(
-                    onTap: (() {
-                      LogD('************');
-                      if(playRecord){
-                        stopPlayer();
-                      }else{
+                      } else {
                         play(allData2[i]['content']);
                       }
                     }),
@@ -455,17 +577,22 @@ class _ChatPageState extends State<ChatPage> {
                       child: Row(
                         children: [
                           const Spacer(),
-                          WidgetUtils.onlyText("${allData2[i]['number']}''", StyleUtils.textStyleb1),
-                          WidgetUtils.showImages('assets/images/chat_huatong.png', 20.h, 20.h),
+                          WidgetUtils.onlyText(
+                              "${allData2[i]['number']}''",
+                              StyleUtils.textStyleb1),
+                          WidgetUtils.showImages(
+                              'assets/images/chat_huatong.png',
+                              20.h,
+                              20.h),
                         ],
                       ),
                     ),
-                  ),
+                  ) : const Text(''),
                 ),
               ),
               WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(10)),
               WidgetUtils.CircleImageAss(ScreenUtil().setHeight(80),
-                  ScreenUtil().setHeight(80), 40.h, allData2[i]['otherHeadImg']),
+                  ScreenUtil().setHeight(80), 40.h, allData2[i]['headImg']),
             ],
           ),
           WidgetUtils.commonSizedBox(20.h, ScreenUtil().setHeight(10)),
@@ -499,6 +626,7 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   late Timer _timer;
+
 //点击开始录音
   startRecord() {
     record();
@@ -516,7 +644,7 @@ class _ChatPageState extends State<ChatPage> {
 
 //开始录音
   void record() async {
-    try{
+    try {
       await getPermissionStatus().then((value) async {
         if (!value) {
           return;
@@ -557,9 +685,7 @@ class _ChatPageState extends State<ChatPage> {
           });
         });
       });
-    }catch(err){
-
-    }
+    } catch (err) {}
   }
 
 //停止录音
@@ -851,7 +977,7 @@ class _ChatPageState extends State<ChatPage> {
                         ? Expanded(
                             child: GestureDetector(
                               onVerticalDragStart: (details) async {
-                                if(await getPermissionStatus()){
+                                if (await getPermissionStatus()) {
                                   // 开始录音
                                   startRecord();
                                   setState(() {
@@ -861,7 +987,7 @@ class _ChatPageState extends State<ChatPage> {
                                 }
                               },
                               onVerticalDragUpdate: (details) async {
-                                if(await getPermissionStatus()){
+                                if (await getPermissionStatus()) {
                                   if (details.delta.dy < -1) {
                                     if (_timer.isActive) {
                                       _timer.cancel();
@@ -875,7 +1001,7 @@ class _ChatPageState extends State<ChatPage> {
                                 }
                               },
                               onVerticalDragEnd: (details) async {
-                                if(await getPermissionStatus()){
+                                if (await getPermissionStatus()) {
                                   // 取消录音后抬起手指
                                   if (isCancel) {
                                     //重新初始化音频信息
@@ -891,7 +1017,7 @@ class _ChatPageState extends State<ChatPage> {
                                       djNum = 60; // 录音时长
                                       audioNum = 0; // 记录录了多久
                                     });
-                                  }else{
+                                  } else {
                                     // 停止录音
                                     stopRecorder();
                                     //发送录音
@@ -986,48 +1112,73 @@ class _ChatPageState extends State<ChatPage> {
                           ),
                     WidgetUtils.commonSizedBox(0, 10),
                     GestureDetector(
-                      onTap: ((){
+                      onTap: (() {
                         setState(() {
                           MyUtils.hideKeyboard(context);
                           _isEmojiPickerVisible = !_isEmojiPickerVisible;
                         });
                       }),
-                      child: WidgetUtils.showImages('assets/images/trends_biaoqing.png',
-                          ScreenUtil().setHeight(45), ScreenUtil().setHeight(45)),
-                    ),
-                    WidgetUtils.commonSizedBox(0, 10),
-                    _isEmojiPickerVisible ? GestureDetector(
-                      onTap: ((){
-                        setState(() {
-                          _isEmojiPickerVisible = false;
-                        });
-                        doPostSendUserMsg(controller.text);
-                      }),
-                      child: Container(
-                        width: 90.h,
-                        height: 50.h,
-                        //边框设置
-                        decoration: const BoxDecoration(
-                          //背景
-                          color: MyColors.riBangBg,
-                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                        ),
-                        child: WidgetUtils.onlyTextCenter('发送', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 28.sp)),
-                      ),
-                    ) : const Text(''),
-                    _isEmojiPickerVisible == false  ? GestureDetector(
-                      onTap: (() {
-                        onTapPickFromGallery();
-                      }),
                       child: WidgetUtils.showImages(
-                          'assets/images/chat_img.png',
+                          'assets/images/trends_biaoqing.png',
                           ScreenUtil().setHeight(45),
                           ScreenUtil().setHeight(45)),
-                    ) : const Text(''),
-                    _isEmojiPickerVisible == false  ? WidgetUtils.commonSizedBox(0, 10) : const Text(''),
-                    _isEmojiPickerVisible == false  ? WidgetUtils.showImages('assets/images/chat_hongbao.png',
-                        ScreenUtil().setHeight(45), ScreenUtil().setHeight(45)) : const Text(''),
+                    ),
+                    WidgetUtils.commonSizedBox(0, 10),
+                    _isEmojiPickerVisible
+                        ? GestureDetector(
+                            onTap: (() {
+                              setState(() {
+                                _isEmojiPickerVisible = false;
+                              });
+                              doPostSendUserMsg(controller.text);
+                            }),
+                            child: Container(
+                              width: 90.h,
+                              height: 50.h,
+                              //边框设置
+                              decoration: const BoxDecoration(
+                                //背景
+                                color: MyColors.riBangBg,
+                                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20.0)),
+                              ),
+                              child: WidgetUtils.onlyTextCenter(
+                                  '发送',
+                                  StyleUtils.getCommonTextStyle(
+                                      color: Colors.white, fontSize: 28.sp)),
+                            ),
+                          )
+                        : const Text(''),
+                    _isEmojiPickerVisible == false
+                        ? GestureDetector(
+                            onTap: (() {
+                              onTapPickFromGallery();
+                            }),
+                            child: WidgetUtils.showImages(
+                                'assets/images/chat_img.png',
+                                ScreenUtil().setHeight(45),
+                                ScreenUtil().setHeight(45)),
+                          )
+                        : const Text(''),
+                    _isEmojiPickerVisible == false
+                        ? WidgetUtils.commonSizedBox(0, 10)
+                        : const Text(''),
+                    _isEmojiPickerVisible == false
+                        ? GestureDetector(
+                            onTap: (() {
+                              MyUtils.goTransparentPageCom(
+                                  context,
+                                  HongBaoPage(
+                                    uid: widget.otherUid,
+                                  ));
+                            }),
+                            child: WidgetUtils.showImages(
+                                'assets/images/chat_hongbao.png',
+                                ScreenUtil().setHeight(45),
+                                ScreenUtil().setHeight(45)),
+                          )
+                        : const Text(''),
                     WidgetUtils.commonSizedBox(0, 20),
                   ],
                 ),
@@ -1037,17 +1188,21 @@ class _ChatPageState extends State<ChatPage> {
                 child: SizedBox(
                   height: 450.h,
                   child: EmojiPicker(
-                    onEmojiSelected: (Category? category, Emoji emoji) {
-
-                    },
+                    onEmojiSelected: (Category? category, Emoji emoji) {},
                     onBackspacePressed: () {
                       // Do something when the user taps the backspace button (optional)
                       // Set it to null to hide the Backspace-Button
                     },
-                    textEditingController: controller, // pass here the same [TextEditingController] that is connected to your input field, usually a [TextFormField]
+                    textEditingController: controller,
+                    // pass here the same [TextEditingController] that is connected to your input field, usually a [TextFormField]
                     config: Config(
                       columns: 7,
-                      emojiSizeMax: 32 * (foundation.defaultTargetPlatform == TargetPlatform.iOS ? 1.30 : 1.0), // Issue: https://github.com/flutter/flutter/issues/28894
+                      emojiSizeMax: 32 *
+                          (foundation.defaultTargetPlatform ==
+                                  TargetPlatform.iOS
+                              ? 1.30
+                              : 1.0),
+                      // Issue: https://github.com/flutter/flutter/issues/28894
                       verticalSpacing: 0,
                       horizontalSpacing: 0,
                       gridPadding: EdgeInsets.zero,
@@ -1067,8 +1222,10 @@ class _ChatPageState extends State<ChatPage> {
                         'No Recents',
                         style: TextStyle(fontSize: 20, color: Colors.black26),
                         textAlign: TextAlign.center,
-                      ), // Needs to be const Widget
-                      loadingIndicator: const SizedBox.shrink(), // Needs to be const Widget
+                      ),
+                      // Needs to be const Widget
+                      loadingIndicator: const SizedBox.shrink(),
+                      // Needs to be const Widget
                       tabIndicatorAnimDuration: kTabScrollDuration,
                       emojiSet: defaultEmojiSets,
                       buttonMode: ButtonMode.MATERIAL,
@@ -1298,7 +1455,8 @@ class _ChatPageState extends State<ChatPage> {
     List<Map<String, dynamic>> result = await db.query('messageSLTable',
         columns: null, whereArgs: [combineID], where: 'combineID = ?');
 
-    await db.update('messageSLTable',  {'readStatus': 1}, where: 'combineID = ?', whereArgs: [combineID]);
+    await db.update('messageSLTable', {'readStatus': 1},
+        where: 'combineID = ?', whereArgs: [combineID]);
 
     setState(() {
       allData2 = result;
@@ -1313,7 +1471,7 @@ class _ChatPageState extends State<ChatPage> {
   late List<Map<String, dynamic>> allData2;
 
   Future<void> doPostSendUserMsg(String content) async {
-    if(content.trim().isEmpty){
+    if (content.trim().isEmpty) {
       return;
     }
 
@@ -1401,35 +1559,13 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
-  /// 能否发私聊
-  Future<void> doPostCanSendUser(String path) async {
-    Map<String, dynamic> params = <String, dynamic>{'uid': widget.otherUid};
-    try {
-      CommonBean bean = await DataUtils.postCanSendUser(params);
-      switch (bean.code) {
-        case MyHttpConfig.successCode:
-          doSendFile(path);
-          break;
-        case MyHttpConfig.errorloginCode:
-          // ignore: use_build_context_synchronously
-          MyUtils.jumpLogin(context);
-          break;
-        default:
-          MyToastUtils.showToastBottom(bean.msg!);
-          break;
-      }
-    } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
-    }
-  }
-
   onTapPickFromGallery() async {
     final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     print('选择照片路径:${image?.path}');
     String? path = image?.path.toString();
     if (path!.isNotEmpty) {
-      doPostCanSendUser(path!);
+      doSendFile(path);
     }
   }
 

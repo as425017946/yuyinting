@@ -6,7 +6,7 @@ class SlideAnimationController {
 
   SlideAnimationController({
     required TickerProvider vsync,
-    Duration duration = const Duration(seconds: 10),
+    Duration duration = const Duration(seconds: 15),
   }) {
     controller = AnimationController(
       duration: duration,
@@ -21,9 +21,9 @@ class SlideAnimationController {
     });
 
     animation = TweenSequence([
-      TweenSequenceItem(tween: Tween(begin: const Offset(3, 0), end: Offset.zero), weight: 1),
-      TweenSequenceItem(tween: Tween(begin: Offset.zero, end: Offset.zero), weight: 84),
-      TweenSequenceItem(tween: Tween(begin: Offset.zero, end: const Offset(-3, 0)), weight: 15),
+      TweenSequenceItem(tween: Tween(begin: const Offset(3, 0), end: Offset.zero), weight: 10),
+      TweenSequenceItem(tween: Tween(begin: Offset.zero, end: Offset.zero), weight: 80),
+      TweenSequenceItem(tween: Tween(begin: Offset.zero, end: const Offset(-3, 0)), weight: 10),
     ]).animate(controller);
   }
 

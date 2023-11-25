@@ -1,16 +1,18 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/widget/SVGASimpleImage3.dart';
 
+import '../../utils/widget_utils.dart';
 import '../../widget/Marquee.dart';
 import '../../widget/SVGASimpleImage.dart';
 
-class HomeItems{
+class HomeItems {
   /// 公屏送礼推送
-  static Widget itemAnimation(String url, AnimationController controller, Animation<Offset> animation,String title, String name){
+  static Widget itemAnimation(String url, AnimationController controller,
+      Animation<Offset> animation, String name, Map<String, String>? map) {
+    String info = '';
     double gd = 0, topHD = 0;
-    switch(name){
+    switch (name) {
       case '超级转盘':
         gd = 120.h;
         topHD = 130.h;
@@ -18,6 +20,8 @@ class HomeItems{
       case '心动转盘':
         gd = 120.h;
         topHD = 130.h;
+        info =
+            '${map!['from_nickname']!}在${map!['room_name']!}向${map!['to_nickname']!}送出价值${map!['gift_price']!}${map!['gift_name']!} x${map!['gift_number']!}';
         break;
       case '马里奥':
         gd = 120.h;
@@ -30,26 +34,48 @@ class HomeItems{
       case '低贵族':
         gd = 20.h;
         topHD = 130.h;
+        if (int.parse(map!['noble_id'].toString()) == 2) {
+          info = '晋升为骑士';
+        } else if (int.parse(map!['noble_id'].toString()) == 3) {
+          info = '晋升为伯爵';
+        } else if (int.parse(map!['noble_id'].toString()) == 4) {
+          info = '晋升为侯爵';
+        }
         break;
       case '高贵族':
         gd = 50.h;
         topHD = 160.h;
+        if (int.parse(map!['noble_id'].toString()) == 5) {
+          info = '晋升为公爵';
+        } else if (int.parse(map!['noble_id'].toString()) == 6) {
+          info = '晋升为国王';
+        } else if (int.parse(map!['noble_id'].toString()) == 7) {
+          info = '晋升为帝王';
+        }
         break;
       case '蓝魔方':
         gd = 130.h;
         topHD = 130.h;
+        info =
+            '${map!['from_nickname']!}在${map!['room_name']!}向${map!['to_nickname']!}送出价值${map!['gift_price']!}${map!['gift_name']!} x${map!['gift_number']!}';
         break;
       case '金魔方':
         gd = 130.h;
         topHD = 130.h;
+        info =
+            '${map!['from_nickname']!}在${map!['room_name']!}向${map!['to_nickname']!}送出价值${map!['gift_price']!}${map!['gift_name']!} x${map!['gift_number']!}';
         break;
       case '1q直刷':
         gd = 20.h;
         topHD = 135.h;
+        info =
+            '${map!['from_nickname']!}在${map!['room_name']!}向${map!['to_nickname']!}送出价值${map!['gift_price']!}${map!['gift_name']!} x${map!['gift_number']!}';
         break;
       case '1w直刷':
         gd = 20.h;
         topHD = 175.h;
+        info =
+            '${map!['from_nickname']!}在${map!['room_name']!}向${map!['to_nickname']!}送出价值${map!['gift_price']!}${map!['gift_name']!} x${map!['gift_number']!}';
         break;
     }
     return IgnorePointer(
@@ -66,31 +92,94 @@ class HomeItems{
                 assetsName: url,
               ),
               GestureDetector(
-                onTap: ((){
-                  controller.forward();
+                onTap: (() {
+                  // controller.forward();
                 }),
                 child: Padding(
-                  padding: EdgeInsets.only(
-                      top: topHD,
-                      left: gd,
-                      right: 50.h
-                  ),
+                  padding: EdgeInsets.only(top: topHD, left: gd, right: 50.h),
                   child: Marquee(
                     speed: 10,
-                    child: Text(
-                      title,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 30.sp,
-                        shadows: const [
-                          Shadow(
-                            color: Colors.black54,
-                            offset: Offset(2, 2),
-                            blurRadius: 3,
+                    child: name == '低贵族' ||
+                            name == '高贵族' ||
+                            name == '马里奥' ||
+                            name == '白鬼'
+                        ? RichText(
+                            text: TextSpan(children: [
+                            WidgetSpan(
+                                child: Transform.translate(
+                              offset: Offset(0, 0.h),
+                              child: Text(
+                                '恭喜',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 30.sp,
+                                  shadows: const [
+                                    Shadow(
+                                      color: Colors.black54,
+                                      offset: Offset(2, 2),
+                                      blurRadius: 3,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )),
+                            // 显示头像
+                            WidgetSpan(
+                                child: WidgetUtils.CircleImageNet(30.h, 30.h,
+                                    15.h, map!['avatar'].toString())),
+                            // 昵称
+                            WidgetSpan(
+                                child: Transform.translate(
+                              offset: Offset(0, 0.h),
+                              child: Text(
+                                map!['nickname'].toString(),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 30.sp,
+                                  shadows: const [
+                                    Shadow(
+                                      color: Colors.black54,
+                                      offset: Offset(2, 2),
+                                      blurRadius: 3,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )),
+                            // 提示信息
+                            WidgetSpan(
+                                child: Transform.translate(
+                              offset: Offset(0, 0.h),
+                              child: Text(
+                                info,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 30.sp,
+                                  shadows: const [
+                                    Shadow(
+                                      color: Colors.black54,
+                                      offset: Offset(2, 2),
+                                      blurRadius: 3,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )),
+                          ]))
+                        : Text(
+                            info,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 30.sp,
+                              shadows: const [
+                                Shadow(
+                                  color: Colors.black54,
+                                  offset: Offset(2, 2),
+                                  blurRadius: 3,
+                                ),
+                              ],
+                            ),
                           ),
-                        ],
-                      ),
-                    ),
                   ),
                 ),
               ),
@@ -102,48 +191,29 @@ class HomeItems{
   }
 
   /// 爆出5w2的礼物
-  static Widget itemBig(String title){
+  static Widget itemBig(String title) {
     return IgnorePointer(
-      ignoring: true,
-      child:  SizedBox(
-        height: 340.h,
-        width: double.infinity,
-        child: Stack(
-          children: [
-            const SVGASimpleImage3(
-              assetsName: 'assets/svga/gp/gp_52hf.svga',
-            ),
-            GestureDetector(
-              onTap: ((){
-              }),
-              child: Padding(
-                padding: EdgeInsets.only(
-                    top: 220.h,
-                    left: 60.h,
-                    right: 50.h
-                ),
-                child: Marquee(
-                  speed: 10,
-                  child: Text(
-                    title,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 30.sp,
-                      shadows: const [
-                        Shadow(
-                          color: Colors.black54,
-                          offset: Offset(2, 2),
-                          blurRadius: 3,
-                        ),
-                      ],
-                    ),
+        ignoring: true,
+        child: SizedBox(
+          height: 340.h,
+          width: double.infinity,
+          child: Stack(
+            children: [
+              const SVGASimpleImage3(
+                assetsName: 'assets/svga/gp/gp_52hf.svga',
+              ),
+              GestureDetector(
+                onTap: (() {}),
+                child: Padding(
+                  padding: EdgeInsets.only(top: 220.h, left: 60.h, right: 50.h),
+                  child: Marquee(
+                    speed: 10,
+                    child: Text(title),
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-      )
-    );
+            ],
+          ),
+        ));
   }
 }

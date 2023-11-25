@@ -843,4 +843,11 @@ class DataUtils{
     print("魔方奖池：$respons");
     return mofangJCBean.fromJson(respons!);
   }
+
+  /// 发红包
+  static Future<CommonBean> postSendRedPacket(Map<String,dynamic> params) async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.sendRedPacket, {}, params);
+    print("发红包：$respons");
+    return CommonBean.fromJson(respons!);
+  }
 }

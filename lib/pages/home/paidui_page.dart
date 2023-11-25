@@ -251,8 +251,8 @@ class _PaiduiPageState extends State<PaiduiPage>
           /// 热度
           Row(
             children: [
-              WidgetUtils.showImages('assets/images/paidui_redu.png',
-                  40.h, 20.h),
+              WidgetUtils.showImages(
+                  'assets/images/paidui_redu.png', 40.h, 20.h),
               WidgetUtils.commonSizedBox(0, 5),
               WidgetUtils.onlyText(
                   hotDegree > 10000
@@ -531,7 +531,20 @@ class _PaiduiPageState extends State<PaiduiPage>
                                           'assets/images/paidui_one.png',
                                           ScreenUtil().setHeight(84),
                                           ScreenUtil().setWidth(79)),
-                                    )
+                                    ),
+                                    Positioned(
+                                        bottom: 10.h,
+                                        left: 10.h,
+                                        child: SizedBox(
+                                          width: 270.h,
+                                          child: Text(
+                                            list[0].roomName!,
+                                            style:
+                                                StyleUtils.getCommonTextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 30.sp),
+                                          ),
+                                        ))
                                   ],
                                 ),
                               ),
@@ -556,7 +569,21 @@ class _PaiduiPageState extends State<PaiduiPage>
                                               'assets/images/paidui_two.png',
                                               ScreenUtil().setHeight(60),
                                               ScreenUtil().setWidth(55)),
-                                        )
+                                        ),
+                                        Positioned(
+                                            bottom: 5.h,
+                                            left: 5.h,
+                                            child: SizedBox(
+                                              width: 132.5.h,
+                                              child: Text(
+                                                list[1].roomName!,
+                                                maxLines: 1,
+                                                style:
+                                                StyleUtils.getCommonTextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 21.sp),
+                                              ),
+                                            ))
                                       ],
                                     ),
                                   ),
@@ -565,11 +592,29 @@ class _PaiduiPageState extends State<PaiduiPage>
                                     onTap: (() {
                                       doPostBeforeJoin(list[3].id.toString());
                                     }),
-                                    child: WidgetUtils.CircleImageNet(
-                                        ScreenUtil().setHeight(137.5),
-                                        ScreenUtil().setHeight(137.5),
-                                        10,
-                                        list[3].coverImg!),
+                                    child: Stack(
+                                      children: [
+                                        WidgetUtils.CircleImageNet(
+                                            ScreenUtil().setHeight(137.5),
+                                            ScreenUtil().setHeight(137.5),
+                                            10,
+                                            list[3].coverImg!),
+                                        Positioned(
+                                            bottom: 5.h,
+                                            left: 5.h,
+                                            child: SizedBox(
+                                              width: 132.5.h,
+                                              child: Text(
+                                                list[3].roomName!,
+                                                maxLines: 1,
+                                                style:
+                                                StyleUtils.getCommonTextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 21.sp),
+                                              ),
+                                            ))
+                                      ],
+                                    ),
                                   )
                                 ],
                               ),
@@ -594,7 +639,21 @@ class _PaiduiPageState extends State<PaiduiPage>
                                               'assets/images/paidui_three.png',
                                               ScreenUtil().setHeight(60),
                                               ScreenUtil().setWidth(42)),
-                                        )
+                                        ),
+                                        Positioned(
+                                            bottom: 5.h,
+                                            left: 5.h,
+                                            child: SizedBox(
+                                              width: 132.5.h,
+                                              child: Text(
+                                                list[2].roomName!,
+                                                maxLines: 1,
+                                                style:
+                                                StyleUtils.getCommonTextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 21.sp),
+                                              ),
+                                            ))
                                       ],
                                     ),
                                   ),
@@ -603,11 +662,29 @@ class _PaiduiPageState extends State<PaiduiPage>
                                     onTap: (() {
                                       doPostBeforeJoin(list[4].id.toString());
                                     }),
-                                    child: WidgetUtils.CircleImageNet(
-                                        ScreenUtil().setHeight(137.5),
-                                        ScreenUtil().setHeight(137.5),
-                                        10,
-                                        list[4].coverImg!),
+                                    child: Stack(
+                                      children: [
+                                        WidgetUtils.CircleImageNet(
+                                            ScreenUtil().setHeight(137.5),
+                                            ScreenUtil().setHeight(137.5),
+                                            10,
+                                            list[4].coverImg!),
+                                        Positioned(
+                                            bottom: 5.h,
+                                            left: 5.h,
+                                            child: SizedBox(
+                                              width: 132.5.h,
+                                              child: Text(
+                                                list[4].roomName!,
+                                                maxLines: 1,
+                                                style:
+                                                StyleUtils.getCommonTextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 21.sp),
+                                              ),
+                                            ))
+                                      ],
+                                    ),
                                   )
                                 ],
                               ),
@@ -871,7 +948,11 @@ class _PaiduiPageState extends State<PaiduiPage>
       switch (bean.code) {
         case MyHttpConfig.successCode:
           // ignore: use_build_context_synchronously
-          MyUtils.goTransparentRFPage(context, RoomPage(roomId: roomID,));
+          MyUtils.goTransparentRFPage(
+              context,
+              RoomPage(
+                roomId: roomID,
+              ));
           break;
         case MyHttpConfig.errorloginCode:
           // ignore: use_build_context_synchronously
