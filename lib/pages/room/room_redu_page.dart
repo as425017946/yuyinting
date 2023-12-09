@@ -36,7 +36,7 @@ class _RoomReDuPageState extends State<RoomReDuPage> {
       body: Column(
         children: [
           SizedBox(
-            height: ScreenUtil().setHeight(150),
+            height: ScreenUtil().setHeight(400),
             child: GestureDetector(
               onTap: (() {
                 Navigator.pop(context);
@@ -52,11 +52,11 @@ class _RoomReDuPageState extends State<RoomReDuPage> {
             child: Container(
               height: double.infinity,
               width: double.infinity,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 //设置Container修饰
                 image: DecorationImage(
                   //背景图片修饰
-                  image: AssetImage("assets/images/room_tc1.png"),
+                  image: AssetImage(_currentIndex == 0 ? "assets/images/room_tc1.png" : 'assets/images/room_ph_bg.png'),
                   fit: BoxFit.fill, //覆盖
                 ),
               ),

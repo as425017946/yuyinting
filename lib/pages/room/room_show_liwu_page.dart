@@ -13,13 +13,10 @@ class RoomShowLiWuPage extends StatefulWidget {
   // 选择需要赠送的哪个人
   List<bool> listPeople = [];
   String url;
-  String svga;
-
   RoomShowLiWuPage(
       {super.key,
       required this.listPeople,
-      required this.url,
-      required this.svga});
+      required this.url});
 
   @override
   State<RoomShowLiWuPage> createState() => _RoomShowLiWuPageState();
@@ -350,43 +347,37 @@ class _RoomShowLiWuPageState extends State<RoomShowLiWuPage>
     _animationOpacity10 = opacityTween10.animate(opacityCurve10);
 
     // svga礼物是空的，播放送的礼物
-    if(widget.svga.isEmpty){
-      if (widget.listPeople[8]) {
-        _controller.forward();
-      }
-      if (widget.listPeople[0]) {
-        _controller1.forward();
-      }
-      if (widget.listPeople[1]) {
-        _controller2.forward();
-      }
-      if (widget.listPeople[2]) {
-        _controller3.forward();
-      }
-      if (widget.listPeople[3]) {
-        _controller4.forward();
-      }
-      if (widget.listPeople[4]) {
-        _controller5.forward();
-      }
-      if (widget.listPeople[5]) {
-        _controller6.forward();
-      }
-      if (widget.listPeople[6]) {
-        _controller7.forward();
-      }
-      if (widget.listPeople[7]) {
-        _controller8.forward();
-      }
-      if (widget.listPeople[9]) {
-        _controller10.forward();
-      }
-      Future.delayed(const Duration(seconds: 4), () {
-        Navigator.pop(context);
-      });
+    if (widget.listPeople[8]) {
+      _controller.forward();
     }
-
-    eventBus.on<ResidentBack>().listen((event) {
+    if (widget.listPeople[0]) {
+      _controller1.forward();
+    }
+    if (widget.listPeople[1]) {
+      _controller2.forward();
+    }
+    if (widget.listPeople[2]) {
+      _controller3.forward();
+    }
+    if (widget.listPeople[3]) {
+      _controller4.forward();
+    }
+    if (widget.listPeople[4]) {
+      _controller5.forward();
+    }
+    if (widget.listPeople[5]) {
+      _controller6.forward();
+    }
+    if (widget.listPeople[6]) {
+      _controller7.forward();
+    }
+    if (widget.listPeople[7]) {
+      _controller8.forward();
+    }
+    if (widget.listPeople[9]) {
+      _controller10.forward();
+    }
+    Future.delayed(const Duration(seconds: 4), () {
       Navigator.pop(context);
     });
   }
@@ -410,307 +401,299 @@ class _RoomShowLiWuPageState extends State<RoomShowLiWuPage>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: widget.svga.isNotEmpty
-          ? SizedBox(
-              height: double.infinity,
-              width: double.infinity,
-              child: SVGASimpleImage3(
-                resUrl: widget.svga,
-              ),
+      body: Center(
+        child: Stack(
+          children: [
+            widget.listPeople[8]
+                ? AnimatedBuilder(
+              animation: _controller,
+              builder: (context, child) {
+                return Opacity(
+                  opacity: _animationOpacity.value,
+                  child: ScaleTransition(
+                    scale: _animationSize,
+                    child: Transform.translate(
+                      offset: _animationPosition.value,
+                      child: Container(
+                        width: 100.h,
+                        height: 100.h,
+                        //超出部分，可裁剪
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(widget.url),
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.circular(50.h),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
             )
-          : Center(
-              child: Stack(
-                children: [
-                  widget.listPeople[8]
-                      ? AnimatedBuilder(
-                          animation: _controller,
-                          builder: (context, child) {
-                            return Opacity(
-                              opacity: _animationOpacity.value,
-                              child: ScaleTransition(
-                                scale: _animationSize,
-                                child: Transform.translate(
-                                  offset: _animationPosition.value,
-                                  child: Container(
-                                    width: 100.h,
-                                    height: 100.h,
-                                    //超出部分，可裁剪
-                                    clipBehavior: Clip.hardEdge,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: NetworkImage(widget.url),
-                                        fit: BoxFit.cover,
-                                      ),
-                                      borderRadius: BorderRadius.circular(50.h),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        )
-                      : const Text(''),
-                  widget.listPeople[0]
-                      ? AnimatedBuilder(
-                          animation: _controller1,
-                          builder: (context, child) {
-                            return Opacity(
-                              opacity: _animationOpacity1.value,
-                              child: ScaleTransition(
-                                scale: _animationSize1,
-                                child: Transform.translate(
-                                  offset: _animationPosition1.value,
-                                  child: Container(
-                                    width: 100.h,
-                                    height: 100.h,
-                                    //超出部分，可裁剪
-                                    clipBehavior: Clip.hardEdge,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: NetworkImage(widget.url),
-                                        fit: BoxFit.cover,
-                                      ),
-                                      borderRadius: BorderRadius.circular(50.h),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        )
-                      : const Text(''),
-                  widget.listPeople[1]
-                      ? AnimatedBuilder(
-                          animation: _controller2,
-                          builder: (context, child) {
-                            return Opacity(
-                              opacity: _animationOpacity2.value,
-                              child: ScaleTransition(
-                                scale: _animationSize2,
-                                child: Transform.translate(
-                                  offset: _animationPosition2.value,
-                                  child: Container(
-                                    width: 100.h,
-                                    height: 100.h,
-                                    //超出部分，可裁剪
-                                    clipBehavior: Clip.hardEdge,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: NetworkImage(widget.url),
-                                        fit: BoxFit.cover,
-                                      ),
-                                      borderRadius: BorderRadius.circular(50.h),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        )
-                      : const Text(''),
-                  widget.listPeople[2]
-                      ? AnimatedBuilder(
-                          animation: _controller3,
-                          builder: (context, child) {
-                            return Opacity(
-                              opacity: _animationOpacity3.value,
-                              child: ScaleTransition(
-                                scale: _animationSize3,
-                                child: Transform.translate(
-                                  offset: _animationPosition3.value,
-                                  child: Container(
-                                    width: 100.h,
-                                    height: 100.h,
-                                    //超出部分，可裁剪
-                                    clipBehavior: Clip.hardEdge,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: NetworkImage(widget.url),
-                                        fit: BoxFit.cover,
-                                      ),
-                                      borderRadius: BorderRadius.circular(50.h),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        )
-                      : const Text(''),
-                  widget.listPeople[3]
-                      ? AnimatedBuilder(
-                          animation: _controller4,
-                          builder: (context, child) {
-                            return Opacity(
-                              opacity: _animationOpacity4.value,
-                              child: ScaleTransition(
-                                scale: _animationSize4,
-                                child: Transform.translate(
-                                  offset: _animationPosition4.value,
-                                  child: Container(
-                                    width: 100.h,
-                                    height: 100.h,
-                                    //超出部分，可裁剪
-                                    clipBehavior: Clip.hardEdge,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: NetworkImage(widget.url),
-                                        fit: BoxFit.cover,
-                                      ),
-                                      borderRadius: BorderRadius.circular(50.h),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        )
-                      : const Text(''),
-                  widget.listPeople[4]
-                      ? AnimatedBuilder(
-                          animation: _controller5,
-                          builder: (context, child) {
-                            return Opacity(
-                              opacity: _animationOpacity5.value,
-                              child: ScaleTransition(
-                                scale: _animationSize5,
-                                child: Transform.translate(
-                                  offset: _animationPosition5.value,
-                                  child: Container(
-                                    width: 100.h,
-                                    height: 100.h,
-                                    //超出部分，可裁剪
-                                    clipBehavior: Clip.hardEdge,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: NetworkImage(widget.url),
-                                        fit: BoxFit.cover,
-                                      ),
-                                      borderRadius: BorderRadius.circular(50.h),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        )
-                      : const Text(''),
-                  widget.listPeople[5]
-                      ? AnimatedBuilder(
-                          animation: _controller6,
-                          builder: (context, child) {
-                            return Opacity(
-                              opacity: _animationOpacity6.value,
-                              child: ScaleTransition(
-                                scale: _animationSize6,
-                                child: Transform.translate(
-                                  offset: _animationPosition6.value,
-                                  child: Container(
-                                    width: 100.h,
-                                    height: 100.h,
-                                    //超出部分，可裁剪
-                                    clipBehavior: Clip.hardEdge,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: NetworkImage(widget.url),
-                                        fit: BoxFit.cover,
-                                      ),
-                                      borderRadius: BorderRadius.circular(50.h),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        )
-                      : const Text(''),
-                  widget.listPeople[6]
-                      ? AnimatedBuilder(
-                          animation: _controller7,
-                          builder: (context, child) {
-                            return Opacity(
-                              opacity: _animationOpacity7.value,
-                              child: ScaleTransition(
-                                scale: _animationSize7,
-                                child: Transform.translate(
-                                  offset: _animationPosition7.value,
-                                  child: Container(
-                                    width: 100.h,
-                                    height: 100.h,
-                                    //超出部分，可裁剪
-                                    clipBehavior: Clip.hardEdge,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: NetworkImage(widget.url),
-                                        fit: BoxFit.cover,
-                                      ),
-                                      borderRadius: BorderRadius.circular(50.h),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        )
-                      : const Text(''),
-                  widget.listPeople[7]
-                      ? AnimatedBuilder(
-                          animation: _controller8,
-                          builder: (context, child) {
-                            return Opacity(
-                              opacity: _animationOpacity8.value,
-                              child: ScaleTransition(
-                                scale: _animationSize8,
-                                child: Transform.translate(
-                                  offset: _animationPosition8.value,
-                                  child: Container(
-                                    width: 100.h,
-                                    height: 100.h,
-                                    //超出部分，可裁剪
-                                    clipBehavior: Clip.hardEdge,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: NetworkImage(widget.url),
-                                        fit: BoxFit.cover,
-                                      ),
-                                      borderRadius: BorderRadius.circular(50.h),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        )
-                      : const Text(''),
-                  widget.listPeople[9]
-                      ? AnimatedBuilder(
-                          animation: _controller10,
-                          builder: (context, child) {
-                            return Opacity(
-                              opacity: _animationOpacity10.value,
-                              child: ScaleTransition(
-                                scale: _animationSize10,
-                                child: Transform.translate(
-                                  offset: _animationPosition10.value,
-                                  child: Container(
-                                    width: 100.h,
-                                    height: 100.h,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: NetworkImage(widget.url),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        )
-                      : const Text(''),
-                ],
-              ),
-            ),
+                : const Text(''),
+            widget.listPeople[0]
+                ? AnimatedBuilder(
+              animation: _controller1,
+              builder: (context, child) {
+                return Opacity(
+                  opacity: _animationOpacity1.value,
+                  child: ScaleTransition(
+                    scale: _animationSize1,
+                    child: Transform.translate(
+                      offset: _animationPosition1.value,
+                      child: Container(
+                        width: 100.h,
+                        height: 100.h,
+                        //超出部分，可裁剪
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(widget.url),
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.circular(50.h),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            )
+                : const Text(''),
+            widget.listPeople[1]
+                ? AnimatedBuilder(
+              animation: _controller2,
+              builder: (context, child) {
+                return Opacity(
+                  opacity: _animationOpacity2.value,
+                  child: ScaleTransition(
+                    scale: _animationSize2,
+                    child: Transform.translate(
+                      offset: _animationPosition2.value,
+                      child: Container(
+                        width: 100.h,
+                        height: 100.h,
+                        //超出部分，可裁剪
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(widget.url),
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.circular(50.h),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            )
+                : const Text(''),
+            widget.listPeople[2]
+                ? AnimatedBuilder(
+              animation: _controller3,
+              builder: (context, child) {
+                return Opacity(
+                  opacity: _animationOpacity3.value,
+                  child: ScaleTransition(
+                    scale: _animationSize3,
+                    child: Transform.translate(
+                      offset: _animationPosition3.value,
+                      child: Container(
+                        width: 100.h,
+                        height: 100.h,
+                        //超出部分，可裁剪
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(widget.url),
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.circular(50.h),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            )
+                : const Text(''),
+            widget.listPeople[3]
+                ? AnimatedBuilder(
+              animation: _controller4,
+              builder: (context, child) {
+                return Opacity(
+                  opacity: _animationOpacity4.value,
+                  child: ScaleTransition(
+                    scale: _animationSize4,
+                    child: Transform.translate(
+                      offset: _animationPosition4.value,
+                      child: Container(
+                        width: 100.h,
+                        height: 100.h,
+                        //超出部分，可裁剪
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(widget.url),
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.circular(50.h),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            )
+                : const Text(''),
+            widget.listPeople[4]
+                ? AnimatedBuilder(
+              animation: _controller5,
+              builder: (context, child) {
+                return Opacity(
+                  opacity: _animationOpacity5.value,
+                  child: ScaleTransition(
+                    scale: _animationSize5,
+                    child: Transform.translate(
+                      offset: _animationPosition5.value,
+                      child: Container(
+                        width: 100.h,
+                        height: 100.h,
+                        //超出部分，可裁剪
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(widget.url),
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.circular(50.h),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            )
+                : const Text(''),
+            widget.listPeople[5]
+                ? AnimatedBuilder(
+              animation: _controller6,
+              builder: (context, child) {
+                return Opacity(
+                  opacity: _animationOpacity6.value,
+                  child: ScaleTransition(
+                    scale: _animationSize6,
+                    child: Transform.translate(
+                      offset: _animationPosition6.value,
+                      child: Container(
+                        width: 100.h,
+                        height: 100.h,
+                        //超出部分，可裁剪
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(widget.url),
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.circular(50.h),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            )
+                : const Text(''),
+            widget.listPeople[6]
+                ? AnimatedBuilder(
+              animation: _controller7,
+              builder: (context, child) {
+                return Opacity(
+                  opacity: _animationOpacity7.value,
+                  child: ScaleTransition(
+                    scale: _animationSize7,
+                    child: Transform.translate(
+                      offset: _animationPosition7.value,
+                      child: Container(
+                        width: 100.h,
+                        height: 100.h,
+                        //超出部分，可裁剪
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(widget.url),
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.circular(50.h),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            )
+                : const Text(''),
+            widget.listPeople[7]
+                ? AnimatedBuilder(
+              animation: _controller8,
+              builder: (context, child) {
+                return Opacity(
+                  opacity: _animationOpacity8.value,
+                  child: ScaleTransition(
+                    scale: _animationSize8,
+                    child: Transform.translate(
+                      offset: _animationPosition8.value,
+                      child: Container(
+                        width: 100.h,
+                        height: 100.h,
+                        //超出部分，可裁剪
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(widget.url),
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.circular(50.h),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            )
+                : const Text(''),
+            widget.listPeople[9]
+                ? AnimatedBuilder(
+              animation: _controller10,
+              builder: (context, child) {
+                return Opacity(
+                  opacity: _animationOpacity10.value,
+                  child: ScaleTransition(
+                    scale: _animationSize10,
+                    child: Transform.translate(
+                      offset: _animationPosition10.value,
+                      child: Container(
+                        width: 100.h,
+                        height: 100.h,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(widget.url),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            )
+                : const Text(''),
+          ],
+        ),
+      ),
     );
   }
 

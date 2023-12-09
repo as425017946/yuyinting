@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
+import 'package:yuyinting/widget/SVGASimpleImage.dart';
 
 import '../../bean/rankListBean.dart';
 import '../../colors/my_colors.dart';
@@ -236,14 +237,22 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>  with AutomaticKeepAliveC
                 Column(
                   children: [
                     const Expanded(child: Text('')),
-                    _list.length>1 ? WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(100), ScreenUtil().setHeight(100), 'https://img-blog.csdnimg.cn/6d15082ac7234ec7a16065e74f689590.jpeg'): const Text(''),
-                    WidgetUtils.commonSizedBox(5, 0),
+                    _list.length>1 ? Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        WidgetUtils.CircleHeadImage(
+                            ScreenUtil().setHeight(90),
+                            ScreenUtil().setHeight(90), _list[1].avatar!),
+                        SizedBox(
+                          height: 120.h,
+                          width: 120.h,
+                          child: const SVGASimpleImage(assetsName: 'assets/svga/ph_2.svga',),
+                        )
+                      ],
+                    ): const Text(''),
                     Stack(
                       children: [
-                        WidgetUtils.showImagesFill(
-                            'assets/images/room_two.png',
-                            ScreenUtil().setHeight(104),
-                            ScreenUtil().setHeight(155)),
+                        WidgetUtils.commonSizedBox(100.h, 0),
                         Container(
                           width: ScreenUtil().setHeight(155),
                           margin: const EdgeInsets.only(top: 5),
@@ -251,7 +260,7 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>  with AutomaticKeepAliveC
                           child: WidgetUtils.onlyTextCenter(
                               _list.length>1 ? _list[1].nickname! : '',
                               StyleUtils.getCommonTextStyle(
-                                  color: MyColors.roomPHWZBlack,
+                                  color: Colors.white,
                                   fontSize: ScreenUtil().setSp(21),
                                   fontWeight: FontWeight.w600)),
                         )
@@ -259,26 +268,30 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>  with AutomaticKeepAliveC
                     )
                   ],
                 ),
-                const Expanded(child: Text('')),
                 Column(
                   children: [
                     const Expanded(child: Text('')),
-                    _list.isNotEmpty ? WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(120), ScreenUtil().setHeight(120), 'https://img-blog.csdnimg.cn/6d15082ac7234ec7a16065e74f689590.jpeg') : const Text(''),
-                    WidgetUtils.commonSizedBox(5, 0),
+                    _list.isNotEmpty ? Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(110), ScreenUtil().setHeight(110), _list[0].avatar!),
+                        SizedBox(
+                          height: 140.h,
+                          width: 140.h,
+                          child: const SVGASimpleImage(assetsName: 'assets/svga/ph_1.svga',),
+                        )
+                      ],
+                    ) : const Text(''),
                     Stack(
                       children: [
-                        WidgetUtils.showImages(
-                            'assets/images/room_one.png',
-                            ScreenUtil().setHeight(165),
-                            ScreenUtil().setHeight(192)),
+                        WidgetUtils.commonSizedBox(160.h, 0),
                         Container(
                           width: ScreenUtil().setHeight(192),
-                          margin: const EdgeInsets.only(top: 5),
                           alignment: Alignment.topCenter,
                           child: WidgetUtils.onlyTextCenter(
                               _list.isNotEmpty ? _list[0].nickname! : '',
                               StyleUtils.getCommonTextStyle(
-                                  color: MyColors.roomPHWZBlack,
+                                  color: Colors.white,
                                   fontSize: ScreenUtil().setSp(21),
                                   fontWeight: FontWeight.w600)),
                         )
@@ -286,26 +299,30 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>  with AutomaticKeepAliveC
                     )
                   ],
                 ),
-                const Expanded(child: Text('')),
                 Column(
                   children: [
                     const Expanded(child: Text('')),
-                    _list.length > 2 ? WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(100), ScreenUtil().setHeight(100), 'https://img-blog.csdnimg.cn/6d15082ac7234ec7a16065e74f689590.jpeg') : const Text(''),
-                    WidgetUtils.commonSizedBox(5, 0),
+                    _list.length > 2 ? Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(90), ScreenUtil().setHeight(90), _list[2].avatar!),
+                        SizedBox(
+                          height: 120.h,
+                          width: 120.h,
+                          child: const SVGASimpleImage(assetsName: 'assets/svga/ph_3.svga',),
+                        )
+                      ],
+                    ) : const Text(''),
                     Stack(
                       children: [
-                        WidgetUtils.showImagesFill(
-                            'assets/images/room_three.png',
-                            ScreenUtil().setHeight(104),
-                            ScreenUtil().setHeight(155)),
+                        WidgetUtils.commonSizedBox(40.h, 0),
                         Container(
                           width: ScreenUtil().setHeight(155),
-                          margin: const EdgeInsets.only(top: 5),
                           alignment: Alignment.topCenter,
                           child: WidgetUtils.onlyTextCenter(
                               _list.length > 2 ? _list[2].nickname! : '',
                               StyleUtils.getCommonTextStyle(
-                                  color: MyColors.roomPHWZBlack,
+                                  color: Colors.white,
                                   fontSize: ScreenUtil().setSp(21),
                                   fontWeight: FontWeight.w600)),
                         )
@@ -320,7 +337,7 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>  with AutomaticKeepAliveC
           /// 展示在线用户
           ListView.builder(
             padding: EdgeInsets.only(
-                top: ScreenUtil().setHeight(20)),
+                top: 160.h),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: _itemTuiJian,

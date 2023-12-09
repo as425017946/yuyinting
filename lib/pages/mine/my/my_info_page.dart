@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_sound/public/flutter_sound_player.dart';
 import 'package:yuyinting/bean/myHomeBean.dart';
 import 'package:yuyinting/main.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/style_utils.dart';
+import 'package:yuyinting/widget/SVGASimpleImage.dart';
 
 import '../../../colors/my_colors.dart';
 import '../../../config/my_config.dart';
@@ -46,8 +48,40 @@ class _MyInfoPageState extends State<MyInfoPage> {
     _controller = PageController(
       initialPage: 0,
     );
+    _initialize();
     doPostMyIfon();
   }
+
+  final FlutterSoundPlayer _mPlayer = FlutterSoundPlayer();
+  bool playRecord = false; //音频文件播放状态
+  //播放录音
+  void play() {
+    LogE('录音地址**$voice_card');
+    _mPlayer
+        .startPlayer(
+        fromURI: voice_card,
+        whenFinished: () {
+          setState(() {
+            playRecord = false;
+          });
+        })
+        .then((value) {
+      setState(() {
+        playRecord = true;
+      });
+    });
+  }
+  void _initialize() async {
+    await _mPlayer!.closePlayer();
+    await _mPlayer!.openPlayer();
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -207,51 +241,41 @@ class _MyInfoPageState extends State<MyInfoPage> {
               WidgetUtils.commonSizedBox(10, 0),
 
               /// 音频
-              Row(
+              voice_card.isNotEmpty ? Row(
                 children: [
-                  Container(
-                    height: ScreenUtil().setHeight(45),
-                    width: ScreenUtil().setWidth(220),
-                    margin: const EdgeInsets.only(left: 20),
-                    padding: const EdgeInsets.only(left: 8),
-                    alignment: Alignment.center,
-                    //边框设置
-                    decoration: const BoxDecoration(
-                      //背景
-                      color: MyColors.peopleYellow ,
-                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                      borderRadius:
-                      BorderRadius.all(Radius.circular(20.0)),
+                  GestureDetector(
+                    onTap: ((){
+                      if(playRecord == false){
+                        play();
+                      }
+                    }),
+                    child: Container(
+                      height: ScreenUtil().setHeight(45),
+                      width: ScreenUtil().setWidth(220),
+                      margin: const EdgeInsets.only(left: 20),
+                      alignment: Alignment.center,
+                      //边框设置
+                      decoration: const BoxDecoration(
+                        //背景
+                        color: MyColors.peopleYellow ,
+                        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                        borderRadius:
+                        BorderRadius.all(Radius.circular(20.0)),
+                      ),
+                      child:
+                      playRecord == false ? Row(
+                        children: [
+                          const Expanded(child: SVGASimpleImage(assetsName: 'assets/svga/audio_xindiaotu.svga',)),
+                          WidgetUtils.commonSizedBox(0, 10.h),
+                          WidgetUtils.showImages('assets/images/people_bofang.png', ScreenUtil().setHeight(35), ScreenUtil().setWidth(35)),
+                          WidgetUtils.commonSizedBox(0, 10.h),
+                        ],
+                      ) : const Expanded(child: SVGASimpleImage(assetsName: 'assets/svga/audio_bolang.svga',)),
                     ),
-                    child: WidgetUtils.showImages('assets/images/people_bofang.png', ScreenUtil().setHeight(35), ScreenUtil().setWidth(35))
-                    // Row(
-                    //   children: [
-                    //     // WidgetUtils.showImages('assets/images/people_bofang.png', ScreenUtil().setHeight(35), ScreenUtil().setWidth(35)),
-                    //     // WidgetUtils.commonSizedBox(0, 20),
-                    //     // WidgetUtils.onlyText('晴天少女', StyleUtils.getCommonTextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(22))),
-                    //   ],
-                    // ),
                   ),
                   const Expanded(child: Text('')),
                 ],
-              ),
-              /// 播放音频时展示
-              // Container(
-              //   height: ScreenUtil().setHeight(50),
-              //   width: double.infinity,
-              //   child: Row(
-              //     children: [
-              //       Container(
-              //         width: ScreenUtil().setHeight(180),
-              //         height: ScreenUtil().setHeight(50),
-              //         margin: const EdgeInsets.only(left: 20),
-              //         child: const SVGASimpleImage(
-              //             assetsName: 'assets/svga/shengyin_bg.svga'),
-              //       ),
-              //       const Expanded(child: Text('')),
-              //     ],
-              //   ),
-              // ),
+              ) : const Text(''),
               WidgetUtils.commonSizedBox(15, 0),
               Expanded(
                 child: Container(
@@ -409,7 +433,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
         ));
   }
 
-  /// 关于我们
+  /// 个人主页
   Future<void> doPostMyIfon() async {
     LogE('token ${sp.getString('user_id')}');
     Loading.show(MyConfig.successTitle);

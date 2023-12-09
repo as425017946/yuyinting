@@ -259,31 +259,30 @@ class MyUtils {
 
   /// 通用跳转到一个透明页面，从底部向上滚出的方法
   static void goTransparentPage(BuildContext context, Widget page) {
-    if(checkClick()) {
-      Future.delayed(const Duration(seconds: 0), () {
-        Navigator.push(
-          context,
-          PageRouteBuilder(
-            //自定义路由
-            opaque: false,
-            pageBuilder: (context, a, _) => page, //需要跳转的页面
-            transitionsBuilder: (context, a, _, child) {
-              const begin = Offset(0,
-                  1); //Offset是一个2D小部件，他将记录坐标轴的x,y前者为宽，后者为高 如果将begin =Offset(1,0)为从右到左 改为(0,1),效果则会变成从下到上
-              const end = Offset.zero; //得到Offset.zero坐标值
-              const curve = Curves.ease; //这是一个曲线动画
-              var tween = Tween(begin: begin, end: end)
-                  .chain(CurveTween(curve: curve)); //使用补间动画转换为动画
-              return SlideTransition(
-                //转场动画//目前我认为只能用于跳转效果
-                position: a.drive(tween), //这里将获得一个新的动画
-                child: child,
-              );
-            },
-          ),
-        );
-      });
-    }
+
+    Future.delayed(const Duration(seconds: 0), () {
+      Navigator.push(
+        context,
+        PageRouteBuilder(
+          //自定义路由
+          opaque: false,
+          pageBuilder: (context, a, _) => page, //需要跳转的页面
+          transitionsBuilder: (context, a, _, child) {
+            const begin = Offset(0,
+                1); //Offset是一个2D小部件，他将记录坐标轴的x,y前者为宽，后者为高 如果将begin =Offset(1,0)为从右到左 改为(0,1),效果则会变成从下到上
+            const end = Offset.zero; //得到Offset.zero坐标值
+            const curve = Curves.ease; //这是一个曲线动画
+            var tween = Tween(begin: begin, end: end)
+                .chain(CurveTween(curve: curve)); //使用补间动画转换为动画
+            return SlideTransition(
+              //转场动画//目前我认为只能用于跳转效果
+              position: a.drive(tween), //这里将获得一个新的动画
+              child: child,
+            );
+          },
+        ),
+      );
+    });
   }
 
   /// 通用跳转到一个透明页面
@@ -318,8 +317,8 @@ class MyUtils {
           headerBody = const Text('下拉刷新');
         } else if (mode == RefreshStatus.refreshing) {
           // headerBody = Text('刷新中...');
-          headerBody = WidgetUtils.showImages('assets/images/a1.gif',
-              ScreenUtil().setHeight(50), ScreenUtil().setHeight(50));
+          headerBody = WidgetUtils.showImagesFill('assets/images/a1.gif',
+              ScreenUtil().setHeight(100), ScreenUtil().setHeight(100));
         } else if (mode == RefreshStatus.failed) {
           headerBody = const Text('刷新失败');
         } else if (mode == RefreshStatus.completed) {
@@ -330,7 +329,7 @@ class MyUtils {
           headerBody = const Text("完成");
         }
         return SizedBox(
-          height: ScreenUtil().setHeight(50),
+          height: ScreenUtil().setHeight(100),
           child: Center(child: headerBody),
         );
       },
@@ -417,33 +416,32 @@ class MyUtils {
   static void addChatListener() async{
     DatabaseHelper databaseHelper = DatabaseHelper();
     await databaseHelper.database;
-
     // 注册连接状态监听
     EMClient.getInstance.addConnectionEventHandler(
       "UNIQUE_HANDLER_ID",
       EMConnectionEventHandler(
         // sdk 连接成功;
-        onConnected: () => {LogE('im登录成功')},
+        onConnected: () => {LogE('IM 登录成功')},
         // 由于网络问题导致的断开，sdk会尝试自动重连，连接成功后会回调 "onConnected";
-        onDisconnected: () => {},
+        onDisconnected: () => {LogE('IM 断开连接')},
         // 用户 token 鉴权失败;
-        onUserAuthenticationFailed: () => {},
+        onUserAuthenticationFailed: () => {LogE('IM 登鉴权失败')},
         // 由于密码变更被踢下线;
-        onUserDidChangePassword: () => {},
+        onUserDidChangePassword: () => {LogE('IM 登由于密码变更被踢下线')},
         // 用户被连接被服务器禁止;
-        onUserDidForbidByServer: () => {},
+        onUserDidForbidByServer: () => {LogE('IM 登用户被连接被服务器禁止')},
         // 用户登录设备超出数量限制;
-        onUserDidLoginTooManyDevice: () => {},
+        onUserDidLoginTooManyDevice: () => {LogE('IM 登用户登录设备超出数量限制')},
         // 用户从服务器删除;
-        onUserDidRemoveFromServer: () => {},
+        onUserDidRemoveFromServer: () => {LogE('IM 登用户从服务器删除')},
         // 调用 `kickDevice` 方法将设备踢下线，被踢设备会收到该回调；
-        onUserKickedByOtherDevice: () => {},
+        onUserKickedByOtherDevice: () => {LogE('IM 登将设备踢下线')},
         // 登录新设备时因达到了登录设备数量限制而导致当前设备被踢下线，被踢设备收到该回调；
-        onUserDidLoginFromOtherDevice: (String deviceName) => {},
+        onUserDidLoginFromOtherDevice: (String deviceName) => {LogE('IM 登登录设备数量限制而导致当前设备被踢下线')},
         // Token 过期;
-        onTokenDidExpire: () => {},
+        onTokenDidExpire: () => {LogE('IM 登过期')},
         // Token 即将过期，需要调用 renewToken;
-        onTokenWillExpire: () => {},
+        onTokenWillExpire: () => {LogE('IM 登即将过期')},
       ),
     );
 
@@ -459,9 +457,9 @@ class MyUtils {
               case MessageType.TXT:
                 {
                   EMTextMessageBody body = msg.body as EMTextMessageBody;
-                  LogE('接受文本信息$msg');
+                  LogE('接收文本信息$msg');
                   Map info = msg.attributes!;
-                  LogE('接受文本信息${info['lv']}');
+                  LogE('接收文本信息$info');
                   if(info['lv'] == '' || info['lv'] == null){
                     String nickName = info['nickname'];
                     String headImg = info['avatar'];
@@ -481,6 +479,7 @@ class MyUtils {
                       'bigImg' : '',
                       'headImg': headImg,
                       'otherHeadImg': sp.getString('user_headimg'),
+
                       'add_time': msg.serverTime,
                       'type': 1,
                       'number': 0,
@@ -493,7 +492,6 @@ class MyUtils {
                     await databaseHelper.insertData('messageSLTable', params);
                     eventBus.fire(SendMessageBack(type: 1, msgID: '0'));
                   }else{
-                    LogE('接受文本信息=============');
                     eventBus.fire(JoinRoomYBack(map: info, type: '0'));
                   }
                 }
@@ -599,12 +597,9 @@ class MyUtils {
                 break;
               case MessageType.CUSTOM: //自定义消息
                 {
-                  LogE('CUSTOM消息****${msg.from}');
+                  LogE('CUSTOM消息****${msg}');
                   EMCustomMessageBody body = msg.body as EMCustomMessageBody;
-                  LogE('判断 ${body.event == 'send_all_user'}'); //横幅
-                  if(body.event == 'send_all_user'){
-                    eventBus.fire(ZDYHFBack(map: body.params, type: body.event));
-                  }else if(body.event == 'red_package'){ //接受到红包
+                  if(body.event == 'red_package'){ //接受到红包
                     Map info = body.params!;
                     String nickName = info['nickname'];
                     String headImg = info['avatar'];

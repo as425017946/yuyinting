@@ -253,10 +253,11 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                         });
                         if(roomDX){
                           MyToastUtils.showToastBottom('动效已开启');
+                          eventBus.fire(SubmitButtonBack(title: '动效已开启'));
                         }else{
                           MyToastUtils.showToastBottom('动效已关闭');
+                          eventBus.fire(SubmitButtonBack(title: '动效已关闭'));
                         }
-                        eventBus.fire(SubmitButtonBack(title: '动效'));
                       }),
                       child: Column(
                         children: [
@@ -291,10 +292,12 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                         });
                         if(roomSY){
                           MyToastUtils.showToastBottom('房间声音已开启');
+                          eventBus.fire(SubmitButtonBack(title: '房间声音已开启'));
                         }else{
                           MyToastUtils.showToastBottom('房间声音已关闭');
+                          eventBus.fire(SubmitButtonBack(title: '房间声音已关闭'));
                         }
-                        eventBus.fire(SubmitButtonBack(title: '房间声音'));
+
                       }),
                       child: Column(
                         children: [

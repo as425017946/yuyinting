@@ -113,78 +113,78 @@ class RoomItems {
                 WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
                 //等级
                 WidgetSpan(
-                    child: SizedBox(
-                      height: 28.h,
-                      width: 28.h,
-                      child: Stack(
-                        children: [
-                          list[i]['lv'] >= 1 && list[i]['lv'] <= 10
-                              ? WidgetUtils.showImages(
-                              'assets/images/dj/dj_1-10.png', 28.h, 28.h)
-                              : list[i]['lv'] >= 11 && list[i]['lv'] <= 15
-                              ? WidgetUtils.showImages(
-                              'assets/images/dj/dj_11-15.png', 28.h, 28.h)
-                              : list[i]['lv'] >= 16 && list[i]['lv'] <= 20
-                              ? WidgetUtils.showImages(
-                              'assets/images/dj/dj_16-20.png', 28.h, 28.h)
-                              : list[i]['lv'] >= 21 && list[i]['lv'] <= 25
-                              ? WidgetUtils.showImages(
-                              'assets/images/dj/dj_21-25.png',
-                              28.h,
-                              28.h)
-                              : list[i]['lv'] >= 26 && list[i]['lv'] <= 30
-                              ? WidgetUtils.showImages(
-                              'assets/images/dj/dj_26-30.png',
-                              28.h,
-                              28.h)
-                              : list[i]['lv'] >= 31 &&
-                              list[i]['lv'] <= 35
-                              ? WidgetUtils.showImages(
-                              'assets/images/dj/dj_31-35.png',
-                              28.h,
-                              28.h)
-                              : list[i]['lv'] >= 36 &&
-                              list[i]['lv'] <= 40
-                              ? WidgetUtils.showImages(
-                              'assets/images/dj/dj_36-40.png',
-                              28.h,
-                              28.h)
-                              : list[i]['lv'] >= 41 &&
-                              list[i]['lv'] <= 45
-                              ? WidgetUtils.showImages(
-                              'assets/images/dj/dj_41-45.png', 28.h, 28.h)
-                              : WidgetUtils.showImages(
-                              'assets/images/dj/dj_46-50.png', 28.h, 28.h),
-                          Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: Stack(
-                              children: [
-                                Text(
-                                  list[i]['lv'].toString(),
-                                  style: TextStyle(
-                                      fontSize: 18.sp,
-                                      fontWeight: FontWeight.w600,
-                                      fontFamily: 'Impact',
-                                      foreground: Paint()
-                                        ..style = PaintingStyle.stroke
-                                        ..strokeWidth = 2
-                                        ..color = MyColors.djOneM),
-                                ),
-                                Text(
-                                  list[i]['lv'].toString(),
-                                  style: TextStyle(
-                                      color: MyColors.djOne,
-                                      fontSize: 18.sp,
-                                      fontWeight: FontWeight.w600,
-                                      fontFamily: 'Impact'),
-                                ),
-                              ],
-                            ),
+                  child: SizedBox(
+                    height: 28.h,
+                    width: 28.h,
+                    child: Stack(
+                      children: [
+                        list[i]['lv'] >= 1 && list[i]['lv'] <= 10
+                            ? WidgetUtils.showImages(
+                            'assets/images/dj/dj_1-10.png', 28.h, 28.h)
+                            : list[i]['lv'] >= 11 && list[i]['lv'] <= 15
+                            ? WidgetUtils.showImages(
+                            'assets/images/dj/dj_11-15.png', 28.h, 28.h)
+                            : list[i]['lv'] >= 16 && list[i]['lv'] <= 20
+                            ? WidgetUtils.showImages(
+                            'assets/images/dj/dj_16-20.png', 28.h, 28.h)
+                            : list[i]['lv'] >= 21 && list[i]['lv'] <= 25
+                            ? WidgetUtils.showImages(
+                            'assets/images/dj/dj_21-25.png',
+                            28.h,
+                            28.h)
+                            : list[i]['lv'] >= 26 && list[i]['lv'] <= 30
+                            ? WidgetUtils.showImages(
+                            'assets/images/dj/dj_26-30.png',
+                            28.h,
+                            28.h)
+                            : list[i]['lv'] >= 31 &&
+                            list[i]['lv'] <= 35
+                            ? WidgetUtils.showImages(
+                            'assets/images/dj/dj_31-35.png',
+                            28.h,
+                            28.h)
+                            : list[i]['lv'] >= 36 &&
+                            list[i]['lv'] <= 40
+                            ? WidgetUtils.showImages(
+                            'assets/images/dj/dj_36-40.png',
+                            28.h,
+                            28.h)
+                            : list[i]['lv'] >= 41 &&
+                            list[i]['lv'] <= 45
+                            ? WidgetUtils.showImages(
+                            'assets/images/dj/dj_41-45.png', 28.h, 28.h)
+                            : WidgetUtils.showImages(
+                            'assets/images/dj/dj_46-50.png', 28.h, 28.h),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Stack(
+                            children: [
+                              Text(
+                                list[i]['lv'].toString(),
+                                style: TextStyle(
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: 'Impact',
+                                    foreground: Paint()
+                                      ..style = PaintingStyle.stroke
+                                      ..strokeWidth = 2
+                                      ..color = MyColors.djOneM),
+                              ),
+                              Text(
+                                list[i]['lv'].toString(),
+                                style: TextStyle(
+                                    color: MyColors.djOne,
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: 'Impact'),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),),
+                        ),
+                      ],
+                    ),
+                  ),),
                 WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
                 //贵族
                 WidgetSpan(
@@ -222,10 +222,10 @@ class RoomItems {
                 // 靓号
                 WidgetSpan(
                     child: Transform.translate(offset: Offset(0, 1.h),
-                        child: list[i]['is_pretty'] == '0'
-                            ? const Text('')
-                            : WidgetUtils.showImages(
-                            'assets/images/dj/lianghao.png', 30.h, 30.h),)
+                      child: list[i]['is_pretty'] == '0'
+                          ? const Text('')
+                          : WidgetUtils.showImages(
+                          'assets/images/dj/lianghao.png', 30.h, 30.h),)
                 ),
                 //用户昵称
                 WidgetSpan(child: Stack(
@@ -262,7 +262,7 @@ class RoomItems {
                             title: '欢迎', index: '${list[i]['uid']},$i'));
                       }),
                       child: Transform.translate(
-                        offset: Offset(0,5.h),
+                        offset: Offset(0, 5.h),
                         child: Container(
                           width: ScreenUtil().setHeight(65),
                           height: ScreenUtil().setHeight(30),
@@ -490,6 +490,98 @@ class RoomItems {
               ]),
             ),
           ),
+        ],
+      );
+    } else if (list[i]['type'] == '5') {
+      // 直刷和背包单个礼物赠送使用
+      List<String> infos = list[i]['content'].toString().split(';');
+      List<String> listName = infos[3].toString().split(',');
+      String name = '';
+      for (int i = 0; i < listName.length; i++) {
+        if (name.isEmpty) {
+          name = listName[i];
+        } else {
+          name = '$name,${listName[i]}';
+        }
+      }
+      // 厅内送出礼物推送
+      return RichText(
+        text: TextSpan(
+            children: [
+              WidgetSpan(
+                  child: Text(infos[0], style: StyleUtils.getCommonTextStyle(
+                      color: MyColors.jianbian2, fontSize: 22.sp))),
+              WidgetSpan(
+                  child: Text(infos[1], style: StyleUtils.getCommonTextStyle(
+                      color: Colors.white, fontSize: 22.sp))),
+              WidgetSpan(
+                  child: Text(infos[2], style: StyleUtils.getCommonTextStyle(
+                      color: MyColors.jianbian2, fontSize: 22.sp))),
+              WidgetSpan(
+                  child: Text(infos[3].contains(',') ? name : infos[3],
+                      style: StyleUtils.getCommonTextStyle(
+                          color: Colors.white, fontSize: 22.sp))),
+              WidgetSpan(
+                  child: Text(infos[4], style: StyleUtils.getCommonTextStyle(
+                      color: MyColors.jianbian2, fontSize: 22.sp))),
+            ]
+        ),
+      );
+    } else if (list[i]['type'] == '6') {
+      // 背包礼物一键赠送使用
+      List<String> infos = list[i]['content'].toString().split(';');
+      // 厅内送出礼物推送
+      return Wrap(
+        children: [
+          Text(infos[0], style: StyleUtils.getCommonTextStyle(
+              color: MyColors.jianbian2, fontSize: 22.sp)),
+          Text(infos[1], style: StyleUtils.getCommonTextStyle(
+              color: Colors.white, fontSize: 22.sp)),
+          Text(infos[2], style: StyleUtils.getCommonTextStyle(
+              color: MyColors.jianbian2, fontSize: 22.sp)),
+          Text(infos[3], style: StyleUtils.getCommonTextStyle(
+              color: Colors.white, fontSize: 22.sp)),
+          Text(infos[4], maxLines: 20, style: StyleUtils.getCommonTextStyle(
+              color: MyColors.jianbian2, fontSize: 22.sp)),
+        ],
+      );
+    } else if (list[i]['type'] == '7') {
+      // 收藏房间
+      return Text(
+          list[i]['content'],
+          style: StyleUtils.getCommonTextStyle(
+              color: MyColors.jianbian2, fontSize: 22.sp)
+      );
+    } else if (list[i]['type'] == '8') {
+      // 跟随主播进入房间
+      return Row(
+        children: [
+          Text(list[i]['info'], style: StyleUtils.getCommonTextStyle(
+              color: MyColors.roomMessageYellow2, fontSize: 22.sp)),
+          Text('跟随', style: StyleUtils.getCommonTextStyle(
+              color: Colors.white, fontSize: 22.sp)),
+          Text(list[i]['content'], style: StyleUtils.getCommonTextStyle(
+              color: MyColors.roomMessageYellow2, fontSize: 22.sp)),
+          Text('进入房间', style: StyleUtils.getCommonTextStyle(
+              color: Colors.white, fontSize: 22.sp)),
+        ],
+      );
+    } else if (list[i]['type'] == '9') {
+      // 厅内用户抽奖
+      List<String> infos = list[i]['content'].toString().split(';');
+      // 厅内送出礼物推送
+      return Wrap(
+        children: [
+          Text(infos[0], style: StyleUtils.getCommonTextStyle(
+              color: MyColors.jianbian2, fontSize: 22.sp)),
+          Text(infos[1], style: StyleUtils.getCommonTextStyle(
+              color: Colors.white, fontSize: 22.sp)),
+          Text(infos[2], style: StyleUtils.getCommonTextStyle(
+              color: MyColors.jianbian2, fontSize: 22.sp)),
+          Text(infos[3], style: StyleUtils.getCommonTextStyle(
+              color: Colors.white, fontSize: 22.sp)),
+          Text(infos[4], maxLines: 20, style: StyleUtils.getCommonTextStyle(
+              color: MyColors.jianbian2, fontSize: 22.sp)),
         ],
       );
     } else {
@@ -848,11 +940,13 @@ class RoomItems {
         follow_status == '0'
             ? GestureDetector(
           onTap: (() {
-            eventBus.fire(RoomBack(title: '收藏', index: ''));
+            if (MyUtils.checkClick()) {
+              eventBus.fire(RoomBack(title: '收藏', index: ''));
+            }
           }),
           child: SizedBox(
-            width: ScreenUtil().setHeight(60),
-            height: ScreenUtil().setHeight(32),
+            width: ScreenUtil().setHeight(80),
+            height: ScreenUtil().setHeight(38),
             child: Stack(
               alignment: Alignment.center,
               children: [
@@ -861,20 +955,14 @@ class RoomItems {
                     double.infinity,
                     double.infinity),
                 Container(
-                  width: ScreenUtil().setHeight(60),
-                  height: 50.h,
+                  width: ScreenUtil().setHeight(80),
+                  height: ScreenUtil().setHeight(38),
                   alignment: Alignment.center,
-                  child: Column(
-                    children: [
-                      WidgetUtils.commonSizedBox(
-                          ScreenUtil().setHeight(2), 0),
-                      Text(
-                        '收藏',
-                        style: StyleUtils.getCommonTextStyle(
-                            color: Colors.white,
-                            fontSize: ScreenUtil().setSp(18)),
-                      )
-                    ],
+                  child: Text(
+                    '收藏',
+                    style: StyleUtils.getCommonTextStyle(
+                        color: Colors.white,
+                        fontSize: ScreenUtil().setSp(21)),
                   ),
                 )
               ],
@@ -883,7 +971,9 @@ class RoomItems {
         )
             : GestureDetector(
           onTap: (() {
-            eventBus.fire(RoomBack(title: '取消收藏', index: ''));
+            if (MyUtils.checkClick()) {
+              eventBus.fire(RoomBack(title: '取消收藏', index: ''));
+            }
           }),
           child: Stack(
             children: [
@@ -1013,7 +1103,8 @@ class RoomItems {
 
   /// 公告厅主
   static Widget notices(BuildContext context, bool m0, String notice,
-      List<MikeList> listm, String roomID, int wherePeople, List<bool> listPeople) {
+      List<MikeList> listm, String roomID, int wherePeople,
+      List<bool> listPeople) {
     return Row(
       children: [
         WidgetUtils.commonSizedBox(0, 20),
@@ -1119,22 +1210,22 @@ class RoomItems {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  m0 == true
+                  m0 == true && listm[8].waveGifImg!.isNotEmpty
                       ? SVGASimpleImage(
                     resUrl: listm[8].waveGifImg!,
                   )
                       : listm[8].isLock == 0
                       ? WidgetUtils.showImages(
                       'assets/images/room_mai.png',
-                      ScreenUtil().setHeight(110),
-                      ScreenUtil().setHeight(110))
+                      ScreenUtil().setHeight(95),
+                      ScreenUtil().setHeight(95))
                       : WidgetUtils.showImages(
                       'assets/images/room_suo.png',
-                      ScreenUtil().setHeight(110),
-                      ScreenUtil().setHeight(110)),
+                      ScreenUtil().setHeight(95),
+                      ScreenUtil().setHeight(95)),
                   m0 == true
-                      ? WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(110),
-                      ScreenUtil().setHeight(110), listm[8].avatar!)
+                      ? WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(95),
+                      ScreenUtil().setHeight(95), listm[8].avatar!)
                       : const Text(''),
                   Column(
                     children: [
@@ -2588,7 +2679,7 @@ class RoomItems {
 
   /// 厅内底部按钮
   static Widget footBtn(BuildContext context, bool isJinyiin, int isForbation,
-      String roomID, int isShow, int isBoss, bool mima, List<MikeList> listM) {
+      String roomID, int isShow, int isBoss, bool mima, List<MikeList> listM, bool roomDX) {
     return SizedBox(
       height: ScreenUtil().setHeight(90),
       child: Row(
@@ -2634,11 +2725,16 @@ class RoomItems {
                       onTap: (() {
                         eventBus.fire(SubmitButtonBack(title: '聊天'));
                       }),
-                      child: WidgetUtils.onlyTextCenter(
-                          '聊聊...       ',
-                          StyleUtils.getCommonTextStyle(
-                              color: Colors.white70,
-                              fontSize: ScreenUtil().setSp(25))),
+                      child: Container(
+                        width: 100.h,
+                        height: 50.h,
+                        color: Colors.transparent,
+                        child: WidgetUtils.onlyTextCenter(
+                            '聊聊...       ',
+                            StyleUtils.getCommonTextStyle(
+                                color: Colors.white70,
+                                fontSize: ScreenUtil().setSp(25))),
+                      ),
                     ),
                   ],
                 ),
@@ -2709,7 +2805,7 @@ class RoomItems {
                     roomID: roomID,
                     isShow: isShow,
                     isBoss: isBoss,
-                    roomDX: true,
+                    roomDX: roomDX,
                     roomSY: true,
                     mima: mima,
                   )
@@ -2718,7 +2814,7 @@ class RoomItems {
                     roomID: roomID,
                     isShow: isShow,
                     isBoss: isBoss,
-                    roomDX: true,
+                    roomDX: roomDX,
                     roomSY: true,
                     mima: mima,
                   ));
@@ -2748,10 +2844,11 @@ class RoomItems {
   /// 厅内麦上无人
   static Widget noPeople(List<bool> upOrDown, int i, List<MikeList> listM) {
     if (i == 8) {
-      return upOrDown[i] == true && (sp.getString('role').toString() == 'adminer' ||
-          sp.getString('role').toString() == 'leader')
+      return upOrDown[i] == true &&
+          (sp.getString('role').toString() == 'adminer' ||
+              sp.getString('role').toString() == 'leader')
           ? Positioned(
-        left: 250.h,
+        left: 300.w,
         top: 200.h,
         child: Container(
           height: ScreenUtil().setHeight(104),
@@ -2806,13 +2903,13 @@ class RoomItems {
         ),
       )
           : upOrDown[i] && sp.getString('role').toString() == 'user'
-          ? shangmai(265.h, 200.h, i)
+          ? shangmai(300.w, 200.h, i)
           : const Text('');
     } else if (i == 0) {
       return upOrDown[i] && (sp.getString('role').toString() == 'adminer' ||
           sp.getString('role').toString() == 'leader')
           ? Positioned(
-        left: 25.h,
+        left: 35.w,
         top: 400.h,
         child: Container(
           height: ScreenUtil().setHeight(104),
@@ -2867,13 +2964,13 @@ class RoomItems {
         ),
       )
           : upOrDown[i] && sp.getString('role').toString() == 'user'
-          ? shangmai(25.h, 400.h, i)
+          ? shangmai(35.w, 400.h, i)
           : const Text('');
     } else if (i == 1) {
       return upOrDown[i] && (sp.getString('role').toString() == 'adminer' ||
           sp.getString('role').toString() == 'leader')
           ? Positioned(
-        left: 175.h,
+        left: 215.w,
         top: 400.h,
         child: Container(
           height: ScreenUtil().setHeight(104),
@@ -2928,13 +3025,13 @@ class RoomItems {
         ),
       )
           : upOrDown[i] && sp.getString('role').toString() == 'user'
-          ? shangmai(175.h, 400.h, i)
+          ? shangmai(215.w, 400.h, i)
           : const Text('');
     } else if (i == 2) {
       return upOrDown[i] && (sp.getString('role').toString() == 'adminer' ||
           sp.getString('role').toString() == 'leader')
           ? Positioned(
-        left: 325.h,
+        left: 390.w,
         top: 400.h,
         child: Container(
           height: ScreenUtil().setHeight(104),
@@ -2989,13 +3086,13 @@ class RoomItems {
         ),
       )
           : upOrDown[i] && sp.getString('role').toString() == 'user'
-          ? shangmai(325.h, 400.h, i)
+          ? shangmai(390.w, 400.h, i)
           : const Text('');
     } else if (i == 3) {
       return upOrDown[i] && (sp.getString('role').toString() == 'adminer' ||
           sp.getString('role').toString() == 'leader')
           ? Positioned(
-        left: 475.h,
+        left: 570.w,
         top: 400.h,
         child: Container(
           height: ScreenUtil().setHeight(104),
@@ -3050,13 +3147,13 @@ class RoomItems {
         ),
       )
           : upOrDown[i] && sp.getString('role').toString() == 'user'
-          ? shangmai(475.h, 400.h, i)
+          ? shangmai(570.w, 400.h, i)
           : const Text('');
     } else if (i == 4) {
       return upOrDown[i] && (sp.getString('role').toString() == 'adminer' ||
           sp.getString('role').toString() == 'leader')
           ? Positioned(
-        left: 25.h,
+        left: 35.w,
         top: 560.h,
         child: Container(
           height: ScreenUtil().setHeight(104),
@@ -3111,13 +3208,13 @@ class RoomItems {
         ),
       )
           : upOrDown[i] && sp.getString('role').toString() == 'user'
-          ? shangmai(25.h, 560.h, i)
+          ? shangmai(35.w, 560.h, i)
           : const Text('');
     } else if (i == 5) {
       return upOrDown[i] && (sp.getString('role').toString() == 'adminer' ||
           sp.getString('role').toString() == 'leader')
           ? Positioned(
-        left: 175.h,
+        left: 215.w,
         top: 560.h,
         child: Container(
           height: ScreenUtil().setHeight(104),
@@ -3172,13 +3269,13 @@ class RoomItems {
         ),
       )
           : upOrDown[i] && sp.getString('role').toString() == 'user'
-          ? shangmai(175.h, 560.h, i)
+          ? shangmai(215.w, 560.h, i)
           : const Text('');
     } else if (i == 6) {
       return upOrDown[i] && (sp.getString('role').toString() == 'adminer' ||
           sp.getString('role').toString() == 'leader')
           ? Positioned(
-        left: 325.h,
+        left: 390.w,
         top: 560.h,
         child: Container(
           height: ScreenUtil().setHeight(104),
@@ -3233,13 +3330,13 @@ class RoomItems {
         ),
       )
           : upOrDown[i] && sp.getString('role').toString() == 'user'
-          ? shangmai(325.h, 560.h, i)
+          ? shangmai(390.w, 560.h, i)
           : const Text('');
     } else {
       return upOrDown[i] && (sp.getString('role').toString() == 'adminer' ||
           sp.getString('role').toString() == 'leader')
           ? Positioned(
-        left: 475.h,
+        left: 570.w,
         top: 560.h,
         child: Container(
           height: ScreenUtil().setHeight(104),
@@ -3294,7 +3391,7 @@ class RoomItems {
         ),
       )
           : upOrDown[i] && sp.getString('role').toString() == 'user'
-          ? shangmai(475.h, 560.h, i)
+          ? shangmai(570.w, 560.h, i)
           : const Text('');
     }
   }
@@ -3339,7 +3436,7 @@ class RoomItems {
       return listm[i].uid.toString() == sp.getString('user_id').toString() &&
           isShow
           ? Positioned(
-        left: 265.h,
+        left: 300.w,
         top: 200.h,
         child: Container(
           height: ScreenUtil().setHeight(104),
@@ -3398,7 +3495,7 @@ class RoomItems {
       return listm[i].uid.toString() == sp.getString('user_id').toString() &&
           isShow
           ? Positioned(
-        left: 25.h,
+        left: 35.w,
         top: 400.h,
         child: Container(
           height: ScreenUtil().setHeight(104),
@@ -3457,7 +3554,7 @@ class RoomItems {
       return listm[i].uid.toString() == sp.getString('user_id').toString() &&
           isShow
           ? Positioned(
-        left: 175.h,
+        left: 215.w,
         top: 400.h,
         child: Container(
           height: ScreenUtil().setHeight(104),
@@ -3516,7 +3613,7 @@ class RoomItems {
       return listm[i].uid.toString() == sp.getString('user_id').toString() &&
           isShow
           ? Positioned(
-        left: 325.h,
+        left: 390.w,
         top: 400.h,
         child: Container(
           height: ScreenUtil().setHeight(104),
@@ -3575,7 +3672,7 @@ class RoomItems {
       return listm[i].uid.toString() == sp.getString('user_id').toString() &&
           isShow
           ? Positioned(
-        left: 475.h,
+        left: 570.w,
         top: 400.h,
         child: Container(
           height: ScreenUtil().setHeight(104),
@@ -3634,7 +3731,7 @@ class RoomItems {
       return listm[i].uid.toString() == sp.getString('user_id').toString() &&
           isShow
           ? Positioned(
-        left: 25.h,
+        left: 35.w,
         top: 560.h,
         child: Container(
           height: ScreenUtil().setHeight(104),
@@ -3693,7 +3790,7 @@ class RoomItems {
       return listm[i].uid.toString() == sp.getString('user_id').toString() &&
           isShow
           ? Positioned(
-        left: 175.h,
+        left: 215.w,
         top: 560.h,
         child: Container(
           height: ScreenUtil().setHeight(104),
@@ -3752,7 +3849,7 @@ class RoomItems {
       return listm[i].uid.toString() == sp.getString('user_id').toString() &&
           isShow
           ? Positioned(
-        left: 325.h,
+        left: 390.w,
         top: 560.h,
         child: Container(
           height: ScreenUtil().setHeight(104),
@@ -3811,7 +3908,7 @@ class RoomItems {
       return listm[i].uid.toString() == sp.getString('user_id').toString() &&
           isShow
           ? Positioned(
-        left: 475.h,
+        left: 570.w,
         top: 560.h,
         child: Container(
           height: ScreenUtil().setHeight(104),

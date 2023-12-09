@@ -87,7 +87,7 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
         WidgetUtils.commonSizedBox(20, 0),
         GestureDetector(
           onTap: ((){
-            doPostBeforeJoin(listAnchor[i].roomId.toString());
+            doPostBeforeJoin(listAnchor[i].roomId.toString(), listAnchor[i].uid.toString());
           }),
           child: Container(
             margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
@@ -142,13 +142,13 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
                     ],
                   ),
                 ),
-                SizedBox(
+                Container(
                   height: 80.h,
                   width: 120.h,
+                  color: Colors.transparent,
                   child: const SVGASimpleImage(assetsName: 'assets/svga/home_gensui.svga',),
                 ),
                 WidgetUtils.commonSizedBox(0, 20),
-
               ],
             ),
           ),
@@ -168,7 +168,7 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
     if (statuses[Permission.microphone] == PermissionStatus.granted) {
       LogE('权限状态$statuses');
       // 所有权限都已授予，执行你的操作
-      doPostBeforeJoin(roomId);
+      doPostBeforeJoin(roomId,'');
     } else {
       // 用户拒绝了某些权限，后弹提示语
       // ignore: use_build_context_synchronously
@@ -465,7 +465,7 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
 
 
   /// 加入房间前
-  Future<void> doPostBeforeJoin(roomID) async {
+  Future<void> doPostBeforeJoin(roomID,String anchorUid) async {
     Map<String, dynamic> params = <String, dynamic>{
       'room_id': roomID,
     };
@@ -474,7 +474,7 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
       CommonBean bean = await DataUtils.postBeforeJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          doPostRoomJoin(roomID, '');
+          doPostRoomJoin(roomID, '',anchorUid);
           break;
         case MyHttpConfig.errorRoomCode://需要密码
         // ignore: use_build_context_synchronously
@@ -497,10 +497,11 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
 
 
   /// 加入房间
-  Future<void> doPostRoomJoin(roomID, password) async {
+  Future<void> doPostRoomJoin(roomID, password,String anchorUid) async {
     Map<String, dynamic> params = <String, dynamic>{
       'room_id': roomID,
-      'password': password
+      'password': password,
+      'anchor_uid': anchorUid
     };
     try {
       Loading.show();

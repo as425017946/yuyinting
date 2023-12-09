@@ -33,16 +33,14 @@ class _RoomTSMiMaPageState extends State<RoomTSMiMaPage> {
         resizeToAvoidBottomInset: false, // 解决键盘顶起页面
         body: Column(
           children: [
-            Expanded(
-              child: GestureDetector(
-                onTap: (() {
-                  Navigator.pop(context);
-                }),
-                child: Container(
-                  height: double.infinity,
-                  width: double.infinity,
-                  color: Colors.transparent,
-                ),
+            GestureDetector(
+              onTap: (() {
+                Navigator.pop(context);
+              }),
+              child: Container(
+                height: 300.h,
+                width: double.infinity,
+                color: Colors.transparent,
               ),
             ),
             Container(

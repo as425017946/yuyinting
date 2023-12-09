@@ -7,7 +7,9 @@ import 'package:yuyinting/pages/message/message_page.dart';
 import 'package:yuyinting/pages/trends/trends_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/style_utils.dart';
+import 'package:yuyinting/widget/SVGASimpleImage.dart';
 import '../../bean/Common_bean.dart';
+import '../../bean/hengFuBean.dart';
 import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
@@ -62,16 +64,21 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
   String name = ''; // 要展示公屏的名称
   bool isShowHF = false;// 是否显示横幅
   String msg = ''; // 拼接显示数据
-  Map<String, String>? map; //存放接收自定义的数据使用
-  List<Map<String, String>?> listMP = []; // 存放每个进来的公屏，按顺序播放
-
+  List<hengFuBean> listMP = []; // 存放每个进来的公屏，按顺序播放
+  late hengFuBean myhf; //出现第一个横幅使用
   ///爆出大礼物使用
   bool isBig = false;
   var listen,listenZdy,listenRoomBack;
-
+  bool isSDKInit = false;
   @override
   void initState() {
+
+    MyUtils.initSDK();
+    MyUtils.addChatListener();
+    MyUtils.signIn();
+
     super.initState();
+
     _currentIndex = 0;
     _controller = PageController(
       initialPage: 0,
@@ -79,16 +86,12 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
 
     /// 动画持续时间是 3秒，此处的this指 TickerProviderStateMixin
     _repeatController = AnimationController(
-      duration: const Duration(seconds: 6),
+      duration: const Duration(seconds: 15),
       vsync: this,
     )..repeat(); // 设置动画重复播放
 
     // 创建一个从0到360弧度的补间动画 v * 2 * π
     _animation = Tween<double>(begin: 0, end: 1).animate(_repeatController);
-
-    MyUtils.initSDK();
-    MyUtils.addChatListener();
-    MyUtils.signIn();
 
     // 中大奖使用，目前接口没有接，所以先注释
     // setState(() {
@@ -100,23 +103,26 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       });
     });
     // 接受自定义消息
-    listenZdy = eventBus.on<ZDYHFBack>().listen((event) {
-      if(listMP.isEmpty){
-        //显示横幅、map赋值
-        setState(() {
-          isShowHF = true;
-          map = event.map!;
-          listMP.add(event.map!);
-        });
-        // 判断数据显示使用
-        showInfo(event.map!);
-      }else{
-        setState(() {
-          listMP.add(event.map!);
-        });
+    listenZdy = eventBus.on<JoinRoomYBack>().listen((event) {
+      if(event.map!['type'] == 'send_all_user'){
+        hengFuBean hf = hengFuBean.fromJson(event.map!);
+        myhf = hf;
+        if(listMP.isEmpty){
+          //显示横幅、map赋值
+          setState(() {
+            isShowHF = true;
+            listMP.add(hf);
+          });
+          // 判断数据显示使用
+          showInfo(hf);
+        }else{
+          setState(() {
+            listMP.add(hf);
+          });
+        }
+        // 看看集合里面有几个，10s一执行
+        hpTimer();
       }
-      // 看看集合里面有几个，10s一执行
-      hpTimer();
     });
     // 收起房间使用
     listenRoomBack = eventBus.on<SubmitButtonBack>().listen((event) {
@@ -152,16 +158,16 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     });
   }
   // 接受到数据进行判断使用
-  void showInfo(Map<String, String>? map){
-    switch(map!['title'].toString()){
+  void showInfo(hengFuBean hf){
+    switch(hf.title){
       case '贵族':
-        if(int.parse(map!['noble_id'].toString()) > 1 && int.parse(map!['noble_id'].toString()) < 5 ){
+        if(hf.nobleId! > 1 && hf.nobleId! < 5 ){
           // 低贵族
           setState(() {
             name = '低贵族';
             path = 'assets/svga/gp/gp_guizu_d.svga';
           });
-        }else if(int.parse(map!['noble_id'].toString()) > 4 && int.parse(map!['noble_id'].toString()) < 8 ){
+        }else if(hf.nobleId! > 4 && hf.nobleId! < 8 ){
           // 高贵族
           setState(() {
             name = '高贵族';
@@ -187,9 +193,9 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           path = 'assets/svga/gp/gp_maliao.svga';
         });
         break;
-      case '白鬼':
+      case '白灵':
         setState(() {
-          name = '白鬼';
+          name = '白灵';
           path = 'assets/svga/gp/gp_gui.svga';
         });
         break;
@@ -217,6 +223,11 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           path = 'assets/svga/gp/gp_1w.svga';
         });
         break;
+      case '388800转盘礼物':
+        setState(() {
+          isBig = true;
+        });
+        break;
     }
     // 在页面中使用自定义时间和图片地址
     slideAnimationController = SlideAnimationController(
@@ -234,6 +245,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     slideAnimationController.dispose();
     listen.cancel();
     listenZdy.cancel();
+    listenRoomBack.cancel();
     super.dispose();
   }
 
@@ -301,15 +313,15 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
               slideAnimationController.controller,
               slideAnimationController.animation,
               name,
-              map) : const Text(''),
+              myhf) : const Text(''),
 
           /// 爆出5w2的礼物推送使用
-          isBig ? HomeItems.itemBig('aaaaaaa') : const Text(''),
+          isBig ? HomeItems.itemBig(myhf) : const Text(''),
 
           /// 房间图标转动
           isJoinRoom
               ? Positioned(
-                  bottom: 240,
+                  bottom: 160,
                   right: 20,
                   child: GestureDetector(
                     onTap: ((){
@@ -354,10 +366,30 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
                                 ScreenUtil().setHeight(90),
                                 sp.getString('roomImage').toString()),
                           ),
-                          child: WidgetUtils.CircleHeadImage(
-                              ScreenUtil().setHeight(90),
-                              ScreenUtil().setHeight(90),
-                              sp.getString('roomImage').toString())),
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Container(
+                                height: 95.h,
+                                width: 95.h,
+                                decoration: BoxDecoration(
+                                  //背景
+                                  color: Colors.white,
+                                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                  borderRadius: BorderRadius.all(Radius.circular(55.h)),
+                                )
+                              ),
+                              WidgetUtils.CircleHeadImage(
+                                  ScreenUtil().setHeight(90),
+                                  ScreenUtil().setHeight(90),
+                                  sp.getString('roomImage').toString()),
+                              SizedBox(
+                                height: 40.h,
+                                width: 40.h,
+                                child: const SVGASimpleImage(assetsName: 'assets/svga/chorus_svga_room_voice_bar.svga',),
+                              )
+                            ],
+                          )),
                     ),
                   ),
                 )

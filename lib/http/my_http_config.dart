@@ -10,12 +10,12 @@ class MyHttpConfig{
   //鹏飞测试环境
   // static const String baseURL = "http://192.168.0.51/api";
   //赵增测试环境
-  static const String baseURL = "http://192.168.0.53/api";
+  // static const String baseURL = "http://192.168.0.53/api";
   //正式环境
-  // static const String baseURL = "http://18.163.74.49:8080/api";
+  static const String baseURL = "http://18.163.74.49:8080/api";
 
   /// 文件上传
-  // file方式上传
+  // file方式上传`
   static const String fileUpload = '$baseURL/upload/fileUpload';
 
 
@@ -225,5 +225,7 @@ class MyHttpConfig{
   static const String roulettePrizeList = "$baseURL/game/roulettePrizeList";
   // 发红包
   static const String sendRedPacket = "$baseURL/user/sendRedPacket";
+  // 一键赠送背包礼物
+  static const String oneClickPackageGift = "$baseURL/gift/oneClickPackageGift";
 
 }

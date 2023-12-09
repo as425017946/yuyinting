@@ -22,11 +22,14 @@ import '../../config/smile_utils.dart';
 import '../../db/DatabaseHelper.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
+import '../../utils/loading.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/regex_formatter.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
+import '../room/room_page.dart';
+import '../room/room_ts_mima_page.dart';
 import '../trends/trends_more_page.dart';
 import 'package:flutter_sound/public/flutter_sound_player.dart';
 import 'package:flutter_sound_platform_interface/flutter_sound_recorder_platform_interface.dart';
@@ -54,7 +57,7 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   bool isShow = false, isRoomShow = false, isAudio = false;
   int isBlack = 0, length = 0;
-  String roomName = '', noteId = '';
+  String roomName = '', noteId = '', roomId = '';
   List<String> listImg = [];
   List<String> imgList = [];
   TextEditingController controller = TextEditingController();
@@ -830,7 +833,9 @@ class _ChatPageState extends State<ChatPage> {
                                   fontWeight: FontWeight.w600)),
                           const Spacer(),
                           GestureDetector(
-                            onTap: (() {}),
+                            onTap: (() {
+                              doPostBeforeJoin(roomId);
+                            }),
                             child: Container(
                               width: ScreenUtil().setHeight(130),
                               height: ScreenUtil().setHeight(50),
@@ -1422,6 +1427,7 @@ class _ChatPageState extends State<ChatPage> {
             if (bean.data!.roomInfo!.id == 0) {
               isRoomShow = false;
             } else {
+              roomId = bean.data!.roomInfo!.id.toString();
               isRoomShow = true;
             }
             listImg = bean.data!.note!;
@@ -1685,5 +1691,67 @@ class _ChatPageState extends State<ChatPage> {
       djNum = 60; // 录音时长
       audioNum = 0; // 记录录了多久
     });
+  }
+
+
+  /// 加入房间前
+  Future<void> doPostBeforeJoin(roomID) async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'room_id': roomID,
+    };
+    try {
+      Loading.show();
+      CommonBean bean = await DataUtils.postBeforeJoin(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          doPostRoomJoin(roomID, '');
+          break;
+        case MyHttpConfig.errorRoomCode: //需要密码
+        // ignore: use_build_context_synchronously
+          MyUtils.goTransparentPageCom(
+              context, RoomTSMiMaPage(roomID: roomID,));
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+  /// 加入房间
+  Future<void> doPostRoomJoin(roomID, password) async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'room_id': roomID,
+      'password': password
+    };
+    try {
+      Loading.show();
+      CommonBean bean = await DataUtils.postRoomJoin(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.goTransparentRFPage(context, RoomPage(roomId: roomID,));
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
   }
 }

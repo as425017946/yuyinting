@@ -6,6 +6,7 @@ import '../bean/DTListBean.dart';
 import '../bean/DTMoreBean.dart';
 import '../bean/DTTuiJianListBean.dart';
 import '../bean/balanceBean.dart';
+import '../bean/beibaoBean.dart';
 import '../bean/carTimerBean.dart';
 import '../bean/carZJLiShiBean.dart';
 import '../bean/careListBean.dart';
@@ -233,6 +234,7 @@ class DataUtils{
 
   /// 用户个人主页详情
   static Future<userInfoBean> postUserInfo(Map<String,dynamic> params) async {
+    print("用户个人主页详情：$params");
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.userInfo, {}, params);
     print("用户个人主页详情：$respons");
     return userInfoBean.fromJson(respons!);
@@ -456,6 +458,7 @@ class DataUtils{
 
   /// 加入房间
   static Future<CommonBean> postRoomJoin(Map<String,dynamic> params) async {
+    print("加入房间：$params");
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.roomJoin, {}, params);
     print("加入房间：$respons");
     return CommonBean.fromJson(respons!);
@@ -721,6 +724,14 @@ class DataUtils{
     return liwuBean.fromJson(respons!);
   }
 
+  /// 背包礼物
+  static Future<beibaoBean> postGiftListBB(Map<String,dynamic> params) async {
+    print("背包礼物：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.giftList, {}, params);
+    print("背包礼物：$respons");
+    return beibaoBean.fromJson(respons!);
+  }
+
   /// 送礼物
   static Future<CommonBean> postSendGift(Map<String,dynamic> params) async {
     print("送礼物：$params");
@@ -848,6 +859,14 @@ class DataUtils{
   static Future<CommonBean> postSendRedPacket(Map<String,dynamic> params) async {
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.sendRedPacket, {}, params);
     print("发红包：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 一键赠送背包礼物
+  static Future<CommonBean> postOneClickPackageGift(Map<String,dynamic> params) async {
+    print("一键赠送背包礼物：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.oneClickPackageGift, {}, params);
+    print("一键赠送背包礼物：$respons");
     return CommonBean.fromJson(respons!);
   }
 }

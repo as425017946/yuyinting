@@ -11,6 +11,7 @@ import 'package:yuyinting/utils/widget_utils.dart';
 import 'package:yuyinting/widget/SVGASimpleImage.dart';
 import '../../bean/Common_bean.dart';
 import '../../bean/balanceBean.dart';
+import '../../bean/beibaoBean.dart';
 import '../../bean/onlineRoomUserBean.dart';
 import '../../bean/roomInfoBean.dart';
 import '../../config/my_config.dart';
@@ -48,7 +49,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
   List<bool> listPVBool = [];
 
   // 背包
-  List<DataL> listPl = [];
+  List<Gift> listPl = [];
   List<bool> listPlBool = [];
 
   // 麦上有几个人是否点击了选中
@@ -71,6 +72,8 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
   bool isAll = false;
   // 要送的礼物地址
   String url = '', svga = '';
+  // 送人的id集合
+  List<String> listUID = [];
 
   Widget _itemPeople(BuildContext context, int i) {
     return GestureDetector(
@@ -80,10 +83,12 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
             isChoosePeople = false;
             listChoose[i] = false;
             listPeople[listMaiXu[i].serialNumber! - 1] = false;
+            listUID.remove(listMaiXu[i].uid.toString());
           } else {
             isChoosePeople = true;
             listChoose[i] = true;
             listPeople[listMaiXu[i].serialNumber! - 1] = true;
+            listUID.add(listMaiXu[i].uid.toString());
           }
 
           int a = 0;
@@ -101,7 +106,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
         eventBus.fire(ChoosePeopleBack(listPeople: listPeople));
       }),
       child: Container(
-        margin: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+        margin: EdgeInsets.fromLTRB(0, 0, 10.h, 0),
         height: ScreenUtil().setHeight(60),
         child: Stack(
           alignment: Alignment.bottomRight,
@@ -113,13 +118,13 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                     ScreenUtil().setHeight(50), listMaiXu[i].avatar!),
                 listChoose[i]
                     ? SizedBox(
-                        height: 50.h,
-                        width: 50.h,
+                        height: 60.h,
+                        width: 60.h,
                         child: const SVGASimpleImage(
                           assetsName: 'assets/svga/r_people_choose.svga',
                         ),
                       )
-                    : const Text(''),
+                    : WidgetUtils.commonSizedBox(60.h, 60.h),
               ],
             ),
             i == 0 && listMaiXu[i].serialNumber == 9 ? WidgetUtils.showImages('assets/images/room_tingzhu.png',
@@ -210,16 +215,16 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                               scale: _animation.value,
                               child: WidgetUtils.showImagesNet(
                                   listC[index].img!,
-                                  ScreenUtil().setHeight(110),
-                                  ScreenUtil().setHeight(100)),
+                                  ScreenUtil().setHeight(90),
+                                  ScreenUtil().setHeight(90)),
                             );
                           },
                         )
                       :
                   WidgetUtils.showImagesNet(
                       listC[index].img!,
-                      ScreenUtil().setHeight(110),
-                      ScreenUtil().setHeight(100)),
+                      ScreenUtil().setHeight(90),
+                      ScreenUtil().setHeight(90)),
                   WidgetUtils.onlyTextCenter(
                       listC[index].name!,
                       StyleUtils.getCommonTextStyle(
@@ -254,16 +259,16 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                         scale: _animation.value,
                         child: WidgetUtils.showImagesNet(
                             listPV[index].img!,
-                            ScreenUtil().setHeight(110),
-                            ScreenUtil().setHeight(100)),
+                            ScreenUtil().setHeight(90),
+                            ScreenUtil().setHeight(90)),
                       );
                     },
                   )
                       :
                   WidgetUtils.showImagesNet(
                       listPV[index].img!,
-                      ScreenUtil().setHeight(110),
-                      ScreenUtil().setHeight(100)),
+                      ScreenUtil().setHeight(90),
+                      ScreenUtil().setHeight(90)),
                   WidgetUtils.onlyTextCenter(
                       listPV[index].name!,
                       StyleUtils.getCommonTextStyle(
@@ -300,16 +305,16 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                             scale: _animation.value,
                             child: WidgetUtils.showImagesNet(
                                 listPl[index].img!,
-                                ScreenUtil().setHeight(110),
-                                ScreenUtil().setHeight(100)),
+                                ScreenUtil().setHeight(90),
+                                ScreenUtil().setHeight(90)),
                           );
                         },
                       )
                           :
                       WidgetUtils.showImagesNet(
                           listPl[index].img!,
-                          ScreenUtil().setHeight(110),
-                          ScreenUtil().setHeight(100)),
+                          ScreenUtil().setHeight(90),
+                          ScreenUtil().setHeight(90)),
                       Positioned(
                         top: 0,
                           right: 0,
@@ -359,7 +364,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
   void initState() {
     // TODO: implement initState
     super.initState();
-    for(int i = 0; i < 9; i++){
+    for(int i = 0; i < 10; i++){
       listPeople.add(false);
     }
     setState(() {
@@ -367,6 +372,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
         listChoose.add(false);
       }
     });
+    doPostWalletList();
     doPostOnlineRoomUser();
     doPostGiftList();
     _animationController = AnimationController(
@@ -481,10 +487,15 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                         listChoose[i] = false;
                                         listPeople[listMaiXu[i].serialNumber! - 1] = false;
                                         isChoosePeople = false;
+                                        listUID.clear();
                                       }else{
                                         listChoose[i] = true;
                                         listPeople[listMaiXu[i].serialNumber! - 1] = true;
                                         isChoosePeople = true;
+                                        listUID.clear();
+                                        for(int i =0; i < listMaiXu.length; i++){
+                                          listUID.add(listMaiXu[i].uid.toString());
+                                        }
                                       }
                                     }
                                     eventBus.fire(ChoosePeopleBack(listPeople: listPeople));
@@ -573,7 +584,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                   leixing = 2;
                                 });
                                 if(listPl.isEmpty){
-                                  doPostGiftList();
+                                  doPostGiftListBB();
                                 }
                               }),
                               child: WidgetUtils.onlyTextCenter(
@@ -588,9 +599,24 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                             ),
                             const Expanded(child: Text('')),
                             leixing == 2
+                                ? WidgetUtils.onlyTextCenter(
+                                '总价值：$zonge',
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.roomTCWZ2,
+                                    fontSize: ScreenUtil().setSp(25)))
+                                : const Text(''),
+                            WidgetUtils.commonSizedBox(0, 20.h),
+                            leixing == 2
                                 ? GestureDetector(
                               onTap: (() {
-                                setState(() {});
+                                setState(() {
+                                  if(listUID.length>1){
+                                    MyToastUtils.showToastBottom('赠送全部礼物只能选一个人');
+                                    return;
+                                  }else{
+                                    doPostOneClickPackageGift();
+                                  }
+                                });
                               }),
                               child: WidgetUtils.onlyTextCenter(
                                   '赠送全部',
@@ -659,7 +685,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                         ScreenUtil().setHeight(24)),
                                     WidgetUtils.commonSizedBox(0, 5),
                                     WidgetUtils.onlyTextCenter(
-                                        '10000',
+                                        jinbi,
                                         StyleUtils.getCommonTextStyle(
                                             color: Colors.white,
                                             fontSize: ScreenUtil().setSp(25))),
@@ -670,7 +696,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                         ScreenUtil().setHeight(24)),
                                     WidgetUtils.commonSizedBox(0, 5),
                                     WidgetUtils.onlyTextCenter(
-                                        '100',
+                                        zuanshi,
                                         StyleUtils.getCommonTextStyle(
                                             color: Colors.white,
                                             fontSize: ScreenUtil().setSp(25))),
@@ -733,13 +759,23 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                               });
                                               eventBus.fire(ResidentBack(isBack: true));
                                               Navigator.pop(context);
-                                              MyUtils.goTransparentPageCom(context, RoomShowLiWuPage(listPeople: listPeople,url: url , svga:svga));
+                                              if(svga.isEmpty){
+                                                // ignore: use_build_context_synchronously
+                                                MyUtils.goTransparentPageCom(context, RoomShowLiWuPage(listPeople: listPeople,url: url));
+                                              }else{
+                                                eventBus.fire(SVGABack(isAll: false, url: url, listurl: listurl));
+                                              }
                                             }else{
                                               if(isChoosePeople == false){
                                                 MyToastUtils.showToastBottom('请选择要送的对象');
                                                 return;
                                               }else{
-                                                doPostSendGift();
+                                                if(giftId.isEmpty){
+                                                  MyToastUtils.showToastBottom('请选择要送的礼物');
+                                                  return;
+                                                }else{
+                                                  doPostSendGift();
+                                                }
                                               }
                                             }
                                           }),
@@ -1123,13 +1159,6 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
               for (int i = 0; i < listPV.length; i++) {
                 listPVBool.add(false);
               }
-            }else if(leixing == 2){
-              listPl.clear();
-              listPlBool.clear();
-              listPl = bean.data!;
-              for (int i = 0; i < listPl.length; i++) {
-                listPlBool.add(false);
-              }
             }
           });
           break;
@@ -1147,6 +1176,52 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
+
+  /// 获取背包礼物
+  String zonge = '';
+  // 赠送全部礼物使用
+  List<String> listurl = [];
+  Future<void> doPostGiftListBB() async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'type': '2',
+    };
+    Loading.show();
+    try {
+      beibaoBean bean = await DataUtils.postGiftListBB(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            listPl.clear();
+            listPlBool.clear();
+            listPl = bean.data!.gift!;
+            for (int i = 0; i < listPl.length; i++) {
+              listPlBool.add(false);
+            }
+            zonge = bean.data!.total!;
+
+            // 添加背包的svga路径地址
+            for(int i = 0; i < bean.data!.gift!.length; i++){
+              if(bean.data!.gift![i].imgRendering!.isNotEmpty){
+                listurl.add(bean.data!.gift![i].imgRendering!);
+              }
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
 
   List<DataMX> listMaiXu= [];
   /// 房间麦序在线用户
@@ -1167,7 +1242,9 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
               }
             }
             for(int i = 0; i < bean.data!.length; i++){
-              listMaiXu.add(bean.data![i]);
+              if(bean.data![i].serialNumber != 9){
+                listMaiXu.add(bean.data![i]);
+              }
             }
             changdu = listMaiXu.length;
           });
@@ -1188,13 +1265,11 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
   /// 送礼物
   Future<void> doPostSendGift() async {
     String toUids = '';
-    for(int i = 0; i < listPeople.length; i++){
-      if(listPeople[i]){
-        if(toUids.isEmpty){
-          toUids = listMaiXu[i].uid.toString();
-        }else{
-          toUids = '$toUids,${listMaiXu[i].uid}';
-        }
+    for(int i = 0; i < listUID.length; i++){
+      if(toUids.isEmpty){
+        toUids = listUID[i];
+      }else{
+        toUids = '$toUids,${listUID[i]}';
       }
     }
     Map<String, dynamic> params = <String, dynamic>{
@@ -1209,6 +1284,44 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
       switch (bean.code) {
         case MyHttpConfig.successCode:
           eventBus.fire(ResidentBack(isBack: true));
+          // ignore: use_build_context_synchronously
+          Navigator.pop(context);
+          if(svga.isEmpty){
+            // ignore: use_build_context_synchronously
+            MyUtils.goTransparentPageCom(context, RoomShowLiWuPage(listPeople: listPeople,url: url));
+          }else{
+            setState(() {
+              for(int i = 0; i < listPeople.length; i++){
+                listPeople[i] = false;
+              }
+              eventBus.fire(ChoosePeopleBack(listPeople: listPeople));
+            });
+            eventBus.fire(SVGABack(isAll: false, url: svga, listurl: listurl));
+          }
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+  /// 一键赠送背包礼物
+  Future<void> doPostOneClickPackageGift() async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'room_id': sp.getString('roomID').toString(),
+      'to_uid': listUID[0], //收礼物用户uid
+    };
+    try {
+      CommonBean bean = await DataUtils.postOneClickPackageGift(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          eventBus.fire(ResidentBack(isBack: true));
           setState(() {
             for(int i = 0; i < listPeople.length; i++){
               listPeople[i] = false;
@@ -1217,8 +1330,8 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
           });
           // ignore: use_build_context_synchronously
           Navigator.pop(context);
-          // ignore: use_build_context_synchronously
-          MyUtils.goTransparentPageCom(context, RoomShowLiWuPage(listPeople: listPeople,url: url, svga:svga));
+          // 赠送成功发通知
+          eventBus.fire(SVGABack(isAll: true, url: url, listurl: listurl));
           break;
         case MyHttpConfig.errorloginCode:
         // ignore: use_build_context_synchronously
@@ -1233,4 +1346,37 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
     }
   }
 
+  // 金币 钻石
+  String jinbi = '', zuanshi = '';
+  /// 钱包明细
+  Future<void> doPostWalletList() async {
+    try {
+      balanceBean bean = await DataUtils.postBalance();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            if(double.parse(bean.data!.goldBean!) > 10000){
+              jinbi = '${(double.parse(bean.data!.goldBean!)/10000)}w';
+            }else{
+              jinbi = bean.data!.goldBean!;
+            }
+            if(double.parse(bean.data!.diamond!) > 10000){
+              zuanshi = '${(double.parse(bean.data!.diamond!)/10000)}w';
+            }else{
+              zuanshi = bean.data!.diamond!;
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
 }

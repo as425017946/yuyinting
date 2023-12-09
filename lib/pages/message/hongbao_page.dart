@@ -55,42 +55,42 @@ class _HongBaoPageState extends State<HongBaoPage> {
             ),
           ),
           Container(
-            height: isShow ? 700.h : 500.h,
+            height: isShow ? 700.h : 800.h,
             width: double.infinity,
             padding: EdgeInsets.only(left: 20.h, right: 20.h),
-            decoration: BoxDecoration(
-              //背景
-              color: Colors.white,
-              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20.h),
-                  topRight: Radius.circular(20.h)),
+            decoration: const BoxDecoration(
+              //设置Container修饰
+              image: DecorationImage(
+                //背景图片修饰
+                image: AssetImage("assets/images/fahongbao.png"),
+                fit: BoxFit.fill, //覆盖
+              ),
             ),
             child: Column(
               children: [
-                WidgetUtils.commonSizedBox(20.h, 0),
+                WidgetUtils.commonSizedBox(320.h, 0),
                 Row(
                   children: [
-                    WidgetUtils.commonSizedBox(0, 30.h),
-                    Opacity(
-                        opacity: 0,
-                        child: WidgetUtils.onlyText(
-                            '充值',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.peopleRed, fontSize: 25.sp))),
+                    // WidgetUtils.commonSizedBox(0, 30.h),
+                    // Opacity(
+                    //     opacity: 0,
+                    //     child: WidgetUtils.onlyText(
+                    //         '充值',
+                    //         StyleUtils.getCommonTextStyle(
+                    //             color: MyColors.peopleRed, fontSize: 25.sp))),
                     const Spacer(),
                     WidgetUtils.onlyText(
                         '发红包',
                         StyleUtils.getCommonTextStyle(
-                            color: Colors.black87,
-                            fontSize: 33.sp,
+                            color: Colors.white,
+                            fontSize: 36.sp,
                             fontWeight: FontWeight.w600)),
                     const Spacer(),
-                    WidgetUtils.onlyText(
-                        '充值',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.peopleRed, fontSize: 25.sp)),
-                    WidgetUtils.commonSizedBox(0, 30.h),
+                    // WidgetUtils.onlyText(
+                    //     '充值',
+                    //     StyleUtils.getCommonTextStyle(
+                    //         color: MyColors.peopleRed, fontSize: 25.sp)),
+                    // WidgetUtils.commonSizedBox(0, 30.h),
                   ],
                 ),
                 isShow ? WidgetUtils.commonSizedBox(20.h, 0) : WidgetUtils.commonSizedBox(0.h, 0),
@@ -193,7 +193,7 @@ class _HongBaoPageState extends State<HongBaoPage> {
                           alignment: Alignment.center,
                           child: WidgetUtils.commonTextFieldNumberHB(
                               controller: controllerDou,
-                              hintText: '请输入整数个v豆'),
+                              hintText: '请在此输入'),
                         ),
                       ),
                       WidgetUtils.commonSizedBox(0.h, 10.h),
@@ -213,12 +213,12 @@ class _HongBaoPageState extends State<HongBaoPage> {
                     WidgetUtils.onlyText(
                         '余额',
                         StyleUtils.getCommonTextStyle(
-                            color: MyColors.g6, fontSize: 28.sp, fontWeight: FontWeight.w300)),
+                            color: Colors.white70, fontSize: 28.sp, fontWeight: FontWeight.w300)),
                     WidgetUtils.commonSizedBox(0.h, 5.h),
                     Transform.translate(offset: Offset(0,2.h), child: WidgetUtils.onlyText(
                         jinbi,
                         StyleUtils.getCommonTextStyle(
-                            color: Colors.black87, fontSize: 32.sp, fontWeight: FontWeight.w600)),)
+                            color: Colors.white, fontSize: 32.sp, fontWeight: FontWeight.w600)),)
                   ],
                 ),
                 WidgetUtils.commonSizedBox(60.h, 0),
@@ -231,18 +231,18 @@ class _HongBaoPageState extends State<HongBaoPage> {
                     }
                   }),
                   child: Container(
-                    height: 75.h,
-                    width: 300.h,
+                    height: 90.h,
+                    width: 360.h,
                     decoration: BoxDecoration(
                       //背景
-                      color: MyColors.mineRed,
+                      color: MyColors.peopleYellow,
                       //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                      borderRadius: BorderRadius.all(Radius.circular(42.h)),
+                      borderRadius: BorderRadius.all(Radius.circular(50.h)),
                     ),
                     child: WidgetUtils.onlyTextCenter(
                         '发红包',
                         StyleUtils.getCommonTextStyle(
-                            color: Colors.white, fontSize: 38.sp, fontWeight: FontWeight.w300)),
+                            color: Colors.black87, fontSize: 38.sp, fontWeight: FontWeight.w300)),
                   ),
                 ),
                 const Spacer(),

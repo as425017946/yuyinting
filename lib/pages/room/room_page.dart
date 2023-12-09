@@ -1,9 +1,9 @@
 import 'dart:async';
-
+import 'dart:convert';
+import 'dart:io';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:im_flutter_sdk/im_flutter_sdk.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:yuyinting/config/my_config.dart';
 import 'package:yuyinting/pages/room/room_back_page.dart';
@@ -13,9 +13,12 @@ import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/my_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
-import 'package:yuyinting/widget/SVGASimpleImage2.dart';
 import '../../bean/Common_bean.dart';
+import '../../bean/charmAllBean.dart';
+import '../../bean/charmBean.dart';
+import '../../bean/hengFuBean.dart';
 import '../../bean/roomInfoBean.dart';
+import '../../bean/zjgpBean.dart';
 import '../../colors/my_colors.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
@@ -26,6 +29,7 @@ import '../../utils/style_utils.dart';
 import '../../widget/SVGASimpleImage.dart';
 import '../../widget/SVGASimpleImage3.dart';
 import '../../widget/SVGASimpleImage4.dart';
+import '../../widget/SVGASimpleImage5.dart';
 import '../home/home_items.dart';
 import 'room_items.dart';
 
@@ -77,7 +81,9 @@ class _RoomPageState extends State<RoomPage>
       listJoin,
       listenShowLiWu,
       listenSend,
-      listenSendImg;
+      listenSendImg,
+      listenBig,
+      listenZdy;
 
   // 是否展示礼物动效
   bool isLWShow = false;
@@ -89,6 +95,8 @@ class _RoomPageState extends State<RoomPage>
   bool isShow = false;
   late final Gradient gradient;
   FocusNode? _focusNode;
+  // 判断自己是不是在麦上使用
+  bool isMeUp = false;
 
   // 房间名称、背景图、动态背景图热度、公告、关注状态、当前身份、贵族id、房间id
   String roomName = '',
@@ -167,95 +175,140 @@ class _RoomPageState extends State<RoomPage>
   /// 公屏使用
   late SlideAnimationController slideAnimationController;
   String path = ''; // 图片地址
-  String name = '蓝魔方'; // 要展示公屏的名称
-
+  String name = ''; // 要展示公屏的名称
+  bool isShowHF = false;// 是否显示横幅
+  String msg = ''; // 拼接显示数据
+  Map<String, String>? map; //存放接收自定义的数据使用
+  List<hengFuBean> listMP = []; // 存放每个进来的公屏，按顺序播放
+  late hengFuBean myhf; //出现第一个横幅使用
+  ///爆出大礼物使用
+  bool isBig = false;
+  // 送礼物显示SVGA
+  bool isShowSVGA = false;
+  // 赠送全部礼物使用
+  List<String> listurl = [];
+  var listenSVGA, listenSVGAOK ;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    //把外面首页旋转的图去掉
-    eventBus.fire(SubmitButtonBack(title: '去掉旋转'));
-    //添加系统公告
-    setState(() {
-      Map<String, String> map = {};
-      map['info'] =
-          '官方倡导绿色聊天，对聊天内容24小时在线巡查，严禁未成年人充值消费，严禁宣传与政治、色情、敏感话题等相关内容，任何传播违法/违规/低俗/暴力等不良信息的行为会导致封禁账号。';
-      map['type'] = '0';
-      list.add(map);
-    });
-    doPostRoomInfo();
-    //是否上麦下麦和点击的是否自己
-    for (int i = 0; i < 9; i++) {
-      upOrDown.add(false);
-      isMy.add(false);
-      listPeople.add(false);
-    }
-    // //初始化声网的音频插件
-    // initAgora();
-    // //初始化声卡采集
-    // if(Platform.isWindows || Platform.isMacOS){
-    //   starSK();
-    // }
-    // 厅内设置监听
-    listen = eventBus.on<SubmitButtonBack>().listen((event) {
-      if (event.title == '清除公屏') {
-      } else if (event.title == '清除魅力') {
-      } else if (event.title == '老板位0') {
-        setState(() {
-          isBoss = false;
-        });
-      } else if (event.title == '老板位1') {
-        setState(() {
-          isBoss = true;
-        });
-      } else if (event.title == '动效') {
-        setState(() {
-          roomDX = !roomDX;
-        });
-      } else if (event.title == '房间声音') {
-        setState(() {
-          roomSY = !roomSY;
-        });
-      } else if (event.title == '退出房间') {
-        Navigator.pop(context);
-      } else if (event.title == '收起房间') {
-        Navigator.pop(context);
-      } else if (event.title == '设置密码成功') {
-        setState(() {
-          mima = true;
-        });
-      } else if (event.title == '取消密码') {
-        setState(() {
-          mima = false;
-        });
-      } else if (event.title == '修改房间名称') {
-        setState(() {
-          roomName = sp.getString('roomName').toString();
-        });
-      } else if (event.title == '表情') {
-        // 判断是不是贵族，除了0都是贵族身份
-        if (noble_id == '0') {
-          if (_timeCount == 5) {
+    //页面渲染完成
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+
+      //把外面首页旋转的图去掉
+      eventBus.fire(SubmitButtonBack(title: '去掉旋转'));
+      //添加系统公告
+      setState(() {
+        Map<String, String> map = {};
+        map['info'] =
+        '官方倡导绿色聊天，对聊天内容24小时在线巡查，严禁未成年人充值消费，严禁宣传与政治、色情、敏感话题等相关内容，任何传播违法/违规/低俗/暴力等不良信息的行为会导致封禁账号。';
+        map['type'] = '0';
+        list.add(map);
+      });
+      doPostRoomInfo();
+      //是否上麦下麦和点击的是否自己
+      for (int i = 0; i < 9; i++) {
+        upOrDown.add(false);
+        isMy.add(false);
+      }
+      for(int i = 0; i < 10; i++){
+        listPeople.add(false);
+      }
+      //初始化声网的音频插件
+      initAgora();
+      //初始化声卡采集
+      if(Platform.isWindows || Platform.isMacOS){
+        starSK();
+      }
+      // 厅内设置监听
+      listen = eventBus.on<SubmitButtonBack>().listen((event) {
+        if (event.title == '清除公屏') {
+        } else if (event.title == '清除魅力') {
+        } else if (event.title == '老板位0') {
+          setState(() {
+            isBoss = false;
+          });
+        } else if (event.title == '老板位1') {
+          setState(() {
+            isBoss = true;
+          });
+        }
+        else if (event.title == '动效已开启') {
+          setState(() {
+            roomDX = true;
+          });
+        } else if (event.title == '动效已关闭') {
+          setState(() {
+            roomDX = false;
+          });
+        }  else if (event.title == '房间声音已开启') {
+          setState(() {
+            roomSY = true;
+            //默认订阅所有远端用户的音频流。
+            _engine.muteAllRemoteAudioStreams(false);
+          });
+        }  else if (event.title == '房间声音已关闭') {
+          setState(() {
+            roomSY = false;
+            //取消订阅所有远端用户的音频流。
+            _engine.muteAllRemoteAudioStreams(true);
+          });
+        } else if (event.title == '退出房间') {
+          Navigator.pop(context);
+        } else if (event.title == '收起房间') {
+          Navigator.pop(context);
+        } else if (event.title == '设置密码成功') {
+          setState(() {
+            mima = true;
+          });
+        } else if (event.title == '取消密码') {
+          setState(() {
+            mima = false;
+          });
+        } else if (event.title == '修改房间名称') {
+          setState(() {
+            roomName = sp.getString('roomName').toString();
+          });
+        } else if (event.title == '表情') {
+          // 判断是不是贵族，除了0都是贵族身份
+          if (noble_id == '0') {
+            if (_timeCount == 5) {
+              if (isForbation == 0) {
+                MyUtils.goTransparentPage(context, const RoomBQPage());
+              } else {
+                MyToastUtils.showToastBottom('你已被房间禁言！');
+              }
+            } else {
+              MyToastUtils.showToastBottom('太频繁啦，请歇一歇~');
+            }
+          } else {
             if (isForbation == 0) {
               MyUtils.goTransparentPage(context, const RoomBQPage());
             } else {
               MyToastUtils.showToastBottom('你已被房间禁言！');
             }
-          } else {
-            MyToastUtils.showToastBottom('太频繁啦，请歇一歇~');
           }
-        } else {
-          if (isForbation == 0) {
-            MyUtils.goTransparentPage(context, const RoomBQPage());
+        } else if (event.title == '聊天') {
+          // 判断是不是贵族，除了0都是贵族身份
+          LogE('我的身份 1==$noble_id');
+          LogE('我的身份 2==$_timeCount');
+          LogE('我的身份 3==$isForbation');
+          if (noble_id == '0') {
+            if (_timeCount == 5) {
+              if (isForbation == 0) {
+                MyUtils.goTransparentPage(
+                    context,
+                    RoomSendInfoPage(
+                      info: '',
+                    ));
+              } else {
+                MyToastUtils.showToastBottom('你已被房间禁言！');
+              }
+            } else {
+              MyToastUtils.showToastBottom('太频繁啦，请歇一歇~');
+            }
           } else {
-            MyToastUtils.showToastBottom('你已被房间禁言！');
-          }
-        }
-      } else if (event.title == '聊天') {
-        // 判断是不是贵族，除了0都是贵族身份
-        if (noble_id == '0') {
-          if (_timeCount == 5) {
             if (isForbation == 0) {
               MyUtils.goTransparentPage(
                   context,
@@ -265,168 +318,73 @@ class _RoomPageState extends State<RoomPage>
             } else {
               MyToastUtils.showToastBottom('你已被房间禁言！');
             }
+          }
+        } else if (event.title == '爆灯') {
+          for (int i = 0; i < listM.length; i++) {
+            if (sp.getString('user_id').toString() == listM[i].uid.toString()) {
+              setState(() {
+                wherePeople = i + 1;
+              });
+            }
+          }
+          // 如果在麦上，就开启爆灯模式
+          if (wherePeople != 0) {
+            _startTimer2();
           } else {
-            MyToastUtils.showToastBottom('太频繁啦，请歇一歇~');
+            MyToastUtils.showToastBottom('上麦后才可以使用哦~');
           }
-        } else {
-          if (isForbation == 0) {
-            MyUtils.goTransparentPage(
-                context,
-                RoomSendInfoPage(
-                  info: '',
-                ));
-          } else {
-            MyToastUtils.showToastBottom('你已被房间禁言！');
-          }
-        }
-      } else if (event.title == '爆灯') {
-        for (int i = 0; i < listM.length; i++) {
-          if (sp.getString('user_id').toString() == listM[i].uid.toString()) {
-            setState(() {
-              wherePeople = i + 1;
-            });
-          }
-        }
-        // 如果在麦上，就开启爆灯模式
-        if (wherePeople != 0) {
-          _startTimer2();
-        } else {
-          MyToastUtils.showToastBottom('上麦后才可以使用哦~');
-        }
-      }
-    });
-    // 厅内操作监听
-    listenRoomback = eventBus.on<RoomBack>().listen((event) {
-      switch (event.title) {
-        case '关闭声音':
-          setState(() {
-            isJinyiin = !isJinyiin;
-          });
-          break;
-        case '收藏':
-          doPostFollow('2', widget.roomId, '1');
-          break;
-        case '取消收藏':
-          doPostFollow('2', widget.roomId, '0');
-          break;
-        case '空位置':
-          setState(() {
-            for (int i = 0; i < 9; i++) {
-              upOrDown[i] = false;
-            }
-            for (int i = 0; i < 9; i++) {
-              isMy[i] = false;
-            }
-            upOrDown[int.parse(event.index!)] = true;
-          });
-          break;
-        case '上麦':
-          doPostSetmai(event.index!, 'up');
-          setState(() {
-            for (int i = 0; i < 9; i++) {
-              upOrDown[i] = false;
-            }
-          });
-          break;
-        case '锁麦':
-          doPostSetLock(event.index!, 'yes');
-          break;
-        case '解锁':
-          doPostSetLock(event.index!, 'no');
-          break;
-        case '下麦':
-          doPostSetmai(event.index!, 'down');
-          setState(() {
-            for (int i = 0; i < 9; i++) {
-              isMy[i] = false;
-            }
-            for (int i = 0; i < 9; i++) {
-              upOrDown[i] = false;
-            }
-          });
-          break;
-        case '闭麦':
-          setState(() {
-            listM[int.parse(event.index!)].isClose = 1;
-          });
-          break;
-        case '开麦':
-          setState(() {
-            listM[int.parse(event.index!)].isClose = 0;
-          });
-          break;
-        case '闭麦1':
-          setState(() {
-            listM[int.parse(event.index!)].isClose = 1;
-          });
-          doPostSetClose(event.index!, 'no');
-          break;
-        case '开麦1':
-          setState(() {
-            listM[int.parse(event.index!)].isClose = 0;
-          });
-          doPostSetClose(event.index!, 'yes');
-          break;
-        case '自己':
-          setState(() {
-            for (int i = 0; i < 9; i++) {
-              isMy[i] = false;
-            }
-            for (int i = 0; i < 9; i++) {
-              upOrDown[i] = false;
-            }
-            isMy[int.parse(event.index!)] = true;
-          });
-          break;
-        case '修改了公告':
-          setState(() {
-            notice = event.index!;
-          });
-          break;
-        case '欢迎':
-          // 用户id
-          String uid = event.index!.split(',')[0];
-          // 点击的list里面的第几个
-          String index = event.index!.split(',')[1];
-          setState(() {
-            list[int.parse(index)]['isWelcome'] = '1';
-          });
-          doPostRoomWelcomeMsg(uid);
-          break;
-        case '已播放完成':
-          setState(() {
-            list[int.parse(event.index!)]['isOK'] = 'true';
-          });
-          break;
-      }
-    });
-    // 更换背景图监听
-    listenCheckBG = eventBus.on<CheckBGBack>().listen((event) {
-      setState(() {
-        if (event.bgType == '1') {
-          BgType = '1';
-          bgImage = event.bgImagUrl;
-        } else {
-          BgType = '2';
-          bgSVGA = event.bgImagUrl;
         }
       });
-    });
-    // 上麦下麦等操作im监听
-    listenZDY = eventBus.on<ZDYBack>().listen((event) {
-      if (event.map!['room_id'].toString() == widget.roomId) {
-        switch (event.type) {
-          case 'up_mic': //上麦
+      // 厅内操作监听
+      listenRoomback = eventBus.on<RoomBack>().listen((event) {
+        switch (event.title) {
+          case '关闭声音':
+            setState(() {
+              isJinyiin = !isJinyiin;
+              // 自己上麦了
+              if(isMeUp){
+                //点击了静音
+                if(isJinyiin){
+                  // // 通过此方法设置为观众
+                  _engine.setClientRole(role: ClientRoleType.clientRoleAudience);
+                }else{
+                  // 设置成主播
+                  _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
+                }
+              }
+            });
+            break;
+          case '收藏':
+            doPostFollow('2', widget.roomId, '1');
+            break;
+          case '取消收藏':
+            doPostFollow('2', widget.roomId, '0');
+            break;
+          case '空位置':
+            setState(() {
+              for (int i = 0; i < 9; i++) {
+                upOrDown[i] = false;
+                isMy[i] = false;
+              }
+              upOrDown[int.parse(event.index!)] = true;
+            });
+            break;
+          case '上麦':
+            doPostSetmai(event.index!, 'up');
             setState(() {
               for (int i = 0; i < 9; i++) {
                 upOrDown[i] = false;
               }
             });
-            doPostRoomInfo2(
-                (int.parse(event.map!['serial_number'].toString()) - 1)
-                    .toString());
             break;
-          case 'down_mic': //下麦
+          case '锁麦':
+            doPostSetLock(event.index!, 'yes');
+            break;
+          case '解锁':
+            doPostSetLock(event.index!, 'no');
+            break;
+          case '下麦':
+            doPostSetmai(event.index!, 'down');
             setState(() {
               for (int i = 0; i < 9; i++) {
                 isMy[i] = false;
@@ -435,232 +393,581 @@ class _RoomPageState extends State<RoomPage>
                 upOrDown[i] = false;
               }
             });
-            doPostRoomInfo2(
-                (int.parse(event.map!['serial_number'].toString()) - 1)
-                    .toString());
             break;
-          case 'lock_mic': //锁麦
+          case '闭麦':
             setState(() {
-              listM[int.parse(event.map!['serial_number'].toString()) - 1]
-                  .isLock = 1;
+              // 取消发布本地音频流
+              _engine.muteLocalAudioStream(true);
+              listM[int.parse(event.index!)].isClose = 1;
             });
             break;
-          case 'unlock_mic': //未锁麦
+          case '开麦':
             setState(() {
-              listM[int.parse(event.map!['serial_number'].toString()) - 1]
-                  .isLock = 0;
+              // 开启发布本地音频流
+              _engine.muteLocalAudioStream(false);
+              listM[int.parse(event.index!)].isClose = 0;
             });
             break;
-          case 'set_boss': //设置老板位
+          case '闭麦1':
             setState(() {
-              isRoomBoss = 1;
-              isBoss = true;
+              // 取消发布本地音频流
+              _engine.muteLocalAudioStream(true);
+              listM[int.parse(event.index!)].isClose = 1;
+            });
+            doPostSetClose(event.index!, 'no');
+            break;
+          case '开麦1':
+            setState(() {
+              // 开启发布本地音频流
+              _engine.muteLocalAudioStream(false);
+              listM[int.parse(event.index!)].isClose = 0;
+            });
+            doPostSetClose(event.index!, 'yes');
+            break;
+          case '自己':
+            setState(() {
+              for (int i = 0; i < 9; i++) {
+                isMy[i] = false;
+              }
+              for (int i = 0; i < 9; i++) {
+                upOrDown[i] = false;
+              }
+              isMy[int.parse(event.index!)] = true;
             });
             break;
-          case 'cancel_boss': //取消老板位
+          case '修改了公告':
             setState(() {
-              isRoomBoss = 0;
-              isBoss = false;
+              notice = event.index!;
             });
             break;
-          case 'close_mic': //闭麦
+          case '欢迎':
+          // 用户id
+            String uid = event.index!.split(',')[0];
+            // 点击的list里面的第几个
+            String index = event.index!.split(',')[1];
             setState(() {
-              listM[int.parse(event.map!['serial_number'].toString()) - 1]
-                  .isClose = 1;
+              list[int.parse(index)]['isWelcome'] = '1';
+            });
+            doPostRoomWelcomeMsg(uid);
+            break;
+          case '已播放完成':
+            setState(() {
+              list[int.parse(event.index!)]['isOK'] = 'true';
             });
             break;
-          case 'un_close_mic': //开麦
-            setState(() {
-              listM[int.parse(event.map!['serial_number'].toString()) - 1]
-                  .isClose = 0;
-            });
-            break;
-        }
-      }
-    });
-    // 加入房间监听
-    listJoin = eventBus.on<JoinRoomYBack>().listen((event) {
-      LogE('接收到了信息${event.map!['type']}');
-      if (event.map!['room_id'].toString() == widget.roomId) {
-        // 判断是不是点击了欢迎某某人
-        if (event.map!['type'] == 'welcome_msg') {
-          Map<dynamic, dynamic> map = {};
-          map['info'] = event.map!['send_nickname'];
-          map['uid'] = event.map!['uid'];
-          map['type'] = '3';
-          // 欢迎语信息
-          map['content'] =
-              '${event.map!['send_nickname']},${event.map!['content']}';
-          // 身份
-          map['identity'] = event.map!['identity'];
-          // 等级
-          map['lv'] = event.map!['send_level'];
-          // 贵族
-          map['noble_id'] = event.map!['noble_id'];
-          // 萌新
-          map['is_new'] = event.map!['is_new'];
-          // 是否靓号
-          map['is_pretty'] = event.map!['is_pretty'];
-          // 新贵
-          map['new_noble'] = event.map!['new_noble'];
-          // 是否点击了欢迎 0未欢迎 1已欢迎
-          map['isWelcome'] = '0';
-
-          setState(() {
-            list.add(map);
-          });
-        } else if (event.map!['type'] == 'chatroom_msg') {
-          //厅内发送的文字消息
-          Map<dynamic, dynamic> map = {};
-          map['info'] = event.map!['nickname'];
-          map['uid'] = event.map!['uid'];
-          map['type'] = '4';
-          // 发送的信息
-          map['content'] = event.map!['content'];
-          // 发送的图片
-          map['image'] = event.map!['image'];
-          // 身份
-          map['identity'] = event.map!['identity'];
-          // 等级
-          map['lv'] = event.map!['lv'];
-          // 贵族
-          map['noble_id'] = event.map!['noble_id'];
-          // 萌新
-          map['is_new'] = event.map!['is_new'];
-          // 是否靓号
-          map['is_pretty'] = event.map!['is_pretty'];
-          // 新贵
-          map['new_noble'] = event.map!['new_noble'];
-          // 是否点击了欢迎 0未欢迎 1已欢迎
-          map['isWelcome'] = '0';
-          // svga动画是否播放完成
-          map['isOk'] = 'false';
-
-          setState(() {
-            list.add(map);
-            list2.add(map);
-          });
-        } else {
-          bool isHave = false;
-          for (int i = 0; i < list.length; i++) {
-            if (list[i]['type'] == '1') {
-              setState(() {
-                isHave = true;
-              });
-            }
-          }
-          if (!isHave) {
-            Map<dynamic, dynamic> mapg = {};
-            mapg['info'] = event.map!['notice'];
-            mapg['type'] = '1';
-            setState(() {
-              list.add(mapg);
-            });
-          }
-
-          Map<dynamic, dynamic> map = {};
-          map['info'] = event.map!['nickname'];
-          map['type'] = '2';
-          map['uid'] = event.map!['uid'];
-          //身份
-          map['identity'] = event.map!['identity'];
-          //等级
-          map['lv'] = event.map!['lv'];
-          // 贵族
-          map['noble_id'] = event.map!['noble_id'];
-          // 萌新
-          map['is_new'] = event.map!['is_new'];
-          // 是否靓号
-          map['is_pretty'] = event.map!['is_pretty'];
-          // 新贵
-          map['new_noble'] = event.map!['new_noble'];
-          // 是否点击了欢迎 0未欢迎 1已欢迎
-          map['isWelcome'] = '0';
-          setState(() {
-            list.add(map);
-          });
-        }
-
-        WidgetsBinding.instance!.addPostFrameCallback((_) {
-          scrollToLastItem(); // 在widget构建完成后滚动到底部
-        });
-      }
-    });
-    // 发消息监听
-    listenSend = eventBus.on<SendRoomInfoBack>().listen((event) {
-      _startTimer();
-      doPostRoomMessageSend(event.info, 0);
-    });
-    // 发图片监听
-    listenSendImg = eventBus.on<SendRoomImgBack>().listen((event) {
-      _startTimer();
-      doPostRoomMessageSend(event.info, 1);
-    });
-    // 送礼选中了那个用户监听
-    listenPeople = eventBus.on<ChoosePeopleBack>().listen((event) {
-      setState(() {
-        for (int i = 0; i < 9; i++) {
-          listPeople[i] = event.listPeople[i];
         }
       });
-    });
+      // 更换背景图监听
+      listenCheckBG = eventBus.on<CheckBGBack>().listen((event) {
+        setState(() {
+          if (event.bgType == '1') {
+            BgType = '1';
+            bgImage = event.bgImagUrl;
+          } else {
+            BgType = '2';
+            bgSVGA = event.bgImagUrl;
+          }
+        });
+      });
+      // 上麦下麦等操作im监听
+      listenZDY = eventBus.on<ZDYBack>().listen((event) {
+        if (event.map!['room_id'].toString() == widget.roomId) {
+          switch (event.type) {
+            case 'up_mic': //上麦
+              setState(() {
+                for (int i = 0; i < 9; i++) {
+                  upOrDown[i] = false;
+                }
+              });
+              doPostRoomInfo2(
+                  (int.parse(event.map!['serial_number'].toString()) - 1)
+                      .toString());
+              break;
+            case 'down_mic': //下麦
+              setState(() {
+                for (int i = 0; i < 9; i++) {
+                  isMy[i] = false;
+                }
+                for (int i = 0; i < 9; i++) {
+                  upOrDown[i] = false;
+                }
+              });
+              doPostRoomInfo2(
+                  (int.parse(event.map!['serial_number'].toString()) - 1)
+                      .toString());
+              break;
+            case 'lock_mic': //锁麦
+              setState(() {
+                listM[int.parse(event.map!['serial_number'].toString()) - 1]
+                    .isLock = 1;
+              });
+              break;
+            case 'unlock_mic': //未锁麦
+              setState(() {
+                listM[int.parse(event.map!['serial_number'].toString()) - 1]
+                    .isLock = 0;
+              });
+              break;
+            case 'set_boss': //设置老板位
+              setState(() {
+                isRoomBoss = 1;
+                isBoss = true;
+              });
+              break;
+            case 'cancel_boss': //取消老板位
+              setState(() {
+                isRoomBoss = 0;
+                isBoss = false;
+              });
+              break;
+            case 'close_mic': //闭麦
+              setState(() {
+                listM[int.parse(event.map!['serial_number'].toString()) - 1]
+                    .isClose = 1;
+              });
+              break;
+            case '':
+              break;
+          }
+        }
+      });
+      // 加入房间监听
+      listJoin = eventBus.on<JoinRoomYBack>().listen((event) {
+        if (event.map!['room_id'].toString() == widget.roomId) {
+          // 判断是不是点击了欢迎某某人
+          if (event.map!['type'] == 'welcome_msg') {
+            Map<dynamic, dynamic> map = {};
+            map['info'] = event.map!['send_nickname'];
+            map['uid'] = event.map!['uid'];
+            map['type'] = '3';
+            // 欢迎语信息
+            map['content'] =
+            '${event.map!['send_nickname']},${event.map!['content']}';
+            // 身份
+            map['identity'] = event.map!['identity'];
+            // 等级
+            map['lv'] = event.map!['send_level'];
+            // 贵族
+            map['noble_id'] = event.map!['noble_id'];
+            // 萌新
+            map['is_new'] = event.map!['is_new'];
+            // 是否靓号
+            map['is_pretty'] = event.map!['is_pretty'];
+            // 新贵
+            map['new_noble'] = event.map!['new_noble'];
+            // 是否点击了欢迎 0未欢迎 1已欢迎
+            map['isWelcome'] = '0';
 
-    switch (name) {
+            setState(() {
+              list.add(map);
+            });
+          } else if (event.map!['type'] == 'chatroom_msg') {
+            //厅内发送的文字消息
+            Map<dynamic, dynamic> map = {};
+            map['info'] = event.map!['nickname'];
+            map['uid'] = event.map!['uid'];
+            map['type'] = '4';
+            // 发送的信息
+            map['content'] = event.map!['content'];
+            // 发送的图片
+            map['image'] = event.map!['image'];
+            // 身份
+            map['identity'] = event.map!['identity'];
+            // 等级
+            map['lv'] = event.map!['lv'];
+            // 贵族
+            map['noble_id'] = event.map!['noble_id'];
+            // 萌新
+            map['is_new'] = event.map!['is_new'];
+            // 是否靓号
+            map['is_pretty'] = event.map!['is_pretty'];
+            // 新贵
+            map['new_noble'] = event.map!['new_noble'];
+            // 是否点击了欢迎 0未欢迎 1已欢迎
+            map['isWelcome'] = '0';
+            // svga动画是否播放完成
+            map['isOk'] = 'false';
+
+            setState(() {
+              list.add(map);
+              list2.add(map);
+            });
+          }else if (event.map!['type'] == 'send_gift') {
+            charmAllBean cb = charmAllBean.fromJson(event.map);
+            for(int i = 0; i < listM.length; i++){
+              for(int a = 0; a < cb.charm!.length; a ++){
+                if(listM[i].uid.toString() == cb.charm![a].uid){
+                  setState(() {
+                    listM[i].charm = int.parse(cb.charm![a].charm.toString());
+                  });
+                }
+              }
+            }
+            //厅内发送的送礼物消息
+            Map<dynamic, dynamic> map = {};
+            map['info'] = event.map!['nickname'];
+            map['uid'] = event.map!['uid'];
+            map['type'] = '5';
+            // 发送的信息
+            map['content'] = '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出${cb.giftInfo![0].giftName!}(${cb.giftInfo![0].giftPrice.toString()}); x${cb.giftInfo![0].giftNumber.toString()}';
+            setState(() {
+              list.add(map);
+              // 这个是为了让别人也能看见自己送出的礼物
+              listurl.add(event.map!['gift_img']);
+              isShowSVGA = true;
+            });
+
+            LogE('动效== ${(isShowSVGA && roomDX)}');
+          }else if (event.map!['type'] == 'send_all_gift') {
+            //赠送全部背包礼物
+            String infos = '';// 这个是拼接用户送的礼物信息使用
+            charmAllBean cb = charmAllBean.fromJson(event.map);
+            for(int i = 0; i < listM.length; i++){
+              for(int a = 0; a < cb.charm!.length; a ++){
+                if(listM[i].uid.toString() == cb.charm![a].uid){
+                  setState(() {
+                    listM[i].charm = int.parse(cb.charm![a].charm.toString());
+                  });
+                }
+              }
+            }
+            for(int i = 0; i < cb.giftInfo!.length; i++){
+              if(infos.isEmpty){
+                setState(() {
+                  infos = '${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber}';
+                });
+              }else{
+                setState(() {
+                  infos = '$infos,${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber}';
+                });
+              }
+              setState(() {
+                // 这个是为了让别人也能看见自己送出的礼物
+                listurl.add(cb.giftInfo![i].giftImg!);
+              });
+            }
+            //厅内发送的送礼物消息
+            Map<dynamic, dynamic> map = {};
+            map['info'] = event.map!['nickname'];
+            map['uid'] = event.map!['uid'];
+            map['type'] = '6';
+            // 发送的信息
+            map['content'] = '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出;$infos';
+            setState(() {
+              list.add(map);
+              // 这个是为了让别人也能看见自己送出的礼物
+              isShowSVGA = true;
+            });
+          } else if (event.map!['type'] == 'collect_room') {
+            // 收藏房间使用
+            Map<dynamic, dynamic> map = {};
+            map['type'] = '7';
+            // 发送的信息
+            map['content'] = event.map!['info'];
+            setState(() {
+              list.add(map);
+            });
+          } else if(event.map!['type'] == 'join_room'){
+            LogE('***信息 == ${event.map!['follow_info']}');
+            // 跟随主播进入房间
+            Map<dynamic, dynamic> map = {};
+            map['type'] = '8';
+            map['info'] = event.map!['nickname'];
+            // 发送的信息
+            map['content'] = event.map!['follow_info'];
+            setState(() {
+              list.add(map);
+            });
+          } else if(event.map!['type'] == 'play_win_gift'){
+            // 厅内抽奖使用
+            zjgpBean cb = zjgpBean.fromJson(event.map!);
+            String info = '';
+            for(int i = 0; i < cb.giftInfo!.length; i++){
+              if(info.isEmpty){
+                info = '${cb.giftInfo![i].giftName!}(V豆${cb.giftInfo![i].giftName!}) x${cb.giftInfo![i].giftNumber!}';
+              }else{
+                info = '$info${cb.giftInfo![i].giftName!}(V豆${cb.giftInfo![i].giftName!}) x${cb.giftInfo![i].giftNumber!}';
+              }
+            }
+            //厅内发送的送礼物消息
+            Map<dynamic, dynamic> map = {};
+            map['info'] = event.map!['nickname'];
+            map['uid'] = event.map!['uid'];
+            map['type'] = '9';
+            // 发送的信息
+            map['content'] = '${cb.nickName};在;${cb.gameName};中赢得;$info';
+            setState(() {
+              list.add(map);
+            });
+          }else if(event.map!['type'] == 'send_screen'){
+            // 这个是本房间收到了在本房间玩游戏中奖的信息，所以不加数据
+          } else {
+            bool isHave = false;
+            for (int i = 0; i < list.length; i++) {
+              if (list[i]['type'] == '1') {
+                setState(() {
+                  isHave = true;
+                });
+              }
+            }
+            if (!isHave) {
+              Map<dynamic, dynamic> mapg = {};
+              mapg['info'] = event.map!['notice'];
+              mapg['type'] = '1';
+              setState(() {
+                list.add(mapg);
+              });
+            }
+
+            Map<dynamic, dynamic> map = {};
+            map['info'] = event.map!['nickname'];
+            map['type'] = '2';
+            map['uid'] = event.map!['uid'];
+            //身份
+            map['identity'] = event.map!['identity'];
+            //等级
+            map['lv'] = event.map!['lv'];
+            // 贵族
+            map['noble_id'] = event.map!['noble_id'];
+            // 萌新
+            map['is_new'] = event.map!['is_new'];
+            // 是否靓号
+            map['is_pretty'] = event.map!['is_pretty'];
+            // 新贵
+            map['new_noble'] = event.map!['new_noble'];
+            // 是否点击了欢迎 0未欢迎 1已欢迎
+            map['isWelcome'] = '0';
+            setState(() {
+              list.add(map);
+            });
+          }
+
+          WidgetsBinding.instance!.addPostFrameCallback((_) {
+            scrollToLastItem(); // 在widget构建完成后滚动到底部
+          });
+        }else{
+          LogE('房间接收数据 ===  ${event.map!['type']}');
+          if(event.map!['type'] == 'send_screen'){
+            // 厅内抽奖使用
+            zjgpBean cb = zjgpBean.fromJson(event.map!);
+            String info = '';
+            for(int i = 0; i < cb.giftInfo!.length; i++){
+              if(info.isEmpty){
+                info = '${cb.giftInfo![i].giftName!}(V豆${cb.giftInfo![i].giftPrice!}) x${cb.giftInfo![i].giftNumber!}';
+              }else{
+                info = '$info${cb.giftInfo![i].giftName!}(V豆${cb.giftInfo![i].giftPrice!}) x${cb.giftInfo![i].giftNumber!}';
+              }
+            }
+            //厅内发送的送礼物消息
+            Map<dynamic, dynamic> map = {};
+            map['info'] = event.map!['nickname'];
+            map['uid'] = event.map!['uid'];
+            map['type'] = '9';
+            // 发送的信息
+            map['content'] = '${cb.nickName};在;${cb.gameName};中赢得;$info';
+            setState(() {
+              list.add(map);
+            });
+          }else if(event.map!['type'] == 'send_all_user'){
+            // 厅内出现横幅使用
+            hengFuBean hf = hengFuBean.fromJson(event.map!);
+            myhf = hf;
+            if(listMP.isEmpty){
+              //显示横幅、map赋值
+              setState(() {
+                isShowHF = true;
+                listMP.add(hf);
+              });
+              // 判断数据显示使用
+              showInfo(hf);
+            }else{
+              setState(() {
+                listMP.add(hf);
+              });
+            }
+            // 看看集合里面有几个，10s一执行
+            hpTimer();
+          }
+          WidgetsBinding.instance!.addPostFrameCallback((_) {
+            scrollToLastItem(); // 在widget构建完成后滚动到底部
+          });
+        }
+      });
+      // 发消息监听
+      listenSend = eventBus.on<SendRoomInfoBack>().listen((event) {
+        _startTimer();
+        doPostRoomMessageSend(event.info, 0);
+      });
+      // 发图片监听
+      listenSendImg = eventBus.on<SendRoomImgBack>().listen((event) {
+        _startTimer();
+        doPostRoomMessageSend(event.info, 1);
+      });
+      // 送礼选中了那个用户监听
+      listenPeople = eventBus.on<ChoosePeopleBack>().listen((event) {
+        setState(() {
+          for (int i = 0; i < 9; i++) {
+            listPeople[i] = event.listPeople[i];
+          }
+        });
+      });
+
+      listenBig = eventBus.on<ResidentBack>().listen((event) {
+        setState(() {
+          isBig = false;
+        });
+      });
+
+      // 在页面中使用自定义时间和图片地址
+      slideAnimationController = SlideAnimationController(
+        vsync: this,
+        duration: const Duration(seconds: 30), // 自定义时间
+      );
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
+        slideAnimationController.playAnimation();
+      });
+
+      // 接受播放礼物
+      listenSVGA = eventBus.on<SVGABack>().listen((event) {
+        // 赠送了全部
+        if(event.isAll){
+          setState(() {
+            // 虽然赠送了全部礼物，但是之前有人送了，还没结束
+            if(listurl.isNotEmpty){
+              for(int i = 0; i < event.listurl.length; i++){
+                listurl.add(event.listurl[i]);
+              }
+            }else{
+              listurl = event.listurl;
+            }
+            isShowSVGA = true;
+          });
+        }else{
+          setState(() {
+            LogE('==地址==');
+            listurl.add(event.url);
+            LogE('==地址1==${listurl[0]}');
+            isShowSVGA = true;
+          });
+        }
+      });
+      // svga礼物播放完成
+      listenSVGAOK = eventBus.on<RoomSVGABack>().listen((event) {
+        // 动画播放完成后先关闭
+        setState(() {
+          isShowSVGA = false;
+        });
+        // 隔0.5s后移除，在判断里面有没有剩余动画要播放
+        Future.delayed(const Duration(milliseconds: 500,),((){
+          setState(() {
+            if(listurl.isNotEmpty){
+              listurl.removeAt(0);
+              if(listurl.isEmpty){
+                isShowSVGA = false;
+              }
+            }else{
+              isShowSVGA = false;
+            }
+          });
+        }));
+      });
+    });
+  }
+
+  Timer? _timerhf;
+  // 18秒后请求一遍
+  void hpTimer() {
+    _timerhf = Timer.periodic(const Duration(seconds: 18), (timer) {
+      setState(() {
+        listMP.removeAt(0);
+      });
+      if(listMP.isEmpty){
+        _timerhf!.cancel();
+      }else{
+        setState(() {
+          isShowHF = true;
+        });
+        // 判断数据显示使用
+        showInfo(listMP[0]);
+      }
+    });
+  }
+  // 接受到数据进行判断使用
+  void showInfo(hengFuBean hf){
+    switch(hf.title){
+      case '贵族':
+        if(hf.nobleId! > 1 && hf.nobleId! < 5 ){
+          // 低贵族
+          setState(() {
+            name = '低贵族';
+            path = 'assets/svga/gp/gp_guizu_d.svga';
+          });
+        }else if(hf.nobleId! > 4 && hf.nobleId! < 8 ){
+          // 高贵族
+          setState(() {
+            name = '高贵族';
+            path = 'assets/svga/gp/gp_guizu_g.svga';
+          });
+        }
+        break;
       case '超级转盘':
         setState(() {
+          name = '超级转盘';
           path = 'assets/svga/gp/gp_zp2.svga';
         });
         break;
       case '心动转盘':
         setState(() {
+          name = '心动转盘';
           path = 'assets/svga/gp/gp_zp1.svga';
         });
         break;
       case '马里奥':
         setState(() {
+          name = '马里奥';
           path = 'assets/svga/gp/gp_maliao.svga';
         });
         break;
-      case '白鬼':
+      case '白灵':
         setState(() {
+          name = '白灵';
           path = 'assets/svga/gp/gp_gui.svga';
-        });
-        break;
-      case '低贵族':
-        setState(() {
-          path = 'assets/svga/gp/gp_guizu_d.svga';
-        });
-        break;
-      case '高贵族':
-        setState(() {
-          path = 'assets/svga/gp/gp_guizu_g.svga';
         });
         break;
       case '蓝魔方':
         setState(() {
+          name = '蓝魔方';
           path = 'assets/svga/gp/gp_lan.svga';
         });
         break;
       case '金魔方':
         setState(() {
+          name = '金魔方';
           path = 'assets/svga/gp/gp_jin.svga';
         });
         break;
       case '1q直刷':
         setState(() {
+          name = '1q直刷';
           path = 'assets/svga/gp/gp_1q.svga';
         });
         break;
       case '1w直刷':
         setState(() {
+          name = '1w直刷';
           path = 'assets/svga/gp/gp_1w.svga';
+        });
+        break;
+      case '388800转盘礼物':
+        setState(() {
+          isBig = true;
         });
         break;
     }
     // 在页面中使用自定义时间和图片地址
     slideAnimationController = SlideAnimationController(
       vsync: this,
-      duration: const Duration(seconds: 30), // 自定义时间
+      duration: const Duration(seconds: 15), // 自定义时间
     );
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       slideAnimationController.playAnimation();
@@ -741,6 +1048,9 @@ class _RoomPageState extends State<RoomPage>
     _engine.disableAudio();
     _scrollController.dispose();
     listenPeople.cancel();
+    listenBig.cancel();
+    listenZdy.cancel();
+    listenSVGA.cancel();
   }
 
   // 初始化应用
@@ -793,10 +1103,13 @@ class _RoomPageState extends State<RoomPage>
       token: MyConfig.token,
       channelId: MyConfig.channel,
       options: const ChannelMediaOptions(
-          clientRoleType: ClientRoleType.clientRoleBroadcaster),
+          // 设置用户角色为主播
+          // 如果要将用户角色设置为观众，则修改 clientRoleBroadcaster 为 clientRoleAudience
+          clientRoleType: ClientRoleType.clientRoleAudience),
       uid: 0,
     );
-    _engine.setClientRole(role: ClientRoleType.clientRoleAudience);
+    // // 通过此方法设置为观众
+    // _engine.setClientRole(role: ClientRoleType.clientRoleAudience);
     _engine.enableLocalAudio(true);
     // 设置音质
     _engine.setAudioProfile(
@@ -805,6 +1118,8 @@ class _RoomPageState extends State<RoomPage>
     // 开启降噪
     _engine.setAINSMode(
         enabled: true, mode: AudioAinsMode.ainsModeUltralowlatency);
+    //默认订阅所有远端用户的音频流。
+    _engine.muteAllRemoteAudioStreams(false);
   }
 
   /// 开启声卡
@@ -909,7 +1224,7 @@ class _RoomPageState extends State<RoomPage>
 
                     /// 底部按钮信息
                     RoomItems.footBtn(context, isJinyiin, isForbation,
-                        widget.roomId, isHomeShow, isRoomBoss, mima, listM),
+                        widget.roomId, isHomeShow, isRoomBoss, mima, listM, roomDX),
                   ],
                 ),
 
@@ -937,7 +1252,7 @@ class _RoomPageState extends State<RoomPage>
 
                 /// 聊天除使用
                 Positioned(
-                  bottom: 60.h,
+                  bottom: 100.h,
                   child:
                   /// 消息列表最外层
                   SizedBox(
@@ -998,12 +1313,24 @@ class _RoomPageState extends State<RoomPage>
                 ),
 
                 /// 公屏推送使用
-                // HomeItems.itemAnimation(
-                //     path,
-                //     slideAnimationController.controller,
-                //     slideAnimationController.animation,
-                //     '恭喜某某用户单抽喜中价值500元的小柴一个',
-                //     name),
+                isShowHF ? HomeItems.itemAnimation(
+                    path,
+                    slideAnimationController.controller,
+                    slideAnimationController.animation,
+                    name,
+                    myhf) : const Text(''),
+
+                /// 爆出5w2的礼物推送使用
+                 isBig? HomeItems.itemBig(myhf) : const Text(''),
+
+                (isShowSVGA == true && roomDX == true) ? IgnorePointer(
+                  ignoring: true,
+                  child: SizedBox(
+                    height: double.infinity,
+                    width: double.infinity,
+                    child: SVGASimpleImage5( resUrl: listurl[0],),
+                  ),
+                ) : const Text('')
               ],
             ),
           ),
@@ -1071,6 +1398,14 @@ class _RoomPageState extends State<RoomPage>
             isHomeShow = bean.data!.roomInfo!.isShow as int;
             isRoomBoss = bean.data!.roomInfo!.mikeList![7].isBoss as int;
             mima = bean.data!.roomInfo!.secondPwd!.isNotEmpty ? true : false;
+
+            // 判断麦上有没有自己
+            for(int i = 0; i < bean.data!.roomInfo!.mikeList!.length; i++){
+              if(sp.getString('user_id').toString() == bean.data!.roomInfo!.mikeList![i].uid.toString()){
+                isMeUp = true;
+                break;
+              }
+            }
           });
           break;
         case MyHttpConfig.errorloginCode:
@@ -1127,6 +1462,15 @@ class _RoomPageState extends State<RoomPage>
       CommonBean bean = await DataUtils.postSetmai(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
+          setState(() {
+            if(action == 'up'){
+              // 设置成主播
+              _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
+            }else{
+              // 设置成观众
+              _engine.setClientRole(role: ClientRoleType.clientRoleAudience);
+            }
+          });
           doPostRoomInfo2(serial_number);
           break;
         case MyHttpConfig.errorloginCode:
@@ -1152,8 +1496,13 @@ class _RoomPageState extends State<RoomPage>
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
+            // 更新上麦或者下麦的那一条数据
             listM[int.parse(index)] =
                 bean.data!.roomInfo!.mikeList![int.parse(index)];
+            // 判断麦上有没有自己
+            if(sp.getString('user_id').toString() == bean.data!.roomInfo!.mikeList![int.parse(index)].uid.toString()){
+              isMeUp = true;
+            }
             switch (index) {
               case '0':
                 m1 = bean.data!.roomInfo!.mikeList![0].uid == 0 ? false : true;

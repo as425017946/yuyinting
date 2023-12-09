@@ -513,12 +513,17 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
                           isTiaoguo = !isTiaoguo;
                         });
                       }),
-                      child: Row(
-                        children: [
-                          WidgetUtils.showImages(isTiaoguo==false ? 'assets/images/mofang_tg_no.png' : 'assets/images/mofang_tg_yes.png', ScreenUtil().setHeight(24), ScreenUtil().setHeight(24)),
-                          WidgetUtils.commonSizedBox(0, 5),
-                          WidgetUtils.onlyText('跳过动画', StyleUtils.getCommonTextStyle(color: MyColors.roomTCWZ2, fontSize: ScreenUtil().setSp(20)))
-                        ],
+                      child: Container(
+                        height: 30.h,
+                        width: 150.h,
+                        color: Colors.transparent,
+                        child: Row(
+                          children: [
+                            WidgetUtils.showImages(isTiaoguo==false ? 'assets/images/mofang_tg_no.png' : 'assets/images/mofang_tg_yes.png', ScreenUtil().setHeight(24), ScreenUtil().setHeight(24)),
+                            WidgetUtils.commonSizedBox(0, 5),
+                            WidgetUtils.onlyText('跳过动画', StyleUtils.getCommonTextStyle(color: MyColors.roomTCWZ2, fontSize: ScreenUtil().setSp(20)))
+                          ],
+                        ),
                       ),
                     ),
                   ),

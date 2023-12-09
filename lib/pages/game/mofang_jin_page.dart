@@ -51,7 +51,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
   bool isMore = false;
   SVGAAnimationController? animationController;
   // 转几次 要花费多少
-  int cishu = 1, feiyong = 500;
+  int cishu = 1, feiyong = 200;
   // 监听
   var listenXZ;
   // 是否可以点击启动
@@ -298,7 +298,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                                 Transform.translate(
                                   offset: Offset(0, -2.h),
                                   child: WidgetUtils.onlyTextCenter(
-                                      '500V豆',
+                                      '200V豆',
                                       StyleUtils.getCommonTextStyle(
                                           color: Colors.white,
                                           fontSize: ScreenUtil().setSp(21),
@@ -328,7 +328,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                                 Transform.translate(
                                   offset: Offset(0, -2.h),
                                   child: WidgetUtils.onlyTextCenter(
-                                      '5000V豆',
+                                      '2000V豆',
                                       StyleUtils.getCommonTextStyle(
                                           color: Colors.white,
                                           fontSize: ScreenUtil().setSp(21),
@@ -358,7 +358,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                                 Transform.translate(
                                   offset: Offset(0, -2.h),
                                   child: WidgetUtils.onlyTextCenter(
-                                      '50000V豆',
+                                      '20000V豆',
                                       StyleUtils.getCommonTextStyle(
                                           color: Colors.white,
                                           fontSize: ScreenUtil().setSp(21),
@@ -379,7 +379,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                               setState(() {
                                 isCheck = 1;
                                 cishu = 1;
-                                feiyong = 500;
+                                feiyong = 200;
                               });
                             }),
                             child: Container(
@@ -406,7 +406,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                               setState(() {
                                 isCheck = 2;
                                 cishu = 10;
-                                feiyong = 5000;
+                                feiyong = 2000;
                               });
                             }),
                             child: Container(
@@ -433,7 +433,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                               setState(() {
                                 isCheck = 3;
                                 cishu = 100;
-                                feiyong = 50000;
+                                feiyong = 20000;
                               });
                             }),
                             child: Container(
@@ -547,12 +547,17 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                           isTiaoguo = !isTiaoguo;
                         });
                       }),
-                      child: Row(
-                        children: [
-                          WidgetUtils.showImages(isTiaoguo==false ? 'assets/images/mofang_tg_no.png' : 'assets/images/mofang_tg_yes.png', ScreenUtil().setHeight(24), ScreenUtil().setHeight(24)),
-                          WidgetUtils.commonSizedBox(0, 5),
-                          WidgetUtils.onlyText('跳过动画', StyleUtils.getCommonTextStyle(color: MyColors.roomTCWZ2, fontSize: ScreenUtil().setSp(20)))
-                        ],
+                      child: Container(
+                        height: 30.h,
+                        width: 150.h,
+                        color: Colors.transparent,
+                        child: Row(
+                          children: [
+                            WidgetUtils.showImages(isTiaoguo==false ? 'assets/images/mofang_tg_no.png' : 'assets/images/mofang_tg_yes.png', ScreenUtil().setHeight(24), ScreenUtil().setHeight(24)),
+                            WidgetUtils.commonSizedBox(0, 5),
+                            WidgetUtils.onlyText('跳过动画', StyleUtils.getCommonTextStyle(color: MyColors.roomTCWZ2, fontSize: ScreenUtil().setSp(20)))
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -723,7 +728,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
       'number': number, //数量
       'room_id': widget.roomId, //房间id
       'game_id': '1', //1魔方 2转盘
-      'price': '500'
+      'price': '200'
     };
     try {
       playRouletteBean bean = await DataUtils.postPlayRoulette(params);

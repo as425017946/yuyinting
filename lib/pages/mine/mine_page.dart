@@ -5,11 +5,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/pages/message/care_home_page.dart';
 import 'package:yuyinting/pages/mine/setting/setting_page.dart';
+import 'package:yuyinting/pages/mine/tequan/tequan_page.dart';
 import 'package:yuyinting/pages/mine/zhuangban/zhuangban_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/style_utils.dart';
+import 'package:yuyinting/widget/SVGASimpleImage.dart';
 
 import '../../bean/kefuBean.dart';
 import '../../bean/myInfoBean.dart';
@@ -283,42 +285,30 @@ class _MinePageState extends State<MinePage>{
                 children: [
                   WidgetUtils.showImagesFill('assets/images/mine_gz_bg.png',
                       ScreenUtil().setHeight(130), double.infinity),
-                  Container(
-                    width: double.infinity,
-                    height: ScreenUtil().setHeight(100),
-                    padding: const EdgeInsets.only(right: 10),
-                    alignment: Alignment.centerRight,
-                    child: GestureDetector(
-                      onTap: (() {
-                        Navigator.pushNamed(context, 'TequanPage');
-                      }),
+                  GestureDetector(
+                    onTap: ((){
+                      MyUtils.goTransparentPageCom(context, const TequanPage());
+                    }),
+                    child: Container(
+                      width: double.infinity,
+                      height: ScreenUtil().setHeight(100),
+                      padding: const EdgeInsets.only(right: 10),
+                      color: Colors.transparent,
+                      alignment: Alignment.centerRight,
                       child: guizuType == 1
                           ? WidgetUtils.myContainer(
-                              ScreenUtil().setHeight(45),
-                              ScreenUtil().setHeight(100),
-                              Colors.transparent,
-                              MyColors.mineOrange,
-                              '已开通',
-                              ScreenUtil().setSp(21),
-                              MyColors.mineOrange)
+                          ScreenUtil().setHeight(45),
+                          ScreenUtil().setHeight(100),
+                          Colors.transparent,
+                          MyColors.mineOrange,
+                          '已开通',
+                          ScreenUtil().setSp(21),
+                          MyColors.mineOrange)
                           : SizedBox(
-                              width: ScreenUtil().setHeight(116),
-                              height: ScreenUtil().setHeight(39),
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  WidgetUtils.showImages(
-                                      'assets/images/mine_kaitong_bg.png',
-                                      ScreenUtil().setHeight(45),
-                                      ScreenUtil().setHeight(100)),
-                                  WidgetUtils.onlyTextCenter(
-                                      '开通',
-                                      StyleUtils.getCommonTextStyle(
-                                          color: Colors.white,
-                                          fontSize: ScreenUtil().setSp(21))),
-                                ],
-                              ),
-                            ),
+                          width: ScreenUtil().setHeight(116),
+                          height: ScreenUtil().setHeight(45),
+                          child: const SVGASimpleImage(assetsName: 'assets/svga/guizu_kt.svga',)
+                      ),
                     ),
                   ),
                   Container(

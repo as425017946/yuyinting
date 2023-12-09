@@ -210,3 +210,17 @@ class HongBaoBack {
   String info;
   HongBaoBack({required this.info});
 }
+
+/// 向厅内发送播放礼物的通知使用
+class SVGABack {
+  bool isAll; // 是否赠送全部
+  String url; //svga地址
+  List<String> listurl;
+  SVGABack({required this.isAll,required this.url,required this.listurl});
+}
+
+/// 厅内礼物播放完成
+class RoomSVGABack {
+  bool isOK;
+  RoomSVGABack({required this.isOK});
+}

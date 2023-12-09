@@ -1139,13 +1139,13 @@ class WidgetUtils {
         //背景
         color: color,
         //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+        borderRadius: const BorderRadius.all(Radius.circular(20.0)),
       ),
       child: Row(
         children: [
           const Expanded(child: Text('')),
-          WidgetUtils.showImages(
-              imgUrl, ScreenUtil().setHeight(38), ScreenUtil().setWidth(33)),
+          title != '取消关注' ? WidgetUtils.showImages(
+              imgUrl, ScreenUtil().setHeight(38), ScreenUtil().setWidth(33)) : const Text(''),
           WidgetUtils.commonSizedBox(0, 5),
           WidgetUtils.onlyText(
               title,

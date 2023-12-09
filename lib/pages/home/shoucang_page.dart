@@ -274,16 +274,17 @@ class _ShoucangPageState extends State<ShoucangPage> with AutomaticKeepAliveClie
               for (int i = 0; i < bean.data!.list!.length; i++) {
                 _list.add(bean.data!.list![i]);
               }
-              if (bean.data!.list!.length < MyConfig.pageSize) {
-                _refreshController.loadNoData();
-              }
+              // 把没有更多的提示去掉
+              // if (bean.data!.list!.length < MyConfig.pageSize) {
+              //   _refreshController.loadNoData();
+              // }
 
               length = bean.data!.list!.length;
             } else {
               if (page == 1) {
                 length = 0;
               }else{
-                _refreshController.loadNoData();
+                // _refreshController.loadNoData();
               }
             }
           });
