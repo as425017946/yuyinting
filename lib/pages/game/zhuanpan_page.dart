@@ -36,7 +36,7 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
     _controller = PageController(
       initialPage: 0,
     );
-    doPostWalletList();
+    doPostBalance();
     listen = eventBus.on<XiaZhuBack>().listen((event) {
       setState(() {
         if(jinbi.contains('w')){
@@ -321,8 +321,8 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
 
   // 金币 钻石
   String jinbi = '', zuanshi = '';
-  /// 钱包明细
-  Future<void> doPostWalletList() async {
+  /// 钱包余额
+  Future<void> doPostBalance() async {
     try {
       balanceBean bean = await DataUtils.postBalance();
       switch (bean.code) {

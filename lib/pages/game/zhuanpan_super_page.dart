@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:soundpool/soundpool.dart';
-import 'package:yuyinting/bean/commonStringBean.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/pages/game/zhuanpan/zhuanpan_daoju_page.dart';
 import 'package:yuyinting/pages/game/zhuanpan/zhuanpan_guize_page.dart';

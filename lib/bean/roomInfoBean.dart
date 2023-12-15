@@ -139,6 +139,8 @@ class MikeList {
   String? identity;
   String? waveImg;
   String? waveGifImg;
+  String? avatarFrameImg;
+  String? avatarFrameGifImg;
 
   MikeList(
       {this.id,
@@ -153,7 +155,9 @@ class MikeList {
         this.charm,
         this.identity,
         this.waveImg,
-        this.waveGifImg});
+        this.waveGifImg,
+        this.avatarFrameImg,
+        this.avatarFrameGifImg});
 
   MikeList.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -169,6 +173,8 @@ class MikeList {
     identity = json['identity'];
     waveImg = json['wave_img'];
     waveGifImg = json['wave_gif_img'];
+    avatarFrameImg = json['avatar_frame_img'];
+    avatarFrameGifImg = json['avatar_frame_gif_img'];
   }
 
   Map<String, dynamic> toJson() {
@@ -186,6 +192,8 @@ class MikeList {
     data['identity'] = this.identity;
     data['wave_img'] = this.waveImg;
     data['wave_gif_img'] = this.waveGifImg;
+    data['avatar_frame_img'] = this.avatarFrameImg;
+    data['avatar_frame_gif_img'] = this.avatarFrameGifImg;
     return data;
   }
 }
@@ -193,18 +201,20 @@ class MikeList {
 class UserInfo {
   String? role;
   String? nobleId;
-
-  UserInfo({this.role, this.nobleId});
+  String? carDressGifImg;
+  UserInfo({this.role, this.nobleId, this.carDressGifImg});
 
   UserInfo.fromJson(Map<String, dynamic> json) {
     role = json['role'];
     nobleId = json['noble_id'];
+    carDressGifImg = json['car_dress_gif_img'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['role'] = this.role;
     data['noble_id'] = this.nobleId;
+    data['car_dress_gif_img'] = this.carDressGifImg;
     return data;
   }
 }

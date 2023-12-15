@@ -8,11 +8,11 @@ class MyHttpConfig{
   static const int errorRoomCode = 10001;//10001需输入密码
 
   //鹏飞测试环境
-  // static const String baseURL = "http://192.168.0.51/api";
+  static const String baseURL = "http://192.168.0.51/api";
   //赵增测试环境
   // static const String baseURL = "http://192.168.0.53/api";
   //正式环境
-  static const String baseURL = "http://18.163.74.49:8080/api";
+  // static const String baseURL = "http://18.163.74.49:8080/api";
 
   /// 文件上传
   // file方式上传`
@@ -227,5 +227,25 @@ class MyHttpConfig{
   static const String sendRedPacket = "$baseURL/user/sendRedPacket";
   // 一键赠送背包礼物
   static const String oneClickPackageGift = "$baseURL/gift/oneClickPackageGift";
+  // 我的推广
+  static const String myPromotion = "$baseURL/agent/myPromotion";
+  // 领取分润
+  static const String extractRebate = "$baseURL/agent/extractRebate";
+  // 推广码
+  static const String getPromotionCode = "$baseURL/agent/getPromotionCode";
+  // 团队总览
+  static const String teamOverview = "$baseURL/agent/teamOverview";
+  // 团队报表
+  static const String teamReport = "$baseURL/agent/teamReport";
+  // 手工开户
+  static const String openAccount = "$baseURL/agent/openAccount";
+  // 手工开户开关
+  static const String oaSwtich = "$baseURL/agent/oaSwtich";
+  // 结算账单列表
+  static const String settleList = "$baseURL/guild/settleList";
+  // 结算账单明细
+  static const String settleDetail = "$baseURL/guild/settleDetail";
+  // 房间热度
+  static const String hotDegree = "$baseURL/room/hotDegree";
 
 }

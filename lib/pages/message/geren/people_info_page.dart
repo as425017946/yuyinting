@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_sound/public/flutter_sound_player.dart';
 import 'package:yuyinting/pages/message/geren/ziliao_page.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 
@@ -12,9 +13,11 @@ import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../main.dart';
 import '../../../utils/loading.dart';
+import '../../../utils/log_util.dart';
 import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
 import '../../../utils/widget_utils.dart';
+import '../../../widget/SVGASimpleImage.dart';
 import '../../room/room_page.dart';
 import '../../room/room_ts_mima_page.dart';
 import '../chat_page.dart';
@@ -31,7 +34,7 @@ class PeopleInfoPage extends StatefulWidget {
 }
 
 class _PeopleInfoPageState extends State<PeopleInfoPage> {
-  int _currentIndex = 0, gender = 0, is_pretty = 0, all_gift_type = 0, live = 0;
+  int _currentIndex = 0, is_pretty = 0, all_gift_type = 0, live = 0;
   late final PageController _controller; //
   // 0-未知 1-男 2-女
   int sex = 0;
@@ -45,7 +48,9 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
       city = '',
       photo_id = '',
       constellation = '',
-      birthday = '';
+      birthday = '',
+      avatarFrameImg = '',
+      avatarFrameGifImg = '';
   String isFollow = '', roomID = ''; //关注状态, 房间id
 
   List<String> list_p = [];
@@ -59,7 +64,32 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
     _controller = PageController(
       initialPage: 0,
     );
+    _initialize();
     doPostUserInfo();
+  }
+
+  final FlutterSoundPlayer _mPlayer = FlutterSoundPlayer();
+  bool playRecord = false; //音频文件播放状态
+  //播放录音
+  void play() {
+    LogE('录音地址**$voice_card');
+    _mPlayer
+        .startPlayer(
+        fromURI: voice_card,
+        whenFinished: () {
+          setState(() {
+            playRecord = false;
+          });
+        })
+        .then((value) {
+      setState(() {
+        playRecord = true;
+      });
+    });
+  }
+  void _initialize() async {
+    await _mPlayer!.closePlayer();
+    await _mPlayer!.openPlayer();
   }
 
   @override
@@ -90,7 +120,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                       children: [
                         Container(
                           width: ScreenUtil().setWidth(50),
-                          padding: const EdgeInsets.only(left: 15),
+                          padding: const EdgeInsets.only(left: 15, right: 5),
                           color: Colors.transparent,
                           child: IconButton(
                             icon: const Icon(Icons.arrow_back_ios),
@@ -112,8 +142,26 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                     alignment: Alignment.centerLeft,
                     child: Row(
                       children: [
-                        WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(130),
-                            ScreenUtil().setHeight(130), headImg),
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(130),
+                                ScreenUtil().setHeight(130), headImg),
+                            // 头像框静态图
+                            avatarFrameImg.isNotEmpty ? WidgetUtils
+                                .CircleHeadImage(
+                                ScreenUtil().setHeight(160),
+                                ScreenUtil().setHeight(160),
+                                avatarFrameImg) : const Text(''),
+                            // 头像框动态图
+                            avatarFrameGifImg.isEmpty ? SizedBox(
+                              height: 160.h,
+                              width: 160.h,
+                              child: SVGASimpleImage(
+                                resUrl: avatarFrameGifImg,),
+                            ) : const Text(''),
+                          ],
+                        ),
                         WidgetUtils.commonSizedBox(0, 10),
 
                         ///昵称等信息
@@ -138,7 +186,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                                     //边框设置
                                     decoration: BoxDecoration(
                                       //背景
-                                      color: gender == 1
+                                      color: sex == 1
                                           ? MyColors.dtBlue
                                           : MyColors.dtPink,
                                       //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
@@ -146,7 +194,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                                           Radius.circular(20.0)),
                                     ),
                                     child: WidgetUtils.showImages(
-                                        gender == 1
+                                        sex == 1
                                             ? 'assets/images/nan.png'
                                             : 'assets/images/nv.png',
                                         12,
@@ -164,7 +212,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                                 }),
                                 child: Container(
                                   constraints: BoxConstraints(
-                                    maxWidth: ScreenUtil().setHeight(150),
+                                    maxWidth: ScreenUtil().setHeight(170),
                                     minHeight: ScreenUtil().setHeight(38),
                                   ),
                                   padding:
@@ -244,13 +292,19 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                   WidgetUtils.commonSizedBox(10, 0),
 
                   /// 音频
-                  Row(
+                  voice_card.isNotEmpty
+                      ? Row(
                     children: [
-                      Container(
+                      GestureDetector(
+                        onTap: (() {
+                          if (playRecord == false) {
+                            play();
+                          }
+                        }),
+                        child: Container(
                           height: ScreenUtil().setHeight(45),
                           width: ScreenUtil().setWidth(220),
                           margin: const EdgeInsets.only(left: 20),
-                          padding: const EdgeInsets.only(left: 8),
                           alignment: Alignment.center,
                           //边框设置
                           decoration: const BoxDecoration(
@@ -258,23 +312,35 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                             color: MyColors.peopleYellow,
                             //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                             borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
+                            BorderRadius.all(Radius.circular(20.0)),
                           ),
-                          child: WidgetUtils.showImages(
-                              'assets/images/people_bofang.png',
-                              ScreenUtil().setHeight(35),
-                              ScreenUtil().setWidth(35))
-                          // Row(
-                          //   children: [
-                          //     // WidgetUtils.showImages('assets/images/people_bofang.png', ScreenUtil().setHeight(35), ScreenUtil().setWidth(35)),
-                          //     // WidgetUtils.commonSizedBox(0, 20),
-                          //     // WidgetUtils.onlyText('晴天少女', StyleUtils.getCommonTextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(22))),
-                          //   ],
-                          // ),
-                          ),
+                          child: playRecord == false
+                              ? Row(
+                            children: [
+                              const Expanded(
+                                  child: SVGASimpleImage(
+                                    assetsName:
+                                    'assets/svga/audio_xindiaotu.svga',
+                                  )),
+                              WidgetUtils.commonSizedBox(0, 10.h),
+                              WidgetUtils.showImages(
+                                  'assets/images/people_bofang.png',
+                                  ScreenUtil().setHeight(35),
+                                  ScreenUtil().setWidth(35)),
+                              WidgetUtils.commonSizedBox(0, 10.h),
+                            ],
+                          )
+                              : const Expanded(
+                              child: SVGASimpleImage(
+                                assetsName: 'assets/svga/audio_bolang.svga',
+                              )),
+                        ),
+                      ),
                       const Expanded(child: Text('')),
                     ],
-                  ),
+                  )
+                      : const Text(''),
+
                   WidgetUtils.commonSizedBox(15, 0),
                   Expanded(
                     child: Container(
@@ -417,9 +483,9 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                                   _currentIndex = index;
                                 });
                               },
-                              children: const [
-                                ZiliaoPage(),
-                                DongtaiPage(),
+                              children: [
+                                ZiliaoPage(otherId: widget.otherId),
+                                const DongtaiPage(),
                               ],
                             ),
                           )
@@ -485,6 +551,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
 
   /// 查看用户
   Future<void> doPostUserInfo() async {
+    LogE('用户token ${sp.getString('user_token')}');
     Loading.show(MyConfig.successTitle);
     Map<String, dynamic> params = <String, dynamic>{'uid': widget.otherId};
     try {
@@ -499,7 +566,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
             sex = bean.data!.gender as int;
             nickName = bean.data!.nickname!;
             userNumber = bean.data!.number.toString();
-            voice_card = bean.data!.voiceLabelName!;
+            voice_card = bean.data!.voiceCardUrl!;
             voice_cardID = bean.data!.voiceCard.toString();
             birthday = bean.data!.birthday!;
             description = bean.data!.description!;

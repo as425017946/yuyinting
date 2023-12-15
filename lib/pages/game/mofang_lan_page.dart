@@ -60,7 +60,7 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
     super.initState();
     animationController = SVGAAnimationController(vsync: this);
     loadAnimation();
-    doPostWalletList();
+    doPostBalance();
 
     listenXZ = eventBus.on<XZQuerenBack>().listen((event) {
       doPostPlayRoulette(event.cishu);
@@ -655,8 +655,8 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
 
   // 金币 钻石
   String jinbi = '', zuanshi = '';
-  /// 钱包明细
-  Future<void> doPostWalletList() async {
+  /// 钱包余额
+  Future<void> doPostBalance() async {
     try {
       balanceBean bean = await DataUtils.postBalance();
       switch (bean.code) {

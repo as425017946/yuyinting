@@ -918,7 +918,7 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
   void initState() {
     super.initState();
     // 获取账户余额
-    doPostWalletList();
+    doPostBalance();
     // 获取赛车倒计时
     doPostGetCarTimer();
     // 二次确认弹窗点击确认，开始下注
@@ -1860,8 +1860,8 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
 
   // 金币 钻石 蘑菇币
   String jinbi = '', zuanshi = '', mogubi = '';
-  /// 钱包明细
-  Future<void> doPostWalletList() async {
+  /// 钱包余额
+  Future<void> doPostBalance() async {
     try {
       balanceBean bean = await DataUtils.postBalance();
       switch (bean.code) {

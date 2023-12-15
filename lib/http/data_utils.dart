@@ -2,10 +2,12 @@ import 'package:yuyinting/bean/BlackListBean.dart';
 import 'package:yuyinting/bean/Common_bean.dart';
 import 'package:yuyinting/bean/aboutUsBean.dart';
 import '../bean/CommonIntBean.dart';
+import '../bean/CommonMyIntBean.dart';
 import '../bean/DTListBean.dart';
 import '../bean/DTMoreBean.dart';
 import '../bean/DTTuiJianListBean.dart';
 import '../bean/balanceBean.dart';
+import '../bean/baobiaoBean.dart';
 import '../bean/beibaoBean.dart';
 import '../bean/carTimerBean.dart';
 import '../bean/carZJLiShiBean.dart';
@@ -17,6 +19,8 @@ import '../bean/fileUpdateBean.dart';
 import '../bean/gameListBean.dart';
 import '../bean/gameStoreBean.dart';
 import '../bean/getHeadImageBean.dart';
+import '../bean/ghJieSuanListBean.dart';
+import '../bean/ghJieSuanListMoreBean.dart';
 import '../bean/ghPeopleBean.dart';
 import '../bean/ghRoomBean.dart';
 import '../bean/giftListBean.dart';
@@ -30,6 +34,7 @@ import '../bean/luckUserBean.dart';
 import '../bean/managerBean.dart';
 import '../bean/memberListBean.dart';
 import '../bean/mofangJCBean.dart';
+import '../bean/myFenRunBean.dart';
 import '../bean/myGhBean.dart';
 import '../bean/myHomeBean.dart';
 import '../bean/myInfoBean.dart';
@@ -49,6 +54,7 @@ import '../bean/roomUserInfoBean.dart';
 import '../bean/searchGonghuiBean.dart';
 import '../bean/shopListBean.dart';
 import '../bean/shoucangBean.dart';
+import '../bean/tgmBean.dart';
 import '../bean/tjRoomListBean.dart';
 import '../bean/userDTListBean.dart';
 import '../bean/userInfoBean.dart';
@@ -58,6 +64,7 @@ import '../bean/walletListBean.dart';
 import '../bean/whoLockMe.dart';
 import '../bean/winListBean.dart';
 import '../bean/xtListBean.dart';
+import '../bean/zonglanBean.dart';
 import 'my_http_config.dart';
 import 'my_http_request.dart';
 
@@ -232,11 +239,11 @@ class DataUtils{
     return myHomeBean.fromJson(respons!);
   }
 
-  /// 用户个人主页详情
+  /// 查看用户详情
   static Future<userInfoBean> postUserInfo(Map<String,dynamic> params) async {
-    print("用户个人主页详情：$params");
+    print("查看用户详情：$params");
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.userInfo, {}, params);
-    print("用户个人主页详情：$respons");
+    print("查看用户详情：$respons");
     return userInfoBean.fromJson(respons!);
   }
 
@@ -868,5 +875,85 @@ class DataUtils{
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.oneClickPackageGift, {}, params);
     print("一键赠送背包礼物：$respons");
     return CommonBean.fromJson(respons!);
+  }
+
+
+  /// 我的推广
+  static Future<myFenRunBean> postMyPromotion() async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.myPromotion, {}, {});
+    print("我的推广：$respons");
+    return myFenRunBean.fromJson(respons!);
+  }
+
+  /// 领取分润
+  static Future<CommonBean> postExtractRebate(Map<String,dynamic> params) async {
+    print("领取分润：$params");
+    print("领取分润地址：${MyHttpConfig.extractRebate}");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.extractRebate, {}, params);
+    print("领取分润：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 推广码
+  static Future<tgmBean> postGetPromotionCode() async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.getPromotionCode, {}, {});
+    print("推广码：$respons");
+    return tgmBean.fromJson(respons!);
+  }
+
+  /// 团队总览
+  static Future<zonglanBean> postTeamOverview(Map<String,dynamic> params) async {
+    print("团队总览：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.teamOverview, {}, params);
+    print("团队总览：$respons");
+    return zonglanBean.fromJson(respons!);
+  }
+
+  /// 团队报表
+  static Future<baobiaoBean> postTeamReport(Map<String,dynamic> params) async {
+    print("团队报表：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.teamReport, {}, params);
+    print("团队报表：$respons");
+    return baobiaoBean.fromJson(respons!);
+  }
+
+  /// 手工开户
+  static Future<CommonBean> postOpenAccount(Map<String,dynamic> params) async {
+    print("手工开户：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.openAccount, {}, params);
+    print("手工开户：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 手工开户开关
+  static Future<CommonIntBean> postOaSwtich(Map<String,dynamic> params) async {
+    print("手工开户开关：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.oaSwtich, {}, params);
+    print("手工开户开关：$respons");
+    return CommonIntBean.fromJson(respons!);
+  }
+
+  /// 结算账单列表
+  static Future<ghJieSuanListBean> postSettleList(Map<String,dynamic> params) async {
+    print("结算账单列表：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.settleList, {}, params);
+    print("结算账单列表：$respons");
+    return ghJieSuanListBean.fromJson(respons!);
+  }
+
+  /// 结算账单明细
+  static Future<ghJieSuanListMoreBean> postSettleDetail(Map<String,dynamic> params) async {
+    print("结算账单明细：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.settleDetail, {}, params);
+    print("结算账单明细：$respons");
+    return ghJieSuanListMoreBean.fromJson(respons!);
+  }
+
+  /// 房间热度
+  static Future<CommonMyIntBean> postHotDegree(Map<String,dynamic> params) async {
+    print("房间热度：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.hotDegree, {}, params);
+    print("房间热度：$respons");
+    return CommonMyIntBean.fromJson(respons!);
   }
 }

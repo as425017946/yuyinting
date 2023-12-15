@@ -6,7 +6,8 @@ import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 /// 币转豆 页面
 class BiZhuanDouPage extends StatefulWidget {
-  const BiZhuanDouPage({Key? key}) : super(key: key);
+  String shuliang;
+  BiZhuanDouPage({Key? key,required this.shuliang}) : super(key: key);
 
   @override
   State<BiZhuanDouPage> createState() => _BiZhuanDouPageState();
@@ -71,7 +72,7 @@ class _BiZhuanDouPageState extends State<BiZhuanDouPage> {
                                       ),
                                       WidgetUtils.commonSizedBox(0, 50),
                                       WidgetUtils.onlyText(
-                                          '1000000',
+                                          widget.shuliang,
                                           StyleUtils.getCommonTextStyle(
                                               color: Colors.white,
                                               fontSize: ScreenUtil().setSp(56),

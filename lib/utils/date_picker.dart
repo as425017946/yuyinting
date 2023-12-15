@@ -170,7 +170,7 @@ class _DatePickerState extends State<DatePicker> {
   void initState() {
     super.initState();
     startDate = widget.startDate ?? DateTime(1970, 1, 1);
-    endDate = widget.endDate ?? DateTime(2099, 1, 1);
+    endDate = widget.endDate ?? DateTime(2023, 12, 31);
     selectedDate = widget.selectedDate ?? DateTime.now();
     if (endDate.difference(startDate).inSeconds < 0) {
       endDate = startDate;

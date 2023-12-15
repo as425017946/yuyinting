@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:svgaplayer_flutter/player.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
+import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/log_util.dart';
 
 class SVGASimpleImage2 extends StatefulWidget {
@@ -31,6 +32,8 @@ class _SVGASimpleImageState extends State<SVGASimpleImage2>
       if (animationController!.isCompleted) {
         // 动画播放完成时的处理
         print("SVGA animation completed");
+        animationController!.stop();
+        eventBus.fire(RoomSGJBack(isOK: true, index: widget.index));
       }
     });
     _tryDecodeSvga();
@@ -47,7 +50,6 @@ class _SVGASimpleImageState extends State<SVGASimpleImage2>
 
   @override
   Widget build(BuildContext context) {
-    LogE('============');
     if (animationController == null) {
       return Container();
     }

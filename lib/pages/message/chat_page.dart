@@ -410,7 +410,7 @@ class _ChatPageState extends State<ChatPage> {
                       ? Text(
                           allData2[i]['content'],
                           style: TextStyle(
-                            fontSize: 40.sp,
+                            fontSize: 30.sp,
                             color: Colors.black,
                           ),
                         )

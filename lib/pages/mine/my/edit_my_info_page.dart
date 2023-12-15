@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:yuyinting/bean/Common_bean.dart';
 import 'package:yuyinting/colors/my_colors.dart';
+import 'package:yuyinting/pages/mine/my/edit_audio_page.dart';
 import 'package:yuyinting/pages/mine/my/edit_biaoqian_page.dart';
 import 'package:yuyinting/pages/mine/my/edit_photo_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
@@ -55,6 +56,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
       userNumber = '',
       voice_card = '',
       voice_cardID = '',
+      voiceCardUrl = '',
       description = '',
       city = '',
       photo_id = '',
@@ -86,6 +88,11 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
     listen2 = eventBus.on<SubmitButtonBack>().listen((event) {
       if(event.title == '完成' && MyUtils.checkClick()){
         doPostModifyUserInfo();
+      }else if(event.title == '标签选完'){
+        setState(() {
+          list_label = sp.getString('label_name').toString().split(',');
+          list_label.removeAt(list_label.length-1);
+        });
       }
     });
     listen3 = eventBus.on<PhotoBack>().listen((event) {
@@ -265,11 +272,15 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
             /// 生日
             GestureDetector(
               onTap: (() {
+                DateTime now = DateTime.now();
+                int year = now.year;
+                int month = now.month;
+                int day = now.day;
                 DatePicker.show(
                   context,
-                  startDate: DateTime(1970, 2, 2),
-                  selectedDate: DateTime(2023, 3, 3),
-                  endDate: DateTime(2025, 5, 5),
+                  startDate: DateTime(1970, 1, 1),
+                  selectedDate: DateTime(year, month, day),
+                  endDate: DateTime(2023, 12, 31),
                   onSelected: (date) {
                     setState(() {
                       birthday = date.toString().substring(0,10);
@@ -312,7 +323,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
             /// 声音名片
             GestureDetector(
               onTap: (() {
-                Navigator.pushNamed(context, 'EditAudioPage');
+                MyUtils.goTransparentPageCom(context, EditAudioPage(audioUrl: voiceCardUrl));
               }),
               child: Container(
                 height: ScreenUtil().setHeight(100),
@@ -409,10 +420,10 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                         runSpacing: ScreenUtil().setHeight(15),
                         children: List.generate(list_label.length, (index) =>
                             WidgetUtils.myContainerZishiying(
-                                MyColors.f2,
+                                MyColors.careBlue,
                                 list_label[index],
                                 StyleUtils.getCommonTextStyle(
-                                    color: Colors.black,
+                                    color: Colors.white,
                                     fontSize: ScreenUtil().setSp(26)))
                         ),
                       ),
@@ -442,15 +453,15 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                     width: double.infinity,
                     child: Wrap(
                       direction: Axis.horizontal,
-                      spacing: 10,
+                      spacing: 10.h,
                       children: [
                         for(int i = 0; i < list_p.length; i++)
                           SizedBox(
-                            height: ScreenUtil().setHeight(110),
-                            width: ScreenUtil().setHeight(110),
+                            height: ScreenUtil().setHeight(120),
+                            width: ScreenUtil().setHeight(120),
                             child: Stack(
                               children: [
-                                WidgetUtils.CircleImageNet(ScreenUtil().setHeight(110), ScreenUtil().setHeight(110), ScreenUtil().setHeight(20), list_p[i]),
+                                WidgetUtils.CircleImageNet(ScreenUtil().setHeight(120), ScreenUtil().setHeight(120), ScreenUtil().setHeight(20), list_p[i]),
                                 Positioned(
                                   right: 0,
                                   top: 0,
@@ -480,8 +491,8 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                           Stack(
                             children: [
                               Container(
-                                height: ScreenUtil().setHeight(110),
-                                width: ScreenUtil().setHeight(110),
+                                height: ScreenUtil().setHeight(120),
+                                width: ScreenUtil().setHeight(120),
                                 //超出部分，可裁剪
                                 clipBehavior: Clip.hardEdge,
                                 decoration: BoxDecoration(
@@ -489,8 +500,8 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                                 ),
                                 child: AssetEntityImage(
                                   lista[i],
-                                  width: ScreenUtil().setHeight(110),
-                                  height: ScreenUtil().setHeight(110),
+                                  width: ScreenUtil().setHeight(120),
+                                  height: ScreenUtil().setHeight(120),
                                   fit: BoxFit.cover,
                                   isOriginal: false,
                                 ),
@@ -529,7 +540,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                                   }));
                             });
                           }),
-                          child: WidgetUtils.showImages('assets/images/images_add.png',ScreenUtil().setHeight(110), ScreenUtil().setHeight(110)),
+                          child: WidgetUtils.showImages('assets/images/images_add.png',ScreenUtil().setHeight(120), ScreenUtil().setHeight(120)),
                         ): const Text(''),
                       ],
                     ),
@@ -565,6 +576,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
             userNumber = bean.data!.number.toString();
             voice_card = bean.data!.voiceLabelName!;
             voice_cardID = bean.data!.voiceCard.toString();
+            voiceCardUrl = bean.data!.voiceCardUrl!;
             birthday = bean.data!.birthday!;
             description = bean.data!.description!;
             controller.text = nickName;

@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../bean/walletListBean.dart';
 import '../../../colors/my_colors.dart';
+import '../../../config/my_config.dart';
+import '../../../http/data_utils.dart';
+import '../../../http/my_http_config.dart';
+import '../../../utils/my_toast_utils.dart';
+import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 /// 钱包明细收入
@@ -92,5 +98,33 @@ class _WalletMoreShouruPageState extends State<WalletMoreShouruPage> {
         ],
       ),
     );
+  }
+
+  List<Data> list = [];
+  /// 钱包明细 - 收入
+  Future<void> doPostBalance() async {
+    try {
+      Map<String, dynamic> params = <String, dynamic>{
+        'type': '1', //钱包类型 1收入 2支出
+      };
+      walletListBean bean = await DataUtils.postWalletList(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            list.clear();
+
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
   }
 }

@@ -372,7 +372,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
         listChoose.add(false);
       }
     });
-    doPostWalletList();
+    doPostBalance();
     doPostOnlineRoomUser();
     doPostGiftList();
     _animationController = AnimationController(
@@ -1348,8 +1348,8 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
 
   // 金币 钻石
   String jinbi = '', zuanshi = '';
-  /// 钱包明细
-  Future<void> doPostWalletList() async {
+  /// 钱包余额
+  Future<void> doPostBalance() async {
     try {
       balanceBean bean = await DataUtils.postBalance();
       switch (bean.code) {

@@ -69,6 +69,8 @@ class UserInfo {
   String? label;
   String? voiceLabelName;
   List<String>? photoUrl;
+  String? avatarFrameImg;
+  String? avatarFrameGifImg;
 
   UserInfo(
       {this.number,
@@ -89,7 +91,9 @@ class UserInfo {
         this.age,
         this.label,
         this.voiceLabelName,
-        this.photoUrl});
+        this.photoUrl,
+        this.avatarFrameGifImg,
+        this.avatarFrameImg});
 
   UserInfo.fromJson(Map<String, dynamic> json) {
     number = json['number'];
@@ -111,6 +115,8 @@ class UserInfo {
     label = json['label'];
     voiceLabelName = json['voice_label_name'];
     photoUrl = json['photo_url'].cast<String>();
+    avatarFrameImg = json['avatar_frame_img'];
+    avatarFrameGifImg = json['avatar_frame_gif_img'];
   }
 
   Map<String, dynamic> toJson() {
@@ -134,6 +140,8 @@ class UserInfo {
     data['label'] = this.label;
     data['voice_label_name'] = this.voiceLabelName;
     data['photo_url'] = this.photoUrl;
+    data['avatar_frame_img'] = this.avatarFrameImg;
+    data['avatar_frame_gif_img'] = this.avatarFrameGifImg;
     return data;
   }
 }

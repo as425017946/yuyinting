@@ -28,6 +28,7 @@ class _EditBiaoqianPageState extends State<EditBiaoqianPage> {
   int length = 0;
   var listen;
   String label='';
+  String labelName='';
 
   @override
   void initState() {
@@ -40,9 +41,12 @@ class _EditBiaoqianPageState extends State<EditBiaoqianPage> {
           for(int i = 0; i < list_b.length; i++){
             if(list_b[i]){
               label = '$label${list[i].id},';
+              labelName = '$labelName${list[i].name},';
             }
           }
           sp.setString('label_id', label);
+          sp.setString('label_name', labelName);
+          eventBus.fire(SubmitButtonBack(title: '标签选完'));
           Navigator.pop(context);
         }
     });

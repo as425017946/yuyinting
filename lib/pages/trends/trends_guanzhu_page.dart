@@ -1004,21 +1004,14 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
               _list.clear();
             }
             if (bean.data!.list!.isNotEmpty) {
-              for (int i = 0; i < bean.data!.list!.length; i++) {
-                _list.add(bean.data!.list![i]);
-              }
-
-              length = bean.data!.list!.length;
-            } else {
-              if (page == 1) {
-                length = 0;
-              }else{
-                if (bean.data!.list!.length < MyConfig.pageSize) {
+              _list = bean.data!.list!;
+            }else{
+              if(page > 1){
+                if(bean.data!.list!.length < MyConfig.pageSize){
                   _refreshController.loadNoData();
                 }
               }
             }
-
           });
           break;
         case MyHttpConfig.errorloginCode:

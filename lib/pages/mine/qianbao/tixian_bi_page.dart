@@ -7,7 +7,8 @@ import '../../../utils/widget_utils.dart';
 
 /// V币提现
 class TixianBiPage extends StatefulWidget {
-  const TixianBiPage({Key? key}) : super(key: key);
+  String shuliang;
+  TixianBiPage({Key? key, required this.shuliang}) : super(key: key);
 
   @override
   State<TixianBiPage> createState() => _TixianBiPageState();
@@ -81,7 +82,7 @@ class _TixianBiPageState extends State<TixianBiPage> {
                                     ),
                                     WidgetUtils.commonSizedBox(0, 50),
                                     WidgetUtils.onlyText(
-                                        '1000000',
+                                        widget.shuliang,
                                         StyleUtils.getCommonTextStyle(
                                             color: Colors.white,
                                             fontSize: ScreenUtil().setSp(56),

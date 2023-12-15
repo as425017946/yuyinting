@@ -26,9 +26,12 @@ import 'package:audio_session/audio_session.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_sound_platform_interface/flutter_sound_recorder_platform_interface.dart';
 
+import '../../../widget/SVGASimpleImage.dart';
+
 /// 声音录制
 class EditAudioPage extends StatefulWidget {
-  const EditAudioPage({Key? key}) : super(key: key);
+  String audioUrl;
+  EditAudioPage({Key? key, required this.audioUrl}) : super(key: key);
 
   @override
   State<EditAudioPage> createState() => _EditAudioPageState();
@@ -57,6 +60,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
   @override
   void initState() {
     // TODO: implement initState
+    _initialize();
     _mPlayer!.openPlayer().then((value) {
       setState(() {
         _mPlayerIsInited = true;
@@ -66,6 +70,13 @@ class _EditAudioPageState extends State<EditAudioPage> {
     super.initState();
     appBar = WidgetUtils.getAppBar('声音录制', true, context, false, 0);
     doPostLabelList();
+    setState(() {
+      audioUrl = widget.audioUrl;
+    });
+  }
+  void _initialize() async {
+    await _mPlayer!.closePlayer();
+    await _mPlayer!.openPlayer();
   }
 
   @override
@@ -213,6 +224,23 @@ class _EditAudioPageState extends State<EditAudioPage> {
     });
   }
 
+  //播放录音
+  void play2() {
+    _mPlayer!
+        .startPlayer(
+        fromURI: audioUrl,
+        whenFinished: () {
+          setState(() {
+            playRecord = false;
+          });
+        })
+        .then((value) {
+      setState(() {
+        playRecord = true;
+      });
+    });
+  }
+
 //停止播放录音
   void stopPlayer() {
     _mPlayer!.stopPlayer().then((value) {
@@ -266,7 +294,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
                     ),
                     WidgetUtils.commonSizedBox(20, 0),
                     WidgetUtils.onlyTextCenter(
-                        '你还没有录制声音哦~',
+                        audioUrl.isEmpty ? '你还没有录制声音哦~' : '已录制声音',
                         StyleUtils.getCommonTextStyle(
                             color: Colors.white,
                             fontSize: ScreenUtil().setSp(28),
@@ -274,12 +302,11 @@ class _EditAudioPageState extends State<EditAudioPage> {
                     WidgetUtils.commonSizedBox(10, 0),
                     GestureDetector(
                       onTap: (() {
-                        play();
+                        play2();
                       }),
                       child: Container(
                         height: ScreenUtil().setHeight(50),
                         width: ScreenUtil().setWidth(220),
-                        margin: const EdgeInsets.only(left: 20),
                         padding: const EdgeInsets.only(left: 8),
                         alignment: Alignment.topLeft,
                         //边框设置
@@ -289,21 +316,26 @@ class _EditAudioPageState extends State<EditAudioPage> {
                           //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                           borderRadius: BorderRadius.all(Radius.circular(20.0)),
                         ),
-                        child: Row(
+                        child: playRecord == false
+                            ? Row(
                           children: [
+                            const Expanded(
+                                child: SVGASimpleImage(
+                                  assetsName:
+                                  'assets/svga/audio_xindiaotu.svga',
+                                )),
+                            WidgetUtils.commonSizedBox(0, 10.h),
                             WidgetUtils.showImages(
                                 'assets/images/people_bofang.png',
                                 ScreenUtil().setHeight(35),
                                 ScreenUtil().setWidth(35)),
-                            WidgetUtils.commonSizedBox(0, 5),
-                            WidgetUtils.onlyText(
-                                '晴天少女',
-                                StyleUtils.getCommonTextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: ScreenUtil().setSp(18))),
+                            WidgetUtils.commonSizedBox(0, 10.h),
                           ],
-                        ),
+                        )
+                            : const Expanded(
+                            child: SVGASimpleImage(
+                              assetsName: 'assets/svga/audio_bolang.svga',
+                            )),
                       ),
                     )
                   ],

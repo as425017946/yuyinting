@@ -6,7 +6,8 @@ import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 /// 钻石充值
 class ZuanPayPage extends StatefulWidget {
-  const ZuanPayPage({Key? key}) : super(key: key);
+  String shuliang;
+  ZuanPayPage({Key? key, required this.shuliang}) : super(key: key);
 
   @override
   State<ZuanPayPage> createState() => _ZuanPayPageState();
@@ -72,7 +73,7 @@ class _ZuanPayPageState extends State<ZuanPayPage> {
                                       ),
                                       WidgetUtils.commonSizedBox(0, 50),
                                       WidgetUtils.onlyText(
-                                          '1000000',
+                                          widget.shuliang,
                                           StyleUtils.getCommonTextStyle(
                                               color: Colors.white,
                                               fontSize: ScreenUtil().setSp(56),

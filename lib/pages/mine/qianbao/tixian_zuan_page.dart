@@ -10,7 +10,8 @@ import '../../../utils/widget_utils.dart';
 
 /// 提现钻石
 class TixianZuanPage extends StatefulWidget {
-  const TixianZuanPage({Key? key}) : super(key: key);
+  String shuliang;
+  TixianZuanPage({Key? key, required this.shuliang}) : super(key: key);
 
   @override
   State<TixianZuanPage> createState() => _TixianZuanPageState();
@@ -95,7 +96,7 @@ class _TixianZuanPageState extends State<TixianZuanPage> {
                               ),
                               WidgetUtils.commonSizedBox(0, 50),
                               WidgetUtils.onlyText(
-                                  '1000000',
+                                  widget.shuliang,
                                   StyleUtils.getCommonTextStyle(
                                       color: Colors.white,
                                       fontSize: ScreenUtil().setSp(56),

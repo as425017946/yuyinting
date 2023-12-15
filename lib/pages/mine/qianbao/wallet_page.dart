@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/colors/my_colors.dart';
+import 'package:yuyinting/pages/mine/qianbao/bi_zhuan_dou_page.dart';
+import 'package:yuyinting/pages/mine/qianbao/dou_pay_page.dart';
+import 'package:yuyinting/pages/mine/qianbao/tixian_bi_page.dart';
+import 'package:yuyinting/pages/mine/qianbao/tixian_zuan_page.dart';
+import 'package:yuyinting/pages/mine/qianbao/zuan_pay_page.dart';
 import 'package:yuyinting/utils/my_utils.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 
+import '../../../bean/balanceBean.dart';
+import '../../../config/my_config.dart';
+import '../../../http/data_utils.dart';
+import '../../../http/my_http_config.dart';
 import '../../../utils/event_utils.dart';
+import '../../../utils/my_toast_utils.dart';
 /// 我的钱包
 class WalletPage extends StatefulWidget {
   const WalletPage({Key? key}) : super(key: key);
@@ -26,6 +36,7 @@ class _WalletPageState extends State<WalletPage> {
           Navigator.pushNamed(context, 'WalletMorePage');
       }
     });
+    doPostBalance();
   }
   @override
   Widget build(BuildContext context) {
@@ -71,7 +82,7 @@ class _WalletPageState extends State<WalletPage> {
                                   children: [
                                     WidgetUtils.onlyText('豆', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(38))),
                                     const Expanded(child: Text('')),
-                                    WidgetUtils.onlyText('1000000', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(56), fontWeight: FontWeight.w600)),
+                                    WidgetUtils.onlyText(jinbi, StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(56), fontWeight: FontWeight.w600)),
                                     WidgetUtils.commonSizedBox(0, 15),
                                   ],
                                 ),
@@ -89,7 +100,7 @@ class _WalletPageState extends State<WalletPage> {
                         /// 充值按钮
                         GestureDetector(
                           onTap: ((){
-                              Navigator.pushNamed(context, 'DouPayPage');
+                              MyUtils.goTransparentPageCom(context, DouPayPage(shuliang: jinbi));
                           }),
                           child: Container(
                             width: ScreenUtil().setHeight(115),
@@ -144,7 +155,7 @@ class _WalletPageState extends State<WalletPage> {
                                   children: [
                                     WidgetUtils.onlyText('币', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(38))),
                                     const Expanded(child: Text('')),
-                                    WidgetUtils.onlyText('1000000', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(56), fontWeight: FontWeight.w600)),
+                                    WidgetUtils.onlyText(shouyi, StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(56), fontWeight: FontWeight.w600)),
                                     WidgetUtils.commonSizedBox(0, 15),
                                   ],
                                 ),
@@ -162,7 +173,7 @@ class _WalletPageState extends State<WalletPage> {
                         /// 提现
                         GestureDetector(
                           onTap: ((){
-                              Navigator.pushNamed(context, 'TixianBiPage');
+                            MyUtils.goTransparentPageCom(context, TixianBiPage(shuliang: shouyi));
                           }),
                           child: Container(
                             width: ScreenUtil().setHeight(115),
@@ -185,7 +196,7 @@ class _WalletPageState extends State<WalletPage> {
                         /// 兑换
                         GestureDetector(
                           onTap: ((){
-                              Navigator.pushNamed(context, 'BiZhuanDouPage');
+                            MyUtils.goTransparentPageCom(context, BiZhuanDouPage(shuliang: shouyi));
                           }),
                           child: Container(
                             width: ScreenUtil().setHeight(115),
@@ -240,7 +251,7 @@ class _WalletPageState extends State<WalletPage> {
                                   children: [
                                     WidgetUtils.onlyText('钻', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(38))),
                                     const Expanded(child: Text('')),
-                                    WidgetUtils.onlyText('1000000', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(56), fontWeight: FontWeight.w600)),
+                                    WidgetUtils.onlyText(zuanshi, StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(56), fontWeight: FontWeight.w600)),
                                     WidgetUtils.commonSizedBox(0, 15),
                                   ],
                                 ),
@@ -258,7 +269,7 @@ class _WalletPageState extends State<WalletPage> {
                         /// 提现
                         GestureDetector(
                           onTap: ((){
-                            Navigator.pushNamed(context, 'TixianZuanPage');
+                            MyUtils.goTransparentPageCom(context, TixianZuanPage(shuliang: zuanshi));
                           }),
                           child: Container(
                             width: ScreenUtil().setHeight(115),
@@ -281,7 +292,7 @@ class _WalletPageState extends State<WalletPage> {
                         /// 充值
                         GestureDetector(
                           onTap: ((){
-                            Navigator.pushNamed(context, 'ZuanPayPage');
+                            MyUtils.goTransparentPageCom(context, ZuanPayPage(shuliang: zuanshi));
                           }),
                           child: Container(
                             width: ScreenUtil().setHeight(115),
@@ -319,5 +330,44 @@ class _WalletPageState extends State<WalletPage> {
         ],
       ),
     );
+  }
+
+  // 金币 钻石
+  String jinbi = '', zuanshi = '', shouyi  = '';
+  /// 钱包余额
+  Future<void> doPostBalance() async {
+    try {
+      balanceBean bean = await DataUtils.postBalance();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            if(double.parse(bean.data!.goldBean!) > 10000){
+              jinbi = '${(double.parse(bean.data!.goldBean!)/10000)}w';
+            }else{
+              jinbi = bean.data!.goldBean!;
+            }
+            if(double.parse(bean.data!.diamond!) > 10000){
+              zuanshi = '${(double.parse(bean.data!.diamond!)/10000)}w';
+            }else{
+              zuanshi = bean.data!.diamond!;
+            }
+            if(double.parse(bean.data!.goldCoin!) > 10000){
+              shouyi = '${(double.parse(bean.data!.goldCoin!)/10000)}w';
+            }else{
+              shouyi = bean.data!.goldCoin!;
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
   }
 }

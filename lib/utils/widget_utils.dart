@@ -236,7 +236,7 @@ class WidgetUtils {
       style: StyleUtils.loginTextStyle,
       onChanged: (value) {
         LogE('长度$value');
-        // eventBus.fire(InfoBack(infos: value));
+        eventBus.fire(InfoBack(info: value));
       },
       decoration: InputDecoration(
         // border: InputBorder.none,
@@ -531,7 +531,7 @@ class WidgetUtils {
                     placeholder: (context, url) => CircleImageAss(
                       height,
                       width,
-                      ScreenUtil().setHeight(10),
+                      height/2,
                       'assets/images/img_placeholder.png',
                     ),
                     errorWidget: (context, url, error) {
@@ -540,7 +540,7 @@ class WidgetUtils {
                       return CircleImageAss(
                         height,
                         width,
-                        ScreenUtil().setHeight(10),
+                        height/2,
                         'assets/images/img_error.png',
                       );
                     },

@@ -16,7 +16,8 @@ import '../../../utils/my_utils.dart';
 ///资料
 
 class ZiliaoPage extends StatefulWidget {
-  const ZiliaoPage({Key? key}) : super(key: key);
+  String otherId;
+  ZiliaoPage({Key? key, required this.otherId}) : super(key: key);
 
   @override
   State<ZiliaoPage> createState() => _ZiliaoPageState();
@@ -48,13 +49,52 @@ class _ZiliaoPageState extends State<ZiliaoPage> {
     );
   }
 
-  Widget _itemLiwu(BuildContext context, int i) {
-    return Container(
-      margin: const EdgeInsets.only(right: 10),
-      child: WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(110),
-          ScreenUtil().setHeight(110), list_a[i].img!),
-    );
+  Widget liwu(int i){
+    if(i == 1){
+      return WidgetUtils.CircleImageNet(110.h,
+          110.h, 55.h, list_a[0].img!);
+    }else if(i == 2){
+      return Row(
+        children: [
+          WidgetUtils.CircleImageNet(110.h,
+              110.h, 55.h, list_a[0].img!),
+          WidgetUtils.commonSizedBox(0, 10.h),
+          WidgetUtils.CircleImageNet(110.h,
+              110.h, 55.h, list_a[1].img!)
+        ],
+      );
+    }else if(i == 3){
+      return Row(
+        children: [
+          WidgetUtils.CircleImageNet(110.h,
+              110.h, 55.h, list_a[0].img!),
+          WidgetUtils.commonSizedBox(0, 10.h),
+          WidgetUtils.CircleImageNet(110.h,
+              110.h, 55.h, list_a[1].img!),
+          WidgetUtils.commonSizedBox(0, 10.h),
+          WidgetUtils.CircleImageNet(110.h,
+              110.h, 55.h, list_a[2].img!)
+        ],
+      );
+    }else{
+      return Row(
+        children: [
+          WidgetUtils.CircleImageNet(110.h,
+              110.h, 55.h, list_a[0].img!),
+          WidgetUtils.commonSizedBox(0, 10.h),
+          WidgetUtils.CircleImageNet(110.h,
+              110.h, 55.h, list_a[1].img!),
+          WidgetUtils.commonSizedBox(0, 10.h),
+          WidgetUtils.CircleImageNet(110.h,
+              110.h, 55.h, list_a[2].img!),
+          WidgetUtils.commonSizedBox(0, 10.h),
+          WidgetUtils.CircleImageNet(110.h,
+              110.h, 55.h, list_a[3].img!)
+        ],
+      );
+    }
   }
+
 
   @override
   void initState() {
@@ -128,17 +168,11 @@ class _ZiliaoPageState extends State<ZiliaoPage> {
                 ),
                 Expanded(
                   child: list_a.isNotEmpty
-                      ? SizedBox(
-                          height: ScreenUtil().setHeight(110),
-                          width: double.infinity,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemBuilder: _itemLiwu,
-                            itemCount: list_a.length > 4 ? 4 : list_a.length,
-                          ),
-                        )
+                      ? Row(
+                    children: [
+                      liwu(list_a.length),
+                    ],
+                  )
                       : Column(
                           children: [
                             const Expanded(child: Text('')),
@@ -250,7 +284,7 @@ class _ZiliaoPageState extends State<ZiliaoPage> {
   Future<void> doPostMyIfon() async {
     Loading.show(MyConfig.successTitle);
     Map<String, dynamic> params = <String, dynamic>{
-      'uid': sp.getString('other_id')
+      'uid': widget.otherId
     };
     try {
       myHomeBean bean = await DataUtils.postMyHome(params);

@@ -36,6 +36,9 @@ class Data {
   String? status;
   String? forceUpdate;
   String? identity;
+  String? avatarFrameImg;
+  String? avatarFrameGifImg;
+
 
   Data(
       {this.nickname,
@@ -50,7 +53,9 @@ class Data {
         this.currentVersion,
         this.status,
         this.forceUpdate,
-        this.identity});
+        this.identity,
+        this.avatarFrameImg,
+        this.avatarFrameGifImg});
 
   Data.fromJson(Map<String, dynamic> json) {
     nickname = json['nickname'];
@@ -66,6 +71,8 @@ class Data {
     status = json['status'];
     forceUpdate = json['force_update'];
     identity = json['identity'];
+    avatarFrameImg = json['avatar_frame_img'];
+    avatarFrameGifImg = json['avatar_frame_gif_img'];
   }
 
   Map<String, dynamic> toJson() {
@@ -83,6 +90,8 @@ class Data {
     data['status'] = this.status;
     data['force_update'] = this.forceUpdate;
     data['identity'] = this.identity;
+    data['avatar_frame_img'] = this.avatarFrameImg;
+    data['avatar_frame_gif_img'] = this.avatarFrameGifImg;
     return data;
   }
 }

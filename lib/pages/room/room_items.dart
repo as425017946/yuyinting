@@ -30,7 +30,7 @@ import 'room_ts_gonggao_page.dart';
 /// 厅内信息
 class RoomItems {
   /// 互动消息
-  static Widget itemMessages(BuildContext context, int i, String uid,
+  static Widget itemMessages(BuildContext context, int i,
       String roomID, List<Map> list, List<MikeList> listm) {
     // 系统公告
     if (list[i]['type'] == '0') {
@@ -591,7 +591,7 @@ class RoomItems {
           MyUtils.goTransparentPage(
               context,
               RoomPeopleInfoPage(
-                uid: uid,
+                uid: list[i]['uid'],
                 index: '-1',
                 roomID: roomID,
                 isClose: '',
@@ -762,7 +762,59 @@ class RoomItems {
               ],
             ),
             WidgetUtils.commonSizedBox(5, 0),
-            Stack(
+            /// 如果有顿号说明是发的3个svga
+            list[i]['image'].toString().contains('、') ? Stack(
+              children: [
+                Row(
+                  children: [
+                    SizedBox(
+                      height: 100.h,
+                      width: 100.h,
+                      child: list[i]['isOk'] == 'true'
+                          ? WidgetUtils.showImages(
+                          list[i]['image'].toString().split(',')[1].split('、')[0],
+                          double.infinity, double.infinity)
+                          : SVGASimpleImage2(
+                          assetsName: list[i]['image'].toString().split(',')[0].split('、')[0],
+                          isOk: list[i]['isOk'],
+                          index: i),
+                    ),
+                    Transform.translate(
+                      offset: Offset(-20.h, 0.h),
+                      child: SizedBox(
+                        height: 100.h,
+                        width: 100.h,
+                        child: list[i]['isOk'] == 'true'
+                            ? Transform.translate(offset: Offset(2.h, 0.h),
+                          child: WidgetUtils.showImages(
+                              list[i]['image'].toString().split(',')[1].split('、')[1],
+                              double.infinity, double.infinity),)
+                            : SVGASimpleImage2(
+                            assetsName: list[i]['image'].toString().split(',')[0].split('、')[1],
+                            isOk: list[i]['isOk'],
+                            index: i),
+                      ),
+                    ),
+                    Transform.translate(
+                      offset: Offset(-40.h, 0.h),
+                      child: SizedBox(
+                        height: 100.h,
+                        width: 100.h,
+                        child: list[i]['isOk'] == 'true'
+                            ? Transform.translate(offset: Offset(2.h, 0.h),
+                          child: WidgetUtils.showImages(
+                              list[i]['image'].toString().split(',')[1].split('、')[2],
+                              double.infinity, double.infinity),)
+                            : SVGASimpleImage2(
+                            assetsName: list[i]['image'].toString().split(',')[0].split('、')[2],
+                            isOk: list[i]['isOk'],
+                            index: i),
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            ) : Stack(
               children: [
                 Opacity(
                   opacity: 0.3,
@@ -1211,8 +1263,12 @@ class RoomItems {
                 alignment: Alignment.center,
                 children: [
                   m0 == true && listm[8].waveGifImg!.isNotEmpty
-                      ? SVGASimpleImage(
-                    resUrl: listm[8].waveGifImg!,
+                      ? SizedBox(
+                    height: 160.h,
+                    width: 160.h,
+                    child: SVGASimpleImage(
+                      resUrl: listm[8].waveGifImg!,
+                    ),
                   )
                       : listm[8].isLock == 0
                       ? WidgetUtils.showImages(
@@ -1227,6 +1283,19 @@ class RoomItems {
                       ? WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(95),
                       ScreenUtil().setHeight(95), listm[8].avatar!)
                       : const Text(''),
+                  // 头像框静态图
+                  listm[0].avatarFrameImg!.isNotEmpty ? WidgetUtils
+                      .CircleHeadImage(
+                      ScreenUtil().setHeight(110),
+                      ScreenUtil().setHeight(110),
+                      listm[0].avatarFrameImg!) : const Text(''),
+                  // 头像框动态图
+                  listm[0].avatarFrameGifImg!.isNotEmpty ? SizedBox(
+                    height: 110.h,
+                    width: 110.h,
+                    child: SVGASimpleImage(
+                      resUrl: listm[0].avatarFrameGifImg!,),
+                  ) : const Text(''),
                   Column(
                     children: [
                       const Expanded(child: Text('')),
@@ -1366,8 +1435,12 @@ class RoomItems {
                     alignment: Alignment.center,
                     children: [
                       m1 == true
-                          ? SVGASimpleImage(
-                        resUrl: listm[0].waveGifImg!,
+                          ? SizedBox(
+                        height: 130.h,
+                        width: 130.h,
+                        child: SVGASimpleImage(
+                          resUrl: listm[0].waveGifImg!,
+                        ),
                       )
                           : const Text(''),
                       m1 == true
@@ -1384,6 +1457,19 @@ class RoomItems {
                           'assets/images/room_suo.png',
                           ScreenUtil().setHeight(80),
                           ScreenUtil().setHeight(80)),
+                      // 头像框静态图
+                      listm[0].avatarFrameImg!.isNotEmpty ? WidgetUtils
+                          .CircleHeadImage(
+                          ScreenUtil().setHeight(110),
+                          ScreenUtil().setHeight(110),
+                          listm[0].avatarFrameImg!) : const Text(''),
+                      // 头像框动态图
+                      listm[0].avatarFrameGifImg!.isNotEmpty ? SizedBox(
+                        height: 110.h,
+                        width: 110.h,
+                        child: SVGASimpleImage(
+                          resUrl: listm[0].avatarFrameGifImg!,),
+                      ) : const Text(''),
                       Column(
                         children: [
                           const Expanded(child: Text('')),
@@ -1499,8 +1585,12 @@ class RoomItems {
                     alignment: Alignment.center,
                     children: [
                       m2 == true
-                          ? SVGASimpleImage(
-                        resUrl: listm[1].waveGifImg!,
+                          ? SizedBox(
+                        height: 130.h,
+                        width: 130.h,
+                        child: SVGASimpleImage(
+                          resUrl: listm[1].waveGifImg!,
+                        ),
                       )
                           : const Text(''),
                       m2 == true
@@ -1517,6 +1607,19 @@ class RoomItems {
                           'assets/images/room_suo.png',
                           ScreenUtil().setHeight(80),
                           ScreenUtil().setHeight(80)),
+                      // 头像框静态图
+                      listm[1].avatarFrameImg!.isNotEmpty ? WidgetUtils
+                          .CircleHeadImage(
+                          ScreenUtil().setHeight(110),
+                          ScreenUtil().setHeight(110),
+                          listm[1].avatarFrameImg!) : const Text(''),
+                      // 头像框动态图
+                      listm[1].avatarFrameGifImg!.isNotEmpty ? SizedBox(
+                        height: 110.h,
+                        width: 110.h,
+                        child: SVGASimpleImage(
+                          resUrl: listm[1].avatarFrameGifImg!,),
+                      ) : const Text(''),
                       Column(
                         children: [
                           const Expanded(child: Text('')),
@@ -1632,8 +1735,12 @@ class RoomItems {
                     alignment: Alignment.center,
                     children: [
                       m3 == true
-                          ? SVGASimpleImage(
-                        resUrl: listm[2].waveGifImg!,
+                          ? SizedBox(
+                        height: 130.h,
+                        width: 130.h,
+                        child: SVGASimpleImage(
+                          resUrl: listm[2].waveGifImg!,
+                        ),
                       )
                           : const Text(''),
                       m3 == true
@@ -1650,6 +1757,19 @@ class RoomItems {
                           'assets/images/room_suo.png',
                           ScreenUtil().setHeight(80),
                           ScreenUtil().setHeight(80)),
+                      // 头像框静态图
+                      listm[2].avatarFrameImg!.isNotEmpty ? WidgetUtils
+                          .CircleHeadImage(
+                          ScreenUtil().setHeight(110),
+                          ScreenUtil().setHeight(110),
+                          listm[2].avatarFrameImg!) : const Text(''),
+                      // 头像框动态图
+                      listm[2].avatarFrameGifImg!.isNotEmpty ? SizedBox(
+                        height: 110.h,
+                        width: 110.h,
+                        child: SVGASimpleImage(
+                          resUrl: listm[2].avatarFrameGifImg!,),
+                      ) : const Text(''),
                       Column(
                         children: [
                           const Expanded(child: Text('')),
@@ -1765,8 +1885,12 @@ class RoomItems {
                     alignment: Alignment.center,
                     children: [
                       m4 == true
-                          ? SVGASimpleImage(
-                        resUrl: listm[3].waveGifImg!,
+                          ? SizedBox(
+                        height: 130.h,
+                        width: 130.h,
+                        child: SVGASimpleImage(
+                          resUrl: listm[3].waveGifImg!,
+                        ),
                       )
                           : const Text(''),
                       m4 == true
@@ -1783,6 +1907,19 @@ class RoomItems {
                           'assets/images/room_suo.png',
                           ScreenUtil().setHeight(80),
                           ScreenUtil().setHeight(80)),
+                      // 头像框静态图
+                      listm[3].avatarFrameImg!.isNotEmpty ? WidgetUtils
+                          .CircleHeadImage(
+                          ScreenUtil().setHeight(110),
+                          ScreenUtil().setHeight(110),
+                          listm[3].avatarFrameImg!) : const Text(''),
+                      // 头像框动态图
+                      listm[3].avatarFrameGifImg!.isNotEmpty ? SizedBox(
+                        height: 110.h,
+                        width: 110.h,
+                        child: SVGASimpleImage(
+                          resUrl: listm[3].avatarFrameGifImg!,),
+                      ) : const Text(''),
                       Column(
                         children: [
                           const Expanded(child: Text('')),
@@ -1907,8 +2044,12 @@ class RoomItems {
                       alignment: Alignment.center,
                       children: [
                         m5 == true
-                            ? SVGASimpleImage(
-                          resUrl: listm[4].waveGifImg!,
+                            ? SizedBox(
+                          height: 130.h,
+                          width: 130.h,
+                          child: SVGASimpleImage(
+                            resUrl: listm[4].waveGifImg!,
+                          ),
                         )
                             : const Text(''),
                         m5 == true
@@ -1925,6 +2066,19 @@ class RoomItems {
                             'assets/images/room_suo.png',
                             ScreenUtil().setHeight(80),
                             ScreenUtil().setHeight(80)),
+                        // 头像框静态图
+                        listm[4].avatarFrameImg!.isNotEmpty ? WidgetUtils
+                            .CircleHeadImage(
+                            ScreenUtil().setHeight(110),
+                            ScreenUtil().setHeight(110),
+                            listm[4].avatarFrameImg!) : const Text(''),
+                        // 头像框动态图
+                        listm[4].avatarFrameGifImg!.isNotEmpty ? SizedBox(
+                          height: 110.h,
+                          width: 110.h,
+                          child: SVGASimpleImage(
+                            resUrl: listm[4].avatarFrameGifImg!,),
+                        ) : const Text(''),
                         Column(
                           children: [
                             const Expanded(child: Text('')),
@@ -2042,8 +2196,12 @@ class RoomItems {
                       alignment: Alignment.center,
                       children: [
                         m6 == true
-                            ? SVGASimpleImage(
-                          resUrl: listm[5].waveGifImg!,
+                            ? SizedBox(
+                          height: 130.h,
+                          width: 130.h,
+                          child: SVGASimpleImage(
+                            resUrl: listm[5].waveGifImg!,
+                          ),
                         )
                             : const Text(''),
                         m6 == true
@@ -2060,6 +2218,19 @@ class RoomItems {
                             'assets/images/room_suo.png',
                             ScreenUtil().setHeight(80),
                             ScreenUtil().setHeight(80)),
+                        // 头像框静态图
+                        listm[5].avatarFrameImg!.isNotEmpty ? WidgetUtils
+                            .CircleHeadImage(
+                            ScreenUtil().setHeight(110),
+                            ScreenUtil().setHeight(110),
+                            listm[5].avatarFrameImg!) : const Text(''),
+                        // 头像框动态图
+                        listm[5].avatarFrameGifImg!.isNotEmpty ? SizedBox(
+                          height: 110.h,
+                          width: 110.h,
+                          child: SVGASimpleImage(
+                            resUrl: listm[5].avatarFrameGifImg!,),
+                        ) : const Text(''),
                         Column(
                           children: [
                             const Expanded(child: Text('')),
@@ -2177,8 +2348,12 @@ class RoomItems {
                       alignment: Alignment.center,
                       children: [
                         m7 == true
-                            ? SVGASimpleImage(
-                          resUrl: listm[6].waveGifImg!,
+                            ? SizedBox(
+                          height: 130.h,
+                          width: 130.h,
+                          child: SVGASimpleImage(
+                            resUrl: listm[6].waveGifImg!,
+                          ),
                         )
                             : const Text(''),
                         m7 == true
@@ -2195,6 +2370,19 @@ class RoomItems {
                             'assets/images/room_suo.png',
                             ScreenUtil().setHeight(80),
                             ScreenUtil().setHeight(80)),
+                        // 头像框静态图
+                        listm[6].avatarFrameImg!.isNotEmpty ? WidgetUtils
+                            .CircleHeadImage(
+                            ScreenUtil().setHeight(110),
+                            ScreenUtil().setHeight(110),
+                            listm[6].avatarFrameImg!) : const Text(''),
+                        // 头像框动态图
+                        listm[6].avatarFrameGifImg!.isNotEmpty ? SizedBox(
+                          height: 110.h,
+                          width: 110.h,
+                          child: SVGASimpleImage(
+                            resUrl: listm[6].avatarFrameGifImg!,),
+                        ) : const Text(''),
                         Column(
                           children: [
                             const Expanded(child: Text('')),
@@ -2314,8 +2502,12 @@ class RoomItems {
                       alignment: Alignment.center,
                       children: [
                         m8 == true
-                            ? SVGASimpleImage(
-                          resUrl: listm[7].waveGifImg!,
+                            ? SizedBox(
+                          height: 130.h,
+                          width: 130.h,
+                          child: SVGASimpleImage(
+                            resUrl: listm[7].waveGifImg!,
+                          ),
                         )
                             : const Text(''),
                         m8 == true
@@ -2330,6 +2522,20 @@ class RoomItems {
                               assetsName:
                               'assets/svga/laobanwei.svga'),
                         ),
+                        // 头像框静态图
+                        listm[7].avatarFrameImg!.isNotEmpty ? WidgetUtils
+                            .CircleHeadImage(
+                            ScreenUtil().setHeight(110),
+                            ScreenUtil().setHeight(110),
+                            listm[7].avatarFrameImg!) : const Text(''),
+                        // 头像框动态图
+                        listm[7].avatarFrameGifImg!.isNotEmpty ? SizedBox(
+                          height: 110.h,
+                          width: 110.h,
+                          child: SVGASimpleImage(
+                            resUrl: listm[7].avatarFrameGifImg!,),
+                        ) : const Text(''),
+
                         Column(
                           children: [
                             const Expanded(child: Text('')),
@@ -2482,8 +2688,12 @@ class RoomItems {
                       alignment: Alignment.center,
                       children: [
                         m8 == true
-                            ? SVGASimpleImage(
-                          resUrl: listm[7].waveGifImg!,
+                            ? SizedBox(
+                          height: 130.h,
+                          width: 130.h,
+                          child: SVGASimpleImage(
+                            resUrl: listm[7].waveGifImg!,
+                          ),
                         )
                             : const Text(''),
                         m8 == true
@@ -2500,6 +2710,19 @@ class RoomItems {
                             'assets/images/room_suo.png',
                             ScreenUtil().setHeight(80),
                             ScreenUtil().setHeight(80)),
+                        // 头像框静态图
+                        listm[7].avatarFrameImg!.isNotEmpty ? WidgetUtils
+                            .CircleHeadImage(
+                            ScreenUtil().setHeight(110),
+                            ScreenUtil().setHeight(110),
+                            listm[7].avatarFrameImg!) : const Text(''),
+                        // 头像框动态图
+                        listm[7].avatarFrameGifImg!.isNotEmpty ? SizedBox(
+                          height: 110.h,
+                          width: 110.h,
+                          child: SVGASimpleImage(
+                            resUrl: listm[7].avatarFrameGifImg!,),
+                        ) : const Text(''),
                         Column(
                           children: [
                             const Expanded(child: Text('')),
@@ -2679,7 +2902,8 @@ class RoomItems {
 
   /// 厅内底部按钮
   static Widget footBtn(BuildContext context, bool isJinyiin, int isForbation,
-      String roomID, int isShow, int isBoss, bool mima, List<MikeList> listM, bool roomDX) {
+      String roomID, int isShow, int isBoss, bool mima, List<MikeList> listM,
+      bool roomDX) {
     return SizedBox(
       height: ScreenUtil().setHeight(90),
       child: Row(

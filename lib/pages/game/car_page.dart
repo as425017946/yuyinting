@@ -881,7 +881,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
     // // 获取赛车倒计时
     doPostGetCarTimer();
     // 钱包余额
-    doPostWalletList();
+    doPostBalance();
     // 二次确认弹窗点击确认，开始下注
     listen = eventBus.on<QuerenBack>().listen((event) {
       setState(() {
@@ -1915,8 +1915,8 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
 
   // 金币 钻石 蘑菇币
   String jinbi = '', zuanshi = '', mogubi = '';
-  /// 钱包明细
-  Future<void> doPostWalletList() async {
+  /// 钱包余额
+  Future<void> doPostBalance() async {
     try {
       balanceBean bean = await DataUtils.postBalance();
       switch (bean.code) {

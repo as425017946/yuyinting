@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yuyinting/utils/event_utils.dart';
 
+import '../../../bean/Common_bean.dart';
 import '../../../colors/my_colors.dart';
+import '../../../config/my_config.dart';
+import '../../../http/data_utils.dart';
+import '../../../http/my_http_config.dart';
+import '../../../utils/loading.dart';
+import '../../../utils/my_toast_utils.dart';
+import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 
@@ -16,6 +24,28 @@ class KaihuiPage extends StatefulWidget {
 class _KaihuiPageState extends State<KaihuiPage> {
   TextEditingController controllerName = TextEditingController();
   TextEditingController controllerPass = TextEditingController();
+  var listen;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    eventBus.on<SubmitButtonBack>().listen((event) {
+      if(event.title == '创建'){
+        if(controllerName.text.toString().isEmpty || controllerPass.text.toString().isEmpty){
+          MyToastUtils.showToastBottom('账号或者密码不能为空');
+        }else{
+          doPostOpenAccount();
+        }
+      }
+    });
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    listen.cancel();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -24,7 +54,7 @@ class _KaihuiPageState extends State<KaihuiPage> {
         WidgetUtils.onlyTextCenter('为下级代理创建账号', StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(29))),
         WidgetUtils.commonSizedBox(20, 10),
         Container(
-          height: ScreenUtil().setHeight(270),
+          height: 300.h,
           margin: const EdgeInsets.only(left: 20, right: 20),
           padding: const EdgeInsets.all(20),
           //边框设置
@@ -48,7 +78,7 @@ class _KaihuiPageState extends State<KaihuiPage> {
                 children: [
                   WidgetUtils.onlyTextCenter('会员密码', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(28))),
                   WidgetUtils.commonSizedBox(0, 20),
-                  Expanded(child: WidgetUtils.commonTextField(controllerName, '请输入密码')),
+                  Expanded(child: WidgetUtils.commonTextField(controllerPass, '请输入密码')),
                 ],
               ),
               WidgetUtils.myLine(color: MyColors.g6),
@@ -59,5 +89,37 @@ class _KaihuiPageState extends State<KaihuiPage> {
         WidgetUtils.commonSubmitButton('创建')
       ],
     );
+  }
+
+  /// 手工开户
+  Future<void> doPostOpenAccount() async {
+    Loading.show('数据上传中...');
+    Map<String, dynamic> params = <String, dynamic>{
+      'username': controllerName.text.toString(),
+      'password': controllerPass.text.toString(),
+    };
+    try {
+      CommonBean bean = await DataUtils.postOpenAccount(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            controllerName.text = '';
+            controllerPass.text = '';
+          });
+          MyToastUtils.showToastBottom('开户成功！');
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
   }
 }

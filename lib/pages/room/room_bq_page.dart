@@ -30,6 +30,11 @@ class _APageState extends State<RoomBQPage> {
     'assets/svga/6.svga',
     'assets/svga/7.svga',
     'assets/svga/8.svga',
+    'assets/svga/9.svga',
+    'assets/svga/10.svga',
+    'assets/svga/11.svga',
+    'assets/svga/12.svga',
+    'assets/svga/13.svga',
   ];
   List<String> shuiguoji2 = [
     'assets/images/hd/j_0.png',
@@ -41,6 +46,11 @@ class _APageState extends State<RoomBQPage> {
     'assets/images/hd/j_6.png',
     'assets/images/hd/j_7.png',
     'assets/images/hd/j_8.png',
+    'assets/images/hd/j_9.png',
+    'assets/images/hd/j_10.png',
+    'assets/images/hd/j_11.png',
+    'assets/images/hd/j_12.png',
+    'assets/images/hd/j_13.png',
   ];
   // 见到石头布
   List<String> jiandao = [
@@ -73,6 +83,7 @@ class _APageState extends State<RoomBQPage> {
 
   List<String> list1 = [
     'assets/images/pt/22.png',
+    'assets/images/pt/24.png',
     'assets/images/pt/23.png',
     'assets/images/pt/20.png',
     'assets/images/pt/21.png',
@@ -435,14 +446,20 @@ class _APageState extends State<RoomBQPage> {
                               if(i == 0){
                                 eventBus.fire(SubmitButtonBack(title: '爆灯'));
                               }else if(i == 1){
-                                // 生成0-8的随机数
-                                var a = Random().nextInt(9);
-                                eventBus.fire(SendRoomImgBack(info: '${shuiguoji[a]},${shuiguoji2[a]}'));
+                                // 生成0-13的随机数
+                                var a = Random().nextInt(14);
+                                var b = Random().nextInt(14);
+                                var c = Random().nextInt(14);
+                                eventBus.fire(SendRoomImgBack(info: '${shuiguoji[a]}、${shuiguoji[b]}、${shuiguoji[c]},${shuiguoji2[a]}、${shuiguoji2[b]}、${shuiguoji2[c]}'));
                               }else if(i == 2){
+                                // 生成0-9的随机数
+                                var a = Random().nextInt(10);
+                                eventBus.fire(SendRoomImgBack(info: '${shuiguoji[a]},${shuiguoji2[a]}'));
+                              }else if(i == 3){
                                 // 生成0-2的随机数
                                 var a = Random().nextInt(3);
                                 eventBus.fire(SendRoomImgBack(info:'${jiandao[a]},${jiandao2[a]}'));
-                              }else if(i == 3){
+                              }else if(i == 4){
                                 // 生成0-5的随机数
                                 var a = Random().nextInt(6);
                                 eventBus.fire(SendRoomImgBack(info: '${shaizi[a]},${shaizi2[a]}'));

@@ -224,3 +224,14 @@ class RoomSVGABack {
   bool isOK;
   RoomSVGABack({required this.isOK});
 }
+/// 厅内贵族播放完成
+class RoomGZSVGABack {
+  bool isOK;
+  RoomGZSVGABack({required this.isOK});
+}
+/// 厅内水果机播放完成
+class RoomSGJBack {
+  bool isOK;
+  int? index;
+  RoomSGJBack({required this.isOK, required this.index});
+}

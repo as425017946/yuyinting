@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:yuyinting/utils/style_utils.dart';
 
 /// 今日实际分润说明
 class FenRunTSPage extends StatefulWidget {

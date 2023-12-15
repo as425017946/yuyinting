@@ -33,12 +33,13 @@ class MyInfoPage extends StatefulWidget {
 class _MyInfoPageState extends State<MyInfoPage> {
   int _currentIndex = 0, gender = 0, is_pretty = 0, all_gift_type = 0;
   late final PageController _controller;
-  String
-      userNumber = '',
+  String userNumber = '',
       voice_card = '',
       description = '',
       city = '',
-      constellation = '';
+      constellation = '',
+      avatarFrameImg = '',
+      avatarFrameGifImg = '';
   final TextEditingController _souSuoName = TextEditingController();
 
   @override
@@ -59,29 +60,29 @@ class _MyInfoPageState extends State<MyInfoPage> {
     LogE('录音地址**$voice_card');
     _mPlayer
         .startPlayer(
-        fromURI: voice_card,
-        whenFinished: () {
-          setState(() {
-            playRecord = false;
-          });
-        })
+            fromURI: voice_card,
+            whenFinished: () {
+              setState(() {
+                playRecord = false;
+              });
+            })
         .then((value) {
       setState(() {
         playRecord = true;
       });
     });
   }
+
   void _initialize() async {
     await _mPlayer!.closePlayer();
     await _mPlayer!.openPlayer();
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +132,6 @@ class _MyInfoPageState extends State<MyInfoPage> {
                         ).then((value) {
                           doPostMyIfon();
                         });
-
                       }),
                       child: SizedBox(
                         width: ScreenUtil().setWidth(100),
@@ -181,19 +181,25 @@ class _MyInfoPageState extends State<MyInfoPage> {
                                 //边框设置
                                 decoration: BoxDecoration(
                                   //背景
-                                  color: gender == 1 ?  MyColors.dtBlue : MyColors.dtPink,
+                                  color: gender == 1
+                                      ? MyColors.dtBlue
+                                      : MyColors.dtPink,
                                   //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                  borderRadius:
-                                      const BorderRadius.all(Radius.circular(20.0)),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(20.0)),
                                 ),
                                 child: WidgetUtils.showImages(
-                                    gender == 1 ? 'assets/images/nan.png' : 'assets/images/nv.png', 12, 12),
+                                    gender == 1
+                                        ? 'assets/images/nan.png'
+                                        : 'assets/images/nv.png',
+                                    12,
+                                    12),
                               ),
                             ],
                           ),
                           WidgetUtils.commonSizedBox(5, 0),
                           GestureDetector(
-                            onTap: ((){
+                            onTap: (() {
                               Clipboard.setData(ClipboardData(
                                 text: userNumber,
                               ));
@@ -212,7 +218,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
                                 color: MyColors.peopleBlue,
                                 //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
+                                    BorderRadius.all(Radius.circular(20.0)),
                               ),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -241,41 +247,54 @@ class _MyInfoPageState extends State<MyInfoPage> {
               WidgetUtils.commonSizedBox(10, 0),
 
               /// 音频
-              voice_card.isNotEmpty ? Row(
-                children: [
-                  GestureDetector(
-                    onTap: ((){
-                      if(playRecord == false){
-                        play();
-                      }
-                    }),
-                    child: Container(
-                      height: ScreenUtil().setHeight(45),
-                      width: ScreenUtil().setWidth(220),
-                      margin: const EdgeInsets.only(left: 20),
-                      alignment: Alignment.center,
-                      //边框设置
-                      decoration: const BoxDecoration(
-                        //背景
-                        color: MyColors.peopleYellow ,
-                        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(20.0)),
-                      ),
-                      child:
-                      playRecord == false ? Row(
-                        children: [
-                          const Expanded(child: SVGASimpleImage(assetsName: 'assets/svga/audio_xindiaotu.svga',)),
-                          WidgetUtils.commonSizedBox(0, 10.h),
-                          WidgetUtils.showImages('assets/images/people_bofang.png', ScreenUtil().setHeight(35), ScreenUtil().setWidth(35)),
-                          WidgetUtils.commonSizedBox(0, 10.h),
-                        ],
-                      ) : const Expanded(child: SVGASimpleImage(assetsName: 'assets/svga/audio_bolang.svga',)),
-                    ),
-                  ),
-                  const Expanded(child: Text('')),
-                ],
-              ) : const Text(''),
+              voice_card.isNotEmpty
+                  ? Row(
+                      children: [
+                        GestureDetector(
+                          onTap: (() {
+                            if (playRecord == false) {
+                              play();
+                            }
+                          }),
+                          child: Container(
+                            height: ScreenUtil().setHeight(45),
+                            width: ScreenUtil().setWidth(220),
+                            margin: const EdgeInsets.only(left: 20),
+                            alignment: Alignment.center,
+                            //边框设置
+                            decoration: const BoxDecoration(
+                              //背景
+                              color: MyColors.peopleYellow,
+                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20.0)),
+                            ),
+                            child: playRecord == false
+                                ? Row(
+                                    children: [
+                                      const Expanded(
+                                          child: SVGASimpleImage(
+                                        assetsName:
+                                            'assets/svga/audio_xindiaotu.svga',
+                                      )),
+                                      WidgetUtils.commonSizedBox(0, 10.h),
+                                      WidgetUtils.showImages(
+                                          'assets/images/people_bofang.png',
+                                          ScreenUtil().setHeight(35),
+                                          ScreenUtil().setWidth(35)),
+                                      WidgetUtils.commonSizedBox(0, 10.h),
+                                    ],
+                                  )
+                                : const Expanded(
+                                    child: SVGASimpleImage(
+                                    assetsName: 'assets/svga/audio_bolang.svga',
+                                  )),
+                          ),
+                        ),
+                        const Expanded(child: Text('')),
+                      ],
+                    )
+                  : const Text(''),
               WidgetUtils.commonSizedBox(15, 0),
               Expanded(
                 child: Container(
@@ -454,7 +473,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:

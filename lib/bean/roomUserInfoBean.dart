@@ -35,6 +35,8 @@ class Data {
   String? age;
   int? isHi;
   String? followStatus;
+  String? avatarFrameImg;
+  String? avatarFrameGifImg;
 
   Data(
       {this.uid,
@@ -48,7 +50,9 @@ class Data {
         this.birthday,
         this.age,
         this.isHi,
-        this.followStatus});
+        this.followStatus,
+        this.avatarFrameGifImg,
+        this.avatarFrameImg});
 
   Data.fromJson(Map<String, dynamic> json) {
     uid = json['uid'];
@@ -63,6 +67,8 @@ class Data {
     age = json['age'];
     isHi = json['is_hi'];
     followStatus = json['follow_status'];
+    avatarFrameImg = json['avatar_frame_img'];
+    avatarFrameGifImg = json['avatar_frame_gif_img'];
   }
 
   Map<String, dynamic> toJson() {
@@ -79,6 +85,8 @@ class Data {
     data['age'] = this.age;
     data['is_hi'] = this.isHi;
     data['follow_status'] = this.followStatus;
+    data['avatar_frame_img'] = this.avatarFrameImg;
+    data['avatar_frame_gif_img'] = this.avatarFrameGifImg;
     return data;
   }
 }

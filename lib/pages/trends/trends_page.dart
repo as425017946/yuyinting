@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:svgaplayer_flutter/player.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/pages/trends/trends_guanzhu_page.dart';
 import 'package:yuyinting/pages/trends/trends_tuijian_page.dart';

@@ -38,6 +38,7 @@ class _RoomBackPageState extends State<RoomBackPage> {
     return Column(children: [
       GestureDetector(
         onTap: (() {
+          eventBus.fire(SubmitButtonBack(title: '关闭房间'));
           // 点击的是不是当前房间，如果是关闭弹窗，不是跳转房间
           if(sp.getString('roomID').toString() == list[i].id.toString()){
             Navigator.pop(context);
@@ -77,6 +78,7 @@ class _RoomBackPageState extends State<RoomBackPage> {
       backgroundColor: Colors.transparent,
       body: GestureDetector(
         onTap: (() {
+          eventBus.fire(SubmitButtonBack(title: '关闭房间'));
           Navigator.pop(context);
         }),
         child: Row(

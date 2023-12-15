@@ -296,6 +296,7 @@ class _EditInfoPageState extends State<EditInfoPage> {
       switch (commonBean.code) {
         case MyHttpConfig.successCode:
           sp.setBool("isFirst", false);
+          sp.setInt("user_gender", sex);
           LogE('更换值${sp.getBool('isFirst')}');
           MyToastUtils.showToastBottom('提交成功！');
           // ignore: use_build_context_synchronously

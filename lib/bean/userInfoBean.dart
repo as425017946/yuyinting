@@ -46,6 +46,8 @@ class Data {
   List<String>? photoUrl;
   int? isHi;
   String? isFollow;
+  String? avatarFrameImg;
+  String? avatarFrameGifImg;
 
   Data(
       {this.number,
@@ -70,7 +72,9 @@ class Data {
         this.roomID,
         this.photoUrl,
         this.isHi,
-        this.isFollow});
+        this.isFollow,
+        this.avatarFrameGifImg,
+        this.avatarFrameImg});
 
   Data.fromJson(Map<String, dynamic> json) {
     number = json['number'];
@@ -96,6 +100,8 @@ class Data {
     photoUrl = json['photo_url'].cast<String>();
     isHi = json['is_hi'];
     isFollow = json['is_follow'];
+    avatarFrameImg = json['avatar_frame_img'];
+    avatarFrameGifImg = json['avatar_frame_gif_img'];
   }
 
   Map<String, dynamic> toJson() {
@@ -121,6 +127,8 @@ class Data {
     data['live'] = this.live;
     data['photo_url'] = this.photoUrl;
     data['is_hi'] = this.isHi;
+    data['avatar_frame_img'] = this.avatarFrameImg;
+    data['avatar_frame_gif_img'] = this.avatarFrameGifImg;
     return data;
   }
 }

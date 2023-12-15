@@ -5,7 +5,8 @@ import '../../../colors/my_colors.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 class DouPayPage extends StatefulWidget {
-  const DouPayPage({Key? key}) : super(key: key);
+  String shuliang;
+  DouPayPage({Key? key, required this.shuliang}) : super(key: key);
 
   @override
   State<DouPayPage> createState() => _DouPayPageState();
@@ -124,7 +125,7 @@ class _DouPayPageState extends State<DouPayPage> {
                                     ),
                                   ),
                                   WidgetUtils.commonSizedBox(0, 50),
-                                  WidgetUtils.onlyText('1000000', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(56), fontWeight: FontWeight.w600)),
+                                  WidgetUtils.onlyText(widget.shuliang, StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(56), fontWeight: FontWeight.w600)),
                                   const Expanded(child: Text('')),
                                 ],
                               ),

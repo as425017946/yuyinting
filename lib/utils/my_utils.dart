@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:im_flutter_sdk/im_flutter_sdk.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
@@ -375,14 +376,22 @@ class MyUtils {
       File file = File(savePath);
       await file.writeAsBytes(Uint8List.fromList(response.data));
       if (await file.exists()) {
-        // MyToastUtils.showToastBottom("下载成功");
+        MyToastUtils.showToastBottom("下载成功");
         print("保存路径：$savePath");
       } else {
-        // MyToastUtils.showToastBottom("下载失败");
+        MyToastUtils.showToastBottom("下载失败");
       }
     }else{
       MyToastUtils.showToastBottom("未获取存储权限");
     }
+  }
+
+  // 保存网络图片到相册额
+  static void saveNetworkImageToGallery(String imageUrl) async {
+    var response = await http.get(Uri.parse(imageUrl));
+    final result = await ImageGallerySaver.saveImage(Uint8List.fromList(response.bodyBytes));
+    MyToastUtils.showToastBottom("下载成功");
+    print("保存路径：$result");
   }
 
   // 保存网络图片到缓存目录

@@ -84,7 +84,7 @@ class _GonghuiPeoplePageState extends State<GonghuiPeoplePage> {
             Stack(
               alignment: Alignment.center,
               children: [
-                WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(100), ScreenUtil().setWidth(100), list[i].avatar!),
+                WidgetUtils.CircleImageNet(76.h, 76.h, 38.h, list[i].avatar!),
                 list[i].liveStatus == 1 ? WidgetUtils.showImages('assets/images/zhibozhong.webp', ScreenUtil().setHeight(100), ScreenUtil().setWidth(100),) : const Text(''),
               ],
             ),

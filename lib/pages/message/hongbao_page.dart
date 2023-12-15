@@ -33,7 +33,7 @@ class _HongBaoPageState extends State<HongBaoPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    doPostWalletList();
+    doPostBalance();
   }
 
   @override
@@ -256,8 +256,8 @@ class _HongBaoPageState extends State<HongBaoPage> {
 
   // 金币 钻石
   String jinbi = '', zuanshi = '';
-  /// 钱包明细
-  Future<void> doPostWalletList() async {
+  /// 钱包余额
+  Future<void> doPostBalance() async {
     try {
       balanceBean bean = await DataUtils.postBalance();
       switch (bean.code) {

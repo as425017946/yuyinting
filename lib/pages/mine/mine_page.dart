@@ -8,7 +8,6 @@ import 'package:yuyinting/pages/mine/setting/setting_page.dart';
 import 'package:yuyinting/pages/mine/tequan/tequan_page.dart';
 import 'package:yuyinting/pages/mine/zhuangban/zhuangban_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
-import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/widget/SVGASimpleImage.dart';
@@ -20,7 +19,6 @@ import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
-import '../../utils/custom_dialog.dart';
 import '../../utils/loading.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/widget_utils.dart';
@@ -47,7 +45,9 @@ class _MinePageState extends State<MinePage>{
       care = '',
       beCare = '',
       lookMe = '',
-      identity = '';
+      identity = '',
+      avatarFrameImg = '',
+      avatarFrameGifImg = '';
 
   @override
   void initState() {
@@ -183,8 +183,26 @@ class _MinePageState extends State<MinePage>{
                       // doPostMyIfon();
                     });
                   }),
-                  child: WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(90),
-                      ScreenUtil().setHeight(90), sp.getString('user_headimg').toString()),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(90),
+                          ScreenUtil().setHeight(90), sp.getString('user_headimg').toString()),
+                      // 头像框静态图
+                      avatarFrameImg.isNotEmpty ? WidgetUtils
+                          .CircleHeadImage(
+                      ScreenUtil().setHeight(120),
+                      ScreenUtil().setHeight(120),
+                        avatarFrameImg) : const Text(''),
+                      // 头像框动态图
+                      avatarFrameGifImg.isNotEmpty ? SizedBox(
+                        height: 120.h,
+                        width: 120.h,
+                        child: SVGASimpleImage(
+                          resUrl: avatarFrameGifImg,),
+                      ) : const Text(''),
+                    ],
+                  ),
                 ),
                 WidgetUtils.commonSizedBox(0, 15),
                 Expanded(
@@ -554,7 +572,7 @@ class _MinePageState extends State<MinePage>{
     );
   }
 
-  /// 关于我们
+  /// 我的详情
   Future<void> doPostMyIfon() async {
     var type;
     // 透明状态栏
@@ -578,12 +596,15 @@ class _MinePageState extends State<MinePage>{
             sp.setString('versionStatus', bean.data!.status!);
             sp.setString('shimingzhi', bean.data!.auditStatus.toString());
             sp.setString("user_headimg", bean.data!.avatar!);
+            sp.setInt("user_gender", bean.data!.gender!);
             userNumber = bean.data!.number.toString();
             care = bean.data!.followNum.toString();
             beCare = bean.data!.isFollowNum.toString();
             lookMe = bean.data!.lookNum.toString();
             guizuType = bean.data!.nobleId as int;
             identity = bean.data!.identity!;
+            avatarFrameImg = bean.data!.avatarFrameImg!;
+            avatarFrameGifImg = bean.data!.avatarFrameGifImg!;
           });
           break;
         case MyHttpConfig.errorloginCode:
