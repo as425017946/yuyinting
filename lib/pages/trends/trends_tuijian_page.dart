@@ -221,6 +221,7 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> with AutomaticKee
                   ],
                 ),
                 const Expanded(child: Text('')),
+                _list[i].uid.toString() == sp.getString('user_id') ? const Text('') :
                 _list[i].isHi == 0
                     ? GestureDetector(
                   onTap: ((){

@@ -11,6 +11,7 @@ import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
+import '../message/geren/people_info_page.dart';
 /// 热度-在线列表
 class ReDuZaiXianPage extends StatefulWidget {
   String roomID;
@@ -69,7 +70,7 @@ class _ReDuZaiXianPageState extends State<ReDuZaiXianPage> with AutomaticKeepAli
       children: [
         GestureDetector(
           onTap: (() {
-            // MyToastUtils.showToastBottom('点击了');
+            MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: list[i].uid.toString(),));
           }),
           child: Container(
             margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),

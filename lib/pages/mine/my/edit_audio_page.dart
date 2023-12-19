@@ -41,7 +41,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
   var appBar;
   List<Data> list = [];
   List<bool> list_b = [];
-  int length = 0;
+  int length = 1;
 
   Codec _codec = Codec.aacADTS;
   String _mPath = ''; //录音文件路径
@@ -434,53 +434,53 @@ class _EditAudioPageState extends State<EditAudioPage> {
                           color: MyColors.g6,
                           fontSize: ScreenUtil().setSp(25))),
                   WidgetUtils.commonSizedBox(20, 0),
-                  WidgetUtils.onlyText(
-                      '声音标签（$length/1）',
-                      StyleUtils.getCommonTextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                          fontSize: ScreenUtil().setSp(32))),
-                  WidgetUtils.commonSizedBox(10, 0),
-                  Wrap(
-                    spacing: ScreenUtil().setHeight(30),
-                    runSpacing: ScreenUtil().setHeight(20),
-                    children: List.generate(
-                        list.length,
-                        (index) => GestureDetector(
-                              onTap: (() {
-                                if (length < 1) {
-                                  setState(() {
-                                    list_b[index] = !list_b[index];
-                                    if (list_b[index]) {
-                                      length++;
-                                    } else {
-                                      length--;
-                                    }
-                                  });
-                                } else {
-                                  if (list_b[index]) {
-                                    setState(() {
-                                      list_b[index] = !list_b[index];
-                                      length--;
-                                    });
-                                  }
-                                }
-                              }),
-                              child: WidgetUtils.myContainerZishiying2(
-                                  list_b[index]
-                                      ? MyColors.homeTopBG
-                                      : Colors.white,
-                                  list_b[index]
-                                      ? MyColors.homeTopBG
-                                      : MyColors.f2,
-                                  list[index].name!,
-                                  StyleUtils.getCommonTextStyle(
-                                      color: list_b[index] == false
-                                          ? Colors.black
-                                          : Colors.white,
-                                      fontSize: ScreenUtil().setSp(28))),
-                            )),
-                  ),
+                  // WidgetUtils.onlyText(
+                  //     '声音标签（$length/1）',
+                  //     StyleUtils.getCommonTextStyle(
+                  //         color: Colors.black,
+                  //         fontWeight: FontWeight.w600,
+                  //         fontSize: ScreenUtil().setSp(32))),
+                  // WidgetUtils.commonSizedBox(10, 0),
+                  // Wrap(
+                  //   spacing: ScreenUtil().setHeight(30),
+                  //   runSpacing: ScreenUtil().setHeight(20),
+                  //   children: List.generate(
+                  //       list.length,
+                  //       (index) => GestureDetector(
+                  //             onTap: (() {
+                  //               if (length < 1) {
+                  //                 setState(() {
+                  //                   list_b[index] = !list_b[index];
+                  //                   if (list_b[index]) {
+                  //                     length++;
+                  //                   } else {
+                  //                     length--;
+                  //                   }
+                  //                 });
+                  //               } else {
+                  //                 if (list_b[index]) {
+                  //                   setState(() {
+                  //                     list_b[index] = !list_b[index];
+                  //                     length--;
+                  //                   });
+                  //                 }
+                  //               }
+                  //             }),
+                  //             child: WidgetUtils.myContainerZishiying2(
+                  //                 list_b[index]
+                  //                     ? MyColors.homeTopBG
+                  //                     : Colors.white,
+                  //                 list_b[index]
+                  //                     ? MyColors.homeTopBG
+                  //                     : MyColors.f2,
+                  //                 list[index].name!,
+                  //                 StyleUtils.getCommonTextStyle(
+                  //                     color: list_b[index] == false
+                  //                         ? Colors.black
+                  //                         : Colors.white,
+                  //                     fontSize: ScreenUtil().setSp(28))),
+                  //           )),
+                  // ),
                 ],
               ),
             ),

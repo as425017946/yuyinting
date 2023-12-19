@@ -604,7 +604,7 @@ class WidgetUtils {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(radius),
       ),
-      child: url.contains('com.leimu.yuyinting') || url.contains('storage')
+      child: (url.contains('com.leimu.yuyinting') || url.contains('storage'))
           ? Image.file(
               File(url),
               fit: BoxFit.fill,

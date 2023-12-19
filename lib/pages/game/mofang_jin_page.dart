@@ -613,7 +613,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                               Expanded(
                                   child: GestureDetector(
                                     onTap: ((){
-                                      MyUtils.goTransparentPageCom(context, MoFangJiLuPage(type: 0,));
+                                      MyUtils.goTransparentPageCom(context, MoFangJiLuPage(type: 1,));
                                       setState(() {
                                         isMore = false;
                                       });
@@ -692,13 +692,13 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
-            if(double.parse(bean.data!.goldBean!) > 10000){
-              jinbi = '${(double.parse(bean.data!.goldBean!)/10000)}w';
+            if(double.parse(bean.data!.goldBean!) > 100000){
+              jinbi = '${(double.parse(bean.data!.goldBean!)/100000)}w';
             }else{
               jinbi = bean.data!.goldBean!;
             }
-            if(double.parse(bean.data!.diamond!) > 10000){
-              zuanshi = '${(double.parse(bean.data!.diamond!)/10000)}w';
+            if(double.parse(bean.data!.diamond!) > 100000){
+              zuanshi = '${(double.parse(bean.data!.diamond!)/100000)}w';
             }else{
               zuanshi = bean.data!.diamond!;
             }
@@ -734,6 +734,10 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
       playRouletteBean bean = await DataUtils.postPlayRoulette(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
+        // 把是否可以下注设置为可以
+          setState(() {
+            isXiazhu = true;
+          });
         // 获取数据并赋值
           list.clear();
           list = bean.data!.gifts!;
@@ -767,11 +771,11 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
           setState(() {
             if(jinbi.contains('w')){
               // 目的是先把 1w 转换成 10000
-              jinbi = (double.parse(jinbi.substring(0,jinbi.length - 1)) * 10000).toString();
+              jinbi = (double.parse(jinbi.substring(0,jinbi.length - 1)) * 100000).toString();
               // 减去花费的V豆
-              jinbi = '${(double.parse(jinbi) - int.parse(number)*20)/10000}w';
+              jinbi = '${(double.parse(jinbi) - int.parse(number)*200)/100000}w';
             }else{
-              jinbi = (double.parse(jinbi) - int.parse(number)*20).toString();
+              jinbi = (double.parse(jinbi) - int.parse(number)*200).toString();
             }
           });
           break;

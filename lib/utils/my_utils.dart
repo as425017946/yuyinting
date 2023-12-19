@@ -231,31 +231,29 @@ class MyUtils {
 
   /// 通用跳转到一个透明页面，从右到左滚出的方法
   static void goTransparentRFPage(BuildContext context, Widget page) {
-    if(checkClick()) {
-      Future.delayed(const Duration(seconds: 0), () {
-        Navigator.push(
-          context,
-          PageRouteBuilder(
-            //自定义路由
-            opaque: false,
-            pageBuilder: (context, a, _) => page, //需要跳转的页面
-            transitionsBuilder: (context, a, _, child) {
-              const begin = Offset(1,
-                  0); //Offset是一个2D小部件，他将记录坐标轴的x,y前者为宽，后者为高 如果将begin =Offset(1,0)为从右到左 改为(0,1),效果则会变成从下到上
-              const end = Offset.zero; //得到Offset.zero坐标值
-              const curve = Curves.ease; //这是一个曲线动画
-              var tween = Tween(begin: begin, end: end)
-                  .chain(CurveTween(curve: curve)); //使用补间动画转换为动画
-              return SlideTransition(
-                //转场动画//目前我认为只能用于跳转效果
-                position: a.drive(tween), //这里将获得一个新的动画
-                child: child,
-              );
-            },
-          ),
-        );
-      });
-    }
+    Future.delayed(const Duration(seconds: 0), () {
+      Navigator.push(
+        context,
+        PageRouteBuilder(
+          //自定义路由
+          opaque: false,
+          pageBuilder: (context, a, _) => page, //需要跳转的页面
+          transitionsBuilder: (context, a, _, child) {
+            const begin = Offset(1,
+                0); //Offset是一个2D小部件，他将记录坐标轴的x,y前者为宽，后者为高 如果将begin =Offset(1,0)为从右到左 改为(0,1),效果则会变成从下到上
+            const end = Offset.zero; //得到Offset.zero坐标值
+            const curve = Curves.ease; //这是一个曲线动画
+            var tween = Tween(begin: begin, end: end)
+                .chain(CurveTween(curve: curve)); //使用补间动画转换为动画
+            return SlideTransition(
+              //转场动画//目前我认为只能用于跳转效果
+              position: a.drive(tween), //这里将获得一个新的动画
+              child: child,
+            );
+          },
+        ),
+      );
+    });
   }
 
   /// 通用跳转到一个透明页面，从底部向上滚出的方法
@@ -288,15 +286,13 @@ class MyUtils {
 
   /// 通用跳转到一个透明页面
   static void goTransparentPageCom(BuildContext context, Widget page) {
-    if(checkClick()) {
-      Future.delayed(const Duration(seconds: 0), () {
-        Navigator.of(context).push(PageRouteBuilder(
-            opaque: false,
-            pageBuilder: (context, animation, secondaryAnimation) {
-              return page;
-            }));
-      });
-    }
+    Future.delayed(const Duration(seconds: 0), () {
+      Navigator.of(context).push(PageRouteBuilder(
+          opaque: false,
+          pageBuilder: (context, animation, secondaryAnimation) {
+            return page;
+          }));
+    });
   }
 
   /// 这个是弹出有人跟你打招呼或者邀请你进入房间使用
@@ -470,36 +466,53 @@ class MyUtils {
                   Map info = msg.attributes!;
                   LogE('接收文本信息$info');
                   if(info['lv'] == '' || info['lv'] == null){
-                    String nickName = info['nickname'];
-                    String headImg = info['avatar'];
-                    String combineID = '';
-                    if(int.parse(sp.getString('user_id').toString()) > int.parse(msg.from!)){
-                      combineID = '${msg.from}-${sp.getString('user_id').toString()}';
+                    if(info['type'] == 'clean_charm'){
+                      // 厅内清空魅力值
+                      eventBus.fire(JoinRoomYBack(map: info, type: '0'));
+                    }else if(info['type'] == 'clean_public_screen'){
+                      // 厅内清空魅力值
+                      eventBus.fire(JoinRoomYBack(map: info, type: '0'));
                     }else{
-                      combineID = '${sp.getString('user_id').toString()}-${msg.from}';
-                    }
-                    Map<String, dynamic> params = <String, dynamic>{
-                      'uid': sp.getString('user_id').toString(),
-                      'otherUid': msg.from,
-                      'whoUid':msg.from,
-                      'combineID': combineID,
-                      'nickName': nickName,
-                      'content': body.content,
-                      'bigImg' : '',
-                      'headImg': headImg,
-                      'otherHeadImg': sp.getString('user_headimg'),
+                      String nickName = info['nickname'];
+                      String headImg = info['avatar'];
+                      String combineID = '';
+                      if(int.parse(sp.getString('user_id').toString()) > int.parse(msg.from!)){
+                        combineID = '${msg.from}-${sp.getString('user_id').toString()}';
+                      }else{
+                        combineID = '${sp.getString('user_id').toString()}-${msg.from}';
+                      }
 
-                      'add_time': msg.serverTime,
-                      'type': 1,
-                      'number': 0,
-                      'status': 1,
-                      'readStatus': 0,
-                      'liveStatus': 0,
-                      'loginStatus': 0,
-                    };
-                    // 插入数据
-                    await databaseHelper.insertData('messageSLTable', params);
-                    eventBus.fire(SendMessageBack(type: 1, msgID: '0'));
+                      //保存头像
+                      MyUtils.saveImgTemp(sp.getString('user_headimg').toString(),
+                          sp.getString('user_id').toString());
+                      MyUtils.saveImgTemp(headImg, msg.from.toString());
+                      // 保存路径
+                      Directory? directory = await getTemporaryDirectory();
+                      String myHeadImg = '${directory!.path}/${sp.getString('user_id')}.jpg';
+                      String otherHeadImg = '${directory!.path}/${msg.from}.jpg';
+                      // 接收别人发来的消息
+                      Map<String, dynamic> params = <String, dynamic>{
+                        'uid': sp.getString('user_id').toString(),
+                        'otherUid': msg.from,
+                        'whoUid':msg.from,
+                        'combineID': combineID,
+                        'nickName': nickName,
+                        'content': body.content,
+                        'bigImg' : '',
+                        'headImg': myHeadImg,
+                        'otherHeadImg': otherHeadImg,
+                        'add_time': msg.serverTime,
+                        'type': 1,
+                        'number': 0,
+                        'status': 1,
+                        'readStatus': 0,
+                        'liveStatus': 0,
+                        'loginStatus': 0,
+                      };
+                      // 插入数据
+                      await databaseHelper.insertData('messageSLTable', params);
+                      eventBus.fire(SendMessageBack(type: 1, msgID: '0'));
+                    }
                   }else{
                     eventBus.fire(JoinRoomYBack(map: info, type: '0'));
                   }
@@ -512,14 +525,24 @@ class MyUtils {
                   EMImageMessageBody body = msg.body as EMImageMessageBody;
                   LogE('接受图片信息==$body');
                   Map? info = msg.attributes;
-                  String? nickName = info!['nickname'];
-                  String? headImg = info!['avatar'];
+                  String nickName = info!['nickname'];
+                  String headImg = info!['remotePath'];
                   String combineID = '';
                   if(int.parse(sp.getString('user_id').toString()) > int.parse(msg.from!)){
                     combineID = '${msg.from}-${sp.getString('user_id').toString()}';
                   }else{
                     combineID = '${sp.getString('user_id').toString()}-${msg.from}';
                   }
+                  //保存自己头像
+                  MyUtils.saveImgTemp(sp.getString('user_headimg').toString(),
+                      sp.getString('user_id').toString());
+                  // 保存他人
+                  MyUtils.saveImgTemp(headImg, msg.from.toString());
+                  // 保存路径
+                  Directory? directory = await getTemporaryDirectory();
+                  String myHeadImg = '${directory!.path}/${sp.getString('user_id')}.jpg';
+                  String otherHeadImg = '${directory!.path}/${msg.from}.jpg';
+
                   Map<String, dynamic> params = <String, dynamic>{
                     'uid': sp.getString('user_id').toString(),
                     'otherUid': msg.from,
@@ -528,8 +551,8 @@ class MyUtils {
                     'nickName': nickName,
                     'content': body.thumbnailLocalPath,
                     'bigImg' : body.localPath,
-                    'headImg': headImg,
-                    'otherHeadImg': sp.getString('user_headimg'),
+                    'headImg': myHeadImg,
+                    'otherHeadImg': otherHeadImg,
                     'add_time': msg.serverTime,
                     'type': 2,
                     'number': 0,
@@ -561,17 +584,27 @@ class MyUtils {
                 break;
               case MessageType.VOICE:
                 {
-                  LogE('VOICE消息${msg.from}');
+                  LogE('VOICE消息${msg}');
                   EMVoiceMessageBody body = msg.body as EMVoiceMessageBody;
                   Map? info = msg.attributes;
-                  String? nickName = info!['nickname'];
-                  String? headImg = info!['avatar'];
+                  String nickName = info!['nickname'];
+                  String headImg = info!['remotePath'];
                   String combineID = '';
                   if(int.parse(sp.getString('user_id').toString()) > int.parse(msg.from!)){
                     combineID = '${msg.from}-${sp.getString('user_id').toString()}';
                   }else{
                     combineID = '${sp.getString('user_id').toString()}-${msg.from}';
                   }
+                  //保存自己头像
+                  MyUtils.saveImgTemp(sp.getString('user_headimg').toString(),
+                      sp.getString('user_id').toString());
+                  // 保存他人
+                  MyUtils.saveImgTemp(headImg, msg.from.toString());
+                  // 保存路径
+                  Directory? directory = await getTemporaryDirectory();
+                  String myHeadImg = '${directory!.path}/${sp.getString('user_id')}.jpg';
+                  String otherHeadImg = '${directory!.path}/${msg.from}.jpg';
+
                   Map<String, dynamic> params = <String, dynamic>{
                     'uid': sp.getString('user_id').toString(),
                     'otherUid': msg.from,
@@ -580,8 +613,8 @@ class MyUtils {
                     'nickName': nickName,
                     'content': body.localPath,
                     'bigImg' : body.localPath,
-                    'headImg': headImg,
-                    'otherHeadImg': sp.getString('user_headimg'),
+                    'headImg': myHeadImg,
+                    'otherHeadImg': otherHeadImg,
                     'add_time': msg.serverTime,
                     'type': 3,
                     'number': body.duration,
@@ -618,6 +651,17 @@ class MyUtils {
                     }else{
                       combineID = '${sp.getString('user_id').toString()}-${msg.from}';
                     }
+
+                    //保存自己头像
+                    MyUtils.saveImgTemp(sp.getString('user_headimg').toString(),
+                        sp.getString('user_id').toString());
+                    // 保存他人
+                    MyUtils.saveImgTemp(headImg, msg.from.toString());
+                    // 保存路径
+                    Directory? directory = await getTemporaryDirectory();
+                    String myHeadImg = '${directory!.path}/${sp.getString('user_id')}.jpg';
+                    String otherHeadImg = '${directory!.path}/${msg.from}.jpg';
+
                     Map<String, dynamic> params = <String, dynamic>{
                       'uid': sp.getString('user_id').toString(),
                       'otherUid': msg.from,
@@ -626,8 +670,8 @@ class MyUtils {
                       'nickName': nickName,
                       'content': '收到${info['value']}个V豆',
                       'bigImg' : '',
-                      'headImg': headImg,
-                      'otherHeadImg': sp.getString('user_headimg'),
+                      'headImg': myHeadImg,
+                      'otherHeadImg': otherHeadImg,
                       'add_time': msg.serverTime,
                       'type': 6,
                       'number': 0,

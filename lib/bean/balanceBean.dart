@@ -27,7 +27,7 @@ class Data {
   String? goldBean;
   String? goldCoin;
   String? diamond;
-  int? mushroom;
+  String? mushroom;
 
   Data({this.goldBean, this.goldCoin, this.diamond, this.mushroom});
 

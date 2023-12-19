@@ -25,7 +25,7 @@ class gameStoreBean {
 
 class Data {
   List<GoodsList>? goodsList;
-  int? amount;
+  String? amount;
 
   Data({this.goodsList, this.amount});
 

@@ -101,7 +101,10 @@ class _MeiLiDayPageState extends State<MeiLiDayPage> {
                 WidgetUtils.commonSizedBox(0, 4),
                 GestureDetector(
                   onTap: ((){
-                    MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[0].uid.toString(),));
+                    if(MyUtils.checkClick()) {
+                      MyUtils.goTransparentRFPage(context,
+                          PeopleInfoPage(otherId: _list[0].uid.toString(),));
+                    }
                   }),
                   child: Transform.translate(offset: Offset(0,-20),
                     child: Container(
@@ -124,9 +127,9 @@ class _MeiLiDayPageState extends State<MeiLiDayPage> {
                                     ScreenUtil().setHeight(231),
                                     ScreenUtil().setWidth(228)),
                                 _list[0].liveStatus == 1 ?Container(
-                                  margin: EdgeInsets.only(bottom: ScreenUtil().setHeight(30)),
-                                  width: ScreenUtil().setHeight(50),
-                                  height: ScreenUtil().setWidth(25),
+                                  margin: EdgeInsets.only(bottom: ScreenUtil().setHeight(28)),
+                                  width: ScreenUtil().setHeight(60),
+                                  height: ScreenUtil().setWidth(30),
                                   decoration: const BoxDecoration(
                                     //设置Container修饰
                                     image: DecorationImage(
@@ -146,7 +149,7 @@ class _MeiLiDayPageState extends State<MeiLiDayPage> {
                                           '在房间',
                                           StyleUtils.getCommonTextStyle(
                                               color: Colors.white,
-                                              fontSize: ScreenUtil().setSp(10))),
+                                              fontSize: ScreenUtil().setSp(15))),
                                     ],
                                   ) /* add child content here */,
                                 ) : const Text('')
@@ -253,8 +256,8 @@ class _MeiLiDayPageState extends State<MeiLiDayPage> {
                         _list[1].liveStatus == 1 ?Container(
                           margin:
                           EdgeInsets.only(top: ScreenUtil().setHeight(98)),
-                          width: ScreenUtil().setHeight(50),
-                          height: ScreenUtil().setWidth(20),
+                          width: ScreenUtil().setHeight(60),
+                          height: ScreenUtil().setWidth(30),
                           decoration: const BoxDecoration(
                             //设置Container修饰
                             image: DecorationImage(
@@ -274,7 +277,7 @@ class _MeiLiDayPageState extends State<MeiLiDayPage> {
                                   '在房间',
                                   StyleUtils.getCommonTextStyle(
                                       color: Colors.white,
-                                      fontSize: ScreenUtil().setSp(10))),
+                                      fontSize: ScreenUtil().setSp(15))),
                             ],
                           ) /* add child content here */,
                         ) : const Text('')
@@ -308,9 +311,9 @@ class _MeiLiDayPageState extends State<MeiLiDayPage> {
                                     ScreenUtil().setHeight(231),
                                     ScreenUtil().setWidth(228)),
                                 _list[0].liveStatus == 1 ?Container(
-                                  margin: EdgeInsets.only(bottom: ScreenUtil().setHeight(30)),
-                                  width: ScreenUtil().setHeight(50),
-                                  height: ScreenUtil().setWidth(25),
+                                  margin: EdgeInsets.only(bottom: ScreenUtil().setHeight(28)),
+                                  width: ScreenUtil().setHeight(60),
+                                  height: ScreenUtil().setWidth(30),
                                   decoration: const BoxDecoration(
                                     //设置Container修饰
                                     image: DecorationImage(
@@ -330,7 +333,7 @@ class _MeiLiDayPageState extends State<MeiLiDayPage> {
                                           '在房间',
                                           StyleUtils.getCommonTextStyle(
                                               color: Colors.white,
-                                              fontSize: ScreenUtil().setSp(10))),
+                                              fontSize: ScreenUtil().setSp(15))),
                                     ],
                                   ) /* add child content here */,
                                 ) : const Text('')
@@ -437,8 +440,8 @@ class _MeiLiDayPageState extends State<MeiLiDayPage> {
                         _list[1].liveStatus == 1 ?Container(
                           margin:
                           EdgeInsets.only(top: ScreenUtil().setHeight(98)),
-                          width: ScreenUtil().setHeight(50),
-                          height: ScreenUtil().setWidth(20),
+                          width: ScreenUtil().setHeight(60),
+                          height: ScreenUtil().setWidth(30),
                           decoration: const BoxDecoration(
                             //设置Container修饰
                             image: DecorationImage(
@@ -458,7 +461,7 @@ class _MeiLiDayPageState extends State<MeiLiDayPage> {
                                   '在房间',
                                   StyleUtils.getCommonTextStyle(
                                       color: Colors.white,
-                                      fontSize: ScreenUtil().setSp(10))),
+                                      fontSize: ScreenUtil().setSp(15))),
                             ],
                           ) /* add child content here */,
                         ) : const Text('')
@@ -492,9 +495,9 @@ class _MeiLiDayPageState extends State<MeiLiDayPage> {
                                     ScreenUtil().setHeight(231),
                                     ScreenUtil().setWidth(228)),
                                 _list[0].liveStatus == 1 ?Container(
-                                  margin: EdgeInsets.only(bottom: ScreenUtil().setHeight(30)),
-                                  width: ScreenUtil().setHeight(50),
-                                  height: ScreenUtil().setWidth(25),
+                                  margin: EdgeInsets.only(bottom: ScreenUtil().setHeight(28)),
+                                  width: ScreenUtil().setHeight(60),
+                                  height: ScreenUtil().setWidth(30),
                                   decoration: const BoxDecoration(
                                     //设置Container修饰
                                     image: DecorationImage(
@@ -514,7 +517,7 @@ class _MeiLiDayPageState extends State<MeiLiDayPage> {
                                           '在房间',
                                           StyleUtils.getCommonTextStyle(
                                               color: Colors.white,
-                                              fontSize: ScreenUtil().setSp(10))),
+                                              fontSize: ScreenUtil().setSp(15))),
                                     ],
                                   ) /* add child content here */,
                                 ) : const Text('')
@@ -559,8 +562,8 @@ class _MeiLiDayPageState extends State<MeiLiDayPage> {
                         _list[2].liveStatus == 1 ?Container(
                           margin:
                           EdgeInsets.only(top: ScreenUtil().setHeight(98)),
-                          width: ScreenUtil().setHeight(50),
-                          height: ScreenUtil().setWidth(20),
+                          width: ScreenUtil().setHeight(60),
+                          height: ScreenUtil().setWidth(30),
                           decoration: const BoxDecoration(
                             //设置Container修饰
                             image: DecorationImage(
@@ -580,7 +583,7 @@ class _MeiLiDayPageState extends State<MeiLiDayPage> {
                                   '在房间',
                                   StyleUtils.getCommonTextStyle(
                                       color: Colors.white,
-                                      fontSize: ScreenUtil().setSp(10))),
+                                      fontSize: ScreenUtil().setSp(15))),
                             ],
                           ) /* add child content here */,
                         ) : const Text('')
@@ -675,14 +678,14 @@ class _MeiLiDayPageState extends State<MeiLiDayPage> {
     );
   }
 
-  /// 关注列表
+  /// 榜单
   Future<void> doPostRankList() async {
     //财富榜传wealth 魅力榜传charm
     Map<String, dynamic> params = <String, dynamic>{
       'category': widget.category,
       'date_type': date_type,
       'page': page,
-      'pageSize': '30'
+      'pageSize': MyConfig.pageSize
     };
     try {
       Loading.show(MyConfig.successTitle);

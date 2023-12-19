@@ -3,10 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/config/my_config.dart';
+import 'package:yuyinting/utils/log_util.dart';
 
 import '../../../bean/liwuMoreBean.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
+import '../../../main.dart';
 import '../../../utils/loading.dart';
 import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
@@ -62,6 +64,12 @@ class _LiwuShoudaoPageState extends State<LiwuShoudaoPage> {
   }
 
   Widget _itemLiwu(BuildContext context, int i) {
+    String info = '';
+    if(list[i].curType == 1){
+      info = 'V豆';
+    }else{
+      info = '钻石';
+    }
     return Column(
       children: [
         Container(
@@ -107,9 +115,9 @@ class _LiwuShoudaoPageState extends State<LiwuShoudaoPage> {
                 child: Column(
                   children: [
                     const Expanded(child: Text('')),
-                    WidgetUtils.onlyText('礼物：${list[i].giftName!}', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(25))),
+                    WidgetUtils.onlyText('礼物：${list[i].giftName!}  (x${list[i].number.toString()})', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(25))),
                     WidgetUtils.commonSizedBox(10, 0),
-                    WidgetUtils.onlyText('价格：${list[i].amount!}', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(25))),
+                    WidgetUtils.onlyText('价格：${list[i].amount!}$info', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(25))),
                     WidgetUtils.commonSizedBox(10, 0),
                     WidgetUtils.onlyText('时间：${list[i].addTime!}', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(25))),
                     const Expanded(child: Text('')),
@@ -161,6 +169,7 @@ class _LiwuShoudaoPageState extends State<LiwuShoudaoPage> {
 
   /// 礼物记录
   Future<void> doPostGiftDetail() async {
+    LogE('用户token  ${sp.getString('user_token')}');
     Map<String, dynamic> params = <String, dynamic>{
       'type': '1',
       'page': page,

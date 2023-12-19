@@ -63,6 +63,12 @@ class _LiwuSongchuPageState extends State<LiwuSongchuPage> {
   }
 
   Widget _itemLiwu(BuildContext context, int i) {
+    String info = '';
+    if(list[i].curType == 1){
+      info = 'V豆';
+    }else{
+      info = '钻石';
+    }
     return Column(
       children: [
         Container(
@@ -108,9 +114,9 @@ class _LiwuSongchuPageState extends State<LiwuSongchuPage> {
                 child: Column(
                   children: [
                     const Expanded(child: Text('')),
-                    WidgetUtils.onlyText('礼物：${list[i].giftName!}', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(25))),
+                    WidgetUtils.onlyText('礼物：${list[i].giftName!}  (x${list[i].number.toString()})', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(25))),
                     WidgetUtils.commonSizedBox(10, 0),
-                    WidgetUtils.onlyText('价格：${list[i].amount!}', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(25))),
+                    WidgetUtils.onlyText('价格：${list[i].amount!}$info', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(25))),
                     WidgetUtils.commonSizedBox(10, 0),
                     WidgetUtils.onlyText('时间：${list[i].addTime!}', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(25))),
                     const Expanded(child: Text('')),

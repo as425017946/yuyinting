@@ -597,6 +597,8 @@ class _MinePageState extends State<MinePage>{
             sp.setString('shimingzhi', bean.data!.auditStatus.toString());
             sp.setString("user_headimg", bean.data!.avatar!);
             sp.setInt("user_gender", bean.data!.gender!);
+            sp.setString("nickname", bean.data!.nickname!);
+            sp.setString('user_id', bean.data!.uid.toString());
             userNumber = bean.data!.number.toString();
             care = bean.data!.followNum.toString();
             beCare = bean.data!.isFollowNum.toString();

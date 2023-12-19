@@ -28,27 +28,39 @@ class liwuMoreBean {
 }
 
 class Data {
+  int? playerUid;
+  int? receiveUid;
   int? number;
-  String? amount;
+  int? amount;
   String? addTime;
+  int? objId;
+  int? curType;
   String? username;
   String? avatar;
   String? giftImg;
   String? giftName;
 
   Data(
-      {this.number,
+      {this.playerUid,
+        this.receiveUid,
+        this.number,
         this.amount,
         this.addTime,
+        this.objId,
+        this.curType,
         this.username,
         this.avatar,
         this.giftImg,
         this.giftName});
 
   Data.fromJson(Map<String, dynamic> json) {
+    playerUid = json['player_uid'];
+    receiveUid = json['receive_uid'];
     number = json['number'];
     amount = json['amount'];
     addTime = json['add_time'];
+    objId = json['obj_id'];
+    curType = json['cur_type'];
     username = json['username'];
     avatar = json['avatar'];
     giftImg = json['gift_img'];
@@ -57,9 +69,13 @@ class Data {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['player_uid'] = this.playerUid;
+    data['receive_uid'] = this.receiveUid;
     data['number'] = this.number;
     data['amount'] = this.amount;
     data['add_time'] = this.addTime;
+    data['obj_id'] = this.objId;
+    data['cur_type'] = this.curType;
     data['username'] = this.username;
     data['avatar'] = this.avatar;
     data['gift_img'] = this.giftImg;

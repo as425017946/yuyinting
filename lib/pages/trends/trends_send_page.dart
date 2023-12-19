@@ -257,14 +257,15 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
                     margin: const EdgeInsets.only(left: 10, right: 10),
                     child: Wrap(
                       direction: Axis.horizontal,
-                      spacing: 10,
+                      spacing: 10.h,
+                      runSpacing: 15.h,
                       children: [
                         for (int i = 0; i < imgArray.length; i++)
                           Stack(
                             children: [
                               Container(
-                                height: ScreenUtil().setHeight(180),
-                                width: ScreenUtil().setHeight(180),
+                                height: 160.h,
+                                width: 160.h,
                                 //超出部分，可裁剪
                                 clipBehavior: Clip.hardEdge,
                                 decoration: BoxDecoration(
@@ -273,8 +274,8 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
                                 ),
                                 child: WidgetUtils.showImages(
                                   imgArray[i].path,
-                                  ScreenUtil().setHeight(180),
-                                  ScreenUtil().setHeight(180),
+                                  160.h,
+                                  160.h,
                                 ),
                               ),
                               Positioned(
@@ -308,8 +309,8 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
                                 }),
                                 child: WidgetUtils.showImages(
                                     'assets/images/images_add.png',
-                                    ScreenUtil().setHeight(180),
-                                    ScreenUtil().setHeight(180)),
+                                    160.h,
+                                    160.h),
                               )
                             : const Text(''),
                       ],
@@ -514,7 +515,7 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
       CommonBean bean = await DataUtils.postSendDT(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          MyToastUtils.showToastBottom("发布成功！");
+          MyToastUtils.showToastBottom("已提交动态发布申请！");
           Navigator.pop(context);
           break;
         case MyHttpConfig.errorloginCode:

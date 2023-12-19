@@ -118,16 +118,15 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                     alignment: Alignment.bottomLeft,
                     child: Row(
                       children: [
-                        Container(
-                          width: ScreenUtil().setWidth(50),
-                          padding: const EdgeInsets.only(left: 15, right: 5),
-                          color: Colors.transparent,
-                          child: IconButton(
-                            icon: const Icon(Icons.arrow_back_ios),
-                            color: Colors.white,
-                            onPressed: (() {
-                              Navigator.of(context).pop();
-                            }),
+                        GestureDetector(
+                          onTap:((){
+                            Navigator.pop(context);
+                          }),
+                          child: Container(
+                            width: 100.h,
+                            color: Colors.transparent,
+                            alignment: Alignment.center,
+                            child: WidgetUtils.showImages('assets/images/back_other_white.png',  40.h, 40.h),
                           ),
                         ),
                         const Expanded(child: Text('')),

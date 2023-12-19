@@ -78,7 +78,7 @@ class _SVGASimpleImage4State extends State<SVGASimpleImage4>
       if (mounted && animationController != null) {
         animationController!
           ..videoItem = videoItem
-          ..forward();
+          ..repeat();
       } else {
         videoItem.dispose();
       }

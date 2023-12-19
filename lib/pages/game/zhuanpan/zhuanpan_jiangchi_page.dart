@@ -9,6 +9,7 @@ import '../../../colors/my_colors.dart';
 import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
+import '../../../main.dart';
 import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
@@ -195,7 +196,7 @@ class _ZhuanPanJiangChiPageState extends State<ZhuanPanJiangChiPage> {
           setState(() {
             list.clear();
             list = bean.data!.goodsList!;
-            nums = bean.data!.amount as int;
+            nums = int.parse(bean.data!.amount!);
           });
           break;
         case MyHttpConfig.errorloginCode:

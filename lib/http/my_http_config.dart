@@ -8,11 +8,11 @@ class MyHttpConfig{
   static const int errorRoomCode = 10001;//10001需输入密码
 
   //鹏飞测试环境
-  static const String baseURL = "http://192.168.0.51/api";
+  // static const String baseURL = "http://192.168.0.51/api";
   //赵增测试环境
   // static const String baseURL = "http://192.168.0.53/api";
   //正式环境
-  // static const String baseURL = "http://18.163.74.49:8080/api";
+  static const String baseURL = "http://18.163.74.49:8080/api";
 
   /// 文件上传
   // file方式上传`
@@ -165,6 +165,10 @@ class MyHttpConfig{
   static const String roomUserInfoManager = "$baseURL/room/roomUserInfo";
   //房间首页展示
   static const String setShow = "$baseURL/room/setShow";
+  //清除魅力值
+  static const String cleanCharm = "$baseURL/room/cleanCharm";
+  //清除公屏
+  static const String cleanPublicScreen = "$baseURL/room/cleanPublicScreen";
   //房间老板位
   static const String setBoss = "$baseURL/room/setBoss";
   //设置房间信息
@@ -247,5 +251,6 @@ class MyHttpConfig{
   static const String settleDetail = "$baseURL/guild/settleDetail";
   // 房间热度
   static const String hotDegree = "$baseURL/room/hotDegree";
+
 
 }

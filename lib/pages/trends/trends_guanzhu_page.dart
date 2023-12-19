@@ -50,7 +50,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
   List<String> imgListUrl = [];
   List<BannerTJ> imgList_tj = [];
 
-  var length = 1;
+  var length = 0;
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
@@ -66,11 +66,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
         page = 1;
       });
     }
-    if(length > 0){
-      doPostGZFollowList();
-    }else{
-      doPostRecommendList("1");
-    }
+    doPostGZFollowList();
   }
 
   void _onLoading() async {
@@ -83,11 +79,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
         page++;
       });
     }
-    if(length > 0){
-      doPostGZFollowList();
-    }else{
-      doPostRecommendList("1");
-    }
+    doPostGZFollowList();
   }
 
   @override
@@ -1005,7 +997,11 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
             }
             if (bean.data!.list!.isNotEmpty) {
               _list = bean.data!.list!;
+              length = _list.length;
             }else{
+              // 没有关注的人，需要请求推荐的接口
+              doPostRecommendList("1");
+
               if(page > 1){
                 if(bean.data!.list!.length < MyConfig.pageSize){
                   _refreshController.loadNoData();
@@ -1030,7 +1026,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
   }
 
 
-  /// 关注列表
+  /// 推荐动态列表
   Future<void> doPostRecommendList(is_refresh) async {
     Map<String, dynamic> params = <String, dynamic>{
       'page': page,

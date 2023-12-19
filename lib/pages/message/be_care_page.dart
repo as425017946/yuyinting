@@ -14,6 +14,7 @@ import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
+import 'geren/people_info_page.dart';
 ///被 关注
 class BeCarePage extends StatefulWidget {
   const BeCarePage({Key? key}) : super(key: key);
@@ -65,7 +66,7 @@ class _BeCarePageState extends State<BeCarePage> {
         children: [
           GestureDetector(
             onTap: ((){
-              Navigator.pushNamed(context, 'PeopleInfoPage');
+              MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[i].uid.toString(),));
             }),
             child: Stack(
               alignment: Alignment.center,
@@ -253,9 +254,9 @@ class _BeCarePageState extends State<BeCarePage> {
               for(int i =0; i < bean.data!.list!.length; i++){
                 _list.add(bean.data!.list![i]);
               }
-              if(bean.data!.list!.length < MyConfig.pageSize){
-                _refreshController.loadNoData();
-              }
+              // if(bean.data!.list!.length < MyConfig.pageSize){
+              //   _refreshController.loadNoData();
+              // }
 
               length = bean.data!.list!.length;
             }else{

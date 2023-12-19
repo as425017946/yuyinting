@@ -93,6 +93,10 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
         eventBus.fire(ResidentBack(isBack: false));
         // 打开礼物结果
         MyUtils.goTransparentPageCom(context, ZhuanPanDaoJuPage(list: list, zonge: zonge, title: '超级转盘',));
+        // 归位
+        Future.delayed(const Duration(milliseconds: 500),((){
+          animationController.reset();
+        }));
         //结束了
       } else if (animationController.status == AnimationStatus.forward) {
         //动画正在从开始处运行到结束处（正向运行）
@@ -568,7 +572,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
         // 通知用户游戏开始不能离开
           eventBus.fire(ResidentBack(isBack: true));
           // 发送要减多少V豆
-          eventBus.fire(XiaZhuBack(jine: int.parse(number)*100));
+          eventBus.fire(XiaZhuBack(jine: int.parse(number)*1000));
           // 获取数据并赋值
           list.clear();
           list = bean.data!.gifts!;

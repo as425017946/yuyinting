@@ -93,6 +93,10 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
         // 打开礼物结果
         MyUtils.goTransparentPageCom(context, ZhuanPanDaoJuPage(list: list, zonge: zonge, title: '心动转盘',));
         //结束了
+        // 归位
+        Future.delayed(const Duration(milliseconds: 500),((){
+          animationController.reset();
+        }));
       } else if (animationController.status == AnimationStatus.forward) {
         //动画正在从开始处运行到结束处（正向运行）
         // print('forward');

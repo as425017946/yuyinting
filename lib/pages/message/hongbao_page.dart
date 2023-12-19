@@ -39,6 +39,7 @@ class _HongBaoPageState extends State<HongBaoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false, // 解决键盘顶起页面
       backgroundColor: Colors.black54,
       body: Column(
         children: [

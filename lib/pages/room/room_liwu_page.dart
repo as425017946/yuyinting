@@ -394,28 +394,6 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
         _animationController.forward();
       }
     });
-
-    if(widget.uid.isEmpty){
-      setState(() {
-        isMaiPeople = true;
-      });
-    }else{
-      for(int i = 0; i < widget.listM.length; i++){
-        if(widget.uid == widget.listM[i].uid.toString()){
-          if(i == 8){
-            listChoose[0] = true;
-          }else{
-            listChoose[i+1] = true;
-          }
-          setState(() {
-            isMaiPeople = true;
-            listPeople[i] = true;
-          });
-          eventBus.fire(ChoosePeopleBack(listPeople: listPeople));
-          break;
-        }
-      }
-    }
   }
 
   @override
@@ -1247,6 +1225,39 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
               }
             }
             changdu = listMaiXu.length;
+            if(widget.uid.isEmpty){
+              setState(() {
+                isMaiPeople = true;
+              });
+            }else{
+              //点击麦上的人进来的送礼物，要直接写入送人的信息
+              isChoosePeople = true;
+              listUID.add(widget.uid);
+              for(int i = 0; i < listMaiXu.length; i++){
+                if(widget.uid == listMaiXu[i].uid.toString()){
+                  if(i == 8){
+                    listChoose[0] = true;
+                  }else{
+                    listChoose[i] = true;
+                  }
+                  setState(() {
+                    isMaiPeople = true;
+                  });
+                  break;
+                }
+              }
+              // 房间内旋中使用
+              for(int i = 0; i < widget.listM.length; i++){
+                if(widget.uid == widget.listM[i].uid.toString()){
+                  setState(() {
+                    isMaiPeople = true;
+                    listPeople[i] = true;
+                  });
+                  eventBus.fire(ChoosePeopleBack(listPeople: listPeople));
+                  break;
+                }
+              }
+            }
           });
           break;
         case MyHttpConfig.errorloginCode:
@@ -1355,13 +1366,13 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
-            if(double.parse(bean.data!.goldBean!) > 10000){
-              jinbi = '${(double.parse(bean.data!.goldBean!)/10000)}w';
+            if(double.parse(bean.data!.goldBean!) > 100000){
+              jinbi = '${(double.parse(bean.data!.goldBean!)/100000)}w';
             }else{
               jinbi = bean.data!.goldBean!;
             }
-            if(double.parse(bean.data!.diamond!) > 10000){
-              zuanshi = '${(double.parse(bean.data!.diamond!)/10000)}w';
+            if(double.parse(bean.data!.diamond!) > 100000){
+              zuanshi = '${(double.parse(bean.data!.diamond!)/100000)}w';
             }else{
               zuanshi = bean.data!.diamond!;
             }

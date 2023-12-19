@@ -627,6 +627,23 @@ class DataUtils{
     return CommonBean.fromJson(respons!);
   }
 
+  /// 清除魅力值
+  static Future<CommonBean> postCleanCharm(Map<String,dynamic> params) async {
+    print("清除魅力值：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.cleanCharm, {}, params);
+    print("清除魅力值：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 清除公屏
+  static Future<CommonBean> postCleanPublicScreen(Map<String,dynamic> params) async {
+    print("清除公屏：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.cleanPublicScreen, {}, params);
+    print("清除公屏：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+
   /// 房间老板位
   static Future<CommonBean> postSetBoss(Map<String,dynamic> params) async {
     print("房间老板位：$params");
@@ -864,6 +881,7 @@ class DataUtils{
 
   /// 发红包
   static Future<CommonBean> postSendRedPacket(Map<String,dynamic> params) async {
+    print("发红包：$params");
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.sendRedPacket, {}, params);
     print("发红包：$respons");
     return CommonBean.fromJson(respons!);

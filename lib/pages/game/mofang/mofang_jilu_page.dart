@@ -177,7 +177,7 @@ class _MoFangJiLuPageState extends State<MoFangJiLuPage> {
   Future<void> doPostGetMineRouletteWinList() async {
     Map<String, dynamic> params = <String, dynamic>{
       'game_id': '1', // 1魔方2转盘
-      'price': widget.type == 0 ? '20' : '500',
+      'price': widget.type == 0 ? '20' : '200',
       'page': page,
       'pageSize': MyConfig.pageSize,
     };

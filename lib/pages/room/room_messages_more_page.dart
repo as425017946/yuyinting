@@ -200,6 +200,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                       child: Row(
                         children: [
                           WidgetUtils.showImages('assets/images/chat_huatong.png', 20.h, 20.h),
+                          WidgetUtils.commonSizedBox(0, 10.h),
                           WidgetUtils.onlyText("${allData2[i]['number']}''", StyleUtils.textStyleb1),
                           const Spacer(),
                         ],
@@ -357,7 +358,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
             ),
           ),
           Container(
-            height: ScreenUtil().setHeight(700),
+            height: ScreenUtil().setHeight(856),
             decoration: const BoxDecoration(
               //设置Container修饰
               image: DecorationImage(
@@ -388,50 +389,34 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                                   color: MyColors.roomTCWZ2,
                                   fontSize: ScreenUtil().setSp(28))),
                           const Expanded(child: Text('')),
-                          Stack(
-                            children: [
-                              Opacity(
-                                opacity: 0.7,
-                                child: Container(
-                                  height: ScreenUtil().setHeight(42),
-                                  width: ScreenUtil().setWidth(106),
-                                  //边框设置
-                                  decoration: const BoxDecoration(
-                                    //背景
-                                    color: MyColors.roomMessageYellow,
-                                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(30.0)),
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: (() {
-                                  doPostFollow();
-                                }),
-                                child: Container(
-                                  height: ScreenUtil().setHeight(42),
-                                  width: ScreenUtil().setWidth(106),
-                                  //边框设置
-                                  decoration: BoxDecoration(
-                                    //背景
-                                    color: Colors.transparent,
-                                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(30.0)),
-                                    //设置四周边框
-                                    border: Border.all(
-                                        width: 1,
-                                        color: MyColors.roomMessageYellow),
-                                  ),
-                                  child: WidgetUtils.onlyTextCenter(
+                          GestureDetector(
+                            onTap: (() {
+                              doPostFollow();
+                            }),
+                            child: SizedBox(
+                              width: ScreenUtil().setHeight(80),
+                              height: ScreenUtil().setHeight(38),
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  WidgetUtils.showImagesFill(
+                                      'assets/images/room_shoucang.png',
+                                      double.infinity,
+                                      double.infinity),
+                                  Container(
+                                    width: ScreenUtil().setHeight(80),
+                                    height: ScreenUtil().setHeight(38),
+                                    alignment: Alignment.center,
+                                    child: Text(
                                       isGZ == '0' ? '关注' : '取关',
-                                      StyleUtils.getCommonTextStyle(
-                                          color: MyColors.roomMessageYellow2,
-                                          fontSize: ScreenUtil().setSp(25))),
-                                ),
+                                      style: StyleUtils.getCommonTextStyle(
+                                          color: Colors.white,
+                                          fontSize: ScreenUtil().setSp(21)),
+                                    ),
+                                  )
+                                ],
                               ),
-                            ],
+                            ),
                           ),
                           WidgetUtils.commonSizedBox(0, 20),
                         ],

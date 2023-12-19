@@ -19,6 +19,7 @@ import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
+import 'geren/people_info_page.dart';
 
 ///消息
 class MessagePage extends StatefulWidget {
@@ -35,7 +36,7 @@ class _MessagePageState extends State<MessagePage> {
   String info = '', time = '';
   int unRead = 0;
   int length = 0;
-  var list1,list2;
+  var list1,list2,list3;
 
   @override
   void initState() {
@@ -51,6 +52,11 @@ class _MessagePageState extends State<MessagePage> {
     list2 = eventBus.on<SendMessageBack>().listen((event) {
       doPostSystemMsgList();
     });
+    list3 = eventBus.on<SubmitButtonBack>().listen((event) {
+      if(event.title == '聊天返回'){
+        doPostSystemMsgList();
+      }
+    });
   }
 
   @override
@@ -58,51 +64,59 @@ class _MessagePageState extends State<MessagePage> {
     // TODO: implement dispose
     list1.cancel();
     list2.cancel();
+    list3.cancel();
     super.dispose();
 
   }
 
   Widget message(BuildContext context, int i) {
-    return GestureDetector(
-      onTap: (() {
-        MyUtils.goTransparentRFPage(
-            context,
-            ChatPage(
-                nickName: listMessage[i]['nickName']?? '',
-                otherUid: listMessage[i]['otherUid'],
-                otherImg: listMessage[i]['otherHeadImg']));
-      }),
-      child: Container(
-        height: ScreenUtil().setHeight(130),
-        width: double.infinity,
-        padding: const EdgeInsets.only(left: 20, right: 20),
-        child: Row(
-          children: [
-            Stack(
+    LogE('他人头像 == ${listMessage[i]['otherHeadImg']}');
+    return Container(
+      height: ScreenUtil().setHeight(130),
+      width: double.infinity,
+      padding: const EdgeInsets.only(left: 20, right: 20),
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: ((){
+              // 点击头像进入个人主页
+              MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: listMessage[i]['otherUid'],));
+            }),
+            child: Stack(
               alignment: Alignment.center,
               children: [
                 WidgetUtils.CircleImageAss(
                     100.h, 100.h, 50.h, listMessage[i]['otherHeadImg']),
                 listU[i].liveStatus == 1
                     ? WidgetUtils.showImages(
-                        'assets/images/zhibozhong.webp',
-                        110.h,
-                        110.h,
-                      )
+                  'assets/images/zhibozhong.webp',
+                  110.h,
+                  110.h,
+                )
                     : listU[i].loginStatus == 1
-                        ? Container(
-                            height: 60.h,
-                            width: 60.h,
-                            alignment: Alignment.bottomRight,
-                            child: CustomPaint(
-                              painter: LinePainter2(colors: Colors.green),
-                            ),
-                          )
-                        : const Text(''),
+                    ? Container(
+                  height: 60.h,
+                  width: 60.h,
+                  alignment: Alignment.bottomRight,
+                  child: CustomPaint(
+                    painter: LinePainter2(colors: Colors.green),
+                  ),
+                )
+                    : const Text(''),
               ],
             ),
-            WidgetUtils.commonSizedBox(0, 10),
-            Expanded(
+          ),
+          WidgetUtils.commonSizedBox(0, 10),
+          Expanded(
+            child: GestureDetector(
+              onTap: (() {
+                MyUtils.goTransparentRFPage(
+                    context,
+                    ChatPage(
+                        nickName: listMessage[i]['nickName']?? '',
+                        otherUid: listMessage[i]['otherUid'],
+                        otherImg: listMessage[i]['otherHeadImg']));
+              }),
               child: Column(
                 children: [
                   const Expanded(child: Text('')),
@@ -120,8 +134,8 @@ class _MessagePageState extends State<MessagePage> {
                         const Expanded(child: Text('')),
                         Text(
                           DateTime.parse(DateTime.fromMillisecondsSinceEpoch(
-                                      int.parse(listMessage[i]['add_time']))
-                                  .toString())
+                              int.parse(listMessage[i]['add_time']))
+                              .toString())
                               .toString()
                               .substring(0, 10),
                           style: StyleUtils.getCommonTextStyle(
@@ -149,10 +163,15 @@ class _MessagePageState extends State<MessagePage> {
                           style: StyleUtils.getCommonTextStyle(
                               color: MyColors.homeTopBG,
                               fontSize: ScreenUtil().setSp(23)),
-                        ) : Text(
+                        ) : listMessage[i]['type'] == 3 ? Text(
                           '[语音]',
                           style: StyleUtils.getCommonTextStyle(
                               color: MyColors.homeTopBG,
+                              fontSize: ScreenUtil().setSp(23)),
+                        ) : Text(
+                          '[红包]',
+                          style: StyleUtils.getCommonTextStyle(
+                              color: Colors.red,
                               fontSize: ScreenUtil().setSp(23)),
                         ),
                         const Spacer(),
@@ -181,9 +200,9 @@ class _MessagePageState extends State<MessagePage> {
                   const Expanded(child: Text('')),
                 ],
               ),
-            )
-          ],
-        ),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -329,6 +348,7 @@ class _MessagePageState extends State<MessagePage> {
   Future<void> doPostSystemMsgList() async {
     DatabaseHelper databaseHelper = DatabaseHelper();
     Database? db = await databaseHelper.database;
+    Loading.show();
     try {
       xtListBean bean = await DataUtils.postSystemMsgList();
       switch (bean.code) {
@@ -382,7 +402,6 @@ class _MessagePageState extends State<MessagePage> {
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
-
       List<Map<String, dynamic>> allData =
           await databaseHelper.getAllData('messageSLTable');
       // 执行查询操作
@@ -411,11 +430,11 @@ class _MessagePageState extends State<MessagePage> {
       List<dynamic> args = listId;
       // 执行查询
       List<Map<String, dynamic>> result2 = await db.rawQuery(query, args);
-
+      LogE('长度== $result2');
       String myIds = '';
       setState(() {
         listMessage = result2;
-
+        listRead.clear();
         for(int i = 0; i < listMessage.length; i++){
           listRead.add(0);
           if(myIds.isNotEmpty){

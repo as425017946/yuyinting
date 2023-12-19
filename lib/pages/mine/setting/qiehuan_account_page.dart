@@ -373,10 +373,7 @@ class _QiehuanAccountPageState extends State<QiehuanAccountPage> {
                 child: Row(
                   children: [
                     WidgetUtils.commonSizedBox(0, 20),
-                    WidgetUtils.CircleHeadImage(
-                        ScreenUtil().setHeight(80),
-                        ScreenUtil().setHeight(80),
-                        'assets/images/trends_jiahao.png'),
+                    WidgetUtils.CircleImageAss(80.h, 80.h, 40.h, 'assets/images/moren.png'),
                     WidgetUtils.commonSizedBox(5, 20),
                     WidgetUtils.onlyText('添加账号', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(30))),
                     WidgetUtils.commonSizedBox(0, 20),
@@ -392,7 +389,7 @@ class _QiehuanAccountPageState extends State<QiehuanAccountPage> {
     );
   }
 
-  /// 设置交易密码
+  /// 切换用户
   Future<void> doPostCheckToken(v1) async {
     try {
       Loading.show("切换中...");

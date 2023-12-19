@@ -22,23 +22,38 @@ import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../widget/SwiperPage.dart';
 import '../message/chat_page.dart';
+import '../message/geren/people_info_page.dart';
 import 'PagePreviewVideo.dart';
 import 'package:video_player/video_player.dart';
 import 'PagePreviewVideo.dart';
 
 class TrendsMorePage extends StatefulWidget {
   String note_id;
+
   TrendsMorePage({Key? key, required this.note_id}) : super(key: key);
 
   @override
   State<TrendsMorePage> createState() => _TrendsMorePageState();
 }
 
-class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProviderStateMixin{
+class _TrendsMorePageState extends State<TrendsMorePage>
+    with SingleTickerProviderStateMixin {
   var appBar;
   TextEditingController controller = TextEditingController();
-  String headImage = '', nickName = '', text = '', constellation = '', add_time = '', city = '';
-  int gender = 0, like = 0, comment = 0, is_hi = 0, isLike = 0, age = 0, type = 1;
+  String headImage = '',
+      nickName = '',
+      text = '',
+      constellation = '',
+      add_time = '',
+      city = '',
+      myUid = '';
+  int gender = 0,
+      like = 0,
+      comment = 0,
+      is_hi = 0,
+      isLike = 0,
+      age = 0,
+      type = 1;
 
   List<String> imgList = [];
   List<CommentList> comList = [];
@@ -49,9 +64,10 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
   void initState() {
     // TODO: implement initState
     super.initState();
-    appBar = WidgetUtils.getAppBar('动态详情', true, context, false,0);
+    appBar = WidgetUtils.getAppBar('动态详情', true, context, false, 0);
     doPostDtDetail(widget.note_id);
     doPostMyIfon();
+
     /// 页面加载完成
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       animationController = SVGAAnimationController(vsync: this);
@@ -69,10 +85,11 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
     super.dispose();
   }
 
-
   SVGAAnimationController? animationController;
+
   //动画是否在播放
   bool isShow = false;
+
   void loadAnimation() async {
     final videoItem = await _loadSVGA(false, 'assets/svga/dianzan_2.svga');
     videoItem.autorelease = false;
@@ -90,7 +107,7 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
     if (animationController!.currentFrame >= animationController!.frames - 1) {
       // 动画播放到最后一帧时停止播放
       animationController?.stop();
-      if(mounted) {
+      if (mounted) {
         setState(() {
           isShow = false;
         });
@@ -120,8 +137,7 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
               Stack(
                 alignment: Alignment.bottomRight,
                 children: [
-                  WidgetUtils.CircleHeadImage(35, 35,
-                      comList[i].avatar!),
+                  WidgetUtils.CircleHeadImage(35, 35, comList[i].avatar!),
                   Container(
                     height: ScreenUtil().setHeight(25),
                     width: ScreenUtil().setWidth(30),
@@ -129,7 +145,9 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
                     //边框设置
                     decoration: BoxDecoration(
                       //背景
-                      color: comList[i].gender == 0 ? MyColors.dtPink : MyColors.dtBlue,
+                      color: comList[i].gender == 0
+                          ? MyColors.dtPink
+                          : MyColors.dtBlue,
                       //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                       borderRadius:
                           const BorderRadius.all(Radius.circular(30.0)),
@@ -172,12 +190,18 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
                   ],
                 ),
               ),
-              comList[i].uid.toString() == sp.getString('user_id') ?  GestureDetector(
-                onTap: ((){
-                  doPostComment('delete', comList[i].id.toString(),i);
-                }),
-                child: WidgetUtils.onlyText('删除', StyleUtils.getCommonTextStyle(color: MyColors.g9,fontSize: ScreenUtil().setSp(25))),
-              ) : const Text('')
+              comList[i].uid.toString() == sp.getString('user_id')
+                  ? GestureDetector(
+                      onTap: (() {
+                        doPostComment('delete', comList[i].id.toString(), i);
+                      }),
+                      child: WidgetUtils.onlyText(
+                          '删除',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.g9,
+                              fontSize: ScreenUtil().setSp(25))),
+                    )
+                  : const Text('')
             ],
           ),
         ),
@@ -188,8 +212,7 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
                 child: Text(
               '${comList[i].addTime} · 来自：${comList[i].city!.isEmpty ? '未知' : comList[i].city!}',
               style: StyleUtils.getCommonTextStyle(
-                  color: MyColors.g9,
-                  fontSize: ScreenUtil().setSp(26)),
+                  color: MyColors.g9, fontSize: ScreenUtil().setSp(26)),
             )),
           ],
         ),
@@ -197,11 +220,12 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
     );
   }
 
-
   late VideoPlayerController _videoController;
+
   Widget showVideo(List<String> listImg) {
     String a = listImg[0];
-    _videoController = VideoPlayerController.network(a,
+    _videoController = VideoPlayerController.network(
+      a,
       videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
     );
     return Row(
@@ -228,7 +252,8 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
               ),
               GestureDetector(
                 onTap: () {
-                  MyUtils.goTransparentRFPage(context, PagePreviewVideo(url: a));
+                  MyUtils.goTransparentRFPage(
+                      context, PagePreviewVideo(url: a));
                 },
                 child: const Icon(
                   Icons.play_circle_fill_outlined,
@@ -243,7 +268,6 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
       ],
     );
   }
-
 
   ///显示图片
   Widget showImag(List<String> listImg) {
@@ -306,19 +330,22 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
           height: ScreenUtil().setHeight(350),
           child: Row(
             children: [
-              WidgetUtils.CircleImageNet(ScreenUtil().setHeight(350),
-                  ScreenUtil().setHeight(350), ScreenUtil().setHeight(10), listImg[0]),
+              WidgetUtils.CircleImageNet(
+                  ScreenUtil().setHeight(350),
+                  ScreenUtil().setHeight(350),
+                  ScreenUtil().setHeight(10),
+                  listImg[0]),
               WidgetUtils.commonSizedBox(0, 10),
               Expanded(
                   child: Column(
-                    children: [
-                      WidgetUtils.CircleImageNet(ScreenUtil().setHeight(170),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[1]),
-                      const Spacer(),
-                      WidgetUtils.CircleImageNet(ScreenUtil().setHeight(170),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[2]),
-                    ],
-                  )),
+                children: [
+                  WidgetUtils.CircleImageNet(ScreenUtil().setHeight(170),
+                      double.infinity, ScreenUtil().setHeight(10), listImg[1]),
+                  const Spacer(),
+                  WidgetUtils.CircleImageNet(ScreenUtil().setHeight(170),
+                      double.infinity, ScreenUtil().setHeight(10), listImg[2]),
+                ],
+              )),
             ],
           ),
         ),
@@ -340,24 +367,36 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
               Row(
                 children: [
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(240),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[0])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(240),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[0])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(240),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[1])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(240),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[1])),
                 ],
               ),
               WidgetUtils.commonSizedBox(ScreenUtil().setHeight(10), 10),
               Row(
                 children: [
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(240),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[2])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(240),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[2])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(240),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[3])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(240),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[3])),
                 ],
               )
             ],
@@ -381,35 +420,53 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
               Row(
                 children: [
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[0])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[0])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[1])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[1])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[2])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[2])),
                 ],
               ),
               WidgetUtils.commonSizedBox(ScreenUtil().setHeight(10), 10),
               Row(
                 children: [
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[3])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[3])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[4])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[4])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
                       child: Opacity(
-                        opacity: 0,
-                        child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                            double.infinity, ScreenUtil().setHeight(10), listImg[0]),
-                      )),
+                    opacity: 0,
+                    child: WidgetUtils.CircleImageNet(
+                        ScreenUtil().setHeight(180),
+                        double.infinity,
+                        ScreenUtil().setHeight(10),
+                        listImg[0]),
+                  )),
                 ],
               )
             ],
@@ -433,32 +490,50 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
               Row(
                 children: [
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[0])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[0])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[1])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[1])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[2])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[2])),
                 ],
               ),
               WidgetUtils.commonSizedBox(ScreenUtil().setHeight(10), 10),
               Row(
                 children: [
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[3])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[3])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[4])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[4])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[5])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[5])),
                 ],
               )
             ],
@@ -498,8 +573,14 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
                           alignment: Alignment.centerLeft,
                           child: Row(
                             children: [
-                              WidgetUtils.CircleHeadImage(40, 40,
-                                  headImage),
+                              GestureDetector(
+                                  onTap: ((){
+                                    if(MyUtils.checkClick()) {
+                                      MyUtils.goTransparentRFPage(context,
+                                          PeopleInfoPage(otherId: myUid,));
+                                    }
+                                  }),
+                                  child: WidgetUtils.CircleHeadImage(40, 40, headImage)),
                               WidgetUtils.commonSizedBox(0, 10),
                               Column(
                                 children: [
@@ -516,24 +597,33 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
                                   ),
                                   Container(
                                     padding:
-                                    const EdgeInsets.fromLTRB(5, 1, 5, 1),
+                                        const EdgeInsets.fromLTRB(5, 1, 5, 1),
                                     alignment: Alignment.center,
                                     //边框设置
                                     decoration: BoxDecoration(
                                       //背景
-                                      color: gender == 0 ? MyColors.dtPink : MyColors.dtBlue,
+                                      color: gender == 1
+                                          ? MyColors.dtBlue
+                                          : MyColors.dtPink,
                                       //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                      borderRadius:
-                                      const BorderRadius.all(Radius.circular(20.0)),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(20.0)),
                                     ),
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         WidgetUtils.showImages(
-                                            gender == 0 ? 'assets/images/nv.png' : 'assets/images/nan.png', 10, 10),
+                                            gender == 1
+                                                ? 'assets/images/nan.png'
+                                                : 'assets/images/nv.png',
+                                            10,
+                                            10),
                                         WidgetUtils.commonSizedBox(0, 5),
                                         WidgetUtils.onlyText(
-                                            age == -1 ? '0·$constellation' : '${age.toString()}·$constellation',
+                                            age == -1
+                                                ? '0·$constellation'
+                                                : '${age.toString()}·$constellation',
                                             StyleUtils.getCommonTextStyle(
                                                 color: Colors.white,
                                                 fontSize: 11)),
@@ -544,22 +634,33 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
                                 ],
                               ),
                               const Expanded(child: Text('')),
-                              is_hi == 0
-                                  ? WidgetUtils.showImages(
-                                  'assets/images/trends_hi.png', 124, 59)
-                                  : GestureDetector(
-                                onTap: (() {
-                                  MyUtils.goTransparentRFPage(context, ChatPage(nickName: nickName, otherUid: sp.getString('user_id').toString(), otherImg: headImage));
-                                }),
-                                child: WidgetUtils.myContainer(
-                                    ScreenUtil().setHeight(45),
-                                    ScreenUtil().setHeight(100),
-                                    Colors.white,
-                                    MyColors.homeTopBG,
-                                    '私信',
-                                    ScreenUtil().setSp(25),
-                                    MyColors.homeTopBG),
-                              ),
+                              myUid == sp.getString('user_id')
+                                  ? const Text('')
+                                  : is_hi == 0
+                                      ? WidgetUtils.showImages(
+                                          'assets/images/trends_hi.png',
+                                          124,
+                                          59)
+                                      : GestureDetector(
+                                          onTap: (() {
+                                            MyUtils.goTransparentRFPage(
+                                                context,
+                                                ChatPage(
+                                                    nickName: nickName,
+                                                    otherUid: sp
+                                                        .getString('user_id')
+                                                        .toString(),
+                                                    otherImg: headImage));
+                                          }),
+                                          child: WidgetUtils.myContainer(
+                                              ScreenUtil().setHeight(45),
+                                              ScreenUtil().setHeight(100),
+                                              Colors.white,
+                                              MyColors.homeTopBG,
+                                              '私信',
+                                              ScreenUtil().setSp(25),
+                                              MyColors.homeTopBG),
+                                        ),
                             ],
                           ),
                         ),
@@ -582,28 +683,33 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
                                     fontWeight: FontWeight.w600)),
                             const Expanded(child: Text('')),
                             GestureDetector(
-                              onTap: ((){
+                              onTap: (() {
                                 setState(() {
-                                  if(isLike == 1){
+                                  if (isLike == 1) {
                                     action = 'delete';
-                                  }else{
+                                  } else {
                                     action = 'create';
                                     isShow = true;
                                   }
                                 });
-                                if(isLike == 0){
+                                if (isLike == 0) {
                                   animationController?.reset();
                                   animationController?.forward();
                                 }
                                 doPostLike();
                               }),
-                              child: WidgetUtils.showImages(isLike == 0 ? 'assets/images/trends_zan1.png' : 'assets/images/trends_zan_2.png', 18, 18),
+                              child: WidgetUtils.showImages(
+                                  isLike == 0
+                                      ? 'assets/images/trends_zan1.png'
+                                      : 'assets/images/trends_zan_2.png',
+                                  18,
+                                  18),
                             ),
                             WidgetUtils.commonSizedBox(0, 5),
                             SizedBox(
                               width: ScreenUtil().setHeight(80),
                               child: WidgetUtils.onlyText(
-                                  like == 0 ? '抢首赞' :like.toString(),
+                                  like == 0 ? '抢首赞' : like.toString(),
                                   StyleUtils.getCommonTextStyle(
                                     color: Colors.grey,
                                     fontSize: ScreenUtil().setSp(21),
@@ -613,7 +719,9 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
                                 'assets/images/trends_message.png', 18, 18),
                             WidgetUtils.commonSizedBox(0, 5),
                             WidgetUtils.onlyText(
-                                comList.isEmpty ? '评论' :comList.length.toString(),
+                                comList.isEmpty
+                                    ? '评论'
+                                    : comList.length.toString(),
                                 StyleUtils.getCommonTextStyle(
                                     color: Colors.grey,
                                     fontSize: ScreenUtil().setSp(24),
@@ -642,7 +750,8 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
                   ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    padding: const EdgeInsets.only(left: 20, right: 20,bottom: 110),
+                    padding:
+                        const EdgeInsets.only(left: 20, right: 20, bottom: 110),
                     itemBuilder: _itemsTuijian,
                     itemCount: comList.length,
                   )
@@ -659,7 +768,7 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
                   color: Colors.white,
                   border: Border(
                     top: BorderSide(
-                      width: 0.5,//宽度
+                      width: 0.5, //宽度
                       color: MyColors.f2, //边框颜色
                     ),
                   ),
@@ -678,18 +787,19 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
                           //背景
                           color: MyColors.f2,
                           //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(20.0)),
+                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
                         ),
-                        child: WidgetUtils.commonTextField(controller, '对 Ta 说点什么吧~'),
+                        child: WidgetUtils.commonTextField(
+                            controller, '对 Ta 说点什么吧~'),
                       ),
                     ),
                     WidgetUtils.commonSizedBox(0, 10),
-                    WidgetUtils.showImages('assets/images/trends_biaoqing.png', 22, 22),
+                    WidgetUtils.showImages(
+                        'assets/images/trends_biaoqing.png', 22, 22),
                     WidgetUtils.commonSizedBox(0, 10),
                     GestureDetector(
-                      onTap: ((){
-                        doPostComment('create','',0);
+                      onTap: (() {
+                        doPostComment('create', '', 0);
                         MyUtils.hideKeyboard(context);
                       }),
                       child: Container(
@@ -701,10 +811,13 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
                           //背景
                           color: MyColors.homeTopBG,
                           //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(20.0)),
+                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
                         ),
-                        child: WidgetUtils.onlyText('发送', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(28))),
+                        child: WidgetUtils.onlyText(
+                            '发送',
+                            StyleUtils.getCommonTextStyle(
+                                color: Colors.white,
+                                fontSize: ScreenUtil().setSp(28))),
                       ),
                     ),
                     WidgetUtils.commonSizedBox(0, 20),
@@ -712,20 +825,22 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
                 ),
               ),
             ),
+
             ///点赞显示样式
-            isShow ? Positioned(
-              left: x-ScreenUtil().setHeight(50),
-              top: y-ScreenUtil().setHeight(210),
-              height: ScreenUtil().setHeight(100),
-              width: ScreenUtil().setHeight(100),
-              child: SVGAImage(animationController!),
-            ) : const Text('')
+            isShow
+                ? Positioned(
+                    left: x - ScreenUtil().setHeight(50),
+                    top: y - ScreenUtil().setHeight(210),
+                    height: ScreenUtil().setHeight(100),
+                    width: ScreenUtil().setHeight(100),
+                    child: SVGAImage(animationController!),
+                  )
+                : const Text('')
           ],
         ),
       ),
     );
   }
-
 
   /// 动态详情
   Future<void> doPostDtDetail(note_id) async {
@@ -748,15 +863,16 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
             comment = bean.data!.noteInfo!.comment as int;
             isLike = bean.data!.noteInfo!.isLike as int;
             age = bean.data!.noteInfo!.age as int;
+            gender = bean.data!.noteInfo!.gender as int;
             constellation = bean.data!.noteInfo!.constellation!;
             type = bean.data!.noteInfo!.type as int;
             imgList = bean.data!.noteInfo!.imgUrl!;
-
+            myUid = bean.data!.noteInfo!.uid.toString();
             comList = bean.data!.noteInfo!.commentList!;
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -769,7 +885,6 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
-
 
   /// 点赞
   Future<void> doPostLike() async {
@@ -782,17 +897,17 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
-            if(action == 'delete'){
+            if (action == 'delete') {
               isLike = 0;
               like--;
-            }else{
+            } else {
               isLike = 1;
               like++;
             }
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -805,21 +920,21 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
   }
 
   /// 评论
-  Future<void> doPostComment(actionPL,comment_id,index) async {
+  Future<void> doPostComment(actionPL, comment_id, index) async {
     Map<String, dynamic> params = <String, dynamic>{
       'note_id': widget.note_id,
       'action': actionPL,
       'content': controller.text.trim(),
-      'comment_id':comment_id
+      'comment_id': comment_id
     };
     try {
       plBean bean = await DataUtils.postComment(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
-            if(actionPL == 'delete'){
+            if (actionPL == 'delete') {
               comList.removeAt(index);
-            }else{
+            } else {
               CommentList c = CommentList();
               c.id = bean.data;
               c.uid = int.parse(sp.getString('user_id').toString());
@@ -828,7 +943,7 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
               c.gender = int.parse(sp.getString('dt_gender').toString());
               c.content = controller.text.trim();
               DateTime d = DateTime.now();
-              c.addTime = d.toString().substring(0,10);
+              c.addTime = d.toString().substring(0, 10);
               c.city = sp.getString('dt_city').toString();
               comList.insert(0, c);
               controller.text = '';
@@ -836,7 +951,7 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -865,7 +980,7 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -876,5 +991,4 @@ class _TrendsMorePageState extends State<TrendsMorePage> with SingleTickerProvid
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
-
 }

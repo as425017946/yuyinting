@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:yuyinting/main.dart';
 import 'package:yuyinting/pages/message/message_page.dart';
 import 'package:yuyinting/pages/trends/trends_page.dart';
@@ -12,6 +13,7 @@ import '../../bean/Common_bean.dart';
 import '../../bean/hengFuBean.dart';
 import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
+import '../../db/DatabaseHelper.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../utils/SlideAnimationController.dart';
@@ -62,17 +64,17 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
   late SlideAnimationController slideAnimationController;
   String path = ''; // 图片地址
   String name = ''; // 要展示公屏的名称
-  bool isShowHF = false;// 是否显示横幅
+  bool isShowHF = false; // 是否显示横幅
   String msg = ''; // 拼接显示数据
   List<hengFuBean> listMP = []; // 存放每个进来的公屏，按顺序播放
   late hengFuBean myhf; //出现第一个横幅使用
   ///爆出大礼物使用
   bool isBig = false;
-  var listen,listenZdy,listenRoomBack;
+  var listen, listenZdy, listenRoomBack,listenMessage;
   bool isSDKInit = false;
+
   @override
   void initState() {
-
     MyUtils.initSDK();
     MyUtils.addChatListener();
     MyUtils.signIn();
@@ -104,10 +106,10 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     });
     // 接受自定义消息
     listenZdy = eventBus.on<JoinRoomYBack>().listen((event) {
-      if(event.map!['type'] == 'send_all_user'){
+      if (event.map!['type'] == 'send_all_user') {
         hengFuBean hf = hengFuBean.fromJson(event.map!);
         myhf = hf;
-        if(listMP.isEmpty){
+        if (listMP.isEmpty) {
           //显示横幅、map赋值
           setState(() {
             isShowHF = true;
@@ -115,7 +117,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           });
           // 判断数据显示使用
           showInfo(hf);
-        }else{
+        } else {
           setState(() {
             listMP.add(hf);
           });
@@ -126,29 +128,34 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     });
     // 收起房间使用
     listenRoomBack = eventBus.on<SubmitButtonBack>().listen((event) {
-      if(event.title == '收起房间'){
+      if (event.title == '收起房间') {
         setState(() {
           isJoinRoom = true;
         });
-      }else{
+      } else {
         setState(() {
           isJoinRoom = false;
         });
       }
     });
     // MyUtils.goTransparentPageRoom(context, const GPHiPage());
+
+    listenMessage = eventBus.on<SendMessageBack>().listen((event) {
+      doPostSystemMsgList();
+    });
   }
 
   Timer? _timer;
+
   // 18秒后请求一遍
   void hpTimer() {
     _timer = Timer.periodic(const Duration(seconds: 18), (timer) {
       setState(() {
         listMP.removeAt(0);
       });
-      if(listMP.isEmpty){
+      if (listMP.isEmpty) {
         _timer!.cancel();
-      }else{
+      } else {
         setState(() {
           isShowHF = true;
         });
@@ -157,17 +164,18 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       }
     });
   }
+
   // 接受到数据进行判断使用
-  void showInfo(hengFuBean hf){
-    switch(hf.title){
+  void showInfo(hengFuBean hf) {
+    switch (hf.title) {
       case '贵族':
-        if(hf.nobleId! > 1 && hf.nobleId! < 5 ){
+        if (hf.nobleId! > 1 && hf.nobleId! < 5) {
           // 低贵族
           setState(() {
             name = '低贵族';
             path = 'assets/svga/gp/gp_guizu_d.svga';
           });
-        }else if(hf.nobleId! > 4 && hf.nobleId! < 8 ){
+        } else if (hf.nobleId! > 4 && hf.nobleId! < 8) {
           // 高贵族
           setState(() {
             name = '高贵族';
@@ -307,13 +315,31 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
                 ]),
           ),
 
+          isRed ? Positioned(
+              bottom: 70.h,
+              right: 295.w,
+              child: Container(
+                width: 10.h,
+                height: 10.h,
+                //边框设置
+                decoration: const BoxDecoration(
+                  //背景
+                  color: Colors.red,
+                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                  borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                ),
+                alignment: Alignment.center,
+              )) : const Text(''),
+
           /// 公屏推送使用
-          isShowHF ? HomeItems.itemAnimation(
-              path,
-              slideAnimationController.controller,
-              slideAnimationController.animation,
-              name,
-              myhf) : const Text(''),
+          isShowHF
+              ? HomeItems.itemAnimation(
+                  path,
+                  slideAnimationController.controller,
+                  slideAnimationController.animation,
+                  name,
+                  myhf)
+              : const Text(''),
 
           /// 爆出5w2的礼物推送使用
           isBig ? HomeItems.itemBig(myhf) : const Text(''),
@@ -324,7 +350,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
                   bottom: 160,
                   right: 20,
                   child: GestureDetector(
-                    onTap: ((){
+                    onTap: (() {
                       doPostBeforeJoin(sp.getString('roomID'));
                     }),
                     child: RotationTransition(
@@ -370,15 +396,15 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
                             alignment: Alignment.center,
                             children: [
                               Container(
-                                height: 95.h,
-                                width: 95.h,
-                                decoration: BoxDecoration(
-                                  //背景
-                                  color: Colors.white,
-                                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                  borderRadius: BorderRadius.all(Radius.circular(55.h)),
-                                )
-                              ),
+                                  height: 95.h,
+                                  width: 95.h,
+                                  decoration: BoxDecoration(
+                                    //背景
+                                    color: Colors.white,
+                                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(55.h)),
+                                  )),
                               WidgetUtils.CircleHeadImage(
                                   ScreenUtil().setHeight(90),
                                   ScreenUtil().setHeight(90),
@@ -386,7 +412,10 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
                               SizedBox(
                                 height: 40.h,
                                 width: 40.h,
-                                child: const SVGASimpleImage(assetsName: 'assets/svga/chorus_svga_room_voice_bar.svga',),
+                                child: const SVGASimpleImage(
+                                  assetsName:
+                                      'assets/svga/chorus_svga_room_voice_bar.svga',
+                                ),
                               )
                             ],
                           )),
@@ -495,7 +524,6 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     );
   }
 
-
   /// 加入房间前
   Future<void> doPostBeforeJoin(roomID) async {
     Map<String, dynamic> params = <String, dynamic>{
@@ -509,7 +537,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           doPostRoomJoin(roomID, '');
           break;
         case MyHttpConfig.errorRoomCode: //需要密码
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.goTransparentPageCom(
               context,
               RoomTSMiMaPage(
@@ -517,7 +545,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
               ));
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -542,7 +570,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       CommonBean bean = await DataUtils.postRoomJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.goTransparentRFPage(
               context,
               RoomPage(
@@ -550,7 +578,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
               ));
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -560,6 +588,71 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+  /// 获取系统消息
+  List<Map<String, dynamic>> listMessage = [];
+  bool isRed = false;
+  Future<void> doPostSystemMsgList() async {
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    Database? db = await databaseHelper.database;
+    try {
+      List<Map<String, dynamic>> allData =
+      await databaseHelper.getAllData('messageSLTable');
+      // 执行查询操作
+      List<Map<String, dynamic>> result = await db.query(
+        'messageSLTable',
+        columns: ['MAX(id) AS id'],
+        groupBy: 'combineID',
+      );
+      // 查询出来后在查询单条信息具体信息
+      List<int> listId = [];
+      String ids = '';
+      for (int i = 0; i < result.length; i++) {
+        listId.add(result[i]['id']);
+        if (ids.isNotEmpty) {
+          ids = '$ids,${result[i]['id'].toString()}';
+        } else {
+          ids = result[i]['id'].toString();
+        }
+      }
+      // 生成占位符字符串，例如: ?,?,?,?
+      String placeholders =
+      List.generate(listId.length, (index) => '?').join(',');
+      // 构建查询语句和参数
+      String query =
+          'SELECT * FROM messageSLTable WHERE id IN ($placeholders) order by add_time desc';
+      List<dynamic> args = listId;
+      // 执行查询
+      List<Map<String, dynamic>> result2 = await db.rawQuery(query, args);
+      String myIds = '';
+      setState(() {
+        listMessage = result2;
+        for(int i = 0; i < listMessage.length; i++){
+          if(myIds.isNotEmpty){
+            myIds = '$myIds,${listMessage[i]['otherUid'].toString()}';
+          }else{
+            myIds = listMessage[i]['otherUid'].toString();
+          }
+        }
+      });
+      for(int i = 0; i < listMessage.length; i++){
+        String query =
+            "SELECT * FROM messageSLTable WHERE  combineID = '${listMessage[i]['combineID']}' and readStatus = 0";
+        List<Map<String, dynamic>> result3 = await db.rawQuery(query);
+        if(result3.isNotEmpty){
+          setState(() {
+            isRed = true;
+          });
+        }else{
+          setState(() {
+            isRed = false;
+          });
+        }
+      }
+    } catch (e) {
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }

@@ -16,7 +16,7 @@ class DatabaseHelper {
 
   Future<Database> _initDatabase() async {
     String databasesPath = await getDatabasesPath();
-    // LogE('路径$databasesPath');
+    LogE('路径$databasesPath');
     String dbPath = join(databasesPath, 'lmyyt.db');
 
     return await openDatabase(

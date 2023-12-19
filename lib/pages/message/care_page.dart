@@ -14,6 +14,7 @@ import '../../http/my_http_config.dart';
 import '../../utils/loading.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
+import 'geren/people_info_page.dart';
 ///关注的人
 class CarePage extends StatefulWidget {
   const CarePage({Key? key}) : super(key: key);
@@ -67,7 +68,7 @@ class _CarePageState extends State<CarePage> {
         children: [
           GestureDetector(
             onTap: ((){
-              Navigator.pushNamed(context, 'PeopleInfoPage');
+              MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[i].uid.toString(),));
             }),
             child: Stack(
               alignment: Alignment.center,
@@ -246,9 +247,9 @@ class _CarePageState extends State<CarePage> {
               for(int i =0; i < bean.data!.list!.length; i++){
                 _list.add(bean.data!.list![i]);
               }
-              if(bean.data!.list!.length < MyConfig.pageSize){
-                _refreshController.loadNoData();
-              }
+              // if(bean.data!.list!.length < MyConfig.pageSize){
+              //   _refreshController.loadNoData();
+              // }
 
               length = bean.data!.list!.length;
             }else{

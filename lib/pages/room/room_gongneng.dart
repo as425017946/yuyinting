@@ -164,7 +164,8 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                     const Expanded(child: Text('')),
                     GestureDetector(
                       onTap: ((){
-                        eventBus.fire(SubmitButtonBack(title: '清除公屏'));
+                        // eventBus.fire(SubmitButtonBack(title: '清除公屏'));
+                        doPostCleanPublicScreen();
                       }),
                       child: Column(
                         children: [
@@ -182,7 +183,8 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                     const Expanded(child: Text('')),
                     GestureDetector(
                       onTap: ((){
-                        eventBus.fire(SubmitButtonBack(title: '清除魅力'));
+                        // eventBus.fire(SubmitButtonBack(title: '清除魅力'));
+                        doPostCleanCharm();
                       }),
                       child: Column(
                         children: [
@@ -622,6 +624,57 @@ class _RoomGongNengState extends State<RoomGongNeng> {
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
+
+  /// 清除魅力值
+  Future<void> doPostCleanCharm() async {
+
+    Map<String, dynamic> params = <String, dynamic>{
+      'room_id': widget.roomID,
+    };
+    try {
+      CommonBean bean = await DataUtils.postCleanCharm(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          MyToastUtils.showToastBottom('魅力值已清除');
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+  /// 清除公屏信息
+  Future<void> doPostCleanPublicScreen() async {
+
+    Map<String, dynamic> params = <String, dynamic>{
+      'room_id': widget.roomID,
+    };
+    try {
+      CommonBean bean = await DataUtils.postCleanPublicScreen(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          MyToastUtils.showToastBottom('公屏信息已清空');
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
   /// 老板位
   Future<void> doPostSetBoss() async {
     String status = '';

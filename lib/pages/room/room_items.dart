@@ -88,11 +88,14 @@ class RoomItems {
               text: TextSpan(children: [
                 // 厅主或管理或主播
                 WidgetSpan(
-                    child: list[i]['identity'] == 'user'
+                    child: (list[i]['identity'] == 'user' ||
+                        list[i]['identity'] == 'streamer')
                         ? const Text('')
+                        : list[i]['identity'] == 'leader'
+                        ? WidgetUtils.showImages(
+                        'assets/images/dj/room_role_director.png', 30.h, 30.h)
                         : WidgetUtils.showImages(
                         'assets/images/dj/room_role_manager.png', 30.h, 30.h)),
-                WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
                 // 萌新/新贵/新锐 三选一
                 // 不是新锐新贵，并且是萌新直接显示萌新
                 WidgetSpan(
@@ -118,39 +121,39 @@ class RoomItems {
                     width: 28.h,
                     child: Stack(
                       children: [
-                        list[i]['lv'] >= 1 && list[i]['lv'] <= 10
+                        int.parse(list[i]['lv'].toString()) >= 1 && int.parse(list[i]['lv'].toString()) <= 10
                             ? WidgetUtils.showImages(
                             'assets/images/dj/dj_1-10.png', 28.h, 28.h)
-                            : list[i]['lv'] >= 11 && list[i]['lv'] <= 15
+                            : int.parse(list[i]['lv'].toString()) >= 11 && int.parse(list[i]['lv'].toString()) <= 15
                             ? WidgetUtils.showImages(
                             'assets/images/dj/dj_11-15.png', 28.h, 28.h)
-                            : list[i]['lv'] >= 16 && list[i]['lv'] <= 20
+                            : int.parse(list[i]['lv'].toString()) >= 16 && int.parse(list[i]['lv'].toString()) <= 20
                             ? WidgetUtils.showImages(
                             'assets/images/dj/dj_16-20.png', 28.h, 28.h)
-                            : list[i]['lv'] >= 21 && list[i]['lv'] <= 25
+                            : int.parse(list[i]['lv'].toString()) >= 21 && int.parse(list[i]['lv'].toString()) <= 25
                             ? WidgetUtils.showImages(
                             'assets/images/dj/dj_21-25.png',
                             28.h,
                             28.h)
-                            : list[i]['lv'] >= 26 && list[i]['lv'] <= 30
+                            : int.parse(list[i]['lv'].toString()) >= 26 && int.parse(list[i]['lv'].toString()) <= 30
                             ? WidgetUtils.showImages(
                             'assets/images/dj/dj_26-30.png',
                             28.h,
                             28.h)
-                            : list[i]['lv'] >= 31 &&
-                            list[i]['lv'] <= 35
+                            : int.parse(list[i]['lv'].toString()) >= 31 &&
+                            int.parse(list[i]['lv'].toString()) <= 35
                             ? WidgetUtils.showImages(
                             'assets/images/dj/dj_31-35.png',
                             28.h,
                             28.h)
-                            : list[i]['lv'] >= 36 &&
-                            list[i]['lv'] <= 40
+                            : int.parse(list[i]['lv'].toString()) >= 36 &&
+                            int.parse(list[i]['lv'].toString()) <= 40
                             ? WidgetUtils.showImages(
                             'assets/images/dj/dj_36-40.png',
                             28.h,
                             28.h)
-                            : list[i]['lv'] >= 41 &&
-                            list[i]['lv'] <= 45
+                            : int.parse(list[i]['lv'].toString()) >= 41 &&
+                            int.parse(list[i]['lv'].toString()) <= 45
                             ? WidgetUtils.showImages(
                             'assets/images/dj/dj_41-45.png', 28.h, 28.h)
                             : WidgetUtils.showImages(
@@ -161,7 +164,7 @@ class RoomItems {
                           child: Stack(
                             children: [
                               Text(
-                                list[i]['lv'].toString(),
+                                int.parse(list[i]['lv'].toString()).toString(),
                                 style: TextStyle(
                                     fontSize: 18.sp,
                                     fontWeight: FontWeight.w600,
@@ -172,7 +175,7 @@ class RoomItems {
                                       ..color = MyColors.djOneM),
                               ),
                               Text(
-                                list[i]['lv'].toString(),
+                                int.parse(list[i]['lv'].toString()).toString(),
                                 style: TextStyle(
                                     color: MyColors.djOne,
                                     fontSize: 18.sp,
@@ -334,39 +337,39 @@ class RoomItems {
                     width: 28.h,
                     child: Stack(
                       children: [
-                        list[i]['lv'] >= 1 && list[i]['lv'] <= 10
+                        int.parse(list[i]['lv'].toString()) >= 1 && int.parse(list[i]['lv'].toString()) <= 10
                             ? WidgetUtils.showImages(
                             'assets/images/dj/dj_1-10.png', 28.h, 28.h)
-                            : list[i]['lv'] >= 11 && list[i]['lv'] <= 15
+                            : int.parse(list[i]['lv'].toString()) >= 11 && int.parse(list[i]['lv'].toString()) <= 15
                             ? WidgetUtils.showImages(
                             'assets/images/dj/dj_11-15.png', 28.h, 28.h)
-                            : list[i]['lv'] >= 16 && list[i]['lv'] <= 20
+                            : int.parse(list[i]['lv'].toString()) >= 16 && int.parse(list[i]['lv'].toString()) <= 20
                             ? WidgetUtils.showImages(
                             'assets/images/dj/dj_16-20.png', 28.h, 28.h)
-                            : list[i]['lv'] >= 21 && list[i]['lv'] <= 25
+                            : int.parse(list[i]['lv'].toString()) >= 21 && int.parse(list[i]['lv'].toString()) <= 25
                             ? WidgetUtils.showImages(
                             'assets/images/dj/dj_21-25.png',
                             28.h,
                             28.h)
-                            : list[i]['lv'] >= 26 && list[i]['lv'] <= 30
+                            : int.parse(list[i]['lv'].toString()) >= 26 && int.parse(list[i]['lv'].toString()) <= 30
                             ? WidgetUtils.showImages(
                             'assets/images/dj/dj_26-30.png',
                             28.h,
                             28.h)
-                            : list[i]['lv'] >= 31 &&
-                            list[i]['lv'] <= 35
+                            : int.parse(list[i]['lv'].toString()) >= 31 &&
+                            int.parse(list[i]['lv'].toString()) <= 35
                             ? WidgetUtils.showImages(
                             'assets/images/dj/dj_31-35.png',
                             28.h,
                             28.h)
-                            : list[i]['lv'] >= 36 &&
-                            list[i]['lv'] <= 40
+                            : int.parse(list[i]['lv'].toString()) >= 36 &&
+                            int.parse(list[i]['lv'].toString()) <= 40
                             ? WidgetUtils.showImages(
                             'assets/images/dj/dj_36-40.png',
                             28.h,
                             28.h)
-                            : list[i]['lv'] >= 41 &&
-                            list[i]['lv'] <= 45
+                            : int.parse(list[i]['lv'].toString()) >= 41 &&
+                            int.parse(list[i]['lv'].toString()) <= 45
                             ? WidgetUtils.showImages(
                             'assets/images/dj/dj_41-45.png', 28.h, 28.h)
                             : WidgetUtils.showImages(
@@ -377,7 +380,7 @@ class RoomItems {
                           child: Stack(
                             children: [
                               Text(
-                                list[i]['lv'].toString(),
+                                int.parse(list[i]['lv'].toString()).toString(),
                                 style: TextStyle(
                                     fontSize: 18.sp,
                                     fontWeight: FontWeight.w600,
@@ -388,7 +391,7 @@ class RoomItems {
                                       ..color = MyColors.djOneM),
                               ),
                               Text(
-                                list[i]['lv'].toString(),
+                                int.parse(list[i]['lv'].toString()).toString(),
                                 style: TextStyle(
                                     color: MyColors.djOne,
                                     fontSize: 18.sp,
@@ -637,39 +640,39 @@ class RoomItems {
                           width: 28.h,
                           child: Stack(
                             children: [
-                              list[i]['lv'] >= 1 && list[i]['lv'] <= 10
+                              int.parse(list[i]['lv'].toString()) >= 1 && int.parse(list[i]['lv'].toString()) <= 10
                                   ? WidgetUtils.showImages(
                                   'assets/images/dj/dj_1-10.png', 28.h, 28.h)
-                                  : list[i]['lv'] >= 11 && list[i]['lv'] <= 15
+                                  : int.parse(list[i]['lv'].toString()) >= 11 && int.parse(list[i]['lv'].toString()) <= 15
                                   ? WidgetUtils.showImages(
                                   'assets/images/dj/dj_11-15.png', 28.h, 28.h)
-                                  : list[i]['lv'] >= 16 && list[i]['lv'] <= 20
+                                  : int.parse(list[i]['lv'].toString()) >= 16 && int.parse(list[i]['lv'].toString()) <= 20
                                   ? WidgetUtils.showImages(
                                   'assets/images/dj/dj_16-20.png', 28.h, 28.h)
-                                  : list[i]['lv'] >= 21 && list[i]['lv'] <= 25
+                                  : int.parse(list[i]['lv'].toString()) >= 21 && int.parse(list[i]['lv'].toString()) <= 25
                                   ? WidgetUtils.showImages(
                                   'assets/images/dj/dj_21-25.png',
                                   28.h,
                                   28.h)
-                                  : list[i]['lv'] >= 26 && list[i]['lv'] <= 30
+                                  : int.parse(list[i]['lv'].toString()) >= 26 && int.parse(list[i]['lv'].toString()) <= 30
                                   ? WidgetUtils.showImages(
                                   'assets/images/dj/dj_26-30.png',
                                   28.h,
                                   28.h)
-                                  : list[i]['lv'] >= 31 &&
-                                  list[i]['lv'] <= 35
+                                  : int.parse(list[i]['lv'].toString()) >= 31 &&
+                                  int.parse(list[i]['lv'].toString()) <= 35
                                   ? WidgetUtils.showImages(
                                   'assets/images/dj/dj_31-35.png',
                                   28.h,
                                   28.h)
-                                  : list[i]['lv'] >= 36 &&
-                                  list[i]['lv'] <= 40
+                                  : int.parse(list[i]['lv'].toString()) >= 36 &&
+                                  int.parse(list[i]['lv'].toString()) <= 40
                                   ? WidgetUtils.showImages(
                                   'assets/images/dj/dj_36-40.png',
                                   28.h,
                                   28.h)
-                                  : list[i]['lv'] >= 41 &&
-                                  list[i]['lv'] <= 45
+                                  : int.parse(list[i]['lv'].toString()) >= 41 &&
+                                  int.parse(list[i]['lv'].toString()) <= 45
                                   ? WidgetUtils.showImages(
                                   'assets/images/dj/dj_41-45.png', 28.h, 28.h)
                                   : WidgetUtils.showImages(
@@ -680,7 +683,7 @@ class RoomItems {
                                 child: Stack(
                                   children: [
                                     Text(
-                                      list[i]['lv'].toString(),
+                                      int.parse(list[i]['lv'].toString()).toString(),
                                       style: TextStyle(
                                           fontSize: 18.sp,
                                           fontWeight: FontWeight.w600,
@@ -691,7 +694,7 @@ class RoomItems {
                                             ..color = MyColors.djOneM),
                                     ),
                                     Text(
-                                      list[i]['lv'].toString(),
+                                      int.parse(list[i]['lv'].toString()).toString(),
                                       style: TextStyle(
                                           color: MyColors.djOne,
                                           fontSize: 18.sp,
@@ -762,6 +765,7 @@ class RoomItems {
               ],
             ),
             WidgetUtils.commonSizedBox(5, 0),
+
             /// 如果有顿号说明是发的3个svga
             list[i]['image'].toString().contains('、') ? Stack(
               children: [
@@ -772,10 +776,12 @@ class RoomItems {
                       width: 100.h,
                       child: list[i]['isOk'] == 'true'
                           ? WidgetUtils.showImages(
-                          list[i]['image'].toString().split(',')[1].split('、')[0],
+                          list[i]['image'].toString().split(',')[1].split(
+                              '、')[0],
                           double.infinity, double.infinity)
                           : SVGASimpleImage2(
-                          assetsName: list[i]['image'].toString().split(',')[0].split('、')[0],
+                          assetsName: list[i]['image'].toString().split(',')[0]
+                              .split('、')[0],
                           isOk: list[i]['isOk'],
                           index: i),
                     ),
@@ -787,10 +793,12 @@ class RoomItems {
                         child: list[i]['isOk'] == 'true'
                             ? Transform.translate(offset: Offset(2.h, 0.h),
                           child: WidgetUtils.showImages(
-                              list[i]['image'].toString().split(',')[1].split('、')[1],
+                              list[i]['image'].toString().split(',')[1].split(
+                                  '、')[1],
                               double.infinity, double.infinity),)
                             : SVGASimpleImage2(
-                            assetsName: list[i]['image'].toString().split(',')[0].split('、')[1],
+                            assetsName: list[i]['image'].toString().split(
+                                ',')[0].split('、')[1],
                             isOk: list[i]['isOk'],
                             index: i),
                       ),
@@ -803,10 +811,12 @@ class RoomItems {
                         child: list[i]['isOk'] == 'true'
                             ? Transform.translate(offset: Offset(2.h, 0.h),
                           child: WidgetUtils.showImages(
-                              list[i]['image'].toString().split(',')[1].split('、')[2],
+                              list[i]['image'].toString().split(',')[1].split(
+                                  '、')[2],
                               double.infinity, double.infinity),)
                             : SVGASimpleImage2(
-                            assetsName: list[i]['image'].toString().split(',')[0].split('、')[2],
+                            assetsName: list[i]['image'].toString().split(
+                                ',')[0].split('、')[2],
                             isOk: list[i]['isOk'],
                             index: i),
                       ),
@@ -1082,33 +1092,11 @@ class RoomItems {
                 )),
             GestureDetector(
               onTap: (() {
-                Future.delayed(const Duration(seconds: 0), () {
-                  Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      //自定义路由
-                      opaque: false,
-                      pageBuilder: (context, a, _) =>
-                          RoomReDuPage(
-                            roomID: roomID,
-                          ),
-                      //需要跳转的页面
-                      transitionsBuilder: (context, a, _, child) {
-                        const begin =
-                        Offset(0, 1); //Offset是一个2D小部件，他将记录坐标轴的x,y前者为宽，后者为高
-                        const end = Offset.zero; //得到Offset.zero坐标值
-                        const curve = Curves.ease; //这是一个曲线动画
-                        var tween = Tween(begin: begin, end: end)
-                            .chain(CurveTween(curve: curve)); //使用补间动画转换为动画
-                        return SlideTransition(
-                          //转场动画//目前我认为只能用于跳转效果
-                          position: a.drive(tween), //这里将获得一个新的动画
-                          child: child,
-                        );
-                      },
-                    ),
-                  );
-                });
+                if (MyUtils.checkClick()) {
+                  MyUtils.goTransparentPage(context, RoomReDuPage(
+                    roomID: roomID,
+                  ));
+                }
               }),
               child: SizedBox(
                 width: ScreenUtil().setHeight(70),
@@ -2937,7 +2925,9 @@ class RoomItems {
                   children: [
                     GestureDetector(
                       onTap: (() {
-                        eventBus.fire(SubmitButtonBack(title: '表情'));
+                        if (MyUtils.checkClick()) {
+                          eventBus.fire(SubmitButtonBack(title: '表情'));
+                        }
                       }),
                       child: WidgetUtils.showImages(
                           'assets/images/room_xiaolian.png',
@@ -2947,7 +2937,9 @@ class RoomItems {
                     WidgetUtils.commonSizedBox(0, 10),
                     GestureDetector(
                       onTap: (() {
-                        eventBus.fire(SubmitButtonBack(title: '聊天'));
+                        if (MyUtils.checkClick()) {
+                          eventBus.fire(SubmitButtonBack(title: '聊天'));
+                        }
                       }),
                       child: Container(
                         width: 100.h,
@@ -3091,11 +3083,15 @@ class RoomItems {
                       eventBus
                           .fire(RoomBack(title: '上麦', index: i.toString()));
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        '上麦',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: SizedBox(
+                      height: double.infinity,
+                      width: double.infinity,
+                      child: WidgetUtils.onlyTextCenter(
+                          '上麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
               Container(
                 width: double.infinity,
@@ -3642,11 +3638,16 @@ class RoomItems {
                     eventBus.fire(
                         RoomBack(title: '上麦', index: index.toString()));
                   }),
-                  child: WidgetUtils.onlyTextCenter(
-                      '上麦',
-                      StyleUtils.getCommonTextStyle(
-                          color: MyColors.roomTCWZ1,
-                          fontSize: ScreenUtil().setSp(21))),
+                  child: Container(
+                    height: double.infinity,
+                    width: double.infinity,
+                    color: Colors.transparent,
+                    child: WidgetUtils.onlyTextCenter(
+                        '上麦',
+                        StyleUtils.getCommonTextStyle(
+                            color: MyColors.roomTCWZ1,
+                            fontSize: ScreenUtil().setSp(21))),
+                  ),
                 )),
           ],
         ),
@@ -3679,11 +3680,16 @@ class RoomItems {
                       eventBus
                           .fire(RoomBack(title: '下麦', index: i.toString()));
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        '下麦',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '下麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
               Container(
                 width: double.infinity,
@@ -3704,11 +3710,16 @@ class RoomItems {
                             RoomBack(title: '开麦1', index: i.toString()));
                       }
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        listm[i].isLock == 0 ? '闭麦' : '开麦',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listm[i].isLock == 0 ? '闭麦' : '开麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
             ],
           ),
@@ -3738,11 +3749,16 @@ class RoomItems {
                       eventBus
                           .fire(RoomBack(title: '下麦', index: i.toString()));
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        '下麦',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '下麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
               Container(
                 width: double.infinity,
@@ -3763,11 +3779,16 @@ class RoomItems {
                             RoomBack(title: '开麦1', index: i.toString()));
                       }
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        listm[i].isLock == 0 ? '闭麦' : '开麦',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listm[i].isLock == 0 ? '闭麦' : '开麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
             ],
           ),
@@ -3797,11 +3818,16 @@ class RoomItems {
                       eventBus
                           .fire(RoomBack(title: '下麦', index: i.toString()));
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        '下麦',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '下麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
               Container(
                 width: double.infinity,
@@ -3822,11 +3848,16 @@ class RoomItems {
                             RoomBack(title: '开麦1', index: i.toString()));
                       }
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        listm[i].isLock == 0 ? '闭麦' : '开麦',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listm[i].isLock == 0 ? '闭麦' : '开麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
             ],
           ),
@@ -3856,11 +3887,16 @@ class RoomItems {
                       eventBus
                           .fire(RoomBack(title: '下麦', index: i.toString()));
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        '下麦',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '下麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
               Container(
                 width: double.infinity,
@@ -3881,11 +3917,16 @@ class RoomItems {
                             RoomBack(title: '开麦1', index: i.toString()));
                       }
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        listm[i].isLock == 0 ? '闭麦' : '开麦',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listm[i].isLock == 0 ? '闭麦' : '开麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
             ],
           ),
@@ -3915,11 +3956,16 @@ class RoomItems {
                       eventBus
                           .fire(RoomBack(title: '下麦', index: i.toString()));
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        '下麦',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '下麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
               Container(
                 width: double.infinity,
@@ -3940,11 +3986,16 @@ class RoomItems {
                             RoomBack(title: '开麦1', index: i.toString()));
                       }
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        listm[i].isLock == 0 ? '闭麦' : '开麦',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listm[i].isLock == 0 ? '闭麦' : '开麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
             ],
           ),
@@ -3974,11 +4025,16 @@ class RoomItems {
                       eventBus
                           .fire(RoomBack(title: '下麦', index: i.toString()));
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        '下麦',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '下麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
               Container(
                 width: double.infinity,
@@ -3999,11 +4055,16 @@ class RoomItems {
                             RoomBack(title: '开麦1', index: i.toString()));
                       }
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        listm[i].isLock == 0 ? '闭麦' : '开麦',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listm[i].isLock == 0 ? '闭麦' : '开麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
             ],
           ),
@@ -4033,11 +4094,16 @@ class RoomItems {
                       eventBus
                           .fire(RoomBack(title: '下麦', index: i.toString()));
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        '下麦',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '下麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
               Container(
                 width: double.infinity,
@@ -4058,11 +4124,16 @@ class RoomItems {
                             RoomBack(title: '开麦1', index: i.toString()));
                       }
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        listm[i].isLock == 0 ? '闭麦' : '开麦',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listm[i].isLock == 0 ? '闭麦' : '开麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
             ],
           ),
@@ -4092,11 +4163,16 @@ class RoomItems {
                       eventBus
                           .fire(RoomBack(title: '下麦', index: i.toString()));
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        '下麦',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '下麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
               Container(
                 width: double.infinity,
@@ -4117,11 +4193,16 @@ class RoomItems {
                             RoomBack(title: '开麦1', index: i.toString()));
                       }
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        listm[i].isLock == 0 ? '闭麦' : '开麦',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listm[i].isLock == 0 ? '闭麦' : '开麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
             ],
           ),
@@ -4151,11 +4232,16 @@ class RoomItems {
                       eventBus
                           .fire(RoomBack(title: '下麦', index: i.toString()));
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        '下麦',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '下麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
               Container(
                 width: double.infinity,
@@ -4176,11 +4262,16 @@ class RoomItems {
                             RoomBack(title: '开麦1', index: i.toString()));
                       }
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        listm[i].isLock == 0 ? '闭麦' : '开麦',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listm[i].isLock == 0 ? '闭麦' : '开麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
             ],
           ),

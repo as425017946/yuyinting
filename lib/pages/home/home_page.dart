@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:yuyinting/colors/my_colors.dart';
-import 'package:yuyinting/pages/gongping/gp_hi_page.dart';
 import 'package:yuyinting/pages/home/paidui_page.dart';
 import 'package:yuyinting/pages/home/shoucang_page.dart';
 import 'package:yuyinting/pages/home/ts/ts_car_page.dart';
@@ -18,11 +17,8 @@ import 'package:yuyinting/pages/login/edit_info_page.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import '../../main.dart';
-import '../../utils/SlideAnimationController.dart';
-import '../../utils/log_util.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
-import 'home_items.dart';
 ///首页
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -60,7 +56,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin,
       MyUtils.goTransparentPageCom(context, const EditInfoPage());
     }
 
-    // MyUtils.goTransparentPageCom(context, const TSCarPage());
+    MyUtils.goTransparentPageCom(context, const TSCarPage());
     quanxian();
 
   }

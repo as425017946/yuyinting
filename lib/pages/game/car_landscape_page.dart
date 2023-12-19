@@ -1867,20 +1867,20 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
-            if(double.parse(bean.data!.goldBean!) > 10000){
-              jinbi = '${(double.parse(bean.data!.goldBean!)/10000)}w';
+            if(double.parse(bean.data!.goldBean!) > 100000){
+              jinbi = '${(double.parse(bean.data!.goldBean!)/100000)}w';
             }else{
               jinbi = bean.data!.goldBean!;
             }
-            if(double.parse(bean.data!.diamond!) > 10000){
-              zuanshi = '${(double.parse(bean.data!.diamond!)/10000)}w';
+            if(double.parse(bean.data!.diamond!) > 100000){
+              zuanshi = '${(double.parse(bean.data!.diamond!)/100000)}w';
             }else{
               zuanshi = bean.data!.diamond!;
             }
-            if(bean.data!.mushroom! > 10000){
-              mogubi = '${bean.data!.mushroom!/10000}w';
+            if(double.parse(bean.data!.mushroom!) > 100000){
+              mogubi = '${double.parse(bean.data!.mushroom!)/100000}w';
             }else{
-              mogubi = bean.data!.mushroom!.toString();
+              mogubi = bean.data!.mushroom!;
             }
           });
           break;

@@ -169,7 +169,7 @@ class _ChatPageState extends State<ChatPage> {
     MyUtils.saveImgTemp(widget.otherImg, widget.otherUid);
     // 保存路径
     Directory? directory = await getTemporaryDirectory();
-    myHeadImg = '${directory!.path}/${sp.getString('user_headimg')}.jpg';
+    myHeadImg = '${directory!.path}/${sp.getString('user_id')}.jpg';
     otherHeadImg = '${directory!.path}/${widget.otherUid}.jpg';
   }
 
@@ -297,6 +297,7 @@ class _ChatPageState extends State<ChatPage> {
 
   // 显示聊天信息
   Widget chatWidget(BuildContext context, int i) {
+    LogE('头像框 == ${allData2[i]['headImg']}');
     double widthAudio = 0;
     if (allData2[i]['type'] == 3) {
       widthAudio = ScreenUtil().setHeight(60 + allData2[i]['number'] * 4);
@@ -339,6 +340,7 @@ class _ChatPageState extends State<ChatPage> {
     }
 
     if (allData2[i]['whoUid'] != sp.getString('user_id')) {
+      // 左侧显示
       return Column(
         children: [
           //左侧显示
@@ -390,14 +392,14 @@ class _ChatPageState extends State<ChatPage> {
                   //边框设置
                   decoration: BoxDecoration(
                     //背景
-                    color: Colors.white,
+                    color: allData2[i]['type'] == 2 ? Colors.transparent : Colors.white,
                     //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                     borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(20.0),
                         topRight: Radius.circular(0),
                         bottomLeft: Radius.circular(20.0),
                         bottomRight: Radius.circular(20.0)),
-                    boxShadow: [
+                    boxShadow: allData2[i]['type'] == 2 ? [] : [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.1),
                         spreadRadius: 2,
@@ -518,14 +520,14 @@ class _ChatPageState extends State<ChatPage> {
                   //边框设置
                   decoration: BoxDecoration(
                     //背景
-                    color: Colors.white,
+                    color: allData2[i]['type'] == 2 ? Colors.transparent : Colors.white,
                     //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                     borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(20.0),
                         topRight: Radius.circular(0),
                         bottomLeft: Radius.circular(20.0),
                         bottomRight: Radius.circular(20.0)),
-                    boxShadow: [
+                    boxShadow: allData2[i]['type'] == 2 ? [] : [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.1),
                         spreadRadius: 2,
@@ -767,6 +769,7 @@ class _ChatPageState extends State<ChatPage> {
                         icon: const Icon(Icons.arrow_back_ios),
                         color: Colors.black,
                         onPressed: (() {
+                          eventBus.fire(SubmitButtonBack(title: '聊天返回'));
                           Navigator.of(context).pop();
                         }),
                       ),
@@ -1012,7 +1015,6 @@ class _ChatPageState extends State<ChatPage> {
                                     //重新初始化音频信息
                                     setState(() {
                                       isCancel = false;
-                                      isLuZhi = false;
 
                                       mediaRecord = true;
                                       playRecord = false; //音频文件播放状态
@@ -1025,8 +1027,22 @@ class _ChatPageState extends State<ChatPage> {
                                   } else {
                                     // 停止录音
                                     stopRecorder();
-                                    //发送录音
-                                    doSendAudio();
+                                    if(audioNum == 0){
+                                      MyToastUtils.showToastBottom('录音时长过短！');
+                                      //重新初始化音频信息
+                                      setState(() {
+                                        mediaRecord = true;
+                                        playRecord = false; //音频文件播放状态
+                                        hasRecord = false; //是否有音频文件可播放
+                                        isLuZhi = false;
+                                        isPlay = 0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
+                                        djNum = 60; // 录音时长
+                                        audioNum = 0; // 记录录了多久
+                                      });
+                                    }else{
+                                      //发送录音
+                                      doSendAudio();
+                                    }
                                   }
                                 }
                               },
@@ -1119,6 +1135,7 @@ class _ChatPageState extends State<ChatPage> {
                     GestureDetector(
                       onTap: (() {
                         setState(() {
+                          isAudio = false;
                           MyUtils.hideKeyboard(context);
                           _isEmojiPickerVisible = !_isEmojiPickerVisible;
                         });

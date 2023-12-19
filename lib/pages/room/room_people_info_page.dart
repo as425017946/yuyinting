@@ -21,6 +21,7 @@ import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../../widget/SVGASimpleImage.dart';
+import '../message/geren/people_info_page.dart';
 
 /// 厅内人员信息详情
 class RoomPeopleInfoPage extends StatefulWidget {
@@ -581,25 +582,33 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                       )
                     : const Text(''),
 
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(120),
-                        ScreenUtil().setHeight(120), headImg),
-                    // 头像框静态图
-                    avatarFrameImg.isNotEmpty ? WidgetUtils
-                        .CircleHeadImage(
-                        ScreenUtil().setHeight(120),
-                        ScreenUtil().setHeight(120),
-                        avatarFrameImg) : const Text(''),
-                    // 头像框动态图
-                    avatarFrameGifImg.isEmpty ? SizedBox(
-                      height: 160.h,
-                      width: 160.h,
-                      child: SVGASimpleImage(
-                        resUrl:avatarFrameGifImg,),
-                    ) : const Text(''),
-                  ],
+                GestureDetector(
+                  onTap: ((){
+                    if(MyUtils.checkClick()) {
+                      MyUtils.goTransparentRFPage(context,
+                          PeopleInfoPage(otherId: widget.uid,));
+                    }
+                  }),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(120),
+                          ScreenUtil().setHeight(120), headImg),
+                      // 头像框静态图
+                      avatarFrameImg.isNotEmpty ? WidgetUtils
+                          .CircleHeadImage(
+                          ScreenUtil().setHeight(120),
+                          ScreenUtil().setHeight(120),
+                          avatarFrameImg) : const Text(''),
+                      // 头像框动态图
+                      avatarFrameGifImg.isEmpty ? SizedBox(
+                        height: 160.h,
+                        width: 160.h,
+                        child: SVGASimpleImage(
+                          resUrl:avatarFrameGifImg,),
+                      ) : const Text(''),
+                    ],
+                  ),
                 ),
               ],
             ),

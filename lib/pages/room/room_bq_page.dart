@@ -441,32 +441,40 @@ class _APageState extends State<RoomBQPage> {
                         for (int i = 0; i < list1.length; i++)
                           GestureDetector(
                             onTap: ((){
-                              // 通知厅内我发表情了
-                              // 这里需要判断0是爆灯1是水果机2是剪刀石头布3是筛子
-                              if(i == 0){
-                                eventBus.fire(SubmitButtonBack(title: '爆灯'));
-                              }else if(i == 1){
-                                // 生成0-13的随机数
-                                var a = Random().nextInt(14);
-                                var b = Random().nextInt(14);
-                                var c = Random().nextInt(14);
-                                eventBus.fire(SendRoomImgBack(info: '${shuiguoji[a]}、${shuiguoji[b]}、${shuiguoji[c]},${shuiguoji2[a]}、${shuiguoji2[b]}、${shuiguoji2[c]}'));
-                              }else if(i == 2){
-                                // 生成0-9的随机数
-                                var a = Random().nextInt(10);
-                                eventBus.fire(SendRoomImgBack(info: '${shuiguoji[a]},${shuiguoji2[a]}'));
-                              }else if(i == 3){
-                                // 生成0-2的随机数
-                                var a = Random().nextInt(3);
-                                eventBus.fire(SendRoomImgBack(info:'${jiandao[a]},${jiandao2[a]}'));
-                              }else if(i == 4){
-                                // 生成0-5的随机数
-                                var a = Random().nextInt(6);
-                                eventBus.fire(SendRoomImgBack(info: '${shaizi[a]},${shaizi2[a]}'));
-                              }else{
-                                eventBus.fire(SendRoomImgBack(info: list1[i]));
+                              if(MyUtils.checkClick()) {
+                                // 通知厅内我发表情了
+                                // 这里需要判断0是爆灯1是水果机2是剪刀石头布3是筛子
+                                if (i == 0) {
+                                  eventBus.fire(
+                                      SubmitButtonBack(title: '爆灯'));
+                                } else if (i == 1) {
+                                  // 生成0-13的随机数
+                                  var a = Random().nextInt(14);
+                                  var b = Random().nextInt(14);
+                                  var c = Random().nextInt(14);
+                                  eventBus.fire(SendRoomImgBack(
+                                      info: '${shuiguoji[a]}、${shuiguoji[b]}、${shuiguoji[c]},${shuiguoji2[a]}、${shuiguoji2[b]}、${shuiguoji2[c]}'));
+                                } else if (i == 2) {
+                                  // 生成0-9的随机数
+                                  var a = Random().nextInt(10);
+                                  eventBus.fire(SendRoomImgBack(
+                                      info: '${shuiguoji[a]},${shuiguoji2[a]}'));
+                                } else if (i == 3) {
+                                  // 生成0-2的随机数
+                                  var a = Random().nextInt(3);
+                                  eventBus.fire(SendRoomImgBack(
+                                      info: '${jiandao[a]},${jiandao2[a]}'));
+                                } else if (i == 4) {
+                                  // 生成0-5的随机数
+                                  var a = Random().nextInt(6);
+                                  eventBus.fire(SendRoomImgBack(
+                                      info: '${shaizi[a]},${shaizi2[a]}'));
+                                } else {
+                                  eventBus.fire(
+                                      SendRoomImgBack(info: list1[i]));
+                                }
+                                Navigator.pop(context);
                               }
-                              Navigator.pop(context);
                             }),
                             child: Container(
                               margin: EdgeInsets.only(left: 15.h),

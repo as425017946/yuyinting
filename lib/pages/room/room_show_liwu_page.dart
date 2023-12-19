@@ -1,12 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:svgaplayer_flutter/player.dart';
-import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
-import 'package:yuyinting/utils/log_util.dart';
-import '../../utils/event_utils.dart';
-import '../../utils/widget_utils.dart';
-import '../../widget/SVGASimpleImage2.dart';
-import '../../widget/SVGASimpleImage3.dart';
 
 /// 送礼物展示的效果页面
 class RoomShowLiWuPage extends StatefulWidget {

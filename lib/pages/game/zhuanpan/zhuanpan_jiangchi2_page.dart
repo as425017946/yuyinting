@@ -193,7 +193,7 @@ class _ZhuanPanJiangChi2PageState extends State<ZhuanPanJiangChi2Page> {
           setState(() {
             list.clear();
             list = bean.data!.goodsList!;
-            nums = bean.data!.amount as int;
+            nums = int.parse(bean.data!.amount!);
           });
           break;
         case MyHttpConfig.errorloginCode:

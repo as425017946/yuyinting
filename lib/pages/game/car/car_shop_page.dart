@@ -5,18 +5,15 @@ import 'package:yuyinting/utils/my_utils.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 
 import '../../../bean/Common_bean.dart';
-import '../../../bean/balanceBean.dart';
 import '../../../bean/gameStoreBean.dart';
 import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
-import '../../../utils/custom_dialog.dart';
 import '../../../utils/event_utils.dart';
 import '../../../utils/my_toast_utils.dart';
 import '../../../utils/widget_utils.dart';
 import '../../../widget/OptionGridView.dart';
 import '../../../widget/duihuan_queren_page.dart';
-import '../../../widget/queren_page.dart';
 ///赛车商城
 class CarShopPage extends StatefulWidget {
   const CarShopPage({super.key});
@@ -179,8 +176,8 @@ class _CarShopPageState extends State<CarShopPage> {
           setState(() {
             list.clear();
             list = bean.data!.goodsList!;
-            if(bean.data!.amount! > 10000){
-              mogubi = '${bean.data!.amount!/10000}w';
+            if(double.parse(bean.data!.amount!) > 100000){
+              mogubi = '${double.parse(bean.data!.amount!)/100000}w';
             }else{
               mogubi = bean.data!.amount!.toString();
             }
@@ -214,9 +211,9 @@ class _CarShopPageState extends State<CarShopPage> {
           setState(() {
             if(mogubi.contains('w')){
               // 目的是先把 1w 转换成 10000
-              mogubi = (double.parse(mogubi.substring(0,mogubi.length - 1)) * 1000).toString();
+              mogubi = (double.parse(mogubi.substring(0,mogubi.length - 1)) * 100000).toString();
               // 减去花费的V豆
-              mogubi = '${(double.parse(mogubi) - sl)/1000}w';
+              mogubi = '${(double.parse(mogubi) - sl)/100000}w';
             }else{
               mogubi = (double.parse(mogubi) - sl).toString();
             }

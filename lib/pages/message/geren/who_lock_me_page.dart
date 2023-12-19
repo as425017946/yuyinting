@@ -201,9 +201,9 @@ class _WhoLockMePageState extends State<WhoLockMePage> {
               for(int i =0; i < bean.data!.length; i++){
                 _list.add(bean.data![i]);
               }
-              if(bean.data!.length < MyConfig.pageSize){
-                _refreshController.loadNoData();
-              }
+              // if(bean.data!.length < MyConfig.pageSize){
+              //   _refreshController.loadNoData();
+              // }
               length = bean.data!.length;
             }else{
               if (page == 1) {

@@ -14,6 +14,8 @@ import 'package:yuyinting/pages/room/room_guanliyuan_page.dart';
 import 'package:yuyinting/pages/room/room_jinyan_page.dart';
 import 'package:yuyinting/pages/room/room_name.dart';
 import 'package:yuyinting/pages/room/room_password_page.dart';
+import 'package:yuyinting/utils/event_utils.dart';
+import 'package:yuyinting/utils/log_util.dart';
 import '../../bean/Common_bean.dart';
 import '../../bean/managerBean.dart';
 import '../../colors/my_colors.dart';
@@ -39,11 +41,16 @@ class RoomManagerPage extends StatefulWidget {
 
 class _RoomManagerPageState extends State<RoomManagerPage> {
   List<Data> list = [];
+  // 厅头图片
+  String ttImg = '';
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     doPostAdminList();
+    setState(() {
+      ttImg = sp.getString('roomImage').toString();
+    });
   }
 
   onTapPickFromGallery() async {
@@ -99,7 +106,7 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
                         ScreenUtil().setHeight(122),
                         ScreenUtil().setHeight(122),
                         15,
-                        sp.getString('roomImage').toString()),
+                        ttImg),
                     WidgetUtils.commonSizedBox(0, 15),
                     Expanded(
                       child: Column(
@@ -591,7 +598,13 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
           MyHttpConfig.editRoom,
           data: formdata);
       Map jsonResponse = json.decode(respone.data.toString());
+      
       if (respone.statusCode == 200) {
+        sp.setString('roomImage', path);
+        setState(() {
+          ttImg = path;
+        });
+        eventBus.fire(RoomBack(title: '厅头修改', index: path));
         MyToastUtils.showToastBottom('上传成功');
         Loading.dismiss();
       }else if(respone.statusCode == 401){

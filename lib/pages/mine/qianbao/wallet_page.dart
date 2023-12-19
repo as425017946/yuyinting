@@ -341,21 +341,9 @@ class _WalletPageState extends State<WalletPage> {
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
-            if(double.parse(bean.data!.goldBean!) > 10000){
-              jinbi = '${(double.parse(bean.data!.goldBean!)/10000)}w';
-            }else{
-              jinbi = bean.data!.goldBean!;
-            }
-            if(double.parse(bean.data!.diamond!) > 10000){
-              zuanshi = '${(double.parse(bean.data!.diamond!)/10000)}w';
-            }else{
-              zuanshi = bean.data!.diamond!;
-            }
-            if(double.parse(bean.data!.goldCoin!) > 10000){
-              shouyi = '${(double.parse(bean.data!.goldCoin!)/10000)}w';
-            }else{
-              shouyi = bean.data!.goldCoin!;
-            }
+            jinbi = bean.data!.goldBean!;
+            zuanshi = bean.data!.diamond!;
+            shouyi = bean.data!.goldCoin!;
           });
           break;
         case MyHttpConfig.errorloginCode:

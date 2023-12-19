@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,7 +25,7 @@ class SVGASimpleImage2 extends StatefulWidget {
 class _SVGASimpleImageState extends State<SVGASimpleImage2>
     with SingleTickerProviderStateMixin {
   SVGAAnimationController? animationController;
-
+  Timer? _timer;
   @override
   void initState() {
     super.initState();
@@ -33,8 +35,11 @@ class _SVGASimpleImageState extends State<SVGASimpleImage2>
         // 动画播放完成时的处理
         print("SVGA animation completed");
         animationController!.stop();
-        eventBus.fire(RoomSGJBack(isOK: true, index: widget.index));
       }
+    });
+    _timer = Timer.periodic(const Duration(milliseconds: 3000), (timer) {
+      eventBus.fire(RoomSGJBack(isOK: true, index: widget.index));
+      _timer!.cancel();
     });
     _tryDecodeSvga();
   }

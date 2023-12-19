@@ -16,7 +16,6 @@ import 'package:yuyinting/utils/widget_utils.dart';
 import '../../bean/CommonMyIntBean.dart';
 import '../../bean/Common_bean.dart';
 import '../../bean/charmAllBean.dart';
-import '../../bean/charmBean.dart';
 import '../../bean/hengFuBean.dart';
 import '../../bean/roomInfoBean.dart';
 import '../../bean/zjgpBean.dart';
@@ -26,9 +25,7 @@ import '../../http/my_http_config.dart';
 import '../../main.dart';
 import '../../utils/SlideAnimationController.dart';
 import '../../utils/log_util.dart';
-import '../../utils/style_utils.dart';
 import '../../widget/SVGASimpleImage.dart';
-import '../../widget/SVGASimpleImage3.dart';
 import '../../widget/SVGASimpleImage4.dart';
 import '../../widget/SVGASimpleImage5.dart';
 import '../../widget/SVGASimpleImage6.dart';
@@ -239,7 +236,16 @@ class _RoomPageState extends State<RoomPage>
       // 厅内设置监听
       listen = eventBus.on<SubmitButtonBack>().listen((event) {
         if (event.title == '清除公屏') {
+          // setState(() {
+          //   list.clear();
+          //   list2.clear();
+          // });
         } else if (event.title == '清除魅力') {
+          // setState(() {
+          //   for(int i = 0; i < listM.length; i++){
+          //     listM[i].charm = 0;
+          //   }
+          // });
         } else if (event.title == '老板位0') {
           setState(() {
             isBoss = false;
@@ -421,6 +427,9 @@ class _RoomPageState extends State<RoomPage>
               // 取消发布本地音频流
               _engine.muteLocalAudioStream(true);
               listM[int.parse(event.index!)].isClose = 1;
+              for (int i = 0; i < 9; i++) {
+                upOrDown[i] = false;
+              }
             });
             break;
           case '开麦':
@@ -428,6 +437,9 @@ class _RoomPageState extends State<RoomPage>
               // 开启发布本地音频流
               _engine.muteLocalAudioStream(false);
               listM[int.parse(event.index!)].isClose = 0;
+              for (int i = 0; i < 9; i++) {
+                upOrDown[i] = false;
+              }
             });
             break;
           case '闭麦1':
@@ -435,6 +447,9 @@ class _RoomPageState extends State<RoomPage>
               // 取消发布本地音频流
               _engine.muteLocalAudioStream(true);
               listM[int.parse(event.index!)].isClose = 1;
+              for (int i = 0; i < 9; i++) {
+                upOrDown[i] = false;
+              }
             });
             doPostSetClose(event.index!, 'no');
             break;
@@ -443,6 +458,9 @@ class _RoomPageState extends State<RoomPage>
               // 开启发布本地音频流
               _engine.muteLocalAudioStream(false);
               listM[int.parse(event.index!)].isClose = 0;
+              for (int i = 0; i < 9; i++) {
+                upOrDown[i] = false;
+              }
             });
             doPostSetClose(event.index!, 'yes');
             break;
@@ -475,6 +493,11 @@ class _RoomPageState extends State<RoomPage>
           case '已播放完成':
             setState(() {
               list[int.parse(event.index!)]['isOK'] = 'true';
+            });
+            break;
+          case '厅头修改':
+            setState(() {
+              roomHeadImg = event.index!;
             });
             break;
         }
@@ -583,7 +606,20 @@ class _RoomPageState extends State<RoomPage>
             setState(() {
               list.add(map);
             });
-          } else if (event.map!['type'] == 'chatroom_msg') {
+          }  else if (event.map!['type'] == 'clean_charm'){
+            // 清除魅力值
+            setState(() {
+              for(int i = 0; i < listM.length; i++){
+                listM[i].charm = 0;
+              }
+            });
+          }  else if (event.map!['type'] == 'clean_public_screen'){
+            // 清除公屏
+            setState(() {
+              list.clear();
+              list2.clear();
+            });
+          }else if (event.map!['type'] == 'chatroom_msg') {
             //厅内发送的文字消息
             Map<dynamic, dynamic> map = {};
             map['info'] = event.map!['nickname'];
@@ -628,21 +664,20 @@ class _RoomPageState extends State<RoomPage>
             //厅内发送的送礼物消息
             Map<dynamic, dynamic> map = {};
             map['info'] = event.map!['nickname'];
-            map['uid'] = event.map!['uid'];
+            map['uid'] = event.map!['from_uid'];
             map['type'] = '5';
             // 发送的信息
             map['content'] =
                 '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出${cb.giftInfo![0].giftName!}(${cb.giftInfo![0].giftPrice.toString()}); x${cb.giftInfo![0].giftNumber.toString()}';
             setState(() {
               list.add(map);
-              // 这个是为了让别人也能看见自己送出的礼物
-              listurl.add(cb.giftInfo![0].giftImg!);
-              isShowSVGA = true;
+              // 判断如果不是自己，则可以加入播放队列
+              if(event.map!['from_uid'].toString() != sp.getString('user_id')){
+                // 这个是为了让别人也能看见自己送出的礼物
+                listurl.add(cb.giftInfo![0].giftImg!);
+                isShowSVGA = true;
+              }
             });
-
-            LogE('动效礼物 == ${event.map!['gift_img']}');
-            LogE('动效== ${(isShowSVGA && roomDX)}');
-            LogE('动效礼物 == ${listurl[0]}');
           } else if (event.map!['type'] == 'send_all_gift') {
             //赠送全部背包礼物
             String infos = ''; // 这个是拼接用户送的礼物信息使用
@@ -669,10 +704,12 @@ class _RoomPageState extends State<RoomPage>
                 });
               }
               setState(() {
-                // 这个是为了让别人也能看见自己送出的礼物
-                listurl.add(cb.giftInfo![i].giftImg!);
+                // 判断如果不是自己，则可以加入播放队列
+                if(event.map!['from_uid'].toString() != sp.getString('user_id').toString()) {
+                  // 这个是为了让别人也能看见自己送出的礼物
+                  listurl.add(cb.giftInfo![i].giftImg!);
+                }
               });
-              LogE('动效礼物1 == ${cb.giftInfo![i].giftImg!}');
             }
             //厅内发送的送礼物消息
             Map<dynamic, dynamic> map = {};
@@ -688,9 +725,6 @@ class _RoomPageState extends State<RoomPage>
               isShowSVGA = true;
             });
 
-            LogE('动效1== ${(isShowSVGA && roomDX)}');
-            LogE('动效礼物1 == ${listurl[0]}');
-            LogE('动效礼物1 == ${listurl.length}');
           } else if (event.map!['type'] == 'collect_room') {
             // 收藏房间使用
             Map<dynamic, dynamic> map = {};
@@ -737,6 +771,7 @@ class _RoomPageState extends State<RoomPage>
           } else if (event.map!['type'] == 'send_screen') {
             // 这个是本房间收到了在本房间玩游戏中奖的信息，所以不加数据
           } else {
+            // 正常进入房间使用
             bool isHave = false;
             for (int i = 0; i < list.length; i++) {
               if (list[i]['type'] == '1') {
@@ -744,14 +779,6 @@ class _RoomPageState extends State<RoomPage>
                   isHave = true;
                 });
               }
-            }
-            if (!isHave) {
-              Map<dynamic, dynamic> mapg = {};
-              mapg['info'] = event.map!['notice'];
-              mapg['type'] = '1';
-              setState(() {
-                list.add(mapg);
-              });
             }
 
             Map<dynamic, dynamic> map = {};
@@ -887,15 +914,15 @@ class _RoomPageState extends State<RoomPage>
           });
         } else {
           setState(() {
-            LogE('==地址==');
             listurl.add(event.url);
-            LogE('==地址1==${listurl[0]}');
             isShowSVGA = true;
           });
         }
       });
       // svga礼物播放完成
       listenSVGAOK = eventBus.on<RoomSVGABack>().listen((event) {
+        LogE('动画播放完成回调');
+        LogE('动画播放完成回调 ${listurl.length}');
         // 隔0.5s后移除，在判断里面有没有剩余动画要播放
         Future.delayed(
             const Duration(
@@ -1459,7 +1486,7 @@ class _RoomPageState extends State<RoomPage>
 
   /// 房间信息
   Future<void> doPostRoomInfo() async {
-    LogE('userToken ${sp.getString('user_token')}');
+    LogE('userToken ${sp.getString('user_id')}');
     Map<String, dynamic> params = <String, dynamic>{
       'room_id': widget.roomId,
     };
@@ -1523,6 +1550,13 @@ class _RoomPageState extends State<RoomPage>
               isGuZu = false;
               tequanzhuangban = '';
             }
+
+            // 有房间公告消息
+            Map<dynamic, dynamic> mapg = {};
+            mapg['info'] = notice;
+            mapg['type'] = '1';
+            list.add(mapg);
+
           });
           break;
         case MyHttpConfig.errorloginCode:
@@ -1558,7 +1592,7 @@ class _RoomPageState extends State<RoomPage>
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle+'777');
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1637,47 +1671,44 @@ class _RoomPageState extends State<RoomPage>
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
-            // 更新上麦或者下麦的那一条数据
-            listM[int.parse(index)] =
-                bean.data!.roomInfo!.mikeList![int.parse(index)];
             // 判断麦上有没有自己
-            if (sp.getString('user_id').toString() ==
-                bean.data!.roomInfo!.mikeList![int.parse(index)].uid
-                    .toString()) {
-              isMeUp = true;
+            for (int i = 0; i < bean.data!.roomInfo!.mikeList!.length; i++) {
+              listM[i] = bean.data!.roomInfo!.mikeList![i];
+              switch (i.toString()) {
+                case '0':
+                  m1 = bean.data!.roomInfo!.mikeList![0].uid == 0 ? false : true;
+                  break;
+                case '1':
+                  m2 = bean.data!.roomInfo!.mikeList![1].uid == 0 ? false : true;
+                  break;
+                case '2':
+                  m3 = bean.data!.roomInfo!.mikeList![2].uid == 0 ? false : true;
+                  break;
+                case '3':
+                  m4 = bean.data!.roomInfo!.mikeList![3].uid == 0 ? false : true;
+                  break;
+                case '4':
+                  m5 = bean.data!.roomInfo!.mikeList![4].uid == 0 ? false : true;
+                  break;
+                case '5':
+                  m6 = bean.data!.roomInfo!.mikeList![5].uid == 0 ? false : true;
+                  break;
+                case '6':
+                  m7 = bean.data!.roomInfo!.mikeList![6].uid == 0 ? false : true;
+                  break;
+                case '7':
+                  m8 = bean.data!.roomInfo!.mikeList![7].uid == 0 ? false : true;
+                  break;
+                case '8':
+                  m0 = bean.data!.roomInfo!.mikeList![8].uid == 0 ? false : true;
+                  break;
+              }
+              if (sp.getString('user_id').toString() ==
+                  bean.data!.roomInfo!.mikeList![i].uid.toString()) {
+                isMeUp = true;
+              }
             }
-            switch (index) {
-              case '0':
-                m1 = bean.data!.roomInfo!.mikeList![0].uid == 0 ? false : true;
-                break;
-              case '1':
-                m2 = bean.data!.roomInfo!.mikeList![1].uid == 0 ? false : true;
-                break;
-              case '2':
-                m3 = bean.data!.roomInfo!.mikeList![2].uid == 0 ? false : true;
-                break;
-              case '3':
-                m4 = bean.data!.roomInfo!.mikeList![3].uid == 0 ? false : true;
-                break;
-              case '4':
-                m5 = bean.data!.roomInfo!.mikeList![4].uid == 0 ? false : true;
-                break;
-              case '5':
-                m6 = bean.data!.roomInfo!.mikeList![5].uid == 0 ? false : true;
-                break;
-              case '6':
-                LogE('*****上下麦位置****$index');
-                LogE(
-                    '*****上下麦位置****${bean.data!.roomInfo!.mikeList![6].uid == 0}');
-                m7 = bean.data!.roomInfo!.mikeList![6].uid == 0 ? false : true;
-                break;
-              case '7':
-                m8 = bean.data!.roomInfo!.mikeList![7].uid == 0 ? false : true;
-                break;
-              case '8':
-                m0 = bean.data!.roomInfo!.mikeList![8].uid == 0 ? false : true;
-                break;
-            }
+
           });
           break;
         case MyHttpConfig.errorloginCode:
