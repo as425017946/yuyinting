@@ -20,7 +20,8 @@ import '../../utils/my_utils.dart';
 
 /// 退出房间
 class RoomBackPage extends StatefulWidget {
-  const RoomBackPage({super.key});
+  String roomID;
+  RoomBackPage({super.key, required this.roomID});
 
   @override
   State<RoomBackPage> createState() => _RoomBackPageState();
@@ -38,12 +39,14 @@ class _RoomBackPageState extends State<RoomBackPage> {
     return Column(children: [
       GestureDetector(
         onTap: (() {
-          eventBus.fire(SubmitButtonBack(title: '关闭房间'));
+          // eventBus.fire(SubmitButtonBack(title: '退出房间,${widget.roomID}'));
           // 点击的是不是当前房间，如果是关闭弹窗，不是跳转房间
-          if(sp.getString('roomID').toString() == list[i].id.toString()){
-            Navigator.pop(context);
-          }else{
-            doPostBeforeJoin(list[i].id.toString());
+          if(MyUtils.checkClick()) {
+            if (sp.getString('roomID').toString() == list[i].id.toString()) {
+              Navigator.pop(context);
+            } else {
+              doPostBeforeJoin(list[i].id.toString());
+            }
           }
         }),
         child: Container(
@@ -78,8 +81,10 @@ class _RoomBackPageState extends State<RoomBackPage> {
       backgroundColor: Colors.transparent,
       body: GestureDetector(
         onTap: (() {
-          eventBus.fire(SubmitButtonBack(title: '关闭房间'));
-          Navigator.pop(context);
+          if(MyUtils.checkClick()) {
+            eventBus.fire(SubmitButtonBack(title: '关闭房间'));
+            Navigator.pop(context);
+          }
         }),
         child: Row(
           children: [
@@ -100,8 +105,11 @@ class _RoomBackPageState extends State<RoomBackPage> {
                       const Expanded(child: Text('')),
                       GestureDetector(
                         onTap: (() {
-                          eventBus.fire(SubmitButtonBack(title: '退出房间'));
-                          Navigator.pop(context);
+                          if(MyUtils.checkClick()) {
+                            eventBus.fire(SubmitButtonBack(
+                                title: '退出房间,${widget.roomID}'));
+                            Navigator.pop(context);
+                          }
                         }),
                         child: Column(
                           children: [
@@ -120,8 +128,10 @@ class _RoomBackPageState extends State<RoomBackPage> {
                       WidgetUtils.commonSizedBox(0, 50),
                       GestureDetector(
                         onTap: (() {
-                          eventBus.fire(SubmitButtonBack(title: '收起房间'));
-                          Navigator.pop(context);
+                          if(MyUtils.checkClick()) {
+                            eventBus.fire(SubmitButtonBack(title: '收起房间'));
+                            Navigator.pop(context);
+                          }
                         }),
                         child: Column(
                           children: [
@@ -240,6 +250,7 @@ class _RoomBackPageState extends State<RoomBackPage> {
       CommonBean bean = await DataUtils.postRoomJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
+          LogE('错误信息 == $roomID');
         // ignore: use_build_context_synchronously
           MyUtils.goTransparentRFPage(
               context,
@@ -257,6 +268,7 @@ class _RoomBackPageState extends State<RoomBackPage> {
       }
       Loading.dismiss();
     } catch (e) {
+      LogE('错误信息 == ${e.toString()}');
       Loading.dismiss();
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }

@@ -172,7 +172,35 @@ class RoomItems {
                                     foreground: Paint()
                                       ..style = PaintingStyle.stroke
                                       ..strokeWidth = 2
-                                      ..color = MyColors.djOneM),
+                                      ..color = (int.parse(list[i]['lv'].toString()) >= 1 &&
+                                          int.parse(list[i]['lv'].toString()) <= 10)
+                                          ? MyColors.djOneM
+                                          : (int.parse(list[i]['lv'].toString()) >= 11 && int.parse(list[i]['lv'].toString()) <= 15)
+                                          ? MyColors.djTwoM
+                                          : (int.parse(list[i]['lv'].toString()) >= 16 &&
+                                          int.parse(list[i]['lv'].toString()) <= 20)
+                                          ? MyColors.djThreeM
+                                          : (int.parse(list[i]['lv'].toString()) >= 21 &&
+                                          int.parse(list[i]['lv'].toString()) <= 25)
+                                          ? MyColors.djFourM
+                                          : (int.parse(list[i]['lv'].toString()) >= 26 &&
+                                          int.parse(list[i]['lv'].toString()) <= 30)
+                                          ? MyColors
+                                          .djFiveM
+                                          : (int.parse(list[i]['lv'].toString()) >= 31 &&
+                                          int.parse(list[i]['lv'].toString()) <=
+                                              35)
+                                          ? MyColors
+                                          .djSixM
+                                          : (int.parse(list[i]['lv'].toString()) >= 36 &&
+                                          int.parse(list[i]['lv'].toString()) <=
+                                              40)
+                                          ? MyColors
+                                          .djSevenM
+                                          : (int.parse(list[i]['lv'].toString()) >= 41 &&
+                                          int.parse(list[i]['lv'].toString()) <= 45)
+                                          ? MyColors.djEightM
+                                          : MyColors.djNineM),
                               ),
                               Text(
                                 int.parse(list[i]['lv'].toString()).toString(),
@@ -235,7 +263,7 @@ class RoomItems {
                   alignment: Alignment.center,
                   children: [
                     WidgetUtils.commonSizedBox(28.h, 10.h),
-                    Text(list[i]['info'],
+                    Text(list[i]['info'].toString().length > 8 ? '${list[i]['info'].toString().substring(0,8)}...' : list[i]['info'],
                         style: TextStyle(
                           color: MyColors.roomMessageYellow2,
                           fontSize: 24.sp,
@@ -261,8 +289,10 @@ class RoomItems {
                     child: sp.getString('role').toString() != 'user' &&
                         list[i]['isWelcome'] == '0' ? GestureDetector(
                       onTap: (() {
-                        eventBus.fire(RoomBack(
-                            title: '欢迎', index: '${list[i]['uid']},$i'));
+                        if(MyUtils.checkClick()) {
+                          eventBus.fire(RoomBack(
+                              title: '欢迎', index: '${list[i]['uid']},$i'));
+                        }
                       }),
                       child: Transform.translate(
                         offset: Offset(0, 5.h),
@@ -308,10 +338,14 @@ class RoomItems {
             text: TextSpan(children: [
               // 厅主或管理或主播
               WidgetSpan(
-                  child: list[i]['identity'] == 'user'
+                  child: (list[i]['identity'] == 'user' ||
+                      list[i]['identity'] == 'streamer')
                       ? const Text('')
+                      : list[i]['identity'] == 'leader'
+                      ? WidgetUtils.showImages(
+                      'assets/images/dj/room_role_director.png', 30.h, 30.h)
                       : WidgetUtils.showImages(
-                      'assets/images/dj/room_role_manager.png', 28.h, 28.h)),
+                      'assets/images/dj/room_role_manager.png', 30.h, 30.h)),
               WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
               // 萌新/新贵/新锐 三选一
               // 不是新锐新贵，并且是萌新直接显示萌新
@@ -388,7 +422,35 @@ class RoomItems {
                                     foreground: Paint()
                                       ..style = PaintingStyle.stroke
                                       ..strokeWidth = 2
-                                      ..color = MyColors.djOneM),
+                                      ..color = (int.parse(list[i]['lv'].toString()) >= 1 &&
+                                          int.parse(list[i]['lv'].toString()) <= 10)
+                                          ? MyColors.djOneM
+                                          : (int.parse(list[i]['lv'].toString()) >= 11 && int.parse(list[i]['lv'].toString()) <= 15)
+                                          ? MyColors.djTwoM
+                                          : (int.parse(list[i]['lv'].toString()) >= 16 &&
+                                          int.parse(list[i]['lv'].toString()) <= 20)
+                                          ? MyColors.djThreeM
+                                          : (int.parse(list[i]['lv'].toString()) >= 21 &&
+                                          int.parse(list[i]['lv'].toString()) <= 25)
+                                          ? MyColors.djFourM
+                                          : (int.parse(list[i]['lv'].toString()) >= 26 &&
+                                          int.parse(list[i]['lv'].toString()) <= 30)
+                                          ? MyColors
+                                          .djFiveM
+                                          : (int.parse(list[i]['lv'].toString()) >= 31 &&
+                                          int.parse(list[i]['lv'].toString()) <=
+                                              35)
+                                          ? MyColors
+                                          .djSixM
+                                          : (int.parse(list[i]['lv'].toString()) >= 36 &&
+                                          int.parse(list[i]['lv'].toString()) <=
+                                              40)
+                                          ? MyColors
+                                          .djSevenM
+                                          : (int.parse(list[i]['lv'].toString()) >= 41 &&
+                                          int.parse(list[i]['lv'].toString()) <= 45)
+                                          ? MyColors.djEightM
+                                          : MyColors.djNineM),
                               ),
                               Text(
                                 int.parse(list[i]['lv'].toString()).toString(),
@@ -609,11 +671,14 @@ class RoomItems {
                   text: TextSpan(children: [
                     // 厅主或管理或主播
                     WidgetSpan(
-                        child: list[i]['identity'] == 'user'
+                        child: (list[i]['identity'] == 'user' ||
+                            list[i]['identity'] == 'streamer')
                             ? const Text('')
+                            : list[i]['identity'] == 'leader'
+                            ? WidgetUtils.showImages(
+                            'assets/images/dj/room_role_director.png', 30.h, 30.h)
                             : WidgetUtils.showImages(
-                            'assets/images/dj/room_role_manager.png', 28.h,
-                            28.h)),
+                            'assets/images/dj/room_role_manager.png', 30.h, 30.h)),
                     WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
                     // 萌新/新贵/新锐 三选一
                     // 不是新锐新贵，并且是萌新直接显示萌新
@@ -691,7 +756,35 @@ class RoomItems {
                                           foreground: Paint()
                                             ..style = PaintingStyle.stroke
                                             ..strokeWidth = 2
-                                            ..color = MyColors.djOneM),
+                                            ..color = (int.parse(list[i]['lv'].toString()) >= 1 &&
+                                                int.parse(list[i]['lv'].toString()) <= 10)
+                                                ? MyColors.djOneM
+                                                : (int.parse(list[i]['lv'].toString()) >= 11 && int.parse(list[i]['lv'].toString()) <= 15)
+                                                ? MyColors.djTwoM
+                                                : (int.parse(list[i]['lv'].toString()) >= 16 &&
+                                                int.parse(list[i]['lv'].toString()) <= 20)
+                                                ? MyColors.djThreeM
+                                                : (int.parse(list[i]['lv'].toString()) >= 21 &&
+                                                int.parse(list[i]['lv'].toString()) <= 25)
+                                                ? MyColors.djFourM
+                                                : (int.parse(list[i]['lv'].toString()) >= 26 &&
+                                                int.parse(list[i]['lv'].toString()) <= 30)
+                                                ? MyColors
+                                                .djFiveM
+                                                : (int.parse(list[i]['lv'].toString()) >= 31 &&
+                                                int.parse(list[i]['lv'].toString()) <=
+                                                    35)
+                                                ? MyColors
+                                                .djSixM
+                                                : (int.parse(list[i]['lv'].toString()) >= 36 &&
+                                                int.parse(list[i]['lv'].toString()) <=
+                                                    40)
+                                                ? MyColors
+                                                .djSevenM
+                                                : (int.parse(list[i]['lv'].toString()) >= 41 &&
+                                                int.parse(list[i]['lv'].toString()) <= 45)
+                                                ? MyColors.djEightM
+                                                : MyColors.djNineM),
                                     ),
                                     Text(
                                       int.parse(list[i]['lv'].toString()).toString(),
@@ -848,13 +941,13 @@ class RoomItems {
                               bottomRight: Radius.circular(24)),
                         ),
                         child: Row(
-                          children: [
-                            WidgetUtils.onlyText(
-                                list[i]['content'],
-                                StyleUtils.getCommonTextStyle(
-                                    color: Colors.transparent,
-                                    fontSize: ScreenUtil().setSp(21)))
-                          ],
+                            children: [
+                              WidgetUtils.onlyText(
+                                  list[i]['content'],
+                                  StyleUtils.getCommonTextStyle(
+                                      color: Colors.transparent,
+                                      fontSize: ScreenUtil().setSp(21)))
+                            ],
                         ),
                       ) : list[i]['image'].toString().contains('svga')
                           ? SizedBox(
@@ -1080,7 +1173,7 @@ class RoomItems {
             Opacity(
                 opacity: 0.3,
                 child: Container(
-                  width: ScreenUtil().setHeight(70),
+                  width: ScreenUtil().setHeight(100),
                   height: ScreenUtil().setHeight(30),
                   //边框设置
                   decoration: const BoxDecoration(
@@ -1099,19 +1192,30 @@ class RoomItems {
                 }
               }),
               child: SizedBox(
-                width: ScreenUtil().setHeight(70),
+                width: ScreenUtil().setHeight(100),
                 height: ScreenUtil().setHeight(30),
                 child: Row(
                   children: [
                     const Expanded(child: Text('')),
-                    WidgetUtils.showImagesFill('assets/images/room_hot.png',
-                        ScreenUtil().setHeight(18), ScreenUtil().setHeight(15)),
+                    // WidgetUtils.showImagesFill('assets/images/room_hot.png',
+                    //     ScreenUtil().setHeight(18), ScreenUtil().setHeight(15)),
+                    // WidgetUtils.onlyText('热度', StyleUtils.getCommonTextStyle(
+                    //     color: Colors.white,
+                    //     fontSize: ScreenUtil().setSp(18))),
+                    Text('热度',style: TextStyle(
+                        fontSize: ScreenUtil().setSp(22),
+                        color: Colors.white,
+                        fontFamily: 'YOUSHEBIAOTIHEI'),),
                     WidgetUtils.commonSizedBox(0, 2),
-                    WidgetUtils.onlyTextCenter(
-                        hot_degree,
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomID,
-                            fontSize: ScreenUtil().setSp(18))),
+                    Text(double.parse(hot_degree) > 9999 ? '${(double.parse(hot_degree) / 10000).toStringAsFixed(2)}w' : hot_degree,style: TextStyle(
+                        fontSize: ScreenUtil().setSp(22),
+                        color: Colors.white,
+                        fontFamily: 'YOUSHEBIAOTIHEI'),),
+                    // WidgetUtils.onlyTextCenter(
+                    //     double.parse(hot_degree) > 9999 ? '${(double.parse(hot_degree) / 10000).toStringAsFixed(2)}w' : hot_degree,
+                    //     StyleUtils.getCommonTextStyle(
+                    //         color: Colors.white,
+                    //         fontSize: ScreenUtil().setSp(18))),
                     const Expanded(child: Text('')),
                   ],
                 ),
@@ -1127,7 +1231,7 @@ class RoomItems {
               Navigator.of(context).push(PageRouteBuilder(
                   opaque: false,
                   pageBuilder: (context, animation, secondaryAnimation) {
-                    return const RoomBackPage();
+                    return RoomBackPage(roomID: roomID,);
                   }));
             });
           }),
@@ -3122,7 +3226,7 @@ class RoomItems {
           ),
         ),
       )
-          : upOrDown[i] && sp.getString('role').toString() == 'user'
+          : upOrDown[i] && (sp.getString('role').toString() == 'user' || sp.getString('role').toString() == 'streamer')
           ? shangmai(300.w, 200.h, i)
           : const Text('');
     } else if (i == 0) {
@@ -3183,7 +3287,7 @@ class RoomItems {
           ),
         ),
       )
-          : upOrDown[i] && sp.getString('role').toString() == 'user'
+          : upOrDown[i] && (sp.getString('role').toString() == 'user' || sp.getString('role').toString() == 'streamer')
           ? shangmai(35.w, 400.h, i)
           : const Text('');
     } else if (i == 1) {
@@ -3244,7 +3348,7 @@ class RoomItems {
           ),
         ),
       )
-          : upOrDown[i] && sp.getString('role').toString() == 'user'
+          : upOrDown[i] && (sp.getString('role').toString() == 'user' || sp.getString('role').toString() == 'streamer')
           ? shangmai(215.w, 400.h, i)
           : const Text('');
     } else if (i == 2) {
@@ -3305,7 +3409,7 @@ class RoomItems {
           ),
         ),
       )
-          : upOrDown[i] && sp.getString('role').toString() == 'user'
+          : upOrDown[i] && (sp.getString('role').toString() == 'user' || sp.getString('role').toString() == 'streamer')
           ? shangmai(390.w, 400.h, i)
           : const Text('');
     } else if (i == 3) {
@@ -3366,7 +3470,7 @@ class RoomItems {
           ),
         ),
       )
-          : upOrDown[i] && sp.getString('role').toString() == 'user'
+          : upOrDown[i] && (sp.getString('role').toString() == 'user' || sp.getString('role').toString() == 'streamer')
           ? shangmai(570.w, 400.h, i)
           : const Text('');
     } else if (i == 4) {
@@ -3427,7 +3531,7 @@ class RoomItems {
           ),
         ),
       )
-          : upOrDown[i] && sp.getString('role').toString() == 'user'
+          : upOrDown[i] && (sp.getString('role').toString() == 'user' || sp.getString('role').toString() == 'streamer')
           ? shangmai(35.w, 560.h, i)
           : const Text('');
     } else if (i == 5) {
@@ -3488,7 +3592,7 @@ class RoomItems {
           ),
         ),
       )
-          : upOrDown[i] && sp.getString('role').toString() == 'user'
+          : upOrDown[i] && (sp.getString('role').toString() == 'user' || sp.getString('role').toString() == 'streamer')
           ? shangmai(215.w, 560.h, i)
           : const Text('');
     } else if (i == 6) {
@@ -3549,7 +3653,7 @@ class RoomItems {
           ),
         ),
       )
-          : upOrDown[i] && sp.getString('role').toString() == 'user'
+          : upOrDown[i] && (sp.getString('role').toString() == 'user' || sp.getString('role').toString() == 'streamer')
           ? shangmai(390.w, 560.h, i)
           : const Text('');
     } else {
@@ -3610,7 +3714,7 @@ class RoomItems {
           ),
         ),
       )
-          : upOrDown[i] && sp.getString('role').toString() == 'user'
+          : upOrDown[i] && (sp.getString('role').toString() == 'user' || sp.getString('role').toString() == 'streamer')
           ? shangmai(570.w, 560.h, i)
           : const Text('');
     }

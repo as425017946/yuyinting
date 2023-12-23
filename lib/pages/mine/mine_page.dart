@@ -22,7 +22,9 @@ import '../../main.dart';
 import '../../utils/loading.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/widget_utils.dart';
+import '../../widget/Marquee.dart';
 import 'gonghui/gonghui_home_page.dart';
+import 'gonghui/jiesuan_page.dart';
 import 'gonghui/my_gonghui_page.dart';
 import 'mine_smz_page.dart';
 import 'my/my_info_page.dart';
@@ -36,11 +38,10 @@ class MinePage extends StatefulWidget {
   State<MinePage> createState() => _MinePageState();
 }
 
-class _MinePageState extends State<MinePage>{
-
-
+class _MinePageState extends State<MinePage> {
   var guizuType = 0, isFirst = 0;
   var listen;
+  int level = 1; //用户等级
   String userNumber = '',
       care = '',
       beCare = '',
@@ -60,42 +61,43 @@ class _MinePageState extends State<MinePage>{
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-            const ZhuangbanPage(),
+            builder: (context) => const ZhuangbanPage(),
           ),
         ).then((value) {
           // doPostMyIfon();
         });
       } else if (event.title == '公会中心') {
-        if(sp.getString('shimingzhi').toString() == '2' || sp.getString('shimingzhi').toString() == '3'){
+        if (sp.getString('shimingzhi').toString() == '2' ||
+            sp.getString('shimingzhi').toString() == '3') {
           // isShiMing(context);
           MyUtils.goTransparentPageCom(context, const MineSMZPage());
-        }else if(sp.getString('shimingzhi').toString() == '1'){
+        } else if (sp.getString('shimingzhi').toString() == '1') {
           //身份 user普通用户，未加入公会 streamer主播 leader会长
-          if(identity == 'user'){
+          if (identity == 'user') {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                const GonghuiHomePage(),
+                builder: (context) => const GonghuiHomePage(),
               ),
             ).then((value) {
               // doPostMyIfon();
             });
-          }else{
-            if(mounted){
+          } else {
+            if (mounted) {
               Future.delayed(const Duration(seconds: 0), () {
                 Navigator.of(context).push(PageRouteBuilder(
                     opaque: false,
                     pageBuilder: (context, animation, secondaryAnimation) {
-                      return MyGonghuiPage(type: identity,);
+                      return MyGonghuiPage(
+                        type: identity,
+                      );
                     }));
-              }).then((value){
+              }).then((value) {
                 // doPostMyIfon();
               });
             }
           }
-        }else if(sp.getString('shimingzhi').toString() == '0'){
+        } else if (sp.getString('shimingzhi').toString() == '0') {
           MyToastUtils.showToastBottom('审核中，请耐心等待');
         }
       } else if (event.title == '全民代理') {
@@ -149,15 +151,16 @@ class _MinePageState extends State<MinePage>{
             WidgetUtils.commonSizedBox(35, 0),
             GestureDetector(
               onTap: (() {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                    const SettingPage(),
-                  ),
-                ).then((value) {
-                  doPostMyIfon();
-                });
+                if (MyUtils.checkClick()) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SettingPage(),
+                    ),
+                  ).then((value) {
+                    doPostMyIfon();
+                  });
+                }
               }),
               child: Row(
                 children: [
@@ -173,34 +176,41 @@ class _MinePageState extends State<MinePage>{
               children: [
                 GestureDetector(
                   onTap: (() {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                        const MyInfoPage(),
-                      ),
-                    ).then((value) {
-                      // doPostMyIfon();
-                    });
+                    if (MyUtils.checkClick()) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MyInfoPage(),
+                        ),
+                      ).then((value) {
+                        // doPostMyIfon();
+                      });
+                    }
                   }),
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(90),
-                          ScreenUtil().setHeight(90), sp.getString('user_headimg').toString()),
+                      WidgetUtils.CircleHeadImage(
+                          ScreenUtil().setHeight(90),
+                          ScreenUtil().setHeight(90),
+                          sp.getString('user_headimg').toString()),
                       // 头像框静态图
-                      avatarFrameImg.isNotEmpty ? WidgetUtils
-                          .CircleHeadImage(
-                      ScreenUtil().setHeight(120),
-                      ScreenUtil().setHeight(120),
-                        avatarFrameImg) : const Text(''),
+                      avatarFrameImg.isNotEmpty
+                          ? WidgetUtils.CircleHeadImage(
+                              ScreenUtil().setHeight(120),
+                              ScreenUtil().setHeight(120),
+                              avatarFrameImg)
+                          : const Text(''),
                       // 头像框动态图
-                      avatarFrameGifImg.isNotEmpty ? SizedBox(
-                        height: 120.h,
-                        width: 120.h,
-                        child: SVGASimpleImage(
-                          resUrl: avatarFrameGifImg,),
-                      ) : const Text(''),
+                      avatarFrameGifImg.isNotEmpty
+                          ? SizedBox(
+                              height: 120.h,
+                              width: 120.h,
+                              child: SVGASimpleImage(
+                                resUrl: avatarFrameGifImg,
+                              ),
+                            )
+                          : const Text(''),
                     ],
                   ),
                 ),
@@ -212,13 +222,27 @@ class _MinePageState extends State<MinePage>{
                         alignment: Alignment.bottomLeft,
                         child: Row(
                           children: [
-                            Text(
-                              sp.getString('nickname').toString(),
-                              style: StyleUtils.getCommonTextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: ScreenUtil().setSp(38)),
-                            ),
+                            sp.getString('nickname').toString().length > 8
+                                ? SizedBox(
+                                    width: 260.w,
+                                    child: Marquee(
+                                      speed: 20,
+                                      child: Text(
+                                        "${sp.getString('nickname')}    ${sp.getString('nickname')}",
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: ScreenUtil().setSp(35),
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                    ),
+                                  )
+                                : Text(
+                                    sp.getString('nickname').toString(),
+                                    style: StyleUtils.getCommonTextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: ScreenUtil().setSp(38)),
+                                  ),
                             WidgetUtils.commonSizedBox(0, 5),
                             Container(
                               height: ScreenUtil().setHeight(25),
@@ -241,6 +265,90 @@ class _MinePageState extends State<MinePage>{
                                   12,
                                   12),
                             ),
+                            WidgetUtils.commonSizedBox(0, 5),
+                            // 用户等级
+                            Stack(
+                              alignment: Alignment.bottomRight,
+                              children: [
+                                WidgetUtils.showImagesFill(
+                                    (level >= 1 && level <= 10)
+                                        ? 'assets/images/dj/dj_1-10.png'
+                                        : (level >= 11 && level <= 15)
+                                            ? 'assets/images/dj/dj_11-15.png'
+                                            : (level >= 16 && level <= 20)
+                                                ? 'assets/images/dj/dj_16-20.png'
+                                                : (level >= 21 && level <= 25)
+                                                    ? 'assets/images/dj/dj_21-25.png'
+                                                    : (level >= 26 &&
+                                                            level <= 30)
+                                                        ? 'assets/images/dj/dj_26-30.png'
+                                                        : (level >= 31 &&
+                                                                level <= 35)
+                                                            ? 'assets/images/dj/dj_31-35.png'
+                                                            : (level >= 36 &&
+                                                                    level <= 40)
+                                                                ? 'assets/images/dj/dj_36-40.png'
+                                                                : (level >= 41 &&
+                                                                        level <=
+                                                                            45)
+                                                                    ? 'assets/images/dj/dj_41-45.png'
+                                                                    : 'assets/images/dj/dj_46-50.png',
+                                    ScreenUtil().setHeight(25),
+                                    ScreenUtil().setHeight(25)),
+                                Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Text(
+                                      level.toString(),
+                                      style: TextStyle(
+                                          fontSize: ScreenUtil().setSp(16),
+                                          fontWeight: FontWeight.w600,
+                                          fontFamily: 'ARIAL',
+                                          foreground: Paint()
+                                            ..style = PaintingStyle.stroke
+                                            ..strokeWidth = 2
+                                            ..color = (level >= 1 &&
+                                                    level <= 10)
+                                                ? MyColors.djOneM
+                                                : (level >= 11 && level <= 15)
+                                                    ? MyColors.djTwoM
+                                                    : (level >= 16 &&
+                                                            level <= 20)
+                                                        ? MyColors.djThreeM
+                                                        : (level >= 21 &&
+                                                                level <= 25)
+                                                            ? MyColors.djFourM
+                                                            : (level >= 26 &&
+                                                                    level <= 30)
+                                                                ? MyColors
+                                                                    .djFiveM
+                                                                : (level >= 31 &&
+                                                                        level <=
+                                                                            35)
+                                                                    ? MyColors
+                                                                        .djSixM
+                                                                    : (level >= 36 &&
+                                                                            level <=
+                                                                                40)
+                                                                        ? MyColors
+                                                                            .djSevenM
+                                                                        : (level >= 41 &&
+                                                                                level <= 45)
+                                                                            ? MyColors.djEightM
+                                                                            : MyColors.djNineM),
+                                    ),
+                                    Text(
+                                      level.toString(),
+                                      style: TextStyle(
+                                          color: MyColors.djOne,
+                                          fontSize: ScreenUtil().setSp(16),
+                                          fontWeight: FontWeight.w600,
+                                          fontFamily: 'ARIAL'),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            )
                           ],
                         ),
                       ),
@@ -273,7 +381,9 @@ class _MinePageState extends State<MinePage>{
                 ),
                 GestureDetector(
                   onTap: (() {
-                    Navigator.pushNamed(context, 'MyInfoPage');
+                    if (MyUtils.checkClick()) {
+                      Navigator.pushNamed(context, 'MyInfoPage');
+                    }
                   }),
                   child: Row(
                     children: [
@@ -304,8 +414,11 @@ class _MinePageState extends State<MinePage>{
                   WidgetUtils.showImagesFill('assets/images/mine_gz_bg.png',
                       ScreenUtil().setHeight(130), double.infinity),
                   GestureDetector(
-                    onTap: ((){
-                      MyUtils.goTransparentPageCom(context, const TequanPage());
+                    onTap: (() {
+                      if (MyUtils.checkClick()) {
+                        MyUtils.goTransparentPageCom(
+                            context, const TequanPage());
+                      }
                     }),
                     child: Container(
                       width: double.infinity,
@@ -315,18 +428,19 @@ class _MinePageState extends State<MinePage>{
                       alignment: Alignment.centerRight,
                       child: guizuType == 1
                           ? WidgetUtils.myContainer(
-                          ScreenUtil().setHeight(45),
-                          ScreenUtil().setHeight(100),
-                          Colors.transparent,
-                          MyColors.mineOrange,
-                          '已开通',
-                          ScreenUtil().setSp(21),
-                          MyColors.mineOrange)
+                              ScreenUtil().setHeight(45),
+                              ScreenUtil().setHeight(100),
+                              Colors.transparent,
+                              MyColors.mineOrange,
+                              '已开通',
+                              ScreenUtil().setSp(21),
+                              MyColors.mineOrange)
                           : SizedBox(
-                          width: ScreenUtil().setHeight(116),
-                          height: ScreenUtil().setHeight(45),
-                          child: const SVGASimpleImage(assetsName: 'assets/svga/guizu_kt.svga',)
-                      ),
+                              width: ScreenUtil().setHeight(116),
+                              height: ScreenUtil().setHeight(45),
+                              child: const SVGASimpleImage(
+                                assetsName: 'assets/svga/guizu_kt.svga',
+                              )),
                     ),
                   ),
                   Container(
@@ -346,9 +460,12 @@ class _MinePageState extends State<MinePage>{
                           const Expanded(child: Text('')),
                           GestureDetector(
                             onTap: (() {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                                return CareHomePage(index: 0);
-                              }));
+                              if (MyUtils.checkClick()) {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return CareHomePage(index: 0);
+                                }));
+                              }
                             }),
                             child: Column(
                               children: [
@@ -380,9 +497,12 @@ class _MinePageState extends State<MinePage>{
                           const Expanded(flex: 2, child: Text('')),
                           GestureDetector(
                             onTap: (() {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                                return CareHomePage(index: 1);
-                              }));
+                              if (MyUtils.checkClick()) {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return CareHomePage(index: 1);
+                                }));
+                              }
                             }),
                             child: Column(
                               children: [
@@ -414,9 +534,12 @@ class _MinePageState extends State<MinePage>{
                           const Expanded(flex: 2, child: Text('')),
                           GestureDetector(
                             onTap: (() {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                                return CareHomePage(index: 2);
-                              }));
+                              if (MyUtils.checkClick()) {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return CareHomePage(index: 2);
+                                }));
+                              }
                             }),
                             child: Column(
                               children: [
@@ -468,7 +591,9 @@ class _MinePageState extends State<MinePage>{
                         Expanded(
                             child: GestureDetector(
                           onTap: (() {
-                            Navigator.pushNamed(context, 'WalletPage');
+                            if (MyUtils.checkClick()) {
+                              Navigator.pushNamed(context, 'WalletPage');
+                            }
                           }),
                           child: WidgetUtils.containerNo(
                               height: ScreenUtil().setHeight(110),
@@ -511,7 +636,9 @@ class _MinePageState extends State<MinePage>{
                         Expanded(
                           child: GestureDetector(
                             onTap: (() {
-                              Navigator.pushNamed(context, 'LiwuPage');
+                              if (MyUtils.checkClick()) {
+                                Navigator.pushNamed(context, 'LiwuPage');
+                              }
                             }),
                             child: WidgetUtils.containerNo(
                                 height: ScreenUtil().setHeight(110),
@@ -607,6 +734,7 @@ class _MinePageState extends State<MinePage>{
             identity = bean.data!.identity!;
             avatarFrameImg = bean.data!.avatarFrameImg!;
             avatarFrameGifImg = bean.data!.avatarFrameGifImg!;
+            level = bean.data!.level as int;
           });
           break;
         case MyHttpConfig.errorloginCode:
@@ -645,8 +773,6 @@ class _MinePageState extends State<MinePage>{
   //       });
   // }
 
-
-
   /// 客服
   Future<void> doPostKefu() async {
     try {
@@ -660,7 +786,7 @@ class _MinePageState extends State<MinePage>{
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:

@@ -162,8 +162,10 @@ class _TuiguangPageState extends State<TuiguangPage> {
                   Expanded(
                       child: GestureDetector(
                     onTap: (() {
-                      MyUtils.goTransparentPageCom(
-                          context, const FenRunTSPage());
+    if(MyUtils.checkClick()) {
+      MyUtils.goTransparentPageCom(
+          context, const FenRunTSPage());
+    }
                     }),
                     child: Row(
                       children: [
@@ -332,7 +334,9 @@ class _TuiguangPageState extends State<TuiguangPage> {
               Expanded(
                 child: GestureDetector(
                   onTap: (() {
-                    Navigator.pushNamed(context, 'ShareTuiguangPage');
+    if(MyUtils.checkClick()) {
+      Navigator.pushNamed(context, 'ShareTuiguangPage');
+    }
                   }),
                   child: WidgetUtils.myContainer(
                       ScreenUtil().setHeight(70),
@@ -348,7 +352,9 @@ class _TuiguangPageState extends State<TuiguangPage> {
               isShow ? Expanded(
                 child: GestureDetector(
                   onTap: (() {
-                    doPostRoomUserInfo(1);
+    if(MyUtils.checkClick()) {
+      doPostRoomUserInfo(1);
+    }
                   }),
                   child: WidgetUtils.myContainer(
                       ScreenUtil().setHeight(70),
@@ -364,7 +370,9 @@ class _TuiguangPageState extends State<TuiguangPage> {
               isShow ? Expanded(
                 child: GestureDetector(
                   onTap: (() {
-                    doPostRoomUserInfo(2);
+    if(MyUtils.checkClick()) {
+      doPostRoomUserInfo(2);
+    }
                   }),
                   child: WidgetUtils.myContainer(
                       ScreenUtil().setHeight(70),

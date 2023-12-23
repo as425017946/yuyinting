@@ -71,7 +71,9 @@ class _ShenhePageState extends State<ShenhePage> {
           const Expanded(child: Text('')),
           GestureDetector(
             onTap: ((){
-              doPostSignExamine(list[i].streamerUid,'2',i);
+              if(MyUtils.checkClick()) {
+                doPostSignExamine(list[i].streamerUid, '2', i);
+              }
             }),
             child: WidgetUtils.myContainer(ScreenUtil().setHeight(45), ScreenUtil().setHeight(90), Colors.white, MyColors.homeTopBG, '同意', ScreenUtil().setSp(25), MyColors.homeTopBG),
           ),

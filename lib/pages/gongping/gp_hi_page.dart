@@ -3,10 +3,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import '../../colors/my_colors.dart';
+import '../../utils/my_utils.dart';
+import '../message/chat_page.dart';
 
 /// 公屏打招呼使用
 class GPHiPage extends StatefulWidget {
-  const GPHiPage({super.key});
+  String uid;
+  String nickName;
+  String avatar;
+  String gender;
+  GPHiPage({super.key, required this.uid, required this.nickName, required this.avatar, required this.gender});
 
   @override
   State<GPHiPage> createState() => _GPHiPageState();
@@ -21,17 +27,20 @@ class _GPHiPageState extends State<GPHiPage> with SingleTickerProviderStateMixin
   void initState() {
     // TODO: implement initState
     super.initState();
+    setState(() {
+      gender = int.parse(widget.gender);
+    });
     controller = AnimationController(
       duration: const Duration(seconds: 4),
       vsync: this,
     );
 
-    controller.addListener(() {
-      if (controller.isCompleted) {
-        // 在动画完成时执行操作，例如关闭页面
-        Navigator.pop(context);
-      }
-    });
+    // controller.addListener(() {
+    //   if (controller.isCompleted) {
+    //     // 在动画完成时执行操作，例如关闭页面
+    //     Navigator.pop(context);
+    //   }
+    // });
 
     animation = TweenSequence([
       TweenSequenceItem(tween: Tween(begin: const Offset(0, -2), end: Offset.zero), weight: 20),
@@ -81,7 +90,7 @@ class _GPHiPageState extends State<GPHiPage> with SingleTickerProviderStateMixin
                           120.h,
                           120.h,
                           60.h,
-                          'http://static.runoob.com/images/demo/demo2.jpg',
+                          widget.avatar,
                         ),
                         Container(
                           height: 30.h,
@@ -114,7 +123,7 @@ class _GPHiPageState extends State<GPHiPage> with SingleTickerProviderStateMixin
                           Row(
                             children: [
                               WidgetUtils.onlyText(
-                                  '昵称',
+                                  widget.nickName,
                                   StyleUtils.getCommonTextStyle(
                                       color: Colors.black87,
                                       fontSize: 26.sp,
@@ -127,14 +136,15 @@ class _GPHiPageState extends State<GPHiPage> with SingleTickerProviderStateMixin
                               '正在向你打招呼',
                               StyleUtils.getCommonTextStyle(
                                   color: MyColors.a5,
-                                  fontSize: 18.sp,
+                                  fontSize: 20.sp,
                                   fontWeight: FontWeight.w600)),
                           const Spacer(),
                         ],
                       )),
                   GestureDetector(
                     onTap: (() {
-                      // MyUtils.goTransparentRFPage(context, ChatPage(nickName: list[i].nickname!, otherUid: list[i].uid.toString(), otherImg: list[i].avatar!,));
+                      Navigator.pop(context);
+                      MyUtils.goTransparentRFPage(context, ChatPage(nickName: widget.nickName, otherUid: widget.uid, otherImg: widget.avatar,));
                     }),
                     child: Container(
                       height: 56.h,

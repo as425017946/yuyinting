@@ -58,7 +58,7 @@ class _ZhuxiaoPageState extends State<ZhuxiaoPage> {
             WidgetUtils.onlyText('关注信息、收藏信息、账单、礼物墙等）', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(30))),
             WidgetUtils.onlyText('·账号内所有资产，包括豆、币、各类收益、道具卡、等级、装扮等', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(30))),
             WidgetUtils.onlyText('·自主发布的内容，包括动态、点赞等', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(30))),
-            WidgetUtils.onlyText('·账号绑定的手机号以及所有第三方账号将被解绑', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(30))),
+            WidgetUtils.onlyText('·账号绑定的手机号以及所有第三方账号将无法注册新的账号，请慎重选择！', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(30))),
             const Expanded(child: Text('')),
             GestureDetector(
               onTap: ((){

@@ -26,6 +26,7 @@ class playRouletteBean {
 class Data {
   List<Gifts>? gifts;
   int? total;
+  int? curType;
 
   Data({this.gifts, this.total});
 
@@ -37,6 +38,7 @@ class Data {
       });
     }
     total = json['total'];
+    curType = json['cur_type'];
   }
 
   Map<String, dynamic> toJson() {
@@ -45,6 +47,7 @@ class Data {
       data['gifts'] = this.gifts!.map((v) => v.toJson()).toList();
     }
     data['total'] = this.total;
+    data['cur_type'] = this.curType;
     return data;
   }
 }

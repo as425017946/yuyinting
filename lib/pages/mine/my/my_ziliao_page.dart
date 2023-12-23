@@ -123,7 +123,9 @@ class _MyZiliaoPageState extends State<MyZiliaoPage> {
               children: [
                 GestureDetector(
                   onTap: (() {
-                    Navigator.pushNamed(context, 'WallPage');
+    if(MyUtils.checkClick()) {
+      Navigator.pushNamed(context, 'WallPage');
+    }
                   }),
                   child: Container(
                     height: ScreenUtil().setHeight(44),
@@ -324,6 +326,7 @@ class _MyZiliaoPageState extends State<MyZiliaoPage> {
       }
       Loading.dismiss();
     } catch (e) {
+      LogE('错误信息2 ${e.toString()}');
       Loading.dismiss();
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }

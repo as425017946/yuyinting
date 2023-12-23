@@ -4,12 +4,14 @@ import 'package:yuyinting/pages/room/redu_caifu_page.dart';
 import 'package:yuyinting/pages/room/redu_meili_page.dart';
 import 'package:yuyinting/pages/room/redu_zaixian_page.dart';
 import '../../colors/my_colors.dart';
+import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 
 /// 房间内的热度
 class RoomReDuPage extends StatefulWidget {
   String roomID;
+
   RoomReDuPage({super.key, required this.roomID});
 
   @override
@@ -18,7 +20,8 @@ class RoomReDuPage extends StatefulWidget {
 
 class _RoomReDuPageState extends State<RoomReDuPage> {
   int _currentIndex = 0;
-  late final PageController _controller ;
+  late final PageController _controller;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -39,7 +42,9 @@ class _RoomReDuPageState extends State<RoomReDuPage> {
             height: ScreenUtil().setHeight(400),
             child: GestureDetector(
               onTap: (() {
-                Navigator.pop(context);
+                if (MyUtils.checkClick()) {
+                  Navigator.pop(context);
+                }
               }),
               child: Container(
                 height: double.infinity,
@@ -56,74 +61,80 @@ class _RoomReDuPageState extends State<RoomReDuPage> {
                 //设置Container修饰
                 image: DecorationImage(
                   //背景图片修饰
-                  image: AssetImage(_currentIndex == 0 ? "assets/images/room_tc1.png" : 'assets/images/room_ph_bg.png'),
+                  image: AssetImage(_currentIndex == 0
+                      ? "assets/images/room_tc1.png"
+                      : 'assets/images/room_ph_bg.png'),
                   fit: BoxFit.fill, //覆盖
                 ),
               ),
               child: Column(
                 children: [
                   WidgetUtils.commonSizedBox(20, 0),
+
                   /// 顶部三个按钮
                   Row(
                     children: [
                       WidgetUtils.commonSizedBox(0, 20),
                       Expanded(
                           child: GestureDetector(
-                            onTap: (() {
-                              setState(() {
-                                _currentIndex = 0;
-                                _controller.animateToPage(0, duration: const Duration(milliseconds: 500), curve: Curves.ease);
-                              });
-                            }),
-                            child: Opacity(
-                              opacity: _currentIndex == 0 ? 1 : 0.5,
-                              child: WidgetUtils.onlyTextCenter(
-                                  '在线列表',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: MyColors.roomTCWZ2,
-                                      fontSize: ScreenUtil().setSp(32))),
-                            ),
-                          )),
+                        onTap: (() {
+                          setState(() {
+                            _currentIndex = 0;
+                            // _controller.animateToPage(0, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                            _controller.jumpToPage(0);
+                          });
+                        }),
+                        child: Opacity(
+                          opacity: _currentIndex == 0 ? 1 : 0.5,
+                          child: WidgetUtils.onlyTextCenter(
+                              '在线列表',
+                              StyleUtils.getCommonTextStyle(
+                                  color: MyColors.roomTCWZ2,
+                                  fontSize: ScreenUtil().setSp(32))),
+                        ),
+                      )),
                       Expanded(
                           child: GestureDetector(
-                            onTap: (() {
-                              setState(() {
-                                _currentIndex = 1;
-                                _controller.animateToPage(1, duration: const Duration(milliseconds: 500), curve: Curves.ease);
-                              });
-                            }),
-                            child: Opacity(
-                              opacity: _currentIndex == 1 ? 1 : 0.5,
-                              child: WidgetUtils.onlyTextCenter(
-                                  '财富榜',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: MyColors.roomTCWZ2,
-                                      fontSize: ScreenUtil().setSp(32))),
-                            ),
-                          )),
+                        onTap: (() {
+                          setState(() {
+                            _currentIndex = 1;
+                            _controller.jumpToPage(1);
+                          });
+                        }),
+                        child: Opacity(
+                          opacity: _currentIndex == 1 ? 1 : 0.5,
+                          child: WidgetUtils.onlyTextCenter(
+                              '财富榜',
+                              StyleUtils.getCommonTextStyle(
+                                  color: MyColors.roomTCWZ2,
+                                  fontSize: ScreenUtil().setSp(32))),
+                        ),
+                      )),
                       Expanded(
                           child: GestureDetector(
-                            onTap: (() {
-                              setState(() {
-                                _currentIndex = 2;
-                                _controller.animateToPage(2, duration: const Duration(milliseconds: 500), curve: Curves.ease);
-                              });
-                            }),
-                            child: Opacity(
-                              opacity: _currentIndex == 2 ? 1 : 0.5,
-                              child: WidgetUtils.onlyTextCenter(
-                                  '魅力榜',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: MyColors.roomTCWZ2,
-                                      fontSize: ScreenUtil().setSp(32))),
-                            ),
-                          )),
+                        onTap: (() {
+                          setState(() {
+                            _currentIndex = 2;
+                            _controller.jumpToPage(2);
+                          });
+                        }),
+                        child: Opacity(
+                          opacity: _currentIndex == 2 ? 1 : 0.5,
+                          child: WidgetUtils.onlyTextCenter(
+                              '魅力榜',
+                              StyleUtils.getCommonTextStyle(
+                                  color: MyColors.roomTCWZ2,
+                                  fontSize: ScreenUtil().setSp(32))),
+                        ),
+                      )),
                       WidgetUtils.commonSizedBox(0, 20),
                     ],
                   ),
                   WidgetUtils.commonSizedBox(20, 0),
                   Expanded(
                     child: PageView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      // 禁止左右滑动，只能点击
                       controller: _controller,
                       onPageChanged: (index) {
                         setState(() {
@@ -146,5 +157,4 @@ class _RoomReDuPageState extends State<RoomReDuPage> {
       ),
     );
   }
-
 }

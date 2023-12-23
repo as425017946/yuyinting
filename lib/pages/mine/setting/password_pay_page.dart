@@ -56,6 +56,7 @@ class _PasswordPayPageState extends State<PasswordPayPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false, // 解决键盘顶起页面
       appBar: appBar,
       backgroundColor: Colors.white,
       body: Column(

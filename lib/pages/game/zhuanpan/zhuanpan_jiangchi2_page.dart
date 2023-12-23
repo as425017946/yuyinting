@@ -184,7 +184,7 @@ class _ZhuanPanJiangChi2PageState extends State<ZhuanPanJiangChi2Page> {
   /// 游戏商店
   Future<void> doPostGameStore() async {
     Map<String, dynamic> params = <String, dynamic>{
-      'store_id': '1',
+      'store_id': '2',
     };
     try {
       gameStoreBean bean = await DataUtils.postGameStore(params);
@@ -213,7 +213,7 @@ class _ZhuanPanJiangChi2PageState extends State<ZhuanPanJiangChi2Page> {
   /// 兑换
   Future<void> doPostExchangeGoods(String goodsID, String goodsType, int sl) async {
     Map<String, dynamic> params = <String, dynamic>{
-      'store_id': '1', //商店id 1小转盘 2大转盘 3赛车
+      'store_id': '2', //商店id 1小转盘 2大转盘 3赛车
       'goods_id': goodsID, //商品id
       'goods_type': goodsType, //1礼物 2装扮
     };

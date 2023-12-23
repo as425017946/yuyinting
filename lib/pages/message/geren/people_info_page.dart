@@ -199,6 +199,90 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                                         12,
                                         12),
                                   ),
+                                  WidgetUtils.commonSizedBox(0, 10.h),
+                                  // 用户等级
+                                  Stack(
+                                    alignment: Alignment.bottomRight,
+                                    children: [
+                                      WidgetUtils.showImagesFill(
+                                          (level >= 1 && level <= 10)
+                                              ? 'assets/images/dj/dj_1-10.png'
+                                              : (level >= 11 && level <= 15)
+                                              ? 'assets/images/dj/dj_11-15.png'
+                                              : (level >= 16 && level <= 20)
+                                              ? 'assets/images/dj/dj_16-20.png'
+                                              : (level >= 21 && level <= 25)
+                                              ? 'assets/images/dj/dj_21-25.png'
+                                              : (level >= 26 &&
+                                              level <= 30)
+                                              ? 'assets/images/dj/dj_26-30.png'
+                                              : (level >= 31 &&
+                                              level <= 35)
+                                              ? 'assets/images/dj/dj_31-35.png'
+                                              : (level >= 36 &&
+                                              level <= 40)
+                                              ? 'assets/images/dj/dj_36-40.png'
+                                              : (level >= 41 &&
+                                              level <=
+                                                  45)
+                                              ? 'assets/images/dj/dj_41-45.png'
+                                              : 'assets/images/dj/dj_46-50.png',
+                                          ScreenUtil().setHeight(25),
+                                          ScreenUtil().setHeight(25)),
+                                      Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Text(
+                                            level.toString(),
+                                            style: TextStyle(
+                                                fontSize: ScreenUtil().setSp(16),
+                                                fontWeight: FontWeight.w600,
+                                                fontFamily: 'ARIAL',
+                                                foreground: Paint()
+                                                  ..style = PaintingStyle.stroke
+                                                  ..strokeWidth = 2
+                                                  ..color = (level >= 1 &&
+                                                      level <= 10)
+                                                      ? MyColors.djOneM
+                                                      : (level >= 11 && level <= 15)
+                                                      ? MyColors.djTwoM
+                                                      : (level >= 16 &&
+                                                      level <= 20)
+                                                      ? MyColors.djThreeM
+                                                      : (level >= 21 &&
+                                                      level <= 25)
+                                                      ? MyColors.djFourM
+                                                      : (level >= 26 &&
+                                                      level <= 30)
+                                                      ? MyColors
+                                                      .djFiveM
+                                                      : (level >= 31 &&
+                                                      level <=
+                                                          35)
+                                                      ? MyColors
+                                                      .djSixM
+                                                      : (level >= 36 &&
+                                                      level <=
+                                                          40)
+                                                      ? MyColors
+                                                      .djSevenM
+                                                      : (level >= 41 &&
+                                                      level <= 45)
+                                                      ? MyColors.djEightM
+                                                      : MyColors.djNineM),
+                                          ),
+                                          Text(
+                                            level.toString(),
+                                            style: TextStyle(
+                                                color: MyColors.djOne,
+                                                fontSize: ScreenUtil().setSp(16),
+                                                fontWeight: FontWeight.w600,
+                                                fontFamily: 'ARIAL'),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  )
                                 ],
                               ),
                               WidgetUtils.commonSizedBox(5, 0),
@@ -549,6 +633,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
   }
 
   /// 查看用户
+  int level = 1;
   Future<void> doPostUserInfo() async {
     LogE('用户token ${sp.getString('user_token')}');
     Loading.show(MyConfig.successTitle);
@@ -600,6 +685,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
+      LogE('错误  ${e.toString()}');
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }

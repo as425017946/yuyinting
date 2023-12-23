@@ -311,7 +311,9 @@ class _APageState extends State<RoomBQPage> {
         children: [
           Expanded(child: GestureDetector(
             onTap: ((){
-              Navigator.pop(context);
+              if(MyUtils.checkClick()) {
+                Navigator.pop(context);
+              }
             }),
             child: Container(color: Colors.transparent,),
           )),

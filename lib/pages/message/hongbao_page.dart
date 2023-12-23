@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/bean/Common_bean.dart';
+import 'package:yuyinting/pages/message/pay_ts_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
@@ -28,12 +29,24 @@ class _HongBaoPageState extends State<HongBaoPage> {
   int type = 0;
   // 是否显示全的
   bool isShow = false;
+  var listen;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     doPostBalance();
+    listen = eventBus.on<RoomBack>().listen((event) {
+      if(event.title == '发红包已输入密码'){
+        doPostSendRedPacket(controllerDou.text,event.index!);
+      }
+    });
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    listen.cancel();
   }
 
   @override
@@ -225,10 +238,13 @@ class _HongBaoPageState extends State<HongBaoPage> {
                 WidgetUtils.commonSizedBox(60.h, 0),
                 GestureDetector(
                   onTap: ((){
-                    if(controllerDou.text.isEmpty){
-                      MyToastUtils.showToastBottom('请输入要发送的V豆数量');
-                    }else{
-                      doPostSendRedPacket(controllerDou.text);
+                    if(MyUtils.checkClick()) {
+                      if (controllerDou.text.isEmpty) {
+                        MyToastUtils.showToastBottom('请输入要发送的V豆数量');
+                      } else {
+                        // 进入输入密码页面
+                        MyUtils.goTransparentPage(context, const PayTSPage());
+                      }
                     }
                   }),
                   child: Container(
@@ -281,11 +297,12 @@ class _HongBaoPageState extends State<HongBaoPage> {
   }
 
   /// 发红包
-  Future<void> doPostSendRedPacket(String shuliang) async {
+  Future<void> doPostSendRedPacket(String shuliang, String mima) async {
     Map<String, dynamic> params = <String, dynamic>{
       'uid': widget.uid,
       'amount': shuliang,
       'amount_type': '1',
+      'pay_pwd': mima
     };
     try {
       CommonBean bean = await DataUtils.postSendRedPacket(params);

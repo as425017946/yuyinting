@@ -74,6 +74,8 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
   String url = '', svga = '';
   // 送人的id集合
   List<String> listUID = [];
+  //是否点击送礼按钮
+  bool isCheck = false;
 
   Widget _itemPeople(BuildContext context, int i) {
     return GestureDetector(
@@ -231,7 +233,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                           color: MyColors.roomTCWZ2,
                           fontSize: ScreenUtil().setSp(25))),
                   WidgetUtils.onlyTextCenter(
-                      '${listC[index].price}钻',
+                      '${listC[index].price}V豆',
                       StyleUtils.getCommonTextStyle(
                           color: MyColors.roomTCWZ3,
                           fontSize: ScreenUtil().setSp(21))),
@@ -275,7 +277,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                           color: MyColors.roomTCWZ2,
                           fontSize: ScreenUtil().setSp(25))),
                   WidgetUtils.onlyTextCenter(
-                      '${listPV[index].price}钻',
+                      '${listPV[index].price}V豆',
                       StyleUtils.getCommonTextStyle(
                           color: MyColors.roomTCWZ3,
                           fontSize: ScreenUtil().setSp(21))),
@@ -343,7 +345,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                           color: MyColors.roomTCWZ2,
                           fontSize: ScreenUtil().setSp(25))),
                   WidgetUtils.onlyTextCenter(
-                      '${listPl[index].price}钻',
+                      '${listPl[index].price}V豆',
                       StyleUtils.getCommonTextStyle(
                           color: MyColors.roomTCWZ3,
                           fontSize: ScreenUtil().setSp(21))),
@@ -587,14 +589,22 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                             leixing == 2
                                 ? GestureDetector(
                               onTap: (() {
-                                setState(() {
-                                  if(listUID.length>1){
-                                    MyToastUtils.showToastBottom('赠送全部礼物只能选一个人');
-                                    return;
-                                  }else{
-                                    doPostOneClickPackageGift();
-                                  }
-                                });
+                                if(MyUtils.checkClick()) {
+                                  setState(() {
+                                    if (listUID.length > 1) {
+                                      MyToastUtils.showToastBottom(
+                                          '赠送全部礼物只能选一个人');
+                                      return;
+                                    } else {
+                                      if (listUID.isEmpty) {
+                                        MyToastUtils.showToastBottom(
+                                            '请选择要赠送的人');
+                                      } else {
+                                        doPostOneClickPackageGift();
+                                      }
+                                    }
+                                  });
+                                }
                               }),
                               child: WidgetUtils.onlyTextCenter(
                                   '赠送全部',
@@ -663,7 +673,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                         ScreenUtil().setHeight(24)),
                                     WidgetUtils.commonSizedBox(0, 5),
                                     WidgetUtils.onlyTextCenter(
-                                        jinbi,
+                                        jinbi2,
                                         StyleUtils.getCommonTextStyle(
                                             color: Colors.white,
                                             fontSize: ScreenUtil().setSp(25))),
@@ -674,7 +684,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                         ScreenUtil().setHeight(24)),
                                     WidgetUtils.commonSizedBox(0, 5),
                                     WidgetUtils.onlyTextCenter(
-                                        zuanshi,
+                                        zuanshi2,
                                         StyleUtils.getCommonTextStyle(
                                             color: Colors.white,
                                             fontSize: ScreenUtil().setSp(25))),
@@ -731,28 +741,33 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                         child: GestureDetector(
                                           onTap: (() {
                                             // eventBus.fire(LiWuShowBack(url: imgUrl, listPeople: listPeople, numbers: numbers));
-                                            if(isMaiPeople == false){
+                                            if(isCheck == false){
                                               setState(() {
-                                                listPeople[9] = true;
+                                                isCheck = true;
                                               });
-                                              eventBus.fire(ResidentBack(isBack: true));
-                                              Navigator.pop(context);
-                                              if(svga.isEmpty){
-                                                // ignore: use_build_context_synchronously
-                                                MyUtils.goTransparentPageCom(context, RoomShowLiWuPage(listPeople: listPeople,url: url));
+                                              if(isMaiPeople == false){
+                                                setState(() {
+                                                  listPeople[9] = true;
+                                                });
+                                                eventBus.fire(ResidentBack(isBack: true));
+                                                Navigator.pop(context);
+                                                if(svga.isEmpty){
+                                                  // ignore: use_build_context_synchronously
+                                                  MyUtils.goTransparentPageCom(context, RoomShowLiWuPage(listPeople: listPeople,url: url));
+                                                }else{
+                                                  eventBus.fire(SVGABack(isAll: false, url: url, listurl: listurl));
+                                                }
                                               }else{
-                                                eventBus.fire(SVGABack(isAll: false, url: url, listurl: listurl));
-                                              }
-                                            }else{
-                                              if(isChoosePeople == false){
-                                                MyToastUtils.showToastBottom('请选择要送的对象');
-                                                return;
-                                              }else{
-                                                if(giftId.isEmpty){
-                                                  MyToastUtils.showToastBottom('请选择要送的礼物');
+                                                if(isChoosePeople == false){
+                                                  MyToastUtils.showToastBottom('请选择要送的对象');
                                                   return;
                                                 }else{
-                                                  doPostSendGift();
+                                                  if(giftId.isEmpty){
+                                                    MyToastUtils.showToastBottom('请选择要送的礼物');
+                                                    return;
+                                                  }else{
+                                                    doPostSendGift();
+                                                  }
                                                 }
                                               }
                                             }
@@ -1294,6 +1309,9 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
       CommonBean bean = await DataUtils.postSendGift(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
+          setState(() {
+            isCheck = false;
+          });
           eventBus.fire(ResidentBack(isBack: true));
           // ignore: use_build_context_synchronously
           Navigator.pop(context);
@@ -1357,8 +1375,9 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
     }
   }
 
+
   // 金币 钻石
-  String jinbi = '', zuanshi = '';
+  String jinbi = '', jinbi2 = '', zuanshi = '', zuanshi2 = '';
   /// 钱包余额
   Future<void> doPostBalance() async {
     try {
@@ -1366,15 +1385,22 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
-            if(double.parse(bean.data!.goldBean!) > 100000){
-              jinbi = '${(double.parse(bean.data!.goldBean!)/100000)}w';
+            if(double.parse(bean.data!.goldBean!) > 10000){
+              jinbi = '${(double.parse(bean.data!.goldBean!)/10000)}w';
+              List<String> a = jinbi.split('.');
+              LogE('余额 == ${a[1]}');
+              jinbi2 = '${a[0]}.${a[1].substring(0,2)}w';
             }else{
               jinbi = bean.data!.goldBean!;
+              jinbi2 = bean.data!.goldBean!;
             }
-            if(double.parse(bean.data!.diamond!) > 100000){
-              zuanshi = '${(double.parse(bean.data!.diamond!)/100000)}w';
+            if(double.parse(bean.data!.diamond!) > 10000){
+              zuanshi = '${(double.parse(bean.data!.diamond!)/10000)}w';
+              List<String> a = zuanshi.split('.');
+              zuanshi2 = '${a[0]}.${a[1].substring(0,2)}w';
             }else{
               zuanshi = bean.data!.diamond!;
+              zuanshi2 = bean.data!.diamond!;
             }
           });
           break;

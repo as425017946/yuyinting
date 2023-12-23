@@ -72,7 +72,9 @@ class _RoomGuanLiYuanPageState extends State<RoomGuanLiYuanPage> {
                 ),
                 widget.type == 1 ? GestureDetector(
                   onTap: ((){
-                    doPostSetRoomAdmin(list[i].uid.toString(),i);
+                    if(MyUtils.checkClick()) {
+                      doPostSetRoomAdmin(list[i].uid.toString(), i);
+                    }
                   }),
                   child: Container(
                     width: ScreenUtil().setHeight(100),
@@ -107,7 +109,9 @@ class _RoomGuanLiYuanPageState extends State<RoomGuanLiYuanPage> {
           Expanded(
             child: GestureDetector(
               onTap: (() {
-                Navigator.pop(context);
+                if(MyUtils.checkClick()) {
+                  Navigator.pop(context);
+                }
               }),
               child: Container(
                 height: double.infinity,

@@ -117,7 +117,7 @@ class _QueRenPageState extends State<QueRenPage> {
                         sp.setBool('car_queren', false);
                       }
                       Navigator.pop(context);
-                      eventBus.fire(QuerenBack(title: widget.title, jine: widget.jine, index: widget.index));
+                      eventBus.fire(QuerenBack(title: '竖屏赛车', jine: widget.jine, index: widget.index));
                     }),
                     child: Container(
                       width: 200.h,

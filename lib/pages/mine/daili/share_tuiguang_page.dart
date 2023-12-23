@@ -57,7 +57,9 @@ class _ShareTuiguangPageState extends State<ShareTuiguangPage> {
               children: [
                 GestureDetector(
                   onTap: (() {
-                     MyUtils.saveNetworkImageToGallery(imgUrl);
+    if(MyUtils.checkClick()) {
+      MyUtils.saveNetworkImageToGallery(imgUrl);
+    }
                   }),
                   child: WidgetUtils.myContainer(
                       ScreenUtil().setHeight(70),

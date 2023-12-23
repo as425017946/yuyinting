@@ -24,9 +24,9 @@ class JiesuanPage extends StatefulWidget {
 
 class _JiesuanPageState extends State<JiesuanPage> {
   var appBar;
-  List<Data> list = [];
-  // 直刷流水返点、背包流水返点、钻石游戏流水返点
-  String zjMoney = '', bbMoney = '', zsMoney = '';
+  List<Settle> list = [];
+  // 直刷流水返点、背包流水返点、钻石游戏流水返点、公会名称
+  String zjMoney = '', bbMoney = '', zsMoney = '', name = '';
   int page = 1;
   final RefreshController _refreshController =
   RefreshController(initialRefresh: false);
@@ -166,22 +166,25 @@ class _JiesuanPageState extends State<JiesuanPage> {
                               WidgetUtils.commonSizedBox(0, 140),
                               SizedBox(
                                 width: ScreenUtil().setHeight(200),
-                                child: WidgetUtils.onlyText('直刷流水返点', StyleUtils.getCommonTextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(25))),
+                                child: Text(name,style: TextStyle(
+                                    fontSize: ScreenUtil().setSp(55),
+                                    color: Colors.white,
+                                    fontFamily: 'YOUSHEBIAOTIHEI'),),
                               ),
-                              WidgetUtils.onlyText('27%', StyleUtils.getCommonTextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(33)))
+                              // WidgetUtils.onlyText('27%', StyleUtils.getCommonTextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(33)))
                             ],
                           ),
-                          WidgetUtils.commonSizedBox(8, 5),
-                          Row(
-                            children: [
-                              WidgetUtils.commonSizedBox(0, 140),
-                              SizedBox(
-                                width: ScreenUtil().setHeight(200),
-                                child: WidgetUtils.onlyText('背包流水返点', StyleUtils.getCommonTextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(25))),
-                              ),
-                              WidgetUtils.onlyText('27%', StyleUtils.getCommonTextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(33)))
-                            ],
-                          ),
+                          // WidgetUtils.commonSizedBox(8, 5),
+                          // Row(
+                          //   children: [
+                          //     WidgetUtils.commonSizedBox(0, 140),
+                          //     SizedBox(
+                          //       width: ScreenUtil().setHeight(200),
+                          //       child: WidgetUtils.onlyText('背包流水返点', StyleUtils.getCommonTextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(25))),
+                          //     ),
+                          //     WidgetUtils.onlyText('27%', StyleUtils.getCommonTextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(33)))
+                          //   ],
+                          // ),
                           // WidgetUtils.commonSizedBox(8, 5),
                           // Row(
                           //   children: [
@@ -239,11 +242,12 @@ class _JiesuanPageState extends State<JiesuanPage> {
             if (page == 1) {
               list.clear();
             }
-            if (bean.data!.isNotEmpty) {
-              list = bean.data!;
+            name = bean.data!.guildName!;
+            if (bean.data!.settle!.isNotEmpty) {
+              list = bean.data!.settle!;
             }else{
               if(page > 1){
-                if(bean.data!.length < MyConfig.pageSize){
+                if(bean.data!.settle!.length < MyConfig.pageSize){
                   _refreshController.loadNoData();
                 }
               }

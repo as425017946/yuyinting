@@ -4,6 +4,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:yuyinting/pages/room/room_messages_more_page.dart';
 import '../../colors/my_colors.dart';
 import '../../db/DatabaseHelper.dart';
+import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 
@@ -16,7 +17,6 @@ class RoomMessagesPage extends StatefulWidget {
 }
 
 class _RoomMessagesPageState extends State<RoomMessagesPage> {
-
   List<Map<String, dynamic>> listMessage = [];
   List<int> listRead = [];
 
@@ -33,13 +33,19 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
       children: [
         GestureDetector(
           onTap: (() {
-            Future.delayed(const Duration(seconds: 0), () {
-              Navigator.of(context).push(PageRouteBuilder(
-                  opaque: false,
-                  pageBuilder: (context, animation, secondaryAnimation) {
-                    return RoomMessagesMorePage(otherUid: listMessage[i]['otherUid'], nickName: listMessage[i]['nickName'], otherImg: listMessage[i]['otherHeadImg'],);
-                  }));
-            });
+            if (MyUtils.checkClick()) {
+              Future.delayed(const Duration(seconds: 0), () {
+                Navigator.of(context).push(PageRouteBuilder(
+                    opaque: false,
+                    pageBuilder: (context, animation, secondaryAnimation) {
+                      return RoomMessagesMorePage(
+                        otherUid: listMessage[i]['otherUid'],
+                        nickName: listMessage[i]['nickName'],
+                        otherImg: listMessage[i]['otherHeadImg'],
+                      );
+                    }));
+              });
+            }
           }),
           child: Container(
             margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
@@ -72,9 +78,11 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
                             //     ScreenUtil().setHeight(29)),
                             const Expanded(child: Text('')),
                             WidgetUtils.onlyText(
-                                DateTime.parse(DateTime.fromMillisecondsSinceEpoch(
-                                    int.parse(listMessage[i]['add_time']))
-                                    .toString())
+                                DateTime.parse(
+                                        DateTime.fromMillisecondsSinceEpoch(
+                                                int.parse(
+                                                    listMessage[i]['add_time']))
+                                            .toString())
                                     .toString()
                                     .substring(0, 10),
                                 StyleUtils.getCommonTextStyle(
@@ -88,23 +96,30 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
                         children: [
                           listMessage[i]['type'] == 1
                               ? Text(
-                            listMessage[i]['content'].toString().length > 15 ? listMessage[i]['content'].toString().substring(0,15) : listMessage[i]['content'],
-                            overflow: TextOverflow.ellipsis,
-                            style: StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ3,
-                                fontSize: ScreenUtil().setSp(25)),
-                          )
-                              :  listMessage[i]['type'] == 2 ? Text(
-                            '[图片]',
-                            style: StyleUtils.getCommonTextStyle(
-                                color: MyColors.homeTopBG,
-                                fontSize: ScreenUtil().setSp(23)),
-                          ) : Text(
-                            '[语音]',
-                            style: StyleUtils.getCommonTextStyle(
-                                color: MyColors.homeTopBG,
-                                fontSize: ScreenUtil().setSp(23)),
-                          ),
+                                  listMessage[i]['content'].toString().length >
+                                          15
+                                      ? listMessage[i]['content']
+                                          .toString()
+                                          .substring(0, 15)
+                                      : listMessage[i]['content'],
+                                  overflow: TextOverflow.ellipsis,
+                                  style: StyleUtils.getCommonTextStyle(
+                                      color: MyColors.roomTCWZ3,
+                                      fontSize: ScreenUtil().setSp(25)),
+                                )
+                              : listMessage[i]['type'] == 2
+                                  ? Text(
+                                      '[图片]',
+                                      style: StyleUtils.getCommonTextStyle(
+                                          color: MyColors.homeTopBG,
+                                          fontSize: ScreenUtil().setSp(23)),
+                                    )
+                                  : Text(
+                                      '[语音]',
+                                      style: StyleUtils.getCommonTextStyle(
+                                          color: MyColors.homeTopBG,
+                                          fontSize: ScreenUtil().setSp(23)),
+                                    ),
                         ],
                       )
                     ],
@@ -129,7 +144,9 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
           Expanded(
             child: GestureDetector(
               onTap: (() {
-                Navigator.pop(context);
+                if (MyUtils.checkClick()) {
+                  Navigator.pop(context);
+                }
               }),
               child: Container(
                 height: double.infinity,
@@ -161,11 +178,11 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
                 Expanded(
                   child: listMessage.isNotEmpty
                       ? ListView.builder(
-                    padding: EdgeInsets.only(
-                        top: ScreenUtil().setHeight(10)),
-                    itemBuilder: _itemTuiJian,
-                    itemCount: listMessage.length,
-                  )
+                          padding:
+                              EdgeInsets.only(top: ScreenUtil().setHeight(10)),
+                          itemBuilder: _itemTuiJian,
+                          itemCount: listMessage.length,
+                        )
                       : const Text(''),
                 )
               ],

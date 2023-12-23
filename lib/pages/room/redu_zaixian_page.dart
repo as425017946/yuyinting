@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+import 'package:yuyinting/utils/loading.dart';
 
 import '../../bean/memberListBean.dart';
 import '../../colors/my_colors.dart';
@@ -70,7 +71,10 @@ class _ReDuZaiXianPageState extends State<ReDuZaiXianPage> with AutomaticKeepAli
       children: [
         GestureDetector(
           onTap: (() {
-            MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: list[i].uid.toString(),));
+            if(MyUtils.checkClick()) {
+              MyUtils.goTransparentRFPage(
+                  context, PeopleInfoPage(otherId: list[i].uid.toString(),));
+            }
           }),
           child: Container(
             margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
@@ -166,6 +170,7 @@ class _ReDuZaiXianPageState extends State<ReDuZaiXianPage> with AutomaticKeepAli
 
   /// 关注用户或房间
   Future<void> doPostMemberList() async {
+    Loading.show();
     Map<String, dynamic> params = <String, dynamic>{
       'room_id': widget.roomID,
       'page': page,
@@ -198,7 +203,9 @@ class _ReDuZaiXianPageState extends State<ReDuZaiXianPage> with AutomaticKeepAli
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
+      Loading.dismiss();
     } catch (e) {
+      Loading.dismiss();
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }

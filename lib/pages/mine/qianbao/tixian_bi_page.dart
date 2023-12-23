@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yuyinting/utils/my_toast_utils.dart';
 
+import '../../../bean/Common_bean.dart';
+import '../../../bean/isPayBean.dart';
 import '../../../colors/my_colors.dart';
+import '../../../config/my_config.dart';
+import '../../../http/data_utils.dart';
+import '../../../http/my_http_config.dart';
+import '../../../utils/event_utils.dart';
+import '../../../utils/loading.dart';
+import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
+import '../../message/pay_ts_page.dart';
+import '../setting/password_pay_page.dart';
 
 /// V币提现
 class TixianBiPage extends StatefulWidget {
@@ -19,17 +30,58 @@ class _TixianBiPageState extends State<TixianBiPage> {
   TextEditingController controllerName = TextEditingController();
   TextEditingController controllerAccount = TextEditingController();
   TextEditingController controllerNumber = TextEditingController();
-
+  String daozhang = '0';
+  var listenTX, listenMM;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     appBar = WidgetUtils.getAppBar('提现', true, context, false, 0);
+    eventBus.on<SubmitButtonBack>().listen((event) {
+      if(event.title == '申请提现'){
+        if(controllerName.text.isEmpty){
+          MyToastUtils.showToastBottom('请输入姓名');
+          return;
+        }
+        if(controllerAccount.text.isEmpty){
+          MyToastUtils.showToastBottom('请输入账号');
+          return;
+        }
+        if(controllerNumber.text.isEmpty){
+          MyToastUtils.showToastBottom('请输入币数量');
+          return;
+        }
+        if(double.parse(controllerNumber.text.toString()) > 10){
+          setState(() {
+            daozhang = (double.parse(controllerNumber.text.toString()) / 10).toStringAsFixed(0);
+          });
+        }else{
+          MyToastUtils.showToastBottom('提现数量不足10个');
+          return;
+        }
+        //先判断是否有支付密码
+        doPostPayPwd();
+      }
+    });
+    listenMM = eventBus.on<RoomBack>().listen((event) {
+      if(event.title == '发红包已输入密码'){
+        MyUtils.hideKeyboard(context);
+        doPostWithdrawal(event.index!);
+      }
+    });
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    listenTX.cancel();
+    listenMM.cancel();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: appBar,
       backgroundColor: MyColors.homeBG,
       body: SingleChildScrollView(
@@ -159,12 +211,19 @@ class _TixianBiPageState extends State<TixianBiPage> {
                         WidgetUtils.showImages('assets/images/mine_wallet_dd.png', ScreenUtil().setHeight(48), ScreenUtil().setHeight(48)),
                         WidgetUtils.commonSizedBox(0, 20),
                         Expanded(
-                          child: WidgetUtils.commonTextField(
-                              controllerNumber,  '请输入币数量'),
+                          child: WidgetUtils.commonTextFieldNumber(
+                              controller: controllerNumber, hintText: '请输入币数量'),
                         ),
                         GestureDetector(
                           onTap: ((){
-
+                              if(double.parse(widget.shuliang) > 10){
+                                setState(() {
+                                  controllerNumber.text = '${(double.parse(widget.shuliang) / 10).toStringAsFixed(0)}0';
+                                  daozhang = (double.parse(widget.shuliang) / 10).toStringAsFixed(0);
+                                });
+                              }else{
+                                MyToastUtils.showToastBottom('提现数量不足10个');
+                              }
                           }),
                           child: WidgetUtils.onlyText('全部', StyleUtils.getCommonTextStyle(color: MyColors.walletWZBlue, fontSize: ScreenUtil().setSp(32))),
                         ),
@@ -173,9 +232,9 @@ class _TixianBiPageState extends State<TixianBiPage> {
                     WidgetUtils.myLine(),
                     Row(
                       children: [
-                        WidgetUtils.onlyText('到账V币', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(32))),
+                        WidgetUtils.onlyText('到账金额', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(32))),
                         WidgetUtils.commonSizedBox(0, 10),
-                        WidgetUtils.onlyText('￥0', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(32), fontWeight: FontWeight.w600)),
+                        WidgetUtils.onlyText('￥$daozhang', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(32), fontWeight: FontWeight.w600)),
                       ],
                     )
                   ],
@@ -198,5 +257,71 @@ class _TixianBiPageState extends State<TixianBiPage> {
         )
       ),
     );
+  }
+
+  /// 申请提现
+  Future<void> doPostWithdrawal(mima) async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'type': '1', //1金币  2钻石
+      'method': '2', //提现方式 2 支付宝 3银行卡
+      'num': controllerNumber.text.toString(), //数量
+      'account': controllerAccount.text.toString(), //账号或钱包地址
+      'name': controllerName.text.toString(), // 名字
+      'pay_pwd': mima, //支付密码
+    };
+    try {
+      Loading.show();
+      CommonBean bean = await DataUtils.postWithdrawal(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          MyToastUtils.showToastBottom('提现成功！');
+          eventBus.fire(SubmitButtonBack(title: '金币提现成功'));
+          Navigator.pop(context);
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+  /// 是否设置了支付密码
+  Future<void> doPostPayPwd() async {
+    try {
+      isPayBean bean = await DataUtils.postPayPwd();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+        //1已设置  0未设置
+          if(bean.data!.isSet == 1){
+            // 进入输入密码页面
+            // ignore: use_build_context_synchronously
+            MyUtils.goTransparentPage(context, const PayTSPage());
+          }else{
+            MyToastUtils.showToastBottom('请先设置支付密码！');
+            // ignore: use_build_context_synchronously
+            MyUtils.goTransparentPageCom(
+                context,
+                const PasswordPayPage());
+          }
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
   }
 }

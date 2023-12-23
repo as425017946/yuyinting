@@ -34,7 +34,7 @@ class _SettingPageState extends State<SettingPage> {
     if(sp.getString('shimingzhi').toString() == '0'){
       shiming = '待审核';
     }else if(sp.getString('shimingzhi').toString() == '1'){
-      shiming = '已审核';
+      shiming = '已认证';
     }else if(sp.getString('shimingzhi').toString() == '1'){
       shiming = '已驳回';
     }else{

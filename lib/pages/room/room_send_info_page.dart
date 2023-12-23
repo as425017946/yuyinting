@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/pages/room/room_bq_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
@@ -39,7 +40,9 @@ class _RoomSendInfoPageState extends State<RoomSendInfoPage> {
           Expanded(
               child: GestureDetector(
             onTap: (() {
-              Navigator.pop(context);
+      if(MyUtils.checkClick()) {
+        Navigator.pop(context);
+      }
             }),
             child: Container(
               color: Colors.transparent,
@@ -72,6 +75,7 @@ class _RoomSendInfoPageState extends State<RoomSendInfoPage> {
                       controller: controller,
                       inputFormatters: [
                         RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                        LengthLimitingTextInputFormatter(15)//限制输入长度
                       ],
                       style: StyleUtils.loginTextStyle,
                       onSubmitted: (value) {
@@ -79,7 +83,9 @@ class _RoomSendInfoPageState extends State<RoomSendInfoPage> {
                           MyToastUtils.showToastBottom('请输入要发送的信息');
                           return;
                         }
-                        eventBus.fire(SendRoomInfoBack(info: value));
+                        if(MyUtils.checkClick()) {
+                          eventBus.fire(SendRoomInfoBack(info: value));
+                        }
                         setState(() {
                           Navigator.pop(context);
                         });
@@ -119,8 +125,10 @@ class _RoomSendInfoPageState extends State<RoomSendInfoPage> {
                 WidgetUtils.commonSizedBox(0, 20.h),
                 GestureDetector(
                   onTap: ((){
-                    Navigator.pop(context);
-                    MyUtils.goTransparentPage(context, const RoomBQPage());
+    if(MyUtils.checkClick()) {
+      Navigator.pop(context);
+      MyUtils.goTransparentPage(context, const RoomBQPage());
+    }
                   }),
                   child: WidgetUtils.showImages('assets/images/trends_biaoqing.png', 50.h, 50.h),
                 ),

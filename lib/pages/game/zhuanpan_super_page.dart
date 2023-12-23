@@ -57,18 +57,19 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
   bool isClose = false;
   // 转几次 要花费多少
   int cishu = 1, feiyong = 1000;
-  var listen, listenZDY;
+  var listen, listenZDY, listen2;
   // 当前欢乐值进度，展示值
   int huanlezhi = 0, zhanshizhi = 0;
   // 是否可以点击启动
   bool isXiazhu = true;
 
   /// 播放音频
-  Soundpool soundpool = Soundpool(streamType: StreamType.notification);
+  late Soundpool soundpool;
   Future<void> playSound() async {
     int soundId = await rootBundle.load('assets/audio/zhuanpan_jin.MP3').then(((ByteData soundDate){
       return soundpool.load(soundDate);
     }));
+    soundpool.setVolume(volume: 1);
     await soundpool.play(soundId);
   }
 
@@ -76,6 +77,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
   @override
   void initState() {
     super.initState();
+    soundpool = Soundpool(streamType: StreamType.notification);
     doPostGetGameLuck();
     animationController = AnimationController(
       vsync: this,
@@ -119,9 +121,15 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
     );
 
     listen = eventBus.on<XZQuerenBack>().listen((event) {
-      doPostPlayRoulette(event.cishu);
+      if(event.title == '超级转盘') {
+        doPostPlayRoulette(event.cishu);
+      }
     });
-
+    listen2 = eventBus.on<SubmitButtonBack>().listen((event) {
+      if(event.title == '转盘关闭'){
+        soundpool.dispose();
+      }
+    });
     // 判断当前年月日是否为今天，如果不是，下注还是要提示
     DateTime now = DateTime.now();
     int year = now.year;
@@ -186,8 +194,10 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
 
   @override
   void dispose() {
+    LogE('====关闭2');
     animationController.dispose();
     listen.cancel();
+    listen2.cancel();
     listenZDY.cancel();
     super.dispose();
   }
@@ -569,10 +579,10 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
       playRouletteBean bean = await DataUtils.postPlayRoulette(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-        // 通知用户游戏开始不能离开
+          // 通知用户游戏开始不能离开
           eventBus.fire(ResidentBack(isBack: true));
           // 发送要减多少V豆
-          eventBus.fire(XiaZhuBack(jine: int.parse(number)*1000));
+          eventBus.fire(XiaZhuBack(jine: int.parse(number)*1000, type: bean.data!.curType as int));
           // 获取数据并赋值
           list.clear();
           list = bean.data!.gifts!;

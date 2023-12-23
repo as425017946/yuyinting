@@ -277,7 +277,7 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> with AutomaticKee
                       action = 'delete';
                     }else{
                       action = 'create';
-                      isShow = true;
+                      isShow = false;
                     }
                   });
                   if(_list[i].isLike == 0){

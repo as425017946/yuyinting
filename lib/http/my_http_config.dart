@@ -251,6 +251,10 @@ class MyHttpConfig{
   static const String settleDetail = "$baseURL/guild/settleDetail";
   // 房间热度
   static const String hotDegree = "$baseURL/room/hotDegree";
-
-
+  // 是否设置了支付密码
+  static const String payPwd = "$baseURL/user/payPwd";
+  // 提现申请
+  static const String withdrawal = "$baseURL/user/withdrawal";
+  // 离开房间
+  static const String leave = "$baseURL/room/leave";
 }

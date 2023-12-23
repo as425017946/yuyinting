@@ -6,6 +6,7 @@ import 'package:yuyinting/pages/mine/qianbao/dou_pay_page.dart';
 import 'package:yuyinting/pages/mine/qianbao/tixian_bi_page.dart';
 import 'package:yuyinting/pages/mine/qianbao/tixian_zuan_page.dart';
 import 'package:yuyinting/pages/mine/qianbao/zuan_pay_page.dart';
+import 'package:yuyinting/utils/loading.dart';
 import 'package:yuyinting/utils/my_utils.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
@@ -14,8 +15,10 @@ import '../../../bean/balanceBean.dart';
 import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
+import '../../../main.dart';
 import '../../../utils/event_utils.dart';
 import '../../../utils/my_toast_utils.dart';
+import '../mine_smz_page.dart';
 /// 我的钱包
 class WalletPage extends StatefulWidget {
   const WalletPage({Key? key}) : super(key: key);
@@ -34,6 +37,8 @@ class _WalletPageState extends State<WalletPage> {
     eventBus.on<SubmitButtonBack>().listen((event) {
       if(MyUtils.compare(event.title, '账单明细') == 0){
           Navigator.pushNamed(context, 'WalletMorePage');
+      }else if(event.title == '金币提成功'){
+        doPostBalance();
       }
     });
     doPostBalance();
@@ -173,7 +178,13 @@ class _WalletPageState extends State<WalletPage> {
                         /// 提现
                         GestureDetector(
                           onTap: ((){
-                            MyUtils.goTransparentPageCom(context, TixianBiPage(shuliang: shouyi));
+                            if(sp.getString('shimingzhi').toString() == '1'){
+                              MyUtils.goTransparentPageCom(context, TixianBiPage(shuliang: shouyi));
+                            }else if(sp.getString('shimingzhi').toString() == '0'){
+                              MyToastUtils.showToastBottom('审核中，请耐心等待！');
+                            }else{
+                              MyUtils.goTransparentPageCom(context, const MineSMZPage());
+                            }
                           }),
                           child: Container(
                             width: ScreenUtil().setHeight(115),
@@ -336,6 +347,7 @@ class _WalletPageState extends State<WalletPage> {
   String jinbi = '', zuanshi = '', shouyi  = '';
   /// 钱包余额
   Future<void> doPostBalance() async {
+    Loading.show();
     try {
       balanceBean bean = await DataUtils.postBalance();
       switch (bean.code) {
@@ -354,7 +366,9 @@ class _WalletPageState extends State<WalletPage> {
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
+      Loading.dismiss();
     } catch (e) {
+      Loading.dismiss();
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }

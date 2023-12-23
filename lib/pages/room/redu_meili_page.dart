@@ -7,6 +7,7 @@ import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
+import '../../utils/loading.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
@@ -64,6 +65,13 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage>  with AutomaticKeepAliveC
                                 StyleUtils.getCommonTextStyle(
                                     color: MyColors.roomTCWZ2,
                                     fontSize: ScreenUtil().setSp(25))),
+                            const Spacer(),
+                            WidgetUtils.onlyText(
+                                _list2[i].score.toString(),
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.roomTCWZ2,
+                                    fontSize: ScreenUtil().setSp(25))),
+                            WidgetUtils.commonSizedBox(0, 20.h),
                           ],
                         ),
                       ),
@@ -262,7 +270,18 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage>  with AutomaticKeepAliveC
                                   color: Colors.white,
                                   fontSize: ScreenUtil().setSp(21),
                                   fontWeight: FontWeight.w600)),
-                        )
+                        ),
+                        Container(
+                          width: ScreenUtil().setHeight(155),
+                          margin: EdgeInsets.only(top: 35.h),
+                          alignment: Alignment.topCenter,
+                          child: WidgetUtils.onlyTextCenter(
+                              _list.length > 1 ? _list[1].score.toString() : '',
+                              StyleUtils.getCommonTextStyle(
+                                  color: Colors.white,
+                                  fontSize: ScreenUtil().setSp(21),
+                                  fontWeight: FontWeight.w600)),
+                        ),
                       ],
                     )
                   ],
@@ -293,7 +312,19 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage>  with AutomaticKeepAliveC
                                   color: Colors.white,
                                   fontSize: ScreenUtil().setSp(21),
                                   fontWeight: FontWeight.w600)),
-                        )
+                        ),
+
+                        Container(
+                          width: ScreenUtil().setHeight(192),
+                          margin: EdgeInsets.only(top: 35.h),
+                          alignment: Alignment.topCenter,
+                          child: WidgetUtils.onlyTextCenter(
+                              _list.isNotEmpty ? _list[0].score.toString() : '',
+                              StyleUtils.getCommonTextStyle(
+                                  color: Colors.white,
+                                  fontSize: ScreenUtil().setSp(21),
+                                  fontWeight: FontWeight.w600)),
+                        ),
                       ],
                     )
                   ],
@@ -324,7 +355,18 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage>  with AutomaticKeepAliveC
                                   color: Colors.white,
                                   fontSize: ScreenUtil().setSp(21),
                                   fontWeight: FontWeight.w600)),
-                        )
+                        ),
+                        Container(
+                          width: ScreenUtil().setHeight(155),
+                          margin: EdgeInsets.only(top: 35.h),
+                          alignment: Alignment.topCenter,
+                          child: WidgetUtils.onlyTextCenter(
+                              _list.length > 2 ? _list[2].score.toString() : '',
+                              StyleUtils.getCommonTextStyle(
+                                  color: Colors.white,
+                                  fontSize: ScreenUtil().setSp(21),
+                                  fontWeight: FontWeight.w600)),
+                        ),
                       ],
                     )
                   ],
@@ -336,7 +378,7 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage>  with AutomaticKeepAliveC
           /// 展示在线用户
           ListView.builder(
             padding: EdgeInsets.only(
-                top: ScreenUtil().setHeight(20)),
+                top: 160.h),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: _itemTuiJian,
@@ -349,6 +391,7 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage>  with AutomaticKeepAliveC
 
   /// 榜单
   Future<void> doPostRankList() async {
+    Loading.show();
     Map<String, dynamic> params = <String, dynamic>{
       'category': 'charm',
       'date_type': dateType,
@@ -384,7 +427,9 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage>  with AutomaticKeepAliveC
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
+      Loading.dismiss();
     } catch (e) {
+      Loading.dismiss();
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }

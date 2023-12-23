@@ -176,8 +176,8 @@ class _CarShopPageState extends State<CarShopPage> {
           setState(() {
             list.clear();
             list = bean.data!.goodsList!;
-            if(double.parse(bean.data!.amount!) > 100000){
-              mogubi = '${double.parse(bean.data!.amount!)/100000}w';
+            if(double.parse(bean.data!.amount!) > 10000){
+              mogubi = '${double.parse(bean.data!.amount!)/10000}w';
             }else{
               mogubi = bean.data!.amount!.toString();
             }
@@ -211,9 +211,9 @@ class _CarShopPageState extends State<CarShopPage> {
           setState(() {
             if(mogubi.contains('w')){
               // 目的是先把 1w 转换成 10000
-              mogubi = (double.parse(mogubi.substring(0,mogubi.length - 1)) * 100000).toString();
+              mogubi = (double.parse(mogubi.substring(0,mogubi.length - 1)) * 10000).toString();
               // 减去花费的V豆
-              mogubi = '${(double.parse(mogubi) - sl)/100000}w';
+              mogubi = '${(double.parse(mogubi) - sl)/10000}w';
             }else{
               mogubi = (double.parse(mogubi) - sl).toString();
             }

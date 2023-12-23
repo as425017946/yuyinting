@@ -59,7 +59,9 @@ class _RoomGongNengState extends State<RoomGongNeng> {
           Expanded(
             child: GestureDetector(
               onTap: (() {
-                Navigator.pop(context);
+                if(MyUtils.checkClick()) {
+                  Navigator.pop(context);
+                }
               }),
               child: Container(
                 height: double.infinity,
@@ -94,7 +96,9 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                     WidgetUtils.commonSizedBox(0, 20),
                     GestureDetector(
                       onTap: ((){
+                        if(MyUtils.checkClick()) {
                           doPostSetShow();
+                        }
                       }),
                       child: Column(
                         children: [
@@ -124,14 +128,18 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                     const Expanded(child: Text('')),
                     GestureDetector(
                       onTap: ((){
-                        Navigator.pop(context);
-                        Future.delayed(const Duration(seconds: 0), () {
-                          Navigator.of(context).push(PageRouteBuilder(
-                              opaque: false,
-                              pageBuilder: (context, animation, secondaryAnimation) {
-                                return RoomPasswordPage(type: 1, roomID: widget.roomID,);
-                              }));
-                        });
+                        if(MyUtils.checkClick()) {
+                          Navigator.pop(context);
+                          Future.delayed(const Duration(seconds: 0), () {
+                            Navigator.of(context).push(PageRouteBuilder(
+                                opaque: false,
+                                pageBuilder: (context, animation,
+                                    secondaryAnimation) {
+                                  return RoomPasswordPage(
+                                    type: 1, roomID: widget.roomID,);
+                                }));
+                          });
+                        }
                       }),
                       child: Column(
                         children: [
@@ -165,7 +173,9 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                     GestureDetector(
                       onTap: ((){
                         // eventBus.fire(SubmitButtonBack(title: '清除公屏'));
-                        doPostCleanPublicScreen();
+                        if(MyUtils.checkClick()) {
+                          doPostCleanPublicScreen();
+                        }
                       }),
                       child: Column(
                         children: [
@@ -184,7 +194,9 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                     GestureDetector(
                       onTap: ((){
                         // eventBus.fire(SubmitButtonBack(title: '清除魅力'));
-                        doPostCleanCharm();
+                        if(MyUtils.checkClick()) {
+                          doPostCleanCharm();
+                        }
                       }),
                       child: Column(
                         children: [
@@ -202,15 +214,17 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                     const Expanded(child: Text('')),
                     GestureDetector(
                       onTap: ((){
-                        doPostSetBoss();
-                        setState(() {
-                          if(is_boss == 1){
-                            eventBus.fire(SubmitButtonBack(title: '老板位0'));
-                          }else{
-                            eventBus.fire(SubmitButtonBack(title: '老板位1'));
-                          }
-                        });
-                        eventBus.fire(SubmitButtonBack(title: '老板位'));
+    if(MyUtils.checkClick()) {
+      doPostSetBoss();
+      setState(() {
+        if (is_boss == 1) {
+          eventBus.fire(SubmitButtonBack(title: '老板位0'));
+        } else {
+          eventBus.fire(SubmitButtonBack(title: '老板位1'));
+        }
+      });
+      eventBus.fire(SubmitButtonBack(title: '老板位'));
+    }
                       }),
                       child: Column(
                         children: [
@@ -250,16 +264,18 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                     WidgetUtils.commonSizedBox(0, 20),
                     GestureDetector(
                       onTap: ((){
-                        setState(() {
-                          roomDX = !roomDX;
-                        });
-                        if(roomDX){
-                          MyToastUtils.showToastBottom('动效已开启');
-                          eventBus.fire(SubmitButtonBack(title: '动效已开启'));
-                        }else{
-                          MyToastUtils.showToastBottom('动效已关闭');
-                          eventBus.fire(SubmitButtonBack(title: '动效已关闭'));
-                        }
+    if(MyUtils.checkClick()) {
+      setState(() {
+        roomDX = !roomDX;
+      });
+      if (roomDX) {
+        MyToastUtils.showToastBottom('动效已开启');
+        eventBus.fire(SubmitButtonBack(title: '动效已开启'));
+      } else {
+        MyToastUtils.showToastBottom('动效已关闭');
+        eventBus.fire(SubmitButtonBack(title: '动效已关闭'));
+      }
+    }
                       }),
                       child: Column(
                         children: [
@@ -289,17 +305,18 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                     const Expanded(child: Text('')),
                     GestureDetector(
                       onTap: ((){
-                        setState(() {
-                          roomSY = !roomSY;
-                        });
-                        if(roomSY){
-                          MyToastUtils.showToastBottom('房间声音已开启');
-                          eventBus.fire(SubmitButtonBack(title: '房间声音已开启'));
-                        }else{
-                          MyToastUtils.showToastBottom('房间声音已关闭');
-                          eventBus.fire(SubmitButtonBack(title: '房间声音已关闭'));
-                        }
-
+    if(MyUtils.checkClick()) {
+      setState(() {
+        roomSY = !roomSY;
+      });
+      if (roomSY) {
+        MyToastUtils.showToastBottom('房间声音已开启');
+        eventBus.fire(SubmitButtonBack(title: '房间声音已开启'));
+      } else {
+        MyToastUtils.showToastBottom('房间声音已关闭');
+        eventBus.fire(SubmitButtonBack(title: '房间声音已关闭'));
+      }
+    }
                       }),
                       child: Column(
                         children: [
@@ -329,14 +346,16 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                     const Expanded(child: Text('')),
                     GestureDetector(
                       onTap: ((){
-                        Navigator.pop(context);
-                        Future.delayed(const Duration(seconds: 0), () {
-                          Navigator.of(context).push(PageRouteBuilder(
-                              opaque: false,
-                              pageBuilder: (context, animation, secondaryAnimation) {
-                                return RoomManagerPage(type: 1, roomID: widget.roomID,);
-                              }));
-                        });
+    if(MyUtils.checkClick()) {
+      Navigator.pop(context);
+      Future.delayed(const Duration(seconds: 0), () {
+        Navigator.of(context).push(PageRouteBuilder(
+            opaque: false,
+            pageBuilder: (context, animation, secondaryAnimation) {
+              return RoomManagerPage(type: 1, roomID: widget.roomID,);
+            }));
+      });
+    }
                       }),
                       child: Column(
                         children: [

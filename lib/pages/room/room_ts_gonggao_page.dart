@@ -3,9 +3,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
+
+import '../../utils/my_utils.dart';
+
 /// 房间内弹窗公告
 class RoomTSGongGaoPage extends StatefulWidget {
   String notice;
+
   RoomTSGongGaoPage({super.key, required this.notice});
 
   @override
@@ -22,7 +26,9 @@ class _RoomTSGongGaoPageState extends State<RoomTSGongGaoPage> {
           Expanded(
             child: GestureDetector(
               onTap: (() {
-                Navigator.pop(context);
+                if (MyUtils.checkClick()) {
+                  Navigator.pop(context);
+                }
               }),
               child: Container(
                 height: double.infinity,
@@ -33,7 +39,8 @@ class _RoomTSGongGaoPageState extends State<RoomTSGongGaoPage> {
           ),
           Container(
             margin: const EdgeInsets.only(left: 30, right: 30),
-            padding: const EdgeInsets.only(left: 20, top: 10, right: 20, bottom: 10),
+            padding:
+                const EdgeInsets.only(left: 20, top: 10, right: 20, bottom: 10),
             width: double.infinity,
             //边框设置
             decoration: const BoxDecoration(
@@ -45,16 +52,17 @@ class _RoomTSGongGaoPageState extends State<RoomTSGongGaoPage> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  WidgetUtils.onlyTextCenter('房间公告', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(30))),
+                  WidgetUtils.onlyTextCenter(
+                      '房间公告',
+                      StyleUtils.getCommonTextStyle(
+                          color: Colors.white,
+                          fontSize: ScreenUtil().setSp(30))),
                   WidgetUtils.commonSizedBox(5, 0),
-                  Text(
-                      widget.notice.isEmpty ? '暂无公告信息' : widget.notice,
+                  Text(widget.notice.isEmpty ? '暂无公告信息' : widget.notice,
                       style: TextStyle(
                           color: MyColors.jianbian3,
                           fontSize: ScreenUtil().setSp(22),
-                          height: 2
-                      )
-                  ),
+                          height: 2)),
                 ],
               ),
             ),
@@ -62,7 +70,9 @@ class _RoomTSGongGaoPageState extends State<RoomTSGongGaoPage> {
           Expanded(
             child: GestureDetector(
               onTap: (() {
-                Navigator.pop(context);
+                if (MyUtils.checkClick()) {
+                  Navigator.pop(context);
+                }
               }),
               child: Container(
                 height: double.infinity,

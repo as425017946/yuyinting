@@ -38,18 +38,19 @@ class EditMyInfoPage extends StatefulWidget {
 class _EditMyInfoPageState extends State<EditMyInfoPage> {
   TextEditingController controller = TextEditingController();
   TextEditingController controllerGexing = TextEditingController();
-  var appBar,listen,listen2,listen3;
+  var appBar, listen, listen2, listen3;
   List<File> imgArray = [];
 
   // //0-未知 1-男 2-女
   int sex = 0;
+
   // late List<String> list_sex = [];
   late List<String> listCity = [];
   List<String> list_p = [];
   List<String> list_pID = [];
   List<String> list_label = [];
   List<AssetEntity> lista = [];
-  
+
   String headImg = '',
       headImgID = '',
       nickName = '',
@@ -73,12 +74,12 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
     doPostMyIfon();
     doPstGetCity();
     listen = eventBus.on<FileBack>().listen((event) {
-      if(event.type == 0){
+      if (event.type == 0) {
         setState(() {
           headImg = event.info;
           headImgID = event.id;
         });
-      }else if(event.type == 1){
+      } else if (event.type == 1) {
         setState(() {
           voice_cardID = event.id;
         });
@@ -86,28 +87,28 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
     });
 
     listen2 = eventBus.on<SubmitButtonBack>().listen((event) {
-      if(event.title == '完成' && MyUtils.checkClick()){
+      if (event.title == '完成' && MyUtils.checkClick()) {
         doPostModifyUserInfo();
-      }else if(event.title == '标签选完'){
+      } else if (event.title == '标签选完') {
         setState(() {
           list_label = sp.getString('label_name').toString().split(',');
-          list_label.removeAt(list_label.length-1);
+          list_label.removeAt(list_label.length - 1);
         });
       }
     });
     listen3 = eventBus.on<PhotoBack>().listen((event) {
-        setState(() {
-          lista = event.selectAss!;
-          photo_id = '';
-          for(int i = 0; i < list_pID.length; i++){
-            if(photo_id.isNotEmpty) {
-              photo_id = '$photo_id,${list_pID[i]},';
-            }else{
-              photo_id = '${list_pID[i]},';
-            }
+      setState(() {
+        lista = event.selectAss!;
+        photo_id = '';
+        for (int i = 0; i < list_pID.length; i++) {
+          if (photo_id.isNotEmpty) {
+            photo_id = '$photo_id,${list_pID[i]},';
+          } else {
+            photo_id = '${list_pID[i]},';
           }
-          photo_id = '$photo_id,${event.id}';
-        });
+        }
+        photo_id = '$photo_id,${event.id}';
+      });
     });
   }
 
@@ -151,7 +152,6 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -165,13 +165,15 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
             /// 头像
             GestureDetector(
               onTap: (() {
-                Future.delayed(const Duration(seconds: 0), () {
-                  Navigator.of(context).push(PageRouteBuilder(
-                      opaque: false,
-                      pageBuilder: (context, animation, secondaryAnimation) {
-                        return const EditHeadPage();
-                      }));
-                });
+                if (MyUtils.checkClick()) {
+                  Future.delayed(const Duration(seconds: 0), () {
+                    Navigator.of(context).push(PageRouteBuilder(
+                        opaque: false,
+                        pageBuilder: (context, animation, secondaryAnimation) {
+                          return const EditHeadPage();
+                        }));
+                  });
+                }
               }),
               child: Container(
                 height: ScreenUtil().setHeight(110),
@@ -237,9 +239,12 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                           color: MyColors.g6,
                           fontSize: ScreenUtil().setSp(28))),
                   WidgetUtils.commonSizedBox(0, 10),
-                  Opacity(opacity: 0,
-                    child: WidgetUtils.showImages('assets/images/mine_more2.png',
-                        ScreenUtil().setHeight(27), ScreenUtil().setHeight(16)),
+                  Opacity(
+                    opacity: 0,
+                    child: WidgetUtils.showImages(
+                        'assets/images/mine_more2.png',
+                        ScreenUtil().setHeight(27),
+                        ScreenUtil().setHeight(16)),
                   )
                 ],
               ),
@@ -272,21 +277,23 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
             /// 生日
             GestureDetector(
               onTap: (() {
-                DateTime now = DateTime.now();
-                int year = now.year;
-                int month = now.month;
-                int day = now.day;
-                DatePicker.show(
-                  context,
-                  startDate: DateTime(1970, 1, 1),
-                  selectedDate: DateTime(year, month, day),
-                  endDate: DateTime(2023, 12, 31),
-                  onSelected: (date) {
-                    setState(() {
-                      birthday = date.toString().substring(0,10);
-                    });
-                  },
-                );
+                if (MyUtils.checkClick()) {
+                  DateTime now = DateTime.now();
+                  int year = now.year;
+                  int month = now.month;
+                  int day = now.day;
+                  DatePicker.show(
+                    context,
+                    startDate: DateTime(1970, 1, 1),
+                    selectedDate: DateTime(year, month, day),
+                    endDate: DateTime(2023, 12, 31),
+                    onSelected: (date) {
+                      setState(() {
+                        birthday = date.toString().substring(0, 10);
+                      });
+                    },
+                  );
+                }
               }),
               child: Container(
                 height: ScreenUtil().setHeight(100),
@@ -323,7 +330,10 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
             /// 声音名片
             GestureDetector(
               onTap: (() {
-                MyUtils.goTransparentPageCom(context, EditAudioPage(audioUrl: voiceCardUrl));
+                if (MyUtils.checkClick()) {
+                  MyUtils.goTransparentPageCom(
+                      context, EditAudioPage(audioUrl: voiceCardUrl));
+                }
               }),
               child: Container(
                 height: ScreenUtil().setHeight(100),
@@ -348,7 +358,9 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
             /// 所在城市
             GestureDetector(
               onTap: (() {
-                _onClickItem(listCity, '未知');
+                if (MyUtils.checkClick()) {
+                  _onClickItem(listCity, '未知');
+                }
               }),
               child: Container(
                 height: ScreenUtil().setHeight(100),
@@ -379,13 +391,15 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
             /// 我的标签
             GestureDetector(
               onTap: (() {
-                Future.delayed(const Duration(seconds: 0), () {
-                  Navigator.of(context).push(PageRouteBuilder(
-                      opaque: false,
-                      pageBuilder: (context, animation, secondaryAnimation) {
-                        return const EditBiaoqianPage();
-                      }));
-                });
+                if (MyUtils.checkClick()) {
+                  Future.delayed(const Duration(seconds: 0), () {
+                    Navigator.of(context).push(PageRouteBuilder(
+                        opaque: false,
+                        pageBuilder: (context, animation, secondaryAnimation) {
+                          return const EditBiaoqianPage();
+                        }));
+                  });
+                }
               }),
               child: Container(
                 constraints: BoxConstraints(
@@ -418,14 +432,14 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                         alignment: WrapAlignment.start,
                         spacing: ScreenUtil().setHeight(15),
                         runSpacing: ScreenUtil().setHeight(15),
-                        children: List.generate(list_label.length, (index) =>
-                            WidgetUtils.myContainerZishiying(
+                        children: List.generate(
+                            list_label.length,
+                            (index) => WidgetUtils.myContainerZishiying(
                                 MyColors.careBlue,
                                 list_label[index],
                                 StyleUtils.getCommonTextStyle(
                                     color: Colors.white,
-                                    fontSize: ScreenUtil().setSp(26)))
-                        ),
+                                    fontSize: ScreenUtil().setSp(26)))),
                       ),
                     ),
                   ],
@@ -455,21 +469,27 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                       direction: Axis.horizontal,
                       spacing: 10.h,
                       children: [
-                        for(int i = 0; i < list_p.length; i++)
+                        for (int i = 0; i < list_p.length; i++)
                           SizedBox(
                             height: ScreenUtil().setHeight(120),
                             width: ScreenUtil().setHeight(120),
                             child: Stack(
                               children: [
-                                WidgetUtils.CircleImageNet(ScreenUtil().setHeight(120), ScreenUtil().setHeight(120), ScreenUtil().setHeight(20), list_p[i]),
+                                WidgetUtils.CircleImageNet(
+                                    ScreenUtil().setHeight(120),
+                                    ScreenUtil().setHeight(120),
+                                    ScreenUtil().setHeight(20),
+                                    list_p[i]),
                                 Positioned(
                                   right: 0,
                                   top: 0,
                                   child: GestureDetector(
                                     onTap: () {
-                                      setState(() {
-                                        _removeImage(i);
-                                      });
+                                      if (MyUtils.checkClick()) {
+                                        setState(() {
+                                          _removeImage(i);
+                                        });
+                                      }
                                     },
                                     child: ClipOval(
                                       child: Container(
@@ -487,7 +507,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                               ],
                             ),
                           ),
-                        for(int i = 0; i < lista.length; i++)
+                        for (int i = 0; i < lista.length; i++)
                           Stack(
                             children: [
                               Container(
@@ -496,7 +516,8 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                                 //超出部分，可裁剪
                                 clipBehavior: Clip.hardEdge,
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(ScreenUtil().setHeight(20)),
+                                  borderRadius: BorderRadius.circular(
+                                      ScreenUtil().setHeight(20)),
                                 ),
                                 child: AssetEntityImage(
                                   lista[i],
@@ -511,9 +532,11 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                                 top: 0,
                                 child: GestureDetector(
                                   onTap: () {
-                                    setState(() {
-                                      _removeImage2(i);
-                                    });
+                                    if (MyUtils.checkClick()) {
+                                      setState(() {
+                                        _removeImage2(i);
+                                      });
+                                    }
                                   },
                                   child: ClipOval(
                                     child: Container(
@@ -530,18 +553,33 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                               ),
                             ],
                           ),
-                        list_p.length+lista.length < 4 ? GestureDetector(
-                          onTap: ((){
-                            Future.delayed(const Duration(seconds: 0), () {
-                              Navigator.of(context).push(PageRouteBuilder(
-                                  opaque: false,
-                                  pageBuilder: (context, animation, secondaryAnimation) {
-                                    return EditPhotoPage(length: 4-list_p.length-lista.length,);
-                                  }));
-                            });
-                          }),
-                          child: WidgetUtils.showImages('assets/images/images_add.png',ScreenUtil().setHeight(120), ScreenUtil().setHeight(120)),
-                        ): const Text(''),
+                        list_p.length + lista.length < 4
+                            ? GestureDetector(
+                                onTap: (() {
+                                  if(MyUtils.checkClick()) {
+                                    Future.delayed(const Duration(seconds: 0),
+                                            () {
+                                          Navigator.of(context).push(
+                                              PageRouteBuilder(
+                                                  opaque: false,
+                                                  pageBuilder: (context,
+                                                      animation,
+                                                      secondaryAnimation) {
+                                                    return EditPhotoPage(
+                                                      length: 4 -
+                                                          list_p.length -
+                                                          lista.length,
+                                                    );
+                                                  }));
+                                        });
+                                  }
+                                }),
+                                child: WidgetUtils.showImages(
+                                    'assets/images/images_add.png',
+                                    ScreenUtil().setHeight(120),
+                                    ScreenUtil().setHeight(120)),
+                              )
+                            : const Text(''),
                       ],
                     ),
                   ),
@@ -582,24 +620,24 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
             controller.text = nickName;
             controllerGexing.text = description;
             city = bean.data!.city!;
-            if(bean.data!.label!.isNotEmpty){
+            if (bean.data!.label!.isNotEmpty) {
               list_label = bean.data!.label!.split(',');
             }
-            if(bean.data!.photoId!.isNotEmpty){
+            if (bean.data!.photoId!.isNotEmpty) {
               list_pID = bean.data!.photoId!.split(',');
-              if(bean.data!.photoUrl!.length > 4){
+              if (bean.data!.photoUrl!.length > 4) {
                 list_p.add(bean.data!.photoUrl![0]);
                 list_p.add(bean.data!.photoUrl![1]);
                 list_p.add(bean.data!.photoUrl![2]);
                 list_p.add(bean.data!.photoUrl![3]);
-              }else{
+              } else {
                 list_p = bean.data!.photoUrl!;
               }
             }
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -625,7 +663,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -639,8 +677,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
 
   /// 修改个人资料
   Future<void> doPostModifyUserInfo() async {
-
-    if(controller.text.trim().isEmpty){
+    if (controller.text.trim().isEmpty) {
       MyToastUtils.showToastBottom('昵称不为空');
       return;
     }
@@ -654,17 +691,17 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
       'city': city,
       'label_id': sp.getString('label_id'),
       'photo_id': photo_id
-
     };
     try {
       CommonBean bean = await DataUtils.postModifyUserInfo(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
+          sp.setString('nickname', controller.text.trim());
           MyToastUtils.showToastBottom('资料修改成功');
           Navigator.pop(context);
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:

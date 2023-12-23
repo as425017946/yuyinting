@@ -35,6 +35,8 @@ class Data {
   int? uid;
   String? emPwd;
   String? emToken;
+  String? identity;
+
 
   Data(
       {this.token,
@@ -48,7 +50,8 @@ class Data {
         this.areaCode,
         this.uid,
         this.emPwd,
-        this.emToken});
+        this.emToken,
+        this.identity});
 
   Data.fromJson(Map<String, dynamic> json) {
     token = json['token'];
@@ -63,6 +66,7 @@ class Data {
     uid = json['uid'];
     emPwd = json['em_pwd'];
     emToken = json['em_token'];
+    identity = json['identity'];
   }
 
   Map<String, dynamic> toJson() {
@@ -79,6 +83,7 @@ class Data {
     data['uid'] = this.uid;
     data['em_pwd'] = this.emPwd;
     data['em_token'] = this.emToken;
+    data['identity'] = this.identity;
     return data;
   }
 }

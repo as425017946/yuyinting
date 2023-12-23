@@ -65,7 +65,9 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
     doPostBalance();
 
     listenXZ = eventBus.on<XZQuerenBack>().listen((event) {
-      doPostPlayRoulette(event.cishu);
+      if(event.title == '金星魔方') {
+        doPostPlayRoulette(event.cishu);
+      }
     });
 
     // 判断当前年月日是否为今天，如果不是，下注还是要提示
@@ -270,7 +272,9 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                       // 蓝色魔方和金色魔方按钮切换
                       GestureDetector(
                         onTap: ((){
-                          eventBus.fire(MofangBack(info: 0));
+                          if(isXiazhu){
+                            eventBus.fire(MofangBack(info: 0));
+                          }
                         }),
                         child: WidgetUtils.showImages('assets/images/mofang_jin.png', ScreenUtil().setHeight(75), ScreenUtil().setHeight(316)),
                       ),
@@ -505,7 +509,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                                 ScreenUtil().setHeight(24)),
                             WidgetUtils.commonSizedBox(0, 5),
                             WidgetUtils.onlyTextCenter(
-                                jinbi,
+                                jinbi2,
                                 StyleUtils.getCommonTextStyle(
                                     color: Colors.white,
                                     fontSize: ScreenUtil().setSp(23),
@@ -526,7 +530,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                                 ScreenUtil().setHeight(24)),
                             WidgetUtils.commonSizedBox(0, 5),
                             WidgetUtils.onlyTextCenter(
-                                zuanshi,
+                                zuanshi2,
                                 StyleUtils.getCommonTextStyle(
                                     color: Colors.white,
                                     fontSize: ScreenUtil().setSp(23),
@@ -684,7 +688,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
   }
 
   // 金币 钻石
-  String jinbi = '', zuanshi = '';
+  String jinbi = '', jinbi2 = '', zuanshi = '', zuanshi2 = '';
   /// 钱包余额
   Future<void> doPostBalance() async {
     try {
@@ -692,15 +696,17 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
-            if(double.parse(bean.data!.goldBean!) > 100000){
-              jinbi = '${(double.parse(bean.data!.goldBean!)/100000)}w';
+            jinbi = bean.data!.goldBean!;
+            if(double.parse(bean.data!.goldBean!) > 10000){
+              jinbi2 = '${(double.parse(bean.data!.goldBean!) / 10000).toStringAsFixed(2)}w';
             }else{
-              jinbi = bean.data!.goldBean!;
+              jinbi2 = bean.data!.goldBean!;
             }
-            if(double.parse(bean.data!.diamond!) > 100000){
-              zuanshi = '${(double.parse(bean.data!.diamond!)/100000)}w';
+            zuanshi = bean.data!.diamond!;
+            if(double.parse(bean.data!.diamond!) > 10000){
+              zuanshi2 = '${(double.parse(bean.data!.diamond!) / 10000).toStringAsFixed(2)}w';
             }else{
-              zuanshi = bean.data!.diamond!;
+              zuanshi2 = bean.data!.diamond!;
             }
           });
           break;
@@ -734,16 +740,16 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
       playRouletteBean bean = await DataUtils.postPlayRoulette(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-        // 把是否可以下注设置为可以
-          setState(() {
-            isXiazhu = true;
-          });
         // 获取数据并赋值
           list.clear();
           list = bean.data!.gifts!;
           zonge = bean.data!.total as int;
           // 如果是跳过动画，直接展示数据
           if(isTiaoguo){
+            // 把是否可以下注设置为可以
+              setState(() {
+                isXiazhu = true;
+              });
             setState(() {
               isTiaoguoLW = false;
             });
@@ -768,16 +774,28 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
             });
           }
           // 更新余额
-          setState(() {
-            if(jinbi.contains('w')){
-              // 目的是先把 1w 转换成 10000
-              jinbi = (double.parse(jinbi.substring(0,jinbi.length - 1)) * 100000).toString();
+          if(bean.data!.curType == 1){
+            if(double.parse(jinbi) > 10000){
               // 减去花费的V豆
-              jinbi = '${(double.parse(jinbi) - int.parse(number)*200)/100000}w';
+              jinbi = '${(double.parse(jinbi) - int.parse(number)*200)}';
+              //保留2位小数
+              jinbi2 = '${(double.parse(jinbi) / 10000).toStringAsFixed(2)}w';
             }else{
               jinbi = (double.parse(jinbi) - int.parse(number)*200).toString();
+              jinbi2 = jinbi;
             }
-          });
+          }else if(bean.data!.curType == 2){
+            if(double.parse(zuanshi) > 10000){
+              // 减去花费的V豆
+              zuanshi = '${(double.parse(zuanshi) - int.parse(number)*200)}';
+              //保留2位小数
+              zuanshi2 = '${(double.parse(zuanshi) / 10000).toStringAsFixed(2)}w';
+            }else{
+              zuanshi = (double.parse(zuanshi) - int.parse(number)*200).toString();
+              zuanshi2 = zuanshi;
+            }
+          }
+
           break;
         case MyHttpConfig.errorloginCode:
         // ignore: use_build_context_synchronously

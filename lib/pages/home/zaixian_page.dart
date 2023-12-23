@@ -92,7 +92,10 @@ class _ZaixianPageState extends State<ZaixianPage> with AutomaticKeepAliveClient
               children: [
                 GestureDetector(
                   onTap: ((){
-                    MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: list[i].uid.toString(),));
+    if(MyUtils.checkClick()) {
+      MyUtils.goTransparentRFPage(
+          context, PeopleInfoPage(otherId: list[i].uid.toString(),));
+    }
                   }),
                   child:  Stack(
                     alignment: Alignment.center,
@@ -156,24 +159,28 @@ class _ZaixianPageState extends State<ZaixianPage> with AutomaticKeepAliveClient
                     ],
                   ),
                 ),
-                list[i].isHi == 0
-                    ? GestureDetector(
+                if (list[i].isHi == 0) GestureDetector(
                         onTap: (() {
-                          MyUtils.goTransparentPageCom(
-                              context,
-                              TrendsHiPage(
-                                  imgUrl: list[i].avatar!,
-                                  uid: list[i].uid.toString(),
-                                  index: i));
+    if(MyUtils.checkClick()) {
+      MyUtils.goTransparentPageCom(
+          context,
+          TrendsHiPage(
+              imgUrl: list[i].avatar!,
+              uid: list[i].uid.toString(),
+              index: i));
+    }
                         }),
                         child: WidgetUtils.showImages(
                             'assets/images/trends_hi.png',
                             ScreenUtil().setHeight(40),
                             ScreenUtil().setHeight(90)),
-                      )
-                    : GestureDetector(
+                      ) else GestureDetector(
                         onTap: (() {
-                          MyUtils.goTransparentRFPage(context, ChatPage(nickName: list[i].nickname!, otherUid: list[i].uid.toString(), otherImg: list[i].avatar!,));
+    if(MyUtils.checkClick()) {
+      MyUtils.goTransparentRFPage(
+          context, ChatPage(nickName: list[i].nickname!, otherUid: list[i].uid
+          .toString(), otherImg: list[i].avatar!,));
+    }
                         }),
                         child: WidgetUtils.myContainer(
                             ScreenUtil().setHeight(40),

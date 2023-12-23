@@ -67,7 +67,9 @@ class _RoomBGPageState extends State<RoomBGPage> {
           Expanded(
             child: GestureDetector(
               onTap: (() {
-                Navigator.pop(context);
+                if(MyUtils.checkClick()) {
+                  Navigator.pop(context);
+                }
               }),
               child: Container(
                 height: double.infinity,
@@ -104,9 +106,11 @@ class _RoomBGPageState extends State<RoomBGPage> {
                     const Expanded(child: Text('')),
                     GestureDetector(
                       onTap: (() {
-                        if(isOK){
-                          doPostCheckRoomBg();
-                          Navigator.pop(context);
+                        if(MyUtils.checkClick()) {
+                          if (isOK) {
+                            doPostCheckRoomBg();
+                            Navigator.pop(context);
+                          }
                         }
                       }),
                       child: Container(

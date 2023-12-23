@@ -63,6 +63,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
       avatarFrameGifImg = '';
   List<String> list_p = [];
   String zhuangtai = '闭麦';
+  bool isMai = false; //判断麦上有没有这个人
 
   @override
   void initState() {
@@ -76,6 +77,15 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
     } else {
       zhuangtai = '开麦';
     }
+    // 用于判断麦上有没有点击的这个人
+    for (int i = 0; i < widget.listM.length; i++) {
+      if (widget.uid == widget.listM[i].uid.toString()) {
+        setState(() {
+          isMai = true;
+        });
+        break;
+      }
+    }
   }
 
   @override
@@ -87,7 +97,9 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
           Expanded(
             child: GestureDetector(
               onTap: (() {
-                Navigator.pop(context);
+    if(MyUtils.checkClick()) {
+      Navigator.pop(context);
+    }
               }),
               child: Container(
                 height: double.infinity,
@@ -129,12 +141,14 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                 WidgetUtils.commonSizedBox(0, 20),
                                 GestureDetector(
                                   onTap: (() {
-                                    MyUtils.goTransparentPage(
-                                        context,
-                                        RoomSendInfoPage(
-                                          info: nickName,
-                                        ));
-                                    Navigator.pop(context);
+    if(MyUtils.checkClick()) {
+      MyUtils.goTransparentPage(
+          context,
+          RoomSendInfoPage(
+            info: nickName,
+          ));
+      Navigator.pop(context);
+    }
                                   }),
                                   child: WidgetUtils.showImages(
                                       'assets/images/room_@ta.png',
@@ -176,12 +190,14 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                     WidgetUtils.commonSizedBox(0, 20),
                                     GestureDetector(
                                       onTap: (() {
-                                        MyUtils.goTransparentPage(
-                                            context,
-                                            RoomSendInfoPage(
-                                              info: nickName,
-                                            ));
-                                        Navigator.pop(context);
+    if(MyUtils.checkClick()) {
+      MyUtils.goTransparentPage(
+          context,
+          RoomSendInfoPage(
+            info: nickName,
+          ));
+      Navigator.pop(context);
+    }
                                       }),
                                       child: WidgetUtils.showImages(
                                           'assets/images/room_@ta.png',
@@ -209,12 +225,14 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                     WidgetUtils.commonSizedBox(0, 20),
                                     GestureDetector(
                                       onTap: (() {
-                                        MyUtils.goTransparentPage(
-                                            context,
-                                            RoomSendInfoPage(
-                                              info: nickName,
-                                            ));
-                                        Navigator.pop(context);
+    if(MyUtils.checkClick()) {
+      MyUtils.goTransparentPage(
+          context,
+          RoomSendInfoPage(
+            info: nickName,
+          ));
+      Navigator.pop(context);
+    }
                                       }),
                                       child: WidgetUtils.showImages(
                                           'assets/images/room_@ta.png',
@@ -307,88 +325,105 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                   fontSize: ScreenUtil().setSp(24))),
                         ],
                       ),
-                      description.isNotEmpty ? WidgetUtils.commonSizedBox(30, 0) : const Text(''),
+                      description.isNotEmpty
+                          ? WidgetUtils.commonSizedBox(30, 0)
+                          : const Text(''),
 
                       /// 上麦下麦
-                      sp.getString('role').toString() != 'user'
-                          ? Row(
-                              children: [
-                                WidgetUtils.commonSizedBox(0, 20),
-                                Stack(
-                                  alignment: Alignment.center,
+                      isMai
+                          ? sp.getString('role').toString() != 'user'
+                              ? Row(
                                   children: [
-                                    Opacity(
-                                      opacity: 0.6,
-                                      child: Row(
-                                        children: [
-                                          Container(
-                                            height: ScreenUtil().setHeight(60),
-                                            width: ScreenUtil().setHeight(110),
-                                            //边框设置
-                                            decoration: const BoxDecoration(
-                                              //背景
-                                              color: MyColors.roomMaiLiao2,
-                                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(30.0)),
-                                            ),
-                                          )
-                                        ],
-                                      ),
+                                    WidgetUtils.commonSizedBox(0, 20),
+                                    Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        Opacity(
+                                          opacity: 0.6,
+                                          child: Row(
+                                            children: [
+                                              Container(
+                                                height:
+                                                    ScreenUtil().setHeight(60),
+                                                width:
+                                                    ScreenUtil().setHeight(110),
+                                                //边框设置
+                                                decoration: const BoxDecoration(
+                                                  //背景
+                                                  color: MyColors.roomMaiLiao2,
+                                                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(
+                                                              30.0)),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: (() {
+    if(MyUtils.checkClick()) {
+      eventBus.fire(RoomBack(
+          title: '下麦',
+          index: widget.index));
+    }
+                                          }),
+                                          child: WidgetUtils.onlyTextCenter(
+                                              '下麦',
+                                              StyleUtils.getCommonTextStyle(
+                                                  color: MyColors.roomTCWZ1,
+                                                  fontSize:
+                                                      ScreenUtil().setSp(24))),
+                                        ),
+                                      ],
                                     ),
-                                    GestureDetector(
-                                      onTap: (() {
-                                        eventBus.fire(RoomBack(
-                                            title: '下麦', index: widget.index));
-                                      }),
-                                      child: WidgetUtils.onlyTextCenter(
-                                          '下麦',
-                                          StyleUtils.getCommonTextStyle(
-                                              color: MyColors.roomTCWZ1,
-                                              fontSize:
-                                                  ScreenUtil().setSp(24))),
+                                    const Expanded(child: Text('')),
+                                    Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        Opacity(
+                                          opacity: 0.6,
+                                          child: Row(
+                                            children: [
+                                              Container(
+                                                height:
+                                                    ScreenUtil().setHeight(60),
+                                                width:
+                                                    ScreenUtil().setHeight(110),
+                                                //边框设置
+                                                decoration: const BoxDecoration(
+                                                  //背景
+                                                  color: MyColors.roomMaiLiao2,
+                                                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(
+                                                              30.0)),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: (() {
+    if(MyUtils.checkClick()) {
+      doPostSetClose(widget.index);
+    }
+                                          }),
+                                          child: WidgetUtils.onlyTextCenter(
+                                              zhuangtai,
+                                              StyleUtils.getCommonTextStyle(
+                                                  color: MyColors.roomTCWZ1,
+                                                  fontSize:
+                                                      ScreenUtil().setSp(24))),
+                                        ),
+                                      ],
                                     ),
+                                    WidgetUtils.commonSizedBox(0, 20),
                                   ],
-                                ),
-                                const Expanded(child: Text('')),
-                                Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    Opacity(
-                                      opacity: 0.6,
-                                      child: Row(
-                                        children: [
-                                          Container(
-                                            height: ScreenUtil().setHeight(60),
-                                            width: ScreenUtil().setHeight(110),
-                                            //边框设置
-                                            decoration: const BoxDecoration(
-                                              //背景
-                                              color: MyColors.roomMaiLiao2,
-                                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(30.0)),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      onTap: (() {
-                                        doPostSetClose(widget.index);
-                                      }),
-                                      child: WidgetUtils.onlyTextCenter(
-                                          zhuangtai,
-                                          StyleUtils.getCommonTextStyle(
-                                              color: MyColors.roomTCWZ1,
-                                              fontSize:
-                                                  ScreenUtil().setSp(24))),
-                                    ),
-                                  ],
-                                ),
-                                WidgetUtils.commonSizedBox(0, 20),
-                              ],
-                            )
+                                )
+                              : const Text('')
                           : const Text(''),
 
                       const Expanded(child: Text('')),
@@ -399,7 +434,9 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                           Expanded(
                               child: GestureDetector(
                             onTap: (() {
-                              doPostFollow();
+    if(MyUtils.checkClick()) {
+      doPostFollow();
+    }
                             }),
                             child: WidgetUtils.onlyTextCenter(
                                 status == '0' ? '关注' : '已关注',
@@ -415,13 +452,15 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                           Expanded(
                               child: GestureDetector(
                             onTap: (() {
-                              Navigator.pop(context);
-                              MyUtils.goTransparentPage(
-                                  context,
-                                  RoomLiWuPage(
-                                    listM: widget.listM,
-                                    uid: widget.uid,
-                                  ));
+    if(MyUtils.checkClick()) {
+      Navigator.pop(context);
+      MyUtils.goTransparentPage(
+          context,
+          RoomLiWuPage(
+            listM: widget.listM,
+            uid: widget.uid,
+          ));
+    }
                             }),
                             child: WidgetUtils.onlyTextCenter(
                                 '送礼物',
@@ -583,10 +622,13 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                     : const Text(''),
 
                 GestureDetector(
-                  onTap: ((){
-                    if(MyUtils.checkClick()) {
-                      MyUtils.goTransparentRFPage(context,
-                          PeopleInfoPage(otherId: widget.uid,));
+                  onTap: (() {
+                    if (MyUtils.checkClick()) {
+                      MyUtils.goTransparentRFPage(
+                          context,
+                          PeopleInfoPage(
+                            otherId: widget.uid,
+                          ));
                     }
                   }),
                   child: Stack(
@@ -595,18 +637,22 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                       WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(120),
                           ScreenUtil().setHeight(120), headImg),
                       // 头像框静态图
-                      avatarFrameImg.isNotEmpty ? WidgetUtils
-                          .CircleHeadImage(
-                          ScreenUtil().setHeight(120),
-                          ScreenUtil().setHeight(120),
-                          avatarFrameImg) : const Text(''),
+                      avatarFrameImg.isNotEmpty
+                          ? WidgetUtils.CircleHeadImage(
+                              ScreenUtil().setHeight(120),
+                              ScreenUtil().setHeight(120),
+                              avatarFrameImg)
+                          : const Text(''),
                       // 头像框动态图
-                      avatarFrameGifImg.isEmpty ? SizedBox(
-                        height: 160.h,
-                        width: 160.h,
-                        child: SVGASimpleImage(
-                          resUrl:avatarFrameGifImg,),
-                      ) : const Text(''),
+                      avatarFrameGifImg.isEmpty
+                          ? SizedBox(
+                              height: 160.h,
+                              width: 160.h,
+                              child: SVGASimpleImage(
+                                resUrl: avatarFrameGifImg,
+                              ),
+                            )
+                          : const Text(''),
                     ],
                   ),
                 ),

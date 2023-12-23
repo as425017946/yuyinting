@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 import 'package:yuyinting/utils/event_utils.dart';
+import '../../../config/my_config.dart';
 import '../../../http/my_http_config.dart';
 import '../../../main.dart';
 import '../../../utils/loading.dart';
@@ -106,7 +107,9 @@ class _EditHeadPageState extends State<EditHeadPage> {
                   WidgetUtils.myLine(thickness: 10),
                   GestureDetector(
                     onTap: (() {
-                      onTapPickFromCamera();
+    if(MyUtils.checkClick()) {
+      onTapPickFromCamera();
+    }
                     }),
                     child: Container(
                       width: double.infinity,
@@ -126,7 +129,9 @@ class _EditHeadPageState extends State<EditHeadPage> {
                   GestureDetector(
                     onTap: (() {
                       // selectAssets();
-                      onTapPickFromGallery();
+                      if(MyUtils.checkClick()) {
+                        onTapPickFromGallery();
+                      }
                     }),
                     child: Container(
                       width: double.infinity,
@@ -147,7 +152,9 @@ class _EditHeadPageState extends State<EditHeadPage> {
                   GestureDetector(
                     onTap: (() {
                       // selectAssets();
-                      Navigator.pop(context);
+                      if(MyUtils.checkClick()) {
+                        Navigator.pop(context);
+                      }
                     }),
                     child: Container(
                       width: double.infinity,
@@ -174,18 +181,45 @@ class _EditHeadPageState extends State<EditHeadPage> {
   /// 获取文件url
   Future<void> doPostPostFileUpload(path) async {
     var dir = await path_provider.getTemporaryDirectory();
-    var targetPath = "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
-    var result = await FlutterImageCompress.compressAndGetFile(
-      path, targetPath,
-      quality: 50, // 压缩率
-      rotate: 0, // 旋转角度
-    );
+    String targetPath = '';
+    var result;
+    if (path.toString().contains('.gif') || path.toString().contains('.GIF')) {
+      targetPath = path;
+    } else if (path.toString().contains('.jpg') ||
+        path.toString().contains('.GPG')) {
+      targetPath =
+      "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
+      result = await FlutterImageCompress.compressAndGetFile(
+        path, targetPath,
+        quality: 50,
+        rotate: 0, // 旋转角度
+      );
+    } else if (path.toString().contains('.jpeg') ||
+        path.toString().contains('.GPEG')) {
+      targetPath =
+      "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpeg";
+      result = await FlutterImageCompress.compressAndGetFile(
+        path, targetPath,
+        quality: 50,
+        rotate: 0, // 旋转角度
+      );
+    } else {
+      targetPath =
+      "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.png";
+      result = await FlutterImageCompress.compressAndGetFile(
+        path, targetPath,
+        quality: 50,
+        rotate: 0, // 旋转角度
+      );
+    }
     Loading.show("头像上传中...");
     var name = path.substring(path.lastIndexOf("/") + 1, path.length);
     FormData formdata = FormData.fromMap(
       {
         'type': 'image',
-        "file": await MultipartFile.fromFile(result!.path,
+        "file": await MultipartFile.fromFile(path.toString().contains('.gif') || path.toString().contains('.GIF')
+            ? targetPath
+            : result!.path,
           filename: name,)
       },
     );
@@ -209,13 +243,14 @@ class _EditHeadPageState extends State<EditHeadPage> {
         // ignore: use_build_context_synchronously
         MyUtils.jumpLogin(context);
       }else{
-        MyToastUtils.showToastBottom(jsonResponse['msg']);
+        MyToastUtils.showToastBottom(MyConfig.errorTitleFile);
       }
 
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitleFile);
     }
 
   }

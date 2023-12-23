@@ -70,7 +70,9 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
           Expanded(
             child: GestureDetector(
               onTap: (() {
-                Navigator.pop(context);
+                if(MyUtils.checkClick()) {
+                  Navigator.pop(context);
+                }
               }),
               child: Container(
                 height: double.infinity,
@@ -157,29 +159,36 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
                   child: WidgetUtils.myLine(color: MyColors.g9),
                 ),
                 Expanded(
-                    child: Row(
+                    child: GestureDetector(
+                      onTap: ((){
+                        if(MyUtils.checkClick()){
+                          MyUtils.goTransparentPage(context, RoomGuanLiYuanPage(type: 0, roomID: widget.roomID,));
+                        }
+                      }),
+                      child: Row(
                   children: [
-                    WidgetUtils.commonSizedBox(0, 20),
-                    WidgetUtils.onlyText(
-                        '房间管理员',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ2,
-                            fontSize: ScreenUtil().setSp(25))),
-                    const Expanded(child: Text('')),
-                    list.isNotEmpty ? WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(60), ScreenUtil().setHeight(60), list[0].avatar!) : const Text(''),
-                    WidgetUtils.commonSizedBox(0, 2),
-                    list.length > 1 ? WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(60), ScreenUtil().setHeight(60), list[1].avatar!): const Text(''),
-                    WidgetUtils.commonSizedBox(0, 2),
-                    list.length > 2 ? WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(60), ScreenUtil().setHeight(60), list[2].avatar!): const Text(''),
-                    WidgetUtils.commonSizedBox(0, 10),
-                    Image(
-                      image: const AssetImage('assets/images/mine_more.png'),
-                      width: ScreenUtil().setHeight(12),
-                      height: ScreenUtil().setHeight(20),
-                    ),
-                    WidgetUtils.commonSizedBox(0, 20),
+                      WidgetUtils.commonSizedBox(0, 20),
+                      WidgetUtils.onlyText(
+                          '房间管理员',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ2,
+                              fontSize: ScreenUtil().setSp(25))),
+                      const Expanded(child: Text('')),
+                      list.isNotEmpty ? WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(60), ScreenUtil().setHeight(60), list[0].avatar!) : const Text(''),
+                      WidgetUtils.commonSizedBox(0, 2),
+                      list.length > 1 ? WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(60), ScreenUtil().setHeight(60), list[1].avatar!): const Text(''),
+                      WidgetUtils.commonSizedBox(0, 2),
+                      list.length > 2 ? WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(60), ScreenUtil().setHeight(60), list[2].avatar!): const Text(''),
+                      WidgetUtils.commonSizedBox(0, 10),
+                      Image(
+                        image: const AssetImage('assets/images/mine_more.png'),
+                        width: ScreenUtil().setHeight(12),
+                        height: ScreenUtil().setHeight(20),
+                      ),
+                      WidgetUtils.commonSizedBox(0, 20),
                   ],
-                )),
+                ),
+                    )),
               ],
             ),
           )
@@ -209,7 +218,9 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
                     WidgetUtils.commonSizedBox(0, 20),
                     GestureDetector(
                       onTap: ((){
-                        onTapPickFromGallery();
+    if(MyUtils.checkClick()) {
+      onTapPickFromGallery();
+    }
                       }),
                       child: Stack(
                         alignment: Alignment.bottomCenter,
@@ -244,8 +255,10 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
                         children: [
                           GestureDetector(
                             onTap: ((){
-                              Navigator.pop(context);
-                              MyUtils.goTransparentPageCom(context, const RoomName());
+    if(MyUtils.checkClick()) {
+      Navigator.pop(context);
+      MyUtils.goTransparentPageCom(context, const RoomName());
+    }
                             }),
                             child: Row(
                               children: [
@@ -301,7 +314,9 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
                 ),
                 GestureDetector(
                   onTap: ((){
-                    MyUtils.goTransparentPage(context, RoomGuanLiYuanPage(type: 1, roomID: widget.roomID,));
+                    if(MyUtils.checkClick()){
+                      MyUtils.goTransparentPage(context, RoomGuanLiYuanPage(type: 1, roomID: widget.roomID,));
+                    }
                   }),
                   child: SizedBox(
                     height: ScreenUtil().setHeight(80),
@@ -617,7 +632,7 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      MyToastUtils.showToastBottom(MyConfig.errorTitleFile);
     }
 
   }

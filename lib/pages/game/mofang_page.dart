@@ -20,6 +20,7 @@ class _MoFangPageState extends State<MoFangPage> with TickerProviderStateMixin {
   int _currentIndex = 0;
   late final PageController _controller;
 
+
   var listen;
 
   @override
@@ -38,6 +39,7 @@ class _MoFangPageState extends State<MoFangPage> with TickerProviderStateMixin {
           _controller.jumpToPage(_currentIndex);
         });
     });
+
   }
 
   @override

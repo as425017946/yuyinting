@@ -41,15 +41,17 @@ class _YouxiPageState extends State<YouxiPage>  with AutomaticKeepAliveClientMix
   Widget gameItems(BuildContext context,int i){
     return GestureDetector(
       onTap: ((){
-        if (i == 0) {
-          // 转盘
-          MyUtils.goTransparentPageCom(context, ZhuanPanPage(roomId: '0',));
-        } else if (i == 1) {
-          // 赛车
-          MyUtils.goTransparentPageCom(context, const Carpage());
-        } else if (i == 2) {
-          // 魔方
-          MyUtils.goTransparentPageCom(context, MoFangPage(roomID: '0',));
+        if(MyUtils.checkClick()) {
+          if (i == 0) {
+            // 转盘
+            MyUtils.goTransparentPageCom(context, ZhuanPanPage(roomId: '0',));
+          } else if (i == 1) {
+            // 赛车
+            MyUtils.goTransparentPageCom(context, const Carpage());
+          } else if (i == 2) {
+            // 魔方
+            MyUtils.goTransparentPageCom(context, MoFangPage(roomID: '0',));
+          }
         }
       }),
       child: Column(

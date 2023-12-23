@@ -33,13 +33,15 @@ class Data {
   String? avatar;
   String? description;
   String? addTime;
+  int? uid;
 
   Data(
       {this.nickname,
         this.gender,
         this.avatar,
         this.description,
-        this.addTime});
+        this.addTime,
+        this.uid});
 
   Data.fromJson(Map<String, dynamic> json) {
     nickname = json['nickname'];
@@ -47,6 +49,7 @@ class Data {
     avatar = json['avatar'];
     description = json['description'];
     addTime = json['add_time'];
+    uid = json['uid'];
   }
 
   Map<String, dynamic> toJson() {
@@ -56,6 +59,7 @@ class Data {
     data['avatar'] = this.avatar;
     data['description'] = this.description;
     data['add_time'] = this.addTime;
+    data['uid'] = this.uid;
     return data;
   }
 }

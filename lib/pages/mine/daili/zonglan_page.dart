@@ -59,22 +59,24 @@ class _ZonglanPageState extends State<ZonglanPage> {
                     color: MyColors.g6, fontSize: ScreenUtil().setSp(28))),
             GestureDetector(
               onTap: (() {
-                DateTime now = DateTime.now();
-                int year = now.year;
-                int month = now.month;
-                int day = now.day;
+    if(MyUtils.checkClick()) {
+      DateTime now = DateTime.now();
+      int year = now.year;
+      int month = now.month;
+      int day = now.day;
 
-                DatePicker.show(
-                  context,
-                  startDate: DateTime(1970, 1, 1),
-                  selectedDate: DateTime(year, month, day),
-                  endDate: DateTime(2023, 12, 31),
-                  onSelected: (date) {
-                    setState(() {
-                      starTime = date.toString().substring(0, 10);
-                    });
-                  },
-                );
+      DatePicker.show(
+        context,
+        startDate: DateTime(1970, 1, 1),
+        selectedDate: DateTime(year, month, day),
+        endDate: DateTime(2023, 12, 31),
+        onSelected: (date) {
+          setState(() {
+            starTime = date.toString().substring(0, 10);
+          });
+        },
+      );
+    }
               }),
               child: Container(
                 color: MyColors.dailiTime,

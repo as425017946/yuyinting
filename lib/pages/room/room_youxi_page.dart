@@ -26,7 +26,9 @@ class _RoomYouXiPageState extends State<RoomYouXiPage> {
         children: [
           Expanded(child: GestureDetector(
             onTap: ((){
-              Navigator.pop(context);
+      if(MyUtils.checkClick()) {
+        Navigator.pop(context);
+      }
             }),
             child: Container(color: Colors.transparent,),
           )),
@@ -51,27 +53,33 @@ class _RoomYouXiPageState extends State<RoomYouXiPage> {
                     WidgetUtils.commonSizedBox(0, 20.h),
                     GestureDetector(
                       onTap: ((){
-                        // 赛车
-                        Navigator.pop(context);
-                        MyUtils.goTransparentPage(context, const Carpage());
+    if(MyUtils.checkClick()) {
+      // 赛车
+      Navigator.pop(context);
+      MyUtils.goTransparentPage(context, const Carpage());
+    }
                       }),
                       child: WidgetUtils.showImages('assets/images/room_yx_1.png', 120.h, 120.h),
                     ),
                     WidgetUtils.commonSizedBox(0, 40.h),
                     GestureDetector(
                       onTap: ((){
-                        // 转盘
-                        Navigator.pop(context);
-                        MyUtils.goTransparentPage(context, ZhuanPanPage(roomId: widget.roomID,));
+    if(MyUtils.checkClick()) {
+      // 转盘
+      Navigator.pop(context);
+      MyUtils.goTransparentPage(context, ZhuanPanPage(roomId: widget.roomID,));
+    }
                       }),
                       child: WidgetUtils.showImages('assets/images/room_yx_2.png', 120.h, 120.h),
                     ),
                     WidgetUtils.commonSizedBox(0, 40.h),
                     GestureDetector(
                       onTap: ((){
-                        // 魔方
-                        Navigator.pop(context);
-                        MyUtils.goTransparentPage(context, MoFangPage(roomID: widget.roomID,));
+    if(MyUtils.checkClick()) {
+      // 魔方
+      Navigator.pop(context);
+      MyUtils.goTransparentPage(context, MoFangPage(roomID: widget.roomID,));
+    }
                       }),
                       child: WidgetUtils.showImages('assets/images/room_yx_3.png', 120.h, 120.h),
                     ),

@@ -302,7 +302,9 @@ class _EditAudioPageState extends State<EditAudioPage> {
                     WidgetUtils.commonSizedBox(10, 0),
                     GestureDetector(
                       onTap: (() {
-                        play2();
+    if(MyUtils.checkClick()) {
+      play2();
+    }
                       }),
                       child: Container(
                         height: ScreenUtil().setHeight(50),
@@ -369,13 +371,15 @@ class _EditAudioPageState extends State<EditAudioPage> {
                         isPlay == 2
                             ? GestureDetector(
                                 onTap: (() {
-                                  stopPlayer();
-                                  delRecorder();
-                                  setState(() {
-                                    audioNum = 0; // 记录录了多久
-                                    recordText = '开始录音';
-                                    isPlay = 0;
-                                  });
+    if(MyUtils.checkClick()) {
+      stopPlayer();
+      delRecorder();
+      setState(() {
+        audioNum = 0; // 记录录了多久
+        recordText = '开始录音';
+        isPlay = 0;
+      });
+    }
                                 }),
                                 child: WidgetUtils.showImages(
                                     'assets/images/mine_audio_cuo.png',
@@ -386,18 +390,20 @@ class _EditAudioPageState extends State<EditAudioPage> {
                         WidgetUtils.commonSizedBox(10, 30),
                         GestureDetector(
                           onTap: (() {
-                            if (isPlay == 2) {
-                              play();
-                            } else {
-                              startRecord();
-                              setState(() {
-                                if (isPlay == 0) {
-                                  isPlay = 1;
-                                } else if (isPlay == 1) {
-                                  isPlay = 2;
-                                }
-                              });
-                            }
+    if(MyUtils.checkClick()) {
+      if (isPlay == 2) {
+        play();
+      } else {
+        startRecord();
+        setState(() {
+          if (isPlay == 0) {
+            isPlay = 1;
+          } else if (isPlay == 1) {
+            isPlay = 2;
+          }
+        });
+      }
+    }
                           }),
                           child: WidgetUtils.showImages(
                               isPlay == 0
@@ -412,11 +418,13 @@ class _EditAudioPageState extends State<EditAudioPage> {
                         isPlay == 2
                             ? GestureDetector(
                                 onTap: (() {
-                                  if(length == 0){
-                                    MyToastUtils.showToastBottom('请先选择一个声音标签');
-                                  }else{
-                                    doPostPostFileUpload(_mPath == "" ? audioUrl : _mPath);
-                                  }
+    if(MyUtils.checkClick()) {
+      if (length == 0) {
+        MyToastUtils.showToastBottom('请先选择一个声音标签');
+      } else {
+        doPostPostFileUpload(_mPath == "" ? audioUrl : _mPath);
+      }
+    }
                                 }),
                                 child: WidgetUtils.showImages(
                                     'assets/images/mine_audio_dui.png',

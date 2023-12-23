@@ -50,7 +50,7 @@ class _GuowangPageState extends State<GuowangPage>  with TickerProviderStateMixi
             WidgetUtils.commonSizedBox(0, 15),
             GestureDetector(
               onTap: ((){
-                eventBus.fire(GuizuButtonBack(index: 5, title: '左'));
+      eventBus.fire(GuizuButtonBack(index: 5, title: '左'));
               }),
               child:  WidgetUtils.showImages('assets/images/guizu_left.png',
                   ScreenUtil().setHeight(52), ScreenUtil().setHeight(26)),

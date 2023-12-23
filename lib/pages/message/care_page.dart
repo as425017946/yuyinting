@@ -68,7 +68,9 @@ class _CarePageState extends State<CarePage> {
         children: [
           GestureDetector(
             onTap: ((){
-              MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[i].uid.toString(),));
+              if(MyUtils.checkClick()){
+                MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[i].uid.toString(),));
+              }
             }),
             child: Stack(
               alignment: Alignment.center,

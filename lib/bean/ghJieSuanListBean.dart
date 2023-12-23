@@ -1,19 +1,14 @@
 class ghJieSuanListBean {
   int? code;
   String? msg;
-  List<Data>? data;
+  Data? data;
 
   ghJieSuanListBean({this.code, this.msg, this.data});
 
   ghJieSuanListBean.fromJson(Map<String, dynamic> json) {
     code = json['code'];
     msg = json['msg'];
-    if (json['data'] != null) {
-      data = <Data>[];
-      json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
-      });
-    }
+    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -21,13 +16,39 @@ class ghJieSuanListBean {
     data['code'] = this.code;
     data['msg'] = this.msg;
     if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
+      data['data'] = this.data!.toJson();
     }
     return data;
   }
 }
 
 class Data {
+  List<Settle>? settle;
+  String? guildName;
+
+  Data({this.settle, this.guildName});
+
+  Data.fromJson(Map<String, dynamic> json) {
+    if (json['settle'] != null) {
+      settle = <Settle>[];
+      json['settle'].forEach((v) {
+        settle!.add(new Settle.fromJson(v));
+      });
+    }
+    guildName = json['guild_name'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.settle != null) {
+      data['settle'] = this.settle!.map((v) => v.toJson()).toList();
+    }
+    data['guild_name'] = this.guildName;
+    return data;
+  }
+}
+
+class Settle {
   int? id;
   int? guildId;
   String? beginTime;
@@ -48,7 +69,7 @@ class Data {
   int? editTime;
   int? dataStatus;
 
-  Data(
+  Settle(
       {this.id,
         this.guildId,
         this.beginTime,
@@ -69,7 +90,7 @@ class Data {
         this.editTime,
         this.dataStatus});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  Settle.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     guildId = json['guild_id'];
     beginTime = json['begin_time'];

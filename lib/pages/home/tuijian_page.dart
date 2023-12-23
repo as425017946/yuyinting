@@ -87,7 +87,10 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
         WidgetUtils.commonSizedBox(20, 0),
         GestureDetector(
           onTap: ((){
-            doPostBeforeJoin(listAnchor[i].roomId.toString(), listAnchor[i].uid.toString());
+            if(MyUtils.checkClick()) {
+              doPostBeforeJoin(listAnchor[i].roomId.toString(),
+                  listAnchor[i].uid.toString());
+            }
           }),
           child: Container(
             margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
@@ -313,7 +316,9 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
                                     onIndexChanged: (index){
                                     },
                                     onTap: (index){
-                                      quanxian(listRoom[index].id.toString());
+    if(MyUtils.checkClick()) {
+      quanxian(listRoom[index].id.toString());
+    }
                                     },
                                   ),
                                 ),
@@ -347,7 +352,9 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
                                         autoplayDelay: 4000,
                                         duration: 2000,
                                         onTap: (index){
-                                          quanxian(listRoom2[index].id.toString());
+    if(MyUtils.checkClick()) {
+      quanxian(listRoom2[index].id.toString());
+    }
                                         },
                                       ),
                                     )),
@@ -379,7 +386,9 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
                                         autoplayDelay: 4000,
                                         duration: 2000,
                                         onTap: (index){
-                                          quanxian(listRoom3[index].id.toString());
+    if(MyUtils.checkClick()) {
+      quanxian(listRoom3[index].id.toString());
+    }
                                           // doPostBeforeJoin(listRoom3[index].id.toString());
                                         },
                                       ),
@@ -444,7 +453,7 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
             if(bean.data!.anchorList!.isNotEmpty){
               listAnchor = bean.data!.anchorList!;
             }
-            _refreshController.loadNoData();
+            // _refreshController.loadNoData();
           });
           break;
         case MyHttpConfig.errorloginCode:

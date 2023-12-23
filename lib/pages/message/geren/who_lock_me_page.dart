@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+import 'package:yuyinting/pages/message/geren/people_info_page.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import '../../../bean/whoLockMe.dart';
 import '../../../colors/my_colors.dart';
@@ -65,7 +66,9 @@ class _WhoLockMePageState extends State<WhoLockMePage> {
         children: [
           GestureDetector(
             onTap: ((){
-              Navigator.pushNamed(context, 'PeopleInfoPage');
+              if(MyUtils.checkClick()){
+                MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[i].uid.toString(),));
+              }
             }),
             child: Stack(
               alignment: Alignment.center,

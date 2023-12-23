@@ -135,8 +135,10 @@ class _CareHomePageState extends State<CareHomePage> {
                 WidgetUtils.commonSizedBox(0, 10),
                 GestureDetector(
                   onTap: ((){
-                    MyUtils.hideKeyboard(context);
-                     eventBus.fire(CareBack(info: _souSuoName.text.trim()));
+                    if(MyUtils.checkClick()) {
+                      MyUtils.hideKeyboard(context);
+                      eventBus.fire(CareBack(info: _souSuoName.text.trim()));
+                    }
                   }),
                   child: WidgetUtils.showImages('assets/images/messages_sousuo.png',
                       ScreenUtil().setHeight(30), ScreenUtil().setHeight(30)),

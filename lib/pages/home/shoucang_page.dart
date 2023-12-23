@@ -69,7 +69,9 @@ class _ShoucangPageState extends State<ShoucangPage> with AutomaticKeepAliveClie
   Widget _initlistdata(context, index) {
     return GestureDetector(
       onTap: (() {
-        doPostBeforeJoin(_list[index].id.toString());
+        if(MyUtils.checkClick()) {
+          doPostBeforeJoin(_list[index].id.toString());
+        }
       }),
       child: Container(
         height: ScreenUtil().setHeight(260),
@@ -120,7 +122,9 @@ class _ShoucangPageState extends State<ShoucangPage> with AutomaticKeepAliveClie
   Widget _initlistdata2(context, index) {
     return GestureDetector(
       onTap: (() {
-        doPostBeforeJoin(listTJ[index].id.toString());
+        if(MyUtils.checkClick()) {
+          doPostBeforeJoin(listTJ[index].id.toString());
+        }
       }),
       child: Container(
         height: ScreenUtil().setHeight(260),

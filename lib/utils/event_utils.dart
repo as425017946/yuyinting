@@ -114,7 +114,8 @@ class DHQuerenBack {
 class XZQuerenBack {
   String cishu;
   String feiyong;
-  XZQuerenBack({required this.cishu, required this.feiyong});
+  String title;
+  XZQuerenBack({required this.cishu, required this.feiyong, required this.title});
 }
 
 /// 厅内使用
@@ -201,7 +202,8 @@ class SendRoomImgBack {
 /// 魔方转盘下注
 class XiaZhuBack {
   int jine;
-  XiaZhuBack({required this.jine});
+  int type;//要减那个金额 cur_type 1金豆 2钻石 3蘑菇
+  XiaZhuBack({required this.jine, required this.type});
 }
 
 

@@ -5,6 +5,7 @@ import 'package:yuyinting/pages/home/rank/rank_caifu_page.dart';
 import 'package:yuyinting/pages/home/rank/rank_meili_page.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 
+import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 
@@ -55,7 +56,9 @@ class _RankingPageState extends State<RankingPage> {
                   WidgetUtils.commonSizedBox(0, 20),
                   GestureDetector(
                     onTap: (() {
-                      Navigator.pop(context);
+                        if(MyUtils.checkClick()) {
+                          Navigator.pop(context);
+                        }
                     }),
                     child: WidgetUtils.showImages('assets/images/back.jpg',
                         ScreenUtil().setHeight(35), ScreenUtil().setHeight(25)),

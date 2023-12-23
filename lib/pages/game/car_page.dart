@@ -17,6 +17,7 @@ import 'package:yuyinting/widget/queren_page.dart';
 import '../../bean/Common_bean.dart';
 import '../../bean/balanceBean.dart';
 import '../../bean/carTimerBean.dart';
+import '../../bean/carYZBean.dart';
 import '../../bean/commonStringBean.dart';
 import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
@@ -319,6 +320,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
 
   /// 播放音频
   Soundpool soundpool = Soundpool(streamType: StreamType.notification);
+  Soundpool soundpool2 = Soundpool(streamType: StreamType.notification);
 
   Future<void> playSound() async {
     int soundId = await rootBundle
@@ -326,7 +328,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
         .then(((ByteData soundDate) {
       return soundpool.load(soundDate);
     }));
-    soundpool.setVolume(volume: 0.5);
+    // soundpool.setVolume(volume: 0.5);
     await soundpool.play(soundId);
   }
 
@@ -346,6 +348,15 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
       return soundpool.load(soundDate);
     }));
     await soundpool.play(soundId);
+  }
+
+  Future<void> playSound4() async {
+    int soundId = await rootBundle
+        .load('assets/audio/car_bg.MP3')
+        .then(((ByteData soundDate) {
+      return soundpool2.load(soundDate);
+    }));
+    await soundpool2.play(soundId);
   }
 
   List<String> imagesa = [
@@ -799,6 +810,8 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
   bool isPlay = false, isGo = false;
 
   void loadAnimation() async {
+    // //播放赛车背景音
+    // playSound4();
     // 清空接受的im下注信息
     listZDY.clear();
     // 请求中奖赛道
@@ -884,9 +897,9 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
     doPostBalance();
     // 二次确认弹窗点击确认，开始下注
     listen = eventBus.on<QuerenBack>().listen((event) {
-      setState(() {
+      if(event.title == '竖屏赛车') {
         doPostCarBet(event.index);
-      });
+      }
     });
     suijishu();
     animationController = SVGAAnimationController(vsync: this);
@@ -1199,11 +1212,12 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                                             25.h),
                                         WidgetUtils.commonSizedBox(
                                             0, 5.h),
-                                        WidgetUtils.onlyText(
-                                            mogubi,
+                                        WidgetUtils.onlyTextCenter(
+                                            mogubi2,
                                             StyleUtils.getCommonTextStyle(
                                                 color: Colors.white,
-                                                fontSize: 20.sp)),
+                                                fontSize: ScreenUtil().setSp(23),
+                                                fontWeight: FontWeight.w600)),
                                         WidgetUtils.commonSizedBox(
                                             0, 10.h),
                                         Opacity(
@@ -1223,7 +1237,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                                         WidgetUtils.commonSizedBox(
                                             0, 10.h),
                                         WidgetUtils.onlyTextCenter(
-                                            jinbi,
+                                            jinbi2,
                                             StyleUtils.getCommonTextStyle(
                                                 color: Colors.white,
                                                 fontSize: ScreenUtil().setSp(23),
@@ -1247,7 +1261,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                                         WidgetUtils.commonSizedBox(
                                             0, 10.h),
                                         WidgetUtils.onlyTextCenter(
-                                            zuanshi,
+                                            zuanshi2,
                                             StyleUtils.getCommonTextStyle(
                                                 color: Colors.white,
                                                 fontSize: ScreenUtil().setSp(23),
@@ -1798,7 +1812,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
       'bet_amount': xiazhujine.toString()
     };
     try {
-      CommonBean bean = await DataUtils.postCarBet(params);
+      carYZBean bean = await DataUtils.postCarBet(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
@@ -1820,6 +1834,39 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                 ), () {
               listA1[int.parse(benSN) - 1] = false;
             });
+
+            // 更新余额
+            if(bean.data!.curType == 1){
+              if(double.parse(jinbi) > 10000){
+                // 减去花费的V豆
+                jinbi = '${(double.parse(jinbi) - int.parse(xiazhujine.toString()))}';
+                //保留2位小数
+                jinbi2 = '${(double.parse(jinbi) / 10000).toStringAsFixed(2)}w';
+              }else{
+                jinbi = (double.parse(jinbi) - int.parse(xiazhujine.toString())).toString();
+                jinbi2 = jinbi;
+              }
+            }else if(bean.data!.curType == 2){
+              if(double.parse(zuanshi) > 10000){
+                // 减去花费的V豆
+                zuanshi = '${(double.parse(zuanshi) - int.parse(xiazhujine.toString()))}';
+                //保留2位小数
+                zuanshi2 = '${(double.parse(zuanshi) / 10000).toStringAsFixed(2)}w';
+              }else{
+                zuanshi = (double.parse(zuanshi) - int.parse(xiazhujine.toString())).toString();
+                zuanshi2 = zuanshi;
+              }
+            }else{
+              if(double.parse(mogubi) > 10000){
+                // 减去花费的V豆
+                mogubi = '${(double.parse(mogubi) - int.parse(xiazhujine.toString()))}';
+                //保留2位小数
+                mogubi2 = '${(double.parse(mogubi) / 10000).toStringAsFixed(2)}w';
+              }else{
+                mogubi = (double.parse(mogubi) - int.parse(xiazhujine.toString())).toString();
+                mogubi2 = mogubi;
+              }
+            }
           });
           break;
         case MyHttpConfig.errorloginCode:
@@ -1914,7 +1961,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
   }
 
   // 金币 钻石 蘑菇币
-  String jinbi = '', zuanshi = '', mogubi = '';
+  String jinbi = '', zuanshi = '', mogubi = '', jinbi2 = '', zuanshi2 = '', mogubi2 = '';
   /// 钱包余额
   Future<void> doPostBalance() async {
     try {
@@ -1922,20 +1969,23 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
-            if(double.parse(bean.data!.goldBean!) > 100000){
-              jinbi = '${(double.parse(bean.data!.goldBean!)/100000)}w';
+            jinbi = bean.data!.goldBean!;
+            if(double.parse(bean.data!.goldBean!) > 10000){
+              jinbi2 = '${(double.parse(bean.data!.goldBean!) / 10000).toStringAsFixed(2)}w';
             }else{
-              jinbi = bean.data!.goldBean!;
+              jinbi2 = bean.data!.goldBean!;
             }
-            if(double.parse(bean.data!.diamond!) > 100000){
-              zuanshi = '${(double.parse(bean.data!.diamond!)/100000)}w';
+            zuanshi = bean.data!.diamond!;
+            if(double.parse(bean.data!.diamond!) > 10000){
+              zuanshi2 = '${(double.parse(bean.data!.diamond!) / 10000).toStringAsFixed(2)}w';
             }else{
-              zuanshi = bean.data!.diamond!;
+              zuanshi2 = bean.data!.diamond!;
             }
-            if(double.parse(bean.data!.mushroom!) > 100000){
-              mogubi = '${double.parse(bean.data!.mushroom!)/100000}w';
+            mogubi = bean.data!.mushroom!;
+            if(double.parse(bean.data!.mushroom!) > 10000){
+              mogubi2 = '${(double.parse(bean.data!.mushroom!) / 10000).toStringAsFixed(2)}w';
             }else{
-              mogubi = bean.data!.mushroom!;
+              mogubi2 = bean.data!.mushroom!;
             }
           });
           break;

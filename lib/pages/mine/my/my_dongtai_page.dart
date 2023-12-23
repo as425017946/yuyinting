@@ -65,7 +65,10 @@ class _MyDongtaiPageState extends State<MyDongtaiPage> {
   Widget _itemPeople(BuildContext context, int i) {
     return GestureDetector(
       onTap: ((){
-        MyUtils.goTransparentRFPage(context, TrendsMorePage( note_id: _list[i].id.toString(),));
+        if(MyUtils.checkClick()) {
+          MyUtils.goTransparentRFPage(
+              context, TrendsMorePage(note_id: _list[i].id.toString(),));
+        }
       }),
       child: Container(
         width: double.infinity,
@@ -144,7 +147,9 @@ class _MyDongtaiPageState extends State<MyDongtaiPage> {
               ),
               GestureDetector(
                 onTap: () {
-                  MyUtils.goTransparentRFPage(context, PagePreviewVideo(url: a));
+    if(MyUtils.checkClick()) {
+      MyUtils.goTransparentRFPage(context, PagePreviewVideo(url: a));
+    }
                 },
                 child: const Icon(
                   Icons.play_circle_fill_outlined,
@@ -165,11 +170,13 @@ class _MyDongtaiPageState extends State<MyDongtaiPage> {
     if (listImg.length == 1) {
       return GestureDetector(
         onTap: (() {
-          Navigator.of(context).push(PageRouteBuilder(
-              opaque: false,
-              pageBuilder: (context, animation, secondaryAnimation) {
-                return SwiperPage(imgList: listImg);
-              }));
+          if(MyUtils.checkClick()) {
+            Navigator.of(context).push(PageRouteBuilder(
+                opaque: false,
+                pageBuilder: (context, animation, secondaryAnimation) {
+                  return SwiperPage(imgList: listImg);
+                }));
+          }
         }),
         child: Container(
           height: ScreenUtil().setHeight(300),
@@ -184,11 +191,13 @@ class _MyDongtaiPageState extends State<MyDongtaiPage> {
     } else if (listImg.length == 2) {
       return GestureDetector(
         onTap: (() {
-          Navigator.of(context).push(PageRouteBuilder(
-              opaque: false,
-              pageBuilder: (context, animation, secondaryAnimation) {
-                return SwiperPage(imgList: listImg);
-              }));
+          if(MyUtils.checkClick()) {
+            Navigator.of(context).push(PageRouteBuilder(
+                opaque: false,
+                pageBuilder: (context, animation, secondaryAnimation) {
+                  return SwiperPage(imgList: listImg);
+                }));
+          }
         }),
         child: SizedBox(
           height: ScreenUtil().setHeight(240),
@@ -208,11 +217,13 @@ class _MyDongtaiPageState extends State<MyDongtaiPage> {
     } else if (listImg.length == 3) {
       return GestureDetector(
         onTap: (() {
-          Navigator.of(context).push(PageRouteBuilder(
-              opaque: false,
-              pageBuilder: (context, animation, secondaryAnimation) {
-                return SwiperPage(imgList: listImg);
-              }));
+          if(MyUtils.checkClick()) {
+            Navigator.of(context).push(PageRouteBuilder(
+                opaque: false,
+                pageBuilder: (context, animation, secondaryAnimation) {
+                  return SwiperPage(imgList: listImg);
+                }));
+          }
         }),
         child: SizedBox(
           height: ScreenUtil().setHeight(350),
@@ -238,11 +249,13 @@ class _MyDongtaiPageState extends State<MyDongtaiPage> {
     } else if (listImg.length == 4) {
       return GestureDetector(
         onTap: (() {
-          Navigator.of(context).push(PageRouteBuilder(
-              opaque: false,
-              pageBuilder: (context, animation, secondaryAnimation) {
-                return SwiperPage(imgList: listImg);
-              }));
+          if(MyUtils.checkClick()) {
+            Navigator.of(context).push(PageRouteBuilder(
+                opaque: false,
+                pageBuilder: (context, animation, secondaryAnimation) {
+                  return SwiperPage(imgList: listImg);
+                }));
+          }
         }),
         child: SizedBox(
           height: ScreenUtil().setHeight(490),
@@ -278,11 +291,13 @@ class _MyDongtaiPageState extends State<MyDongtaiPage> {
     } else if (listImg.length == 5) {
       return GestureDetector(
         onTap: (() {
-          Navigator.of(context).push(PageRouteBuilder(
-              opaque: false,
-              pageBuilder: (context, animation, secondaryAnimation) {
-                return SwiperPage(imgList: listImg);
-              }));
+          if(MyUtils.checkClick()) {
+            Navigator.of(context).push(PageRouteBuilder(
+                opaque: false,
+                pageBuilder: (context, animation, secondaryAnimation) {
+                  return SwiperPage(imgList: listImg);
+                }));
+          }
         }),
         child: SizedBox(
           height: ScreenUtil().setHeight(370),
@@ -329,11 +344,13 @@ class _MyDongtaiPageState extends State<MyDongtaiPage> {
     } else if (listImg.length == 6) {
       return GestureDetector(
         onTap: (() {
-          Navigator.of(context).push(PageRouteBuilder(
-              opaque: false,
-              pageBuilder: (context, animation, secondaryAnimation) {
-                return SwiperPage(imgList: listImg);
-              }));
+          if(MyUtils.checkClick()) {
+            Navigator.of(context).push(PageRouteBuilder(
+                opaque: false,
+                pageBuilder: (context, animation, secondaryAnimation) {
+                  return SwiperPage(imgList: listImg);
+                }));
+          }
         }),
         child: SizedBox(
           height: ScreenUtil().setHeight(370),

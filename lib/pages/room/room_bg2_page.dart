@@ -30,8 +30,8 @@ class RoomBG2Page extends StatefulWidget {
   State<RoomBG2Page> createState() => _RoomBG2PageState();
 }
 
-class _RoomBG2PageState extends State<RoomBG2Page> with AutomaticKeepAliveClientMixin{
-
+class _RoomBG2PageState extends State<RoomBG2Page>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -50,14 +50,15 @@ class _RoomBG2PageState extends State<RoomBG2Page> with AutomaticKeepAliveClient
     doPostPostFileUpload(image!.path);
   }
 
-
   ///收藏使用
   Widget _initlistdata(context, index) {
     LogE('返回下标$index');
     return index == list.length
         ? GestureDetector(
             onTap: (() {
-              onTapPickFromGallery();
+              if(MyUtils.checkClick()) {
+                onTapPickFromGallery();
+              }
             }),
             child: Column(
               children: [
@@ -74,55 +75,81 @@ class _RoomBG2PageState extends State<RoomBG2Page> with AutomaticKeepAliveClient
             ),
           )
         : GestureDetector(
-      onTap: (() {
-        setState(() {
-          list[index].type = 1;
-          for(int i = 0; i < list.length; i++){
-            if(index != i) {
-              list[i].type = 0;
-            }
-          }
-          eventBus.fire(RoomBGBack(bgID: list[index].bgId.toString(), bgType: list[index].bgType.toString(), bgImagUrl: list[index].img.toString()));
-        });
-      }),
-      child: Column(
-        children: [
-          Stack(
-            alignment: Alignment.topRight,
-            children: [
-              list[index].bgType == 1
-                  ? WidgetUtils.CircleImageNet(ScreenUtil().setHeight(320),
-                  ScreenUtil().setHeight(180), 20.0, list[index].img!)
-                  : Container(
-                height: 320.h,
-                width: 180.h,
-                //超出部分，可裁剪
-                clipBehavior: Clip.hardEdge,
-                //边框设置
-                decoration: const BoxDecoration(
-                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
+            onTap: (() {
+              if(MyUtils.checkClick()) {
+                setState(() {
+                  list[index].type = 1;
+                  for (int i = 0; i < list.length; i++) {
+                    if (index != i) {
+                      list[i].type = 0;
+                    }
+                  }
+                  eventBus.fire(RoomBGBack(
+                      bgID: list[index].bgId.toString(),
+                      bgType: list[index].bgType.toString(),
+                      bgImagUrl: list[index].img.toString()));
+                });
+              }
+            }),
+            child: Column(
+              children: [
+                Stack(
+                  alignment: Alignment.topRight,
+                  children: [
+                    (!list[index].img!.contains('svga') || !list[index].img!.contains('SVGA'))
+                        ? WidgetUtils.CircleImageNet(
+                            ScreenUtil().setHeight(320),
+                            ScreenUtil().setHeight(180),
+                            20.0,
+                            list[index].img!)
+                        : Container(
+                            height: 320.h,
+                            width: 180.h,
+                            //超出部分，可裁剪
+                            clipBehavior: Clip.hardEdge,
+                            //边框设置
+                            decoration: const BoxDecoration(
+                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20.0)),
+                            ),
+                            child: SVGASimpleImage(
+                              resUrl: list[index].img!,
+                            ),
+                          ),
+                    list[index].type == 1
+                        ? WidgetUtils.showImagesFill(
+                            'assets/images/room_bg_xzk.png',
+                            ScreenUtil().setHeight(320),
+                            ScreenUtil().setHeight(180))
+                        : const Text(''),
+                    // 删除按钮
+                    Positioned(
+                        top: 10.h,
+                        right: 10.h,
+                        child: ClipOval(
+                          child: Container(
+                            color: Colors.white.withOpacity(0.7),
+                            width: 20,
+                            height: 20,
+                            child: const Icon(
+                              Icons.close,
+                              size: 20,
+                            ),
+                          ),
+                        ))
+                  ],
                 ),
-                child: SVGASimpleImage(
-                  resUrl: list[index].img!,
-
-                ),
-              ),
-              list[index].type == 1
-                  ? WidgetUtils.showImagesFill('assets/images/room_bg_xzk.png',
-                  ScreenUtil().setHeight(320), ScreenUtil().setHeight(180))
-                  : const Text(''),
-            ],
-          ),
-          WidgetUtils.commonSizedBox(5, 0),
-          WidgetUtils.onlyTextCenter(
-              '自定义${index + 1}',
-              StyleUtils.getCommonTextStyle(
-                  color: MyColors.roomTCWZ2, fontSize: ScreenUtil().setSp(28))),
-          WidgetUtils.commonSizedBox(15, 0),
-        ],
-      ),
-    );
+                WidgetUtils.commonSizedBox(5, 0),
+                WidgetUtils.onlyTextCenter(
+                    '自定义${index + 1}',
+                    StyleUtils.getCommonTextStyle(
+                        color: MyColors.roomTCWZ2,
+                        fontSize: ScreenUtil().setSp(28))),
+                WidgetUtils.commonSizedBox(15, 0),
+              ],
+            ),
+          );
   }
 
   @override
@@ -131,7 +158,7 @@ class _RoomBG2PageState extends State<RoomBG2Page> with AutomaticKeepAliveClient
       child: Container(
         margin: const EdgeInsets.all(20),
         child: OptionGridView(
-          itemCount: list.length+1,
+          itemCount: list.length + 1,
           rowCount: 3,
           mainAxisSpacing: 10,
           crossAxisSpacing: 10,
@@ -141,11 +168,11 @@ class _RoomBG2PageState extends State<RoomBG2Page> with AutomaticKeepAliveClient
     );
   }
 
-
   List<CustomBglist> list = [];
 
   /// 房间默认背景
   Future<void> doPostBgList() async {
+    LogE('token = ${sp.getString('user_token')}, == id = ${sp.getString('roomID').toString()} ');
     Map<String, dynamic> params = <String, dynamic>{
       'room_id': sp.getString('roomID').toString(),
     };
@@ -159,7 +186,7 @@ class _RoomBG2PageState extends State<RoomBG2Page> with AutomaticKeepAliveClient
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -176,24 +203,29 @@ class _RoomBG2PageState extends State<RoomBG2Page> with AutomaticKeepAliveClient
     var dir = await path_provider.getTemporaryDirectory();
     String targetPath = '';
     var result;
-    if(path.toString().contains('.gif') || path.toString().contains('.GIF')){
+    if (path.toString().contains('.gif') || path.toString().contains('.GIF')) {
       targetPath = path;
-    }else if(path.toString().contains('.jpg') || path.toString().contains('.GPG')){
-      targetPath = "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
+    } else if (path.toString().contains('.jpg') ||
+        path.toString().contains('.GPG')) {
+      targetPath =
+          "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
       result = await FlutterImageCompress.compressAndGetFile(
         path, targetPath,
         quality: 50,
         rotate: 0, // 旋转角度
       );
-    }else if(path.toString().contains('.jpeg') || path.toString().contains('.GPEG')){
-      targetPath = "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpeg";
+    } else if (path.toString().contains('.jpeg') ||
+        path.toString().contains('.GPEG')) {
+      targetPath =
+          "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpeg";
       result = await FlutterImageCompress.compressAndGetFile(
         path, targetPath,
         quality: 50,
         rotate: 0, // 旋转角度
       );
-    }else{
-      targetPath = "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.png";
+    } else {
+      targetPath =
+          "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.png";
       result = await FlutterImageCompress.compressAndGetFile(
         path, targetPath,
         quality: 50,
@@ -205,38 +237,42 @@ class _RoomBG2PageState extends State<RoomBG2Page> with AutomaticKeepAliveClient
     FormData formdata = FormData.fromMap(
       {
         'room_id': sp.getString('roomID').toString(),
-        'bg_type': '1',
-        "file": await MultipartFile.fromFile(path.toString().contains('.gif') || path.toString().contains('.GIF') ? targetPath : result!.path,
-          filename: name,)
+        'bg_type':
+            path.toString().contains('.gif') || path.toString().contains('.GIF')
+                ? '2'
+                : '1',
+        "file": await MultipartFile.fromFile(
+          path.toString().contains('.gif') || path.toString().contains('.GIF')
+              ? targetPath
+              : result!.path,
+          filename: name,
+        )
       },
     );
     BaseOptions option = BaseOptions(
         contentType: 'multipart/form-data', responseType: ResponseType.plain);
-    option.headers["Authorization"] = sp.getString('user_token')??'';
+    option.headers["Authorization"] = sp.getString('user_token') ?? '';
     Dio dio = Dio(option);
     //application/json
     try {
-      var respone = await dio.post(
-          MyHttpConfig.uploadBg,
-          data: formdata);
+      var respone = await dio.post(MyHttpConfig.uploadBg, data: formdata);
+      LogE('提示信息 == $respone');
       Map jsonResponse = json.decode(respone.data.toString());
       if (respone.statusCode == 200) {
         MyToastUtils.showToastBottom('上传成功');
         doPostBgList();
         Loading.dismiss();
-      }else if(respone.statusCode == 401){
+      } else if (respone.statusCode == 401) {
         // ignore: use_build_context_synchronously
         MyUtils.jumpLogin(context);
-      }else{
+      } else {
         MyToastUtils.showToastBottom(jsonResponse['msg']);
       }
 
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      MyToastUtils.showToastBottom(MyConfig.errorTitleFile);
     }
-
   }
-
 }

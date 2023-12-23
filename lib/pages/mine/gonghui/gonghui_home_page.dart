@@ -81,12 +81,16 @@ class _GonghuiHomePageState extends State<GonghuiHomePage> {
                 WidgetUtils.commonSizedBox(0, 10),
                 GestureDetector(
                   onTap: ((){
-                    if(_souSuoName.text.trim().isNotEmpty){
-                      doPostSearchGuild(_souSuoName.text.trim());
-                      MyUtils.hideKeyboard(context);
-                    }else{
-                      MyToastUtils.showToastBottom('请输入公会名称/公会ID');
-                    }
+    if(MyUtils.checkClick()) {
+      if (_souSuoName.text
+          .trim()
+          .isNotEmpty) {
+        doPostSearchGuild(_souSuoName.text.trim());
+        MyUtils.hideKeyboard(context);
+      } else {
+        MyToastUtils.showToastBottom('请输入公会名称/公会ID');
+      }
+    }
                   }),
                   child: WidgetUtils.onlyText('搜索', StyleUtils.getCommonTextStyle(color: MyColors.walletWZBlue, fontSize: ScreenUtil().setSp(32))),
                 ),

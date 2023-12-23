@@ -8,6 +8,7 @@ import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
+import '../../utils/loading.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
@@ -15,17 +16,19 @@ import '../../utils/widget_utils.dart';
 /// 热度-财富榜
 class ReDuCaiFuPage extends StatefulWidget {
   String roomID;
+
   ReDuCaiFuPage({super.key, required this.roomID});
 
   @override
   State<ReDuCaiFuPage> createState() => _ReDuCaiFuPageState();
 }
 
-class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>  with AutomaticKeepAliveClientMixin{
-
+class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
   int page = 1;
+
   // 财富榜传wealth 魅力榜传charm : 日榜day 周榜week 月榜month
   String dateType = 'day';
   List<ListBD> _list = [];
@@ -47,10 +50,8 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>  with AutomaticKeepAliveC
             height: ScreenUtil().setHeight(130),
             child: Row(
               children: [
-                WidgetUtils.CircleHeadImage(
-                    ScreenUtil().setHeight(80),
-                    ScreenUtil().setHeight(80),
-                    _list2[i].avatar!),
+                WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(80),
+                    ScreenUtil().setHeight(80), _list2[i].avatar!),
                 WidgetUtils.commonSizedBox(0, 10),
                 Expanded(
                   child: Column(
@@ -61,10 +62,19 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>  with AutomaticKeepAliveC
                         child: Row(
                           children: [
                             WidgetUtils.onlyText(
-                                _list2[i].nickname!,
+                                _list2[i].nickname!.length > 16
+                                    ? _list2[i].nickname!.substring(0, 16)
+                                    : _list2[i].nickname!,
                                 StyleUtils.getCommonTextStyle(
                                     color: MyColors.roomTCWZ2,
                                     fontSize: ScreenUtil().setSp(25))),
+                            const Spacer(),
+                            WidgetUtils.onlyText(
+                                _list2[i].score.toString(),
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.roomTCWZ2,
+                                    fontSize: ScreenUtil().setSp(25))),
+                            WidgetUtils.commonSizedBox(0, 20.h),
                           ],
                         ),
                       ),
@@ -110,7 +120,9 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>  with AutomaticKeepAliveC
                             //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                             borderRadius: BorderRadius.all(Radius.circular(20)),
                           ),
-                          child: WidgetUtils.commonSizedBox(ScreenUtil().setHeight(50), ScreenUtil().setHeight(270)),
+                          child: WidgetUtils.commonSizedBox(
+                              ScreenUtil().setHeight(50),
+                              ScreenUtil().setHeight(270)),
                         )
                       ],
                     ),
@@ -132,14 +144,15 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>  with AutomaticKeepAliveC
                                     //背景
                                     color: Colors.white,
                                     //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20)),
                                   ),
                                   width: double.infinity,
                                   height: double.infinity,
                                 ),
                               ),
                               GestureDetector(
-                                onTap: ((){
+                                onTap: (() {
                                   setState(() {
                                     showPage = 0;
                                     dateType = 'day';
@@ -148,7 +161,13 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>  with AutomaticKeepAliveC
                                 child: SizedBox(
                                   width: double.infinity,
                                   height: double.infinity,
-                                  child: WidgetUtils.onlyTextCenter('日榜', StyleUtils.getCommonTextStyle(color: showPage == 0 ? MyColors.roomTCWZ2 : MyColors.roomTCWZ3, fontSize: ScreenUtil().setSp(25))),
+                                  child: WidgetUtils.onlyTextCenter(
+                                      '日榜',
+                                      StyleUtils.getCommonTextStyle(
+                                          color: showPage == 0
+                                              ? MyColors.roomTCWZ2
+                                              : MyColors.roomTCWZ3,
+                                          fontSize: ScreenUtil().setSp(25))),
                                 ),
                               )
                             ],
@@ -165,14 +184,15 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>  with AutomaticKeepAliveC
                                     //背景
                                     color: Colors.white,
                                     //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20)),
                                   ),
                                   width: double.infinity,
                                   height: double.infinity,
                                 ),
                               ),
                               GestureDetector(
-                                onTap: ((){
+                                onTap: (() {
                                   setState(() {
                                     showPage = 1;
                                     dateType = 'week';
@@ -181,7 +201,13 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>  with AutomaticKeepAliveC
                                 child: SizedBox(
                                   width: double.infinity,
                                   height: double.infinity,
-                                  child: WidgetUtils.onlyTextCenter('周榜', StyleUtils.getCommonTextStyle(color: showPage == 1 ? MyColors.roomTCWZ2 : MyColors.roomTCWZ3, fontSize: ScreenUtil().setSp(25))),
+                                  child: WidgetUtils.onlyTextCenter(
+                                      '周榜',
+                                      StyleUtils.getCommonTextStyle(
+                                          color: showPage == 1
+                                              ? MyColors.roomTCWZ2
+                                              : MyColors.roomTCWZ3,
+                                          fontSize: ScreenUtil().setSp(25))),
                                 ),
                               )
                             ],
@@ -198,14 +224,15 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>  with AutomaticKeepAliveC
                                     //背景
                                     color: Colors.white,
                                     //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20)),
                                   ),
                                   width: double.infinity,
                                   height: double.infinity,
                                 ),
                               ),
                               GestureDetector(
-                                onTap: ((){
+                                onTap: (() {
                                   setState(() {
                                     showPage = 2;
                                     dateType = 'month';
@@ -214,7 +241,13 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>  with AutomaticKeepAliveC
                                 child: SizedBox(
                                   width: double.infinity,
                                   height: double.infinity,
-                                  child: WidgetUtils.onlyTextCenter('月榜', StyleUtils.getCommonTextStyle(color: showPage == 2 ? MyColors.roomTCWZ2 : MyColors.roomTCWZ3, fontSize: ScreenUtil().setSp(25))),
+                                  child: WidgetUtils.onlyTextCenter(
+                                      '月榜',
+                                      StyleUtils.getCommonTextStyle(
+                                          color: showPage == 2
+                                              ? MyColors.roomTCWZ2
+                                              : MyColors.roomTCWZ3,
+                                          fontSize: ScreenUtil().setSp(25))),
                                 ),
                               )
                             ],
@@ -237,19 +270,24 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>  with AutomaticKeepAliveC
                 Column(
                   children: [
                     const Expanded(child: Text('')),
-                    _list.length>1 ? Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        WidgetUtils.CircleHeadImage(
-                            ScreenUtil().setHeight(90),
-                            ScreenUtil().setHeight(90), _list[1].avatar!),
-                        SizedBox(
-                          height: 120.h,
-                          width: 120.h,
-                          child: const SVGASimpleImage(assetsName: 'assets/svga/ph_2.svga',),
-                        )
-                      ],
-                    ): const Text(''),
+                    _list.length > 1
+                        ? Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              WidgetUtils.CircleHeadImage(
+                                  ScreenUtil().setHeight(90),
+                                  ScreenUtil().setHeight(90),
+                                  _list[1].avatar!),
+                              SizedBox(
+                                height: 120.h,
+                                width: 120.h,
+                                child: const SVGASimpleImage(
+                                  assetsName: 'assets/svga/ph_2.svga',
+                                ),
+                              )
+                            ],
+                          )
+                        : const Text(''),
                     Stack(
                       children: [
                         WidgetUtils.commonSizedBox(100.h, 0),
@@ -258,30 +296,48 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>  with AutomaticKeepAliveC
                           margin: const EdgeInsets.only(top: 5),
                           alignment: Alignment.topCenter,
                           child: WidgetUtils.onlyTextCenter(
-                              _list.length>1 ? _list[1].nickname! : '',
+                              _list.length > 1 ? _list[1].nickname! : '',
                               StyleUtils.getCommonTextStyle(
                                   color: Colors.white,
                                   fontSize: ScreenUtil().setSp(21),
                                   fontWeight: FontWeight.w600)),
-                        )
+                        ),
+                        Container(
+                          width: ScreenUtil().setHeight(155),
+                          margin: EdgeInsets.only(top: 35.h),
+                          alignment: Alignment.topCenter,
+                          child: WidgetUtils.onlyTextCenter(
+                              _list.length > 1 ? _list[1].score.toString() : '',
+                              StyleUtils.getCommonTextStyle(
+                                  color: Colors.white,
+                                  fontSize: ScreenUtil().setSp(21),
+                                  fontWeight: FontWeight.w600)),
+                        ),
                       ],
-                    )
+                    ),
                   ],
                 ),
                 Column(
                   children: [
                     const Expanded(child: Text('')),
-                    _list.isNotEmpty ? Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(110), ScreenUtil().setHeight(110), _list[0].avatar!),
-                        SizedBox(
-                          height: 140.h,
-                          width: 140.h,
-                          child: const SVGASimpleImage(assetsName: 'assets/svga/ph_1.svga',),
-                        )
-                      ],
-                    ) : const Text(''),
+                    _list.isNotEmpty
+                        ? Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              WidgetUtils.CircleHeadImage(
+                                  ScreenUtil().setHeight(110),
+                                  ScreenUtil().setHeight(110),
+                                  _list[0].avatar!),
+                              SizedBox(
+                                height: 140.h,
+                                width: 140.h,
+                                child: const SVGASimpleImage(
+                                  assetsName: 'assets/svga/ph_1.svga',
+                                ),
+                              )
+                            ],
+                          )
+                        : const Text(''),
                     Stack(
                       children: [
                         WidgetUtils.commonSizedBox(160.h, 0),
@@ -294,7 +350,18 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>  with AutomaticKeepAliveC
                                   color: Colors.white,
                                   fontSize: ScreenUtil().setSp(21),
                                   fontWeight: FontWeight.w600)),
-                        )
+                        ),
+                        Container(
+                          width: ScreenUtil().setHeight(192),
+                          margin: EdgeInsets.only(top: 30.h),
+                          alignment: Alignment.topCenter,
+                          child: WidgetUtils.onlyTextCenter(
+                              _list.isNotEmpty ? _list[0].score.toString() : '',
+                              StyleUtils.getCommonTextStyle(
+                                  color: Colors.white,
+                                  fontSize: ScreenUtil().setSp(21),
+                                  fontWeight: FontWeight.w600)),
+                        ),
                       ],
                     )
                   ],
@@ -302,17 +369,24 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>  with AutomaticKeepAliveC
                 Column(
                   children: [
                     const Expanded(child: Text('')),
-                    _list.length > 2 ? Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(90), ScreenUtil().setHeight(90), _list[2].avatar!),
-                        SizedBox(
-                          height: 120.h,
-                          width: 120.h,
-                          child: const SVGASimpleImage(assetsName: 'assets/svga/ph_3.svga',),
-                        )
-                      ],
-                    ) : const Text(''),
+                    _list.length > 2
+                        ? Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              WidgetUtils.CircleHeadImage(
+                                  ScreenUtil().setHeight(90),
+                                  ScreenUtil().setHeight(90),
+                                  _list[2].avatar!),
+                              SizedBox(
+                                height: 120.h,
+                                width: 120.h,
+                                child: const SVGASimpleImage(
+                                  assetsName: 'assets/svga/ph_3.svga',
+                                ),
+                              )
+                            ],
+                          )
+                        : const Text(''),
                     Stack(
                       children: [
                         WidgetUtils.commonSizedBox(40.h, 0),
@@ -325,7 +399,18 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>  with AutomaticKeepAliveC
                                   color: Colors.white,
                                   fontSize: ScreenUtil().setSp(21),
                                   fontWeight: FontWeight.w600)),
-                        )
+                        ),
+                        Container(
+                          width: ScreenUtil().setHeight(155),
+                          margin: EdgeInsets.only(top: 35.h),
+                          alignment: Alignment.topCenter,
+                          child: WidgetUtils.onlyTextCenter(
+                              _list.length > 2 ? _list[2].score.toString() : '',
+                              StyleUtils.getCommonTextStyle(
+                                  color: Colors.white,
+                                  fontSize: ScreenUtil().setSp(21),
+                                  fontWeight: FontWeight.w600)),
+                        ),
                       ],
                     )
                   ],
@@ -334,10 +419,10 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>  with AutomaticKeepAliveC
               ],
             ),
           ),
+
           /// 展示在线用户
           ListView.builder(
-            padding: EdgeInsets.only(
-                top: 160.h),
+            padding: EdgeInsets.only(top: 160.h),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: _itemTuiJian,
@@ -348,9 +433,9 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>  with AutomaticKeepAliveC
     );
   }
 
-
   /// 榜单
   Future<void> doPostRankList() async {
+    Loading.show();
     Map<String, dynamic> params = <String, dynamic>{
       'category': 'wealth',
       'date_type': dateType,
@@ -370,7 +455,7 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>  with AutomaticKeepAliveC
               for (int i = 0; i < bean.data!.list!.length; i++) {
                 _list.add(bean.data!.list![i]);
               }
-              if(bean.data!.list!.length>3){
+              if (bean.data!.list!.length > 3) {
                 for (int i = 3; i < bean.data!.list!.length; i++) {
                   _list2.add(bean.data!.list![i]);
                 }
@@ -379,14 +464,16 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>  with AutomaticKeepAliveC
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
+      Loading.dismiss();
     } catch (e) {
+      Loading.dismiss();
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }

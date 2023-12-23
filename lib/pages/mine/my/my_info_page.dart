@@ -18,6 +18,7 @@ import '../../../utils/loading.dart';
 import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
 import '../../../utils/widget_utils.dart';
+import '../../../widget/Marquee.dart';
 import 'edit_my_info_page.dart';
 import 'my_dongtai_page.dart';
 import 'my_ziliao_page.dart';
@@ -124,14 +125,16 @@ class _MyInfoPageState extends State<MyInfoPage> {
                     const Expanded(child: Text('')),
                     GestureDetector(
                       onTap: (() {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const EditMyInfoPage(),
-                          ),
-                        ).then((value) {
-                          doPostMyIfon();
-                        });
+                        if (MyUtils.checkClick()) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const EditMyInfoPage(),
+                            ),
+                          ).then((value) {
+                            doPostMyIfon();
+                          });
+                        }
                       }),
                       child: SizedBox(
                         width: ScreenUtil().setWidth(100),
@@ -165,12 +168,23 @@ class _MyInfoPageState extends State<MyInfoPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Expanded(child: Text('')),
-                          WidgetUtils.onlyText(
-                              sp.getString('nickname').toString(),
-                              StyleUtils.getCommonTextStyle(
-                                  color: Colors.white,
-                                  fontSize: 35.sp,
-                                  fontWeight: FontWeight.w600)),
+                          sp.getString('nickname').toString().length > 10
+                              ? Marquee(
+                                  speed: 20,
+                                  child: Text(
+                                    "${sp.getString('nickname')}    ${sp.getString('nickname')}",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: ScreenUtil().setSp(35),
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                )
+                              : WidgetUtils.onlyText(
+                                  sp.getString('nickname').toString(),
+                                  StyleUtils.getCommonTextStyle(
+                                      color: Colors.white,
+                                      fontSize: 35.sp,
+                                      fontWeight: FontWeight.w600)),
                           WidgetUtils.commonSizedBox(5, 0),
                           Row(
                             children: [
@@ -195,6 +209,91 @@ class _MyInfoPageState extends State<MyInfoPage> {
                                     12,
                                     12),
                               ),
+                              WidgetUtils.commonSizedBox(0, 10.h),
+                              // 用户等级
+                              Stack(
+                                alignment: Alignment.bottomRight,
+                                children: [
+                                  WidgetUtils.showImagesFill(
+                                      (level >= 1 && level <= 10)
+                                          ? 'assets/images/dj/dj_1-10.png'
+                                          : (level >= 11 && level <= 15)
+                                              ? 'assets/images/dj/dj_11-15.png'
+                                              : (level >= 16 && level <= 20)
+                                                  ? 'assets/images/dj/dj_16-20.png'
+                                                  : (level >= 21 && level <= 25)
+                                                      ? 'assets/images/dj/dj_21-25.png'
+                                                      : (level >= 26 &&
+                                                              level <= 30)
+                                                          ? 'assets/images/dj/dj_26-30.png'
+                                                          : (level >= 31 &&
+                                                                  level <= 35)
+                                                              ? 'assets/images/dj/dj_31-35.png'
+                                                              : (level >= 36 &&
+                                                                      level <=
+                                                                          40)
+                                                                  ? 'assets/images/dj/dj_36-40.png'
+                                                                  : (level >= 41 &&
+                                                                          level <=
+                                                                              45)
+                                                                      ? 'assets/images/dj/dj_41-45.png'
+                                                                      : 'assets/images/dj/dj_46-50.png',
+                                      ScreenUtil().setHeight(25),
+                                      ScreenUtil().setHeight(25)),
+                                  Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Text(
+                                        level.toString(),
+                                        style: TextStyle(
+                                            fontSize: ScreenUtil().setSp(16),
+                                            fontWeight: FontWeight.w600,
+                                            fontFamily: 'ARIAL',
+                                            foreground: Paint()
+                                              ..style = PaintingStyle.stroke
+                                              ..strokeWidth = 2
+                                              ..color = (level >= 1 &&
+                                                      level <= 10)
+                                                  ? MyColors.djOneM
+                                                  : (level >= 11 && level <= 15)
+                                                      ? MyColors.djTwoM
+                                                      : (level >= 16 &&
+                                                              level <= 20)
+                                                          ? MyColors.djThreeM
+                                                          : (level >= 21 &&
+                                                                  level <= 25)
+                                                              ? MyColors.djFourM
+                                                              : (level >= 26 &&
+                                                                      level <=
+                                                                          30)
+                                                                  ? MyColors
+                                                                      .djFiveM
+                                                                  : (level >= 31 &&
+                                                                          level <=
+                                                                              35)
+                                                                      ? MyColors
+                                                                          .djSixM
+                                                                      : (level >= 36 &&
+                                                                              level <=
+                                                                                  40)
+                                                                          ? MyColors
+                                                                              .djSevenM
+                                                                          : (level >= 41 && level <= 45)
+                                                                              ? MyColors.djEightM
+                                                                              : MyColors.djNineM),
+                                      ),
+                                      Text(
+                                        level.toString(),
+                                        style: TextStyle(
+                                            color: MyColors.djOne,
+                                            fontSize: ScreenUtil().setSp(16),
+                                            fontWeight: FontWeight.w600,
+                                            fontFamily: 'ARIAL'),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              )
                             ],
                           ),
                           WidgetUtils.commonSizedBox(5, 0),
@@ -252,8 +351,10 @@ class _MyInfoPageState extends State<MyInfoPage> {
                       children: [
                         GestureDetector(
                           onTap: (() {
-                            if (playRecord == false) {
-                              play();
+                            if (MyUtils.checkClick()) {
+                              if (playRecord == false) {
+                                play();
+                              }
                             }
                           }),
                           child: Container(
@@ -453,8 +554,11 @@ class _MyInfoPageState extends State<MyInfoPage> {
   }
 
   /// 个人主页
+  int level = 1;
+
   Future<void> doPostMyIfon() async {
     LogE('token ${sp.getString('user_id')}');
+    LogE('token ${sp.getString('user_token')}');
     Loading.show(MyConfig.successTitle);
     Map<String, dynamic> params = <String, dynamic>{
       'uid': sp.getString('user_id')
@@ -470,6 +574,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
             userNumber = bean.data!.userInfo!.number.toString();
             voice_card = bean.data!.userInfo!.voiceCardUrl!;
             is_pretty = bean.data!.userInfo!.isPretty as int;
+            level = bean.data!.userInfo!.level as int;
           });
           break;
         case MyHttpConfig.errorloginCode:
@@ -482,6 +587,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
       }
       Loading.dismiss();
     } catch (e) {
+      LogE('错误信息 ${e.toString()}');
       Loading.dismiss();
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }

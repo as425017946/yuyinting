@@ -118,7 +118,7 @@ class _QueRenPageState extends State<QueRenHPage> {
                       }
                       ///确认后请求接口
                       Navigator.pop(context);
-                      eventBus.fire(QuerenBack(title: widget.title, jine: widget.jine, index: widget.index));
+                      eventBus.fire(QuerenBack(title: '横屏赛车', jine: widget.jine, index: widget.index));
                     }),
                     child: Container(
                       width: 100,

@@ -46,8 +46,11 @@ class _RoomNameState extends State<RoomName> {
           Expanded(
             child: GestureDetector(
               onTap: (() {
-                Navigator.pop(context);
-                MyUtils.goTransparentPageCom(context, RoomManagerPage(type: 1, roomID: sp.getString('roomID').toString()));
+    if(MyUtils.checkClick()) {
+      Navigator.pop(context);
+      MyUtils.goTransparentPageCom(context,
+          RoomManagerPage(type: 1, roomID: sp.getString('roomID').toString()));
+    }
               }),
               child: Container(
                 height: double.infinity,
@@ -82,11 +85,16 @@ class _RoomNameState extends State<RoomName> {
                     const Expanded(child: Text('')),
                     GestureDetector(
                       onTap: ((){
-                        if(textEditingController.text.trim().toString().isEmpty){
-                          MyToastUtils.showToastBottom('请输入房间名称');
-                        }else{
-                          doPostEditRoom();
-                        }
+    if(MyUtils.checkClick()) {
+      if (textEditingController.text
+          .trim()
+          .toString()
+          .isEmpty) {
+        MyToastUtils.showToastBottom('请输入房间名称');
+      } else {
+        doPostEditRoom();
+      }
+    }
                       }),
                       child: Container(
                         width: ScreenUtil().setWidth(180),

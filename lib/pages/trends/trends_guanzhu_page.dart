@@ -294,7 +294,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
                       action = 'delete';
                     } else {
                       action = 'create';
-                      isShow = true;
+                      isShow = false;
                     }
                   });
                   if (_list[i].isLike == 0) {
@@ -503,7 +503,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
                       action = 'delete';
                     } else {
                       action = 'create';
-                      isShow = true;
+                      isShow = false;
                     }
                   });
                   if (_list_tj[i].isLike == 0) {

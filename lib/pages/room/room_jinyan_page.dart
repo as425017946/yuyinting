@@ -68,7 +68,9 @@ class _RoomJinYanPageState extends State<RoomJinYanPage> {
                 ),
                 GestureDetector(
                   onTap: ((){
-                    doPostSetRoomForbation(list[i].uid.toString(), i);
+                    if(MyUtils.checkClick()) {
+                      doPostSetRoomForbation(list[i].uid.toString(), i);
+                    }
                   }),
                   child: Container(
                     width: ScreenUtil().setHeight(100),
@@ -103,7 +105,9 @@ class _RoomJinYanPageState extends State<RoomJinYanPage> {
           Expanded(
             child: GestureDetector(
               onTap: (() {
-                Navigator.pop(context);
+                if(MyUtils.checkClick()) {
+                  Navigator.pop(context);
+                }
               }),
               child: Container(
                 height: double.infinity,

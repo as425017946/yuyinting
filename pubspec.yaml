@@ -196,3 +196,6 @@ flutter:
     - family: ARIAL
       fonts:
         - asset: assets/font/ARIAL.TTF
+    - family: YOUSHEBIAOTIHEI
+      fonts:
+        - asset: assets/font/YOUSHEBIAOTIHEI-2.TTF

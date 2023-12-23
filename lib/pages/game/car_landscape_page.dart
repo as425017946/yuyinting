@@ -13,6 +13,7 @@ import 'package:svgaplayer_flutter/player.dart';
 import '../../bean/Common_bean.dart';
 import '../../bean/balanceBean.dart';
 import '../../bean/carTimerBean.dart';
+import '../../bean/carYZBean.dart';
 import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
@@ -923,9 +924,9 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
     doPostGetCarTimer();
     // 二次确认弹窗点击确认，开始下注
     listen = eventBus.on<QuerenBack>().listen((event) {
-      setState(() {
+      if(event.title == '横屏赛车') {
         doPostCarBet(event.index);
-      });
+      }
     });
     AutoOrientation.landscapeAutoMode();
     ///关闭状态栏，与底部虚拟操作按钮
@@ -1509,11 +1510,12 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
                                         12),
                                     WidgetUtils.commonSizedBox(
                                         0, 2),
-                                    WidgetUtils.onlyText(
-                                        mogubi,
+                                    WidgetUtils.onlyTextCenter(
+                                        mogubi2,
                                         StyleUtils.getCommonTextStyle(
                                             color: Colors.white,
-                                            fontSize: 10)),
+                                            fontSize: ScreenUtil().setSp(23),
+                                            fontWeight: FontWeight.w600)),
                                     WidgetUtils.commonSizedBox(
                                         0, 5),
                                     Opacity(
@@ -1533,7 +1535,7 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
                                     WidgetUtils.commonSizedBox(
                                         0, 5),
                                     WidgetUtils.onlyTextCenter(
-                                        jinbi,
+                                        jinbi2,
                                         StyleUtils.getCommonTextStyle(
                                             color: Colors.white,
                                             fontSize: 10,
@@ -1557,7 +1559,7 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
                                     WidgetUtils.commonSizedBox(
                                         0, 5),
                                     WidgetUtils.onlyTextCenter(
-                                        zuanshi,
+                                        zuanshi2,
                                         StyleUtils.getCommonTextStyle(
                                             color: Colors.white,
                                             fontSize: 10,
@@ -1743,7 +1745,7 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
       'bet_amount': xiazhujine.toString()
     };
     try {
-      CommonBean bean = await DataUtils.postCarBet(params);
+      carYZBean bean = await DataUtils.postCarBet(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
@@ -1765,6 +1767,39 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
                 ), () {
               listA1[int.parse(benSN) - 1] = false;
             });
+
+            // 更新余额
+            if(bean.data!.curType == 1){
+              if(double.parse(jinbi) > 10000){
+                // 减去花费的V豆
+                jinbi = '${(double.parse(jinbi) - int.parse(xiazhujine.toString()))}';
+                //保留2位小数
+                jinbi2 = '${(double.parse(jinbi) / 10000).toStringAsFixed(2)}w';
+              }else{
+                jinbi = (double.parse(jinbi) - int.parse(xiazhujine.toString())).toString();
+                jinbi2 = jinbi;
+              }
+            }else if(bean.data!.curType == 2){
+              if(double.parse(zuanshi) > 10000){
+                // 减去花费的V豆
+                zuanshi = '${(double.parse(zuanshi) - int.parse(xiazhujine.toString()))}';
+                //保留2位小数
+                zuanshi2 = '${(double.parse(zuanshi) / 10000).toStringAsFixed(2)}w';
+              }else{
+                zuanshi = (double.parse(zuanshi) - int.parse(xiazhujine.toString())).toString();
+                zuanshi2 = zuanshi;
+              }
+            }else{
+              if(double.parse(mogubi) > 10000){
+                // 减去花费的V豆
+                mogubi = '${(double.parse(mogubi) - int.parse(xiazhujine.toString()))}';
+                //保留2位小数
+                mogubi2 = '${(double.parse(mogubi) / 10000).toStringAsFixed(2)}w';
+              }else{
+                mogubi = (double.parse(mogubi) - int.parse(xiazhujine.toString())).toString();
+                mogubi2 = mogubi;
+              }
+            }
           });
           break;
         case MyHttpConfig.errorloginCode:
@@ -1859,7 +1894,7 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
   }
 
   // 金币 钻石 蘑菇币
-  String jinbi = '', zuanshi = '', mogubi = '';
+  String jinbi = '', zuanshi = '', mogubi = '', jinbi2 = '', zuanshi2 = '', mogubi2 = '';
   /// 钱包余额
   Future<void> doPostBalance() async {
     try {
@@ -1867,20 +1902,23 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
-            if(double.parse(bean.data!.goldBean!) > 100000){
-              jinbi = '${(double.parse(bean.data!.goldBean!)/100000)}w';
+            jinbi = bean.data!.goldBean!;
+            if(double.parse(bean.data!.goldBean!) > 10000){
+              jinbi2 = '${(double.parse(bean.data!.goldBean!) / 10000).toStringAsFixed(2)}w';
             }else{
-              jinbi = bean.data!.goldBean!;
+              jinbi2 = bean.data!.goldBean!;
             }
-            if(double.parse(bean.data!.diamond!) > 100000){
-              zuanshi = '${(double.parse(bean.data!.diamond!)/100000)}w';
+            zuanshi = bean.data!.diamond!;
+            if(double.parse(bean.data!.diamond!) > 10000){
+              zuanshi2 = '${(double.parse(bean.data!.diamond!) / 10000).toStringAsFixed(2)}w';
             }else{
-              zuanshi = bean.data!.diamond!;
+              zuanshi2 = bean.data!.diamond!;
             }
-            if(double.parse(bean.data!.mushroom!) > 100000){
-              mogubi = '${double.parse(bean.data!.mushroom!)/100000}w';
+            mogubi = bean.data!.mushroom!;
+            if(double.parse(bean.data!.mushroom!) > 10000){
+              mogubi2 = '${(double.parse(bean.data!.mushroom!) / 10000).toStringAsFixed(2)}w';
             }else{
-              mogubi = bean.data!.mushroom!;
+              mogubi2 = bean.data!.mushroom!;
             }
           });
           break;

@@ -68,7 +68,9 @@ class _RoomBlackPageState extends State<RoomBlackPage> {
                 ),
                 GestureDetector(
                   onTap: ((){
-                    doPostSetRoomBlack(list[i].uid.toString(), i);
+                    if(MyUtils.checkClick()) {
+                      doPostSetRoomBlack(list[i].uid.toString(), i);
+                    }
                   }),
                   child: Container(
                     width: ScreenUtil().setHeight(100),
@@ -103,7 +105,9 @@ class _RoomBlackPageState extends State<RoomBlackPage> {
           Expanded(
             child: GestureDetector(
               onTap: (() {
-                Navigator.pop(context);
+                if(MyUtils.checkClick()) {
+                  Navigator.pop(context);
+                }
               }),
               child: Container(
                 height: double.infinity,

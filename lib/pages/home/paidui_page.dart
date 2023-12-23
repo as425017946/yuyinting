@@ -103,14 +103,16 @@ class _PaiduiPageState extends State<PaiduiPage>
       children: [
         GestureDetector(
           onTap: (() {
-            if (index == 2) {
-              doPostBeforeJoin(list2[i].id.toString());
-            } else if (index == 3) {
-              doPostBeforeJoin(list3[i].id.toString());
-            } else if (index == 4) {
-              doPostBeforeJoin(list4[i].id.toString());
-            } else if (index == 5) {
-              doPostBeforeJoin(list5[i].id.toString());
+            if (MyUtils.checkClick()) {
+              if (index == 2) {
+                doPostBeforeJoin(list2[i].id.toString());
+              } else if (index == 3) {
+                doPostBeforeJoin(list3[i].id.toString());
+              } else if (index == 4) {
+                doPostBeforeJoin(list4[i].id.toString());
+              } else if (index == 5) {
+                doPostBeforeJoin(list5[i].id.toString());
+              }
             }
           }),
           child: Container(
@@ -251,15 +253,25 @@ class _PaiduiPageState extends State<PaiduiPage>
           /// 热度
           Row(
             children: [
-              WidgetUtils.showImages(
-                  'assets/images/paidui_redu.png', 40.h, 20.h),
-              WidgetUtils.commonSizedBox(0, 5),
-              WidgetUtils.onlyText(
-                  hotDegree > 10000
-                      ? (hotDegree / 10000).toStringAsFixed(2)
-                      : hotDegree.toString(),
-                  StyleUtils.getCommonTextStyle(
-                      color: MyColors.g6, fontSize: ScreenUtil().setSp(24)))
+              // WidgetUtils.showImages(
+              //     'assets/images/paidui_redu.png', 40.h, 20.h),
+              Text('热度值:',style: TextStyle(
+                  fontSize: ScreenUtil().setSp(24),
+                  color: MyColors.g6,
+                  fontFamily: 'YOUSHEBIAOTIHEI'),),
+              // WidgetUtils.commonSizedBox(0, 5),
+              Text(hotDegree > 9999
+                  ? '${(hotDegree / 10000).toStringAsFixed(2)}w'
+                  : hotDegree.toString(),style: TextStyle(
+                  fontSize: ScreenUtil().setSp(24),
+                  color: MyColors.g6,
+                  fontFamily: 'YOUSHEBIAOTIHEI'),),
+              // WidgetUtils.onlyText(
+              //     hotDegree > 9999
+              //         ? '${(hotDegree / 10000).toStringAsFixed(2)}w'
+              //         : hotDegree.toString(),
+              //     StyleUtils.getCommonTextStyle(
+              //         color: MyColors.g6, fontSize: ScreenUtil().setSp(24)))
             ],
           ),
         ],
@@ -515,7 +527,9 @@ class _PaiduiPageState extends State<PaiduiPage>
                             children: [
                               GestureDetector(
                                 onTap: (() {
-                                  doPostBeforeJoin(list[0].id.toString());
+                                  if (MyUtils.checkClick()) {
+                                    doPostBeforeJoin(list[0].id.toString());
+                                  }
                                 }),
                                 child: Stack(
                                   alignment: Alignment.topRight,
@@ -553,7 +567,9 @@ class _PaiduiPageState extends State<PaiduiPage>
                                 children: [
                                   GestureDetector(
                                     onTap: (() {
-                                      doPostBeforeJoin(list[1].id.toString());
+                                      if (MyUtils.checkClick()) {
+                                        doPostBeforeJoin(list[1].id.toString());
+                                      }
                                     }),
                                     child: Stack(
                                       alignment: Alignment.topRight,
@@ -578,10 +594,10 @@ class _PaiduiPageState extends State<PaiduiPage>
                                               child: Text(
                                                 list[1].roomName!,
                                                 maxLines: 1,
-                                                style:
-                                                StyleUtils.getCommonTextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 21.sp),
+                                                style: StyleUtils
+                                                    .getCommonTextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 21.sp),
                                               ),
                                             ))
                                       ],
@@ -590,7 +606,9 @@ class _PaiduiPageState extends State<PaiduiPage>
                                   const Expanded(child: Text('')),
                                   GestureDetector(
                                     onTap: (() {
-                                      doPostBeforeJoin(list[3].id.toString());
+                                      if (MyUtils.checkClick()) {
+                                        doPostBeforeJoin(list[3].id.toString());
+                                      }
                                     }),
                                     child: Stack(
                                       children: [
@@ -607,10 +625,10 @@ class _PaiduiPageState extends State<PaiduiPage>
                                               child: Text(
                                                 list[3].roomName!,
                                                 maxLines: 1,
-                                                style:
-                                                StyleUtils.getCommonTextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 21.sp),
+                                                style: StyleUtils
+                                                    .getCommonTextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 21.sp),
                                               ),
                                             ))
                                       ],
@@ -623,7 +641,9 @@ class _PaiduiPageState extends State<PaiduiPage>
                                 children: [
                                   GestureDetector(
                                     onTap: (() {
-                                      doPostBeforeJoin(list[2].id.toString());
+                                      if (MyUtils.checkClick()) {
+                                        doPostBeforeJoin(list[2].id.toString());
+                                      }
                                     }),
                                     child: Stack(
                                       alignment: Alignment.topRight,
@@ -648,10 +668,10 @@ class _PaiduiPageState extends State<PaiduiPage>
                                               child: Text(
                                                 list[2].roomName!,
                                                 maxLines: 1,
-                                                style:
-                                                StyleUtils.getCommonTextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 21.sp),
+                                                style: StyleUtils
+                                                    .getCommonTextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 21.sp),
                                               ),
                                             ))
                                       ],
@@ -660,7 +680,9 @@ class _PaiduiPageState extends State<PaiduiPage>
                                   const Expanded(child: Text('')),
                                   GestureDetector(
                                     onTap: (() {
-                                      doPostBeforeJoin(list[4].id.toString());
+                                      if (MyUtils.checkClick()) {
+                                        doPostBeforeJoin(list[4].id.toString());
+                                      }
                                     }),
                                     child: Stack(
                                       children: [
@@ -677,10 +699,10 @@ class _PaiduiPageState extends State<PaiduiPage>
                                               child: Text(
                                                 list[4].roomName!,
                                                 maxLines: 1,
-                                                style:
-                                                StyleUtils.getCommonTextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 21.sp),
+                                                style: StyleUtils
+                                                    .getCommonTextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 21.sp),
                                               ),
                                             ))
                                       ],
@@ -698,11 +720,13 @@ class _PaiduiPageState extends State<PaiduiPage>
                           children: [
                             GestureDetector(
                               onTap: (() {
-                                setState(() {
-                                  index = 2;
-                                  page = 1;
-                                  doPostTJRoomList2('2');
-                                });
+                                if (MyUtils.checkClick()) {
+                                  setState(() {
+                                    index = 2;
+                                    page = 1;
+                                    doPostTJRoomList2('2');
+                                  });
+                                }
                               }),
                               child: WidgetUtils.myContainer(
                                   ScreenUtil().setHeight(40),
@@ -716,11 +740,13 @@ class _PaiduiPageState extends State<PaiduiPage>
                             WidgetUtils.commonSizedBox(0, 10),
                             GestureDetector(
                               onTap: (() {
-                                setState(() {
-                                  index = 3;
-                                  page = 1;
-                                  doPostTJRoomList2('3');
-                                });
+                                if (MyUtils.checkClick()) {
+                                  setState(() {
+                                    index = 3;
+                                    page = 1;
+                                    doPostTJRoomList2('3');
+                                  });
+                                }
                               }),
                               child: WidgetUtils.myContainer(
                                   ScreenUtil().setHeight(40),
@@ -734,11 +760,13 @@ class _PaiduiPageState extends State<PaiduiPage>
                             WidgetUtils.commonSizedBox(0, 10),
                             GestureDetector(
                               onTap: (() {
-                                setState(() {
-                                  index = 4;
-                                  page = 1;
-                                  doPostTJRoomList2('4');
-                                });
+                                if (MyUtils.checkClick()) {
+                                  setState(() {
+                                    index = 4;
+                                    page = 1;
+                                    doPostTJRoomList2('4');
+                                  });
+                                }
                               }),
                               child: WidgetUtils.myContainer(
                                   ScreenUtil().setHeight(40),
@@ -752,11 +780,13 @@ class _PaiduiPageState extends State<PaiduiPage>
                             WidgetUtils.commonSizedBox(0, 10),
                             GestureDetector(
                               onTap: (() {
-                                setState(() {
-                                  index = 5;
-                                  page = 1;
-                                  doPostTJRoomList2('5');
-                                });
+                                if (MyUtils.checkClick()) {
+                                  setState(() {
+                                    index = 5;
+                                    page = 1;
+                                    doPostTJRoomList2('5');
+                                  });
+                                }
                               }),
                               child: SizedBox(
                                 height: ScreenUtil().setHeight(40),

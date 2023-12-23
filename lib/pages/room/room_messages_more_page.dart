@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sound/public/flutter_sound_player.dart';
 import 'package:path_provider/path_provider.dart';
@@ -9,6 +10,7 @@ import 'package:yuyinting/utils/widget_utils.dart';
 
 import '../../bean/Common_bean.dart';
 import '../../bean/commonStringBean.dart';
+import '../../bean/isPayBean.dart';
 import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
 import '../../db/DatabaseHelper.dart';
@@ -16,11 +18,14 @@ import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
 import '../../utils/event_utils.dart';
+import '../../utils/log_util.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/regex_formatter.dart';
 import '../../utils/style_utils.dart';
 import '../../widget/SwiperPage.dart';
+import '../message/hongbao_page.dart';
+import '../mine/setting/password_pay_page.dart';
 
 /// 厅内消息详情
 class RoomMessagesMorePage extends StatefulWidget {
@@ -40,7 +45,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
   FlutterSoundPlayer? _mPlayer = FlutterSoundPlayer();
   bool playRecord = false; //音频文件播放状态
   List<String> imgList = [];
-  var listen;
+  var listen,listenHB;
   int length = 0;
   String isGZ = '0';
 
@@ -51,12 +56,23 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
     MyUtils.addChatListener();
     doPostUserFollowStatus();
     doLocationInfo();
+    saveImages();
     listen = eventBus.on<SendMessageBack>().listen((event) {
       doLocationInfo();
     });
-    saveImages();
+    listenHB = eventBus.on<HongBaoBack>().listen((event) {
+      LogE('发送了===');
+      saveHBinfo(event.info);
+    });
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    listen.cancel();
+    listenHB.cancel();
+  }
   // 在数据变化后将滚动位置设置为最后一个item的位置
   void scrollToLastItem() {
     _scrollController.animateTo(
@@ -74,8 +90,50 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
     MyUtils.saveImgTemp(widget.otherImg, widget.otherUid);
     // 保存路径
     Directory? directory = await getTemporaryDirectory();
-    myHeadImg = '${directory!.path}/${sp.getString('user_headimg')}.jpg';
+    myHeadImg = '${directory!.path}/${sp.getString('user_id')}.jpg';
     otherHeadImg = '${directory!.path}/${widget.otherUid}.jpg';
+  }
+
+  // 保存发红包的信息 type 1自己给别人发，2收到别人发的红包
+  saveHBinfo(String info) async {
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    Database? db = await databaseHelper.database;
+    String combineID = '';
+    if (int.parse(sp.getString('user_id').toString()) >
+        int.parse(widget.otherUid)) {
+      combineID = '${widget.otherUid}-${sp.getString('user_id').toString()}';
+    } else {
+      combineID = '${sp.getString('user_id').toString()}-${widget.otherUid}';
+    }
+    Map<String, dynamic> params = <String, dynamic>{
+      'uid': sp.getString('user_id').toString(),
+      'otherUid': widget.otherUid,
+      'whoUid': sp.getString('user_id').toString(),
+      'combineID': combineID,
+      'nickName': widget.nickName,
+      'content': '送出$info个V豆',
+      'headImg': myHeadImg,
+      'otherHeadImg': otherHeadImg,
+      'add_time': DateTime.now().millisecondsSinceEpoch,
+      'type': 6,
+      'number': 0,
+      'status': 1,
+      'readStatus': 1,
+      'liveStatus': 0,
+      'loginStatus': 0,
+    };
+    // 插入数据
+    await databaseHelper.insertData('messageSLTable', params);
+    // 获取所有数据
+    List<Map<String, dynamic>> result = await db.query('messageSLTable',
+        columns: null, whereArgs: [combineID], where: 'combineID = ?');
+    setState(() {
+      allData2 = result;
+      length = allData2.length;
+    });
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      scrollToLastItem(); // 在widget构建完成后滚动到底部
+    });
   }
 
   Widget chatWidget(BuildContext context, int i) {
@@ -147,8 +205,8 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                     color: Colors.white,
                     //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                     borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(20.0),
-                        topRight: Radius.circular(0),
+                        topLeft: Radius.circular(0),
+                        topRight: Radius.circular(20.0),
                         bottomLeft: Radius.circular(20.0),
                         bottomRight: Radius.circular(20.0)),
                     boxShadow: [
@@ -170,12 +228,14 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                   )
                       : allData2[i]['type'] == 2 ? GestureDetector(
                     onTap: (() {
-                      setState(() {
-                        imgList.clear();
-                        imgList.add(allData2[i]['content']);
-                      });
-                      MyUtils.goTransparentPageCom(
-                          context, SwiperPage(imgList: imgList));
+    if(MyUtils.checkClick()) {
+      setState(() {
+        imgList.clear();
+        imgList.add(allData2[i]['content']);
+      });
+      MyUtils.goTransparentPageCom(
+          context, SwiperPage(imgList: imgList));
+    }
                     }),
                     child: Image(
                       image: FileImage(File(allData2[i]['content'])),
@@ -189,11 +249,13 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                     ),
                   ) : GestureDetector(
                     onTap: (() {
-                      if(playRecord){
-                        stopPlayer();
-                      }else{
-                        play(allData2[i]['content']);
-                      }
+    if(MyUtils.checkClick()) {
+      if (playRecord) {
+        stopPlayer();
+      } else {
+        play(allData2[i]['content']);
+      }
+    }
                     }),
                     child: SizedBox(
                       width: widthAudio,
@@ -263,12 +325,14 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                   )
                       : allData2[i]['type'] == 2 ? GestureDetector(
                     onTap: (() {
-                      setState(() {
-                        imgList.clear();
-                        imgList.add(allData2[i]['content']);
-                      });
-                      MyUtils.goTransparentPageCom(
-                          context, SwiperPage(imgList: imgList));
+    if(MyUtils.checkClick()) {
+      setState(() {
+        imgList.clear();
+        imgList.add(allData2[i]['content']);
+      });
+      MyUtils.goTransparentPageCom(
+          context, SwiperPage(imgList: imgList));
+    }
                     }),
                     child: Image(
                       image: FileImage(File(allData2[i]['content'])),
@@ -282,11 +346,13 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                     ),
                   ) : GestureDetector(
                     onTap: (() {
-                      if(playRecord){
-                        stopPlayer();
-                      }else{
-                        play(allData2[i]['content']);
-                      }
+    if(MyUtils.checkClick()) {
+      if (playRecord) {
+        stopPlayer();
+      } else {
+        play(allData2[i]['content']);
+      }
+    }
                     }),
                     child: SizedBox(
                       width: widthAudio,
@@ -342,13 +408,16 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false, // 解决键盘顶起页面
       backgroundColor: Colors.transparent,
       body: Column(
         children: [
           Expanded(
             child: GestureDetector(
               onTap: (() {
-                Navigator.pop(context);
+    if(MyUtils.checkClick()) {
+      Navigator.pop(context);
+    }
               }),
               child: Container(
                 height: double.infinity,
@@ -391,7 +460,9 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                           const Expanded(child: Text('')),
                           GestureDetector(
                             onTap: (() {
-                              doPostFollow();
+    if(MyUtils.checkClick()) {
+      doPostFollow();
+    }
                             }),
                             child: SizedBox(
                               width: ScreenUtil().setHeight(80),
@@ -448,61 +519,78 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                         topRight: Radius.circular(35)),
                   ),
                   alignment: Alignment.center,
-                  child: Container(
-                    height: 78.h,
-                    width: double.infinity,
-                    margin: EdgeInsets.only(left: 20.h, right: 20.h),
-                    padding: EdgeInsets.only(left: 20.h, right: 20.h),
-                    decoration: const BoxDecoration(
-                      //背景
-                      color: MyColors.roomXZ2,
-                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                      borderRadius: BorderRadius.all(Radius.circular(38)),
-                    ),
-                    child: TextField(
-                      textInputAction: TextInputAction.send,
-                      // 设置为发送按钮
-                      controller: controller,
-                      inputFormatters: [
-                        RegexFormatter(
-                            regex: MyUtils.regexFirstNotNull),
-                      ],
-                      style: StyleUtils.loginTextStyle,
-                      onSubmitted: (value) {
-                        MyUtils.sendMessage(widget.otherUid, value);
-                        doPostSendUserMsg(value);
-                      },
-                      decoration: InputDecoration(
-                        // border: InputBorder.none,
-                        // labelText: "请输入用户名",
-                        // icon: Icon(Icons.people), //前面的图标
-                        hintText: '请输入信息...',
-                        hintStyle: StyleUtils.loginHintTextStyle,
+                  child: Row(
+                    children: [
+                      Expanded(child: Container(
+                        height: 78.h,
+                        width: double.infinity,
+                        margin: EdgeInsets.only(left: 20.h, right: 20.h),
+                        padding: EdgeInsets.only(left: 20.h, right: 20.h),
+                        decoration: const BoxDecoration(
+                          //背景
+                          color: MyColors.roomXZ2,
+                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                          borderRadius: BorderRadius.all(Radius.circular(38)),
+                        ),
+                        child: TextField(
+                          textInputAction: TextInputAction.send,
+                          // 设置为发送按钮
+                          controller: controller,
+                          inputFormatters: [
+                            RegexFormatter(
+                                regex: MyUtils.regexFirstNotNull),
+                            LengthLimitingTextInputFormatter(25)//限制输入长度
+                          ],
+                          style: StyleUtils.loginTextStyle,
+                          onSubmitted: (value) {
+                            MyUtils.sendMessage(widget.otherUid, value);
+                            doPostSendUserMsg(value);
+                          },
+                          decoration: InputDecoration(
+                            // border: InputBorder.none,
+                            // labelText: "请输入用户名",
+                            // icon: Icon(Icons.people), //前面的图标
+                            hintText: '请输入信息...',
+                            hintStyle: StyleUtils.loginHintTextStyle,
 
-                        contentPadding:
-                        const EdgeInsets.only(top: 0, bottom: 0),
-                        border: const OutlineInputBorder(
-                          borderSide:
-                          BorderSide(color: Colors.transparent),
-                        ),
-                        enabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.transparent,
+                            contentPadding:
+                            const EdgeInsets.only(top: 0, bottom: 0),
+                            border: const OutlineInputBorder(
+                              borderSide:
+                              BorderSide(color: Colors.transparent),
+                            ),
+                            enabledBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.transparent,
+                              ),
+                            ),
+                            disabledBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.transparent,
+                              ),
+                            ),
+                            focusedBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.transparent,
+                              ),
+                            ),
+                            // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
                           ),
                         ),
-                        disabledBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.transparent,
-                          ),
-                        ),
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.transparent,
-                          ),
-                        ),
-                        // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
+                      ),),
+                      GestureDetector(
+                        onTap: (() {
+                            if(MyUtils.checkClick()){
+                              doPostPayPwd();
+                            }
+                        }),
+                        child: WidgetUtils.showImages(
+                            'assets/images/chat_hongbao.png',
+                            ScreenUtil().setHeight(45),
+                            ScreenUtil().setHeight(45)),
                       ),
-                    ),
+                      WidgetUtils.commonSizedBox(0, 20.h),
+                    ],
                   ),
                 )
               ],
@@ -689,4 +777,39 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
     }
   }
 
+
+  /// 是否设置了支付密码
+  Future<void> doPostPayPwd() async {
+    try {
+      isPayBean bean = await DataUtils.postPayPwd();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+        //1已设置  0未设置
+          if(bean.data!.isSet == 1){
+            // ignore: use_build_context_synchronously
+            MyUtils.goTransparentPageCom(
+                context,
+                HongBaoPage(
+                  uid: widget.otherUid,
+                ));
+          }else{
+            MyToastUtils.showToastBottom('请先设置支付密码！');
+            // ignore: use_build_context_synchronously
+            MyUtils.goTransparentPageCom(
+                context,
+                const PasswordPayPage());
+          }
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
 }

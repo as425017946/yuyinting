@@ -410,8 +410,9 @@ class MyUtils {
 
   //初始化sdk
   static void initSDK() async {
+    //1199230605161000#demo
     EMOptions options = EMOptions(
-        appKey: "1199230605161000#demo", autoLogin: false, debugModel: true, isAutoDownloadThumbnail: true);
+        appKey: "1136231222154558#demo", autoLogin: false, debugModel: true, isAutoDownloadThumbnail: true);
     await EMClient.getInstance.init(options);
     // 通知 SDK UI 已准备好。该方法执行后才会收到 `EMChatRoomEventHandler`、`EMContactEventHandler` 和 `EMGroupEventHandler` 回调。
     await EMClient.getInstance.startCallback();
@@ -466,6 +467,7 @@ class MyUtils {
                   Map info = msg.attributes!;
                   LogE('接收文本信息$info');
                   if(info['lv'] == '' || info['lv'] == null){
+                    LogE('接收文本信息*********************************');
                     if(info['type'] == 'clean_charm'){
                       // 厅内清空魅力值
                       eventBus.fire(JoinRoomYBack(map: info, type: '0'));

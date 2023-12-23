@@ -1286,6 +1286,7 @@ class WidgetUtils {
       controller: controller,
       inputFormatters: [
         RegexFormatter(regex: MyUtils.regexFirstNotNull),
+        LengthLimitingTextInputFormatter(16)//限制输入长度
       ],
       style: StyleUtils.getCommonTextStyle(
           color: MyColors.g3, fontSize: ScreenUtil().setSp(25)),

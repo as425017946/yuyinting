@@ -44,6 +44,7 @@ class _MessagePageState extends State<MessagePage> {
     super.initState();
     doPostSystemMsgList();
     MyUtils.addChatListener();
+    eventBus.fire(SubmitButtonBack(title: '清空红点'));
     list1 = eventBus.on<ResidentBack>().listen((event) {
       setState(() {
         unRead = 0;
@@ -338,10 +339,65 @@ class _MessagePageState extends State<MessagePage> {
         builder: (context) {
           return CustomDialog(
             title: '是否标记一键已读？',
-            callback: (res) {},
+            callback: (res) {
+              readInfo();
+            },
             content: '',
           );
         });
+  }
+
+  /// 一键已读使用
+  void readInfo() async{
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    Database? db = await databaseHelper.database;
+    // 执行查询操作
+    List<Map<String, dynamic>> result = await db.query(
+      'messageSLTable',
+      columns: ['MAX(id) AS id'],
+      groupBy: 'combineID',
+    );
+    // 把未读信息都改成已读
+    for (int i = 0; i < result.length; i++) {
+      await db.update('messageSLTable', {'readStatus': 1},
+          where: 'combineID = ?', whereArgs: [result[i]['combineID']]);
+    }
+    // 修改数据成功后在重新查询一遍
+    // 查询出来后在查询单条信息具体信息
+    List<int> listId = [];
+    String ids = '';
+    for (int i = 0; i < result.length; i++) {
+      listId.add(result[i]['id']);
+      if (ids.isNotEmpty) {
+        ids = '$ids,${result[i]['id'].toString()}';
+      } else {
+        ids = result[i]['id'].toString();
+      }
+    }
+    // 生成占位符字符串，例如: ?,?,?,?
+    String placeholders =
+    List.generate(listId.length, (index) => '?').join(',');
+    // 构建查询语句和参数
+    String query =
+        'SELECT * FROM messageSLTable WHERE id IN ($placeholders) order by add_time desc';
+    List<dynamic> args = listId;
+    // 执行查询
+    List<Map<String, dynamic>> result2 = await db.rawQuery(query, args);
+    LogE('长度 ** == $result2');
+    String myIds = '';
+    setState(() {
+      listMessage = result2;
+      listRead.clear();
+      for(int i = 0; i < listMessage.length; i++){
+        listRead.add(0);
+        if(myIds.isNotEmpty){
+          myIds = '$myIds,${listMessage[i]['otherUid'].toString()}';
+        }else{
+          myIds = listMessage[i]['otherUid'].toString();
+        }
+      }
+    });
+
   }
 
   /// 获取系统消息
@@ -430,7 +486,7 @@ class _MessagePageState extends State<MessagePage> {
       List<dynamic> args = listId;
       // 执行查询
       List<Map<String, dynamic>> result2 = await db.rawQuery(query, args);
-      LogE('长度== $result2');
+      LogE('长度== ${result2}');
       String myIds = '';
       setState(() {
         listMessage = result2;
@@ -483,8 +539,10 @@ class _MessagePageState extends State<MessagePage> {
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
-            listU = bean.data!;
-            length = listU.length;
+            if(bean.data!.isNotEmpty) {
+              listU = bean.data!;
+              length = listU.length;
+            }
           });
           break;
         case MyHttpConfig.errorloginCode:

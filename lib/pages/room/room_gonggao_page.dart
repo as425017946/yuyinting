@@ -44,15 +44,18 @@ class _RoomGongGaoPageState extends State<RoomGongGaoPage> {
           Expanded(
             child: GestureDetector(
               onTap: (() {
-                Navigator.pop(context);
-                Future.delayed(const Duration(seconds: 0), () {
-                  Navigator.of(context).push(PageRouteBuilder(
-                      opaque: false,
-                      pageBuilder:
-                          (context, animation, secondaryAnimation) {
-                        return RoomManagerPage(type: 1, roomID: widget.roomID,);
-                      }));
-                });
+                if(MyUtils.checkClick()) {
+                  Navigator.pop(context);
+                  Future.delayed(const Duration(seconds: 0), () {
+                    Navigator.of(context).push(PageRouteBuilder(
+                        opaque: false,
+                        pageBuilder:
+                            (context, animation, secondaryAnimation) {
+                          return RoomManagerPage(
+                            type: 1, roomID: widget.roomID,);
+                        }));
+                  });
+                }
               }),
               child: Container(
                 height: double.infinity,
@@ -87,7 +90,9 @@ class _RoomGongGaoPageState extends State<RoomGongGaoPage> {
                     const Expanded(child: Text('')),
                     GestureDetector(
                       onTap: (() {
-                        doPostEditRoom();
+                        if(MyUtils.checkClick()) {
+                          doPostEditRoom();
+                        }
                       }),
                       child: Container(
                         width: ScreenUtil().setWidth(180),

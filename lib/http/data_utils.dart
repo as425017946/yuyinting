@@ -10,6 +10,7 @@ import '../bean/balanceBean.dart';
 import '../bean/baobiaoBean.dart';
 import '../bean/beibaoBean.dart';
 import '../bean/carTimerBean.dart';
+import '../bean/carYZBean.dart';
 import '../bean/carZJLiShiBean.dart';
 import '../bean/careListBean.dart';
 import '../bean/chatUserInfoBean.dart';
@@ -25,6 +26,7 @@ import '../bean/ghPeopleBean.dart';
 import '../bean/ghRoomBean.dart';
 import '../bean/giftListBean.dart';
 import '../bean/homeTJBean.dart';
+import '../bean/isPayBean.dart';
 import '../bean/kefuBean.dart';
 import '../bean/labelListBean.dart';
 import '../bean/liwuBean.dart';
@@ -799,11 +801,11 @@ class DataUtils{
   }
 
   /// 赛车押注
-  static Future<CommonBean> postCarBet(Map<String,dynamic> params) async {
+  static Future<carYZBean> postCarBet(Map<String,dynamic> params) async {
     print("赛车押注：$params");
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.carBet, {}, params);
     print("赛车押注：$respons");
-    return CommonBean.fromJson(respons!);
+    return carYZBean.fromJson(respons!);
   }
 
   /// 赛车中奖赛道
@@ -844,6 +846,7 @@ class DataUtils{
 
   /// 游戏商店
   static Future<gameStoreBean> postGameStore(Map<String,dynamic> params) async {
+    print("游戏商店：$params");
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.gameStore, {}, params);
     print("游戏商店：$respons");
     return gameStoreBean.fromJson(respons!);
@@ -974,4 +977,29 @@ class DataUtils{
     print("房间热度：$respons");
     return CommonMyIntBean.fromJson(respons!);
   }
+
+  /// 是否设置了支付密码
+  static Future<isPayBean> postPayPwd() async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.payPwd, {}, {});
+    print("是否设置了支付密码：$respons");
+    return isPayBean.fromJson(respons!);
+  }
+
+  /// 提现申请
+  static Future<CommonBean> postWithdrawal(Map<String,dynamic> params) async {
+    print("提现申请：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.withdrawal, {}, params);
+    print("提现申请：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+
+  /// 离开房间
+  static Future<CommonBean> postLeave(Map<String,dynamic> params) async {
+    print("离开房间：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.leave, {}, params);
+    print("离开房间：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
 }

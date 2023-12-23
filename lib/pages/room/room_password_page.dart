@@ -52,7 +52,9 @@ class _RoomPasswordPageState extends State<RoomPasswordPage> {
           Expanded(
             child: GestureDetector(
               onTap: (() {
-                Navigator.pop(context);
+    if(MyUtils.checkClick()) {
+      Navigator.pop(context);
+    }
               }),
               child: Container(
                 height: double.infinity,
@@ -79,11 +81,13 @@ class _RoomPasswordPageState extends State<RoomPasswordPage> {
                   children: [
                     GestureDetector(
                       onTap: (() {
-                        setState(() {
-                          currentText = '';
-                        });
-                        doPostEditRoom();
-                        Navigator.pop(context);
+    if(MyUtils.checkClick()) {
+      setState(() {
+        currentText = '';
+      });
+      doPostEditRoom();
+      Navigator.pop(context);
+    }
                       }),
                       child: Container(
                         width: ScreenUtil().setWidth(220),
@@ -107,8 +111,10 @@ class _RoomPasswordPageState extends State<RoomPasswordPage> {
                     const Expanded(child: Text('')),
                     GestureDetector(
                       onTap: (() {
-                        doPostEditRoom();
-                        Navigator.pop(context);
+    if(MyUtils.checkClick()) {
+      doPostEditRoom();
+      Navigator.pop(context);
+    }
                       }),
                       child: Container(
                         width: ScreenUtil().setWidth(220),

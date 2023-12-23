@@ -114,29 +114,36 @@ class _QueRenPageState extends State<XiaZhuQueRenPage> {
                           if(widget.title == '心动转盘') {
                             sp.setBool('zp1_queren', true);
                             sp.setString('zp1_queren_time', '$year-$month-$day');
+                            eventBus.fire(XZQuerenBack(cishu: widget.cishu, feiyong: widget.feiyong, title: '心动转盘'));
                           }else if(widget.title == '超级转盘'){
                             sp.setBool('zp2_queren', true);
                             sp.setString('zp2_queren_time', '$year-$month-$day');
+                            eventBus.fire(XZQuerenBack(cishu: widget.cishu, feiyong: widget.feiyong, title: '超级转盘'));
                           }else if(widget.title == '水星魔方'){
                             sp.setBool('mf1_queren', true);
                             sp.setString('mf1_queren_time', '$year-$month-$day');
+                            eventBus.fire(XZQuerenBack(cishu: widget.cishu, feiyong: widget.feiyong, title: '水星魔方'));
                           }else if(widget.title == '金星魔方'){
                             sp.setBool('mf2_queren', true);
                             sp.setString('mf2_queren_time', '$year-$month-$day');
+                            eventBus.fire(XZQuerenBack(cishu: widget.cishu, feiyong: widget.feiyong, title: '金星魔方'));
                           }
                         }else{
                           if(widget.title == '心动转盘') {
                             sp.setBool('zp1_queren', false);
+                            eventBus.fire(XZQuerenBack(cishu: widget.cishu, feiyong: widget.feiyong, title: '心动转盘'));
                           }else if(widget.title == '超级转盘') {
                             sp.setBool('zp2_queren', false);
+                            eventBus.fire(XZQuerenBack(cishu: widget.cishu, feiyong: widget.feiyong, title: '超级转盘'));
                           }else if(widget.title == '水星魔方') {
                             sp.setBool('mf1_queren', false);
+                            eventBus.fire(XZQuerenBack(cishu: widget.cishu, feiyong: widget.feiyong, title: '水星魔方'));
                           }else if(widget.title == '金星魔方') {
                             sp.setBool('mf2_queren', false);
+                            eventBus.fire(XZQuerenBack(cishu: widget.cishu, feiyong: widget.feiyong, title: '金星魔方'));
                           }
                         }
                         Navigator.pop(context);
-                        eventBus.fire(XZQuerenBack(cishu: widget.cishu, feiyong: widget.feiyong));
                       }
                     }),
                     child: Container(

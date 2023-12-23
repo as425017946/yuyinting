@@ -60,7 +60,7 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
   bool isXiazhu = true;
 
   /// 播放音频
-  Soundpool soundpool = Soundpool(streamType: StreamType.notification);
+  late Soundpool soundpool ;
 
   Future<void> playSound() async {
     int soundId = await rootBundle
@@ -68,14 +68,16 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
         .then(((ByteData soundDate) {
       return soundpool.load(soundDate);
     }));
+    soundpool.setVolume(volume: 1);
     await soundpool.play(soundId);
   }
 
-  var listen;
+  var listen, listen2;
 
   @override
   void initState() {
     super.initState();
+    soundpool = Soundpool(streamType: StreamType.notification);
     animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 8000),
@@ -118,7 +120,15 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
     );
 
     listen = eventBus.on<XZQuerenBack>().listen((event) {
-      doPostPlayRoulette(event.cishu);
+      if(event.title == '心动转盘') {
+        doPostPlayRoulette(event.cishu);
+      }
+    });
+
+    listen2 = eventBus.on<SubmitButtonBack>().listen((event) {
+      if(event.title == '转盘关闭'){
+        soundpool.dispose();
+      }
     });
 
     // 判断当前年月日是否为今天，如果不是，下注还是要提示
@@ -177,6 +187,7 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
   void dispose() {
     animationController.dispose();
     listen.cancel();
+    listen2.cancel();
     super.dispose();
   }
 
@@ -543,7 +554,7 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
           // 通知用户游戏开始不能离开
           eventBus.fire(ResidentBack(isBack: true));
           // 发送要减多少V豆
-          eventBus.fire(XiaZhuBack(jine: int.parse(number)*100));
+          eventBus.fire(XiaZhuBack(jine: int.parse(number)*100, type: bean.data!.curType as int));
           // 获取数据并赋值
           list.clear();
           list = bean.data!.gifts!;

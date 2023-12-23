@@ -4,6 +4,7 @@ import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/pages/game/zhuanpan_super_page.dart';
 import 'package:yuyinting/pages/game/zhuanpan_xin_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
+import 'package:yuyinting/utils/log_util.dart';
 
 import '../../bean/balanceBean.dart';
 import '../../config/my_config.dart';
@@ -39,13 +40,26 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
     doPostBalance();
     listen = eventBus.on<XiaZhuBack>().listen((event) {
       setState(() {
-        if(jinbi.contains('w')){
-          // 目的是先把 1w 转换成 10000
-          jinbi = (double.parse(jinbi.substring(0,jinbi.length - 1)) * 100000).toString();
-          // 减去花费的V豆
-          jinbi = '${(double.parse(jinbi) - event.jine)/100000}w';
-        }else{
-          jinbi = (double.parse(jinbi) - event.jine).toString();
+        //cur_type 1金豆 2钻石 3蘑菇
+        if(event.type == 1){
+          if(double.parse(jinbi) > 10000){
+            // 减去花费的V豆
+            jinbi = '${(double.parse(jinbi) - event.jine)}';
+            //保留2位小数
+            jinbi2 = '${(double.parse(jinbi) / 10000).toStringAsFixed(2)}w';
+          }else{
+            jinbi = (double.parse(jinbi) - event.jine).toString();
+            jinbi2 = jinbi;
+          }
+        }else if(event.type == 2){
+          if(double.parse(zuanshi) > 10000){
+            // 减去花费的V豆
+            zuanshi = '${(double.parse(zuanshi) - event.jine)}';
+            zuanshi2 = '${(double.parse(zuanshi) / 10000).toStringAsFixed(2)}w';
+          }else{
+            zuanshi = (double.parse(zuanshi) - event.jine).toString();
+            zuanshi2 = zuanshi;
+          }
         }
       });
     });
@@ -73,9 +87,7 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
           Expanded(
             child: GestureDetector(
               onTap: (() {
-                if(isBack){
-                  return;
-                }
+                eventBus.fire(SubmitButtonBack(title: '转盘关闭'));
                 Navigator.pop(context);
               }),
               child: Container(
@@ -122,6 +134,9 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
                                 child: _currentIndex == 0
                                     ? GestureDetector(
                                         onTap: (() {
+                                          if(isBack){
+                                            return;
+                                          }
                                           setState(() {
                                             _currentIndex = 0;
                                             _controller.animateToPage(0,
@@ -158,6 +173,9 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
                                       )
                                     : GestureDetector(
                                         onTap: (() {
+                                          if(isBack){
+                                            return;
+                                          }
                                           setState(() {
                                             _currentIndex = 0;
                                             _controller.animateToPage(0,
@@ -181,6 +199,9 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
                                 child: _currentIndex == 1
                                     ? GestureDetector(
                                         onTap: (() {
+                                          if(isBack){
+                                            return;
+                                          }
                                           setState(() {
                                             _currentIndex = 1;
                                             _controller.animateToPage(1,
@@ -217,6 +238,9 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
                                       )
                                     : GestureDetector(
                                         onTap: (() {
+                                          if(isBack){
+                                            return;
+                                          }
                                           setState(() {
                                             _currentIndex = 1;
                                             _controller.animateToPage(1,
@@ -260,7 +284,7 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
                                 ScreenUtil().setHeight(24)),
                             WidgetUtils.commonSizedBox(0, 5),
                             WidgetUtils.onlyTextCenter(
-                                jinbi,
+                                jinbi2,
                                 StyleUtils.getCommonTextStyle(
                                     color: Colors.white,
                                     fontSize: ScreenUtil().setSp(23),
@@ -281,7 +305,7 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
                                 ScreenUtil().setHeight(24)),
                             WidgetUtils.commonSizedBox(0, 5),
                             WidgetUtils.onlyTextCenter(
-                                zuanshi,
+                                zuanshi2,
                                 StyleUtils.getCommonTextStyle(
                                     color: Colors.white,
                                     fontSize: ScreenUtil().setSp(23),
@@ -320,7 +344,7 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
 
 
   // 金币 钻石
-  String jinbi = '', zuanshi = '';
+  String jinbi = '', jinbi2 = '', zuanshi = '', zuanshi2 = '';
   /// 钱包余额
   Future<void> doPostBalance() async {
     try {
@@ -328,15 +352,17 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
-            if(double.parse(bean.data!.goldBean!) > 100000){
-              jinbi = '${(double.parse(bean.data!.goldBean!)/100000)}w';
+            jinbi = bean.data!.goldBean!;
+            if(double.parse(bean.data!.goldBean!) > 10000){
+              jinbi2 = '${(double.parse(bean.data!.goldBean!) / 10000).toStringAsFixed(2)}w';
             }else{
-              jinbi = bean.data!.goldBean!;
+              jinbi2 = bean.data!.goldBean!;
             }
-            if(double.parse(bean.data!.diamond!) > 100000){
-              zuanshi = '${(double.parse(bean.data!.diamond!)/100000)}w';
+            zuanshi = bean.data!.diamond!;
+            if(double.parse(bean.data!.diamond!) > 10000){
+              zuanshi2 = '${(double.parse(bean.data!.diamond!) / 10000).toStringAsFixed(2)}w';
             }else{
-              zuanshi = bean.data!.diamond!;
+              zuanshi2 = bean.data!.diamond!;
             }
           });
           break;

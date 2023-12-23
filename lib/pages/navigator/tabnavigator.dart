@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:yuyinting/main.dart';
 import 'package:yuyinting/pages/message/message_page.dart';
@@ -21,6 +23,7 @@ import '../../utils/loading.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/widget_utils.dart';
+import '../gongping/gp_hi_page.dart';
 import '../home/home_items.dart';
 import '../home/home_page.dart';
 import '../mine/mine_page.dart';
@@ -70,7 +73,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
   late hengFuBean myhf; //出现第一个横幅使用
   ///爆出大礼物使用
   bool isBig = false;
-  var listen, listenZdy, listenRoomBack,listenMessage;
+  var listen, listenZdy, listenRoomBack,listenMessage,listenZDY;
   bool isSDKInit = false;
 
   @override
@@ -132,35 +135,103 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         setState(() {
           isJoinRoom = true;
         });
+      }else if (event.title == '清空红点') {
+        setState(() {
+          isRed = false;
+        });
       } else {
         setState(() {
           isJoinRoom = false;
         });
       }
     });
-    // MyUtils.goTransparentPageRoom(context, const GPHiPage());
+
 
     listenMessage = eventBus.on<SendMessageBack>().listen((event) {
+      setState(() {
+        isRed = true;
+      });
       doPostSystemMsgList();
     });
+    // 接收自定义消息
+    listenZDY = eventBus.on<ZDYBack>().listen((event) {
+      //别人给我发送的打招呼
+      if(event.type == 'say_hi'){
+        setState(() {
+          isRed = true;
+        });
+        MyUtils.goTransparentPageRoom(context, GPHiPage(uid: event.map!['uid'].toString(), nickName: event.map!['nickname'].toString(), avatar: event.map!['avatar'].toString(), gender: event.map!['gender'].toString(),));
+        saveHi(event.map!);
+      }
+    });
   }
+
+  // 保存打招呼信息
+  void saveHi(Map<String, String>? map) async{
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    await databaseHelper.database;
+
+    String nickName = map!['nickname'].toString();
+    String headImg = map!['avatar'].toString();
+    String combineID = '';
+    if(int.parse(sp.getString('user_id').toString()) > int.parse(map!['uid'].toString())){
+      combineID = '${map!['uid'].toString()}-${sp.getString('user_id').toString()}';
+    }else{
+      combineID = '${sp.getString('user_id').toString()}-${map!['uid'].toString()}';
+    }
+
+    //保存自己头像
+    MyUtils.saveImgTemp(sp.getString('user_headimg').toString(),
+        sp.getString('user_id').toString());
+    // 保存他人
+    MyUtils.saveImgTemp(headImg, map!['uid'].toString());
+    // 保存路径
+    Directory? directory = await getTemporaryDirectory();
+    String myHeadImg = '${directory!.path}/${sp.getString('user_id')}.jpg';
+    String otherHeadImg = '${directory!.path}/${map!['uid'].toString()}.jpg';
+
+    Map<String, dynamic> params = <String, dynamic>{
+      'uid': sp.getString('user_id').toString(),
+      'otherUid': map!['uid'].toString(),
+      'whoUid':map!['uid'].toString(),
+      'combineID': combineID,
+      'nickName': nickName,
+      'content': map['msg'],
+      'bigImg' : '',
+      'headImg': myHeadImg,
+      'otherHeadImg': otherHeadImg,
+      'add_time': DateTime.now().millisecondsSinceEpoch,
+      'type': 1,
+      'number': 0,
+      'status': 1,
+      'readStatus': 0,
+      'liveStatus': 0,
+      'loginStatus': 0,
+    };
+    // 插入数据
+    await databaseHelper.insertData('messageSLTable', params);
+    eventBus.fire(SendMessageBack(type: 1, msgID: '0'));
+  }
+
 
   Timer? _timer;
 
   // 18秒后请求一遍
   void hpTimer() {
     _timer = Timer.periodic(const Duration(seconds: 18), (timer) {
-      setState(() {
-        listMP.removeAt(0);
-      });
-      if (listMP.isEmpty) {
-        _timer!.cancel();
-      } else {
+      if(listMP.isNotEmpty){
         setState(() {
-          isShowHF = true;
+          listMP.removeAt(0);
         });
-        // 判断数据显示使用
-        showInfo(listMP[0]);
+        if (listMP.isEmpty) {
+          _timer!.cancel();
+        } else {
+          setState(() {
+            isShowHF = true;
+          });
+          // 判断数据显示使用
+          showInfo(listMP[0]);
+        }
       }
     });
   }
@@ -254,6 +325,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     listen.cancel();
     listenZdy.cancel();
     listenRoomBack.cancel();
+    listenZDY.cancel();
     super.dispose();
   }
 
@@ -319,8 +391,8 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
               bottom: 70.h,
               right: 295.w,
               child: Container(
-                width: 10.h,
-                height: 10.h,
+                width: 15.h,
+                height: 15.h,
                 //边框设置
                 decoration: const BoxDecoration(
                   //背景

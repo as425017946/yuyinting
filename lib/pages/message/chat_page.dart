@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:im_flutter_sdk/im_flutter_sdk.dart';
@@ -17,6 +18,7 @@ import 'package:yuyinting/widget/SwiperPage.dart';
 
 import '../../bean/Common_bean.dart';
 import '../../bean/chatUserInfoBean.dart';
+import '../../bean/isPayBean.dart';
 import '../../config/my_config.dart';
 import '../../config/smile_utils.dart';
 import '../../db/DatabaseHelper.dart';
@@ -28,6 +30,7 @@ import '../../utils/my_utils.dart';
 import '../../utils/regex_formatter.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
+import '../mine/setting/password_pay_page.dart';
 import '../room/room_page.dart';
 import '../room/room_ts_mima_page.dart';
 import '../trends/trends_more_page.dart';
@@ -98,6 +101,7 @@ class _ChatPageState extends State<ChatPage> {
     // TODO: implement initState
     _initialize();
     super.initState();
+    eventBus.fire(SubmitButtonBack(title: '清空红点'));
     doPostChatUserInfo();
     doLocationInfo();
     // _addChatListener();
@@ -107,9 +111,7 @@ class _ChatPageState extends State<ChatPage> {
     });
     listenHB = eventBus.on<HongBaoBack>().listen((event) {
       LogE('发送了===');
-      if(MyUtils.checkClick()){
-        saveHBinfo(event.info);
-      }
+      saveHBinfo(event.info);
     });
 
     _focusNode = FocusNode();
@@ -395,8 +397,8 @@ class _ChatPageState extends State<ChatPage> {
                     color: allData2[i]['type'] == 2 ? Colors.transparent : Colors.white,
                     //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                     borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(20.0),
-                        topRight: Radius.circular(0),
+                        topLeft: Radius.circular(0),
+                        topRight: Radius.circular(20.0),
                         bottomLeft: Radius.circular(20.0),
                         bottomRight: Radius.circular(20.0)),
                     boxShadow: allData2[i]['type'] == 2 ? [] : [
@@ -1092,6 +1094,7 @@ class _ChatPageState extends State<ChatPage> {
                                 inputFormatters: [
                                   RegexFormatter(
                                       regex: MyUtils.regexFirstNotNull),
+                                  LengthLimitingTextInputFormatter(25)//限制输入长度
                                 ],
                                 style: StyleUtils.loginTextStyle,
                                 onSubmitted: (value) {
@@ -1189,11 +1192,9 @@ class _ChatPageState extends State<ChatPage> {
                     _isEmojiPickerVisible == false
                         ? GestureDetector(
                             onTap: (() {
-                              MyUtils.goTransparentPageCom(
-                                  context,
-                                  HongBaoPage(
-                                    uid: widget.otherUid,
-                                  ));
+                              if(MyUtils.checkClick()){
+                                doPostPayPwd();
+                              }
                             }),
                             child: WidgetUtils.showImages(
                                 'assets/images/chat_hongbao.png',
@@ -1768,6 +1769,41 @@ class _ChatPageState extends State<ChatPage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+  /// 是否设置了支付密码
+  Future<void> doPostPayPwd() async {
+    try {
+      isPayBean bean = await DataUtils.postPayPwd();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+        //1已设置  0未设置
+          if(bean.data!.isSet == 1){
+            // ignore: use_build_context_synchronously
+            MyUtils.goTransparentPageCom(
+                context,
+                HongBaoPage(
+                  uid: widget.otherUid,
+                ));
+          }else{
+            MyToastUtils.showToastBottom('请先设置支付密码！');
+            // ignore: use_build_context_synchronously
+            MyUtils.goTransparentPageCom(
+                context,
+                const PasswordPayPage());
+          }
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }

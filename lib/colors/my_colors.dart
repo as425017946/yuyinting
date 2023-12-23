@@ -111,7 +111,13 @@ class MyColors{
   static const Color djOne = Color(0xFFFAFAFD);
   static const Color djOneM = Color(0xFF3D4C57);
   static const Color djTwoM = Color(0xFF1A0096);
-  static const Color djThreeM = Color(0xFF025C69);
+  static const Color djThreeM = Color(0xFF025393);
+  static const Color djFourM = Color(0xFF025C69);
+  static const Color djFiveM = Color(0xFF096F35);
+  static const Color djSixM = Color(0xFFCC610A);
+  static const Color djSevenM = Color(0xFFFF7262);
+  static const Color djEightM = Color(0xFFFF67F8);
+  static const Color djNineM = Color(0xFFE7900A);
   /// 老板位渐变色
   static const Color lbL = Color(0xFF6ffffd);
   static const Color lbR = Color(0xFFf8fec4);

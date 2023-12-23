@@ -61,7 +61,9 @@ class _EditBiaoqianPageState extends State<EditBiaoqianPage> {
             const Expanded(child: Text('')),
             GestureDetector(
               onTap: ((){
-                Navigator.pop(context);
+    if(MyUtils.checkClick()) {
+      Navigator.pop(context);
+    }
               }),
               child: WidgetUtils.showImagesFill('assets/images/mine_biaoqian.png', ScreenUtil().setHeight(200), double.infinity),
             ),
@@ -87,23 +89,25 @@ class _EditBiaoqianPageState extends State<EditBiaoqianPage> {
                     runSpacing: ScreenUtil().setHeight(15),
                     children: List.generate(list.length, (index) => GestureDetector(
                       onTap: ((){
-                        if(length < 3){
-                          setState(() {
-                            list_b[index] = !list_b[index];
-                            if(list_b[index]){
-                              length++;
-                            }else{
-                              length--;
-                            }
-                          });
-                        }else{
-                          if(list_b[index]){
-                           setState(() {
-                             list_b[index] = !list_b[index];
-                             length--;
-                           });
-                          }
-                        }
+    if(MyUtils.checkClick()) {
+      if (length < 3) {
+        setState(() {
+          list_b[index] = !list_b[index];
+          if (list_b[index]) {
+            length++;
+          } else {
+            length--;
+          }
+        });
+      } else {
+        if (list_b[index]) {
+          setState(() {
+            list_b[index] = !list_b[index];
+            length--;
+          });
+        }
+      }
+    }
                       }),
                       child: WidgetUtils.myContainerZishiying2(
                           list_b[index] ? MyColors.homeTopBG : Colors.white,
