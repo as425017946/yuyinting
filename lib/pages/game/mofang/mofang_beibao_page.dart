@@ -5,6 +5,7 @@ import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 
+import '../../../bean/beibaoBean.dart';
 import '../../../bean/liwuBean.dart';
 import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
@@ -42,28 +43,49 @@ class _MoFangBeiBaoPageState extends State<MoFangBeiBaoPage> {
         child: Stack(
           children: [
             SizedBox(
-              height: ScreenUtil().setHeight(200),
-              width: ScreenUtil().setHeight(150),
+              height: ScreenUtil().setHeight(190),
+              width: ScreenUtil().setHeight(130),
               child: Column(
                 children: [
-                  WidgetUtils.commonSizedBox(5, 0),
-                  WidgetUtils.showImagesNet(listPl[index].img!,
-                      ScreenUtil().setHeight(120), ScreenUtil().setHeight(110)),
+                  WidgetUtils.commonSizedBox(10.h, 0),
+                  Stack(
+                    children: [
+                      WidgetUtils.showImagesNet(
+                          listPl[index].img!,
+                          ScreenUtil().setHeight(90),
+                          ScreenUtil().setHeight(90)),
+                      Positioned(
+                          top: 0,
+                          right: 0,
+                          child: Container(
+                            padding: EdgeInsets.all(5.h),
+                            decoration: BoxDecoration(
+                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                              borderRadius: BorderRadius.all(Radius.circular(10.h)),
+                              //设置四周边框
+                              border: Border.all(width: 1, color: MyColors.lbL),
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              listPl[index].number!.toString(),
+                              style: TextStyle(
+                                color: MyColors.lbL,
+                                fontSize: 16.sp,
+                              ),
+                            ),
+                          ))
+                    ],
+                  ),
                   WidgetUtils.onlyTextCenter(
                       listPl[index].name!,
                       StyleUtils.getCommonTextStyle(
                           color: MyColors.roomTCWZ2,
                           fontSize: ScreenUtil().setSp(25))),
                   WidgetUtils.onlyTextCenter(
-                      '${listPl[index].price!}钻',
+                      '${listPl[index].price}V豆',
                       StyleUtils.getCommonTextStyle(
                           color: MyColors.roomTCWZ3,
                           fontSize: ScreenUtil().setSp(21))),
-                  WidgetUtils.onlyTextCenter(
-                      'x${listPl[index].number!}',
-                      StyleUtils.getCommonTextStyle(
-                          color: MyColors.roomMessageYellow2,
-                          fontSize: ScreenUtil().setSp(22))),
                 ],
               ),
             ),
@@ -130,7 +152,7 @@ class _MoFangBeiBaoPageState extends State<MoFangBeiBaoPage> {
                 /// 展示礼物
                 Expanded(
                     child: SingleChildScrollView(
-                  child: OptionGridView(
+                  child: listPl.isNotEmpty ? OptionGridView(
                     itemCount: listPl.length,
                     rowCount: 4,
                     mainAxisSpacing: 10.h,
@@ -138,6 +160,23 @@ class _MoFangBeiBaoPageState extends State<MoFangBeiBaoPage> {
                     crossAxisSpacing: 0.h,
                     //左右间距
                     itemBuilder: _initlistdata,
+                  ) : Container(
+                    height: 400.h,
+                    alignment: Alignment.center,
+                    child: Column(
+                      children: [
+                        const Expanded(child: Text('')),
+                        WidgetUtils.showImages(
+                            'assets/images/no_have.png', 100, 100),
+                        WidgetUtils.commonSizedBox(10, 0),
+                        WidgetUtils.onlyTextCenter(
+                            '暂无背包礼物',
+                            StyleUtils.getCommonTextStyle(
+                                color: MyColors.g6,
+                                fontSize: ScreenUtil().setSp(26))),
+                        const Expanded(child: Text('')),
+                      ],
+                    ),
                   ),
                 )),
                 WidgetUtils.commonSizedBox(20.h, 0),
@@ -150,22 +189,22 @@ class _MoFangBeiBaoPageState extends State<MoFangBeiBaoPage> {
   }
 
   // 背包
-  List<DataL> listPl = [];
+  List<Gift> listPl = [];
 
   /// 获取礼物列表
   Future<void> doPostGiftList() async {
     LogE('token ${sp.getString('user_token')}');
     Map<String, dynamic> params = <String, dynamic>{
-      'type': 2,
+      'type': "2",
     };
     Loading.show(MyConfig.successTitle);
     try {
-      liwuBean bean = await DataUtils.postGiftList(params);
+      beibaoBean bean = await DataUtils.postGiftListBB(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
             listPl.clear();
-            listPl = bean.data!;
+            listPl = bean.data!.gift!;
           });
           break;
         case MyHttpConfig.errorloginCode:

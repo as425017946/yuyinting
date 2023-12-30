@@ -234,7 +234,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                           fontSize: ScreenUtil().setSp(28))),
                   const Expanded(child: Text('')),
                   WidgetUtils.onlyText(
-                      '男',
+                      sex == 0 ? '未知' : sex == 1 ? '男' : '女',
                       StyleUtils.getCommonTextStyle(
                           color: MyColors.g6,
                           fontSize: ScreenUtil().setSp(28))),

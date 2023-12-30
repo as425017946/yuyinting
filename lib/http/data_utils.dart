@@ -993,12 +993,27 @@ class DataUtils{
     return CommonBean.fromJson(respons!);
   }
 
-
   /// 离开房间
   static Future<CommonBean> postLeave(Map<String,dynamic> params) async {
     print("离开房间：$params");
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.leave, {}, params);
     print("离开房间：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 删除房间背景图
+  static Future<CommonBean> postRemoveRoomBg(Map<String,dynamic> params) async {
+    print("删除房间背景图：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.removeRoomBg, {}, params);
+    print("删除房间背景图：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 币转豆
+  static Future<CommonBean> postExchangeCurrency(Map<String,dynamic> params) async {
+    print("币转豆：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.exchangeCurrency, {}, params);
+    print("币转豆：$respons");
     return CommonBean.fromJson(respons!);
   }
 

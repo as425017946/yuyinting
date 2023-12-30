@@ -24,6 +24,7 @@ import '../../widget/SwiperPage.dart';
 import 'package:video_player/video_player.dart';
 import '../message/chat_page.dart';
 import '../message/geren/people_info_page.dart';
+import '../mine/my/my_info_page.dart';
 import 'PagePreviewVideo.dart';
 
 /// 动态-关注页面
@@ -149,419 +150,431 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
   }
 
   Widget _itemsTuijian(BuildContext context, int i) {
-    return GestureDetector(
-      onTap: (() {}),
-      child: Column(
-        children: [
-          WidgetUtils.commonSizedBox(10, 0),
-          Container(
-            height: ScreenUtil().setHeight(100),
-            alignment: Alignment.centerLeft,
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: (() {
-                    MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[i].uid.toString(),));
-                  }),
-                  child: WidgetUtils.CircleHeadImage(40, 40, _list[i].avatar!),
-                ),
-                WidgetUtils.commonSizedBox(0, 8),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const Expanded(child: Text('')),
-                    Container(
-                      width: ScreenUtil().setWidth(300),
-                      padding: EdgeInsets.only(left: ScreenUtil().setHeight(8)),
-                      child: Text(
-                        _list[i].nickname!,
-                        style: StyleUtils.getCommonTextStyle(
-                            color: Colors.black,
-                            fontSize: ScreenUtil().setSp(30),
-                            fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                    SizedBox(
-                      height: ScreenUtil().setHeight(30),
-                      width: ScreenUtil().setWidth(300),
-                      child: Row(
-                        children: [
-                          Container(
-                            height: ScreenUtil().setHeight(25),
-                            padding: const EdgeInsets.only(left: 5, right: 5),
-                            margin: const EdgeInsets.only(top: 2),
-                            alignment: Alignment.center,
-                            //边框设置
-                            decoration: BoxDecoration(
-                              //背景
-                              color: _list[i].gender == 1
-                                  ? MyColors.dtBlue
-                                  : MyColors.dtPink,
-                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(15.0)),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                WidgetUtils.showImages(
-                                    _list[i].gender == 1
-                                        ? 'assets/images/nan.png'
-                                        : 'assets/images/nv.png',
-                                    10,
-                                    10),
-                                WidgetUtils.commonSizedBox(0, 5),
-                                WidgetUtils.onlyText(
-                                    _list[i].age == -1
-                                        ? '0·${_list[i].constellation!}'
-                                        : '${_list[i].age.toString()}·${_list[i].constellation!}',
-                                    StyleUtils.getCommonTextStyle(
-                                        color: Colors.white, fontSize: 10)),
-                              ],
-                            ),
-                          ),
-                          const Expanded(child: Text('')),
-                        ],
-                      ),
-                    ),
-                    const Expanded(child: Text('')),
-                  ],
-                ),
-                const Expanded(child: Text('')),
-                _list[i].isHi == 0
-                    ? GestureDetector(
-                        onTap: (() {
-                          MyUtils.goTransparentPageCom(
-                              context,
-                              TrendsHiPage(
-                                  imgUrl: _list[i].avatar!,
-                                  uid: _list[i].uid.toString(),
-                                  index: i));
-                        }),
-                        child: WidgetUtils.showImages(
-                            'assets/images/trends_hi.png', 124, 59),
-                      )
-                    : GestureDetector(
-                        onTap: (() {
-                          MyUtils.goTransparentRFPage(context, ChatPage(nickName: _list[i].nickname!, otherUid: _list[i].uid.toString(), otherImg: _list[i].avatar!));
-                        }),
-                        child: WidgetUtils.myContainer(
-                            ScreenUtil().setHeight(45),
-                            ScreenUtil().setHeight(100),
-                            Colors.white,
-                            MyColors.homeTopBG,
-                            '私信',
-                            ScreenUtil().setSp(25),
-                            MyColors.homeTopBG),
-                      ),
-              ],
-            ),
-          ),
-          WidgetUtils.commonSizedBox(5, 0),
-          GestureDetector(
-            onTap: (() {
-              MyUtils.goTransparentRFPage(
-                  context,
-                  TrendsMorePage(
-                    note_id: _list[i].id.toString(),
-                  ));
-            }),
-            child: WidgetUtils.onlyText(
-                _list[i].text!,
-                StyleUtils.getCommonTextStyle(
-                  color: Colors.black,
-                  fontSize: ScreenUtil().setSp(28),
-                )),
-          ),
-          WidgetUtils.commonSizedBox(10, 0),
-          _list[i].type == 2
-              ? showVideo(_list[i].imgUrl!)
-              : showImag(_list[i].imgUrl!, i),
-          WidgetUtils.commonSizedBox(20, 0),
-          Row(
+    return Column(
+      children: [
+        WidgetUtils.commonSizedBox(10, 0),
+        Container(
+          height: ScreenUtil().setHeight(100),
+          alignment: Alignment.centerLeft,
+          child: Row(
             children: [
-              WidgetUtils.onlyText(
-                  '${_list[i].addTime}·来自：${_list[i].city}',
+              GestureDetector(
+                onTap: (() {
+                  if(MyUtils.checkClick()){
+                    // 如果点击的是自己，进入自己的主页
+                    if(sp.getString('user_id').toString() == _list[i].uid.toString()){
+                      MyUtils.goTransparentRFPage(context, const MyInfoPage());
+                    }else{
+                      sp.setString('other_id', _list[i].uid.toString());
+                      MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[i].uid.toString(),));
+                    }
+                  }
+                }),
+                child: WidgetUtils.CircleHeadImage(40, 40, _list[i].avatar!),
+              ),
+              WidgetUtils.commonSizedBox(0, 8),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Expanded(child: Text('')),
+                  Container(
+                    width: ScreenUtil().setWidth(300),
+                    padding: EdgeInsets.only(left: ScreenUtil().setHeight(8)),
+                    child: Text(
+                      _list[i].nickname!,
+                      style: StyleUtils.getCommonTextStyle(
+                          color: Colors.black,
+                          fontSize: ScreenUtil().setSp(30),
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  SizedBox(
+                    height: ScreenUtil().setHeight(30),
+                    width: ScreenUtil().setWidth(300),
+                    child: Row(
+                      children: [
+                        Container(
+                          height: ScreenUtil().setHeight(25),
+                          padding: const EdgeInsets.only(left: 5, right: 5),
+                          margin: const EdgeInsets.only(top: 2),
+                          alignment: Alignment.center,
+                          //边框设置
+                          decoration: BoxDecoration(
+                            //背景
+                            color: _list[i].gender == 1
+                                ? MyColors.dtBlue
+                                : MyColors.dtPink,
+                            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                            borderRadius:
+                            const BorderRadius.all(Radius.circular(15.0)),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              WidgetUtils.showImages(
+                                  _list[i].gender == 1
+                                      ? 'assets/images/nan.png'
+                                      : 'assets/images/nv.png',
+                                  10,
+                                  10),
+                              WidgetUtils.commonSizedBox(0, 5),
+                              WidgetUtils.onlyText(
+                                  _list[i].age == -1
+                                      ? '0·${_list[i].constellation!}'
+                                      : '${_list[i].age.toString()}·${_list[i].constellation!}',
+                                  StyleUtils.getCommonTextStyle(
+                                      color: Colors.white, fontSize: 10)),
+                            ],
+                          ),
+                        ),
+                        const Expanded(child: Text('')),
+                      ],
+                    ),
+                  ),
+                  const Expanded(child: Text('')),
+                ],
+              ),
+              const Expanded(child: Text('')),
+              _list[i].uid.toString() == sp.getString('user_id') ? const Text('') :
+              _list[i].isHi == 0
+                  ? GestureDetector(
+                onTap: (() {
+                  MyUtils.goTransparentPageCom(
+                      context,
+                      TrendsHiPage(
+                          imgUrl: _list[i].avatar!,
+                          uid: _list[i].uid.toString(),
+                          index: i));
+                }),
+                child: WidgetUtils.showImages(
+                    'assets/images/trends_hi.png', 124, 59),
+              )
+                  : GestureDetector(
+                onTap: (() {
+                  MyUtils.goTransparentRFPage(context, ChatPage(nickName: _list[i].nickname!, otherUid: _list[i].uid.toString(), otherImg: _list[i].avatar!));
+                }),
+                child: WidgetUtils.myContainer(
+                    ScreenUtil().setHeight(45),
+                    ScreenUtil().setHeight(100),
+                    Colors.white,
+                    MyColors.homeTopBG,
+                    '私信',
+                    ScreenUtil().setSp(25),
+                    MyColors.homeTopBG),
+              ),
+            ],
+          ),
+        ),
+        WidgetUtils.commonSizedBox(5, 0),
+        GestureDetector(
+          onTap: (() {
+            MyUtils.goTransparentRFPage(
+                context,
+                TrendsMorePage(
+                  note_id: _list[i].id.toString(),
+                ));
+          }),
+          child: WidgetUtils.onlyText(
+              _list[i].text!,
+              StyleUtils.getCommonTextStyle(
+                color: Colors.black,
+                fontSize: ScreenUtil().setSp(28),
+              )),
+        ),
+        WidgetUtils.commonSizedBox(10, 0),
+        _list[i].type == 2
+            ? showVideo(_list[i].imgUrl!)
+            : showImag(_list[i].imgUrl!, i),
+        WidgetUtils.commonSizedBox(20, 0),
+        Row(
+          children: [
+            WidgetUtils.onlyText(
+                '${_list[i].addTime}·来自：${_list[i].city}',
+                StyleUtils.getCommonTextStyle(
+                  color: Colors.grey,
+                  fontSize: ScreenUtil().setSp(21),
+                )),
+            const Expanded(child: Text('')),
+            GestureDetector(
+              onTap: (() {
+                setState(() {
+                  if (_list[i].isLike == 1) {
+                    action = 'delete';
+                  } else {
+                    action = 'create';
+                    isShow = false;
+                  }
+                });
+                if (_list[i].isLike == 0) {
+                  animationController?.reset();
+                  animationController?.forward();
+                }
+                doPostLike(_list[i].id.toString(), i);
+              }),
+              child: WidgetUtils.showImages(
+                  _list[i].isLike == 0
+                      ? 'assets/images/trends_zan1.png'
+                      : 'assets/images/trends_zan_2.png',
+                  18,
+                  18),
+            ),
+            WidgetUtils.commonSizedBox(0, 5),
+            SizedBox(
+              width: ScreenUtil().setHeight(80),
+              child: WidgetUtils.onlyText(
+                  _list[i].like == 0 ? '抢首赞' : _list[i].like.toString(),
                   StyleUtils.getCommonTextStyle(
                     color: Colors.grey,
                     fontSize: ScreenUtil().setSp(21),
                   )),
-              const Expanded(child: Text('')),
-              GestureDetector(
-                onTap: (() {
-                  setState(() {
-                    if (_list[i].isLike == 1) {
-                      action = 'delete';
-                    } else {
-                      action = 'create';
-                      isShow = false;
-                    }
-                  });
-                  if (_list[i].isLike == 0) {
-                    animationController?.reset();
-                    animationController?.forward();
-                  }
-                  doPostLike(_list[i].id.toString(), i);
-                }),
-                child: WidgetUtils.showImages(
-                    _list[i].isLike == 0
-                        ? 'assets/images/trends_zan1.png'
-                        : 'assets/images/trends_zan_2.png',
-                    18,
-                    18),
-              ),
-              WidgetUtils.commonSizedBox(0, 5),
-              SizedBox(
-                width: ScreenUtil().setHeight(80),
-                child: WidgetUtils.onlyText(
-                    _list[i].like == 0 ? '抢首赞' : _list[i].like.toString(),
-                    StyleUtils.getCommonTextStyle(
-                      color: Colors.grey,
-                      fontSize: ScreenUtil().setSp(21),
-                    )),
-              ),
-              GestureDetector(
-                onTap: (() {
-                  MyUtils.goTransparentRFPage(
-                      context,
-                      TrendsMorePage(
-                        note_id: _list[i].id.toString(),
-                      ));
-                }),
-                child: WidgetUtils.showImages(
-                    'assets/images/trends_message.png', 18, 18),
-              ),
-              WidgetUtils.commonSizedBox(0, 5),
-              GestureDetector(
-                onTap: (() {
-                  MyUtils.goTransparentRFPage(
-                      context,
-                      TrendsMorePage(
-                        note_id: _list[i].id.toString(),
-                      ));
-                }),
-                child: WidgetUtils.onlyText(
-                    _list[i].comment == 0 ? '评论' : _list[i].comment.toString(),
-                    StyleUtils.getCommonTextStyle(
-                      color: Colors.grey,
-                      fontSize: ScreenUtil().setSp(21),
-                    )),
-              ),
-            ],
-          ),
-          WidgetUtils.commonSizedBox(10, 0),
-          WidgetUtils.myLine()
-        ],
-      ),
+            ),
+            GestureDetector(
+              onTap: (() {
+                MyUtils.goTransparentRFPage(
+                    context,
+                    TrendsMorePage(
+                      note_id: _list[i].id.toString(),
+                    ));
+              }),
+              child: WidgetUtils.showImages(
+                  'assets/images/trends_message.png', 18, 18),
+            ),
+            WidgetUtils.commonSizedBox(0, 5),
+            GestureDetector(
+              onTap: (() {
+                MyUtils.goTransparentRFPage(
+                    context,
+                    TrendsMorePage(
+                      note_id: _list[i].id.toString(),
+                    ));
+              }),
+              child: WidgetUtils.onlyText(
+                  _list[i].comment == 0 ? '评论' : _list[i].comment.toString(),
+                  StyleUtils.getCommonTextStyle(
+                    color: Colors.grey,
+                    fontSize: ScreenUtil().setSp(21),
+                  )),
+            ),
+          ],
+        ),
+        WidgetUtils.commonSizedBox(10, 0),
+        WidgetUtils.myLine()
+      ],
     );
   }
 
 
   Widget _itemsTuijian2(BuildContext context, int i) {
-    return GestureDetector(
-      onTap: (() {}),
-      child: Column(
-        children: [
-          WidgetUtils.commonSizedBox(10, 0),
-          Container(
-            height: ScreenUtil().setHeight(100),
-            alignment: Alignment.centerLeft,
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: (() {
-                    MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list_tj[i].uid.toString(),));
-                  }),
-                  child: WidgetUtils.CircleHeadImage(40, 40, _list_tj[i].avatar!),
-                ),
-                WidgetUtils.commonSizedBox(0, 8),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const Expanded(child: Text('')),
-                    Container(
-                      width: ScreenUtil().setWidth(300),
-                      padding: EdgeInsets.only(left: ScreenUtil().setHeight(8)),
-                      child: Text(
-                        _list_tj[i].nickname!,
-                        style: StyleUtils.getCommonTextStyle(
-                            color: Colors.black,
-                            fontSize: ScreenUtil().setSp(30),
-                            fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                    SizedBox(
-                      height: ScreenUtil().setHeight(30),
-                      width: ScreenUtil().setWidth(300),
-                      child: Row(
-                        children: [
-                          Container(
-                            height: ScreenUtil().setHeight(25),
-                            padding: const EdgeInsets.only(left: 5, right: 5),
-                            margin: const EdgeInsets.only(top: 2),
-                            alignment: Alignment.center,
-                            //边框设置
-                            decoration: BoxDecoration(
-                              //背景
-                              color: _list_tj[i].gender == 1
-                                  ? MyColors.dtBlue
-                                  : MyColors.dtPink,
-                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                              borderRadius:
-                              const BorderRadius.all(Radius.circular(15.0)),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                WidgetUtils.showImages(
-                                    _list_tj[i].gender == 1
-                                        ? 'assets/images/nan.png'
-                                        : 'assets/images/nv.png',
-                                    10,
-                                    10),
-                                WidgetUtils.commonSizedBox(0, 5),
-                                WidgetUtils.onlyText(
-                                    _list_tj[i].age == -1
-                                        ? '0·${_list_tj[i].constellation!}'
-                                        : '${_list_tj[i].age.toString()}·${_list_tj[i].constellation!}',
-                                    StyleUtils.getCommonTextStyle(
-                                        color: Colors.white, fontSize: 10)),
-                              ],
-                            ),
-                          ),
-                          const Expanded(child: Text('')),
-                        ],
-                      ),
-                    ),
-                    const Expanded(child: Text('')),
-                  ],
-                ),
-                const Expanded(child: Text('')),
-                _list_tj[i].isHi == 0
-                    ? GestureDetector(
-                  onTap: (() {
-                    MyUtils.goTransparentPageCom(
-                        context,
-                        TrendsHiPage(
-                            imgUrl: _list_tj[i].avatar!,
-                            uid: _list_tj[i].uid.toString(),
-                            index: i));
-                  }),
-                  child: WidgetUtils.showImages(
-                      'assets/images/trends_hi.png', 124, 59),
-                )
-                    : GestureDetector(
-                  onTap: (() {
-                    MyUtils.goTransparentRFPage(context, ChatPage(nickName: _list_tj[i].nickname!, otherUid: _list_tj[i].uid.toString(), otherImg: _list_tj[i].avatar!));
-                  }),
-                  child: WidgetUtils.myContainer(
-                      ScreenUtil().setHeight(45),
-                      ScreenUtil().setHeight(100),
-                      Colors.white,
-                      MyColors.homeTopBG,
-                      '私信',
-                      ScreenUtil().setSp(25),
-                      MyColors.homeTopBG),
-                ),
-              ],
-            ),
-          ),
-          WidgetUtils.commonSizedBox(5, 0),
-          GestureDetector(
-            onTap: (() {
-              MyUtils.goTransparentRFPage(
-                  context,
-                  TrendsMorePage(
-                    note_id: _list_tj[i].id.toString(),
-                  ));
-            }),
-            child: WidgetUtils.onlyText(
-                _list_tj[i].text!,
-                StyleUtils.getCommonTextStyle(
-                  color: Colors.black,
-                  fontSize: ScreenUtil().setSp(28),
-                )),
-          ),
-          WidgetUtils.commonSizedBox(10, 0),
-          _list_tj[i].type == 2
-              ? showVideo(_list_tj[i].imgUrl!)
-              : showImag(_list_tj[i].imgUrl!, i),
-          WidgetUtils.commonSizedBox(20, 0),
-          Row(
+    return Column(
+      children: [
+        WidgetUtils.commonSizedBox(10, 0),
+        Container(
+          height: ScreenUtil().setHeight(100),
+          alignment: Alignment.centerLeft,
+          child: Row(
             children: [
-              WidgetUtils.onlyText(
-                  '${_list_tj[i].addTime}·来自：${_list_tj[i].city}',
+              GestureDetector(
+                onTap: (() {
+                  if(MyUtils.checkClick()){
+                    // 如果点击的是自己，进入自己的主页
+                    if(sp.getString('user_id').toString() == _list_tj[i].uid.toString()){
+                      MyUtils.goTransparentRFPage(context, const MyInfoPage());
+                    }else{
+                      sp.setString('other_id', _list_tj[i].uid.toString());
+                      MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list_tj[i].uid.toString(),));
+                    }
+                  }
+                }),
+                child: WidgetUtils.CircleHeadImage(40, 40, _list_tj[i].avatar!),
+              ),
+              WidgetUtils.commonSizedBox(0, 8),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Expanded(child: Text('')),
+                  Container(
+                    width: ScreenUtil().setWidth(300),
+                    padding: EdgeInsets.only(left: ScreenUtil().setHeight(8)),
+                    child: Text(
+                      _list_tj[i].nickname!,
+                      style: StyleUtils.getCommonTextStyle(
+                          color: Colors.black,
+                          fontSize: ScreenUtil().setSp(30),
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  SizedBox(
+                    height: ScreenUtil().setHeight(30),
+                    width: ScreenUtil().setWidth(300),
+                    child: Row(
+                      children: [
+                        Container(
+                          height: ScreenUtil().setHeight(25),
+                          padding: const EdgeInsets.only(left: 5, right: 5),
+                          margin: const EdgeInsets.only(top: 2),
+                          alignment: Alignment.center,
+                          //边框设置
+                          decoration: BoxDecoration(
+                            //背景
+                            color: _list_tj[i].gender == 1
+                                ? MyColors.dtBlue
+                                : MyColors.dtPink,
+                            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                            borderRadius:
+                            const BorderRadius.all(Radius.circular(15.0)),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              WidgetUtils.showImages(
+                                  _list_tj[i].gender == 1
+                                      ? 'assets/images/nan.png'
+                                      : 'assets/images/nv.png',
+                                  10,
+                                  10),
+                              WidgetUtils.commonSizedBox(0, 5),
+                              WidgetUtils.onlyText(
+                                  _list_tj[i].age == -1
+                                      ? '0·${_list_tj[i].constellation!}'
+                                      : '${_list_tj[i].age.toString()}·${_list_tj[i].constellation!}',
+                                  StyleUtils.getCommonTextStyle(
+                                      color: Colors.white, fontSize: 10)),
+                            ],
+                          ),
+                        ),
+                        const Expanded(child: Text('')),
+                      ],
+                    ),
+                  ),
+                  const Expanded(child: Text('')),
+                ],
+              ),
+              const Expanded(child: Text('')),
+              _list_tj[i].uid.toString() == sp.getString('user_id') ? const Text('') :
+              _list_tj[i].isHi == 0
+                  ? GestureDetector(
+                onTap: (() {
+                  MyUtils.goTransparentPageCom(
+                      context,
+                      TrendsHiPage(
+                          imgUrl: _list_tj[i].avatar!,
+                          uid: _list_tj[i].uid.toString(),
+                          index: i));
+                }),
+                child: WidgetUtils.showImages(
+                    'assets/images/trends_hi.png', 124, 59),
+              )
+                  : GestureDetector(
+                onTap: (() {
+                  MyUtils.goTransparentRFPage(context, ChatPage(nickName: _list_tj[i].nickname!, otherUid: _list_tj[i].uid.toString(), otherImg: _list_tj[i].avatar!));
+                }),
+                child: WidgetUtils.myContainer(
+                    ScreenUtil().setHeight(45),
+                    ScreenUtil().setHeight(100),
+                    Colors.white,
+                    MyColors.homeTopBG,
+                    '私信',
+                    ScreenUtil().setSp(25),
+                    MyColors.homeTopBG),
+              ),
+            ],
+          ),
+        ),
+        WidgetUtils.commonSizedBox(5, 0),
+        GestureDetector(
+          onTap: (() {
+            MyUtils.goTransparentRFPage(
+                context,
+                TrendsMorePage(
+                  note_id: _list_tj[i].id.toString(),
+                ));
+          }),
+          child: WidgetUtils.onlyText(
+              _list_tj[i].text!,
+              StyleUtils.getCommonTextStyle(
+                color: Colors.black,
+                fontSize: ScreenUtil().setSp(28),
+              )),
+        ),
+        WidgetUtils.commonSizedBox(10, 0),
+        _list_tj[i].type == 2
+            ? showVideo(_list_tj[i].imgUrl!)
+            : showImag(_list_tj[i].imgUrl!, i),
+        WidgetUtils.commonSizedBox(20, 0),
+        Row(
+          children: [
+            WidgetUtils.onlyText(
+                '${_list_tj[i].addTime}·来自：${_list_tj[i].city}',
+                StyleUtils.getCommonTextStyle(
+                  color: Colors.grey,
+                  fontSize: ScreenUtil().setSp(21),
+                )),
+            const Expanded(child: Text('')),
+            GestureDetector(
+              onTap: (() {
+                setState(() {
+                  if (_list_tj[i].isLike == 1) {
+                    action = 'delete';
+                  } else {
+                    action = 'create';
+                    isShow = false;
+                  }
+                });
+                if (_list_tj[i].isLike == 0) {
+                  animationController?.reset();
+                  animationController?.forward();
+                }
+                doPostLike(_list_tj[i].id.toString(), i);
+              }),
+              child: WidgetUtils.showImages(
+                  _list_tj[i].isLike == 0
+                      ? 'assets/images/trends_zan1.png'
+                      : 'assets/images/trends_zan_2.png',
+                  18,
+                  18),
+            ),
+            WidgetUtils.commonSizedBox(0, 5),
+            SizedBox(
+              width: ScreenUtil().setHeight(80),
+              child: WidgetUtils.onlyText(
+                  _list_tj[i].like == 0 ? '抢首赞' : _list_tj[i].like.toString(),
                   StyleUtils.getCommonTextStyle(
                     color: Colors.grey,
                     fontSize: ScreenUtil().setSp(21),
                   )),
-              const Expanded(child: Text('')),
-              GestureDetector(
-                onTap: (() {
-                  setState(() {
-                    if (_list_tj[i].isLike == 1) {
-                      action = 'delete';
-                    } else {
-                      action = 'create';
-                      isShow = false;
-                    }
-                  });
-                  if (_list_tj[i].isLike == 0) {
-                    animationController?.reset();
-                    animationController?.forward();
-                  }
-                  doPostLike(_list_tj[i].id.toString(), i);
-                }),
-                child: WidgetUtils.showImages(
-                    _list_tj[i].isLike == 0
-                        ? 'assets/images/trends_zan1.png'
-                        : 'assets/images/trends_zan_2.png',
-                    18,
-                    18),
-              ),
-              WidgetUtils.commonSizedBox(0, 5),
-              SizedBox(
-                width: ScreenUtil().setHeight(80),
-                child: WidgetUtils.onlyText(
-                    _list_tj[i].like == 0 ? '抢首赞' : _list_tj[i].like.toString(),
-                    StyleUtils.getCommonTextStyle(
-                      color: Colors.grey,
-                      fontSize: ScreenUtil().setSp(21),
-                    )),
-              ),
-              GestureDetector(
-                onTap: (() {
-                  MyUtils.goTransparentRFPage(
-                      context,
-                      TrendsMorePage(
-                        note_id: _list_tj[i].id.toString(),
-                      ));
-                }),
-                child: WidgetUtils.showImages(
-                    'assets/images/trends_message.png', 18, 18),
-              ),
-              WidgetUtils.commonSizedBox(0, 5),
-              GestureDetector(
-                onTap: (() {
-                  MyUtils.goTransparentRFPage(
-                      context,
-                      TrendsMorePage(
-                        note_id: _list_tj[i].id.toString(),
-                      ));
-                }),
-                child: WidgetUtils.onlyText(
-                    _list_tj[i].comment == 0 ? '评论' : _list_tj[i].comment.toString(),
-                    StyleUtils.getCommonTextStyle(
-                      color: Colors.grey,
-                      fontSize: ScreenUtil().setSp(21),
-                    )),
-              ),
-            ],
-          ),
-          WidgetUtils.commonSizedBox(10, 0),
-          WidgetUtils.myLine()
-        ],
-      ),
+            ),
+            GestureDetector(
+              onTap: (() {
+                MyUtils.goTransparentRFPage(
+                    context,
+                    TrendsMorePage(
+                      note_id: _list_tj[i].id.toString(),
+                    ));
+              }),
+              child: WidgetUtils.showImages(
+                  'assets/images/trends_message.png', 18, 18),
+            ),
+            WidgetUtils.commonSizedBox(0, 5),
+            GestureDetector(
+              onTap: (() {
+                MyUtils.goTransparentRFPage(
+                    context,
+                    TrendsMorePage(
+                      note_id: _list_tj[i].id.toString(),
+                    ));
+              }),
+              child: WidgetUtils.onlyText(
+                  _list_tj[i].comment == 0 ? '评论' : _list_tj[i].comment.toString(),
+                  StyleUtils.getCommonTextStyle(
+                    color: Colors.grey,
+                    fontSize: ScreenUtil().setSp(21),
+                  )),
+            ),
+          ],
+        ),
+        WidgetUtils.commonSizedBox(10, 0),
+        WidgetUtils.myLine()
+      ],
     );
   }
 

@@ -16,7 +16,8 @@ import '../../../utils/widget_utils.dart';
 
 /// 礼物墙
 class WallPage extends StatefulWidget {
-  const WallPage({Key? key}) : super(key: key);
+  String uid;
+  WallPage({Key? key, required this.uid}) : super(key: key);
 
   @override
   State<WallPage> createState() => _WallPageState();
@@ -105,7 +106,7 @@ class _WallPageState extends State<WallPage> {
   Future<void> doPostMyIfon() async {
     Loading.show(MyConfig.successTitle);
     Map<String, dynamic> params = <String, dynamic>{
-      'uid': sp.getString('user_id')
+      'uid': widget.uid
     };
     try {
       myHomeBean bean = await DataUtils.postMyHome(params);

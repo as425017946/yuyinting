@@ -198,9 +198,16 @@ class HomeItems {
   }
 
   /// 爆出5w2的礼物
-  static Widget itemBig(hengFuBean hf) {
-    String info =
-        '在${hf.roomName}的超级转盘玩法中赢得瑞麟（388800）！';
+  static Widget itemBig(hengFuBean hf,int type) {
+    // type 0爆出 1送出
+    String info = '';
+    if(type == 0) {
+      info =
+          '在${hf.roomName}的超级转盘玩法中赢得价值388800的瑞麟*1';
+    }else{
+      info =
+      '神豪降临${hf.fromNickname!}在${hf.roomName!}送给了${hf.toNickname!}价值388800的瑞麟*1 快来围观吧！';
+    }
     return IgnorePointer(
         ignoring: true,
         child: SizedBox(
@@ -208,13 +215,13 @@ class HomeItems {
           width: double.infinity,
           child: Stack(
             children: [
-              const SVGASimpleImage3(
-                assetsName: 'assets/svga/gp/gp_52hf.svga',
+              SVGASimpleImage3(
+                assetsName: type == 0 ? 'assets/svga/gp/gp_52hf.svga' : 'assets/svga/gp/gp_52.svga',
               ),
               GestureDetector(
                 onTap: (() {}),
                 child: Padding(
-                  padding: EdgeInsets.only(top: 220.h, left: 60.h, right: 50.h),
+                  padding: EdgeInsets.only(top: type == 0 ? 220.h : 185.h, left: 60.h, right: 50.h),
                   child: Marquee(
                     speed: 10,
                     child: RichText(
@@ -223,7 +230,7 @@ class HomeItems {
                           child: Transform.translate(
                         offset: Offset(0, 0.h),
                         child: Text(
-                          '恭喜',
+                          type == 0 ? '恭喜' : '',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 30.sp,
@@ -239,13 +246,13 @@ class HomeItems {
                       )),
                       // 显示头像
                       WidgetSpan(
-                          child: WidgetUtils.CircleImageNet(
-                              30.h, 30.h, 15.h, "map!['avatar'].toString()")),
+                          child: type == 0 ? WidgetUtils.CircleImageNet(
+                              30.h, 30.h, 15.h, hf.avatar!) : const Text('')),
                       // 昵称
                       WidgetSpan(
                           child: Transform.translate(
                         offset: Offset(0, 0.h),
-                        child: Text(
+                        child: type == 0 ? Text(
                           hf.fromNickname!,
                           style: TextStyle(
                             color: Colors.white,
@@ -258,7 +265,7 @@ class HomeItems {
                               ),
                             ],
                           ),
-                        ),
+                        ) : const Text(''),
                       )),
                       // 提示信息
                       WidgetSpan(

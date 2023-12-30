@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:yuyinting/bean/userStatusBean.dart';
 import 'package:yuyinting/colors/my_colors.dart';
@@ -72,142 +73,175 @@ class _MessagePageState extends State<MessagePage> {
 
   Widget message(BuildContext context, int i) {
     LogE('他人头像 == ${listMessage[i]['otherHeadImg']}');
-    return Container(
-      height: ScreenUtil().setHeight(130),
-      width: double.infinity,
-      padding: const EdgeInsets.only(left: 20, right: 20),
-      child: Row(
+    return Slidable(
+      //列表中只有一个能滑动
+      key: Key(i.toString()),
+      endActionPane: ActionPane(
+        motion: const ScrollMotion(),
         children: [
-          GestureDetector(
-            onTap: ((){
-              // 点击头像进入个人主页
-              MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: listMessage[i]['otherUid'],));
-            }),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                WidgetUtils.CircleImageAss(
-                    100.h, 100.h, 50.h, listMessage[i]['otherHeadImg']),
-                listU[i].liveStatus == 1
-                    ? WidgetUtils.showImages(
-                  'assets/images/zhibozhong.webp',
-                  110.h,
-                  110.h,
-                )
-                    : listU[i].loginStatus == 1
-                    ? Container(
-                  height: 60.h,
-                  width: 60.h,
-                  alignment: Alignment.bottomRight,
-                  child: CustomPaint(
-                    painter: LinePainter2(colors: Colors.green),
-                  ),
-                )
-                    : const Text(''),
-              ],
-            ),
+          SlidableAction(
+            // An action can be bigger than the others.
+            flex: 1,
+            onPressed: (context){
+              // MyToastUtils.showToastBottom('第几个$i');
+              doDelete(listMessage[i]['combineID']);
+              //移除当前项
+              setState(() {
+                listMessage.removeAt(i);
+              });
+            },
+            backgroundColor: Colors.red,
+            label: '删除',
           ),
-          WidgetUtils.commonSizedBox(0, 10),
-          Expanded(
-            child: GestureDetector(
-              onTap: (() {
-                MyUtils.goTransparentRFPage(
-                    context,
-                    ChatPage(
-                        nickName: listMessage[i]['nickName']?? '',
-                        otherUid: listMessage[i]['otherUid'],
-                        otherImg: listMessage[i]['otherHeadImg']));
+        ],
+      ),
+      child: Container(
+        height: ScreenUtil().setHeight(130),
+        width: double.infinity,
+        padding: const EdgeInsets.only(left: 20, right: 20),
+        child: Row(
+          children: [
+            GestureDetector(
+              onTap: ((){
+                // 点击头像进入个人主页
+                MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: listMessage[i]['otherUid'],));
               }),
-              child: Column(
+              child: Stack(
+                alignment: Alignment.center,
                 children: [
-                  const Expanded(child: Text('')),
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    width: double.infinity,
-                    child: Row(
-                      children: [
-                        Text(
-                          listMessage[i]['nickName']?? '',
-                          style: StyleUtils.getCommonTextStyle(
-                              color: Colors.black,
-                              fontSize: ScreenUtil().setSp(32)),
-                        ),
-                        const Expanded(child: Text('')),
-                        Text(
-                          DateTime.parse(DateTime.fromMillisecondsSinceEpoch(
-                              int.parse(listMessage[i]['add_time']))
-                              .toString())
-                              .toString()
-                              .substring(0, 10),
-                          style: StyleUtils.getCommonTextStyle(
-                              color: MyColors.g9,
-                              fontSize: ScreenUtil().setSp(25)),
-                        ),
-                      ],
+                  WidgetUtils.CircleImageAss(
+                      100.h, 100.h, 50.h, listMessage[i]['otherHeadImg']),
+                  listU[i].liveStatus == 1
+                      ? WidgetUtils.showImages(
+                    'assets/images/zhibozhong.webp',
+                    110.h,
+                    110.h,
+                  )
+                      : listU[i].loginStatus == 1
+                      ? Container(
+                    height: 60.h,
+                    width: 60.h,
+                    alignment: Alignment.bottomRight,
+                    child: CustomPaint(
+                      painter: LinePainter2(colors: Colors.green),
                     ),
-                  ),
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    width: double.infinity,
-                    child: Row(
-                      children: [
-                        listMessage[i]['type'] == 1
-                            ? Text(
-                          listMessage[i]['content'].toString().length > 15 ? listMessage[i]['content'].toString().substring(0,15) : listMessage[i]['content'],
-                          overflow: TextOverflow.ellipsis,
-                          style: StyleUtils.getCommonTextStyle(
-                              color: MyColors.g9,
-                              fontSize: ScreenUtil().setSp(25)),
-                        )
-                            :  listMessage[i]['type'] == 2 ? Text(
-                          '[图片]',
-                          style: StyleUtils.getCommonTextStyle(
-                              color: MyColors.homeTopBG,
-                              fontSize: ScreenUtil().setSp(23)),
-                        ) : listMessage[i]['type'] == 3 ? Text(
-                          '[语音]',
-                          style: StyleUtils.getCommonTextStyle(
-                              color: MyColors.homeTopBG,
-                              fontSize: ScreenUtil().setSp(23)),
-                        ) : Text(
-                          '[红包]',
-                          style: StyleUtils.getCommonTextStyle(
-                              color: Colors.red,
-                              fontSize: ScreenUtil().setSp(23)),
-                        ),
-                        const Spacer(),
-                        listRead[i] > 0 ? Container(
-                          width: 30.h,
-                          height: 30.h,
-                          //边框设置
-                          decoration: const BoxDecoration(
-                            //背景
-                            color: Colors.red,
-                            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                            borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                          ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            listRead[i].toString(),
-                            style: StyleUtils.getCommonTextStyle(
-                                color: Colors.white,
-                                fontSize: ScreenUtil().setSp(22),
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ) : const Text('')
-                      ],
-                    ),
-                  ),
-                  const Expanded(child: Text('')),
+                  )
+                      : const Text(''),
                 ],
               ),
             ),
-          )
-        ],
+            WidgetUtils.commonSizedBox(0, 10),
+            Expanded(
+              child: GestureDetector(
+                onTap: (() {
+                  MyUtils.goTransparentRFPage(
+                      context,
+                      ChatPage(
+                          nickName: listMessage[i]['nickName']?? '',
+                          otherUid: listMessage[i]['otherUid'],
+                          otherImg: listMessage[i]['otherHeadImg']));
+                }),
+                child: Column(
+                  children: [
+                    const Spacer(),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: Row(
+                        children: [
+                          Text(
+                            listMessage[i]['nickName']?? '',
+                            style: StyleUtils.getCommonTextStyle(
+                                color: Colors.black,
+                                fontSize: ScreenUtil().setSp(32)),
+                          ),
+                          const Expanded(child: Text('')),
+                          Text(
+                            DateTime.parse(DateTime.fromMillisecondsSinceEpoch(
+                                int.parse(listMessage[i]['add_time']))
+                                .toString())
+                                .toString()
+                                .substring(0, 10),
+                            style: StyleUtils.getCommonTextStyle(
+                                color: MyColors.g9,
+                                fontSize: ScreenUtil().setSp(25)),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: Row(
+                        children: [
+                          listMessage[i]['type'] == 1
+                              ? Text(
+                            listMessage[i]['content'].toString().length > 15 ? listMessage[i]['content'].toString().substring(0,15) : listMessage[i]['content'],
+                            overflow: TextOverflow.ellipsis,
+                            style: StyleUtils.getCommonTextStyle(
+                                color: MyColors.g9,
+                                fontSize: ScreenUtil().setSp(25)),
+                          )
+                              :  listMessage[i]['type'] == 2 ? Text(
+                            '[图片]',
+                            style: StyleUtils.getCommonTextStyle(
+                                color: MyColors.homeTopBG,
+                                fontSize: ScreenUtil().setSp(23)),
+                          ) : listMessage[i]['type'] == 3 ? Text(
+                            '[语音]',
+                            style: StyleUtils.getCommonTextStyle(
+                                color: MyColors.homeTopBG,
+                                fontSize: ScreenUtil().setSp(23)),
+                          ) : Text(
+                            '[红包]',
+                            style: StyleUtils.getCommonTextStyle(
+                                color: Colors.red,
+                                fontSize: ScreenUtil().setSp(23)),
+                          ),
+                          const Spacer(),
+                          listRead[i] > 0 ? Container(
+                            width: 30.h,
+                            height: 30.h,
+                            //边框设置
+                            decoration: const BoxDecoration(
+                              //背景
+                              color: Colors.red,
+                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                              borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              listRead[i].toString(),
+                              style: StyleUtils.getCommonTextStyle(
+                                  color: Colors.white,
+                                  fontSize: ScreenUtil().setSp(22),
+                                  fontWeight: FontWeight.w600),
+                            ),
+                          ) : const Text('')
+                        ],
+                      ),
+                    ),
+                    const Spacer(),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
 
+  String mbIdl = '';
+  void doDelete(String cbID) async{
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    Database? db = await databaseHelper.database;
+    //删除
+    db.delete('messageSLTable',where: 'combineID = ?',whereArgs: [cbID]);
+    doPostSystemMsgList();
+  }
 
 
   @override
@@ -465,6 +499,7 @@ class _MessagePageState extends State<MessagePage> {
         'messageSLTable',
         columns: ['MAX(id) AS id'],
         groupBy: 'combineID',
+        orderBy: 'add_time desc'
       );
       // 查询出来后在查询单条信息具体信息
       List<int> listId = [];

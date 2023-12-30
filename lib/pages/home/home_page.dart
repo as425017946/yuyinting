@@ -17,6 +17,7 @@ import 'package:yuyinting/pages/login/edit_info_page.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import '../../main.dart';
+import '../../utils/event_utils.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 
@@ -28,18 +29,25 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>
-    with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
+class _HomePageState extends State<HomePage> {
   @override
   bool get wantKeepAlive => true;
 
   int _currentIndex = 1;
   late final PageController _controller;
   bool isFirst = true;
+  var listen;
+
+  // 用户身份
+  String identity = 'user';
 
   @override
   void initState() {
     // TODO: implement initState
+    //更新身份
+    setState(() {
+      identity = sp.getString('user_identity').toString();
+    });
 
     /// 如果是全屏就切换竖屏
     AutoOrientation.portraitAutoMode();
@@ -54,13 +62,24 @@ class _HomePageState extends State<HomePage>
       initialPage: 1,
     );
 
+    // 马里奥
+    MyUtils.goTransparentPageCom(context, const TSCarPage());
+
     ///首次打开app进入的，弹出编辑页面
     if (sp.getBool('isFirst') == true) {
       MyUtils.goTransparentPageCom(context, const EditInfoPage());
     }
 
-    MyUtils.goTransparentPageCom(context, const TSCarPage());
     quanxian();
+
+    listen = eventBus.on<SubmitButtonBack>().listen((event) {
+      if (event.title == '更换了身份') {
+        //更新身份
+        setState(() {
+          identity = sp.getString('user_identity').toString();
+        });
+      }
+    });
   }
 
   Future<void> quanxian() async {
@@ -216,7 +235,7 @@ class _HomePageState extends State<HomePage>
                               ],
                             ),
                           )),
-                          sp.getString('user_identity').toString() != 'user'
+                          identity != 'user'
                               ? Expanded(
                                   child: GestureDetector(
                                   onTap: (() {
@@ -277,7 +296,7 @@ class _HomePageState extends State<HomePage>
                     children: [
                       _currentIndex == 0
                           ? Expanded(
-                              child: Container(
+                              child: SizedBox(
                               width: ScreenUtil().setHeight(68),
                               height: ScreenUtil().setHeight(10),
                               child: Row(
@@ -302,7 +321,7 @@ class _HomePageState extends State<HomePage>
                           : const Expanded(child: Text('')),
                       _currentIndex == 1
                           ? Expanded(
-                              child: Container(
+                              child: SizedBox(
                               width: ScreenUtil().setHeight(68),
                               height: ScreenUtil().setHeight(10),
                               child: Row(
@@ -327,7 +346,7 @@ class _HomePageState extends State<HomePage>
                           : const Expanded(child: Text('')),
                       _currentIndex == 2
                           ? Expanded(
-                              child: Container(
+                              child: SizedBox(
                               width: ScreenUtil().setHeight(68),
                               height: ScreenUtil().setHeight(10),
                               child: Row(
@@ -352,7 +371,7 @@ class _HomePageState extends State<HomePage>
                           : const Expanded(child: Text('')),
                       _currentIndex == 3
                           ? Expanded(
-                              child: Container(
+                              child: SizedBox(
                               width: ScreenUtil().setHeight(68),
                               height: ScreenUtil().setHeight(10),
                               child: Row(
@@ -375,9 +394,9 @@ class _HomePageState extends State<HomePage>
                               ),
                             ))
                           : const Expanded(child: Text('')),
-                      _currentIndex == 4
+                      (_currentIndex == 4 && identity != 'user')
                           ? Expanded(
-                              child: Container(
+                              child: SizedBox(
                               width: ScreenUtil().setHeight(68),
                               height: ScreenUtil().setHeight(10),
                               child: Row(
@@ -417,13 +436,20 @@ class _HomePageState extends State<HomePage>
                     _currentIndex = index;
                   });
                 },
-                children: const [
-                  ShoucangPage(),
-                  TuijianPage(),
-                  PaiduiPage(),
-                  YouxiPage(),
-                  ZaixianPage(),
-                ],
+                children: identity != 'user'
+                    ? const [
+                        ShoucangPage(),
+                        TuijianPage(),
+                        PaiduiPage(),
+                        YouxiPage(),
+                        ZaixianPage()
+                      ]
+                    : const [
+                        ShoucangPage(),
+                        TuijianPage(),
+                        PaiduiPage(),
+                        YouxiPage(),
+                      ],
               ),
             ),
           )

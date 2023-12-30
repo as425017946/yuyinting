@@ -3,12 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:yuyinting/utils/event_utils.dart';
+import 'package:yuyinting/utils/my_utils.dart';
 
 import '../../colors/my_colors.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 /// 支付密码弹窗使用
 class PayTSPage extends StatefulWidget {
+
   const PayTSPage({super.key});
 
   @override
@@ -73,6 +75,7 @@ class _PayTSPageState extends State<PayTSPage> {
                         // LogE('返回数据$value');
                         if(value.length == 6){
                           eventBus.fire(RoomBack(title: '发红包已输入密码', index: value));
+                          MyUtils.hideKeyboard(context);
                           Navigator.pop(context);
                         }
                       },

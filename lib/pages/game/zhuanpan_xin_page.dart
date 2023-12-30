@@ -53,6 +53,7 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
   int cyclesNum = 5;
 
   int isCheck = 1;
+  // 是否关闭了音效 false没关闭
   bool isClose = false;
   // 转几次 要花费多少
   int cishu = 1, feiyong = 100;
@@ -60,15 +61,13 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
   bool isXiazhu = true;
 
   /// 播放音频
-  late Soundpool soundpool ;
-
+  Soundpool soundpool = Soundpool(streamType: StreamType.notification);
   Future<void> playSound() async {
     int soundId = await rootBundle
         .load('assets/audio/zhuanpan_lan.MP3')
         .then(((ByteData soundDate) {
       return soundpool.load(soundDate);
     }));
-    soundpool.setVolume(volume: 1);
     await soundpool.play(soundId);
   }
 
@@ -77,7 +76,10 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
   @override
   void initState() {
     super.initState();
-    soundpool = Soundpool(streamType: StreamType.notification);
+    // 更新音效关闭开启状态
+    setState(() {
+      isClose = sp.getBool('zp_xin')!;
+    });
     animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 8000),
@@ -122,12 +124,6 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
     listen = eventBus.on<XZQuerenBack>().listen((event) {
       if(event.title == '心动转盘') {
         doPostPlayRoulette(event.cishu);
-      }
-    });
-
-    listen2 = eventBus.on<SubmitButtonBack>().listen((event) {
-      if(event.title == '转盘关闭'){
-        soundpool.dispose();
       }
     });
 
@@ -187,7 +183,6 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
   void dispose() {
     animationController.dispose();
     listen.cancel();
-    listen2.cancel();
     super.dispose();
   }
 
@@ -327,6 +322,11 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
                     onTap: (() {
                       setState(() {
                         isClose = !isClose;
+                        if(isClose){
+                          sp.setBool('zp_xin', true);
+                        }else{
+                          sp.setBool('zp_xin', false);
+                        }
                       });
                     }),
                     child: Container(

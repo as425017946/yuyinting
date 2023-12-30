@@ -25,8 +25,8 @@ class ZaixianPage extends StatefulWidget {
   State<ZaixianPage> createState() => _ZaixianPageState();
 }
 
-class _ZaixianPageState extends State<ZaixianPage> with AutomaticKeepAliveClientMixin{
-
+class _ZaixianPageState extends State<ZaixianPage>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -34,7 +34,7 @@ class _ZaixianPageState extends State<ZaixianPage> with AutomaticKeepAliveClient
   var listen;
   int page = 1;
   final RefreshController _refreshController =
-  RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: false);
 
   void _onRefresh() async {
     // monitor network fetch
@@ -81,9 +81,7 @@ class _ZaixianPageState extends State<ZaixianPage> with AutomaticKeepAliveClient
     return Column(
       children: [
         GestureDetector(
-          onTap: (() {
-
-          }),
+          onTap: (() {}),
           child: Container(
             margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
             width: double.infinity,
@@ -91,17 +89,23 @@ class _ZaixianPageState extends State<ZaixianPage> with AutomaticKeepAliveClient
             child: Row(
               children: [
                 GestureDetector(
-                  onTap: ((){
-    if(MyUtils.checkClick()) {
-      MyUtils.goTransparentRFPage(
-          context, PeopleInfoPage(otherId: list[i].uid.toString(),));
-    }
+                  onTap: (() {
+                    if (MyUtils.checkClick()) {
+                      MyUtils.goTransparentRFPage(
+                          context,
+                          PeopleInfoPage(
+                            otherId: list[i].uid.toString(),
+                          ));
+                    }
                   }),
-                  child:  Stack(
+                  child: Stack(
                     alignment: Alignment.center,
                     children: [
                       WidgetUtils.CircleHeadImage(78.h, 78.h, list[i].avatar!),
-                      list[i].live == 1 ? WidgetUtils.showImages( 'assets/images/zhibozhong.webp', 80.h, 80.h) : const Text(''),
+                      list[i].live == 1
+                          ? WidgetUtils.showImages(
+                              'assets/images/zhibozhong.webp', 80.h, 80.h)
+                          : const Text(''),
                     ],
                   ),
                 ),
@@ -122,14 +126,16 @@ class _ZaixianPageState extends State<ZaixianPage> with AutomaticKeepAliveClient
                             WidgetUtils.commonSizedBox(0, 5),
                             Stack(
                               children: [
-                                WidgetUtils.showImages(
-                                    list[i].gender == 1
-                                        ? 'assets/images/avj.png'
-                                        : 'assets/images/avk.png',
-                                    15,
-                                    45),
+                                list[i].gender != 0
+                                    ? WidgetUtils.showImages(
+                                        list[i].gender == 1
+                                            ? 'assets/images/avj.png'
+                                            : 'assets/images/avk.png',
+                                        15,
+                                        45)
+                                    : const Text(''),
                                 Container(
-                                  padding: const EdgeInsets.only(right: 8),
+                                  padding: EdgeInsets.only(right: int.parse(list[i].age.toString()) > 9 ? 15.h : 20.h),
                                   width: 45,
                                   height: 15,
                                   alignment: Alignment.centerRight,
@@ -159,38 +165,43 @@ class _ZaixianPageState extends State<ZaixianPage> with AutomaticKeepAliveClient
                     ],
                   ),
                 ),
-                if (list[i].isHi == 0) GestureDetector(
-                        onTap: (() {
-    if(MyUtils.checkClick()) {
-      MyUtils.goTransparentPageCom(
-          context,
-          TrendsHiPage(
-              imgUrl: list[i].avatar!,
-              uid: list[i].uid.toString(),
-              index: i));
-    }
-                        }),
-                        child: WidgetUtils.showImages(
-                            'assets/images/trends_hi.png',
-                            ScreenUtil().setHeight(40),
-                            ScreenUtil().setHeight(90)),
-                      ) else GestureDetector(
-                        onTap: (() {
-    if(MyUtils.checkClick()) {
-      MyUtils.goTransparentRFPage(
-          context, ChatPage(nickName: list[i].nickname!, otherUid: list[i].uid
-          .toString(), otherImg: list[i].avatar!,));
-    }
-                        }),
-                        child: WidgetUtils.myContainer(
-                            ScreenUtil().setHeight(40),
-                            ScreenUtil().setHeight(90),
-                            Colors.white,
-                            MyColors.homeTopBG,
-                            '私信',
-                            ScreenUtil().setSp(25),
-                            MyColors.homeTopBG),
-                      ),
+                if (list[i].isHi == 0)
+                  GestureDetector(
+                    onTap: (() {
+                      if (MyUtils.checkClick()) {
+                        MyUtils.goTransparentPageCom(
+                            context,
+                            TrendsHiPage(
+                                imgUrl: list[i].avatar!,
+                                uid: list[i].uid.toString(),
+                                index: i));
+                      }
+                    }),
+                    child: WidgetUtils.showImages('assets/images/trends_hi.png',
+                        ScreenUtil().setHeight(40), ScreenUtil().setHeight(90)),
+                  )
+                else
+                  GestureDetector(
+                    onTap: (() {
+                      if (MyUtils.checkClick()) {
+                        MyUtils.goTransparentRFPage(
+                            context,
+                            ChatPage(
+                              nickName: list[i].nickname!,
+                              otherUid: list[i].uid.toString(),
+                              otherImg: list[i].avatar!,
+                            ));
+                      }
+                    }),
+                    child: WidgetUtils.myContainer(
+                        ScreenUtil().setHeight(40),
+                        ScreenUtil().setHeight(90),
+                        Colors.white,
+                        MyColors.homeTopBG,
+                        '私信',
+                        ScreenUtil().setSp(25),
+                        MyColors.homeTopBG),
+                  ),
                 WidgetUtils.commonSizedBox(0, 20),
               ],
             ),
@@ -203,19 +214,21 @@ class _ZaixianPageState extends State<ZaixianPage> with AutomaticKeepAliveClient
 
   @override
   Widget build(BuildContext context) {
-    return list.isNotEmpty ? SmartRefresher(
-      header: MyUtils.myHeader(),
-      footer: MyUtils.myFotter(),
-      controller: _refreshController,
-      enablePullUp: true,
-      onLoading: _onLoading,
-      onRefresh: _onRefresh,
-      child: ListView.builder(
-        padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
-        itemBuilder: _itemTuiJian,
-        itemCount: list.length,
-      ),
-    ) : const Text('');
+    return list.isNotEmpty
+        ? SmartRefresher(
+            header: MyUtils.myHeader(),
+            footer: MyUtils.myFotter(),
+            controller: _refreshController,
+            enablePullUp: true,
+            onLoading: _onLoading,
+            onRefresh: _onRefresh,
+            child: ListView.builder(
+              padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
+              itemBuilder: _itemTuiJian,
+              itemCount: list.length,
+            ),
+          )
+        : const Text('');
   }
 
   /// 在线用户
@@ -235,9 +248,9 @@ class _ZaixianPageState extends State<ZaixianPage> with AutomaticKeepAliveClient
             }
             if (bean.data!.isNotEmpty) {
               list = bean.data!;
-            }else{
-              if(page > 1){
-                if(bean.data!.length < MyConfig.pageSize){
+            } else {
+              if (page > 1) {
+                if (bean.data!.length < MyConfig.pageSize) {
                   _refreshController.loadNoData();
                 }
               }

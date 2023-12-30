@@ -4,7 +4,9 @@ import 'dart:io';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:yuyinting/config/my_config.dart';
 import 'package:yuyinting/pages/room/room_back_page.dart';
 import 'package:yuyinting/pages/room/room_bq_page.dart';
@@ -20,12 +22,15 @@ import '../../bean/hengFuBean.dart';
 import '../../bean/roomInfoBean.dart';
 import '../../bean/zjgpBean.dart';
 import '../../colors/my_colors.dart';
+import '../../db/DatabaseHelper.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
 import '../../utils/SlideAnimationController.dart';
 import '../../utils/log_util.dart';
+import '../../widget/Marquee.dart';
 import '../../widget/SVGASimpleImage.dart';
+import '../../widget/SVGASimpleImage3.dart';
 import '../../widget/SVGASimpleImage4.dart';
 import '../../widget/SVGASimpleImage5.dart';
 import '../../widget/SVGASimpleImage6.dart';
@@ -187,6 +192,7 @@ class _RoomPageState extends State<RoomPage>
   late hengFuBean myhf; //出现第一个横幅使用
   ///爆出大礼物使用
   bool isBig = false;
+  int bigType = 0;//大礼物默认是爆出 0爆出1送出
 
   // 送礼物显示SVGA
   bool isShowSVGA = false;
@@ -197,7 +203,7 @@ class _RoomPageState extends State<RoomPage>
 
   // 赠送全部礼物使用
   List<String> listurl = [];
-  var listenSVGA, listenSVGAOK, listenGZOK;
+  var listenSVGA, listenSVGAOK, listenGZOK,listenMessage;
 
   // 每2分钟请求一下热度接口
   Timer? _timerHot;
@@ -219,6 +225,7 @@ class _RoomPageState extends State<RoomPage>
         list.add(map);
       });
       doPostRoomInfo();
+      doPostSystemMsgList();
       //是否上麦下麦和点击的是否自己
       for (int i = 0; i < 9; i++) {
         upOrDown.add(false);
@@ -365,6 +372,11 @@ class _RoomPageState extends State<RoomPage>
           } else {
             MyToastUtils.showToastBottom('上麦后才可以使用哦~');
           }
+        }else if (event.title == '清空红点') {
+          LogE('清空');
+          setState(() {
+            isRed = false;
+          });
         }
       });
       // 厅内操作监听
@@ -631,16 +643,17 @@ class _RoomPageState extends State<RoomPage>
       // 加入房间监听
       listJoin = eventBus.on<JoinRoomYBack>().listen((event) {
         LogE('哪个厅 = ${event.map!['room_id'].toString() == widget.roomId}');
+        LogE('哪个厅** ${event.map!['type']}');
         if (event.map!['room_id'].toString() == widget.roomId) {
           // 判断是不是点击了欢迎某某人
           if (event.map!['type'] == 'welcome_msg') {
             Map<dynamic, dynamic> map = {};
             map['info'] = event.map!['send_nickname'];
-            map['uid'] = event.map!['uid'];
+            map['uid'] = event.map!['from_uid'];
             map['type'] = '3';
             // 欢迎语信息
             map['content'] =
-                '${event.map!['send_nickname']},${event.map!['content']}';
+                '${event.map!['nickname']},${event.map!['content']}';
             // 身份
             map['identity'] = event.map!['identity'];
             // 等级
@@ -729,13 +742,17 @@ class _RoomPageState extends State<RoomPage>
                   sp.getString('user_id')) {
                 // 这个是为了让别人也能看见自己送出的礼物
                 listurl.add(cb.giftInfo![0].giftImg!);
-                isShowSVGA = true;
+                Future.delayed(const Duration(milliseconds: 200),((){
+                  isShowSVGA = true;
+                }));
               }
             });
-          } else if (event.map!['type'] == 'send_all_gift') {
+          } else if (event.map!['type'] == 'one_click_gift') {
             //赠送全部背包礼物
             String infos = ''; // 这个是拼接用户送的礼物信息使用
             charmAllBean cb = charmAllBean.fromJson(event.map);
+            //判断一键赠送给的谁加入本地数据库里面
+            saveImages(cb);
             for (int i = 0; i < listM.length; i++) {
               for (int a = 0; a < cb.charm!.length; a++) {
                 if (listM[i].uid.toString() == cb.charm![a].uid) {
@@ -768,8 +785,8 @@ class _RoomPageState extends State<RoomPage>
             }
             //厅内发送的送礼物消息
             Map<dynamic, dynamic> map = {};
-            map['info'] = event.map!['nickname'];
-            map['uid'] = event.map!['uid'];
+            map['info'] = event.map!['from_nickname'];
+            map['uid'] = event.map!['from_uid'];
             map['type'] = '6';
             // 发送的信息
             map['content'] =
@@ -777,12 +794,15 @@ class _RoomPageState extends State<RoomPage>
             setState(() {
               list.add(map);
               // 这个是为了让别人也能看见自己送出的礼物
-              isShowSVGA = true;
+              Future.delayed(const Duration(milliseconds: 200),((){
+                isShowSVGA = true;
+              }));
             });
           } else if (event.map!['type'] == 'collect_room') {
             // 收藏房间使用
             Map<dynamic, dynamic> map = {};
             map['type'] = '7';
+            map['uid'] = event.map!['from_uid'];
             // 发送的信息
             map['content'] = event.map!['info'];
             setState(() {
@@ -800,16 +820,42 @@ class _RoomPageState extends State<RoomPage>
               list.add(map);
             });
           } else if (event.map!['type'] == 'play_win_gift') {
+            // 厅内小礼物不在显示
+          } else if (event.map!['type'] == 'send_screen_gift') {
+            // 这个是本房间收到了在其他房间送出的3w8礼物
+            zjgpBean cb = zjgpBean.fromJson(event.map!);
+            String info = '';
+            for (int i = 0; i < cb.giftInfo!.length; i++) {
+              if (info.isEmpty) {
+                info =
+                '${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber!}';
+              } else {
+                info =
+                '$info ${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber!}';
+              }
+            }
+            //厅内发送的送礼物消息
+            Map<dynamic, dynamic> map = {};
+            map['info'] = event.map!['nickname'];
+            map['uid'] = event.map!['uid'];
+            map['type'] = '9';
+            // 发送的信息
+            map['content'] = '${cb.nickName};在${event.map!['room_name']}向;${event.map!['to_nickname']};送出;$info';
+            setState(() {
+              list.add(map);
+            });
+          } else if (event.map!['type'] == 'send_screen') {
+            // 这个是本房间收到了在本房间玩游戏中奖的信息（公屏信息）
             // 厅内抽奖使用
             zjgpBean cb = zjgpBean.fromJson(event.map!);
             String info = '';
             for (int i = 0; i < cb.giftInfo!.length; i++) {
               if (info.isEmpty) {
                 info =
-                    '${cb.giftInfo![i].giftName!}(V豆${cb.giftInfo![i].giftName!}) x${cb.giftInfo![i].giftNumber!}';
+                '${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber!}';
               } else {
                 info =
-                    '$info${cb.giftInfo![i].giftName!}(V豆${cb.giftInfo![i].giftName!}) x${cb.giftInfo![i].giftNumber!}';
+                '$info ${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber!}';
               }
             }
             //厅内发送的送礼物消息
@@ -822,8 +868,6 @@ class _RoomPageState extends State<RoomPage>
             setState(() {
               list.add(map);
             });
-          } else if (event.map!['type'] == 'send_screen') {
-            // 这个是本房间收到了在本房间玩游戏中奖的信息，所以不加数据
           } else if (event.map!['type'] == 'send_all_user') {
             // 是这个厅，并送了带横幅的礼物不做操作
           } else {
@@ -870,7 +914,7 @@ class _RoomPageState extends State<RoomPage>
             scrollToLastItem(); // 在widget构建完成后滚动到底部
           });
         } else {
-          LogE('房间接收数据 ===  ${event.map!['type']}');
+          LogE('其他房间发送im接收数据 ===  ${event.map!['type']}');
           if (event.map!['type'] == 'send_screen') {
             // 厅内抽奖使用
             zjgpBean cb = zjgpBean.fromJson(event.map!);
@@ -878,10 +922,10 @@ class _RoomPageState extends State<RoomPage>
             for (int i = 0; i < cb.giftInfo!.length; i++) {
               if (info.isEmpty) {
                 info =
-                    '${cb.giftInfo![i].giftName!}(V豆${cb.giftInfo![i].giftPrice!}) x${cb.giftInfo![i].giftNumber!}';
+                    '${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice!}) x${cb.giftInfo![i].giftNumber!}';
               } else {
                 info =
-                    '$info${cb.giftInfo![i].giftName!}(V豆${cb.giftInfo![i].giftPrice!}) x${cb.giftInfo![i].giftNumber!}';
+                    '$info ${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice!}) x${cb.giftInfo![i].giftNumber!}';
               }
             }
             //厅内发送的送礼物消息
@@ -891,6 +935,33 @@ class _RoomPageState extends State<RoomPage>
             map['type'] = '9';
             // 发送的信息
             map['content'] = '${cb.nickName};在;${cb.gameName};中赢得;$info';
+            setState(() {
+              list.add(map);
+            });
+
+            WidgetsBinding.instance!.addPostFrameCallback((_) {
+              scrollToLastItem(); // 在widget构建完成后滚动到底部
+            });
+          }else if (event.map!['type'] == 'send_screen_all') {
+            // 厅内抽奖使用
+            charmAllBean cb = charmAllBean.fromJson(event.map!);
+            String info = '';
+            for (int i = 0; i < cb.giftInfo!.length; i++) {
+              if (info.isEmpty) {
+                info =
+                '${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice!}) x${cb.giftInfo![i].giftNumber!}';
+              } else {
+                info =
+                '$info ${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice!}) x${cb.giftInfo![i].giftNumber!}';
+              }
+            }
+            //厅内发送的送礼物消息
+            Map<dynamic, dynamic> map = {};
+            map['info'] = cb.fromNickname;
+            map['uid'] = event.map!['from_uid'];
+            map['type'] = '9';
+            // 发送的信息
+            map['content'] = '${cb.fromNickname};向;${cb.toNickname};赠送了;$info';
             setState(() {
               list.add(map);
             });
@@ -917,6 +988,29 @@ class _RoomPageState extends State<RoomPage>
             }
             // 看看集合里面有几个，10s一执行
             hpTimer();
+          } else if (event.map!['type'] == 'send_screen_gift') {
+            // 这个是其他房间收到了在其他房间送出的3w8礼物
+            zjgpBean cb = zjgpBean.fromJson(event.map!);
+            String info = '';
+            for (int i = 0; i < cb.giftInfo!.length; i++) {
+              if (info.isEmpty) {
+                info =
+                '${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber!}';
+              } else {
+                info =
+                '$info ${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber!}';
+              }
+            }
+            //厅内发送的送礼物消息
+            Map<dynamic, dynamic> map = {};
+            map['info'] = event.map!['nickname'];
+            map['uid'] = event.map!['uid'];
+            map['type'] = '9';
+            // 发送的信息
+            map['content'] = '${cb.nickName};在${event.map!['room_name']}向;${event.map!['to_nickname']};送出;$info';
+            setState(() {
+              list.add(map);
+            });
           }
         }
       });
@@ -967,12 +1061,16 @@ class _RoomPageState extends State<RoomPage>
             } else {
               listurl = event.listurl;
             }
-            isShowSVGA = true;
+            Future.delayed(const Duration(milliseconds: 200),((){
+              isShowSVGA = true;
+            }));
           });
         } else {
           setState(() {
             listurl.add(event.url);
-            isShowSVGA = true;
+            Future.delayed(const Duration(milliseconds: 200),((){
+              isShowSVGA = true;
+            }));
           });
         }
       });
@@ -1019,25 +1117,37 @@ class _RoomPageState extends State<RoomPage>
           });
         }
       });
+
+      listenMessage = eventBus.on<SendMessageBack>().listen((event) {
+        setState(() {
+          isRed = true;
+        });
+        doPostSystemMsgList();
+      });
     });
   }
+
 
   Timer? _timerhf;
 
   // 18秒后请求一遍
   void hpTimer() {
     _timerhf = Timer.periodic(const Duration(seconds: 18), (timer) {
-      setState(() {
-        listMP.removeAt(0);
-      });
-      if (listMP.isEmpty) {
-        _timerhf!.cancel();
-      } else {
+      if(listMP.isNotEmpty) {
         setState(() {
-          isShowHF = true;
+          listMP.removeAt(0);
         });
-        // 判断数据显示使用
-        showInfo(listMP[0]);
+        if (listMP.isEmpty) {
+          _timerhf!.cancel();
+        } else {
+          setState(() {
+            isShowHF = true;
+          });
+          // 判断数据显示使用
+          showInfo(listMP[0]);
+        }
+      }else{
+        _timerhf!.cancel();
       }
     });
   }
@@ -1111,6 +1221,15 @@ class _RoomPageState extends State<RoomPage>
       case '388800转盘礼物':
         setState(() {
           isBig = true;
+          isShowHF = false;
+          bigType = 0;
+        });
+        break;
+      case '送出388800转盘礼物':
+        setState(() {
+          isBig = true;
+          isShowHF = false;
+          bigType = 1;
         });
         break;
     }
@@ -1191,6 +1310,7 @@ class _RoomPageState extends State<RoomPage>
     listenZdy.cancel();
     listenSVGA.cancel();
     listenGZOK.cancel();
+    listenMessage.cancel();
     if (_timerHot != null) {
       _timerHot!.cancel();
     }
@@ -1255,7 +1375,7 @@ class _RoomPageState extends State<RoomPage>
       uid: 0,
     );
     // // 通过此方法设置为观众
-    // _engine.setClientRole(role: ClientRoleType.clientRoleAudience);
+    // _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
     _engine.enableLocalAudio(true);
     // 设置音质
     _engine.setAudioProfile(
@@ -1389,7 +1509,8 @@ class _RoomPageState extends State<RoomPage>
                               isRoomBoss,
                               mima,
                               listM,
-                              roomDX),
+                              roomDX,
+                              isRed),
                         ],
                       ),
 
@@ -1503,8 +1624,8 @@ class _RoomPageState extends State<RoomPage>
                               myhf)
                           : const Text(''),
 
-                      /// 爆出5w2的礼物推送使用
-                      isBig ? HomeItems.itemBig(myhf) : const Text(''),
+                      /// 爆出5w2的礼物横幅推送使用
+                      isBig ? HomeItems.itemBig(myhf,bigType) : const Text(''),
                       (isShowSVGA == true && roomDX == true)
                           ? IgnorePointer(
                               ignoring: true,
@@ -1530,7 +1651,7 @@ class _RoomPageState extends State<RoomPage>
                                 ),
                               ),
                             )
-                          : const Text('')
+                          : const Text(''),
                     ],
                   ),
                 ),
@@ -1581,8 +1702,11 @@ class _RoomPageState extends State<RoomPage>
             follow_status = bean.data!.roomInfo!.followStatus!;
             role = bean.data!.userInfo!.role!;
             sp.setString('role', bean.data!.userInfo!.role!);
-            LogE('====身份$role');
-            LogE('====身份${bean.data!.userInfo!.role!}');
+            // 如果身份变了
+            if(sp.getString('user_identity').toString() != role){
+              eventBus.fire(SubmitButtonBack(title: '更换了身份'));
+              sp.setString('user_identity', role);
+            }
             noble_id = bean.data!.userInfo!.nobleId!;
             roomNumber = bean.data!.roomInfo!.roomNumber.toString();
             roomHeadImg = bean.data!.roomInfo!.coverImgUrl!;
@@ -1966,6 +2090,178 @@ class _RoomPageState extends State<RoomPage>
           break;
         default:
           MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+  /// 获取系统消息
+  List<Map<String, dynamic>> listMessage = [];
+  bool isRed = false;
+  Future<void> doPostSystemMsgList() async {
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    Database? db = await databaseHelper.database;
+
+    List<Map<String, dynamic>> allData =
+    await databaseHelper.getAllData('messageSLTable');
+    // 执行查询操作
+    List<Map<String, dynamic>> result = await db.query(
+      'messageSLTable',
+      columns: ['MAX(id) AS id'],
+      groupBy: 'combineID',
+    );
+    // 查询出来后在查询单条信息具体信息
+    List<int> listId = [];
+    String ids = '';
+    for (int i = 0; i < result.length; i++) {
+      listId.add(result[i]['id']);
+      if (ids.isNotEmpty) {
+        ids = '$ids,${result[i]['id'].toString()}';
+      } else {
+        ids = result[i]['id'].toString();
+      }
+    }
+    // 生成占位符字符串，例如: ?,?,?,?
+    String placeholders =
+    List.generate(listId.length, (index) => '?').join(',');
+    // 构建查询语句和参数
+    String query =
+        'SELECT * FROM messageSLTable WHERE id IN ($placeholders) order by add_time desc';
+    List<dynamic> args = listId;
+    // 执行查询
+    List<Map<String, dynamic>> result2 = await db.rawQuery(query, args);
+
+    String myIds = '';
+    setState(() {
+      listMessage = result2;
+
+      for (int i = 0; i < listMessage.length; i++) {
+        if (myIds.isNotEmpty) {
+          myIds = '$myIds,${listMessage[i]['otherUid'].toString()}';
+        } else {
+          myIds = listMessage[i]['otherUid'].toString();
+        }
+      }
+    });
+    for (int i = 0; i < listMessage.length; i++) {
+      String query =
+          "SELECT * FROM messageSLTable WHERE  combineID = '${listMessage[i]['combineID']}' and readStatus = 0";
+      List<Map<String, dynamic>> result3 = await db.rawQuery(query);
+      if (result3.isNotEmpty) {
+        setState(() {
+          isRed = true;
+        });
+        break;
+      } else {
+        setState(() {
+          isRed = false;
+        });
+      }
+    }
+  }
+
+
+  // 自己头像和他人头像
+  String myHeadImg = '', otherHeadImg = '';
+  saveImages(charmAllBean cb) async {
+    // 一键赠送人是自己
+    if(cb.fromUid.toString() == sp.getString('user_id').toString()){
+      //保存头像
+      MyUtils.saveImgTemp(sp.getString('user_headimg').toString(),
+          sp.getString('user_id').toString());
+      MyUtils.saveImgTemp(cb.avatar!, cb.toUids!);
+      // 保存路径
+      Directory? directory = await getTemporaryDirectory();
+      //保存自己头像
+      if (sp.getString('user_headimg').toString().contains('.gif') || sp.getString('user_headimg').toString().contains('.GIF')) {
+        myHeadImg = '${directory!.path}/${sp.getString('user_id')}.gif';
+      } else if (sp.getString('user_headimg').toString().contains('.jpg') ||
+          sp.getString('user_headimg').toString().contains('.GPG')) {
+        myHeadImg = '${directory!.path}/${sp.getString('user_id')}.gif';
+      } else if (sp.getString('user_headimg').toString().contains('.jpeg') ||
+          sp.getString('user_headimg').toString().contains('.GPEG')) {
+        myHeadImg = '${directory!.path}/${sp.getString('user_id')}.jpeg';
+      } else {
+        myHeadImg = '${directory!.path}/${sp.getString('user_id')}.png';
+      }
+      // 保存他人头像
+      if (cb.avatar!.contains('.gif') || cb.avatar!.contains('.GIF')) {
+        otherHeadImg = '${directory!.path}/${cb.toUids!}.gif';
+      } else if (cb.avatar!.contains('.jpg') ||
+          cb.avatar!.contains('.GPG')) {
+        otherHeadImg = '${directory!.path}/${cb.toUids!}.jpg';
+      } else if (cb.avatar!.contains('.jpeg') ||
+          cb.avatar!.contains('.GPEG')) {
+        otherHeadImg = '${directory!.path}/${cb.toUids!}.jpeg';
+      } else {
+        otherHeadImg = '${directory!.path}/${cb.toUids!}.png';
+      }
+      String infos = '';
+      for (int i = 0; i < cb.giftInfo!.length; i++) {
+        if (infos.isEmpty) {
+          setState(() {
+            infos =
+            '${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber}';
+          });
+        } else {
+          setState(() {
+            infos =
+            '$infos,${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber}';
+          });
+        }
+      }
+      String content = '我向你赠送了全部背包礼物：\n$infos\n总额为：${cb.amount!}V豆';
+      //请求发消息的接口
+      doPostSendUserMsg(content,cb);
+    }
+  }
+  // 一键赠送背包礼物发送消息
+  Future<void> doPostSendUserMsg(String content,charmAllBean cb) async {
+    LogE('发送时间===${cb.toUids!}');
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    Database? db = await databaseHelper.database;
+    Map<String, dynamic> params = <String, dynamic>{
+      'uid': cb.toUids!,
+      'type': '1',
+      'content': content
+    };
+    try {
+      CommonBean bean = await DataUtils.postSendUserMsg(params);
+      String combineID = '';
+      if (int.parse(sp.getString('user_id').toString()) >
+          int.parse(cb.toUids!)) {
+        combineID = '${cb.toUids!}-${sp.getString('user_id').toString()}';
+      } else {
+        combineID = '${sp.getString('user_id').toString()}-${cb.toUids!}';
+      }
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          LogE('发送时间===${DateTime.now()}');
+          Map<String, dynamic> params = <String, dynamic>{
+            'uid': sp.getString('user_id').toString(),
+            'otherUid': cb.toUids!,
+            'whoUid': sp.getString('user_id').toString(),
+            'combineID': combineID,
+            'nickName': cb.avatar!,
+            'content': content,
+            'headImg': myHeadImg,
+            'otherHeadImg': otherHeadImg,
+            'add_time': DateTime.now().millisecondsSinceEpoch,
+            'type': 1,
+            'number': 0,
+            'status': 1,
+            'readStatus': 1,
+            'liveStatus': 0,
+            'loginStatus': 0,
+          };
+          // 插入数据
+          await databaseHelper.insertData('messageSLTable', params);
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
           break;
       }
     } catch (e) {

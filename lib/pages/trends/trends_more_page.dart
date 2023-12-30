@@ -125,6 +125,7 @@ class _TrendsMorePageState extends State<TrendsMorePage>
     return decoder(svgaUrl);
   }
 
+  // 评论区
   Widget _itemsTuijian(BuildContext context, int i) {
     LogE('==========${comList[i].id.toString()}');
     return Column(
@@ -138,27 +139,27 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                 alignment: Alignment.bottomRight,
                 children: [
                   WidgetUtils.CircleHeadImage(35, 35, comList[i].avatar!),
-                  Container(
+                  comList[i].gender != 0 ? Container(
                     height: ScreenUtil().setHeight(25),
                     width: ScreenUtil().setWidth(30),
                     alignment: Alignment.center,
                     //边框设置
                     decoration: BoxDecoration(
                       //背景
-                      color: comList[i].gender == 0
-                          ? MyColors.dtPink
-                          : MyColors.dtBlue,
+                      color: comList[i].gender == 1
+                          ? MyColors.dtBlue
+                          : MyColors.dtPink,
                       //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                       borderRadius:
                           const BorderRadius.all(Radius.circular(30.0)),
                     ),
                     child: WidgetUtils.showImages(
-                        comList[i].gender == 0
-                            ? 'assets/images/nv.png'
-                            : 'assets/images/nan.png',
+                        comList[i].gender == 1
+                            ? 'assets/images/nan.png'
+                            : 'assets/images/nv.png',
                         10,
                         10),
-                  ),
+                  ) : const Text(''),
                 ],
               ),
               WidgetUtils.commonSizedBox(0, 10),

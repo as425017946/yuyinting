@@ -119,6 +119,8 @@ dependencies:
   flutter_bugly: ^0.4.4
   # 查看设备版本
   device_info_plus: ^8.0.0
+  # 侧滑按钮
+  flutter_slidable: ^3.0.1
 
 
 dev_dependencies:
@@ -158,6 +160,7 @@ flutter:
     - assets/images/dj/
     - assets/images/cj/
     - assets/images/hd/
+    - assets/images/xz/
     - assets/svga/
     - assets/svga/gp/
     - assets/svga/shengbo/

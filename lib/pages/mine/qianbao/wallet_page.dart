@@ -37,7 +37,7 @@ class _WalletPageState extends State<WalletPage> {
     eventBus.on<SubmitButtonBack>().listen((event) {
       if(MyUtils.compare(event.title, '账单明细') == 0){
           Navigator.pushNamed(context, 'WalletMorePage');
-      }else if(event.title == '金币提成功'){
+      }else if(event.title == '金币提现成功'){
         doPostBalance();
       }
     });

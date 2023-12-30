@@ -73,6 +73,8 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
   late hengFuBean myhf; //出现第一个横幅使用
   ///爆出大礼物使用
   bool isBig = false;
+  int bigType = 0;//大礼物默认是爆出 0爆出1送出
+
   var listen, listenZdy, listenRoomBack,listenMessage,listenZDY;
   bool isSDKInit = false;
 
@@ -80,7 +82,8 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
   void initState() {
     MyUtils.initSDK();
     MyUtils.addChatListener();
-    MyUtils.signIn();
+    //先退出然后在登录
+    MyUtils.signOutLogin();
 
     super.initState();
 
@@ -305,6 +308,15 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       case '388800转盘礼物':
         setState(() {
           isBig = true;
+          isShowHF = false;
+          bigType = 0;
+        });
+        break;
+      case '送出388800转盘礼物':
+        setState(() {
+          isBig = true;
+          isShowHF = false;
+          bigType = 1;
         });
         break;
     }
@@ -414,7 +426,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
               : const Text(''),
 
           /// 爆出5w2的礼物推送使用
-          isBig ? HomeItems.itemBig(myhf) : const Text(''),
+          isBig ? HomeItems.itemBig(myhf,bigType) : const Text(''),
 
           /// 房间图标转动
           isJoinRoom
@@ -718,6 +730,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           setState(() {
             isRed = true;
           });
+          break;
         }else{
           setState(() {
             isRed = false;

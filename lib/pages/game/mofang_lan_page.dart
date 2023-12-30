@@ -58,6 +58,11 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
   @override
   void initState() {
     super.initState();
+    // 更新音效关闭开启状态
+    setState(() {
+      isTiaoguo = sp.getBool('mf_lan')!;
+    });
+
     animationController = SVGAAnimationController(vsync: this);
     loadAnimation();
     doPostBalance();
@@ -127,9 +132,6 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
     listenXZ.cancel();
     super.dispose();
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -439,20 +441,20 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
                         child: Stack(
                           children: [
                             WidgetUtils.showImages(
-                                'assets/images/mofang_jin_jiangchi.png',
+                                'assets/images/mofang_lan_jiangchi.png',
                                 ScreenUtil().setHeight(90),
                                 ScreenUtil().setHeight(109)),
-                            Container(
-                              height: ScreenUtil().setHeight(90),
-                              width: ScreenUtil().setHeight(109),
-                              padding: EdgeInsets.only(
-                                  top: ScreenUtil().setHeight(58)),
-                              child: WidgetUtils.onlyTextCenter(
-                                  '魔方奖池',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: Colors.white,
-                                      fontSize: ScreenUtil().setSp(22))),
-                            )
+                            // Container(
+                            //   height: ScreenUtil().setHeight(90),
+                            //   width: ScreenUtil().setHeight(109),
+                            //   padding: EdgeInsets.only(
+                            //       top: ScreenUtil().setHeight(58)),
+                            //   child: WidgetUtils.onlyTextCenter(
+                            //       '魔方奖池',
+                            //       StyleUtils.getCommonTextStyle(
+                            //           color: Colors.white,
+                            //           fontSize: ScreenUtil().setSp(22))),
+                            // )
                           ],
                         ),
                       )
@@ -474,8 +476,9 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
                                 ScreenUtil().setHeight(26),
                                 ScreenUtil().setHeight(24)),
                             WidgetUtils.commonSizedBox(0, 5),
+                            //显示金币
                             WidgetUtils.onlyTextCenter(
-                                jinbi2,
+                                sp.getString('mofangJB').toString(),
                                 StyleUtils.getCommonTextStyle(
                                     color: Colors.white,
                                     fontSize: ScreenUtil().setSp(23),
@@ -495,8 +498,9 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
                                 ScreenUtil().setHeight(26),
                                 ScreenUtil().setHeight(24)),
                             WidgetUtils.commonSizedBox(0, 5),
+                            // 显示钻石
                             WidgetUtils.onlyTextCenter(
-                                zuanshi2,
+                                sp.getString('mofangZS').toString(),
                                 StyleUtils.getCommonTextStyle(
                                     color: Colors.white,
                                     fontSize: ScreenUtil().setSp(23),
@@ -515,6 +519,11 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
                       onTap: ((){
                         setState(() {
                           isTiaoguo = !isTiaoguo;
+                          if(isTiaoguo){
+                            sp.setBool('mf_lan', true);
+                          }else{
+                            sp.setBool('mf_lan', false);
+                          }
                         });
                       }),
                       child: Container(
@@ -672,12 +681,16 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
             }else{
               jinbi2 = bean.data!.goldBean!;
             }
+            sp.setString('mofangJBY', jinbi);
+            sp.setString('mofangJB', jinbi2);
             zuanshi = bean.data!.diamond!;
             if(double.parse(bean.data!.diamond!) > 10000){
               zuanshi2 = '${(double.parse(bean.data!.diamond!) / 10000).toStringAsFixed(2)}w';
             }else{
               zuanshi2 = bean.data!.diamond!;
             }
+            sp.setString('mofangZSY', zuanshi);
+            sp.setString('mofangZS', zuanshi2);
           });
           break;
         case MyHttpConfig.errorloginCode:
@@ -746,24 +759,32 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
           // 更新余额
           if(bean.data!.curType == 1){
             if(double.parse(jinbi) > 10000){
+              jinbi = sp.getString('mofangJBY').toString();
               // 减去花费的V豆
               jinbi = '${(double.parse(jinbi) - int.parse(number)*20)}';
               //保留2位小数
               jinbi2 = '${(double.parse(jinbi) / 10000).toStringAsFixed(2)}w';
             }else{
+              jinbi = sp.getString('mofangJBY').toString();
               jinbi = (double.parse(jinbi) - int.parse(number)*20).toString();
               jinbi2 = jinbi;
             }
+            sp.setString('mofangJBY', jinbi);
+            sp.setString('mofangJB', jinbi2);
           }else if(bean.data!.curType == 2){
             if(double.parse(zuanshi) > 10000){
+              zuanshi = sp.getString('mofangZSY').toString();
               // 减去花费的V豆
               zuanshi = '${(double.parse(zuanshi) - int.parse(number)*20)}';
               //保留2位小数
               zuanshi2 = '${(double.parse(zuanshi) / 10000).toStringAsFixed(2)}w';
             }else{
+              zuanshi = sp.getString('mofangZSY').toString();
               zuanshi = (double.parse(zuanshi) - int.parse(number)*20).toString();
               zuanshi2 = zuanshi;
             }
+            sp.setString('mofangZSY', zuanshi);
+            sp.setString('mofangZS', zuanshi2);
           }
 
           break;

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yuyinting/pages/game/zhuanpan/zhuanpan_shuoming_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
+import 'package:yuyinting/utils/loading.dart';
 import 'package:yuyinting/utils/log_util.dart';
 
 import '../../../bean/Common_bean.dart';
@@ -30,6 +32,7 @@ class _ZhuanPanJiangChiPageState extends State<ZhuanPanJiangChiPage> {
   // 钥匙数量
   int nums = 0;
   var listen;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -37,9 +40,11 @@ class _ZhuanPanJiangChiPageState extends State<ZhuanPanJiangChiPage> {
     doPostGameStore();
     listen = eventBus.on<DHQuerenBack>().listen((event) {
       // 开始去兑换
-      doPostExchangeGoods(event.goodsId.toString(), event.goodsType.toString(), event.exchangeCost!);
+      doPostExchangeGoods(event.goodsId.toString(), event.goodsType.toString(),
+          event.exchangeCost!);
     });
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -49,7 +54,7 @@ class _ZhuanPanJiangChiPageState extends State<ZhuanPanJiangChiPage> {
 
   Widget jiangChiWidget(BuildContext context, int i) {
     return Container(
-      height: 227.h,
+      height: 240.h,
       width: 161.h,
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -60,29 +65,48 @@ class _ZhuanPanJiangChiPageState extends State<ZhuanPanJiangChiPage> {
       child: Column(
         children: [
           const Spacer(),
-          WidgetUtils.showImagesNet(
-              list[i].img!, 120.h, 120.h),
+          WidgetUtils.showImagesNet(list[i].img!, 120.h, 120.h),
           WidgetUtils.commonSizedBox(10.h, 0),
           Row(
             children: [
               const Spacer(),
-              WidgetUtils.showImages('assets/images/zhuanpan_jc_ys1.png', 20.h, 20.h),
+              WidgetUtils.showImages(
+                  'assets/images/zhuanpan_jc_ys1.png', 20.h, 20.h),
               WidgetUtils.commonSizedBox(0, 5.h),
-              WidgetUtils.onlyText('x${list[i].exchangeCost}', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 18.sp)),
+              WidgetUtils.onlyText(
+                  'x${list[i].exchangeCost}',
+                  StyleUtils.getCommonTextStyle(
+                      color: Colors.white, fontSize: 20.sp)),
               const Spacer(),
             ],
           ),
+          WidgetUtils.commonSizedBox(5.h, 0),
+          WidgetUtils.onlyTextCenter(
+              '（${list[i].price!}V豆）',
+              StyleUtils.getCommonTextStyle(
+                  color: Colors.white, fontSize: 18.sp)),
           WidgetUtils.commonSizedBox(10.h, 0),
           GestureDetector(
-            onTap: ((){
+            onTap: (() {
               MyUtils.goTransparentPageCom(
-                  context, DuiHuanQueRenPage(goodsId: list[i].goodsId.toString(), goodsType: list[i].goodsType.toString(), exchangeCost: list[i].exchangeCost!, title: '心动转盘'));
+                  context,
+                  DuiHuanQueRenPage(
+                      goodsId: list[i].goodsId.toString(),
+                      goodsType: list[i].goodsType.toString(),
+                      exchangeCost: list[i].exchangeCost!,
+                      title: '心动转盘'));
             }),
             child: Stack(
               alignment: Alignment.center,
               children: [
-                WidgetUtils.showImages('assets/images/zhuanpan_jc_btn.png', 42.h, 133.h),
-                WidgetUtils.onlyTextCenter('兑换', StyleUtils.getCommonTextStyle(color: MyColors.zpWZ1, fontSize: 20.sp, fontWeight: FontWeight.w600))
+                WidgetUtils.showImages(
+                    'assets/images/zhuanpan_jc_btn.png', 42.h, 133.h),
+                WidgetUtils.onlyTextCenter(
+                    '兑换',
+                    StyleUtils.getCommonTextStyle(
+                        color: MyColors.zpWZ1,
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.w600))
               ],
             ),
           ),
@@ -147,34 +171,49 @@ class _ZhuanPanJiangChiPageState extends State<ZhuanPanJiangChiPage> {
                           child: Row(
                             children: [
                               WidgetUtils.commonSizedBox(0, 20.h),
-                              WidgetUtils.showImages('assets/images/zhuanpan_jc_ys1.png', 32.h, 32.h),
+                              WidgetUtils.showImages(
+                                  'assets/images/zhuanpan_jc_ys1.png',
+                                  32.h,
+                                  32.h),
                               WidgetUtils.commonSizedBox(0, 10.h),
-                              WidgetUtils.onlyText(nums.toString(), StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 24.sp)),
+                              WidgetUtils.onlyText(
+                                  nums.toString(),
+                                  StyleUtils.getCommonTextStyle(
+                                      color: Colors.white, fontSize: 24.sp)),
                             ],
                           ),
                         )
                       ],
                     ),
                     const Spacer(),
-                    WidgetUtils.onlyText('帮助', StyleUtils.getCommonTextStyle(color: MyColors.zpGZYellow, fontSize: 24.sp)),
+                    GestureDetector(
+                        onTap: (() {
+                          MyUtils.goTransparentPageCom(
+                              context, const ZhuanPanShuoMingPage());
+                        }),
+                        child: WidgetUtils.onlyText(
+                            '帮助',
+                            StyleUtils.getCommonTextStyle(
+                                color: MyColors.zpGZYellow, fontSize: 24.sp))),
                     WidgetUtils.commonSizedBox(0, 30.h),
                   ],
                 ),
                 WidgetUtils.commonSizedBox(20.h, 0),
                 //标题
-                WidgetUtils.showImages('assets/images/zhuanpan_jc_title1.png', 32.h, 320.h),
+                WidgetUtils.showImages(
+                    'assets/images/zhuanpan_jc_title1.png', 32.h, 320.h),
                 WidgetUtils.commonSizedBox(50.h, 0),
                 Expanded(
                     child: OptionGridView(
-                      padding: EdgeInsets.only(left: 50.h, right: 50.h),
-                      itemCount: list.length,
-                      rowCount: 3,
-                      mainAxisSpacing: 20.h,
-                      // 上下间距
-                      crossAxisSpacing: 20.h,
-                      //左右间距
-                      itemBuilder: jiangChiWidget,
-                    ))
+                  padding: EdgeInsets.only(left: 50.h, right: 50.h),
+                  itemCount: list.length,
+                  rowCount: 3,
+                  mainAxisSpacing: 20.h,
+                  // 上下间距
+                  crossAxisSpacing: 20.h,
+                  //左右间距
+                  itemBuilder: jiangChiWidget,
+                ))
               ],
             ),
           )
@@ -184,8 +223,10 @@ class _ZhuanPanJiangChiPageState extends State<ZhuanPanJiangChiPage> {
   }
 
   List<GoodsList> list = [];
+
   /// 游戏商店
   Future<void> doPostGameStore() async {
+    Loading.show();
     Map<String, dynamic> params = <String, dynamic>{
       'store_id': '1',
     };
@@ -200,21 +241,24 @@ class _ZhuanPanJiangChiPageState extends State<ZhuanPanJiangChiPage> {
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
+      Loading.dismiss();
     } catch (e) {
+      Loading.dismiss();
       LogE('钥匙错误信息$e');
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
   /// 兑换
-  Future<void> doPostExchangeGoods(String goodsID, String goodsType, int sl) async {
+  Future<void> doPostExchangeGoods(
+      String goodsID, String goodsType, int sl) async {
     Map<String, dynamic> params = <String, dynamic>{
       'store_id': '1', //商店id 1小转盘 2大转盘 3赛车
       'goods_id': goodsID, //商品id
@@ -230,7 +274,7 @@ class _ZhuanPanJiangChiPageState extends State<ZhuanPanJiangChiPage> {
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:

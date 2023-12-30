@@ -37,7 +37,7 @@ class _TixianBiPageState extends State<TixianBiPage> {
     // TODO: implement initState
     super.initState();
     appBar = WidgetUtils.getAppBar('提现', true, context, false, 0);
-    eventBus.on<SubmitButtonBack>().listen((event) {
+    listenTX = eventBus.on<SubmitButtonBack>().listen((event) {
       if(event.title == '申请提现'){
         if(controllerName.text.isEmpty){
           MyToastUtils.showToastBottom('请输入姓名');
@@ -132,7 +132,7 @@ class _TixianBiPageState extends State<TixianBiPage> {
                                             fontSize: ScreenUtil().setSp(38)),
                                       ),
                                     ),
-                                    WidgetUtils.commonSizedBox(0, 50),
+                                    const Spacer(),
                                     WidgetUtils.onlyText(
                                         widget.shuliang,
                                         StyleUtils.getCommonTextStyle(

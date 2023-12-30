@@ -108,6 +108,7 @@ class StyleUtils {
     return TextStyle(
         color: color,
         decorationColor: color,
+        height: 1.2,
         fontWeight: fontWeight ?? FontWeight.normal,
         fontSize: fontSize ?? ConfigScreenUtil.autoSize36,
         decoration: decoration ?? TextDecoration.none,

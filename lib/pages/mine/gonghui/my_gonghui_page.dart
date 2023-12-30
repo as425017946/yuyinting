@@ -47,7 +47,7 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
     }
     sp.setString('my_identity', widget.type);
     doPostMyGh();
-    doPostApplySignList();
+    // doPostApplySignList();
   }
 
   @override
@@ -344,7 +344,7 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                                     '入驻审核',
                                     ScreenUtil().setSp(31),
                                     Colors.white),
-                                qianyue == 1 ? Positioned(
+                                qianyue != 0 ? Positioned(
                                     right: ScreenUtil().setHeight(30),
                                     top: ScreenUtil().setHeight(10),
                                     child: CustomPaint(
@@ -400,6 +400,7 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
               listRoom = bean.data!.roomList!;
             }
             identity = bean.data!.identity!;
+            qianyue = bean.data!.unauditNum as int;
             sp.setString('guild_id', bean.data!.guildInfo!.id.toString());
             sp.setString('guild_notice', bean.data!.guildInfo!.notice.toString());
           });
@@ -421,29 +422,29 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
 
 
   /// 签约列表
-  Future<void> doPostApplySignList() async {
-    Map<String, dynamic> params = <String, dynamic>{
-      'guild_id': sp.getString('guild_id'),
-    };
-    try {
-      qyListBean bean = await DataUtils.postApplySignList(params);
-      switch (bean.code) {
-        case MyHttpConfig.successCode:
-          setState(() {
-            qianyue = bean.data!.length;
-          });
-          break;
-        case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
-          MyUtils.jumpLogin(context);
-          break;
-        default:
-          MyToastUtils.showToastBottom(bean.msg!);
-          break;
-      }
-    } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
-    }
-  }
+  // Future<void> doPostApplySignList() async {
+  //   Map<String, dynamic> params = <String, dynamic>{
+  //     'guild_id': sp.getString('guild_id'),
+  //   };
+  //   try {
+  //     qyListBean bean = await DataUtils.postApplySignList(params);
+  //     switch (bean.code) {
+  //       case MyHttpConfig.successCode:
+  //         setState(() {
+  //           qianyue = bean.data!.length;
+  //         });
+  //         break;
+  //       case MyHttpConfig.errorloginCode:
+  //       // ignore: use_build_context_synchronously
+  //         MyUtils.jumpLogin(context);
+  //         break;
+  //       default:
+  //         MyToastUtils.showToastBottom(bean.msg!);
+  //         break;
+  //     }
+  //   } catch (e) {
+  //     MyToastUtils.showToastBottom(MyConfig.errorTitle);
+  //   }
+  // }
 
 }

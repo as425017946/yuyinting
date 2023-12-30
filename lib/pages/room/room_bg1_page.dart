@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/utils/event_utils.dart';
+import 'package:yuyinting/utils/loading.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import '../../config/my_config.dart';
 import '../../widget/SVGASimpleImage.dart';
@@ -112,6 +113,7 @@ class _RoomBG1PageState extends State<RoomBG1Page> with AutomaticKeepAliveClient
   /// 房间默认背景
   Future<void> doPostBgList() async {
     LogE('用户token${sp.getString('user_token')}');
+    Loading.show();
     Map<String, dynamic> params = <String, dynamic>{
       'room_id': sp.getString('roomID').toString(),
     };
@@ -132,7 +134,9 @@ class _RoomBG1PageState extends State<RoomBG1Page> with AutomaticKeepAliveClient
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
+      Loading.dismiss();
     } catch (e) {
+      Loading.dismiss();
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }

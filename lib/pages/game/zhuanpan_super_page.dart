@@ -51,9 +51,8 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
 
   //最少转动圈数
   int cyclesNum = 6;
-
   int isCheck = 1;
-
+  // 是否关闭了音效
   bool isClose = false;
   // 转几次 要花费多少
   int cishu = 1, feiyong = 1000;
@@ -64,12 +63,11 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
   bool isXiazhu = true;
 
   /// 播放音频
-  late Soundpool soundpool;
+  Soundpool soundpool = Soundpool(streamType: StreamType.notification);
   Future<void> playSound() async {
     int soundId = await rootBundle.load('assets/audio/zhuanpan_jin.MP3').then(((ByteData soundDate){
       return soundpool.load(soundDate);
     }));
-    soundpool.setVolume(volume: 1);
     await soundpool.play(soundId);
   }
 
@@ -77,7 +75,10 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
   @override
   void initState() {
     super.initState();
-    soundpool = Soundpool(streamType: StreamType.notification);
+    // 更新音效关闭开启状态
+    setState(() {
+      isClose = sp.getBool('zp_super')!;
+    });
     doPostGetGameLuck();
     animationController = AnimationController(
       vsync: this,
@@ -123,11 +124,6 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
     listen = eventBus.on<XZQuerenBack>().listen((event) {
       if(event.title == '超级转盘') {
         doPostPlayRoulette(event.cishu);
-      }
-    });
-    listen2 = eventBus.on<SubmitButtonBack>().listen((event) {
-      if(event.title == '转盘关闭'){
-        soundpool.dispose();
       }
     });
     // 判断当前年月日是否为今天，如果不是，下注还是要提示
@@ -197,7 +193,6 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
     LogE('====关闭2');
     animationController.dispose();
     listen.cancel();
-    listen2.cancel();
     listenZDY.cancel();
     super.dispose();
   }
@@ -356,6 +351,11 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                     onTap: ((){
                       setState(() {
                         isClose = !isClose;
+                        if(isClose){
+                          sp.setBool('zp_super', true);
+                        }else{
+                          sp.setBool('zp_super', false);
+                        }
                       });
                     }),
                     child: Container(
@@ -566,6 +566,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
   int zonge =0;
   /// 魔方转盘竞猜
   Future<void> doPostPlayRoulette(String number) async {
+    LogE('token  ${sp.getString('user_token')}');
     setState(() {
       isXiazhu = false;
     });

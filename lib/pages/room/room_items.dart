@@ -34,299 +34,432 @@ class RoomItems {
       String roomID, List<Map> list, List<MikeList> listm) {
     // 系统公告
     if (list[i]['type'] == '0') {
-      return Container(
-        margin: EdgeInsets.only(bottom: 5.h),
-        child: Text(
-          list[i]['info'],
-          maxLines: 50,
-          style: TextStyle(
-              color: MyColors.jianbian2,
-              height: 2,
-              fontWeight: FontWeight.w600,
-              fontSize: 22.sp
-          ),
-        ),
-      );
-    } else if (list[i]['type'] == '1') {
-      // 房间公告
-      return Container(
-        margin: EdgeInsets.only(bottom: 5.h),
-        child: Text(
-          list[i]['info'],
-          maxLines: 50,
-          style: TextStyle(
-              color: MyColors.peopleYellow,
-              height: 2,
-              fontWeight: FontWeight.w600,
-              fontSize: 22.sp
-          ),
-        ),
-      );
-    } else if (list[i]['type'] == '2') {
-      // 用户进入房间
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+      return Stack(
         children: [
+          Opacity(
+            opacity: 0.05,
+            child: Container(
+              margin: EdgeInsets.only(bottom: 10.h),
+              padding: EdgeInsets.only(
+                  top: 5.h, bottom: 15.h, left: 10.h, right: 10.h
+              ),
+              //边框设置
+              decoration: BoxDecoration(
+                //背景
+                color: MyColors.jianbian2,
+                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                borderRadius: BorderRadius.all(Radius.circular(10.h)),
+                //设置四周边框
+                border: Border.all(width: 1.h, color: MyColors.jianbian2),
+              ),
+              child: Opacity(
+                opacity: 0,
+                child: Text(
+                  '【系统公告】${list[i]['info']}',
+                  maxLines: 50,
+                  style: TextStyle(
+                      color: MyColors.jianbian2,
+                      height: 2,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 24.sp
+                  ),
+                ),
+              ),
+            ),
+          ),
           Container(
             margin: EdgeInsets.only(bottom: 10.h),
             padding: EdgeInsets.only(
                 top: 5.h, bottom: 15.h, left: 10.h, right: 10.h
             ),
             //边框设置
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               //背景
-              color: Colors.white10,
+              color: Colors.transparent,
               //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(7),
-                  topRight: Radius.circular(15),
-                  bottomLeft: Radius.circular(15),
-                  bottomRight: Radius.circular(15)),
+              borderRadius: BorderRadius.all(Radius.circular(10.h)),
+              //设置四周边框
+              border: Border.all(width: 0.5.h, color: MyColors.jianbian2),
             ),
-            child: RichText(
-              text: TextSpan(children: [
-                // 厅主或管理或主播
-                WidgetSpan(
-                    child: (list[i]['identity'] == 'user' ||
-                        list[i]['identity'] == 'streamer')
-                        ? const Text('')
-                        : list[i]['identity'] == 'leader'
-                        ? WidgetUtils.showImages(
-                        'assets/images/dj/room_role_director.png', 30.h, 30.h)
-                        : WidgetUtils.showImages(
-                        'assets/images/dj/room_role_manager.png', 30.h, 30.h)),
-                // 萌新/新贵/新锐 三选一
-                // 不是新锐新贵，并且是萌新直接显示萌新
-                WidgetSpan(
-                    child: list[i]['new_noble'] == 0 &&
-                        list[i]['is_new'] == 1
-                        ? WidgetUtils.showImages(
-                        'assets/images/dj/room_role_common.png', 30.h, 50.h)
-                        : const Text('')),
-                // 不管是不是萌新，只要是新锐或者新贵就优先展示
-                WidgetSpan(
-                    child: list[i]['new_noble'] == 1
-                        ? WidgetUtils.showImages(
-                        'assets/images/dj/room_rui.png', 30.h, 50.h)
-                        : list[i]['new_noble'] == 2
-                        ? WidgetUtils.showImages(
-                        'assets/images/dj/room_gui.png', 30.h, 50.h)
-                        : const Text('')),
-                WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
-                //等级
-                WidgetSpan(
-                  child: SizedBox(
-                    height: 28.h,
-                    width: 28.h,
-                    child: Stack(
-                      children: [
-                        int.parse(list[i]['lv'].toString()) >= 1 && int.parse(list[i]['lv'].toString()) <= 10
-                            ? WidgetUtils.showImages(
-                            'assets/images/dj/dj_1-10.png', 28.h, 28.h)
-                            : int.parse(list[i]['lv'].toString()) >= 11 && int.parse(list[i]['lv'].toString()) <= 15
-                            ? WidgetUtils.showImages(
-                            'assets/images/dj/dj_11-15.png', 28.h, 28.h)
-                            : int.parse(list[i]['lv'].toString()) >= 16 && int.parse(list[i]['lv'].toString()) <= 20
-                            ? WidgetUtils.showImages(
-                            'assets/images/dj/dj_16-20.png', 28.h, 28.h)
-                            : int.parse(list[i]['lv'].toString()) >= 21 && int.parse(list[i]['lv'].toString()) <= 25
-                            ? WidgetUtils.showImages(
-                            'assets/images/dj/dj_21-25.png',
-                            28.h,
-                            28.h)
-                            : int.parse(list[i]['lv'].toString()) >= 26 && int.parse(list[i]['lv'].toString()) <= 30
-                            ? WidgetUtils.showImages(
-                            'assets/images/dj/dj_26-30.png',
-                            28.h,
-                            28.h)
-                            : int.parse(list[i]['lv'].toString()) >= 31 &&
-                            int.parse(list[i]['lv'].toString()) <= 35
-                            ? WidgetUtils.showImages(
-                            'assets/images/dj/dj_31-35.png',
-                            28.h,
-                            28.h)
-                            : int.parse(list[i]['lv'].toString()) >= 36 &&
-                            int.parse(list[i]['lv'].toString()) <= 40
-                            ? WidgetUtils.showImages(
-                            'assets/images/dj/dj_36-40.png',
-                            28.h,
-                            28.h)
-                            : int.parse(list[i]['lv'].toString()) >= 41 &&
-                            int.parse(list[i]['lv'].toString()) <= 45
-                            ? WidgetUtils.showImages(
-                            'assets/images/dj/dj_41-45.png', 28.h, 28.h)
-                            : WidgetUtils.showImages(
-                            'assets/images/dj/dj_46-50.png', 28.h, 28.h),
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: Stack(
-                            children: [
-                              Text(
-                                int.parse(list[i]['lv'].toString()).toString(),
-                                style: TextStyle(
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: 'Impact',
-                                    foreground: Paint()
-                                      ..style = PaintingStyle.stroke
-                                      ..strokeWidth = 2
-                                      ..color = (int.parse(list[i]['lv'].toString()) >= 1 &&
-                                          int.parse(list[i]['lv'].toString()) <= 10)
-                                          ? MyColors.djOneM
-                                          : (int.parse(list[i]['lv'].toString()) >= 11 && int.parse(list[i]['lv'].toString()) <= 15)
-                                          ? MyColors.djTwoM
-                                          : (int.parse(list[i]['lv'].toString()) >= 16 &&
-                                          int.parse(list[i]['lv'].toString()) <= 20)
-                                          ? MyColors.djThreeM
-                                          : (int.parse(list[i]['lv'].toString()) >= 21 &&
-                                          int.parse(list[i]['lv'].toString()) <= 25)
-                                          ? MyColors.djFourM
-                                          : (int.parse(list[i]['lv'].toString()) >= 26 &&
-                                          int.parse(list[i]['lv'].toString()) <= 30)
-                                          ? MyColors
-                                          .djFiveM
-                                          : (int.parse(list[i]['lv'].toString()) >= 31 &&
-                                          int.parse(list[i]['lv'].toString()) <=
-                                              35)
-                                          ? MyColors
-                                          .djSixM
-                                          : (int.parse(list[i]['lv'].toString()) >= 36 &&
-                                          int.parse(list[i]['lv'].toString()) <=
-                                              40)
-                                          ? MyColors
-                                          .djSevenM
-                                          : (int.parse(list[i]['lv'].toString()) >= 41 &&
-                                          int.parse(list[i]['lv'].toString()) <= 45)
-                                          ? MyColors.djEightM
-                                          : MyColors.djNineM),
-                              ),
-                              Text(
-                                int.parse(list[i]['lv'].toString()).toString(),
-                                style: TextStyle(
-                                    color: MyColors.djOne,
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: 'Impact'),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),),
-                WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
-                //贵族
-                WidgetSpan(
-                    child: Transform.translate(
-                      offset: Offset(0, 5.h), child: list[i]['noble_id'] == 1
-                        ? WidgetUtils.showImages(
-                        'assets/images/tequan_yongshi.png', 38.h, 38.h)
-                        : list[i]['noble_id'] == 2
-                        ? WidgetUtils.showImages(
-                        'assets/images/tequan_qishi.png', 38.h, 38.h)
-                        : list[i]['noble_id'] == 3
-                        ? WidgetUtils.showImages(
-                        'assets/images/tequan_bojue.png', 38.h, 38.h)
-                        : list[i]['noble_id'] == 4
-                        ? WidgetUtils.showImages(
-                        'assets/images/tequan_houjue.png', 38.h, 38.h)
-                        : list[i]['noble_id'] == 5
-                        ? WidgetUtils.showImages(
-                        'assets/images/tequan_gongjue.png',
-                        38.h,
-                        38.h)
-                        : list[i]['noble_id'] == 6
-                        ? WidgetUtils.showImages(
-                        'assets/images/tequan_guowang.png',
-                        38.h,
-                        38.h)
-                        : list[i]['noble_id'] == 7
-                        ? WidgetUtils.showImages(
-                        'assets/images/tequan_diwang.png',
-                        38.h,
-                        38.h)
-                        : const Text(''),)
+            child: Text(
+              '【系统公告】${list[i]['info']}',
+              maxLines: 50,
+              style: TextStyle(
+                  color: MyColors.jianbian2,
+                  height: 2,
+                  fontSize: 24.sp
+              ),
+            ),
+          )
+        ],
+      );
+    } else if (list[i]['type'] == '1') {
+      // 房间公告
+      return Stack(
+        children: [
+          Opacity(
+            opacity: 0.05,
+            child: Container(
+              margin: EdgeInsets.only(bottom: 10.h),
+              padding: EdgeInsets.only(
+                  top: 5.h, bottom: 15.h, left: 10.h, right: 10.h
+              ),
+              //边框设置
+              decoration: BoxDecoration(
+                //背景
+                color: MyColors.peopleYellow,
+                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                borderRadius: BorderRadius.all(Radius.circular(10.h)),
+                //设置四周边框
+                border: Border.all(width: 1.h, color: MyColors.peopleYellow),
+              ),
+              child: Opacity(
+                opacity: 0,
+                child: Text(
+                  '【房间公告】${list[i]['info']}',
+                  maxLines: 50,
+                  style: TextStyle(
+                      color: MyColors.peopleYellow,
+                      height: 2,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 24.sp
+                  ),
                 ),
-                WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
-                // 靓号
-                WidgetSpan(
-                    child: Transform.translate(offset: Offset(0, 1.h),
-                      child: list[i]['is_pretty'] == '0'
-                          ? const Text('')
-                          : WidgetUtils.showImages(
-                          'assets/images/dj/lianghao.png', 30.h, 30.h),)
-                ),
-                //用户昵称
-                WidgetSpan(child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    WidgetUtils.commonSizedBox(28.h, 10.h),
-                    Text(list[i]['info'].toString().length > 8 ? '${list[i]['info'].toString().substring(0,8)}...' : list[i]['info'],
-                        style: TextStyle(
-                          color: MyColors.roomMessageYellow2,
-                          fontSize: 24.sp,
-                          height: 2,
-                        ))
-                  ],
-                )),
-                // 进入房间
-                WidgetSpan(child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    WidgetUtils.commonSizedBox(28.h, 10.h),
-                    Text('进入房间',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24.sp,
-                          height: 2,
-                        ))
-                  ],
-                )),
-                WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
-                WidgetSpan(
-                    child: sp.getString('role').toString() != 'user' &&
-                        list[i]['isWelcome'] == '0' ? GestureDetector(
-                      onTap: (() {
-                        if(MyUtils.checkClick()) {
-                          eventBus.fire(RoomBack(
-                              title: '欢迎', index: '${list[i]['uid']},$i'));
-                        }
-                      }),
-                      child: Transform.translate(
-                        offset: Offset(0, 5.h),
-                        child: Container(
-                          width: ScreenUtil().setHeight(65),
-                          height: ScreenUtil().setHeight(30),
-                          margin: EdgeInsets.only(top: 5.h, bottom: 5.h),
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              WidgetUtils.showImagesFill(
-                                  'assets/images/room_huanyingta.png',
-                                  double.infinity,
-                                  double.infinity),
-                              Container(
-                                width: ScreenUtil().setHeight(65),
-                                height: ScreenUtil().setHeight(30),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  '欢迎',
-                                  style: StyleUtils.getCommonTextStyle(
-                                      color: Colors.white,
-                                      fontSize: ScreenUtil().setSp(20)),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ) : const Text(''))
-              ]),
+              ),
             ),
           ),
+          Container(
+            margin: EdgeInsets.only(bottom: 10.h),
+            padding: EdgeInsets.only(
+                top: 5.h, bottom: 15.h, left: 10.h, right: 10.h
+            ),
+            //边框设置
+            decoration: BoxDecoration(
+              //背景
+              color: Colors.transparent,
+              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+              borderRadius: BorderRadius.all(Radius.circular(10.h)),
+              //设置四周边框
+              border: Border.all(width: 0.5.h, color: MyColors.peopleYellow),
+            ),
+            child: Text(
+              '【房间公告】${list[i]['info']}',
+              maxLines: 50,
+              style: TextStyle(
+                  color: MyColors.peopleYellow,
+                  height: 2,
+                  fontSize: 24.sp
+              ),
+            ),
+          )
         ],
+      );
+    } else if (list[i]['type'] == '2') {
+      // 用户进入房间
+      return GestureDetector(
+        onTap: (() {
+          MyUtils.goTransparentPage(
+              context,
+              RoomPeopleInfoPage(
+                uid: list[i]['uid'].toString(),
+                index: '-1',
+                roomID: roomID,
+                isClose: '',
+                listM: listm,
+              ));
+        }),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: EdgeInsets.only(bottom: 10.h),
+              padding: EdgeInsets.only(
+                  top: 5.h, bottom: 15.h, left: 10.h, right: 10.h
+              ),
+              //边框设置
+              decoration: const BoxDecoration(
+                //背景
+                color: Colors.white10,
+                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(7),
+                    topRight: Radius.circular(15),
+                    bottomLeft: Radius.circular(15),
+                    bottomRight: Radius.circular(15)),
+              ),
+              child: RichText(
+                text: TextSpan(children: [
+                  // 厅主或管理或主播
+                  WidgetSpan(
+                      child: (list[i]['identity'] == 'user' ||
+                          list[i]['identity'] == 'streamer')
+                          ? const Text('')
+                          : list[i]['identity'] == 'leader'
+                          ? WidgetUtils.showImages(
+                          'assets/images/dj/room_role_director.png', 30.h, 30.h)
+                          : WidgetUtils.showImages(
+                          'assets/images/dj/room_role_manager.png', 30.h,
+                          30.h)),
+                  // 萌新/新贵/新锐 三选一
+                  // 不是新锐新贵，并且是萌新直接显示萌新
+                  WidgetSpan(
+                      child: list[i]['new_noble'] == 0 &&
+                          list[i]['is_new'] == 1
+                          ? WidgetUtils.showImages(
+                          'assets/images/dj/room_role_common.png', 30.h, 50.h)
+                          : const Text('')),
+                  // 不管是不是萌新，只要是新锐或者新贵就优先展示
+                  WidgetSpan(
+                      child: list[i]['new_noble'] == 1
+                          ? WidgetUtils.showImages(
+                          'assets/images/dj/room_rui.png', 30.h, 50.h)
+                          : list[i]['new_noble'] == 2
+                          ? WidgetUtils.showImages(
+                          'assets/images/dj/room_gui.png', 30.h, 50.h)
+                          : const Text('')),
+                  WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
+                  //等级
+                  WidgetSpan(
+                    child: SizedBox(
+                      height: 28.h,
+                      width: 28.h,
+                      child: Stack(
+                        children: [
+                          int.parse(list[i]['lv'].toString()) >= 1 &&
+                              int.parse(list[i]['lv'].toString()) <= 10
+                              ? WidgetUtils.showImages(
+                              'assets/images/dj/dj_1-10.png', 28.h, 28.h)
+                              : int.parse(list[i]['lv'].toString()) >= 11 &&
+                              int.parse(list[i]['lv'].toString()) <= 15
+                              ? WidgetUtils.showImages(
+                              'assets/images/dj/dj_11-15.png', 28.h, 28.h)
+                              : int.parse(list[i]['lv'].toString()) >= 16 &&
+                              int.parse(list[i]['lv'].toString()) <= 20
+                              ? WidgetUtils.showImages(
+                              'assets/images/dj/dj_16-20.png', 28.h, 28.h)
+                              : int.parse(list[i]['lv'].toString()) >= 21 &&
+                              int.parse(list[i]['lv'].toString()) <= 25
+                              ? WidgetUtils.showImages(
+                              'assets/images/dj/dj_21-25.png',
+                              28.h,
+                              28.h)
+                              : int.parse(list[i]['lv'].toString()) >= 26 &&
+                              int.parse(list[i]['lv'].toString()) <= 30
+                              ? WidgetUtils.showImages(
+                              'assets/images/dj/dj_26-30.png',
+                              28.h,
+                              28.h)
+                              : int.parse(list[i]['lv'].toString()) >= 31 &&
+                              int.parse(list[i]['lv'].toString()) <= 35
+                              ? WidgetUtils.showImages(
+                              'assets/images/dj/dj_31-35.png',
+                              28.h,
+                              28.h)
+                              : int.parse(list[i]['lv'].toString()) >= 36 &&
+                              int.parse(list[i]['lv'].toString()) <= 40
+                              ? WidgetUtils.showImages(
+                              'assets/images/dj/dj_36-40.png',
+                              28.h,
+                              28.h)
+                              : int.parse(list[i]['lv'].toString()) >= 41 &&
+                              int.parse(list[i]['lv'].toString()) <= 45
+                              ? WidgetUtils.showImages(
+                              'assets/images/dj/dj_41-45.png', 28.h, 28.h)
+                              : WidgetUtils.showImages(
+                              'assets/images/dj/dj_46-50.png', 28.h, 28.h),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: Stack(
+                              children: [
+                                Text(
+                                  int.parse(list[i]['lv'].toString())
+                                      .toString(),
+                                  style: TextStyle(
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: 'Impact',
+                                      foreground: Paint()
+                                        ..style = PaintingStyle.stroke
+                                        ..strokeWidth = 2
+                                        ..color = (int.parse(
+                                            list[i]['lv'].toString()) >= 1 &&
+                                            int.parse(
+                                                list[i]['lv'].toString()) <= 10)
+                                            ? MyColors.djOneM
+                                            : (int.parse(
+                                            list[i]['lv'].toString()) >= 11 &&
+                                            int.parse(
+                                                list[i]['lv'].toString()) <= 15)
+                                            ? MyColors.djTwoM
+                                            : (int.parse(
+                                            list[i]['lv'].toString()) >= 16 &&
+                                            int.parse(
+                                                list[i]['lv'].toString()) <= 20)
+                                            ? MyColors.djThreeM
+                                            : (int.parse(
+                                            list[i]['lv'].toString()) >= 21 &&
+                                            int.parse(
+                                                list[i]['lv'].toString()) <= 25)
+                                            ? MyColors.djFourM
+                                            : (int.parse(
+                                            list[i]['lv'].toString()) >= 26 &&
+                                            int.parse(
+                                                list[i]['lv'].toString()) <= 30)
+                                            ? MyColors
+                                            .djFiveM
+                                            : (int.parse(
+                                            list[i]['lv'].toString()) >= 31 &&
+                                            int.parse(
+                                                list[i]['lv'].toString()) <=
+                                                35)
+                                            ? MyColors
+                                            .djSixM
+                                            : (int.parse(
+                                            list[i]['lv'].toString()) >= 36 &&
+                                            int.parse(
+                                                list[i]['lv'].toString()) <=
+                                                40)
+                                            ? MyColors
+                                            .djSevenM
+                                            : (int.parse(
+                                            list[i]['lv'].toString()) >= 41 &&
+                                            int.parse(
+                                                list[i]['lv'].toString()) <= 45)
+                                            ? MyColors.djEightM
+                                            : MyColors.djNineM),
+                                ),
+                                Text(
+                                  int.parse(list[i]['lv'].toString())
+                                      .toString(),
+                                  style: TextStyle(
+                                      color: MyColors.djOne,
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: 'Impact'),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),),
+                  WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
+                  //贵族
+                  WidgetSpan(
+                      child: Transform.translate(
+                        offset: Offset(0, 5.h), child: list[i]['noble_id'] == 1
+                          ? WidgetUtils.showImages(
+                          'assets/images/tequan_yongshi.png', 38.h, 38.h)
+                          : list[i]['noble_id'] == 2
+                          ? WidgetUtils.showImages(
+                          'assets/images/tequan_qishi.png', 38.h, 38.h)
+                          : list[i]['noble_id'] == 3
+                          ? WidgetUtils.showImages(
+                          'assets/images/tequan_bojue.png', 38.h, 38.h)
+                          : list[i]['noble_id'] == 4
+                          ? WidgetUtils.showImages(
+                          'assets/images/tequan_houjue.png', 38.h, 38.h)
+                          : list[i]['noble_id'] == 5
+                          ? WidgetUtils.showImages(
+                          'assets/images/tequan_gongjue.png',
+                          38.h,
+                          38.h)
+                          : list[i]['noble_id'] == 6
+                          ? WidgetUtils.showImages(
+                          'assets/images/tequan_guowang.png',
+                          38.h,
+                          38.h)
+                          : list[i]['noble_id'] == 7
+                          ? WidgetUtils.showImages(
+                          'assets/images/tequan_diwang.png',
+                          38.h,
+                          38.h)
+                          : const Text(''),)
+                  ),
+                  WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
+                  // 靓号
+                  WidgetSpan(
+                      child: Transform.translate(offset: Offset(0, 1.h),
+                        child: list[i]['is_pretty'] == '0'
+                            ? const Text('')
+                            : WidgetUtils.showImages(
+                            'assets/images/dj/lianghao.png', 30.h, 30.h),)
+                  ),
+                  //用户昵称
+                  WidgetSpan(child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      WidgetUtils.commonSizedBox(28.h, 10.h),
+                      Text(' ${list[i]['info']
+                          .toString()
+                          .length > 8 ? '${list[i]['info'].toString().substring(
+                          0, 8)}...' : list[i]['info']}',
+                          style: TextStyle(
+                            color: MyColors.roomMessageYellow2,
+                            fontSize: 24.sp,
+                            height: 2,
+                          ))
+                    ],
+                  )),
+                  // 进入房间
+                  WidgetSpan(child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      WidgetUtils.commonSizedBox(28.h, 10.h),
+                      Text('进入房间',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24.sp,
+                            height: 2,
+                          ))
+                    ],
+                  )),
+                  WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
+                  WidgetSpan(
+                      child: sp.getString('role').toString() != 'user' &&
+                          list[i]['isWelcome'] == '0' ? GestureDetector(
+                        onTap: (() {
+                          if (MyUtils.checkClick()) {
+                            eventBus.fire(RoomBack(
+                                title: '欢迎', index: '${list[i]['uid']},$i'));
+                          }
+                        }),
+                        child: Transform.translate(
+                          offset: Offset(0, 5.h),
+                          child: Container(
+                            width: ScreenUtil().setHeight(65),
+                            height: ScreenUtil().setHeight(30),
+                            margin: EdgeInsets.only(top: 5.h, bottom: 5.h),
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                WidgetUtils.showImagesFill(
+                                    'assets/images/room_huanyingta.png',
+                                    double.infinity,
+                                    double.infinity),
+                                Container(
+                                  width: ScreenUtil().setHeight(65),
+                                  height: ScreenUtil().setHeight(30),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    '欢迎',
+                                    style: StyleUtils.getCommonTextStyle(
+                                        color: Colors.white,
+                                        fontSize: ScreenUtil().setSp(20)),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ) : const Text(''))
+                ]),
+              ),
+            ),
+          ],
+        ),
       );
     } else if (list[i]['type'] == '3') {
       // 点击了欢迎某某人
@@ -371,21 +504,26 @@ class RoomItems {
                     width: 28.h,
                     child: Stack(
                       children: [
-                        int.parse(list[i]['lv'].toString()) >= 1 && int.parse(list[i]['lv'].toString()) <= 10
+                        int.parse(list[i]['lv'].toString()) >= 1 &&
+                            int.parse(list[i]['lv'].toString()) <= 10
                             ? WidgetUtils.showImages(
                             'assets/images/dj/dj_1-10.png', 28.h, 28.h)
-                            : int.parse(list[i]['lv'].toString()) >= 11 && int.parse(list[i]['lv'].toString()) <= 15
+                            : int.parse(list[i]['lv'].toString()) >= 11 &&
+                            int.parse(list[i]['lv'].toString()) <= 15
                             ? WidgetUtils.showImages(
                             'assets/images/dj/dj_11-15.png', 28.h, 28.h)
-                            : int.parse(list[i]['lv'].toString()) >= 16 && int.parse(list[i]['lv'].toString()) <= 20
+                            : int.parse(list[i]['lv'].toString()) >= 16 && int
+                            .parse(list[i]['lv'].toString()) <= 20
                             ? WidgetUtils.showImages(
                             'assets/images/dj/dj_16-20.png', 28.h, 28.h)
-                            : int.parse(list[i]['lv'].toString()) >= 21 && int.parse(list[i]['lv'].toString()) <= 25
+                            : int.parse(list[i]['lv'].toString()) >= 21 && int
+                            .parse(list[i]['lv'].toString()) <= 25
                             ? WidgetUtils.showImages(
                             'assets/images/dj/dj_21-25.png',
                             28.h,
                             28.h)
-                            : int.parse(list[i]['lv'].toString()) >= 26 && int.parse(list[i]['lv'].toString()) <= 30
+                            : int.parse(list[i]['lv'].toString()) >= 26 && int
+                            .parse(list[i]['lv'].toString()) <= 30
                             ? WidgetUtils.showImages(
                             'assets/images/dj/dj_26-30.png',
                             28.h,
@@ -422,33 +560,48 @@ class RoomItems {
                                     foreground: Paint()
                                       ..style = PaintingStyle.stroke
                                       ..strokeWidth = 2
-                                      ..color = (int.parse(list[i]['lv'].toString()) >= 1 &&
-                                          int.parse(list[i]['lv'].toString()) <= 10)
+                                      ..color = (int.parse(
+                                          list[i]['lv'].toString()) >= 1 &&
+                                          int.parse(list[i]['lv'].toString()) <=
+                                              10)
                                           ? MyColors.djOneM
-                                          : (int.parse(list[i]['lv'].toString()) >= 11 && int.parse(list[i]['lv'].toString()) <= 15)
+                                          : (int.parse(
+                                          list[i]['lv'].toString()) >= 11 &&
+                                          int.parse(list[i]['lv'].toString()) <=
+                                              15)
                                           ? MyColors.djTwoM
-                                          : (int.parse(list[i]['lv'].toString()) >= 16 &&
-                                          int.parse(list[i]['lv'].toString()) <= 20)
+                                          : (int.parse(
+                                          list[i]['lv'].toString()) >= 16 &&
+                                          int.parse(list[i]['lv'].toString()) <=
+                                              20)
                                           ? MyColors.djThreeM
-                                          : (int.parse(list[i]['lv'].toString()) >= 21 &&
-                                          int.parse(list[i]['lv'].toString()) <= 25)
+                                          : (int.parse(
+                                          list[i]['lv'].toString()) >= 21 &&
+                                          int.parse(list[i]['lv'].toString()) <=
+                                              25)
                                           ? MyColors.djFourM
-                                          : (int.parse(list[i]['lv'].toString()) >= 26 &&
-                                          int.parse(list[i]['lv'].toString()) <= 30)
+                                          : (int.parse(
+                                          list[i]['lv'].toString()) >= 26 &&
+                                          int.parse(list[i]['lv'].toString()) <=
+                                              30)
                                           ? MyColors
                                           .djFiveM
-                                          : (int.parse(list[i]['lv'].toString()) >= 31 &&
+                                          : (int.parse(
+                                          list[i]['lv'].toString()) >= 31 &&
                                           int.parse(list[i]['lv'].toString()) <=
                                               35)
                                           ? MyColors
                                           .djSixM
-                                          : (int.parse(list[i]['lv'].toString()) >= 36 &&
+                                          : (int.parse(
+                                          list[i]['lv'].toString()) >= 36 &&
                                           int.parse(list[i]['lv'].toString()) <=
                                               40)
                                           ? MyColors
                                           .djSevenM
-                                          : (int.parse(list[i]['lv'].toString()) >= 41 &&
-                                          int.parse(list[i]['lv'].toString()) <= 45)
+                                          : (int.parse(
+                                          list[i]['lv'].toString()) >= 41 &&
+                                          int.parse(list[i]['lv'].toString()) <=
+                                              45)
                                           ? MyColors.djEightM
                                           : MyColors.djNineM),
                               ),
@@ -511,7 +664,10 @@ class RoomItems {
                 alignment: Alignment.center,
                 children: [
                   WidgetUtils.commonSizedBox(28.h, 10.h),
-                  Text(list[i]['info'],
+                  Text(' ${list[i]['info']
+                      .toString()
+                      .length > 8 ? '${list[i]['info'].toString().substring(0,
+                      8)}...' : list[i]['info']}',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 24.sp,
@@ -522,37 +678,52 @@ class RoomItems {
             ]),
           ),
           WidgetUtils.commonSizedBox(5.h, 0),
-          Container(
-            margin: EdgeInsets.only(bottom: 10.h),
-            padding: EdgeInsets.only(
-                top: 10.h, bottom: 10.h, left: 10.h, right: 10.h
-            ),
-            //边框设置
-            decoration: const BoxDecoration(
-              //背景
-              color: Colors.white10,
-              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(7),
-                  topRight: Radius.circular(15),
-                  bottomLeft: Radius.circular(15),
-                  bottomRight: Radius.circular(15)),
-            ),
-            child: RichText(
-              text: TextSpan(children: [
-                WidgetSpan(
-                    child: Transform.translate(offset: Offset(0, -4.h),
-                      child: Text(
-                        '@', style: StyleUtils.getCommonTextStyle(color: Colors
-                          .white, fontSize: 21.sp),),)),
-                WidgetSpan(
-                    child: Text(list[i]['content'].toString().split(',')[0],
-                      style: TextStyle(color: MyColors.roomMessageYellow2,
-                          fontSize: 21.sp),)),
-                WidgetSpan(
-                    child: Text(list[i]['content'].toString().split(',')[1],
-                      style: TextStyle(color: Colors.white, fontSize: 21.sp),)),
-              ]),
+          GestureDetector(
+            onTap: (() {
+              MyUtils.goTransparentPage(
+                  context,
+                  RoomPeopleInfoPage(
+                    uid: list[i]['uid'].toString(),
+                    index: '-1',
+                    roomID: roomID,
+                    isClose: '',
+                    listM: listm,
+                  ));
+            }),
+            child: Container(
+              margin: EdgeInsets.only(bottom: 10.h),
+              padding: EdgeInsets.only(
+                  top: 10.h, bottom: 10.h, left: 10.h, right: 10.h
+              ),
+              //边框设置
+              decoration: const BoxDecoration(
+                //背景
+                color: Colors.white10,
+                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(7),
+                    topRight: Radius.circular(15),
+                    bottomLeft: Radius.circular(15),
+                    bottomRight: Radius.circular(15)),
+              ),
+              child: RichText(
+                text: TextSpan(
+                    text: '@',
+                    style: StyleUtils.getCommonTextStyle(
+                        color: Colors
+                            .white, fontSize: 24.sp),
+                    children: [
+                      TextSpan(
+                          text: list[i]['content'].toString().split(',')[0],
+                          style: StyleUtils.getCommonTextStyle(
+                            color: MyColors.roomMessageYellow2,
+                            fontSize: 24.sp,)),
+                      TextSpan(
+                          text: list[i]['content'].toString().split(',')[1],
+                          style: StyleUtils.getCommonTextStyle(
+                            color: Colors.white, fontSize: 24.sp,)),
+                    ]),
+              ),
             ),
           ),
         ],
@@ -570,83 +741,278 @@ class RoomItems {
         }
       }
       // 厅内送出礼物推送
-      return RichText(
-        text: TextSpan(
-            children: [
-              WidgetSpan(
-                  child: Text(infos[0], style: StyleUtils.getCommonTextStyle(
-                      color: MyColors.jianbian2, fontSize: 22.sp))),
-              WidgetSpan(
-                  child: Text(infos[1], style: StyleUtils.getCommonTextStyle(
-                      color: Colors.white, fontSize: 22.sp))),
-              WidgetSpan(
-                  child: Text(infos[2], style: StyleUtils.getCommonTextStyle(
-                      color: MyColors.jianbian2, fontSize: 22.sp))),
-              WidgetSpan(
-                  child: Text(infos[3].contains(',') ? name : infos[3],
-                      style: StyleUtils.getCommonTextStyle(
-                          color: Colors.white, fontSize: 22.sp))),
-              WidgetSpan(
-                  child: Text(infos[4], style: StyleUtils.getCommonTextStyle(
-                      color: MyColors.jianbian2, fontSize: 22.sp))),
-            ]
-        ),
+      // 厅内送出礼物推送
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+            onTap: (() {
+              MyUtils.goTransparentPage(
+                  context,
+                  RoomPeopleInfoPage(
+                    uid: list[i]['uid'].toString(),
+                    index: '-1',
+                    roomID: roomID,
+                    isClose: '',
+                    listM: listm,
+                  ));
+            }),
+            child: Container(
+              margin: EdgeInsets.only(bottom: 10.h),
+              padding: EdgeInsets.only(
+                  top: 10.h, bottom: 10.h, left: 10.h, right: 10.h
+              ),
+              //边框设置
+              decoration: const BoxDecoration(
+                //背景
+                color: Colors.black26,
+                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+              ),
+              child: RichText(
+                text: TextSpan(
+                    text: infos[0],
+                    style: StyleUtils.getCommonTextStyle(
+                      color: MyColors.jianbian2, fontSize: 24.sp,),
+                    children: [
+                      TextSpan(
+                          text: infos[1],
+                          style: StyleUtils.getCommonTextStyle(
+                            color: Colors.white, fontSize: 24.sp,)),
+                      TextSpan(
+                          text: infos[2],
+                          style: StyleUtils.getCommonTextStyle(
+                            color: MyColors.jianbian2, fontSize: 24.sp,)),
+                      TextSpan(
+                          text: infos[3],
+                          style: StyleUtils.getCommonTextStyle(
+                            color: Colors.white, fontSize: 24.sp,)),
+                      TextSpan(
+                          text: infos[4],
+                          style: StyleUtils.getCommonTextStyle(
+                            color: MyColors.jianbian2, fontSize: 24.sp,)),
+                    ]),
+              ),
+            ),
+          ),
+        ],
       );
     } else if (list[i]['type'] == '6') {
       // 背包礼物一键赠送使用
       List<String> infos = list[i]['content'].toString().split(';');
       // 厅内送出礼物推送
-      return Wrap(
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(infos[0], style: StyleUtils.getCommonTextStyle(
-              color: MyColors.jianbian2, fontSize: 22.sp)),
-          Text(infos[1], style: StyleUtils.getCommonTextStyle(
-              color: Colors.white, fontSize: 22.sp)),
-          Text(infos[2], style: StyleUtils.getCommonTextStyle(
-              color: MyColors.jianbian2, fontSize: 22.sp)),
-          Text(infos[3], style: StyleUtils.getCommonTextStyle(
-              color: Colors.white, fontSize: 22.sp)),
-          Text(infos[4], maxLines: 20, style: StyleUtils.getCommonTextStyle(
-              color: MyColors.jianbian2, fontSize: 22.sp)),
+          GestureDetector(
+            onTap: (() {
+              MyUtils.goTransparentPage(
+                  context,
+                  RoomPeopleInfoPage(
+                    uid: list[i]['uid'].toString(),
+                    index: '-1',
+                    roomID: roomID,
+                    isClose: '',
+                    listM: listm,
+                  ));
+            }),
+            child: Container(
+              margin: EdgeInsets.only(bottom: 10.h),
+              padding: EdgeInsets.only(
+                  top: 10.h, bottom: 10.h, left: 10.h, right: 10.h
+              ),
+              //边框设置
+              decoration: const BoxDecoration(
+                //背景
+                color: Colors.black26,
+                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+              ),
+              child: RichText(
+                text: TextSpan(
+                    text: infos[0],
+                    style: StyleUtils.getCommonTextStyle(
+                      color: MyColors.jianbian2, fontSize: 24.sp,),
+                    children: [
+                      TextSpan(
+                          text: infos[1],
+                          style: StyleUtils.getCommonTextStyle(
+                            color: Colors.white, fontSize: 24.sp,)),
+                      TextSpan(
+                          text: infos[2],
+                          style: StyleUtils.getCommonTextStyle(
+                            color: MyColors.jianbian2, fontSize: 24.sp,)),
+                      TextSpan(
+                          text: infos[3],
+                          style: StyleUtils.getCommonTextStyle(
+                            color: Colors.white, fontSize: 24.sp,)),
+                      TextSpan(
+                          text: infos[4],
+                          style: StyleUtils.getCommonTextStyle(
+                            color: MyColors.jianbian2, fontSize: 24.sp,)),
+                    ]),
+              ),
+            ),
+          ),
         ],
       );
     } else if (list[i]['type'] == '7') {
       // 收藏房间
-      return Text(
-          list[i]['content'],
-          style: StyleUtils.getCommonTextStyle(
-              color: MyColors.jianbian2, fontSize: 22.sp)
+      return GestureDetector(
+        onTap: (() {
+          MyUtils.goTransparentPage(
+              context,
+              RoomPeopleInfoPage(
+                uid: list[i]['uid'].toString(),
+                index: '-1',
+                roomID: roomID,
+                isClose: '',
+                listM: listm,
+              ));
+        }),
+        child: Text(
+            list[i]['content'],
+            style: StyleUtils.getCommonTextStyle(
+                color: MyColors.jianbian2, fontSize: 24.sp)
+        ),
       );
     } else if (list[i]['type'] == '8') {
       // 跟随主播进入房间
       return Row(
         children: [
-          Text(list[i]['info'], style: StyleUtils.getCommonTextStyle(
-              color: MyColors.roomMessageYellow2, fontSize: 22.sp)),
+          GestureDetector(
+            onTap: (() {
+              MyUtils.goTransparentPage(
+                  context,
+                  RoomPeopleInfoPage(
+                    uid: list[i]['uid'].toString(),
+                    index: '-1',
+                    roomID: roomID,
+                    isClose: '',
+                    listM: listm,
+                  ));
+            }),
+            child: Text(list[i]['info'], style: StyleUtils.getCommonTextStyle(
+                color: MyColors.roomMessageYellow2, fontSize: 24.sp)),
+          ),
           Text('跟随', style: StyleUtils.getCommonTextStyle(
-              color: Colors.white, fontSize: 22.sp)),
+              color: Colors.white, fontSize: 24.sp)),
           Text(list[i]['content'], style: StyleUtils.getCommonTextStyle(
-              color: MyColors.roomMessageYellow2, fontSize: 22.sp)),
+              color: MyColors.roomMessageYellow2, fontSize: 24.sp)),
           Text('进入房间', style: StyleUtils.getCommonTextStyle(
-              color: Colors.white, fontSize: 22.sp)),
+              color: Colors.white, fontSize: 24.sp)),
         ],
       );
     } else if (list[i]['type'] == '9') {
       // 厅内用户抽奖
       List<String> infos = list[i]['content'].toString().split(';');
       // 厅内送出礼物推送
-      return Wrap(
+      return Stack(
         children: [
-          Text(infos[0], style: StyleUtils.getCommonTextStyle(
-              color: MyColors.jianbian2, fontSize: 22.sp)),
-          Text(infos[1], style: StyleUtils.getCommonTextStyle(
-              color: Colors.white, fontSize: 22.sp)),
-          Text(infos[2], style: StyleUtils.getCommonTextStyle(
-              color: MyColors.jianbian2, fontSize: 22.sp)),
-          Text(infos[3], style: StyleUtils.getCommonTextStyle(
-              color: Colors.white, fontSize: 22.sp)),
-          Text(infos[4], maxLines: 20, style: StyleUtils.getCommonTextStyle(
-              color: MyColors.jianbian2, fontSize: 22.sp)),
+          Opacity(
+            opacity: 0.5,
+            child: Container(
+              margin: EdgeInsets.only(bottom: 10.h),
+              padding: EdgeInsets.only(
+                  top: 5.h, bottom: 10.h, left: 10.h, right: 10.h
+              ),
+              //边框设置
+              decoration: const BoxDecoration(
+                //背景
+                color: Colors.blue,
+                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(5),
+                    topRight: Radius.circular(5),
+                    bottomLeft: Radius.circular(5),
+                    bottomRight: Radius.circular(5)),
+              ),
+              child: Opacity(
+                opacity: 0,
+                child: RichText(
+                  text: TextSpan(
+                      text: infos[0],
+                      style: StyleUtils.getCommonTextStyle(
+                        color: MyColors.roomMessageYellow2, fontSize: 24.sp,),
+                      children: [
+                        TextSpan(
+                            text: infos[1],
+                            style: StyleUtils.getCommonTextStyle(
+                              color: Colors.white, fontSize: 24.sp,)),
+                        TextSpan(
+                            text: infos[2],
+                            style: StyleUtils.getCommonTextStyle(
+                              color: MyColors.loginPink, fontSize: 24.sp,)),
+                        TextSpan(
+                            text: infos[3],
+                            style: StyleUtils.getCommonTextStyle(
+                              color: Colors.white, fontSize: 24.sp,)),
+                        TextSpan(
+                            text: infos[4],
+                            style: StyleUtils.getCommonTextStyle(
+                              color: MyColors.loginPink, fontSize: 24.sp,)),
+                      ]),
+                ),
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(bottom: 10.h),
+            padding: EdgeInsets.only(
+                top: 5.h, bottom: 10.h, left: 10.h, right: 10.h
+            ),
+            //边框设置
+            decoration: const BoxDecoration(
+              //背景
+              color: Colors.transparent,
+              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(5),
+                  topRight: Radius.circular(5),
+                  bottomLeft: Radius.circular(5),
+                  bottomRight: Radius.circular(5)),
+            ),
+            child: RichText(
+              text: TextSpan(
+                  text: infos[0],
+                  style: StyleUtils.getCommonTextStyle(
+                    color: MyColors.roomMessageYellow2, fontSize: 24.sp,),
+                  children: [
+                    TextSpan(
+                        text: infos[1],
+                        style: StyleUtils.getCommonTextStyle(
+                          color: Colors.white, fontSize: 24.sp,)),
+                    TextSpan(
+                        text: infos[2],
+                        style: StyleUtils.getCommonTextStyle(
+                          color: MyColors.loginPink, fontSize: 24.sp,)),
+                    TextSpan(
+                        text: infos[3],
+                        style: StyleUtils.getCommonTextStyle(
+                          color: Colors.white, fontSize: 24.sp,)),
+                    TextSpan(
+                        text: infos[4],
+                        style: StyleUtils.getCommonTextStyle(
+                          color: MyColors.loginPink, fontSize: 24.sp,)),
+                  ]),
+            ),
+            // child: Wrap(
+            //   children: [
+            //     Text(infos[0], style: StyleUtils.getCommonTextStyle(
+            //       color: MyColors.roomMessageYellow2, fontSize: 24.sp,)),
+            //     Text(infos[1], style: StyleUtils.getCommonTextStyle(
+            //         color: Colors.white, fontSize: 24.sp)),
+            //     Text(infos[2], style: StyleUtils.getCommonTextStyle(
+            //         color: MyColors.loginPink, fontSize: 24.sp)),
+            //     Text(infos[3], style: StyleUtils.getCommonTextStyle(
+            //         color: Colors.white, fontSize: 24.sp)),
+            //     Text(infos[4], maxLines: 20, style: StyleUtils.getCommonTextStyle(
+            //         color: MyColors.loginPink, fontSize: 24.sp)),
+            //   ],
+            // ),
+          )
         ],
       );
     } else {
@@ -656,7 +1022,7 @@ class RoomItems {
           MyUtils.goTransparentPage(
               context,
               RoomPeopleInfoPage(
-                uid: list[i]['uid'],
+                uid: list[i]['uid'].toString(),
                 index: '-1',
                 roomID: roomID,
                 isClose: '',
@@ -664,6 +1030,8 @@ class RoomItems {
               ));
         }),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
@@ -676,9 +1044,11 @@ class RoomItems {
                             ? const Text('')
                             : list[i]['identity'] == 'leader'
                             ? WidgetUtils.showImages(
-                            'assets/images/dj/room_role_director.png', 30.h, 30.h)
+                            'assets/images/dj/room_role_director.png', 30.h,
+                            30.h)
                             : WidgetUtils.showImages(
-                            'assets/images/dj/room_role_manager.png', 30.h, 30.h)),
+                            'assets/images/dj/room_role_manager.png', 30.h,
+                            30.h)),
                     WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
                     // 萌新/新贵/新锐 三选一
                     // 不是新锐新贵，并且是萌新直接显示萌新
@@ -705,21 +1075,26 @@ class RoomItems {
                           width: 28.h,
                           child: Stack(
                             children: [
-                              int.parse(list[i]['lv'].toString()) >= 1 && int.parse(list[i]['lv'].toString()) <= 10
+                              int.parse(list[i]['lv'].toString()) >= 1 &&
+                                  int.parse(list[i]['lv'].toString()) <= 10
                                   ? WidgetUtils.showImages(
                                   'assets/images/dj/dj_1-10.png', 28.h, 28.h)
-                                  : int.parse(list[i]['lv'].toString()) >= 11 && int.parse(list[i]['lv'].toString()) <= 15
+                                  : int.parse(list[i]['lv'].toString()) >= 11 &&
+                                  int.parse(list[i]['lv'].toString()) <= 15
                                   ? WidgetUtils.showImages(
                                   'assets/images/dj/dj_11-15.png', 28.h, 28.h)
-                                  : int.parse(list[i]['lv'].toString()) >= 16 && int.parse(list[i]['lv'].toString()) <= 20
+                                  : int.parse(list[i]['lv'].toString()) >= 16 &&
+                                  int.parse(list[i]['lv'].toString()) <= 20
                                   ? WidgetUtils.showImages(
                                   'assets/images/dj/dj_16-20.png', 28.h, 28.h)
-                                  : int.parse(list[i]['lv'].toString()) >= 21 && int.parse(list[i]['lv'].toString()) <= 25
+                                  : int.parse(list[i]['lv'].toString()) >= 21 &&
+                                  int.parse(list[i]['lv'].toString()) <= 25
                                   ? WidgetUtils.showImages(
                                   'assets/images/dj/dj_21-25.png',
                                   28.h,
                                   28.h)
-                                  : int.parse(list[i]['lv'].toString()) >= 26 && int.parse(list[i]['lv'].toString()) <= 30
+                                  : int.parse(list[i]['lv'].toString()) >= 26 &&
+                                  int.parse(list[i]['lv'].toString()) <= 30
                                   ? WidgetUtils.showImages(
                                   'assets/images/dj/dj_26-30.png',
                                   28.h,
@@ -748,7 +1123,8 @@ class RoomItems {
                                 child: Stack(
                                   children: [
                                     Text(
-                                      int.parse(list[i]['lv'].toString()).toString(),
+                                      int.parse(list[i]['lv'].toString())
+                                          .toString(),
                                       style: TextStyle(
                                           fontSize: 18.sp,
                                           fontWeight: FontWeight.w600,
@@ -756,38 +1132,68 @@ class RoomItems {
                                           foreground: Paint()
                                             ..style = PaintingStyle.stroke
                                             ..strokeWidth = 2
-                                            ..color = (int.parse(list[i]['lv'].toString()) >= 1 &&
-                                                int.parse(list[i]['lv'].toString()) <= 10)
+                                            ..color = (int.parse(
+                                                list[i]['lv'].toString()) >=
+                                                1 &&
+                                                int.parse(
+                                                    list[i]['lv'].toString()) <=
+                                                    10)
                                                 ? MyColors.djOneM
-                                                : (int.parse(list[i]['lv'].toString()) >= 11 && int.parse(list[i]['lv'].toString()) <= 15)
+                                                : (int.parse(
+                                                list[i]['lv'].toString()) >=
+                                                11 && int.parse(
+                                                list[i]['lv'].toString()) <= 15)
                                                 ? MyColors.djTwoM
-                                                : (int.parse(list[i]['lv'].toString()) >= 16 &&
-                                                int.parse(list[i]['lv'].toString()) <= 20)
+                                                : (int.parse(
+                                                list[i]['lv'].toString()) >=
+                                                16 &&
+                                                int.parse(
+                                                    list[i]['lv'].toString()) <=
+                                                    20)
                                                 ? MyColors.djThreeM
-                                                : (int.parse(list[i]['lv'].toString()) >= 21 &&
-                                                int.parse(list[i]['lv'].toString()) <= 25)
+                                                : (int.parse(
+                                                list[i]['lv'].toString()) >=
+                                                21 &&
+                                                int.parse(
+                                                    list[i]['lv'].toString()) <=
+                                                    25)
                                                 ? MyColors.djFourM
-                                                : (int.parse(list[i]['lv'].toString()) >= 26 &&
-                                                int.parse(list[i]['lv'].toString()) <= 30)
+                                                : (int.parse(
+                                                list[i]['lv'].toString()) >=
+                                                26 &&
+                                                int.parse(
+                                                    list[i]['lv'].toString()) <=
+                                                    30)
                                                 ? MyColors
                                                 .djFiveM
-                                                : (int.parse(list[i]['lv'].toString()) >= 31 &&
-                                                int.parse(list[i]['lv'].toString()) <=
+                                                : (int.parse(
+                                                list[i]['lv'].toString()) >=
+                                                31 &&
+                                                int.parse(
+                                                    list[i]['lv'].toString()) <=
                                                     35)
                                                 ? MyColors
                                                 .djSixM
-                                                : (int.parse(list[i]['lv'].toString()) >= 36 &&
-                                                int.parse(list[i]['lv'].toString()) <=
+                                                : (int.parse(
+                                                list[i]['lv'].toString()) >=
+                                                36 &&
+                                                int.parse(
+                                                    list[i]['lv'].toString()) <=
                                                     40)
                                                 ? MyColors
                                                 .djSevenM
-                                                : (int.parse(list[i]['lv'].toString()) >= 41 &&
-                                                int.parse(list[i]['lv'].toString()) <= 45)
+                                                : (int.parse(
+                                                list[i]['lv'].toString()) >=
+                                                41 &&
+                                                int.parse(
+                                                    list[i]['lv'].toString()) <=
+                                                    45)
                                                 ? MyColors.djEightM
                                                 : MyColors.djNineM),
                                     ),
                                     Text(
-                                      int.parse(list[i]['lv'].toString()).toString(),
+                                      int.parse(list[i]['lv'].toString())
+                                          .toString(),
                                       style: TextStyle(
                                           color: MyColors.djOne,
                                           fontSize: 18.sp,
@@ -845,7 +1251,11 @@ class RoomItems {
                       alignment: Alignment.center,
                       children: [
                         WidgetUtils.commonSizedBox(28.h, 10.h),
-                        Text(list[i]['info'],
+                        Text(' ${list[i]['info']
+                            .toString()
+                            .length > 8 ? '${list[i]['info']
+                            .toString()
+                            .substring(0, 8)}...' : list[i]['info']}',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 24.sp,
@@ -917,114 +1327,53 @@ class RoomItems {
                   ],
                 ),
               ],
-            ) : Stack(
-              children: [
-                Opacity(
-                  opacity: 0.3,
-                  child: Row(
-                    children: [
-                      list[i]['content']
-                          .toString()
-                          .isNotEmpty ?
-                      Container(
-                        padding: const EdgeInsets.only(
-                            left: 15, right: 15, top: 10, bottom: 10),
-                        //边框设置
-                        decoration: const BoxDecoration(
-                          //背景
-                          color: Colors.white,
-                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(7),
-                              topRight: Radius.circular(24),
-                              bottomLeft: Radius.circular(24),
-                              bottomRight: Radius.circular(24)),
-                        ),
-                        child: Row(
-                            children: [
-                              WidgetUtils.onlyText(
-                                  list[i]['content'],
-                                  StyleUtils.getCommonTextStyle(
-                                      color: Colors.transparent,
-                                      fontSize: ScreenUtil().setSp(21)))
-                            ],
-                        ),
-                      ) : list[i]['image'].toString().contains('svga')
-                          ? SizedBox(
-                        height: !list[i]['image'].toString().contains('vc')
-                            ? 100.h
-                            : 80.h,
-                        width: !list[i]['image'].toString().contains('vc') ? 100
-                            .h : 80.h,
-                        child: list[i]['isOk'] == 'true'
-                            ? Transform.translate(
-                          offset: Offset(2.h, 0.h), child: WidgetUtils
-                            .showImages(
-                            list[i]['image'].toString().split(',')[1],
-                            double.infinity, double.infinity),)
-                            : SVGASimpleImage2(
-                            assetsName: list[i]['image'].toString().split(
-                                ',')[0], isOk: list[i]['isOk'], index: i),
-                      )
-                          : list[i]['image'].toString().contains('gif')
-                          ? WidgetUtils.showImages(list[i]['image'], 80.h,
-                          80.h)
-                          : WidgetUtils.showImages(list[i]['image'], 50.h,
-                          50.h)
-                    ],
-                  ),
-                ),
-                Row(
-                  children: [
-                    list[i]['content']
-                        .toString()
-                        .isNotEmpty ?
-                    Container(
-                      padding: const EdgeInsets.only(
-                          left: 15, right: 15, top: 10, bottom: 10),
-                      //边框设置
-                      decoration: const BoxDecoration(
-                        //背景
-                        color: Colors.transparent,
-                        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(7),
-                            topRight: Radius.circular(24),
-                            bottomLeft: Radius.circular(24),
-                            bottomRight: Radius.circular(24)),
-                      ),
-                      child: Row(
-                        children: [
-                          WidgetUtils.onlyText(
-                              list[i]['content'],
-                              StyleUtils.getCommonTextStyle(
-                                  color: Colors.white,
-                                  fontSize: ScreenUtil().setSp(21)))
-                        ],
-                      ),
-                    ) : list[i]['image'].toString().contains('svga') ? SizedBox(
-                      height: !list[i]['image'].toString().contains('vc') ? 100
-                          .h : 80.h,
-                      width: !list[i]['image'].toString().contains('vc')
-                          ? 100.h
-                          : 80.h,
-                      child: list[i]['isOk'] == 'true'
-                          ? Transform.translate(offset: Offset(2.h, 0.h),
-                        child: WidgetUtils.showImages(
-                            list[i]['image'].toString().split(',')[1],
-                            double.infinity, double.infinity),)
-                          : SVGASimpleImage2(
-                          assetsName: list[i]['image'].toString().split(',')[0],
-                          isOk: list[i]['isOk'],
-                          index: i),
-                    ) : list[i]['image'].toString().contains('gif')
-                        ? WidgetUtils.showImages(list[i]['image'], 80.h,
-                        80.h)
-                        : WidgetUtils.showImages(list[i]['image'], 50.h,
-                        50.h)
-                  ],
-                ),
-              ],
+            ) :
+            Container(
+              margin: EdgeInsets.only(bottom: 10.h),
+              padding: EdgeInsets.only(
+                  top: 5.h, bottom: 15.h, left: 10.h, right: 10.h
+              ),
+              //边框设置
+              decoration: BoxDecoration(
+                //背景
+                color: list[i]['content']
+                    .toString()
+                    .isNotEmpty ? Colors.white10 : Colors.transparent,
+                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(7),
+                    topRight: Radius.circular(15),
+                    bottomLeft: Radius.circular(15),
+                    bottomRight: Radius.circular(15)),
+              ),
+              child:
+              list[i]['content']
+                  .toString()
+                  .isNotEmpty ?
+              RichText(text: TextSpan(text: list[i]['content'],
+                  style: StyleUtils.getCommonTextStyle(
+                      color: Colors.white, fontSize: 24.sp))) : list[i]['image']
+                  .toString()
+                  .contains('svga') ? SizedBox(
+                height: !list[i]['image'].toString().contains('vc') ? 100
+                    .h : 80.h,
+                width: !list[i]['image'].toString().contains('vc')
+                    ? 100.h
+                    : 80.h,
+                child: list[i]['isOk'] == 'true'
+                    ? Transform.translate(offset: Offset(2.h, 0.h),
+                  child: WidgetUtils.showImages(
+                      list[i]['image'].toString().split(',')[1],
+                      double.infinity, double.infinity),)
+                    : SVGASimpleImage2(
+                    assetsName: list[i]['image'].toString().split(',')[0],
+                    isOk: list[i]['isOk'],
+                    index: i),
+              ) : list[i]['image'].toString().contains('gif')
+                  ? WidgetUtils.showImages(list[i]['image'], 80.h,
+                  80.h)
+                  : WidgetUtils.showImages(list[i]['image'], 50.h,
+                  50.h),
             ),
             WidgetUtils.commonSizedBox(10.h, 0),
           ],
@@ -1173,7 +1522,7 @@ class RoomItems {
             Opacity(
                 opacity: 0.3,
                 child: Container(
-                  width: ScreenUtil().setHeight(100),
+                  width: ScreenUtil().setHeight(130),
                   height: ScreenUtil().setHeight(30),
                   //边框设置
                   decoration: const BoxDecoration(
@@ -1192,7 +1541,7 @@ class RoomItems {
                 }
               }),
               child: SizedBox(
-                width: ScreenUtil().setHeight(100),
+                width: ScreenUtil().setHeight(130),
                 height: ScreenUtil().setHeight(30),
                 child: Row(
                   children: [
@@ -1202,15 +1551,17 @@ class RoomItems {
                     // WidgetUtils.onlyText('热度', StyleUtils.getCommonTextStyle(
                     //     color: Colors.white,
                     //     fontSize: ScreenUtil().setSp(18))),
-                    Text('热度',style: TextStyle(
+                    Text('热度', style: TextStyle(
                         fontSize: ScreenUtil().setSp(22),
                         color: Colors.white,
                         fontFamily: 'YOUSHEBIAOTIHEI'),),
                     WidgetUtils.commonSizedBox(0, 2),
-                    Text(double.parse(hot_degree) > 9999 ? '${(double.parse(hot_degree) / 10000).toStringAsFixed(2)}w' : hot_degree,style: TextStyle(
-                        fontSize: ScreenUtil().setSp(22),
-                        color: Colors.white,
-                        fontFamily: 'YOUSHEBIAOTIHEI'),),
+                    Text(double.parse(hot_degree) > 9999 ? '${(double.parse(
+                        hot_degree) / 10000).toStringAsFixed(2)}w' : hot_degree,
+                      style: TextStyle(
+                          fontSize: ScreenUtil().setSp(22),
+                          color: Colors.white,
+                          fontFamily: 'YOUSHEBIAOTIHEI'),),
                     // WidgetUtils.onlyTextCenter(
                     //     double.parse(hot_degree) > 9999 ? '${(double.parse(hot_degree) / 10000).toStringAsFixed(2)}w' : hot_degree,
                     //     StyleUtils.getCommonTextStyle(
@@ -2607,9 +2958,10 @@ class RoomItems {
                             ScreenUtil().setHeight(80),
                             ScreenUtil().setHeight(80),
                             listm[7].avatar!)
-                            : SizedBox(
+                            : Container(
                           height: ScreenUtil().setHeight(80),
                           width: ScreenUtil().setHeight(80),
+                          color: Colors.transparent,
                           child: const SVGASimpleImage(
                               assetsName:
                               'assets/svga/laobanwei.svga'),
@@ -2995,7 +3347,7 @@ class RoomItems {
   /// 厅内底部按钮
   static Widget footBtn(BuildContext context, bool isJinyiin, int isForbation,
       String roomID, int isShow, int isBoss, bool mima, List<MikeList> listM,
-      bool roomDX) {
+      bool roomDX, bool isRed) {
     return SizedBox(
       height: ScreenUtil().setHeight(90),
       child: Row(
@@ -3109,8 +3461,27 @@ class RoomItems {
             onTap: (() {
               MyUtils.goTransparentPage(context, const RoomMessagesPage());
             }),
-            child: WidgetUtils.showImages('assets/images/room_message.png',
-                ScreenUtil().setHeight(50), ScreenUtil().setHeight(50)),
+            child: Stack(
+              children: [
+                WidgetUtils.showImages('assets/images/room_message.png',
+                    ScreenUtil().setHeight(50), ScreenUtil().setHeight(50)),
+                isRed ? Positioned(
+                    top: 5.h,
+                    right: 5.w,
+                    child: Container(
+                      width: 15.h,
+                      height: 15.h,
+                      //边框设置
+                      decoration: const BoxDecoration(
+                        //背景
+                        color: Colors.red,
+                        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                        borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                      ),
+                      alignment: Alignment.center,
+                    )) : const Text(''),
+              ],
+            ),
           ),
           WidgetUtils.commonSizedBox(0, 10),
           //功能
@@ -3226,7 +3597,8 @@ class RoomItems {
           ),
         ),
       )
-          : upOrDown[i] && (sp.getString('role').toString() == 'user' || sp.getString('role').toString() == 'streamer')
+          : upOrDown[i] && (sp.getString('role').toString() == 'user' ||
+          sp.getString('role').toString() == 'streamer')
           ? shangmai(300.w, 200.h, i)
           : const Text('');
     } else if (i == 0) {
@@ -3287,7 +3659,8 @@ class RoomItems {
           ),
         ),
       )
-          : upOrDown[i] && (sp.getString('role').toString() == 'user' || sp.getString('role').toString() == 'streamer')
+          : upOrDown[i] && (sp.getString('role').toString() == 'user' ||
+          sp.getString('role').toString() == 'streamer')
           ? shangmai(35.w, 400.h, i)
           : const Text('');
     } else if (i == 1) {
@@ -3348,7 +3721,8 @@ class RoomItems {
           ),
         ),
       )
-          : upOrDown[i] && (sp.getString('role').toString() == 'user' || sp.getString('role').toString() == 'streamer')
+          : upOrDown[i] && (sp.getString('role').toString() == 'user' ||
+          sp.getString('role').toString() == 'streamer')
           ? shangmai(215.w, 400.h, i)
           : const Text('');
     } else if (i == 2) {
@@ -3409,7 +3783,8 @@ class RoomItems {
           ),
         ),
       )
-          : upOrDown[i] && (sp.getString('role').toString() == 'user' || sp.getString('role').toString() == 'streamer')
+          : upOrDown[i] && (sp.getString('role').toString() == 'user' ||
+          sp.getString('role').toString() == 'streamer')
           ? shangmai(390.w, 400.h, i)
           : const Text('');
     } else if (i == 3) {
@@ -3470,7 +3845,8 @@ class RoomItems {
           ),
         ),
       )
-          : upOrDown[i] && (sp.getString('role').toString() == 'user' || sp.getString('role').toString() == 'streamer')
+          : upOrDown[i] && (sp.getString('role').toString() == 'user' ||
+          sp.getString('role').toString() == 'streamer')
           ? shangmai(570.w, 400.h, i)
           : const Text('');
     } else if (i == 4) {
@@ -3531,7 +3907,8 @@ class RoomItems {
           ),
         ),
       )
-          : upOrDown[i] && (sp.getString('role').toString() == 'user' || sp.getString('role').toString() == 'streamer')
+          : upOrDown[i] && (sp.getString('role').toString() == 'user' ||
+          sp.getString('role').toString() == 'streamer')
           ? shangmai(35.w, 560.h, i)
           : const Text('');
     } else if (i == 5) {
@@ -3592,7 +3969,8 @@ class RoomItems {
           ),
         ),
       )
-          : upOrDown[i] && (sp.getString('role').toString() == 'user' || sp.getString('role').toString() == 'streamer')
+          : upOrDown[i] && (sp.getString('role').toString() == 'user' ||
+          sp.getString('role').toString() == 'streamer')
           ? shangmai(215.w, 560.h, i)
           : const Text('');
     } else if (i == 6) {
@@ -3653,7 +4031,8 @@ class RoomItems {
           ),
         ),
       )
-          : upOrDown[i] && (sp.getString('role').toString() == 'user' || sp.getString('role').toString() == 'streamer')
+          : upOrDown[i] && (sp.getString('role').toString() == 'user' ||
+          sp.getString('role').toString() == 'streamer')
           ? shangmai(390.w, 560.h, i)
           : const Text('');
     } else {
@@ -3714,7 +4093,8 @@ class RoomItems {
           ),
         ),
       )
-          : upOrDown[i] && (sp.getString('role').toString() == 'user' || sp.getString('role').toString() == 'streamer')
+          : upOrDown[i] && (sp.getString('role').toString() == 'user' ||
+          sp.getString('role').toString() == 'streamer')
           ? shangmai(570.w, 560.h, i)
           : const Text('');
     }

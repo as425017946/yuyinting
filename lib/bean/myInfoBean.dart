@@ -40,6 +40,7 @@ class Data {
   String? avatarFrameGifImg;
   int? uid;
   int? level;
+  int? unauditNum;
 
   Data(
       {this.nickname,
@@ -58,7 +59,8 @@ class Data {
         this.avatarFrameImg,
         this.avatarFrameGifImg,
         this.uid,
-        this.level});
+        this.level,
+        this.unauditNum});
 
   Data.fromJson(Map<String, dynamic> json) {
     nickname = json['nickname'];
@@ -78,6 +80,7 @@ class Data {
     avatarFrameGifImg = json['avatar_frame_gif_img'];
     uid = json['uid'];
     level = json['level'];
+    unauditNum = json['unaudit_num'];
   }
 
   Map<String, dynamic> toJson() {
@@ -99,6 +102,7 @@ class Data {
     data['avatar_frame_gif_img'] = this.avatarFrameGifImg;
     data['uid'] = this.uid;
     data['level'] = this.level;
+    data['unaudit_num'] = this.unauditNum;
     return data;
   }
 }

@@ -29,6 +29,7 @@ import 'package:video_player/video_player.dart';
 
 import '../message/chat_page.dart';
 import '../message/geren/people_info_page.dart';
+import '../mine/my/my_info_page.dart';
 import 'PagePreviewVideo.dart';
 /// 动态-推荐页面
 class TrendsTuiJianPage extends StatefulWidget {
@@ -164,8 +165,15 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> with AutomaticKee
               children: [
                 GestureDetector(
                   onTap: ((){
-                    sp.setString('other_id', _list[i].uid.toString());
-                    MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[i].uid.toString(),));
+                    if(MyUtils.checkClick()){
+                      // 如果点击的是自己，进入自己的主页
+                      if(sp.getString('user_id').toString() == _list[i].uid.toString()){
+                        MyUtils.goTransparentRFPage(context, const MyInfoPage());
+                      }else{
+                        sp.setString('other_id', _list[i].uid.toString());
+                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[i].uid.toString(),));
+                      }
+                    }
                   }),
                   child: WidgetUtils.CircleHeadImage(40, 40, _list[i].avatar!),
                 ),

@@ -9,6 +9,7 @@ import '../../../bean/luckUserBean.dart';
 import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
+import '../../../main.dart';
 import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
 
@@ -389,6 +390,13 @@ class _ZhongJiangPageState extends State<ZhongJiangPage> {
 
   List<LuckyList> list = [];
   /// 赛车中奖用户
+  // 金币 钻石 蘑菇币
+  String jinbi = '',
+      zuanshi = '',
+      mogubi = '',
+      jinbi2 = '',
+      zuanshi2 = '',
+      mogubi2 = '';
   Future<void> doPostCarLuckyUser() async {
     try {
       luckUserBean bean = await DataUtils.postCarLuckyUser();
@@ -397,6 +405,33 @@ class _ZhongJiangPageState extends State<ZhongJiangPage> {
           setState(() {
             list.clear();
             list = bean.data!.luckyList!;
+            jinbi = bean.data!.wallet!.goldBean!;
+            if (double.parse(bean.data!.wallet!.goldBean!) > 10000) {
+              jinbi2 =
+              '${(double.parse(bean.data!.wallet!.goldBean!) / 10000).toStringAsFixed(2)}w';
+            } else {
+              jinbi2 = bean.data!.wallet!.goldBean!;
+            }
+            zuanshi = bean.data!.wallet!.diamond!;
+            if (double.parse(bean.data!.wallet!.diamond!) > 10000) {
+              zuanshi2 =
+              '${(double.parse(bean.data!.wallet!.diamond!) / 10000).toStringAsFixed(2)}w';
+            } else {
+              zuanshi2 = bean.data!.wallet!.diamond!;
+            }
+            mogubi = bean.data!.wallet!.mushroom!;
+            if (double.parse(bean.data!.wallet!.mushroom!) > 10000) {
+              mogubi2 =
+              '${(double.parse(bean.data!.wallet!.mushroom!) / 10000).toStringAsFixed(2)}w';
+            } else {
+              mogubi2 = bean.data!.wallet!.mushroom!;
+            }
+            sp.setString('car_jinbi', jinbi);
+            sp.setString('car_zuanshi', zuanshi);
+            sp.setString('car_mogu', mogubi);
+            sp.setString('car_jinbi2', jinbi2);
+            sp.setString('car_zuanshi2', zuanshi2);
+            sp.setString('car_mogu2', mogubi2);
           });
           break;
         case MyHttpConfig.errorloginCode:

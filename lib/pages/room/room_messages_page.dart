@@ -96,30 +96,48 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
                         children: [
                           listMessage[i]['type'] == 1
                               ? Text(
-                                  listMessage[i]['content'].toString().length >
-                                          15
-                                      ? listMessage[i]['content']
-                                          .toString()
-                                          .substring(0, 15)
-                                      : listMessage[i]['content'],
-                                  overflow: TextOverflow.ellipsis,
-                                  style: StyleUtils.getCommonTextStyle(
-                                      color: MyColors.roomTCWZ3,
-                                      fontSize: ScreenUtil().setSp(25)),
-                                )
-                              : listMessage[i]['type'] == 2
-                                  ? Text(
-                                      '[图片]',
-                                      style: StyleUtils.getCommonTextStyle(
-                                          color: MyColors.homeTopBG,
-                                          fontSize: ScreenUtil().setSp(23)),
-                                    )
-                                  : Text(
-                                      '[语音]',
-                                      style: StyleUtils.getCommonTextStyle(
-                                          color: MyColors.homeTopBG,
-                                          fontSize: ScreenUtil().setSp(23)),
-                                    ),
+                            listMessage[i]['content'].toString().length > 15 ? listMessage[i]['content'].toString().substring(0,15) : listMessage[i]['content'],
+                            overflow: TextOverflow.ellipsis,
+                            style: StyleUtils.getCommonTextStyle(
+                                color: MyColors.g9,
+                                fontSize: ScreenUtil().setSp(25)),
+                          )
+                              :  listMessage[i]['type'] == 2 ? Text(
+                            '[图片]',
+                            style: StyleUtils.getCommonTextStyle(
+                                color: MyColors.homeTopBG,
+                                fontSize: ScreenUtil().setSp(23)),
+                          ) : listMessage[i]['type'] == 3 ? Text(
+                            '[语音]',
+                            style: StyleUtils.getCommonTextStyle(
+                                color: MyColors.homeTopBG,
+                                fontSize: ScreenUtil().setSp(23)),
+                          ) : Text(
+                            '[红包]',
+                            style: StyleUtils.getCommonTextStyle(
+                                color: Colors.red,
+                                fontSize: ScreenUtil().setSp(23)),
+                          ),
+                          const Spacer(),
+                          listRead[i] > 0 ? Container(
+                            width: 30.h,
+                            height: 30.h,
+                            //边框设置
+                            decoration: const BoxDecoration(
+                              //背景
+                              color: Colors.red,
+                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                              borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              listRead[i].toString(),
+                              style: StyleUtils.getCommonTextStyle(
+                                  color: Colors.white,
+                                  fontSize: ScreenUtil().setSp(22),
+                                  fontWeight: FontWeight.w600),
+                            ),
+                          ) : const Text('')
                         ],
                       )
                     ],

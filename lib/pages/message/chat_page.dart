@@ -171,8 +171,31 @@ class _ChatPageState extends State<ChatPage> {
     MyUtils.saveImgTemp(widget.otherImg, widget.otherUid);
     // 保存路径
     Directory? directory = await getTemporaryDirectory();
-    myHeadImg = '${directory!.path}/${sp.getString('user_id')}.jpg';
-    otherHeadImg = '${directory!.path}/${widget.otherUid}.jpg';
+    //保存自己头像
+    if (sp.getString('user_headimg').toString().contains('.gif') || sp.getString('user_headimg').toString().contains('.GIF')) {
+      myHeadImg = '${directory!.path}/${sp.getString('user_id')}.gif';
+    } else if (sp.getString('user_headimg').toString().contains('.jpg') ||
+        sp.getString('user_headimg').toString().contains('.GPG')) {
+      myHeadImg = '${directory!.path}/${sp.getString('user_id')}.gif';
+    } else if (sp.getString('user_headimg').toString().contains('.jpeg') ||
+        sp.getString('user_headimg').toString().contains('.GPEG')) {
+      myHeadImg = '${directory!.path}/${sp.getString('user_id')}.jpeg';
+    } else {
+      myHeadImg = '${directory!.path}/${sp.getString('user_id')}.png';
+    }
+    // 保存他人头像
+    if (widget.otherImg.contains('.gif') || widget.otherImg.contains('.GIF')) {
+      otherHeadImg = '${directory!.path}/${widget.otherUid}.gif';
+    } else if (widget.otherImg.contains('.jpg') ||
+        widget.otherImg.contains('.GPG')) {
+      otherHeadImg = '${directory!.path}/${widget.otherUid}.jpg';
+    } else if (widget.otherImg.contains('.jpeg') ||
+        widget.otherImg.contains('.GPEG')) {
+      otherHeadImg = '${directory!.path}/${widget.otherUid}.jpeg';
+    } else {
+      otherHeadImg = '${directory!.path}/${widget.otherUid}.png';
+    }
+
   }
 
   void _initialize() async {
@@ -751,288 +774,280 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.homeBG,
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              WidgetUtils.commonSizedBox(35, 0),
+      body: WillPopScope(
+        onWillPop: () async {
+          //这里可以响应物理返回键
+          eventBus.fire(SubmitButtonBack(title: '聊天返回'));
+          Navigator.of(context).pop();
+          return false;
+        },
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                WidgetUtils.commonSizedBox(35, 0),
 
-              ///头部信息
-              Container(
-                height: ScreenUtil().setHeight(60),
-                width: double.infinity,
-                alignment: Alignment.bottomLeft,
-                child: Row(
-                  children: [
-                    Container(
-                      width: ScreenUtil().setWidth(100),
-                      padding: const EdgeInsets.only(left: 15),
-                      child: IconButton(
-                        icon: const Icon(Icons.arrow_back_ios),
-                        color: Colors.black,
-                        onPressed: (() {
-                          eventBus.fire(SubmitButtonBack(title: '聊天返回'));
-                          Navigator.of(context).pop();
-                        }),
-                      ),
-                    ),
-                    const Expanded(child: Text('')),
-
-                    /// 关注被关注切换按钮
-                    Container(
-                        width: ScreenUtil().setHeight(200),
-                        height: ScreenUtil().setHeight(80),
-                        alignment: Alignment.center,
-                        child: Text(
-                          widget.nickName,
-                          style: TextStyle(
-                              overflow: TextOverflow.ellipsis,
-                              color: Colors.black,
-                              fontSize: ScreenUtil().setSp(30),
-                              fontWeight: FontWeight.w600),
-                        )),
-                    const Expanded(child: Text('')),
-                    GestureDetector(
-                      onTap: (() {
-                        setState(() {
-                          isShow = true;
-                        });
-                      }),
-                      child: Container(
+                ///头部信息
+                Container(
+                  height: ScreenUtil().setHeight(60),
+                  width: double.infinity,
+                  alignment: Alignment.bottomLeft,
+                  child: Row(
+                    children: [
+                      Container(
                         width: ScreenUtil().setWidth(100),
-                        padding: const EdgeInsets.only(right: 15),
-                        child: WidgetUtils.showImages(
-                            'assets/images/chat_dian.png',
-                            ScreenUtil().setHeight(10),
-                            ScreenUtil().setHeight(7)),
+                        padding: const EdgeInsets.only(left: 15),
+                        child: IconButton(
+                          icon: const Icon(Icons.arrow_back_ios),
+                          color: Colors.black,
+                          onPressed: (() {
+                            eventBus.fire(SubmitButtonBack(title: '聊天返回'));
+                            Navigator.of(context).pop();
+                          }),
+                        ),
                       ),
-                    ),
-                  ],
+                      const Expanded(child: Text('')),
+
+                      /// 关注被关注切换按钮
+                      Container(
+                          width: ScreenUtil().setHeight(200),
+                          height: ScreenUtil().setHeight(80),
+                          alignment: Alignment.center,
+                          child: Text(
+                            widget.nickName,
+                            style: TextStyle(
+                                overflow: TextOverflow.ellipsis,
+                                color: Colors.black,
+                                fontSize: ScreenUtil().setSp(30),
+                                fontWeight: FontWeight.w600),
+                          )),
+                      const Expanded(child: Text('')),
+                      GestureDetector(
+                        onTap: (() {
+                          setState(() {
+                            isShow = true;
+                          });
+                        }),
+                        child: Container(
+                          width: ScreenUtil().setWidth(100),
+                          padding: const EdgeInsets.only(right: 15),
+                          child: WidgetUtils.showImages(
+                              'assets/images/chat_dian.png',
+                              ScreenUtil().setHeight(10),
+                              ScreenUtil().setHeight(7)),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              // 在房间
-              isRoomShow
-                  ? Container(
-                      height: ScreenUtil().setHeight(90),
-                      width: double.infinity,
-                      margin: EdgeInsets.only(
-                          left: ScreenUtil().setHeight(20),
-                          right: ScreenUtil().setHeight(20),
-                          top: ScreenUtil().setHeight(10)),
-                      //边框设置
-                      decoration: const BoxDecoration(
-                        //背景
-                        color: MyColors.chatBlue,
-                        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      child: Row(
-                        children: [
-                          WidgetUtils.commonSizedBox(
-                              0, ScreenUtil().setHeight(20)),
-                          WidgetUtils.onlyText(
-                              'Ta在$roomName房间',
-                              StyleUtils.getCommonTextStyle(
-                                  color: MyColors.btn_d,
-                                  fontSize: ScreenUtil().setSp(28),
-                                  fontWeight: FontWeight.w600)),
-                          const Spacer(),
-                          GestureDetector(
-                            onTap: (() {
-                              doPostBeforeJoin(roomId);
-                            }),
-                            child: Container(
-                              width: ScreenUtil().setHeight(130),
-                              height: ScreenUtil().setHeight(50),
-                              decoration: const BoxDecoration(
-                                //背景
-                                color: MyColors.btn_d,
-                                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(30.0)),
-                              ),
-                              child: Row(
-                                children: [
-                                  const Spacer(),
-                                  WidgetUtils.showImages(
-                                      'assets/images/zhibo2.webp',
-                                      ScreenUtil().setHeight(20),
-                                      ScreenUtil().setHeight(20)),
-                                  WidgetUtils.commonSizedBox(
-                                      0, ScreenUtil().setHeight(5)),
-                                  WidgetUtils.onlyText(
-                                      '踩房间',
-                                      StyleUtils.getCommonTextStyle(
-                                          color: Colors.white,
-                                          fontSize: ScreenUtil().setSp(28),
-                                          fontWeight: FontWeight.w600)),
-                                  const Spacer(),
-                                ],
-                              ),
-                            ),
-                          ),
-                          WidgetUtils.commonSizedBox(
-                              0, ScreenUtil().setHeight(20)),
-                          GestureDetector(
-                            onTap: (() {
-                              setState(() {
-                                isRoomShow = false;
-                              });
-                            }),
-                            child: WidgetUtils.showImages(
-                                'assets/images/chat_close.png',
-                                ScreenUtil().setHeight(15),
-                                ScreenUtil().setHeight(15)),
-                          ),
-                          WidgetUtils.commonSizedBox(
-                              0, ScreenUtil().setHeight(20)),
-                        ],
-                      ),
-                    )
-                  : const Text(''),
-              // 最新动态
-              listImg.isNotEmpty
-                  ? GestureDetector(
-                      onTap: (() {
-                        MyUtils.goTransparentRFPage(
-                            context,
-                            TrendsMorePage(
-                              note_id: noteId,
-                            ));
-                      }),
-                      child: Container(
-                        height: ScreenUtil().setHeight(260),
+                // 在房间
+                isRoomShow
+                    ? Container(
+                        height: ScreenUtil().setHeight(90),
                         width: double.infinity,
-                        padding: EdgeInsets.only(
-                            left: ScreenUtil().setHeight(20),
-                            right: ScreenUtil().setHeight(20),
-                            top: ScreenUtil().setHeight(20)),
                         margin: EdgeInsets.only(
                             left: ScreenUtil().setHeight(20),
                             right: ScreenUtil().setHeight(20),
-                            top: ScreenUtil().setHeight(10),
-                            bottom: ScreenUtil().setHeight(20)),
+                            top: ScreenUtil().setHeight(10)),
                         //边框设置
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           //背景
-                          color: Colors.white,
+                          color: MyColors.chatBlue,
                           //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10.0)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.1),
-                              spreadRadius: 2,
-                              blurRadius: 5,
-                              offset: const Offset(0, 1), // 阴影的偏移量，向右下方偏移3像素
-                            ),
-                          ],
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
                         ),
-                        child: Column(
+                        child: Row(
                           children: [
                             WidgetUtils.commonSizedBox(
                                 0, ScreenUtil().setHeight(20)),
                             WidgetUtils.onlyText(
-                                '最新动态',
+                                'Ta在$roomName房间',
                                 StyleUtils.getCommonTextStyle(
-                                    color: Colors.black,
-                                    fontSize: ScreenUtil().setSp(30),
+                                    color: MyColors.btn_d,
+                                    fontSize: ScreenUtil().setSp(28),
                                     fontWeight: FontWeight.w600)),
-                            SizedBox(
-                              height: ScreenUtil().setHeight(200),
-                              child: showImage(),
-                            )
+                            const Spacer(),
+                            GestureDetector(
+                              onTap: (() {
+                                doPostBeforeJoin(roomId);
+                              }),
+                              child: Container(
+                                width: ScreenUtil().setHeight(130),
+                                height: ScreenUtil().setHeight(50),
+                                decoration: const BoxDecoration(
+                                  //背景
+                                  color: MyColors.btn_d,
+                                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(30.0)),
+                                ),
+                                child: Row(
+                                  children: [
+                                    const Spacer(),
+                                    WidgetUtils.showImages(
+                                        'assets/images/zhibo2.webp',
+                                        ScreenUtil().setHeight(20),
+                                        ScreenUtil().setHeight(20)),
+                                    WidgetUtils.commonSizedBox(
+                                        0, ScreenUtil().setHeight(5)),
+                                    WidgetUtils.onlyText(
+                                        '踩房间',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: Colors.white,
+                                            fontSize: ScreenUtil().setSp(28),
+                                            fontWeight: FontWeight.w600)),
+                                    const Spacer(),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            WidgetUtils.commonSizedBox(
+                                0, ScreenUtil().setHeight(20)),
+                            GestureDetector(
+                              onTap: (() {
+                                setState(() {
+                                  isRoomShow = false;
+                                });
+                              }),
+                              child: WidgetUtils.showImages(
+                                  'assets/images/chat_close.png',
+                                  ScreenUtil().setHeight(15),
+                                  ScreenUtil().setHeight(15)),
+                            ),
+                            WidgetUtils.commonSizedBox(
+                                0, ScreenUtil().setHeight(20)),
                           ],
                         ),
-                      ),
-                    )
-                  : const Text(''),
-              Expanded(
-                child: length > 0
-                    ? ListView.builder(
-                        padding: EdgeInsets.only(
-                            left: ScreenUtil().setHeight(20),
-                            right: ScreenUtil().setHeight(20)),
-                        controller: _scrollController,
-                        itemBuilder: chatWidget,
-                        itemCount: allData2.length,
                       )
                     : const Text(''),
-              ),
-              // 底部键盘
-              Container(
-                height: ScreenUtil().setHeight(120),
-                color: Colors.white,
-                child: Row(
-                  children: [
-                    WidgetUtils.commonSizedBox(0, 20),
-                    GestureDetector(
-                      onTap: (() {
-                        setState(() {
-                          isAudio = !isAudio;
-                        });
-                      }),
-                      child: isAudio
-                          ? WidgetUtils.showImages(
-                              'assets/images/chat_jianpan.png',
-                              ScreenUtil().setHeight(45),
-                              ScreenUtil().setHeight(45))
-                          : WidgetUtils.showImages(
-                              'assets/images/chat_huatong.png',
-                              ScreenUtil().setHeight(45),
-                              ScreenUtil().setHeight(45)),
-                    ),
-                    WidgetUtils.commonSizedBox(0, 10),
-                    isAudio
-                        ? Expanded(
-                            child: GestureDetector(
-                              onVerticalDragStart: (details) async {
-                                if (await getPermissionStatus()) {
-                                  // 开始录音
-                                  startRecord();
-                                  setState(() {
-                                    audioNum = 0; // 记录录了多久
-                                    isLuZhi = true;
-                                  });
-                                }
-                              },
-                              onVerticalDragUpdate: (details) async {
-                                if (await getPermissionStatus()) {
-                                  if (details.delta.dy < -1) {
-                                    if (_timer.isActive) {
-                                      _timer.cancel();
-                                    }
-                                    // 停止录音
-                                    stopRecorder();
+                // 最新动态
+                listImg.isNotEmpty
+                    ? GestureDetector(
+                        onTap: (() {
+                          MyUtils.goTransparentRFPage(
+                              context,
+                              TrendsMorePage(
+                                note_id: noteId,
+                              ));
+                        }),
+                        child: Container(
+                          height: ScreenUtil().setHeight(260),
+                          width: double.infinity,
+                          padding: EdgeInsets.only(
+                              left: ScreenUtil().setHeight(20),
+                              right: ScreenUtil().setHeight(20),
+                              top: ScreenUtil().setHeight(20)),
+                          margin: EdgeInsets.only(
+                              left: ScreenUtil().setHeight(20),
+                              right: ScreenUtil().setHeight(20),
+                              top: ScreenUtil().setHeight(10),
+                              bottom: ScreenUtil().setHeight(20)),
+                          //边框设置
+                          decoration: BoxDecoration(
+                            //背景
+                            color: Colors.white,
+                            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10.0)),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.1),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                                offset: const Offset(0, 1), // 阴影的偏移量，向右下方偏移3像素
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            children: [
+                              WidgetUtils.commonSizedBox(
+                                  0, ScreenUtil().setHeight(20)),
+                              WidgetUtils.onlyText(
+                                  '最新动态',
+                                  StyleUtils.getCommonTextStyle(
+                                      color: Colors.black,
+                                      fontSize: ScreenUtil().setSp(30),
+                                      fontWeight: FontWeight.w600)),
+                              SizedBox(
+                                height: ScreenUtil().setHeight(200),
+                                child: showImage(),
+                              )
+                            ],
+                          ),
+                        ),
+                      )
+                    : const Text(''),
+                Expanded(
+                  child: length > 0
+                      ? ListView.builder(
+                          padding: EdgeInsets.only(
+                              left: ScreenUtil().setHeight(20),
+                              right: ScreenUtil().setHeight(20)),
+                          controller: _scrollController,
+                          itemBuilder: chatWidget,
+                          itemCount: allData2.length,
+                        )
+                      : const Text(''),
+                ),
+                // 底部键盘
+                Container(
+                  height: ScreenUtil().setHeight(120),
+                  color: Colors.white,
+                  child: Row(
+                    children: [
+                      WidgetUtils.commonSizedBox(0, 20),
+                      GestureDetector(
+                        onTap: (() {
+                          setState(() {
+                            isAudio = !isAudio;
+                          });
+                        }),
+                        child: isAudio
+                            ? WidgetUtils.showImages(
+                                'assets/images/chat_jianpan.png',
+                                ScreenUtil().setHeight(45),
+                                ScreenUtil().setHeight(45))
+                            : WidgetUtils.showImages(
+                                'assets/images/chat_huatong.png',
+                                ScreenUtil().setHeight(45),
+                                ScreenUtil().setHeight(45)),
+                      ),
+                      WidgetUtils.commonSizedBox(0, 10),
+                      isAudio
+                          ? Expanded(
+                              child: GestureDetector(
+                                onVerticalDragStart: (details) async {
+                                  if (await getPermissionStatus()) {
+                                    // 开始录音
+                                    startRecord();
                                     setState(() {
-                                      isCancel = true;
+                                      audioNum = 0; // 记录录了多久
+                                      isLuZhi = true;
                                     });
                                   }
-                                }
-                              },
-                              onVerticalDragEnd: (details) async {
-                                if (await getPermissionStatus()) {
-                                  // 取消录音后抬起手指
-                                  if (isCancel) {
-                                    //重新初始化音频信息
-                                    setState(() {
-                                      isCancel = false;
-
-                                      mediaRecord = true;
-                                      playRecord = false; //音频文件播放状态
-                                      hasRecord = false; //是否有音频文件可播放
-                                      isLuZhi = false;
-                                      isPlay = 0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
-                                      djNum = 60; // 录音时长
-                                      audioNum = 0; // 记录录了多久
-                                    });
-                                  } else {
-                                    // 停止录音
-                                    stopRecorder();
-                                    if(audioNum == 0){
-                                      MyToastUtils.showToastBottom('录音时长过短！');
+                                },
+                                onVerticalDragUpdate: (details) async {
+                                  if (await getPermissionStatus()) {
+                                    if (details.delta.dy < -1) {
+                                      if (_timer.isActive) {
+                                        _timer.cancel();
+                                      }
+                                      // 停止录音
+                                      stopRecorder();
+                                      setState(() {
+                                        isCancel = true;
+                                      });
+                                    }
+                                  }
+                                },
+                                onVerticalDragEnd: (details) async {
+                                  if (await getPermissionStatus()) {
+                                    // 取消录音后抬起手指
+                                    if (isCancel) {
                                       //重新初始化音频信息
                                       setState(() {
+                                        isCancel = false;
+
                                         mediaRecord = true;
                                         playRecord = false; //音频文件播放状态
                                         hasRecord = false; //是否有音频文件可播放
@@ -1041,13 +1056,52 @@ class _ChatPageState extends State<ChatPage> {
                                         djNum = 60; // 录音时长
                                         audioNum = 0; // 记录录了多久
                                       });
-                                    }else{
-                                      //发送录音
-                                      doSendAudio();
+                                    } else {
+                                      // 停止录音
+                                      stopRecorder();
+                                      if(audioNum == 0){
+                                        MyToastUtils.showToastBottom('录音时长过短！');
+                                        //重新初始化音频信息
+                                        setState(() {
+                                          mediaRecord = true;
+                                          playRecord = false; //音频文件播放状态
+                                          hasRecord = false; //是否有音频文件可播放
+                                          isLuZhi = false;
+                                          isPlay = 0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
+                                          djNum = 60; // 录音时长
+                                          audioNum = 0; // 记录录了多久
+                                        });
+                                      }else{
+                                        //发送录音
+                                        doSendAudio();
+                                      }
                                     }
                                   }
-                                }
-                              },
+                                },
+                                child: Container(
+                                  width: double.infinity,
+                                  height: ScreenUtil().setHeight(60),
+                                  padding:
+                                      const EdgeInsets.only(left: 10, right: 10),
+                                  alignment: Alignment.center,
+                                  //边框设置
+                                  decoration: const BoxDecoration(
+                                    //背景
+                                    color: MyColors.f2,
+                                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20.0)),
+                                  ),
+                                  child: WidgetUtils.onlyTextCenter(
+                                      '按住 说话',
+                                      StyleUtils.getCommonTextStyle(
+                                          color: MyColors.g6,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 25.sp)),
+                                ),
+                              ),
+                            )
+                          : Expanded(
                               child: Container(
                                 width: double.infinity,
                                 height: ScreenUtil().setHeight(60),
@@ -1062,305 +1116,282 @@ class _ChatPageState extends State<ChatPage> {
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(20.0)),
                                 ),
-                                child: WidgetUtils.onlyTextCenter(
-                                    '按住 说话',
-                                    StyleUtils.getCommonTextStyle(
-                                        color: MyColors.g6,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 25.sp)),
-                              ),
-                            ),
-                          )
-                        : Expanded(
-                            child: Container(
-                              width: double.infinity,
-                              height: ScreenUtil().setHeight(60),
-                              padding:
-                                  const EdgeInsets.only(left: 10, right: 10),
-                              alignment: Alignment.center,
-                              //边框设置
-                              decoration: const BoxDecoration(
-                                //背景
-                                color: MyColors.f2,
-                                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20.0)),
-                              ),
-                              child: TextField(
-                                focusNode: _focusNode,
-                                textInputAction: TextInputAction.send,
-                                // 设置为发送按钮
-                                controller: controller,
-                                inputFormatters: [
-                                  RegexFormatter(
-                                      regex: MyUtils.regexFirstNotNull),
-                                  LengthLimitingTextInputFormatter(25)//限制输入长度
-                                ],
-                                style: StyleUtils.loginTextStyle,
-                                onSubmitted: (value) {
-                                  MyUtils.sendMessage(widget.otherUid, value);
-                                  doPostSendUserMsg(value);
-                                },
-                                decoration: InputDecoration(
-                                  // border: InputBorder.none,
-                                  // labelText: "请输入用户名",
-                                  // icon: Icon(Icons.people), //前面的图标
-                                  hintText: '请输入文字信息',
-                                  hintStyle: StyleUtils.loginHintTextStyle,
+                                child: TextField(
+                                  focusNode: _focusNode,
+                                  textInputAction: TextInputAction.send,
+                                  // 设置为发送按钮
+                                  controller: controller,
+                                  inputFormatters: [
+                                    RegexFormatter(
+                                        regex: MyUtils.regexFirstNotNull),
+                                    LengthLimitingTextInputFormatter(25)//限制输入长度
+                                  ],
+                                  style: StyleUtils.loginTextStyle,
+                                  onSubmitted: (value) {
+                                    MyUtils.sendMessage(widget.otherUid, value);
+                                    doPostSendUserMsg(value);
+                                  },
+                                  decoration: InputDecoration(
+                                    // border: InputBorder.none,
+                                    // labelText: "请输入用户名",
+                                    // icon: Icon(Icons.people), //前面的图标
+                                    hintText: '请输入文字信息',
+                                    hintStyle: StyleUtils.loginHintTextStyle,
 
-                                  contentPadding:
-                                      const EdgeInsets.only(top: 0, bottom: 0),
-                                  border: const OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.transparent),
-                                  ),
-                                  enabledBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.transparent,
+                                    contentPadding:
+                                        const EdgeInsets.only(top: 0, bottom: 0),
+                                    border: const OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.transparent),
                                     ),
-                                  ),
-                                  disabledBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.transparent,
+                                    enabledBorder: const OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Colors.transparent,
+                                      ),
                                     ),
-                                  ),
-                                  focusedBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.transparent,
+                                    disabledBorder: const OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Colors.transparent,
+                                      ),
                                     ),
+                                    focusedBorder: const OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Colors.transparent,
+                                      ),
+                                    ),
+                                    // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
                                   ),
-                                  // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
                                 ),
                               ),
                             ),
-                          ),
-                    WidgetUtils.commonSizedBox(0, 10),
-                    GestureDetector(
-                      onTap: (() {
-                        setState(() {
-                          isAudio = false;
-                          MyUtils.hideKeyboard(context);
-                          _isEmojiPickerVisible = !_isEmojiPickerVisible;
-                        });
-                      }),
-                      child: WidgetUtils.showImages(
-                          'assets/images/trends_biaoqing.png',
-                          ScreenUtil().setHeight(45),
-                          ScreenUtil().setHeight(45)),
+                      WidgetUtils.commonSizedBox(0, 10),
+                      GestureDetector(
+                        onTap: (() {
+                          setState(() {
+                            isAudio = false;
+                            MyUtils.hideKeyboard(context);
+                            _isEmojiPickerVisible = !_isEmojiPickerVisible;
+                          });
+                        }),
+                        child: WidgetUtils.showImages(
+                            'assets/images/trends_biaoqing.png',
+                            ScreenUtil().setHeight(45),
+                            ScreenUtil().setHeight(45)),
+                      ),
+                      WidgetUtils.commonSizedBox(0, 10),
+                      _isEmojiPickerVisible
+                          ? GestureDetector(
+                              onTap: (() {
+                                setState(() {
+                                  _isEmojiPickerVisible = false;
+                                });
+                                doPostSendUserMsg(controller.text);
+                              }),
+                              child: Container(
+                                width: 90.h,
+                                height: 50.h,
+                                //边框设置
+                                decoration: const BoxDecoration(
+                                  //背景
+                                  color: MyColors.riBangBg,
+                                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                ),
+                                child: WidgetUtils.onlyTextCenter(
+                                    '发送',
+                                    StyleUtils.getCommonTextStyle(
+                                        color: Colors.white, fontSize: 28.sp)),
+                              ),
+                            )
+                          : const Text(''),
+                      _isEmojiPickerVisible == false
+                          ? GestureDetector(
+                              onTap: (() {
+                                onTapPickFromGallery();
+                              }),
+                              child: WidgetUtils.showImages(
+                                  'assets/images/chat_img.png',
+                                  ScreenUtil().setHeight(45),
+                                  ScreenUtil().setHeight(45)),
+                            )
+                          : const Text(''),
+                      _isEmojiPickerVisible == false
+                          ? WidgetUtils.commonSizedBox(0, 10)
+                          : const Text(''),
+                      _isEmojiPickerVisible == false
+                          ? GestureDetector(
+                              onTap: (() {
+                                if(MyUtils.checkClick()){
+                                  doPostPayPwd();
+                                }
+                              }),
+                              child: WidgetUtils.showImages(
+                                  'assets/images/chat_hongbao.png',
+                                  ScreenUtil().setHeight(45),
+                                  ScreenUtil().setHeight(45)),
+                            )
+                          : const Text(''),
+                      WidgetUtils.commonSizedBox(0, 20),
+                    ],
+                  ),
+                ),
+                Visibility(
+                  visible: _isEmojiPickerVisible,
+                  child: SizedBox(
+                    height: 450.h,
+                    child: EmojiPicker(
+                      onEmojiSelected: (Category? category, Emoji emoji) {},
+                      onBackspacePressed: () {
+                        // Do something when the user taps the backspace button (optional)
+                        // Set it to null to hide the Backspace-Button
+                      },
+                      textEditingController: controller,
+                      // pass here the same [TextEditingController] that is connected to your input field, usually a [TextFormField]
+                      config: Config(
+                        columns: 7,
+                        emojiSizeMax: 32 *
+                            (foundation.defaultTargetPlatform ==
+                                    TargetPlatform.iOS
+                                ? 1.30
+                                : 1.0),
+                        // Issue: https://github.com/flutter/flutter/issues/28894
+                        verticalSpacing: 0,
+                        horizontalSpacing: 0,
+                        gridPadding: EdgeInsets.zero,
+                        initCategory: Category.RECENT,
+                        bgColor: const Color(0xFFF2F2F2),
+                        indicatorColor: Colors.blue,
+                        iconColor: Colors.grey,
+                        iconColorSelected: Colors.blue,
+                        backspaceColor: Colors.blue,
+                        skinToneDialogBgColor: Colors.white,
+                        skinToneIndicatorColor: Colors.grey,
+                        enableSkinTones: false,
+                        replaceEmojiOnLimitExceed: false,
+                        recentTabBehavior: RecentTabBehavior.RECENT,
+                        recentsLimit: 28,
+                        noRecents: const Text(
+                          'No Recents',
+                          style: TextStyle(fontSize: 20, color: Colors.black26),
+                          textAlign: TextAlign.center,
+                        ),
+                        // Needs to be const Widget
+                        loadingIndicator: const SizedBox.shrink(),
+                        // Needs to be const Widget
+                        tabIndicatorAnimDuration: kTabScrollDuration,
+                        emojiSet: defaultEmojiSets,
+                        buttonMode: ButtonMode.MATERIAL,
+                      ),
                     ),
-                    WidgetUtils.commonSizedBox(0, 10),
-                    _isEmojiPickerVisible
-                        ? GestureDetector(
+                  ),
+                ),
+              ],
+            ),
+            // 头部黑名单
+            isShow
+                ? GestureDetector(
+                    onTap: (() {
+                      setState(() {
+                        isShow = false;
+                      });
+                    }),
+                    child: Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      alignment: Alignment.topRight,
+                      color: Colors.transparent,
+                      child: Row(
+                        children: [
+                          const Spacer(),
+                          GestureDetector(
                             onTap: (() {
                               setState(() {
-                                _isEmojiPickerVisible = false;
+                                isShow = false;
                               });
-                              doPostSendUserMsg(controller.text);
+                              doPostFollow();
+                              doPostUpdateBlack();
                             }),
                             child: Container(
-                              width: 90.h,
-                              height: 50.h,
+                              height: ScreenUtil().setHeight(80),
+                              width: ScreenUtil().setHeight(220),
+                              margin: EdgeInsets.only(
+                                  top: ScreenUtil().setHeight(100), right: 15),
                               //边框设置
                               decoration: const BoxDecoration(
                                 //背景
-                                color: MyColors.riBangBg,
+                                color: Colors.white,
                                 //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(20.0)),
+                                    BorderRadius.all(Radius.circular(10.0)),
                               ),
-                              child: WidgetUtils.onlyTextCenter(
-                                  '发送',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: Colors.white, fontSize: 28.sp)),
+                              child: Row(
+                                children: [
+                                  const Spacer(),
+                                  WidgetUtils.showImages(
+                                      'assets/images/chat_black_p.png',
+                                      ScreenUtil().setHeight(42),
+                                      ScreenUtil().setHeight(38)),
+                                  WidgetUtils.commonSizedBox(
+                                      0, ScreenUtil().setHeight(10)),
+                                  WidgetUtils.onlyText(
+                                      isBlack == 0 ? '加入黑名单' : '移除黑名单',
+                                      StyleUtils.loginHintTextStyle),
+                                  const Spacer(),
+                                ],
+                              ),
                             ),
                           )
-                        : const Text(''),
-                    _isEmojiPickerVisible == false
-                        ? GestureDetector(
-                            onTap: (() {
-                              onTapPickFromGallery();
-                            }),
-                            child: WidgetUtils.showImages(
-                                'assets/images/chat_img.png',
-                                ScreenUtil().setHeight(45),
-                                ScreenUtil().setHeight(45)),
-                          )
-                        : const Text(''),
-                    _isEmojiPickerVisible == false
-                        ? WidgetUtils.commonSizedBox(0, 10)
-                        : const Text(''),
-                    _isEmojiPickerVisible == false
-                        ? GestureDetector(
-                            onTap: (() {
-                              if(MyUtils.checkClick()){
-                                doPostPayPwd();
-                              }
-                            }),
-                            child: WidgetUtils.showImages(
-                                'assets/images/chat_hongbao.png',
-                                ScreenUtil().setHeight(45),
-                                ScreenUtil().setHeight(45)),
-                          )
-                        : const Text(''),
-                    WidgetUtils.commonSizedBox(0, 20),
-                  ],
-                ),
-              ),
-              Visibility(
-                visible: _isEmojiPickerVisible,
-                child: SizedBox(
-                  height: 450.h,
-                  child: EmojiPicker(
-                    onEmojiSelected: (Category? category, Emoji emoji) {},
-                    onBackspacePressed: () {
-                      // Do something when the user taps the backspace button (optional)
-                      // Set it to null to hide the Backspace-Button
-                    },
-                    textEditingController: controller,
-                    // pass here the same [TextEditingController] that is connected to your input field, usually a [TextFormField]
-                    config: Config(
-                      columns: 7,
-                      emojiSizeMax: 32 *
-                          (foundation.defaultTargetPlatform ==
-                                  TargetPlatform.iOS
-                              ? 1.30
-                              : 1.0),
-                      // Issue: https://github.com/flutter/flutter/issues/28894
-                      verticalSpacing: 0,
-                      horizontalSpacing: 0,
-                      gridPadding: EdgeInsets.zero,
-                      initCategory: Category.RECENT,
-                      bgColor: const Color(0xFFF2F2F2),
-                      indicatorColor: Colors.blue,
-                      iconColor: Colors.grey,
-                      iconColorSelected: Colors.blue,
-                      backspaceColor: Colors.blue,
-                      skinToneDialogBgColor: Colors.white,
-                      skinToneIndicatorColor: Colors.grey,
-                      enableSkinTones: false,
-                      replaceEmojiOnLimitExceed: false,
-                      recentTabBehavior: RecentTabBehavior.RECENT,
-                      recentsLimit: 28,
-                      noRecents: const Text(
-                        'No Recents',
-                        style: TextStyle(fontSize: 20, color: Colors.black26),
-                        textAlign: TextAlign.center,
+                        ],
                       ),
-                      // Needs to be const Widget
-                      loadingIndicator: const SizedBox.shrink(),
-                      // Needs to be const Widget
-                      tabIndicatorAnimDuration: kTabScrollDuration,
-                      emojiSet: defaultEmojiSets,
-                      buttonMode: ButtonMode.MATERIAL,
                     ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          // 头部黑名单
-          isShow
-              ? GestureDetector(
-                  onTap: (() {
-                    setState(() {
-                      isShow = false;
-                    });
-                  }),
-                  child: Container(
-                    width: double.infinity,
-                    height: double.infinity,
-                    alignment: Alignment.topRight,
-                    color: Colors.transparent,
-                    child: Row(
-                      children: [
-                        const Spacer(),
-                        GestureDetector(
-                          onTap: (() {
-                            setState(() {
-                              isShow = false;
-                            });
-                            doPostFollow();
-                            doPostUpdateBlack();
-                          }),
-                          child: Container(
-                            height: ScreenUtil().setHeight(80),
-                            width: ScreenUtil().setHeight(220),
-                            margin: EdgeInsets.only(
-                                top: ScreenUtil().setHeight(100), right: 15),
-                            //边框设置
-                            decoration: const BoxDecoration(
-                              //背景
-                              color: Colors.white,
-                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0)),
-                            ),
-                            child: Row(
+                  )
+                : const Text(''),
+
+            isLuZhi
+                ? Center(
+                    child: Container(
+                      width: 300.h,
+                      height: 200.h,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Colors.black54),
+                      child: isCancel == false
+                          ? Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                const SVGASimpleImage(
+                                  assetsName: 'assets/svga/audio_luzhi.svga',
+                                ),
+                                Positioned(
+                                    bottom: 0,
+                                    child: WidgetUtils.onlyTextCenter(
+                                        '手指上滑，取消发送',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: MyColors.g9, fontSize: 25.sp)))
+                              ],
+                            )
+                          : Row(
                               children: [
                                 const Spacer(),
                                 WidgetUtils.showImages(
-                                    'assets/images/chat_black_p.png',
-                                    ScreenUtil().setHeight(42),
-                                    ScreenUtil().setHeight(38)),
-                                WidgetUtils.commonSizedBox(
-                                    0, ScreenUtil().setHeight(10)),
+                                    'assets/images/chat_back.png', 50.h, 50.h),
+                                WidgetUtils.commonSizedBox(0, 10.w),
                                 WidgetUtils.onlyText(
-                                    isBlack == 0 ? '加入黑名单' : '移除黑名单',
-                                    StyleUtils.loginHintTextStyle),
+                                    '松开手指，取消发送',
+                                    StyleUtils.getCommonTextStyle(
+                                        color: Colors.red,
+                                        fontSize: 28.sp,
+                                        fontWeight: FontWeight.w600)),
                                 const Spacer(),
                               ],
                             ),
-                          ),
-                        )
-                      ],
                     ),
-                  ),
-                )
-              : const Text(''),
-
-          isLuZhi
-              ? Center(
-                  child: Container(
-                    width: 300.h,
-                    height: 200.h,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: Colors.black54),
-                    child: isCancel == false
-                        ? Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              const SVGASimpleImage(
-                                assetsName: 'assets/svga/audio_luzhi.svga',
-                              ),
-                              Positioned(
-                                  bottom: 0,
-                                  child: WidgetUtils.onlyTextCenter(
-                                      '手指上滑，取消发送',
-                                      StyleUtils.getCommonTextStyle(
-                                          color: MyColors.g9, fontSize: 25.sp)))
-                            ],
-                          )
-                        : Row(
-                            children: [
-                              const Spacer(),
-                              WidgetUtils.showImages(
-                                  'assets/images/chat_back.png', 50.h, 50.h),
-                              WidgetUtils.commonSizedBox(0, 10.w),
-                              WidgetUtils.onlyText(
-                                  '松开手指，取消发送',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: Colors.red,
-                                      fontSize: 28.sp,
-                                      fontWeight: FontWeight.w600)),
-                              const Spacer(),
-                            ],
-                          ),
-                  ),
-                )
-              : const Text('')
-        ],
+                  )
+                : const Text('')
+          ],
+        ),
       ),
     );
   }

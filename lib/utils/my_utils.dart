@@ -258,7 +258,6 @@ class MyUtils {
 
   /// 通用跳转到一个透明页面，从底部向上滚出的方法
   static void goTransparentPage(BuildContext context, Widget page) {
-
     Future.delayed(const Duration(seconds: 0), () {
       Navigator.push(
         context,
@@ -377,7 +376,7 @@ class MyUtils {
       } else {
         MyToastUtils.showToastBottom("下载失败");
       }
-    }else{
+    } else {
       MyToastUtils.showToastBottom("未获取存储权限");
     }
   }
@@ -385,7 +384,8 @@ class MyUtils {
   // 保存网络图片到相册额
   static void saveNetworkImageToGallery(String imageUrl) async {
     var response = await http.get(Uri.parse(imageUrl));
-    final result = await ImageGallerySaver.saveImage(Uint8List.fromList(response.bodyBytes));
+    final result = await ImageGallerySaver.saveImage(
+        Uint8List.fromList(response.bodyBytes));
     MyToastUtils.showToastBottom("下载成功");
     print("保存路径：$result");
   }
@@ -394,7 +394,16 @@ class MyUtils {
   static void saveImgTemp(String imgUrl, String name) async {
     var response = await http.get(Uri.parse(imgUrl));
     // 生成新的文件名
-    String fileName = "$name.jpg";
+    String fileName = '';
+    if (imgUrl.contains('.gif') || imgUrl.contains('.GIF')) {
+      fileName = "$name.gif";
+    } else if (imgUrl.contains('.jpg') || imgUrl.contains('.GPG')) {
+      fileName = "$name.jpg";
+    } else if (imgUrl.contains('.jpeg') || imgUrl.contains('.GPEG')) {
+      fileName = "$name.jpeg";
+    } else {
+      fileName = "$name.png";
+    }
     // 获取保存路径
     var tempDir = await getTemporaryDirectory();
     String savePath = "${tempDir!.path}/$fileName";
@@ -410,16 +419,20 @@ class MyUtils {
 
   //初始化sdk
   static void initSDK() async {
-    //1199230605161000#demo
     EMOptions options = EMOptions(
-        appKey: "1136231222154558#demo", autoLogin: false, debugModel: true, isAutoDownloadThumbnail: true);
+        appKey: "1199230605161000#demo",
+        autoLogin: false,
+        debugModel: true,
+        isAutoDownloadThumbnail: true);
+    // EMOptions options = EMOptions(
+    //     appKey: "1136231222154558#demo", autoLogin: false, debugModel: true, isAutoDownloadThumbnail: true);
     await EMClient.getInstance.init(options);
     // 通知 SDK UI 已准备好。该方法执行后才会收到 `EMChatRoomEventHandler`、`EMContactEventHandler` 和 `EMGroupEventHandler` 回调。
     await EMClient.getInstance.startCallback();
   }
 
   //添加监听
-  static void addChatListener() async{
+  static void addChatListener() async {
     DatabaseHelper databaseHelper = DatabaseHelper();
     await databaseHelper.database;
     // 注册连接状态监听
@@ -443,7 +456,8 @@ class MyUtils {
         // 调用 `kickDevice` 方法将设备踢下线，被踢设备会收到该回调；
         onUserKickedByOtherDevice: () => {LogE('IM 登将设备踢下线')},
         // 登录新设备时因达到了登录设备数量限制而导致当前设备被踢下线，被踢设备收到该回调；
-        onUserDidLoginFromOtherDevice: (String deviceName) => {LogE('IM 登登录设备数量限制而导致当前设备被踢下线')},
+        onUserDidLoginFromOtherDevice: (String deviceName) =>
+            {LogE('IM 登登录设备数量限制而导致当前设备被踢下线')},
         // Token 过期;
         onTokenDidExpire: () => {LogE('IM 登过期')},
         // Token 即将过期，需要调用 renewToken;
@@ -466,57 +480,117 @@ class MyUtils {
                   LogE('接收文本信息$msg');
                   Map info = msg.attributes!;
                   LogE('接收文本信息$info');
-                  if(info['lv'] == '' || info['lv'] == null){
-                    LogE('接收文本信息*********************************');
-                    if(info['type'] == 'clean_charm'){
-                      // 厅内清空魅力值
-                      eventBus.fire(JoinRoomYBack(map: info, type: '0'));
-                    }else if(info['type'] == 'clean_public_screen'){
-                      // 厅内清空魅力值
-                      eventBus.fire(JoinRoomYBack(map: info, type: '0'));
-                    }else{
-                      String nickName = info['nickname'];
-                      String headImg = info['avatar'];
-                      String combineID = '';
-                      if(int.parse(sp.getString('user_id').toString()) > int.parse(msg.from!)){
-                        combineID = '${msg.from}-${sp.getString('user_id').toString()}';
-                      }else{
-                        combineID = '${sp.getString('user_id').toString()}-${msg.from}';
-                      }
-
-                      //保存头像
-                      MyUtils.saveImgTemp(sp.getString('user_headimg').toString(),
-                          sp.getString('user_id').toString());
-                      MyUtils.saveImgTemp(headImg, msg.from.toString());
-                      // 保存路径
-                      Directory? directory = await getTemporaryDirectory();
-                      String myHeadImg = '${directory!.path}/${sp.getString('user_id')}.jpg';
-                      String otherHeadImg = '${directory!.path}/${msg.from}.jpg';
-                      // 接收别人发来的消息
-                      Map<String, dynamic> params = <String, dynamic>{
-                        'uid': sp.getString('user_id').toString(),
-                        'otherUid': msg.from,
-                        'whoUid':msg.from,
-                        'combineID': combineID,
-                        'nickName': nickName,
-                        'content': body.content,
-                        'bigImg' : '',
-                        'headImg': myHeadImg,
-                        'otherHeadImg': otherHeadImg,
-                        'add_time': msg.serverTime,
-                        'type': 1,
-                        'number': 0,
-                        'status': 1,
-                        'readStatus': 0,
-                        'liveStatus': 0,
-                        'loginStatus': 0,
-                      };
-                      // 插入数据
-                      await databaseHelper.insertData('messageSLTable', params);
-                      eventBus.fire(SendMessageBack(type: 1, msgID: '0'));
-                    }
-                  }else{
+                  if (body.content == '赛车押注') {
                     eventBus.fire(JoinRoomYBack(map: info, type: '0'));
+                  } else {
+                    if (info['lv'] == '' || info['lv'] == null) {
+                      if (info['type'] == 'clean_charm') {
+                        // 厅内清空魅力值
+                        eventBus.fire(JoinRoomYBack(map: info, type: '0'));
+                      } else if (info['type'] == 'clean_public_screen') {
+                        // 清除公屏
+                        eventBus.fire(JoinRoomYBack(map: info, type: '0'));
+                      } else if (info['type'] == 'one_click_gift') {
+
+                        eventBus.fire(JoinRoomYBack(map: info, type: '0'));
+                      } else {
+                        String nickName = info['nickname'];
+                        String headImg = info['avatar'];
+                        String combineID = '';
+                        if (int.parse(sp.getString('user_id').toString()) >
+                            int.parse(msg.from!)) {
+                          combineID =
+                              '${msg.from}-${sp.getString('user_id').toString()}';
+                        } else {
+                          combineID =
+                              '${sp.getString('user_id').toString()}-${msg.from}';
+                        }
+
+                        //保存头像
+                        MyUtils.saveImgTemp(
+                            sp.getString('user_headimg').toString(),
+                            sp.getString('user_id').toString());
+                        MyUtils.saveImgTemp(headImg, msg.from.toString());
+                        // 保存路径
+                        Directory? directory = await getTemporaryDirectory();
+                        String myHeadImg = '';
+                        String otherHeadImg = '';
+                        //保存自己头像
+                        if (sp
+                                .getString('user_headimg')
+                                .toString()
+                                .contains('.gif') ||
+                            sp
+                                .getString('user_headimg')
+                                .toString()
+                                .contains('.GIF')) {
+                          myHeadImg =
+                              '${directory!.path}/${sp.getString('user_id')}.gif';
+                        } else if (sp
+                                .getString('user_headimg')
+                                .toString()
+                                .contains('.jpg') ||
+                            sp
+                                .getString('user_headimg')
+                                .toString()
+                                .contains('.GPG')) {
+                          myHeadImg =
+                              '${directory!.path}/${sp.getString('user_id')}.gif';
+                        } else if (sp
+                                .getString('user_headimg')
+                                .toString()
+                                .contains('.jpeg') ||
+                            sp
+                                .getString('user_headimg')
+                                .toString()
+                                .contains('.GPEG')) {
+                          myHeadImg =
+                              '${directory!.path}/${sp.getString('user_id')}.jpeg';
+                        } else {
+                          myHeadImg =
+                              '${directory!.path}/${sp.getString('user_id')}.png';
+                        }
+                        // 保存他人头像
+                        if (headImg.contains('.gif') ||
+                            headImg.contains('.GIF')) {
+                          otherHeadImg = '${directory!.path}/${msg.from}.gif';
+                        } else if (headImg.contains('.jpg') ||
+                            headImg.contains('.GPG')) {
+                          otherHeadImg = '${directory!.path}/${msg.from}.jpg';
+                        } else if (headImg.contains('.jpeg') ||
+                            headImg.contains('.GPEG')) {
+                          otherHeadImg = '${directory!.path}/${msg.from}.jpeg';
+                        } else {
+                          otherHeadImg = '${directory!.path}/${msg.from}.png';
+                        }
+
+                        // 接收别人发来的消息
+                        Map<String, dynamic> params = <String, dynamic>{
+                          'uid': sp.getString('user_id').toString(),
+                          'otherUid': msg.from,
+                          'whoUid': msg.from,
+                          'combineID': combineID,
+                          'nickName': nickName,
+                          'content': body.content,
+                          'bigImg': '',
+                          'headImg': myHeadImg,
+                          'otherHeadImg': otherHeadImg,
+                          'add_time': msg.serverTime,
+                          'type': 1,
+                          'number': 0,
+                          'status': 1,
+                          'readStatus': 0,
+                          'liveStatus': 0,
+                          'loginStatus': 0,
+                        };
+                        // 插入数据
+                        await databaseHelper.insertData(
+                            'messageSLTable', params);
+                        eventBus.fire(SendMessageBack(type: 1, msgID: '0'));
+                      }
+                    } else {
+                      eventBus.fire(JoinRoomYBack(map: info, type: '0'));
+                    }
                   }
                 }
                 break;
@@ -530,10 +604,13 @@ class MyUtils {
                   String nickName = info!['nickname'];
                   String headImg = info!['remotePath'];
                   String combineID = '';
-                  if(int.parse(sp.getString('user_id').toString()) > int.parse(msg.from!)){
-                    combineID = '${msg.from}-${sp.getString('user_id').toString()}';
-                  }else{
-                    combineID = '${sp.getString('user_id').toString()}-${msg.from}';
+                  if (int.parse(sp.getString('user_id').toString()) >
+                      int.parse(msg.from!)) {
+                    combineID =
+                        '${msg.from}-${sp.getString('user_id').toString()}';
+                  } else {
+                    combineID =
+                        '${sp.getString('user_id').toString()}-${msg.from}';
                   }
                   //保存自己头像
                   MyUtils.saveImgTemp(sp.getString('user_headimg').toString(),
@@ -542,17 +619,65 @@ class MyUtils {
                   MyUtils.saveImgTemp(headImg, msg.from.toString());
                   // 保存路径
                   Directory? directory = await getTemporaryDirectory();
-                  String myHeadImg = '${directory!.path}/${sp.getString('user_id')}.jpg';
-                  String otherHeadImg = '${directory!.path}/${msg.from}.jpg';
+                  String myHeadImg = '';
+                  String otherHeadImg = '';
+                  //保存自己头像
+                  if (sp
+                      .getString('user_headimg')
+                      .toString()
+                      .contains('.gif') ||
+                      sp
+                          .getString('user_headimg')
+                          .toString()
+                          .contains('.GIF')) {
+                    myHeadImg =
+                    '${directory!.path}/${sp.getString('user_id')}.gif';
+                  } else if (sp
+                      .getString('user_headimg')
+                      .toString()
+                      .contains('.jpg') ||
+                      sp
+                          .getString('user_headimg')
+                          .toString()
+                          .contains('.GPG')) {
+                    myHeadImg =
+                    '${directory!.path}/${sp.getString('user_id')}.gif';
+                  } else if (sp
+                      .getString('user_headimg')
+                      .toString()
+                      .contains('.jpeg') ||
+                      sp
+                          .getString('user_headimg')
+                          .toString()
+                          .contains('.GPEG')) {
+                    myHeadImg =
+                    '${directory!.path}/${sp.getString('user_id')}.jpeg';
+                  } else {
+                    myHeadImg =
+                    '${directory!.path}/${sp.getString('user_id')}.png';
+                  }
+                  // 保存他人头像
+                  if (headImg.contains('.gif') ||
+                      headImg.contains('.GIF')) {
+                    otherHeadImg = '${directory!.path}/${msg.from}.gif';
+                  } else if (headImg.contains('.jpg') ||
+                      headImg.contains('.GPG')) {
+                    otherHeadImg = '${directory!.path}/${msg.from}.jpg';
+                  } else if (headImg.contains('.jpeg') ||
+                      headImg.contains('.GPEG')) {
+                    otherHeadImg = '${directory!.path}/${msg.from}.jpeg';
+                  } else {
+                    otherHeadImg = '${directory!.path}/${msg.from}.png';
+                  }
 
                   Map<String, dynamic> params = <String, dynamic>{
                     'uid': sp.getString('user_id').toString(),
                     'otherUid': msg.from,
-                    'whoUid':msg.from,
+                    'whoUid': msg.from,
                     'combineID': combineID,
                     'nickName': nickName,
                     'content': body.thumbnailLocalPath,
-                    'bigImg' : body.localPath,
+                    'bigImg': body.localPath,
                     'headImg': myHeadImg,
                     'otherHeadImg': otherHeadImg,
                     'add_time': msg.serverTime,
@@ -565,7 +690,6 @@ class MyUtils {
                   };
                   // 插入数据
                   await databaseHelper.insertData('messageSLTable', params);
-
                 }
                 break;
               case MessageType.VIDEO:
@@ -592,10 +716,13 @@ class MyUtils {
                   String nickName = info!['nickname'];
                   String headImg = info!['remotePath'];
                   String combineID = '';
-                  if(int.parse(sp.getString('user_id').toString()) > int.parse(msg.from!)){
-                    combineID = '${msg.from}-${sp.getString('user_id').toString()}';
-                  }else{
-                    combineID = '${sp.getString('user_id').toString()}-${msg.from}';
+                  if (int.parse(sp.getString('user_id').toString()) >
+                      int.parse(msg.from!)) {
+                    combineID =
+                        '${msg.from}-${sp.getString('user_id').toString()}';
+                  } else {
+                    combineID =
+                        '${sp.getString('user_id').toString()}-${msg.from}';
                   }
                   //保存自己头像
                   MyUtils.saveImgTemp(sp.getString('user_headimg').toString(),
@@ -604,17 +731,65 @@ class MyUtils {
                   MyUtils.saveImgTemp(headImg, msg.from.toString());
                   // 保存路径
                   Directory? directory = await getTemporaryDirectory();
-                  String myHeadImg = '${directory!.path}/${sp.getString('user_id')}.jpg';
-                  String otherHeadImg = '${directory!.path}/${msg.from}.jpg';
+                  String myHeadImg = '';
+                  String otherHeadImg = '';
+                  //保存自己头像
+                  if (sp
+                      .getString('user_headimg')
+                      .toString()
+                      .contains('.gif') ||
+                      sp
+                          .getString('user_headimg')
+                          .toString()
+                          .contains('.GIF')) {
+                    myHeadImg =
+                    '${directory!.path}/${sp.getString('user_id')}.gif';
+                  } else if (sp
+                      .getString('user_headimg')
+                      .toString()
+                      .contains('.jpg') ||
+                      sp
+                          .getString('user_headimg')
+                          .toString()
+                          .contains('.GPG')) {
+                    myHeadImg =
+                    '${directory!.path}/${sp.getString('user_id')}.gif';
+                  } else if (sp
+                      .getString('user_headimg')
+                      .toString()
+                      .contains('.jpeg') ||
+                      sp
+                          .getString('user_headimg')
+                          .toString()
+                          .contains('.GPEG')) {
+                    myHeadImg =
+                    '${directory!.path}/${sp.getString('user_id')}.jpeg';
+                  } else {
+                    myHeadImg =
+                    '${directory!.path}/${sp.getString('user_id')}.png';
+                  }
+                  // 保存他人头像
+                  if (headImg.contains('.gif') ||
+                      headImg.contains('.GIF')) {
+                    otherHeadImg = '${directory!.path}/${msg.from}.gif';
+                  } else if (headImg.contains('.jpg') ||
+                      headImg.contains('.GPG')) {
+                    otherHeadImg = '${directory!.path}/${msg.from}.jpg';
+                  } else if (headImg.contains('.jpeg') ||
+                      headImg.contains('.GPEG')) {
+                    otherHeadImg = '${directory!.path}/${msg.from}.jpeg';
+                  } else {
+                    otherHeadImg = '${directory!.path}/${msg.from}.png';
+                  }
 
                   Map<String, dynamic> params = <String, dynamic>{
                     'uid': sp.getString('user_id').toString(),
                     'otherUid': msg.from,
-                    'whoUid':msg.from,
+                    'whoUid': msg.from,
                     'combineID': combineID,
                     'nickName': nickName,
                     'content': body.localPath,
-                    'bigImg' : body.localPath,
+                    'bigImg': body.localPath,
                     'headImg': myHeadImg,
                     'otherHeadImg': otherHeadImg,
                     'add_time': msg.serverTime,
@@ -643,15 +818,19 @@ class MyUtils {
                 {
                   LogE('CUSTOM消息****${msg}');
                   EMCustomMessageBody body = msg.body as EMCustomMessageBody;
-                  if(body.event == 'red_package'){ //接受到红包
+                  if (body.event == 'red_package') {
+                    //接受到红包
                     Map info = body.params!;
                     String nickName = info['nickname'];
                     String headImg = info['avatar'];
                     String combineID = '';
-                    if(int.parse(sp.getString('user_id').toString()) > int.parse(msg.from!)){
-                      combineID = '${msg.from}-${sp.getString('user_id').toString()}';
-                    }else{
-                      combineID = '${sp.getString('user_id').toString()}-${msg.from}';
+                    if (int.parse(sp.getString('user_id').toString()) >
+                        int.parse(msg.from!)) {
+                      combineID =
+                          '${msg.from}-${sp.getString('user_id').toString()}';
+                    } else {
+                      combineID =
+                          '${sp.getString('user_id').toString()}-${msg.from}';
                     }
 
                     //保存自己头像
@@ -661,17 +840,65 @@ class MyUtils {
                     MyUtils.saveImgTemp(headImg, msg.from.toString());
                     // 保存路径
                     Directory? directory = await getTemporaryDirectory();
-                    String myHeadImg = '${directory!.path}/${sp.getString('user_id')}.jpg';
-                    String otherHeadImg = '${directory!.path}/${msg.from}.jpg';
+                    String myHeadImg = '';
+                    String otherHeadImg = '';
+                    //保存自己头像
+                    if (sp
+                        .getString('user_headimg')
+                        .toString()
+                        .contains('.gif') ||
+                        sp
+                            .getString('user_headimg')
+                            .toString()
+                            .contains('.GIF')) {
+                      myHeadImg =
+                      '${directory!.path}/${sp.getString('user_id')}.gif';
+                    } else if (sp
+                        .getString('user_headimg')
+                        .toString()
+                        .contains('.jpg') ||
+                        sp
+                            .getString('user_headimg')
+                            .toString()
+                            .contains('.GPG')) {
+                      myHeadImg =
+                      '${directory!.path}/${sp.getString('user_id')}.gif';
+                    } else if (sp
+                        .getString('user_headimg')
+                        .toString()
+                        .contains('.jpeg') ||
+                        sp
+                            .getString('user_headimg')
+                            .toString()
+                            .contains('.GPEG')) {
+                      myHeadImg =
+                      '${directory!.path}/${sp.getString('user_id')}.jpeg';
+                    } else {
+                      myHeadImg =
+                      '${directory!.path}/${sp.getString('user_id')}.png';
+                    }
+                    // 保存他人头像
+                    if (headImg.contains('.gif') ||
+                        headImg.contains('.GIF')) {
+                      otherHeadImg = '${directory!.path}/${msg.from}.gif';
+                    } else if (headImg.contains('.jpg') ||
+                        headImg.contains('.GPG')) {
+                      otherHeadImg = '${directory!.path}/${msg.from}.jpg';
+                    } else if (headImg.contains('.jpeg') ||
+                        headImg.contains('.GPEG')) {
+                      otherHeadImg = '${directory!.path}/${msg.from}.jpeg';
+                    } else {
+                      otherHeadImg = '${directory!.path}/${msg.from}.png';
+                    }
 
                     Map<String, dynamic> params = <String, dynamic>{
                       'uid': sp.getString('user_id').toString(),
                       'otherUid': msg.from,
-                      'whoUid':msg.from,
+                      'whoUid': msg.from,
                       'combineID': combineID,
                       'nickName': nickName,
                       'content': '收到${info['value']}个V豆',
-                      'bigImg' : '',
+                      'bigImg': '',
                       'headImg': myHeadImg,
                       'otherHeadImg': otherHeadImg,
                       'add_time': msg.serverTime,
@@ -685,7 +912,7 @@ class MyUtils {
                     // 插入数据
                     await databaseHelper.insertData('messageSLTable', params);
                     eventBus.fire(SendMessageBack(type: 1, msgID: '0'));
-                  }else{
+                  } else {
                     eventBus.fire(ZDYBack(map: body.params, type: body.event));
                   }
                 }
@@ -707,7 +934,7 @@ class MyUtils {
         "UNIQUE_HANDLER_ID",
         ChatMessageEvent(
           onSuccess: (msgId, msg) {
-            switch(msg.body.type){
+            switch (msg.body.type) {
               case MessageType.TXT:
                 break;
               case MessageType.IMAGE:
@@ -730,12 +957,12 @@ class MyUtils {
             );
           },
         ));
-
   }
 
   //添加登录
   static void signIn() async {
     try {
+      LogE('初始化UID ${sp.getString('user_id').toString()}');
       await EMClient.getInstance.login(sp.getString('user_id').toString(),
           sp.getString('em_pwd').toString());
     } on EMError catch (e) {
@@ -747,6 +974,18 @@ class MyUtils {
   static void signOut() async {
     try {
       await EMClient.getInstance.logout(true);
+      addLogToConsole("sign out succeed");
+    } on EMError catch (e) {
+      addLogToConsole(
+          "sign out failed, code: ${e.code}, desc: ${e.description}");
+    }
+  }
+
+  //退出登录后在进行登录
+  static void signOutLogin() async {
+    try {
+      await EMClient.getInstance.logout(true);
+      signIn();
       addLogToConsole("sign out succeed");
     } on EMError catch (e) {
       addLogToConsole(

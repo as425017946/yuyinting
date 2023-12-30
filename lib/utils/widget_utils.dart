@@ -14,6 +14,7 @@ import '../config/my_config.dart';
 import '../main.dart';
 import '../widget/NetworkImageSSL.dart';
 import 'event_utils.dart';
+import 'line_painter2.dart';
 import 'loading.dart';
 import 'log_util.dart';
 import 'my_utils.dart';
@@ -745,11 +746,18 @@ class WidgetUtils {
               style: StyleUtils.getCommonTextStyle(
                   color: Colors.black, fontSize: ScreenUtil().setSp(29)),
             ),
+            WidgetUtils.commonSizedBox(0, 10.w),
+            (title == '公会中心' && isVersion) ? Transform.translate(
+              offset: Offset(0,-5.h),
+              child: CustomPaint(
+                painter: LinePainter2(colors: Colors.red),
+              ),
+            ) : const Text(''),
             const Expanded(child: Text('')),
-            Text(
-              isVersion ? sp.getString(MyConfig.appVersion).toString() : '',
-              style: StyleUtils.textStyleG3,
-            ),
+            // Text(
+            //   isVersion ? sp.getString(MyConfig.appVersion).toString() : '',
+            //   style: StyleUtils.textStyleG3,
+            // ),
             SizedBox(
               width: ScreenUtil().setWidth(10),
             ),

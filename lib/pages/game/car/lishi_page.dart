@@ -106,7 +106,7 @@ class _LiShiPageState extends State<LiShiPage> {
           Container(
             height: 820.h,
             width: double.infinity,
-            margin: EdgeInsets.all(20.h),
+            margin: EdgeInsets.all(15.h),
             decoration: const BoxDecoration(
               image: DecorationImage(
                 //背景图片修饰

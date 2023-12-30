@@ -178,7 +178,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                               WidgetUtils.commonSizedBox(5, 0),
                               Row(
                                 children: [
-                                  Container(
+                                  sex != 0 ? Container(
                                     height: ScreenUtil().setHeight(25),
                                     width: ScreenUtil().setWidth(50),
                                     alignment: Alignment.center,
@@ -198,91 +198,99 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                                             : 'assets/images/nv.png',
                                         12,
                                         12),
-                                  ),
+                                  ) : const Text(''),
                                   WidgetUtils.commonSizedBox(0, 10.h),
                                   // 用户等级
-                                  Stack(
-                                    alignment: Alignment.bottomRight,
+                                  level != 0
+                                      ? Stack(
+                                    alignment: Alignment.centerLeft,
                                     children: [
                                       WidgetUtils.showImagesFill(
                                           (level >= 1 && level <= 10)
-                                              ? 'assets/images/dj/dj_1-10.png'
+                                              ? 'assets/images/dj/dj_c_1-10.png'
                                               : (level >= 11 && level <= 15)
-                                              ? 'assets/images/dj/dj_11-15.png'
+                                              ? 'assets/images/dj/dj_c_11-15.png'
                                               : (level >= 16 && level <= 20)
-                                              ? 'assets/images/dj/dj_16-20.png'
-                                              : (level >= 21 && level <= 25)
-                                              ? 'assets/images/dj/dj_21-25.png'
+                                              ? 'assets/images/dj/dj_c_16-20.png'
+                                              : (level >= 21 &&
+                                              level <= 25)
+                                              ? 'assets/images/dj/dj_c_21-25.png'
                                               : (level >= 26 &&
                                               level <= 30)
-                                              ? 'assets/images/dj/dj_26-30.png'
+                                              ? 'assets/images/dj/dj_c_26-30.png'
                                               : (level >= 31 &&
-                                              level <= 35)
-                                              ? 'assets/images/dj/dj_31-35.png'
-                                              : (level >= 36 &&
-                                              level <= 40)
-                                              ? 'assets/images/dj/dj_36-40.png'
-                                              : (level >= 41 &&
                                               level <=
-                                                  45)
-                                              ? 'assets/images/dj/dj_41-45.png'
-                                              : 'assets/images/dj/dj_46-50.png',
-                                          ScreenUtil().setHeight(25),
-                                          ScreenUtil().setHeight(25)),
-                                      Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          Text(
-                                            level.toString(),
-                                            style: TextStyle(
-                                                fontSize: ScreenUtil().setSp(16),
-                                                fontWeight: FontWeight.w600,
-                                                fontFamily: 'ARIAL',
-                                                foreground: Paint()
-                                                  ..style = PaintingStyle.stroke
-                                                  ..strokeWidth = 2
-                                                  ..color = (level >= 1 &&
-                                                      level <= 10)
-                                                      ? MyColors.djOneM
-                                                      : (level >= 11 && level <= 15)
-                                                      ? MyColors.djTwoM
-                                                      : (level >= 16 &&
-                                                      level <= 20)
-                                                      ? MyColors.djThreeM
-                                                      : (level >= 21 &&
-                                                      level <= 25)
-                                                      ? MyColors.djFourM
-                                                      : (level >= 26 &&
-                                                      level <= 30)
-                                                      ? MyColors
-                                                      .djFiveM
-                                                      : (level >= 31 &&
-                                                      level <=
-                                                          35)
-                                                      ? MyColors
-                                                      .djSixM
-                                                      : (level >= 36 &&
-                                                      level <=
-                                                          40)
-                                                      ? MyColors
-                                                      .djSevenM
-                                                      : (level >= 41 &&
-                                                      level <= 45)
-                                                      ? MyColors.djEightM
-                                                      : MyColors.djNineM),
-                                          ),
-                                          Text(
-                                            level.toString(),
-                                            style: TextStyle(
-                                                color: MyColors.djOne,
-                                                fontSize: ScreenUtil().setSp(16),
-                                                fontWeight: FontWeight.w600,
-                                                fontFamily: 'ARIAL'),
-                                          ),
-                                        ],
-                                      )
+                                                  35)
+                                              ? 'assets/images/dj/dj_c_31-35.png'
+                                              : (level >= 36 &&
+                                              level <=
+                                                  40)
+                                              ? 'assets/images/dj/dj_c_36-40.png'
+                                              : (level >= 41 &&
+                                              level <= 45)
+                                              ? 'assets/images/dj/dj_c_41-45.png'
+                                              : 'assets/images/dj/dj_c_46-50.png',
+                                          ScreenUtil().setHeight(30),
+                                          ScreenUtil().setHeight(85)),
+                                      Positioned(
+                                          left: 45.w,
+                                          child: Stack(
+                                            alignment: Alignment.center,
+                                            children: [
+                                              Text(
+                                                'LV.${level.toString()}',
+                                                style: TextStyle(
+                                                    fontSize:
+                                                    ScreenUtil().setSp(18),
+                                                    fontWeight: FontWeight.w600,
+                                                    fontFamily: 'ARIAL',
+                                                    foreground: Paint()
+                                                      ..style =
+                                                          PaintingStyle.stroke
+                                                      ..strokeWidth = 2
+                                                      ..color = (level >= 1 &&
+                                                          level <= 10)
+                                                          ? MyColors.djOneM
+                                                          : (level >= 11 &&
+                                                          level <= 15)
+                                                          ? MyColors.djTwoM
+                                                          : (level >= 16 &&
+                                                          level <=
+                                                              20)
+                                                          ? MyColors
+                                                          .djThreeM
+                                                          : (level >= 21 &&
+                                                          level <=
+                                                              25)
+                                                          ? MyColors
+                                                          .djFourM
+                                                          : (level >= 26 &&
+                                                          level <=
+                                                              30)
+                                                          ? MyColors
+                                                          .djFiveM
+                                                          : (level >= 31 && level <= 35)
+                                                          ? MyColors.djSixM
+                                                          : (level >= 36 && level <= 40)
+                                                          ? MyColors.djSevenM
+                                                          : (level >= 41 && level <= 45)
+                                                          ? MyColors.djEightM
+                                                          : MyColors.djNineM),
+                                              ),
+                                              Text(
+                                                'LV.${level.toString()}',
+                                                style: TextStyle(
+                                                    color: MyColors.djOne,
+                                                    fontSize:
+                                                    ScreenUtil().setSp(18),
+                                                    fontWeight: FontWeight.w600,
+                                                    fontFamily: 'ARIAL'),
+                                              ),
+                                            ],
+                                          ))
                                     ],
                                   )
+                                      : const Text(''),
                                 ],
                               ),
                               WidgetUtils.commonSizedBox(5, 0),
@@ -633,7 +641,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
   }
 
   /// 查看用户
-  int level = 1;
+  int level = 0;
   Future<void> doPostUserInfo() async {
     LogE('用户token ${sp.getString('user_token')}');
     Loading.show(MyConfig.successTitle);
@@ -658,6 +666,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
             live = bean.data!.live as int;
             isFollow = bean.data!.isFollow!;
             roomID = bean.data!.roomID.toString();
+            level = bean.data!.level as int;
             if (bean.data!.label!.isNotEmpty) {
               list_label = bean.data!.label!.split(',');
             }

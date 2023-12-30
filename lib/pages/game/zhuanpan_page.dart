@@ -87,6 +87,9 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
           Expanded(
             child: GestureDetector(
               onTap: (() {
+                if(isBack){
+                  return;
+                }
                 eventBus.fire(SubmitButtonBack(title: '转盘关闭'));
                 Navigator.pop(context);
               }),

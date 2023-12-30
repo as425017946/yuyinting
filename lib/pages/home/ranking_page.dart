@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/pages/home/rank/rank_caifu_page.dart';
 import 'package:yuyinting/pages/home/rank/rank_meili_page.dart';
-import 'package:yuyinting/utils/my_toast_utils.dart';
-
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';

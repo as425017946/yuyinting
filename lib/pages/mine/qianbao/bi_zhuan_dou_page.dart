@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yuyinting/utils/log_util.dart';
 
+import '../../../bean/Common_bean.dart';
+import '../../../bean/isPayBean.dart';
 import '../../../colors/my_colors.dart';
+import '../../../config/my_config.dart';
+import '../../../http/data_utils.dart';
+import '../../../http/my_http_config.dart';
+import '../../../utils/event_utils.dart';
+import '../../../utils/my_toast_utils.dart';
+import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
+import '../../message/pay_ts_page.dart';
+import '../setting/password_pay_page.dart';
 /// 币转豆 页面
 class BiZhuanDouPage extends StatefulWidget {
   String shuliang;
@@ -16,11 +27,40 @@ class BiZhuanDouPage extends StatefulWidget {
 class _BiZhuanDouPageState extends State<BiZhuanDouPage> {
   TextEditingController controllerNumber = TextEditingController();
   var appBar;
+  String daozhang = '0';
+  var listenTX, listenMM;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     appBar = WidgetUtils.getAppBar('币转豆', true, context, false, 0);
+    listenTX = eventBus.on<SubmitButtonBack>().listen((event) {
+      if(event.title == '确认兑换'){
+        LogE('数量 ${controllerNumber.text.toString()}');
+        if(controllerNumber.text.toString().isEmpty){
+          MyToastUtils.showToastBottom('请输入币数量');
+          return;
+        }
+        setState(() {
+          daozhang = double.parse(controllerNumber.text.toString()).toStringAsFixed(0);
+        });
+        //先判断是否有支付密码
+        doPostPayPwd();
+      }
+    });
+    listenMM = eventBus.on<RoomBack>().listen((event) {
+      if(event.title == '发红包已输入密码'){
+        MyUtils.hideKeyboard(context);
+        doPostExchangeCurrency();
+      }
+    });
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    listenTX.cancel();
+    listenMM.cancel();
   }
 
 
@@ -28,6 +68,7 @@ class _BiZhuanDouPageState extends State<BiZhuanDouPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar,
+      resizeToAvoidBottomInset: false, // 解决键盘顶起页面
       backgroundColor: Colors.white,
       body: Column(
         children: [
@@ -70,7 +111,7 @@ class _BiZhuanDouPageState extends State<BiZhuanDouPage> {
                                               fontSize: ScreenUtil().setSp(38)),
                                         ),
                                       ),
-                                      WidgetUtils.commonSizedBox(0, 50),
+                                      const Spacer(),
                                       WidgetUtils.onlyText(
                                           widget.shuliang,
                                           StyleUtils.getCommonTextStyle(
@@ -119,12 +160,19 @@ class _BiZhuanDouPageState extends State<BiZhuanDouPage> {
                           WidgetUtils.showImages('assets/images/mine_wallet_jinbi.png', ScreenUtil().setHeight(48), ScreenUtil().setHeight(48)),
                           WidgetUtils.commonSizedBox(0, 20),
                           Expanded(
-                            child: WidgetUtils.commonTextField(
-                                controllerNumber,  '请输入币数量'),
+                            child: WidgetUtils.commonTextFieldNumber(
+                                controller: controllerNumber, hintText: '请输入币数量'),
                           ),
                           GestureDetector(
                             onTap: ((){
-
+                              if(double.parse(widget.shuliang) > 1){
+                                setState(() {
+                                  controllerNumber.text = (double.parse(widget.shuliang)).toStringAsFixed(0);
+                                  daozhang = (double.parse(widget.shuliang)).toStringAsFixed(0);
+                                });
+                              }else{
+                                MyToastUtils.showToastBottom('提现数量不足1个');
+                              }
                             }),
                             child: WidgetUtils.onlyText('全部', StyleUtils.getCommonTextStyle(color: MyColors.walletWZBlue, fontSize: ScreenUtil().setSp(32))),
                           ),
@@ -136,7 +184,7 @@ class _BiZhuanDouPageState extends State<BiZhuanDouPage> {
                         children: [
                           WidgetUtils.onlyText('到账豆', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(32))),
                           WidgetUtils.commonSizedBox(0, 10),
-                          WidgetUtils.onlyText('￥0', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(32), fontWeight: FontWeight.w600)),
+                          WidgetUtils.onlyText('￥$daozhang', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(32), fontWeight: FontWeight.w600)),
                         ],
                       )
                     ],
@@ -150,5 +198,63 @@ class _BiZhuanDouPageState extends State<BiZhuanDouPage> {
         ],
       ),
     );
+  }
+
+  /// 币转豆
+  Future<void> doPostExchangeCurrency() async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'gold_coin': controllerNumber.text.toString(), // 兑换金币数量
+    };
+    try {
+      CommonBean bean = await DataUtils.postExchangeCurrency(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          MyToastUtils.showToastBottom('兑换成功！');
+          eventBus.fire(SubmitButtonBack(title: '金币提现成功'));
+          Navigator.pop(context);
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+  /// 是否设置了支付密码
+  Future<void> doPostPayPwd() async {
+    try {
+      isPayBean bean = await DataUtils.postPayPwd();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+        //1已设置  0未设置
+          if(bean.data!.isSet == 1){
+            // 进入输入密码页面
+            // ignore: use_build_context_synchronously
+            MyUtils.goTransparentPage(context, const PayTSPage());
+          }else{
+            MyToastUtils.showToastBottom('请先设置支付密码！');
+            // ignore: use_build_context_synchronously
+            MyUtils.goTransparentPageCom(
+                context,
+                const PasswordPayPage());
+          }
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
   }
 }

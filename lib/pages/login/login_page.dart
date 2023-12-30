@@ -46,6 +46,13 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    // 在登录页先设置所有游戏的音频开关默认开启，false为开始，true为关闭
+    sp.setBool('zp_xin', false);
+    sp.setBool('zp_super', false);
+    sp.setBool('mf_lan', false);
+    sp.setBool('mf_jin', false);
+    sp.setBool('car_play', false);
+
     listen = eventBus.on<AddressBack>().listen((event) {
       setState(() {
         quhao = event.info;

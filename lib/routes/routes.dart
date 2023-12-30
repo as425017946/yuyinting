@@ -103,7 +103,6 @@ var staticRoutes = {
   'QiehuanAccountPage':(context) => const QiehuanAccountPage(),// 切换账号
   'ForgotPasswordPage':(context) => const ForgotPasswordPage(),// 忘记密码
   'XitongMorePage':(context) => const XitongMorePage(),// 系统消息详情
-  'WallPage':(context) => const WallPage(),// 礼物墙
   'ZhuangbanPage':(context) => const ZhuangbanPage(),// 礼物墙
   'ShopPage':(context) => const ShopPage(),// 装扮商城
   'TequanPage':(context) => const TequanPage(),// 特权页面

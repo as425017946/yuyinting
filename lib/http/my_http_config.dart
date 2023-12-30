@@ -8,11 +8,11 @@ class MyHttpConfig{
   static const int errorRoomCode = 10001;//10001需输入密码
 
   //鹏飞测试环境
-  // static const String baseURL = "http://192.168.0.51/api";
+  static const String baseURL = "http://192.168.0.51/api";
   //赵增测试环境
   // static const String baseURL = "http://192.168.0.53/api";
   //正式环境
-  static const String baseURL = "http://18.163.74.49:8080/api";
+  // static const String baseURL = "http://18.163.74.49:8080/api";
 
   /// 文件上传
   // file方式上传`
@@ -257,4 +257,9 @@ class MyHttpConfig{
   static const String withdrawal = "$baseURL/user/withdrawal";
   // 离开房间
   static const String leave = "$baseURL/room/leave";
+  // 删除房间背景图
+  static const String removeRoomBg = "$baseURL/room/removeRoomBg";
+  // 币转豆
+  static const String exchangeCurrency = "$baseURL/user/exchangeCurrency";
+
 }

@@ -32,20 +32,24 @@ class RoomMessagesMorePage extends StatefulWidget {
   String otherUid;
   String otherImg;
   String nickName;
-  RoomMessagesMorePage({super.key, required this.otherUid, required this.otherImg, required this.nickName});
+
+  RoomMessagesMorePage(
+      {super.key,
+      required this.otherUid,
+      required this.otherImg,
+      required this.nickName});
 
   @override
   State<RoomMessagesMorePage> createState() => _RoomMessagesMorePageState();
 }
 
 class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
-
   TextEditingController controller = TextEditingController();
   ScrollController _scrollController = ScrollController();
   FlutterSoundPlayer? _mPlayer = FlutterSoundPlayer();
   bool playRecord = false; //音频文件播放状态
   List<String> imgList = [];
-  var listen,listenHB;
+  var listen, listenHB;
   int length = 0;
   String isGZ = '0';
 
@@ -73,6 +77,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
     listen.cancel();
     listenHB.cancel();
   }
+
   // 在数据变化后将滚动位置设置为最后一个item的位置
   void scrollToLastItem() {
     _scrollController.animateTo(
@@ -84,14 +89,39 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
 
   // 自己头像和他人头像
   String myHeadImg = '', otherHeadImg = '';
-  saveImages() async{
+
+  saveImages() async {
     //保存头像
-    MyUtils.saveImgTemp(sp.getString('user_headimg').toString(), sp.getString('user_id').toString());
+    MyUtils.saveImgTemp(sp.getString('user_headimg').toString(),
+        sp.getString('user_id').toString());
     MyUtils.saveImgTemp(widget.otherImg, widget.otherUid);
     // 保存路径
     Directory? directory = await getTemporaryDirectory();
-    myHeadImg = '${directory!.path}/${sp.getString('user_id')}.jpg';
-    otherHeadImg = '${directory!.path}/${widget.otherUid}.jpg';
+    //保存自己头像
+    if (sp.getString('user_headimg').toString().contains('.gif') ||
+        sp.getString('user_headimg').toString().contains('.GIF')) {
+      myHeadImg = '${directory!.path}/${sp.getString('user_id')}.gif';
+    } else if (sp.getString('user_headimg').toString().contains('.jpg') ||
+        sp.getString('user_headimg').toString().contains('.GPG')) {
+      myHeadImg = '${directory!.path}/${sp.getString('user_id')}.gif';
+    } else if (sp.getString('user_headimg').toString().contains('.jpeg') ||
+        sp.getString('user_headimg').toString().contains('.GPEG')) {
+      myHeadImg = '${directory!.path}/${sp.getString('user_id')}.jpeg';
+    } else {
+      myHeadImg = '${directory!.path}/${sp.getString('user_id')}.png';
+    }
+    // 保存他人头像
+    if (widget.otherImg.contains('.gif') || widget.otherImg.contains('.GIF')) {
+      otherHeadImg = '${directory!.path}/${widget.otherUid}.gif';
+    } else if (widget.otherImg.contains('.jpg') ||
+        widget.otherImg.contains('.GPG')) {
+      otherHeadImg = '${directory!.path}/${widget.otherUid}.jpg';
+    } else if (widget.otherImg.contains('.jpeg') ||
+        widget.otherImg.contains('.GPEG')) {
+      otherHeadImg = '${directory!.path}/${widget.otherUid}.jpeg';
+    } else {
+      otherHeadImg = '${directory!.path}/${widget.otherUid}.png';
+    }
   }
 
   // 保存发红包的信息 type 1自己给别人发，2收到别人发的红包
@@ -138,10 +168,9 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
 
   Widget chatWidget(BuildContext context, int i) {
     double widthAudio = 0;
-    if(allData2[i]['type'] == 3){
-      widthAudio = ScreenUtil().setHeight(60+allData2[i]['number']*4);
+    if (allData2[i]['type'] == 3) {
+      widthAudio = ScreenUtil().setHeight(60 + allData2[i]['number'] * 4);
     }
-
 
     String addTime = '';
     DateTime date = DateTime.parse(
@@ -173,8 +202,8 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
     // 判断不是第一个，并且中间时间差距大于10分钟才显示时间
     if (i > 0 &&
         ((int.parse(allData2[i]['add_time']) -
-            int.parse(allData2[i - 1]['add_time'])) /
-            1000 <=
+                    int.parse(allData2[i - 1]['add_time'])) /
+                1000 <=
             600)) {
       addTime = '';
     }
@@ -191,25 +220,51 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
               ScreenUtil().setHeight(10), ScreenUtil().setHeight(10)),
           Row(
             children: [
-              WidgetUtils.CircleImageAss(60.h,
-                  60.h, 30.h, allData2[i]['headImg']),
+              WidgetUtils.CircleImageAss(
+                  60.h, 60.h, 30.h, allData2[i]['headImg']),
               WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(10)),
-              Flexible(
+              // 6v豆红包
+              allData2[i]['type'] == 6 ? SizedBox(
+                height: 130.h,
+                width: 300.h,
+                child: Stack(
+                  children: [
+                    WidgetUtils.showImages(
+                        'assets/images/chat_hongbao_bg.png',
+                        130.h,
+                        300.h),
+                    Positioned(
+                        top: 40.h,
+                        left: 60.w,
+                        child: Row(
+                          children: [
+                            WidgetUtils.commonSizedBox(
+                                0, 50.h),
+                            WidgetUtils.onlyText(
+                                allData2[i]['content'],
+                                StyleUtils.getCommonTextStyle(
+                                    color: Colors.white,
+                                    fontSize: 25.sp)),
+                          ],
+                        ))
+                  ],
+                ),
+              ): Flexible(
                 child: Container(
                   constraints:
                   BoxConstraints(minWidth: ScreenUtil().setHeight(60)),
-                  padding: EdgeInsets.all(ScreenUtil().setHeight(15)),
+                  padding: EdgeInsets.all(ScreenUtil().setHeight(20)),
                   //边框设置
                   decoration: BoxDecoration(
                     //背景
-                    color: Colors.white,
+                    color: allData2[i]['type'] == 2 ? Colors.transparent : Colors.white,
                     //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                     borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(0),
                         topRight: Radius.circular(20.0),
                         bottomLeft: Radius.circular(20.0),
                         bottomRight: Radius.circular(20.0)),
-                    boxShadow: [
+                    boxShadow: allData2[i]['type'] == 2 ? [] : [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.1),
                         spreadRadius: 2,
@@ -222,48 +277,53 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                       ? Text(
                     allData2[i]['content'],
                     style: TextStyle(
-                      fontSize: 32.sp,
+                      fontSize: 30.sp,
                       color: Colors.black,
                     ),
                   )
-                      : allData2[i]['type'] == 2 ? GestureDetector(
+                      : allData2[i]['type'] == 2
+                      ? GestureDetector(
                     onTap: (() {
-    if(MyUtils.checkClick()) {
-      setState(() {
-        imgList.clear();
-        imgList.add(allData2[i]['content']);
-      });
-      MyUtils.goTransparentPageCom(
-          context, SwiperPage(imgList: imgList));
-    }
+                      setState(() {
+                        imgList.clear();
+                        imgList.add(allData2[i]['content']);
+                      });
+                      MyUtils.goTransparentPageCom(
+                          context, SwiperPage(imgList: imgList));
                     }),
                     child: Image(
                       image: FileImage(File(allData2[i]['content'])),
                       width: 160.h,
                       height: 200.h,
-                      errorBuilder: (BuildContext context, Object error,
-                          StackTrace? stackTrace) {
+                      errorBuilder: (BuildContext context,
+                          Object error, StackTrace? stackTrace) {
                         return WidgetUtils.showImages(
-                            'assets/images/img_error.png', 200.h, 160.h);
+                            'assets/images/img_error.png',
+                            200.h,
+                            160.h);
                       },
                     ),
-                  ) : GestureDetector(
+                  )
+                      : GestureDetector(
                     onTap: (() {
-    if(MyUtils.checkClick()) {
-      if (playRecord) {
-        stopPlayer();
-      } else {
-        play(allData2[i]['content']);
-      }
-    }
+                      LogD('************');
+                      if (playRecord) {
+                        stopPlayer();
+                      } else {
+                        play(allData2[i]['content']);
+                      }
                     }),
                     child: SizedBox(
                       width: widthAudio,
                       child: Row(
                         children: [
-                          WidgetUtils.showImages('assets/images/chat_huatong.png', 20.h, 20.h),
-                          WidgetUtils.commonSizedBox(0, 10.h),
-                          WidgetUtils.onlyText("${allData2[i]['number']}''", StyleUtils.textStyleb1),
+                          WidgetUtils.showImages(
+                              'assets/images/chat_huatong.png',
+                              20.h,
+                              20.h),
+                          WidgetUtils.onlyText(
+                              "${allData2[i]['number']}''",
+                              StyleUtils.textStyleb1),
                           const Spacer(),
                         ],
                       ),
@@ -291,22 +351,48 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(100)),
-              Flexible(
+              // 6v豆红包
+              allData2[i]['type'] == 6 ? SizedBox(
+                height: 130.h,
+                width: 300.h,
+                child: Stack(
+                  children: [
+                    WidgetUtils.showImages(
+                        'assets/images/chat_hongbao_bg.png',
+                        130.h,
+                        300.h),
+                    Positioned(
+                        top: 40.h,
+                        left: 60.w,
+                        child: Row(
+                          children: [
+                            WidgetUtils.commonSizedBox(
+                                0, 50.h),
+                            WidgetUtils.onlyText(
+                                allData2[i]['content'],
+                                StyleUtils.getCommonTextStyle(
+                                    color: Colors.white,
+                                    fontSize: 25.sp)),
+                          ],
+                        ))
+                  ],
+                ),
+              ): Flexible(
                 child: Container(
                   constraints:
                   BoxConstraints(minWidth: ScreenUtil().setHeight(60)),
-                  padding: EdgeInsets.all(ScreenUtil().setHeight(15)),
+                  padding: EdgeInsets.all(ScreenUtil().setHeight(20)),
                   //边框设置
                   decoration: BoxDecoration(
                     //背景
-                    color: Colors.white,
+                    color: allData2[i]['type'] == 2 ? Colors.transparent : Colors.white,
                     //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                     borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(20.0),
                         topRight: Radius.circular(0),
                         bottomLeft: Radius.circular(20.0),
                         bottomRight: Radius.circular(20.0)),
-                    boxShadow: [
+                    boxShadow: allData2[i]['type'] == 2 ? [] : [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.1),
                         spreadRadius: 2,
@@ -319,57 +405,64 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                       ? Text(
                     allData2[i]['content'],
                     style: TextStyle(
-                      fontSize: 32.sp,
+                      fontSize: 30.sp,
                       color: Colors.black,
                     ),
                   )
-                      : allData2[i]['type'] == 2 ? GestureDetector(
+                      : allData2[i]['type'] == 2
+                      ? GestureDetector(
                     onTap: (() {
-    if(MyUtils.checkClick()) {
-      setState(() {
-        imgList.clear();
-        imgList.add(allData2[i]['content']);
-      });
-      MyUtils.goTransparentPageCom(
-          context, SwiperPage(imgList: imgList));
-    }
+                      setState(() {
+                        imgList.clear();
+                        imgList.add(allData2[i]['content']);
+                      });
+                      MyUtils.goTransparentPageCom(
+                          context, SwiperPage(imgList: imgList));
                     }),
                     child: Image(
                       image: FileImage(File(allData2[i]['content'])),
                       width: 160.h,
                       height: 200.h,
-                      errorBuilder: (BuildContext context, Object error,
-                          StackTrace? stackTrace) {
+                      errorBuilder: (BuildContext context,
+                          Object error, StackTrace? stackTrace) {
                         return WidgetUtils.showImages(
-                            'assets/images/img_error.png', 200.h, 160.h);
+                            'assets/images/img_error.png',
+                            200.h,
+                            160.h);
                       },
                     ),
-                  ) : GestureDetector(
+                  )
+                      : allData2[i]['type'] == 3
+                      ? GestureDetector(
                     onTap: (() {
-    if(MyUtils.checkClick()) {
-      if (playRecord) {
-        stopPlayer();
-      } else {
-        play(allData2[i]['content']);
-      }
-    }
+                      LogD('************');
+                      if (playRecord) {
+                        stopPlayer();
+                      } else {
+                        play(allData2[i]['content']);
+                      }
                     }),
                     child: SizedBox(
                       width: widthAudio,
                       child: Row(
                         children: [
                           const Spacer(),
-                          WidgetUtils.onlyText("${allData2[i]['number']}''", StyleUtils.textStyleb1),
-                          WidgetUtils.showImages('assets/images/chat_huatong.png', 20.h, 20.h),
+                          WidgetUtils.onlyText(
+                              "${allData2[i]['number']}''",
+                              StyleUtils.textStyleb1),
+                          WidgetUtils.showImages(
+                              'assets/images/chat_huatong.png',
+                              20.h,
+                              20.h),
                         ],
                       ),
                     ),
-                  ),
+                  ) : const Text(''),
                 ),
               ),
               WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(10)),
-              WidgetUtils.CircleImageAss(60.h,
-                 60.h , 30.h, allData2[i]['otherHeadImg']),
+              WidgetUtils.CircleImageAss(
+                  60.h, 60.h, 30.h, allData2[i]['otherHeadImg']),
             ],
           ),
           WidgetUtils.commonSizedBox(20.h, ScreenUtil().setHeight(10)),
@@ -378,17 +471,16 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
     }
   }
 
-
 //播放录音
   void play(String audioUrls) {
     _mPlayer!
         .startPlayer(
-        fromURI: audioUrls,
-        whenFinished: () {
-          setState(() {
-            playRecord = false;
-          });
-        })
+            fromURI: audioUrls,
+            whenFinished: () {
+              setState(() {
+                playRecord = false;
+              });
+            })
         .then((value) {
       setState(() {
         playRecord = true;
@@ -415,9 +507,9 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
           Expanded(
             child: GestureDetector(
               onTap: (() {
-    if(MyUtils.checkClick()) {
-      Navigator.pop(context);
-    }
+                if (MyUtils.checkClick()) {
+                  Navigator.pop(context);
+                }
               }),
               child: Container(
                 height: double.infinity,
@@ -460,9 +552,9 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                           const Expanded(child: Text('')),
                           GestureDetector(
                             onTap: (() {
-    if(MyUtils.checkClick()) {
-      doPostFollow();
-    }
+                              if (MyUtils.checkClick()) {
+                                doPostFollow();
+                              }
                             }),
                             child: SizedBox(
                               width: ScreenUtil().setHeight(80),
@@ -493,18 +585,21 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                         ],
                       ),
                     ),
-                    length != 0 ? Expanded(
-                      child: Container(
-                        height: double.infinity,
-                        color: MyColors.roomMessageBlackBG,
-                        child: ListView.builder(
-                          padding:
-                              EdgeInsets.only(top: ScreenUtil().setHeight(10)),
-                          itemBuilder: chatWidget,
-                          itemCount: allData2.length,
-                        ),
-                      ),
-                    ) : const Text('')
+                    length != 0
+                        ? Expanded(
+                            child: Container(
+                              height: double.infinity,
+                              color: MyColors.roomMessageBlackBG,
+                              padding: EdgeInsets.only(bottom: 120.h),
+                              child: ListView.builder(
+                                padding: EdgeInsets.only(
+                                    top: ScreenUtil().setHeight(10), bottom: 120.h),
+                                itemBuilder: chatWidget,
+                                itemCount: allData2.length,
+                              ),
+                            ),
+                          )
+                        : const Text('')
                   ],
                 ),
                 Container(
@@ -521,68 +616,69 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                   alignment: Alignment.center,
                   child: Row(
                     children: [
-                      Expanded(child: Container(
-                        height: 78.h,
-                        width: double.infinity,
-                        margin: EdgeInsets.only(left: 20.h, right: 20.h),
-                        padding: EdgeInsets.only(left: 20.h, right: 20.h),
-                        decoration: const BoxDecoration(
-                          //背景
-                          color: MyColors.roomXZ2,
-                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                          borderRadius: BorderRadius.all(Radius.circular(38)),
-                        ),
-                        child: TextField(
-                          textInputAction: TextInputAction.send,
-                          // 设置为发送按钮
-                          controller: controller,
-                          inputFormatters: [
-                            RegexFormatter(
-                                regex: MyUtils.regexFirstNotNull),
-                            LengthLimitingTextInputFormatter(25)//限制输入长度
-                          ],
-                          style: StyleUtils.loginTextStyle,
-                          onSubmitted: (value) {
-                            MyUtils.sendMessage(widget.otherUid, value);
-                            doPostSendUserMsg(value);
-                          },
-                          decoration: InputDecoration(
-                            // border: InputBorder.none,
-                            // labelText: "请输入用户名",
-                            // icon: Icon(Icons.people), //前面的图标
-                            hintText: '请输入信息...',
-                            hintStyle: StyleUtils.loginHintTextStyle,
+                      Expanded(
+                        child: Container(
+                          height: 78.h,
+                          width: double.infinity,
+                          margin: EdgeInsets.only(left: 20.h, right: 20.h),
+                          padding: EdgeInsets.only(left: 20.h, right: 20.h),
+                          decoration: const BoxDecoration(
+                            //背景
+                            color: MyColors.roomXZ2,
+                            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                            borderRadius: BorderRadius.all(Radius.circular(38)),
+                          ),
+                          child: TextField(
+                            textInputAction: TextInputAction.send,
+                            // 设置为发送按钮
+                            controller: controller,
+                            inputFormatters: [
+                              RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                              LengthLimitingTextInputFormatter(25) //限制输入长度
+                            ],
+                            style: StyleUtils.loginTextStyle,
+                            onSubmitted: (value) {
+                              MyUtils.sendMessage(widget.otherUid, value);
+                              doPostSendUserMsg(value);
+                            },
+                            decoration: InputDecoration(
+                              // border: InputBorder.none,
+                              // labelText: "请输入用户名",
+                              // icon: Icon(Icons.people), //前面的图标
+                              hintText: '请输入信息...',
+                              hintStyle: StyleUtils.loginHintTextStyle,
 
-                            contentPadding:
-                            const EdgeInsets.only(top: 0, bottom: 0),
-                            border: const OutlineInputBorder(
-                              borderSide:
-                              BorderSide(color: Colors.transparent),
-                            ),
-                            enabledBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
+                              contentPadding:
+                                  const EdgeInsets.only(top: 0, bottom: 0),
+                              border: const OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.transparent),
                               ),
-                            ),
-                            disabledBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
+                              enabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                ),
                               ),
-                            ),
-                            focusedBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
+                              disabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                ),
                               ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                ),
+                              ),
+                              // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
                             ),
-                            // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
                           ),
                         ),
-                      ),),
+                      ),
                       GestureDetector(
                         onTap: (() {
-                            if(MyUtils.checkClick()){
-                              doPostPayPwd();
-                            }
+                          if (MyUtils.checkClick()) {
+                            doPostPayPwd();
+                          }
                         }),
                         child: WidgetUtils.showImages(
                             'assets/images/chat_hongbao.png',
@@ -616,7 +712,8 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
     List<Map<String, dynamic>> result = await db.query('messageSLTable',
         columns: null, whereArgs: [combineID], where: 'combineID = ?');
 
-    await db.update('messageSLTable',  {'readStatus': 1}, where: 'combineID = ?', whereArgs: [combineID]);
+    await db.update('messageSLTable', {'readStatus': 1},
+        where: 'combineID = ?', whereArgs: [combineID]);
 
     setState(() {
       allData2 = result;
@@ -626,10 +723,12 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
       scrollToLastItem(); // 在widget构建完成后滚动到底部
     });
   }
+
   /// 发送消息
   late List<Map<String, dynamic>> allData2;
+
   Future<void> doPostSendUserMsg(String content) async {
-    if(content.trim().isEmpty){
+    if (content.trim().isEmpty) {
       return;
     }
 
@@ -675,7 +774,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -715,6 +814,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
+
   /// 查询关注状态
   Future<void> doPostUserFollowStatus() async {
     Map<String, dynamic> params = <String, dynamic>{
@@ -730,7 +830,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -741,6 +841,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
+
   /// 关注还是取关
   Future<void> doPostFollow() async {
     Map<String, dynamic> params = <String, dynamic>{
@@ -752,12 +853,12 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
       CommonBean bean = await DataUtils.postFollow(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          if(isGZ == '0'){
+          if (isGZ == '0') {
             setState(() {
               isGZ = '1';
             });
             MyToastUtils.showToastBottom("关注成功！");
-          }else{
+          } else {
             setState(() {
               isGZ = '0';
             });
@@ -765,7 +866,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
           }
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -777,31 +878,28 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
     }
   }
 
-
   /// 是否设置了支付密码
   Future<void> doPostPayPwd() async {
     try {
       isPayBean bean = await DataUtils.postPayPwd();
       switch (bean.code) {
         case MyHttpConfig.successCode:
-        //1已设置  0未设置
-          if(bean.data!.isSet == 1){
+          //1已设置  0未设置
+          if (bean.data!.isSet == 1) {
             // ignore: use_build_context_synchronously
             MyUtils.goTransparentPageCom(
                 context,
                 HongBaoPage(
                   uid: widget.otherUid,
                 ));
-          }else{
+          } else {
             MyToastUtils.showToastBottom('请先设置支付密码！');
             // ignore: use_build_context_synchronously
-            MyUtils.goTransparentPageCom(
-                context,
-                const PasswordPayPage());
+            MyUtils.goTransparentPageCom(context, const PasswordPayPage());
           }
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:

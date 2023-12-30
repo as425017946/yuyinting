@@ -251,10 +251,12 @@ class _ShimingzhiCardPageState extends State<ShimingzhiCardPage> {
             WidgetUtils.commonSizedBox(20, 10),
             GestureDetector(
               onTap: (() {
-                if(isShow){
-                  setState(() {
-                    doPostRealAuth();
-                  });
+                if(MyUtils.checkClick()){
+                  if(isShow){
+                    setState(() {
+                      doPostRealAuth();
+                    });
+                  }
                 }
               }),
               child: Container(
@@ -277,7 +279,7 @@ class _ShimingzhiCardPageState extends State<ShimingzhiCardPage> {
   }
 
 
-  /// 设置交易密码
+  /// 上传实名制信息
   Future<void> doPostRealAuth() async {
 
     if (identity_frontID.isEmpty) {
@@ -301,8 +303,9 @@ class _ShimingzhiCardPageState extends State<ShimingzhiCardPage> {
       CommonBean commonBean = await DataUtils.postRealAuth(params);
       switch (commonBean.code) {
         case MyHttpConfig.successCode:
-          sp.setString('shimingzhi', '2');
           eventBus.fire(RenzhengBack(isBack: true));
+          eventBus.fire(SubmitButtonBack(title: '实名制提交'));
+          sp.setString('shimingzhi', '0');
           MyToastUtils.showToastBottom('提交成功！');
           // ignore: use_build_context_synchronously
           Navigator.pop(context);

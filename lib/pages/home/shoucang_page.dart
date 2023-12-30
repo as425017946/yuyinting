@@ -238,6 +238,15 @@ class _ShoucangPageState extends State<ShoucangPage> with AutomaticKeepAliveClie
                       ),
                     ),
                     Container(
+                      margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                      child: WidgetUtils.onlyText(
+                          '推荐房间',
+                          StyleUtils.getCommonTextStyle(
+                              color: Colors.black,
+                              fontSize: ScreenUtil().setSp(28),
+                              fontWeight: FontWeight.w600)),
+                    ),
+                    Container(
                       margin:
                           const EdgeInsets.only(left: 20, right: 20,top: 20),
                       child: OptionGridView(

@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/pages/login/login_page.dart';
+import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/line_painter.dart';
+import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 
 import '../../../config/config_screen_util.dart';
@@ -24,6 +26,7 @@ class SettingPage extends StatefulWidget {
 class _SettingPageState extends State<SettingPage> {
   var appBar;
   var _switchValue = true;
+  var listen;
   String shiming = '';
   @override
   void initState() {
@@ -35,11 +38,26 @@ class _SettingPageState extends State<SettingPage> {
       shiming = '待审核';
     }else if(sp.getString('shimingzhi').toString() == '1'){
       shiming = '已认证';
-    }else if(sp.getString('shimingzhi').toString() == '1'){
+    }else if(sp.getString('shimingzhi').toString() == '2'){
       shiming = '已驳回';
     }else{
       shiming = '未认证';
     }
+    eventBus.on<SubmitButtonBack>().listen((event) {
+      if(event.title == '实名制提交'){
+        setState(() {
+          if(sp.getString('shimingzhi').toString() == '0'){
+            shiming = '待审核';
+          }else if(sp.getString('shimingzhi').toString() == '1'){
+            shiming = '已认证';
+          }else if(sp.getString('shimingzhi').toString() == '2'){
+            shiming = '已驳回';
+          }else{
+            shiming = '未认证';
+          }
+        });
+      }
+    });
   }
 
   @override
@@ -109,7 +127,7 @@ class _SettingPageState extends State<SettingPage> {
               }else if(sp.getString('shimingzhi').toString() == '1'){
                 MyToastUtils.showToastBottom('已认证');
               }else if(sp.getString('shimingzhi').toString() == '0'){
-                MyToastUtils.showToastBottom('审核中，请耐心等待');
+                MyToastUtils.showToastBottom('实名审核中，无需重复提交');
               }
 
             }),
@@ -272,7 +290,19 @@ class _SettingPageState extends State<SettingPage> {
             callback: (res) {
               setState(() {
                 sp.setString('user_token', '');
+                sp.setString("user_account", '');
+                sp.setString("user_id", '');
+                sp.setString("em_pwd", '');
+                sp.setString("em_token", '');
+                sp.setString("user_password", '');
+                sp.setString('user_phone', '');
+                sp.setString('nickname', '');
+                sp.setString("user_headimg", '');
+                sp.setString("user_headimg_id", '');
+                // 保存身份
+                sp.setString("user_identity", '');
               });
+              MyUtils.signOut();
               Future.delayed(Duration.zero, () {
                 Navigator.pushAndRemoveUntil(
                   context,

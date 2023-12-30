@@ -304,15 +304,17 @@ class _PaiduiPageState extends State<PaiduiPage>
           /// 热度
           Row(
             children: [
-              WidgetUtils.showImages('assets/images/paidui_redu.png',
-                  ScreenUtil().setHeight(22), ScreenUtil().setHeight(14)),
-              WidgetUtils.commonSizedBox(0, 5),
-              WidgetUtils.onlyText(
-                  hotDegree > 10000
-                      ? (hotDegree / 10000).toStringAsFixed(2)
-                      : hotDegree.toString(),
-                  StyleUtils.getCommonTextStyle(
-                      color: MyColors.g6, fontSize: ScreenUtil().setSp(24)))
+              Text('热度值:',style: TextStyle(
+                  fontSize: ScreenUtil().setSp(24),
+                  color: MyColors.g6,
+                  fontFamily: 'YOUSHEBIAOTIHEI'),),
+              // WidgetUtils.commonSizedBox(0, 5),
+              Text(hotDegree > 9999
+                  ? '${(hotDegree / 10000).toStringAsFixed(2)}w'
+                  : hotDegree.toString(),style: TextStyle(
+                  fontSize: ScreenUtil().setSp(24),
+                  color: MyColors.g6,
+                  fontFamily: 'YOUSHEBIAOTIHEI'),),
             ],
           ),
         ],
@@ -345,15 +347,17 @@ class _PaiduiPageState extends State<PaiduiPage>
           /// 热度
           Row(
             children: [
-              WidgetUtils.showImages('assets/images/paidui_redu.png',
-                  ScreenUtil().setHeight(22), ScreenUtil().setHeight(14)),
-              WidgetUtils.commonSizedBox(0, 5),
-              WidgetUtils.onlyText(
-                  hotDegree > 10000
-                      ? (hotDegree / 10000).toStringAsFixed(2)
-                      : hotDegree.toString(),
-                  StyleUtils.getCommonTextStyle(
-                      color: MyColors.g6, fontSize: ScreenUtil().setSp(24)))
+              Text('热度值:',style: TextStyle(
+                  fontSize: ScreenUtil().setSp(24),
+                  color: MyColors.g6,
+                  fontFamily: 'YOUSHEBIAOTIHEI'),),
+              // WidgetUtils.commonSizedBox(0, 5),
+              Text(hotDegree > 9999
+                  ? '${(hotDegree / 10000).toStringAsFixed(2)}w'
+                  : hotDegree.toString(),style: TextStyle(
+                  fontSize: ScreenUtil().setSp(24),
+                  color: MyColors.g6,
+                  fontFamily: 'YOUSHEBIAOTIHEI'),),
             ],
           ),
         ],
@@ -386,15 +390,17 @@ class _PaiduiPageState extends State<PaiduiPage>
           /// 热度
           Row(
             children: [
-              WidgetUtils.showImages('assets/images/paidui_redu.png',
-                  ScreenUtil().setHeight(22), ScreenUtil().setHeight(14)),
-              WidgetUtils.commonSizedBox(0, 5),
-              WidgetUtils.onlyText(
-                  hotDegree > 10000
-                      ? (hotDegree / 10000).toStringAsFixed(2)
-                      : hotDegree.toString(),
-                  StyleUtils.getCommonTextStyle(
-                      color: MyColors.g6, fontSize: ScreenUtil().setSp(24)))
+              Text('热度值:',style: TextStyle(
+                  fontSize: ScreenUtil().setSp(24),
+                  color: MyColors.g6,
+                  fontFamily: 'YOUSHEBIAOTIHEI'),),
+              // WidgetUtils.commonSizedBox(0, 5),
+              Text(hotDegree > 9999
+                  ? '${(hotDegree / 10000).toStringAsFixed(2)}w'
+                  : hotDegree.toString(),style: TextStyle(
+                  fontSize: ScreenUtil().setSp(24),
+                  color: MyColors.g6,
+                  fontFamily: 'YOUSHEBIAOTIHEI'),),
             ],
           ),
         ],

@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
+import '../../bean/Common_bean.dart';
 import '../../bean/roomBGBean.dart';
 import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
@@ -34,6 +35,7 @@ class _RoomBG2PageState extends State<RoomBG2Page>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
+  String chooseID = '';
 
   @override
   void initState() {
@@ -50,7 +52,7 @@ class _RoomBG2PageState extends State<RoomBG2Page>
     doPostPostFileUpload(image!.path);
   }
 
-  ///收藏使用
+  ///添加背景图和显示背景图
   Widget _initlistdata(context, index) {
     LogE('返回下标$index');
     return index == list.length
@@ -127,14 +129,27 @@ class _RoomBG2PageState extends State<RoomBG2Page>
                     Positioned(
                         top: 10.h,
                         right: 10.h,
-                        child: ClipOval(
-                          child: Container(
-                            color: Colors.white.withOpacity(0.7),
-                            width: 20,
-                            height: 20,
-                            child: const Icon(
-                              Icons.close,
-                              size: 20,
+                        child: GestureDetector(
+                          onTap: ((){
+                            if(MyUtils.checkClick()) {
+                              if (chooseID == list[index].bgId.toString()) {
+                                MyToastUtils.showToastBottom(
+                                    '当前背景正在使用，无法删除');
+                              } else {
+                                postRemoveRoomBg(
+                                    list[index].bgId.toString(), index);
+                              }
+                            }
+                          }),
+                          child: ClipOval(
+                            child: Container(
+                              color: Colors.white.withOpacity(0.7),
+                              width: 20,
+                              height: 20,
+                              child: const Icon(
+                                Icons.close,
+                                size: 20,
+                              ),
                             ),
                           ),
                         ))
@@ -170,8 +185,37 @@ class _RoomBG2PageState extends State<RoomBG2Page>
 
   List<CustomBglist> list = [];
 
+  /// 删除背景图
+  Future<void> postRemoveRoomBg(String bgID,int index) async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'room_id': sp.getString('roomID').toString(),
+      'bg_id': bgID,
+    };
+    try {
+      CommonBean bean = await DataUtils.postRemoveRoomBg(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            list.removeAt(index);
+          });
+          MyToastUtils.showToastBottom('删除成功');
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
   /// 房间默认背景
   Future<void> doPostBgList() async {
+    Loading.show();
     LogE('token = ${sp.getString('user_token')}, == id = ${sp.getString('roomID').toString()} ');
     Map<String, dynamic> params = <String, dynamic>{
       'room_id': sp.getString('roomID').toString(),
@@ -183,6 +227,12 @@ class _RoomBG2PageState extends State<RoomBG2Page>
           list.clear();
           setState(() {
             list = bean.data!.customBglist!;
+            for(int i = 0; i < bean.data!.customBglist!.length; i++){
+              if(bean.data!.customBglist![i].type == 1){
+                chooseID = bean.data!.customBglist![i].bgId.toString();
+                break;
+              }
+            }
           });
           break;
         case MyHttpConfig.errorloginCode:
@@ -193,7 +243,9 @@ class _RoomBG2PageState extends State<RoomBG2Page>
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
+      Loading.dismiss();
     } catch (e) {
+      Loading.dismiss();
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }

@@ -22,6 +22,7 @@ import '../../utils/my_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../../widget/SVGASimpleImage.dart';
 import '../message/geren/people_info_page.dart';
+import '../mine/my/my_info_page.dart';
 
 /// 厅内人员信息详情
 class RoomPeopleInfoPage extends StatefulWidget {
@@ -97,9 +98,9 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
           Expanded(
             child: GestureDetector(
               onTap: (() {
-    if(MyUtils.checkClick()) {
-      Navigator.pop(context);
-    }
+                if (MyUtils.checkClick()) {
+                  Navigator.pop(context);
+                }
               }),
               child: Container(
                 height: double.infinity,
@@ -141,14 +142,14 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                 WidgetUtils.commonSizedBox(0, 20),
                                 GestureDetector(
                                   onTap: (() {
-    if(MyUtils.checkClick()) {
-      MyUtils.goTransparentPage(
-          context,
-          RoomSendInfoPage(
-            info: nickName,
-          ));
-      Navigator.pop(context);
-    }
+                                    if (MyUtils.checkClick()) {
+                                      MyUtils.goTransparentPage(
+                                          context,
+                                          RoomSendInfoPage(
+                                            info: nickName,
+                                          ));
+                                      Navigator.pop(context);
+                                    }
                                   }),
                                   child: WidgetUtils.showImages(
                                       'assets/images/room_@ta.png',
@@ -190,14 +191,14 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                     WidgetUtils.commonSizedBox(0, 20),
                                     GestureDetector(
                                       onTap: (() {
-    if(MyUtils.checkClick()) {
-      MyUtils.goTransparentPage(
-          context,
-          RoomSendInfoPage(
-            info: nickName,
-          ));
-      Navigator.pop(context);
-    }
+                                        if (MyUtils.checkClick()) {
+                                          MyUtils.goTransparentPage(
+                                              context,
+                                              RoomSendInfoPage(
+                                                info: nickName,
+                                              ));
+                                          Navigator.pop(context);
+                                        }
                                       }),
                                       child: WidgetUtils.showImages(
                                           'assets/images/room_@ta.png',
@@ -225,14 +226,14 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                     WidgetUtils.commonSizedBox(0, 20),
                                     GestureDetector(
                                       onTap: (() {
-    if(MyUtils.checkClick()) {
-      MyUtils.goTransparentPage(
-          context,
-          RoomSendInfoPage(
-            info: nickName,
-          ));
-      Navigator.pop(context);
-    }
+                                        if (MyUtils.checkClick()) {
+                                          MyUtils.goTransparentPage(
+                                              context,
+                                              RoomSendInfoPage(
+                                                info: nickName,
+                                              ));
+                                          Navigator.pop(context);
+                                        }
                                       }),
                                       child: WidgetUtils.showImages(
                                           'assets/images/room_@ta.png',
@@ -250,7 +251,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           WidgetUtils.onlyText(
-                              nickName,
+                              nickName.length>12?'${nickName.substring(0,12)}...' : nickName,
                               StyleUtils.getCommonTextStyle(
                                   color: MyColors.roomTCWZ2,
                                   fontSize: ScreenUtil().setSp(32),
@@ -262,6 +263,98 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                   : 'assets/images/room_nv.png',
                               ScreenUtil().setHeight(31),
                               ScreenUtil().setHeight(29)),
+                          WidgetUtils.commonSizedBox(0, 10),
+                          // 用户等级
+                          level != 0
+                              ? Stack(
+                            alignment: Alignment.centerLeft,
+                            children: [
+                              WidgetUtils.showImagesFill(
+                                  (level >= 1 && level <= 10)
+                                      ? 'assets/images/dj/dj_c_1-10.png'
+                                      : (level >= 11 && level <= 15)
+                                      ? 'assets/images/dj/dj_c_11-15.png'
+                                      : (level >= 16 && level <= 20)
+                                      ? 'assets/images/dj/dj_c_16-20.png'
+                                      : (level >= 21 &&
+                                      level <= 25)
+                                      ? 'assets/images/dj/dj_c_21-25.png'
+                                      : (level >= 26 &&
+                                      level <= 30)
+                                      ? 'assets/images/dj/dj_c_26-30.png'
+                                      : (level >= 31 &&
+                                      level <=
+                                          35)
+                                      ? 'assets/images/dj/dj_c_31-35.png'
+                                      : (level >= 36 &&
+                                      level <=
+                                          40)
+                                      ? 'assets/images/dj/dj_c_36-40.png'
+                                      : (level >= 41 &&
+                                      level <= 45)
+                                      ? 'assets/images/dj/dj_c_41-45.png'
+                                      : 'assets/images/dj/dj_c_46-50.png',
+                                  ScreenUtil().setHeight(30),
+                                  ScreenUtil().setHeight(85)),
+                              Positioned(
+                                  left: 45.w,
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Text(
+                                        'LV.${level.toString()}',
+                                        style: TextStyle(
+                                            fontSize:
+                                            ScreenUtil().setSp(18),
+                                            fontWeight: FontWeight.w600,
+                                            fontFamily: 'ARIAL',
+                                            foreground: Paint()
+                                              ..style =
+                                                  PaintingStyle.stroke
+                                              ..strokeWidth = 2
+                                              ..color = (level >= 1 &&
+                                                  level <= 10)
+                                                  ? MyColors.djOneM
+                                                  : (level >= 11 &&
+                                                  level <= 15)
+                                                  ? MyColors.djTwoM
+                                                  : (level >= 16 &&
+                                                  level <=
+                                                      20)
+                                                  ? MyColors
+                                                  .djThreeM
+                                                  : (level >= 21 &&
+                                                  level <=
+                                                      25)
+                                                  ? MyColors
+                                                  .djFourM
+                                                  : (level >= 26 &&
+                                                  level <=
+                                                      30)
+                                                  ? MyColors
+                                                  .djFiveM
+                                                  : (level >= 31 && level <= 35)
+                                                  ? MyColors.djSixM
+                                                  : (level >= 36 && level <= 40)
+                                                  ? MyColors.djSevenM
+                                                  : (level >= 41 && level <= 45)
+                                                  ? MyColors.djEightM
+                                                  : MyColors.djNineM),
+                                      ),
+                                      Text(
+                                        'LV.${level.toString()}',
+                                        style: TextStyle(
+                                            color: MyColors.djOne,
+                                            fontSize:
+                                            ScreenUtil().setSp(18),
+                                            fontWeight: FontWeight.w600,
+                                            fontFamily: 'ARIAL'),
+                                      ),
+                                    ],
+                                  ))
+                            ],
+                          )
+                              : const Text(''),
                         ],
                       ),
                       WidgetUtils.commonSizedBox(10, 0),
@@ -363,11 +456,11 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                         ),
                                         GestureDetector(
                                           onTap: (() {
-    if(MyUtils.checkClick()) {
-      eventBus.fire(RoomBack(
-          title: '下麦',
-          index: widget.index));
-    }
+                                            if (MyUtils.checkClick()) {
+                                              eventBus.fire(RoomBack(
+                                                  title: '下麦',
+                                                  index: widget.index));
+                                            }
                                           }),
                                           child: WidgetUtils.onlyTextCenter(
                                               '下麦',
@@ -407,9 +500,9 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                         ),
                                         GestureDetector(
                                           onTap: (() {
-    if(MyUtils.checkClick()) {
-      doPostSetClose(widget.index);
-    }
+                                            if (MyUtils.checkClick()) {
+                                              doPostSetClose(widget.index);
+                                            }
                                           }),
                                           child: WidgetUtils.onlyTextCenter(
                                               zhuangtai,
@@ -434,9 +527,9 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                           Expanded(
                               child: GestureDetector(
                             onTap: (() {
-    if(MyUtils.checkClick()) {
-      doPostFollow();
-    }
+                              if (MyUtils.checkClick()) {
+                                doPostFollow();
+                              }
                             }),
                             child: WidgetUtils.onlyTextCenter(
                                 status == '0' ? '关注' : '已关注',
@@ -452,15 +545,15 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                           Expanded(
                               child: GestureDetector(
                             onTap: (() {
-    if(MyUtils.checkClick()) {
-      Navigator.pop(context);
-      MyUtils.goTransparentPage(
-          context,
-          RoomLiWuPage(
-            listM: widget.listM,
-            uid: widget.uid,
-          ));
-    }
+                              if (MyUtils.checkClick()) {
+                                Navigator.pop(context);
+                                MyUtils.goTransparentPage(
+                                    context,
+                                    RoomLiWuPage(
+                                      listM: widget.listM,
+                                      uid: widget.uid,
+                                    ));
+                              }
                             }),
                             child: WidgetUtils.onlyTextCenter(
                                 '送礼物',
@@ -476,13 +569,9 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                           Expanded(
                               child: GestureDetector(
                             onTap: (() {
-                              MyUtils.goTransparentPageCom(
-                                  context,
-                                  RoomMessagesMorePage(
-                                    otherUid: widget.uid,
-                                    otherImg: headImg,
-                                    nickName: nickName,
-                                  ));
+                              if(MyUtils.checkClick()) {
+                                doPostCanSendUser();
+                              }
                             }),
                             child: WidgetUtils.onlyTextCenter(
                                 '私聊',
@@ -623,12 +712,12 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
 
                 GestureDetector(
                   onTap: (() {
-                    if (MyUtils.checkClick()) {
-                      MyUtils.goTransparentRFPage(
-                          context,
-                          PeopleInfoPage(
-                            otherId: widget.uid,
-                          ));
+                    // 如果点击的是自己，进入自己的主页
+                    if(sp.getString('user_id').toString() == widget.uid){
+                      MyUtils.goTransparentRFPage(context, const MyInfoPage());
+                    }else{
+                      sp.setString('other_id', widget.uid);
+                      MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: widget.uid,));
                     }
                   }),
                   child: Stack(
@@ -664,6 +753,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
     );
   }
 
+  int level = 0; //用户等级
   /// 查看用户
   Future<void> doPostRoomUserInfo() async {
     Map<String, dynamic> params = <String, dynamic>{'uid': widget.uid};
@@ -680,6 +770,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
             description = bean.data!.description!;
             sex = bean.data!.gender as int;
             status = bean.data!.followStatus!;
+            level = bean.data!.level as int;
           });
           break;
         case MyHttpConfig.errorloginCode:
@@ -884,6 +975,37 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
           break;
         case MyHttpConfig.errorloginCode:
           // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+
+  /// 能否发私聊
+  Future<void> doPostCanSendUser() async {
+    Map<String, dynamic> params = <String, dynamic>{'uid': widget.uid};
+    try {
+      CommonBean bean = await DataUtils.postCanSendUser(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+        //可以发私聊跳转
+        // ignore: use_build_context_synchronously
+          MyUtils.goTransparentPageCom(
+              context,
+              RoomMessagesMorePage(
+                otherUid: widget.uid,
+                otherImg: headImg,
+                nickName: nickName,
+              ));
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:

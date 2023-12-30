@@ -13,6 +13,8 @@ import '../../../utils/loading.dart';
 import '../../../utils/log_util.dart';
 import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
+import '../../../widget/SwiperPage.dart';
+import '../liwu/wall_page.dart';
 
 ///资料
 
@@ -35,62 +37,64 @@ class _MyZiliaoPageState extends State<MyZiliaoPage> {
       voice_card = '',
       description = '',
       city = '',
-      constellation = '';
+      constellation = '',
+      xzUrl = '';
 
   List<String> list_p = [];
   List<ReceiveGift> list_a = [];
   TextEditingController controller = TextEditingController();
+  // 查看图片使用
+  List<String> imgList = [];
+
 
   Widget _itemTuiJian(BuildContext context, int i) {
-    return Container(
-      margin: const EdgeInsets.only(right: 10),
-      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(110),
-          ScreenUtil().setHeight(110), ScreenUtil().setHeight(20), list_p[i]),
+    return GestureDetector(
+      onTap: (() {
+        Navigator.of(context).push(PageRouteBuilder(
+            opaque: false,
+            pageBuilder: (context, animation, secondaryAnimation) {
+              return SwiperPage(imgList: imgList);
+            }));
+      }),
+      child: Container(
+        margin: const EdgeInsets.only(right: 10),
+        child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(160),
+            ScreenUtil().setHeight(160), ScreenUtil().setHeight(20), list_p[i]),
+      ),
     );
   }
 
-
-  Widget liwu(int i){
-    if(i == 1){
-      return WidgetUtils.CircleImageNet(110.h,
-          110.h, 55.h, list_a[0].img!);
-    }else if(i == 2){
+  Widget liwu(int i) {
+    if (i == 1) {
+      return WidgetUtils.CircleImageNet(110.h, 110.h, 55.h, list_a[0].img!);
+    } else if (i == 2) {
       return Row(
         children: [
-          WidgetUtils.CircleImageNet(110.h,
-              110.h, 55.h, list_a[0].img!),
+          WidgetUtils.CircleImageNet(110.h, 110.h, 55.h, list_a[0].img!),
           WidgetUtils.commonSizedBox(0, 10.h),
-          WidgetUtils.CircleImageNet(110.h,
-              110.h, 55.h, list_a[1].img!)
+          WidgetUtils.CircleImageNet(110.h, 110.h, 55.h, list_a[1].img!)
         ],
       );
-    }else if(i == 3){
+    } else if (i == 3) {
       return Row(
         children: [
-          WidgetUtils.CircleImageNet(110.h,
-              110.h, 55.h, list_a[0].img!),
+          WidgetUtils.CircleImageNet(110.h, 110.h, 55.h, list_a[0].img!),
           WidgetUtils.commonSizedBox(0, 10.h),
-          WidgetUtils.CircleImageNet(110.h,
-              110.h, 55.h, list_a[1].img!),
+          WidgetUtils.CircleImageNet(110.h, 110.h, 55.h, list_a[1].img!),
           WidgetUtils.commonSizedBox(0, 10.h),
-          WidgetUtils.CircleImageNet(110.h,
-              110.h, 55.h, list_a[2].img!)
+          WidgetUtils.CircleImageNet(110.h, 110.h, 55.h, list_a[2].img!)
         ],
       );
-    }else{
+    } else {
       return Row(
         children: [
-          WidgetUtils.CircleImageNet(110.h,
-              110.h, 55.h, list_a[0].img!),
+          WidgetUtils.CircleImageNet(110.h, 110.h, 55.h, list_a[0].img!),
           WidgetUtils.commonSizedBox(0, 10.h),
-          WidgetUtils.CircleImageNet(110.h,
-              110.h, 55.h, list_a[1].img!),
+          WidgetUtils.CircleImageNet(110.h, 110.h, 55.h, list_a[1].img!),
           WidgetUtils.commonSizedBox(0, 10.h),
-          WidgetUtils.CircleImageNet(110.h,
-              110.h, 55.h, list_a[2].img!),
+          WidgetUtils.CircleImageNet(110.h, 110.h, 55.h, list_a[2].img!),
           WidgetUtils.commonSizedBox(0, 10.h),
-          WidgetUtils.CircleImageNet(110.h,
-              110.h, 55.h, list_a[3].img!)
+          WidgetUtils.CircleImageNet(110.h, 110.h, 55.h, list_a[3].img!)
         ],
       );
     }
@@ -123,9 +127,12 @@ class _MyZiliaoPageState extends State<MyZiliaoPage> {
               children: [
                 GestureDetector(
                   onTap: (() {
-    if(MyUtils.checkClick()) {
-      Navigator.pushNamed(context, 'WallPage');
-    }
+                    if (MyUtils.checkClick()) {
+                      if (MyUtils.checkClick()) {
+                        MyUtils.goTransparentPageCom(context,
+                            WallPage(uid: sp.getString('user_id').toString()));
+                      }
+                    }
                   }),
                   child: Container(
                     height: ScreenUtil().setHeight(44),
@@ -171,10 +178,10 @@ class _MyZiliaoPageState extends State<MyZiliaoPage> {
                 Expanded(
                   child: list_a.isNotEmpty
                       ? Row(
-                    children: [
-                      liwu(list_a.length),
-                    ],
-                  )
+                          children: [
+                            liwu(list_a.length),
+                          ],
+                        )
                       : Column(
                           children: [
                             const Expanded(child: Text('')),
@@ -208,10 +215,13 @@ class _MyZiliaoPageState extends State<MyZiliaoPage> {
                 WidgetUtils.showImages('assets/images/people_xingzuo.png',
                     ScreenUtil().setHeight(40), ScreenUtil().setHeight(40)),
                 WidgetUtils.commonSizedBox(0, 10),
-                WidgetUtils.onlyText(
-                    constellation.isEmpty ? '未知' : constellation,
-                    StyleUtils.getCommonTextStyle(
-                        color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
+                constellation.isEmpty
+                    ? WidgetUtils.onlyText(
+                        '未知',
+                        StyleUtils.getCommonTextStyle(
+                            color: MyColors.g3,
+                            fontSize: ScreenUtil().setSp(25)))
+                    : WidgetUtils.showImages(xzUrl, 45.h, 160.w),
               ],
             ),
           ),
@@ -265,14 +275,14 @@ class _MyZiliaoPageState extends State<MyZiliaoPage> {
           WidgetUtils.commonSizedBox(20, 0),
           list_p.isNotEmpty
               ? SizedBox(
-                  height: ScreenUtil().setHeight(110),
+                  height: ScreenUtil().setHeight(160),
                   width: double.infinity,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: _itemTuiJian,
-                    itemCount: list_p.length > 4 ? 4 : list_p.length,
+                    itemCount: list_p.length > 3 ? 3 : list_p.length,
                   ),
                 )
               : const Text(''),
@@ -304,10 +314,38 @@ class _MyZiliaoPageState extends State<MyZiliaoPage> {
             is_pretty = bean.data!.userInfo!.isPretty as int;
             age = bean.data!.userInfo!.age as int;
             constellation = bean.data!.userInfo!.constellation!;
+            if (bean.data!.userInfo!.constellation! == '白羊座') {
+              xzUrl = 'assets/images/xz/baiyang.png';
+            } else if (bean.data!.userInfo!.constellation! == '处女座') {
+              xzUrl = 'assets/images/xz/chunv.png';
+            } else if (bean.data!.userInfo!.constellation! == '金牛座') {
+              xzUrl = 'assets/images/xz/jinniu.png';
+            } else if (bean.data!.userInfo!.constellation! == '巨蟹座') {
+              xzUrl = 'assets/images/xz/juxie.png';
+            } else if (bean.data!.userInfo!.constellation! == '摩羯座') {
+              xzUrl = 'assets/images/xz/mojie.png';
+            } else if (bean.data!.userInfo!.constellation! == '射手座') {
+              xzUrl = 'assets/images/xz/sheshou.png';
+            } else if (bean.data!.userInfo!.constellation! == '狮子座') {
+              xzUrl = 'assets/images/xz/shizi.png';
+            } else if (bean.data!.userInfo!.constellation! == '双鱼座') {
+              xzUrl = 'assets/images/xz/shuangyu.png';
+            } else if (bean.data!.userInfo!.constellation! == '双子座') {
+              xzUrl = 'assets/images/xz/shuangzi.png';
+            } else if (bean.data!.userInfo!.constellation! == '水瓶座') {
+              xzUrl = 'assets/images/xz/shuiping.png';
+            } else if (bean.data!.userInfo!.constellation! == '天秤座') {
+              xzUrl = 'assets/images/xz/tiancheng.png';
+            } else if (bean.data!.userInfo!.constellation! == '天蝎座') {
+              xzUrl = 'assets/images/xz/tianxie.png';
+            }
             city = bean.data!.userInfo!.city!;
             description = bean.data!.userInfo!.description!;
             if (bean.data!.userInfo!.photoId!.isNotEmpty) {
               list_p = bean.data!.userInfo!.photoUrl!;
+            }
+            for(int i = 0; i < bean.data!.userInfo!.photoUrl!.length; i++) {
+              imgList.add(bean.data!.userInfo!.photoUrl![i].toString());
             }
             if (bean.data!.giftList!.receiveGift!.isNotEmpty) {
               list_a = bean.data!.giftList!.receiveGift!;

@@ -27,6 +27,7 @@ import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../../widget/OptionGridView.dart';
 import '../../widget/queren_h_page.dart';
+import 'car/car_guize_h_page.dart';
 import 'car/car_h_shop_page.dart';
 import 'car/lishi_h_page.dart';
 import 'car/zhongjian_h_page.dart';
@@ -996,7 +997,7 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
     });
 
     // 接受下注的im信息
-    listenZDY = eventBus.on<ZDYBack>().listen((event) {
+    listenZDY = eventBus.on<JoinRoomYBack>().listen((event) {
       if (event.map!['avatar'].toString().isNotEmpty && isShow) {
         if (listZDY.length < 8) {
           Map<dynamic, dynamic> map = {};
@@ -1071,665 +1072,700 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          SizedBox(
-            height: 240,
-            width: double.infinity,
-            child: Stack(
-              children: [
-                //背景图
-                SizedBox(
-                  height: double.infinity,
-                  width: double.infinity,
-                  child: PageView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    controller: _controller,
-                    itemBuilder: (context, index) {
-                      final imageIndex = index % imagesa.length;
-                      return Image.asset(
-                        imagesa[imageIndex],
-                        width: double.infinity,
-                        height: double.infinity,
-                        fit: BoxFit.fill,
-                        gaplessPlayback: true,
-                      );
-                    },
+      body: WillPopScope(
+        onWillPop: () async {
+          //这里可以响应物理返回键
+          /// 如果是全屏就切换竖屏
+          AutoOrientation.portraitAutoMode();
+          Navigator.pop(context);
+          return false;
+        },
+        child:Column(
+          children: [
+            SizedBox(
+              height: 240,
+              width: double.infinity,
+              child: Stack(
+                children: [
+                  //背景图
+                  SizedBox(
+                    height: double.infinity,
+                    width: double.infinity,
+                    child: PageView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      controller: _controller,
+                      itemBuilder: (context, index) {
+                        final imageIndex = index % imagesa.length;
+                        return Image.asset(
+                          imagesa[imageIndex],
+                          width: double.infinity,
+                          height: double.infinity,
+                          fit: BoxFit.fill,
+                          gaplessPlayback: true,
+                        );
+                      },
+                    ),
                   ),
-                ),
 
-                Positioned(
-                  top: 55,
-                  left: 12,
-                  child: SlideTransition(
-                    position: _carPlay(0),
-                    child: Row(
-                      children: [
-                        Stack(
-                          children: [
-                            WidgetUtils.showImages(
-                                listCar[0] ? 'assets/images/car/xiaogui+.png' : 'assets/images/car/xiaogui.png',
-                                60,
-                                100),
-                            isShow == false ? Positioned(
-                                left: 41,
-                                top: 45,
-                                child: WidgetUtils.showImages(
-                                    'assets/images/z_wheel.gif',
-                                    8,
-                                    8)) : const Text(''),
-                            isShow == false ? Positioned(
-                                left: 72,
-                                top: 45,
-                                child: WidgetUtils.showImages(
-                                    'assets/images/z_wheel.gif',
-                                    8,
-                                    8)) : const Text(''),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 75,
-                  left: 5,
-                  child: SlideTransition(
-                    position: _carPlay(1),
-                    child: Row(
-                      children: [
-                        Stack(
-                          children: [
-                            WidgetUtils.showImages(
-                                listCar[1] ? 'assets/images/car/guigui+.png' : 'assets/images/car/guigui.png',
-                                60,
-                                100),
-                            isShow == false ? Positioned(
-                                left: 37,
-                                top: 43,
-                                child: WidgetUtils.showImages(
-                                    'assets/images/z_wheel.gif',
-                                    10,
-                                    10)) : const Text(''),
-                            isShow == false ? Positioned(
-                                left: 65,
-                                top: 45,
-                                child: WidgetUtils.showImages(
-                                    'assets/images/z_wheel.gif',
-                                    10,
-                                    10)) : const Text(''),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 95,
-                  left: 3,
-                  child: SlideTransition(
-                    position: _carPlay(2),
-                    child: Row(
-                      children: [
-                        Stack(
-                          children: [
-                            WidgetUtils.showImages(
-                                listCar[2] ? 'assets/images/car/lan+.png' : 'assets/images/car/lan.png',
-                                60,
-                                100),
-                            isShow == false ? Positioned(
-                                left: 33,
-                                top: 42,
-                                child: WidgetUtils.showImages(
-                                    'assets/images/z_wheel.gif',
-                                    10,
-                                    10)) : const Text(''),
-                            isShow == false ? Positioned(
-                                left: 63,
-                                top: 42,
-                                child: WidgetUtils.showImages(
-                                    'assets/images/z_wheel.gif',
-                                    11,
-                                    11)) : const Text(''),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 116,
-                  left: -2,
-                  child: SlideTransition(
-                    position: _carPlay(3),
-                    child: Row(
-                      children: [
-                        Stack(
-                          children: [
-                            WidgetUtils.showImages(
-                                listCar[3] ? 'assets/images/car/hou+.png' : 'assets/images/car/hou.png',
-                                60,
-                                100),
-                            isShow == false ? Positioned(
-                                left: 30,
-                                top: 43,
-                                child: WidgetUtils.showImages(
-                                    'assets/images/z_wheel.gif',
-                                    7,
-                                    7)) : const Text(''),
-                            isShow == false ? Positioned(
-                                left: 71,
-                                top: 45.5,
-                                child: WidgetUtils.showImages(
-                                    'assets/images/z_wheel.gif',
-                                    7,
-                                    7)) : const Text(''),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 137,
-                  left: -7,
-                  child: SlideTransition(
-                    position: _carPlay(4),
-                    child: Row(
-                      children: [
-                        Stack(
-                          children: [
-                            WidgetUtils.showImages(
-                                listCar[4] ? 'assets/images/car/fen+.png' : 'assets/images/car/fen.png',
-                                60,
-                                100),
-                            isShow == false ? Positioned(
-                                left: 33,
-                                top: 43,
-                                child: WidgetUtils.showImages(
-                                    'assets/images/z_wheel.gif',
-                                    9,
-                                    9)) : const Text(''),
-                            isShow == false ? Positioned(
-                                left: 65,
-                                top: 45,
-                                child: WidgetUtils.showImages(
-                                    'assets/images/z_wheel.gif',
-                                    9,
-                                    9)) : const Text(''),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 160,
-                  left: -14,
-                  child: SlideTransition(
-                    position: _carPlay(5),
-                    child: Row(
-                      children: [
-                        Stack(
-                          children: [
-                            WidgetUtils.showImages(
-                                listCar[5] ? 'assets/images/car/lv+.png' : 'assets/images/car/lv.png',
-                                60,
-                                100),
-                            isShow == false ? Positioned(
-                                left: 34,
-                                top: 41,
-                                child: WidgetUtils.showImages(
-                                    'assets/images/z_wheel.gif',
-                                    10,
-                                    10)) : const Text(''),
-                            isShow == false ? Positioned(
-                                left: 64,
-                                top: 45,
-                                child: WidgetUtils.showImages(
-                                    'assets/images/z_wheel.gif',
-                                    8,
-                                    8)) : const Text(''),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 182,
-                  left: -20,
-                  child: SlideTransition(
-                    position: _carPlay(6),
-                    child: Row(
-                      children: [
-                        Stack(
-                          children: [
-                            WidgetUtils.showImages(
-                                listCar[6] ? 'assets/images/car/maliao+.png' : 'assets/images/car/maliao.png',
-                                60,
-                                100),
-                            isShow == false ? Positioned(
-                                left: 33,
-                                top: 40,
-                                child: WidgetUtils.showImages(
-                                    'assets/images/z_wheel.gif',
-                                    11,
-                                    11)) : const Text(''),
-                            isShow == false ? Positioned(
-                                left: 63,
-                                top: 42.5,
-                                child: WidgetUtils.showImages(
-                                    'assets/images/z_wheel.gif',
-                                    9,
-                                    9)) : const Text(''),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                // 倒计时闹钟
-                isShow
-                    ? Positioned(
-                  top: 30,
-                  left: 355,
-                  child: Stack(
-                    children: [
-                      WidgetUtils.showImages(
-                          'assets/images/car_jingcai.png', 80, 80),
-                      Container(
-                        height: 70,
-                        width: 80,
-                        alignment: Alignment.center,
-                        child: WidgetUtils.onlyTextCenter(
-                            sum.toString(),
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.mineRed,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600)),
-                      )
-                    ],
-                  ),
-                )
-                    : const Text(''),
-                //倒计时svga
-                isPlay
-                    ? const Positioned(
-                  top: -30,
-                  left: 305,
-                  height: 175,
-                  width: 180,
-                  child: SVGASimpleImage(
-                    assetsName: 'assets/svga/gp/djs.svga',
-                  ),
-                )
-                    : const Text(''),
-                isGo? Positioned(
-                  top: 0,
-                  left: 325,
-                  child: ScaleTransition(
-                    scale: animationGO,
-                    child: WidgetUtils.showImages('assets/images/car_go.png', 130, 130),
-                  ),
-                ): const Text(''),
-
-                //下注金额
-                isShow ? Positioned(
-                  top: 110,
-                  left: 200,
-                  child:  Row(
-                  children: [
-                    jine(0),
-                    WidgetUtils.commonSizedBox(0, 30),
-                    jine(1),
-                    WidgetUtils.commonSizedBox(0, 30),
-                    jine(2),
-                    WidgetUtils.commonSizedBox(0, 30),
-                    jine(3),
-                  ],
-                ),) : const Text(''),
-
-                //左侧按钮
-                SizedBox(
-                  height: 100,
-                  child: Row(
-                    children: [
-                      // 左侧按键
-                      SizedBox(
-                        height: 100,
-                        child: Column(
-                          children: [
-                            WidgetUtils.commonSizedBox(10, 0),
-                            GestureDetector(
-                              onTap: ((){
-                                MyUtils.goTransparentPageCom(context, const Carpage());
-                                /// 如果是全屏就切换竖屏
-                                AutoOrientation.portraitAutoMode();
-                                ///显示状态栏，与底部虚拟操作按钮
-                                SystemChrome.setEnabledSystemUIOverlays(
-                                    [SystemUiOverlay.top, SystemUiOverlay.bottom]);
-                                Navigator.pop(context);
-                              }),
-                              child: Container(
-                                height: 20,
-                                width: 55,
-                                //边框设置
-                                decoration: const BoxDecoration(
-                                    image: DecorationImage(
-                                      //背景图片修饰
-                                      image: AssetImage(
-                                          "assets/images/car_anniu.png"),
-                                      fit: BoxFit.fill, //覆盖
-                                    )),
-                                child: WidgetUtils.onlyTextCenter(
-                                    '竖屏模式',
-                                    StyleUtils.getCommonTextStyle(
-                                        color: Colors.white,
-                                        fontSize: 11)),
-                              ),
-                            ),
-                            WidgetUtils.commonSizedBox(2.5, 0),
-                            GestureDetector(
-                              onTap: ((){
-                                if(sp.getString('car_audio') == null || sp.getString('car_audio').toString() == '开启'){
-                                  sp.setString('car_audio', '关闭');
-                                }else{
-                                  sp.setString('car_audio', '开启');
-                                }
-                              }),
-                              child: Container(
-                                height: 20,
-                                width: 55,
-                                //边框设置
-                                decoration: const BoxDecoration(
-                                    image: DecorationImage(
-                                      //背景图片修饰
-                                      image: AssetImage(
-                                          "assets/images/car_anniu.png"),
-                                      fit: BoxFit.fill, //覆盖
-                                    )),
-                                child: WidgetUtils.onlyTextCenter(
-                                    sp.getString('car_audio') == null || sp.getString('car_audio').toString() == '开启' ? '关闭音效' : '开启音效',
-                                    StyleUtils.getCommonTextStyle(
-                                        color: sp.getString('car_audio') == null || sp.getString('car_audio').toString() == '开启' ? Colors.white :  MyColors.peopleYellow,
-                                        fontSize: 11)),
-                              ),
-                            ),
-                            WidgetUtils.commonSizedBox(2.5, 0),
-                            GestureDetector(
-                              onTap: ((){
-                                MyUtils.goTransparentPageCom(context, const LiShiHPage());
-                              }),
-                              child: Container(
-                                height: 20,
-                                width: 55,
-                                //边框设置
-                                decoration: const BoxDecoration(
-                                    image: DecorationImage(
-                                      //背景图片修饰
-                                      image: AssetImage(
-                                          "assets/images/car_anniu.png"),
-                                      fit: BoxFit.fill, //覆盖
-                                    )),
-                                child: WidgetUtils.onlyTextCenter(
-                                    '开奖记录',
-                                    StyleUtils.getCommonTextStyle(
-                                        color: Colors.white,
-                                        fontSize: 11)),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      const Spacer(),
-                      // 右侧按键
-                      Stack(
+                  Positioned(
+                    top: 55,
+                    left: 12,
+                    child: SlideTransition(
+                      position: _carPlay(0),
+                      child: Row(
                         children: [
-                          Column(
+                          Stack(
                             children: [
-                              WidgetUtils.commonSizedBox(10, 0),
-                              Container(
-                                height: 20,
-                                margin: const EdgeInsets.only(right: 5),
-                                padding: const EdgeInsets.only(
-                                    left: 5, right: 5, top: 1, bottom: 1),
-                                //边框设置
-                                decoration: const BoxDecoration(
-                                  //背景
-                                  color: MyColors.zpJLHX,
-                                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                  borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                                ),
-                                child: Row(
-                                  children: [
-                                    WidgetUtils.commonSizedBox(0, 5),
-                                    WidgetUtils.showImages(
-                                        'assets/images/car_mogubi.png',
-                                        12,
-                                        12),
-                                    WidgetUtils.commonSizedBox(
-                                        0, 2),
-                                    WidgetUtils.onlyTextCenter(
-                                        mogubi2,
-                                        StyleUtils.getCommonTextStyle(
-                                            color: Colors.white,
-                                            fontSize: ScreenUtil().setSp(23),
-                                            fontWeight: FontWeight.w600)),
-                                    WidgetUtils.commonSizedBox(
-                                        0, 5),
-                                    Opacity(
-                                      opacity: 0.8,
-                                      child: Container(
-                                        height: 10,
-                                        width: 1,
-                                        color: MyColors.home_hx,
-                                      ),
-                                    ),
-                                    WidgetUtils.commonSizedBox(
-                                        0, 5),
-                                    WidgetUtils.showImages(
-                                        'assets/images/mine_wallet_dd.png',
-                                        12,
-                                        12),
-                                    WidgetUtils.commonSizedBox(
-                                        0, 5),
-                                    WidgetUtils.onlyTextCenter(
-                                        jinbi2,
-                                        StyleUtils.getCommonTextStyle(
-                                            color: Colors.white,
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.w600)),
-                                    WidgetUtils.commonSizedBox(
-                                        0, 5),
-                                    Opacity(
-                                      opacity: 0.8,
-                                      child: Container(
-                                        height: 10,
-                                        width: 1,
-                                        color: MyColors.home_hx,
-                                      ),
-                                    ),
-                                    WidgetUtils.commonSizedBox(
-                                        0, 5),
-                                    WidgetUtils.showImages(
-                                        'assets/images/mine_wallet_zz.png',
-                                        12,
-                                        12),
-                                    WidgetUtils.commonSizedBox(
-                                        0, 5),
-                                    WidgetUtils.onlyTextCenter(
-                                        zuanshi2,
-                                        StyleUtils.getCommonTextStyle(
-                                            color: Colors.white,
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.w600)),
-                                    WidgetUtils.commonSizedBox(
-                                        0, 5),
-                                  ],
-                                ),
-                              ),
+                              WidgetUtils.showImages(
+                                  listCar[0] ? 'assets/images/car/xiaogui+.png' : 'assets/images/car/xiaogui.png',
+                                  60,
+                                  100),
+                              isShow == false ? Positioned(
+                                  left: 41,
+                                  top: 45,
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/z_wheel.gif',
+                                      8,
+                                      8)) : const Text(''),
+                              isShow == false ? Positioned(
+                                  left: 72,
+                                  top: 45,
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/z_wheel.gif',
+                                      8,
+                                      8)) : const Text(''),
                             ],
-                          ),
-                          Positioned(
-                            right: 10.h,
-                            top: 100.h,
-                            child: GestureDetector(
-                                onTap: (() {
-                                  MyUtils.goTransparentPageCom(
-                                      context, const CarHShopPage());
-                                }),
-                                child: WidgetUtils.showImages(
-                                    'assets/images/car_shop.png',
-                                    50,
-                                    50)
-                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 75,
+                    left: 5,
+                    child: SlideTransition(
+                      position: _carPlay(1),
+                      child: Row(
+                        children: [
+                          Stack(
+                            children: [
+                              WidgetUtils.showImages(
+                                  listCar[1] ? 'assets/images/car/guigui+.png' : 'assets/images/car/guigui.png',
+                                  60,
+                                  100),
+                              isShow == false ? Positioned(
+                                  left: 37,
+                                  top: 43,
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/z_wheel.gif',
+                                      10,
+                                      10)) : const Text(''),
+                              isShow == false ? Positioned(
+                                  left: 65,
+                                  top: 45,
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/z_wheel.gif',
+                                      10,
+                                      10)) : const Text(''),
+                            ],
                           ),
                         ],
                       ),
-                      WidgetUtils.commonSizedBox(0, 5),
-                    ],
+                    ),
                   ),
-                )
-              ],
-            ),
-          ),
-          //下注区域
-          Expanded(
-            child: Container(
-              height: double.infinity,
-              padding: const EdgeInsets.only(left: 10, right: 5),
-              color: MyColors.CarBG,
-              child: Row(
-                children: [
-                  Expanded(child: Column(
-                    children: [
-                      const Spacer(),
-                      //6倍
-                      SizedBox(
-                        height: 35,
-                        child: Row(
-                          children: [
-                            WidgetUtils.showImagesFill(
-                                'assets/images/car_b6.png', 35, 40),
-                            SixInfo(1),
-                            WidgetUtils.commonSizedBox(0, 2.5),
-                            SixInfo(2),
-                            WidgetUtils.commonSizedBox(0, 2.5),
-                            SixInfo(3),
-                            WidgetUtils.commonSizedBox(0, 2.5),
-                            SixInfo(4),
-                            WidgetUtils.commonSizedBox(0, 2.5),
-                            SixInfo(5),
-                            WidgetUtils.commonSizedBox(0, 2.5),
-                            SixInfo(6),
-                          ],
-                        ),
+                  Positioned(
+                    top: 95,
+                    left: 3,
+                    child: SlideTransition(
+                      position: _carPlay(2),
+                      child: Row(
+                        children: [
+                          Stack(
+                            children: [
+                              WidgetUtils.showImages(
+                                  listCar[2] ? 'assets/images/car/lan+.png' : 'assets/images/car/lan.png',
+                                  60,
+                                  100),
+                              isShow == false ? Positioned(
+                                  left: 33,
+                                  top: 42,
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/z_wheel.gif',
+                                      10,
+                                      10)) : const Text(''),
+                              isShow == false ? Positioned(
+                                  left: 63,
+                                  top: 42,
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/z_wheel.gif',
+                                      11,
+                                      11)) : const Text(''),
+                            ],
+                          ),
+                        ],
                       ),
-                      WidgetUtils.commonSizedBox(2, 0),
-                      //3倍
-                      SizedBox(
-                        height: 35,
-                        child: Row(
-                          children: [
-                            WidgetUtils.showImagesFill(
-                                'assets/images/car_b3.png', 35, 40),
-                            SixInfo2(1),
-                            WidgetUtils.commonSizedBox(0, 2.5),
-                            SixInfo2(2),
-                            WidgetUtils.commonSizedBox(0, 2.5),
-                            SixInfo2(3),
-                          ],
-                        ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 116,
+                    left: -2,
+                    child: SlideTransition(
+                      position: _carPlay(3),
+                      child: Row(
+                        children: [
+                          Stack(
+                            children: [
+                              WidgetUtils.showImages(
+                                  listCar[3] ? 'assets/images/car/hou+.png' : 'assets/images/car/hou.png',
+                                  60,
+                                  100),
+                              isShow == false ? Positioned(
+                                  left: 30,
+                                  top: 43,
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/z_wheel.gif',
+                                      7,
+                                      7)) : const Text(''),
+                              isShow == false ? Positioned(
+                                  left: 71,
+                                  top: 45.5,
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/z_wheel.gif',
+                                      7,
+                                      7)) : const Text(''),
+                            ],
+                          ),
+                        ],
                       ),
-                      WidgetUtils.commonSizedBox(2, 0),
-                      //2倍
-                      SizedBox(
-                        height: 35,
-                        child: Row(
-                          children: [
-                            WidgetUtils.showImagesFill(
-                                'assets/images/car_b2.png', 35, 40),
-                            SixInfo3(1),
-                            WidgetUtils.commonSizedBox(0, 2.5),
-                            SixInfo3(2),
-                          ],
-                        ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 137,
+                    left: -7,
+                    child: SlideTransition(
+                      position: _carPlay(4),
+                      child: Row(
+                        children: [
+                          Stack(
+                            children: [
+                              WidgetUtils.showImages(
+                                  listCar[4] ? 'assets/images/car/fen+.png' : 'assets/images/car/fen.png',
+                                  60,
+                                  100),
+                              isShow == false ? Positioned(
+                                  left: 33,
+                                  top: 43,
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/z_wheel.gif',
+                                      9,
+                                      9)) : const Text(''),
+                              isShow == false ? Positioned(
+                                  left: 65,
+                                  top: 45,
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/z_wheel.gif',
+                                      9,
+                                      9)) : const Text(''),
+                            ],
+                          ),
+                        ],
                       ),
-                      const Spacer(),
-                    ],
-                  )),
-                  WidgetUtils.commonSizedBox(0, 2.5),
-                  //12倍
-                  Column(
-                    children: [
-                      WidgetUtils.commonSizedBox(5, 0),
-                      Expanded(child: GestureDetector(
-                        onTap: (() {
-                          if (isShow) {
-                            if (sp.getBool('car_queren_h') == false ||
-                                sp.getBool('car_queren_h') == null) {
-                              MyUtils.goTransparentPageCom(context, QueRenHPage(title: '赛车下注横屏', jine: xiazhujine, isDuiHuan: false, index: '12',));
-                              return;
-                            }
-                            doPostCarBet('12');
-                          }
-                        }),
-                        child: Stack(
+                    ),
+                  ),
+                  Positioned(
+                    top: 160,
+                    left: -14,
+                    child: SlideTransition(
+                      position: _carPlay(5),
+                      child: Row(
+                        children: [
+                          Stack(
+                            children: [
+                              WidgetUtils.showImages(
+                                  listCar[5] ? 'assets/images/car/lv+.png' : 'assets/images/car/lv.png',
+                                  60,
+                                  100),
+                              isShow == false ? Positioned(
+                                  left: 34,
+                                  top: 41,
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/z_wheel.gif',
+                                      10,
+                                      10)) : const Text(''),
+                              isShow == false ? Positioned(
+                                  left: 64,
+                                  top: 45,
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/z_wheel.gif',
+                                      8,
+                                      8)) : const Text(''),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 182,
+                    left: -20,
+                    child: SlideTransition(
+                      position: _carPlay(6),
+                      child: Row(
+                        children: [
+                          Stack(
+                            children: [
+                              WidgetUtils.showImages(
+                                  listCar[6] ? 'assets/images/car/maliao+.png' : 'assets/images/car/maliao.png',
+                                  60,
+                                  100),
+                              isShow == false ? Positioned(
+                                  left: 33,
+                                  top: 40,
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/z_wheel.gif',
+                                      11,
+                                      11)) : const Text(''),
+                              isShow == false ? Positioned(
+                                  left: 63,
+                                  top: 42.5,
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/z_wheel.gif',
+                                      9,
+                                      9)) : const Text(''),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  // 倒计时闹钟
+                  isShow
+                      ? Positioned(
+                    top: 30,
+                    left: 355,
+                    child: Stack(
+                      children: [
+                        WidgetUtils.showImages(
+                            'assets/images/car_jingcai.png', 80, 80),
+                        Container(
+                          height: 70,
+                          width: 80,
                           alignment: Alignment.center,
+                          child: WidgetUtils.onlyTextCenter(
+                              sum.toString(),
+                              StyleUtils.getCommonTextStyle(
+                                  color: MyColors.mineRed,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600)),
+                        )
+                      ],
+                    ),
+                  )
+                      : const Text(''),
+                  //倒计时svga
+                  isPlay
+                      ? const Positioned(
+                    top: -30,
+                    left: 305,
+                    height: 175,
+                    width: 180,
+                    child: SVGASimpleImage(
+                      assetsName: 'assets/svga/gp/djs.svga',
+                    ),
+                  )
+                      : const Text(''),
+                  isGo? Positioned(
+                    top: 0,
+                    left: 325,
+                    child: ScaleTransition(
+                      scale: animationGO,
+                      child: WidgetUtils.showImages('assets/images/car_go.png', 130, 130),
+                    ),
+                  ): const Text(''),
+
+                  //下注金额
+                  isShow ? Positioned(
+                    top: 110,
+                    left: 200,
+                    child:  Row(
+                      children: [
+                        jine(0),
+                        WidgetUtils.commonSizedBox(0, 30),
+                        jine(1),
+                        WidgetUtils.commonSizedBox(0, 30),
+                        jine(2),
+                        WidgetUtils.commonSizedBox(0, 30),
+                        jine(3),
+                      ],
+                    ),) : const Text(''),
+
+                  //左侧按钮
+                  SizedBox(
+                    height: 100,
+                    child: Row(
+                      children: [
+                        // 左侧按键
+                        SizedBox(
+                          height: 100,
+                          child: Column(
+                            children: [
+                              WidgetUtils.commonSizedBox(10, 0),
+                              isShow ?  GestureDetector(
+                                onTap: ((){
+                                  MyUtils.goTransparentPageCom(context, const Carpage());
+                                  /// 如果是全屏就切换竖屏
+                                  AutoOrientation.portraitAutoMode();
+                                  ///显示状态栏，与底部虚拟操作按钮
+                                  SystemChrome.setEnabledSystemUIOverlays(
+                                      [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+                                  Navigator.pop(context);
+                                }),
+                                child: Container(
+                                  height: 20,
+                                  width: 55,
+                                  //边框设置
+                                  decoration: const BoxDecoration(
+                                      image: DecorationImage(
+                                        //背景图片修饰
+                                        image: AssetImage(
+                                            "assets/images/car_anniu.png"),
+                                        fit: BoxFit.fill, //覆盖
+                                      )),
+                                  child: WidgetUtils.onlyTextCenter(
+                                      '竖屏模式',
+                                      StyleUtils.getCommonTextStyle(
+                                          color: Colors.white,
+                                          fontSize: 11)),
+                                ),
+                              ) : const Text(''),
+                              WidgetUtils.commonSizedBox(2.5, 0),
+                              GestureDetector(
+                                onTap: (() {
+                                  if (MyUtils.checkClick()) {
+                                    MyUtils.goTransparentPageCom(
+                                        context, const CarGuiZeHPage());
+                                  }
+                                }),
+                                child: Container(
+                                  height: 20,
+                                  width: 55,
+                                  //边框设置
+                                  decoration: const BoxDecoration(
+                                      image: DecorationImage(
+                                        //背景图片修饰
+                                        image: AssetImage(
+                                            "assets/images/car_anniu.png"),
+                                        fit: BoxFit.fill, //覆盖
+                                      )),
+                                  child: WidgetUtils.onlyTextCenter(
+                                      '游戏规则',
+                                      StyleUtils.getCommonTextStyle(
+                                          color: Colors.white,
+                                          fontSize: 11)),
+                                ),
+                              ),
+                              WidgetUtils.commonSizedBox(2.5, 0),
+                              GestureDetector(
+                                onTap: ((){
+                                  if(sp.getString('car_audio') == null || sp.getString('car_audio').toString() == '开启'){
+                                    sp.setString('car_audio', '关闭');
+                                  }else{
+                                    sp.setString('car_audio', '开启');
+                                  }
+                                }),
+                                child: Container(
+                                  height: 20,
+                                  width: 55,
+                                  //边框设置
+                                  decoration: const BoxDecoration(
+                                      image: DecorationImage(
+                                        //背景图片修饰
+                                        image: AssetImage(
+                                            "assets/images/car_anniu.png"),
+                                        fit: BoxFit.fill, //覆盖
+                                      )),
+                                  child: WidgetUtils.onlyTextCenter(
+                                      sp.getString('car_audio') == null || sp.getString('car_audio').toString() == '开启' ? '关闭音效' : '开启音效',
+                                      StyleUtils.getCommonTextStyle(
+                                          color: sp.getString('car_audio') == null || sp.getString('car_audio').toString() == '开启' ? Colors.white :  MyColors.peopleYellow,
+                                          fontSize: 11)),
+                                ),
+                              ),
+                              WidgetUtils.commonSizedBox(2.5, 0),
+                              GestureDetector(
+                                onTap: ((){
+                                  MyUtils.goTransparentPageCom(context, const LiShiHPage());
+                                }),
+                                child: Container(
+                                  height: 20,
+                                  width: 55,
+                                  //边框设置
+                                  decoration: const BoxDecoration(
+                                      image: DecorationImage(
+                                        //背景图片修饰
+                                        image: AssetImage(
+                                            "assets/images/car_anniu.png"),
+                                        fit: BoxFit.fill, //覆盖
+                                      )),
+                                  child: WidgetUtils.onlyTextCenter(
+                                      '开奖记录',
+                                      StyleUtils.getCommonTextStyle(
+                                          color: Colors.white,
+                                          fontSize: 11)),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        const Spacer(),
+                        // 右侧按键
+                        Stack(
                           children: [
-                            WidgetUtils.showImagesFill(
-                                listA[11]
-                                    ? 'assets/images/car_h_jl_8_yes.png'
-                                    : 'assets/images/car_h_jl_8_no.png',
-                                double.infinity,
-                                50),
-                            WidgetUtils.onlyText(
-                                listJL[11].toString(),
-                                StyleUtils.getCommonTextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600))
+                            Column(
+                              children: [
+                                WidgetUtils.commonSizedBox(10, 0),
+                                Container(
+                                  height: 20,
+                                  margin: const EdgeInsets.only(right: 5),
+                                  padding: const EdgeInsets.only(
+                                      left: 5, right: 5, top: 1, bottom: 1),
+                                  //边框设置
+                                  decoration: const BoxDecoration(
+                                    //背景
+                                    color: MyColors.zpJLHX,
+                                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                    borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      WidgetUtils.commonSizedBox(0, 5),
+                                      WidgetUtils.showImages(
+                                          'assets/images/car_mogubi.png',
+                                          12,
+                                          12),
+                                      WidgetUtils.commonSizedBox(
+                                          0, 2),
+                                      WidgetUtils.onlyTextCenter(
+                                          sp.getString('car_mogu2').toString(),
+                                          StyleUtils.getCommonTextStyle(
+                                              color: Colors.white,
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.w600)),
+                                      WidgetUtils.commonSizedBox(
+                                          0, 5),
+                                      Opacity(
+                                        opacity: 0.8,
+                                        child: Container(
+                                          height: 10,
+                                          width: 1,
+                                          color: MyColors.home_hx,
+                                        ),
+                                      ),
+                                      WidgetUtils.commonSizedBox(
+                                          0, 5),
+                                      WidgetUtils.showImages(
+                                          'assets/images/mine_wallet_dd.png',
+                                          12,
+                                          12),
+                                      WidgetUtils.commonSizedBox(
+                                          0, 5),
+                                      WidgetUtils.onlyTextCenter(
+                                          sp.getString('car_jinbi2').toString(),
+                                          StyleUtils.getCommonTextStyle(
+                                              color: Colors.white,
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.w600)),
+                                      WidgetUtils.commonSizedBox(
+                                          0, 5),
+                                      Opacity(
+                                        opacity: 0.8,
+                                        child: Container(
+                                          height: 10,
+                                          width: 1,
+                                          color: MyColors.home_hx,
+                                        ),
+                                      ),
+                                      WidgetUtils.commonSizedBox(
+                                          0, 5),
+                                      WidgetUtils.showImages(
+                                          'assets/images/mine_wallet_zz.png',
+                                          12,
+                                          12),
+                                      WidgetUtils.commonSizedBox(
+                                          0, 5),
+                                      WidgetUtils.onlyTextCenter(
+                                          sp.getString('car_zuanshi2').toString(),
+                                          StyleUtils.getCommonTextStyle(
+                                              color: Colors.white,
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.w600)),
+                                      WidgetUtils.commonSizedBox(
+                                          0, 5),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Positioned(
+                              right: 10.h,
+                              top: 100.h,
+                              child: GestureDetector(
+                                  onTap: (() {
+                                    MyUtils.goTransparentPageCom(
+                                        context, const CarHShopPage());
+                                  }),
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/car_shop.png',
+                                      50,
+                                      50)
+                              ),
+                            ),
                           ],
                         ),
-                      )),
-                      WidgetUtils.commonSizedBox(5, 0),
-                    ],
-                  ),
-                  WidgetUtils.commonSizedBox(0, 5),
-                  Column(
-                    children: [
-                      WidgetUtils.commonSizedBox(5, 0),
-                      Expanded(child: Container(
-                        height: double.infinity,
-                        width: 240,
-                        decoration: BoxDecoration(
-                          //背景
-                          color: MyColors.CarBG,
-                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                          borderRadius: const BorderRadius.all(
-                              Radius.circular(11)),
-                          //设置四周边框
-                          border: Border.all(width: 1, color: Colors.white),
-                        ),
-                        child: OptionGridView(
-                          itemCount: listZDY.length,
-                          rowCount: 4,
-                          mainAxisSpacing: 20.h,
-                          // 上下间距
-                          crossAxisSpacing: 20.h,
-                          //左右间距
-                          itemBuilder: _initlistdata,
-                        ),
-                      )),
-                      WidgetUtils.commonSizedBox(5, 0),
-                    ],
-                  ),
+                        WidgetUtils.commonSizedBox(0, 5),
+                      ],
+                    ),
+                  )
                 ],
               ),
             ),
-          )
-        ],
+            //下注区域
+            Expanded(
+              child: Container(
+                height: double.infinity,
+                padding: const EdgeInsets.only(left: 10, right: 5),
+                color: MyColors.CarBG,
+                child: Row(
+                  children: [
+                    Expanded(child: Column(
+                      children: [
+                        const Spacer(),
+                        //6倍
+                        SizedBox(
+                          height: 35,
+                          child: Row(
+                            children: [
+                              WidgetUtils.showImagesFill(
+                                  'assets/images/car_b6.png', 35, 40),
+                              SixInfo(1),
+                              WidgetUtils.commonSizedBox(0, 2.5),
+                              SixInfo(2),
+                              WidgetUtils.commonSizedBox(0, 2.5),
+                              SixInfo(3),
+                              WidgetUtils.commonSizedBox(0, 2.5),
+                              SixInfo(4),
+                              WidgetUtils.commonSizedBox(0, 2.5),
+                              SixInfo(5),
+                              WidgetUtils.commonSizedBox(0, 2.5),
+                              SixInfo(6),
+                            ],
+                          ),
+                        ),
+                        WidgetUtils.commonSizedBox(2, 0),
+                        //3倍
+                        SizedBox(
+                          height: 35,
+                          child: Row(
+                            children: [
+                              WidgetUtils.showImagesFill(
+                                  'assets/images/car_b3.png', 35, 40),
+                              SixInfo2(1),
+                              WidgetUtils.commonSizedBox(0, 2.5),
+                              SixInfo2(2),
+                              WidgetUtils.commonSizedBox(0, 2.5),
+                              SixInfo2(3),
+                            ],
+                          ),
+                        ),
+                        WidgetUtils.commonSizedBox(2, 0),
+                        //2倍
+                        SizedBox(
+                          height: 35,
+                          child: Row(
+                            children: [
+                              WidgetUtils.showImagesFill(
+                                  'assets/images/car_b2.png', 35, 40),
+                              SixInfo3(1),
+                              WidgetUtils.commonSizedBox(0, 2.5),
+                              SixInfo3(2),
+                            ],
+                          ),
+                        ),
+                        const Spacer(),
+                      ],
+                    )),
+                    WidgetUtils.commonSizedBox(0, 2.5),
+                    //12倍
+                    Column(
+                      children: [
+                        WidgetUtils.commonSizedBox(5, 0),
+                        Expanded(child: GestureDetector(
+                          onTap: (() {
+                            if (isShow) {
+                              if (sp.getBool('car_queren_h') == false ||
+                                  sp.getBool('car_queren_h') == null) {
+                                MyUtils.goTransparentPageCom(context, QueRenHPage(title: '赛车下注横屏', jine: xiazhujine, isDuiHuan: false, index: '12',));
+                                return;
+                              }
+                              doPostCarBet('12');
+                            }
+                          }),
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              WidgetUtils.showImagesFill(
+                                  listA[11]
+                                      ? 'assets/images/car_h_jl_8_yes.png'
+                                      : 'assets/images/car_h_jl_8_no.png',
+                                  double.infinity,
+                                  50),
+                              WidgetUtils.onlyText(
+                                  listJL[11].toString(),
+                                  StyleUtils.getCommonTextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600))
+                            ],
+                          ),
+                        )),
+                        WidgetUtils.commonSizedBox(5, 0),
+                      ],
+                    ),
+                    WidgetUtils.commonSizedBox(0, 5),
+                    Column(
+                      children: [
+                        WidgetUtils.commonSizedBox(5, 0),
+                        Expanded(child: Container(
+                          height: double.infinity,
+                          width: 240,
+                          decoration: BoxDecoration(
+                            //背景
+                            color: MyColors.CarBG,
+                            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                            borderRadius: const BorderRadius.all(
+                                Radius.circular(11)),
+                            //设置四周边框
+                            border: Border.all(width: 1, color: Colors.white),
+                          ),
+                          child: OptionGridView(
+                            itemCount: listZDY.length,
+                            rowCount: 4,
+                            mainAxisSpacing: 20.h,
+                            // 上下间距
+                            crossAxisSpacing: 20.h,
+                            //左右间距
+                            itemBuilder: _initlistdata,
+                          ),
+                        )),
+                        WidgetUtils.commonSizedBox(5, 0),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -1769,36 +1805,59 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
             });
 
             // 更新余额
-            if(bean.data!.curType == 1){
-              if(double.parse(jinbi) > 10000){
+            if (bean.data!.curType == 1) {
+              if (double.parse(jinbi) > 10000) {
+                jinbi = sp.getString('car_jinbi').toString();
                 // 减去花费的V豆
-                jinbi = '${(double.parse(jinbi) - int.parse(xiazhujine.toString()))}';
+                jinbi =
+                '${(double.parse(jinbi) - int.parse(xiazhujine.toString()))}';
                 //保留2位小数
                 jinbi2 = '${(double.parse(jinbi) / 10000).toStringAsFixed(2)}w';
-              }else{
-                jinbi = (double.parse(jinbi) - int.parse(xiazhujine.toString())).toString();
+              } else {
+                jinbi = sp.getString('car_jinbi').toString();
+                jinbi = (double.parse(jinbi) - int.parse(xiazhujine.toString()))
+                    .toString();
                 jinbi2 = jinbi;
               }
-            }else if(bean.data!.curType == 2){
-              if(double.parse(zuanshi) > 10000){
+              sp.setString('car_jinbi', jinbi);
+              sp.setString('car_jinbi2', jinbi2);
+            } else if (bean.data!.curType == 2) {
+              if (double.parse(zuanshi) > 10000) {
+                zuanshi = sp.getString('car_zuanshi').toString();
                 // 减去花费的V豆
-                zuanshi = '${(double.parse(zuanshi) - int.parse(xiazhujine.toString()))}';
+                zuanshi =
+                '${(double.parse(zuanshi) - int.parse(xiazhujine.toString()))}';
                 //保留2位小数
-                zuanshi2 = '${(double.parse(zuanshi) / 10000).toStringAsFixed(2)}w';
-              }else{
-                zuanshi = (double.parse(zuanshi) - int.parse(xiazhujine.toString())).toString();
+                zuanshi2 =
+                '${(double.parse(zuanshi) / 10000).toStringAsFixed(2)}w';
+              } else {
+                zuanshi = sp.getString('car_zuanshi').toString();
+                zuanshi =
+                    (double.parse(zuanshi) - int.parse(xiazhujine.toString()))
+                        .toString();
                 zuanshi2 = zuanshi;
               }
-            }else{
-              if(double.parse(mogubi) > 10000){
+
+              sp.setString('car_zuanshi', zuanshi);
+              sp.setString('car_zuanshi2', zuanshi2);
+            } else {
+              if (double.parse(mogubi) > 10000) {
+                mogubi = sp.getString('car_mogu').toString();
                 // 减去花费的V豆
-                mogubi = '${(double.parse(mogubi) - int.parse(xiazhujine.toString()))}';
+                mogubi =
+                '${(double.parse(mogubi) - int.parse(xiazhujine.toString()))}';
                 //保留2位小数
-                mogubi2 = '${(double.parse(mogubi) / 10000).toStringAsFixed(2)}w';
-              }else{
-                mogubi = (double.parse(mogubi) - int.parse(xiazhujine.toString())).toString();
+                mogubi2 =
+                '${(double.parse(mogubi) / 10000).toStringAsFixed(2)}w';
+              } else {
+                mogubi = sp.getString('car_mogu').toString();
+                mogubi =
+                    (double.parse(mogubi) - int.parse(xiazhujine.toString()))
+                        .toString();
                 mogubi2 = mogubi;
               }
+              sp.setString('car_mogu', mogubi);
+              sp.setString('car_mogu2', mogubi2);
             }
           });
           break;
@@ -1920,6 +1979,12 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
             }else{
               mogubi2 = bean.data!.mushroom!;
             }
+            sp.setString('car_jinbi', jinbi);
+            sp.setString('car_zuanshi', zuanshi);
+            sp.setString('car_mogu', mogubi);
+            sp.setString('car_jinbi2', jinbi2);
+            sp.setString('car_zuanshi2', zuanshi2);
+            sp.setString('car_mogu2', mogubi2);
           });
           break;
         case MyHttpConfig.errorloginCode:

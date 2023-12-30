@@ -25,6 +25,7 @@ import '../../http/my_http_config.dart';
 import '../../main.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/style_utils.dart';
+import 'car/car_guize_page.dart';
 import 'car/car_shop_page.dart';
 import 'car/lishi_page.dart';
 import 'car/zhongjian_page.dart';
@@ -92,10 +93,11 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
             MyUtils.goTransparentPageCom(
                 context,
                 QueRenPage(
-                    title: '赛车下注',
-                    jine: xiazhujine,
-                    isDuiHuan: false,
-                    index: i.toString(),));
+                  title: '赛车下注',
+                  jine: xiazhujine,
+                  isDuiHuan: false,
+                  index: i.toString(),
+                ));
             return;
           }
           doPostCarBet(i.toString());
@@ -320,7 +322,6 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
 
   /// 播放音频
   Soundpool soundpool = Soundpool(streamType: StreamType.notification);
-  Soundpool soundpool2 = Soundpool(streamType: StreamType.notification);
 
   Future<void> playSound() async {
     int soundId = await rootBundle
@@ -348,15 +349,6 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
       return soundpool.load(soundDate);
     }));
     await soundpool.play(soundId);
-  }
-
-  Future<void> playSound4() async {
-    int soundId = await rootBundle
-        .load('assets/audio/car_bg.MP3')
-        .then(((ByteData soundDate) {
-      return soundpool2.load(soundDate);
-    }));
-    await soundpool2.play(soundId);
   }
 
   List<String> imagesa = [
@@ -588,7 +580,8 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
         sum--;
       });
       if (sum == 0) {
-        if(sp.getString('car_audio') == null || sp.getString('car_audio').toString() == '开启') {
+        if (sp.getString('car_audio') == null ||
+            sp.getString('car_audio').toString() == '开启') {
           playSound3();
         }
         _timer2!.cancel();
@@ -810,8 +803,6 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
   bool isPlay = false, isGo = false;
 
   void loadAnimation() async {
-    // //播放赛车背景音
-    // playSound4();
     // 清空接受的im下注信息
     listZDY.clear();
     // 请求中奖赛道
@@ -826,9 +817,11 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
         controllerGO.forward();
         Future.delayed(const Duration(seconds: 1), () {
           for (int i = 0; i < 7; i++) {
-            setState(() {
-              listCar[i] = true;
-            });
+            if (mounted) {
+              setState(() {
+                listCar[i] = true;
+              });
+            }
           }
           carTimer();
           controller2.forward();
@@ -897,7 +890,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
     doPostBalance();
     // 二次确认弹窗点击确认，开始下注
     listen = eventBus.on<QuerenBack>().listen((event) {
-      if(event.title == '竖屏赛车') {
+      if (event.title == '竖屏赛车') {
         doPostCarBet(event.index);
       }
     });
@@ -967,7 +960,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
     });
 
     // 接受下注的im信息
-    listenZDY = eventBus.on<ZDYBack>().listen((event) {
+    listenZDY = eventBus.on<JoinRoomYBack>().listen((event) {
       if (event.map!['avatar'].toString().isNotEmpty && isShow) {
         if (listZDY.length < 6) {
           Map<dynamic, dynamic> map = {};
@@ -1000,22 +993,24 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
     int month = now.month;
     int day = now.day;
     String time = '$year-$month-$day';
-    if(sp.getString('car_queren_time') == null || sp.getString('car_queren_time') != time){
+    if (sp.getString('car_queren_time') == null ||
+        sp.getString('car_queren_time') != time) {
       sp.setBool('car_queren', false);
     }
   }
+
   Connectivity connectivity = Connectivity();
   late StreamSubscription<ConnectivityResult> subscription;
 
   void startListening() {
-    subscription = connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
+    subscription =
+        connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
       if (result == ConnectivityResult.none) {
         // 处理网络中断的逻辑
         MyToastUtils.showToastCenter('网络中断，游戏暂时退出!');
         Navigator.pop(context);
       } else {
         // 处理网络重连的逻辑
-
       }
     });
   }
@@ -1078,221 +1073,271 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     // 顶部信息
-                    isShow ? SizedBox(
-                      height: 240.h,
-                      child: Row(
-                        children: [
-                          // 左侧按键
-                          SizedBox(
+                    SizedBox(
                             height: 240.h,
-                            child: Column(
+                            child: Row(
                               children: [
-                                WidgetUtils.commonSizedBox(20.h, 0),
-                                GestureDetector(
-                                  onTap: (() {
-                                    MyUtils.goTransparentPageCom(context,
-                                        const CarLandScapePage());
-                                    Navigator.pop(context);
-                                  }),
-                                  child: Container(
-                                    height: 38.h,
-                                    width: 100.h,
-                                    //边框设置
-                                    decoration: const BoxDecoration(
-                                        image: DecorationImage(
-                                          //背景图片修饰
-                                          image: AssetImage(
-                                              "assets/images/car_anniu.png"),
-                                          fit: BoxFit.fill, //覆盖
-                                        )),
-                                    child: WidgetUtils.onlyTextCenter(
-                                        '横屏模式',
-                                        StyleUtils.getCommonTextStyle(
-                                            color: Colors.white,
-                                            fontSize: 22.sp)),
+                                // 左侧按键
+                                SizedBox(
+                                  height: 240.h,
+                                  child: Column(
+                                    children: [
+                                      WidgetUtils.commonSizedBox(20.h, 0),
+                                      isShow ? GestureDetector(
+                                        onTap: (() {
+                                          if (MyUtils.checkClick()) {
+                                            MyUtils.goTransparentPageCom(
+                                                context,
+                                                const CarLandScapePage());
+                                            Navigator.pop(context);
+                                          }
+                                        }),
+                                        child: Container(
+                                          height: 38.h,
+                                          width: 100.h,
+                                          //边框设置
+                                          decoration: const BoxDecoration(
+                                              image: DecorationImage(
+                                            //背景图片修饰
+                                            image: AssetImage(
+                                                "assets/images/car_anniu.png"),
+                                            fit: BoxFit.fill, //覆盖
+                                          )),
+                                          child: WidgetUtils.onlyTextCenter(
+                                              '横屏模式',
+                                              StyleUtils.getCommonTextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 22.sp)),
+                                        ),
+                                      ) : const Text(''),
+                                      WidgetUtils.commonSizedBox(10.h, 0),
+                                      GestureDetector(
+                                        onTap: (() {
+                                          if (MyUtils.checkClick()) {
+                                            MyUtils.goTransparentPageCom(
+                                                context, const CarGuiZePage());
+                                          }
+                                        }),
+                                        child: Container(
+                                          height: 38.h,
+                                          width: 100.h,
+                                          //边框设置
+                                          decoration: const BoxDecoration(
+                                              image: DecorationImage(
+                                            //背景图片修饰
+                                            image: AssetImage(
+                                                "assets/images/car_anniu.png"),
+                                            fit: BoxFit.fill, //覆盖
+                                          )),
+                                          child: WidgetUtils.onlyTextCenter(
+                                              '游戏规则',
+                                              StyleUtils.getCommonTextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 22.sp)),
+                                        ),
+                                      ),
+                                      WidgetUtils.commonSizedBox(10.h, 0),
+                                      GestureDetector(
+                                        onTap: (() {
+                                          if (MyUtils.checkClick()) {
+                                            MyUtils.goTransparentPageCom(
+                                                context, const LiShiPage());
+                                          }
+                                        }),
+                                        child: Container(
+                                          height: 38.h,
+                                          width: 100.h,
+                                          //边框设置
+                                          decoration: const BoxDecoration(
+                                              image: DecorationImage(
+                                            //背景图片修饰
+                                            image: AssetImage(
+                                                "assets/images/car_anniu.png"),
+                                            fit: BoxFit.fill, //覆盖
+                                          )),
+                                          child: WidgetUtils.onlyTextCenter(
+                                              '开奖记录',
+                                              StyleUtils.getCommonTextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 22.sp)),
+                                        ),
+                                      ),
+                                      WidgetUtils.commonSizedBox(10.h, 0),
+                                      GestureDetector(
+                                        onTap: (() {
+                                          if (sp.getString('car_audio') ==
+                                                  null ||
+                                              sp
+                                                      .getString('car_audio')
+                                                      .toString() ==
+                                                  '开启') {
+                                            sp.setString('car_audio', '关闭');
+                                          } else {
+                                            sp.setString('car_audio', '开启');
+                                          }
+                                        }),
+                                        child: Container(
+                                          height: 38.h,
+                                          width: 100.h,
+                                          //边框设置
+                                          decoration: const BoxDecoration(
+                                              image: DecorationImage(
+                                            //背景图片修饰
+                                            image: AssetImage(
+                                                "assets/images/car_anniu.png"),
+                                            fit: BoxFit.fill, //覆盖
+                                          )),
+                                          child: WidgetUtils.onlyTextCenter(
+                                              sp.getString('car_audio') ==
+                                                          null ||
+                                                      sp
+                                                              .getString(
+                                                                  'car_audio')
+                                                              .toString() ==
+                                                          '开启'
+                                                  ? '关闭音效'
+                                                  : '开启音效',
+                                              StyleUtils.getCommonTextStyle(
+                                                  color: sp.getString(
+                                                                  'car_audio') ==
+                                                              null ||
+                                                          sp
+                                                                  .getString(
+                                                                      'car_audio')
+                                                                  .toString() ==
+                                                              '开启'
+                                                      ? Colors.white
+                                                      : MyColors.peopleYellow,
+                                                  fontSize: 22.sp)),
+                                        ),
+                                      )
+                                    ],
                                   ),
                                 ),
-                                WidgetUtils.commonSizedBox(10.h, 0),
-                                Container(
-                                  height: 38.h,
-                                  width: 100.h,
-                                  //边框设置
-                                  decoration: const BoxDecoration(
-                                      image: DecorationImage(
-                                        //背景图片修饰
-                                        image: AssetImage(
-                                            "assets/images/car_anniu.png"),
-                                        fit: BoxFit.fill, //覆盖
-                                      )),
-                                  child: WidgetUtils.onlyTextCenter(
-                                      '游戏规则',
-                                      StyleUtils.getCommonTextStyle(
-                                          color: Colors.white,
-                                          fontSize: 22.sp)),
+                                const Spacer(),
+                                // 右侧按键
+                                Stack(
+                                  children: [
+                                    Column(
+                                      children: [
+                                        WidgetUtils.commonSizedBox(20.h, 0),
+                                        Container(
+                                          height: ScreenUtil().setHeight(45),
+                                          margin: EdgeInsets.only(right: 10.h),
+                                          padding: const EdgeInsets.only(
+                                              left: 5,
+                                              right: 5,
+                                              top: 1,
+                                              bottom: 1),
+                                          //边框设置
+                                          decoration: const BoxDecoration(
+                                            //背景
+                                            color: MyColors.zpJLHX,
+                                            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(30.0)),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              WidgetUtils.commonSizedBox(0, 5),
+                                              WidgetUtils.showImages(
+                                                  'assets/images/car_mogubi.png',
+                                                  25.h,
+                                                  25.h),
+                                              WidgetUtils.commonSizedBox(
+                                                  0, 5.h),
+                                              WidgetUtils.onlyTextCenter(
+                                                  sp.getString('car_mogu2').toString(),
+                                                  StyleUtils.getCommonTextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: ScreenUtil()
+                                                          .setSp(23),
+                                                      fontWeight:
+                                                          FontWeight.w600)),
+                                              WidgetUtils.commonSizedBox(
+                                                  0, 10.h),
+                                              Opacity(
+                                                opacity: 0.8,
+                                                child: Container(
+                                                  height: ScreenUtil()
+                                                      .setHeight(20),
+                                                  width:
+                                                      ScreenUtil().setHeight(1),
+                                                  color: MyColors.home_hx,
+                                                ),
+                                              ),
+                                              WidgetUtils.commonSizedBox(
+                                                  0, 10.h),
+                                              WidgetUtils.showImages(
+                                                  'assets/images/mine_wallet_dd.png',
+                                                  ScreenUtil().setHeight(26),
+                                                  ScreenUtil().setHeight(24)),
+                                              WidgetUtils.commonSizedBox(
+                                                  0, 10.h),
+                                              WidgetUtils.onlyTextCenter(
+                                                  sp.getString('car_jinbi2').toString(),
+                                                  StyleUtils.getCommonTextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: ScreenUtil()
+                                                          .setSp(23),
+                                                      fontWeight:
+                                                          FontWeight.w600)),
+                                              WidgetUtils.commonSizedBox(
+                                                  0, 10.h),
+                                              Opacity(
+                                                opacity: 0.8,
+                                                child: Container(
+                                                  height: ScreenUtil()
+                                                      .setHeight(20),
+                                                  width:
+                                                      ScreenUtil().setHeight(1),
+                                                  color: MyColors.home_hx,
+                                                ),
+                                              ),
+                                              WidgetUtils.commonSizedBox(
+                                                  0, 10.h),
+                                              WidgetUtils.showImages(
+                                                  'assets/images/mine_wallet_zz.png',
+                                                  ScreenUtil().setHeight(26),
+                                                  ScreenUtil().setHeight(24)),
+                                              WidgetUtils.commonSizedBox(
+                                                  0, 10.h),
+                                              WidgetUtils.onlyTextCenter(
+                                                  sp.getString('car_zuanshi2').toString(),
+                                                  StyleUtils.getCommonTextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: ScreenUtil()
+                                                          .setSp(23),
+                                                      fontWeight:
+                                                          FontWeight.w600)),
+                                              WidgetUtils.commonSizedBox(
+                                                  0, 10.h),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Positioned(
+                                      right: 10.h,
+                                      top: 80.h,
+                                      child: GestureDetector(
+                                          onTap: (() {
+                                            if (MyUtils.checkClick()) {
+                                              MyUtils.goTransparentPageCom(
+                                                  context, const CarShopPage());
+                                            }
+                                          }),
+                                          child: WidgetUtils.showImages(
+                                              'assets/images/car_shop.png',
+                                              100.h,
+                                              100.h)),
+                                    ),
+                                  ],
                                 ),
-                                WidgetUtils.commonSizedBox(10.h, 0),
-                                GestureDetector(
-                                  onTap: (() {
-                                    MyUtils.goTransparentPageCom(
-                                        context, const LiShiPage());
-                                  }),
-                                  child: Container(
-                                    height: 38.h,
-                                    width: 100.h,
-                                    //边框设置
-                                    decoration: const BoxDecoration(
-                                        image: DecorationImage(
-                                          //背景图片修饰
-                                          image: AssetImage(
-                                              "assets/images/car_anniu.png"),
-                                          fit: BoxFit.fill, //覆盖
-                                        )),
-                                    child: WidgetUtils.onlyTextCenter(
-                                        '开奖记录',
-                                        StyleUtils.getCommonTextStyle(
-                                            color: Colors.white,
-                                            fontSize: 22.sp)),
-                                  ),
-                                ),
-                                WidgetUtils.commonSizedBox(10.h, 0),
-                                GestureDetector(
-                                  onTap: (() {
-                                    if(sp.getString('car_audio') == null || sp.getString('car_audio').toString() == '开启'){
-                                      sp.setString('car_audio', '关闭');
-                                    }else{
-                                      sp.setString('car_audio', '开启');
-                                    }
-                                  }),
-                                  child: Container(
-                                    height: 38.h,
-                                    width: 100.h,
-                                    //边框设置
-                                    decoration: const BoxDecoration(
-                                        image: DecorationImage(
-                                          //背景图片修饰
-                                          image: AssetImage(
-                                              "assets/images/car_anniu.png"),
-                                          fit: BoxFit.fill, //覆盖
-                                        )),
-                                    child: WidgetUtils.onlyTextCenter(
-                                        sp.getString('car_audio') == null || sp.getString('car_audio').toString() == '开启' ? '关闭音效' : '开启音效',
-                                        StyleUtils.getCommonTextStyle(
-                                            color: sp.getString('car_audio') == null || sp.getString('car_audio').toString() == '开启' ? Colors.white :  MyColors.peopleYellow,
-                                            fontSize: 22.sp)),
-                                  ),
-                                )
+                                WidgetUtils.commonSizedBox(0, 10.h),
                               ],
                             ),
                           ),
-                          const Spacer(),
-                          // 右侧按键
-                          Stack(
-                            children: [
-                              Column(
-                                children: [
-                                  WidgetUtils.commonSizedBox(20.h, 0),
-                                  Container(
-                                    height: ScreenUtil().setHeight(45),
-                                    margin: EdgeInsets.only(right: 10.h),
-                                    padding: const EdgeInsets.only(
-                                        left: 5, right: 5, top: 1, bottom: 1),
-                                    //边框设置
-                                    decoration: const BoxDecoration(
-                                      //背景
-                                      color: MyColors.zpJLHX,
-                                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                      borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        WidgetUtils.commonSizedBox(0, 5),
-                                        WidgetUtils.showImages(
-                                            'assets/images/car_mogubi.png',
-                                            25.h,
-                                            25.h),
-                                        WidgetUtils.commonSizedBox(
-                                            0, 5.h),
-                                        WidgetUtils.onlyTextCenter(
-                                            mogubi2,
-                                            StyleUtils.getCommonTextStyle(
-                                                color: Colors.white,
-                                                fontSize: ScreenUtil().setSp(23),
-                                                fontWeight: FontWeight.w600)),
-                                        WidgetUtils.commonSizedBox(
-                                            0, 10.h),
-                                        Opacity(
-                                          opacity: 0.8,
-                                          child: Container(
-                                            height: ScreenUtil().setHeight(20),
-                                            width: ScreenUtil().setHeight(1),
-                                            color: MyColors.home_hx,
-                                          ),
-                                        ),
-                                        WidgetUtils.commonSizedBox(
-                                            0, 10.h),
-                                        WidgetUtils.showImages(
-                                            'assets/images/mine_wallet_dd.png',
-                                            ScreenUtil().setHeight(26),
-                                            ScreenUtil().setHeight(24)),
-                                        WidgetUtils.commonSizedBox(
-                                            0, 10.h),
-                                        WidgetUtils.onlyTextCenter(
-                                            jinbi2,
-                                            StyleUtils.getCommonTextStyle(
-                                                color: Colors.white,
-                                                fontSize: ScreenUtil().setSp(23),
-                                                fontWeight: FontWeight.w600)),
-                                        WidgetUtils.commonSizedBox(
-                                            0, 10.h),
-                                        Opacity(
-                                          opacity: 0.8,
-                                          child: Container(
-                                            height: ScreenUtil().setHeight(20),
-                                            width: ScreenUtil().setHeight(1),
-                                            color: MyColors.home_hx,
-                                          ),
-                                        ),
-                                        WidgetUtils.commonSizedBox(
-                                            0, 10.h),
-                                        WidgetUtils.showImages(
-                                            'assets/images/mine_wallet_zz.png',
-                                            ScreenUtil().setHeight(26),
-                                            ScreenUtil().setHeight(24)),
-                                        WidgetUtils.commonSizedBox(
-                                            0, 10.h),
-                                        WidgetUtils.onlyTextCenter(
-                                            zuanshi2,
-                                            StyleUtils.getCommonTextStyle(
-                                                color: Colors.white,
-                                                fontSize: ScreenUtil().setSp(23),
-                                                fontWeight: FontWeight.w600)),
-                                        WidgetUtils.commonSizedBox(
-                                            0, 10.h),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Positioned(
-                                right: 10.h,
-                                top: 80.h,
-                                child: GestureDetector(
-                                    onTap: (() {
-                                      MyUtils.goTransparentPageCom(
-                                          context, const CarShopPage());
-                                    }),
-                                    child: WidgetUtils.showImages(
-                                        'assets/images/car_shop.png',
-                                        100.h,
-                                        100.h)
-                                ),
-                              ),
-                            ],
-                          ),
-                          WidgetUtils.commonSizedBox(0, 10.h),
-                        ],
-                      ),
-                    ) : const Text(''),
                     WidgetUtils.commonSizedBox(140.h, 0),
                   ],
                 ),
@@ -1818,7 +1863,8 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
           setState(() {
             listJL[int.parse(benSN) - 1] =
                 listJL[int.parse(benSN) - 1] + xiazhujine;
-            if(sp.getString('car_audio') == null || sp.getString('car_audio').toString() == '开启') {
+            if (sp.getString('car_audio') == null ||
+                sp.getString('car_audio').toString() == '开启') {
               playSound2();
             }
             if (listA[int.parse(benSN) - 1] == false) {
@@ -1834,38 +1880,60 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                 ), () {
               listA1[int.parse(benSN) - 1] = false;
             });
-
             // 更新余额
-            if(bean.data!.curType == 1){
-              if(double.parse(jinbi) > 10000){
+            if (bean.data!.curType == 1) {
+              if (double.parse(jinbi) > 10000) {
+                jinbi = sp.getString('car_jinbi').toString();
                 // 减去花费的V豆
-                jinbi = '${(double.parse(jinbi) - int.parse(xiazhujine.toString()))}';
+                jinbi =
+                    '${(double.parse(jinbi) - int.parse(xiazhujine.toString()))}';
                 //保留2位小数
                 jinbi2 = '${(double.parse(jinbi) / 10000).toStringAsFixed(2)}w';
-              }else{
-                jinbi = (double.parse(jinbi) - int.parse(xiazhujine.toString())).toString();
+              } else {
+                jinbi = sp.getString('car_jinbi').toString();
+                jinbi = (double.parse(jinbi) - int.parse(xiazhujine.toString()))
+                    .toString();
                 jinbi2 = jinbi;
               }
-            }else if(bean.data!.curType == 2){
-              if(double.parse(zuanshi) > 10000){
+              sp.setString('car_jinbi', jinbi);
+              sp.setString('car_jinbi2', jinbi2);
+            } else if (bean.data!.curType == 2) {
+              if (double.parse(zuanshi) > 10000) {
+                zuanshi = sp.getString('car_zuanshi').toString();
                 // 减去花费的V豆
-                zuanshi = '${(double.parse(zuanshi) - int.parse(xiazhujine.toString()))}';
+                zuanshi =
+                    '${(double.parse(zuanshi) - int.parse(xiazhujine.toString()))}';
                 //保留2位小数
-                zuanshi2 = '${(double.parse(zuanshi) / 10000).toStringAsFixed(2)}w';
-              }else{
-                zuanshi = (double.parse(zuanshi) - int.parse(xiazhujine.toString())).toString();
+                zuanshi2 =
+                    '${(double.parse(zuanshi) / 10000).toStringAsFixed(2)}w';
+              } else {
+                zuanshi = sp.getString('car_zuanshi').toString();
+                zuanshi =
+                    (double.parse(zuanshi) - int.parse(xiazhujine.toString()))
+                        .toString();
                 zuanshi2 = zuanshi;
               }
-            }else{
-              if(double.parse(mogubi) > 10000){
+
+              sp.setString('car_zuanshi', zuanshi);
+              sp.setString('car_zuanshi2', zuanshi2);
+            } else {
+              if (double.parse(mogubi) > 10000) {
+                mogubi = sp.getString('car_mogu').toString();
                 // 减去花费的V豆
-                mogubi = '${(double.parse(mogubi) - int.parse(xiazhujine.toString()))}';
+                mogubi =
+                    '${(double.parse(mogubi) - int.parse(xiazhujine.toString()))}';
                 //保留2位小数
-                mogubi2 = '${(double.parse(mogubi) / 10000).toStringAsFixed(2)}w';
-              }else{
-                mogubi = (double.parse(mogubi) - int.parse(xiazhujine.toString())).toString();
+                mogubi2 =
+                    '${(double.parse(mogubi) / 10000).toStringAsFixed(2)}w';
+              } else {
+                mogubi = sp.getString('car_mogu').toString();
+                mogubi =
+                    (double.parse(mogubi) - int.parse(xiazhujine.toString()))
+                        .toString();
                 mogubi2 = mogubi;
               }
+              sp.setString('car_mogu', mogubi);
+              sp.setString('car_mogu2', mogubi2);
             }
           });
           break;
@@ -1961,7 +2029,13 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
   }
 
   // 金币 钻石 蘑菇币
-  String jinbi = '', zuanshi = '', mogubi = '', jinbi2 = '', zuanshi2 = '', mogubi2 = '';
+  String jinbi = '',
+      zuanshi = '',
+      mogubi = '',
+      jinbi2 = '',
+      zuanshi2 = '',
+      mogubi2 = '';
+
   /// 钱包余额
   Future<void> doPostBalance() async {
     try {
@@ -1970,27 +2044,36 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
         case MyHttpConfig.successCode:
           setState(() {
             jinbi = bean.data!.goldBean!;
-            if(double.parse(bean.data!.goldBean!) > 10000){
-              jinbi2 = '${(double.parse(bean.data!.goldBean!) / 10000).toStringAsFixed(2)}w';
-            }else{
+            if (double.parse(bean.data!.goldBean!) > 10000) {
+              jinbi2 =
+                  '${(double.parse(bean.data!.goldBean!) / 10000).toStringAsFixed(2)}w';
+            } else {
               jinbi2 = bean.data!.goldBean!;
             }
             zuanshi = bean.data!.diamond!;
-            if(double.parse(bean.data!.diamond!) > 10000){
-              zuanshi2 = '${(double.parse(bean.data!.diamond!) / 10000).toStringAsFixed(2)}w';
-            }else{
+            if (double.parse(bean.data!.diamond!) > 10000) {
+              zuanshi2 =
+                  '${(double.parse(bean.data!.diamond!) / 10000).toStringAsFixed(2)}w';
+            } else {
               zuanshi2 = bean.data!.diamond!;
             }
             mogubi = bean.data!.mushroom!;
-            if(double.parse(bean.data!.mushroom!) > 10000){
-              mogubi2 = '${(double.parse(bean.data!.mushroom!) / 10000).toStringAsFixed(2)}w';
-            }else{
+            if (double.parse(bean.data!.mushroom!) > 10000) {
+              mogubi2 =
+                  '${(double.parse(bean.data!.mushroom!) / 10000).toStringAsFixed(2)}w';
+            } else {
               mogubi2 = bean.data!.mushroom!;
             }
+            sp.setString('car_jinbi', jinbi);
+            sp.setString('car_zuanshi', zuanshi);
+            sp.setString('car_mogu', mogubi);
+            sp.setString('car_jinbi2', jinbi2);
+            sp.setString('car_zuanshi2', zuanshi2);
+            sp.setString('car_mogu2', mogubi2);
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:

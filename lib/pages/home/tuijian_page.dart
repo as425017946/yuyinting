@@ -23,6 +23,7 @@ import '../../utils/widget_utils.dart';
 import '../gongping/gp_quanxian_page.dart';
 import '../room/room_page.dart';
 import '../room/room_ts_mima_page.dart';
+
 ///推荐页面
 class TuijianPage extends StatefulWidget {
   const TuijianPage({Key? key}) : super(key: key);
@@ -31,12 +32,13 @@ class TuijianPage extends StatefulWidget {
   State<TuijianPage> createState() => _TuijianPageState();
 }
 
-class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClientMixin{
+class _TuijianPageState extends State<TuijianPage>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
   final RefreshController _refreshController =
-  RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: false);
   int page = 1;
   List<BannerList> listBanner = [];
   List<RoomList1> listRoom = [];
@@ -44,7 +46,7 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
   List<RoomList3> listRoom3 = [];
   List<AnchorList> listAnchor = [];
   List<int> listI = [];
-  int a = 0, b =0, c = 0;
+  int a = 0, b = 0, c = 0;
 
   void _onRefresh() async {
     // monitor network fetch
@@ -81,13 +83,14 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
     doPostPushRoom();
   }
 
-  Widget tuijian(context, i){
+  // 推荐主播
+  Widget tuijian(context, i) {
     return Column(
       children: [
         WidgetUtils.commonSizedBox(20, 0),
         GestureDetector(
-          onTap: ((){
-            if(MyUtils.checkClick()) {
+          onTap: (() {
+            if (MyUtils.checkClick()) {
               doPostBeforeJoin(listAnchor[i].roomId.toString(),
                   listAnchor[i].uid.toString());
             }
@@ -101,8 +104,12 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
                 Stack(
                   alignment: Alignment.center,
                   children: [
-                    WidgetUtils.CircleHeadImage(76.h, 76.h, listAnchor[i].avatar!),
-                    listAnchor[i].live == 1 ? WidgetUtils.showImages( 'assets/images/zhibozhong.webp', 80.h, 80.h) : const Text(''),
+                    WidgetUtils.CircleHeadImage(
+                        76.h, 76.h, listAnchor[i].avatar!),
+                    listAnchor[i].live == 1
+                        ? WidgetUtils.showImages(
+                            'assets/images/zhibozhong.webp', 80.h, 80.h)
+                        : const Text(''),
                   ],
                 ),
                 WidgetUtils.commonSizedBox(0, 10),
@@ -113,23 +120,43 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
                         alignment: Alignment.centerLeft,
                         child: Row(
                           children: [
-                            WidgetUtils.onlyText(listAnchor[i].nickname!, StyleUtils.getCommonTextStyle(color: Colors.black,fontWeight: FontWeight.w600, fontSize: 14)),
+                            WidgetUtils.onlyText(
+                                listAnchor[i].nickname!,
+                                StyleUtils.getCommonTextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14)),
                             WidgetUtils.commonSizedBox(0, 5),
-                            Stack(
-                              children: [
-                                WidgetUtils.showImages(listAnchor[i].gender == 1 ? 'assets/images/avj.png' : 'assets/images/avk.png', 15, 45),
-                                Container(
-                                  padding: const EdgeInsets.only(right: 8),
-                                  width: 45,
-                                  height: 15,
-                                  alignment: Alignment.centerRight,
-                                  child: Text(
-                                    listAnchor[i].age.toString(),
-                                    style: StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 12),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            listAnchor[i].gender != 0
+                                ? Stack(
+                                    children: [
+                                      WidgetUtils.showImages(
+                                          listAnchor[i].gender == 1
+                                              ? 'assets/images/avj.png'
+                                              : 'assets/images/avk.png',
+                                          15,
+                                          45),
+                                      Container(
+                                        padding: EdgeInsets.only(
+                                            right: int.parse(listAnchor[i]
+                                                        .age
+                                                        .toString()) >
+                                                    9
+                                                ? 15.h
+                                                : 20.h),
+                                        width: 45,
+                                        height: 15,
+                                        alignment: Alignment.centerRight,
+                                        child: Text(
+                                          listAnchor[i].age.toString(),
+                                          style: StyleUtils.getCommonTextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : const Text(''),
                           ],
                         ),
                       ),
@@ -139,7 +166,10 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
                         child: Text(
                           listAnchor[i].description!,
                           textAlign: TextAlign.left,
-                          style: StyleUtils.getCommonTextStyle(color: Colors.grey,fontWeight: FontWeight.w600, fontSize: 14),
+                          style: StyleUtils.getCommonTextStyle(
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14),
                         ),
                       )
                     ],
@@ -149,7 +179,9 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
                   height: 80.h,
                   width: 120.h,
                   color: Colors.transparent,
-                  child: const SVGASimpleImage(assetsName: 'assets/svga/home_gensui.svga',),
+                  child: const SVGASimpleImage(
+                    assetsName: 'assets/svga/home_gensui.svga',
+                  ),
                 ),
                 WidgetUtils.commonSizedBox(0, 20),
               ],
@@ -171,14 +203,13 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
     if (statuses[Permission.microphone] == PermissionStatus.granted) {
       LogE('权限状态$statuses');
       // 所有权限都已授予，执行你的操作
-      doPostBeforeJoin(roomId,'');
+      doPostBeforeJoin(roomId, '');
     } else {
       // 用户拒绝了某些权限，后弹提示语
       // ignore: use_build_context_synchronously
       MyUtils.goTransparentPageRoom(context, const GPQuanXianPage());
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -192,18 +223,14 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
       onRefresh: _onRefresh,
       child: SingleChildScrollView(
         child: Container(
-            decoration: const BoxDecoration(
-                gradient: LinearGradient(      //渐变位置
-                    begin: Alignment.topCenter, //右上
-                    end: Alignment.bottomCenter, //左下
-                    stops: [0.0, 1.0],         //[渐变起始点, 渐变结束点]
-                    //渐变颜色[始点颜色, 结束颜色]
-                    colors: [
-                      MyColors.homeTopBG,
-                      Colors.white
-                    ]
-                )
-            ),
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                  //渐变位置
+                  begin: Alignment.topCenter, //右上
+                  end: Alignment.bottomCenter, //左下
+                  stops: [0.0, 1.0], //[渐变起始点, 渐变结束点]
+                  //渐变颜色[始点颜色, 结束颜色]
+                  colors: [MyColors.homeTopBG, Colors.white])),
           child: Column(
             children: [
               Container(
@@ -226,10 +253,14 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
                   child: Row(
                     children: [
                       WidgetUtils.commonSizedBox(0, 10),
-                      WidgetUtils.showImages('assets/images/sousuo.png',
-                          ScreenUtil().setHeight(30), ScreenUtil().setHeight(30)),
+                      WidgetUtils.showImages(
+                          'assets/images/sousuo.png',
+                          ScreenUtil().setHeight(30),
+                          ScreenUtil().setHeight(30)),
                       WidgetUtils.commonSizedBox(0, 10),
-                      Expanded(child: WidgetUtils.commonTextField(_souSuoName, '搜索ID昵称房间名')),
+                      Expanded(
+                          child: WidgetUtils.commonTextField(
+                              _souSuoName, '搜索ID昵称房间名')),
                     ],
                   ),
                 ),
@@ -244,7 +275,7 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
                         children: [
                           ///轮播图
                           Container(
-                            height:ScreenUtil().setHeight(140),
+                            height: ScreenUtil().setHeight(140),
                             //超出部分，可裁剪
                             clipBehavior: Clip.hardEdge,
                             decoration: BoxDecoration(
@@ -252,34 +283,47 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
                             ),
                             child: Swiper(
                               key: UniqueKey(),
-                              itemBuilder: (BuildContext context,int index){
+                              itemBuilder: (BuildContext context, int index) {
                                 // 配置图片地址
                                 return CachedNetworkImage(
                                   imageUrl: listBanner[index].img!,
                                   fit: BoxFit.cover,
-                                  placeholder: (context, url) => WidgetUtils.CircleImageAss(ScreenUtil().setHeight(140), double.infinity, ScreenUtil().setHeight(10) , 'assets/images/img_placeholder.png',),
-                                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                                  placeholder: (context, url) =>
+                                      WidgetUtils.CircleImageAss(
+                                    ScreenUtil().setHeight(140),
+                                    double.infinity,
+                                    ScreenUtil().setHeight(10),
+                                    'assets/images/img_placeholder.png',
+                                  ),
+                                  errorWidget: (context, url, error) =>
+                                      const Icon(Icons.error),
                                 );
                               },
                               // 配置图片数量
-                              itemCount: listBanner.length ,
+                              itemCount: listBanner.length,
                               // 无限循环
                               loop: true,
                               // 自动轮播
                               autoplay: true,
                               autoplayDelay: 5000,
                               duration: 2000,
-                              onIndexChanged: (index){
+                              onIndexChanged: (index) {
                                 // LogE('用户拖动或者自动播放引起下标改变调用');
                               },
-                              onTap: (index){
+                              onTap: (index) {
                                 // LogE('用户点击引起下标改变调用');
                               },
                             ),
                           ),
+
                           ///热门推荐
                           WidgetUtils.commonSizedBox(10, 0),
-                          WidgetUtils.onlyText('热门推荐', StyleUtils.getCommonTextStyle(color: Colors.black,fontSize: ScreenUtil().setSp(28),fontWeight: FontWeight.w600)),
+                          WidgetUtils.onlyText(
+                              '热门推荐',
+                              StyleUtils.getCommonTextStyle(
+                                  color: Colors.black,
+                                  fontSize: ScreenUtil().setSp(28),
+                                  fontWeight: FontWeight.w600)),
                           WidgetUtils.commonSizedBox(10, 0),
                           SizedBox(
                             width: double.infinity,
@@ -287,108 +331,175 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
                             child: Row(
                               children: [
                                 ///热门推荐第一个大的轮播图
-                                Container(
-                                  height:ScreenUtil().setHeight(350),
+                                SizedBox(
+                                  height: ScreenUtil().setHeight(350),
                                   width: ScreenUtil().setWidth(450),
-                                  //超出部分，可裁剪
-                                  clipBehavior: Clip.hardEdge,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
                                   child: Swiper(
                                     key: UniqueKey(),
-                                    itemBuilder: (BuildContext context,int index){
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
                                       // 配置图片地址
-                                      return FadeInImage.assetNetwork(
-                                        placeholder: 'assets/images/img_placeholder.png',
-                                        image: listRoom[index].coverImg!,
-                                        fit: BoxFit.fill,
-                                      );
+                                          return Stack(
+                                            children: [
+                                              Container(
+                                                height:
+                                                ScreenUtil().setHeight(350),
+                                                width: ScreenUtil().setWidth(450),
+                                                //超出部分，可裁剪
+                                                clipBehavior: Clip.hardEdge,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                  BorderRadius.circular(5),
+                                                ),
+                                                child: FadeInImage.assetNetwork(
+                                                  placeholder:
+                                                  'assets/images/img_placeholder.png',
+                                                  image: listRoom[index]
+                                                      .coverImg!,
+                                                  fit: BoxFit.fill,
+                                                ),
+                                              ),
+                                              Positioned(
+                                                  bottom: 10.h,
+                                                  left:10.h,
+                                                  child: WidgetUtils.onlyText(
+                                                      listRoom[index].roomName!.length > 10 ? '${listRoom[index].roomName!.substring(0,10)}...' : listRoom[index].roomName!,
+                                                      StyleUtils.getCommonTextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 22.sp)))
+                                            ],
+                                          );
                                     },
                                     // 配置图片数量
-                                    itemCount: listRoom.isEmpty ? 0 : listRoom.length ,
+                                    itemCount:
+                                        listRoom.isEmpty ? 0 : listRoom.length,
                                     // 无限循环
                                     loop: true,
                                     // 自动轮播
                                     autoplay: true,
                                     autoplayDelay: 4000,
                                     duration: 2500,
-                                    onIndexChanged: (index){
-                                    },
-                                    onTap: (index){
-    if(MyUtils.checkClick()) {
-      quanxian(listRoom[index].id.toString());
-    }
+                                    onIndexChanged: (index) {},
+                                    onTap: (index) {
+                                      if (MyUtils.checkClick()) {
+                                        quanxian(listRoom[index].id.toString());
+                                      }
                                     },
                                   ),
                                 ),
                                 WidgetUtils.commonSizedBox(0, 10),
-                                Expanded(child: Column(
+                                Expanded(
+                                    child: Column(
                                   children: [
                                     ///热门推荐 小的轮播图1
-                                    Expanded(child: Container(
+                                    Expanded(
+                                        child: SizedBox(
                                       height: ScreenUtil().setHeight(170),
-                                      //超出部分，可裁剪
-                                      clipBehavior: Clip.hardEdge,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
                                       child: Swiper(
                                         key: UniqueKey(),
-                                        itemBuilder: (BuildContext context,int index){
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
                                           // 配置图片地址
-                                          return FadeInImage.assetNetwork(
-                                            placeholder: 'assets/images/img_placeholder.png',
-                                            image: listRoom2[index].coverImg!,
-                                            fit: BoxFit.fill,
-                                          );
+                                              return Stack(
+                                                children: [
+                                                  Container(
+                                                    height:
+                                                    ScreenUtil().setHeight(170),
+                                                    //超出部分，可裁剪
+                                                    clipBehavior: Clip.hardEdge,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                      BorderRadius.circular(5),
+                                                    ),
+                                                    child: FadeInImage.assetNetwork(
+                                                      placeholder:
+                                                      'assets/images/img_placeholder.png',
+                                                      image: listRoom2[index]
+                                                          .coverImg!,
+                                                      fit: BoxFit.fill,
+                                                    ),
+                                                  ),
+                                                  Positioned(
+                                                      bottom: 10.h,
+                                                      left:10.h,
+                                                      child: WidgetUtils.onlyText(
+                                                          listRoom2[index].roomName!.length > 10 ? '${listRoom2[index].roomName!.substring(0,10)}...' : listRoom2[index].roomName!,
+                                                          StyleUtils.getCommonTextStyle(
+                                                              color: Colors.white,
+                                                              fontSize: 22.sp)))
+                                                ],
+                                              );
                                         },
                                         // 配置图片数量
-                                        itemCount: listRoom2.length ,
+                                        itemCount: listRoom2.length,
                                         // 无限循环
                                         loop: true,
                                         // 自动轮播
                                         autoplay: true,
                                         autoplayDelay: 4000,
                                         duration: 2000,
-                                        onTap: (index){
-    if(MyUtils.checkClick()) {
-      quanxian(listRoom2[index].id.toString());
-    }
+                                        onTap: (index) {
+                                          if (MyUtils.checkClick()) {
+                                            quanxian(
+                                                listRoom2[index].id.toString());
+                                          }
                                         },
                                       ),
                                     )),
                                     WidgetUtils.commonSizedBox(10, 0),
+
                                     ///热门推荐 小的轮播图2
-                                    Expanded(child: Container(
+                                    Expanded(
+                                        child: SizedBox(
                                       height: ScreenUtil().setHeight(170),
-                                      //超出部分，可裁剪
-                                      clipBehavior: Clip.hardEdge,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
                                       child: Swiper(
                                         key: UniqueKey(),
-                                        itemBuilder: (BuildContext context,int index){
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
                                           // 配置图片地址
-                                          return FadeInImage.assetNetwork(
-                                            placeholder: 'assets/images/img_placeholder.png',
-                                            image: listRoom3[index].coverImg!,
-                                            fit: BoxFit.fill,
+                                          return Stack(
+                                            children: [
+                                              Container(
+                                                height:
+                                                    ScreenUtil().setHeight(170),
+                                                //超出部分，可裁剪
+                                                clipBehavior: Clip.hardEdge,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                ),
+                                                child: FadeInImage.assetNetwork(
+                                                  placeholder:
+                                                      'assets/images/img_placeholder.png',
+                                                  image: listRoom3[index]
+                                                      .coverImg!,
+                                                  fit: BoxFit.fill,
+                                                ),
+                                              ),
+                                              Positioned(
+                                                  bottom: 10.h,
+                                                  left:10.h,
+                                                  child: WidgetUtils.onlyText(
+                                                      listRoom3[index].roomName!.length > 10 ? '${listRoom3[index].roomName!.substring(0,10)}...' : listRoom3[index].roomName!,
+                                                  StyleUtils.getCommonTextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 22.sp)))
+                                            ],
                                           );
                                         },
                                         // 配置图片数量
-                                        itemCount: listRoom3.length ,
+                                        itemCount: listRoom3.length,
                                         // 无限循环
                                         loop: true,
                                         // 自动轮播
                                         autoplay: true,
                                         autoplayDelay: 4000,
                                         duration: 2000,
-                                        onTap: (index){
-    if(MyUtils.checkClick()) {
-      quanxian(listRoom3[index].id.toString());
-    }
+                                        onTap: (index) {
+                                          if (MyUtils.checkClick()) {
+                                            quanxian(
+                                                listRoom3[index].id.toString());
+                                          }
                                           // doPostBeforeJoin(listRoom3[index].id.toString());
                                         },
                                       ),
@@ -401,11 +512,17 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
                         ],
                       ),
                     ),
+
                     ///推荐主播
                     WidgetUtils.commonSizedBox(20, 0),
                     Container(
                       margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                      child: WidgetUtils.onlyText('推荐主播', StyleUtils.getCommonTextStyle(color: Colors.black,fontSize: ScreenUtil().setSp(28),fontWeight: FontWeight.w600)),
+                      child: WidgetUtils.onlyText(
+                          '推荐主播',
+                          StyleUtils.getCommonTextStyle(
+                              color: Colors.black,
+                              fontSize: ScreenUtil().setSp(28),
+                              fontWeight: FontWeight.w600)),
                     ),
                     ListView.builder(
                       padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
@@ -438,26 +555,26 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
             listRoom.clear();
             listRoom2.clear();
             listRoom3.clear();
-            if(bean.data!.bannerList!.isNotEmpty){
+            if (bean.data!.bannerList!.isNotEmpty) {
               listBanner = bean.data!.bannerList!;
             }
-            if(bean.data!.roomList1!.isNotEmpty){
+            if (bean.data!.roomList1!.isNotEmpty) {
               listRoom = bean.data!.roomList1!;
             }
-            if(bean.data!.roomList2!.isNotEmpty){
+            if (bean.data!.roomList2!.isNotEmpty) {
               listRoom2 = bean.data!.roomList2!;
             }
-            if(bean.data!.roomList3!.isNotEmpty){
+            if (bean.data!.roomList3!.isNotEmpty) {
               listRoom3 = bean.data!.roomList3!;
             }
-            if(bean.data!.anchorList!.isNotEmpty){
+            if (bean.data!.anchorList!.isNotEmpty) {
               listAnchor = bean.data!.anchorList!;
             }
             // _refreshController.loadNoData();
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -471,10 +588,8 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
     }
   }
 
-
-
   /// 加入房间前
-  Future<void> doPostBeforeJoin(roomID,String anchorUid) async {
+  Future<void> doPostBeforeJoin(roomID, String anchorUid) async {
     Map<String, dynamic> params = <String, dynamic>{
       'room_id': roomID,
     };
@@ -483,14 +598,18 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
       CommonBean bean = await DataUtils.postBeforeJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          doPostRoomJoin(roomID, '',anchorUid);
+          doPostRoomJoin(roomID, '', anchorUid);
           break;
-        case MyHttpConfig.errorRoomCode://需要密码
-        // ignore: use_build_context_synchronously
-          MyUtils.goTransparentPageCom(context, RoomTSMiMaPage(roomID: roomID,));
+        case MyHttpConfig.errorRoomCode: //需要密码
+          // ignore: use_build_context_synchronously
+          MyUtils.goTransparentPageCom(
+              context,
+              RoomTSMiMaPage(
+                roomID: roomID,
+              ));
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -504,9 +623,8 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
     }
   }
 
-
   /// 加入房间
-  Future<void> doPostRoomJoin(roomID, password,String anchorUid) async {
+  Future<void> doPostRoomJoin(roomID, password, String anchorUid) async {
     Map<String, dynamic> params = <String, dynamic>{
       'room_id': roomID,
       'password': password,
@@ -517,11 +635,15 @@ class _TuijianPageState extends State<TuijianPage> with AutomaticKeepAliveClient
       CommonBean bean = await DataUtils.postRoomJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-        // ignore: use_build_context_synchronously
-          MyUtils.goTransparentRFPage(context, RoomPage(roomId: roomID,));
+          // ignore: use_build_context_synchronously
+          MyUtils.goTransparentRFPage(
+              context,
+              RoomPage(
+                roomId: roomID,
+              ));
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
