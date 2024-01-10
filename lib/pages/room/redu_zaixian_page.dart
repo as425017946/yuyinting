@@ -8,11 +8,13 @@ import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
+import '../../main.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../message/geren/people_info_page.dart';
+import '../mine/my/my_info_page.dart';
 /// 热度-在线列表
 class ReDuZaiXianPage extends StatefulWidget {
   String roomID;
@@ -71,9 +73,14 @@ class _ReDuZaiXianPageState extends State<ReDuZaiXianPage> with AutomaticKeepAli
       children: [
         GestureDetector(
           onTap: (() {
-            if(MyUtils.checkClick()) {
-              MyUtils.goTransparentRFPage(
-                  context, PeopleInfoPage(otherId: list[i].uid.toString(),));
+            if(MyUtils.checkClick()){
+              // 如果点击的是自己，进入自己的主页
+              if(sp.getString('user_id').toString() == list[i].uid.toString()){
+                MyUtils.goTransparentRFPage(context, const MyInfoPage());
+              }else{
+                sp.setString('other_id', list[i].uid.toString());
+                MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: list[i].uid.toString(),));
+              }
             }
           }),
           child: Container(

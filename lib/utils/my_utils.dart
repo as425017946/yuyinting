@@ -45,7 +45,7 @@ class MyUtils {
   static bool chinaPhoneNumber(String input) {
     if (input == null || input.isEmpty) return false;
     String regexPhoneNumber =
-        "^((13[0-9])|(15[^4])|(166)|(17[0-8])|(18[0-9])|(19[8-9])|(147,145))\\d{8}\$";
+        "^((13[0-9])|(15[^4])|(166)|(17[0-8])|(18[0-9])|(19[1-9])|(147,145))\\d{8}\$";
     return RegExp(regexPhoneNumber).hasMatch(input);
   }
 
@@ -419,13 +419,21 @@ class MyUtils {
 
   //初始化sdk
   static void initSDK() async {
+    // EMOptions options = EMOptions(
+    //     appKey: "1199230605161000#demo",
+    //     autoLogin: false,
+    //     debugModel: true,
+    //     isAutoDownloadThumbnail: true);
+    // EMOptions options = EMOptions(
+    //     appKey: "1136231222154558#demo",
+    //     autoLogin: false,
+    //     debugModel: true,
+    //     isAutoDownloadThumbnail: true);
     EMOptions options = EMOptions(
-        appKey: "1199230605161000#demo",
+        appKey: "1136231222154558#test",
         autoLogin: false,
         debugModel: true,
         isAutoDownloadThumbnail: true);
-    // EMOptions options = EMOptions(
-    //     appKey: "1136231222154558#demo", autoLogin: false, debugModel: true, isAutoDownloadThumbnail: true);
     await EMClient.getInstance.init(options);
     // 通知 SDK UI 已准备好。该方法执行后才会收到 `EMChatRoomEventHandler`、`EMContactEventHandler` 和 `EMGroupEventHandler` 回调。
     await EMClient.getInstance.startCallback();
@@ -440,28 +448,62 @@ class MyUtils {
       "UNIQUE_HANDLER_ID",
       EMConnectionEventHandler(
         // sdk 连接成功;
-        onConnected: () => {LogE('IM 登录成功')},
+        onConnected: (() {
+          LogE('IM 登录成功');
+          MyToastUtils.showToastBottom('IM登录成功');
+        }),
         // 由于网络问题导致的断开，sdk会尝试自动重连，连接成功后会回调 "onConnected";
-        onDisconnected: () => {LogE('IM 断开连接')},
+        onDisconnected: (() {
+          LogE('IM 断开连接');
+          MyToastUtils.showToastBottom('IM断开连接');
+        }),
         // 用户 token 鉴权失败;
-        onUserAuthenticationFailed: () => {LogE('IM 登鉴权失败')},
+        onUserAuthenticationFailed: (() {
+          LogE('IM 登鉴权失败');
+          MyToastUtils.showToastBottom('IM登鉴权失败');
+        }),
         // 由于密码变更被踢下线;
-        onUserDidChangePassword: () => {LogE('IM 登由于密码变更被踢下线')},
+        onUserDidChangePassword: (() {
+          LogE('IM 登由于密码变更被踢下线');
+          MyToastUtils.showToastBottom('IM登由于密码变更被踢下线');
+        }),
         // 用户被连接被服务器禁止;
-        onUserDidForbidByServer: () => {LogE('IM 登用户被连接被服务器禁止')},
+        onUserDidForbidByServer: (() {
+          LogE('IM 登用户被连接被服务器禁止');
+          MyToastUtils.showToastBottom('IM登用户被连接被服务器禁止');
+        }),
         // 用户登录设备超出数量限制;
-        onUserDidLoginTooManyDevice: () => {LogE('IM 登用户登录设备超出数量限制')},
+        onUserDidLoginTooManyDevice: (() {
+          LogE('IM 登用户登录设备超出数量限制');
+          MyToastUtils.showToastBottom('IM登用户登录设备超出数量限制');
+        }),
         // 用户从服务器删除;
-        onUserDidRemoveFromServer: () => {LogE('IM 登用户从服务器删除')},
+        onUserDidRemoveFromServer: (() {
+          LogE('IM 登用户从服务器删除');
+          MyToastUtils.showToastBottom('IM登用户从服务器删除');
+        }),
         // 调用 `kickDevice` 方法将设备踢下线，被踢设备会收到该回调；
-        onUserKickedByOtherDevice: () => {LogE('IM 登将设备踢下线')},
+        onUserKickedByOtherDevice: (() {
+          LogE('IM 登将设备踢下线');
+          signOut();
+          MyToastUtils.showToastBottom('账号已在其他设备登录！');
+        }),
         // 登录新设备时因达到了登录设备数量限制而导致当前设备被踢下线，被踢设备收到该回调；
-        onUserDidLoginFromOtherDevice: (String deviceName) =>
-            {LogE('IM 登登录设备数量限制而导致当前设备被踢下线')},
+        onUserDidLoginFromOtherDevice: ((String deviceName) {
+          LogE('IM 登登录设备数量限制而导致当前设备被踢下线');
+          signOut();
+          MyToastUtils.showToastBottom('账号已在其他设备登录！');
+        }),
         // Token 过期;
-        onTokenDidExpire: () => {LogE('IM 登过期')},
+        onTokenDidExpire: (() {
+          LogE('IM 登过期');
+          MyToastUtils.showToastBottom('IM登过期');
+        }),
         // Token 即将过期，需要调用 renewToken;
-        onTokenWillExpire: () => {LogE('IM 登即将过期')},
+        onTokenWillExpire: (() {
+          LogE('IM 登即将过期');
+          MyToastUtils.showToastBottom('IM登即将过期');
+        }),
       ),
     );
 
@@ -491,7 +533,6 @@ class MyUtils {
                         // 清除公屏
                         eventBus.fire(JoinRoomYBack(map: info, type: '0'));
                       } else if (info['type'] == 'one_click_gift') {
-
                         eventBus.fire(JoinRoomYBack(map: info, type: '0'));
                       } else {
                         String nickName = info['nickname'];
@@ -600,9 +641,10 @@ class MyUtils {
                   EMClient.getInstance.chatManager.downloadAttachment(msg);
                   EMImageMessageBody body = msg.body as EMImageMessageBody;
                   LogE('接受图片信息==$body');
+                  LogE('接受图片信息**${msg.attributes}');
                   Map? info = msg.attributes;
                   String nickName = info!['nickname'];
-                  String headImg = info!['remotePath'];
+                  String headImg = info!['avatar'];
                   String combineID = '';
                   if (int.parse(sp.getString('user_id').toString()) >
                       int.parse(msg.from!)) {
@@ -623,42 +665,41 @@ class MyUtils {
                   String otherHeadImg = '';
                   //保存自己头像
                   if (sp
-                      .getString('user_headimg')
-                      .toString()
-                      .contains('.gif') ||
+                          .getString('user_headimg')
+                          .toString()
+                          .contains('.gif') ||
                       sp
                           .getString('user_headimg')
                           .toString()
                           .contains('.GIF')) {
                     myHeadImg =
-                    '${directory!.path}/${sp.getString('user_id')}.gif';
+                        '${directory!.path}/${sp.getString('user_id')}.gif';
                   } else if (sp
-                      .getString('user_headimg')
-                      .toString()
-                      .contains('.jpg') ||
+                          .getString('user_headimg')
+                          .toString()
+                          .contains('.jpg') ||
                       sp
                           .getString('user_headimg')
                           .toString()
                           .contains('.GPG')) {
                     myHeadImg =
-                    '${directory!.path}/${sp.getString('user_id')}.gif';
+                        '${directory!.path}/${sp.getString('user_id')}.gif';
                   } else if (sp
-                      .getString('user_headimg')
-                      .toString()
-                      .contains('.jpeg') ||
+                          .getString('user_headimg')
+                          .toString()
+                          .contains('.jpeg') ||
                       sp
                           .getString('user_headimg')
                           .toString()
                           .contains('.GPEG')) {
                     myHeadImg =
-                    '${directory!.path}/${sp.getString('user_id')}.jpeg';
+                        '${directory!.path}/${sp.getString('user_id')}.jpeg';
                   } else {
                     myHeadImg =
-                    '${directory!.path}/${sp.getString('user_id')}.png';
+                        '${directory!.path}/${sp.getString('user_id')}.png';
                   }
                   // 保存他人头像
-                  if (headImg.contains('.gif') ||
-                      headImg.contains('.GIF')) {
+                  if (headImg.contains('.gif') || headImg.contains('.GIF')) {
                     otherHeadImg = '${directory!.path}/${msg.from}.gif';
                   } else if (headImg.contains('.jpg') ||
                       headImg.contains('.GPG')) {
@@ -679,7 +720,9 @@ class MyUtils {
                     'content': body.thumbnailLocalPath,
                     'bigImg': body.localPath,
                     'headImg': myHeadImg,
+                    'headNetImg': sp.getString('user_headimg').toString(),
                     'otherHeadImg': otherHeadImg,
+                    'otherHeadNetImg': headImg,
                     'add_time': msg.serverTime,
                     'type': 2,
                     'number': 0,
@@ -714,7 +757,7 @@ class MyUtils {
                   EMVoiceMessageBody body = msg.body as EMVoiceMessageBody;
                   Map? info = msg.attributes;
                   String nickName = info!['nickname'];
-                  String headImg = info!['remotePath'];
+                  String headImg = info!['avatar'];
                   String combineID = '';
                   if (int.parse(sp.getString('user_id').toString()) >
                       int.parse(msg.from!)) {
@@ -735,42 +778,41 @@ class MyUtils {
                   String otherHeadImg = '';
                   //保存自己头像
                   if (sp
-                      .getString('user_headimg')
-                      .toString()
-                      .contains('.gif') ||
+                          .getString('user_headimg')
+                          .toString()
+                          .contains('.gif') ||
                       sp
                           .getString('user_headimg')
                           .toString()
                           .contains('.GIF')) {
                     myHeadImg =
-                    '${directory!.path}/${sp.getString('user_id')}.gif';
+                        '${directory!.path}/${sp.getString('user_id')}.gif';
                   } else if (sp
-                      .getString('user_headimg')
-                      .toString()
-                      .contains('.jpg') ||
+                          .getString('user_headimg')
+                          .toString()
+                          .contains('.jpg') ||
                       sp
                           .getString('user_headimg')
                           .toString()
                           .contains('.GPG')) {
                     myHeadImg =
-                    '${directory!.path}/${sp.getString('user_id')}.gif';
+                        '${directory!.path}/${sp.getString('user_id')}.gif';
                   } else if (sp
-                      .getString('user_headimg')
-                      .toString()
-                      .contains('.jpeg') ||
+                          .getString('user_headimg')
+                          .toString()
+                          .contains('.jpeg') ||
                       sp
                           .getString('user_headimg')
                           .toString()
                           .contains('.GPEG')) {
                     myHeadImg =
-                    '${directory!.path}/${sp.getString('user_id')}.jpeg';
+                        '${directory!.path}/${sp.getString('user_id')}.jpeg';
                   } else {
                     myHeadImg =
-                    '${directory!.path}/${sp.getString('user_id')}.png';
+                        '${directory!.path}/${sp.getString('user_id')}.png';
                   }
                   // 保存他人头像
-                  if (headImg.contains('.gif') ||
-                      headImg.contains('.GIF')) {
+                  if (headImg.contains('.gif') || headImg.contains('.GIF')) {
                     otherHeadImg = '${directory!.path}/${msg.from}.gif';
                   } else if (headImg.contains('.jpg') ||
                       headImg.contains('.GPG')) {
@@ -791,7 +833,9 @@ class MyUtils {
                     'content': body.localPath,
                     'bigImg': body.localPath,
                     'headImg': myHeadImg,
+                    'headNetImg': sp.getString('user_headimg').toString(),
                     'otherHeadImg': otherHeadImg,
+                    'otherHeadNetImg': headImg,
                     'add_time': msg.serverTime,
                     'type': 3,
                     'number': body.duration,
@@ -844,42 +888,41 @@ class MyUtils {
                     String otherHeadImg = '';
                     //保存自己头像
                     if (sp
-                        .getString('user_headimg')
-                        .toString()
-                        .contains('.gif') ||
+                            .getString('user_headimg')
+                            .toString()
+                            .contains('.gif') ||
                         sp
                             .getString('user_headimg')
                             .toString()
                             .contains('.GIF')) {
                       myHeadImg =
-                      '${directory!.path}/${sp.getString('user_id')}.gif';
+                          '${directory!.path}/${sp.getString('user_id')}.gif';
                     } else if (sp
-                        .getString('user_headimg')
-                        .toString()
-                        .contains('.jpg') ||
+                            .getString('user_headimg')
+                            .toString()
+                            .contains('.jpg') ||
                         sp
                             .getString('user_headimg')
                             .toString()
                             .contains('.GPG')) {
                       myHeadImg =
-                      '${directory!.path}/${sp.getString('user_id')}.gif';
+                          '${directory!.path}/${sp.getString('user_id')}.gif';
                     } else if (sp
-                        .getString('user_headimg')
-                        .toString()
-                        .contains('.jpeg') ||
+                            .getString('user_headimg')
+                            .toString()
+                            .contains('.jpeg') ||
                         sp
                             .getString('user_headimg')
                             .toString()
                             .contains('.GPEG')) {
                       myHeadImg =
-                      '${directory!.path}/${sp.getString('user_id')}.jpeg';
+                          '${directory!.path}/${sp.getString('user_id')}.jpeg';
                     } else {
                       myHeadImg =
-                      '${directory!.path}/${sp.getString('user_id')}.png';
+                          '${directory!.path}/${sp.getString('user_id')}.png';
                     }
                     // 保存他人头像
-                    if (headImg.contains('.gif') ||
-                        headImg.contains('.GIF')) {
+                    if (headImg.contains('.gif') || headImg.contains('.GIF')) {
                       otherHeadImg = '${directory!.path}/${msg.from}.gif';
                     } else if (headImg.contains('.jpg') ||
                         headImg.contains('.GPG')) {
@@ -900,7 +943,9 @@ class MyUtils {
                       'content': '收到${info['value']}个V豆',
                       'bigImg': '',
                       'headImg': myHeadImg,
+                      'headNetImg': sp.getString('user_headimg').toString(),
                       'otherHeadImg': otherHeadImg,
+                      'otherHeadNetImg': headImg,
                       'add_time': msg.serverTime,
                       'type': 6,
                       'number': 0,
@@ -912,7 +957,23 @@ class MyUtils {
                     // 插入数据
                     await databaseHelper.insertData('messageSLTable', params);
                     eventBus.fire(SendMessageBack(type: 1, msgID: '0'));
-                  } else {
+                  }else if(body.event == 'login_kick') {
+                    // 这个状态是后台直接封禁了账号，然后直接踢掉app
+                    sp.setString('user_token', '');
+                    sp.setString("user_account", '');
+                    sp.setString("user_id", '');
+                    sp.setString("em_pwd", '');
+                    sp.setString("em_token", '');
+                    sp.setString("user_password", '');
+                    sp.setString('user_phone', '');
+                    sp.setString('nickname', '');
+                    sp.setString("user_headimg", '');
+                    sp.setString("user_headimg_id", '');
+                    // 保存身份
+                    sp.setString("user_identity", '');
+                    // 直接杀死app
+                    SystemNavigator.pop();
+                  }else {
                     eventBus.fire(ZDYBack(map: body.params, type: body.event));
                   }
                 }

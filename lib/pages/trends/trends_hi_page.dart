@@ -11,12 +11,16 @@ import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../utils/my_toast_utils.dart';
+
 ///打招呼弹窗
 class TrendsHiPage extends StatefulWidget {
   String imgUrl;
   String uid;
   int index;
-  TrendsHiPage({Key? key, required this.imgUrl, required this.uid, required this.index}) : super(key: key);
+
+  TrendsHiPage(
+      {Key? key, required this.imgUrl, required this.uid, required this.index})
+      : super(key: key);
 
   @override
   State<TrendsHiPage> createState() => _TrendsHiPageState();
@@ -24,19 +28,14 @@ class TrendsHiPage extends StatefulWidget {
 
 class _TrendsHiPageState extends State<TrendsHiPage> {
   var gz = true;
+  bool isClick = false;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    eventBus.on<SubmitButtonBack>().listen((event) {
-        if(MyUtils.compare('发送', event.title) == 0){
-          if(mounted) {
-            doPostHi();
-          }
-        }
-    });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,23 +59,38 @@ class _TrendsHiPageState extends State<TrendsHiPage> {
                 ),
                 child: Column(
                   children: [
-                    const SizedBox(height: 20,),
+                    const SizedBox(
+                      height: 20,
+                    ),
                     Row(
                       children: [
                         const Expanded(child: Text('')),
                         GestureDetector(
-                          onTap: ((){
+                          onTap: (() {
                             ///关闭当前页面
                             Navigator.pop(context);
                           }),
-                          child: WidgetUtils.showImages('assets/images/close.png', 15, 15),
+                          child: WidgetUtils.showImages(
+                              'assets/images/close.png', 15, 15),
                         ),
-                        const SizedBox(width: 20,),
+                        const SizedBox(
+                          width: 20,
+                        ),
                       ],
                     ),
-                    const SizedBox(height: 40,),
-                    const Text('给TA别致打招呼',style: TextStyle(fontSize: 18,color: MyColors.black_3, fontWeight: FontWeight.w600),),
-                    const SizedBox(height: 10,),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    const Text(
+                      '给TA别致打招呼',
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: MyColors.black_3,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     Container(
                       width: double.infinity,
                       margin: const EdgeInsets.only(left: 20, right: 20),
@@ -88,15 +102,47 @@ class _TrendsHiPageState extends State<TrendsHiPage> {
                         //背景
                         color: MyColors.f2,
                         //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(20.0)),
+                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
                       ),
-                      child: WidgetUtils.onlyText("遇见你真好，我们交个朋友吧！", StyleUtils.textStyleG3),
+                      child: WidgetUtils.onlyText(
+                          "遇见你真好，我们交个朋友吧！", StyleUtils.textStyleG3),
                     ),
-                    WidgetUtils.commonSubmitButton('发送'),
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                      height: 80.h,
+                      alignment: Alignment.center,
+                      width: double.infinity,
+                      //边框设置
+                      decoration: const BoxDecoration(
+                        //背景
+                        color: MyColors.homeTopBG,
+                        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                        borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                      ),
+                      child: MaterialButton(
+                        minWidth: double.infinity,
+                        height: 90.h,
+                        splashColor: MyColors.blue,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(25)),
+                        ),
+                        onPressed: (() {
+                          if (MyUtils.checkClick() && isClick == false) {
+                            setState(() {
+                              isClick = true;
+                            });
+                            doPostHi();
+                          }
+                        }),
+                        child: Text(
+                          '发送',
+                          style: StyleUtils.buttonTextStyle,
+                        ),
+                      ),
+                    ),
                     WidgetUtils.commonSizedBox(10, 0),
                     GestureDetector(
-                      onTap: ((){
+                      onTap: (() {
                         setState(() {
                           gz = !gz;
                         });
@@ -104,9 +150,20 @@ class _TrendsHiPageState extends State<TrendsHiPage> {
                       child: Row(
                         children: [
                           const Expanded(child: Text('')),
-                          WidgetUtils.showImages( gz == false ? 'assets/images/trends_r1.png' : 'assets/images/trends_r2.png', 15, 15),
+                          WidgetUtils.showImages(
+                              gz == false
+                                  ? 'assets/images/trends_r1.png'
+                                  : 'assets/images/trends_r2.png',
+                              15,
+                              15),
                           WidgetUtils.commonSizedBox(0, 10),
-                          const Text('关注TA，Ta的最新动态怎能错过~',style: TextStyle(fontSize: 13,color: MyColors.g9, ),),
+                          const Text(
+                            '关注TA，Ta的最新动态怎能错过~',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: MyColors.g9,
+                            ),
+                          ),
                           const Expanded(child: Text('')),
                         ],
                       ),
@@ -124,7 +181,7 @@ class _TrendsHiPageState extends State<TrendsHiPage> {
 
   /// 打招呼
   Future<void> doPostHi() async {
-    if(gz){
+    if (gz) {
       doPostFollow();
     }
     Map<String, dynamic> params = <String, dynamic>{
@@ -134,6 +191,9 @@ class _TrendsHiPageState extends State<TrendsHiPage> {
       CommonBean bean = await DataUtils.postHi(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
+          setState(() {
+            isClick = false;
+          });
           eventBus.fire(HiBack(isBack: true, index: widget.index));
           Navigator.pop(context);
           break;
@@ -142,7 +202,7 @@ class _TrendsHiPageState extends State<TrendsHiPage> {
           Navigator.pop(context);
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -158,17 +218,16 @@ class _TrendsHiPageState extends State<TrendsHiPage> {
   Future<void> doPostFollow() async {
     Map<String, dynamic> params = <String, dynamic>{
       'type': '1',
-      'status':'1',
+      'status': '1',
       'follow_id': widget.uid,
     };
     try {
       CommonBean bean = await DataUtils.postFollow(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -179,5 +238,4 @@ class _TrendsHiPageState extends State<TrendsHiPage> {
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
-
 }

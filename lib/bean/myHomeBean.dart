@@ -23,14 +23,14 @@ class myHomeBean {
 }
 
 class Data {
-  UserInfo? userInfo;
+  MyUserInfo? userInfo;
   GiftList? giftList;
 
   Data({this.userInfo, this.giftList});
 
   Data.fromJson(Map<String, dynamic> json) {
     userInfo = json['user_info'] != null
-        ? new UserInfo.fromJson(json['user_info'])
+        ? new MyUserInfo.fromJson(json['user_info'])
         : null;
     giftList = json['gift_list'] != null
         ? new GiftList.fromJson(json['gift_list'])
@@ -49,7 +49,7 @@ class Data {
   }
 }
 
-class UserInfo {
+class MyUserInfo {
   int? number;
   String? nickname;
   int? avatar;
@@ -73,7 +73,7 @@ class UserInfo {
   String? avatarFrameGifImg;
   int? level;
 
-  UserInfo(
+  MyUserInfo(
       {this.number,
         this.nickname,
         this.avatar,
@@ -97,7 +97,7 @@ class UserInfo {
         this.avatarFrameImg,
         this.level});
 
-  UserInfo.fromJson(Map<String, dynamic> json) {
+  MyUserInfo.fromJson(Map<String, dynamic> json) {
     number = json['number'];
     nickname = json['nickname'];
     avatar = json['avatar'];

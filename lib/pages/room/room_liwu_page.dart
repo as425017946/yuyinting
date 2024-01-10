@@ -21,6 +21,7 @@ import '../../main.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../widget/OptionGridView.dart';
+import '../mine/qianbao/dou_pay_page.dart';
 
 /// 厅内礼物
 class RoomLiWuPage extends StatefulWidget {
@@ -82,12 +83,10 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
       onTap: (() {
         setState(() {
           if (listChoose[i]) {
-            isChoosePeople = false;
             listChoose[i] = false;
             listPeople[listMaiXu[i].serialNumber! - 1] = false;
             listUID.remove(listMaiXu[i].uid.toString());
           } else {
-            isChoosePeople = true;
             listChoose[i] = true;
             listPeople[listMaiXu[i].serialNumber! - 1] = true;
             listUID.add(listMaiXu[i].uid.toString());
@@ -100,6 +99,12 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
             }else{
               a ++;
             }
+          }
+          // 是否有选中的人
+          if(a > 0){
+            isChoosePeople = true;
+          }else{
+            isChoosePeople = false;
           }
           if(a == listChoose.length){
             isAll = true;
@@ -165,12 +170,22 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
       onTap: (() {
         setState(() {
           if(leixing == 0){
+            isAll = true;
+            for(int i = 0; i < listMaiXu.length; i++){
+              listChoose[i] = true;
+              listPeople[listMaiXu[i].serialNumber! - 1] = true;
+              isChoosePeople = true;
+              listUID.clear();
+              for(int i =0; i < listMaiXu.length; i++){
+                listUID.add(listMaiXu[i].uid.toString());
+              }
+            }
+            eventBus.fire(ChoosePeopleBack(listPeople: listPeople));
             giftId = listC[index].id.toString();
             for (int i = 0; i < listC.length; i++) {
               listCBool[i] = false;
             }
             listCBool[index] = true;
-
             url = listC[index].img.toString();
             svga = listC[index].imgRendering.toString();
           }else if(leixing == 1){
@@ -676,37 +691,43 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                               children: [
                                 WidgetUtils.commonSizedBox(0, 20),
                                 Expanded(
-                                  child: Row(
-                                    children: [
-                                      WidgetUtils.showImages(
-                                          'assets/images/mine_wallet_dd.png',
-                                          ScreenUtil().setHeight(26),
-                                          ScreenUtil().setHeight(24)),
-                                      WidgetUtils.commonSizedBox(0, 5),
-                                      WidgetUtils.onlyTextCenter(
-                                          jinbi2,
-                                          StyleUtils.getCommonTextStyle(
-                                              color: Colors.white,
-                                              fontSize: ScreenUtil().setSp(25))),
-                                      WidgetUtils.commonSizedBox(0, 5),
-                                      WidgetUtils.showImages(
-                                          'assets/images/mine_wallet_zz.png',
-                                          ScreenUtil().setHeight(26),
-                                          ScreenUtil().setHeight(24)),
-                                      WidgetUtils.commonSizedBox(0, 5),
-                                      WidgetUtils.onlyTextCenter(
-                                          zuanshi2,
-                                          StyleUtils.getCommonTextStyle(
-                                              color: Colors.white,
-                                              fontSize: ScreenUtil().setSp(25))),
-                                      WidgetUtils.commonSizedBox(0, 5),
-                                      Image(
-                                        image: const AssetImage(
-                                            'assets/images/mine_more.png'),
-                                        width: ScreenUtil().setHeight(8),
-                                        height: ScreenUtil().setHeight(15),
-                                      ),
-                                    ],
+                                  child: GestureDetector(
+                                    onTap: ((){
+                                      MyUtils.goTransparentPageCom(context, DouPayPage(shuliang: jinbi,));
+                                    }),
+                                    child: Row(
+                                      children: [
+                                        WidgetUtils.showImages(
+                                            'assets/images/mine_wallet_dd.png',
+                                            ScreenUtil().setHeight(26),
+                                            ScreenUtil().setHeight(24)),
+                                        WidgetUtils.commonSizedBox(0, 5),
+                                        WidgetUtils.onlyTextCenter(
+                                            jinbi2,
+                                            StyleUtils.getCommonTextStyle(
+                                                color: Colors.white,
+                                                fontSize: ScreenUtil().setSp(25))),
+                                        WidgetUtils.commonSizedBox(0, 5),
+                                        // 钻石处先隐藏
+                                        // WidgetUtils.showImages(
+                                        //     'assets/images/mine_wallet_zz.png',
+                                        //     ScreenUtil().setHeight(26),
+                                        //     ScreenUtil().setHeight(24)),
+                                        // WidgetUtils.commonSizedBox(0, 5),
+                                        // WidgetUtils.onlyTextCenter(
+                                        //     zuanshi2,
+                                        //     StyleUtils.getCommonTextStyle(
+                                        //         color: Colors.white,
+                                        //         fontSize: ScreenUtil().setSp(25))),
+                                        // WidgetUtils.commonSizedBox(0, 5),
+                                        Image(
+                                          image: const AssetImage(
+                                              'assets/images/mine_more.png'),
+                                          width: ScreenUtil().setHeight(8),
+                                          height: ScreenUtil().setHeight(15),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                                 Container(
@@ -770,10 +791,16 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                                   }
                                                 }else{
                                                   if(isChoosePeople == false){
+                                                    setState(() {
+                                                      isCheck = false;
+                                                    });
                                                     MyToastUtils.showToastBottom('请选择要送的对象');
                                                     return;
                                                   }else{
                                                     if(giftId.isEmpty){
+                                                      setState(() {
+                                                        isCheck = false;
+                                                      });
                                                       MyToastUtils.showToastBottom('请选择要送的礼物');
                                                       return;
                                                     }else{
@@ -1345,6 +1372,9 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
           MyUtils.jumpLogin(context);
           break;
         default:
+          setState(() {
+            isCheck = false;
+          });
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }

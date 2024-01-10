@@ -6,6 +6,8 @@ import 'package:yuyinting/config/my_config.dart';
 import 'package:yuyinting/main.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 
+import '../../../bean/CommonIntBean.dart';
+import '../../../bean/CommonMyIntBean.dart';
 import '../../../bean/Common_bean.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
@@ -393,21 +395,35 @@ class _QiehuanAccountPageState extends State<QiehuanAccountPage> {
   Future<void> doPostCheckToken(v1) async {
     try {
       Loading.show("切换中...");
-      CommonBean commonBean = await DataUtils.postCheckToken();
+      CommonMyIntBean commonBean = await DataUtils.postCheckToken();
       switch (commonBean.code) {
         case MyHttpConfig.successCode:
           MyToastUtils.showToastBottom('成功切换');
           if(v1 == 1){
             setState(() {
               sp.setString('user_token', sp.getString(MyConfig.userOneToken).toString());
+              sp.setString(MyConfig.userOneUID, commonBean.data!.toString());
+              sp.setString('user_id', commonBean.data!.toString());
+              MyUtils.initSDK();
+              MyUtils.addChatListener();
+              //先退出然后在登录
+              MyUtils.signOutLogin();
             });
           }else if(v1 == 2){
             setState(() {
               sp.setString('user_token', sp.getString(MyConfig.userTwoToken).toString());
+              sp.setString(MyConfig.userTwoUID, commonBean.data!.toString());
+              sp.setString('user_id', commonBean.data!.toString());
+              //先退出然后在登录
+              MyUtils.signOutLogin();
             });
           }else{
             setState(() {
               sp.setString('user_token', sp.getString(MyConfig.userThreeToken).toString());
+              sp.setString(MyConfig.userThreeUID, commonBean.data!.toString());
+              sp.setString('user_id', commonBean.data!.toString());
+              //先退出然后在登录
+              MyUtils.signOutLogin();
             });
           }
           break;

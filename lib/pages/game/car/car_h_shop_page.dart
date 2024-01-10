@@ -1,3 +1,4 @@
+import 'package:auto_orientation/auto_orientation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -47,8 +48,8 @@ class _CarHShopPageState extends State<CarHShopPage> {
     return Column(
       children: [
         Container(
-          height: 75,
-          width: 75,
+          height: 65,
+          width: 65,
           alignment: Alignment.center,
           decoration: BoxDecoration(
             //背景
@@ -59,9 +60,11 @@ class _CarHShopPageState extends State<CarHShopPage> {
             //设置四周边框
             border: Border.all(width: 1, color: MyColors.CarZJ),
           ),
-          child: WidgetUtils.showImagesNet(list[i].img!, 65, 65),
+          child: WidgetUtils.showImagesNet(list[i].img!, 55, 55),
         ),
-        WidgetUtils.commonSizedBox(5, 0),
+        WidgetUtils.commonSizedBox(2, 0),
+        WidgetUtils.onlyTextCenter(list[i].goodsName!, StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: 9, fontWeight: FontWeight.w600)),
+        WidgetUtils.commonSizedBox(2, 0),
         SizedBox(
           width: 75,
           child: Row(
@@ -102,85 +105,94 @@ class _CarHShopPageState extends State<CarHShopPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black54,
-      body: Row(
-        children: [
-          const Spacer(),
-          Opacity(
-            opacity: 0,
-            child: GestureDetector(
+      body: WillPopScope(
+        onWillPop: () async {
+          //这里可以响应物理返回键
+          /// 如果是全屏就切换竖屏
+          AutoOrientation.portraitAutoMode();
+          Navigator.pop(context);
+          return false;
+        },
+        child: Row(
+          children: [
+            const Spacer(),
+            Opacity(
+              opacity: 0,
+              child: GestureDetector(
+                onTap: (() {
+                  Navigator.pop(context);
+                }),
+                child: WidgetUtils.showImages(
+                    'assets/images/car/car_guanbi.png', 35, 35),
+              ),
+            ),
+            Column(
+              children: [
+                Expanded(
+                    child: Container(
+                      color: Colors.transparent,
+                    )),
+                Container(
+                  height: 320,
+                  width: 290,
+                  margin: const EdgeInsets.all(10),
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      //背景图片修饰
+                      image: AssetImage('assets/images/car_h_shop.png'),
+                      fit: BoxFit.fill, //覆盖
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      WidgetUtils.commonSizedBox(12, 0),
+                      Row(
+                        children: [
+                          WidgetUtils.commonSizedBox(0, 175),
+                          WidgetUtils.showImages('assets/images/car_mogubi.png', 18, 18),
+                          WidgetUtils.commonSizedBox(0, 2.5),
+                          WidgetUtils.onlyText(mogubi, StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: 16, fontWeight: FontWeight.w600)),
+                        ],
+                      ),
+                      WidgetUtils.commonSizedBox(10, 0),
+                      WidgetUtils.onlyTextCenter('在金蘑菇商店里兑换的礼物，价值与V豆相等', StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: 10)),
+                      WidgetUtils.commonSizedBox(10, 0),
+                      Expanded(
+                          child: OptionGridView(
+                            padding: EdgeInsets.only(left: 50.h, right: 50.h),
+                            itemCount: list.length,
+                            rowCount: 3,
+                            mainAxisSpacing: 20.h,
+                            // 上下间距
+                            crossAxisSpacing: 20.h,
+                            //左右间距
+                            itemBuilder: jiangChiWidget,
+                          ))
+                    ],
+                  ),
+                ),
+                Expanded(
+                    child: Container(
+                      color: Colors.transparent,
+                    )),
+              ],
+            ),
+            GestureDetector(
               onTap: (() {
                 Navigator.pop(context);
               }),
-              child: WidgetUtils.showImages(
-                  'assets/images/car/car_guanbi.png', 35, 35),
-            ),
-          ),
-          Column(
-            children: [
-              Expanded(
-                  child: Container(
-                    color: Colors.transparent,
-                  )),
-              Container(
-                height: 320,
-                width: 290,
-                margin: const EdgeInsets.all(10),
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    //背景图片修饰
-                    image: AssetImage('assets/images/car_h_shop.png'),
-                    fit: BoxFit.fill, //覆盖
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    WidgetUtils.commonSizedBox(12, 0),
-                    Row(
-                      children: [
-                        WidgetUtils.commonSizedBox(0, 175),
-                        WidgetUtils.showImages('assets/images/car_mogubi.png', 18, 18),
-                        WidgetUtils.commonSizedBox(0, 2.5),
-                        WidgetUtils.onlyText(mogubi, StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: 16, fontWeight: FontWeight.w600)),
-                      ],
-                    ),
-                    WidgetUtils.commonSizedBox(10, 0),
-                    WidgetUtils.onlyTextCenter('在金蘑菇商店里兑换的礼物，价值与V豆相等', StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: 10)),
-                    WidgetUtils.commonSizedBox(10, 0),
-                    Expanded(
-                        child: OptionGridView(
-                          padding: EdgeInsets.only(left: 50.h, right: 50.h),
-                          itemCount: list.length,
-                          rowCount: 3,
-                          mainAxisSpacing: 20.h,
-                          // 上下间距
-                          crossAxisSpacing: 20.h,
-                          //左右间距
-                          itemBuilder: jiangChiWidget,
-                        ))
-                  ],
-                ),
+              child: Container(
+                height: double.infinity,
+                width: 35,
+                alignment: Alignment.topLeft,
+                margin: const EdgeInsets.only(top: 20),
+                child: WidgetUtils.showImages(
+                    'assets/images/car/car_guanbi.png', 35, 35),
               ),
-              Expanded(
-                  child: Container(
-                    color: Colors.transparent,
-                  )),
-            ],
-          ),
-          GestureDetector(
-            onTap: (() {
-              Navigator.pop(context);
-            }),
-            child: Container(
-              height: double.infinity,
-              width: 35,
-              alignment: Alignment.topLeft,
-              margin: const EdgeInsets.only(top: 20),
-              child: WidgetUtils.showImages(
-                  'assets/images/car/car_guanbi.png', 35, 35),
             ),
-          ),
-          const Spacer(),
-        ],
+            const Spacer(),
+          ],
+        ),
       ),
     );
   }

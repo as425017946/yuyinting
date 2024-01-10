@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:yuyinting/pages/navigator/tabnavigator.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,6 +11,8 @@ import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/my_utils.dart';
 
+import '../../bean/CommonMyIntBean.dart';
+import '../../bean/Common_bean.dart';
 import '../../bean/loginBean.dart';
 import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
@@ -41,11 +45,14 @@ class _LoginPageState extends State<LoginPage> {
   bool isClick = false;
   bool isMiMa = false;
   var listen,listen2;
+  String IP = '', IMEI = '';
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    getIPAddress();
+    getDeviceIMEI();
     // 在登录页先设置所有游戏的音频开关默认开启，false为开始，true为关闭
     sp.setBool('zp_xin', false);
     sp.setBool('zp_super', false);
@@ -85,6 +92,21 @@ class _LoginPageState extends State<LoginPage> {
     if (sp.getString('myAgree').toString() == 'null' || sp.getString('myAgree').toString() == '0') {
       MyUtils.goTransparentPageCom(context, const AgreeTSPage());
     }
+    
+    ceshi();
+  }
+
+  void ceshi() async{
+    String info = '';
+    ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain!);
+    if (data != null) {
+      setState(() {
+        info = data.text!;
+        MyToastUtils.showToastBottom(info);
+      });
+    }else{
+      MyToastUtils.showToastBottom('没有获取到剪切板信息');
+    }
   }
 
   @override
@@ -96,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Timer? _timer;
-  int _timeCount = 10;
+  int _timeCount = 60;
   var _autoCodeText = '发送验证码';
 
   void _startTimer() {
@@ -108,13 +130,44 @@ class _LoginPageState extends State<LoginPage> {
                 if (_timeCount <= 0) {
                   _autoCodeText = '重新获取';
                   _timer!.cancel();
-                  _timeCount = 10;
+                  _timeCount = 60;
                 } else {
                   _timeCount -= 1;
-                  _autoCodeText = "$_timeCount" + 's';
+                  _autoCodeText = "${_timeCount}s";
                 }
               })
             });
+  }
+
+  void getIPAddress() async {
+    for (var interface in await NetworkInterface.list()) {
+      for (var addr in interface.addresses) {
+        if (addr.type == InternetAddressType.IPv4) {
+          setState(() {
+            IP = addr.address;
+          });
+          print('IP地址: ${addr.address}');
+        }
+      }
+    }
+  }
+  void getDeviceIMEI() async {
+    final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      String imei = androidInfo.id; // 获取 Android 设备的 IMEI
+      setState(() {
+        IMEI = imei;
+      });
+      print('IMEI: $imei');
+    } else if (Platform.isIOS) {
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      String identifierForVendor = iosInfo.identifierForVendor.toString(); // 获取 iOS 设备的 IMEI
+      setState(() {
+        IMEI = identifierForVendor;
+      });
+      print('IMEI: $identifierForVendor');
+    }
   }
 
   @override
@@ -154,8 +207,8 @@ class _LoginPageState extends State<LoginPage> {
                           children: [
                             GestureDetector(
                               onTap: (() {
-                                Navigator.pushNamed(
-                                    context, 'ChooseCountryPage');
+                                // Navigator.pushNamed(
+                                //     context, 'ChooseCountryPage');
                               }),
                               child: Row(
                                 children: [
@@ -167,10 +220,10 @@ class _LoginPageState extends State<LoginPage> {
                                           fontSize: ScreenUtil().setSp(30),
                                           fontWeight: FontWeight.w600)),
                                   WidgetUtils.commonSizedBox(0, 5),
-                                  WidgetUtils.showImages(
-                                      'assets/images/login_xia.png',
-                                      ScreenUtil().setHeight(12),
-                                      ScreenUtil().setHeight(18))
+                                  // WidgetUtils.showImages(
+                                  //     'assets/images/login_xia.png',
+                                  //     ScreenUtil().setHeight(12),
+                                  //     ScreenUtil().setHeight(18))
                                 ],
                               ),
                             ),
@@ -230,9 +283,21 @@ class _LoginPageState extends State<LoginPage> {
                                                   hintText: '请输入验证码')),
                                       GestureDetector(
                                         onTap: (() {
-                                          if (_autoCodeText == '发送验证码' ||
-                                              _autoCodeText == '重新获取') {
-                                            _startTimer();
+                                          if(MyUtils.checkClick()) {
+                                            if (_autoCodeText == '发送验证码' ||
+                                                _autoCodeText == '重新获取') {
+                                              if (controllerPhone.text
+                                                  .trim()
+                                                  .isEmpty) {
+                                                MyToastUtils.showToastBottom(
+                                                    '请输入手机号');
+                                              } else if (!MyUtils.chinaPhoneNumber(controllerPhone.text.trim())) {
+                                                MyToastUtils.showToastBottom(
+                                                    '输入的手机号码格式错误');
+                                              } else {
+                                                doPostLoginSms();
+                                              }
+                                            }
                                           }
                                         }),
                                         child: Container(
@@ -340,11 +405,12 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
-                WidgetUtils.commonSizedBox(15, 0),
+                WidgetUtils.commonSizedBox(20, 0),
                 Container(
                   margin: const EdgeInsets.only(left: 40, right: 40),
                   child: Row(
                     children: [
+                      // const Expanded(child: Text('')),
                       GestureDetector(
                         onTap: (() {
                           setState(() {
@@ -363,7 +429,7 @@ class _LoginPageState extends State<LoginPage> {
                                 fontSize: ScreenUtil().setSp(28))),
                       ),
                       const Expanded(child: Text('')),
-                      GestureDetector(
+                      zhanghao == '账号登录' ? GestureDetector(
                         onTap: (() {
                           Navigator.pushNamed(context, 'ForgotPasswordPage');
                         }),
@@ -372,7 +438,7 @@ class _LoginPageState extends State<LoginPage> {
                             StyleUtils.getCommonTextStyle(
                                 color: MyColors.g6,
                                 fontSize: ScreenUtil().setSp(28))),
-                      ),
+                      ) : const Text(''),
                     ],
                   ),
                 ),
@@ -463,8 +529,11 @@ class _LoginPageState extends State<LoginPage> {
     FocusScope.of(context).requestFocus(FocusNode());
     Map<String, dynamic> params;
 
+    ceshi();
+
     /// 测试使用后期删除
     if (userPhone == '1' && userMsg == '1') {
+      // ignore: use_build_context_synchronously
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const Tab_Navigator()),
@@ -514,7 +583,9 @@ class _LoginPageState extends State<LoginPage> {
         'password': passWord,
         'type': type,
         'area_code': quhao,
-        'code': userMsg
+        'code': userMsg,
+        'ip': IP,
+        'imei': IMEI
       };
     }
 
@@ -526,11 +597,48 @@ class _LoginPageState extends State<LoginPage> {
           LogE('登录${MyConfig.issAdd}');
           LogE('登录${sp.getString(MyConfig.userOneToken).toString()}');
           if (MyConfig.issAdd == false) {
-            sp.setString(MyConfig.userOneUID, loginBean.data!.uid.toString());
-            sp.setString(MyConfig.userOneHeaderImg, loginBean.data!.avatarUrl!);
-            sp.setString(MyConfig.userOneName, loginBean.data!.nickname!);
-            sp.setString(MyConfig.userOneToken, loginBean.data!.token!);
-            sp.setString(MyConfig.userOneID, loginBean.data!.number.toString());
+            if(loginBean.data!.uid.toString() == sp.getString(MyConfig.userOneUID).toString()){
+              //如果是直接覆盖
+              sp.setString(MyConfig.userOneUID, loginBean.data!.uid.toString());
+              sp.setString(
+                  MyConfig.userOneHeaderImg, loginBean.data!.avatarUrl!);
+              sp.setString(MyConfig.userOneName, loginBean.data!.nickname!);
+              sp.setString(MyConfig.userOneToken, loginBean.data!.token!);
+              sp.setString(
+                  MyConfig.userOneID, loginBean.data!.number.toString());
+            }else if(loginBean.data!.uid.toString() == sp.getString(MyConfig.userTwoUID).toString()){
+              // 判断登录的账号是不是存在了第2个信息里面
+              // 如果是直接覆盖
+              sp.setString(
+                  MyConfig.userTwoUID, loginBean.data!.uid.toString());
+              sp.setString(
+                  MyConfig.userTwoHeaderImg, loginBean.data!.avatarUrl!);
+              sp.setString(MyConfig.userTwoName, loginBean.data!.nickname!);
+              sp.setString(MyConfig.userTwoToken, loginBean.data!.token!);
+              sp.setString(
+                  MyConfig.userTwoID, loginBean.data!.number.toString());
+            }else if(loginBean.data!.uid.toString() == sp.getString(MyConfig.userThreeUID).toString()){
+              // 判断登录的账号是不是存在了第3个信息里面
+              // 如果是直接覆盖
+              sp.setString(
+                  MyConfig.userThreeUID, loginBean.data!.uid.toString());
+              sp.setString(
+                  MyConfig.userThreeHeaderImg, loginBean.data!.avatarUrl!);
+              sp.setString(
+                  MyConfig.userThreeName, loginBean.data!.nickname!);
+              sp.setString(MyConfig.userThreeToken, loginBean.data!.token!);
+              sp.setString(
+                  MyConfig.userThreeID, loginBean.data!.number.toString());
+            }else{
+              // 都没有直接存第一个
+              sp.setString(MyConfig.userOneUID, loginBean.data!.uid.toString());
+              sp.setString(
+                  MyConfig.userOneHeaderImg, loginBean.data!.avatarUrl!);
+              sp.setString(MyConfig.userOneName, loginBean.data!.nickname!);
+              sp.setString(MyConfig.userOneToken, loginBean.data!.token!);
+              sp.setString(
+                  MyConfig.userOneID, loginBean.data!.number.toString());
+            }
           } else {
             if (sp.getString(MyConfig.userOneToken).toString().isEmpty) {
               sp.setString(MyConfig.userOneUID, loginBean.data!.uid.toString());
@@ -541,8 +649,19 @@ class _LoginPageState extends State<LoginPage> {
               sp.setString(
                   MyConfig.userOneID, loginBean.data!.number.toString());
             } else {
-              if (sp.getString(MyConfig.userOneToken).toString().isNotEmpty &&
-                  sp.getString(MyConfig.userTwoToken).toString().isEmpty) {
+              // 判断登录的账号是不是存在了第一个信息里面
+              if(loginBean.data!.uid.toString() == sp.getString(MyConfig.userOneUID).toString()){
+                //如果是直接覆盖
+                sp.setString(MyConfig.userOneUID, loginBean.data!.uid.toString());
+                sp.setString(
+                    MyConfig.userOneHeaderImg, loginBean.data!.avatarUrl!);
+                sp.setString(MyConfig.userOneName, loginBean.data!.nickname!);
+                sp.setString(MyConfig.userOneToken, loginBean.data!.token!);
+                sp.setString(
+                    MyConfig.userOneID, loginBean.data!.number.toString());
+              }else if(loginBean.data!.uid.toString() == sp.getString(MyConfig.userTwoUID).toString()){
+                // 判断登录的账号是不是存在了第2个信息里面
+                // 如果是直接覆盖
                 sp.setString(
                     MyConfig.userTwoUID, loginBean.data!.uid.toString());
                 sp.setString(
@@ -551,37 +670,22 @@ class _LoginPageState extends State<LoginPage> {
                 sp.setString(MyConfig.userTwoToken, loginBean.data!.token!);
                 sp.setString(
                     MyConfig.userTwoID, loginBean.data!.number.toString());
-              } else if (sp
-                      .getString(MyConfig.userOneToken)
-                      .toString()
-                      .isNotEmpty &&
-                  sp.getString(MyConfig.userTwoToken).toString().isNotEmpty &&
-                  sp.getString(MyConfig.userThreeToken).toString().isEmpty) {
+              }else if(loginBean.data!.uid.toString() == sp.getString(MyConfig.userThreeUID).toString()){
+                // 判断登录的账号是不是存在了第3个信息里面
+                // 如果是直接覆盖
                 sp.setString(
                     MyConfig.userThreeUID, loginBean.data!.uid.toString());
                 sp.setString(
                     MyConfig.userThreeHeaderImg, loginBean.data!.avatarUrl!);
-                sp.setString(MyConfig.userThreeName, loginBean.data!.nickname!);
+                sp.setString(
+                    MyConfig.userThreeName, loginBean.data!.nickname!);
                 sp.setString(MyConfig.userThreeToken, loginBean.data!.token!);
                 sp.setString(
                     MyConfig.userThreeID, loginBean.data!.number.toString());
-              } else if (sp
-                      .getString(MyConfig.userOneToken)
-                      .toString()
-                      .isNotEmpty &&
-                  sp.getString(MyConfig.userTwoToken).toString().isNotEmpty &&
-                  sp.getString(MyConfig.userThreeToken).toString().isEmpty) {
-                if (MyConfig.clickIndex == 1) {
-                  sp.setString(
-                      MyConfig.userOneUID, loginBean.data!.uid.toString());
-                  sp.setString(
-                      MyConfig.userOneHeaderImg, loginBean.data!.avatarUrl!);
-                  sp.setString(MyConfig.userOneName, loginBean.data!.nickname!);
-                  sp.setString(MyConfig.userOneToken, loginBean.data!.token!);
-                  sp.setString(
-                      MyConfig.userOneID, loginBean.data!.number.toString());
-                }
-                if (MyConfig.clickIndex == 2) {
+              }else{
+                //账号信息都没存过
+                if (sp.getString(MyConfig.userOneToken).toString().isNotEmpty &&
+                    sp.getString(MyConfig.userTwoToken).toString().isEmpty) {
                   sp.setString(
                       MyConfig.userTwoUID, loginBean.data!.uid.toString());
                   sp.setString(
@@ -590,17 +694,57 @@ class _LoginPageState extends State<LoginPage> {
                   sp.setString(MyConfig.userTwoToken, loginBean.data!.token!);
                   sp.setString(
                       MyConfig.userTwoID, loginBean.data!.number.toString());
-                }
-                if (MyConfig.clickIndex == 3) {
+                } else if (sp
+                    .getString(MyConfig.userOneToken)
+                    .toString()
+                    .isNotEmpty &&
+                    sp.getString(MyConfig.userTwoToken).toString().isNotEmpty &&
+                    sp.getString(MyConfig.userThreeToken).toString().isEmpty) {
                   sp.setString(
                       MyConfig.userThreeUID, loginBean.data!.uid.toString());
                   sp.setString(
                       MyConfig.userThreeHeaderImg, loginBean.data!.avatarUrl!);
-                  sp.setString(
-                      MyConfig.userThreeName, loginBean.data!.nickname!);
+                  sp.setString(MyConfig.userThreeName, loginBean.data!.nickname!);
                   sp.setString(MyConfig.userThreeToken, loginBean.data!.token!);
                   sp.setString(
                       MyConfig.userThreeID, loginBean.data!.number.toString());
+                } else if (sp
+                    .getString(MyConfig.userOneToken)
+                    .toString()
+                    .isNotEmpty &&
+                    sp.getString(MyConfig.userTwoToken).toString().isNotEmpty &&
+                    sp.getString(MyConfig.userThreeToken).toString().isEmpty) {
+                  if (MyConfig.clickIndex == 1) {
+                    sp.setString(
+                        MyConfig.userOneUID, loginBean.data!.uid.toString());
+                    sp.setString(
+                        MyConfig.userOneHeaderImg, loginBean.data!.avatarUrl!);
+                    sp.setString(MyConfig.userOneName, loginBean.data!.nickname!);
+                    sp.setString(MyConfig.userOneToken, loginBean.data!.token!);
+                    sp.setString(
+                        MyConfig.userOneID, loginBean.data!.number.toString());
+                  }
+                  if (MyConfig.clickIndex == 2) {
+                    sp.setString(
+                        MyConfig.userTwoUID, loginBean.data!.uid.toString());
+                    sp.setString(
+                        MyConfig.userTwoHeaderImg, loginBean.data!.avatarUrl!);
+                    sp.setString(MyConfig.userTwoName, loginBean.data!.nickname!);
+                    sp.setString(MyConfig.userTwoToken, loginBean.data!.token!);
+                    sp.setString(
+                        MyConfig.userTwoID, loginBean.data!.number.toString());
+                  }
+                  if (MyConfig.clickIndex == 3) {
+                    sp.setString(
+                        MyConfig.userThreeUID, loginBean.data!.uid.toString());
+                    sp.setString(
+                        MyConfig.userThreeHeaderImg, loginBean.data!.avatarUrl!);
+                    sp.setString(
+                        MyConfig.userThreeName, loginBean.data!.nickname!);
+                    sp.setString(MyConfig.userThreeToken, loginBean.data!.token!);
+                    sp.setString(
+                        MyConfig.userThreeID, loginBean.data!.number.toString());
+                  }
                 }
               }
             }
@@ -644,6 +788,34 @@ class _LoginPageState extends State<LoginPage> {
       Loading.dismiss();
     } catch (e) {
       LogE('登录返回*${e.toString()}');
+      Loading.dismiss();
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+  /// 发送短信验证码
+  Future<void> doPostLoginSms() async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'phone': controllerPhone.text.trim(),
+      'area_code': quhao,
+    };
+    try {
+      CommonBean bean = await DataUtils.postLoginSms(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          //短信发送成功请求倒计时
+          _startTimer();
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
       Loading.dismiss();
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }

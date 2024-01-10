@@ -6,14 +6,18 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:yuyinting/pages/home/search_page.dart';
 import 'package:yuyinting/widget/SVGASimpleImage.dart';
 import '../../bean/Common_bean.dart';
 import '../../bean/homeTJBean.dart';
+import '../../bean/joinRoomBean.dart';
 import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
 import '../../db/DatabaseHelper.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
+import '../../main.dart';
+import '../../utils/event_utils.dart';
 import '../../utils/loading.dart';
 import '../../utils/log_util.dart';
 import '../../utils/my_toast_utils.dart';
@@ -74,8 +78,6 @@ class _TuijianPageState extends State<TuijianPage>
     _refreshController.loadComplete();
   }
 
-  final TextEditingController _souSuoName = TextEditingController();
-
   @override
   void initState() {
     // TODO: implement initState
@@ -105,7 +107,7 @@ class _TuijianPageState extends State<TuijianPage>
                   alignment: Alignment.center,
                   children: [
                     WidgetUtils.CircleHeadImage(
-                        76.h, 76.h, listAnchor[i].avatar!),
+                        70.h, 70.h, listAnchor[i].avatar!),
                     listAnchor[i].live == 1
                         ? WidgetUtils.showImages(
                             'assets/images/zhibozhong.webp', 80.h, 80.h)
@@ -233,35 +235,44 @@ class _TuijianPageState extends State<TuijianPage>
                   colors: [MyColors.homeTopBG, Colors.white])),
           child: Column(
             children: [
-              Container(
-                height: ScreenUtil().setHeight(80),
-                padding: const EdgeInsets.only(top: 10, bottom: 10),
+              GestureDetector(
+                onTap: (() {
+                  if (MyUtils.checkClick()) {
+                    MyUtils.goTransparentPageCom(context, const SearchPage());
+                  }
+                }),
                 child: Container(
-                  margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                  height: ScreenUtil().setHeight(50),
-                  alignment: Alignment.centerLeft,
-                  width: double.infinity,
-                  //边框设置
-                  decoration: BoxDecoration(
-                    //背景
-                    color: MyColors.homeSoucuoBG,
-                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                    borderRadius: const BorderRadius.all(Radius.circular(25.0)),
-                    //设置四周边框
-                    border: Border.all(width: 1, color: MyColors.homeSoucuoBG),
-                  ),
-                  child: Row(
-                    children: [
-                      WidgetUtils.commonSizedBox(0, 10),
-                      WidgetUtils.showImages(
-                          'assets/images/sousuo.png',
-                          ScreenUtil().setHeight(30),
-                          ScreenUtil().setHeight(30)),
-                      WidgetUtils.commonSizedBox(0, 10),
-                      Expanded(
-                          child: WidgetUtils.commonTextField(
-                              _souSuoName, '搜索ID昵称房间名')),
-                    ],
+                  height: ScreenUtil().setHeight(100),
+                  padding: const EdgeInsets.only(top: 10, bottom: 10),
+                  child: Container(
+                    margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    height: ScreenUtil().setHeight(50),
+                    alignment: Alignment.centerLeft,
+                    width: double.infinity,
+                    //边框设置
+                    decoration: BoxDecoration(
+                      //背景
+                      color: MyColors.homeSoucuoBG,
+                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(25.0)),
+                      //设置四周边框
+                      border:
+                          Border.all(width: 1, color: MyColors.homeSoucuoBG),
+                    ),
+                    child: Row(
+                      children: [
+                        WidgetUtils.commonSizedBox(0, 10),
+                        WidgetUtils.showImages(
+                            'assets/images/sousuo_hui.png', 25.h, 25.h),
+                        WidgetUtils.commonSizedBox(0, 10),
+                        Expanded(
+                            child: WidgetUtils.onlyText(
+                                '搜索ID昵称房间名',
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.black_1, fontSize: 26.sp))),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -339,36 +350,40 @@ class _TuijianPageState extends State<TuijianPage>
                                     itemBuilder:
                                         (BuildContext context, int index) {
                                       // 配置图片地址
-                                          return Stack(
-                                            children: [
-                                              Container(
-                                                height:
-                                                ScreenUtil().setHeight(350),
-                                                width: ScreenUtil().setWidth(450),
-                                                //超出部分，可裁剪
-                                                clipBehavior: Clip.hardEdge,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
+                                      return Stack(
+                                        children: [
+                                          Container(
+                                            height: ScreenUtil().setHeight(350),
+                                            width: ScreenUtil().setWidth(450),
+                                            //超出部分，可裁剪
+                                            clipBehavior: Clip.hardEdge,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
                                                   BorderRadius.circular(5),
-                                                ),
-                                                child: FadeInImage.assetNetwork(
-                                                  placeholder:
+                                            ),
+                                            child: FadeInImage.assetNetwork(
+                                              placeholder:
                                                   'assets/images/img_placeholder.png',
-                                                  image: listRoom[index]
-                                                      .coverImg!,
-                                                  fit: BoxFit.fill,
-                                                ),
-                                              ),
-                                              Positioned(
-                                                  bottom: 10.h,
-                                                  left:10.h,
-                                                  child: WidgetUtils.onlyText(
-                                                      listRoom[index].roomName!.length > 10 ? '${listRoom[index].roomName!.substring(0,10)}...' : listRoom[index].roomName!,
-                                                      StyleUtils.getCommonTextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 22.sp)))
-                                            ],
-                                          );
+                                              image: listRoom[index].coverImg!,
+                                              fit: BoxFit.fill,
+                                            ),
+                                          ),
+                                          Positioned(
+                                              bottom: 10.h,
+                                              left: 10.h,
+                                              child: WidgetUtils.onlyText(
+                                                  listRoom[index]
+                                                              .roomName!
+                                                              .length >
+                                                          10
+                                                      ? '${listRoom[index].roomName!.substring(0, 10)}...'
+                                                      : listRoom[index]
+                                                          .roomName!,
+                                                  StyleUtils.getCommonTextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 22.sp)))
+                                        ],
+                                      );
                                     },
                                     // 配置图片数量
                                     itemCount:
@@ -395,40 +410,49 @@ class _TuijianPageState extends State<TuijianPage>
                                     Expanded(
                                         child: SizedBox(
                                       height: ScreenUtil().setHeight(170),
+                                      width: double.infinity,
                                       child: Swiper(
                                         key: UniqueKey(),
                                         itemBuilder:
                                             (BuildContext context, int index) {
                                           // 配置图片地址
-                                              return Stack(
-                                                children: [
-                                                  Container(
-                                                    height:
+                                          return Stack(
+                                            children: [
+                                              Container(
+                                                height:
                                                     ScreenUtil().setHeight(170),
-                                                    //超出部分，可裁剪
-                                                    clipBehavior: Clip.hardEdge,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
+                                                //超出部分，可裁剪
+                                                clipBehavior: Clip.hardEdge,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
                                                       BorderRadius.circular(5),
-                                                    ),
-                                                    child: FadeInImage.assetNetwork(
-                                                      placeholder:
+                                                ),
+                                                child: FadeInImage.assetNetwork(
+                                                  placeholder:
                                                       'assets/images/img_placeholder.png',
-                                                      image: listRoom2[index]
-                                                          .coverImg!,
-                                                      fit: BoxFit.fill,
-                                                    ),
-                                                  ),
-                                                  Positioned(
-                                                      bottom: 10.h,
-                                                      left:10.h,
-                                                      child: WidgetUtils.onlyText(
-                                                          listRoom2[index].roomName!.length > 10 ? '${listRoom2[index].roomName!.substring(0,10)}...' : listRoom2[index].roomName!,
-                                                          StyleUtils.getCommonTextStyle(
-                                                              color: Colors.white,
+                                                  image: listRoom2[index]
+                                                      .coverImg!,
+                                                  fit: BoxFit.fill,
+                                                ),
+                                              ),
+                                              Positioned(
+                                                  bottom: 10.h,
+                                                  left: 10.h,
+                                                  child: WidgetUtils.onlyText(
+                                                      listRoom2[index]
+                                                                  .roomName!
+                                                                  .length >
+                                                              10
+                                                          ? '${listRoom2[index].roomName!.substring(0, 10)}...'
+                                                          : listRoom2[index]
+                                                              .roomName!,
+                                                      StyleUtils
+                                                          .getCommonTextStyle(
+                                                              color:
+                                                                  Colors.white,
                                                               fontSize: 22.sp)))
-                                                ],
-                                              );
+                                            ],
+                                          );
                                         },
                                         // 配置图片数量
                                         itemCount: listRoom2.length,
@@ -462,6 +486,7 @@ class _TuijianPageState extends State<TuijianPage>
                                               Container(
                                                 height:
                                                     ScreenUtil().setHeight(170),
+                                                width: double.infinity,
                                                 //超出部分，可裁剪
                                                 clipBehavior: Clip.hardEdge,
                                                 decoration: BoxDecoration(
@@ -478,12 +503,20 @@ class _TuijianPageState extends State<TuijianPage>
                                               ),
                                               Positioned(
                                                   bottom: 10.h,
-                                                  left:10.h,
+                                                  left: 10.h,
                                                   child: WidgetUtils.onlyText(
-                                                      listRoom3[index].roomName!.length > 10 ? '${listRoom3[index].roomName!.substring(0,10)}...' : listRoom3[index].roomName!,
-                                                  StyleUtils.getCommonTextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 22.sp)))
+                                                      listRoom3[index]
+                                                                  .roomName!
+                                                                  .length >
+                                                              10
+                                                          ? '${listRoom3[index].roomName!.substring(0, 10)}...'
+                                                          : listRoom3[index]
+                                                              .roomName!,
+                                                      StyleUtils
+                                                          .getCommonTextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 22.sp)))
                                             ],
                                           );
                                         },
@@ -544,6 +577,7 @@ class _TuijianPageState extends State<TuijianPage>
 
   /// 首页 推荐房间/海报轮播/推荐主播
   Future<void> doPostPushRoom() async {
+    LogE('token == ${sp.getString('user_token')}');
     DatabaseHelper databaseHelper = DatabaseHelper();
     Database? db = await databaseHelper.database;
     try {
@@ -590,23 +624,33 @@ class _TuijianPageState extends State<TuijianPage>
 
   /// 加入房间前
   Future<void> doPostBeforeJoin(roomID, String anchorUid) async {
+    //判断房间id是否为空的
+    if(sp.getString('roomID') == null || sp.getString('').toString().isEmpty){
+    }else{
+      // 不是空的，并且不是之前进入的房间
+      if(sp.getString('roomID').toString() != roomID){
+        sp.setString('roomID', roomID);
+        eventBus.fire(SubmitButtonBack(title: '加入其他房间'));
+      }
+    }
     Map<String, dynamic> params = <String, dynamic>{
       'room_id': roomID,
     };
     try {
       Loading.show();
-      CommonBean bean = await DataUtils.postBeforeJoin(params);
+      joinRoomBean bean = await DataUtils.postBeforeJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          doPostRoomJoin(roomID, '', anchorUid);
+          doPostRoomJoin(roomID, '', anchorUid, bean.data!.rtc!);
           break;
         case MyHttpConfig.errorRoomCode: //需要密码
           // ignore: use_build_context_synchronously
           MyUtils.goTransparentPageCom(
               context,
               RoomTSMiMaPage(
-                roomID: roomID,
-              ));
+                  roomID: roomID,
+                  roomToken: bean.data!.rtc!,
+                  anchorUid: anchorUid));
           break;
         case MyHttpConfig.errorloginCode:
           // ignore: use_build_context_synchronously
@@ -624,7 +668,8 @@ class _TuijianPageState extends State<TuijianPage>
   }
 
   /// 加入房间
-  Future<void> doPostRoomJoin(roomID, password, String anchorUid) async {
+  Future<void> doPostRoomJoin(
+      roomID, password, String anchorUid, roomToken) async {
     Map<String, dynamic> params = <String, dynamic>{
       'room_id': roomID,
       'password': password,
@@ -640,6 +685,8 @@ class _TuijianPageState extends State<TuijianPage>
               context,
               RoomPage(
                 roomId: roomID,
+                beforeId: '',
+                roomToken: roomToken,
               ));
           break;
         case MyHttpConfig.errorloginCode:

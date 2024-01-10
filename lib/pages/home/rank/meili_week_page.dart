@@ -6,15 +6,19 @@ import '../../../colors/my_colors.dart';
 import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
+import '../../../main.dart';
 import '../../../utils/loading.dart';
 import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 import '../../message/geren/people_info_page.dart';
+import '../../mine/my/my_info_page.dart';
+
 /// 魅力 周榜
 class MeiLiWeekPage extends StatefulWidget {
   String category;
+
   MeiLiWeekPage({super.key, required this.category});
 
   @override
@@ -22,10 +26,10 @@ class MeiLiWeekPage extends StatefulWidget {
 }
 
 class _MeiLiWeekPageState extends State<MeiLiWeekPage> {
-
   int page = 1;
   List<ListBD> _list = [];
   List<ListBD> _list2 = [];
+
   // 财富榜传wealth 魅力榜传charm : 日榜day 周榜week 月榜month
   String date_type = 'week';
 
@@ -40,552 +44,646 @@ class _MeiLiWeekPageState extends State<MeiLiWeekPage> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        if(_list.length==1)
+        if (_list.length == 1)
           SizedBox(
-            height: ScreenUtil().setHeight(320),
-            child:  Row(
+            height: ScreenUtil().setHeight(400),
+            child: Row(
               children: [
                 const Expanded(child: Text('')),
                 Opacity(
                   opacity: 0,
                   child: Container(
-                    alignment: Alignment.bottomCenter,
-                    margin: const EdgeInsets.only(top: 70),
-                    height: ScreenUtil().setHeight(200),
+                    margin: EdgeInsets.only(top: 20.h),
+                    height: ScreenUtil().setHeight(400),
                     width: ScreenUtil().setWidth(180),
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        WidgetUtils.CricleImagess(55, 55,
-                            'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
+                        WidgetUtils.CricleImagess(55, 55, _list[1].avatar!),
                         WidgetUtils.showImages(
                             'assets/images/py_two.png',
                             ScreenUtil().setHeight(154),
                             ScreenUtil().setWidth(146)),
-                        WidgetUtils.onlyTextBottom(
-                            '我爱车模',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.pyWenZiBlue,
-                                fontSize: ScreenUtil().setSp(30),
-                                fontWeight: FontWeight.w600)),
-                        Container(
-                          margin:
-                          EdgeInsets.only(top: ScreenUtil().setHeight(98)),
-                          width: ScreenUtil().setHeight(50),
-                          height: ScreenUtil().setWidth(20),
-                          decoration: const BoxDecoration(
-                            //设置Container修饰
-                            image: DecorationImage(
-                              //背景图片修饰
-                              image: AssetImage("assets/images/py_tishi.png"),
-                              fit: BoxFit.cover, //覆盖
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              WidgetUtils.showImages(
-                                  'assets/images/zhibo2.webp',
-                                  ScreenUtil().setWidth(15),
-                                  ScreenUtil().setWidth(15)),
-                              WidgetUtils.onlyText(
-                                  '在房间',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: Colors.white,
-                                      fontSize: ScreenUtil().setSp(10))),
-                            ],
-                          ) /* add child content here */,
-                        )
+                        Positioned(
+                            bottom: 70.h,
+                            child: WidgetUtils.onlyTextCenter(
+                                _list[0].nickname!.length > 4 ? '${_list[0].nickname!.substring(0,4)}...' : _list[0].nickname!,
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.homeTopBG,
+                                    fontSize: 28.sp,
+                                    fontWeight: FontWeight.w600))),
+                        Positioned(
+                            left: 0.w,
+                            bottom: 10.h,
+                            child: _list[0].liveStatus == 1
+                                ? Container(
+                              margin: EdgeInsets.only(
+                                  top: ScreenUtil().setHeight(98)),
+                              width: 150.w,
+                              height: 50.h,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  WidgetUtils.showImagesFill("assets/images/py_tishi.png", 35.h, 150.w),
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
+                                    children: [
+                                      WidgetUtils.showImages(
+                                          'assets/images/zhibo2.webp',
+                                          ScreenUtil().setWidth(20),
+                                          ScreenUtil().setWidth(20)),
+                                      WidgetUtils.onlyText(
+                                          '在房间',
+                                          StyleUtils.getCommonTextStyle(
+                                              color: Colors.white,
+                                              fontSize:
+                                              ScreenUtil().setSp(20))),
+                                    ],
+                                  )
+                                ],
+                              ) /* add child content here */,
+                            )
+                                : const Text(''))
                       ],
                     ),
                   ),
                 ),
                 WidgetUtils.commonSizedBox(0, 4),
                 GestureDetector(
-                  onTap: ((){
-                    MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[0].uid.toString(),));
+                  onTap: (() {
+                    if(MyUtils.checkClick()){
+                      // 如果点击的是自己，进入自己的主页
+                      if(sp.getString('user_id').toString() == _list[0].uid.toString()){
+                        MyUtils.goTransparentRFPage(context, const MyInfoPage());
+                      }else{
+                        sp.setString('other_id', _list[0].uid.toString());
+                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[0].uid.toString(),));
+                      }
+                    }
                   }),
-                  child: Transform.translate(offset: Offset(0,-20),
-                    child: Container(
-                      alignment: Alignment.topCenter,
-                      height: ScreenUtil().setHeight(260),
-                      width: ScreenUtil().setWidth(230),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          WidgetUtils.CricleImagess(90, 90,
-                              _list[0].avatar!),
-                          SizedBox(
+                  child: Container(
+                    alignment: Alignment.topCenter,
+                    height: ScreenUtil().setHeight(400),
+                    width: ScreenUtil().setWidth(230),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Positioned(
+                            top:60.h,
+                            child: WidgetUtils.CricleImagess(90, 90, _list[0].avatar!)),
+                        Positioned(
+                          top:10.h,
+                          child: SizedBox(
                             height: ScreenUtil().setHeight(231),
                             width: ScreenUtil().setWidth(228),
-                            child: Stack(
-                              alignment: Alignment.bottomCenter,
-                              children: [
-                                WidgetUtils.showImages(
-                                    'assets/images/py_one.png',
-                                    ScreenUtil().setHeight(231),
-                                    ScreenUtil().setWidth(228)),
-                                _list[0].liveStatus == 1 ?Container(
-                                  margin: EdgeInsets.only(bottom: ScreenUtil().setHeight(28)),
-                                  width: ScreenUtil().setHeight(60),
-                                  height: ScreenUtil().setWidth(30),
-                                  decoration: const BoxDecoration(
-                                    //设置Container修饰
-                                    image: DecorationImage(
-                                      //背景图片修饰
-                                      image: AssetImage("assets/images/py_tishi.png"),
-                                      fit: BoxFit.cover, //覆盖
-                                    ),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                            child:  WidgetUtils.showImages(
+                                'assets/images/py_one.png',
+                                ScreenUtil().setHeight(231),
+                                ScreenUtil().setWidth(228)),
+                          ),
+                        ),
+                        Positioned(
+                            bottom: 40.h,
+                            child: _list[0].liveStatus == 1
+                                ? Container(
+                              margin: EdgeInsets.only(
+                                  top: ScreenUtil().setHeight(98)),
+                              width: 150.w,
+                              height: 50.h,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  WidgetUtils.showImagesFill("assets/images/py_tishi.png", 35.h, 150.w),
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
                                     children: [
                                       WidgetUtils.showImages(
                                           'assets/images/zhibo2.webp',
-                                          ScreenUtil().setWidth(15),
-                                          ScreenUtil().setWidth(15)),
+                                          ScreenUtil().setWidth(20),
+                                          ScreenUtil().setWidth(20)),
                                       WidgetUtils.onlyText(
                                           '在房间',
                                           StyleUtils.getCommonTextStyle(
                                               color: Colors.white,
-                                              fontSize: ScreenUtil().setSp(15))),
+                                              fontSize:
+                                              ScreenUtil().setSp(20))),
                                     ],
-                                  ) /* add child content here */,
-                                ) : const Text('')
-                              ],
-                            ),
-                          ),
-                          WidgetUtils.onlyTextBottom(
-                              _list[0].nickname!,
+                                  )
+                                ],
+                              ) /* add child content here */,
+                            )
+                                : const Text('')),
+                        Positioned(
+                          bottom: 100.h,
+                          child: WidgetUtils.onlyTextBottom(
+                              _list[0].nickname!.length > 8 ? '${_list[0].nickname!.substring(0,8)}...' : _list[0].nickname!,
                               StyleUtils.getCommonTextStyle(
-                                  color: MyColors.pyWenZiBlue,
+                                  color: MyColors.homeTopBG,
                                   fontSize: ScreenUtil().setSp(30),
                                   fontWeight: FontWeight.w600)),
-                        ],
-                      ),
-                    ),),
-                ),
-                WidgetUtils.commonSizedBox(0, 4),
-                Opacity(opacity: 0,
-                  child: Container(
-                    alignment: Alignment.bottomCenter,
-                    margin: const EdgeInsets.only(top: 70),
-                    height: ScreenUtil().setHeight(200),
-                    width: ScreenUtil().setWidth(180),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        WidgetUtils.CricleImagess(55, 55,
-                            'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
-                        WidgetUtils.showImages(
-                            'assets/images/py_three.png',
-                            ScreenUtil().setHeight(154),
-                            ScreenUtil().setWidth(146)),
-                        WidgetUtils.onlyTextBottom(
-                            '我爱车模',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.pyWenZiBlue,
-                                fontSize: ScreenUtil().setSp(30),
-                                fontWeight: FontWeight.w600)),
-                        Container(
-                          margin:
-                          EdgeInsets.only(top: ScreenUtil().setHeight(98)),
-                          width: ScreenUtil().setHeight(50),
-                          height: ScreenUtil().setWidth(20),
-                          decoration: const BoxDecoration(
-                            //设置Container修饰
-                            image: DecorationImage(
-                              //背景图片修饰
-                              image: AssetImage("assets/images/py_tishi.png"),
-                              fit: BoxFit.cover, //覆盖
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              WidgetUtils.showImages(
-                                  'assets/images/zhibo2.webp',
-                                  ScreenUtil().setWidth(15),
-                                  ScreenUtil().setWidth(15)),
-                              WidgetUtils.onlyText(
-                                  '在房间',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: Colors.white,
-                                      fontSize: ScreenUtil().setSp(10))),
-                            ],
-                          ) /* add child content here */,
-                        )
+                        ),
                       ],
                     ),
-                  ),),
+                  ),
+                ),
+                WidgetUtils.commonSizedBox(0, 4),
+                Opacity(opacity: 0, child: Container(
+                  margin: EdgeInsets.only(top: 20.h),
+                  height: ScreenUtil().setHeight(400),
+                  width: ScreenUtil().setWidth(180),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      WidgetUtils.CricleImagess(55, 55, _list[0].avatar!),
+                      WidgetUtils.showImages(
+                          'assets/images/py_three.png',
+                          ScreenUtil().setHeight(154),
+                          ScreenUtil().setWidth(146)),
+                      Positioned(
+                          bottom: 70.h,
+                          child: WidgetUtils.onlyTextCenter(
+                              _list[1].nickname!.length > 4 ? '${_list[0].nickname!.substring(0,4)}...' : _list[0].nickname!,
+                              StyleUtils.getCommonTextStyle(
+                                  color: MyColors.homeTopBG,
+                                  fontSize: 28.sp,
+                                  fontWeight: FontWeight.w600))),
+                      Positioned(
+                          right: 0.w,
+                          bottom: 10.h,
+                          child: _list[0].liveStatus == 0
+                              ? Container(
+                            margin: EdgeInsets.only(
+                                top: ScreenUtil().setHeight(98)),
+                            width: 150.w,
+                            height: 50.h,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                WidgetUtils.showImagesFill("assets/images/py_tishi.png", 35.h, 150.w),
+                                Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.center,
+                                  children: [
+                                    WidgetUtils.showImages(
+                                        'assets/images/zhibo2.webp',
+                                        ScreenUtil().setWidth(20),
+                                        ScreenUtil().setWidth(20)),
+                                    WidgetUtils.onlyText(
+                                        '在房间',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: Colors.white,
+                                            fontSize:
+                                            ScreenUtil().setSp(20))),
+                                  ],
+                                )
+                              ],
+                            ) /* add child content here */,
+                          )
+                              : const Text(''))
+                    ],
+                  ),
+                ),),
                 const Expanded(child: Text('')),
               ],
             ),
           ),
-        if(_list.length==2)
+        if (_list.length == 2)
           SizedBox(
-            height: ScreenUtil().setHeight(320),
-            child:  Row(
+            height: ScreenUtil().setHeight(400),
+            child: Row(
               children: [
                 const Expanded(child: Text('')),
                 GestureDetector(
-                  onTap: ((){
-                    MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[1].uid.toString(),));
+                  onTap: (() {
+                    if(MyUtils.checkClick()){
+                      // 如果点击的是自己，进入自己的主页
+                      if(sp.getString('user_id').toString() == _list[1].uid.toString()){
+                        MyUtils.goTransparentRFPage(context, const MyInfoPage());
+                      }else{
+                        sp.setString('other_id', _list[1].uid.toString());
+                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[1].uid.toString(),));
+                      }
+                    }
                   }),
                   child: Container(
-                    alignment: Alignment.bottomCenter,
-                    margin: const EdgeInsets.only(top: 70),
-                    height: ScreenUtil().setHeight(200),
+                    margin: EdgeInsets.only(top: 20.h),
+                    height: ScreenUtil().setHeight(400),
                     width: ScreenUtil().setWidth(180),
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        WidgetUtils.CricleImagess(55, 55,
-                            _list[1].avatar!),
+                        WidgetUtils.CricleImagess(55, 55, _list[1].avatar!),
                         WidgetUtils.showImages(
                             'assets/images/py_two.png',
                             ScreenUtil().setHeight(154),
                             ScreenUtil().setWidth(146)),
-                        WidgetUtils.onlyTextBottom(
-                            _list[1].nickname!,
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.pyWenZiBlue,
-                                fontSize: ScreenUtil().setSp(30),
-                                fontWeight: FontWeight.w600)),
-                        _list[1].liveStatus == 1 ?Container(
-                          margin:
-                          EdgeInsets.only(top: ScreenUtil().setHeight(98)),
-                          width: ScreenUtil().setHeight(60),
-                          height: ScreenUtil().setWidth(30),
-                          decoration: const BoxDecoration(
-                            //设置Container修饰
-                            image: DecorationImage(
-                              //背景图片修饰
-                              image: AssetImage("assets/images/py_tishi.png"),
-                              fit: BoxFit.cover, //覆盖
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              WidgetUtils.showImages(
-                                  'assets/images/zhibo2.webp',
-                                  ScreenUtil().setWidth(15),
-                                  ScreenUtil().setWidth(15)),
-                              WidgetUtils.onlyText(
-                                  '在房间',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: Colors.white,
-                                      fontSize: ScreenUtil().setSp(15))),
-                            ],
-                          ) /* add child content here */,
-                        ) : const Text('')
+                        Positioned(
+                            bottom: 70.h,
+                            child: WidgetUtils.onlyTextCenter(
+                                _list[1].nickname!.length > 4 ? '${_list[1].nickname!.substring(0,4)}...' : _list[1].nickname!,
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.homeTopBG,
+                                    fontSize: 28.sp,
+                                    fontWeight: FontWeight.w600))),
+                        Positioned(
+                            left: 0.w,
+                            bottom: 10.h,
+                            child: _list[1].liveStatus == 1
+                                ? Container(
+                              margin: EdgeInsets.only(
+                                  top: ScreenUtil().setHeight(98)),
+                              width: 150.w,
+                              height: 50.h,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  WidgetUtils.showImagesFill("assets/images/py_tishi.png", 35.h, 150.w),
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
+                                    children: [
+                                      WidgetUtils.showImages(
+                                          'assets/images/zhibo2.webp',
+                                          ScreenUtil().setWidth(20),
+                                          ScreenUtil().setWidth(20)),
+                                      WidgetUtils.onlyText(
+                                          '在房间',
+                                          StyleUtils.getCommonTextStyle(
+                                              color: Colors.white,
+                                              fontSize:
+                                              ScreenUtil().setSp(20))),
+                                    ],
+                                  )
+                                ],
+                              ) /* add child content here */,
+                            )
+                                : const Text(''))
                       ],
                     ),
                   ),
                 ),
                 WidgetUtils.commonSizedBox(0, 4),
                 GestureDetector(
-                  onTap: ((){
-                    MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[0].uid.toString(),));
+                  onTap: (() {
+                    if(MyUtils.checkClick()){
+                      // 如果点击的是自己，进入自己的主页
+                      if(sp.getString('user_id').toString() == _list[0].uid.toString()){
+                        MyUtils.goTransparentRFPage(context, const MyInfoPage());
+                      }else{
+                        sp.setString('other_id', _list[0].uid.toString());
+                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[0].uid.toString(),));
+                      }
+                    }
                   }),
-                  child: Transform.translate(offset: Offset(0,-20),
-                    child: Container(
-                      alignment: Alignment.topCenter,
-                      height: ScreenUtil().setHeight(260),
-                      width: ScreenUtil().setWidth(230),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          WidgetUtils.CricleImagess(90, 90,
-                              _list[0].avatar!),
-                          SizedBox(
+                  child: Container(
+                    alignment: Alignment.topCenter,
+                    height: ScreenUtil().setHeight(400),
+                    width: ScreenUtil().setWidth(230),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Positioned(
+                            top:60.h,
+                            child: WidgetUtils.CricleImagess(90, 90, _list[0].avatar!)),
+                        Positioned(
+                          top:10.h,
+                          child: SizedBox(
                             height: ScreenUtil().setHeight(231),
                             width: ScreenUtil().setWidth(228),
-                            child: Stack(
-                              alignment: Alignment.bottomCenter,
-                              children: [
-                                WidgetUtils.showImages(
-                                    'assets/images/py_one.png',
-                                    ScreenUtil().setHeight(231),
-                                    ScreenUtil().setWidth(228)),
-                                _list[0].liveStatus == 1 ?Container(
-                                  margin: EdgeInsets.only(bottom: ScreenUtil().setHeight(28)),
-                                  width: ScreenUtil().setHeight(60),
-                                  height: ScreenUtil().setWidth(30),
-                                  decoration: const BoxDecoration(
-                                    //设置Container修饰
-                                    image: DecorationImage(
-                                      //背景图片修饰
-                                      image: AssetImage("assets/images/py_tishi.png"),
-                                      fit: BoxFit.cover, //覆盖
-                                    ),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                            child:  WidgetUtils.showImages(
+                                'assets/images/py_one.png',
+                                ScreenUtil().setHeight(231),
+                                ScreenUtil().setWidth(228)),
+                          ),
+                        ),
+                        Positioned(
+                            bottom: 40.h,
+                            child: _list[0].liveStatus == 1
+                                ? Container(
+                              margin: EdgeInsets.only(
+                                  top: ScreenUtil().setHeight(98)),
+                              width: 150.w,
+                              height: 50.h,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  WidgetUtils.showImagesFill("assets/images/py_tishi.png", 35.h, 150.w),
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
                                     children: [
                                       WidgetUtils.showImages(
                                           'assets/images/zhibo2.webp',
-                                          ScreenUtil().setWidth(15),
-                                          ScreenUtil().setWidth(15)),
+                                          ScreenUtil().setWidth(20),
+                                          ScreenUtil().setWidth(20)),
                                       WidgetUtils.onlyText(
                                           '在房间',
                                           StyleUtils.getCommonTextStyle(
                                               color: Colors.white,
-                                              fontSize: ScreenUtil().setSp(15))),
+                                              fontSize:
+                                              ScreenUtil().setSp(20))),
                                     ],
-                                  ) /* add child content here */,
-                                ) : const Text('')
-                              ],
-                            ),
-                          ),
-                          WidgetUtils.onlyTextBottom(
-                              _list[0].nickname!,
+                                  )
+                                ],
+                              ) /* add child content here */,
+                            )
+                                : const Text('')),
+                        Positioned(
+                          bottom: 100.h,
+                          child: WidgetUtils.onlyTextBottom(
+                              _list[0].nickname!.length > 8 ? '${_list[0].nickname!.substring(0,8)}...' : _list[0].nickname!,
                               StyleUtils.getCommonTextStyle(
-                                  color: MyColors.pyWenZiBlue,
+                                  color: MyColors.homeTopBG,
                                   fontSize: ScreenUtil().setSp(30),
                                   fontWeight: FontWeight.w600)),
-                        ],
-                      ),
-                    ),),
-                ),
-                WidgetUtils.commonSizedBox(0, 4),
-                Opacity(opacity: 0,
-                  child: Container(
-                    alignment: Alignment.bottomCenter,
-                    margin: const EdgeInsets.only(top: 70),
-                    height: ScreenUtil().setHeight(200),
-                    width: ScreenUtil().setWidth(180),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        WidgetUtils.CricleImagess(55, 55,
-                            'https://img1.baidu.com/it/u=4159158149,2237302473&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=500'),
-                        WidgetUtils.showImages(
-                            'assets/images/py_three.png',
-                            ScreenUtil().setHeight(154),
-                            ScreenUtil().setWidth(146)),
-                        WidgetUtils.onlyTextBottom(
-                            '我爱车模',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.pyWenZiBlue,
-                                fontSize: ScreenUtil().setSp(30),
-                                fontWeight: FontWeight.w600)),
-                        Container(
-                          margin:
-                          EdgeInsets.only(top: ScreenUtil().setHeight(98)),
-                          width: ScreenUtil().setHeight(50),
-                          height: ScreenUtil().setWidth(20),
-                          decoration: const BoxDecoration(
-                            //设置Container修饰
-                            image: DecorationImage(
-                              //背景图片修饰
-                              image: AssetImage("assets/images/py_tishi.png"),
-                              fit: BoxFit.cover, //覆盖
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              WidgetUtils.showImages(
-                                  'assets/images/zhibo2.webp',
-                                  ScreenUtil().setWidth(15),
-                                  ScreenUtil().setWidth(15)),
-                              WidgetUtils.onlyText(
-                                  '在房间',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: Colors.white,
-                                      fontSize: ScreenUtil().setSp(10))),
-                            ],
-                          ) /* add child content here */,
-                        )
+                        ),
                       ],
                     ),
-                  ),),
+                  ),
+                ),
+                WidgetUtils.commonSizedBox(0, 4),
+                Opacity(opacity: 0, child: Container(
+                  margin: EdgeInsets.only(top: 20.h),
+                  height: ScreenUtil().setHeight(400),
+                  width: ScreenUtil().setWidth(180),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      WidgetUtils.CricleImagess(55, 55, _list[1].avatar!),
+                      WidgetUtils.showImages(
+                          'assets/images/py_three.png',
+                          ScreenUtil().setHeight(154),
+                          ScreenUtil().setWidth(146)),
+                      Positioned(
+                          bottom: 70.h,
+                          child: WidgetUtils.onlyTextCenter(
+                              _list[1].nickname!.length > 4 ? '${_list[1].nickname!.substring(0,4)}...' : _list[1].nickname!,
+                              StyleUtils.getCommonTextStyle(
+                                  color: MyColors.homeTopBG,
+                                  fontSize: 28.sp,
+                                  fontWeight: FontWeight.w600))),
+                      Positioned(
+                          right: 0.w,
+                          bottom: 10.h,
+                          child: _list[1].liveStatus == 0
+                              ? Container(
+                            margin: EdgeInsets.only(
+                                top: ScreenUtil().setHeight(98)),
+                            width: 150.w,
+                            height: 50.h,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                WidgetUtils.showImagesFill("assets/images/py_tishi.png", 35.h, 150.w),
+                                Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.center,
+                                  children: [
+                                    WidgetUtils.showImages(
+                                        'assets/images/zhibo2.webp',
+                                        ScreenUtil().setWidth(20),
+                                        ScreenUtil().setWidth(20)),
+                                    WidgetUtils.onlyText(
+                                        '在房间',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: Colors.white,
+                                            fontSize:
+                                            ScreenUtil().setSp(20))),
+                                  ],
+                                )
+                              ],
+                            ) /* add child content here */,
+                          )
+                              : const Text(''))
+                    ],
+                  ),
+                ),),
                 const Expanded(child: Text('')),
               ],
             ),
           ),
-        if(_list.length>=3)
+        if (_list.length >= 3)
           SizedBox(
-            height: ScreenUtil().setHeight(320),
-            child:  Row(
+            height: ScreenUtil().setHeight(400),
+            child: Row(
               children: [
                 const Expanded(child: Text('')),
                 GestureDetector(
-                  onTap: ((){
-                    MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[1].uid.toString(),));
+                  onTap: (() {
+                    if(MyUtils.checkClick()){
+                      // 如果点击的是自己，进入自己的主页
+                      if(sp.getString('user_id').toString() == _list[1].uid.toString()){
+                        MyUtils.goTransparentRFPage(context, const MyInfoPage());
+                      }else{
+                        sp.setString('other_id', _list[1].uid.toString());
+                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[1].uid.toString(),));
+                      }
+                    }
                   }),
                   child: Container(
-                    alignment: Alignment.bottomCenter,
-                    margin: const EdgeInsets.only(top: 70),
-                    height: ScreenUtil().setHeight(200),
+                    margin: EdgeInsets.only(top: 20.h),
+                    height: ScreenUtil().setHeight(400),
                     width: ScreenUtil().setWidth(180),
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        WidgetUtils.CricleImagess(55, 55,
-                            _list[1].avatar!),
+                        WidgetUtils.CricleImagess(55, 55, _list[1].avatar!),
                         WidgetUtils.showImages(
                             'assets/images/py_two.png',
                             ScreenUtil().setHeight(154),
                             ScreenUtil().setWidth(146)),
-                        WidgetUtils.onlyTextBottom(
-                            _list[1].nickname!,
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.pyWenZiBlue,
-                                fontSize: ScreenUtil().setSp(30),
-                                fontWeight: FontWeight.w600)),
-                        _list[1].liveStatus == 1 ?Container(
-                          margin:
-                          EdgeInsets.only(top: ScreenUtil().setHeight(98)),
-                          width: ScreenUtil().setHeight(60),
-                          height: ScreenUtil().setWidth(30),
-                          decoration: const BoxDecoration(
-                            //设置Container修饰
-                            image: DecorationImage(
-                              //背景图片修饰
-                              image: AssetImage("assets/images/py_tishi.png"),
-                              fit: BoxFit.cover, //覆盖
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              WidgetUtils.showImages(
-                                  'assets/images/zhibo2.webp',
-                                  ScreenUtil().setWidth(15),
-                                  ScreenUtil().setWidth(15)),
-                              WidgetUtils.onlyText(
-                                  '在房间',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: Colors.white,
-                                      fontSize: ScreenUtil().setSp(15))),
-                            ],
-                          ) /* add child content here */,
-                        ) : const Text('')
+                        Positioned(
+                            bottom: 70.h,
+                            child: WidgetUtils.onlyTextCenter(
+                                _list[1].nickname!.length > 4 ? '${_list[1].nickname!.substring(0,4)}...' : _list[1].nickname!,
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.homeTopBG,
+                                    fontSize: 28.sp,
+                                    fontWeight: FontWeight.w600))),
+                        Positioned(
+                            left: 0.w,
+                            bottom: 10.h,
+                            child: _list[1].liveStatus == 1
+                                ? Container(
+                              margin: EdgeInsets.only(
+                                  top: ScreenUtil().setHeight(98)),
+                              width: 150.w,
+                              height: 50.h,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  WidgetUtils.showImagesFill("assets/images/py_tishi.png", 35.h, 150.w),
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
+                                    children: [
+                                      WidgetUtils.showImages(
+                                          'assets/images/zhibo2.webp',
+                                          ScreenUtil().setWidth(20),
+                                          ScreenUtil().setWidth(20)),
+                                      WidgetUtils.onlyText(
+                                          '在房间',
+                                          StyleUtils.getCommonTextStyle(
+                                              color: Colors.white,
+                                              fontSize:
+                                              ScreenUtil().setSp(20))),
+                                    ],
+                                  )
+                                ],
+                              ) /* add child content here */,
+                            )
+                                : const Text(''))
                       ],
                     ),
                   ),
                 ),
                 WidgetUtils.commonSizedBox(0, 4),
                 GestureDetector(
-                  onTap: ((){
-                    MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[0].uid.toString(),));
+                  onTap: (() {
+                    if(MyUtils.checkClick()){
+                      // 如果点击的是自己，进入自己的主页
+                      if(sp.getString('user_id').toString() == _list[0].uid.toString()){
+                        MyUtils.goTransparentRFPage(context, const MyInfoPage());
+                      }else{
+                        sp.setString('other_id', _list[0].uid.toString());
+                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[1].uid.toString(),));
+                      }
+                    }
                   }),
-                  child: Transform.translate(offset: Offset(0,-20),
-                    child: Container(
-                      alignment: Alignment.topCenter,
-                      height: ScreenUtil().setHeight(260),
-                      width: ScreenUtil().setWidth(230),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          WidgetUtils.CricleImagess(90, 90,
-                              _list[0].avatar!),
-                          SizedBox(
+                  child: Container(
+                    alignment: Alignment.topCenter,
+                    height: ScreenUtil().setHeight(400),
+                    width: ScreenUtil().setWidth(230),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Positioned(
+                            top:60.h,
+                            child: WidgetUtils.CricleImagess(90, 90, _list[0].avatar!)),
+                        Positioned(
+                          top:10.h,
+                          child: SizedBox(
                             height: ScreenUtil().setHeight(231),
                             width: ScreenUtil().setWidth(228),
-                            child: Stack(
-                              alignment: Alignment.bottomCenter,
-                              children: [
-                                WidgetUtils.showImages(
-                                    'assets/images/py_one.png',
-                                    ScreenUtil().setHeight(231),
-                                    ScreenUtil().setWidth(228)),
-                                _list[0].liveStatus == 1 ?Container(
-                                  margin: EdgeInsets.only(bottom: ScreenUtil().setHeight(28)),
-                                  width: ScreenUtil().setHeight(60),
-                                  height: ScreenUtil().setWidth(30),
-                                  decoration: const BoxDecoration(
-                                    //设置Container修饰
-                                    image: DecorationImage(
-                                      //背景图片修饰
-                                      image: AssetImage("assets/images/py_tishi.png"),
-                                      fit: BoxFit.cover, //覆盖
-                                    ),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                            child:  WidgetUtils.showImages(
+                                'assets/images/py_one.png',
+                                ScreenUtil().setHeight(231),
+                                ScreenUtil().setWidth(228)),
+                          ),
+                        ),
+                        Positioned(
+                            bottom: 40.h,
+                            child: _list[0].liveStatus == 1
+                                ? Container(
+                              margin: EdgeInsets.only(
+                                  top: ScreenUtil().setHeight(98)),
+                              width: 150.w,
+                              height: 50.h,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  WidgetUtils.showImagesFill("assets/images/py_tishi.png", 35.h, 150.w),
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
                                     children: [
                                       WidgetUtils.showImages(
                                           'assets/images/zhibo2.webp',
-                                          ScreenUtil().setWidth(15),
-                                          ScreenUtil().setWidth(15)),
+                                          ScreenUtil().setWidth(20),
+                                          ScreenUtil().setWidth(20)),
                                       WidgetUtils.onlyText(
                                           '在房间',
                                           StyleUtils.getCommonTextStyle(
                                               color: Colors.white,
-                                              fontSize: ScreenUtil().setSp(15))),
+                                              fontSize:
+                                              ScreenUtil().setSp(20))),
                                     ],
-                                  ) /* add child content here */,
-                                ) : const Text('')
-                              ],
-                            ),
-                          ),
-                          WidgetUtils.onlyTextBottom(
-                              _list[0].nickname!,
+                                  )
+                                ],
+                              ) /* add child content here */,
+                            )
+                                : const Text('')),
+                        Positioned(
+                          bottom: 100.h,
+                          child: WidgetUtils.onlyTextBottom(
+                              _list[0].nickname!.length > 8 ? '${_list[0].nickname!.substring(0,8)}...' : _list[0].nickname!,
                               StyleUtils.getCommonTextStyle(
-                                  color: MyColors.pyWenZiBlue,
+                                  color: MyColors.homeTopBG,
                                   fontSize: ScreenUtil().setSp(30),
                                   fontWeight: FontWeight.w600)),
-                        ],
-                      ),
-                    ),),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
                 WidgetUtils.commonSizedBox(0, 4),
                 GestureDetector(
-                  onTap: ((){
-                    MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[2].uid.toString(),));
+                  onTap: (() {
+                    if(MyUtils.checkClick()){
+                      // 如果点击的是自己，进入自己的主页
+                      if(sp.getString('user_id').toString() == _list[2].uid.toString()){
+                        MyUtils.goTransparentRFPage(context, const MyInfoPage());
+                      }else{
+                        sp.setString('other_id', _list[2].uid.toString());
+                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[2].uid.toString(),));
+                      }
+                    }
                   }),
                   child: Container(
-                    alignment: Alignment.bottomCenter,
-                    margin: const EdgeInsets.only(top: 70),
-                    height: ScreenUtil().setHeight(200),
+                    margin: EdgeInsets.only(top: 20.h),
+                    height: ScreenUtil().setHeight(400),
                     width: ScreenUtil().setWidth(180),
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        WidgetUtils.CricleImagess(55, 55,
-                            _list[2].avatar!),
+                        WidgetUtils.CricleImagess(55, 55, _list[2].avatar!),
                         WidgetUtils.showImages(
                             'assets/images/py_three.png',
                             ScreenUtil().setHeight(154),
                             ScreenUtil().setWidth(146)),
-                        WidgetUtils.onlyTextBottom(
-                            _list[2].nickname!,
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.pyWenZiBlue,
-                                fontSize: ScreenUtil().setSp(30),
-                                fontWeight: FontWeight.w600)),
-                        _list[2].liveStatus == 1 ?Container(
-                          margin:
-                          EdgeInsets.only(top: ScreenUtil().setHeight(98)),
-                          width: ScreenUtil().setHeight(60),
-                          height: ScreenUtil().setWidth(30),
-                          decoration: const BoxDecoration(
-                            //设置Container修饰
-                            image: DecorationImage(
-                              //背景图片修饰
-                              image: AssetImage("assets/images/py_tishi.png"),
-                              fit: BoxFit.cover, //覆盖
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              WidgetUtils.showImages(
-                                  'assets/images/zhibo2.webp',
-                                  ScreenUtil().setWidth(15),
-                                  ScreenUtil().setWidth(15)),
-                              WidgetUtils.onlyText(
-                                  '在房间',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: Colors.white,
-                                      fontSize: ScreenUtil().setSp(15))),
-                            ],
-                          ) /* add child content here */,
-                        ) : const Text('')
+                        Positioned(
+                            bottom: 70.h,
+                            child: WidgetUtils.onlyTextCenter(
+                                _list[2].nickname!.length > 4 ? '${_list[2].nickname!.substring(0,4)}...' : _list[2].nickname!,
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.homeTopBG,
+                                    fontSize: 28.sp,
+                                    fontWeight: FontWeight.w600))),
+                        Positioned(
+                            right: 0.w,
+                            bottom: 10.h,
+                            child: _list[2].liveStatus == 1
+                                ? Container(
+                              margin: EdgeInsets.only(
+                                  top: ScreenUtil().setHeight(98)),
+                              width: 150.w,
+                              height: 50.h,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  WidgetUtils.showImagesFill("assets/images/py_tishi.png", 35.h, 150.w),
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
+                                    children: [
+                                      WidgetUtils.showImages(
+                                          'assets/images/zhibo2.webp',
+                                          ScreenUtil().setWidth(20),
+                                          ScreenUtil().setWidth(20)),
+                                      WidgetUtils.onlyText(
+                                          '在房间',
+                                          StyleUtils.getCommonTextStyle(
+                                              color: Colors.white,
+                                              fontSize:
+                                              ScreenUtil().setSp(20))),
+                                    ],
+                                  )
+                                ],
+                              ) /* add child content here */,
+                            )
+                                : const Text(''))
                       ],
                     ),
                   ),
@@ -594,28 +692,37 @@ class _MeiLiWeekPageState extends State<MeiLiWeekPage> {
               ],
             ),
           ),
-        WidgetUtils.commonSizedBox(ScreenUtil().setHeight(120), 0),
+        WidgetUtils.commonSizedBox(ScreenUtil().setHeight(50), 0),
         SingleChildScrollView(
           child: Wrap(
             children: [
-              for(int i = 0; i < _list2.length; i++)
+              for (int i = 0; i < _list2.length; i++)
                 GestureDetector(
-                  onTap: ((){
-                    MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list2[i].uid.toString(),));
+                  onTap: (() {
+                    if(MyUtils.checkClick()){
+                      // 如果点击的是自己，进入自己的主页
+                      if(sp.getString('user_id').toString() == _list2[i].uid.toString()){
+                        MyUtils.goTransparentRFPage(context, const MyInfoPage());
+                      }else{
+                        sp.setString('other_id', _list2[i].uid.toString());
+                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list2[i].uid.toString(),));
+                      }
+                    }
                   }),
                   child: Padding(
                     padding: EdgeInsets.only(
                         left: ScreenUtil().setWidth(60),
-                        right: ScreenUtil().setWidth(20)),
-                    child:  Container(
+                        right: ScreenUtil().setWidth(20),
+                        bottom: 15.h),
+                    child: Container(
                       height: ScreenUtil().setHeight(90),
                       alignment: Alignment.center,
                       child: Row(
                         children: [
                           WidgetUtils.onlyText(
-                              (i+4).toString(),
+                              (i + 4).toString(),
                               StyleUtils.getCommonTextStyle(
-                                  color: MyColors.pyWenZiGrey,
+                                  color: Colors.white,
                                   fontWeight: FontWeight.w600,
                                   fontSize: ScreenUtil().setSp(40))),
                           WidgetUtils.commonSizedBox(0, 15),
@@ -625,37 +732,8 @@ class _MeiLiWeekPageState extends State<MeiLiWeekPage> {
                             child: Stack(
                               alignment: Alignment.bottomCenter,
                               children: [
-                                WidgetUtils.CricleImagess(50, 50,
-                                    _list2[i].avatar!),
-                                _list2[i].liveStatus == 1 ? Container(
-                                  margin: EdgeInsets.only(
-                                      top: ScreenUtil().setHeight(20)),
-                                  width: ScreenUtil().setHeight(70),
-                                  height: ScreenUtil().setWidth(31),
-                                  decoration: const BoxDecoration(
-                                    //设置Container修饰
-                                    image: DecorationImage(
-                                      //背景图片修饰
-                                      image: AssetImage(
-                                          "assets/images/py_tishi.png"),
-                                      fit: BoxFit.cover, //覆盖
-                                    ),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      WidgetUtils.showImages(
-                                          'assets/images/zhibo2.webp',
-                                          ScreenUtil().setWidth(20),
-                                          ScreenUtil().setWidth(25)),
-                                      WidgetUtils.onlyText(
-                                          '在房间',
-                                          StyleUtils.getCommonTextStyle(
-                                              color: Colors.white,
-                                              fontSize: ScreenUtil().setSp(14))),
-                                    ],
-                                  ) /* add child content here */,
-                                ) : const Text(''),
+                                WidgetUtils.CricleImagess(
+                                    50, 50, _list2[i].avatar!),
                               ],
                             ),
                           ),
@@ -665,6 +743,32 @@ class _MeiLiWeekPageState extends State<MeiLiWeekPage> {
                               StyleUtils.getCommonTextStyle(
                                   color: Colors.black,
                                   fontSize: ScreenUtil().setSp(28))),
+                          const Spacer(),
+                          _list2[i].liveStatus == 1
+                              ? Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              WidgetUtils.showImagesFill("assets/images/py_tishi.png", 35.h, 150.w),
+                              Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.center,
+                                children: [
+                                  WidgetUtils.showImages(
+                                      'assets/images/zhibo2.webp',
+                                      ScreenUtil().setWidth(20),
+                                      ScreenUtil().setWidth(20)),
+                                  WidgetUtils.onlyText(
+                                      '在房间',
+                                      StyleUtils.getCommonTextStyle(
+                                          color: Colors.white,
+                                          fontSize:
+                                          ScreenUtil().setSp(20))),
+                                ],
+                              )
+                            ],
+                          )
+                              : const Text(''),
+                          WidgetUtils.commonSizedBox(0, 40.w),
                         ],
                       ),
                     ),
@@ -698,7 +802,7 @@ class _MeiLiWeekPageState extends State<MeiLiWeekPage> {
               for (int i = 0; i < bean.data!.list!.length; i++) {
                 _list.add(bean.data!.list![i]);
               }
-              if(bean.data!.list!.length>3){
+              if (bean.data!.list!.length > 3) {
                 for (int i = 3; i < bean.data!.list!.length; i++) {
                   _list2.add(bean.data!.list![i]);
                 }
@@ -707,7 +811,7 @@ class _MeiLiWeekPageState extends State<MeiLiWeekPage> {
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:

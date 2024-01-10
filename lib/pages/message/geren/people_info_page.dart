@@ -6,12 +6,14 @@ import 'package:yuyinting/pages/message/geren/ziliao_page.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 
 import '../../../bean/Common_bean.dart';
+import '../../../bean/joinRoomBean.dart';
 import '../../../bean/userInfoBean.dart';
 import '../../../colors/my_colors.dart';
 import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../main.dart';
+import '../../../utils/event_utils.dart';
 import '../../../utils/loading.dart';
 import '../../../utils/log_util.dart';
 import '../../../utils/my_toast_utils.dart';
@@ -75,18 +77,19 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
     LogE('录音地址**$voice_card');
     _mPlayer
         .startPlayer(
-        fromURI: voice_card,
-        whenFinished: () {
-          setState(() {
-            playRecord = false;
-          });
-        })
+            fromURI: voice_card,
+            whenFinished: () {
+              setState(() {
+                playRecord = false;
+              });
+            })
         .then((value) {
       setState(() {
         playRecord = true;
       });
     });
   }
+
   void _initialize() async {
     await _mPlayer!.closePlayer();
     await _mPlayer!.openPlayer();
@@ -119,14 +122,17 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                     child: Row(
                       children: [
                         GestureDetector(
-                          onTap:((){
+                          onTap: (() {
                             Navigator.pop(context);
                           }),
                           child: Container(
                             width: 100.h,
                             color: Colors.transparent,
                             alignment: Alignment.center,
-                            child: WidgetUtils.showImages('assets/images/back_other_white.png',  40.h, 40.h),
+                            child: WidgetUtils.showImages(
+                                'assets/images/back_other_white.png',
+                                40.h,
+                                40.h),
                           ),
                         ),
                         const Expanded(child: Text('')),
@@ -144,21 +150,27 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                         Stack(
                           alignment: Alignment.center,
                           children: [
-                            WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(130),
-                                ScreenUtil().setHeight(130), headImg),
+                            WidgetUtils.CircleHeadImage(
+                                ScreenUtil().setHeight(130),
+                                ScreenUtil().setHeight(130),
+                                headImg),
                             // 头像框静态图
-                            avatarFrameImg.isNotEmpty ? WidgetUtils
-                                .CircleHeadImage(
-                                ScreenUtil().setHeight(160),
-                                ScreenUtil().setHeight(160),
-                                avatarFrameImg) : const Text(''),
+                            avatarFrameImg.isNotEmpty
+                                ? WidgetUtils.CircleHeadImage(
+                                    ScreenUtil().setHeight(160),
+                                    ScreenUtil().setHeight(160),
+                                    avatarFrameImg)
+                                : const Text(''),
                             // 头像框动态图
-                            avatarFrameGifImg.isEmpty ? SizedBox(
-                              height: 160.h,
-                              width: 160.h,
-                              child: SVGASimpleImage(
-                                resUrl: avatarFrameGifImg,),
-                            ) : const Text(''),
+                            avatarFrameGifImg.isEmpty
+                                ? SizedBox(
+                                    height: 160.h,
+                                    width: 160.h,
+                                    child: SVGASimpleImage(
+                                      resUrl: avatarFrameGifImg,
+                                    ),
+                                  )
+                                : const Text(''),
                           ],
                         ),
                         WidgetUtils.commonSizedBox(0, 10),
@@ -178,118 +190,124 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                               WidgetUtils.commonSizedBox(5, 0),
                               Row(
                                 children: [
-                                  sex != 0 ? Container(
-                                    height: ScreenUtil().setHeight(25),
-                                    width: ScreenUtil().setWidth(50),
-                                    alignment: Alignment.center,
-                                    //边框设置
-                                    decoration: BoxDecoration(
-                                      //背景
-                                      color: sex == 1
-                                          ? MyColors.dtBlue
-                                          : MyColors.dtPink,
-                                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(20.0)),
-                                    ),
-                                    child: WidgetUtils.showImages(
-                                        sex == 1
-                                            ? 'assets/images/nan.png'
-                                            : 'assets/images/nv.png',
-                                        12,
-                                        12),
-                                  ) : const Text(''),
+                                  sex != 0
+                                      ? Container(
+                                          height: ScreenUtil().setHeight(25),
+                                          width: ScreenUtil().setWidth(50),
+                                          alignment: Alignment.center,
+                                          //边框设置
+                                          decoration: BoxDecoration(
+                                            //背景
+                                            color: sex == 1
+                                                ? MyColors.dtBlue
+                                                : MyColors.dtPink,
+                                            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(20.0)),
+                                          ),
+                                          child: WidgetUtils.showImages(
+                                              sex == 1
+                                                  ? 'assets/images/nan.png'
+                                                  : 'assets/images/nv.png',
+                                              12,
+                                              12),
+                                        )
+                                      : const Text(''),
                                   WidgetUtils.commonSizedBox(0, 10.h),
                                   // 用户等级
                                   level != 0
                                       ? Stack(
-                                    alignment: Alignment.centerLeft,
-                                    children: [
-                                      WidgetUtils.showImagesFill(
-                                          (level >= 1 && level <= 10)
-                                              ? 'assets/images/dj/dj_c_1-10.png'
-                                              : (level >= 11 && level <= 15)
-                                              ? 'assets/images/dj/dj_c_11-15.png'
-                                              : (level >= 16 && level <= 20)
-                                              ? 'assets/images/dj/dj_c_16-20.png'
-                                              : (level >= 21 &&
-                                              level <= 25)
-                                              ? 'assets/images/dj/dj_c_21-25.png'
-                                              : (level >= 26 &&
-                                              level <= 30)
-                                              ? 'assets/images/dj/dj_c_26-30.png'
-                                              : (level >= 31 &&
-                                              level <=
-                                                  35)
-                                              ? 'assets/images/dj/dj_c_31-35.png'
-                                              : (level >= 36 &&
-                                              level <=
-                                                  40)
-                                              ? 'assets/images/dj/dj_c_36-40.png'
-                                              : (level >= 41 &&
-                                              level <= 45)
-                                              ? 'assets/images/dj/dj_c_41-45.png'
-                                              : 'assets/images/dj/dj_c_46-50.png',
-                                          ScreenUtil().setHeight(30),
-                                          ScreenUtil().setHeight(85)),
-                                      Positioned(
-                                          left: 45.w,
-                                          child: Stack(
-                                            alignment: Alignment.center,
-                                            children: [
-                                              Text(
-                                                'LV.${level.toString()}',
-                                                style: TextStyle(
-                                                    fontSize:
-                                                    ScreenUtil().setSp(18),
-                                                    fontWeight: FontWeight.w600,
-                                                    fontFamily: 'ARIAL',
-                                                    foreground: Paint()
-                                                      ..style =
-                                                          PaintingStyle.stroke
-                                                      ..strokeWidth = 2
-                                                      ..color = (level >= 1 &&
-                                                          level <= 10)
-                                                          ? MyColors.djOneM
-                                                          : (level >= 11 &&
-                                                          level <= 15)
-                                                          ? MyColors.djTwoM
-                                                          : (level >= 16 &&
-                                                          level <=
-                                                              20)
-                                                          ? MyColors
-                                                          .djThreeM
-                                                          : (level >= 21 &&
-                                                          level <=
-                                                              25)
-                                                          ? MyColors
-                                                          .djFourM
-                                                          : (level >= 26 &&
-                                                          level <=
-                                                              30)
-                                                          ? MyColors
-                                                          .djFiveM
-                                                          : (level >= 31 && level <= 35)
-                                                          ? MyColors.djSixM
-                                                          : (level >= 36 && level <= 40)
-                                                          ? MyColors.djSevenM
-                                                          : (level >= 41 && level <= 45)
-                                                          ? MyColors.djEightM
-                                                          : MyColors.djNineM),
-                                              ),
-                                              Text(
-                                                'LV.${level.toString()}',
-                                                style: TextStyle(
-                                                    color: MyColors.djOne,
-                                                    fontSize:
-                                                    ScreenUtil().setSp(18),
-                                                    fontWeight: FontWeight.w600,
-                                                    fontFamily: 'ARIAL'),
-                                              ),
-                                            ],
-                                          ))
-                                    ],
-                                  )
+                                          alignment: Alignment.centerLeft,
+                                          children: [
+                                            WidgetUtils.showImagesFill(
+                                                (level >= 1 && level <= 10)
+                                                    ? 'assets/images/dj/dj_c_1-10.png'
+                                                    : (level >= 11 &&
+                                                            level <= 15)
+                                                        ? 'assets/images/dj/dj_c_11-15.png'
+                                                        : (level >= 16 &&
+                                                                level <= 20)
+                                                            ? 'assets/images/dj/dj_c_16-20.png'
+                                                            : (level >= 21 &&
+                                                                    level <= 25)
+                                                                ? 'assets/images/dj/dj_c_21-25.png'
+                                                                : (level >= 26 &&
+                                                                        level <=
+                                                                            30)
+                                                                    ? 'assets/images/dj/dj_c_26-30.png'
+                                                                    : (level >= 31 &&
+                                                                            level <=
+                                                                                35)
+                                                                        ? 'assets/images/dj/dj_c_31-35.png'
+                                                                        : (level >= 36 &&
+                                                                                level <= 40)
+                                                                            ? 'assets/images/dj/dj_c_36-40.png'
+                                                                            : (level >= 41 && level <= 45)
+                                                                                ? 'assets/images/dj/dj_c_41-45.png'
+                                                                                : 'assets/images/dj/dj_c_46-50.png',
+                                                ScreenUtil().setHeight(30),
+                                                ScreenUtil().setHeight(85)),
+                                            Positioned(
+                                                left: 45.w,
+                                                child: Stack(
+                                                  alignment: Alignment.center,
+                                                  children: [
+                                                    Text(
+                                                      'LV.${level.toString()}',
+                                                      style: TextStyle(
+                                                          fontSize: ScreenUtil()
+                                                              .setSp(18),
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          fontFamily: 'ARIAL',
+                                                          foreground: Paint()
+                                                            ..style =
+                                                                PaintingStyle
+                                                                    .stroke
+                                                            ..strokeWidth = 2
+                                                            ..color = (level >=
+                                                                        1 &&
+                                                                    level <= 10)
+                                                                ? MyColors
+                                                                    .djOneM
+                                                                : (level >= 11 &&
+                                                                        level <=
+                                                                            15)
+                                                                    ? MyColors
+                                                                        .djTwoM
+                                                                    : (level >= 16 &&
+                                                                            level <=
+                                                                                20)
+                                                                        ? MyColors
+                                                                            .djThreeM
+                                                                        : (level >= 21 &&
+                                                                                level <= 25)
+                                                                            ? MyColors.djFourM
+                                                                            : (level >= 26 && level <= 30)
+                                                                                ? MyColors.djFiveM
+                                                                                : (level >= 31 && level <= 35)
+                                                                                    ? MyColors.djSixM
+                                                                                    : (level >= 36 && level <= 40)
+                                                                                        ? MyColors.djSevenM
+                                                                                        : (level >= 41 && level <= 45)
+                                                                                            ? MyColors.djEightM
+                                                                                            : MyColors.djNineM),
+                                                    ),
+                                                    Text(
+                                                      'LV.${level.toString()}',
+                                                      style: TextStyle(
+                                                          color: MyColors.djOne,
+                                                          fontSize: ScreenUtil()
+                                                              .setSp(18),
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          fontFamily: 'ARIAL'),
+                                                    ),
+                                                  ],
+                                                ))
+                                          ],
+                                        )
                                       : const Text(''),
                                 ],
                               ),
@@ -385,51 +403,67 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                   /// 音频
                   voice_card.isNotEmpty
                       ? Row(
-                    children: [
-                      GestureDetector(
-                        onTap: (() {
-                          if (playRecord == false) {
-                            play();
-                          }
-                        }),
-                        child: Container(
-                          height: ScreenUtil().setHeight(45),
-                          width: ScreenUtil().setWidth(220),
-                          margin: const EdgeInsets.only(left: 20),
-                          alignment: Alignment.center,
-                          //边框设置
-                          decoration: const BoxDecoration(
-                            //背景
-                            color: MyColors.peopleYellow,
-                            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(20.0)),
-                          ),
-                          child: playRecord == false
-                              ? Row(
-                            children: [
-                              const Expanded(
-                                  child: SVGASimpleImage(
-                                    assetsName:
-                                    'assets/svga/audio_xindiaotu.svga',
-                                  )),
-                              WidgetUtils.commonSizedBox(0, 10.h),
-                              WidgetUtils.showImages(
-                                  'assets/images/people_bofang.png',
-                                  ScreenUtil().setHeight(35),
-                                  ScreenUtil().setWidth(35)),
-                              WidgetUtils.commonSizedBox(0, 10.h),
-                            ],
-                          )
-                              : const Expanded(
-                              child: SVGASimpleImage(
-                                assetsName: 'assets/svga/audio_bolang.svga',
-                              )),
-                        ),
-                      ),
-                      const Expanded(child: Text('')),
-                    ],
-                  )
+                          children: [
+                            GestureDetector(
+                              onTap: (() {
+                                if (playRecord == false) {
+                                  play();
+                                }
+                              }),
+                              child: Container(
+                                height: ScreenUtil().setHeight(45),
+                                width: ScreenUtil().setWidth(220),
+                                margin: const EdgeInsets.only(left: 20),
+                                alignment: Alignment.center,
+                                //边框设置
+                                decoration: const BoxDecoration(
+                                  //背景
+                                  color: MyColors.peopleYellow,
+                                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0)),
+                                ),
+                                child: Row(
+                                  children: [
+                                    const Expanded(
+                                        child: SVGASimpleImage(
+                                          assetsName:
+                                          'assets/svga/audio_xindiaotu.svga',
+                                        )),
+                                    WidgetUtils.commonSizedBox(0, 10.h),
+                                    WidgetUtils.showImages(
+                                        'assets/images/people_bofang.png',
+                                        ScreenUtil().setHeight(35),
+                                        ScreenUtil().setWidth(35)),
+                                    WidgetUtils.commonSizedBox(0, 10.h),
+                                  ],
+                                ),
+                                // child: playRecord == false
+                                //     ? Row(
+                                //         children: [
+                                //           const Expanded(
+                                //               child: SVGASimpleImage(
+                                //             assetsName:
+                                //                 'assets/svga/audio_xindiaotu.svga',
+                                //           )),
+                                //           WidgetUtils.commonSizedBox(0, 10.h),
+                                //           WidgetUtils.showImages(
+                                //               'assets/images/people_bofang.png',
+                                //               ScreenUtil().setHeight(35),
+                                //               ScreenUtil().setWidth(35)),
+                                //           WidgetUtils.commonSizedBox(0, 10.h),
+                                //         ],
+                                //       )
+                                //     : const Expanded(
+                                //         child: SVGASimpleImage(
+                                //         assetsName:
+                                //             'assets/svga/audio_bolang.svga',
+                                //       )),
+                              ),
+                            ),
+                            const Expanded(child: Text('')),
+                          ],
+                        )
                       : const Text(''),
 
                   WidgetUtils.commonSizedBox(15, 0),
@@ -576,7 +610,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                               },
                               children: [
                                 ZiliaoPage(otherId: widget.otherId),
-                                const DongtaiPage(),
+                                DongtaiPage(otherId: widget.otherId),
                               ],
                             ),
                           )
@@ -642,6 +676,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
 
   /// 查看用户
   int level = 0;
+
   Future<void> doPostUserInfo() async {
     LogE('用户token ${sp.getString('user_token')}');
     Loading.show(MyConfig.successTitle);
@@ -769,23 +804,31 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
 
   /// 加入房间前
   Future<void> doPostBeforeJoin(roomID) async {
+    //判断房间id是否为空的
+    if(sp.getString('roomID') == null || sp.getString('').toString().isEmpty){
+    }else{
+      // 不是空的，并且不是之前进入的房间
+      if(sp.getString('roomID').toString() != roomID){
+        sp.setString('roomID', roomID);
+        eventBus.fire(SubmitButtonBack(title: '加入其他房间'));
+      }
+    }
     Map<String, dynamic> params = <String, dynamic>{
       'room_id': roomID,
     };
     try {
       Loading.show();
-      CommonBean bean = await DataUtils.postBeforeJoin(params);
+      joinRoomBean bean = await DataUtils.postBeforeJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          doPostRoomJoin(roomID, '');
+          doPostRoomJoin(roomID, '', bean.data!.rtc!);
           break;
         case MyHttpConfig.errorRoomCode: //需要密码
           // ignore: use_build_context_synchronously
           MyUtils.goTransparentPageCom(
               context,
               RoomTSMiMaPage(
-                roomID: roomID,
-              ));
+                  roomID: roomID, roomToken: bean.data!.rtc!, anchorUid: ''));
           break;
         case MyHttpConfig.errorloginCode:
           // ignore: use_build_context_synchronously
@@ -803,7 +846,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
   }
 
   /// 加入房间
-  Future<void> doPostRoomJoin(roomID, password) async {
+  Future<void> doPostRoomJoin(roomID, password, roomToken) async {
     Map<String, dynamic> params = <String, dynamic>{
       'room_id': roomID,
       'password': password
@@ -818,6 +861,8 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
               context,
               RoomPage(
                 roomId: roomID,
+                beforeId: '',
+                roomToken: roomToken,
               ));
           break;
         case MyHttpConfig.errorloginCode:

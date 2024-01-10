@@ -620,7 +620,7 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> with AutomaticKee
             children: [
               WidgetUtils.commonSizedBox(20, 0),
               ///轮播图
-              Container(
+              imgList.isNotEmpty ? Container(
                 padding: const EdgeInsets.only(left: 20, right: 20),
                 height:ScreenUtil().setHeight(140),
                 //超出部分，可裁剪
@@ -650,6 +650,14 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> with AutomaticKee
                     // LogE('用户点击引起下标改变调用');
 
                   },
+                ),
+              ) : Container(
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                height:ScreenUtil().setHeight(140),
+                //超出部分，可裁剪
+                clipBehavior: Clip.hardEdge,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
                 ),
               ),
               Expanded(child: SmartRefresher(
@@ -681,7 +689,7 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> with AutomaticKee
   }
 
 
-  /// 关注列表
+  /// 推荐动态列表
   Future<void> doPostRecommendList(is_refresh) async {
     Map<String, dynamic> params = <String, dynamic>{
       'page': page,
@@ -698,6 +706,7 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> with AutomaticKee
               _list.clear();
             }
             if(bean.data!.banner!.isNotEmpty){
+              imgList.clear();
               imgList = bean.data!.banner!;
             }
             if (bean.data!.list!.isNotEmpty) {

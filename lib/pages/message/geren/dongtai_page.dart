@@ -20,7 +20,8 @@ import '../../trends/trends_more_page.dart';
 ///动态
 
 class DongtaiPage extends StatefulWidget {
-  const DongtaiPage({Key? key}) : super(key: key);
+  String otherId;
+  DongtaiPage({Key? key,required this.otherId}) : super(key: key);
 
   @override
   State<DongtaiPage> createState() => _DongtaiPageState();
@@ -72,12 +73,14 @@ class _DongtaiPageState extends State<DongtaiPage> {
         color: Colors.white,
         child: Column(
           children: [
-            WidgetUtils.onlyText(
-                _list[i].text!,
-                StyleUtils.getCommonTextStyle(
-                  color: Colors.black,
-                  fontSize: ScreenUtil().setSp(28),
-                )),
+            Text(
+              _list[i].text!,
+              maxLines: 20,
+              style: StyleUtils.getCommonTextStyle(
+                color: Colors.black,
+                fontSize: ScreenUtil().setSp(28),
+              ),
+            ),
             WidgetUtils.commonSizedBox(10, 0),
             _list[i].type == 2 ? showVideo(_list[i].imgUrl!) : showImag(_list[i].imgUrl!, i),
             WidgetUtils.commonSizedBox(10, 0),
@@ -431,7 +434,7 @@ class _DongtaiPageState extends State<DongtaiPage> {
   /// 用户动态
   Future<void> doPostUserList() async {
     Map<String, dynamic> params = <String, dynamic>{
-      'uid': sp.getString('other_id'),
+      'uid': widget.otherId,
       'page': page,
       'pageSize': MyConfig.pageSize
     };

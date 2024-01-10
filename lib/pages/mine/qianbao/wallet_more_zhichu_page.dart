@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 import '../../../bean/walletListBean.dart';
 import '../../../colors/my_colors.dart';
@@ -21,6 +22,35 @@ class WalletMoreZhichuPage extends StatefulWidget {
 
 class _WalletMoreZhichuPageState extends State<WalletMoreZhichuPage> {
   var length = 0;
+  final RefreshController _refreshController =
+  RefreshController(initialRefresh: false);
+  int page = 1;
+
+  void _onRefresh() async {
+    // monitor network fetch
+    await Future.delayed(const Duration(milliseconds: 1000));
+    // if failed,use refreshFailed()
+    _refreshController.refreshCompleted();
+    if (mounted) {
+      setState(() {
+        page = 1;
+      });
+    }
+    doPostBalance();
+  }
+
+  void _onLoading() async {
+    // monitor network fetch
+    await Future.delayed(const Duration(milliseconds: 1000));
+    // if failed,use loadFailed(),if no data return,use LoadNodata()
+    if (mounted) {
+      setState(() {
+        page++;
+      });
+    }
+    doPostBalance();
+    _refreshController.loadComplete();
+  }
 
   @override
   void initState() {
@@ -58,19 +88,22 @@ class _WalletMoreZhichuPageState extends State<WalletMoreZhichuPage> {
         showImg = 'assets/images/wallet_q.png';
         break;
       case 6:
-        leixing = '提现';
         if(list[i].curType == 1){
           showImg = 'assets/images/wallet_d.png';
-        }else{
+        }else if(list[i].curType == 2){
           showImg = 'assets/images/wallet_z.png';
+        }else{
+          showImg = 'assets/images/mine_wallet_bb.png';
         }
         break;
       case 7:
         leixing = '兑换';
         if(list[i].curType == 1){
           showImg = 'assets/images/wallet_d.png';
-        }else{
+        }else if(list[i].curType == 2){
           showImg = 'assets/images/wallet_z.png';
+        }else{
+          showImg = 'assets/images/mine_wallet_bb.png';
         }
         break;
       case 8:
@@ -90,8 +123,18 @@ class _WalletMoreZhichuPageState extends State<WalletMoreZhichuPage> {
         }
         break;
       case 10:
-        leixing = '刷礼物';
+        leixing = '打赏';
         showImg = list[i].img!;
+        break;
+      case 12:
+        leixing = '提现申请冻结金';
+        if(list[i].curType == 1){
+          showImg = 'assets/images/wallet_d.png';
+        }else if(list[i].curType == 2){
+          showImg = 'assets/images/wallet_z.png';
+        }else{
+          showImg = 'assets/images/mine_wallet_bb.png';
+        }
         break;
     }
     return Column(
@@ -116,7 +159,7 @@ class _WalletMoreZhichuPageState extends State<WalletMoreZhichuPage> {
           child: Row(
             children: [
               WidgetUtils.commonSizedBox(0, 20),
-              leixing == '刷礼物' ? WidgetUtils.showImagesNet(showImg, ScreenUtil().setHeight(100), ScreenUtil().setHeight(100)) : WidgetUtils.showImages(showImg, ScreenUtil().setHeight(100), ScreenUtil().setHeight(100)),
+              leixing == '打赏' ? WidgetUtils.showImagesNet(showImg, ScreenUtil().setHeight(100), ScreenUtil().setHeight(100)) : WidgetUtils.showImages(showImg, ScreenUtil().setHeight(100), ScreenUtil().setHeight(100)),
               WidgetUtils.commonSizedBox(0, 20),
               Expanded(
                 child: Column(
@@ -124,9 +167,9 @@ class _WalletMoreZhichuPageState extends State<WalletMoreZhichuPage> {
                     const Expanded(child: Text('')),
                     Row(
                       children: [
-                        leixing == '刷礼物' ? WidgetUtils.onlyText('礼物：${list[i].name}', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(25))) : const Text(''),
+                        leixing == '打赏' ? WidgetUtils.onlyText('礼物：${list[i].name}', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(25))) : const Text(''),
                         const Expanded(child: Text('')),
-                        WidgetUtils.onlyText(list[i].curType == 1 ? 'V豆' : '钻石', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(25))),
+                        WidgetUtils.onlyText(list[i].curType == 1 ? 'V豆' : list[i].curType == 2 ? '钻石' : 'V币', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(25))),
                         WidgetUtils.commonSizedBox(0, 20),
                       ],
                     ),
@@ -153,9 +196,17 @@ class _WalletMoreZhichuPageState extends State<WalletMoreZhichuPage> {
 
   @override
   Widget build(BuildContext context) {
-    return length > 0 ? ListView.builder(
-      itemBuilder: _itemLiwu,
-      itemCount: list.length,
+    return length > 0 ? SmartRefresher(
+      header: MyUtils.myHeader(),
+      footer: MyUtils.myFotter(),
+      controller: _refreshController,
+      enablePullUp: true,
+      onLoading: _onLoading,
+      onRefresh: _onRefresh,
+      child: ListView.builder(
+        itemBuilder: _itemLiwu,
+        itemCount: list.length,
+      ),
     )
         :
     Container(
@@ -173,21 +224,35 @@ class _WalletMoreZhichuPageState extends State<WalletMoreZhichuPage> {
     );
   }
 
-  List<Result> list = [];
+  List<Data> list = [];
   /// 钱包明细 - 收入
   Future<void> doPostBalance() async {
     Loading.show();
     try {
       Map<String, dynamic> params = <String, dynamic>{
         'type': '2', //钱包类型 1收入 2支出
+        'page': page,
+        'pageSize': MyConfig.pageSize
       };
       walletListBean bean = await DataUtils.postWalletList(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
-            list.clear();
-            list = bean.data!.result!;
-            length = list.length;
+            if (page == 1) {
+              list.clear();
+            }
+            if (bean.data!.isNotEmpty) {
+              for (int i = 0; i < bean.data!.length; i++) {
+                list.add(bean.data![i]);
+              }
+              length = bean.data!.length;
+            } else {
+              if (page == 1) {
+                length = 0;
+              } else {
+                _refreshController.loadNoData();
+              }
+            }
           });
           break;
         case MyHttpConfig.errorloginCode:

@@ -4,8 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/pages/room/room_page.dart';
+import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import '../../bean/Common_bean.dart';
+import '../../bean/joinRoomBean.dart';
 import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
@@ -17,7 +19,9 @@ import '../../utils/style_utils.dart';
 /// 进入房间前输入密码
 class RoomTSMiMaPage extends StatefulWidget {
   String roomID;
-  RoomTSMiMaPage({super.key, required this.roomID});
+  String roomToken;
+  String anchorUid;
+  RoomTSMiMaPage({super.key, required this.roomID, required this.roomToken, required this.anchorUid});
 
   @override
   State<RoomTSMiMaPage> createState() => _RoomTSMiMaPageState();
@@ -35,9 +39,9 @@ class _RoomTSMiMaPageState extends State<RoomTSMiMaPage> {
           children: [
             GestureDetector(
               onTap: (() {
-    if(MyUtils.checkClick()) {
-      Navigator.pop(context);
-    }
+                if (MyUtils.checkClick()) {
+                  Navigator.pop(context);
+                }
               }),
               child: Container(
                 height: 300.h,
@@ -70,7 +74,10 @@ class _RoomTSMiMaPageState extends State<RoomTSMiMaPage> {
                     width: double.infinity,
                     color: Colors.transparent,
                     alignment: Alignment.center,
-                    margin: EdgeInsets.only(left: ScreenUtil().setHeight(80), right: ScreenUtil().setHeight(80),),
+                    margin: EdgeInsets.only(
+                      left: ScreenUtil().setHeight(80),
+                      right: ScreenUtil().setHeight(80),
+                    ),
                     child: PinCodeTextField(
                       length: 4,
                       inputFormatters: [
@@ -81,13 +88,12 @@ class _RoomTSMiMaPageState extends State<RoomTSMiMaPage> {
                       controller: textEditingController,
                       onChanged: (value) {
                         // LogE('返回数据$value');
-                        if(value.length == 4){
+                        if (value.length == 4) {
                           doPostCheckPwd();
                         }
                       },
                       textStyle: StyleUtils.getCommonTextStyle(
-                          color: MyColors.btn_a,
-                          fontSize: 38.sp),
+                          color: MyColors.btn_a, fontSize: 38.sp),
                       appContext: context,
                       keyboardType: TextInputType.number,
                       autoFocus: true,
@@ -114,9 +120,9 @@ class _RoomTSMiMaPageState extends State<RoomTSMiMaPage> {
             Expanded(
               child: GestureDetector(
                 onTap: (() {
-    if(MyUtils.checkClick()) {
-      Navigator.pop(context);
-    }
+                  if (MyUtils.checkClick()) {
+                    Navigator.pop(context);
+                  }
                 }),
                 child: Container(
                   height: double.infinity,
@@ -137,13 +143,13 @@ class _RoomTSMiMaPageState extends State<RoomTSMiMaPage> {
     };
     try {
       Loading.show("校验中...");
-      CommonBean bean = await DataUtils.postCheckPwd(params);
+      joinRoomBean bean = await DataUtils.postCheckPwd(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          doPostRoomJoin(widget.roomID,textEditingController.text.trim());
+          doPostRoomJoin(widget.roomID, textEditingController.text.trim(),bean.data!.rtc!);
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -161,22 +167,30 @@ class _RoomTSMiMaPageState extends State<RoomTSMiMaPage> {
   }
 
   /// 加入房间
-  Future<void> doPostRoomJoin(roomID, password) async {
+  Future<void> doPostRoomJoin(roomID, password,roomToken) async {
     Map<String, dynamic> params = <String, dynamic>{
       'room_id': roomID,
-      'password': password
+      'password': password,
+      'anchor_uid': widget.anchorUid
     };
     try {
       Loading.show();
       CommonBean bean = await DataUtils.postRoomJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
+          // ignore: use_build_context_synchronously
           Navigator.pop(context);
-        // ignore: use_build_context_synchronously
-          MyUtils.goTransparentRFPage(context, RoomPage(roomId: roomID,));
+          // ignore: use_build_context_synchronously
+          MyUtils.goTransparentRFPage(
+              context,
+              RoomPage(
+                roomId: roomID,
+                beforeId: '',
+                roomToken: roomToken,
+              ));
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -189,5 +203,4 @@ class _RoomTSMiMaPageState extends State<RoomTSMiMaPage> {
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
-
 }

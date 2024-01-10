@@ -35,7 +35,7 @@ class _RankCaiFuPageState extends State<RankCaiFuPage> {
         Container(
           alignment: Alignment.center,
           height: ScreenUtil().setHeight(60),
-          margin: EdgeInsets.only(top: ScreenUtil().setHeight(30)),
+          margin: EdgeInsets.only(top: ScreenUtil().setHeight(50)),
           width: double.infinity,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -95,8 +95,10 @@ class _RankCaiFuPageState extends State<RankCaiFuPage> {
             ],
           ),
         ),
+        WidgetUtils.commonSizedBox(30.h, 0),
         Expanded(
           child: PageView(
+            physics: const NeverScrollableScrollPhysics(), //禁止左右滑动
             controller: _controller,
             onPageChanged: (index) {
               setState(() {

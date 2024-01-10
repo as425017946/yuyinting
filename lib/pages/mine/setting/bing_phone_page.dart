@@ -135,7 +135,17 @@ class _BingPhonePageState extends State<BingPhonePage> {
                     if(controllerPhone.text.isEmpty){
                       MyToastUtils.showToastBottom('请输入手机号');
                     }else{
-                      _startTimer();
+                      if (controllerPhone.text
+                          .trim()
+                          .isEmpty) {
+                        MyToastUtils.showToastBottom(
+                            '请输入手机号');
+                      } else if (!MyUtils.chinaPhoneNumber(controllerPhone.text.trim())) {
+                        MyToastUtils.showToastBottom(
+                            '输入的手机号码格式错误');
+                      } else {
+                        doPostLoginSms();
+                      }
                     }
                   }),
                   child: WidgetUtils.onlyText(_autoCodeText, StyleUtils.getCommonTextStyle(
@@ -210,6 +220,34 @@ class _BingPhonePageState extends State<BingPhonePage> {
           break;
         default:
           MyToastUtils.showToastBottom(commonBean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+  /// 发送短信验证码
+  Future<void> doPostLoginSms() async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'phone': controllerPhone.text.trim(),
+      'area_code': quhao,
+    };
+    try {
+      CommonBean bean = await DataUtils.postLoginSms(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+        //短信发送成功请求倒计时
+          _startTimer();
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
       Loading.dismiss();

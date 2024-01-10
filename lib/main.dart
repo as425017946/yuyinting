@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yuyinting/pages/login/login_page.dart';
 import 'package:yuyinting/pages/login/star_page.dart';
@@ -77,9 +78,16 @@ class MyApp extends StatelessWidget {
       builder: EasyLoading.init(),
       //配置路由  -- map格式
       routes: staticRoutes,
-      // supportedLocales: const [
-      //   Locale('zh')
-      // ],
+      localizationsDelegates: const [
+        // ... 其他本地化委托
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate, // 添加 Cupertino 的本地化委托
+      ],
+      supportedLocales: const [
+        Locale('zh', 'CN'), // 设置支持的中文简体语言
+      ],
+      locale: const Locale('zh', 'CN'), // 设置默认的locale
     );
   }
 }

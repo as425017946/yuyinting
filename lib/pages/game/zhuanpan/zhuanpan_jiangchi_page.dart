@@ -65,7 +65,44 @@ class _ZhuanPanJiangChiPageState extends State<ZhuanPanJiangChiPage> {
       child: Column(
         children: [
           const Spacer(),
-          WidgetUtils.showImagesNet(list[i].img!, 120.h, 120.h),
+          SizedBox(
+            height: 120.h,
+            width: 161.h,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                WidgetUtils.showImagesNet(list[i].img!, 120.h, 120.h),
+                Positioned(
+                  right: 10.w,
+                  top: 5.h,
+                  child: Stack(
+                    children: [
+                      Opacity(
+                        opacity: 0.47,
+                        child: Container(
+                          width: 70.h,
+                          height: 30.h,
+                          decoration: BoxDecoration(
+                            color: MyColors.zpBG,
+                            borderRadius: BorderRadius.circular(21),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 70.h,
+                        height: 30.h,
+                        alignment: Alignment.centerLeft,
+                        child: WidgetUtils.onlyTextCenter(
+                            '${list[i].price!}V豆',
+                            StyleUtils.getCommonTextStyle(
+                                color: MyColors.peopleYellow, fontSize: 18.sp))
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
           WidgetUtils.commonSizedBox(10.h, 0),
           Row(
             children: [
@@ -82,7 +119,7 @@ class _ZhuanPanJiangChiPageState extends State<ZhuanPanJiangChiPage> {
           ),
           WidgetUtils.commonSizedBox(5.h, 0),
           WidgetUtils.onlyTextCenter(
-              '（${list[i].price!}V豆）',
+              list[i].goodsName!,
               StyleUtils.getCommonTextStyle(
                   color: Colors.white, fontSize: 18.sp)),
           WidgetUtils.commonSizedBox(10.h, 0),

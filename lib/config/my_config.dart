@@ -24,7 +24,8 @@ class MyConfig{
   static const String userThreeUID = 'userThreeUID';//用户uid
 
   // 定义声网 App ID、Token（生成的临时token，声网这个是有效时间24小时） 和 Channel（创建的频道名）
-  static const appId = "6d4c7c47c5c040a2a51829ed564a2697";
+  // static const appId = "6d4c7c47c5c040a2a51829ed564a2697";
+  static const appId = "ab20e77e5f744b59a3f81dca0e68a543";
   static const token = "007eJxTYJgsP3eVBhsvl43Yy6oXQbeFhTpaTTM+iPn7TmGdLrVW4IkCg1mKSbJ5sol5smmygYlBolGiqaGFkWVqiqmZSaKRmaX5q1P9qQ2BjAwc714zMzJAIIjPxpBbGZSfn8vAAACIUx3F";
   static const channel = "myRoom";
 

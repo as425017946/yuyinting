@@ -35,7 +35,7 @@ class _RankMeiLiPageState extends State<RankMeiLiPage> {
         Container(
           alignment: Alignment.center,
           height: ScreenUtil().setHeight(60),
-          margin: EdgeInsets.only(top: ScreenUtil().setHeight(30)),
+          margin: EdgeInsets.only(top: ScreenUtil().setHeight(50)),
           width: double.infinity,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -95,8 +95,10 @@ class _RankMeiLiPageState extends State<RankMeiLiPage> {
             ],
           ),
         ),
+        WidgetUtils.commonSizedBox(30.h, 0),
         Expanded(
           child: PageView(
+            physics: const NeverScrollableScrollPhysics(),
             controller: _controller,
             onPageChanged: (index) {
               setState(() {

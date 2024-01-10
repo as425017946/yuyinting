@@ -1,5 +1,8 @@
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:event_bus/event_bus.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
+
+import '../bean/myHomeBean.dart';
 
 
 EventBus eventBus = new EventBus();
@@ -237,3 +240,18 @@ class RoomSGJBack {
   int? index;
   RoomSGJBack({required this.isOK, required this.index});
 }
+
+/// 个人资料修改
+class myInfoBack {
+  MyUserInfo userInfo;
+  GiftList giftList;
+  myInfoBack({required this.userInfo, required this.giftList});
+}
+
+/// 收起房间和加入其他房间使用
+class shouqiRoomBack {
+  RtcEngine engine;
+  String title;
+  shouqiRoomBack({required this.engine, required this.title});
+}
+

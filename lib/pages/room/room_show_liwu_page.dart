@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../utils/event_utils.dart';
+
 /// 送礼物展示的效果页面
 class RoomShowLiWuPage extends StatefulWidget {
   // 选择需要赠送的哪个人
@@ -371,6 +373,12 @@ class _RoomShowLiWuPageState extends State<RoomShowLiWuPage>
       _controller10.forward();
     }
     Future.delayed(const Duration(seconds: 4), () {
+      setState(() {
+        for(int i = 0; i < widget.listPeople.length; i++){
+          widget.listPeople[i] = false;
+        }
+        eventBus.fire(ChoosePeopleBack(listPeople: widget.listPeople));
+      });
       Navigator.pop(context);
     });
   }

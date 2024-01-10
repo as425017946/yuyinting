@@ -18,6 +18,7 @@ import '../../main.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../widget/xiazhu_queren_page.dart';
+import '../mine/qianbao/dou_pay_page.dart';
 import 'mofang/mofang_beibao_page.dart';
 import 'mofang/mofang_daoju_page.dart';
 import 'mofang/mofang_guize_page.dart';
@@ -465,8 +466,9 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
                     top: ScreenUtil().setHeight(140),
                     child: GestureDetector(
                       onTap: ((){
+                        MyUtils.goTransparentPageCom(context, DouPayPage(shuliang: sp.getString('mofangJB').toString(),));
                       }),
-                      child: Container(
+                      child: SizedBox(
                         height: ScreenUtil().setHeight(45),
                         child: Row(
                           children: [
@@ -483,29 +485,37 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
                                     color: Colors.white,
                                     fontSize: ScreenUtil().setSp(23),
                                     fontWeight: FontWeight.w600)),
-                            WidgetUtils.commonSizedBox(0, 5),
-                            Opacity(
-                              opacity: 0.8,
-                              child: Container(
-                                height: ScreenUtil().setHeight(20),
-                                width: ScreenUtil().setHeight(1),
-                                color: MyColors.home_hx,
-                              ),
+                            WidgetUtils.commonSizedBox(0, 5.w),
+                            Image(
+                              image: const AssetImage(
+                                  'assets/images/wallet_more.png'),
+                              width: 15.h,
+                              height: 15.h,
                             ),
-                            WidgetUtils.commonSizedBox(0, 10),
-                            WidgetUtils.showImages(
-                                'assets/images/mine_wallet_zz.png',
-                                ScreenUtil().setHeight(26),
-                                ScreenUtil().setHeight(24)),
                             WidgetUtils.commonSizedBox(0, 5),
-                            // 显示钻石
-                            WidgetUtils.onlyTextCenter(
-                                sp.getString('mofangZS').toString(),
-                                StyleUtils.getCommonTextStyle(
-                                    color: Colors.white,
-                                    fontSize: ScreenUtil().setSp(23),
-                                    fontWeight: FontWeight.w600)),
-                            WidgetUtils.commonSizedBox(0, 5),
+                            // 钻石处先隐藏
+                            // Opacity(
+                            //   opacity: 0.8,
+                            //   child: Container(
+                            //     height: ScreenUtil().setHeight(20),
+                            //     width: ScreenUtil().setHeight(1),
+                            //     color: MyColors.home_hx,
+                            //   ),
+                            // ),
+                            // WidgetUtils.commonSizedBox(0, 10),
+                            // WidgetUtils.showImages(
+                            //     'assets/images/mine_wallet_zz.png',
+                            //     ScreenUtil().setHeight(26),
+                            //     ScreenUtil().setHeight(24)),
+                            // WidgetUtils.commonSizedBox(0, 5),
+                            // // 显示钻石
+                            // WidgetUtils.onlyTextCenter(
+                            //     sp.getString('mofangZS').toString(),
+                            //     StyleUtils.getCommonTextStyle(
+                            //         color: Colors.white,
+                            //         fontSize: ScreenUtil().setSp(23),
+                            //         fontWeight: FontWeight.w600)),
+                            // WidgetUtils.commonSizedBox(0, 5),
                           ],
                         ),
                       ),
@@ -762,8 +772,12 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
               jinbi = sp.getString('mofangJBY').toString();
               // 减去花费的V豆
               jinbi = '${(double.parse(jinbi) - int.parse(number)*20)}';
-              //保留2位小数
-              jinbi2 = '${(double.parse(jinbi) / 10000).toStringAsFixed(2)}w';
+              if(double.parse(jinbi) > 10000){
+                //保留2位小数
+                jinbi2 = '${(double.parse(jinbi) / 10000).toStringAsFixed(2)}w';
+              }else{
+                jinbi2 = jinbi;
+              }
             }else{
               jinbi = sp.getString('mofangJBY').toString();
               jinbi = (double.parse(jinbi) - int.parse(number)*20).toString();
@@ -776,8 +790,12 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
               zuanshi = sp.getString('mofangZSY').toString();
               // 减去花费的V豆
               zuanshi = '${(double.parse(zuanshi) - int.parse(number)*20)}';
-              //保留2位小数
-              zuanshi2 = '${(double.parse(zuanshi) / 10000).toStringAsFixed(2)}w';
+              if(double.parse(zuanshi) > 10000){
+                //保留2位小数
+                zuanshi2 = '${(double.parse(zuanshi) / 10000).toStringAsFixed(2)}w';
+              }else{
+                zuanshi2 = zuanshi;
+              }
             }else{
               zuanshi = sp.getString('mofangZSY').toString();
               zuanshi = (double.parse(zuanshi) - int.parse(number)*20).toString();

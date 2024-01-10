@@ -4,12 +4,15 @@ import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:yuyinting/bean/Common_bean.dart';
 
 import '../../bean/careListBean.dart';
+import '../../bean/joinRoomBean.dart';
 import '../../bean/recommendRoomBean.dart';
 import '../../bean/shoucangBean.dart';
 import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
+import '../../main.dart';
+import '../../utils/event_utils.dart';
 import '../../utils/loading.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
@@ -27,8 +30,8 @@ class ShoucangPage extends StatefulWidget {
   State<ShoucangPage> createState() => _ShoucangPageState();
 }
 
-class _ShoucangPageState extends State<ShoucangPage> with AutomaticKeepAliveClientMixin{
-
+class _ShoucangPageState extends State<ShoucangPage>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -36,7 +39,7 @@ class _ShoucangPageState extends State<ShoucangPage> with AutomaticKeepAliveClie
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   int page = 1;
-  List<ListSC> _list = [];
+  List<DataS> _list = [];
   List<DataTj> listTJ = [];
 
   void _onRefresh() async {
@@ -69,7 +72,7 @@ class _ShoucangPageState extends State<ShoucangPage> with AutomaticKeepAliveClie
   Widget _initlistdata(context, index) {
     return GestureDetector(
       onTap: (() {
-        if(MyUtils.checkClick()) {
+        if (MyUtils.checkClick()) {
           doPostBeforeJoin(_list[index].id.toString());
         }
       }),
@@ -79,11 +82,8 @@ class _ShoucangPageState extends State<ShoucangPage> with AutomaticKeepAliveClie
         alignment: Alignment.bottomLeft,
         child: Stack(
           children: [
-            WidgetUtils.CircleImageNet(
-                ScreenUtil().setHeight(260),
-                ScreenUtil().setHeight(260),
-                10.0,
-                _list[index].coverImg!),
+            WidgetUtils.CircleImageNet(ScreenUtil().setHeight(260),
+                ScreenUtil().setHeight(260), 10.0, _list[index].coverImg!),
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: Column(
@@ -122,7 +122,7 @@ class _ShoucangPageState extends State<ShoucangPage> with AutomaticKeepAliveClie
   Widget _initlistdata2(context, index) {
     return GestureDetector(
       onTap: (() {
-        if(MyUtils.checkClick()) {
+        if (MyUtils.checkClick()) {
           doPostBeforeJoin(listTJ[index].id.toString());
         }
       }),
@@ -132,11 +132,8 @@ class _ShoucangPageState extends State<ShoucangPage> with AutomaticKeepAliveClie
         alignment: Alignment.bottomLeft,
         child: Stack(
           children: [
-            WidgetUtils.CircleImageNet(
-                ScreenUtil().setHeight(260),
-                ScreenUtil().setHeight(260),
-                10.0,
-                listTJ[index].coverImg!),
+            WidgetUtils.CircleImageNet(ScreenUtil().setHeight(260),
+                ScreenUtil().setHeight(260), 10.0, listTJ[index].coverImg!),
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: Column(
@@ -248,7 +245,7 @@ class _ShoucangPageState extends State<ShoucangPage> with AutomaticKeepAliveClie
                     ),
                     Container(
                       margin:
-                          const EdgeInsets.only(left: 20, right: 20,top: 20),
+                          const EdgeInsets.only(left: 20, right: 20, top: 20),
                       child: OptionGridView(
                         itemCount: listTJ.length,
                         rowCount: 2,
@@ -283,20 +280,20 @@ class _ShoucangPageState extends State<ShoucangPage> with AutomaticKeepAliveClie
             if (page == 1) {
               _list.clear();
             }
-            if (bean.data!.list!.isNotEmpty) {
-              for (int i = 0; i < bean.data!.list!.length; i++) {
-                _list.add(bean.data!.list![i]);
+            if (bean.data!.isNotEmpty) {
+              for (int i = 0; i < bean.data!.length; i++) {
+                _list.add(bean.data![i]);
               }
               // 把没有更多的提示去掉
               // if (bean.data!.list!.length < MyConfig.pageSize) {
               //   _refreshController.loadNoData();
               // }
 
-              length = bean.data!.list!.length;
+              length = bean.data!.length;
             } else {
               if (page == 1) {
                 length = 0;
-              }else{
+              } else {
                 // _refreshController.loadNoData();
               }
             }
@@ -317,7 +314,6 @@ class _ShoucangPageState extends State<ShoucangPage> with AutomaticKeepAliveClie
     }
   }
 
-
   /// 关注列表
   Future<void> doPostRecommendRoom() async {
     try {
@@ -329,7 +325,7 @@ class _ShoucangPageState extends State<ShoucangPage> with AutomaticKeepAliveClie
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -344,23 +340,34 @@ class _ShoucangPageState extends State<ShoucangPage> with AutomaticKeepAliveClie
 
   /// 加入房间前
   Future<void> doPostBeforeJoin(roomID) async {
+    //判断房间id是否为空的
+    if(sp.getString('roomID') == null || sp.getString('').toString().isEmpty){
+    }else{
+      // 不是空的，并且不是之前进入的房间
+      if(sp.getString('roomID').toString() != roomID){
+        sp.setString('roomID', roomID);
+        eventBus.fire(SubmitButtonBack(title: '加入其他房间'));
+      }
+    }
     Map<String, dynamic> params = <String, dynamic>{
       'room_id': roomID,
     };
     try {
       Loading.show();
-      CommonBean bean = await DataUtils.postBeforeJoin(params);
+      joinRoomBean bean = await DataUtils.postBeforeJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          doPostRoomJoin(roomID, '');
+          doPostRoomJoin(roomID, '', bean.data!.rtc!);
           break;
         case MyHttpConfig.errorRoomCode: //需要密码
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.goTransparentPageCom(
-              context, RoomTSMiMaPage(roomID: roomID,));
+              context,
+              RoomTSMiMaPage(
+                  roomID: roomID, roomToken: bean.data!.rtc!, anchorUid: ''));
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -375,7 +382,7 @@ class _ShoucangPageState extends State<ShoucangPage> with AutomaticKeepAliveClie
   }
 
   /// 加入房间
-  Future<void> doPostRoomJoin(roomID, password) async {
+  Future<void> doPostRoomJoin(roomID, password, roomToken) async {
     Map<String, dynamic> params = <String, dynamic>{
       'room_id': roomID,
       'password': password
@@ -385,11 +392,17 @@ class _ShoucangPageState extends State<ShoucangPage> with AutomaticKeepAliveClie
       CommonBean bean = await DataUtils.postRoomJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-        // ignore: use_build_context_synchronously
-          MyUtils.goTransparentRFPage(context, RoomPage(roomId: roomID,));
+          // ignore: use_build_context_synchronously
+          MyUtils.goTransparentRFPage(
+              context,
+              RoomPage(
+                roomId: roomID,
+                beforeId: '',
+                roomToken: roomToken,
+              ));
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:

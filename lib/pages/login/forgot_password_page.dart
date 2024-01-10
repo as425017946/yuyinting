@@ -57,7 +57,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   }
 
   late Timer _timer;
-  int _timeCount = 10;
+  int _timeCount = 60;
   var _autoCodeText = '发送验证码';
 
   void _startTimer() {
@@ -69,7 +69,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             if (_timeCount <= 0) {
               _autoCodeText = '重新获取';
               _timer.cancel();
-              _timeCount = 10;
+              _timeCount = 60;
             } else {
               _timeCount -= 1;
               _autoCodeText = "$_timeCount" + 's';
@@ -102,7 +102,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               children: [
                 GestureDetector(
                   onTap: (() {
-                    Navigator.pushNamed(context, 'ChooseCountryPage');
+                    // Navigator.pushNamed(context, 'ChooseCountryPage');
                   }),
                   child: Row(
                     children: [
@@ -114,10 +114,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                               fontSize: ScreenUtil().setSp(30),
                               fontWeight: FontWeight.w600)),
                       WidgetUtils.commonSizedBox(0, 5),
-                      WidgetUtils.showImages(
-                          'assets/images/login_xia.png',
-                          ScreenUtil().setHeight(12),
-                          ScreenUtil().setHeight(18))
+                      // WidgetUtils.showImages(
+                      //     'assets/images/login_xia.png',
+                      //     ScreenUtil().setHeight(12),
+                      //     ScreenUtil().setHeight(18))
                     ],
                   ),
                 ),
@@ -160,7 +160,17 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   onTap: (() {
                     if (_autoCodeText == '发送验证码' ||
                         _autoCodeText == '重新获取') {
-                      _startTimer();
+                      if (controllerPhone.text
+                          .trim()
+                          .isEmpty) {
+                        MyToastUtils.showToastBottom(
+                            '请输入手机号');
+                      } else if (!MyUtils.chinaPhoneNumber(controllerPhone.text.trim())) {
+                        MyToastUtils.showToastBottom(
+                            '输入的手机号码格式错误');
+                      } else {
+                        doPostSendSms();
+                      }
                     }
                   }),
                   child: SizedBox(
@@ -240,6 +250,35 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           break;
         default:
           MyToastUtils.showToastBottom(commonBean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+
+  /// 发送短信验证码
+  Future<void> doPostSendSms() async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'phone': controllerPhone.text.trim(),
+      'area_code': quhao,
+    };
+    try {
+      CommonBean bean = await DataUtils.postSendSms(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+        //短信发送成功请求倒计时
+          _startTimer();
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
       Loading.dismiss();

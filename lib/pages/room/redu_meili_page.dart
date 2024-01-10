@@ -7,11 +7,14 @@ import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
+import '../../main.dart';
 import '../../utils/loading.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
+import '../message/geren/people_info_page.dart';
+import '../mine/my/my_info_page.dart';
 /// 热度-魅力榜
 class ReDuMeiLiPage extends StatefulWidget {
   String roomID;
@@ -40,6 +43,15 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage>  with AutomaticKeepAliveC
         GestureDetector(
           onTap: (() {
             // MyToastUtils.showToastBottom('点击了');
+            if(MyUtils.checkClick()){
+              // 如果点击的是自己，进入自己的主页
+              if(sp.getString('user_id').toString() == _list2[i].uid.toString()){
+                MyUtils.goTransparentRFPage(context, const MyInfoPage());
+              }else{
+                sp.setString('other_id', _list2[i].uid.toString());
+                MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list2[i].uid.toString(),));
+              }
+            }
           }),
           child: Container(
             margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
@@ -241,135 +253,177 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage>  with AutomaticKeepAliveC
             child: Row(
               children: [
                 const Expanded(child: Text('')),
-                Column(
-                  children: [
-                    const Expanded(child: Text('')),
-                    _list.length>1 ? Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        WidgetUtils.CircleHeadImage(
-                            ScreenUtil().setHeight(90),
-                            ScreenUtil().setHeight(90), _list[1].avatar!),
-                        SizedBox(
-                          height: 120.h,
-                          width: 120.h,
-                          child: const SVGASimpleImage(assetsName: 'assets/svga/ph_2.svga',),
-                        )
-                      ],
-                    ): const Text(''),
-                    Stack(
-                      children: [
-                        WidgetUtils.commonSizedBox(100.h, 0),
-                        Container(
-                          width: ScreenUtil().setHeight(155),
-                          margin: const EdgeInsets.only(top: 5),
-                          alignment: Alignment.topCenter,
-                          child: WidgetUtils.onlyTextCenter(
-                              _list.length>1 ? _list[1].nickname! : '',
-                              StyleUtils.getCommonTextStyle(
-                                  color: Colors.white,
-                                  fontSize: ScreenUtil().setSp(21),
-                                  fontWeight: FontWeight.w600)),
-                        ),
-                        Container(
-                          width: ScreenUtil().setHeight(155),
-                          margin: EdgeInsets.only(top: 35.h),
-                          alignment: Alignment.topCenter,
-                          child: WidgetUtils.onlyTextCenter(
-                              _list.length > 1 ? _list[1].score.toString() : '',
-                              StyleUtils.getCommonTextStyle(
-                                  color: Colors.white,
-                                  fontSize: ScreenUtil().setSp(21),
-                                  fontWeight: FontWeight.w600)),
-                        ),
-                      ],
-                    )
-                  ],
+                /// 第二名
+                GestureDetector(
+                  onTap: ((){
+                    if(MyUtils.checkClick()){
+                      // 如果点击的是自己，进入自己的主页
+                      if(sp.getString('user_id').toString() == _list[1].uid.toString()){
+                        MyUtils.goTransparentRFPage(context, const MyInfoPage());
+                      }else{
+                        sp.setString('other_id', _list[1].uid.toString());
+                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId:_list[1].uid.toString(),));
+                      }
+                    }
+                  }),
+                  child: Column(
+                    children: [
+                      const Expanded(child: Text('')),
+                      _list.length>1 ? Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          WidgetUtils.CircleHeadImage(
+                              ScreenUtil().setHeight(90),
+                              ScreenUtil().setHeight(90), _list[1].avatar!),
+                          SizedBox(
+                            height: 120.h,
+                            width: 120.h,
+                            child: const SVGASimpleImage(assetsName: 'assets/svga/ph_2.svga',),
+                          )
+                        ],
+                      ): const Text(''),
+                      Stack(
+                        children: [
+                          WidgetUtils.commonSizedBox(100.h, 0),
+                          Container(
+                            width: ScreenUtil().setHeight(155),
+                            margin: const EdgeInsets.only(top: 5),
+                            alignment: Alignment.topCenter,
+                            child: WidgetUtils.onlyTextCenter(
+                                _list.length>1 ? _list[1].nickname! : '',
+                                StyleUtils.getCommonTextStyle(
+                                    color: Colors.white,
+                                    fontSize: ScreenUtil().setSp(21),
+                                    fontWeight: FontWeight.w600)),
+                          ),
+                          Container(
+                            width: ScreenUtil().setHeight(155),
+                            margin: EdgeInsets.only(top: 35.h),
+                            alignment: Alignment.topCenter,
+                            child: WidgetUtils.onlyTextCenter(
+                                _list.length > 1 ? _list[1].score.toString() : '',
+                                StyleUtils.getCommonTextStyle(
+                                    color: Colors.white,
+                                    fontSize: ScreenUtil().setSp(21),
+                                    fontWeight: FontWeight.w600)),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-                Column(
-                  children: [
-                    const Expanded(child: Text('')),
-                    _list.isNotEmpty ? Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(110), ScreenUtil().setHeight(110), _list[0].avatar!),
-                        SizedBox(
-                          height: 140.h,
-                          width: 140.h,
-                          child: const SVGASimpleImage(assetsName: 'assets/svga/ph_1.svga',),
-                        )
-                      ],
-                    ) : const Text(''),
-                    Stack(
-                      children: [
-                        WidgetUtils.commonSizedBox(160.h, 0),
-                        Container(
-                          width: ScreenUtil().setHeight(192),
-                          alignment: Alignment.topCenter,
-                          child: WidgetUtils.onlyTextCenter(
-                              _list.isNotEmpty ? _list[0].nickname! : '',
-                              StyleUtils.getCommonTextStyle(
-                                  color: Colors.white,
-                                  fontSize: ScreenUtil().setSp(21),
-                                  fontWeight: FontWeight.w600)),
-                        ),
+                /// 第一名
+                GestureDetector(
+                  onTap: ((){
+                    if(MyUtils.checkClick()){
+                      // 如果点击的是自己，进入自己的主页
+                      if(sp.getString('user_id').toString() == _list[0].uid.toString()){
+                        MyUtils.goTransparentRFPage(context, const MyInfoPage());
+                      }else{
+                        sp.setString('other_id', _list[0].uid.toString());
+                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId:_list[0].uid.toString(),));
+                      }
+                    }
+                  }),
+                  child: Column(
+                    children: [
+                      const Expanded(child: Text('')),
+                      _list.isNotEmpty ? Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(110), ScreenUtil().setHeight(110), _list[0].avatar!),
+                          SizedBox(
+                            height: 140.h,
+                            width: 140.h,
+                            child: const SVGASimpleImage(assetsName: 'assets/svga/ph_1.svga',),
+                          )
+                        ],
+                      ) : const Text(''),
+                      Stack(
+                        children: [
+                          WidgetUtils.commonSizedBox(160.h, 0),
+                          Container(
+                            width: ScreenUtil().setHeight(192),
+                            alignment: Alignment.topCenter,
+                            child: WidgetUtils.onlyTextCenter(
+                                _list.isNotEmpty ? _list[0].nickname! : '',
+                                StyleUtils.getCommonTextStyle(
+                                    color: Colors.white,
+                                    fontSize: ScreenUtil().setSp(21),
+                                    fontWeight: FontWeight.w600)),
+                          ),
 
-                        Container(
-                          width: ScreenUtil().setHeight(192),
-                          margin: EdgeInsets.only(top: 35.h),
-                          alignment: Alignment.topCenter,
-                          child: WidgetUtils.onlyTextCenter(
-                              _list.isNotEmpty ? _list[0].score.toString() : '',
-                              StyleUtils.getCommonTextStyle(
-                                  color: Colors.white,
-                                  fontSize: ScreenUtil().setSp(21),
-                                  fontWeight: FontWeight.w600)),
-                        ),
-                      ],
-                    )
-                  ],
+                          Container(
+                            width: ScreenUtil().setHeight(192),
+                            margin: EdgeInsets.only(top: 35.h),
+                            alignment: Alignment.topCenter,
+                            child: WidgetUtils.onlyTextCenter(
+                                _list.isNotEmpty ? _list[0].score.toString() : '',
+                                StyleUtils.getCommonTextStyle(
+                                    color: Colors.white,
+                                    fontSize: ScreenUtil().setSp(21),
+                                    fontWeight: FontWeight.w600)),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-                Column(
-                  children: [
-                    const Expanded(child: Text('')),
-                    _list.length > 2 ? Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(90), ScreenUtil().setHeight(90), _list[2].avatar!),
-                        SizedBox(
-                          height: 120.h,
-                          width: 120.h,
-                          child: const SVGASimpleImage(assetsName: 'assets/svga/ph_3.svga',),
-                        )
-                      ],
-                    ) : const Text(''),
-                    Stack(
-                      children: [
-                        WidgetUtils.commonSizedBox(40.h, 0),
-                        Container(
-                          width: ScreenUtil().setHeight(155),
-                          alignment: Alignment.topCenter,
-                          child: WidgetUtils.onlyTextCenter(
-                              _list.length > 2 ? _list[2].nickname! : '',
-                              StyleUtils.getCommonTextStyle(
-                                  color: Colors.white,
-                                  fontSize: ScreenUtil().setSp(21),
-                                  fontWeight: FontWeight.w600)),
-                        ),
-                        Container(
-                          width: ScreenUtil().setHeight(155),
-                          margin: EdgeInsets.only(top: 35.h),
-                          alignment: Alignment.topCenter,
-                          child: WidgetUtils.onlyTextCenter(
-                              _list.length > 2 ? _list[2].score.toString() : '',
-                              StyleUtils.getCommonTextStyle(
-                                  color: Colors.white,
-                                  fontSize: ScreenUtil().setSp(21),
-                                  fontWeight: FontWeight.w600)),
-                        ),
-                      ],
-                    )
-                  ],
+                /// 第三名
+                GestureDetector(
+                  onTap: ((){
+                    if(MyUtils.checkClick()){
+                      // 如果点击的是自己，进入自己的主页
+                      if(sp.getString('user_id').toString() == _list[2].uid.toString()){
+                        MyUtils.goTransparentRFPage(context, const MyInfoPage());
+                      }else{
+                        sp.setString('other_id', _list[2].uid.toString());
+                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId:_list[2].uid.toString(),));
+                      }
+                    }
+                  }),
+                  child: Column(
+                    children: [
+                      const Expanded(child: Text('')),
+                      _list.length > 2 ? Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(90), ScreenUtil().setHeight(90), _list[2].avatar!),
+                          SizedBox(
+                            height: 120.h,
+                            width: 120.h,
+                            child: const SVGASimpleImage(assetsName: 'assets/svga/ph_3.svga',),
+                          )
+                        ],
+                      ) : const Text(''),
+                      Stack(
+                        children: [
+                          WidgetUtils.commonSizedBox(40.h, 0),
+                          Container(
+                            width: ScreenUtil().setHeight(155),
+                            alignment: Alignment.topCenter,
+                            child: WidgetUtils.onlyTextCenter(
+                                _list.length > 2 ? _list[2].nickname! : '',
+                                StyleUtils.getCommonTextStyle(
+                                    color: Colors.white,
+                                    fontSize: ScreenUtil().setSp(21),
+                                    fontWeight: FontWeight.w600)),
+                          ),
+                          Container(
+                            width: ScreenUtil().setHeight(155),
+                            margin: EdgeInsets.only(top: 35.h),
+                            alignment: Alignment.topCenter,
+                            child: WidgetUtils.onlyTextCenter(
+                                _list.length > 2 ? _list[2].score.toString() : '',
+                                StyleUtils.getCommonTextStyle(
+                                    color: Colors.white,
+                                    fontSize: ScreenUtil().setSp(21),
+                                    fontWeight: FontWeight.w600)),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
                 const Expanded(child: Text('')),
               ],

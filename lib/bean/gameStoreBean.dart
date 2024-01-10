@@ -55,9 +55,10 @@ class GoodsList {
   String? price;
   int? goodsType;
   int? goodsId;
+  String? goodsName;
 
   GoodsList(
-      {this.img, this.exchangeCost, this.price, this.goodsType, this.goodsId});
+      {this.img, this.exchangeCost, this.price, this.goodsType, this.goodsId, this.goodsName});
 
   GoodsList.fromJson(Map<String, dynamic> json) {
     img = json['img'];
@@ -65,6 +66,7 @@ class GoodsList {
     price = json['price'];
     goodsType = json['goods_type'];
     goodsId = json['goods_id'];
+    goodsName = json['goods_name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -74,6 +76,7 @@ class GoodsList {
     data['price'] = this.price;
     data['goods_type'] = this.goodsType;
     data['goods_id'] = this.goodsId;
+    data['goods_name'] = this.goodsName;
     return data;
   }
 }

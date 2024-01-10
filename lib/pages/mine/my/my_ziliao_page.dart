@@ -2,16 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/bean/myHomeBean.dart';
 import 'package:yuyinting/colors/my_colors.dart';
+import 'package:yuyinting/utils/event_utils.dart';
+import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
-
-import '../../../config/my_config.dart';
-import '../../../http/data_utils.dart';
-import '../../../http/my_http_config.dart';
 import '../../../main.dart';
-import '../../../utils/loading.dart';
-import '../../../utils/log_util.dart';
-import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
 import '../../../widget/SwiperPage.dart';
 import '../liwu/wall_page.dart';
@@ -19,7 +14,9 @@ import '../liwu/wall_page.dart';
 ///资料
 
 class MyZiliaoPage extends StatefulWidget {
-  const MyZiliaoPage({Key? key}) : super(key: key);
+  MyUserInfo userInfo;
+  GiftList giftList;
+  MyZiliaoPage({Key? key, required this.userInfo, required this.giftList}) : super(key: key);
 
   @override
   State<MyZiliaoPage> createState() => _MyZiliaoPageState();
@@ -100,11 +97,74 @@ class _MyZiliaoPageState extends State<MyZiliaoPage> {
     }
   }
 
+  var listen;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    doPostMyIfon();
+    LogE('============= aaaa');
+    saveInfo();
+    listen = eventBus.on<myInfoBack>().listen((event) {
+      saveInfo();
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    listen.cancel();
+  }
+
+  void saveInfo(){
+    setState(() {
+      sp.setString("user_headimg", widget.userInfo!.avatarUrl!);
+      headImg = widget.userInfo!.avatarUrl!;
+      gender = widget.userInfo!.gender as int;
+      nickName = widget.userInfo!.nickname!;
+      userNumber = widget.userInfo!.number.toString();
+      voice_card = widget.userInfo!.voiceCardUrl!;
+      is_pretty = widget.userInfo!.isPretty as int;
+      constellation = widget.userInfo!.constellation!;
+      if (widget.userInfo!.constellation! == '白羊座') {
+        xzUrl = 'assets/images/xz/baiyang.png';
+      } else if (widget.userInfo!.constellation! == '处女座') {
+        xzUrl = 'assets/images/xz/chunv.png';
+      } else if (widget.userInfo!.constellation! == '金牛座') {
+        xzUrl = 'assets/images/xz/jinniu.png';
+      } else if (widget.userInfo!.constellation! == '巨蟹座') {
+        xzUrl = 'assets/images/xz/juxie.png';
+      } else if (widget.userInfo!.constellation! == '摩羯座') {
+        xzUrl = 'assets/images/xz/mojie.png';
+      } else if (widget.userInfo!.constellation! == '射手座') {
+        xzUrl = 'assets/images/xz/sheshou.png';
+      } else if (widget.userInfo!.constellation! == '狮子座') {
+        xzUrl = 'assets/images/xz/shizi.png';
+      } else if (widget.userInfo!.constellation! == '双鱼座') {
+        xzUrl = 'assets/images/xz/shuangyu.png';
+      } else if (widget.userInfo!.constellation! == '双子座') {
+        xzUrl = 'assets/images/xz/shuangzi.png';
+      } else if (widget.userInfo!.constellation! == '水瓶座') {
+        xzUrl = 'assets/images/xz/shuiping.png';
+      } else if (widget.userInfo!.constellation! == '天秤座') {
+        xzUrl = 'assets/images/xz/tiancheng.png';
+      } else if (widget.userInfo!.constellation! == '天蝎座') {
+        xzUrl = 'assets/images/xz/tianxie.png';
+      }
+      if (widget.userInfo!.photoId!.isNotEmpty) {
+        list_p = widget.userInfo!.photoUrl!;
+      }
+      imgList.clear();
+      for(int i = 0; i < widget.userInfo!.photoUrl!.length; i++) {
+        imgList.add(widget.userInfo!.photoUrl![i].toString());
+      }
+      if (widget.giftList!.receiveGift!.isNotEmpty) {
+        list_a = widget.giftList!.receiveGift!;
+      }
+      all_gift_type = widget.giftList!.allGiftType!;
+      receive_gift_type = widget.giftList!.receiveGiftType!;
+    });
   }
 
   @override
@@ -128,10 +188,8 @@ class _MyZiliaoPageState extends State<MyZiliaoPage> {
                 GestureDetector(
                   onTap: (() {
                     if (MyUtils.checkClick()) {
-                      if (MyUtils.checkClick()) {
-                        MyUtils.goTransparentPageCom(context,
-                            WallPage(uid: sp.getString('user_id').toString()));
-                      }
+                      MyUtils.goTransparentPageCom(context,
+                          WallPage(uid: sp.getString('user_id').toString()));
                     }
                   }),
                   child: Container(
@@ -235,7 +293,7 @@ class _MyZiliaoPageState extends State<MyZiliaoPage> {
                     ScreenUtil().setHeight(40), ScreenUtil().setHeight(40)),
                 WidgetUtils.commonSizedBox(0, 10),
                 WidgetUtils.onlyText(
-                    age.toString(),
+                    '${widget.userInfo!.age as int}岁',
                     StyleUtils.getCommonTextStyle(
                         color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
               ],
@@ -251,7 +309,7 @@ class _MyZiliaoPageState extends State<MyZiliaoPage> {
                     ScreenUtil().setHeight(40), ScreenUtil().setHeight(40)),
                 WidgetUtils.commonSizedBox(0, 10),
                 WidgetUtils.onlyText(
-                    city.isEmpty ? '未知' : city,
+                    widget.userInfo!.city!.isEmpty ? '外太空' : widget.userInfo!.city!,
                     StyleUtils.getCommonTextStyle(
                         color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
               ],
@@ -267,7 +325,7 @@ class _MyZiliaoPageState extends State<MyZiliaoPage> {
                   fontSize: ScreenUtil().setSp(28))),
           WidgetUtils.commonSizedBox(10, 0),
           WidgetUtils.onlyText(
-              description,
+              widget.userInfo!.description!,
               StyleUtils.getCommonTextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.w600,
@@ -292,81 +350,4 @@ class _MyZiliaoPageState extends State<MyZiliaoPage> {
     );
   }
 
-  /// 个人主页
-  Future<void> doPostMyIfon() async {
-    Loading.show(MyConfig.successTitle);
-    Map<String, dynamic> params = <String, dynamic>{
-      'uid': sp.getString('user_id')
-    };
-    try {
-      myHomeBean bean = await DataUtils.postMyHome(params);
-      switch (bean.code) {
-        case MyHttpConfig.successCode:
-          list_p.clear();
-          list_a.clear();
-          setState(() {
-            sp.setString("user_headimg", bean.data!.userInfo!.avatarUrl!);
-            headImg = bean.data!.userInfo!.avatarUrl!;
-            gender = bean.data!.userInfo!.gender as int;
-            nickName = bean.data!.userInfo!.nickname!;
-            userNumber = bean.data!.userInfo!.number.toString();
-            voice_card = bean.data!.userInfo!.voiceCardUrl!;
-            is_pretty = bean.data!.userInfo!.isPretty as int;
-            age = bean.data!.userInfo!.age as int;
-            constellation = bean.data!.userInfo!.constellation!;
-            if (bean.data!.userInfo!.constellation! == '白羊座') {
-              xzUrl = 'assets/images/xz/baiyang.png';
-            } else if (bean.data!.userInfo!.constellation! == '处女座') {
-              xzUrl = 'assets/images/xz/chunv.png';
-            } else if (bean.data!.userInfo!.constellation! == '金牛座') {
-              xzUrl = 'assets/images/xz/jinniu.png';
-            } else if (bean.data!.userInfo!.constellation! == '巨蟹座') {
-              xzUrl = 'assets/images/xz/juxie.png';
-            } else if (bean.data!.userInfo!.constellation! == '摩羯座') {
-              xzUrl = 'assets/images/xz/mojie.png';
-            } else if (bean.data!.userInfo!.constellation! == '射手座') {
-              xzUrl = 'assets/images/xz/sheshou.png';
-            } else if (bean.data!.userInfo!.constellation! == '狮子座') {
-              xzUrl = 'assets/images/xz/shizi.png';
-            } else if (bean.data!.userInfo!.constellation! == '双鱼座') {
-              xzUrl = 'assets/images/xz/shuangyu.png';
-            } else if (bean.data!.userInfo!.constellation! == '双子座') {
-              xzUrl = 'assets/images/xz/shuangzi.png';
-            } else if (bean.data!.userInfo!.constellation! == '水瓶座') {
-              xzUrl = 'assets/images/xz/shuiping.png';
-            } else if (bean.data!.userInfo!.constellation! == '天秤座') {
-              xzUrl = 'assets/images/xz/tiancheng.png';
-            } else if (bean.data!.userInfo!.constellation! == '天蝎座') {
-              xzUrl = 'assets/images/xz/tianxie.png';
-            }
-            city = bean.data!.userInfo!.city!;
-            description = bean.data!.userInfo!.description!;
-            if (bean.data!.userInfo!.photoId!.isNotEmpty) {
-              list_p = bean.data!.userInfo!.photoUrl!;
-            }
-            for(int i = 0; i < bean.data!.userInfo!.photoUrl!.length; i++) {
-              imgList.add(bean.data!.userInfo!.photoUrl![i].toString());
-            }
-            if (bean.data!.giftList!.receiveGift!.isNotEmpty) {
-              list_a = bean.data!.giftList!.receiveGift!;
-            }
-            all_gift_type = bean.data!.giftList!.allGiftType!;
-            receive_gift_type = bean.data!.giftList!.receiveGiftType!;
-          });
-          break;
-        case MyHttpConfig.errorloginCode:
-          // ignore: use_build_context_synchronously
-          MyUtils.jumpLogin(context);
-          break;
-        default:
-          MyToastUtils.showToastBottom(bean.msg!);
-          break;
-      }
-      Loading.dismiss();
-    } catch (e) {
-      LogE('错误信息2 ${e.toString()}');
-      Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
-    }
-  }
 }

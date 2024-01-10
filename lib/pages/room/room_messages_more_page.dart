@@ -143,7 +143,9 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
       'nickName': widget.nickName,
       'content': '送出$info个V豆',
       'headImg': myHeadImg,
+      'headNetImg': sp.getString('user_headimg').toString(),
       'otherHeadImg': otherHeadImg,
+      'otherHeadNetImg': widget.otherImg,
       'add_time': DateTime.now().millisecondsSinceEpoch,
       'type': 6,
       'number': 0,
@@ -156,7 +158,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
     await databaseHelper.insertData('messageSLTable', params);
     // 获取所有数据
     List<Map<String, dynamic>> result = await db.query('messageSLTable',
-        columns: null, whereArgs: [combineID], where: 'combineID = ?');
+        columns: null, whereArgs: [combineID, sp.getString('user_id')], where: 'combineID = ? and uid = ?');
     setState(() {
       allData2 = result;
       length = allData2.length;
@@ -220,8 +222,9 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
               ScreenUtil().setHeight(10), ScreenUtil().setHeight(10)),
           Row(
             children: [
-              WidgetUtils.CircleImageAss(
-                  60.h, 60.h, 30.h, allData2[i]['headImg']),
+              WidgetUtils.commonSizedBox(20.h, 10.h),
+              WidgetUtils.CircleImageAssNet(
+                  60.h, 60.h, 30.h, allData2[i]['otherHeadImg'], allData2[i]['otherHeadNetImg']),
               WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(10)),
               // 6v豆红包
               allData2[i]['type'] == 6 ? SizedBox(
@@ -461,8 +464,9 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                 ),
               ),
               WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(10)),
-              WidgetUtils.CircleImageAss(
-                  60.h, 60.h, 30.h, allData2[i]['otherHeadImg']),
+              WidgetUtils.CircleImageAssNet(
+                  60.h, 60.h, 30.h, allData2[i]['headImg'], allData2[i]['headNetImg']),
+              WidgetUtils.commonSizedBox(20.h, 10.h),
             ],
           ),
           WidgetUtils.commonSizedBox(20.h, ScreenUtil().setHeight(10)),
@@ -502,197 +506,219 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
     return Scaffold(
       resizeToAvoidBottomInset: false, // 解决键盘顶起页面
       backgroundColor: Colors.transparent,
-      body: Column(
-        children: [
-          Expanded(
-            child: GestureDetector(
-              onTap: (() {
-                if (MyUtils.checkClick()) {
-                  Navigator.pop(context);
-                }
-              }),
-              child: Container(
-                height: double.infinity,
-                width: double.infinity,
-                color: Colors.transparent,
-              ),
-            ),
-          ),
-          Container(
-            height: ScreenUtil().setHeight(856),
-            decoration: const BoxDecoration(
-              //设置Container修饰
-              image: DecorationImage(
-                //背景图片修饰
-                image: AssetImage("assets/images/room_tc1.png"),
-                fit: BoxFit.fill, //覆盖
-              ),
-            ),
-            child: Stack(
-              alignment: Alignment.bottomCenter,
-              children: [
-                Column(
-                  children: [
-                    /// 头部展示
-                    SizedBox(
-                      height: ScreenUtil().setHeight(80),
-                      child: Row(
-                        children: [
-                          WidgetUtils.commonSizedBox(0, 20),
-                          WidgetUtils.showImages(
-                              'assets/images/room_message_left.png',
-                              ScreenUtil().setHeight(22),
-                              ScreenUtil().setHeight(13)),
-                          WidgetUtils.commonSizedBox(0, 20),
-                          WidgetUtils.onlyText(
-                              widget.nickName,
-                              StyleUtils.getCommonTextStyle(
-                                  color: MyColors.roomTCWZ2,
-                                  fontSize: ScreenUtil().setSp(28))),
-                          const Expanded(child: Text('')),
-                          GestureDetector(
-                            onTap: (() {
-                              if (MyUtils.checkClick()) {
-                                doPostFollow();
-                              }
-                            }),
-                            child: SizedBox(
-                              width: ScreenUtil().setHeight(80),
-                              height: ScreenUtil().setHeight(38),
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  WidgetUtils.showImagesFill(
-                                      'assets/images/room_shoucang.png',
-                                      double.infinity,
-                                      double.infinity),
-                                  Container(
-                                    width: ScreenUtil().setHeight(80),
-                                    height: ScreenUtil().setHeight(38),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      isGZ == '0' ? '关注' : '取关',
-                                      style: StyleUtils.getCommonTextStyle(
-                                          color: Colors.white,
-                                          fontSize: ScreenUtil().setSp(21)),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                          WidgetUtils.commonSizedBox(0, 20),
-                        ],
-                      ),
-                    ),
-                    length != 0
-                        ? Expanded(
-                            child: Container(
-                              height: double.infinity,
-                              color: MyColors.roomMessageBlackBG,
-                              padding: EdgeInsets.only(bottom: 120.h),
-                              child: ListView.builder(
-                                padding: EdgeInsets.only(
-                                    top: ScreenUtil().setHeight(10), bottom: 120.h),
-                                itemBuilder: chatWidget,
-                                itemCount: allData2.length,
-                              ),
-                            ),
-                          )
-                        : const Text('')
-                  ],
-                ),
-                Container(
-                  height: 122.h,
+      body: WillPopScope(
+        onWillPop: () async {
+          //这里可以响应物理返回键
+          listen.cancel();
+          listenHB.cancel();
+          eventBus.fire(SubmitButtonBack(title: '厅内聊天返回'));
+          Navigator.of(context).pop();
+          return false;
+        },
+        child: Column(
+          children: [
+            Expanded(
+              child: GestureDetector(
+                onTap: (() {
+                  if (MyUtils.checkClick()) {
+                    //这里可以响应物理返回键
+                    listen.cancel();
+                    listenHB.cancel();
+                    eventBus.fire(SubmitButtonBack(title: '厅内聊天返回'));
+                    Navigator.of(context).pop();
+                  }
+                }),
+                child: Container(
+                  height: double.infinity,
                   width: double.infinity,
-                  decoration: const BoxDecoration(
-                    //背景
-                    color: MyColors.roomXZ1,
-                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(35),
-                        topRight: Radius.circular(35)),
-                  ),
-                  alignment: Alignment.center,
-                  child: Row(
+                  color: Colors.transparent,
+                ),
+              ),
+            ),
+            Container(
+              height: ScreenUtil().setHeight(856),
+              decoration: const BoxDecoration(
+                //设置Container修饰
+                image: DecorationImage(
+                  //背景图片修饰
+                  image: AssetImage("assets/images/room_tc1.png"),
+                  fit: BoxFit.fill, //覆盖
+                ),
+              ),
+              child: Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  Column(
                     children: [
-                      Expanded(
-                        child: Container(
-                          height: 78.h,
-                          width: double.infinity,
-                          margin: EdgeInsets.only(left: 20.h, right: 20.h),
-                          padding: EdgeInsets.only(left: 20.h, right: 20.h),
-                          decoration: const BoxDecoration(
-                            //背景
-                            color: MyColors.roomXZ2,
-                            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                            borderRadius: BorderRadius.all(Radius.circular(38)),
-                          ),
-                          child: TextField(
-                            textInputAction: TextInputAction.send,
-                            // 设置为发送按钮
-                            controller: controller,
-                            inputFormatters: [
-                              RegexFormatter(regex: MyUtils.regexFirstNotNull),
-                              LengthLimitingTextInputFormatter(25) //限制输入长度
-                            ],
-                            style: StyleUtils.loginTextStyle,
-                            onSubmitted: (value) {
-                              MyUtils.sendMessage(widget.otherUid, value);
-                              doPostSendUserMsg(value);
-                            },
-                            decoration: InputDecoration(
-                              // border: InputBorder.none,
-                              // labelText: "请输入用户名",
-                              // icon: Icon(Icons.people), //前面的图标
-                              hintText: '请输入信息...',
-                              hintStyle: StyleUtils.loginHintTextStyle,
+                      /// 头部展示
+                      SizedBox(
+                        height: ScreenUtil().setHeight(80),
+                        child: Row(
+                          children: [
+                            WidgetUtils.commonSizedBox(0, 20),
+                            GestureDetector(
+                              onTap: (() {
+                                if (MyUtils.checkClick()) {
+                                  //这里可以响应物理返回键
+                                  eventBus.fire(SubmitButtonBack(title: '厅内聊天返回'));
+                                  Navigator.of(context).pop();
+                                }
+                              }),
+                              child: WidgetUtils.showImages(
+                                  'assets/images/room_message_left.png',
+                                  ScreenUtil().setHeight(22),
+                                  ScreenUtil().setHeight(13)),
+                            ),
+                            WidgetUtils.commonSizedBox(0, 20),
+                            WidgetUtils.onlyText(
+                                widget.nickName,
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.roomTCWZ2,
+                                    fontSize: ScreenUtil().setSp(28))),
+                            const Expanded(child: Text('')),
+                            GestureDetector(
+                              onTap: (() {
+                                if (MyUtils.checkClick()) {
+                                  doPostFollow();
+                                }
+                              }),
+                              child: SizedBox(
+                                width: ScreenUtil().setHeight(80),
+                                height: ScreenUtil().setHeight(38),
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    WidgetUtils.showImagesFill(
+                                        'assets/images/room_shoucang.png',
+                                        double.infinity,
+                                        double.infinity),
+                                    Container(
+                                      width: ScreenUtil().setHeight(80),
+                                      height: ScreenUtil().setHeight(38),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        isGZ == '0' ? '关注' : '已关注',
+                                        style: StyleUtils.getCommonTextStyle(
+                                            color: Colors.white,
+                                            fontSize: ScreenUtil().setSp(21)),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            WidgetUtils.commonSizedBox(0, 20),
+                          ],
+                        ),
+                      ),
+                      length != 0
+                          ? Expanded(
+                              child: Container(
+                                height: double.infinity,
+                                color: MyColors.roomMessageBlackBG,
+                                margin: EdgeInsets.only(bottom: 130.h),
+                                child: ListView.builder(
+                                  itemBuilder: chatWidget,
+                                  controller: _scrollController,
+                                  itemCount: allData2.length,
+                                ),
+                              ),
+                            )
+                          : const Text('')
+                    ],
+                  ),
+                  Container(
+                    height: 122.h,
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      //背景
+                      color: MyColors.roomXZ1,
+                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(35),
+                          topRight: Radius.circular(35)),
+                    ),
+                    alignment: Alignment.center,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            height: 78.h,
+                            width: double.infinity,
+                            margin: EdgeInsets.only(left: 20.h, right: 20.h),
+                            padding: EdgeInsets.only(left: 20.h, right: 20.h),
+                            decoration: const BoxDecoration(
+                              //背景
+                              color: MyColors.roomXZ2,
+                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                              borderRadius: BorderRadius.all(Radius.circular(38)),
+                            ),
+                            child: TextField(
+                              textInputAction: TextInputAction.send,
+                              // 设置为发送按钮
+                              controller: controller,
+                              inputFormatters: [
+                                RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                                LengthLimitingTextInputFormatter(25) //限制输入长度
+                              ],
+                              style: StyleUtils.loginTextStyle,
+                              onSubmitted: (value) {
+                                MyUtils.sendMessage(widget.otherUid, value);
+                                doPostSendUserMsg(value);
+                              },
+                              decoration: InputDecoration(
+                                // border: InputBorder.none,
+                                // labelText: "请输入用户名",
+                                // icon: Icon(Icons.people), //前面的图标
+                                hintText: '请输入信息...',
+                                hintStyle: StyleUtils.loginHintTextStyle,
 
-                              contentPadding:
-                                  const EdgeInsets.only(top: 0, bottom: 0),
-                              border: const OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.transparent),
-                              ),
-                              enabledBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.transparent,
+                                contentPadding:
+                                    const EdgeInsets.only(top: 0, bottom: 0),
+                                border: const OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.transparent),
                                 ),
-                              ),
-                              disabledBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.transparent,
+                                enabledBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                  ),
                                 ),
-                              ),
-                              focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.transparent,
+                                disabledBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                  ),
                                 ),
+                                focusedBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                  ),
+                                ),
+                                // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
                               ),
-                              // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
                             ),
                           ),
                         ),
-                      ),
-                      GestureDetector(
-                        onTap: (() {
-                          if (MyUtils.checkClick()) {
-                            doPostPayPwd();
-                          }
-                        }),
-                        child: WidgetUtils.showImages(
-                            'assets/images/chat_hongbao.png',
-                            ScreenUtil().setHeight(45),
-                            ScreenUtil().setHeight(45)),
-                      ),
-                      WidgetUtils.commonSizedBox(0, 20.h),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
+                        GestureDetector(
+                          onTap: (() {
+                            if (MyUtils.checkClick()) {
+                              doPostPayPwd();
+                            }
+                          }),
+                          child: WidgetUtils.showImages(
+                              'assets/images/chat_hongbao.png',
+                              ScreenUtil().setHeight(45),
+                              ScreenUtil().setHeight(45)),
+                        ),
+                        WidgetUtils.commonSizedBox(0, 20.h),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -710,10 +736,10 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
       combineID = '${sp.getString('user_id').toString()}-${widget.otherUid}';
     }
     List<Map<String, dynamic>> result = await db.query('messageSLTable',
-        columns: null, whereArgs: [combineID], where: 'combineID = ?');
+        columns: null, whereArgs: [combineID, sp.getString('user_id')], where: 'combineID = ? and uid = ?');
 
     await db.update('messageSLTable', {'readStatus': 1},
-        where: 'combineID = ?', whereArgs: [combineID]);
+        whereArgs: [combineID, sp.getString('user_id')], where: 'combineID = ? and uid = ?');
 
     setState(() {
       allData2 = result;
@@ -758,7 +784,9 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
             'nickName': widget.nickName,
             'content': content,
             'headImg': myHeadImg,
+            'headNetImg': sp.getString('user_headimg').toString(),
             'otherHeadImg': otherHeadImg,
+            'otherHeadNetImg': widget.otherImg,
             'add_time': DateTime.now().millisecondsSinceEpoch,
             'type': 1,
             'number': 0,
@@ -777,32 +805,10 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
-        default:
-          Map<String, dynamic> params = <String, dynamic>{
-            'uid': sp.getString('user_id').toString(),
-            'otherUid': widget.otherUid,
-            'whoUid': sp.getString('user_id').toString(),
-            'combineID': combineID,
-            'nickName': widget.nickName,
-            'content': content,
-            'headImg': myHeadImg,
-            'otherHeadImg': otherHeadImg,
-            'add_time': DateTime.now().millisecondsSinceEpoch,
-            'type': 1,
-            'number': 0,
-            'status': 0,
-            'readStatus': 1,
-            'liveStatus': 0,
-            'loginStatus': 0,
-          };
-          // 插入数据
-          await databaseHelper.insertData('messageSLTable', params);
-          MyToastUtils.showToastBottom(bean.msg!);
-          break;
       }
       // 获取所有数据
       List<Map<String, dynamic>> result = await db.query('messageSLTable',
-          columns: null, whereArgs: [combineID], where: 'combineID = ?');
+          columns: null, whereArgs: [combineID, sp.getString('user_id')], where: 'combineID = ? and uid = ?');
       setState(() {
         allData2 = result;
         length = allData2.length;
@@ -862,7 +868,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
             setState(() {
               isGZ = '0';
             });
-            MyToastUtils.showToastBottom("取关成功！");
+            MyToastUtils.showToastBottom("取消关注成功！");
           }
           break;
         case MyHttpConfig.errorloginCode:

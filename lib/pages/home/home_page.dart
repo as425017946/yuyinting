@@ -1,12 +1,16 @@
 import 'dart:io';
-
 import 'package:auto_orientation/auto_orientation.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:ota_update/ota_update.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:yuyinting/colors/my_colors.dart';
+import 'package:yuyinting/pages/gongping/gp_hi_page.dart';
 import 'package:yuyinting/pages/home/paidui_page.dart';
 import 'package:yuyinting/pages/home/shoucang_page.dart';
 import 'package:yuyinting/pages/home/ts/ts_car_page.dart';
@@ -44,6 +48,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     // TODO: implement initState
+    doCheck();
     //更新身份
     setState(() {
       identity = sp.getString('user_identity').toString();
@@ -456,5 +461,164 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
+  }
+
+
+  /// 检查更新
+  //定义apk的名称，与下载进度dialog
+  String apkName = 'flutterApp.apk';
+  String progress = "";
+  late ProgressDialog pr;
+
+  Future<void> doCheck() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String appName = packageInfo.appName;
+    String packageName = packageInfo.packageName;
+    String version = packageInfo.version;
+    String buildNumber = packageInfo.buildNumber;
+    String deviceType = "";
+    // 应用名称
+    print("appName:${appName}");
+// 包名称
+    print("packageName:${packageName}");
+// 版本号
+    print("version:${version}");
+// 构建编号
+    print("buildNumber:${buildNumber}");
+    sp.setString('app_version', version);
+    if (Platform.isAndroid) {
+      deviceType = "Android";
+    } else {
+      deviceType = "ios";
+    }
+    var params = <String, dynamic>{
+      'packageName': packageName,
+      'system': deviceType,
+    };
+    // showUpdate(context,'1.0.1','http://18.163.74.49:8080/static/resource/uploads/app-release(01-03).apk','更新说明');
+    // try {
+    //   CheckoutBeanEntity checkVersionBeanEntity =
+    //   await DataUtils.checkVersion(params);
+    //   switch (checkVersionBeanEntity.code) {
+    //     case MyHttpConfig.successCode:
+    //       if (int.parse(buildNumber) <
+    //           checkVersionBeanEntity.data.versionCode) {
+    //         if (Platform.isAndroid) {
+    //           // ignore: use_build_context_synchronously
+    //           showUpdate(
+    //               context,
+    //               checkVersionBeanEntity.data.versionCode.toString(),
+    //               checkVersionBeanEntity.data.fileUrl,
+    //               checkVersionBeanEntity.data.description);
+    //         } else {
+    //           const url =
+    //               "https://itunes.apple.com/cn/app/id1380512641"; // id 后面的数字换成自己的应用 id 就行了
+    //           if (await canLaunch(url)) {
+    //             await launch(url, forceSafariVC: false);
+    //           } else {
+    //             throw 'Could not launch $url';
+    //           }
+    //         }
+    //       }
+    //       break;
+    //     default:
+    //       MyToastUtils.showToastBottom(checkVersionBeanEntity.msg);
+    //       break;
+    //   }
+    // } catch (e) {
+    //   // MyToastUtils.showToastBottom("网络异常");
+    // }
+  }
+
+  /// 显示更新内容
+  Future<void> showUpdate(
+      BuildContext context, String version, String url, String info) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, //设置为false，点击空白处弹窗不关
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: Text('检测到新版本 v$version'),
+          content: Text(
+            info,
+            style: const TextStyle(
+              fontSize: 15,
+            ),
+          ),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              child: Text('下次在说'),
+              onPressed: () {
+                // 在这里放置取消操作的代码
+                Navigator.of(context).pop(); // 关闭对话框
+              },
+            ),
+            CupertinoDialogAction(
+              child: Text('立即更新'),
+              onPressed: () {
+                // 在这里放置确认操作的代码
+                doUpdate(context, version, url);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  ///3.执行更新操作
+  doUpdate(BuildContext context, String version, String url) async {
+    //关闭更新内容提示框
+    Navigator.pop(context);
+    // downloadAndroid(url);
+    _updateVersion(url);
+  }
+
+  /// android app更新
+  void _updateVersion(String url) async {
+    pr = ProgressDialog(
+      context,
+      showLogs: true,
+      type: ProgressDialogType.download, //下载类型带下载进度
+      isDismissible: false, //点击外层不消失
+    );
+    if (!pr.isShowing()) {
+      pr.show();
+    }
+    try {
+      // destinationFilename 是对下载的apk进行重命名
+      OtaUpdate().execute(url, destinationFilename: 'lmkj.apk').listen(
+            (OtaEvent event) {
+          print('status:${event.status},value:${event.value}');
+          switch (event.status) {
+            case OtaStatus.DOWNLOADING: // 下载中
+              setState(() {
+                progress = event.value!;
+                double d = double.parse(progress);
+                pr.update(
+                  progress: d,
+                  message: "下载中，请稍后…",
+                );
+              });
+              break;
+            case OtaStatus.INSTALLING: //安装中
+              if (pr.isShowing()) {
+                pr.hide();
+              }
+              break;
+            case OtaStatus.PERMISSION_NOT_GRANTED_ERROR: // 权限错误
+              print('更新失败，请稍后再试');
+              if (pr.isShowing()) {
+                pr.hide();
+              }
+              break;
+            default: // 其他问题
+              break;
+          }
+        },
+      );
+    } catch (e) {
+      print('更新失败，请稍后再试');
+    }
   }
 }

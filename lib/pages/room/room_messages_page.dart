@@ -4,6 +4,8 @@ import 'package:sqflite/sqflite.dart';
 import 'package:yuyinting/pages/room/room_messages_more_page.dart';
 import '../../colors/my_colors.dart';
 import '../../db/DatabaseHelper.dart';
+import '../../main.dart';
+import '../../utils/event_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
@@ -19,12 +21,23 @@ class RoomMessagesPage extends StatefulWidget {
 class _RoomMessagesPageState extends State<RoomMessagesPage> {
   List<Map<String, dynamic>> listMessage = [];
   List<int> listRead = [];
-
+  var listen;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     doPostSystemMsgList();
+    listen = eventBus.on<SubmitButtonBack>().listen((event) {
+      if(event.title == '厅内聊天返回'){
+        doPostSystemMsgList();
+      }
+    });
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    listen.cancel();
   }
 
   /// 消息列表
@@ -51,13 +64,14 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
             margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
             width: double.infinity,
             height: ScreenUtil().setHeight(100),
+            color: Colors.transparent,
             child: Row(
               children: [
-                WidgetUtils.CircleImageAss(
+                WidgetUtils.CircleImageAssNet(
                     ScreenUtil().setHeight(90),
                     ScreenUtil().setHeight(90),
                     45.h,
-                    listMessage[i]['otherHeadImg']),
+                    listMessage[i]['otherHeadImg'],listMessage[i]['otherHeadNetImg'],),
                 WidgetUtils.commonSizedBox(0, 10),
                 Expanded(
                   child: Column(
@@ -157,56 +171,65 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       resizeToAvoidBottomInset: false,
-      body: Column(
-        children: [
-          Expanded(
-            child: GestureDetector(
-              onTap: (() {
-                if (MyUtils.checkClick()) {
-                  Navigator.pop(context);
-                }
-              }),
-              child: Container(
-                height: double.infinity,
-                width: double.infinity,
-                color: Colors.transparent,
+      body: WillPopScope(
+        onWillPop: () async {
+          //这里可以响应物理返回键
+          eventBus.fire(SendMessageBack(type: 5, msgID: '0'));
+          Navigator.of(context).pop();
+          return true;
+        },
+        child: Column(
+          children: [
+            Expanded(
+              child: GestureDetector(
+                onTap: (() {
+                  if (MyUtils.checkClick()) {
+                    eventBus.fire(SendMessageBack(type: 5, msgID: '0'));
+                    Navigator.pop(context);
+                  }
+                }),
+                child: Container(
+                  height: double.infinity,
+                  width: double.infinity,
+                  color: Colors.transparent,
+                ),
               ),
             ),
-          ),
-          Container(
-            height: ScreenUtil().setHeight(856),
-            decoration: const BoxDecoration(
-              //设置Container修饰
-              image: DecorationImage(
-                //背景图片修饰
-                image: AssetImage("assets/images/room_tc1.png"),
-                fit: BoxFit.fill, //覆盖
+            Container(
+              height: ScreenUtil().setHeight(856),
+              decoration: const BoxDecoration(
+                //设置Container修饰
+                image: DecorationImage(
+                  //背景图片修饰
+                  image: AssetImage("assets/images/room_tc1.png"),
+                  fit: BoxFit.fill, //覆盖
+                ),
               ),
-            ),
-            child: Column(
-              children: [
-                WidgetUtils.commonSizedBox(15, 0),
-                WidgetUtils.onlyTextCenter(
-                    '消息列表',
-                    StyleUtils.getCommonTextStyle(
-                        color: MyColors.roomTCWZ2,
-                        fontSize: ScreenUtil().setSp(32))),
+              child: Column(
+                children: [
+                  WidgetUtils.commonSizedBox(15, 0),
+                  WidgetUtils.onlyTextCenter(
+                      '消息列表',
+                      StyleUtils.getCommonTextStyle(
+                          color: MyColors.roomTCWZ2,
+                          fontSize: ScreenUtil().setSp(32))),
 
-                /// 展示在线用户
-                Expanded(
-                  child: listMessage.isNotEmpty
-                      ? ListView.builder(
-                          padding:
-                              EdgeInsets.only(top: ScreenUtil().setHeight(10)),
-                          itemBuilder: _itemTuiJian,
-                          itemCount: listMessage.length,
-                        )
-                      : const Text(''),
-                )
-              ],
-            ),
-          )
-        ],
+                  /// 展示在线用户
+                  Expanded(
+                    child: listMessage.isNotEmpty
+                        ? ListView.builder(
+                            padding:
+                                EdgeInsets.only(top: ScreenUtil().setHeight(10)),
+                            itemBuilder: _itemTuiJian,
+                            itemCount: listMessage.length,
+                          )
+                        : const Text(''),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -221,7 +244,7 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
     // 执行查询操作
     List<Map<String, dynamic>> result = await db.query(
       'messageSLTable',
-      columns: ['MAX(id) AS id'],
+      columns: ['MAX(id) AS id', 'combineID'],
       groupBy: 'combineID',
     );
     // 查询出来后在查询单条信息具体信息
@@ -240,7 +263,7 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
         List.generate(listId.length, (index) => '?').join(',');
     // 构建查询语句和参数
     String query =
-        'SELECT * FROM messageSLTable WHERE id IN ($placeholders) order by add_time desc';
+        'SELECT * FROM messageSLTable WHERE id IN ($placeholders)  and uid = ${sp.getString('user_id')}  order by add_time desc';
     List<dynamic> args = listId;
     // 执行查询
     List<Map<String, dynamic>> result2 = await db.rawQuery(query, args);
@@ -260,7 +283,7 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
     });
     for (int i = 0; i < listMessage.length; i++) {
       String query =
-          "SELECT * FROM messageSLTable WHERE  combineID = '${listMessage[i]['combineID']}' and readStatus = 0";
+          "SELECT * FROM messageSLTable WHERE  combineID = '${listMessage[i]['combineID']}' and readStatus = 0 and uid = ${sp.getString('user_id')} ";
       List<Map<String, dynamic>> result3 = await db.rawQuery(query);
       if (result3.isNotEmpty) {
         setState(() {

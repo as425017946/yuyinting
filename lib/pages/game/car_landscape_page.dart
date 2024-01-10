@@ -27,6 +27,7 @@ import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../../widget/OptionGridView.dart';
 import '../../widget/queren_h_page.dart';
+import '../mine/qianbao/dou_pay_page.dart';
 import 'car/car_guize_h_page.dart';
 import 'car/car_h_shop_page.dart';
 import 'car/lishi_h_page.dart';
@@ -1524,84 +1525,97 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
                             Column(
                               children: [
                                 WidgetUtils.commonSizedBox(10, 0),
-                                Container(
-                                  height: 20,
-                                  margin: const EdgeInsets.only(right: 5),
-                                  padding: const EdgeInsets.only(
-                                      left: 5, right: 5, top: 1, bottom: 1),
-                                  //边框设置
-                                  decoration: const BoxDecoration(
-                                    //背景
-                                    color: MyColors.zpJLHX,
-                                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                    borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      WidgetUtils.commonSizedBox(0, 5),
-                                      WidgetUtils.showImages(
-                                          'assets/images/car_mogubi.png',
-                                          12,
-                                          12),
-                                      WidgetUtils.commonSizedBox(
-                                          0, 2),
-                                      WidgetUtils.onlyTextCenter(
-                                          sp.getString('car_mogu2').toString(),
-                                          StyleUtils.getCommonTextStyle(
-                                              color: Colors.white,
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.w600)),
-                                      WidgetUtils.commonSizedBox(
-                                          0, 5),
-                                      Opacity(
-                                        opacity: 0.8,
-                                        child: Container(
-                                          height: 10,
-                                          width: 1,
-                                          color: MyColors.home_hx,
+                                GestureDetector(
+                                  onTap: ((){
+                                    // MyUtils.goTransparentPageCom(context, DouPayPage(shuliang: sp.getString('car_jinbi2').toString(),));
+                                  }),
+                                  child: Container(
+                                    height: 20,
+                                    margin: const EdgeInsets.only(right: 5),
+                                    padding: const EdgeInsets.only(
+                                        left: 5, right: 5, top: 1, bottom: 1),
+                                    //边框设置
+                                    decoration: const BoxDecoration(
+                                      //背景
+                                      color: MyColors.zpJLHX,
+                                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                      borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        WidgetUtils.commonSizedBox(0, 5),
+                                        WidgetUtils.showImages(
+                                            'assets/images/car_mogubi.png',
+                                            12,
+                                            12),
+                                        WidgetUtils.commonSizedBox(
+                                            0, 2),
+                                        WidgetUtils.onlyTextCenter(
+                                            sp.getString('car_mogu2').toString(),
+                                            StyleUtils.getCommonTextStyle(
+                                                color: Colors.white,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w600)),
+                                        WidgetUtils.commonSizedBox(
+                                            0, 5),
+                                        Opacity(
+                                          opacity: 0.8,
+                                          child: Container(
+                                            height: 10,
+                                            width: 1,
+                                            color: MyColors.home_hx,
+                                          ),
                                         ),
-                                      ),
-                                      WidgetUtils.commonSizedBox(
-                                          0, 5),
-                                      WidgetUtils.showImages(
-                                          'assets/images/mine_wallet_dd.png',
-                                          12,
-                                          12),
-                                      WidgetUtils.commonSizedBox(
-                                          0, 5),
-                                      WidgetUtils.onlyTextCenter(
-                                          sp.getString('car_jinbi2').toString(),
-                                          StyleUtils.getCommonTextStyle(
-                                              color: Colors.white,
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.w600)),
-                                      WidgetUtils.commonSizedBox(
-                                          0, 5),
-                                      Opacity(
-                                        opacity: 0.8,
-                                        child: Container(
-                                          height: 10,
-                                          width: 1,
-                                          color: MyColors.home_hx,
-                                        ),
-                                      ),
-                                      WidgetUtils.commonSizedBox(
-                                          0, 5),
-                                      WidgetUtils.showImages(
-                                          'assets/images/mine_wallet_zz.png',
-                                          12,
-                                          12),
-                                      WidgetUtils.commonSizedBox(
-                                          0, 5),
-                                      WidgetUtils.onlyTextCenter(
-                                          sp.getString('car_zuanshi2').toString(),
-                                          StyleUtils.getCommonTextStyle(
-                                              color: Colors.white,
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.w600)),
-                                      WidgetUtils.commonSizedBox(
-                                          0, 5),
-                                    ],
+                                        WidgetUtils.commonSizedBox(
+                                            0, 5),
+                                        WidgetUtils.showImages(
+                                            'assets/images/mine_wallet_dd.png',
+                                            12,
+                                            12),
+                                        WidgetUtils.commonSizedBox(
+                                            0, 5),
+                                        WidgetUtils.onlyTextCenter(
+                                            sp.getString('car_jinbi2').toString(),
+                                            StyleUtils.getCommonTextStyle(
+                                                color: Colors.white,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w600)),
+                                        // WidgetUtils.commonSizedBox(0, 2),
+                                        // const Image(
+                                        //   image: AssetImage(
+                                        //       'assets/images/wallet_more.png'),
+                                        //   width: 8,
+                                        //   height: 8,
+                                        // ),
+                                        WidgetUtils.commonSizedBox(
+                                            0, 5),
+                                        // 钻石处先隐藏
+                                        // Opacity(
+                                        //   opacity: 0.8,
+                                        //   child: Container(
+                                        //     height: 10,
+                                        //     width: 1,
+                                        //     color: MyColors.home_hx,
+                                        //   ),
+                                        // ),
+                                        // WidgetUtils.commonSizedBox(
+                                        //     0, 5),
+                                        // WidgetUtils.showImages(
+                                        //     'assets/images/mine_wallet_zz.png',
+                                        //     12,
+                                        //     12),
+                                        // WidgetUtils.commonSizedBox(
+                                        //     0, 5),
+                                        // WidgetUtils.onlyTextCenter(
+                                        //     sp.getString('car_zuanshi2').toString(),
+                                        //     StyleUtils.getCommonTextStyle(
+                                        //         color: Colors.white,
+                                        //         fontSize: 10,
+                                        //         fontWeight: FontWeight.w600)),
+                                        // WidgetUtils.commonSizedBox(
+                                        //     0, 5),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ],
@@ -1811,8 +1825,12 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
                 // 减去花费的V豆
                 jinbi =
                 '${(double.parse(jinbi) - int.parse(xiazhujine.toString()))}';
-                //保留2位小数
-                jinbi2 = '${(double.parse(jinbi) / 10000).toStringAsFixed(2)}w';
+                if(double.parse(jinbi) > 10000){
+                  //保留2位小数
+                  jinbi2 = '${(double.parse(jinbi) / 10000).toStringAsFixed(2)}w';
+                }else{
+                  jinbi2 = jinbi;
+                }
               } else {
                 jinbi = sp.getString('car_jinbi').toString();
                 jinbi = (double.parse(jinbi) - int.parse(xiazhujine.toString()))
@@ -1827,9 +1845,13 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
                 // 减去花费的V豆
                 zuanshi =
                 '${(double.parse(zuanshi) - int.parse(xiazhujine.toString()))}';
-                //保留2位小数
-                zuanshi2 =
-                '${(double.parse(zuanshi) / 10000).toStringAsFixed(2)}w';
+                if(double.parse(zuanshi) > 10000){
+                  //保留2位小数
+                  zuanshi2 =
+                  '${(double.parse(zuanshi) / 10000).toStringAsFixed(2)}w';
+                }else{
+                  zuanshi2 = zuanshi;
+                }
               } else {
                 zuanshi = sp.getString('car_zuanshi').toString();
                 zuanshi =
@@ -1846,9 +1868,13 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
                 // 减去花费的V豆
                 mogubi =
                 '${(double.parse(mogubi) - int.parse(xiazhujine.toString()))}';
-                //保留2位小数
-                mogubi2 =
-                '${(double.parse(mogubi) / 10000).toStringAsFixed(2)}w';
+                if(double.parse(mogubi) > 10000){
+                  //保留2位小数
+                  mogubi2 =
+                  '${(double.parse(mogubi) / 10000).toStringAsFixed(2)}w';
+                }else{
+                  mogubi2 = mogubi;
+                }
               } else {
                 mogubi = sp.getString('car_mogu').toString();
                 mogubi =

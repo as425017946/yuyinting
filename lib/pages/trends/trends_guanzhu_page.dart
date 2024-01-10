@@ -46,7 +46,6 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
   List<ListDT> _list = [];
   List<String> imgList = [];
 
-
   List<ListTJ> _list_tj = [];
   List<String> imgListUrl = [];
   List<BannerTJ> imgList_tj = [];
@@ -160,13 +159,18 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
             children: [
               GestureDetector(
                 onTap: (() {
-                  if(MyUtils.checkClick()){
+                  if (MyUtils.checkClick()) {
                     // 如果点击的是自己，进入自己的主页
-                    if(sp.getString('user_id').toString() == _list[i].uid.toString()){
+                    if (sp.getString('user_id').toString() ==
+                        _list[i].uid.toString()) {
                       MyUtils.goTransparentRFPage(context, const MyInfoPage());
-                    }else{
+                    } else {
                       sp.setString('other_id', _list[i].uid.toString());
-                      MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[i].uid.toString(),));
+                      MyUtils.goTransparentRFPage(
+                          context,
+                          PeopleInfoPage(
+                            otherId: _list[i].uid.toString(),
+                          ));
                     }
                   }
                 }),
@@ -206,7 +210,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
                                 : MyColors.dtPink,
                             //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                             borderRadius:
-                            const BorderRadius.all(Radius.circular(15.0)),
+                                const BorderRadius.all(Radius.circular(15.0)),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -235,44 +239,56 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
                 ],
               ),
               const Expanded(child: Text('')),
-              _list[i].uid.toString() == sp.getString('user_id') ? const Text('') :
-              _list[i].isHi == 0
-                  ? GestureDetector(
-                onTap: (() {
-                  MyUtils.goTransparentPageCom(
-                      context,
-                      TrendsHiPage(
-                          imgUrl: _list[i].avatar!,
-                          uid: _list[i].uid.toString(),
-                          index: i));
-                }),
-                child: WidgetUtils.showImages(
-                    'assets/images/trends_hi.png', 124, 59),
-              )
-                  : GestureDetector(
-                onTap: (() {
-                  MyUtils.goTransparentRFPage(context, ChatPage(nickName: _list[i].nickname!, otherUid: _list[i].uid.toString(), otherImg: _list[i].avatar!));
-                }),
-                child: WidgetUtils.myContainer(
-                    ScreenUtil().setHeight(45),
-                    ScreenUtil().setHeight(100),
-                    Colors.white,
-                    MyColors.homeTopBG,
-                    '私信',
-                    ScreenUtil().setSp(25),
-                    MyColors.homeTopBG),
-              ),
+              _list[i].uid.toString() == sp.getString('user_id')
+                  ? const Text('')
+                  : _list[i].isHi == 0
+                      ? GestureDetector(
+                          onTap: (() {
+                            if (MyUtils.checkClick()) {
+                              MyUtils.goTransparentPageCom(
+                                  context,
+                                  TrendsHiPage(
+                                      imgUrl: _list[i].avatar!,
+                                      uid: _list[i].uid.toString(),
+                                      index: i));
+                            }
+                          }),
+                          child: WidgetUtils.showImages(
+                              'assets/images/trends_hi.png', 124, 59),
+                        )
+                      : GestureDetector(
+                          onTap: (() {
+                            if (MyUtils.checkClick()) {
+                              MyUtils.goTransparentRFPage(
+                                  context,
+                                  ChatPage(
+                                      nickName: _list[i].nickname!,
+                                      otherUid: _list[i].uid.toString(),
+                                      otherImg: _list[i].avatar!));
+                            }
+                          }),
+                          child: WidgetUtils.myContainer(
+                              ScreenUtil().setHeight(45),
+                              ScreenUtil().setHeight(100),
+                              Colors.white,
+                              MyColors.homeTopBG,
+                              '私信',
+                              ScreenUtil().setSp(25),
+                              MyColors.homeTopBG),
+                        ),
             ],
           ),
         ),
         WidgetUtils.commonSizedBox(5, 0),
         GestureDetector(
           onTap: (() {
-            MyUtils.goTransparentRFPage(
-                context,
-                TrendsMorePage(
-                  note_id: _list[i].id.toString(),
-                ));
+            if (MyUtils.checkClick()) {
+              MyUtils.goTransparentRFPage(
+                  context,
+                  TrendsMorePage(
+                    note_id: _list[i].id.toString(),
+                  ));
+            }
           }),
           child: WidgetUtils.onlyText(
               _list[i].text!,
@@ -330,11 +346,13 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
             ),
             GestureDetector(
               onTap: (() {
-                MyUtils.goTransparentRFPage(
-                    context,
-                    TrendsMorePage(
-                      note_id: _list[i].id.toString(),
-                    ));
+                if (MyUtils.checkClick()) {
+                  MyUtils.goTransparentRFPage(
+                      context,
+                      TrendsMorePage(
+                        note_id: _list[i].id.toString(),
+                      ));
+                }
               }),
               child: WidgetUtils.showImages(
                   'assets/images/trends_message.png', 18, 18),
@@ -342,11 +360,13 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
             WidgetUtils.commonSizedBox(0, 5),
             GestureDetector(
               onTap: (() {
-                MyUtils.goTransparentRFPage(
-                    context,
-                    TrendsMorePage(
-                      note_id: _list[i].id.toString(),
-                    ));
+                if (MyUtils.checkClick()) {
+                  MyUtils.goTransparentRFPage(
+                      context,
+                      TrendsMorePage(
+                        note_id: _list[i].id.toString(),
+                      ));
+                }
               }),
               child: WidgetUtils.onlyText(
                   _list[i].comment == 0 ? '评论' : _list[i].comment.toString(),
@@ -363,7 +383,6 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
     );
   }
 
-
   Widget _itemsTuijian2(BuildContext context, int i) {
     return Column(
       children: [
@@ -375,13 +394,18 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
             children: [
               GestureDetector(
                 onTap: (() {
-                  if(MyUtils.checkClick()){
+                  if (MyUtils.checkClick()) {
                     // 如果点击的是自己，进入自己的主页
-                    if(sp.getString('user_id').toString() == _list_tj[i].uid.toString()){
+                    if (sp.getString('user_id').toString() ==
+                        _list_tj[i].uid.toString()) {
                       MyUtils.goTransparentRFPage(context, const MyInfoPage());
-                    }else{
+                    } else {
                       sp.setString('other_id', _list_tj[i].uid.toString());
-                      MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list_tj[i].uid.toString(),));
+                      MyUtils.goTransparentRFPage(
+                          context,
+                          PeopleInfoPage(
+                            otherId: _list_tj[i].uid.toString(),
+                          ));
                     }
                   }
                 }),
@@ -421,7 +445,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
                                 : MyColors.dtPink,
                             //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                             borderRadius:
-                            const BorderRadius.all(Radius.circular(15.0)),
+                                const BorderRadius.all(Radius.circular(15.0)),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -450,44 +474,56 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
                 ],
               ),
               const Expanded(child: Text('')),
-              _list_tj[i].uid.toString() == sp.getString('user_id') ? const Text('') :
-              _list_tj[i].isHi == 0
-                  ? GestureDetector(
-                onTap: (() {
-                  MyUtils.goTransparentPageCom(
-                      context,
-                      TrendsHiPage(
-                          imgUrl: _list_tj[i].avatar!,
-                          uid: _list_tj[i].uid.toString(),
-                          index: i));
-                }),
-                child: WidgetUtils.showImages(
-                    'assets/images/trends_hi.png', 124, 59),
-              )
-                  : GestureDetector(
-                onTap: (() {
-                  MyUtils.goTransparentRFPage(context, ChatPage(nickName: _list_tj[i].nickname!, otherUid: _list_tj[i].uid.toString(), otherImg: _list_tj[i].avatar!));
-                }),
-                child: WidgetUtils.myContainer(
-                    ScreenUtil().setHeight(45),
-                    ScreenUtil().setHeight(100),
-                    Colors.white,
-                    MyColors.homeTopBG,
-                    '私信',
-                    ScreenUtil().setSp(25),
-                    MyColors.homeTopBG),
-              ),
+              _list_tj[i].uid.toString() == sp.getString('user_id')
+                  ? const Text('')
+                  : _list_tj[i].isHi == 0
+                      ? GestureDetector(
+                          onTap: (() {
+                            if (MyUtils.checkClick()) {
+                              MyUtils.goTransparentPageCom(
+                                  context,
+                                  TrendsHiPage(
+                                      imgUrl: _list_tj[i].avatar!,
+                                      uid: _list_tj[i].uid.toString(),
+                                      index: i));
+                            }
+                          }),
+                          child: WidgetUtils.showImages(
+                              'assets/images/trends_hi.png', 124, 59),
+                        )
+                      : GestureDetector(
+                          onTap: (() {
+                            if (MyUtils.checkClick()) {
+                              MyUtils.goTransparentRFPage(
+                                  context,
+                                  ChatPage(
+                                      nickName: _list_tj[i].nickname!,
+                                      otherUid: _list_tj[i].uid.toString(),
+                                      otherImg: _list_tj[i].avatar!));
+                            }
+                          }),
+                          child: WidgetUtils.myContainer(
+                              ScreenUtil().setHeight(45),
+                              ScreenUtil().setHeight(100),
+                              Colors.white,
+                              MyColors.homeTopBG,
+                              '私信',
+                              ScreenUtil().setSp(25),
+                              MyColors.homeTopBG),
+                        ),
             ],
           ),
         ),
         WidgetUtils.commonSizedBox(5, 0),
         GestureDetector(
           onTap: (() {
-            MyUtils.goTransparentRFPage(
-                context,
-                TrendsMorePage(
-                  note_id: _list_tj[i].id.toString(),
-                ));
+            if (MyUtils.checkClick()) {
+              MyUtils.goTransparentRFPage(
+                  context,
+                  TrendsMorePage(
+                    note_id: _list_tj[i].id.toString(),
+                  ));
+            }
           }),
           child: WidgetUtils.onlyText(
               _list_tj[i].text!,
@@ -545,11 +581,13 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
             ),
             GestureDetector(
               onTap: (() {
-                MyUtils.goTransparentRFPage(
-                    context,
-                    TrendsMorePage(
-                      note_id: _list_tj[i].id.toString(),
-                    ));
+                if (MyUtils.checkClick()) {
+                  MyUtils.goTransparentRFPage(
+                      context,
+                      TrendsMorePage(
+                        note_id: _list_tj[i].id.toString(),
+                      ));
+                }
               }),
               child: WidgetUtils.showImages(
                   'assets/images/trends_message.png', 18, 18),
@@ -557,14 +595,18 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
             WidgetUtils.commonSizedBox(0, 5),
             GestureDetector(
               onTap: (() {
-                MyUtils.goTransparentRFPage(
-                    context,
-                    TrendsMorePage(
-                      note_id: _list_tj[i].id.toString(),
-                    ));
+                if (MyUtils.checkClick()) {
+                  MyUtils.goTransparentRFPage(
+                      context,
+                      TrendsMorePage(
+                        note_id: _list_tj[i].id.toString(),
+                      ));
+                }
               }),
               child: WidgetUtils.onlyText(
-                  _list_tj[i].comment == 0 ? '评论' : _list_tj[i].comment.toString(),
+                  _list_tj[i].comment == 0
+                      ? '评论'
+                      : _list_tj[i].comment.toString(),
                   StyleUtils.getCommonTextStyle(
                     color: Colors.grey,
                     fontSize: ScreenUtil().setSp(21),
@@ -919,50 +961,50 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
           children: [
             length == 0
                 ? SmartRefresher(
-                  header: MyUtils.myHeader(),
-                  footer: MyUtils.myFotter(),
-                  controller: _refreshController,
-                  enablePullUp: true,
-                  onLoading: _onLoading,
-                  onRefresh: _onRefresh,
-                  child: SingleChildScrollView(
-                    child: Wrap(
-                      alignment: WrapAlignment.center,
-                      children: [
-                        WidgetUtils.showImages(
-                            'assets/images/trends_no.jpg',
-                            ScreenUtil().setHeight(242),
-                            ScreenUtil().setWidth(221)),
-                        WidgetUtils.onlyTextBottom(
-                            '您还没有关注的人',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.homeNoHave,
-                                fontSize: ScreenUtil().setSp(32))),
-                        WidgetUtils.commonSizedBox(50, 0),
-                        Row(
-                          children: [
-                            Expanded(child: WidgetUtils.myLine()),
-                            WidgetUtils.commonSizedBox(0, 10),
-                            WidgetUtils.onlyTextBottom(
-                                '为您推荐一些有趣的内容',
-                                StyleUtils.getCommonTextStyle(
-                                    color: MyColors.homeNoHave,
-                                    fontSize: ScreenUtil().setSp(25))),
-                            WidgetUtils.commonSizedBox(0, 10),
-                            Expanded(child: WidgetUtils.myLine()),
-                          ],
-                        ),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          padding: const EdgeInsets.all(20),
-                          itemBuilder: _itemsTuijian2,
-                          itemCount: _list_tj.length,
-                        )
-                      ],
+                    header: MyUtils.myHeader(),
+                    footer: MyUtils.myFotter(),
+                    controller: _refreshController,
+                    enablePullUp: true,
+                    onLoading: _onLoading,
+                    onRefresh: _onRefresh,
+                    child: SingleChildScrollView(
+                      child: Wrap(
+                        alignment: WrapAlignment.center,
+                        children: [
+                          WidgetUtils.showImages(
+                              'assets/images/trends_no.jpg',
+                              ScreenUtil().setHeight(242),
+                              ScreenUtil().setWidth(221)),
+                          WidgetUtils.onlyTextBottom(
+                              '您还没有关注的人',
+                              StyleUtils.getCommonTextStyle(
+                                  color: MyColors.homeNoHave,
+                                  fontSize: ScreenUtil().setSp(32))),
+                          WidgetUtils.commonSizedBox(50, 0),
+                          Row(
+                            children: [
+                              Expanded(child: WidgetUtils.myLine()),
+                              WidgetUtils.commonSizedBox(0, 10),
+                              WidgetUtils.onlyTextBottom(
+                                  '为您推荐一些有趣的内容',
+                                  StyleUtils.getCommonTextStyle(
+                                      color: MyColors.homeNoHave,
+                                      fontSize: ScreenUtil().setSp(25))),
+                              WidgetUtils.commonSizedBox(0, 10),
+                              Expanded(child: WidgetUtils.myLine()),
+                            ],
+                          ),
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            padding: const EdgeInsets.all(20),
+                            itemBuilder: _itemsTuijian2,
+                            itemCount: _list_tj.length,
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                )
+                  )
                 : SmartRefresher(
                     header: MyUtils.myHeader(),
                     footer: MyUtils.myFotter(),
@@ -1011,12 +1053,12 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
             if (bean.data!.list!.isNotEmpty) {
               _list = bean.data!.list!;
               length = _list.length;
-            }else{
+            } else {
               // 没有关注的人，需要请求推荐的接口
               doPostRecommendList("1");
 
-              if(page > 1){
-                if(bean.data!.list!.length < MyConfig.pageSize){
+              if (page > 1) {
+                if (bean.data!.list!.length < MyConfig.pageSize) {
                   _refreshController.loadNoData();
                 }
               }
@@ -1038,7 +1080,6 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
     }
   }
 
-
   /// 推荐动态列表
   Future<void> doPostRecommendList(is_refresh) async {
     Map<String, dynamic> params = <String, dynamic>{
@@ -1055,26 +1096,25 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
             if (page == 1) {
               _list_tj.clear();
             }
-            if(bean.data!.banner!.isNotEmpty){
+            if (bean.data!.banner!.isNotEmpty) {
               imgList_tj = bean.data!.banner!;
             }
             if (bean.data!.list!.isNotEmpty) {
-              for(int i =0; i < bean.data!.list!.length; i++){
+              for (int i = 0; i < bean.data!.list!.length; i++) {
                 _list_tj.add(bean.data!.list![i]);
               }
               LogE('推荐${_list_tj.length}');
-            }else{
-              if(page > 1){
-                if(bean.data!.list!.length < MyConfig.pageSize){
+            } else {
+              if (page > 1) {
+                if (bean.data!.list!.length < MyConfig.pageSize) {
                   _refreshController.loadNoData();
                 }
               }
             }
-
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -1087,6 +1127,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
+
   /// 点赞
   Future<void> doPostLike(note_id, index) async {
     LogE('点赞数据$note_id');
@@ -1098,7 +1139,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
       CommonBean bean = await DataUtils.postLike(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          if(length > 0){
+          if (length > 0) {
             int a = _list[index].like as int;
             setState(() {
               if (action == 'delete') {
@@ -1109,7 +1150,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
                 _list[index].like = a + 1;
               }
             });
-          }else{
+          } else {
             int a = _list_tj[index].like as int;
             setState(() {
               if (action == 'delete') {

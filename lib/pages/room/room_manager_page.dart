@@ -585,7 +585,20 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
         quality: 50,
         rotate: 0, // 旋转角度
       );
-    }else{
+    }else if (path.toString().contains('.svga') ||
+        path.toString().contains('.SVGA')) {
+      MyToastUtils.showToastBottom('不支持svga格式图片上传');
+      return;
+    } else if (path.toString().contains('.webp') ||
+        path.toString().contains('.WEBP')) {
+      targetPath =
+      "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.webp";
+      result = await FlutterImageCompress.compressAndGetFile(
+        path, targetPath,
+        quality: 50,
+        rotate: 0, // 旋转角度
+      );
+    } else{
       targetPath = "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.png";
       result = await FlutterImageCompress.compressAndGetFile(
         path, targetPath,

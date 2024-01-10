@@ -85,7 +85,7 @@ class _WalletPageState extends State<WalletPage> {
                                 const Expanded(child: Text('')),
                                 Row(
                                   children: [
-                                    WidgetUtils.onlyText('豆', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(38))),
+                                    WidgetUtils.onlyText('V豆', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(38))),
                                     const Expanded(child: Text('')),
                                     WidgetUtils.onlyText(jinbi, StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(56), fontWeight: FontWeight.w600)),
                                     WidgetUtils.commonSizedBox(0, 15),
@@ -158,7 +158,7 @@ class _WalletPageState extends State<WalletPage> {
                                 const Expanded(child: Text('')),
                                 Row(
                                   children: [
-                                    WidgetUtils.onlyText('币', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(38))),
+                                    WidgetUtils.onlyText('V币', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(38))),
                                     const Expanded(child: Text('')),
                                     WidgetUtils.onlyText(shouyi, StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(56), fontWeight: FontWeight.w600)),
                                     WidgetUtils.commonSizedBox(0, 15),
@@ -231,101 +231,101 @@ class _WalletPageState extends State<WalletPage> {
                     ),
                   ),
                   WidgetUtils.commonSizedBox(20, 20),
-                  /// 钻石
-                  SizedBox(
-                    height: ScreenUtil().setHeight(250),
-                    child: Stack(
-                      alignment: Alignment.bottomRight,
-                      children: [
-                        WidgetUtils.showImagesFill('assets/images/mine_wallet_zbj.jpg', ScreenUtil().setHeight(250), double.infinity),
-                        Row(
-                          children: [
-                            WidgetUtils.commonSizedBox(0, 20),
-                            Container(
-                              height: 100.h,
-                              width: 100.h,
-                              alignment: Alignment.center,
-                              //边框设置
-                              decoration: BoxDecoration(
-                                //背景
-                                color: Colors.white,
-                                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                borderRadius: BorderRadius.all(Radius.circular(50.h)),
-                              ),
-                              child: WidgetUtils.showImages('assets/images/mine_wallet_zz.png', 650.h, 65.h),
-                            ),
-                            WidgetUtils.commonSizedBox(0, 15),
-                            Expanded(child: Column(
-                              children: [
-                                const Expanded(child: Text('')),
-                                Row(
-                                  children: [
-                                    WidgetUtils.onlyText('钻', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(38))),
-                                    const Expanded(child: Text('')),
-                                    WidgetUtils.onlyText(zuanshi, StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(56), fontWeight: FontWeight.w600)),
-                                    WidgetUtils.commonSizedBox(0, 15),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    WidgetUtils.onlyText('美元数字货币USDT交易', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(25))),
-                                    const Expanded(child: Text('')),
-                                  ],
-                                ),
-                                const Expanded(child: Text('')),
-                              ],
-                            )),
-                          ],
-                        ),
-                        /// 提现
-                        GestureDetector(
-                          onTap: ((){
-                            MyUtils.goTransparentPageCom(context, TixianZuanPage(shuliang: zuanshi));
-                          }),
-                          child: Container(
-                            width: ScreenUtil().setHeight(115),
-                            height: ScreenUtil().setHeight(50),
-                            margin: const EdgeInsets.only(right: 105,bottom: 15),
-                            alignment: Alignment.center,
-                            //边框设置
-                            decoration: const BoxDecoration(
-                              //背景
-                              color: Colors.white,
-                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                              borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                            ),
-                            child: Text(
-                              '提现',
-                              style: TextStyle(fontSize: ScreenUtil().setSp(29), color: MyColors.walletBlue),
-                            ),
-                          ),
-                        ),
-                        /// 充值
-                        GestureDetector(
-                          onTap: ((){
-                            MyUtils.goTransparentPageCom(context, ZuanPayPage(shuliang: zuanshi));
-                          }),
-                          child: Container(
-                            width: ScreenUtil().setHeight(115),
-                            height: ScreenUtil().setHeight(50),
-                            margin: EdgeInsets.only(right: 15,bottom: 15),
-                            alignment: Alignment.center,
-                            //边框设置
-                            decoration: const BoxDecoration(
-                              //背景
-                              color: Colors.white,
-                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                              borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                            ),
-                            child: Text(
-                              '充值',
-                              style: TextStyle(fontSize: ScreenUtil().setSp(29), color: MyColors.walletBlue),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  // /// 钻石
+                  // SizedBox(
+                  //   height: ScreenUtil().setHeight(250),
+                  //   child: Stack(
+                  //     alignment: Alignment.bottomRight,
+                  //     children: [
+                  //       WidgetUtils.showImagesFill('assets/images/mine_wallet_zbj.jpg', ScreenUtil().setHeight(250), double.infinity),
+                  //       Row(
+                  //         children: [
+                  //           WidgetUtils.commonSizedBox(0, 20),
+                  //           Container(
+                  //             height: 100.h,
+                  //             width: 100.h,
+                  //             alignment: Alignment.center,
+                  //             //边框设置
+                  //             decoration: BoxDecoration(
+                  //               //背景
+                  //               color: Colors.white,
+                  //               //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                  //               borderRadius: BorderRadius.all(Radius.circular(50.h)),
+                  //             ),
+                  //             child: WidgetUtils.showImages('assets/images/mine_wallet_zz.png', 650.h, 65.h),
+                  //           ),
+                  //           WidgetUtils.commonSizedBox(0, 15),
+                  //           Expanded(child: Column(
+                  //             children: [
+                  //               const Expanded(child: Text('')),
+                  //               Row(
+                  //                 children: [
+                  //                   WidgetUtils.onlyText('钻石', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(38))),
+                  //                   const Expanded(child: Text('')),
+                  //                   WidgetUtils.onlyText(zuanshi, StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(56), fontWeight: FontWeight.w600)),
+                  //                   WidgetUtils.commonSizedBox(0, 15),
+                  //                 ],
+                  //               ),
+                  //               Row(
+                  //                 children: [
+                  //                   WidgetUtils.onlyText('美元数字货币USDT交易', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(25))),
+                  //                   const Expanded(child: Text('')),
+                  //                 ],
+                  //               ),
+                  //               const Expanded(child: Text('')),
+                  //             ],
+                  //           )),
+                  //         ],
+                  //       ),
+                  //       /// 提现
+                  //       GestureDetector(
+                  //         onTap: ((){
+                  //           MyUtils.goTransparentPageCom(context, TixianZuanPage(shuliang: zuanshi));
+                  //         }),
+                  //         child: Container(
+                  //           width: ScreenUtil().setHeight(115),
+                  //           height: ScreenUtil().setHeight(50),
+                  //           margin: const EdgeInsets.only(right: 105,bottom: 15),
+                  //           alignment: Alignment.center,
+                  //           //边框设置
+                  //           decoration: const BoxDecoration(
+                  //             //背景
+                  //             color: Colors.white,
+                  //             //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                  //             borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                  //           ),
+                  //           child: Text(
+                  //             '提现',
+                  //             style: TextStyle(fontSize: ScreenUtil().setSp(29), color: MyColors.walletBlue),
+                  //           ),
+                  //         ),
+                  //       ),
+                  //       /// 充值
+                  //       GestureDetector(
+                  //         onTap: ((){
+                  //           MyUtils.goTransparentPageCom(context, ZuanPayPage(shuliang: zuanshi));
+                  //         }),
+                  //         child: Container(
+                  //           width: ScreenUtil().setHeight(115),
+                  //           height: ScreenUtil().setHeight(50),
+                  //           margin: EdgeInsets.only(right: 15,bottom: 15),
+                  //           alignment: Alignment.center,
+                  //           //边框设置
+                  //           decoration: const BoxDecoration(
+                  //             //背景
+                  //             color: Colors.white,
+                  //             //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                  //             borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                  //           ),
+                  //           child: Text(
+                  //             '充值',
+                  //             style: TextStyle(fontSize: ScreenUtil().setSp(29), color: MyColors.walletBlue),
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                   WidgetUtils.commonSizedBox(20, 20),
                   WidgetUtils.onlyText('注意', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(25))),
                   WidgetUtils.commonSizedBox(5, 20),
@@ -354,7 +354,7 @@ class _WalletPageState extends State<WalletPage> {
         case MyHttpConfig.successCode:
           setState(() {
             jinbi = bean.data!.goldBean!;
-            zuanshi = bean.data!.diamond!;
+            // zuanshi = bean.data!.diamond!;
             shouyi = bean.data!.goldCoin!;
           });
           break;

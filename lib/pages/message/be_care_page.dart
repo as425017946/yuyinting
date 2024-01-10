@@ -25,8 +25,8 @@ class BeCarePage extends StatefulWidget {
 
 class _BeCarePageState extends State<BeCarePage> {
 
-  List<Lista> _list = [];
-  var length = 1, number = 0;
+  List<Data> _list = [];
+  var length = 1;
   var listen,infos = '';
 
   final RefreshController _refreshController =
@@ -74,7 +74,7 @@ class _BeCarePageState extends State<BeCarePage> {
               alignment: Alignment.center,
               children: [
                 WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(90), ScreenUtil().setHeight(90), _list[i].avatar!),
-                _list[i].liveStatus == 1 ? WidgetUtils.showImages('assets/images/zhibozhong.webp', ScreenUtil().setHeight(90), ScreenUtil().setHeight(90),) : WidgetUtils.commonSizedBox(0, 0),
+                _list[i].live == 1 ? WidgetUtils.showImages('assets/images/zhibozhong.webp', ScreenUtil().setHeight(90), ScreenUtil().setHeight(90),) : WidgetUtils.commonSizedBox(0, 0),
               ],
             ),
           ),
@@ -194,7 +194,7 @@ class _BeCarePageState extends State<BeCarePage> {
       margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
       child: Column(
         children: [
-          WidgetUtils.onlyText('被关注数（$number）', StyleUtils.getCommonTextStyle(color: Colors.black , fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(25))),
+          WidgetUtils.onlyText('被关注数（${_list.length}）', StyleUtils.getCommonTextStyle(color: Colors.black , fontWeight: FontWeight.w600, fontSize: ScreenUtil().setSp(25))),
           Expanded(
             child: length > 0
                 ? SmartRefresher(
@@ -252,15 +252,15 @@ class _BeCarePageState extends State<BeCarePage> {
             if (page == 1) {
               _list.clear();
             }
-            if(bean.data!.list!.isNotEmpty){
-              for(int i =0; i < bean.data!.list!.length; i++){
-                _list.add(bean.data!.list![i]);
+            if(bean.data!.isNotEmpty){
+              for(int i =0; i < bean.data!.length; i++){
+                _list.add(bean.data![i]);
               }
               // if(bean.data!.list!.length < MyConfig.pageSize){
               //   _refreshController.loadNoData();
               // }
 
-              length = bean.data!.list!.length;
+              length = bean.data!.length;
             }else{
               if (page == 1) {
                 length = 0;

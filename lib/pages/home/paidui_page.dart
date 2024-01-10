@@ -3,11 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 import '../../bean/Common_bean.dart';
+import '../../bean/joinRoomBean.dart';
 import '../../bean/tjRoomListBean.dart';
 import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
+import '../../main.dart';
+import '../../utils/event_utils.dart';
 import '../../utils/loading.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
@@ -31,14 +34,15 @@ class _PaiduiPageState extends State<PaiduiPage>
 
   final TextEditingController _souSuoName = TextEditingController();
 
-  //2女厅 3男厅 4新厅 5游戏厅
+  //2女厅 3男厅 4新厅 5游戏厅 6交友
   int index = 2;
   String roomType = '女神';
-  List<Data> list = [];
-  List<Data> list2 = [];
-  List<Data> list3 = [];
-  List<Data> list4 = [];
-  List<Data> list5 = [];
+  List<DataPH> list = [];
+  List<DataPH> list2 = [];
+  List<DataPH> list3 = [];
+  List<DataPH> list4 = [];
+  List<DataPH> list5 = [];
+  List<DataPH> list6 = [];
   int page = 1;
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -87,7 +91,9 @@ class _PaiduiPageState extends State<PaiduiPage>
             ? list3[i].hotDegree as int
             : index == 4
                 ? list4[i].hotDegree as int
-                : list5[i].hotDegree as int;
+                : index == 5
+                    ? list5[i].hotDegree as int
+                    : list6[i].hotDegree as int;
 
     //2女厅 3男厅 4新厅 5游戏厅
     if (index == 2) {
@@ -98,6 +104,8 @@ class _PaiduiPageState extends State<PaiduiPage>
       roomType = '新厅';
     } else if (index == 5) {
       roomType = '游戏厅';
+    } else if (index == 6) {
+      roomType = '交友';
     }
     return Column(
       children: [
@@ -112,6 +120,8 @@ class _PaiduiPageState extends State<PaiduiPage>
                 doPostBeforeJoin(list4[i].id.toString());
               } else if (index == 5) {
                 doPostBeforeJoin(list5[i].id.toString());
+              } else if (index == 6) {
+                doPostBeforeJoin(list6[i].id.toString());
               }
             }
           }),
@@ -146,7 +156,9 @@ class _PaiduiPageState extends State<PaiduiPage>
                             ? list3[i].coverImg!
                             : index == 4
                                 ? list4[i].coverImg!
-                                : list5[i].coverImg!),
+                                : index == 5
+                                    ? list5[i].coverImg!
+                                    : list6[i].coverImg!),
                 WidgetUtils.commonSizedBox(0, 10),
                 Expanded(
                   child: Column(
@@ -162,7 +174,9 @@ class _PaiduiPageState extends State<PaiduiPage>
                                           ? list3[i].roomName!
                                           : index == 4
                                               ? list4[i].roomName!
-                                              : list5[i].roomName!,
+                                              : index == 5
+                                                  ? list5[i].roomName!
+                                                  : list6[i].roomName!,
                                   StyleUtils.getCommonTextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.w600,
@@ -185,7 +199,9 @@ class _PaiduiPageState extends State<PaiduiPage>
                                       ? MyColors.paiduiBlue
                                       : index == 4
                                           ? MyColors.paiduiOrange
-                                          : MyColors.paiduiPurple,
+                                          : index == 5
+                                              ? MyColors.paiduiPurple
+                                              : MyColors.btn_d,
                               roomType,
                               index == 2
                                   ? 'assets/images/paidui_nvshen.png'
@@ -193,7 +209,9 @@ class _PaiduiPageState extends State<PaiduiPage>
                                       ? 'assets/images/paidui_nanshen.png'
                                       : index == 4
                                           ? 'assets/images/paidui_xinting.png'
-                                          : 'assets/images/paidui_youxi.png',
+                                          : index == 5
+                                              ? 'assets/images/paidui_youxi.png'
+                                              : 'assets/images/paidui_xinting.png',
                               index == 5
                                   ? ScreenUtil().setHeight(85)
                                   : ScreenUtil().setHeight(75)),
@@ -255,17 +273,23 @@ class _PaiduiPageState extends State<PaiduiPage>
             children: [
               // WidgetUtils.showImages(
               //     'assets/images/paidui_redu.png', 40.h, 20.h),
-              Text('热度值:',style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  color: MyColors.g6,
-                  fontFamily: 'YOUSHEBIAOTIHEI'),),
+              Text(
+                '热度值:',
+                style: TextStyle(
+                    fontSize: ScreenUtil().setSp(24),
+                    color: MyColors.g6,
+                    fontFamily: 'YOUSHEBIAOTIHEI'),
+              ),
               // WidgetUtils.commonSizedBox(0, 5),
-              Text(hotDegree > 9999
-                  ? '${(hotDegree / 10000).toStringAsFixed(2)}w'
-                  : hotDegree.toString(),style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  color: MyColors.g6,
-                  fontFamily: 'YOUSHEBIAOTIHEI'),),
+              Text(
+                hotDegree > 9999
+                    ? '${(hotDegree / 10000).toStringAsFixed(2)}w'
+                    : hotDegree.toString(),
+                style: TextStyle(
+                    fontSize: ScreenUtil().setSp(24),
+                    color: MyColors.g6,
+                    fontFamily: 'YOUSHEBIAOTIHEI'),
+              ),
               // WidgetUtils.onlyText(
               //     hotDegree > 9999
               //         ? '${(hotDegree / 10000).toStringAsFixed(2)}w'
@@ -304,17 +328,23 @@ class _PaiduiPageState extends State<PaiduiPage>
           /// 热度
           Row(
             children: [
-              Text('热度值:',style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  color: MyColors.g6,
-                  fontFamily: 'YOUSHEBIAOTIHEI'),),
+              Text(
+                '热度值:',
+                style: TextStyle(
+                    fontSize: ScreenUtil().setSp(24),
+                    color: MyColors.g6,
+                    fontFamily: 'YOUSHEBIAOTIHEI'),
+              ),
               // WidgetUtils.commonSizedBox(0, 5),
-              Text(hotDegree > 9999
-                  ? '${(hotDegree / 10000).toStringAsFixed(2)}w'
-                  : hotDegree.toString(),style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  color: MyColors.g6,
-                  fontFamily: 'YOUSHEBIAOTIHEI'),),
+              Text(
+                hotDegree > 9999
+                    ? '${(hotDegree / 10000).toStringAsFixed(2)}w'
+                    : hotDegree.toString(),
+                style: TextStyle(
+                    fontSize: ScreenUtil().setSp(24),
+                    color: MyColors.g6,
+                    fontFamily: 'YOUSHEBIAOTIHEI'),
+              ),
             ],
           ),
         ],
@@ -347,22 +377,28 @@ class _PaiduiPageState extends State<PaiduiPage>
           /// 热度
           Row(
             children: [
-              Text('热度值:',style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  color: MyColors.g6,
-                  fontFamily: 'YOUSHEBIAOTIHEI'),),
+              Text(
+                '热度值:',
+                style: TextStyle(
+                    fontSize: ScreenUtil().setSp(24),
+                    color: MyColors.g6,
+                    fontFamily: 'YOUSHEBIAOTIHEI'),
+              ),
               // WidgetUtils.commonSizedBox(0, 5),
-              Text(hotDegree > 9999
-                  ? '${(hotDegree / 10000).toStringAsFixed(2)}w'
-                  : hotDegree.toString(),style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  color: MyColors.g6,
-                  fontFamily: 'YOUSHEBIAOTIHEI'),),
+              Text(
+                hotDegree > 9999
+                    ? '${(hotDegree / 10000).toStringAsFixed(2)}w'
+                    : hotDegree.toString(),
+                style: TextStyle(
+                    fontSize: ScreenUtil().setSp(24),
+                    color: MyColors.g6,
+                    fontFamily: 'YOUSHEBIAOTIHEI'),
+              ),
             ],
           ),
         ],
       );
-    } else {
+    } else if (index == 5) {
       return Row(
         children: [
           list5[i].hostInfo!.isNotEmpty
@@ -390,17 +426,72 @@ class _PaiduiPageState extends State<PaiduiPage>
           /// 热度
           Row(
             children: [
-              Text('热度值:',style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  color: MyColors.g6,
-                  fontFamily: 'YOUSHEBIAOTIHEI'),),
+              Text(
+                '热度值:',
+                style: TextStyle(
+                    fontSize: ScreenUtil().setSp(24),
+                    color: MyColors.g6,
+                    fontFamily: 'YOUSHEBIAOTIHEI'),
+              ),
               // WidgetUtils.commonSizedBox(0, 5),
-              Text(hotDegree > 9999
-                  ? '${(hotDegree / 10000).toStringAsFixed(2)}w'
-                  : hotDegree.toString(),style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  color: MyColors.g6,
-                  fontFamily: 'YOUSHEBIAOTIHEI'),),
+              Text(
+                hotDegree > 9999
+                    ? '${(hotDegree / 10000).toStringAsFixed(2)}w'
+                    : hotDegree.toString(),
+                style: TextStyle(
+                    fontSize: ScreenUtil().setSp(24),
+                    color: MyColors.g6,
+                    fontFamily: 'YOUSHEBIAOTIHEI'),
+              ),
+            ],
+          ),
+        ],
+      );
+    } else {
+      return Row(
+        children: [
+          list6[i].hostInfo!.isNotEmpty
+              ? WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(30),
+                  ScreenUtil().setHeight(30), list6[i].hostInfo![1])
+              : WidgetUtils.commonSizedBox(
+                  ScreenUtil().setHeight(30), ScreenUtil().setHeight(30)),
+          WidgetUtils.commonSizedBox(0, 5),
+          SizedBox(
+            width: ScreenUtil().setHeight(50),
+            child: list6[i].hostInfo!.isNotEmpty
+                ? Text(
+                    list6[i].hostInfo![0],
+                    style: TextStyle(
+                        fontSize: ScreenUtil().setSp(20),
+                        color: MyColors.mineGrey,
+                        overflow: TextOverflow.ellipsis),
+                  )
+                : const Text(''),
+          ),
+          WidgetUtils.commonSizedBox(0, 20),
+          showHead(list6[i].memberList!),
+          const Expanded(child: Text('')),
+
+          /// 热度
+          Row(
+            children: [
+              Text(
+                '热度值:',
+                style: TextStyle(
+                    fontSize: ScreenUtil().setSp(24),
+                    color: MyColors.g6,
+                    fontFamily: 'YOUSHEBIAOTIHEI'),
+              ),
+              // WidgetUtils.commonSizedBox(0, 5),
+              Text(
+                hotDegree > 9999
+                    ? '${(hotDegree / 10000).toStringAsFixed(2)}w'
+                    : hotDegree.toString(),
+                style: TextStyle(
+                    fontSize: ScreenUtil().setSp(24),
+                    color: MyColors.g6,
+                    fontFamily: 'YOUSHEBIAOTIHEI'),
+              ),
             ],
           ),
         ],
@@ -736,14 +827,18 @@ class _PaiduiPageState extends State<PaiduiPage>
                               }),
                               child: WidgetUtils.myContainer(
                                   ScreenUtil().setHeight(40),
-                                  ScreenUtil().setHeight(100),
-                                  index == 2 ? MyColors.btn_d : MyColors.homeBG,
-                                  index == 2 ? MyColors.btn_d : MyColors.homeBG,
+                                  ScreenUtil().setHeight(90),
+                                  index == 2
+                                      ? MyColors.paiduiRed
+                                      : MyColors.homeBG,
+                                  index == 2
+                                      ? MyColors.paiduiRed
+                                      : MyColors.homeBG,
                                   '女神',
                                   ScreenUtil().setSp(28),
                                   index == 2 ? Colors.white : MyColors.g6),
                             ),
-                            WidgetUtils.commonSizedBox(0, 10),
+                            const Spacer(),
                             GestureDetector(
                               onTap: (() {
                                 if (MyUtils.checkClick()) {
@@ -756,14 +851,38 @@ class _PaiduiPageState extends State<PaiduiPage>
                               }),
                               child: WidgetUtils.myContainer(
                                   ScreenUtil().setHeight(40),
-                                  ScreenUtil().setHeight(100),
-                                  index == 3 ? MyColors.btn_d : MyColors.homeBG,
-                                  index == 3 ? MyColors.btn_d : MyColors.homeBG,
+                                  ScreenUtil().setHeight(90),
+                                  index == 3
+                                      ? MyColors.paiduiBlue
+                                      : MyColors.homeBG,
+                                  index == 3
+                                      ? MyColors.paiduiBlue
+                                      : MyColors.homeBG,
                                   '男神',
                                   ScreenUtil().setSp(28),
                                   index == 3 ? Colors.white : MyColors.g6),
                             ),
-                            WidgetUtils.commonSizedBox(0, 10),
+                            const Spacer(),
+                            GestureDetector(
+                              onTap: (() {
+                                if (MyUtils.checkClick()) {
+                                  setState(() {
+                                    index = 6;
+                                    page = 1;
+                                    doPostTJRoomList2('6');
+                                  });
+                                }
+                              }),
+                              child: WidgetUtils.myContainer(
+                                  ScreenUtil().setHeight(40),
+                                  ScreenUtil().setHeight(90),
+                                  index == 6 ? MyColors.btn_d : MyColors.homeBG,
+                                  index == 6 ? MyColors.btn_d : MyColors.homeBG,
+                                  '交友',
+                                  ScreenUtil().setSp(28),
+                                  index == 6 ? Colors.white : MyColors.g6),
+                            ),
+                            const Spacer(),
                             GestureDetector(
                               onTap: (() {
                                 if (MyUtils.checkClick()) {
@@ -776,14 +895,18 @@ class _PaiduiPageState extends State<PaiduiPage>
                               }),
                               child: WidgetUtils.myContainer(
                                   ScreenUtil().setHeight(40),
-                                  ScreenUtil().setHeight(100),
-                                  index == 4 ? MyColors.btn_d : MyColors.homeBG,
-                                  index == 4 ? MyColors.btn_d : MyColors.homeBG,
+                                  ScreenUtil().setHeight(90),
+                                  index == 4
+                                      ? MyColors.origin
+                                      : MyColors.homeBG,
+                                  index == 4
+                                      ? MyColors.origin
+                                      : MyColors.homeBG,
                                   '新厅',
                                   ScreenUtil().setSp(28),
                                   index == 4 ? Colors.white : MyColors.g6),
                             ),
-                            WidgetUtils.commonSizedBox(0, 10),
+                            const Spacer(),
                             GestureDetector(
                               onTap: (() {
                                 if (MyUtils.checkClick()) {
@@ -833,7 +956,9 @@ class _PaiduiPageState extends State<PaiduiPage>
                                   ? list3.length
                                   : index == 4
                                       ? list4.length
-                                      : list5.length,
+                                      : index == 5
+                                          ? list5.length
+                                          : list6.length,
                         ),
                       ],
                     ),
@@ -902,6 +1027,8 @@ class _PaiduiPageState extends State<PaiduiPage>
               list4.clear();
             } else if (page == 1 && type == "5") {
               list5.clear();
+            } else if (page == 1 && type == "6") {
+              list6.clear();
             }
             if (bean.data!.isNotEmpty) {
               if (type == "2") {
@@ -912,6 +1039,8 @@ class _PaiduiPageState extends State<PaiduiPage>
                 list4 = bean.data!;
               } else if (type == "5") {
                 list5 = bean.data!;
+              } else if (type == "6") {
+                list6 = bean.data!;
               }
             } else {
               if (page > 1) {
@@ -939,23 +1068,31 @@ class _PaiduiPageState extends State<PaiduiPage>
 
   /// 加入房间前
   Future<void> doPostBeforeJoin(roomID) async {
+    //判断房间id是否为空的
+    if(sp.getString('roomID') == null || sp.getString('').toString().isEmpty){
+    }else{
+      // 不是空的，并且不是之前进入的房间
+      if(sp.getString('roomID').toString() != roomID){
+        sp.setString('roomID', roomID);
+        eventBus.fire(SubmitButtonBack(title: '加入其他房间'));
+      }
+    }
     Map<String, dynamic> params = <String, dynamic>{
       'room_id': roomID,
     };
     try {
       Loading.show();
-      CommonBean bean = await DataUtils.postBeforeJoin(params);
+      joinRoomBean bean = await DataUtils.postBeforeJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          doPostRoomJoin(roomID, '');
+          doPostRoomJoin(roomID, '', bean.data!.rtc!);
           break;
         case MyHttpConfig.errorRoomCode: //需要密码
           // ignore: use_build_context_synchronously
           MyUtils.goTransparentPageCom(
               context,
               RoomTSMiMaPage(
-                roomID: roomID,
-              ));
+                  roomID: roomID, roomToken: bean.data!.rtc!, anchorUid: ''));
           break;
         case MyHttpConfig.errorloginCode:
           // ignore: use_build_context_synchronously
@@ -973,7 +1110,7 @@ class _PaiduiPageState extends State<PaiduiPage>
   }
 
   /// 加入房间
-  Future<void> doPostRoomJoin(roomID, password) async {
+  Future<void> doPostRoomJoin(roomID, password, roomToken) async {
     Map<String, dynamic> params = <String, dynamic>{
       'room_id': roomID,
       'password': password
@@ -988,6 +1125,8 @@ class _PaiduiPageState extends State<PaiduiPage>
               context,
               RoomPage(
                 roomId: roomID,
+                beforeId: '',
+                roomToken: roomToken,
               ));
           break;
         case MyHttpConfig.errorloginCode:

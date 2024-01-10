@@ -60,6 +60,8 @@ class _CarShopPageState extends State<CarShopPage> {
           child: WidgetUtils.showImagesNet(list[i].img!, 130.h, 130.h),
         ),
         WidgetUtils.commonSizedBox(10.h, 0.h),
+        WidgetUtils.onlyTextCenter(list[i].goodsName!, StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: 22.sp, fontWeight: FontWeight.w600)),
+        WidgetUtils.commonSizedBox(10.h, 0.h),
         SizedBox(
           width: 150.h,
           child: Row(

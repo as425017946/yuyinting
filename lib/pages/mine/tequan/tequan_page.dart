@@ -7,6 +7,7 @@ import 'package:yuyinting/pages/mine/tequan/houjue_page.dart';
 import 'package:yuyinting/pages/mine/tequan/qishi_page.dart';
 import 'package:yuyinting/pages/mine/tequan/yongshi_page.dart';
 import 'package:yuyinting/utils/log_util.dart';
+import 'package:yuyinting/utils/my_toast_utils.dart';
 
 import '../../../colors/my_colors.dart';
 import '../../../utils/event_utils.dart';
@@ -452,7 +453,9 @@ class _TequanPageState extends State<TequanPage> {
                   ],
                 )),
                 GestureDetector(
-                  onTap: (() {}),
+                  onTap: (() {
+                    MyToastUtils.showToastBottom('荣誉升级，敬请期待');
+                  }),
                   child: Container(
                     height: ScreenUtil().setHeight(74),
                     margin: const EdgeInsets.only(left: 20, right: 20),

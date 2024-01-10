@@ -36,7 +36,7 @@ class _RankingPageState extends State<RankingPage> {
           //设置Container修饰
           image: DecorationImage(
             //背景图片修饰
-            image: AssetImage(_currentIndex == 0 ? "assets/images/py_meili_bg.jpg" :  "assets/images/py_caifu_bg.jpg"),
+            image: AssetImage(_currentIndex == 0 ? "assets/images/py_meili_bg.png" :  "assets/images/py_caifu_bg.png"),
             fit: BoxFit.fill, //覆盖
           ),
         ),
@@ -68,18 +68,13 @@ class _RankingPageState extends State<RankingPage> {
                         _controller.jumpToPage(0);
                       });
                     }),
-                    child: WidgetUtils.onlyTextBottom(
-                        '魅力榜',
-                        StyleUtils.getCommonTextStyle(
-                            color: Colors.black,
-                            fontSize: _currentIndex == 0
-                                ? ScreenUtil().setSp(40)
-                                : ScreenUtil().setSp(32),
-                            fontWeight: _currentIndex == 0
-                                ? FontWeight.w600
-                                : FontWeight.w100)),
+                    child: Container(
+                      height: 100.h,
+                      width: 135.h,
+                      color: Colors.transparent,
+                    ),
                   ),
-                  WidgetUtils.commonSizedBox(0, 20),
+                  WidgetUtils.commonSizedBox(0, 45.w),
                   GestureDetector(
                     onTap: (() {
                       setState(() {
@@ -87,16 +82,11 @@ class _RankingPageState extends State<RankingPage> {
                         _controller.jumpToPage(1);
                       });
                     }),
-                    child: WidgetUtils.onlyTextBottom(
-                        '财富榜',
-                        StyleUtils.getCommonTextStyle(
-                            color: Colors.black,
-                            fontSize: _currentIndex == 1
-                                ? ScreenUtil().setSp(40)
-                                : ScreenUtil().setSp(32),
-                            fontWeight: _currentIndex == 1
-                                ? FontWeight.w600
-                                : FontWeight.w100)),
+                    child: Container(
+                      height: 100.h,
+                      width: 135.h,
+                      color: Colors.transparent,
+                    ),
                   ),
                   const Expanded(child: Text('')),
                   WidgetUtils.commonSizedBox(0, 45),
@@ -106,6 +96,7 @@ class _RankingPageState extends State<RankingPage> {
 
             Expanded(
               child: PageView(
+                physics: const NeverScrollableScrollPhysics(), //禁止左右滑动
                 controller: _controller,
                 onPageChanged: (index) {
                   setState(() {

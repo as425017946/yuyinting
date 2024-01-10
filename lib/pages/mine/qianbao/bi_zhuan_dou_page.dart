@@ -28,12 +28,12 @@ class _BiZhuanDouPageState extends State<BiZhuanDouPage> {
   TextEditingController controllerNumber = TextEditingController();
   var appBar;
   String daozhang = '0';
-  var listenTX, listenMM;
+  var listenTX, listenMM,listensl;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    appBar = WidgetUtils.getAppBar('币转豆', true, context, false, 0);
+    appBar = WidgetUtils.getAppBar('V币兑换V豆', true, context, false, 0);
     listenTX = eventBus.on<SubmitButtonBack>().listen((event) {
       if(event.title == '确认兑换'){
         LogE('数量 ${controllerNumber.text.toString()}');
@@ -51,8 +51,17 @@ class _BiZhuanDouPageState extends State<BiZhuanDouPage> {
     listenMM = eventBus.on<RoomBack>().listen((event) {
       if(event.title == '发红包已输入密码'){
         MyUtils.hideKeyboard(context);
-        doPostExchangeCurrency();
+        doPostExchangeCurrency(event.index!);
       }
+    });
+    listensl = eventBus.on<InfoBack>().listen((event) {
+      setState(() {
+        if(event.info.isEmpty){
+          daozhang = '0';
+        }else{
+          daozhang = double.parse(event.info).toStringAsFixed(0);
+        }
+      });
     });
   }
   @override
@@ -61,6 +70,7 @@ class _BiZhuanDouPageState extends State<BiZhuanDouPage> {
     super.dispose();
     listenTX.cancel();
     listenMM.cancel();
+    listensl.cancel();
   }
 
 
@@ -101,16 +111,11 @@ class _BiZhuanDouPageState extends State<BiZhuanDouPage> {
                                   const Expanded(child: Text('')),
                                   Row(
                                     children: [
-                                      Container(
-                                        height: ScreenUtil().setHeight(250),
-                                        padding: const EdgeInsets.only(top: 50),
-                                        child: Text(
-                                          '币',
-                                          style: StyleUtils.getCommonTextStyle(
+                                      WidgetUtils.onlyText(
+                                          'V币',
+                                          StyleUtils.getCommonTextStyle(
                                               color: Colors.white,
-                                              fontSize: ScreenUtil().setSp(38)),
-                                        ),
-                                      ),
+                                              fontSize: ScreenUtil().setSp(38))),
                                       const Spacer(),
                                       WidgetUtils.onlyText(
                                           widget.shuliang,
@@ -131,7 +136,7 @@ class _BiZhuanDouPageState extends State<BiZhuanDouPage> {
                       Container(
                         margin: const EdgeInsets.only(right: 15, bottom: 15),
                         child: Text(
-                          '1币=1豆',
+                          '1V币=1V豆',
                           style: TextStyle(
                               fontSize: ScreenUtil().setSp(21),
                               color: Colors.white),
@@ -157,18 +162,19 @@ class _BiZhuanDouPageState extends State<BiZhuanDouPage> {
                       WidgetUtils.onlyText('提取V币', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(32))),
                       Row(
                         children: [
-                          WidgetUtils.showImages('assets/images/mine_wallet_jinbi.png', ScreenUtil().setHeight(48), ScreenUtil().setHeight(48)),
+                          WidgetUtils.showImages('assets/images/mine_wallet_bb.png', ScreenUtil().setHeight(48), ScreenUtil().setHeight(48)),
                           WidgetUtils.commonSizedBox(0, 20),
                           Expanded(
                             child: WidgetUtils.commonTextFieldNumber(
-                                controller: controllerNumber, hintText: '请输入币数量'),
+                                controller: controllerNumber, hintText: '请输入V币数量'),
                           ),
                           GestureDetector(
                             onTap: ((){
                               if(double.parse(widget.shuliang) > 1){
                                 setState(() {
-                                  controllerNumber.text = (double.parse(widget.shuliang)).toStringAsFixed(0);
-                                  daozhang = (double.parse(widget.shuliang)).toStringAsFixed(0);
+                                  //舍弃当前变量的小数部分
+                                  controllerNumber.text = (double.parse(widget.shuliang).truncate()).toStringAsFixed(0);
+                                  daozhang = (double.parse(widget.shuliang).truncate()).toStringAsFixed(0);
                                 });
                               }else{
                                 MyToastUtils.showToastBottom('提现数量不足1个');
@@ -182,9 +188,10 @@ class _BiZhuanDouPageState extends State<BiZhuanDouPage> {
                       WidgetUtils.commonSizedBox(20, 20),
                       Row(
                         children: [
-                          WidgetUtils.onlyText('到账豆', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(32))),
+                          WidgetUtils.onlyText('到账', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(32))),
+                          WidgetUtils.showImages('assets/images/mine_wallet_dd.png', ScreenUtil().setHeight(30), ScreenUtil().setHeight(30)),
                           WidgetUtils.commonSizedBox(0, 10),
-                          WidgetUtils.onlyText('￥$daozhang', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(32), fontWeight: FontWeight.w600)),
+                          WidgetUtils.onlyText('$daozhang V豆', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(32), fontWeight: FontWeight.w600)),
                         ],
                       )
                     ],
@@ -201,9 +208,10 @@ class _BiZhuanDouPageState extends State<BiZhuanDouPage> {
   }
 
   /// 币转豆
-  Future<void> doPostExchangeCurrency() async {
+  Future<void> doPostExchangeCurrency(String mima) async {
     Map<String, dynamic> params = <String, dynamic>{
       'gold_coin': controllerNumber.text.toString(), // 兑换金币数量
+      'pay_pwd' : mima,
     };
     try {
       CommonBean bean = await DataUtils.postExchangeCurrency(params);

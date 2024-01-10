@@ -21,7 +21,7 @@ class _ZuanPayPageState extends State<ZuanPayPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    appBar = WidgetUtils.getAppBar('充值钻', true, context, false, 0);
+    appBar = WidgetUtils.getAppBar('充值钻石', true, context, false, 0);
   }
 
 
@@ -61,16 +61,12 @@ class _ZuanPayPageState extends State<ZuanPayPage> {
                                   const Expanded(child: Text('')),
                                   Row(
                                     children: [
-                                      Container(
-                                        height: ScreenUtil().setHeight(250),
-                                        padding: const EdgeInsets.only(top: 50),
-                                        child: Text(
-                                          '钻',
-                                          style: StyleUtils.getCommonTextStyle(
+                                      WidgetUtils.onlyText(
+                                          '钻石',
+                                          StyleUtils.getCommonTextStyle(
                                               color: Colors.white,
-                                              fontSize: ScreenUtil().setSp(38)),
-                                        ),
-                                      ),
+                                              fontSize: ScreenUtil().setSp(38))),
+                                      const Spacer(),
                                       WidgetUtils.commonSizedBox(0, 50),
                                       WidgetUtils.onlyText(
                                           widget.shuliang,

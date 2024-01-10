@@ -243,7 +243,7 @@ class _ZiliaoPageState extends State<ZiliaoPage> {
                     ScreenUtil().setHeight(40), ScreenUtil().setHeight(40)),
                 WidgetUtils.commonSizedBox(0, 10),
                 WidgetUtils.onlyText(
-                    age.toString(),
+                    '$age岁',
                     StyleUtils.getCommonTextStyle(
                         color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
               ],
@@ -259,7 +259,7 @@ class _ZiliaoPageState extends State<ZiliaoPage> {
                     ScreenUtil().setHeight(40), ScreenUtil().setHeight(40)),
                 WidgetUtils.commonSizedBox(0, 10),
                 WidgetUtils.onlyText(
-                    city.isEmpty ? '未知' : city,
+                    city.isEmpty ? '外太空' : city,
                     StyleUtils.getCommonTextStyle(
                         color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
               ],

@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:yuyinting/pages/room/room_youxi_page.dart';
-import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/my_utils.dart';
 import '../../bean/roomInfoBean.dart';
 import '../../colors/my_colors.dart';
 import '../../main.dart';
 import '../../utils/event_utils.dart';
+import '../../utils/log_util.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../../widget/Marquee.dart';
@@ -18,7 +18,6 @@ import '../game/car_page.dart';
 import '../game/mofang_page.dart';
 import '../game/zhuanpan_page.dart';
 import '../shouchong/shouchong_page.dart';
-import 'room_back_page.dart';
 import 'room_gongneng.dart';
 import 'room_liwu_page.dart';
 import 'room_manager_page.dart';
@@ -741,7 +740,6 @@ class RoomItems {
         }
       }
       // 厅内送出礼物推送
-      // 厅内送出礼物推送
       return Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -783,7 +781,7 @@ class RoomItems {
                       TextSpan(
                           text: infos[2],
                           style: StyleUtils.getCommonTextStyle(
-                            color: MyColors.jianbian2, fontSize: 24.sp,)),
+                            color: Colors.white, fontSize: 24.sp,)),
                       TextSpan(
                           text: infos[3],
                           style: StyleUtils.getCommonTextStyle(
@@ -880,30 +878,60 @@ class RoomItems {
       );
     } else if (list[i]['type'] == '8') {
       // 跟随主播进入房间
-      return Row(
-        children: [
-          GestureDetector(
-            onTap: (() {
-              MyUtils.goTransparentPage(
-                  context,
-                  RoomPeopleInfoPage(
-                    uid: list[i]['uid'].toString(),
-                    index: '-1',
-                    roomID: roomID,
-                    isClose: '',
-                    listM: listm,
-                  ));
-            }),
-            child: Text(list[i]['info'], style: StyleUtils.getCommonTextStyle(
-                color: MyColors.roomMessageYellow2, fontSize: 24.sp)),
-          ),
-          Text('跟随', style: StyleUtils.getCommonTextStyle(
-              color: Colors.white, fontSize: 24.sp)),
-          Text(list[i]['content'], style: StyleUtils.getCommonTextStyle(
-              color: MyColors.roomMessageYellow2, fontSize: 24.sp)),
-          Text('进入房间', style: StyleUtils.getCommonTextStyle(
-              color: Colors.white, fontSize: 24.sp)),
-        ],
+      return GestureDetector(
+        onTap: (() {
+          MyUtils.goTransparentPage(
+              context,
+              RoomPeopleInfoPage(
+                uid: list[i]['uid'].toString(),
+                index: '-1',
+                roomID: roomID,
+                isClose: '',
+                listM: listm,
+              ));
+        }),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: EdgeInsets.only(bottom: 10.h),
+              padding: EdgeInsets.only(
+                  top: 15.h, bottom: 15.h, left: 10.h, right: 10.h
+              ),
+              //边框设置
+              decoration: const BoxDecoration(
+                //背景
+                color: Colors.white10,
+                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(7),
+                    topRight: Radius.circular(15),
+                    bottomLeft: Radius.circular(15),
+                    bottomRight: Radius.circular(15)),
+              ),
+              child: RichText(text: TextSpan(
+                  text: list[i]['info'],
+                  style: StyleUtils.getCommonTextStyle(
+                    color: MyColors.peopleYellow, fontSize: 24.sp,),
+                  children: [
+                    TextSpan(
+                        text: '跟随',
+                        style: StyleUtils.getCommonTextStyle(
+                          color: Colors.white, fontSize: 24.sp,)),
+                    TextSpan(
+                        text: list[i]['content'],
+                        style: StyleUtils.getCommonTextStyle(
+                          color: Colors.white, fontSize: 24.sp,)),
+                    TextSpan(
+                        text: '进入房间',
+                        style: StyleUtils.getCommonTextStyle(
+                          color: Colors.white, fontSize: 24.sp,)),
+                  ]),
+              ),
+            ),
+          ],
+        ),
       );
     } else if (list[i]['type'] == '9') {
       // 厅内用户抽奖
@@ -987,7 +1015,7 @@ class RoomItems {
                     TextSpan(
                         text: infos[2],
                         style: StyleUtils.getCommonTextStyle(
-                          color: MyColors.loginPink, fontSize: 24.sp,)),
+                          color: MyColors.roomMessageYellow2, fontSize: 24.sp,)),
                     TextSpan(
                         text: infos[3],
                         style: StyleUtils.getCommonTextStyle(
@@ -1578,13 +1606,7 @@ class RoomItems {
         /// 退出的点
         GestureDetector(
           onTap: (() {
-            Future.delayed(const Duration(seconds: 0), () {
-              Navigator.of(context).push(PageRouteBuilder(
-                  opaque: false,
-                  pageBuilder: (context, animation, secondaryAnimation) {
-                    return RoomBackPage(roomID: roomID,);
-                  }));
-            });
+            eventBus.fire(RoomBack(title: '点击房间关闭', index: ''));
           }),
           child: SizedBox(
               height: ScreenUtil().setHeight(32),
@@ -1600,6 +1622,8 @@ class RoomItems {
   static Widget notices(BuildContext context, bool m0, String notice,
       List<MikeList> listm, String roomID, int wherePeople,
       List<bool> listPeople) {
+    LogE('上麦了 == ${listm[8].isClose == 0}');
+    LogE('上麦了 =* ${listm[8].isClose}');
     return Row(
       children: [
         WidgetUtils.commonSizedBox(0, 20),
@@ -1727,18 +1751,24 @@ class RoomItems {
                       ScreenUtil().setHeight(95), listm[8].avatar!)
                       : const Text(''),
                   // 头像框静态图
-                  listm[0].avatarFrameImg!.isNotEmpty ? WidgetUtils
+                  listm[8].avatarFrameImg!.isNotEmpty ? WidgetUtils
                       .CircleHeadImage(
-                      ScreenUtil().setHeight(110),
+                      ScreenUtil().setHeight(120),
                       ScreenUtil().setHeight(110),
                       listm[0].avatarFrameImg!) : const Text(''),
                   // 头像框动态图
-                  listm[0].avatarFrameGifImg!.isNotEmpty ? SizedBox(
-                    height: 110.h,
-                    width: 110.h,
-                    child: SVGASimpleImage(
-                      resUrl: listm[0].avatarFrameGifImg!,),
+                  listm[8].isClose == 0 ? SizedBox(
+                    height: 140.h,
+                    width: 140.h,
+                    child: const SVGASimpleImage(
+                      assetsName: 'assets/svga/room_shengbo.svga',),
                   ) : const Text(''),
+                  // listm[0].avatarFrameGifImg!.isNotEmpty ? SizedBox(
+                  //   height: 110.h,
+                  //   width: 110.h,
+                  //   child: SVGASimpleImage(
+                  //     resUrl: listm[0].avatarFrameGifImg!,),
+                  // ) : const Text(''),
                   Column(
                     children: [
                       const Expanded(child: Text('')),
@@ -2958,7 +2988,11 @@ class RoomItems {
                             ScreenUtil().setHeight(80),
                             ScreenUtil().setHeight(80),
                             listm[7].avatar!)
-                            : Container(
+                            : listm[7].isLock == 1
+                            ? WidgetUtils.showImages(
+                            'assets/images/room_suo.png',
+                            ScreenUtil().setHeight(80),
+                            ScreenUtil().setHeight(80)) : Container(
                           height: ScreenUtil().setHeight(80),
                           width: ScreenUtil().setHeight(80),
                           color: Colors.transparent,
@@ -3347,7 +3381,7 @@ class RoomItems {
   /// 厅内底部按钮
   static Widget footBtn(BuildContext context, bool isJinyiin, int isForbation,
       String roomID, int isShow, int isBoss, bool mima, List<MikeList> listM,
-      bool roomDX, bool isRed) {
+      bool roomDX, bool isRed, bool isMeUp) {
     return SizedBox(
       height: ScreenUtil().setHeight(90),
       child: Row(
@@ -3489,8 +3523,8 @@ class RoomItems {
             onTap: (() {
               MyUtils.goTransparentPage(
                   context,
-                  sp.getString('role').toString() == 'adminer' ||
-                      sp.getString('role').toString() == 'leader'
+                  (sp.getString('role').toString() == 'adminer' ||
+                      sp.getString('role').toString() == 'leader')
                       ? RoomGongNeng(
                     type: 1,
                     roomID: roomID,
@@ -3517,7 +3551,12 @@ class RoomItems {
           //闭麦
           GestureDetector(
             onTap: (() {
-              eventBus.fire(RoomBack(title: '关闭声音', index: ''));
+              //如果上麦的人有自己
+              if(isMeUp){
+                eventBus.fire(RoomBack(title: '关闭声音', index: ''));
+              }else{
+                MyToastUtils.showToastBottom('不在麦序，无需开启');
+              }
             }),
             child: WidgetUtils.showImages(
                 isJinyiin
@@ -4142,8 +4181,8 @@ class RoomItems {
   /// 厅内麦上有人，并且是自己
   static Widget isMe(int i, List<MikeList> listm, bool isShow) {
     if (i == 8) {
-      return listm[i].uid.toString() == sp.getString('user_id').toString() &&
-          isShow
+      return (listm[i].uid.toString() == sp.getString('user_id').toString() &&
+          isShow)
           ? Positioned(
         left: 300.w,
         top: 200.h,
@@ -4186,7 +4225,7 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      if (listm[i].isLock == 0) {
+                      if (listm[i].isClose == 0) {
                         eventBus.fire(
                             RoomBack(title: '闭麦1', index: i.toString()));
                       } else {
@@ -4199,7 +4238,7 @@ class RoomItems {
                       width: double.infinity,
                       color: Colors.transparent,
                       child: WidgetUtils.onlyTextCenter(
-                          listm[i].isLock == 0 ? '闭麦' : '开麦',
+                          listm[i].isClose == 0 ? '闭麦' : '开麦',
                           StyleUtils.getCommonTextStyle(
                               color: MyColors.roomTCWZ1,
                               fontSize: ScreenUtil().setSp(21))),
@@ -4211,8 +4250,8 @@ class RoomItems {
       )
           : const Text('');
     } else if (i == 0) {
-      return listm[i].uid.toString() == sp.getString('user_id').toString() &&
-          isShow
+      return (listm[i].uid.toString() == sp.getString('user_id').toString() &&
+          isShow)
           ? Positioned(
         left: 35.w,
         top: 400.h,
@@ -4255,7 +4294,7 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      if (listm[i].isLock == 0) {
+                      if (listm[i].isClose == 0) {
                         eventBus.fire(
                             RoomBack(title: '闭麦1', index: i.toString()));
                       } else {
@@ -4268,7 +4307,7 @@ class RoomItems {
                       width: double.infinity,
                       color: Colors.transparent,
                       child: WidgetUtils.onlyTextCenter(
-                          listm[i].isLock == 0 ? '闭麦' : '开麦',
+                          listm[i].isClose == 0 ? '闭麦' : '开麦',
                           StyleUtils.getCommonTextStyle(
                               color: MyColors.roomTCWZ1,
                               fontSize: ScreenUtil().setSp(21))),
@@ -4280,8 +4319,8 @@ class RoomItems {
       )
           : const Text('');
     } else if (i == 1) {
-      return listm[i].uid.toString() == sp.getString('user_id').toString() &&
-          isShow
+      return (listm[i].uid.toString() == sp.getString('user_id').toString() &&
+          isShow)
           ? Positioned(
         left: 215.w,
         top: 400.h,
@@ -4324,7 +4363,7 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      if (listm[i].isLock == 0) {
+                      if (listm[i].isClose == 0) {
                         eventBus.fire(
                             RoomBack(title: '闭麦1', index: i.toString()));
                       } else {
@@ -4337,7 +4376,7 @@ class RoomItems {
                       width: double.infinity,
                       color: Colors.transparent,
                       child: WidgetUtils.onlyTextCenter(
-                          listm[i].isLock == 0 ? '闭麦' : '开麦',
+                          listm[i].isClose == 0 ? '闭麦' : '开麦',
                           StyleUtils.getCommonTextStyle(
                               color: MyColors.roomTCWZ1,
                               fontSize: ScreenUtil().setSp(21))),
@@ -4349,8 +4388,8 @@ class RoomItems {
       )
           : const Text('');
     } else if (i == 2) {
-      return listm[i].uid.toString() == sp.getString('user_id').toString() &&
-          isShow
+      return (listm[i].uid.toString() == sp.getString('user_id').toString() &&
+          isShow)
           ? Positioned(
         left: 390.w,
         top: 400.h,
@@ -4393,7 +4432,7 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      if (listm[i].isLock == 0) {
+                      if (listm[i].isClose == 0) {
                         eventBus.fire(
                             RoomBack(title: '闭麦1', index: i.toString()));
                       } else {
@@ -4406,7 +4445,7 @@ class RoomItems {
                       width: double.infinity,
                       color: Colors.transparent,
                       child: WidgetUtils.onlyTextCenter(
-                          listm[i].isLock == 0 ? '闭麦' : '开麦',
+                          listm[i].isClose == 0 ? '闭麦' : '开麦',
                           StyleUtils.getCommonTextStyle(
                               color: MyColors.roomTCWZ1,
                               fontSize: ScreenUtil().setSp(21))),
@@ -4418,8 +4457,8 @@ class RoomItems {
       )
           : const Text('');
     } else if (i == 3) {
-      return listm[i].uid.toString() == sp.getString('user_id').toString() &&
-          isShow
+      return (listm[i].uid.toString() == sp.getString('user_id').toString() &&
+          isShow)
           ? Positioned(
         left: 570.w,
         top: 400.h,
@@ -4462,7 +4501,7 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      if (listm[i].isLock == 0) {
+                      if (listm[i].isClose == 0) {
                         eventBus.fire(
                             RoomBack(title: '闭麦1', index: i.toString()));
                       } else {
@@ -4475,7 +4514,7 @@ class RoomItems {
                       width: double.infinity,
                       color: Colors.transparent,
                       child: WidgetUtils.onlyTextCenter(
-                          listm[i].isLock == 0 ? '闭麦' : '开麦',
+                          listm[i].isClose == 0 ? '闭麦' : '开麦',
                           StyleUtils.getCommonTextStyle(
                               color: MyColors.roomTCWZ1,
                               fontSize: ScreenUtil().setSp(21))),
@@ -4487,8 +4526,8 @@ class RoomItems {
       )
           : const Text('');
     } else if (i == 4) {
-      return listm[i].uid.toString() == sp.getString('user_id').toString() &&
-          isShow
+      return (listm[i].uid.toString() == sp.getString('user_id').toString() &&
+          isShow)
           ? Positioned(
         left: 35.w,
         top: 560.h,
@@ -4531,7 +4570,7 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      if (listm[i].isLock == 0) {
+                      if (listm[i].isClose == 0) {
                         eventBus.fire(
                             RoomBack(title: '闭麦1', index: i.toString()));
                       } else {
@@ -4544,7 +4583,7 @@ class RoomItems {
                       width: double.infinity,
                       color: Colors.transparent,
                       child: WidgetUtils.onlyTextCenter(
-                          listm[i].isLock == 0 ? '闭麦' : '开麦',
+                          listm[i].isClose == 0 ? '闭麦' : '开麦',
                           StyleUtils.getCommonTextStyle(
                               color: MyColors.roomTCWZ1,
                               fontSize: ScreenUtil().setSp(21))),
@@ -4556,8 +4595,8 @@ class RoomItems {
       )
           : const Text('');
     } else if (i == 5) {
-      return listm[i].uid.toString() == sp.getString('user_id').toString() &&
-          isShow
+      return (listm[i].uid.toString() == sp.getString('user_id').toString() &&
+          isShow)
           ? Positioned(
         left: 215.w,
         top: 560.h,
@@ -4600,7 +4639,7 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      if (listm[i].isLock == 0) {
+                      if (listm[i].isClose == 0) {
                         eventBus.fire(
                             RoomBack(title: '闭麦1', index: i.toString()));
                       } else {
@@ -4613,7 +4652,7 @@ class RoomItems {
                       width: double.infinity,
                       color: Colors.transparent,
                       child: WidgetUtils.onlyTextCenter(
-                          listm[i].isLock == 0 ? '闭麦' : '开麦',
+                          listm[i].isClose == 0 ? '闭麦' : '开麦',
                           StyleUtils.getCommonTextStyle(
                               color: MyColors.roomTCWZ1,
                               fontSize: ScreenUtil().setSp(21))),
@@ -4625,8 +4664,8 @@ class RoomItems {
       )
           : const Text('');
     } else if (i == 6) {
-      return listm[i].uid.toString() == sp.getString('user_id').toString() &&
-          isShow
+      return (listm[i].uid.toString() == sp.getString('user_id').toString() &&
+          isShow)
           ? Positioned(
         left: 390.w,
         top: 560.h,
@@ -4669,7 +4708,7 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      if (listm[i].isLock == 0) {
+                      if (listm[i].isClose == 0) {
                         eventBus.fire(
                             RoomBack(title: '闭麦1', index: i.toString()));
                       } else {
@@ -4682,7 +4721,7 @@ class RoomItems {
                       width: double.infinity,
                       color: Colors.transparent,
                       child: WidgetUtils.onlyTextCenter(
-                          listm[i].isLock == 0 ? '闭麦' : '开麦',
+                          listm[i].isClose == 0 ? '闭麦' : '开麦',
                           StyleUtils.getCommonTextStyle(
                               color: MyColors.roomTCWZ1,
                               fontSize: ScreenUtil().setSp(21))),
@@ -4694,8 +4733,8 @@ class RoomItems {
       )
           : const Text('');
     } else {
-      return listm[i].uid.toString() == sp.getString('user_id').toString() &&
-          isShow
+      return (listm[i].uid.toString() == sp.getString('user_id').toString() &&
+          isShow)
           ? Positioned(
         left: 570.w,
         top: 560.h,
@@ -4738,7 +4777,7 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      if (listm[i].isLock == 0) {
+                      if (listm[i].isClose == 0) {
                         eventBus.fire(
                             RoomBack(title: '闭麦1', index: i.toString()));
                       } else {
@@ -4751,7 +4790,7 @@ class RoomItems {
                       width: double.infinity,
                       color: Colors.transparent,
                       child: WidgetUtils.onlyTextCenter(
-                          listm[i].isLock == 0 ? '闭麦' : '开麦',
+                          listm[i].isClose == 0 ? '闭麦' : '开麦',
                           StyleUtils.getCommonTextStyle(
                               color: MyColors.roomTCWZ1,
                               fontSize: ScreenUtil().setSp(21))),

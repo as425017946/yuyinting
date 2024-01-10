@@ -120,7 +120,9 @@ dependencies:
   # 查看设备版本
   device_info_plus: ^8.0.0
   # 侧滑按钮
-  flutter_slidable: ^3.0.1
+  flutter_slidable: ^0.6.0
+  # 屏幕常亮
+  screen: ^0.0.5
 
 
 dev_dependencies:

@@ -78,7 +78,7 @@ class _PasswordPayPageState extends State<PasswordPayPage> {
               children: [
                 WidgetUtils.onlyText('旧密码', StyleUtils.getCommonTextStyle(color: MyColors.g3,fontSize: ScreenUtil().setSp(33))),
                 WidgetUtils.commonSizedBox(0, 20),
-                Expanded(child: WidgetUtils.commonTextFieldNumber(
+                Expanded(child: WidgetUtils.commonTextFieldNumber2(
                     controller: controllerPas1, hintText: '请输入旧密码(未设置可不填)', enabled: true, obscureText: true)),
               ],
             ),
@@ -100,7 +100,7 @@ class _PasswordPayPageState extends State<PasswordPayPage> {
               children: [
                 WidgetUtils.onlyText('新密码', StyleUtils.getCommonTextStyle(color: MyColors.g3,fontSize: ScreenUtil().setSp(33))),
                 WidgetUtils.commonSizedBox(0, 20),
-                Expanded(child: WidgetUtils.commonTextFieldNumber(
+                Expanded(child: WidgetUtils.commonTextFieldNumber2(
                     controller: controllerPas2, hintText: '请输入新密码', enabled: true, obscureText: true)),
               ],
             ),
@@ -122,7 +122,7 @@ class _PasswordPayPageState extends State<PasswordPayPage> {
               children: [
                 WidgetUtils.onlyText('确认密码', StyleUtils.getCommonTextStyle(color: MyColors.g3,fontSize: ScreenUtil().setSp(33))),
                 WidgetUtils.commonSizedBox(0, 20),
-                Expanded(child: WidgetUtils.commonTextFieldNumber(
+                Expanded(child: WidgetUtils.commonTextFieldNumber2(
                     controller: controllerPas3, hintText: '请输入确认密码', enabled: true, obscureText: true)),
               ],
             ),

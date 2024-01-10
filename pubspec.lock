@@ -439,10 +439,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_slidable
-      sha256: "19ed4813003a6ff4e9c6bcce37e792a2a358919d7603b2b31ff200229191e44c"
+      sha256: c7607eb808cdef19c8468246e95a133308aeaeb3971cdd9edfb9d5e31cedfbe9
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.0.1"
+    version: "0.6.0"
   flutter_sound:
     dependency: "direct main"
     description:
@@ -1021,6 +1021,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.27.7"
+  screen:
+    dependency: "direct main"
+    description:
+      name: screen
+      sha256: f953f9f906b15b971597acadad16b5ab1d3912cbb325e807416f223313ce8ed6
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.0.5"
   shared_preferences:
     dependency: "direct main"
     description:

@@ -1,14 +1,19 @@
 class walletListBean {
   int? code;
   String? msg;
-  Data? data;
+  List<Data>? data;
 
   walletListBean({this.code, this.msg, this.data});
 
   walletListBean.fromJson(Map<String, dynamic> json) {
     code = json['code'];
     msg = json['msg'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    if (json['data'] != null) {
+      data = <Data>[];
+      json['data'].forEach((v) {
+        data!.add(new Data.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -16,41 +21,13 @@ class walletListBean {
     data['code'] = this.code;
     data['msg'] = this.msg;
     if (this.data != null) {
-      data['data'] = this.data!.toJson();
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class Data {
-  List<Result>? result;
-  Total? total;
-
-  Data({this.result, this.total});
-
-  Data.fromJson(Map<String, dynamic> json) {
-    if (json['result'] != null) {
-      result = <Result>[];
-      json['result'].forEach((v) {
-        result!.add(new Result.fromJson(v));
-      });
-    }
-    total = json['total'] != null ? new Total.fromJson(json['total']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.result != null) {
-      data['result'] = this.result!.map((v) => v.toJson()).toList();
-    }
-    if (this.total != null) {
-      data['total'] = this.total!.toJson();
-    }
-    return data;
-  }
-}
-
-class Result {
   int? uid;
   int? type;
   int? curType;
@@ -61,7 +38,7 @@ class Result {
   String? name;
   String? img;
 
-  Result(
+  Data(
       {this.uid,
         this.type,
         this.curType,
@@ -72,7 +49,7 @@ class Result {
         this.name,
         this.img});
 
-  Result.fromJson(Map<String, dynamic> json) {
+  Data.fromJson(Map<String, dynamic> json) {
     uid = json['uid'];
     type = json['type'];
     curType = json['cur_type'];
@@ -95,28 +72,6 @@ class Result {
     data['add_time'] = this.addTime;
     data['name'] = this.name;
     data['img'] = this.img;
-    return data;
-  }
-}
-
-class Total {
-  int? totalGoldBean;
-  int? totalDiamond;
-  int? totalGoldCoin;
-
-  Total({this.totalGoldBean, this.totalDiamond, this.totalGoldCoin});
-
-  Total.fromJson(Map<String, dynamic> json) {
-    totalGoldBean = json['total_gold_bean'];
-    totalDiamond = json['total_diamond'];
-    totalGoldCoin = json['total_gold_coin'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['total_gold_bean'] = this.totalGoldBean;
-    data['total_diamond'] = this.totalDiamond;
-    data['total_gold_coin'] = this.totalGoldCoin;
     return data;
   }
 }

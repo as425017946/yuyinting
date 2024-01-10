@@ -84,16 +84,12 @@ class _TixianZuanPageState extends State<TixianZuanPage> {
                           const Expanded(child: Text('')),
                           Row(
                             children: [
-                              Container(
-                                height: ScreenUtil().setHeight(250),
-                                padding: const EdgeInsets.only(top: 50),
-                                child: Text(
-                                  '钻',
-                                  style: StyleUtils.getCommonTextStyle(
+                              WidgetUtils.onlyText(
+                                  '钻石',
+                                  StyleUtils.getCommonTextStyle(
                                       color: Colors.white,
-                                      fontSize: ScreenUtil().setSp(38)),
-                                ),
-                              ),
+                                      fontSize: ScreenUtil().setSp(38))),
+                              const Spacer(),
                               WidgetUtils.commonSizedBox(0, 50),
                               WidgetUtils.onlyText(
                                   widget.shuliang,

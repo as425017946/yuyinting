@@ -25,6 +25,7 @@ import '../../http/my_http_config.dart';
 import '../../main.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/style_utils.dart';
+import '../mine/qianbao/dou_pay_page.dart';
 import 'car/car_guize_page.dart';
 import 'car/car_shop_page.dart';
 import 'car/lishi_page.dart';
@@ -1221,98 +1222,111 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                                     Column(
                                       children: [
                                         WidgetUtils.commonSizedBox(20.h, 0),
-                                        Container(
-                                          height: ScreenUtil().setHeight(45),
-                                          margin: EdgeInsets.only(right: 10.h),
-                                          padding: const EdgeInsets.only(
-                                              left: 5,
-                                              right: 5,
-                                              top: 1,
-                                              bottom: 1),
-                                          //边框设置
-                                          decoration: const BoxDecoration(
-                                            //背景
-                                            color: MyColors.zpJLHX,
-                                            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(30.0)),
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              WidgetUtils.commonSizedBox(0, 5),
-                                              WidgetUtils.showImages(
-                                                  'assets/images/car_mogubi.png',
-                                                  25.h,
-                                                  25.h),
-                                              WidgetUtils.commonSizedBox(
-                                                  0, 5.h),
-                                              WidgetUtils.onlyTextCenter(
-                                                  sp.getString('car_mogu2').toString(),
-                                                  StyleUtils.getCommonTextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: ScreenUtil()
-                                                          .setSp(23),
-                                                      fontWeight:
-                                                          FontWeight.w600)),
-                                              WidgetUtils.commonSizedBox(
-                                                  0, 10.h),
-                                              Opacity(
-                                                opacity: 0.8,
-                                                child: Container(
-                                                  height: ScreenUtil()
-                                                      .setHeight(20),
-                                                  width:
-                                                      ScreenUtil().setHeight(1),
-                                                  color: MyColors.home_hx,
+                                        GestureDetector(
+                                          onTap: ((){
+                                            MyUtils.goTransparentPageCom(context, DouPayPage(shuliang: sp.getString('car_jinbi2').toString(),));
+                                          }),
+                                          child: Container(
+                                            height: ScreenUtil().setHeight(45),
+                                            margin: EdgeInsets.only(right: 10.h),
+                                            padding: const EdgeInsets.only(
+                                                left: 5,
+                                                right: 5,
+                                                top: 1,
+                                                bottom: 1),
+                                            //边框设置
+                                            decoration: const BoxDecoration(
+                                              //背景
+                                              color: MyColors.zpJLHX,
+                                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(30.0)),
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                WidgetUtils.commonSizedBox(0, 5),
+                                                WidgetUtils.showImages(
+                                                    'assets/images/car_mogubi.png',
+                                                    25.h,
+                                                    25.h),
+                                                WidgetUtils.commonSizedBox(
+                                                    0, 5.h),
+                                                WidgetUtils.onlyTextCenter(
+                                                    sp.getString('car_mogu2').toString(),
+                                                    StyleUtils.getCommonTextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: ScreenUtil()
+                                                            .setSp(23),
+                                                        fontWeight:
+                                                            FontWeight.w600)),
+                                                WidgetUtils.commonSizedBox(
+                                                    0, 10.h),
+                                                Opacity(
+                                                  opacity: 0.8,
+                                                  child: Container(
+                                                    height: ScreenUtil()
+                                                        .setHeight(20),
+                                                    width:
+                                                        ScreenUtil().setHeight(1),
+                                                    color: MyColors.home_hx,
+                                                  ),
                                                 ),
-                                              ),
-                                              WidgetUtils.commonSizedBox(
-                                                  0, 10.h),
-                                              WidgetUtils.showImages(
-                                                  'assets/images/mine_wallet_dd.png',
-                                                  ScreenUtil().setHeight(26),
-                                                  ScreenUtil().setHeight(24)),
-                                              WidgetUtils.commonSizedBox(
-                                                  0, 10.h),
-                                              WidgetUtils.onlyTextCenter(
-                                                  sp.getString('car_jinbi2').toString(),
-                                                  StyleUtils.getCommonTextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: ScreenUtil()
-                                                          .setSp(23),
-                                                      fontWeight:
-                                                          FontWeight.w600)),
-                                              WidgetUtils.commonSizedBox(
-                                                  0, 10.h),
-                                              Opacity(
-                                                opacity: 0.8,
-                                                child: Container(
-                                                  height: ScreenUtil()
-                                                      .setHeight(20),
-                                                  width:
-                                                      ScreenUtil().setHeight(1),
-                                                  color: MyColors.home_hx,
+                                                WidgetUtils.commonSizedBox(
+                                                    0, 10.h),
+                                                WidgetUtils.showImages(
+                                                    'assets/images/mine_wallet_dd.png',
+                                                    ScreenUtil().setHeight(26),
+                                                    ScreenUtil().setHeight(24)),
+                                                WidgetUtils.commonSizedBox(
+                                                    0, 10.h),
+                                                WidgetUtils.onlyTextCenter(
+                                                    sp.getString('car_jinbi2').toString(),
+                                                    StyleUtils.getCommonTextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: ScreenUtil()
+                                                            .setSp(23),
+                                                        fontWeight:
+                                                            FontWeight.w600)),
+                                                WidgetUtils.commonSizedBox(0, 5.w),
+                                                Image(
+                                                  image: const AssetImage(
+                                                      'assets/images/wallet_more.png'),
+                                                  width: 15.h,
+                                                  height: 15.h,
                                                 ),
-                                              ),
-                                              WidgetUtils.commonSizedBox(
-                                                  0, 10.h),
-                                              WidgetUtils.showImages(
-                                                  'assets/images/mine_wallet_zz.png',
-                                                  ScreenUtil().setHeight(26),
-                                                  ScreenUtil().setHeight(24)),
-                                              WidgetUtils.commonSizedBox(
-                                                  0, 10.h),
-                                              WidgetUtils.onlyTextCenter(
-                                                  sp.getString('car_zuanshi2').toString(),
-                                                  StyleUtils.getCommonTextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: ScreenUtil()
-                                                          .setSp(23),
-                                                      fontWeight:
-                                                          FontWeight.w600)),
-                                              WidgetUtils.commonSizedBox(
-                                                  0, 10.h),
-                                            ],
+                                                WidgetUtils.commonSizedBox(
+                                                    0, 10.h),
+                                                // 钻石处先隐藏
+                                                // Opacity(
+                                                //   opacity: 0.8,
+                                                //   child: Container(
+                                                //     height: ScreenUtil()
+                                                //         .setHeight(20),
+                                                //     width:
+                                                //         ScreenUtil().setHeight(1),
+                                                //     color: MyColors.home_hx,
+                                                //   ),
+                                                // ),
+                                                // WidgetUtils.commonSizedBox(
+                                                //     0, 10.h),
+                                                // WidgetUtils.showImages(
+                                                //     'assets/images/mine_wallet_zz.png',
+                                                //     ScreenUtil().setHeight(26),
+                                                //     ScreenUtil().setHeight(24)),
+                                                // WidgetUtils.commonSizedBox(
+                                                //     0, 10.h),
+                                                // WidgetUtils.onlyTextCenter(
+                                                //     sp.getString('car_zuanshi2').toString(),
+                                                //     StyleUtils.getCommonTextStyle(
+                                                //         color: Colors.white,
+                                                //         fontSize: ScreenUtil()
+                                                //             .setSp(23),
+                                                //         fontWeight:
+                                                //             FontWeight.w600)),
+                                                // WidgetUtils.commonSizedBox(
+                                                //     0, 10.h),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -1887,8 +1901,12 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                 // 减去花费的V豆
                 jinbi =
                     '${(double.parse(jinbi) - int.parse(xiazhujine.toString()))}';
-                //保留2位小数
-                jinbi2 = '${(double.parse(jinbi) / 10000).toStringAsFixed(2)}w';
+                if(double.parse(jinbi) > 10000){
+                  //保留2位小数
+                  jinbi2 = '${(double.parse(jinbi) / 10000).toStringAsFixed(2)}w';
+                }else{
+                  jinbi2 = jinbi;
+                }
               } else {
                 jinbi = sp.getString('car_jinbi').toString();
                 jinbi = (double.parse(jinbi) - int.parse(xiazhujine.toString()))
@@ -1903,9 +1921,13 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                 // 减去花费的V豆
                 zuanshi =
                     '${(double.parse(zuanshi) - int.parse(xiazhujine.toString()))}';
-                //保留2位小数
-                zuanshi2 =
-                    '${(double.parse(zuanshi) / 10000).toStringAsFixed(2)}w';
+                if(double.parse(zuanshi) > 10000){
+                  //保留2位小数
+                  zuanshi2 =
+                  '${(double.parse(zuanshi) / 10000).toStringAsFixed(2)}w';
+                }else{
+                  zuanshi2 = zuanshi;
+                }
               } else {
                 zuanshi = sp.getString('car_zuanshi').toString();
                 zuanshi =

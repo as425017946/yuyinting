@@ -14,6 +14,7 @@ import '../../../colors/my_colors.dart';
 import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
+import '../../../utils/event_utils.dart';
 import '../../../utils/loading.dart';
 import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
@@ -535,7 +536,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
                                   ScreenUtil().setHeight(68)),
                         ],
                       ),
-                      Expanded(
+                      isOK ? Expanded(
                         child: PageView(
                           reverse: false,
                           controller: _controller,
@@ -545,12 +546,12 @@ class _MyInfoPageState extends State<MyInfoPage> {
                               _currentIndex = index;
                             });
                           },
-                          children: const [
-                            MyZiliaoPage(),
-                            MyDongtaiPage(),
+                          children: [
+                            MyZiliaoPage(userInfo: userInfo, giftList: giftList,),
+                            const MyDongtaiPage(),
                           ],
                         ),
-                      )
+                      ) : const Text('')
                     ],
                   ),
                 ),
@@ -562,7 +563,9 @@ class _MyInfoPageState extends State<MyInfoPage> {
 
   /// 个人主页
   int level = 0;
-
+  late MyUserInfo userInfo;
+  late GiftList giftList;
+  bool isOK = false;
   Future<void> doPostMyIfon() async {
     LogE('token ${sp.getString('user_id')}');
     LogE('token ${sp.getString('user_token')}');
@@ -575,6 +578,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
+            isOK = true;
             sp.setString("user_headimg", bean.data!.userInfo!.avatarUrl!);
             sp.setString("nickname", bean.data!.userInfo!.nickname!);
             gender = bean.data!.userInfo!.gender as int;
@@ -582,7 +586,11 @@ class _MyInfoPageState extends State<MyInfoPage> {
             voice_card = bean.data!.userInfo!.voiceCardUrl!;
             is_pretty = bean.data!.userInfo!.isPretty as int;
             level = bean.data!.userInfo!.level as int;
+            userInfo = bean.data!.userInfo!;
+            giftList = bean.data!.giftList!;
           });
+          // 发送通知
+          eventBus.fire(myInfoBack(userInfo: userInfo, giftList: giftList));
           break;
         case MyHttpConfig.errorloginCode:
           // ignore: use_build_context_synchronously

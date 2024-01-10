@@ -457,9 +457,10 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                         GestureDetector(
                                           onTap: (() {
                                             if (MyUtils.checkClick()) {
+                                              Navigator.pop(context);
                                               eventBus.fire(RoomBack(
                                                   title: '下麦',
-                                                  index: widget.index));
+                                                  index: '${widget.index};${widget.uid}'));
                                             }
                                           }),
                                           child: WidgetUtils.onlyTextCenter(
@@ -644,6 +645,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                               Expanded(
                                   child: GestureDetector(
                                 onTap: (() {
+                                  Navigator.pop(context);
                                   if (is_black == '1') {
                                     doPostSetRoomBlack('0');
                                   } else {

@@ -182,6 +182,7 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                       width: double.infinity,
                       child: Text(
                         comList[i].content!,
+                        maxLines: 10,
                         style: StyleUtils.getCommonTextStyle(
                             color: Colors.black,
                             fontSize: ScreenUtil().setSp(25)),
@@ -666,11 +667,14 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                           ),
                         ),
                         WidgetUtils.commonSizedBox(5, 0),
-                        WidgetUtils.onlyText(
-                            text,
-                            StyleUtils.getCommonTextStyle(
-                                color: Colors.black,
-                                fontSize: ScreenUtil().setSp(32))),
+                        Text(
+                          text,
+                          maxLines: 10,
+                          style: StyleUtils.getCommonTextStyle(
+                            color: Colors.black,
+                            fontSize: ScreenUtil().setSp(32),
+                          ),
+                        ),
                         WidgetUtils.commonSizedBox(5, 0),
                         type == 2 ? showVideo(imgList) : showImag(imgList),
                         WidgetUtils.commonSizedBox(10, 0),

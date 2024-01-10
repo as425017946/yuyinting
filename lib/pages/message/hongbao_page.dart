@@ -38,7 +38,7 @@ class _HongBaoPageState extends State<HongBaoPage> {
     doPostBalance();
     listen = eventBus.on<RoomBack>().listen((event) {
       if(event.title == '发红包已输入密码'){
-        doPostSendRedPacket(controllerDou.text,event.index!);
+        doPostSendRedPacket(int.parse(controllerDou.text).toString(), event.index!);
       }
     });
   }
@@ -321,6 +321,10 @@ class _HongBaoPageState extends State<HongBaoPage> {
           break;
         default:
           MyToastUtils.showToastBottom(bean.msg!);
+          setState(() {
+            controllerDou.text = '';
+          });
+
           break;
       }
     } catch (e) {

@@ -51,7 +51,8 @@ class _SVGASimpleImage5State extends State<SVGASimpleImage5>
     }
     return SVGAImage(
       animationController!,
-      fit: BoxFit.fill,
+      // fit: BoxFit.contain,
+      fit: BoxFit.fitHeight,
       preferredSize: const Size(double.infinity, double.infinity),
       allowDrawingOverflow: false,
       clearsAfterStop: false,

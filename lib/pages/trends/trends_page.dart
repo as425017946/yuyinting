@@ -20,16 +20,16 @@ class _TrendsPageState extends State<TrendsPage> with AutomaticKeepAliveClientMi
   @override
   bool get wantKeepAlive => true;
 
-  int _currentIndex = 0;
+  int _currentIndex = 1;
   late final PageController _controller;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _currentIndex = 0;
+    _currentIndex = 1;
     _controller = PageController(
-      initialPage: 0,
+      initialPage: 1,
     );
   }
 

@@ -1,7 +1,7 @@
 class tjRoomListBean {
   int? code;
   String? msg;
-  List<Data>? data;
+  List<DataPH>? data;
 
   tjRoomListBean({this.code, this.msg, this.data});
 
@@ -9,9 +9,9 @@ class tjRoomListBean {
     code = json['code'];
     msg = json['msg'];
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <DataPH>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(new DataPH.fromJson(v));
       });
     }
   }
@@ -27,7 +27,7 @@ class tjRoomListBean {
   }
 }
 
-class Data {
+class DataPH {
   int? id;
   int? roomNumber;
   String? roomName;
@@ -41,7 +41,7 @@ class Data {
   List<MemberList>? memberList;
   int? isNew;
 
-  Data(
+  DataPH(
       {this.id,
         this.roomNumber,
         this.roomName,
@@ -55,7 +55,7 @@ class Data {
         this.memberList,
         this.isNew});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  DataPH.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     roomNumber = json['room_number'];
     roomName = json['room_name'];

@@ -24,7 +24,6 @@ import '../../utils/my_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../../widget/Marquee.dart';
 import 'gonghui/gonghui_home_page.dart';
-import 'gonghui/jiesuan_page.dart';
 import 'gonghui/my_gonghui_page.dart';
 import 'mine_smz_page.dart';
 import 'my/my_info_page.dart';
@@ -398,7 +397,14 @@ class _MinePageState extends State<MinePage> {
                 GestureDetector(
                   onTap: (() {
                     if (MyUtils.checkClick()) {
-                      Navigator.pushNamed(context, 'MyInfoPage');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MyInfoPage(),
+                        ),
+                      ).then((value) {
+                        doPostMyIfon();
+                      });
                     }
                   }),
                   child: Row(
@@ -480,7 +486,9 @@ class _MinePageState extends State<MinePage> {
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
                                   return CareHomePage(index: 0);
-                                }));
+                                })).then((value) {
+                                  doPostMyIfon();
+                                });
                               }
                             }),
                             child: Column(
@@ -517,7 +525,9 @@ class _MinePageState extends State<MinePage> {
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
                                   return CareHomePage(index: 1);
-                                }));
+                                })).then((value) {
+                                  doPostMyIfon();
+                                });
                               }
                             }),
                             child: Column(
@@ -554,7 +564,9 @@ class _MinePageState extends State<MinePage> {
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context) {
                                   return CareHomePage(index: 2);
-                                }));
+                                })).then((value) {
+                                  doPostMyIfon();
+                                });
                               }
                             }),
                             child: Column(

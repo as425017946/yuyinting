@@ -1,14 +1,19 @@
 class shoucangBean {
   int? code;
   String? msg;
-  Data? data;
+  List<DataS>? data;
 
   shoucangBean({this.code, this.msg, this.data});
 
   shoucangBean.fromJson(Map<String, dynamic> json) {
     code = json['code'];
     msg = json['msg'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    if (json['data'] != null) {
+      data = <DataS>[];
+      json['data'].forEach((v) {
+        data!.add(new DataS.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -16,39 +21,13 @@ class shoucangBean {
     data['code'] = this.code;
     data['msg'] = this.msg;
     if (this.data != null) {
-      data['data'] = this.data!.toJson();
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
-class Data {
-  List<ListSC>? list;
-  int? count;
-
-  Data({this.list, this.count});
-
-  Data.fromJson(Map<String, dynamic> json) {
-    if (json['list'] != null) {
-      list = <ListSC>[];
-      json['list'].forEach((v) {
-        list!.add(new ListSC.fromJson(v));
-      });
-    }
-    count = json['count'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.list != null) {
-      data['list'] = this.list!.map((v) => v.toJson()).toList();
-    }
-    data['count'] = this.count;
-    return data;
-  }
-}
-
-class ListSC {
+class DataS {
   int? id;
   String? roomName;
   String? coverImg;
@@ -56,7 +35,7 @@ class ListSC {
   int? hotDegree;
   int? type;
 
-  ListSC(
+  DataS(
       {this.id,
         this.roomName,
         this.coverImg,
@@ -64,7 +43,7 @@ class ListSC {
         this.hotDegree,
         this.type});
 
-  ListSC.fromJson(Map<String, dynamic> json) {
+  DataS.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     roomName = json['room_name'];
     coverImg = json['cover_img'];

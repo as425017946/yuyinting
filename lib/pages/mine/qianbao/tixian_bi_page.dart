@@ -11,6 +11,7 @@ import '../../../http/my_http_config.dart';
 import '../../../utils/event_utils.dart';
 import '../../../utils/loading.dart';
 import '../../../utils/my_utils.dart';
+import '../../../utils/regex_formatter.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 import '../../message/pay_ts_page.dart';
@@ -31,7 +32,7 @@ class _TixianBiPageState extends State<TixianBiPage> {
   TextEditingController controllerAccount = TextEditingController();
   TextEditingController controllerNumber = TextEditingController();
   String daozhang = '0';
-  var listenTX, listenMM;
+  var listenTX, listenMM,listensl;
   @override
   void initState() {
     // TODO: implement initState
@@ -51,12 +52,12 @@ class _TixianBiPageState extends State<TixianBiPage> {
           MyToastUtils.showToastBottom('请输入币数量');
           return;
         }
-        if(double.parse(controllerNumber.text.toString()) > 10){
+        if(double.parse(controllerNumber.text.toString()) >= 1100){
           setState(() {
-            daozhang = (double.parse(controllerNumber.text.toString()) / 10).toStringAsFixed(0);
+            daozhang = (double.parse(controllerNumber.text.toString()) / 10*0.94).truncate().toStringAsFixed(0);
           });
         }else{
-          MyToastUtils.showToastBottom('提现数量不足10个');
+          MyToastUtils.showToastBottom('提现数量不足1100个，无法发起提现申请');
           return;
         }
         //先判断是否有支付密码
@@ -69,6 +70,16 @@ class _TixianBiPageState extends State<TixianBiPage> {
         doPostWithdrawal(event.index!);
       }
     });
+
+    listensl = eventBus.on<InfoBack>().listen((event) {
+      setState(() {
+        if(event.info.isEmpty){
+          daozhang = '0';
+        }else{
+          daozhang = (double.parse(event.info) / 10*0.94).truncate().toStringAsFixed(0);
+        }
+      });
+    });
   }
   @override
   void dispose() {
@@ -76,6 +87,7 @@ class _TixianBiPageState extends State<TixianBiPage> {
     super.dispose();
     listenTX.cancel();
     listenMM.cancel();
+    listensl.cancel();
   }
 
   @override
@@ -122,16 +134,11 @@ class _TixianBiPageState extends State<TixianBiPage> {
                                 const Expanded(child: Text('')),
                                 Row(
                                   children: [
-                                    Container(
-                                      height: ScreenUtil().setHeight(250),
-                                      padding: const EdgeInsets.only(top: 50),
-                                      child: Text(
-                                        '币',
-                                        style: StyleUtils.getCommonTextStyle(
+                                    WidgetUtils.onlyText(
+                                        'V币',
+                                        StyleUtils.getCommonTextStyle(
                                             color: Colors.white,
-                                            fontSize: ScreenUtil().setSp(38)),
-                                      ),
-                                    ),
+                                            fontSize: ScreenUtil().setSp(38))),
                                     const Spacer(),
                                     WidgetUtils.onlyText(
                                         widget.shuliang,
@@ -149,15 +156,15 @@ class _TixianBiPageState extends State<TixianBiPage> {
                     ),
 
                     /// 兑换提示
-                    Container(
-                      margin: const EdgeInsets.only(right: 15, bottom: 15),
-                      child: Text(
-                        '10币=1元',
-                        style: TextStyle(
-                            fontSize: ScreenUtil().setSp(21),
-                            color: Colors.white),
-                      ),
-                    ),
+                    // Container(
+                    //   margin: const EdgeInsets.only(right: 15, bottom: 15),
+                    //   child: Text(
+                    //     '10V币=1元',
+                    //     style: TextStyle(
+                    //         fontSize: ScreenUtil().setSp(21),
+                    //         color: Colors.white),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -188,8 +195,44 @@ class _TixianBiPageState extends State<TixianBiPage> {
                         WidgetUtils.onlyText('姓名', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(32))),
                         WidgetUtils.commonSizedBox(0, 20),
                         Expanded(
-                          child: WidgetUtils.commonTextField(
-                              controllerName,  '请输入姓名'),
+                          child: TextField(
+                            controller: controllerName,
+                            inputFormatters: [
+                              RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                            ],
+                            style: StyleUtils.loginTextStyle,
+                            onChanged: (value) {
+
+                            },
+                            decoration: InputDecoration(
+                              // border: InputBorder.none,
+                              // labelText: "请输入用户名",
+                              // icon: Icon(Icons.people), //前面的图标
+                              hintText: '请输入姓名',
+                              hintStyle: StyleUtils.loginHintTextStyle,
+
+                              contentPadding: const EdgeInsets.only(top: 0, bottom: 0),
+                              border: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.transparent),
+                              ),
+                              enabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                ),
+                              ),
+                              disabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                ),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                ),
+                              ),
+                              // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -199,8 +242,44 @@ class _TixianBiPageState extends State<TixianBiPage> {
                         WidgetUtils.onlyText('支付宝账号', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(32))),
                         WidgetUtils.commonSizedBox(0, 20),
                         Expanded(
-                          child: WidgetUtils.commonTextField(
-                              controllerAccount,  '请输入账号'),
+                          child: TextField(
+                            controller: controllerAccount,
+                            inputFormatters: [
+                              RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                            ],
+                            style: StyleUtils.loginTextStyle,
+                            onChanged: (value) {
+
+                            },
+                            decoration: InputDecoration(
+                              // border: InputBorder.none,
+                              // labelText: "请输入用户名",
+                              // icon: Icon(Icons.people), //前面的图标
+                              hintText: '请输入账号',
+                              hintStyle: StyleUtils.loginHintTextStyle,
+
+                              contentPadding: const EdgeInsets.only(top: 0, bottom: 0),
+                              border: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.transparent),
+                              ),
+                              enabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                ),
+                              ),
+                              disabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                ),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                ),
+                              ),
+                              // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -208,21 +287,21 @@ class _TixianBiPageState extends State<TixianBiPage> {
                     WidgetUtils.onlyText('提取V币', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(32))),
                     Row(
                       children: [
-                        WidgetUtils.showImages('assets/images/mine_wallet_dd.png', ScreenUtil().setHeight(48), ScreenUtil().setHeight(48)),
+                        WidgetUtils.showImages('assets/images/mine_wallet_bb.png', ScreenUtil().setHeight(30), ScreenUtil().setHeight(30)),
                         WidgetUtils.commonSizedBox(0, 20),
                         Expanded(
                           child: WidgetUtils.commonTextFieldNumber(
-                              controller: controllerNumber, hintText: '请输入币数量'),
+                              controller: controllerNumber, hintText: '请输入V币数量'),
                         ),
                         GestureDetector(
                           onTap: ((){
-                              if(double.parse(widget.shuliang) > 10){
+                              if(double.parse(widget.shuliang) > 1100){
                                 setState(() {
-                                  controllerNumber.text = '${(double.parse(widget.shuliang) / 10).toStringAsFixed(0)}0';
-                                  daozhang = (double.parse(widget.shuliang) / 10).toStringAsFixed(0);
+                                  controllerNumber.text = '${(double.parse(widget.shuliang).truncate() / 10).toStringAsFixed(0)}0';
+                                  daozhang = (double.parse(widget.shuliang).truncate() / 10).toStringAsFixed(0);
                                 });
                               }else{
-                                MyToastUtils.showToastBottom('提现数量不足10个');
+                                MyToastUtils.showToastBottom('提现数量不足1100个');
                               }
                           }),
                           child: WidgetUtils.onlyText('全部', StyleUtils.getCommonTextStyle(color: MyColors.walletWZBlue, fontSize: ScreenUtil().setSp(32))),
@@ -234,7 +313,7 @@ class _TixianBiPageState extends State<TixianBiPage> {
                       children: [
                         WidgetUtils.onlyText('到账金额', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(32))),
                         WidgetUtils.commonSizedBox(0, 10),
-                        WidgetUtils.onlyText('￥$daozhang', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(32), fontWeight: FontWeight.w600)),
+                        WidgetUtils.onlyText('￥$daozhang元', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(32), fontWeight: FontWeight.w600)),
                       ],
                     )
                   ],
@@ -245,11 +324,13 @@ class _TixianBiPageState extends State<TixianBiPage> {
               WidgetUtils.commonSizedBox(5, 20),
               WidgetUtils.onlyText('1.请确保支付宝账号和真实姓名一致，否则可能导致提现失败；（无需使用账号实名账户）', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(25))),
               WidgetUtils.commonSizedBox(5, 20),
-              WidgetUtils.onlyText('2.提取金额必须为10的倍数且大于等于50，否则无法申请', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(25))),
+              WidgetUtils.onlyText('2.提取V币数必须≥1100 V币，否则无法发起申请', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(25))),
               WidgetUtils.commonSizedBox(5, 20),
-              WidgetUtils.onlyText('3.V币提现收取', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(25))),
+              WidgetUtils.onlyText('3.V币提现收取6%手续费', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(25))),
               WidgetUtils.commonSizedBox(5, 20),
-              WidgetUtils.onlyText('4.提款次日到账，节假日另行通知', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(25))),
+              WidgetUtils.onlyText('4.实际到账金额将精简到元，即抹除角分数值', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(25))),
+              WidgetUtils.commonSizedBox(5, 20),
+              WidgetUtils.onlyText('5.提款次日到账，节假日另行通知', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(25))),
               WidgetUtils.commonSizedBox(20, 20),
               WidgetUtils.commonSubmitButton2('申请提现', MyColors.walletWZBlue),
             ],
@@ -274,7 +355,7 @@ class _TixianBiPageState extends State<TixianBiPage> {
       CommonBean bean = await DataUtils.postWithdrawal(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          MyToastUtils.showToastBottom('提现成功！');
+          MyToastUtils.showToastBottom('已成功发起提现申请！');
           eventBus.fire(SubmitButtonBack(title: '金币提现成功'));
           Navigator.pop(context);
           break;

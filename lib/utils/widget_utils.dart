@@ -378,6 +378,7 @@ class WidgetUtils {
       //设置键盘为数字
       style: StyleUtils.loginTextStyle,
       onChanged: (value) {
+        LogE('输入信息 $value');
         eventBus.fire(InfoBack(info: value));
       },
       decoration: InputDecoration(
@@ -391,6 +392,39 @@ class WidgetUtils {
     );
   }
 
+  ///通用数字键盘，只能输入数字
+  static Widget commonTextFieldNumber2(
+      {required TextEditingController controller,
+      required String hintText,
+      bool? enabled = true,
+      bool? obscureText = false}) {
+    return TextField(
+      enabled: enabled,
+      obscureText: obscureText!,
+      controller: controller,
+      inputFormatters: [
+        RegexFormatter(regex: MyUtils.regexFirstNotNull),
+        FilteringTextInputFormatter.digitsOnly,
+        //设置只能输入6位
+        LengthLimitingTextInputFormatter(6),
+      ],
+      keyboardType: TextInputType.number,
+      //设置键盘为数字
+      style: StyleUtils.loginTextStyle,
+      onChanged: (value) {
+        LogE('输入信息 $value');
+        eventBus.fire(InfoBack(info: value));
+      },
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        // labelText: "请输入用户名",
+        // icon: Icon(Icons.people), //前面的图标
+        hintText: hintText,
+        hintStyle: StyleUtils.loginHintTextStyle,
+        // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
+      ),
+    );
+  }
 
   ///通用登录大按钮
   static Widget commonSubmitButton(String title) {
@@ -448,7 +482,9 @@ class WidgetUtils {
           borderRadius: BorderRadius.all(Radius.circular(25)),
         ),
         onPressed: (() {
-          eventBus.fire(SubmitButtonBack(title: title));
+          if(MyUtils.checkClick()) {
+            eventBus.fire(SubmitButtonBack(title: title));
+          }
         }),
         child: Text(
           title,
@@ -532,7 +568,7 @@ class WidgetUtils {
                     placeholder: (context, url) => CircleImageAss(
                       height,
                       width,
-                      height/2,
+                      height / 2,
                       'assets/images/img_placeholder.png',
                     ),
                     errorWidget: (context, url, error) {
@@ -541,7 +577,7 @@ class WidgetUtils {
                       return CircleImageAss(
                         height,
                         width,
-                        height/2,
+                        height / 2,
                         'assets/images/img_error.png',
                       );
                     },
@@ -578,11 +614,21 @@ class WidgetUtils {
               ? CachedNetworkImage(
                   imageUrl: url,
                   fit: BoxFit.fill,
-                  placeholder: (context, url) => CircleImageAss(height, width, ScreenUtil().setHeight(10) , 'assets/images/img_placeholder.png',),
+                  placeholder: (context, url) => CircleImageAss(
+                    height,
+                    width,
+                    ScreenUtil().setHeight(10),
+                    'assets/images/img_placeholder.png',
+                  ),
                   errorWidget: (context, url, error) {
                     LogE('加载错误提示 $error');
                     // return const Icon(Icons.error);
-                    return CircleImageAss(height, width, ScreenUtil().setHeight(10) , 'assets/images/img_error.png',);
+                    return CircleImageAss(
+                      height,
+                      width,
+                      ScreenUtil().setHeight(10),
+                      'assets/images/img_error.png',
+                    );
                   },
                 )
               : Image(
@@ -617,6 +663,77 @@ class WidgetUtils {
               height: height,
               fit: BoxFit.cover,
               gaplessPlayback: true,
+            ),
+    );
+  }
+
+  ///圆角图片 本地，加载失败展示网络图
+  static Widget CircleImageAssNet(
+      double height, double width, double radius, String url, String netUrl) {
+    return Container(
+      width: width,
+      height: height,
+      //超出部分，可裁剪
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(radius),
+      ),
+      child: (url.contains('com.leimu.yuyinting') || url.contains('storage'))
+          ? Image.file(
+              File(url),
+              fit: BoxFit.fill,
+              gaplessPlayback: true,
+              errorBuilder: (context, error, stackTrace) {
+                return CachedNetworkImage(
+                  imageUrl: netUrl,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => CircleImageAss(
+                    height,
+                    width,
+                    ScreenUtil().setHeight(10),
+                    'assets/images/img_placeholder.png',
+                  ),
+                  errorWidget: (context, url, error) {
+                    LogE('加载错误提示 $error');
+                    // return const Icon(Icons.error);
+                    return CircleImageAss(
+                      height,
+                      width,
+                      ScreenUtil().setHeight(10),
+                      'assets/images/img_error.png',
+                    );
+                  },
+                );
+              },
+            )
+          : Image(
+              image: AssetImage(url),
+              width: width,
+              height: height,
+              fit: BoxFit.cover,
+              gaplessPlayback: true,
+              errorBuilder: (context, error, stackTrace) {
+                return CachedNetworkImage(
+                  imageUrl: netUrl,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => CircleImageAss(
+                    height,
+                    width,
+                    ScreenUtil().setHeight(10),
+                    'assets/images/img_placeholder.png',
+                  ),
+                  errorWidget: (context, url, error) {
+                    LogE('加载错误提示 $error');
+                    // return const Icon(Icons.error);
+                    return CircleImageAss(
+                      height,
+                      width,
+                      ScreenUtil().setHeight(10),
+                      'assets/images/img_error.png',
+                    );
+                  },
+                );
+              },
             ),
     );
   }
@@ -747,12 +864,14 @@ class WidgetUtils {
                   color: Colors.black, fontSize: ScreenUtil().setSp(29)),
             ),
             WidgetUtils.commonSizedBox(0, 10.w),
-            (title == '公会中心' && isVersion) ? Transform.translate(
-              offset: Offset(0,-5.h),
-              child: CustomPaint(
-                painter: LinePainter2(colors: Colors.red),
-              ),
-            ) : const Text(''),
+            (title == '公会中心' && isVersion)
+                ? Transform.translate(
+                    offset: Offset(0, -5.h),
+                    child: CustomPaint(
+                      painter: LinePainter2(colors: Colors.red),
+                    ),
+                  )
+                : const Text(''),
             const Expanded(child: Text('')),
             // Text(
             //   isVersion ? sp.getString(MyConfig.appVersion).toString() : '',
@@ -1152,8 +1271,10 @@ class WidgetUtils {
       child: Row(
         children: [
           const Expanded(child: Text('')),
-          title != '取消关注' ? WidgetUtils.showImages(
-              imgUrl, ScreenUtil().setHeight(38), ScreenUtil().setWidth(33)) : const Text(''),
+          title != '取消关注'
+              ? WidgetUtils.showImages(
+                  imgUrl, ScreenUtil().setHeight(38), ScreenUtil().setWidth(33))
+              : const Text(''),
           WidgetUtils.commonSizedBox(0, 5),
           WidgetUtils.onlyText(
               title,
@@ -1294,7 +1415,7 @@ class WidgetUtils {
       controller: controller,
       inputFormatters: [
         RegexFormatter(regex: MyUtils.regexFirstNotNull),
-        LengthLimitingTextInputFormatter(16)//限制输入长度
+        LengthLimitingTextInputFormatter(16) //限制输入长度
       ],
       style: StyleUtils.getCommonTextStyle(
           color: MyColors.g3, fontSize: ScreenUtil().setSp(25)),
@@ -1374,9 +1495,9 @@ class WidgetUtils {
   ///通用数字键盘，只能输入数字, 发红包使用
   static Widget commonTextFieldNumberHB(
       {required TextEditingController controller,
-        required String hintText,
-        bool? enabled = true,
-        bool? obscureText = false}) {
+      required String hintText,
+      bool? enabled = true,
+      bool? obscureText = false}) {
     return TextField(
       enabled: enabled,
       obscureText: obscureText!,
@@ -1388,7 +1509,8 @@ class WidgetUtils {
       ],
       keyboardType: TextInputType.number,
       //设置键盘为数字
-      style: StyleUtils.getCommonTextStyle(color: Colors.black87, fontSize: 32.sp, fontWeight: FontWeight.w500),
+      style: StyleUtils.getCommonTextStyle(
+          color: Colors.black87, fontSize: 32.sp, fontWeight: FontWeight.w500),
       onChanged: (value) {
         eventBus.fire(InfoBack(info: value));
       },
@@ -1397,7 +1519,8 @@ class WidgetUtils {
         // labelText: "请输入用户名",
         // icon: Icon(Icons.people), //前面的图标
         hintText: hintText,
-        hintStyle: StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: 32.sp, fontWeight: FontWeight.w500),
+        hintStyle: StyleUtils.getCommonTextStyle(
+            color: MyColors.g9, fontSize: 32.sp, fontWeight: FontWeight.w500),
         // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
       ),
     );

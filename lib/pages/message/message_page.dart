@@ -13,6 +13,7 @@ import '../../config/my_config.dart';
 import '../../db/DatabaseHelper.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
+import '../../main.dart';
 import '../../utils/custom_dialog.dart';
 import '../../utils/line_painter2.dart';
 import '../../utils/loading.dart';
@@ -45,7 +46,6 @@ class _MessagePageState extends State<MessagePage> {
     super.initState();
     doPostSystemMsgList();
     MyUtils.addChatListener();
-    eventBus.fire(SubmitButtonBack(title: '清空红点'));
     list1 = eventBus.on<ResidentBack>().listen((event) {
       setState(() {
         unRead = 0;
@@ -70,31 +70,37 @@ class _MessagePageState extends State<MessagePage> {
     super.dispose();
 
   }
+  Widget buildIconSlideAction(String title, IconData icons, Color color,int i) {
+    return Container(
+      width: 50,
+      child: IconSlideAction(
+        caption: title,
+        color: color,
+        icon: icons,
+        onTap: () {
+          // MyToastUtils.showToastBottom('第几个$i');
+          doDelete(listMessage[i]['combineID']);
+              //移除当前项
+          setState(() {
+            listMessage.removeAt(i);
+          });
+        },
+      ),
+    );
+  }
 
   Widget message(BuildContext context, int i) {
     LogE('他人头像 == ${listMessage[i]['otherHeadImg']}');
     return Slidable(
       //列表中只有一个能滑动
-      key: Key(i.toString()),
-      endActionPane: ActionPane(
-        motion: const ScrollMotion(),
-        children: [
-          SlidableAction(
-            // An action can be bigger than the others.
-            flex: 1,
-            onPressed: (context){
-              // MyToastUtils.showToastBottom('第几个$i');
-              doDelete(listMessage[i]['combineID']);
-              //移除当前项
-              setState(() {
-                listMessage.removeAt(i);
-              });
-            },
-            backgroundColor: Colors.red,
-            label: '删除',
-          ),
-        ],
-      ),
+      key: Key(UniqueKey().toString()),
+      actionExtentRatio: 0.3,
+      //滑动的动画
+      actionPane: const SlidableStrechActionPane(),
+      //右侧滑出
+      secondaryActions: [
+        buildIconSlideAction("删除", Icons.delete, Colors.red, i)
+      ],
       child: Container(
         height: ScreenUtil().setHeight(130),
         width: double.infinity,
@@ -109,8 +115,8 @@ class _MessagePageState extends State<MessagePage> {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  WidgetUtils.CircleImageAss(
-                      100.h, 100.h, 50.h, listMessage[i]['otherHeadImg']),
+                  WidgetUtils.CircleImageAssNet(
+                      100.h, 100.h, 50.h, listMessage[i]['otherHeadImg'],listMessage[i]['otherHeadNetImg']),
                   listU[i].liveStatus == 1
                       ? WidgetUtils.showImages(
                     'assets/images/zhibozhong.webp',
@@ -282,77 +288,77 @@ class _MessagePageState extends State<MessagePage> {
             WidgetUtils.commonSizedBox(35, 0),
 
             /// 系统消息
-            GestureDetector(
-              onTap: (() {
-                MyUtils.goTransparentRFPage(context, const XitongMorePage());
-              }),
-              child: Container(
-                height: ScreenUtil().setHeight(130),
-                width: double.infinity,
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: Row(
-                  children: [
-                    Stack(
-                      alignment: Alignment.topRight,
-                      children: [
-                        WidgetUtils.showImages(
-                            'assets/images/message_xt.webp',
-                            ScreenUtil().setHeight(100),
-                            ScreenUtil().setHeight(100)),
-                        unRead > 1
-                            ? Positioned(
-                                top: ScreenUtil().setHeight(10),
-                                right: ScreenUtil().setHeight(20),
-                                child: CustomPaint(
-                                  painter: LinePainter2(colors: Colors.red),
-                                ))
-                            : const Text('')
-                      ],
-                    ),
-                    WidgetUtils.commonSizedBox(0, 10),
-                    Expanded(
-                      child: Column(
-                        children: [
-                          const Expanded(child: Text('')),
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            width: double.infinity,
-                            child: Row(
-                              children: [
-                                Text(
-                                  '系统消息',
-                                  style: StyleUtils.getCommonTextStyle(
-                                      color: Colors.black,
-                                      fontSize: ScreenUtil().setSp(32)),
-                                ),
-                                const Expanded(child: Text('')),
-                                Text(
-                                  time,
-                                  style: StyleUtils.getCommonTextStyle(
-                                      color: MyColors.g9,
-                                      fontSize: ScreenUtil().setSp(25)),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            width: double.infinity,
-                            child: Text(
-                              info,
-                              style: StyleUtils.getCommonTextStyle(
-                                  color: MyColors.g9,
-                                  fontSize: ScreenUtil().setSp(25)),
-                            ),
-                          ),
-                          const Expanded(child: Text('')),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
+            // GestureDetector(
+            //   onTap: (() {
+            //     MyUtils.goTransparentRFPage(context, const XitongMorePage());
+            //   }),
+            //   child: Container(
+            //     height: ScreenUtil().setHeight(130),
+            //     width: double.infinity,
+            //     padding: const EdgeInsets.only(left: 20, right: 20),
+            //     child: Row(
+            //       children: [
+            //         Stack(
+            //           alignment: Alignment.topRight,
+            //           children: [
+            //             WidgetUtils.showImages(
+            //                 'assets/images/message_xt.webp',
+            //                 ScreenUtil().setHeight(100),
+            //                 ScreenUtil().setHeight(100)),
+            //             unRead > 1
+            //                 ? Positioned(
+            //                     top: ScreenUtil().setHeight(10),
+            //                     right: ScreenUtil().setHeight(20),
+            //                     child: CustomPaint(
+            //                       painter: LinePainter2(colors: Colors.red),
+            //                     ))
+            //                 : const Text('')
+            //           ],
+            //         ),
+            //         WidgetUtils.commonSizedBox(0, 10),
+            //         Expanded(
+            //           child: Column(
+            //             children: [
+            //               const Expanded(child: Text('')),
+            //               Container(
+            //                 alignment: Alignment.centerLeft,
+            //                 width: double.infinity,
+            //                 child: Row(
+            //                   children: [
+            //                     Text(
+            //                       '系统消息',
+            //                       style: StyleUtils.getCommonTextStyle(
+            //                           color: Colors.black,
+            //                           fontSize: ScreenUtil().setSp(32)),
+            //                     ),
+            //                     const Expanded(child: Text('')),
+            //                     Text(
+            //                       time,
+            //                       style: StyleUtils.getCommonTextStyle(
+            //                           color: MyColors.g9,
+            //                           fontSize: ScreenUtil().setSp(25)),
+            //                     ),
+            //                   ],
+            //                 ),
+            //               ),
+            //               Container(
+            //                 alignment: Alignment.centerLeft,
+            //                 width: double.infinity,
+            //                 child: Text(
+            //                   info,
+            //                   style: StyleUtils.getCommonTextStyle(
+            //                       color: MyColors.g9,
+            //                       fontSize: ScreenUtil().setSp(25)),
+            //                 ),
+            //               ),
+            //               const Expanded(child: Text('')),
+            //             ],
+            //           ),
+            //         )
+            //       ],
+            //     ),
+            //   ),
+            // ),
             length > 0
                 ? Expanded(
                     child: ListView.builder(
@@ -388,13 +394,15 @@ class _MessagePageState extends State<MessagePage> {
     // 执行查询操作
     List<Map<String, dynamic>> result = await db.query(
       'messageSLTable',
-      columns: ['MAX(id) AS id'],
+      columns: ['MAX(id) AS id', 'combineID'],
       groupBy: 'combineID',
     );
     // 把未读信息都改成已读
     for (int i = 0; i < result.length; i++) {
+      LogE('标记已读 ${result[i]['combineID']}');
+
       await db.update('messageSLTable', {'readStatus': 1},
-          where: 'combineID = ?', whereArgs: [result[i]['combineID']]);
+          whereArgs: [result[i]['combineID'], sp.getString('user_id')], where: 'combineID = ? and uid = ?');
     }
     // 修改数据成功后在重新查询一遍
     // 查询出来后在查询单条信息具体信息
@@ -413,7 +421,7 @@ class _MessagePageState extends State<MessagePage> {
     List.generate(listId.length, (index) => '?').join(',');
     // 构建查询语句和参数
     String query =
-        'SELECT * FROM messageSLTable WHERE id IN ($placeholders) order by add_time desc';
+        'SELECT * FROM messageSLTable WHERE id IN ($placeholders)  and uid = ${sp.getString('user_id')} order by add_time desc';
     List<dynamic> args = listId;
     // 执行查询
     List<Map<String, dynamic>> result2 = await db.rawQuery(query, args);
@@ -431,7 +439,7 @@ class _MessagePageState extends State<MessagePage> {
         }
       }
     });
-
+    eventBus.fire(SendMessageBack(type: 5, msgID: '0'));
   }
 
   /// 获取系统消息
@@ -443,46 +451,46 @@ class _MessagePageState extends State<MessagePage> {
       xtListBean bean = await DataUtils.postSystemMsgList();
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          if (bean.data!.list!.isNotEmpty) {
-            setState(() {
-              info = bean.data!.list![bean.data!.list!.length - 1].text!;
-              time = bean.data!.list![bean.data!.list!.length - 1].addTime!
-                  .substring(0, 10);
-              unRead = bean.data!.list!.length;
-            });
-            for (int i = 0; i < bean.data!.list!.length; i++) {
-              Map<String, dynamic> params = <String, dynamic>{
-                'messageID': bean.data!.list![i].id as int,
-                'type': bean.data!.list![i].type,
-                'title': bean.data!.list![i].title,
-                'text': bean.data!.list![i].text,
-                'img': bean.data!.list![i].img,
-                'url': bean.data!.list![i].url,
-                'add_time': bean.data!.list![i].addTime,
-                'data_status': 0,
-                'img_url': bean.data!.list![i].imgUrl,
-              };
-              // 插入数据
-              await databaseHelper.insertData('messageXTTable', params);
-            }
-          } else {
-            // 获取所有数据
-            List<Map<String, dynamic>> allData =
-                await databaseHelper.getAllData('messageXTTable');
-            if (allData.isNotEmpty) {
-              for (int i = 0; i < allData.length; i++) {
-                if (allData[i]['data_status'] == 0) {
-                  setState(() {
-                    unRead++;
-                  });
-                }
-              }
-              setState(() {
-                info = allData[allData.length - 1]['text'];
-                time = allData[allData.length - 1]['add_time'].substring(0, 10);
-              });
-            }
-          }
+          // if (bean.data!.list!.isNotEmpty) {
+          //   setState(() {
+          //     info = bean.data!.list![bean.data!.list!.length - 1].text!;
+          //     time = bean.data!.list![bean.data!.list!.length - 1].addTime!
+          //         .substring(0, 10);
+          //     unRead = bean.data!.list!.length;
+          //   });
+          //   for (int i = 0; i < bean.data!.list!.length; i++) {
+          //     Map<String, dynamic> params = <String, dynamic>{
+          //       'messageID': bean.data!.list![i].id as int,
+          //       'type': bean.data!.list![i].type,
+          //       'title': bean.data!.list![i].title,
+          //       'text': bean.data!.list![i].text,
+          //       'img': bean.data!.list![i].img,
+          //       'url': bean.data!.list![i].url,
+          //       'add_time': bean.data!.list![i].addTime,
+          //       'data_status': 0,
+          //       'img_url': bean.data!.list![i].imgUrl,
+          //     };
+          //     // 插入数据
+          //     await databaseHelper.insertData('messageXTTable', params);
+          //   }
+          // } else {
+          //   // 获取所有数据
+          //   List<Map<String, dynamic>> allData =
+          //       await databaseHelper.getAllData('messageXTTable');
+          //   if (allData.isNotEmpty) {
+          //     for (int i = 0; i < allData.length; i++) {
+          //       if (allData[i]['data_status'] == 0) {
+          //         setState(() {
+          //           unRead++;
+          //         });
+          //       }
+          //     }
+          //     setState(() {
+          //       info = allData[allData.length - 1]['text'];
+          //       time = allData[allData.length - 1]['add_time'].substring(0, 10);
+          //     });
+          //   }
+          // }
           break;
         case MyHttpConfig.errorloginCode:
           // ignore: use_build_context_synchronously
@@ -517,7 +525,7 @@ class _MessagePageState extends State<MessagePage> {
           List.generate(listId.length, (index) => '?').join(',');
       // 构建查询语句和参数
       String query =
-          'SELECT * FROM messageSLTable WHERE id IN ($placeholders) order by add_time desc';
+          'SELECT * FROM messageSLTable WHERE id IN ($placeholders) and uid = ${sp.getString('user_id')} order by add_time desc';
       List<dynamic> args = listId;
       // 执行查询
       List<Map<String, dynamic>> result2 = await db.rawQuery(query, args);
@@ -537,7 +545,7 @@ class _MessagePageState extends State<MessagePage> {
       });
       for(int i = 0; i < listMessage.length; i++){
         String query =
-            "SELECT * FROM messageSLTable WHERE  combineID = '${listMessage[i]['combineID']}' and readStatus = 0";
+            "SELECT * FROM messageSLTable WHERE  combineID = '${listMessage[i]['combineID']}' and readStatus = 0  and uid = ${sp.getString('user_id')} ";
         List<Map<String, dynamic>> result3 = await db.rawQuery(query);
         if(result3.isNotEmpty){
           setState(() {

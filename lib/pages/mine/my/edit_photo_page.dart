@@ -166,12 +166,50 @@ class _EditPhotoPageState extends State<EditPhotoPage> {
   /// 获取文件url
   Future<void> doPostPostFileUpload(path) async {
     var dir = await path_provider.getTemporaryDirectory();
-    var targetPath = "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
-    var result = await FlutterImageCompress.compressAndGetFile(
-      path, targetPath,
-      quality: 50,
-      rotate: 0, // 旋转角度
-    );
+    String targetPath = '';
+    var result;
+    if (path.toString().contains('.gif') || path.toString().contains('.GIF')) {
+      targetPath = path;
+    } else if (path.toString().contains('.jpg') ||
+        path.toString().contains('.GPG')) {
+      targetPath =
+      "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
+      result = await FlutterImageCompress.compressAndGetFile(
+        path, targetPath,
+        quality: 50,
+        rotate: 0, // 旋转角度
+      );
+    } else if (path.toString().contains('.jpeg') ||
+        path.toString().contains('.GPEG')) {
+      targetPath =
+      "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpeg";
+      result = await FlutterImageCompress.compressAndGetFile(
+        path, targetPath,
+        quality: 50,
+        rotate: 0, // 旋转角度
+      );
+    } else if (path.toString().contains('.svga') ||
+        path.toString().contains('.SVGA')) {
+      MyToastUtils.showToastBottom('不支持svga格式图片上传');
+      return;
+    } else if (path.toString().contains('.webp') ||
+        path.toString().contains('.WEBP')) {
+      targetPath =
+      "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.webp";
+      result = await FlutterImageCompress.compressAndGetFile(
+        path, targetPath,
+        quality: 50,
+        rotate: 0, // 旋转角度
+      );
+    } else {
+      targetPath =
+      "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.png";
+      result = await FlutterImageCompress.compressAndGetFile(
+        path, targetPath,
+        quality: 50,
+        rotate: 0, // 旋转角度
+      );
+    }
     Loading.show("上传中...");
     var name = path.substring(path.lastIndexOf("/") + 1, path.length);
     FormData formdata = FormData.fromMap(
@@ -219,12 +257,50 @@ class _EditPhotoPageState extends State<EditPhotoPage> {
     for (int i = 0; i < lists.length; i++) {
       File? imgFile = await lists[i].file;
       var dir = await path_provider.getTemporaryDirectory();
-      var targetPath = "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
-      var result = await FlutterImageCompress.compressAndGetFile(
-        imgFile!.path, targetPath,
-        quality: 50,
-        rotate: 0, // 旋转角度
-      );
+      String targetPath = '';
+      var result;
+      if (imgFile!.path.toString().contains('.gif') || imgFile!.path.toString().contains('.GIF')) {
+        targetPath = imgFile!.path;
+      } else if (imgFile!.path.toString().contains('.jpg') ||
+          imgFile!.path.toString().contains('.GPG')) {
+        targetPath =
+        "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
+        result = await FlutterImageCompress.compressAndGetFile(
+          imgFile!.path, targetPath,
+          quality: 50,
+          rotate: 0, // 旋转角度
+        );
+      } else if (imgFile!.path.toString().contains('.jpeg') ||
+          imgFile!.path.toString().contains('.GPEG')) {
+        targetPath =
+        "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpeg";
+        result = await FlutterImageCompress.compressAndGetFile(
+          imgFile!.path, targetPath,
+          quality: 50,
+          rotate: 0, // 旋转角度
+        );
+      } else if (imgFile!.path.toString().contains('.svga') ||
+          imgFile!.path.toString().contains('.SVGA')) {
+        MyToastUtils.showToastBottom('不支持svga格式图片上传');
+        return;
+      } else if (imgFile!.path.toString().contains('.webp') ||
+          imgFile!.path.toString().contains('.WEBP')) {
+        targetPath =
+        "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.webp";
+        result = await FlutterImageCompress.compressAndGetFile(
+          imgFile!.path, targetPath,
+          quality: 50,
+          rotate: 0, // 旋转角度
+        );
+      } else {
+        targetPath =
+        "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.png";
+        result = await FlutterImageCompress.compressAndGetFile(
+          imgFile!.path, targetPath,
+          quality: 50,
+          rotate: 0, // 旋转角度
+        );
+      }
       var name = imgFile!.path.substring(imgFile!.path.lastIndexOf("/") + 1, imgFile!.path.length);
       FormData formdata = FormData.fromMap(
         {
