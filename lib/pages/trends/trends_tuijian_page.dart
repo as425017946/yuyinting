@@ -27,6 +27,7 @@ import '../../utils/widget_utils.dart';
 import '../../widget/SwiperPage.dart';
 import 'package:video_player/video_player.dart';
 
+import '../gongping/web_page.dart';
 import '../message/chat_page.dart';
 import '../message/geren/people_info_page.dart';
 import '../mine/my/my_info_page.dart';
@@ -93,10 +94,17 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> with AutomaticKee
     loadAnimation();
 
     listen = eventBus.on<HiBack>().listen((event) {
+      LogE('打招呼回调 == ${event.isBack}');
+      LogE('打招呼回调 == ${_list.length}');
       if(event.isBack){
-        setState(() {
-          _list[event.index].isHi = 1;
-        });
+        //目的是为了有打过招呼的这个人的hi都变成私信按钮
+        for(int i = 0 ; i < _list.length; i++){
+          setState(() {
+            if(_list[i].uid.toString() == event.index){
+              _list[i].isHi = 1;
+            }
+          });
+        }
       }
     });
   }
@@ -257,7 +265,7 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> with AutomaticKee
           WidgetUtils.commonSizedBox(5, 0),
           GestureDetector(
             onTap: ((){
-              MyUtils.goTransparentRFPage(context, TrendsMorePage( note_id: _list[i].id.toString(),));
+              MyUtils.goTransparentRFPage(context, TrendsMorePage( note_id: _list[i].id.toString(), index: i));
             }),
             child: WidgetUtils.onlyText(
                 _list[i].text!,
@@ -308,7 +316,7 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> with AutomaticKee
               ),
               GestureDetector(
                 onTap: ((){
-                  MyUtils.goTransparentRFPage(context, TrendsMorePage( note_id: _list[i].id.toString(),));
+                  MyUtils.goTransparentRFPage(context, TrendsMorePage( note_id: _list[i].id.toString(),index:i));
                 }),
                 child: WidgetUtils.showImages(
                     'assets/images/trends_message.png', 18, 18),
@@ -316,7 +324,7 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> with AutomaticKee
               WidgetUtils.commonSizedBox(0, 5),
               GestureDetector(
                 onTap: ((){
-                  MyUtils.goTransparentRFPage(context, TrendsMorePage( note_id: _list[i].id.toString(),));
+                  MyUtils.goTransparentRFPage(context, TrendsMorePage( note_id: _list[i].id.toString(),index:i));
                 }),
                 child: WidgetUtils.onlyText(
                     _list[i].comment == 0 ? '评论' : _list[i].comment.toString(),
@@ -648,7 +656,9 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> with AutomaticKee
                   duration: 2000,
                   onTap: (index){
                     // LogE('用户点击引起下标改变调用');
-
+                    if(MyUtils.checkClick()){
+                      MyUtils.goTransparentPageCom(context, WebPage(url: imgList[index].url!));
+                    }
                   },
                 ),
               ) : Container(

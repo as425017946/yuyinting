@@ -8,7 +8,7 @@ class zjgpBean {
   String? nickName;
   String? type;
   List<GiftInfo>? giftInfo;
-
+  String? amount;
   zjgpBean(
       {
         this.roomId,
@@ -17,7 +17,8 @@ class zjgpBean {
         this.uid,
         this.nickName,
         this.type,
-        this.giftInfo,});
+        this.giftInfo,
+        this.amount});
 
   zjgpBean.fromJson(Map<dynamic, dynamic> json) {
     roomId = json['room_id'];
@@ -26,6 +27,7 @@ class zjgpBean {
     uid = json['uid'];
     nickName = json['from_nickname'];
     type = json['type'];
+    amount = json['amount'];
     if (json['gift_info'] != null) {
       giftInfo = <GiftInfo>[];
       json['gift_info'].forEach((v) {
@@ -42,6 +44,7 @@ class zjgpBean {
     data['uid'] = this.uid;
     data['nickname'] = this.nickName;
     data['type'] = this.type;
+    data['amount'] = this.amount;
     if (this.giftInfo != null) {
       data['gift_info'] = this.giftInfo!.map((v) => v.toJson()).toList();
     }

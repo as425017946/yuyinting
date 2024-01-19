@@ -32,8 +32,6 @@ class Data {
   int? isFollowNum;
   int? lookNum;
   int? auditStatus;
-  String? currentVersion;
-  String? status;
   String? forceUpdate;
   String? identity;
   String? avatarFrameImg;
@@ -41,6 +39,9 @@ class Data {
   int? uid;
   int? level;
   int? unauditNum;
+  int? kefuUid;
+  String? kefuAvatar;
+  int? isAgent;
 
   Data(
       {this.nickname,
@@ -52,15 +53,16 @@ class Data {
         this.isFollowNum,
         this.lookNum,
         this.auditStatus,
-        this.currentVersion,
-        this.status,
         this.forceUpdate,
         this.identity,
         this.avatarFrameImg,
         this.avatarFrameGifImg,
         this.uid,
         this.level,
-        this.unauditNum});
+        this.unauditNum,
+        this.kefuUid,
+        this.kefuAvatar,
+        this.isAgent});
 
   Data.fromJson(Map<String, dynamic> json) {
     nickname = json['nickname'];
@@ -72,8 +74,6 @@ class Data {
     isFollowNum = json['is_follow_num'];
     lookNum = json['look_num'];
     auditStatus = json['audit_status'];
-    currentVersion = json['current_version'];
-    status = json['status'];
     forceUpdate = json['force_update'];
     identity = json['identity'];
     avatarFrameImg = json['avatar_frame_img'];
@@ -81,6 +81,9 @@ class Data {
     uid = json['uid'];
     level = json['level'];
     unauditNum = json['unaudit_num'];
+    kefuUid = json['kefu_uid'];
+    kefuAvatar = json['kefu_avatar'];
+    isAgent = json['is_agent'];
   }
 
   Map<String, dynamic> toJson() {
@@ -94,8 +97,6 @@ class Data {
     data['is_follow_num'] = this.isFollowNum;
     data['look_num'] = this.lookNum;
     data['audit_status'] = this.auditStatus;
-    data['current_version'] = this.currentVersion;
-    data['status'] = this.status;
     data['force_update'] = this.forceUpdate;
     data['identity'] = this.identity;
     data['avatar_frame_img'] = this.avatarFrameImg;
@@ -103,6 +104,9 @@ class Data {
     data['uid'] = this.uid;
     data['level'] = this.level;
     data['unaudit_num'] = this.unauditNum;
+    data['kefu_uid'] = this.kefuUid;
+    data['kefu_avatar'] = this.kefuAvatar;
+    data['is_agent'] = this.isAgent;
     return data;
   }
 }

@@ -59,7 +59,7 @@ class _MeiLiWeekPageState extends State<MeiLiWeekPage> {
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        WidgetUtils.CricleImagess(55, 55, _list[1].avatar!),
+                        WidgetUtils.CricleImagess(55, 55, _list[0].avatar!),
                         WidgetUtils.showImages(
                             'assets/images/py_two.png',
                             ScreenUtil().setHeight(154),
@@ -204,7 +204,7 @@ class _MeiLiWeekPageState extends State<MeiLiWeekPage> {
                       Positioned(
                           bottom: 70.h,
                           child: WidgetUtils.onlyTextCenter(
-                              _list[1].nickname!.length > 4 ? '${_list[0].nickname!.substring(0,4)}...' : _list[0].nickname!,
+                              _list[0].nickname!.length > 4 ? '${_list[0].nickname!.substring(0,4)}...' : _list[0].nickname!,
                               StyleUtils.getCommonTextStyle(
                                   color: MyColors.homeTopBG,
                                   fontSize: 28.sp,
@@ -548,7 +548,7 @@ class _MeiLiWeekPageState extends State<MeiLiWeekPage> {
                         MyUtils.goTransparentRFPage(context, const MyInfoPage());
                       }else{
                         sp.setString('other_id', _list[0].uid.toString());
-                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[1].uid.toString(),));
+                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[0].uid.toString(),));
                       }
                     }
                   }),
@@ -693,88 +693,95 @@ class _MeiLiWeekPageState extends State<MeiLiWeekPage> {
             ),
           ),
         WidgetUtils.commonSizedBox(ScreenUtil().setHeight(50), 0),
-        SingleChildScrollView(
-          child: Wrap(
-            children: [
-              for (int i = 0; i < _list2.length; i++)
-                GestureDetector(
-                  onTap: (() {
-                    if(MyUtils.checkClick()){
-                      // 如果点击的是自己，进入自己的主页
-                      if(sp.getString('user_id').toString() == _list2[i].uid.toString()){
-                        MyUtils.goTransparentRFPage(context, const MyInfoPage());
-                      }else{
-                        sp.setString('other_id', _list2[i].uid.toString());
-                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list2[i].uid.toString(),));
+        Expanded(
+          child: SingleChildScrollView(
+            child: Wrap(
+              children: [
+                for (int i = 0; i < _list2.length; i++)
+                  GestureDetector(
+                    onTap: (() {
+                      if(MyUtils.checkClick()){
+                        // 如果点击的是自己，进入自己的主页
+                        if(sp.getString('user_id').toString() == _list2[i].uid.toString()){
+                          MyUtils.goTransparentRFPage(context, const MyInfoPage());
+                        }else{
+                          sp.setString('other_id', _list2[i].uid.toString());
+                          MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list2[i].uid.toString(),));
+                        }
                       }
-                    }
-                  }),
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                        left: ScreenUtil().setWidth(60),
-                        right: ScreenUtil().setWidth(20),
-                        bottom: 15.h),
-                    child: Container(
-                      height: ScreenUtil().setHeight(90),
-                      alignment: Alignment.center,
-                      child: Row(
-                        children: [
-                          WidgetUtils.onlyText(
-                              (i + 4).toString(),
-                              StyleUtils.getCommonTextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: ScreenUtil().setSp(40))),
-                          WidgetUtils.commonSizedBox(0, 15),
-                          Container(
-                            height: ScreenUtil().setHeight(90),
-                            alignment: Alignment.center,
-                            child: Stack(
-                              alignment: Alignment.bottomCenter,
-                              children: [
-                                WidgetUtils.CricleImagess(
-                                    50, 50, _list2[i].avatar!),
-                              ],
+                    }),
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          left: ScreenUtil().setWidth(40),
+                          right: ScreenUtil().setWidth(20),
+                          bottom: 15.h),
+                      child: Container(
+                        height: ScreenUtil().setHeight(90),
+                        alignment: Alignment.center,
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 60.w,
+                              child: WidgetUtils.onlyTextCenter(
+                                  (i + 4).toString(),
+                                  StyleUtils.getCommonTextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: ScreenUtil().setSp(40))),
                             ),
-                          ),
-                          WidgetUtils.commonSizedBox(0, 10),
-                          WidgetUtils.onlyText(
-                              _list2[i].nickname!,
-                              StyleUtils.getCommonTextStyle(
-                                  color: Colors.black,
-                                  fontSize: ScreenUtil().setSp(28))),
-                          const Spacer(),
-                          _list2[i].liveStatus == 1
-                              ? Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              WidgetUtils.showImagesFill("assets/images/py_tishi.png", 35.h, 150.w),
-                              Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.center,
+                            WidgetUtils.commonSizedBox(0, 15.h),
+                            Container(
+                              height: ScreenUtil().setHeight(90),
+                              alignment: Alignment.center,
+                              child: Stack(
+                                alignment: Alignment.bottomCenter,
                                 children: [
-                                  WidgetUtils.showImages(
-                                      'assets/images/zhibo2.webp',
-                                      ScreenUtil().setWidth(20),
-                                      ScreenUtil().setWidth(20)),
-                                  WidgetUtils.onlyText(
-                                      '在房间',
-                                      StyleUtils.getCommonTextStyle(
-                                          color: Colors.white,
-                                          fontSize:
-                                          ScreenUtil().setSp(20))),
+                                  WidgetUtils.CricleImagess(
+                                      50, 50, _list2[i].avatar!),
                                 ],
-                              )
-                            ],
-                          )
-                              : const Text(''),
-                          WidgetUtils.commonSizedBox(0, 40.w),
-                        ],
+                              ),
+                            ),
+                            WidgetUtils.commonSizedBox(0, 10),
+                            WidgetUtils.onlyText(
+                                _list2[i].nickname!.length > 8
+                                    ? '${_list2[i].nickname!.substring(0, 8)}...'
+                                    : _list2[i].nickname!,
+                                StyleUtils.getCommonTextStyle(
+                                    color: Colors.black,
+                                    fontSize: ScreenUtil().setSp(28))),
+                            const Spacer(),
+                            _list2[i].liveStatus == 1
+                                ? Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                WidgetUtils.showImagesFill("assets/images/py_tishi.png", 35.h, 150.w),
+                                Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.center,
+                                  children: [
+                                    WidgetUtils.showImages(
+                                        'assets/images/zhibo2.webp',
+                                        ScreenUtil().setWidth(20),
+                                        ScreenUtil().setWidth(20)),
+                                    WidgetUtils.onlyText(
+                                        '在房间',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: Colors.white,
+                                            fontSize:
+                                            ScreenUtil().setSp(20))),
+                                  ],
+                                )
+                              ],
+                            )
+                                : const Text(''),
+                            WidgetUtils.commonSizedBox(0, 40.w),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                )
-            ],
+                  )
+              ],
+            ),
           ),
         )
       ],

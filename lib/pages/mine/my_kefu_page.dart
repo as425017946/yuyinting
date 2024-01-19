@@ -15,7 +15,9 @@ import '../message/chat_page.dart';
 
 /// 客服新页面
 class MyKeFuPage extends StatefulWidget {
-  const MyKeFuPage({super.key});
+  String kefuUid;
+  String kefuAvatar;
+  MyKeFuPage({super.key, required this.kefuUid, required this.kefuAvatar});
 
   @override
   State<MyKeFuPage> createState() => _MyKeFuPageState();
@@ -61,8 +63,8 @@ class _MyKeFuPageState extends State<MyKeFuPage> {
                           context,
                           ChatPage(
                               nickName: '维C客服',
-                              otherUid: '1',
-                              otherImg: 'https://chat-st.s3.ap-southeast-1.amazonaws.com/image/202312/14/657a9a126a686.png'));
+                              otherUid: widget.kefuUid,
+                              otherImg:  widget.kefuAvatar));
                       Navigator.pop(context);
                     }),
                     child: Container(

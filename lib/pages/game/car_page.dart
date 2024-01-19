@@ -1895,6 +1895,9 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
               listA1[int.parse(benSN) - 1] = false;
             });
             // 更新余额
+            LogE('更新余额 == ${bean.data!.curType == 1}');
+            LogE('更新余额 == ${bean.data!.curType == 2}');
+            LogE('更新余额 == ${bean.data!.curType == 3}');
             if (bean.data!.curType == 1) {
               if (double.parse(jinbi) > 10000) {
                 jinbi = sp.getString('car_jinbi').toString();

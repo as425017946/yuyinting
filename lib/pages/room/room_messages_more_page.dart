@@ -211,6 +211,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
     }
 
     if (allData2[i]['whoUid'] != sp.getString('user_id')) {
+      // 左侧显示
       return Column(
         children: [
           //左侧显示
@@ -222,12 +223,17 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
               ScreenUtil().setHeight(10), ScreenUtil().setHeight(10)),
           Row(
             children: [
-              WidgetUtils.commonSizedBox(20.h, 10.h),
+              WidgetUtils.commonSizedBox(0, 15.w),
               WidgetUtils.CircleImageAssNet(
-                  60.h, 60.h, 30.h, allData2[i]['otherHeadImg'], allData2[i]['otherHeadNetImg']),
+                  ScreenUtil().setHeight(80),
+                  ScreenUtil().setHeight(80),
+                  40.h,
+                  allData2[i]['otherHeadImg'],
+                  allData2[i]['otherHeadNetImg']),
               WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(10)),
               // 6v豆红包
-              allData2[i]['type'] == 6 ? SizedBox(
+              allData2[i]['type'] == 6
+                  ? SizedBox(
                 height: 130.h,
                 width: 300.h,
                 child: Stack(
@@ -241,8 +247,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                         left: 60.w,
                         child: Row(
                           children: [
-                            WidgetUtils.commonSizedBox(
-                                0, 50.h),
+                            WidgetUtils.commonSizedBox(0, 50.h),
                             WidgetUtils.onlyText(
                                 allData2[i]['content'],
                                 StyleUtils.getCommonTextStyle(
@@ -252,27 +257,33 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                         ))
                   ],
                 ),
-              ): Flexible(
+              )
+                  : Flexible(
                 child: Container(
-                  constraints:
-                  BoxConstraints(minWidth: ScreenUtil().setHeight(60)),
+                  constraints: BoxConstraints(
+                      minWidth: ScreenUtil().setHeight(60)),
                   padding: EdgeInsets.all(ScreenUtil().setHeight(20)),
                   //边框设置
                   decoration: BoxDecoration(
                     //背景
-                    color: allData2[i]['type'] == 2 ? Colors.transparent : Colors.white,
+                    color: allData2[i]['type'] == 2
+                        ? Colors.transparent
+                        : Colors.white,
                     //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                     borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(0),
                         topRight: Radius.circular(20.0),
                         bottomLeft: Radius.circular(20.0),
                         bottomRight: Radius.circular(20.0)),
-                    boxShadow: allData2[i]['type'] == 2 ? [] : [
+                    boxShadow: allData2[i]['type'] == 2
+                        ? []
+                        : [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.1),
                         spreadRadius: 2,
                         blurRadius: 5,
-                        offset: const Offset(0, 1), // 阴影的偏移量，向右下方偏移3像素
+                        offset:
+                        const Offset(0, 1), // 阴影的偏移量，向右下方偏移3像素
                       ),
                     ],
                   ),
@@ -291,21 +302,34 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                         imgList.clear();
                         imgList.add(allData2[i]['content']);
                       });
-                      MyUtils.goTransparentPageCom(
-                          context, SwiperPage(imgList: imgList));
+                      MyUtils.goTransparentPageCom(context,
+                          SwiperPage(imgList: imgList));
                     }),
-                    child: Image(
-                      image: FileImage(File(allData2[i]['content'])),
+                    child: (allData2[i]['content']
+                        .toString()
+                        .contains(
+                        'com.leimu.yuyinting') ||
+                        allData2[i]['content']
+                            .toString()
+                            .contains('storage'))
+                        ? Image(
+                      image: FileImage(
+                          File(allData2[i]['content'])),
                       width: 160.h,
                       height: 200.h,
                       errorBuilder: (BuildContext context,
-                          Object error, StackTrace? stackTrace) {
+                          Object error,
+                          StackTrace? stackTrace) {
                         return WidgetUtils.showImages(
                             'assets/images/img_error.png',
                             200.h,
                             160.h);
                       },
-                    ),
+                    )
+                        : WidgetUtils.showImagesNet(
+                        allData2[i]['content'].toString(),
+                        200.h,
+                        160.h),
                   )
                       : GestureDetector(
                     onTap: (() {
@@ -355,7 +379,8 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
             children: [
               WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(100)),
               // 6v豆红包
-              allData2[i]['type'] == 6 ? SizedBox(
+              allData2[i]['type'] == 6
+                  ? SizedBox(
                 height: 130.h,
                 width: 300.h,
                 child: Stack(
@@ -369,8 +394,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                         left: 60.w,
                         child: Row(
                           children: [
-                            WidgetUtils.commonSizedBox(
-                                0, 50.h),
+                            WidgetUtils.commonSizedBox(0, 50.h),
                             WidgetUtils.onlyText(
                                 allData2[i]['content'],
                                 StyleUtils.getCommonTextStyle(
@@ -380,27 +404,33 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                         ))
                   ],
                 ),
-              ): Flexible(
+              )
+                  : Flexible(
                 child: Container(
-                  constraints:
-                  BoxConstraints(minWidth: ScreenUtil().setHeight(60)),
+                  constraints: BoxConstraints(
+                      minWidth: ScreenUtil().setHeight(60)),
                   padding: EdgeInsets.all(ScreenUtil().setHeight(20)),
                   //边框设置
                   decoration: BoxDecoration(
                     //背景
-                    color: allData2[i]['type'] == 2 ? Colors.transparent : Colors.white,
+                    color: allData2[i]['type'] == 2
+                        ? Colors.transparent
+                        : Colors.white,
                     //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                     borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(20.0),
                         topRight: Radius.circular(0),
                         bottomLeft: Radius.circular(20.0),
                         bottomRight: Radius.circular(20.0)),
-                    boxShadow: allData2[i]['type'] == 2 ? [] : [
+                    boxShadow: allData2[i]['type'] == 2
+                        ? []
+                        : [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.1),
                         spreadRadius: 2,
                         blurRadius: 5,
-                        offset: const Offset(0, 1), // 阴影的偏移量，向右下方偏移3像素
+                        offset:
+                        const Offset(0, 1), // 阴影的偏移量，向右下方偏移3像素
                       ),
                     ],
                   ),
@@ -419,15 +449,17 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                         imgList.clear();
                         imgList.add(allData2[i]['content']);
                       });
-                      MyUtils.goTransparentPageCom(
-                          context, SwiperPage(imgList: imgList));
+                      MyUtils.goTransparentPageCom(context,
+                          SwiperPage(imgList: imgList));
                     }),
                     child: Image(
-                      image: FileImage(File(allData2[i]['content'])),
+                      image: FileImage(
+                          File(allData2[i]['content'])),
                       width: 160.h,
                       height: 200.h,
                       errorBuilder: (BuildContext context,
-                          Object error, StackTrace? stackTrace) {
+                          Object error,
+                          StackTrace? stackTrace) {
                         return WidgetUtils.showImages(
                             'assets/images/img_error.png',
                             200.h,
@@ -460,13 +492,18 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                         ],
                       ),
                     ),
-                  ) : const Text(''),
+                  )
+                      : const Text(''),
                 ),
               ),
               WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(10)),
               WidgetUtils.CircleImageAssNet(
-                  60.h, 60.h, 30.h, allData2[i]['headImg'], allData2[i]['headNetImg']),
-              WidgetUtils.commonSizedBox(20.h, 10.h),
+                  ScreenUtil().setHeight(80),
+                  ScreenUtil().setHeight(80),
+                  40.h,
+                  allData2[i]['headImg'],
+                  allData2[i]['headNetImg']),
+              WidgetUtils.commonSizedBox(0, 15.w),
             ],
           ),
           WidgetUtils.commonSizedBox(20.h, ScreenUtil().setHeight(10)),
@@ -702,7 +739,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                         GestureDetector(
                           onTap: (() {
                             if (MyUtils.checkClick()) {
-                              doPostPayPwd();
+                              doPostCanSendUser(4);
                             }
                           }),
                           child: WidgetUtils.showImages(
@@ -906,6 +943,29 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
           break;
         case MyHttpConfig.errorloginCode:
           // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+  /// 能否发私聊
+  Future<void> doPostCanSendUser(int type) async {
+    Map<String, dynamic> params = <String, dynamic>{'uid': widget.otherUid};
+    try {
+      CommonBean bean = await DataUtils.postCanSendUser(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+        //可以发私聊跳转 type 1发表情 2图片 3录音 4红包
+          doPostPayPwd();
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:

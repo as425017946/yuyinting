@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yuyinting/utils/event_utils.dart';
 
 class CustomDialog extends Dialog {
   final double width; // 宽度
@@ -105,6 +106,7 @@ class CustomDialog extends Dialog {
                                                     )
                                                 ),
                                                 onTap: () {
+                                                  eventBus.fire(SubmitButtonBack(title: '编辑个人资料取消保存'));
                                                   Navigator.pop(context);
                                                 }
                                             )

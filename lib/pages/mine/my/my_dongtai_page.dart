@@ -5,12 +5,14 @@ import 'package:video_player/video_player.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 
+import '../../../bean/Common_bean.dart';
 import '../../../bean/userDTListBean.dart';
 import '../../../colors/my_colors.dart';
 import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../main.dart';
+import '../../../utils/custom_dialog.dart';
 import '../../../utils/loading.dart';
 import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
@@ -62,22 +64,23 @@ class _MyDongtaiPageState extends State<MyDongtaiPage> {
   }
 
   Widget _itemPeople(BuildContext context, int i) {
-    return GestureDetector(
-      onTap: (() {
-        if (MyUtils.checkClick()) {
-          MyUtils.goTransparentRFPage(
-              context,
-              TrendsMorePage(
-                note_id: _list[i].id.toString(),
-              ));
-        }
-      }),
-      child: Container(
-        width: double.infinity,
-        color: Colors.white,
-        child: Column(
-          children: [
-            Text(
+    return Container(
+      width: double.infinity,
+      color: Colors.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+            onTap: (() {
+              if (MyUtils.checkClick()) {
+                MyUtils.goTransparentRFPage(
+                    context,
+                    TrendsMorePage(
+                      note_id: _list[i].id.toString(), index: i
+                    ));
+              }
+            }),
+            child: Text(
               _list[i].text!,
               maxLines: 20,
               style: StyleUtils.getCommonTextStyle(
@@ -85,21 +88,54 @@ class _MyDongtaiPageState extends State<MyDongtaiPage> {
                 fontSize: ScreenUtil().setSp(28),
               ),
             ),
-            WidgetUtils.commonSizedBox(10, 0),
-            _list[i].type == 2
+          ),
+          WidgetUtils.commonSizedBox(10, 0),
+          GestureDetector(
+            onTap: (() {
+              if (MyUtils.checkClick()) {
+                MyUtils.goTransparentRFPage(
+                    context,
+                    TrendsMorePage(
+                      note_id: _list[i].id.toString(), index: i
+                    ));
+              }
+            }),
+            child: _list[i].type == 2
                 ? showVideo(_list[i].imgUrl!)
                 : showImag(_list[i].imgUrl!, i),
-            WidgetUtils.commonSizedBox(10, 0),
-            Row(
-              children: [
-                WidgetUtils.showImages(
+          ),
+          WidgetUtils.commonSizedBox(10, 0),
+          Row(
+            children: [
+              GestureDetector(
+                onTap: (() {
+                  if (MyUtils.checkClick()) {
+                    MyUtils.goTransparentRFPage(
+                        context,
+                        TrendsMorePage(
+                            note_id: _list[i].id.toString(), index: i
+                        ));
+                  }
+                }),
+                child: WidgetUtils.showImages(
                     _list[i].isLike == 0
                         ? 'assets/images/trends_zan1.png'
                         : 'assets/images/trends_zan_2.png',
                     18,
                     18),
-                WidgetUtils.commonSizedBox(0, 5),
-                SizedBox(
+              ),
+              WidgetUtils.commonSizedBox(0, 5),
+              GestureDetector(
+                onTap: (() {
+                  if (MyUtils.checkClick()) {
+                    MyUtils.goTransparentRFPage(
+                        context,
+                        TrendsMorePage(
+                            note_id: _list[i].id.toString(), index: i
+                        ));
+                  }
+                }),
+                child: SizedBox(
                   width: ScreenUtil().setHeight(80),
                   child: WidgetUtils.onlyText(
                       _list[i].like == 0 ? '抢首赞' : _list[i].like.toString(),
@@ -108,21 +144,55 @@ class _MyDongtaiPageState extends State<MyDongtaiPage> {
                         fontSize: ScreenUtil().setSp(21),
                       )),
                 ),
-                WidgetUtils.showImages(
+              ),
+              GestureDetector(
+                onTap: (() {
+                  if (MyUtils.checkClick()) {
+                    MyUtils.goTransparentRFPage(
+                        context,
+                        TrendsMorePage(
+                            note_id: _list[i].id.toString(), index: i
+                        ));
+                  }
+                }),
+                child: WidgetUtils.showImages(
                     'assets/images/trends_message.png', 18, 18),
-                WidgetUtils.commonSizedBox(0, 5),
-                WidgetUtils.onlyText(
+              ),
+              WidgetUtils.commonSizedBox(0, 5),
+              GestureDetector(
+                onTap: (() {
+                  if (MyUtils.checkClick()) {
+                    MyUtils.goTransparentRFPage(
+                        context,
+                        TrendsMorePage(
+                            note_id: _list[i].id.toString(), index: i
+                        ));
+                  }
+                }),
+                child: WidgetUtils.onlyText(
                     _list[i].comment == 0 ? '评论' : _list[i].comment.toString(),
                     StyleUtils.getCommonTextStyle(
                       color: Colors.grey,
                       fontSize: ScreenUtil().setSp(21),
                     )),
-              ],
-            ),
-            WidgetUtils.commonSizedBox(10, 0),
-            WidgetUtils.myLine()
-          ],
-        ),
+              ),
+              const Spacer(),
+              GestureDetector(
+                onTap: ((){
+                  exitDEL(context,i,_list[i].id.toString());
+                }),
+                child: WidgetUtils.onlyText(
+                    '删除',
+                    StyleUtils.getCommonTextStyle(
+                      color: Colors.grey,
+                      fontSize: ScreenUtil().setSp(25),
+                    )),
+              ),
+            ],
+          ),
+          WidgetUtils.commonSizedBox(10, 0),
+          WidgetUtils.myLine()
+        ],
       ),
     );
   }
@@ -510,6 +580,23 @@ class _MyDongtaiPageState extends State<MyDongtaiPage> {
           );
   }
 
+  /// 离开编辑页
+  Future<void> exitDEL(BuildContext context,int index, String noteID) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return CustomDialog(
+            title: '是否确认删除此动态？',
+            callback: (res) {
+              if(MyUtils.checkClick()) {
+                doPostDelDT(index,noteID);
+              }
+            },
+            content: '',
+          );
+        });
+  }
+
   /// 用户动态
   Future<void> doPostUserList() async {
     Map<String, dynamic> params = <String, dynamic>{
@@ -544,6 +631,36 @@ class _MyDongtaiPageState extends State<MyDongtaiPage> {
           break;
         case MyHttpConfig.errorloginCode:
           // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+  /// 删除动态
+  Future<void> doPostDelDT(int index,String noteID) async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'note_id': noteID,
+    };
+    try {
+      Loading.show(MyConfig.successTitle);
+      CommonBean bean = await DataUtils.postDelDT(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            _list.removeAt(index);
+          });
+          MyToastUtils.showToastBottom('删除成功！');
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:

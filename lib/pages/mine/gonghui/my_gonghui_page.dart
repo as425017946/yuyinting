@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yuyinting/bean/kefuBean.dart';
 import 'package:yuyinting/bean/myGhBean.dart';
 import 'package:yuyinting/main.dart';
 import 'package:yuyinting/pages/mine/gonghui/room_more_page.dart';
@@ -17,6 +18,7 @@ import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
+import '../../message/chat_page.dart';
 import 'gonghui_people_page.dart';
 
 /// 我的公会
@@ -31,7 +33,7 @@ class MyGonghuiPage extends StatefulWidget {
 
 class _MyGonghuiPageState extends State<MyGonghuiPage> {
   var appBar;
-  String logo = '', ghName = '', ghId = '', ghAddTime = '', identity = '';
+  String logo = '', ghName = '', ghId = '', ghAddTime = '', identity = '',kefUavatar = '', kefuUid = '';
   List<StreamerList> listPeople = [];
   List<RoomList> listRoom = [];
   int qianyue = 0;
@@ -41,9 +43,9 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
     // TODO: implement initState
     super.initState();
     if (widget.type == 'leader') {
-      appBar = WidgetUtils.getAppBar('我的公会', true, context, true, 4);
+      appBar = WidgetUtils.getAppBar('我的公会', true, context, true, 40);
     } else {
-      appBar = WidgetUtils.getAppBar('我的公会', true, context, false, 4);
+      appBar = WidgetUtils.getAppBar('我的公会', true, context, false, 40);
     }
     sp.setString('my_identity', widget.type);
     doPostMyGh();
@@ -307,7 +309,15 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                       Expanded(
                         child: GestureDetector(
                           onTap: (() {
-                            Navigator.pushNamed(context, 'KefuPage');
+                            if (MyUtils.checkClick()) {
+                              MyUtils.goTransparentRFPage(
+                                  context,
+                                  ChatPage(
+                                    nickName: '维C客服',
+                                    otherUid: kefuUid,
+                                    otherImg: kefUavatar,
+                                  ));
+                            }
                           }),
                           child: WidgetUtils.myContainer(
                               ScreenUtil().setHeight(70),
@@ -399,6 +409,8 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
             if (bean.data!.roomList!.isNotEmpty) {
               listRoom = bean.data!.roomList!;
             }
+            kefUavatar = bean.data!.kefUavatar!;
+            kefuUid = bean.data!.kefuUid!.toString();
             identity = bean.data!.identity!;
             qianyue = bean.data!.unauditNum as int;
             sp.setString('guild_id', bean.data!.guildInfo!.id.toString());

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yuyinting/utils/log_util.dart';
 
 import '../../utils/event_utils.dart';
 
@@ -91,7 +92,9 @@ class _RoomShowLiWuPageState extends State<RoomShowLiWuPage>
   @override
   void initState() {
     super.initState();
-
+    for(int i = 0; i < widget.listPeople.length; i++){
+      LogE('都是什么 ${widget.listPeople[0]}');
+    }
     _controller = AnimationController(
       vsync: this,
       duration: Duration(seconds: sc),

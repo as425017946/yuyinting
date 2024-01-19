@@ -8,7 +8,6 @@ import '../../bean/roomInfoBean.dart';
 import '../../colors/my_colors.dart';
 import '../../main.dart';
 import '../../utils/event_utils.dart';
-import '../../utils/log_util.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../../widget/Marquee.dart';
@@ -157,15 +156,18 @@ class RoomItems {
       // 用户进入房间
       return GestureDetector(
         onTap: (() {
-          MyUtils.goTransparentPage(
-              context,
-              RoomPeopleInfoPage(
-                uid: list[i]['uid'].toString(),
-                index: '-1',
-                roomID: roomID,
-                isClose: '',
-                listM: listm,
-              ));
+          if (MyUtils.checkClick() &&
+              list[i]['uid'].toString() != sp.getString('user_id').toString()) {
+            MyUtils.goTransparentPage(
+                context,
+                RoomPeopleInfoPage(
+                  uid: list[i]['uid'].toString(),
+                  index: '-1',
+                  roomID: roomID,
+                  isClose: '',
+                  listM: listm,
+                ));
+          }
         }),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -679,15 +681,18 @@ class RoomItems {
           WidgetUtils.commonSizedBox(5.h, 0),
           GestureDetector(
             onTap: (() {
-              MyUtils.goTransparentPage(
-                  context,
-                  RoomPeopleInfoPage(
-                    uid: list[i]['uid'].toString(),
-                    index: '-1',
-                    roomID: roomID,
-                    isClose: '',
-                    listM: listm,
-                  ));
+              if (MyUtils.checkClick() && list[i]['uid'].toString() !=
+                  sp.getString('user_id').toString()) {
+                MyUtils.goTransparentPage(
+                    context,
+                    RoomPeopleInfoPage(
+                      uid: list[i]['uid'].toString(),
+                      index: '-1',
+                      roomID: roomID,
+                      isClose: '',
+                      listM: listm,
+                    ));
+              }
             }),
             child: Container(
               margin: EdgeInsets.only(bottom: 10.h),
@@ -746,15 +751,18 @@ class RoomItems {
         children: [
           GestureDetector(
             onTap: (() {
-              MyUtils.goTransparentPage(
-                  context,
-                  RoomPeopleInfoPage(
-                    uid: list[i]['uid'].toString(),
-                    index: '-1',
-                    roomID: roomID,
-                    isClose: '',
-                    listM: listm,
-                  ));
+              if (MyUtils.checkClick() && list[i]['uid'].toString() !=
+                  sp.getString('user_id').toString()) {
+                MyUtils.goTransparentPage(
+                    context,
+                    RoomPeopleInfoPage(
+                      uid: list[i]['uid'].toString(),
+                      index: '-1',
+                      roomID: roomID,
+                      isClose: '',
+                      listM: listm,
+                    ));
+              }
             }),
             child: Container(
               margin: EdgeInsets.only(bottom: 10.h),
@@ -806,15 +814,18 @@ class RoomItems {
         children: [
           GestureDetector(
             onTap: (() {
-              MyUtils.goTransparentPage(
-                  context,
-                  RoomPeopleInfoPage(
-                    uid: list[i]['uid'].toString(),
-                    index: '-1',
-                    roomID: roomID,
-                    isClose: '',
-                    listM: listm,
-                  ));
+              if (MyUtils.checkClick() && list[i]['uid'].toString() !=
+                  sp.getString('user_id').toString()) {
+                MyUtils.goTransparentPage(
+                    context,
+                    RoomPeopleInfoPage(
+                      uid: list[i]['uid'].toString(),
+                      index: '-1',
+                      roomID: roomID,
+                      isClose: '',
+                      listM: listm,
+                    ));
+              }
             }),
             child: Container(
               margin: EdgeInsets.only(bottom: 10.h),
@@ -860,15 +871,18 @@ class RoomItems {
       // 收藏房间
       return GestureDetector(
         onTap: (() {
-          MyUtils.goTransparentPage(
-              context,
-              RoomPeopleInfoPage(
-                uid: list[i]['uid'].toString(),
-                index: '-1',
-                roomID: roomID,
-                isClose: '',
-                listM: listm,
-              ));
+          if (MyUtils.checkClick() &&
+              list[i]['uid'].toString() != sp.getString('user_id').toString()) {
+            MyUtils.goTransparentPage(
+                context,
+                RoomPeopleInfoPage(
+                  uid: list[i]['uid'].toString(),
+                  index: '-1',
+                  roomID: roomID,
+                  isClose: '',
+                  listM: listm,
+                ));
+          }
         }),
         child: Text(
             list[i]['content'],
@@ -880,15 +894,18 @@ class RoomItems {
       // 跟随主播进入房间
       return GestureDetector(
         onTap: (() {
-          MyUtils.goTransparentPage(
-              context,
-              RoomPeopleInfoPage(
-                uid: list[i]['uid'].toString(),
-                index: '-1',
-                roomID: roomID,
-                isClose: '',
-                listM: listm,
-              ));
+          if (MyUtils.checkClick() &&
+              list[i]['uid'].toString() != sp.getString('user_id').toString()) {
+            MyUtils.goTransparentPage(
+                context,
+                RoomPeopleInfoPage(
+                  uid: list[i]['uid'].toString(),
+                  index: '-1',
+                  roomID: roomID,
+                  isClose: '',
+                  listM: listm,
+                ));
+          }
         }),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -1015,7 +1032,8 @@ class RoomItems {
                     TextSpan(
                         text: infos[2],
                         style: StyleUtils.getCommonTextStyle(
-                          color: MyColors.roomMessageYellow2, fontSize: 24.sp,)),
+                          color: MyColors.roomMessageYellow2,
+                          fontSize: 24.sp,)),
                     TextSpan(
                         text: infos[3],
                         style: StyleUtils.getCommonTextStyle(
@@ -1047,15 +1065,18 @@ class RoomItems {
       // 厅内正常发送消息
       return GestureDetector(
         onTap: (() {
-          MyUtils.goTransparentPage(
-              context,
-              RoomPeopleInfoPage(
-                uid: list[i]['uid'].toString(),
-                index: '-1',
-                roomID: roomID,
-                isClose: '',
-                listM: listm,
-              ));
+          if (MyUtils.checkClick() &&
+              list[i]['uid'].toString() != sp.getString('user_id').toString()) {
+            MyUtils.goTransparentPage(
+                context,
+                RoomPeopleInfoPage(
+                  uid: list[i]['uid'].toString(),
+                  index: '-1',
+                  roomID: roomID,
+                  isClose: '',
+                  listM: listm,
+                ));
+          }
         }),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -1622,8 +1643,6 @@ class RoomItems {
   static Widget notices(BuildContext context, bool m0, String notice,
       List<MikeList> listm, String roomID, int wherePeople,
       List<bool> listPeople) {
-    LogE('上麦了 == ${listm[8].isClose == 0}');
-    LogE('上麦了 =* ${listm[8].isClose}');
     return Row(
       children: [
         WidgetUtils.commonSizedBox(0, 20),
@@ -1701,15 +1720,18 @@ class RoomItems {
                       sp.getString('user_id').toString()) {
                     eventBus.fire(RoomBack(title: '自己', index: '8'));
                   } else {
-                    MyUtils.goTransparentPage(
-                        context,
-                        RoomPeopleInfoPage(
-                          uid: listm[8].uid.toString(),
-                          index: '8',
-                          roomID: roomID,
-                          isClose: listm[8].isClose.toString(),
-                          listM: listm,
-                        ));
+                    if (MyUtils.checkClick() && listm[8].uid.toString() !=
+                        sp.getString('user_id').toString()) {
+                      MyUtils.goTransparentPage(
+                          context,
+                          RoomPeopleInfoPage(
+                            uid: listm[8].uid.toString(),
+                            index: '8',
+                            roomID: roomID,
+                            isClose: listm[8].isClose.toString(),
+                            listM: listm,
+                          ));
+                    }
                   }
                 } else {
                   eventBus.fire(RoomBack(title: '空位置', index: '8'));
@@ -1880,14 +1902,17 @@ class RoomItems {
                           sp.getString('user_id').toString()) {
                         eventBus.fire(RoomBack(title: '自己', index: '0'));
                       } else {
-                        MyUtils.goTransparentPage(
-                            context,
-                            RoomPeopleInfoPage(
-                              uid: listm[0].uid.toString(),
-                              index: '0',
-                              roomID: roomID,
-                              isClose: listm[0].isClose.toString(),
-                              listM: listm,));
+                        if (MyUtils.checkClick() && listm[0].uid.toString() !=
+                            sp.getString('user_id').toString()) {
+                          MyUtils.goTransparentPage(
+                              context,
+                              RoomPeopleInfoPage(
+                                uid: listm[0].uid.toString(),
+                                index: '0',
+                                roomID: roomID,
+                                isClose: listm[0].isClose.toString(),
+                                listM: listm,));
+                        }
                       }
                     } else {
                       eventBus.fire(RoomBack(title: '空位置', index: '0'));
@@ -1937,12 +1962,18 @@ class RoomItems {
                           ScreenUtil().setHeight(110),
                           listm[0].avatarFrameImg!) : const Text(''),
                       // 头像框动态图
-                      listm[0].avatarFrameGifImg!.isNotEmpty ? SizedBox(
-                        height: 110.h,
-                        width: 110.h,
-                        child: SVGASimpleImage(
-                          resUrl: listm[0].avatarFrameGifImg!,),
+                      listm[0].isClose == 0 ? SizedBox(
+                        height: 140.h,
+                        width: 140.h,
+                        child: const SVGASimpleImage(
+                          assetsName: 'assets/svga/room_shengbo.svga',),
                       ) : const Text(''),
+                      // listm[0].avatarFrameGifImg!.isNotEmpty ? SizedBox(
+                      //   height: 110.h,
+                      //   width: 110.h,
+                      //   child: SVGASimpleImage(
+                      //     resUrl: listm[0].avatarFrameGifImg!,),
+                      // ) : const Text(''),
                       Column(
                         children: [
                           const Expanded(child: Text('')),
@@ -2030,14 +2061,17 @@ class RoomItems {
                           sp.getString('user_id').toString()) {
                         eventBus.fire(RoomBack(title: '自己', index: '1'));
                       } else {
-                        MyUtils.goTransparentPage(
-                            context,
-                            RoomPeopleInfoPage(
-                              uid: listm[1].uid.toString(),
-                              index: '1',
-                              roomID: roomID,
-                              isClose: listm[1].isClose.toString(),
-                              listM: listm,));
+                        if (MyUtils.checkClick() && listm[1].uid.toString() !=
+                            sp.getString('user_id').toString()) {
+                          MyUtils.goTransparentPage(
+                              context,
+                              RoomPeopleInfoPage(
+                                uid: listm[1].uid.toString(),
+                                index: '1',
+                                roomID: roomID,
+                                isClose: listm[1].isClose.toString(),
+                                listM: listm,));
+                        }
                       }
                     } else {
                       eventBus.fire(RoomBack(title: '空位置', index: '1'));
@@ -2087,12 +2121,18 @@ class RoomItems {
                           ScreenUtil().setHeight(110),
                           listm[1].avatarFrameImg!) : const Text(''),
                       // 头像框动态图
-                      listm[1].avatarFrameGifImg!.isNotEmpty ? SizedBox(
-                        height: 110.h,
-                        width: 110.h,
-                        child: SVGASimpleImage(
-                          resUrl: listm[1].avatarFrameGifImg!,),
+                      listm[1].isClose == 0 ? SizedBox(
+                        height: 140.h,
+                        width: 140.h,
+                        child: const SVGASimpleImage(
+                          assetsName: 'assets/svga/room_shengbo.svga',),
                       ) : const Text(''),
+                      // listm[1].avatarFrameGifImg!.isNotEmpty ? SizedBox(
+                      //   height: 110.h,
+                      //   width: 110.h,
+                      //   child: SVGASimpleImage(
+                      //     resUrl: listm[1].avatarFrameGifImg!,),
+                      // ) : const Text(''),
                       Column(
                         children: [
                           const Expanded(child: Text('')),
@@ -2180,14 +2220,17 @@ class RoomItems {
                           sp.getString('user_id').toString()) {
                         eventBus.fire(RoomBack(title: '自己', index: '2'));
                       } else {
-                        MyUtils.goTransparentPage(
-                            context,
-                            RoomPeopleInfoPage(
-                              uid: listm[2].uid.toString(),
-                              index: '2',
-                              roomID: roomID,
-                              isClose: listm[2].isClose.toString(),
-                              listM: listm,));
+                        if (MyUtils.checkClick() && listm[2].uid.toString() !=
+                            sp.getString('user_id').toString()) {
+                          MyUtils.goTransparentPage(
+                              context,
+                              RoomPeopleInfoPage(
+                                uid: listm[2].uid.toString(),
+                                index: '2',
+                                roomID: roomID,
+                                isClose: listm[2].isClose.toString(),
+                                listM: listm,));
+                        }
                       }
                     } else {
                       eventBus.fire(RoomBack(title: '空位置', index: '2'));
@@ -2237,12 +2280,18 @@ class RoomItems {
                           ScreenUtil().setHeight(110),
                           listm[2].avatarFrameImg!) : const Text(''),
                       // 头像框动态图
-                      listm[2].avatarFrameGifImg!.isNotEmpty ? SizedBox(
-                        height: 110.h,
-                        width: 110.h,
-                        child: SVGASimpleImage(
-                          resUrl: listm[2].avatarFrameGifImg!,),
+                      listm[2].isClose == 0 ? SizedBox(
+                        height: 140.h,
+                        width: 140.h,
+                        child: const SVGASimpleImage(
+                          assetsName: 'assets/svga/room_shengbo.svga',),
                       ) : const Text(''),
+                      // listm[2].avatarFrameGifImg!.isNotEmpty ? SizedBox(
+                      //   height: 110.h,
+                      //   width: 110.h,
+                      //   child: SVGASimpleImage(
+                      //     resUrl: listm[2].avatarFrameGifImg!,),
+                      // ) : const Text(''),
                       Column(
                         children: [
                           const Expanded(child: Text('')),
@@ -2330,14 +2379,17 @@ class RoomItems {
                           sp.getString('user_id').toString()) {
                         eventBus.fire(RoomBack(title: '自己', index: '3'));
                       } else {
-                        MyUtils.goTransparentPage(
-                            context,
-                            RoomPeopleInfoPage(
-                              uid: listm[3].uid.toString(),
-                              index: '3',
-                              roomID: roomID,
-                              isClose: listm[3].isClose.toString(),
-                              listM: listm,));
+                        if (MyUtils.checkClick() && listm[3].uid.toString() !=
+                            sp.getString('user_id').toString()) {
+                          MyUtils.goTransparentPage(
+                              context,
+                              RoomPeopleInfoPage(
+                                uid: listm[3].uid.toString(),
+                                index: '3',
+                                roomID: roomID,
+                                isClose: listm[3].isClose.toString(),
+                                listM: listm,));
+                        }
                       }
                     } else {
                       eventBus.fire(RoomBack(title: '空位置', index: '3'));
@@ -2387,12 +2439,18 @@ class RoomItems {
                           ScreenUtil().setHeight(110),
                           listm[3].avatarFrameImg!) : const Text(''),
                       // 头像框动态图
-                      listm[3].avatarFrameGifImg!.isNotEmpty ? SizedBox(
-                        height: 110.h,
-                        width: 110.h,
-                        child: SVGASimpleImage(
-                          resUrl: listm[3].avatarFrameGifImg!,),
+                      listm[3].isClose == 0 ? SizedBox(
+                        height: 140.h,
+                        width: 140.h,
+                        child: const SVGASimpleImage(
+                          assetsName: 'assets/svga/room_shengbo.svga',),
                       ) : const Text(''),
+                      // listm[3].avatarFrameGifImg!.isNotEmpty ? SizedBox(
+                      //   height: 110.h,
+                      //   width: 110.h,
+                      //   child: SVGASimpleImage(
+                      //     resUrl: listm[3].avatarFrameGifImg!,),
+                      // ) : const Text(''),
                       Column(
                         children: [
                           const Expanded(child: Text('')),
@@ -2489,14 +2547,17 @@ class RoomItems {
                             sp.getString('user_id').toString()) {
                           eventBus.fire(RoomBack(title: '自己', index: '4'));
                         } else {
-                          MyUtils.goTransparentPage(
-                              context,
-                              RoomPeopleInfoPage(
-                                uid: listm[4].uid.toString(),
-                                index: '4',
-                                roomID: roomID,
-                                isClose: listm[4].isClose.toString(),
-                                listM: listm,));
+                          if (MyUtils.checkClick() && listm[4].uid.toString() !=
+                              sp.getString('user_id').toString()) {
+                            MyUtils.goTransparentPage(
+                                context,
+                                RoomPeopleInfoPage(
+                                  uid: listm[4].uid.toString(),
+                                  index: '4',
+                                  roomID: roomID,
+                                  isClose: listm[4].isClose.toString(),
+                                  listM: listm,));
+                          }
                         }
                       } else {
                         eventBus.fire(RoomBack(title: '空位置', index: '4'));
@@ -2546,12 +2607,18 @@ class RoomItems {
                             ScreenUtil().setHeight(110),
                             listm[4].avatarFrameImg!) : const Text(''),
                         // 头像框动态图
-                        listm[4].avatarFrameGifImg!.isNotEmpty ? SizedBox(
-                          height: 110.h,
-                          width: 110.h,
-                          child: SVGASimpleImage(
-                            resUrl: listm[4].avatarFrameGifImg!,),
+                        listm[4].isClose == 0 ? SizedBox(
+                          height: 140.h,
+                          width: 140.h,
+                          child: const SVGASimpleImage(
+                            assetsName: 'assets/svga/room_shengbo.svga',),
                         ) : const Text(''),
+                        // listm[4].avatarFrameGifImg!.isNotEmpty ? SizedBox(
+                        //   height: 110.h,
+                        //   width: 110.h,
+                        //   child: SVGASimpleImage(
+                        //     resUrl: listm[4].avatarFrameGifImg!,),
+                        // ) : const Text(''),
                         Column(
                           children: [
                             const Expanded(child: Text('')),
@@ -2641,14 +2708,17 @@ class RoomItems {
                             sp.getString('user_id').toString()) {
                           eventBus.fire(RoomBack(title: '自己', index: '5'));
                         } else {
-                          MyUtils.goTransparentPage(
-                              context,
-                              RoomPeopleInfoPage(
-                                uid: listm[5].uid.toString(),
-                                index: '5',
-                                roomID: roomID,
-                                isClose: listm[5].isClose.toString(),
-                                listM: listm,));
+                          if (MyUtils.checkClick() && listm[5].uid.toString() !=
+                              sp.getString('user_id').toString()) {
+                            MyUtils.goTransparentPage(
+                                context,
+                                RoomPeopleInfoPage(
+                                  uid: listm[5].uid.toString(),
+                                  index: '5',
+                                  roomID: roomID,
+                                  isClose: listm[5].isClose.toString(),
+                                  listM: listm,));
+                          }
                         }
                       } else {
                         eventBus.fire(RoomBack(title: '空位置', index: '5'));
@@ -2698,12 +2768,18 @@ class RoomItems {
                             ScreenUtil().setHeight(110),
                             listm[5].avatarFrameImg!) : const Text(''),
                         // 头像框动态图
-                        listm[5].avatarFrameGifImg!.isNotEmpty ? SizedBox(
-                          height: 110.h,
-                          width: 110.h,
-                          child: SVGASimpleImage(
-                            resUrl: listm[5].avatarFrameGifImg!,),
+                        listm[5].isClose == 0 ? SizedBox(
+                          height: 140.h,
+                          width: 140.h,
+                          child: const SVGASimpleImage(
+                            assetsName: 'assets/svga/room_shengbo.svga',),
                         ) : const Text(''),
+                        // listm[5].avatarFrameGifImg!.isNotEmpty ? SizedBox(
+                        //   height: 110.h,
+                        //   width: 110.h,
+                        //   child: SVGASimpleImage(
+                        //     resUrl: listm[5].avatarFrameGifImg!,),
+                        // ) : const Text(''),
                         Column(
                           children: [
                             const Expanded(child: Text('')),
@@ -2793,14 +2869,17 @@ class RoomItems {
                             sp.getString('user_id').toString()) {
                           eventBus.fire(RoomBack(title: '自己', index: '6'));
                         } else {
-                          MyUtils.goTransparentPage(
-                              context,
-                              RoomPeopleInfoPage(
-                                uid: listm[6].uid.toString(),
-                                index: '6',
-                                roomID: roomID,
-                                isClose: listm[6].isClose.toString(),
-                                listM: listm,));
+                          if (MyUtils.checkClick() && listm[6].uid.toString() !=
+                              sp.getString('user_id').toString()) {
+                            MyUtils.goTransparentPage(
+                                context,
+                                RoomPeopleInfoPage(
+                                  uid: listm[6].uid.toString(),
+                                  index: '6',
+                                  roomID: roomID,
+                                  isClose: listm[6].isClose.toString(),
+                                  listM: listm,));
+                          }
                         }
                       } else {
                         eventBus.fire(RoomBack(title: '空位置', index: '6'));
@@ -2850,12 +2929,18 @@ class RoomItems {
                             ScreenUtil().setHeight(110),
                             listm[6].avatarFrameImg!) : const Text(''),
                         // 头像框动态图
-                        listm[6].avatarFrameGifImg!.isNotEmpty ? SizedBox(
-                          height: 110.h,
-                          width: 110.h,
-                          child: SVGASimpleImage(
-                            resUrl: listm[6].avatarFrameGifImg!,),
+                        listm[6].isClose == 0 ? SizedBox(
+                          height: 140.h,
+                          width: 140.h,
+                          child: const SVGASimpleImage(
+                            assetsName: 'assets/svga/room_shengbo.svga',),
                         ) : const Text(''),
+                        // listm[6].avatarFrameGifImg!.isNotEmpty ? SizedBox(
+                        //   height: 110.h,
+                        //   width: 110.h,
+                        //   child: SVGASimpleImage(
+                        //     resUrl: listm[6].avatarFrameGifImg!,),
+                        // ) : const Text(''),
                         Column(
                           children: [
                             const Expanded(child: Text('')),
@@ -2947,14 +3032,17 @@ class RoomItems {
                           eventBus
                               .fire(RoomBack(title: '自己', index: '7'));
                         } else {
-                          MyUtils.goTransparentPage(
-                              context,
-                              RoomPeopleInfoPage(
-                                uid: listm[7].uid.toString(),
-                                index: '7',
-                                roomID: roomID,
-                                isClose: listm[7].isClose.toString(),
-                                listM: listm,));
+                          if (MyUtils.checkClick() && listm[7].uid.toString() !=
+                              sp.getString('user_id').toString()) {
+                            MyUtils.goTransparentPage(
+                                context,
+                                RoomPeopleInfoPage(
+                                  uid: listm[7].uid.toString(),
+                                  index: '7',
+                                  roomID: roomID,
+                                  isClose: listm[7].isClose.toString(),
+                                  listM: listm,));
+                          }
                         }
                       } else {
                         eventBus.fire(RoomBack(title: '空位置', index: '7'));
@@ -3007,12 +3095,18 @@ class RoomItems {
                             ScreenUtil().setHeight(110),
                             listm[7].avatarFrameImg!) : const Text(''),
                         // 头像框动态图
-                        listm[7].avatarFrameGifImg!.isNotEmpty ? SizedBox(
-                          height: 110.h,
-                          width: 110.h,
-                          child: SVGASimpleImage(
-                            resUrl: listm[7].avatarFrameGifImg!,),
+                        listm[7].isClose == 0 ? SizedBox(
+                          height: 140.h,
+                          width: 140.h,
+                          child: const SVGASimpleImage(
+                            assetsName: 'assets/svga/room_shengbo.svga',),
                         ) : const Text(''),
+                        // listm[7].avatarFrameGifImg!.isNotEmpty ? SizedBox(
+                        //   height: 110.h,
+                        //   width: 110.h,
+                        //   child: SVGASimpleImage(
+                        //     resUrl: listm[7].avatarFrameGifImg!,),
+                        // ) : const Text(''),
 
                         Column(
                           children: [
@@ -3138,14 +3232,17 @@ class RoomItems {
                           eventBus
                               .fire(RoomBack(title: '自己', index: '7'));
                         } else {
-                          MyUtils.goTransparentPage(
-                              context,
-                              RoomPeopleInfoPage(
-                                uid: listm[7].uid.toString(),
-                                index: '7',
-                                roomID: roomID,
-                                isClose: listm[7].isClose.toString(),
-                                listM: listm,));
+                          if (MyUtils.checkClick() && listm[7].uid.toString() !=
+                              sp.getString('user_id').toString()) {
+                            MyUtils.goTransparentPage(
+                                context,
+                                RoomPeopleInfoPage(
+                                  uid: listm[7].uid.toString(),
+                                  index: '7',
+                                  roomID: roomID,
+                                  isClose: listm[7].isClose.toString(),
+                                  listM: listm,));
+                          }
                         }
                       } else {
                         eventBus.fire(RoomBack(title: '空位置', index: '7'));
@@ -3195,12 +3292,18 @@ class RoomItems {
                             ScreenUtil().setHeight(110),
                             listm[7].avatarFrameImg!) : const Text(''),
                         // 头像框动态图
-                        listm[7].avatarFrameGifImg!.isNotEmpty ? SizedBox(
-                          height: 110.h,
-                          width: 110.h,
-                          child: SVGASimpleImage(
-                            resUrl: listm[7].avatarFrameGifImg!,),
+                        listm[7].isClose == 0 ? SizedBox(
+                          height: 140.h,
+                          width: 140.h,
+                          child: const SVGASimpleImage(
+                            assetsName: 'assets/svga/room_shengbo.svga',),
                         ) : const Text(''),
+                        // listm[7].avatarFrameGifImg!.isNotEmpty ? SizedBox(
+                        //   height: 110.h,
+                        //   width: 110.h,
+                        //   child: SVGASimpleImage(
+                        //     resUrl: listm[7].avatarFrameGifImg!,),
+                        // ) : const Text(''),
                         Column(
                           children: [
                             const Expanded(child: Text('')),
@@ -3381,7 +3484,7 @@ class RoomItems {
   /// 厅内底部按钮
   static Widget footBtn(BuildContext context, bool isJinyiin, int isForbation,
       String roomID, int isShow, int isBoss, bool mima, List<MikeList> listM,
-      bool roomDX, bool isRed, bool isMeUp) {
+      bool roomDX, bool isRed, bool isMeUp, String mxIndex) {
     return SizedBox(
       height: ScreenUtil().setHeight(90),
       child: Row(
@@ -3552,9 +3655,10 @@ class RoomItems {
           GestureDetector(
             onTap: (() {
               //如果上麦的人有自己
-              if(isMeUp){
-                eventBus.fire(RoomBack(title: '关闭声音', index: ''));
-              }else{
+              if (isMeUp) {
+                eventBus.fire(RoomBack(title: '关闭声音',
+                    index: (int.parse(mxIndex) - 1).toString()));
+              } else {
                 MyToastUtils.showToastBottom('不在麦序，无需开启');
               }
             }),
@@ -3597,9 +3701,10 @@ class RoomItems {
                       eventBus
                           .fire(RoomBack(title: '上麦', index: i.toString()));
                     }),
-                    child: SizedBox(
+                    child: Container(
                       height: double.infinity,
                       width: double.infinity,
+                      color: Colors.transparent,
                       child: WidgetUtils.onlyTextCenter(
                           '上麦',
                           StyleUtils.getCommonTextStyle(
@@ -3663,11 +3768,16 @@ class RoomItems {
                       eventBus
                           .fire(RoomBack(title: '上麦', index: i.toString()));
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        '上麦',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '上麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
               Container(
                 width: double.infinity,
@@ -3725,11 +3835,16 @@ class RoomItems {
                       eventBus
                           .fire(RoomBack(title: '上麦', index: i.toString()));
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        '上麦',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '上麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
               Container(
                 width: double.infinity,
@@ -3787,11 +3902,16 @@ class RoomItems {
                       eventBus
                           .fire(RoomBack(title: '上麦', index: i.toString()));
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        '上麦',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '上麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
               Container(
                 width: double.infinity,
@@ -3849,11 +3969,16 @@ class RoomItems {
                       eventBus
                           .fire(RoomBack(title: '上麦', index: i.toString()));
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        '上麦',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '上麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
               Container(
                 width: double.infinity,
@@ -3911,11 +4036,16 @@ class RoomItems {
                       eventBus
                           .fire(RoomBack(title: '上麦', index: i.toString()));
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        '上麦',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '上麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
               Container(
                 width: double.infinity,
@@ -3973,11 +4103,16 @@ class RoomItems {
                       eventBus
                           .fire(RoomBack(title: '上麦', index: i.toString()));
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        '上麦',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '上麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
               Container(
                 width: double.infinity,
@@ -4035,11 +4170,16 @@ class RoomItems {
                       eventBus
                           .fire(RoomBack(title: '上麦', index: i.toString()));
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        '上麦',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '上麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
               Container(
                 width: double.infinity,
@@ -4097,11 +4237,16 @@ class RoomItems {
                       eventBus
                           .fire(RoomBack(title: '上麦', index: i.toString()));
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        '上麦',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '上麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
               Container(
                 width: double.infinity,

@@ -565,55 +565,55 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
                 int randomNum = Random().nextInt(6);
                 luckyName = randomNum;
                 break;
-              case 8: // 御龙豪杰
+              case 9: // 梦回长安
                 int min = 7;
                 int max = 18; // 注意这里是 18 而不是 17，因为范围是左闭右开的
                 int randomNumber = Random().nextInt(max - min) + min;
                 luckyName = randomNumber;
                 break;
-              case 1: // 甜甜圈
+              case 26: // 雪顶咖啡
                 int min = 19;
                 int max = 30;
                 int randomNumber = Random().nextInt(max - min) + min;
                 luckyName = randomNumber;
                 break;
-              case 7: // 云顶天宫
+              case 8: // 御龙豪杰
                 int min = 31;
                 int max = 42;
                 int randomNumber = Random().nextInt(max - min) + min;
                 luckyName = randomNumber;
                 break;
-              case 3: // 魔法池
+              case 36: // 钻石糖
                 int min = 43;
                 int max = 54;
                 int randomNumber = Random().nextInt(max - min) + min;
                 luckyName = randomNumber;
                 break;
-              case 5: // 电竞小柴
+              case 10: // 速度与激情
                 int min = 55;
                 int max = 66;
                 int randomNumber = Random().nextInt(max - min) + min;
                 luckyName = randomNumber;
                 break;
-              case 4: // 蝴蝶荷塘
+              case 5: // 电竞小柴
                 int min = 67;
                 int max = 78;
                 int randomNumber = Random().nextInt(max - min) + min;
                 luckyName = randomNumber;
                 break;
-              case 6: // 幸运热气球
+              case 38: // 鹤仙
                 int min = 79;
                 int max = 90;
                 int randomNumber = Random().nextInt(max - min) + min;
                 luckyName = randomNumber;
                 break;
-              case 2: // 纸箱姑娘
+              case 4: // 蝴蝶荷塘
                 int min = 91;
                 int max = 102;
                 int randomNumber = Random().nextInt(max - min) + min;
                 luckyName = randomNumber;
                 break;
-              case 9: // 梦回长安
+              case 17: // 霸下
                 int min = 103;
                 int max = 114;
                 int randomNumber = Random().nextInt(max - min) + min;

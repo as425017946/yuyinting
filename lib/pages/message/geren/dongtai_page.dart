@@ -66,7 +66,7 @@ class _DongtaiPageState extends State<DongtaiPage> {
   Widget _itemPeople(BuildContext context, int i) {
     return GestureDetector(
       onTap: ((){
-        MyUtils.goTransparentRFPage(context, TrendsMorePage( note_id: _list[i].id.toString(),));
+        MyUtils.goTransparentRFPage(context, TrendsMorePage( note_id: _list[i].id.toString(),index: i));
       }),
       child: Container(
         width: double.infinity,

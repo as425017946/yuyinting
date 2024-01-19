@@ -72,7 +72,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
     super.initState();
     doPostRoomUserInfo();
     doPostRoomUserInfoManager();
-    LogE('身份${sp.getString('role').toString()}');
+    LogE('身份 === ${sp.getString('role').toString()}');
     if (widget.isClose == '0') {
       zhuangtai = '闭麦';
     } else {
@@ -424,7 +424,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
 
                       /// 上麦下麦
                       isMai
-                          ? sp.getString('role').toString() != 'user'
+                          ? (sp.getString('role').toString() == 'leader' || sp.getString('role').toString() == 'adminer')
                               ? Row(
                                   children: [
                                     WidgetUtils.commonSizedBox(0, 20),

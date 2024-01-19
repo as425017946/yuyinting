@@ -464,20 +464,31 @@ class _ChatPageState extends State<ChatPage> {
                                       MyUtils.goTransparentPageCom(context,
                                           SwiperPage(imgList: imgList));
                                     }),
-                                    child: Image(
-                                      image: FileImage(
-                                          File(allData2[i]['content'])),
-                                      width: 160.h,
-                                      height: 200.h,
-                                      errorBuilder: (BuildContext context,
-                                          Object error,
-                                          StackTrace? stackTrace) {
-                                        return WidgetUtils.showImages(
-                                            'assets/images/img_error.png',
+                                    child: (allData2[i]['content']
+                                                .toString()
+                                                .contains(
+                                                    'com.leimu.yuyinting') ||
+                                            allData2[i]['content']
+                                                .toString()
+                                                .contains('storage'))
+                                        ? Image(
+                                            image: FileImage(
+                                                File(allData2[i]['content'])),
+                                            width: 160.h,
+                                            height: 200.h,
+                                            errorBuilder: (BuildContext context,
+                                                Object error,
+                                                StackTrace? stackTrace) {
+                                              return WidgetUtils.showImages(
+                                                  'assets/images/img_error.png',
+                                                  200.h,
+                                                  160.h);
+                                            },
+                                          )
+                                        : WidgetUtils.showImagesNet(
+                                            allData2[i]['content'].toString(),
                                             200.h,
-                                            160.h);
-                                      },
-                                    ),
+                                            160.h),
                                   )
                                 : GestureDetector(
                                     onTap: (() {
@@ -956,11 +967,8 @@ class _ChatPageState extends State<ChatPage> {
                 listImg.isNotEmpty
                     ? GestureDetector(
                         onTap: (() {
-                          MyUtils.goTransparentRFPage(
-                              context,
-                              TrendsMorePage(
-                                note_id: noteId,
-                              ));
+                          MyUtils.goTransparentRFPage(context,
+                              TrendsMorePage(note_id: noteId, index: 999));
                         }),
                         child: Container(
                           height: ScreenUtil().setHeight(260),
@@ -1049,65 +1057,66 @@ class _ChatPageState extends State<ChatPage> {
                           ? Expanded(
                               child: GestureDetector(
                                 onVerticalDragStart: (details) async {
-                                  if (await getPermissionStatus()) {
-                                    // 开始录音
-                                    startRecord();
-                                    setState(() {
-                                      audioNum = 0; // 记录录了多久
-                                      isLuZhi = true;
-                                    });
+                                  //判断发送音频
+                                  if (MyUtils.checkClick()) {
+                                    doPostCanSendUser(3);
                                   }
                                 },
                                 onVerticalDragUpdate: (details) async {
-                                  if (await getPermissionStatus()) {
-                                    if (details.delta.dy < -1) {
-                                      if (_timer.isActive) {
-                                        _timer.cancel();
+                                  if(isLuZhi) {
+                                    if (await getPermissionStatus()) {
+                                      if (details.delta.dy < -1) {
+                                        if (_timer.isActive) {
+                                          _timer.cancel();
+                                        }
+                                        // 停止录音
+                                        stopRecorder();
+                                        setState(() {
+                                          isCancel = true;
+                                        });
                                       }
-                                      // 停止录音
-                                      stopRecorder();
-                                      setState(() {
-                                        isCancel = true;
-                                      });
                                     }
                                   }
                                 },
                                 onVerticalDragEnd: (details) async {
-                                  if (await getPermissionStatus()) {
-                                    // 取消录音后抬起手指
-                                    if (isCancel) {
-                                      //重新初始化音频信息
-                                      setState(() {
-                                        isCancel = false;
-
-                                        mediaRecord = true;
-                                        playRecord = false; //音频文件播放状态
-                                        hasRecord = false; //是否有音频文件可播放
-                                        isLuZhi = false;
-                                        isPlay =
-                                            0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
-                                        djNum = 60; // 录音时长
-                                        audioNum = 0; // 记录录了多久
-                                      });
-                                    } else {
-                                      // 停止录音
-                                      stopRecorder();
-                                      if (audioNum == 0) {
-                                        MyToastUtils.showToastBottom('录音时长过短！');
+                                  if(isLuZhi) {
+                                    if (await getPermissionStatus()) {
+                                      // 取消录音后抬起手指
+                                      if (isCancel) {
                                         //重新初始化音频信息
                                         setState(() {
+                                          isCancel = false;
+
                                           mediaRecord = true;
                                           playRecord = false; //音频文件播放状态
                                           hasRecord = false; //是否有音频文件可播放
                                           isLuZhi = false;
                                           isPlay =
-                                              0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
+                                          0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
                                           djNum = 60; // 录音时长
                                           audioNum = 0; // 记录录了多久
                                         });
                                       } else {
-                                        //发送录音
-                                        doSendAudio();
+                                        // 停止录音
+                                        stopRecorder();
+                                        if (audioNum == 0) {
+                                          MyToastUtils.showToastBottom(
+                                              '录音时长过短！');
+                                          //重新初始化音频信息
+                                          setState(() {
+                                            mediaRecord = true;
+                                            playRecord = false; //音频文件播放状态
+                                            hasRecord = false; //是否有音频文件可播放
+                                            isLuZhi = false;
+                                            isPlay =
+                                            0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
+                                            djNum = 60; // 录音时长
+                                            audioNum = 0; // 记录录了多久
+                                          });
+                                        } else {
+                                          //发送录音
+                                          doSendAudio();
+                                        }
                                       }
                                     }
                                   }
@@ -1217,10 +1226,10 @@ class _ChatPageState extends State<ChatPage> {
                       _isEmojiPickerVisible
                           ? GestureDetector(
                               onTap: (() {
-                                setState(() {
-                                  _isEmojiPickerVisible = false;
-                                });
-                                doPostSendUserMsg(controller.text);
+                                //判断表情发送
+                                if (MyUtils.checkClick()) {
+                                  doPostCanSendUser(1);
+                                }
                               }),
                               child: Container(
                                 width: 90.h,
@@ -1243,7 +1252,10 @@ class _ChatPageState extends State<ChatPage> {
                       _isEmojiPickerVisible == false
                           ? GestureDetector(
                               onTap: (() {
-                                onTapPickFromGallery();
+                                //判断图片发送
+                                if (MyUtils.checkClick()) {
+                                  doPostCanSendUser(2);
+                                }
                               }),
                               child: WidgetUtils.showImages(
                                   'assets/images/chat_img.png',
@@ -1257,8 +1269,9 @@ class _ChatPageState extends State<ChatPage> {
                       _isEmojiPickerVisible == false
                           ? GestureDetector(
                               onTap: (() {
+                                //判断红包发送
                                 if (MyUtils.checkClick()) {
-                                  doPostPayPwd();
+                                  doPostCanSendUser(4);
                                 }
                               }),
                               child: WidgetUtils.showImages(
@@ -1344,7 +1357,6 @@ class _ChatPageState extends State<ChatPage> {
                               setState(() {
                                 isShow = false;
                               });
-                              doPostFollow();
                               doPostUpdateBlack();
                             }),
                             child: Container(
@@ -1779,10 +1791,10 @@ class _ChatPageState extends State<ChatPage> {
   /// 加入房间前
   Future<void> doPostBeforeJoin(roomID) async {
     //判断房间id是否为空的
-    if(sp.getString('roomID') == null || sp.getString('').toString().isEmpty){
-    }else{
+    if (sp.getString('roomID') == null || sp.getString('').toString().isEmpty) {
+    } else {
       // 不是空的，并且不是之前进入的房间
-      if(sp.getString('roomID').toString() != roomID){
+      if (sp.getString('roomID').toString() != roomID) {
         sp.setString('roomID', roomID);
         eventBus.fire(SubmitButtonBack(title: '加入其他房间'));
       }
@@ -1886,4 +1898,46 @@ class _ChatPageState extends State<ChatPage> {
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
+
+  /// 能否发私聊
+  Future<void> doPostCanSendUser(int type) async {
+    Map<String, dynamic> params = <String, dynamic>{'uid': widget.otherUid};
+    try {
+      CommonBean bean = await DataUtils.postCanSendUser(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+        //可以发私聊跳转 type 1发表情 2图片 3录音 4红包
+          if(type == 1){
+            setState(() {
+              _isEmojiPickerVisible = false;
+            });
+            doPostSendUserMsg(controller.text);
+          }else if(type == 2){
+            onTapPickFromGallery();
+          }else if(type == 3){
+            if (await getPermissionStatus()) {
+              // 开始录音
+              startRecord();
+              setState(() {
+                audioNum = 0; // 记录录了多久
+                isLuZhi = true;
+              });
+            }
+          }else if(type == 4){
+            doPostPayPwd();
+          }
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
 }

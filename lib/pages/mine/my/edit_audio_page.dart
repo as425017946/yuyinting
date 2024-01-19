@@ -31,6 +31,7 @@ import '../../../widget/SVGASimpleImage.dart';
 /// 声音录制
 class EditAudioPage extends StatefulWidget {
   String audioUrl;
+
   EditAudioPage({Key? key, required this.audioUrl}) : super(key: key);
 
   @override
@@ -74,6 +75,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
       audioUrl = widget.audioUrl;
     });
   }
+
   void _initialize() async {
     await _mPlayer!.closePlayer();
     await _mPlayer!.openPlayer();
@@ -125,17 +127,18 @@ class _EditAudioPageState extends State<EditAudioPage> {
   }
 
   late Timer _timer;
+
 //点击开始录音
   startRecord() {
     record();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if(isPlay == 2){
+      if (isPlay == 2) {
         setState(() {
           isPlay = 2;
         });
         timer.cancel();
         stopRecorder();
-      }else{
+      } else {
         setState(() {
           djNum--;
           audioNum++;
@@ -228,12 +231,12 @@ class _EditAudioPageState extends State<EditAudioPage> {
   void play2() {
     _mPlayer!
         .startPlayer(
-        fromURI: audioUrl,
-        whenFinished: () {
-          setState(() {
-            playRecord = false;
-          });
-        })
+            fromURI: audioUrl,
+            whenFinished: () {
+              setState(() {
+                playRecord = false;
+              });
+            })
         .then((value) {
       setState(() {
         playRecord = true;
@@ -302,9 +305,9 @@ class _EditAudioPageState extends State<EditAudioPage> {
                     WidgetUtils.commonSizedBox(10, 0),
                     GestureDetector(
                       onTap: (() {
-    if(MyUtils.checkClick()) {
-      play2();
-    }
+                        if (MyUtils.checkClick()) {
+                          play2();
+                        }
                       }),
                       child: Container(
                         height: ScreenUtil().setHeight(50),
@@ -320,24 +323,24 @@ class _EditAudioPageState extends State<EditAudioPage> {
                         ),
                         child: playRecord == false
                             ? Row(
-                          children: [
-                            const Expanded(
-                                child: SVGASimpleImage(
-                                  assetsName:
-                                  'assets/svga/audio_xindiaotu.svga',
-                                )),
-                            WidgetUtils.commonSizedBox(0, 10.h),
-                            WidgetUtils.showImages(
-                                'assets/images/people_bofang.png',
-                                ScreenUtil().setHeight(35),
-                                ScreenUtil().setWidth(35)),
-                            WidgetUtils.commonSizedBox(0, 10.h),
-                          ],
-                        )
+                                children: [
+                                  const Expanded(
+                                      child: SVGASimpleImage(
+                                    assetsName:
+                                        'assets/svga/audio_xindiaotu.svga',
+                                  )),
+                                  WidgetUtils.commonSizedBox(0, 10.h),
+                                  WidgetUtils.showImages(
+                                      'assets/images/people_bofang.png',
+                                      ScreenUtil().setHeight(35),
+                                      ScreenUtil().setWidth(35)),
+                                  WidgetUtils.commonSizedBox(0, 10.h),
+                                ],
+                              )
                             : const Expanded(
-                            child: SVGASimpleImage(
-                              assetsName: 'assets/svga/audio_bolang.svga',
-                            )),
+                                child: SVGASimpleImage(
+                                assetsName: 'assets/svga/audio_bolang.svga',
+                              )),
                       ),
                     )
                   ],
@@ -371,15 +374,15 @@ class _EditAudioPageState extends State<EditAudioPage> {
                         isPlay == 2
                             ? GestureDetector(
                                 onTap: (() {
-    if(MyUtils.checkClick()) {
-      stopPlayer();
-      delRecorder();
-      setState(() {
-        audioNum = 0; // 记录录了多久
-        recordText = '开始录音';
-        isPlay = 0;
-      });
-    }
+                                  if (MyUtils.checkClick()) {
+                                    stopPlayer();
+                                    delRecorder();
+                                    setState(() {
+                                      audioNum = 0; // 记录录了多久
+                                      recordText = '开始录音';
+                                      isPlay = 0;
+                                    });
+                                  }
                                 }),
                                 child: WidgetUtils.showImages(
                                     'assets/images/mine_audio_cuo.png',
@@ -390,20 +393,20 @@ class _EditAudioPageState extends State<EditAudioPage> {
                         WidgetUtils.commonSizedBox(10, 30),
                         GestureDetector(
                           onTap: (() {
-    if(MyUtils.checkClick()) {
-      if (isPlay == 2) {
-        play();
-      } else {
-        startRecord();
-        setState(() {
-          if (isPlay == 0) {
-            isPlay = 1;
-          } else if (isPlay == 1) {
-            isPlay = 2;
-          }
-        });
-      }
-    }
+                            if (MyUtils.checkClick()) {
+                              if (isPlay == 2) {
+                                play();
+                              } else {
+                                startRecord();
+                                setState(() {
+                                  if (isPlay == 0) {
+                                    isPlay = 1;
+                                  } else if (isPlay == 1) {
+                                    isPlay = 2;
+                                  }
+                                });
+                              }
+                            }
                           }),
                           child: WidgetUtils.showImages(
                               isPlay == 0
@@ -418,13 +421,15 @@ class _EditAudioPageState extends State<EditAudioPage> {
                         isPlay == 2
                             ? GestureDetector(
                                 onTap: (() {
-    if(MyUtils.checkClick()) {
-      if (length == 0) {
-        MyToastUtils.showToastBottom('请先选择一个声音标签');
-      } else {
-        doPostPostFileUpload(_mPath == "" ? audioUrl : _mPath);
-      }
-    }
+                                  if (MyUtils.checkClick()) {
+                                    if (length == 0) {
+                                      MyToastUtils.showToastBottom(
+                                          '请先选择一个声音标签');
+                                    } else {
+                                      doPostPostFileUpload(
+                                          _mPath == "" ? audioUrl : _mPath);
+                                    }
+                                  }
                                 }),
                                 child: WidgetUtils.showImages(
                                     'assets/images/mine_audio_dui.png',
@@ -538,7 +543,6 @@ class _EditAudioPageState extends State<EditAudioPage> {
     }
   }
 
-
   /// 获取文件url
   Future<void> doPostPostFileUpload(path) async {
     LogE('音频上传///$path');
@@ -547,32 +551,33 @@ class _EditAudioPageState extends State<EditAudioPage> {
     FormData formdata = FormData.fromMap(
       {
         'type': 'audio',
-        "file": await MultipartFile.fromFile(path,
-          filename: name,)
+        "file": await MultipartFile.fromFile(
+          path,
+          filename: name,
+        )
       },
     );
     LogE('音频上传**$formdata');
     BaseOptions option = BaseOptions(
         contentType: 'multipart/form-data', responseType: ResponseType.plain);
-    option.headers["Authorization"] = sp.getString('user_token')??'';
+    option.headers["Authorization"] = sp.getString('user_token') ?? '';
     Dio dio = Dio(option);
     //application/json
     try {
-      var respone = await dio.post(
-          MyHttpConfig.fileUpload,
-          data: formdata);
+      var respone = await dio.post(MyHttpConfig.fileUpload, data: formdata);
       Map jsonResponse = json.decode(respone.data.toString());
       LogE('音频上传$jsonResponse');
       if (respone.statusCode == 200) {
-        eventBus.fire(FileBack(info: path, id: jsonResponse['data'].toString(), type: 1));
+        eventBus.fire(
+            FileBack(info: path, id: jsonResponse['data'].toString(), type: 1));
         MyToastUtils.showToastBottom('音频上传成功');
         Loading.dismiss();
         // ignore: use_build_context_synchronously
         Navigator.pop(context);
-      }else if(respone.statusCode == 401){
+      } else if (respone.statusCode == 401) {
         // ignore: use_build_context_synchronously
         MyUtils.jumpLogin(context);
-      }else{
+      } else {
         MyToastUtils.showToastBottom(jsonResponse['msg']);
       }
 
@@ -581,7 +586,5 @@ class _EditAudioPageState extends State<EditAudioPage> {
       Loading.dismiss();
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
-
   }
-
 }

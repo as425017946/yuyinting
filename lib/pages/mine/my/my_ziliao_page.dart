@@ -162,7 +162,7 @@ class _MyZiliaoPageState extends State<MyZiliaoPage> {
       if (widget.giftList!.receiveGift!.isNotEmpty) {
         list_a = widget.giftList!.receiveGift!;
       }
-      all_gift_type = widget.giftList!.allGiftType!;
+      all_gift_type = widget.giftList!.allGiftType as int;
       receive_gift_type = widget.giftList!.receiveGiftType!;
     });
   }

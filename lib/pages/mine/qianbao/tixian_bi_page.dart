@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_pickers/pickers.dart';
+import 'package:flutter_pickers/style/default_style.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 
@@ -30,6 +32,8 @@ class _TixianBiPageState extends State<TixianBiPage> {
   var appBar;
   TextEditingController controllerName = TextEditingController();
   TextEditingController controllerAccount = TextEditingController();
+  TextEditingController controllerYHKH = TextEditingController();
+  TextEditingController controllerYHName = TextEditingController();
   TextEditingController controllerNumber = TextEditingController();
   String daozhang = '0';
   var listenTX, listenMM,listensl;
@@ -37,6 +41,8 @@ class _TixianBiPageState extends State<TixianBiPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    listTD.add('支付宝');
+    listTD.add('银行卡');
     appBar = WidgetUtils.getAppBar('提现', true, context, false, 0);
     listenTX = eventBus.on<SubmitButtonBack>().listen((event) {
       if(event.title == '申请提现'){
@@ -44,24 +50,45 @@ class _TixianBiPageState extends State<TixianBiPage> {
           MyToastUtils.showToastBottom('请输入姓名');
           return;
         }
-        if(controllerAccount.text.isEmpty){
-          MyToastUtils.showToastBottom('请输入账号');
-          return;
-        }
-        if(controllerNumber.text.isEmpty){
-          MyToastUtils.showToastBottom('请输入币数量');
-          return;
-        }
-        if(double.parse(controllerNumber.text.toString()) >= 1100){
-          setState(() {
-            daozhang = (double.parse(controllerNumber.text.toString()) / 10*0.94).truncate().toStringAsFixed(0);
-          });
+        if(methodID == '2'){
+          if(controllerAccount.text.isEmpty){
+            MyToastUtils.showToastBottom('请输入账号');
+            return;
+          }
+          if(controllerNumber.text.isEmpty){
+            MyToastUtils.showToastBottom('请输入币数量');
+            return;
+          }
+          if(double.parse(controllerNumber.text.toString()) >= 1100){
+            setState(() {
+              daozhang = (double.parse(controllerNumber.text.toString()) / 10*0.94).truncate().toStringAsFixed(0);
+            });
+          }else{
+            MyToastUtils.showToastBottom('提现数量不足1100个，无法发起提现申请');
+            return;
+          }
+          //先判断是否有支付密码
+          doPostPayPwd();
         }else{
-          MyToastUtils.showToastBottom('提现数量不足1100个，无法发起提现申请');
-          return;
+          if(controllerYHKH.text.isEmpty){
+            MyToastUtils.showToastBottom('请输入银行账号');
+            return;
+          }
+          if(controllerYHName.text.isEmpty){
+            MyToastUtils.showToastBottom('请输入开户支行名称');
+            return;
+          }
+          if(double.parse(controllerNumber.text.toString()) >= 1100){
+            setState(() {
+              daozhang = (double.parse(controllerNumber.text.toString()) / 10*0.94).truncate().toStringAsFixed(0);
+            });
+          }else{
+            MyToastUtils.showToastBottom('提现数量不足1100个，无法发起提现申请');
+            return;
+          }
+          //先判断是否有支付密码
+          doPostPayPwd();
         }
-        //先判断是否有支付密码
-        doPostPayPwd();
       }
     });
     listenMM = eventBus.on<RoomBack>().listen((event) {
@@ -81,6 +108,34 @@ class _TixianBiPageState extends State<TixianBiPage> {
       });
     });
   }
+
+  late List<String> listTD = [];
+  String method = '支付宝', methodID = '2';//提现方式 2 支付宝 3银行卡
+  ///data设置数据源，selectData设置选中下标，type 0代表第一个家长，1代表第二个家长 ，2代表选择性别
+  void _onClickItem(var data, var selectData) {
+    Pickers.showSinglePicker(
+      context,
+      data: data,
+      selectData: selectData,
+      pickerStyle: DefaultPickerStyle(),
+      onConfirm: (p, position) {
+        print('longer >>> 返回数据下标：$position');
+        print('longer >>> 返回数据：$p');
+        print('longer >>> 返回数据类型：${p.runtimeType}');
+        setState(() {
+          if(p == '支付宝'){
+            method = p;
+            methodID = '2';
+          }else if(p == '银行卡'){
+            method = p;
+            methodID = '3';
+          }
+        });
+      },
+    );
+  }
+
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -170,7 +225,7 @@ class _TixianBiPageState extends State<TixianBiPage> {
               ),
               WidgetUtils.commonSizedBox(20, 20),
               Container(
-                height: ScreenUtil().setHeight(500),
+                height:methodID == '2' ? 500.h : 600.h,
                 padding: const EdgeInsets.only(left: 30, right: 30),
                 //边框设置
                 decoration: const BoxDecoration(
@@ -186,7 +241,16 @@ class _TixianBiPageState extends State<TixianBiPage> {
                       children: [
                         WidgetUtils.onlyText('通道', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(32))),
                         const Expanded(child: Text('')),
-                        WidgetUtils.onlyText('支付宝', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(32))),
+                        GestureDetector(
+                          onTap: ((){
+                            _onClickItem(listTD, '支付宝');
+                          }),
+                            child: WidgetUtils.onlyText(method, StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(32)))),
+                        WidgetUtils.commonSizedBox(0, 10.h),
+                        WidgetUtils.showImages(
+                            'assets/images/mine_more.png',
+                            ScreenUtil().setHeight(22),
+                            ScreenUtil().setHeight(10))
                       ],
                     ),
                     WidgetUtils.myLine(),
@@ -237,7 +301,7 @@ class _TixianBiPageState extends State<TixianBiPage> {
                       ],
                     ),
                     WidgetUtils.myLine(),
-                    Row(
+                    methodID == '2' ? Row(
                       children: [
                         WidgetUtils.onlyText('支付宝账号', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(32))),
                         WidgetUtils.commonSizedBox(0, 20),
@@ -282,7 +346,98 @@ class _TixianBiPageState extends State<TixianBiPage> {
                           ),
                         ),
                       ],
-                    ),
+                    ) : WidgetUtils.commonSizedBox(0, 0),
+                    methodID == '3' ? Row(
+                      children: [
+                        WidgetUtils.onlyText('银行卡号', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(32))),
+                        WidgetUtils.commonSizedBox(0, 20),
+                        Expanded(
+                          child: TextField(
+                            controller: controllerYHKH,
+                            inputFormatters: [
+                              RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                            ],
+                            keyboardType: TextInputType.number,
+                            style: StyleUtils.loginTextStyle,
+                            onChanged: (value) {
+
+                            },
+                            decoration: InputDecoration(
+                              hintText: '请输入银行卡号',
+                              hintStyle: StyleUtils.loginHintTextStyle,
+
+                              contentPadding: const EdgeInsets.only(top: 0, bottom: 0),
+                              border: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.transparent),
+                              ),
+                              enabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                ),
+                              ),
+                              disabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                ),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                ),
+                              ),
+                              // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
+                            ),
+                          ),
+                        ),
+                      ],
+                    ) : WidgetUtils.commonSizedBox(0, 0),
+                    methodID == '3' ? WidgetUtils.myLine() : WidgetUtils.commonSizedBox(0, 0),
+                    methodID == '3' ? Row(
+                      children: [
+                        WidgetUtils.onlyText('开户支行名称', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(32))),
+                        WidgetUtils.commonSizedBox(0, 20),
+                        Expanded(
+                          child: TextField(
+                            controller: controllerYHName,
+                            inputFormatters: [
+                              RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                            ],
+                            style: StyleUtils.loginTextStyle,
+                            onChanged: (value) {
+
+                            },
+                            decoration: InputDecoration(
+                              // border: InputBorder.none,
+                              // labelText: "请输入用户名",
+                              // icon: Icon(Icons.people), //前面的图标
+                              hintText: '请输入开户支行名称',
+                              hintStyle: StyleUtils.loginHintTextStyle,
+
+                              contentPadding: const EdgeInsets.only(top: 0, bottom: 0),
+                              border: const OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.transparent),
+                              ),
+                              enabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                ),
+                              ),
+                              disabledBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                ),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                ),
+                              ),
+                              // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
+                            ),
+                          ),
+                        ),
+                      ],
+                    ) : WidgetUtils.commonSizedBox(0, 0),
                     WidgetUtils.myLine(),
                     WidgetUtils.onlyText('提取V币', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(32))),
                     Row(
@@ -344,11 +499,12 @@ class _TixianBiPageState extends State<TixianBiPage> {
   Future<void> doPostWithdrawal(mima) async {
     Map<String, dynamic> params = <String, dynamic>{
       'type': '1', //1金币  2钻石
-      'method': '2', //提现方式 2 支付宝 3银行卡
-      'num': controllerNumber.text.toString(), //数量
-      'account': controllerAccount.text.toString(), //账号或钱包地址
+      'method': methodID, //提现方式 2 支付宝 3银行卡
+      'num': controllerNumber.text.trim().toString(), //数量
+      'account': methodID == '2' ? controllerAccount.text.trim().toString() : controllerYHKH.text.trim().toString(), //账号或钱包地址
       'name': controllerName.text.toString(), // 名字
       'pay_pwd': mima, //支付密码
+      'bank': controllerYHName.text.trim().toString()
     };
     try {
       Loading.show();

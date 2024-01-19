@@ -69,6 +69,8 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
   String numbers = '';
   // 是不是点击麦上人进来的
   bool isMaiPeople = false;
+  // 被送礼的人是否在麦序上
+  int isUpPeopleNum = 0;
   // 是否全麦
   bool isAll = false;
   // 要送的礼物地址
@@ -170,22 +172,45 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
       onTap: (() {
         setState(() {
           if(leixing == 0){
-            isAll = true;
-            for(int i = 0; i < listMaiXu.length; i++){
-              listChoose[i] = true;
-              listPeople[listMaiXu[i].serialNumber! - 1] = true;
-              isChoosePeople = true;
-              listUID.clear();
-              for(int i =0; i < listMaiXu.length; i++){
-                listUID.add(listMaiXu[i].uid.toString());
+            //说明要送的人在麦序上
+            if(isUpPeopleNum != 0){
+              isAll = true;
+              for(int i = 0; i < listMaiXu.length; i++){
+                listChoose[i] = true;
+                listPeople[listMaiXu[i].serialNumber! - 1] = true;
+                isChoosePeople = true;
+                listUID.clear();
+                for(int i =0; i < listMaiXu.length; i++){
+                  listUID.add(listMaiXu[i].uid.toString());
+                }
               }
+              eventBus.fire(ChoosePeopleBack(listPeople: listPeople));
+              giftId = listC[index].id.toString();
+              for (int i = 0; i < listC.length; i++) {
+                listCBool[i] = false;
+              }
+              listCBool[index] = true;
+            }else{
+              //点击厅内底部送礼按钮进来的
+              if(isMaiPeople){
+                isAll = true;
+                for(int i = 0; i < listMaiXu.length; i++){
+                  listChoose[i] = true;
+                  listPeople[listMaiXu[i].serialNumber! - 1] = true;
+                  isChoosePeople = true;
+                  listUID.clear();
+                  for(int i =0; i < listMaiXu.length; i++){
+                    listUID.add(listMaiXu[i].uid.toString());
+                  }
+                }
+                eventBus.fire(ChoosePeopleBack(listPeople: listPeople));
+              }
+              giftId = listC[index].id.toString();
+              for (int i = 0; i < listC.length; i++) {
+                listCBool[i] = false;
+              }
+              listCBool[index] = true;
             }
-            eventBus.fire(ChoosePeopleBack(listPeople: listPeople));
-            giftId = listC[index].id.toString();
-            for (int i = 0; i < listC.length; i++) {
-              listCBool[i] = false;
-            }
-            listCBool[index] = true;
             url = listC[index].img.toString();
             svga = listC[index].imgRendering.toString();
           }else if(leixing == 1){
@@ -415,9 +440,10 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
 
   @override
   void dispose() {
+    eventBus.fire(ResidentBack(isBack: true));
+    _animationController.dispose();
     // TODO: implement dispose
     super.dispose();
-    eventBus.fire(ResidentBack(isBack: true));
   }
 
   @override
@@ -778,16 +804,14 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                                   isCheck = true;
                                                 });
                                                 if(isMaiPeople == false){
-                                                  setState(() {
-                                                    listPeople[9] = true;
-                                                  });
-                                                  eventBus.fire(ResidentBack(isBack: true));
-                                                  Navigator.pop(context);
-                                                  if(svga.isEmpty){
-                                                    // ignore: use_build_context_synchronously
-                                                    MyUtils.goTransparentPageCom(context, RoomShowLiWuPage(listPeople: listPeople,url: url));
+                                                  if(giftId.isEmpty){
+                                                    setState(() {
+                                                      isCheck = false;
+                                                    });
+                                                    MyToastUtils.showToastBottom('请选择要送的礼物');
+                                                    return;
                                                   }else{
-                                                    eventBus.fire(SVGABack(isAll: false, url: url, listurl: listurl));
+                                                    doPostSendGift();
                                                   }
                                                 }else{
                                                   if(isChoosePeople == false){
@@ -1279,16 +1303,22 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
               }
             }
             changdu = listMaiXu.length;
+            /// 点击礼物栏进来的
             if(widget.uid.isEmpty){
               setState(() {
                 isMaiPeople = true;
               });
             }else{
+              ///点击的人进来的
               //点击麦上的人进来的送礼物，要直接写入送人的信息
               isChoosePeople = true;
               listUID.add(widget.uid);
+              //判断传过来的uid是不是点击麦上的人过来的
               for(int i = 0; i < listMaiXu.length; i++){
+                //传过来的id在麦序上
                 if(widget.uid == listMaiXu[i].uid.toString()){
+                  //如果送的人在麦序上
+                  isUpPeopleNum++;
                   if(i == 8){
                     listChoose[0] = true;
                   }else{
@@ -1300,7 +1330,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                   break;
                 }
               }
-              // 房间内旋中使用
+              // 房间内选中使用
               for(int i = 0; i < widget.listM.length; i++){
                 if(widget.uid == widget.listM[i].uid.toString()){
                   setState(() {
@@ -1348,23 +1378,21 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
       CommonBean bean = await DataUtils.postSendGift(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          setState(() {
-            isCheck = false;
-          });
-          eventBus.fire(ResidentBack(isBack: true));
           // ignore: use_build_context_synchronously
           Navigator.pop(context);
+          eventBus.fire(ResidentBack(isBack: true));
+          // ignore: use_build_context_synchronously
           if(svga.isEmpty){
+            listPeople[9] = true;
             // ignore: use_build_context_synchronously
             MyUtils.goTransparentPageCom(context, RoomShowLiWuPage(listPeople: listPeople,url: url));
           }else{
-            setState(() {
-              for(int i = 0; i < listPeople.length; i++){
-                listPeople[i] = false;
-              }
-              eventBus.fire(ChoosePeopleBack(listPeople: listPeople));
-            });
+            for(int i = 0; i < listPeople.length; i++){
+              listPeople[i] = false;
+            }
+            eventBus.fire(ChoosePeopleBack(listPeople: listPeople));
             eventBus.fire(SVGABack(isAll: false, url: svga, listurl: listurl));
+            LogE('赠送svga礼物  $svga');
           }
           break;
         case MyHttpConfig.errorloginCode:
@@ -1372,14 +1400,17 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
           MyUtils.jumpLogin(context);
           break;
         default:
+          MyToastUtils.showToastBottom(bean.msg!);
           setState(() {
             isCheck = false;
           });
-          MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      setState(() {
+        isCheck = false;
+      });
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
   /// 一键赠送背包礼物

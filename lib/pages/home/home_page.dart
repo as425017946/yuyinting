@@ -5,8 +5,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:open_file/open_file.dart';
 import 'package:ota_update/ota_update.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:yuyinting/colors/my_colors.dart';
@@ -20,10 +22,14 @@ import 'package:yuyinting/pages/home/zaixian_page.dart';
 import 'package:yuyinting/pages/login/edit_info_page.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
+import '../../bean/CheckoutBean.dart';
+import '../../http/data_utils.dart';
+import '../../http/my_http_config.dart';
 import '../../main.dart';
 import '../../utils/event_utils.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
+import '../gongping/gp_dwon_page.dart';
 
 ///首页
 class HomePage extends StatefulWidget {
@@ -33,7 +39,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -85,6 +91,13 @@ class _HomePageState extends State<HomePage> {
         });
       }
     });
+
+
+    if(sp.getString('isFirstDown').toString() == '1' || sp.getString('isFirstDown').toString() == 'null'){
+      MyUtils.goTransparentPageCom(context, const GPDownPage());
+    }else{
+      eventBus.fire(SubmitButtonBack(title: '资源开始下载'));
+    }
   }
 
   Future<void> quanxian() async {
@@ -476,15 +489,20 @@ class _HomePageState extends State<HomePage> {
     String packageName = packageInfo.packageName;
     String version = packageInfo.version;
     String buildNumber = packageInfo.buildNumber;
-    String deviceType = "";
+    String deviceType = '';
     // 应用名称
     print("appName:${appName}");
 // 包名称
     print("packageName:${packageName}");
 // 版本号
     print("version:${version}");
+
+    sp.setString('myVersion2', version);
 // 构建编号
     print("buildNumber:${buildNumber}");
+
+    sp.setString('versionStatus', buildNumber);
+
     sp.setString('app_version', version);
     if (Platform.isAndroid) {
       deviceType = "Android";
@@ -492,42 +510,39 @@ class _HomePageState extends State<HomePage> {
       deviceType = "ios";
     }
     var params = <String, dynamic>{
-      'packageName': packageName,
       'system': deviceType,
     };
-    // showUpdate(context,'1.0.1','http://18.163.74.49:8080/static/resource/uploads/app-release(01-03).apk','更新说明');
-    // try {
-    //   CheckoutBeanEntity checkVersionBeanEntity =
-    //   await DataUtils.checkVersion(params);
-    //   switch (checkVersionBeanEntity.code) {
-    //     case MyHttpConfig.successCode:
-    //       if (int.parse(buildNumber) <
-    //           checkVersionBeanEntity.data.versionCode) {
-    //         if (Platform.isAndroid) {
-    //           // ignore: use_build_context_synchronously
-    //           showUpdate(
-    //               context,
-    //               checkVersionBeanEntity.data.versionCode.toString(),
-    //               checkVersionBeanEntity.data.fileUrl,
-    //               checkVersionBeanEntity.data.description);
-    //         } else {
-    //           const url =
-    //               "https://itunes.apple.com/cn/app/id1380512641"; // id 后面的数字换成自己的应用 id 就行了
-    //           if (await canLaunch(url)) {
-    //             await launch(url, forceSafariVC: false);
-    //           } else {
-    //             throw 'Could not launch $url';
-    //           }
-    //         }
-    //       }
-    //       break;
-    //     default:
-    //       MyToastUtils.showToastBottom(checkVersionBeanEntity.msg);
-    //       break;
-    //   }
-    // } catch (e) {
-    //   // MyToastUtils.showToastBottom("网络异常");
-    // }
+    try {
+      CheckoutBean bean = await DataUtils.checkVersion(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          if (int.parse(buildNumber) <
+              int.parse(bean.data!.customUpdateNum!)) {
+            if (Platform.isAndroid) {
+              // ignore: use_build_context_synchronously
+              showUpdate(
+                  context,
+                  bean.data!.version!,
+                  bean.data!.downloadUrl!,
+                  bean.data!.summary!);
+            } else {
+              // const url =
+              //     "https://itunes.apple.com/cn/app/id1380512641"; // id 后面的数字换成自己的应用 id 就行了
+              // if (await canLaunch(url)) {
+              //   await launch(url, forceSafariVC: false);
+              // } else {
+              //   throw 'Could not launch $url';
+              // }
+            }
+          }
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      // MyToastUtils.showToastBottom("网络异常");
+    }
   }
 
   /// 显示更新内容
@@ -586,10 +601,13 @@ class _HomePageState extends State<HomePage> {
       pr.show();
     }
     try {
+      // 获取APP安装路径
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String appDocPath = appDocDir.path;
       // destinationFilename 是对下载的apk进行重命名
       OtaUpdate().execute(url, destinationFilename: 'lmkj.apk').listen(
             (OtaEvent event) {
-          print('status:${event.status},value:${event.value}');
+          print('status:${event.status},value:${event.value} }');
           switch (event.status) {
             case OtaStatus.DOWNLOADING: // 下载中
               setState(() {
@@ -603,7 +621,7 @@ class _HomePageState extends State<HomePage> {
               break;
             case OtaStatus.INSTALLING: //安装中
               if (pr.isShowing()) {
-                pr.hide();
+                OpenFile.open("${appDocPath}/lmkj.apk");
               }
               break;
             case OtaStatus.PERMISSION_NOT_GRANTED_ERROR: // 权限错误

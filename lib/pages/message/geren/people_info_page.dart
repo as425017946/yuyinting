@@ -90,6 +90,14 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
     });
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    if(_mPlayer.isPlaying) {
+      _mPlayer.stopPlayer();
+    }
+  }
   void _initialize() async {
     await _mPlayer!.closePlayer();
     await _mPlayer!.openPlayer();
@@ -406,7 +414,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                           children: [
                             GestureDetector(
                               onTap: (() {
-                                if (playRecord == false) {
+                                if (MyUtils.checkClick() && playRecord == false) {
                                   play();
                                 }
                               }),
@@ -598,7 +606,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                                       ScreenUtil().setHeight(68)),
                             ],
                           ),
-                          Expanded(
+                          isOK ? Expanded(
                             child: PageView(
                               reverse: false,
                               controller: _controller,
@@ -613,7 +621,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                                 DongtaiPage(otherId: widget.otherId),
                               ],
                             ),
-                          )
+                          ) : const Text('')
                         ],
                       ),
                     ),
@@ -676,7 +684,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
 
   /// 查看用户
   int level = 0;
-
+  bool isOK = false;
   Future<void> doPostUserInfo() async {
     LogE('用户token ${sp.getString('user_token')}');
     Loading.show(MyConfig.successTitle);
@@ -687,6 +695,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
         case MyHttpConfig.successCode:
           list_p.clear();
           setState(() {
+            isOK = true;
             sp.setString("label_id", bean.data!.labelId!);
             headImg = bean.data!.avatarUrl!;
             headImgID = bean.data!.avatar.toString();

@@ -12,6 +12,7 @@ import '../../../http/my_http_config.dart';
 import '../../../utils/loading.dart';
 import '../../../utils/my_utils.dart';
 import '../../../utils/widget_utils.dart';
+import '../../message/chat_page.dart';
 /// 无工会的详情
 class GonghuiMorePage extends StatefulWidget {
   searchGonghuiBean bean;
@@ -139,7 +140,15 @@ class _GonghuiMorePageState extends State<GonghuiMorePage> {
                 Expanded(
                   child: GestureDetector(
                     onTap: ((){
-                      Navigator.pushNamed(context, 'ShareTuiguangPage');
+                      if (MyUtils.checkClick()) {
+                        MyUtils.goTransparentRFPage(
+                            context,
+                            ChatPage(
+                              nickName: widget.bean.data!.leaderNickname!,
+                              otherUid: widget.bean.data!.uid.toString(),
+                              otherImg: widget.bean.data!.leaderAvatar!,
+                            ));
+                      }
                     }),
                     child: WidgetUtils.myContainer(ScreenUtil().setHeight(70), double.infinity, MyColors.homeTopBG, MyColors.homeTopBG, '应聘咨询', ScreenUtil().setSp(33), Colors.white) ,
                   ),

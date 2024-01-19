@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 
+import '../../../bean/allGiftBean.dart';
 import '../../../bean/myHomeBean.dart';
 import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
@@ -25,8 +26,6 @@ class WallPage extends StatefulWidget {
 
 class _WallPageState extends State<WallPage> {
   var appBar;
-
-  List<AllGiftArr> list_a = [];
 
   @override
   void initState() {
@@ -103,19 +102,20 @@ class _WallPageState extends State<WallPage> {
     );
   }
 
+  List<AllGiftArr> list_a = [];
   Future<void> doPostMyIfon() async {
     Loading.show(MyConfig.successTitle);
     Map<String, dynamic> params = <String, dynamic>{
       'uid': widget.uid
     };
     try {
-      myHomeBean bean = await DataUtils.postMyHome(params);
+      allGiftBean bean = await DataUtils.postAllGiftAll(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
           list_a.clear();
           setState(() {
-            if (bean.data!.giftList!.allGiftArr!.isNotEmpty) {
-              list_a = bean.data!.giftList!.allGiftArr!;
+            if (bean.data!.allGiftArr!.isNotEmpty) {
+              list_a = bean.data!.allGiftArr!;
             }
           });
           break;

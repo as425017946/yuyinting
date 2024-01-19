@@ -36,7 +36,7 @@ class _SwiperPageState extends State<SwiperPage> {
           itemBuilder: (BuildContext context, int index) {
             return SizedBox(
                 width: double.infinity,
-                child: widget.imgList[index].contains('com.leimu.yuyinting')
+                child: (widget.imgList[index].contains('com.leimu.yuyinting') || widget.imgList[index].contains('storage'))
                     ? Image.file(
                         File(widget.imgList[index].toString()),
                         fit: BoxFit.fill,
@@ -49,7 +49,8 @@ class _SwiperPageState extends State<SwiperPage> {
                       ));
           },
           itemCount: widget.imgList.length,
-          pagination: const SwiperPagination(), //下面的分页小点
+          pagination: const SwiperPagination(),
+          loop: false,//下面的分页小点
 //        control: new SwiperControl(),  //左右的那个箭头,在某模拟器中会出现蓝线
         ),
       ),

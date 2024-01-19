@@ -38,6 +38,9 @@ class WidgetUtils {
                 Loading.dismiss();
                 Navigator.of(context).pop();
                 MyUtils.hideKeyboard(context);
+                if(index == 1){
+                  eventBus.fire(SubmitButtonBack(title: '编辑信息离开'));
+                }
               }),
             )
           : IconButton(
@@ -270,6 +273,52 @@ class WidgetUtils {
     );
   }
 
+  ///通用 输入文本可以自定义输入长度
+  static Widget commonTextFieldZDY(
+      TextEditingController controller, String hintText, int length) {
+    return TextField(
+      controller: controller,
+      inputFormatters: [
+        RegexFormatter(regex: MyUtils.regexFirstNotNull),
+        //设置只能输入6位
+        LengthLimitingTextInputFormatter(length),
+      ],
+      style: StyleUtils.loginTextStyle,
+      onChanged: (value) {
+        LogE('长度$value');
+        eventBus.fire(InfoBack(info: value));
+      },
+      decoration: InputDecoration(
+        // border: InputBorder.none,
+        // labelText: "请输入用户名",
+        // icon: Icon(Icons.people), //前面的图标
+        hintText: hintText,
+        hintStyle: StyleUtils.loginHintTextStyle,
+
+        contentPadding: const EdgeInsets.only(top: 0, bottom: 0),
+        border: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.transparent),
+        ),
+        enabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.transparent,
+          ),
+        ),
+        disabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.transparent,
+          ),
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.transparent,
+          ),
+        ),
+        // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
+      ),
+    );
+  }
+
   ///通用 输入文本是否显示密码
   static Widget commonTextFieldIsShow(
       TextEditingController controller, String hintText, bool obscureText) {
@@ -413,7 +462,6 @@ class WidgetUtils {
       style: StyleUtils.loginTextStyle,
       onChanged: (value) {
         LogE('输入信息 $value');
-        eventBus.fire(InfoBack(info: value));
       },
       decoration: InputDecoration(
         border: InputBorder.none,
@@ -1410,12 +1458,12 @@ class WidgetUtils {
 
   ///编辑个人
   static Widget bianjiTextField(
-      TextEditingController controller, String hintText) {
+      TextEditingController controller, String hintText,int length) {
     return TextField(
       controller: controller,
       inputFormatters: [
         RegexFormatter(regex: MyUtils.regexFirstNotNull),
-        LengthLimitingTextInputFormatter(16) //限制输入长度
+        LengthLimitingTextInputFormatter(length) //限制输入长度
       ],
       style: StyleUtils.getCommonTextStyle(
           color: MyColors.g3, fontSize: ScreenUtil().setSp(25)),

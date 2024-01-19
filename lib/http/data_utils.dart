@@ -1,11 +1,13 @@
 import 'package:yuyinting/bean/BlackListBean.dart';
 import 'package:yuyinting/bean/Common_bean.dart';
 import 'package:yuyinting/bean/aboutUsBean.dart';
+import '../bean/CheckoutBean.dart';
 import '../bean/CommonIntBean.dart';
 import '../bean/CommonMyIntBean.dart';
 import '../bean/DTListBean.dart';
 import '../bean/DTMoreBean.dart';
 import '../bean/DTTuiJianListBean.dart';
+import '../bean/allGiftBean.dart';
 import '../bean/balanceBean.dart';
 import '../bean/baobiaoBean.dart';
 import '../bean/beibaoBean.dart';
@@ -46,6 +48,7 @@ import '../bean/myShopListBean.dart';
 import '../bean/onlineRoomUserBean.dart';
 import '../bean/plBean.dart';
 import '../bean/playRouletteBean.dart';
+import '../bean/qiehuanBean.dart';
 import '../bean/quhao_bean.dart';
 import '../bean/quhao_searche_bean.dart';
 import '../bean/qyListBean.dart';
@@ -60,6 +63,7 @@ import '../bean/searchAllBean.dart';
 import '../bean/searchGonghuiBean.dart';
 import '../bean/shopListBean.dart';
 import '../bean/shoucangBean.dart';
+import '../bean/svgaAllBean.dart';
 import '../bean/tgmBean.dart';
 import '../bean/tjRoomListBean.dart';
 import '../bean/userDTListBean.dart';
@@ -75,15 +79,24 @@ import 'my_http_config.dart';
 import 'my_http_request.dart';
 
 class DataUtils{
-  // ///更新app
-  // static Future<CheckoutBean> checkVersion(Map<String,dynamic> params) async {
-  //   // print("检查更新：${params}");
-  //   Map<String, dynamic>? respons = await MyHttpRequest.get(MyHttpConfig.checkVersion,
-  //       {}, params);
-  //   print("检查更新：${respons}");
-  //   return CheckoutBean.fromJson(respons!);
-  // }
-  //
+  ///更新app
+  static Future<CheckoutBean> checkVersion(Map<String,dynamic> params) async {
+    print("检查更新：${params}");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.checkVersion,
+        {}, params);
+    print("检查更新：${respons}");
+    return CheckoutBean.fromJson(respons!);
+  }
+
+  /// 登录app后预下载
+  static Future<svgaAllBean> postSvgaGiftList(Map<String,dynamic> params) async {
+    print("登录app后预下载${params}");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.svgaGiftList, {}, params);
+    print("登录app后预下载：${respons}");
+    return svgaAllBean.fromJson(respons!);
+  }
+
+
   /// 登录接口
   static Future<LoginBean> login(Map<String,dynamic> params) async {
     print("登录：传参${params}");
@@ -192,18 +205,17 @@ class DataUtils{
   }
 
   /// 我的详情
-  static Future<MyInfoBean> postMyIfon(Map<String,dynamic> params) async {
-    print("我的详情：$params");
-    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.myInfo, {}, params);
+  static Future<MyInfoBean> postMyIfon() async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.myInfo, {}, {});
     print("我的详情：${respons}");
     return MyInfoBean.fromJson(respons!);
   }
 
   /// 切换账号验证token
-  static Future<CommonMyIntBean> postCheckToken() async {
+  static Future<qiehuanBean> postCheckToken() async {
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.checkToken, {}, {});
     print("切换账号验证token：${respons}");
-    return CommonMyIntBean.fromJson(respons!);
+    return qiehuanBean.fromJson(respons!);
   }
 
 
@@ -261,6 +273,15 @@ class DataUtils{
     print("个人主页：$respons");
     return myHomeBean.fromJson(respons!);
   }
+
+  /// 礼物墙
+  static Future<allGiftBean> postAllGiftAll(Map<String,dynamic> params) async {
+    print("礼物墙：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.allGiftAll, {}, params);
+    print("礼物墙：$respons");
+    return allGiftBean.fromJson(respons!);
+  }
+
 
   /// 查看用户详情
   static Future<userInfoBean> postUserInfo(Map<String,dynamic> params) async {
@@ -1063,4 +1084,11 @@ class DataUtils{
     return roomTJBean.fromJson(respons!);
   }
 
+  /// 删除动态
+  static Future<CommonBean> postDelDT(Map<String,dynamic> params) async {
+    print("删除动态：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.delDT, {}, params);
+    print("删除动态：$respons");
+    return CommonBean.fromJson(respons!);
+  }
 }

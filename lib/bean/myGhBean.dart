@@ -30,6 +30,8 @@ class Data {
   int? roomTotal;
   List<RoomList>? roomList;
   int? unauditNum;
+  int? kefuUid;
+  String? kefUavatar;
 
   Data(
       {this.identity,
@@ -38,7 +40,9 @@ class Data {
         this.streamerList,
         this.roomTotal,
         this.roomList,
-        this.unauditNum});
+        this.unauditNum,
+        this.kefuUid,
+        this.kefUavatar});
 
   Data.fromJson(Map<String, dynamic> json) {
     identity = json['identity'];
@@ -60,6 +64,8 @@ class Data {
       });
     }
     unauditNum = json['unaudit_num'];
+    kefuUid = json['kefu_uid'];
+    kefUavatar = json['kefu_avatar'];
   }
 
   Map<String, dynamic> toJson() {

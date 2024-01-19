@@ -211,7 +211,7 @@ class _PaiduiPageState extends State<PaiduiPage>
                                           ? 'assets/images/paidui_xinting.png'
                                           : index == 5
                                               ? 'assets/images/paidui_youxi.png'
-                                              : 'assets/images/paidui_xinting.png',
+                                              : 'assets/images/paidui_jiaoyou.png',
                               index == 5
                                   ? ScreenUtil().setHeight(85)
                                   : ScreenUtil().setHeight(75)),
@@ -249,14 +249,14 @@ class _PaiduiPageState extends State<PaiduiPage>
           list2[i].hostInfo!.isNotEmpty
               ? WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(30),
                   ScreenUtil().setHeight(30), list2[i].hostInfo![1])
-              : WidgetUtils.commonSizedBox(
-                  ScreenUtil().setHeight(30), ScreenUtil().setHeight(30)),
-          WidgetUtils.commonSizedBox(0, 5),
+              : WidgetUtils.commonSizedBox(0, 0),
           SizedBox(
-            width: ScreenUtil().setHeight(60),
+            width: ScreenUtil().setHeight(50),
             child: list2[i].hostInfo!.isNotEmpty
                 ? Text(
-                    list2[i].hostInfo![0],
+                    list2[i].hostInfo![0].length > 2
+                        ? '${list2[i].hostInfo![0].substring(0, 2)}...'
+                        : list2[i].hostInfo![0],
                     style: TextStyle(
                         fontSize: ScreenUtil().setSp(20),
                         color: MyColors.mineGrey,
@@ -264,9 +264,8 @@ class _PaiduiPageState extends State<PaiduiPage>
                   )
                 : const Text(''),
           ),
-          WidgetUtils.commonSizedBox(0, 20),
           showHead(list2[i].memberList!),
-          const Expanded(child: Text('')),
+          const Spacer(),
 
           /// 热度
           Row(
@@ -283,7 +282,7 @@ class _PaiduiPageState extends State<PaiduiPage>
               // WidgetUtils.commonSizedBox(0, 5),
               Text(
                 hotDegree > 9999
-                    ? '${(hotDegree / 10000).toStringAsFixed(2)}w'
+                    ? '${(hotDegree / 10000).toStringAsFixed(0)}w'
                     : hotDegree.toString(),
                 style: TextStyle(
                     fontSize: ScreenUtil().setSp(24),
@@ -306,14 +305,14 @@ class _PaiduiPageState extends State<PaiduiPage>
           list3[i].hostInfo!.isNotEmpty
               ? WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(30),
                   ScreenUtil().setHeight(30), list3[i].hostInfo![1])
-              : WidgetUtils.commonSizedBox(
-                  ScreenUtil().setHeight(30), ScreenUtil().setHeight(30)),
-          WidgetUtils.commonSizedBox(0, 5),
+              : WidgetUtils.commonSizedBox(0, 0),
           SizedBox(
             width: ScreenUtil().setHeight(50),
             child: list3[i].hostInfo!.isNotEmpty
                 ? Text(
-                    list3[i].hostInfo![0],
+                    list3[i].hostInfo![0].length > 2
+                        ? '${list3[i].hostInfo![0].substring(0, 2)}...'
+                        : list3[i].hostInfo![0],
                     style: TextStyle(
                         fontSize: ScreenUtil().setSp(20),
                         color: MyColors.mineGrey,
@@ -321,9 +320,8 @@ class _PaiduiPageState extends State<PaiduiPage>
                   )
                 : const Text(''),
           ),
-          WidgetUtils.commonSizedBox(0, 20),
           showHead(list3[i].memberList!),
-          const Expanded(child: Text('')),
+          const Spacer(),
 
           /// 热度
           Row(
@@ -338,7 +336,7 @@ class _PaiduiPageState extends State<PaiduiPage>
               // WidgetUtils.commonSizedBox(0, 5),
               Text(
                 hotDegree > 9999
-                    ? '${(hotDegree / 10000).toStringAsFixed(2)}w'
+                    ? '${(hotDegree / 10000).toStringAsFixed(0)}w'
                     : hotDegree.toString(),
                 style: TextStyle(
                     fontSize: ScreenUtil().setSp(24),
@@ -355,14 +353,14 @@ class _PaiduiPageState extends State<PaiduiPage>
           list4[i].hostInfo!.isNotEmpty
               ? WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(30),
                   ScreenUtil().setHeight(30), list4[i].hostInfo![1])
-              : WidgetUtils.commonSizedBox(
-                  ScreenUtil().setHeight(30), ScreenUtil().setHeight(30)),
-          WidgetUtils.commonSizedBox(0, 5),
+              : WidgetUtils.commonSizedBox(0, 0),
           SizedBox(
-            width: ScreenUtil().setHeight(60),
+            width: ScreenUtil().setHeight(50),
             child: list4[i].hostInfo!.isNotEmpty
                 ? Text(
-                    list4[i].hostInfo![0],
+                    list4[i].hostInfo![0].length > 2
+                        ? '${list4[i].hostInfo![0].substring(0, 2)}...'
+                        : list4[i].hostInfo![0],
                     style: TextStyle(
                         fontSize: ScreenUtil().setSp(20),
                         color: MyColors.mineGrey,
@@ -370,9 +368,8 @@ class _PaiduiPageState extends State<PaiduiPage>
                   )
                 : const Text(''),
           ),
-          WidgetUtils.commonSizedBox(0, 20),
           showHead(list4[i].memberList!),
-          const Expanded(child: Text('')),
+          const Spacer(),
 
           /// 热度
           Row(
@@ -387,7 +384,7 @@ class _PaiduiPageState extends State<PaiduiPage>
               // WidgetUtils.commonSizedBox(0, 5),
               Text(
                 hotDegree > 9999
-                    ? '${(hotDegree / 10000).toStringAsFixed(2)}w'
+                    ? '${(hotDegree / 10000).toStringAsFixed(0)}w'
                     : hotDegree.toString(),
                 style: TextStyle(
                     fontSize: ScreenUtil().setSp(24),
@@ -404,14 +401,14 @@ class _PaiduiPageState extends State<PaiduiPage>
           list5[i].hostInfo!.isNotEmpty
               ? WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(30),
                   ScreenUtil().setHeight(30), list5[i].hostInfo![1])
-              : WidgetUtils.commonSizedBox(
-                  ScreenUtil().setHeight(30), ScreenUtil().setHeight(30)),
-          WidgetUtils.commonSizedBox(0, 5),
+              : WidgetUtils.commonSizedBox(0, 0),
           SizedBox(
-            width: ScreenUtil().setHeight(60),
+            width: ScreenUtil().setHeight(50),
             child: list5[i].hostInfo!.isNotEmpty
                 ? Text(
-                    list5[i].hostInfo![0],
+                    list5[i].hostInfo![0].length > 2
+                        ? '${list5[i].hostInfo![0].substring(0, 2)}...'
+                        : list5[i].hostInfo![0],
                     style: TextStyle(
                         fontSize: ScreenUtil().setSp(20),
                         color: MyColors.mineGrey,
@@ -419,9 +416,8 @@ class _PaiduiPageState extends State<PaiduiPage>
                   )
                 : const Text(''),
           ),
-          WidgetUtils.commonSizedBox(0, 20),
           showHead(list5[i].memberList!),
-          const Expanded(child: Text('')),
+          const Spacer(),
 
           /// 热度
           Row(
@@ -436,7 +432,7 @@ class _PaiduiPageState extends State<PaiduiPage>
               // WidgetUtils.commonSizedBox(0, 5),
               Text(
                 hotDegree > 9999
-                    ? '${(hotDegree / 10000).toStringAsFixed(2)}w'
+                    ? '${(hotDegree / 10000).toStringAsFixed(0)}w'
                     : hotDegree.toString(),
                 style: TextStyle(
                     fontSize: ScreenUtil().setSp(24),
@@ -453,14 +449,14 @@ class _PaiduiPageState extends State<PaiduiPage>
           list6[i].hostInfo!.isNotEmpty
               ? WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(30),
                   ScreenUtil().setHeight(30), list6[i].hostInfo![1])
-              : WidgetUtils.commonSizedBox(
-                  ScreenUtil().setHeight(30), ScreenUtil().setHeight(30)),
-          WidgetUtils.commonSizedBox(0, 5),
+              : WidgetUtils.commonSizedBox(0, 0),
           SizedBox(
             width: ScreenUtil().setHeight(50),
             child: list6[i].hostInfo!.isNotEmpty
                 ? Text(
-                    list6[i].hostInfo![0],
+                    list6[i].hostInfo![0].length > 2
+                        ? '${list6[i].hostInfo![0].substring(0, 2)}...'
+                        : list6[i].hostInfo![0],
                     style: TextStyle(
                         fontSize: ScreenUtil().setSp(20),
                         color: MyColors.mineGrey,
@@ -468,9 +464,8 @@ class _PaiduiPageState extends State<PaiduiPage>
                   )
                 : const Text(''),
           ),
-          WidgetUtils.commonSizedBox(0, 20),
           showHead(list6[i].memberList!),
-          const Expanded(child: Text('')),
+          const Spacer(),
 
           /// 热度
           Row(
@@ -485,7 +480,7 @@ class _PaiduiPageState extends State<PaiduiPage>
               // WidgetUtils.commonSizedBox(0, 5),
               Text(
                 hotDegree > 9999
-                    ? '${(hotDegree / 10000).toStringAsFixed(2)}w'
+                    ? '${(hotDegree / 10000).toStringAsFixed(0)}w'
                     : hotDegree.toString(),
                 style: TextStyle(
                     fontSize: ScreenUtil().setSp(24),
@@ -1069,10 +1064,10 @@ class _PaiduiPageState extends State<PaiduiPage>
   /// 加入房间前
   Future<void> doPostBeforeJoin(roomID) async {
     //判断房间id是否为空的
-    if(sp.getString('roomID') == null || sp.getString('').toString().isEmpty){
-    }else{
+    if (sp.getString('roomID') == null || sp.getString('').toString().isEmpty) {
+    } else {
       // 不是空的，并且不是之前进入的房间
-      if(sp.getString('roomID').toString() != roomID){
+      if (sp.getString('roomID').toString() != roomID) {
         sp.setString('roomID', roomID);
         eventBus.fire(SubmitButtonBack(title: '加入其他房间'));
       }

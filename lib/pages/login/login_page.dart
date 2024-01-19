@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ import '../../http/my_http_config.dart';
 import '../../main.dart';
 import '../../utils/loading.dart';
 import '../../utils/my_toast_utils.dart';
+import '../../utils/regex_formatter.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../../widget/SVGASimpleImage.dart';
@@ -46,7 +48,6 @@ class _LoginPageState extends State<LoginPage> {
   bool isMiMa = false;
   var listen,listen2;
   String IP = '', IMEI = '';
-
   @override
   void initState() {
     // TODO: implement initState
@@ -92,17 +93,36 @@ class _LoginPageState extends State<LoginPage> {
     if (sp.getString('myAgree').toString() == 'null' || sp.getString('myAgree').toString() == '0') {
       MyUtils.goTransparentPageCom(context, const AgreeTSPage());
     }
-    
+    // 首次预下载使用
+    if(sp.getString("isFirstDown").toString() == 'null'){
+      sp.setString("isFirstDown",'1');
+    }
     ceshi();
   }
 
+  String pid = '';
   void ceshi() async{
-    String info = '';
+    List<String> uirlInfo = [];
     ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain!);
     if (data != null) {
       setState(() {
-        info = data.text!;
-        MyToastUtils.showToastBottom(info);
+        if(data.text!.contains('?')){
+          uirlInfo = data.text!.split('?');
+          // 有代理有房间id
+          if(uirlInfo[1].contains('&')){
+            uirlInfo = uirlInfo[1].split('&');
+            pid = uirlInfo[0].split('=')[1];
+            LogE('代理id $pid');
+            sp.setString('daili_roomid', uirlInfo[1].split('=')[1]);
+            LogE('房间id ${uirlInfo[1].split('=')[1]}');
+          }else{
+            // 只有代理id
+            pid = uirlInfo[1].split('=')[1];
+            LogE('代理id $pid');
+            sp.setString('daili_roomid', '');
+          }
+
+        }
       });
     }else{
       MyToastUtils.showToastBottom('没有获取到剪切板信息');
@@ -233,9 +253,28 @@ class _LoginPageState extends State<LoginPage> {
                                 height: ScreenUtil().setHeight(60),
                                 width: double.infinity,
                                 alignment: Alignment.center,
-                                child: WidgetUtils.commonTextFieldNumber(
-                                    controller: controllerPhone,
-                                    hintText: '请输入手机号'),
+                                child: TextField(
+                                  enabled: true,
+                                  obscureText: false,
+                                  controller: controllerPhone,
+                                  inputFormatters: [
+                                    RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                                    FilteringTextInputFormatter.digitsOnly,
+                                    //设置只能输入11位
+                                    LengthLimitingTextInputFormatter(11),
+                                  ],
+                                  keyboardType: TextInputType.number,
+                                  //设置键盘为数字
+                                  style: StyleUtils.loginTextStyle,
+                                  onChanged: (value) {
+                                    ceshi();
+                                  },
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: '请输入手机号',
+                                    hintStyle: StyleUtils.loginHintTextStyle,
+                                  ),
+                                ),
                               ),
                             )
                           ],
@@ -329,12 +368,18 @@ class _LoginPageState extends State<LoginPage> {
                                   isMiMa = !isMiMa;
                                 });
                               }),
-                              child: WidgetUtils.showImages(
-                                  isMiMa
-                                      ? 'assets/images/login_sms.png'
-                                      : 'assets/images/login_password.png',
-                                  80.h,
-                                  50.h),
+                              child: Container(
+                                width: 100.h,
+                                color: Colors.transparent,
+                                child: WidgetUtils.onlyText('密码登录', StyleUtils.getCommonTextStyle(color: MyColors.homeTopBG,
+                                    fontSize: 26.sp, fontWeight: FontWeight.w600)),
+                              )
+                              // WidgetUtils.showImages(
+                              //     isMiMa
+                              //         ? 'assets/images/login_sms.png'
+                              //         : 'assets/images/login_password.png',
+                              //     80.h,
+                              //     50.h),
                             ),
                             WidgetUtils.commonSizedBox(0, 40),
                           ],
@@ -368,12 +413,12 @@ class _LoginPageState extends State<LoginPage> {
                                   isMiMa = !isMiMa;
                                 });
                               }),
-                              child: WidgetUtils.showImages(
-                                  isMiMa
-                                      ? 'assets/images/login_sms.png'
-                                      : 'assets/images/login_password.png',
-                                  80.h,
-                                  50.h),
+                              child: Container(
+                                width: 110.h,
+                                color: Colors.transparent,
+                                child: WidgetUtils.onlyText(isMiMa ? '验证码登录' : '密码', StyleUtils.getCommonTextStyle(color: MyColors.homeTopBG,
+                                    fontSize: 26.sp, fontWeight: FontWeight.w600)),
+                              ),
                             ) : const Text(''),
                           ],
                         )),
@@ -555,7 +600,9 @@ class _LoginPageState extends State<LoginPage> {
       params = <String, dynamic>{
         'username': userName,
         'password': passWord,
-        'type': '1'
+        'type': '1',
+        'imei': IMEI,
+        'pid': RegExp(r'^-?[0-9.]+$').hasMatch(pid) ? pid : ''
       };
     } else {
       String type = '';
@@ -584,8 +631,8 @@ class _LoginPageState extends State<LoginPage> {
         'type': type,
         'area_code': quhao,
         'code': userMsg,
-        'ip': IP,
-        'imei': IMEI
+        'imei': IMEI,
+        'pid': RegExp(r'^-?[0-9.]+$').hasMatch(pid) ? pid : ''
       };
     }
 

@@ -27,7 +27,7 @@ class EditInfoPage extends StatefulWidget {
 class _EditInfoPageState extends State<EditInfoPage> {
   TextEditingController controller = TextEditingController();
   var sex = 0;
-  String avatar = '';
+  String avatar = '', avatarID = '', avatarID2 = '', nickName = '';
   var listen;
   @override
   void initState() {
@@ -35,12 +35,15 @@ class _EditInfoPageState extends State<EditInfoPage> {
     super.initState();
     setState(() {
       avatar = sp.getString('user_headimg').toString();
+      avatarID = sp.getString('user_headimg_id').toString();
+      avatarID2 = sp.getString('user_headimg_id').toString();
       controller.text = sp.getString('nickname').toString();
+      nickName = sp.getString('nickname').toString();
     });
     listen = eventBus.on<FileBack>().listen((event) {
       setState(() {
+        avatarID2 = event.id;
         avatar = event.info;
-        sp.setString("user_headimg", event.info);
         sp.setString("user_headimg_id", event.id);
       });
     });
@@ -59,7 +62,7 @@ class _EditInfoPageState extends State<EditInfoPage> {
       resizeToAvoidBottomInset: false, // 解决键盘顶起页面
       backgroundColor: Colors.black45,
       body: WillPopScope(
-        //此处代码是出来选择学校弹窗后，不能点击返回消失页面
+        //不能点击返回消失页面
         onWillPop: () async {
           return Future.value(false);
         },
@@ -298,7 +301,9 @@ class _EditInfoPageState extends State<EditInfoPage> {
           sp.setBool("isFirst", false);
           sp.setInt("user_gender", sex);
           LogE('更换值${sp.getBool('isFirst')}');
-          MyToastUtils.showToastBottom('提交成功！');
+          if(avatarID != avatarID2 || nickName != controller.text.trim().toString()) {
+            MyToastUtils.showToastBottom('资料提交成功，请耐心等待审核');
+          }
           // ignore: use_build_context_synchronously
           Navigator.pop(context);
           break;

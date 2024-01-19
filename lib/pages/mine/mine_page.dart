@@ -41,13 +41,16 @@ class _MinePageState extends State<MinePage> {
   var guizuType = 0, isFirst = 0;
   var listen;
   int level = 0; //用户等级
+  int isAgent = 0; //是否有代理权限 0无1有
   String userNumber = '',
       care = '',
       beCare = '',
       lookMe = '',
       identity = '',
       avatarFrameImg = '',
-      avatarFrameGifImg = '';
+      avatarFrameGifImg = '',
+      kefuUid = '',
+      kefuAvatar = '';
 
   // 是否有入住审核信息
   bool isShenHe = false;
@@ -117,7 +120,7 @@ class _MinePageState extends State<MinePage> {
             Navigator.of(context).push(PageRouteBuilder(
                 opaque: false,
                 pageBuilder: (context, animation, secondaryAnimation) {
-                  return const MyKeFuPage();
+                  return MyKeFuPage(kefuUid: kefuUid, kefuAvatar: kefuAvatar);
                 }));
           });
         }
@@ -713,8 +716,8 @@ class _MinePageState extends State<MinePage> {
                         'assets/images/mine_zhuangban.png', '我的装扮', false),
                     WidgetUtils.whiteKuang(
                         'assets/images/mine_gonghui.png', '公会中心', isShenHe),
-                    WidgetUtils.whiteKuang(
-                        'assets/images/mine_quan.png', '全民代理', false),
+                    isAgent == 1 ?  WidgetUtils.whiteKuang(
+                        'assets/images/mine_quan.png', '全民代理', false) : WidgetUtils.commonSizedBox(0, 0),
                     WidgetUtils.whiteKuang(
                         'assets/images/mine_daili.png', '等级成就', false),
                     WidgetUtils.whiteKuang(
@@ -739,17 +742,15 @@ class _MinePageState extends State<MinePage> {
       type = '1';
     }
 
-    Map<String, dynamic> params = <String, dynamic>{
-      'system': type,
-      'version': sp.getString('myVersion1')
-    };
+    // Map<String, dynamic> params = <String, dynamic>{
+    //   'system': type,
+    //   'version': sp.getString('myVersion1')
+    // };
     try {
-      MyInfoBean bean = await DataUtils.postMyIfon(params);
+      MyInfoBean bean = await DataUtils.postMyIfon();
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
-            sp.setString('myVersion2', bean.data!.currentVersion!);
-            sp.setString('versionStatus', bean.data!.status!);
             sp.setString('shimingzhi', bean.data!.auditStatus.toString());
             sp.setString("user_headimg", bean.data!.avatar!);
             sp.setInt("user_gender", bean.data!.gender!);
@@ -761,6 +762,7 @@ class _MinePageState extends State<MinePage> {
             lookMe = bean.data!.lookNum.toString();
             guizuType = bean.data!.nobleId as int;
             identity = bean.data!.identity!;
+            isAgent = bean.data!.isAgent as int;
             // 如果身份变了
             if (sp.getString('user_identity').toString() != identity) {
               eventBus.fire(SubmitButtonBack(title: '更换了身份'));
@@ -774,6 +776,8 @@ class _MinePageState extends State<MinePage> {
             } else {
               isShenHe = false;
             }
+            kefuUid = bean.data!.kefuUid.toString();
+            kefuAvatar = bean.data!.kefuAvatar!;
           });
           break;
         case MyHttpConfig.errorloginCode:

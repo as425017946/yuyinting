@@ -93,11 +93,21 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
 
     listen = eventBus.on<HiBack>().listen((event) {
       if (event.isBack) {
-        LogE('-***-${event.index}');
-        LogE('////${_list.length}');
-        setState(() {
-          _list[event.index].isHi = 1;
-        });
+        //目的是为了有打过招呼的这个人的hi都变成私信按钮
+        for(int i = 0 ; i < _list.length; i++){
+          setState(() {
+            if(_list[i].uid.toString() == event.index){
+              _list[i].isHi = 1;
+            }
+          });
+        }
+        for(int i = 0 ; i < _list_tj.length; i++){
+          setState(() {
+            if(_list_tj[i].uid.toString() == event.index){
+              _list_tj[i].isHi = 1;
+            }
+          });
+        }
       }
     });
   }
@@ -286,7 +296,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
               MyUtils.goTransparentRFPage(
                   context,
                   TrendsMorePage(
-                    note_id: _list[i].id.toString(),
+                    note_id: _list[i].id.toString(), index: i
                   ));
             }
           }),
@@ -350,7 +360,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
                   MyUtils.goTransparentRFPage(
                       context,
                       TrendsMorePage(
-                        note_id: _list[i].id.toString(),
+                        note_id: _list[i].id.toString(),index:i
                       ));
                 }
               }),
@@ -364,7 +374,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
                   MyUtils.goTransparentRFPage(
                       context,
                       TrendsMorePage(
-                        note_id: _list[i].id.toString(),
+                        note_id: _list[i].id.toString(),index:i
                       ));
                 }
               }),
@@ -521,7 +531,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
               MyUtils.goTransparentRFPage(
                   context,
                   TrendsMorePage(
-                    note_id: _list_tj[i].id.toString(),
+                    note_id: _list_tj[i].id.toString(),index:i
                   ));
             }
           }),
@@ -585,7 +595,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
                   MyUtils.goTransparentRFPage(
                       context,
                       TrendsMorePage(
-                        note_id: _list_tj[i].id.toString(),
+                        note_id: _list_tj[i].id.toString(),index:i
                       ));
                 }
               }),
@@ -599,7 +609,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
                   MyUtils.goTransparentRFPage(
                       context,
                       TrendsMorePage(
-                        note_id: _list_tj[i].id.toString(),
+                        note_id: _list_tj[i].id.toString(),index:i
                       ));
                 }
               }),

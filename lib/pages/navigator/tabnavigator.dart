@@ -5,6 +5,7 @@ import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:screen/screen.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:yuyinting/main.dart';
 import 'package:yuyinting/pages/message/message_page.dart';
@@ -15,6 +16,7 @@ import 'package:yuyinting/widget/SVGASimpleImage.dart';
 import '../../bean/Common_bean.dart';
 import '../../bean/hengFuBean.dart';
 import '../../bean/joinRoomBean.dart';
+import '../../bean/svgaAllBean.dart';
 import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
 import '../../db/DatabaseHelper.dart';
@@ -22,6 +24,7 @@ import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../utils/SlideAnimationController.dart';
 import '../../utils/loading.dart';
+import '../../utils/log_util.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/widget_utils.dart';
@@ -31,6 +34,7 @@ import '../home/home_page.dart';
 import '../mine/mine_page.dart';
 import '../room/room_page.dart';
 import '../room/room_ts_mima_page.dart';
+import 'package:http/http.dart' as http;
 
 class Tab_Navigator extends StatefulWidget {
   const Tab_Navigator({Key? key}) : super(key: key);
@@ -86,6 +90,8 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     MyUtils.addChatListener();
     //先退出然后在登录
     MyUtils.signOutLogin();
+    //保持屏幕常亮
+    saveLiang();
 
     super.initState();
     initE();
@@ -125,13 +131,13 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           });
           // 判断数据显示使用
           showInfo(hf);
+          // 看看集合里面有几个，10s一执行
+          hpTimer();
         } else {
           setState(() {
             listMP.add(hf);
           });
         }
-        // 看看集合里面有几个，10s一执行
-        hpTimer();
       }
     });
     // 收起房间使用
@@ -154,6 +160,16 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           });
 
         }
+      }else if(event.title == '账号已在其他设备登录'){
+        // 取消发布本地音频流
+        _engine.muteLocalAudioStream(true);
+        _engine.disableAudio();
+        _dispose();
+        // 调用离开房间接口
+        doPostLeave();
+        MyUtils.jumpLogin(context);
+      }else if(event.title == '资源开始下载'){
+        doPostSvgaGiftList();
       }
     });
 
@@ -175,6 +191,29 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
               avatar: event.map!['avatar'].toString(),
               gender: event.map!['gender'].toString(),
             ));
+      }else if(event.type == 'room_black'){
+        //设置黑名单
+        if (event.map!['uid'].toString() != sp.getString('user_id').toString()) {
+          if(isJoinRoom){
+            MyToastUtils.showToastBottom('你已被房间设置为黑名单用户！');
+            // 取消发布本地音频流
+            _engine.muteLocalAudioStream(true);
+            _engine.disableAudio();
+            _dispose();
+          }
+        }
+      }else if(event.type == 'down_mic'){
+        if(isJoinRoom){
+          //判断被被下麦的人是不是自己
+          if (event.map!['uid'].toString() ==
+              sp.getString('user_id').toString()) {
+            MyToastUtils.showToastBottom('你已被管理下掉了麦序！');
+            // 取消发布本地音频流
+            _engine.muteLocalAudioStream(true);
+            _engine.disableAudio();
+            _dispose();
+          }
+        }
       }
     });
 
@@ -184,6 +223,16 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         _engine = event.engine;
       }
     });
+  }
+  saveLiang() async {
+    // 获取屏幕亮度:
+    double brightness = await Screen.brightness;
+    // 设置亮度:
+    Screen.setBrightness(0.5);
+    // 检测屏幕是否常亮:
+    bool isKeptOn = await Screen.isKeptOn;
+    // 防止进入睡眠模式:
+    Screen.keepOn(true);
   }
 
   late RtcEngine _engine;
@@ -299,6 +348,37 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           isBig = true;
           isShowHF = false;
           bigType = 1;
+        });
+        break;
+      case '5000_9990背包礼物':
+        setState(() {
+          name = '5000_9990背包礼物';
+          path = 'assets/svga/gp/bb_500_999.svga';
+        });
+        break;
+      case '10000_49990背包礼物':
+        setState(() {
+          name = '10000_49990背包礼物';
+          path = 'assets/svga/gp/bb_1000_4999.svga';
+        });
+        break;
+      case '50000_99990背包礼物':
+        setState(() {
+          name = '50000_99990背包礼物';
+          path = 'assets/svga/gp/bb_5000_9999.svga';
+        });
+        break;
+      case '100000_380000背包礼物':
+        setState(() {
+          name = '100000_380000背包礼物';
+          path = 'assets/svga/gp/bb_10000_38000.svga';
+        });
+        break;
+      case '388800背包礼物':
+        setState(() {
+          isBig = true;
+          isShowHF = false;
+          bigType = 0;
         });
         break;
     }
@@ -773,4 +853,86 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     }
   }
 
+
+  double jindu = 0, jinduNum = 0;
+  String jinduBaifeinbi = '';
+  /// 下载礼物
+  Future<void> doPostSvgaGiftList() async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'is_first': sp.getString('isFirstDown').toString() == 'null' ? '1' : sp.getString('isFirstDown').toString(),
+    };
+    try {
+      Loading.show();
+      svgaAllBean bean = await DataUtils.postSvgaGiftList(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+        // 存一下总数量
+          setState(() {
+            sp.setInt('isFirstDownNum', bean.data!.total as int);
+            LogE('需要下载数量 ${bean.data!.imgList!.length}');
+            jinduBaifeinbi = (1 / bean.data!.total! ).toStringAsFixed(2);
+            LogE('百分比 $jinduBaifeinbi');
+            downloadAllImages(bean);
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+    }
+  }
+
+  //调用 downloadAllImages 方法来开始下载所有图片
+  void downloadAllImages(svgaAllBean bean) async {
+    for (int i = 0; i < bean.data!.imgList!.length; i++) {
+      bool result = await saveSVGAImgTemp(bean.data!.imgList![i].path!);
+      if (result) {
+        // 下载成功后的操作
+        print('图片 $i 下载成功');
+        setState(() {
+          jindu = double.parse(jinduBaifeinbi)*(i+1);
+          jinduNum = (jindu*100).truncateToDouble();
+          eventBus.fire(DownLoadingBack(jindu: jindu, jinduNum: jinduNum));
+          if(jindu == 1){
+           setState(() {
+             sp.setString('isFirstDown', '2');
+           });
+          }
+        });
+      } else {
+        // 下载失败后的操作
+        print('图片 $i 下载失败');
+      }
+    }
+  }
+
+  // 保存网络SVGA图片到缓存目录
+  Future<bool> saveSVGAImgTemp(String imgUrl) async {
+    var response = await http.get(Uri.parse(imgUrl));
+    List<String> listName = imgUrl.split('/');
+    // 生成新的文件名
+    String fileName = listName[listName.length-1];
+
+    // 获取保存路径
+    Directory? directory = await getExternalStorageDirectory();
+    String savePath = "${directory!.path}/$fileName";
+    // 保存图片
+    File file = File(savePath);
+    await file.writeAsBytes(response.bodyBytes);
+    if (await file.exists()) {
+      // MyToastUtils.showToastBottom("下载成功");
+      LogE('下载成功 路径 $savePath');
+      return true;
+    } else {
+      MyToastUtils.showToastBottom("下载失败");
+      return false;
+    }
+  }
 }

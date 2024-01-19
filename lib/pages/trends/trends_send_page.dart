@@ -35,7 +35,7 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
   TextEditingController controller = TextEditingController();
   List<File> imgArray = [];
   int type = 0; // 0 图片 1 视频
-  // List<AssetEntity>? assets;
+  List<AssetEntity> selectAss = [];
   String imgID = '', videoId = '', videoUrl = '';
 
   @override
@@ -78,7 +78,7 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
                       setState(() {
                         type = 0;
                       });
-                      onTapPickFromGallery();
+                      onTapPickFromGallery(6-imgArray.length);
                     }),
                     child: Container(
                       width: double.infinity,
@@ -115,14 +115,15 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
             )));
   }
 
-  onTapPickFromGallery() async {
+  onTapPickFromGallery(int num) async {
     Navigator.pop(context);
     final List<AssetEntity>? entitys = await AssetPicker.pickAssets(context,
-        pickerConfig: const AssetPickerConfig(
-            maxAssets: 6, requestType: RequestType.image));
+        pickerConfig: AssetPickerConfig(
+            maxAssets: num, requestType: RequestType.image));
     if (entitys == null) return;
     setState(() {
       videoId = '';
+      selectAss = entitys!;
     });
     List<String> chooseImagesPath = [];
     //遍历
@@ -172,14 +173,29 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
     print('照片路径:${imgFile.path}');
     setState(() {
       imgArray.add(imgFile!);
+      selectAss.add(entity);
     });
-
     doPostPostFileUpload(imgFile.path);
   }
 
   void _removeImage2(int index) {
     setState(() {
       imgArray.removeAt(index);
+      List<String> listID = [];
+      if(imgID.contains(',')){
+        listID = imgID.split(',');
+        listID.removeAt(index);
+        imgID = '';
+        for(int i = 0; i < listID.length; i++){
+          if(imgID.isEmpty){
+            imgID = listID[i];
+          }else{
+            imgID = '$imgID,${listID[i]}';
+          }
+        }
+      }else{
+        imgID = '';
+      }
     });
   }
 
@@ -230,8 +246,10 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
                         const Expanded(child: Text('')),
                         GestureDetector(
                           onTap: (() {
-                            doPostSendDT();
-                            MyUtils.hideKeyboard(context);
+                            if(MyUtils.checkClick()) {
+                              doPostSendDT();
+                              MyUtils.hideKeyboard(context);
+                            }
                           }),
                           child: WidgetUtils.myContainer(
                               ScreenUtil().setHeight(55),
@@ -376,6 +394,16 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
       var result;
       if (path.toString().contains('.gif') || path.toString().contains('.GIF')) {
         targetPath = path;
+        var name = path.substring(path.lastIndexOf("/") + 1, path.length);
+        formdata = FormData.fromMap(
+          {
+            'type': 'image',
+            "file": await MultipartFile.fromFile(
+              targetPath,
+              filename: name,
+            ),
+          },
+        );
       } else if (path.toString().contains('.jpg') ||
           path.toString().contains('.GPG')) {
         targetPath =
@@ -385,6 +413,16 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
           quality: 50,
           rotate: 0, // 旋转角度
         );
+        var name = path.substring(path.lastIndexOf("/") + 1, path.length);
+        formdata = FormData.fromMap(
+          {
+            'type': 'image',
+            "file": await MultipartFile.fromFile(
+              result!.path,
+              filename: name,
+            ),
+          },
+        );
       } else if (path.toString().contains('.jpeg') ||
           path.toString().contains('.GPEG')) {
         targetPath =
@@ -393,6 +431,16 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
           path, targetPath,
           quality: 50,
           rotate: 0, // 旋转角度
+        );
+        var name = path.substring(path.lastIndexOf("/") + 1, path.length);
+        formdata = FormData.fromMap(
+          {
+            'type': 'image',
+            "file": await MultipartFile.fromFile(
+              result!.path,
+              filename: name,
+            ),
+          },
         );
       } else if (path.toString().contains('.svga') ||
           path.toString().contains('.SVGA')) {
@@ -407,6 +455,16 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
           quality: 50,
           rotate: 0, // 旋转角度
         );
+        var name = path.substring(path.lastIndexOf("/") + 1, path.length);
+        formdata = FormData.fromMap(
+          {
+            'type': 'image',
+            "file": await MultipartFile.fromFile(
+              result!.path,
+              filename: name,
+            ),
+          },
+        );
       } else {
         targetPath =
         "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.png";
@@ -415,17 +473,17 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
           quality: 50,
           rotate: 0, // 旋转角度
         );
+        var name = path.substring(path.lastIndexOf("/") + 1, path.length);
+        formdata = FormData.fromMap(
+          {
+            'type': 'image',
+            "file": await MultipartFile.fromFile(
+              result!.path,
+              filename: name,
+            ),
+          },
+        );
       }
-      var name = path.substring(path.lastIndexOf("/") + 1, path.length);
-      formdata = FormData.fromMap(
-        {
-          'type': 'image',
-          "file": await MultipartFile.fromFile(
-            result!.path,
-            filename: name,
-          ),
-        },
-      );
     }else{
       var name = path.substring(path.lastIndexOf("/") + 1, path.length);
       formdata = FormData.fromMap(
@@ -450,7 +508,11 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
       if (respone.statusCode == 200) {
         setState(() {
           if(type == 0){
-            imgID = jsonResponse['data'].toString();
+            if(imgID.isNotEmpty){
+              imgID = '$imgID,${jsonResponse['data'].toString()}';
+            }else{
+              imgID = jsonResponse['data'].toString();
+            }
           }else{
             videoId = jsonResponse['data'].toString();
           }
@@ -479,25 +541,98 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
     for (int i = 0; i < lists.length; i++) {
       File? imgFile = await lists[i].file;
       var dir = await path_provider.getTemporaryDirectory();
-      var targetPath =
-          "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
-      var result = await FlutterImageCompress.compressAndGetFile(
-        imgFile!.path,
-        targetPath,
-        quality: 50,
-        rotate: 0, // 旋转角度
-      );
       var name = imgFile!.path
           .substring(imgFile!.path.lastIndexOf("/") + 1, imgFile!.path.length);
-      FormData formdata = FormData.fromMap(
-        {
-          'type': 'image',
-          "file": await MultipartFile.fromFile(
-            result!.path,
-            filename: name,
-          )
-        },
-      );
+      FormData formdata;
+      String targetPath = '';
+      var result;
+      if (imgFile!.path.toString().contains('.gif') || imgFile!.path.toString().contains('.GIF')) {
+        targetPath = imgFile!.path;
+        formdata = FormData.fromMap(
+          {
+            'type': 'image',
+            "file": await MultipartFile.fromFile(
+              targetPath,
+              filename: name,
+            ),
+          },
+        );
+      } else if (imgFile!.path.toString().contains('.jpg') ||
+          imgFile!.path.toString().contains('.GPG')) {
+        targetPath =
+        "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
+        result = await FlutterImageCompress.compressAndGetFile(
+          imgFile!.path, targetPath,
+          quality: 50,
+          rotate: 0, // 旋转角度
+        );
+        formdata = FormData.fromMap(
+          {
+            'type': 'image',
+            "file": await MultipartFile.fromFile(
+              result!.path,
+              filename: name,
+            ),
+          },
+        );
+      } else if (imgFile!.path.toString().contains('.jpeg') ||
+          imgFile!.path.toString().contains('.GPEG')) {
+        targetPath =
+        "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpeg";
+        result = await FlutterImageCompress.compressAndGetFile(
+          imgFile!.path, targetPath,
+          quality: 50,
+          rotate: 0, // 旋转角度
+        );
+        formdata = FormData.fromMap(
+          {
+            'type': 'image',
+            "file": await MultipartFile.fromFile(
+              result!.path,
+              filename: name,
+            ),
+          },
+        );
+      } else if (imgFile!.path.toString().contains('.svga') ||
+          imgFile!.path.toString().contains('.SVGA')) {
+        MyToastUtils.showToastBottom('不支持svga格式图片上传');
+        return;
+      } else if (imgFile!.path.toString().contains('.webp') ||
+          imgFile!.path.toString().contains('.WEBP')) {
+        targetPath =
+        "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.webp";
+        result = await FlutterImageCompress.compressAndGetFile(
+          imgFile!.path, targetPath,
+          quality: 50,
+          rotate: 0, // 旋转角度
+        );
+        formdata = FormData.fromMap(
+          {
+            'type': 'image',
+            "file": await MultipartFile.fromFile(
+              result!.path,
+              filename: name,
+            ),
+          },
+        );
+      } else {
+        targetPath =
+        "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.png";
+        result = await FlutterImageCompress.compressAndGetFile(
+          imgFile!.path, targetPath,
+          quality: 50,
+          rotate: 0, // 旋转角度
+        );
+        formdata = FormData.fromMap(
+          {
+            'type': 'image',
+            "file": await MultipartFile.fromFile(
+              result!.path,
+              filename: name,
+            ),
+          },
+        );
+      }
       BaseOptions option = BaseOptions(
           contentType: 'multipart/form-data', responseType: ResponseType.plain);
       option.headers["Authorization"] = sp.getString('user_token') ?? '';
@@ -514,9 +649,15 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
             id = '$id,${jsonResponse['data'].toString()}';
           }
           if (i == lists.length - 1) {
-            setState(() {
-              imgID = id;
-            });
+            if(imgID.isNotEmpty){
+              setState(() {
+                imgID = '$imgID,$id';
+              });
+            }else{
+              setState(() {
+                imgID = id;
+              });
+            }
             MyToastUtils.showToastBottom('上传成功');
             Loading.dismiss();
           }
@@ -535,8 +676,8 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
 
   /// 上传动态
   Future<void> doPostSendDT() async {
-    if (controller.text.trim().isEmpty && imgID.isEmpty && videoId.isEmpty) {
-      MyToastUtils.showToastBottom("发布信息为空！");
+    if (controller.text.trim().isEmpty) {
+      MyToastUtils.showToastBottom("发布文本信息不能为空！");
       return;
     }
 

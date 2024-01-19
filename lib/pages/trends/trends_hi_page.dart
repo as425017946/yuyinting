@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/utils/event_utils.dart';
+import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/my_utils.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
@@ -131,7 +132,10 @@ class _TrendsHiPageState extends State<TrendsHiPage> {
                             setState(() {
                               isClick = true;
                             });
-                            doPostHi();
+                            if (gz) {
+                              doPostFollow();
+                            }
+                            Navigator.pop(context);
                           }
                         }),
                         child: Text(
@@ -181,9 +185,6 @@ class _TrendsHiPageState extends State<TrendsHiPage> {
 
   /// 打招呼
   Future<void> doPostHi() async {
-    if (gz) {
-      doPostFollow();
-    }
     Map<String, dynamic> params = <String, dynamic>{
       'uid': widget.uid,
     };
@@ -191,15 +192,12 @@ class _TrendsHiPageState extends State<TrendsHiPage> {
       CommonBean bean = await DataUtils.postHi(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          setState(() {
-            isClick = false;
-          });
-          eventBus.fire(HiBack(isBack: true, index: widget.index));
-          Navigator.pop(context);
+          LogE('打招呼成功！${widget.uid}');
+          isClick = false;
+          eventBus.fire(HiBack(isBack: true, index: widget.uid));
           break;
         case MyHttpConfig.errorHiCode:
-          eventBus.fire(HiBack(isBack: true, index: widget.index));
-          Navigator.pop(context);
+          eventBus.fire(HiBack(isBack: true, index: widget.uid));
           break;
         case MyHttpConfig.errorloginCode:
           // ignore: use_build_context_synchronously
@@ -210,7 +208,7 @@ class _TrendsHiPageState extends State<TrendsHiPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -225,6 +223,7 @@ class _TrendsHiPageState extends State<TrendsHiPage> {
       CommonBean bean = await DataUtils.postFollow(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
+          doPostHi();
           break;
         case MyHttpConfig.errorloginCode:
           // ignore: use_build_context_synchronously
@@ -235,7 +234,7 @@ class _TrendsHiPageState extends State<TrendsHiPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

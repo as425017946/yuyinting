@@ -84,6 +84,9 @@ class _MyInfoPageState extends State<MyInfoPage> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    if(_mPlayer.isPlaying) {
+      _mPlayer.stopPlayer();
+    }
   }
 
   @override
@@ -359,10 +362,8 @@ class _MyInfoPageState extends State<MyInfoPage> {
                       children: [
                         GestureDetector(
                           onTap: (() {
-                            if (MyUtils.checkClick()) {
-                              if (playRecord == false) {
-                                play();
-                              }
+                            if (MyUtils.checkClick() && playRecord == false) {
+                              play();
                             }
                           }),
                           child: Container(
@@ -378,26 +379,41 @@ class _MyInfoPageState extends State<MyInfoPage> {
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20.0)),
                             ),
-                            child: playRecord == false
-                                ? Row(
-                                    children: [
-                                      const Expanded(
-                                          child: SVGASimpleImage(
-                                        assetsName:
-                                            'assets/svga/audio_xindiaotu.svga',
-                                      )),
-                                      WidgetUtils.commonSizedBox(0, 10.h),
-                                      WidgetUtils.showImages(
-                                          'assets/images/people_bofang.png',
-                                          ScreenUtil().setHeight(35),
-                                          ScreenUtil().setWidth(35)),
-                                      WidgetUtils.commonSizedBox(0, 10.h),
-                                    ],
-                                  )
-                                : const Expanded(
+                            child: Row(
+                              children: [
+                                const Expanded(
                                     child: SVGASimpleImage(
-                                    assetsName: 'assets/svga/audio_bolang.svga',
-                                  )),
+                                      assetsName:
+                                      'assets/svga/audio_xindiaotu.svga',
+                                    )),
+                                WidgetUtils.commonSizedBox(0, 10.h),
+                                WidgetUtils.showImages(
+                                    'assets/images/people_bofang.png',
+                                    ScreenUtil().setHeight(35),
+                                    ScreenUtil().setWidth(35)),
+                                WidgetUtils.commonSizedBox(0, 10.h),
+                              ],
+                            )
+                            // playRecord == false
+                            //     ? Row(
+                            //         children: [
+                            //           const Expanded(
+                            //               child: SVGASimpleImage(
+                            //             assetsName:
+                            //                 'assets/svga/audio_xindiaotu.svga',
+                            //           )),
+                            //           WidgetUtils.commonSizedBox(0, 10.h),
+                            //           WidgetUtils.showImages(
+                            //               'assets/images/people_bofang.png',
+                            //               ScreenUtil().setHeight(35),
+                            //               ScreenUtil().setWidth(35)),
+                            //           WidgetUtils.commonSizedBox(0, 10.h),
+                            //         ],
+                            //       )
+                            //     : const Expanded(
+                            //         child: SVGASimpleImage(
+                            //         assetsName: 'assets/svga/audio_bolang.svga',
+                            //       )),
                           ),
                         ),
                         const Expanded(child: Text('')),

@@ -177,7 +177,7 @@ Future<void> doPostPostFileUpload(path) async {
     Loading.dismiss();
   } catch (e) {
     Loading.dismiss();
-    MyToastUtils.showToastBottom('上传文件过大！');
+    // MyToastUtils.showToastBottom('上传文件过大！');
   }
 
 }

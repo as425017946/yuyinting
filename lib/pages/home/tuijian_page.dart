@@ -6,6 +6,7 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:yuyinting/pages/gongping/web_page.dart';
 import 'package:yuyinting/pages/home/search_page.dart';
 import 'package:yuyinting/widget/SVGASimpleImage.dart';
 import '../../bean/Common_bean.dart';
@@ -24,7 +25,10 @@ import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
+import '../gongping/gp_dwon_page.dart';
 import '../gongping/gp_quanxian_page.dart';
+import '../message/geren/people_info_page.dart';
+import '../mine/my/my_info_page.dart';
 import '../room/room_page.dart';
 import '../room/room_ts_mima_page.dart';
 
@@ -36,10 +40,7 @@ class TuijianPage extends StatefulWidget {
   State<TuijianPage> createState() => _TuijianPageState();
 }
 
-class _TuijianPageState extends State<TuijianPage>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
+class _TuijianPageState extends State<TuijianPage> {
 
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -78,11 +79,24 @@ class _TuijianPageState extends State<TuijianPage>
     _refreshController.loadComplete();
   }
 
+  var listen;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     doPostPushRoom();
+    listen = eventBus.on<SubmitButtonBack>().listen((event) {
+      if(event.title == '退出房间' || event.title == '收起房间'){
+        doPostPushRoom();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    listen.cancel();
   }
 
   // 推荐主播
@@ -90,94 +104,108 @@ class _TuijianPageState extends State<TuijianPage>
     return Column(
       children: [
         WidgetUtils.commonSizedBox(20, 0),
-        GestureDetector(
-          onTap: (() {
-            if (MyUtils.checkClick()) {
-              doPostBeforeJoin(listAnchor[i].roomId.toString(),
-                  listAnchor[i].uid.toString());
-            }
-          }),
-          child: Container(
-            margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-            width: double.infinity,
-            height: ScreenUtil().setHeight(80),
-            child: Row(
-              children: [
-                Stack(
+        Container(
+          margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+          width: double.infinity,
+          height: ScreenUtil().setHeight(80),
+          child: Row(
+            children: [
+              GestureDetector(
+                onTap: (() {
+                  if(MyUtils.checkClick()){
+                    // 如果点击的是自己，进入自己的主页
+                    if(sp.getString('user_id').toString() == listAnchor[i].uid.toString()){
+                      MyUtils.goTransparentRFPage(context, const MyInfoPage());
+                    }else{
+                      sp.setString('other_id', listAnchor[i].uid.toString());
+                      MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: listAnchor[i].uid.toString(),));
+                    }
+                  }
+                }),
+                child: Stack(
                   alignment: Alignment.center,
                   children: [
                     WidgetUtils.CircleHeadImage(
                         70.h, 70.h, listAnchor[i].avatar!),
                     listAnchor[i].live == 1
                         ? WidgetUtils.showImages(
-                            'assets/images/zhibozhong.webp', 80.h, 80.h)
+                        'assets/images/zhibozhong.webp', 80.h, 80.h)
                         : const Text(''),
                   ],
                 ),
-                WidgetUtils.commonSizedBox(0, 10),
-                Expanded(
-                  child: Column(
-                    children: [
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Row(
-                          children: [
-                            WidgetUtils.onlyText(
-                                listAnchor[i].nickname!,
-                                StyleUtils.getCommonTextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14)),
-                            WidgetUtils.commonSizedBox(0, 5),
-                            listAnchor[i].gender != 0
-                                ? Stack(
-                                    children: [
-                                      WidgetUtils.showImages(
-                                          listAnchor[i].gender == 1
-                                              ? 'assets/images/avj.png'
-                                              : 'assets/images/avk.png',
-                                          15,
-                                          45),
-                                      Container(
-                                        padding: EdgeInsets.only(
-                                            right: int.parse(listAnchor[i]
-                                                        .age
-                                                        .toString()) >
-                                                    9
-                                                ? 15.h
-                                                : 20.h),
-                                        width: 45,
-                                        height: 15,
-                                        alignment: Alignment.centerRight,
-                                        child: Text(
-                                          listAnchor[i].age.toString(),
-                                          style: StyleUtils.getCommonTextStyle(
-                                              color: Colors.white,
-                                              fontSize: 12),
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                : const Text(''),
-                          ],
-                        ),
+              ),
+              WidgetUtils.commonSizedBox(0, 10),
+              Expanded(
+                child: Column(
+                  children: [
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      color: Colors.transparent,
+                      child: Row(
+                        children: [
+                          WidgetUtils.onlyText(
+                              listAnchor[i].nickname!,
+                              StyleUtils.getCommonTextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14)),
+                          WidgetUtils.commonSizedBox(0, 5),
+                          listAnchor[i].gender != 0
+                              ? Stack(
+                            children: [
+                              WidgetUtils.showImages(
+                                  listAnchor[i].gender == 1
+                                      ? 'assets/images/avj.png'
+                                      : 'assets/images/avk.png',
+                                  15,
+                                  45),
+                              Container(
+                                padding: EdgeInsets.only(
+                                    right: int.parse(listAnchor[i]
+                                        .age
+                                        .toString()) >
+                                        9
+                                        ? 15.h
+                                        : 20.h),
+                                width: 45,
+                                height: 15,
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  listAnchor[i].age.toString(),
+                                  style: StyleUtils.getCommonTextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12),
+                                ),
+                              ),
+                            ],
+                          )
+                              : const Text(''),
+                        ],
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 5),
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          listAnchor[i].description!,
-                          textAlign: TextAlign.left,
-                          style: StyleUtils.getCommonTextStyle(
-                              color: Colors.grey,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14),
-                        ),
-                      )
-                    ],
-                  ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 5),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        listAnchor[i].description!,
+                        textAlign: TextAlign.left,
+                        style: StyleUtils.getCommonTextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14),
+                      ),
+                    )
+                  ],
                 ),
-                Container(
+              ),
+              GestureDetector(
+                onTap: (() {
+                  if (MyUtils.checkClick()) {
+                    doPostBeforeJoin(listAnchor[i].roomId.toString(),
+                        listAnchor[i].uid.toString());
+                  }
+                }),
+                child: Container(
                   height: 80.h,
                   width: 120.h,
                   color: Colors.transparent,
@@ -185,9 +213,9 @@ class _TuijianPageState extends State<TuijianPage>
                     assetsName: 'assets/svga/home_gensui.svga',
                   ),
                 ),
-                WidgetUtils.commonSizedBox(0, 20),
-              ],
-            ),
+              ),
+              WidgetUtils.commonSizedBox(0, 20),
+            ],
           ),
         ),
       ],
@@ -215,7 +243,6 @@ class _TuijianPageState extends State<TuijianPage>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return SmartRefresher(
       header: MyUtils.myHeader(),
       footer: MyUtils.myFotter(),
@@ -322,7 +349,9 @@ class _TuijianPageState extends State<TuijianPage>
                                 // LogE('用户拖动或者自动播放引起下标改变调用');
                               },
                               onTap: (index) {
-                                // LogE('用户点击引起下标改变调用');
+                                if(MyUtils.checkClick()){
+                                  MyUtils.goTransparentPageCom(context, WebPage(url: listBanner[index].url!));
+                                }
                               },
                             ),
                           ),
@@ -421,6 +450,7 @@ class _TuijianPageState extends State<TuijianPage>
                                               Container(
                                                 height:
                                                     ScreenUtil().setHeight(170),
+                                                width: double.infinity,
                                                 //超出部分，可裁剪
                                                 clipBehavior: Clip.hardEdge,
                                                 decoration: BoxDecoration(
@@ -589,6 +619,7 @@ class _TuijianPageState extends State<TuijianPage>
             listRoom.clear();
             listRoom2.clear();
             listRoom3.clear();
+            listAnchor.clear();
             if (bean.data!.bannerList!.isNotEmpty) {
               listBanner = bean.data!.bannerList!;
             }

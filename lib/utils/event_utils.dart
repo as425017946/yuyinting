@@ -78,7 +78,7 @@ class CareBack {
 ///打招呼使用
 class HiBack {
   bool isBack;
-  int index;
+  String index;
   HiBack({required this.isBack, required this.index});
 }
 
@@ -255,3 +255,9 @@ class shouqiRoomBack {
   shouqiRoomBack({required this.engine, required this.title});
 }
 
+///返回数据解析
+class DownLoadingBack {
+  double jindu;
+  double jinduNum;
+  DownLoadingBack({required this.jindu, required this.jinduNum});
+}

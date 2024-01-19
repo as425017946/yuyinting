@@ -53,6 +53,7 @@ class _PasswordPageState extends State<PasswordPage> {
     return Scaffold(
       appBar: appBar,
       backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: false, // 解决键盘顶起页面
       body: Column(
         children: [
           WidgetUtils.commonSizedBox(20, 0),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:svgaplayer_flutter/parser.dart';
 import 'package:svgaplayer_flutter/player.dart';
+import 'package:yuyinting/pages/trends/trends_hi_page.dart';
 import 'package:yuyinting/utils/loading.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
@@ -17,6 +18,7 @@ import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
+import '../../utils/event_utils.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
@@ -25,12 +27,11 @@ import '../message/chat_page.dart';
 import '../message/geren/people_info_page.dart';
 import 'PagePreviewVideo.dart';
 import 'package:video_player/video_player.dart';
-import 'PagePreviewVideo.dart';
 
 class TrendsMorePage extends StatefulWidget {
   String note_id;
-
-  TrendsMorePage({Key? key, required this.note_id}) : super(key: key);
+  int index;
+  TrendsMorePage({Key? key, required this.note_id, required this.index}) : super(key: key);
 
   @override
   State<TrendsMorePage> createState() => _TrendsMorePageState();
@@ -54,11 +55,13 @@ class _TrendsMorePageState extends State<TrendsMorePage>
       isLike = 0,
       age = 0,
       type = 1;
-
+  //查看详情是不是自己
+  bool isMe = false;
   List<String> imgList = [];
   List<CommentList> comList = [];
   String action = 'create';
   double x = 0, y = 0;
+  var listen ;
 
   @override
   void initState() {
@@ -73,6 +76,7 @@ class _TrendsMorePageState extends State<TrendsMorePage>
       animationController = SVGAAnimationController(vsync: this);
       loadAnimation();
     });
+
   }
 
   @override
@@ -192,7 +196,7 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                   ],
                 ),
               ),
-              comList[i].uid.toString() == sp.getString('user_id')
+              (isMe || comList[i].uid.toString() == sp.getString('user_id'))
                   ? GestureDetector(
                       onTap: (() {
                         doPostComment('delete', comList[i].id.toString(), i);
@@ -568,6 +572,8 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                   Container(
                     padding: const EdgeInsets.only(left: 20, right: 20),
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         WidgetUtils.commonSizedBox(10, 0),
                         Container(
@@ -585,10 +591,12 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                                   child: WidgetUtils.CircleHeadImage(40, 40, headImage)),
                               WidgetUtils.commonSizedBox(0, 10),
                               Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const Expanded(child: Text('')),
                                   SizedBox(
-                                    width: ScreenUtil().setWidth(130),
+                                    width: ScreenUtil().setWidth(300),
                                     child: Text(
                                       nickName,
                                       style: StyleUtils.getCommonTextStyle(
@@ -636,33 +644,38 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                                 ],
                               ),
                               const Expanded(child: Text('')),
-                              myUid == sp.getString('user_id')
-                                  ? const Text('')
-                                  : is_hi == 0
-                                      ? WidgetUtils.showImages(
-                                          'assets/images/trends_hi.png',
-                                          124,
-                                          59)
-                                      : GestureDetector(
-                                          onTap: (() {
-                                            MyUtils.goTransparentRFPage(
-                                                context,
-                                                ChatPage(
-                                                    nickName: nickName,
-                                                    otherUid: sp
-                                                        .getString('user_id')
-                                                        .toString(),
-                                                    otherImg: headImage));
-                                          }),
-                                          child: WidgetUtils.myContainer(
-                                              ScreenUtil().setHeight(45),
-                                              ScreenUtil().setHeight(100),
-                                              Colors.white,
-                                              MyColors.homeTopBG,
-                                              '私信',
-                                              ScreenUtil().setSp(25),
-                                              MyColors.homeTopBG),
-                                        ),
+                              // myUid == sp.getString('user_id')
+                              //     ? const Text('')
+                              //     : is_hi == 0
+                              //         ? GestureDetector(
+                              //           onTap: ((){
+                              //             MyUtils.goTransparentPageCom(context, TrendsHiPage(imgUrl: headImage, uid: myUid, index: widget.index));
+                              //           }),
+                              //           child: WidgetUtils.showImages(
+                              //               'assets/images/trends_hi.png',
+                              //               124,
+                              //               59),
+                              //         )
+                              //         : GestureDetector(
+                              //             onTap: (() {
+                              //               MyUtils.goTransparentRFPage(
+                              //                   context,
+                              //                   ChatPage(
+                              //                       nickName: nickName,
+                              //                       otherUid: sp
+                              //                           .getString('user_id')
+                              //                           .toString(),
+                              //                       otherImg: headImage));
+                              //             }),
+                              //             child: WidgetUtils.myContainer(
+                              //                 ScreenUtil().setHeight(45),
+                              //                 ScreenUtil().setHeight(100),
+                              //                 Colors.white,
+                              //                 MyColors.homeTopBG,
+                              //                 '私信',
+                              //                 ScreenUtil().setSp(25),
+                              //                 MyColors.homeTopBG),
+                              //           ),
                             ],
                           ),
                         ),
@@ -794,8 +807,8 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                           //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                           borderRadius: BorderRadius.all(Radius.circular(20.0)),
                         ),
-                        child: WidgetUtils.commonTextField(
-                            controller, '对 Ta 说点什么吧~'),
+                        child: WidgetUtils.commonTextFieldZDY(
+                            controller, '对 Ta 说点什么吧~',30),
                       ),
                     ),
                     WidgetUtils.commonSizedBox(0, 10),
@@ -804,8 +817,10 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                     WidgetUtils.commonSizedBox(0, 10),
                     GestureDetector(
                       onTap: (() {
-                        doPostComment('create', '', 0);
-                        MyUtils.hideKeyboard(context);
+                        if(controller.text.trim().isNotEmpty){
+                          doPostComment('create', '', 0);
+                          MyUtils.hideKeyboard(context);
+                        }
                       }),
                       child: Container(
                         height: ScreenUtil().setHeight(60),
@@ -874,6 +889,11 @@ class _TrendsMorePageState extends State<TrendsMorePage>
             imgList = bean.data!.noteInfo!.imgUrl!;
             myUid = bean.data!.noteInfo!.uid.toString();
             comList = bean.data!.noteInfo!.commentList!;
+            if(bean.data!.noteInfo!.uid.toString() == sp.getString('user_id')){
+              isMe = true;
+            }else{
+              isMe = false;
+            }
           });
           break;
         case MyHttpConfig.errorloginCode:

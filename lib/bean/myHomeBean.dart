@@ -62,16 +62,18 @@ class MyUserInfo {
   String? description;
   String? city;
   String? labelId;
+  int? level;
   String? constellation;
   String? avatarUrl;
   String? voiceCardUrl;
   int? age;
   String? label;
   String? voiceLabelName;
+  int? live;
+  int? roomId;
   List<String>? photoUrl;
   String? avatarFrameImg;
   String? avatarFrameGifImg;
-  int? level;
 
   MyUserInfo(
       {this.number,
@@ -86,16 +88,18 @@ class MyUserInfo {
         this.description,
         this.city,
         this.labelId,
+        this.level,
         this.constellation,
         this.avatarUrl,
         this.voiceCardUrl,
         this.age,
         this.label,
         this.voiceLabelName,
+        this.live,
+        this.roomId,
         this.photoUrl,
-        this.avatarFrameGifImg,
         this.avatarFrameImg,
-        this.level});
+        this.avatarFrameGifImg});
 
   MyUserInfo.fromJson(Map<String, dynamic> json) {
     number = json['number'];
@@ -110,16 +114,18 @@ class MyUserInfo {
     description = json['description'];
     city = json['city'];
     labelId = json['label_id'];
+    level = json['level'];
     constellation = json['constellation'];
     avatarUrl = json['avatar_url'];
     voiceCardUrl = json['voice_card_url'];
     age = json['age'];
     label = json['label'];
     voiceLabelName = json['voice_label_name'];
+    live = json['live'];
+    roomId = json['room_id'];
     photoUrl = json['photo_url'].cast<String>();
     avatarFrameImg = json['avatar_frame_img'];
     avatarFrameGifImg = json['avatar_frame_gif_img'];
-    level = json['level'];
   }
 
   Map<String, dynamic> toJson() {
@@ -136,16 +142,18 @@ class MyUserInfo {
     data['description'] = this.description;
     data['city'] = this.city;
     data['label_id'] = this.labelId;
+    data['level'] = this.level;
     data['constellation'] = this.constellation;
     data['avatar_url'] = this.avatarUrl;
     data['voice_card_url'] = this.voiceCardUrl;
     data['age'] = this.age;
     data['label'] = this.label;
     data['voice_label_name'] = this.voiceLabelName;
+    data['live'] = this.live;
+    data['room_id'] = this.roomId;
     data['photo_url'] = this.photoUrl;
     data['avatar_frame_img'] = this.avatarFrameImg;
     data['avatar_frame_gif_img'] = this.avatarFrameGifImg;
-    data['level'] = this.level;
     return data;
   }
 }
@@ -153,14 +161,9 @@ class MyUserInfo {
 class GiftList {
   List<ReceiveGift>? receiveGift;
   int? receiveGiftType;
-  List<AllGiftArr>? allGiftArr;
   int? allGiftType;
 
-  GiftList(
-      {this.receiveGift,
-        this.receiveGiftType,
-        this.allGiftArr,
-        this.allGiftType});
+  GiftList({this.receiveGift, this.receiveGiftType, this.allGiftType});
 
   GiftList.fromJson(Map<String, dynamic> json) {
     if (json['receive_gift'] != null) {
@@ -170,12 +173,6 @@ class GiftList {
       });
     }
     receiveGiftType = json['receive_gift_type'];
-    if (json['all_gift_arr'] != null) {
-      allGiftArr = <AllGiftArr>[];
-      json['all_gift_arr'].forEach((v) {
-        allGiftArr!.add(new AllGiftArr.fromJson(v));
-      });
-    }
     allGiftType = json['all_gift_type'];
   }
 
@@ -185,9 +182,6 @@ class GiftList {
       data['receive_gift'] = this.receiveGift!.map((v) => v.toJson()).toList();
     }
     data['receive_gift_type'] = this.receiveGiftType;
-    if (this.allGiftArr != null) {
-      data['all_gift_arr'] = this.allGiftArr!.map((v) => v.toJson()).toList();
-    }
     data['all_gift_type'] = this.allGiftType;
     return data;
   }
@@ -195,44 +189,16 @@ class GiftList {
 
 class ReceiveGift {
   String? img;
-  int? count;
 
-  ReceiveGift({this.img, this.count});
+  ReceiveGift({this.img});
 
   ReceiveGift.fromJson(Map<String, dynamic> json) {
     img = json['img'];
-    count = json['count'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['img'] = this.img;
-    data['count'] = this.count;
-    return data;
-  }
-}
-
-class AllGiftArr {
-  String? img;
-  String? name;
-  int? status;
-  int? count;
-
-  AllGiftArr({this.img, this.name, this.status, this.count});
-
-  AllGiftArr.fromJson(Map<String, dynamic> json) {
-    img = json['img'];
-    name = json['name'];
-    status = json['status'];
-    count = json['count'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['img'] = this.img;
-    data['name'] = this.name;
-    data['status'] = this.status;
-    data['count'] = this.count;
     return data;
   }
 }

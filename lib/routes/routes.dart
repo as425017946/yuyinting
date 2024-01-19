@@ -106,7 +106,6 @@ var staticRoutes = {
   'ZhuangbanPage':(context) => const ZhuangbanPage(),// 礼物墙
   'ShopPage':(context) => const ShopPage(),// 装扮商城
   'TequanPage':(context) => const TequanPage(),// 特权页面
-  'MyKeFuPage':(context) => const MyKeFuPage(),// 新客服页面
   'DengjiPage':(context) => const DengjiPage(),// 测试等级描边
   'ChengJiuPage':(context) => const ChengJiuPage(),// 等级成就
 

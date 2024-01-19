@@ -600,49 +600,49 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                 int randomNumber = Random().nextInt(max - min) + min;
                 luckyName = randomNumber;
                 break;
-              case 12: // 情定埃菲尔
+              case 7: // 云顶天空
                 int min = 19;
                 int max = 30;
                 int randomNumber = Random().nextInt(max - min) + min;
                 luckyName = randomNumber;
                 break;
-              case 17: // 霸下
+              case 32: // 雪山飞虎
                 int min = 31;
                 int max = 42;
                 int randomNumber = Random().nextInt(max - min) + min;
                 luckyName = randomNumber;
                 break;
-              case 13: // 秒见财神
+              case 8: // 御龙豪杰
                 int min = 43;
                 int max = 54;
                 int randomNumber = Random().nextInt(max - min) + min;
                 luckyName = randomNumber;
                 break;
-              case 14: // 宝象传说
+              case 31: // 童话岛
                 int min = 55;
                 int max = 66;
                 int randomNumber = Random().nextInt(max - min) + min;
                 luckyName = randomNumber;
                 break;
-              case 11: // 为爱起航
+              case 38: // 鹤仙
                 int min = 67;
                 int max = 78;
                 int randomNumber = Random().nextInt(max - min) + min;
                 luckyName = randomNumber;
                 break;
-              case 15: // 北欧天马
+              case 9: // 梦回长安
                 int min = 79;
                 int max = 90;
                 int randomNumber = Random().nextInt(max - min) + min;
                 luckyName = randomNumber;
                 break;
-              case 10: // 晚安
+              case 10: // 速度与激情
                 int min = 91;
                 int max = 102;
                 int randomNumber = Random().nextInt(max - min) + min;
                 luckyName = randomNumber;
                 break;
-              case 16: // 远古巨鲲
+              case 17: // 霸下
                 int min = 103;
                 int max = 114;
                 int randomNumber = Random().nextInt(max - min) + min;

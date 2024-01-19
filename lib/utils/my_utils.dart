@@ -493,6 +493,7 @@ class MyUtils {
           LogE('IM 登登录设备数量限制而导致当前设备被踢下线');
           signOut();
           MyToastUtils.showToastBottom('账号已在其他设备登录！');
+          eventBus.fire(SubmitButtonBack(title: '账号已在其他设备登录'));
         }),
         // Token 过期;
         onTokenDidExpire: (() {
@@ -506,6 +507,23 @@ class MyUtils {
         }),
       ),
     );
+
+    EMClient.getInstance.chatRoomManager.addEventHandler('123',
+        EMChatRoomEventHandler(onRemovedFromChatRoom:
+            (roomId, roomName, participantreason, reason) {
+          // ignore: unrelated_type_equality_checks
+          if(reason == LeaveReason.Kicked){
+            LogE(
+                '客户主动离开聊天室 $roomId 房间名称 $roomName == $participantreason ** $reason');
+          }else{
+            //非客户主动离开聊天室 并且判断是否为当前登录的房间
+            if(sp.getString('roomID').toString() == roomId.toString()){
+              EMClient.getInstance.chatRoomManager.joinChatRoom(roomId);
+            }
+            LogE(
+                '非客户主动离开聊天室 $roomId 房间名称 $roomName == $participantreason ** $reason');
+          }
+    }));
 
     // 添加收消息监听
     EMClient.getInstance.chatManager.addEventHandler(
@@ -717,8 +735,8 @@ class MyUtils {
                     'whoUid': msg.from,
                     'combineID': combineID,
                     'nickName': nickName,
-                    'content': body.thumbnailLocalPath,
-                    'bigImg': body.localPath,
+                    'content': body.remotePath,
+                    'bigImg': body.remotePath,
                     'headImg': myHeadImg,
                     'headNetImg': sp.getString('user_headimg').toString(),
                     'otherHeadImg': otherHeadImg,
@@ -733,6 +751,7 @@ class MyUtils {
                   };
                   // 插入数据
                   await databaseHelper.insertData('messageSLTable', params);
+                  eventBus.fire(SendMessageBack(type: 2, msgID: '2'));
                 }
                 break;
               case MessageType.VIDEO:
@@ -830,8 +849,8 @@ class MyUtils {
                     'whoUid': msg.from,
                     'combineID': combineID,
                     'nickName': nickName,
-                    'content': body.localPath,
-                    'bigImg': body.localPath,
+                    'content': body.remotePath,
+                    'bigImg': body.remotePath,
                     'headImg': myHeadImg,
                     'headNetImg': sp.getString('user_headimg').toString(),
                     'otherHeadImg': otherHeadImg,
@@ -957,7 +976,7 @@ class MyUtils {
                     // 插入数据
                     await databaseHelper.insertData('messageSLTable', params);
                     eventBus.fire(SendMessageBack(type: 1, msgID: '0'));
-                  }else if(body.event == 'login_kick') {
+                  } else if (body.event == 'login_kick') {
                     // 这个状态是后台直接封禁了账号，然后直接踢掉app
                     sp.setString('user_token', '');
                     sp.setString("user_account", '');
@@ -973,7 +992,7 @@ class MyUtils {
                     sp.setString("user_identity", '');
                     // 直接杀死app
                     SystemNavigator.pop();
-                  }else {
+                  } else {
                     eventBus.fire(ZDYBack(map: body.params, type: body.event));
                   }
                 }

@@ -70,7 +70,12 @@ class _ZaixianPageState extends State<ZaixianPage>
     listen = eventBus.on<HiBack>().listen((event) {
       if (event.isBack) {
         setState(() {
-          list[event.index].isHi = 1;
+          //目的是为了有打过招呼的这个人的hi都变成私信按钮
+          for(int i = 0 ; i < list.length; i++){
+            if(list[i].uid.toString() == event.index){
+              list[i].isHi = 1;
+            }
+          }
         });
       }
     });

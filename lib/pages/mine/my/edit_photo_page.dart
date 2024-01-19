@@ -215,7 +215,7 @@ class _EditPhotoPageState extends State<EditPhotoPage> {
     FormData formdata = FormData.fromMap(
       {
         'type': 'image',
-        "file": await MultipartFile.fromFile(result!.path,
+        "file": await MultipartFile.fromFile(path.contains('.gif') || path.toString().contains('.GIF') ? targetPath : result!.path ,
           filename: name,)
       },
     );

@@ -85,8 +85,8 @@ class _BlackPageState extends State<BlackPage> {
       height: ScreenUtil().setHeight(120),
       child: Row(
         children: [
-          WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(100),
-              ScreenUtil().setWidth(100), _list[i].avatar!),
+          WidgetUtils.CircleHeadImage(100.h,
+              100.h, _list[i].avatar!),
           WidgetUtils.commonSizedBox(0, 10),
           Expanded(
             child: Column(
@@ -187,10 +187,11 @@ class _BlackPageState extends State<BlackPage> {
             }else{
               if (page == 1) {
                 length = 0;
+              }else{
+                if(bean.data!.length < MyConfig.pageSize){
+                  _refreshController.loadNoData();
+                }
               }
-            }
-            if(bean.data!.length < MyConfig.pageSize){
-              _refreshController.loadNoData();
             }
           });
           break;

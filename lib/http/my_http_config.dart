@@ -20,6 +20,8 @@ class MyHttpConfig{
 
 
 
+  //预下载接口
+  static const String svgaGiftList = "$baseURL/gift/svgaGiftList";
   //登录接口
   static const String login = "$baseURL/login/login";
   //发送短信验证码
@@ -27,7 +29,7 @@ class MyHttpConfig{
   //发送短信验证码-忘记密码
   static const String sendSms = "$baseURL/login/forgetSms";
   //检查更新
-  static const String checkVersion = "$baseURL/app/open/checkVersion";
+  static const String checkVersion = "$baseURL/system/versionRequire";
   //获取电话区号
   static const String quhao = "$baseURL/area/code";
   //忘记密码
@@ -66,6 +68,8 @@ class MyHttpConfig{
   static const String history = "$baseURL/mine/history";
   //个人主页
   static const String myHome = "$baseURL/mine/home";
+  //礼物墙
+  static const String allGiftAll = "$baseURL/mine/allGiftAll";
   //查看用户详情
   static const String userInfo = "$baseURL/mine/userInfo";
   //礼物明细
@@ -118,6 +122,8 @@ class MyHttpConfig{
   static const String hi = "$baseURL/chat/hi";
   //发布动态
   static const String sendDT = "$baseURL/note/post";
+  //删除动态
+  static const String delDT = "$baseURL/note/del";
 
   /// 首页
   //推荐房间/海报轮播/推荐主播
