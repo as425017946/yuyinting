@@ -225,7 +225,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
               // 转盘
               Positioned(
                 top: ScreenUtil().setHeight(70),
-                left: ScreenUtil().setWidth(30),
+                left: ScreenUtil().setWidth(0),
                 width: ScreenUtil().setHeight(590),
                 height: ScreenUtil().setHeight(590),
                 child: Stack(
@@ -245,10 +245,23 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                     ),
                     GestureDetector(
                       onTap: (() async {
+                        if(double.parse(sp.getString('zp_jinbi').toString()) < 1000 && cishu ==1 ){
+                          MyToastUtils.showToastBottom('钱包余额不足');
+                          return;
+                        }
+                        if(double.parse(sp.getString('zp_jinbi').toString()) < 10000 && cishu ==10 ){
+                          MyToastUtils.showToastBottom('钱包余额不足');
+                          return;
+                        }
+                        if(double.parse(sp.getString('zp_jinbi').toString()) < 30000 && cishu ==30 ){
+                          MyToastUtils.showToastBottom('钱包余额不足');
+                          return;
+                        }
                         if(sp.getBool('zp2_queren') == null || sp.getBool('zp2_queren') == false){
                           MyUtils.goTransparentPageCom(context, XiaZhuQueRenPage(cishu: cishu.toString(), feiyong: feiyong.toString(), title: '超级转盘',));
                         }else{
                           if(MyUtils.checkClick() && isRunning == false && isXiazhu) {
+                            eventBus.fire(ResidentBack(isBack: true));
                             doPostPlayRoulette(cishu.toString());
                           }
                         }
@@ -660,10 +673,18 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
           MyUtils.jumpLogin(context);
           break;
         default:
+          eventBus.fire(ResidentBack(isBack: false));
+          setState(() {
+            isXiazhu = true;
+          });
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
     } catch (e) {
+      eventBus.fire(ResidentBack(isBack: false));
+      setState(() {
+        isXiazhu = true;
+      });
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }

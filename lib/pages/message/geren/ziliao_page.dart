@@ -57,6 +57,7 @@ class _ZiliaoPageState extends State<ZiliaoPage> {
             }));
       }),
       child: Container(
+        width: 190.w,
         margin: const EdgeInsets.only(right: 10),
         child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(110),
             ScreenUtil().setHeight(110), ScreenUtil().setHeight(20), list_p[i]),

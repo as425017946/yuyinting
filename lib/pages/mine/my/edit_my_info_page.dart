@@ -63,7 +63,8 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
       city = '',
       photo_id = '',
       constellation = '',
-      birthday = '';
+      birthday = '',
+      voice_cardID = '';
 
   //保存之前信息，然后判断有无修改项
   String headImg2 = '',
@@ -74,7 +75,8 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
       city2 = '',
       photo_id2 = '',
       constellation2 = '',
-      birthday2 = '';
+      birthday2 = '',
+      voice_cardID2 = '';
 
   @override
   void initState() {
@@ -85,10 +87,16 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
     doPostMyIfon();
     doPstGetCity();
     listen = eventBus.on<FileBack>().listen((event) {
+      // 修改头像
       if (event.type == 0) {
         setState(() {
           headImg = event.info;
           headImgID = event.id;
+        });
+      } else if (event.type == 1) {
+        // 修改声音名片
+        setState(() {
+          voice_cardID = event.id;
         });
       }
     });
@@ -219,7 +227,8 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                 city != city2 ||
                 photo_id != photo_id2 ||
                 constellation != constellation2 ||
-                birthday != birthday2) {
+                birthday != birthday2 ||
+                voice_cardID != voice_cardID2) {
               exitBianji(context);
             }else{
               Navigator.of(context).pop();
@@ -288,7 +297,8 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
               city != city2 ||
               photo_id != photo_id2 ||
               constellation != constellation2 ||
-              birthday != birthday2) {
+              birthday != birthday2 ||
+              voice_cardID != voice_cardID2) {
             exitBianji(context);
           }else{
             Navigator.of(context).pop();
@@ -691,13 +701,13 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                         children: [
                           for (int i = 0; i < list_p.length; i++)
                             SizedBox(
-                              height: ScreenUtil().setHeight(120),
-                              width: ScreenUtil().setHeight(120),
+                              height: 150.h,
+                              width: 190.w,
                               child: Stack(
                                 children: [
                                   WidgetUtils.CircleImageNet(
-                                      ScreenUtil().setHeight(120),
-                                      ScreenUtil().setHeight(120),
+                                      120.h,
+                                      190.w,
                                       ScreenUtil().setHeight(20),
                                       list_p[i]),
                                   Positioned(
@@ -731,8 +741,8 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                             Stack(
                               children: [
                                 Container(
-                                  height: ScreenUtil().setHeight(120),
-                                  width: ScreenUtil().setHeight(120),
+                                  height: 150.h,
+                                  width: 190.w,
                                   //超出部分，可裁剪
                                   clipBehavior: Clip.hardEdge,
                                   decoration: BoxDecoration(
@@ -773,7 +783,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                                 ),
                               ],
                             ),
-                          list_p.length + lista.length < 4
+                          list_p.length + lista.length < 3
                               ? GestureDetector(
                                   onTap: (() {
                                     if (MyUtils.checkClick()) {
@@ -785,7 +795,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                                                 pageBuilder: (context, animation,
                                                     secondaryAnimation) {
                                                   return EditPhotoPage(
-                                                    length: 4 -
+                                                    length: 3 -
                                                         list_p.length -
                                                         lista.length,
                                                   );
@@ -795,8 +805,8 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                                   }),
                                   child: WidgetUtils.showImages(
                                       'assets/images/images_add.png',
-                                      ScreenUtil().setHeight(120),
-                                      ScreenUtil().setHeight(120)),
+                                      150.h,
+                                      190.w),
                                 )
                               : const Text(''),
                         ],
@@ -812,7 +822,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
     );
   }
 
-  /// 关于我们
+  /// 我的详情
   Future<void> doPostMyIfon() async {
     Loading.show(MyConfig.successTitle);
     LogE('用户id${sp.getString('user_id')}');
@@ -845,6 +855,8 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
             controllerGexing.text = description;
             city = bean.data!.city!;
             city2 = bean.data!.city!;
+            voice_cardID = bean.data!.voiceCard.toString();
+            voice_cardID2 = bean.data!.voiceCard.toString();
             if (bean.data!.label!.isNotEmpty) {
               list_label = bean.data!.label!.split(',');
             }
@@ -856,11 +868,10 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                   list_pID.add(listPid[i]);
                 }
               }
-              if (bean.data!.photoUrl!.length > 4) {
+              if (bean.data!.photoUrl!.length > 3) {
                 list_p.add(bean.data!.photoUrl![0]);
                 list_p.add(bean.data!.photoUrl![1]);
                 list_p.add(bean.data!.photoUrl![2]);
-                list_p.add(bean.data!.photoUrl![3]);
               } else {
                 list_p = bean.data!.photoUrl!;
               }
@@ -929,13 +940,19 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
       MyToastUtils.showToastBottom('昵称不为空');
       return;
     }
+
+    if (controller.text.trim().toString().contains('维C客服')) {
+      MyToastUtils.showToastBottom('昵称不合法');
+      return;
+    }
+
     Loading.show('提交中...');
     Map<String, dynamic> params = <String, dynamic>{
       'avatar': headImgID,
       'nickname': controller.text.trim(),
       'description': controllerGexing.text.trim(),
       'birthday': birthday,
-      'voice_card': '',
+      'voice_card': voice_cardID,
       'city': city,
       'label_id': sp.getString('label_id'),
       'photo_id': photo_id
@@ -944,7 +961,15 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
       CommonBean bean = await DataUtils.postModifyUserInfo(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          MyToastUtils.showToastBottom('资料提交成功，请耐心等待审核');
+          if (headImg != headImg2 ||
+              headImgID != headImgID2 ||
+              nickName != nickName2 ||
+              description != description2 ||
+              photo_id != photo_id2 ) {
+            MyToastUtils.showToastBottom('资料提交成功，请耐心等待审核');
+          }else{
+            MyToastUtils.showToastBottom('资料提交成功');
+          }
           Navigator.pop(context);
           break;
         case MyHttpConfig.errorloginCode:

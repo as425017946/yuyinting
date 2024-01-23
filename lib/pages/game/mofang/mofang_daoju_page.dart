@@ -4,6 +4,7 @@ import 'package:yuyinting/utils/widget_utils.dart';
 
 import '../../../bean/playRouletteBean.dart';
 import '../../../colors/my_colors.dart';
+import '../../../utils/event_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../widget/OptionGridView.dart';
 /// 魔方获得道具
@@ -126,6 +127,7 @@ class _MoFangDaoJuPageState extends State<MoFangDaoJuPage> {
           WidgetUtils.commonSizedBox(20.h, 0),
           GestureDetector(
             onTap: ((){
+              eventBus.fire(ResidentBack(isBack: false));
               Navigator.pop(context);
             }),
             child: WidgetUtils.showImages('assets/images/mofang_dj_lan_colse.png', 70.h, 70.h),

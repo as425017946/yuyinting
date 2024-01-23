@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/widget/SVGASimpleImage3.dart';
 
 import '../../bean/hengFuBean.dart';
@@ -11,6 +12,7 @@ class HomeItems {
   /// 公屏送礼推送
   static Widget itemAnimation(String url, AnimationController controller,
       Animation<Offset> animation, String name, hengFuBean hf) {
+    LogE('名称 == $name');
     String info = '';
     double gd = 0, topHD = 0;
     switch (name) {
@@ -160,10 +162,10 @@ class HomeItems {
                                 ),
                               ),
                             )),
-                            // 显示头像
-                            WidgetSpan(
-                                child: WidgetUtils.CircleImageNet(30.h, 30.h,
-                                    15.h, hf.avatar!)),
+                            // // 显示头像
+                            // WidgetSpan(
+                            //     child: WidgetUtils.CircleImageNet(30.h, 30.h,
+                            //         15.h, hf.avatar!)),
                             // 昵称
                             WidgetSpan(
                                 child: Transform.translate(
@@ -274,10 +276,10 @@ class HomeItems {
                           ),
                         ),
                       )),
-                      // 显示头像
-                      WidgetSpan(
-                          child: type == 0 ? WidgetUtils.CircleImageNet(
-                              30.h, 30.h, 15.h, hf.avatar!) : const Text('')),
+                      // // 显示头像
+                      // WidgetSpan(
+                      //     child: type == 0 ? WidgetUtils.CircleImageNet(
+                      //         30.h, 30.h, 15.h, hf.avatar!) : const Text('')),
                       // 昵称
                       WidgetSpan(
                           child: Transform.translate(

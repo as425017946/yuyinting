@@ -152,7 +152,7 @@ class _RoomBlackPageState extends State<RoomBlackPage> {
   }
 
   List<Data> list = [];
-  /// 房间管理员列表
+  /// 黑名单列表
   Future<void> doPostRoomBlackList() async {
     Map<String, dynamic> params = <String, dynamic>{
       'room_id': widget.roomID,

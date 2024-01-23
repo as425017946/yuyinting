@@ -1827,7 +1827,8 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
                 '${(double.parse(jinbi) - int.parse(xiazhujine.toString()))}';
                 if(double.parse(jinbi) > 10000){
                   //保留2位小数
-                  jinbi2 = '${(double.parse(jinbi) / 10000).toStringAsFixed(2)}w';
+                  jinbi2 = '${(double.parse(jinbi) / 10000)}';
+                  jinbi2 = '${jinbi2.substring(0,jinbi2.lastIndexOf('.')+3)}w';
                 }else{
                   jinbi2 = jinbi;
                 }
@@ -1847,8 +1848,8 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
                 '${(double.parse(zuanshi) - int.parse(xiazhujine.toString()))}';
                 if(double.parse(zuanshi) > 10000){
                   //保留2位小数
-                  zuanshi2 =
-                  '${(double.parse(zuanshi) / 10000).toStringAsFixed(2)}w';
+                  zuanshi2 = '${(double.parse(zuanshi) / 10000)}';
+                  zuanshi2 = '${zuanshi2.substring(0,zuanshi2.lastIndexOf('.')+3)}w';
                 }else{
                   zuanshi2 = zuanshi;
                 }
@@ -1870,8 +1871,8 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
                 '${(double.parse(mogubi) - int.parse(xiazhujine.toString()))}';
                 if(double.parse(mogubi) > 10000){
                   //保留2位小数
-                  mogubi2 =
-                  '${(double.parse(mogubi) / 10000).toStringAsFixed(2)}w';
+                  mogubi2 = '${(double.parse(mogubi) / 10000)}';
+                  mogubi2 = '${mogubi2.substring(0,mogubi2.lastIndexOf('.')+3)}w';
                 }else{
                   mogubi2 = mogubi;
                 }
@@ -1988,21 +1989,24 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
         case MyHttpConfig.successCode:
           setState(() {
             jinbi = bean.data!.goldBean!;
-            if(double.parse(bean.data!.goldBean!) > 10000){
-              jinbi2 = '${(double.parse(bean.data!.goldBean!) / 10000).toStringAsFixed(2)}w';
-            }else{
+            if (double.parse(bean.data!.goldBean!) > 10000) {
+              jinbi2 = '${(double.parse(bean.data!.goldBean!) / 10000)}';
+              jinbi2 = '${jinbi2.substring(0,jinbi2.lastIndexOf('.')+3)}w';
+            } else {
               jinbi2 = bean.data!.goldBean!;
             }
             zuanshi = bean.data!.diamond!;
-            if(double.parse(bean.data!.diamond!) > 10000){
-              zuanshi2 = '${(double.parse(bean.data!.diamond!) / 10000).toStringAsFixed(2)}w';
-            }else{
+            if (double.parse(bean.data!.diamond!) > 10000) {
+              zuanshi2 = '${(double.parse(bean.data!.diamond!) / 10000)}';
+              zuanshi2 = '${zuanshi2.substring(0,zuanshi2.lastIndexOf('.')+3)}w';
+            } else {
               zuanshi2 = bean.data!.diamond!;
             }
             mogubi = bean.data!.mushroom!;
-            if(double.parse(bean.data!.mushroom!) > 10000){
-              mogubi2 = '${(double.parse(bean.data!.mushroom!) / 10000).toStringAsFixed(2)}w';
-            }else{
+            if (double.parse(bean.data!.mushroom!) > 10000) {
+              mogubi2 = '${(double.parse(bean.data!.mushroom!) / 10000)}';
+              mogubi2 = '${mogubi2.substring(0,mogubi2.lastIndexOf('.')+3)}w';
+            } else {
               mogubi2 = bean.data!.mushroom!;
             }
             sp.setString('car_jinbi', jinbi);

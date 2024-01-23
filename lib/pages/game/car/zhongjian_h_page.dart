@@ -328,22 +328,22 @@ class _ZhongJiangHPageState extends State<ZhongJiangHPage> {
             list = bean.data!.luckyList!;
             jinbi = bean.data!.wallet!.goldBean!;
             if (double.parse(bean.data!.wallet!.goldBean!) > 10000) {
-              jinbi2 =
-              '${(double.parse(bean.data!.wallet!.goldBean!) / 10000).toStringAsFixed(2)}w';
+              jinbi2 = '${(double.parse(bean.data!.wallet!.goldBean!) / 10000)}';
+              jinbi2 = '${jinbi2.substring(0,jinbi2.lastIndexOf('.')+3)}w';
             } else {
               jinbi2 = bean.data!.wallet!.goldBean!;
             }
             zuanshi = bean.data!.wallet!.diamond!;
             if (double.parse(bean.data!.wallet!.diamond!) > 10000) {
-              zuanshi2 =
-              '${(double.parse(bean.data!.wallet!.diamond!) / 10000).toStringAsFixed(2)}w';
+              zuanshi2 = '${(double.parse(bean.data!.wallet!.diamond!) / 10000)}';
+              zuanshi2 = '${zuanshi2.substring(0,zuanshi2.lastIndexOf('.')+3)}w';
             } else {
               zuanshi2 = bean.data!.wallet!.diamond!;
             }
             mogubi = bean.data!.wallet!.mushroom!;
             if (double.parse(bean.data!.wallet!.mushroom!) > 10000) {
-              mogubi2 =
-              '${(double.parse(bean.data!.wallet!.mushroom!) / 10000).toStringAsFixed(2)}w';
+              mogubi2 = '${(double.parse(bean.data!.wallet!.mushroom!) / 10000)}';
+              mogubi2 = '${mogubi2.substring(0,mogubi2.lastIndexOf('.')+3)}w';
             } else {
               mogubi2 = bean.data!.wallet!.mushroom!;
             }

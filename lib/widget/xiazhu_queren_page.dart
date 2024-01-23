@@ -122,10 +122,12 @@ class _QueRenPageState extends State<XiaZhuQueRenPage> {
                           }else if(widget.title == '水星魔方'){
                             sp.setBool('mf1_queren', true);
                             sp.setString('mf1_queren_time', '$year-$month-$day');
+                            eventBus.fire(ResidentBack(isBack: true));
                             eventBus.fire(XZQuerenBack(cishu: widget.cishu, feiyong: widget.feiyong, title: '水星魔方'));
                           }else if(widget.title == '金星魔方'){
                             sp.setBool('mf2_queren', true);
                             sp.setString('mf2_queren_time', '$year-$month-$day');
+                            eventBus.fire(ResidentBack(isBack: true));
                             eventBus.fire(XZQuerenBack(cishu: widget.cishu, feiyong: widget.feiyong, title: '金星魔方'));
                           }
                         }else{
@@ -137,9 +139,11 @@ class _QueRenPageState extends State<XiaZhuQueRenPage> {
                             eventBus.fire(XZQuerenBack(cishu: widget.cishu, feiyong: widget.feiyong, title: '超级转盘'));
                           }else if(widget.title == '水星魔方') {
                             sp.setBool('mf1_queren', false);
+                            eventBus.fire(ResidentBack(isBack: true));
                             eventBus.fire(XZQuerenBack(cishu: widget.cishu, feiyong: widget.feiyong, title: '水星魔方'));
                           }else if(widget.title == '金星魔方') {
                             sp.setBool('mf2_queren', false);
+                            eventBus.fire(ResidentBack(isBack: true));
                             eventBus.fire(XZQuerenBack(cishu: widget.cishu, feiyong: widget.feiyong, title: '金星魔方'));
                           }
                         }

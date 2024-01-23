@@ -302,6 +302,7 @@ class _SettingPageState extends State<SettingPage> {
                 // 保存身份
                 sp.setString("user_identity", '');
               });
+              eventBus.fire(SubmitButtonBack(title: '账号已在其他设备登录'));
               MyUtils.signOut();
               Future.delayed(Duration.zero, () {
                 Navigator.pushAndRemoveUntil(

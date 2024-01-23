@@ -21,7 +21,8 @@ class _MoFangPageState extends State<MoFangPage> with TickerProviderStateMixin {
   late final PageController _controller;
 
 
-  var listen;
+  var listen,listen2;
+  bool isBack = false;
 
   @override
   void initState() {
@@ -40,6 +41,12 @@ class _MoFangPageState extends State<MoFangPage> with TickerProviderStateMixin {
         });
     });
 
+    listen2 = eventBus.on<ResidentBack>().listen((event) {
+      setState(() {
+        isBack = event.isBack;
+      });
+    });
+
   }
 
   @override
@@ -47,6 +54,7 @@ class _MoFangPageState extends State<MoFangPage> with TickerProviderStateMixin {
     // TODO: implement dispose
     super.dispose();
     listen.cancel();
+    listen2.cancel();
   }
 
   @override
@@ -61,6 +69,8 @@ class _MoFangPageState extends State<MoFangPage> with TickerProviderStateMixin {
               width: double.infinity,
               margin: const EdgeInsets.only(left: 20, right: 20),
               child: PageView(
+                reverse: false,
+                physics: isBack ? const NeverScrollableScrollPhysics() : const ClampingScrollPhysics(),
                 controller: _controller,
                 onPageChanged: (index) {
                   setState(() {

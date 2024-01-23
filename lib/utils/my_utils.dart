@@ -486,6 +486,7 @@ class MyUtils {
         onUserKickedByOtherDevice: (() {
           LogE('IM 登将设备踢下线');
           signOut();
+          eventBus.fire(SubmitButtonBack(title: '账号已在其他设备登录'));
           MyToastUtils.showToastBottom('账号已在其他设备登录！');
         }),
         // 登录新设备时因达到了登录设备数量限制而导致当前设备被踢下线，被踢设备收到该回调；
@@ -542,7 +543,9 @@ class MyUtils {
                   LogE('接收文本信息$info');
                   if (body.content == '赛车押注') {
                     eventBus.fire(JoinRoomYBack(map: info, type: '0'));
-                  } else {
+                  }else if (body.content == '离开房间') {
+                    eventBus.fire(JoinRoomYBack(map: info, type: 'user_leave_room'));
+                  }else {
                     if (info['lv'] == '' || info['lv'] == null) {
                       if (info['type'] == 'clean_charm') {
                         // 厅内清空魅力值
@@ -634,7 +637,7 @@ class MyUtils {
                           'bigImg': '',
                           'headImg': myHeadImg,
                           'otherHeadImg': otherHeadImg,
-                          'add_time': msg.serverTime,
+                          'add_time': nickName == '维C客服' ? '1893494560' : msg.serverTime,
                           'type': 1,
                           'number': 0,
                           'status': 1,
@@ -741,7 +744,7 @@ class MyUtils {
                     'headNetImg': sp.getString('user_headimg').toString(),
                     'otherHeadImg': otherHeadImg,
                     'otherHeadNetImg': headImg,
-                    'add_time': msg.serverTime,
+                    'add_time':  nickName == '维C客服' ? '1893494560' : msg.serverTime,
                     'type': 2,
                     'number': 0,
                     'status': 1,
@@ -855,7 +858,7 @@ class MyUtils {
                     'headNetImg': sp.getString('user_headimg').toString(),
                     'otherHeadImg': otherHeadImg,
                     'otherHeadNetImg': headImg,
-                    'add_time': msg.serverTime,
+                    'add_time':  nickName == '维C客服' ? '1893494560' : msg.serverTime,
                     'type': 3,
                     'number': body.duration,
                     'status': 1,
@@ -965,7 +968,7 @@ class MyUtils {
                       'headNetImg': sp.getString('user_headimg').toString(),
                       'otherHeadImg': otherHeadImg,
                       'otherHeadNetImg': headImg,
-                      'add_time': msg.serverTime,
+                      'add_time':  nickName == '维C客服' ? '1893494560' : msg.serverTime,
                       'type': 6,
                       'number': 0,
                       'status': 1,
@@ -992,6 +995,8 @@ class MyUtils {
                     sp.setString("user_identity", '');
                     // 直接杀死app
                     SystemNavigator.pop();
+                  }else if(body.event == 'game_turntable_luck'){
+                    eventBus.fire(ZDYBack(map: body.params, type: body.event));
                   } else {
                     eventBus.fire(ZDYBack(map: body.params, type: body.event));
                   }

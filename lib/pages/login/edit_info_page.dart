@@ -4,6 +4,7 @@ import 'package:yuyinting/main.dart';
 import 'package:yuyinting/utils/log_util.dart';
 
 import '../../bean/Common_bean.dart';
+import '../../bean/joinRoomBean.dart';
 import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
@@ -15,6 +16,8 @@ import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../mine/my/edit_head_page.dart';
+import '../room/room_page.dart';
+import '../room/room_ts_mima_page.dart';
 
 /// 填写个人信息
 class EditInfoPage extends StatefulWidget {
@@ -306,6 +309,11 @@ class _EditInfoPageState extends State<EditInfoPage> {
           }
           // ignore: use_build_context_synchronously
           Navigator.pop(context);
+          //判断有无代理房间
+          if(sp.getString('daili_roomid').toString().isNotEmpty){
+            //有房间直接进入
+            doPostBeforeJoin(sp.getString('daili_roomid').toString(),'');
+          }
           break;
         case MyHttpConfig.errorloginCode:
           // ignore: use_build_context_synchronously
@@ -313,6 +321,88 @@ class _EditInfoPageState extends State<EditInfoPage> {
           break;
         default:
           MyToastUtils.showToastBottom(commonBean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+  /// 加入房间前
+  Future<void> doPostBeforeJoin(roomID, String anchorUid) async {
+    //判断房间id是否为空的
+    if(sp.getString('roomID') == null || sp.getString('').toString().isEmpty){
+    }else{
+      // 不是空的，并且不是之前进入的房间
+      if(sp.getString('roomID').toString() != roomID){
+        sp.setString('roomID', roomID);
+        eventBus.fire(SubmitButtonBack(title: '加入其他房间'));
+      }
+    }
+    Map<String, dynamic> params = <String, dynamic>{
+      'room_id': roomID,
+    };
+    try {
+      Loading.show();
+      joinRoomBean bean = await DataUtils.postBeforeJoin(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          doPostRoomJoin(roomID, '', anchorUid, bean.data!.rtc!);
+          break;
+        case MyHttpConfig.errorRoomCode: //需要密码
+        // ignore: use_build_context_synchronously
+          MyUtils.goTransparentPageCom(
+              context,
+              RoomTSMiMaPage(
+                  roomID: roomID,
+                  roomToken: bean.data!.rtc!,
+                  anchorUid: anchorUid));
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+  /// 加入房间
+  Future<void> doPostRoomJoin(
+      roomID, password, String anchorUid, roomToken) async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'room_id': roomID,
+      'password': password,
+      'anchor_uid': anchorUid
+    };
+    try {
+      Loading.show();
+      CommonBean bean = await DataUtils.postRoomJoin(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.goTransparentRFPage(
+              context,
+              RoomPage(
+                roomId: roomID,
+                beforeId: '',
+                roomToken: roomToken,
+              ));
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
       Loading.dismiss();

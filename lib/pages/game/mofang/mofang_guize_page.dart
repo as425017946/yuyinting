@@ -98,7 +98,7 @@ class _MoFangGuiZePageState extends State<MoFangGuiZePage> {
                                   color: Colors.white, fontSize: 24.sp),
                               children: [
                                 TextSpan(
-                                    text: '20V豆/钻石',
+                                    text: '20V豆',
                                     style: StyleUtils.getCommonTextStyle(
                                         color: MyColors.mfZGBlue,
                                         fontSize: 24.sp)),
@@ -107,25 +107,25 @@ class _MoFangGuiZePageState extends State<MoFangGuiZePage> {
                                     style: StyleUtils.getCommonTextStyle(
                                         color: Colors.white, fontSize: 24.sp)),
                                 TextSpan(
-                                    text: '500V豆/钻石',
+                                    text: '500V豆',
                                     style: StyleUtils.getCommonTextStyle(
                                         color: MyColors.mfZGBlue,
                                         fontSize: 24.sp)),
                                 TextSpan(
                                     text:
-                                        '可进行1次金星魔方，百分百获得礼物，奖励将放入背包中，可以随时赠送。钻石游戏赢得的礼物将自动兑换为钻石返还到您的钱包内。',
+                                        '可进行1次金星魔方，百分百获得礼物，奖励将放入背包中，可以随时赠送。',
                                     style: StyleUtils.getCommonTextStyle(
                                         color: Colors.white, fontSize: 24.sp)),
                               ]),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 20.h, right: 20.h),
-                        child: WidgetUtils.onlyText(
-                            '游戏自动付款顺序为先付V豆，V豆余额不够时付钻石；',
-                            StyleUtils.getCommonTextStyle(
-                                color: Colors.white, fontSize: 24.sp)),
-                      ),
+                      // Padding(
+                      //   padding: EdgeInsets.only(left: 20.h, right: 20.h),
+                      //   child: WidgetUtils.onlyText(
+                      //       '游戏自动付款顺序为先付V豆，V豆余额不够时付钻石；',
+                      //       StyleUtils.getCommonTextStyle(
+                      //           color: Colors.white, fontSize: 24.sp)),
+                      // ),
                       Padding(
                         padding: EdgeInsets.only(left: 20.h, right: 20.h),
                         child: WidgetUtils.onlyText(

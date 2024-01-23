@@ -368,7 +368,12 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                         live == 1
                             ? GestureDetector(
                                 onTap: (() {
-                                  doPostBeforeJoin(roomID);
+                                  if(sp.getString('roomID').toString() == roomID){
+                                    MyToastUtils.showToastBottom('您已在本房间');
+                                  }else{
+                                    doPostBeforeJoin(roomID);
+                                  }
+
                                 }),
                                 child: Container(
                                   height: ScreenUtil().setHeight(40),

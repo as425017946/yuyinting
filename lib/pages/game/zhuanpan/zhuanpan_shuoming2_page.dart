@@ -1,23 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:yuyinting/utils/event_utils.dart';
-import 'package:yuyinting/utils/loading.dart';
-import 'package:yuyinting/utils/log_util.dart';
-
-import '../../../bean/Common_bean.dart';
-import '../../../bean/gameStoreBean.dart';
-import '../../../colors/my_colors.dart';
-import '../../../config/my_config.dart';
-import '../../../http/data_utils.dart';
-import '../../../http/my_http_config.dart';
-import '../../../main.dart';
-import '../../../utils/my_toast_utils.dart';
-import '../../../utils/my_utils.dart';
-import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
-import '../../../widget/OptionGridView.dart';
-import '../../../widget/duihuan_queren_page.dart';
-import '../../../widget/queren_page.dart';
 
 /// 转盘的奖池说明
 class ZhuanPanShuoMing2Page extends StatefulWidget {
@@ -80,7 +63,7 @@ class _ZhuanPanJiangChiPageState extends State<ZhuanPanShuoMing2Page> {
                 Padding(
                   padding: EdgeInsets.only(left: 60.w, right: 60.w),
                   child: Text(
-                    '参与“心动转盘”和“超级转盘”赢得的“心之钥”和“星之钥”可在兑换商城内兑换多种礼物。 \n兑换的礼物将自动发送至您的“礼物背包”内俩种钥匙均为 3 日有效期，例如：今日12时您获得的钥匙，将在 3 日后的0时消失。',
+                    '参与“心动转盘”和“超级转盘”赢得的“心之钥”和“星之钥”可在兑换商城内兑换多种礼物。 \n兑换的礼物将自动发送至您的背包内两种钥匙均为 3 日有效期，例如：今日12时您获得的钥匙，将在 3 日后的0时消失。',
                     style: TextStyle(
                         color: Colors.white, fontSize: 26.sp, height: 2),
                   ),

@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:logger/logger.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/config/my_config.dart';
 import 'package:yuyinting/main.dart';
 import 'package:yuyinting/utils/event_utils.dart';
-
-import '../../../bean/CommonIntBean.dart';
-import '../../../bean/CommonMyIntBean.dart';
-import '../../../bean/Common_bean.dart';
 import '../../../bean/qiehuanBean.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
@@ -361,6 +356,7 @@ class _QiehuanAccountPageState extends State<QiehuanAccountPage> {
                 setState(() {
                   MyConfig.issAdd = true;
                 });
+                eventBus.fire(SubmitButtonBack(title: '添加新账号'));
                 Navigator.pushNamed(context, 'LoginPage');
               }),
               child: Container(
@@ -400,6 +396,23 @@ class _QiehuanAccountPageState extends State<QiehuanAccountPage> {
       switch (commonBean.code) {
         case MyHttpConfig.successCode:
           MyToastUtils.showToastBottom('成功切换');
+          setState(() {
+            sp.setString('user_token', '');
+            sp.setString("user_account", '');
+            sp.setString("user_id", '');
+            sp.setString("em_pwd", '');
+            sp.setString("em_token", '');
+            sp.setString("user_password", '');
+            sp.setString('user_phone', '');
+            sp.setString('nickname', '');
+            sp.setString("user_headimg", '');
+            sp.setString("user_headimg_id", '');
+            // 保存身份
+            sp.setString("user_identity", '');
+          });
+          eventBus.fire(SubmitButtonBack(title: '账号已在其他设备登录'));
+          MyUtils.signOut();
+          sp.setString("em_pwd", commonBean.data!.emPwd!);
           sp.setString('user_identity', commonBean.data!.identity!);
           eventBus.fire(SubmitButtonBack(title: '更换了身份'));
           if(v1 == 1){
@@ -410,23 +423,27 @@ class _QiehuanAccountPageState extends State<QiehuanAccountPage> {
               MyUtils.initSDK();
               MyUtils.addChatListener();
               //先退出然后在登录
-              MyUtils.signOutLogin();
+              MyUtils.signIn();
             });
           }else if(v1 == 2){
             setState(() {
               sp.setString('user_token', sp.getString(MyConfig.userTwoToken).toString());
               sp.setString(MyConfig.userTwoUID, commonBean.data!.uid.toString());
               sp.setString('user_id', commonBean.data!.uid.toString());
+              MyUtils.initSDK();
+              MyUtils.addChatListener();
               //先退出然后在登录
-              MyUtils.signOutLogin();
+              MyUtils.signIn();
             });
           }else{
             setState(() {
               sp.setString('user_token', sp.getString(MyConfig.userThreeToken).toString());
               sp.setString(MyConfig.userThreeUID, commonBean.data!.uid.toString());
               sp.setString('user_id', commonBean.data!.uid.toString());
+              MyUtils.initSDK();
+              MyUtils.addChatListener();
               //先退出然后在登录
-              MyUtils.signOutLogin();
+              MyUtils.signIn();
             });
           }
           break;

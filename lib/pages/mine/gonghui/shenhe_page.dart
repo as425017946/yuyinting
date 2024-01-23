@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/bean/Common_bean.dart';
+import 'package:yuyinting/utils/event_utils.dart';
 
 import '../../../bean/qyListBean.dart';
 import '../../../colors/my_colors.dart';
@@ -169,6 +170,9 @@ class _ShenhePageState extends State<ShenhePage> {
           MyToastUtils.showToastBottom('操作成功！');
           setState(() {
             list.removeAt(index);
+            if(list.isEmpty){
+              eventBus.fire(SubmitButtonBack(title: '审核全部完成'));
+            }
           });
           break;
         case MyHttpConfig.errorloginCode:

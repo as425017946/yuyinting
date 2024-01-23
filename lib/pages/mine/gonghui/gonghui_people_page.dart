@@ -220,7 +220,7 @@ class _GonghuiPeoplePageState extends State<GonghuiPeoplePage> {
     );
   }
 
-  /// 我的公会
+  /// listUrl
   Future<void> doPostSearchGuildStreamer(keyword) async {
     Loading.show(MyConfig.successTitle);
     try {

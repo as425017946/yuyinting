@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:svgaplayer_flutter/parser.dart';
 import 'package:svgaplayer_flutter/player.dart';
@@ -15,18 +17,21 @@ import '../../bean/plBean.dart';
 import '../../bean/userInfoBean.dart';
 import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
+import '../../config/smile_utils.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
 import '../../utils/event_utils.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
+import '../../utils/regex_formatter.dart';
 import '../../utils/style_utils.dart';
 import '../../widget/SwiperPage.dart';
 import '../message/chat_page.dart';
 import '../message/geren/people_info_page.dart';
 import 'PagePreviewVideo.dart';
 import 'package:video_player/video_player.dart';
+import 'package:flutter/foundation.dart' as foundation;
 
 class TrendsMorePage extends StatefulWidget {
   String note_id;
@@ -62,6 +67,7 @@ class _TrendsMorePageState extends State<TrendsMorePage>
   String action = 'create';
   double x = 0, y = 0;
   var listen ;
+  bool _isEmojiPickerVisible = false;
 
   @override
   void initState() {
@@ -77,6 +83,8 @@ class _TrendsMorePageState extends State<TrendsMorePage>
       loadAnimation();
     });
 
+    _focusNode = FocusNode();
+    _focusNode!.addListener(_onFocusChange);
   }
 
   @override
@@ -86,6 +94,8 @@ class _TrendsMorePageState extends State<TrendsMorePage>
     // 移除监听器
     animationController?.removeListener(_animListener);
     animationController = null;
+    _focusNode!.removeListener(_onFocusChange);
+    _focusNode!.dispose();
     super.dispose();
   }
 
@@ -127,6 +137,21 @@ class _TrendsMorePageState extends State<TrendsMorePage>
       decoder = SVGAParser.shared.decodeFromAssets;
     }
     return decoder(svgaUrl);
+  }
+
+  FocusNode? _focusNode;
+
+  void _onFocusChange() {
+    if (_focusNode!.hasFocus) {
+      // 获取焦点事件处理逻辑
+      print('TextField获取焦点');
+      setState(() {
+        _isEmojiPickerVisible = false;
+      });
+    } else {
+      // 失去焦点事件处理逻辑
+      print('TextField失去焦点');
+    }
   }
 
   // 评论区
@@ -779,7 +804,7 @@ class _TrendsMorePageState extends State<TrendsMorePage>
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
-                height: ScreenUtil().setHeight(110),
+                height:_isEmojiPickerVisible ? 560.h : 110.h,
                 width: double.infinity,
                 alignment: Alignment.center,
                 decoration: const BoxDecoration(
@@ -791,56 +816,170 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                     ),
                   ),
                 ),
-                child: Row(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    WidgetUtils.commonSizedBox(0, 20),
-                    Expanded(
-                      child: Container(
-                        width: double.infinity,
-                        height: ScreenUtil().setHeight(60),
-                        padding: const EdgeInsets.only(left: 10, right: 10),
-                        alignment: Alignment.center,
-                        //边框设置
-                        decoration: const BoxDecoration(
-                          //背景
-                          color: MyColors.f2,
-                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                    const Spacer(),
+                    Row(
+                      children: [
+                        WidgetUtils.commonSizedBox(0, 20),
+                        Expanded(
+                          child: Container(
+                            width: double.infinity,
+                            height: ScreenUtil().setHeight(60),
+                            padding: const EdgeInsets.only(left: 10, right: 10),
+                            alignment: Alignment.center,
+                            //边框设置
+                            decoration: const BoxDecoration(
+                              //背景
+                              color: MyColors.f2,
+                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                              borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                            ),
+                            child: TextField(
+                              focusNode: _focusNode,
+                              textInputAction: TextInputAction.send,
+                              // 设置为发送按钮
+                              controller: controller,
+                              inputFormatters: [
+                                RegexFormatter(
+                                    regex: MyUtils.regexFirstNotNull),
+                                LengthLimitingTextInputFormatter(
+                                    30) //限制输入长度
+                              ],
+                              style: StyleUtils.loginTextStyle,
+                              onSubmitted: (value) {
+                                if(controller.text.trim().isNotEmpty){
+                                  doPostComment('create', '', 0);
+                                  MyUtils.hideKeyboard(context);
+                                }
+                              },
+                              decoration: InputDecoration(
+                                // border: InputBorder.none,
+                                // labelText: "请输入用户名",
+                                // icon: Icon(Icons.people), //前面的图标
+                                hintText: '对 TA 说点什么吧~',
+                                hintStyle: StyleUtils.loginHintTextStyle,
+
+                                contentPadding: const EdgeInsets.only(
+                                    top: 0, bottom: 0),
+                                border: const OutlineInputBorder(
+                                  borderSide:
+                                  BorderSide(color: Colors.transparent),
+                                ),
+                                enabledBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                  ),
+                                ),
+                                disabledBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                  ),
+                                ),
+                                focusedBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                  ),
+                                ),
+                                // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
+                              ),
+                            ),
+                          ),
                         ),
-                        child: WidgetUtils.commonTextFieldZDY(
-                            controller, '对 Ta 说点什么吧~',30),
-                      ),
-                    ),
-                    WidgetUtils.commonSizedBox(0, 10),
-                    WidgetUtils.showImages(
-                        'assets/images/trends_biaoqing.png', 22, 22),
-                    WidgetUtils.commonSizedBox(0, 10),
-                    GestureDetector(
-                      onTap: (() {
-                        if(controller.text.trim().isNotEmpty){
-                          doPostComment('create', '', 0);
-                          MyUtils.hideKeyboard(context);
-                        }
-                      }),
-                      child: Container(
-                        height: ScreenUtil().setHeight(60),
-                        padding: const EdgeInsets.only(left: 10, right: 10),
-                        alignment: Alignment.center,
-                        //边框设置
-                        decoration: const BoxDecoration(
-                          //背景
-                          color: MyColors.homeTopBG,
-                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                        WidgetUtils.commonSizedBox(0, 10),
+                        GestureDetector(
+                          onTap: (() {
+                            setState(() {
+                              MyUtils.hideKeyboard(context);
+                              _isEmojiPickerVisible = !_isEmojiPickerVisible;
+                            });
+                          }),
+                          child: WidgetUtils.showImages(
+                              'assets/images/trends_biaoqing.png', 22, 22),
                         ),
-                        child: WidgetUtils.onlyText(
-                            '发送',
-                            StyleUtils.getCommonTextStyle(
-                                color: Colors.white,
-                                fontSize: ScreenUtil().setSp(28))),
-                      ),
+                        WidgetUtils.commonSizedBox(0, 10),
+                        GestureDetector(
+                          onTap: (() {
+                            if(controller.text.trim().isNotEmpty){
+                              _isEmojiPickerVisible = false;
+                              doPostComment('create', '', 0);
+                              MyUtils.hideKeyboard(context);
+                            }
+                          }),
+                          child: Container(
+                            height: ScreenUtil().setHeight(60),
+                            padding: const EdgeInsets.only(left: 10, right: 10),
+                            alignment: Alignment.center,
+                            //边框设置
+                            decoration: const BoxDecoration(
+                              //背景
+                              color: MyColors.homeTopBG,
+                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                              borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                            ),
+                            child: WidgetUtils.onlyText(
+                                '发送',
+                                StyleUtils.getCommonTextStyle(
+                                    color: Colors.white,
+                                    fontSize: ScreenUtil().setSp(28))),
+                          ),
+                        ),
+                        WidgetUtils.commonSizedBox(0, 20),
+                      ],
                     ),
-                    WidgetUtils.commonSizedBox(0, 20),
+                    const Spacer(),
+                    _isEmojiPickerVisible ? Visibility(
+                      visible: _isEmojiPickerVisible,
+                      child: SizedBox(
+                        height: 450.h,
+                        child: EmojiPicker(
+                          onEmojiSelected: (Category? category, Emoji emoji) {},
+                          onBackspacePressed: () {
+                            // Do something when the user taps the backspace button (optional)
+                            // Set it to null to hide the Backspace-Button
+                          },
+                          textEditingController: controller,
+                          // pass here the same [TextEditingController] that is connected to your input field, usually a [TextFormField]
+                          config: Config(
+                            columns: 7,
+                            emojiSizeMax: 32 *
+                                (foundation.defaultTargetPlatform ==
+                                    TargetPlatform.iOS
+                                    ? 1.30
+                                    : 1.0),
+                            // Issue: https://github.com/flutter/flutter/issues/28894
+                            verticalSpacing: 0,
+                            horizontalSpacing: 0,
+                            gridPadding: EdgeInsets.zero,
+                            initCategory: Category.RECENT,
+                            bgColor: const Color(0xFFF2F2F2),
+                            indicatorColor: Colors.blue,
+                            iconColor: Colors.grey,
+                            iconColorSelected: Colors.blue,
+                            backspaceColor: Colors.blue,
+                            skinToneDialogBgColor: Colors.white,
+                            skinToneIndicatorColor: Colors.grey,
+                            enableSkinTones: false,
+                            replaceEmojiOnLimitExceed: false,
+                            recentTabBehavior: RecentTabBehavior.RECENT,
+                            recentsLimit: 28,
+                            noRecents: const Text(
+                              'No Recents',
+                              style: TextStyle(fontSize: 20, color: Colors.black26),
+                              textAlign: TextAlign.center,
+                            ),
+                            // Needs to be const Widget
+                            loadingIndicator: const SizedBox.shrink(),
+                            // Needs to be const Widget
+                            tabIndicatorAnimDuration: kTabScrollDuration,
+                            emojiSet: defaultEmojiSets,
+                            buttonMode: ButtonMode.MATERIAL,
+                          ),
+                        ),
+                      ),
+                    ) : WidgetUtils.commonSizedBox(0, 0),
                   ],
                 ),
               ),
@@ -855,7 +994,7 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                     width: ScreenUtil().setHeight(100),
                     child: SVGAImage(animationController!),
                   )
-                : const Text('')
+                : const Text(''),
           ],
         ),
       ),

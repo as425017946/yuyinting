@@ -143,7 +143,7 @@ class WidgetUtils {
                                                         ScreenUtil().setSp(25)),
                                           ),
                                         )
-                                      : Container(
+                                      :  index == 6 ? Container(
                                           alignment: Alignment.center,
                                           margin:
                                               const EdgeInsets.only(right: 15),
@@ -155,7 +155,7 @@ class WidgetUtils {
                                                     fontSize:
                                                         ScreenUtil().setSp(25)),
                                           ),
-                                        )
+                                        ) : const Text('')
               : Text(''),
         )
       ],
@@ -601,7 +601,7 @@ class WidgetUtils {
     return SizedBox(
       height: height,
       width: width,
-      child: ClipOval(
+      child: imgUrl.isNotEmpty ? ClipOval(
         child: imgUrl.contains('com.leimu.yuyinting') ||
                 imgUrl.contains('storage')
             ? Image.file(
@@ -637,6 +637,12 @@ class WidgetUtils {
                     height: height,
                     gaplessPlayback: true,
                   ),
+      ): Image(
+        image:
+        const AssetImage('assets/images/img_placeholder.png'),
+        width: width,
+        height: height,
+        gaplessPlayback: true,
       ),
     );
   }
@@ -661,7 +667,7 @@ class WidgetUtils {
           : url.isNotEmpty
               ? CachedNetworkImage(
                   imageUrl: url,
-                  fit: BoxFit.fill,
+                  fit: BoxFit.cover,
                   placeholder: (context, url) => CircleImageAss(
                     height,
                     width,
@@ -839,7 +845,7 @@ class WidgetUtils {
       width: width,
       child: CachedNetworkImage(
         imageUrl: url,
-        fit: BoxFit.fill,
+        fit: BoxFit.cover,
         placeholder: (context, url) => CircleImageAss(
           height,
           width,

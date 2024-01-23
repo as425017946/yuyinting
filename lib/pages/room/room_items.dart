@@ -3484,7 +3484,7 @@ class RoomItems {
   /// 厅内底部按钮
   static Widget footBtn(BuildContext context, bool isJinyiin, int isForbation,
       String roomID, int isShow, int isBoss, bool mima, List<MikeList> listM,
-      bool roomDX, bool isRed, bool isMeUp, String mxIndex) {
+      bool roomDX, bool roomSY, bool isRed, bool isMeUp, String mxIndex) {
     return SizedBox(
       height: ScreenUtil().setHeight(90),
       child: Row(
@@ -3634,7 +3634,7 @@ class RoomItems {
                     isShow: isShow,
                     isBoss: isBoss,
                     roomDX: roomDX,
-                    roomSY: true,
+                    roomSY: roomSY,
                     mima: mima,
                   )
                       : RoomGongNeng(
@@ -3643,7 +3643,7 @@ class RoomItems {
                     isShow: isShow,
                     isBoss: isBoss,
                     roomDX: roomDX,
-                    roomSY: true,
+                    roomSY: roomSY,
                     mima: mima,
                   ));
             }),

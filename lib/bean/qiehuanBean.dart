@@ -25,18 +25,21 @@ class qiehuanBean {
 class Data {
   int? uid;
   String? identity;
+  String? emPwd;
 
   Data({this.uid, this.identity});
 
   Data.fromJson(Map<String, dynamic> json) {
     uid = json['uid'];
     identity = json['identity'];
+    emPwd = json['em_pwd'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['uid'] = this.uid;
     data['identity'] = this.identity;
+    data['em_pwd'] = this.emPwd;
     return data;
   }
 }

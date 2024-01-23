@@ -60,6 +60,10 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   bool isShow = false, isRoomShow = false, isAudio = false;
+  // 记录按下的时间，如果不够1s，不发音频
+  int downTime =0;
+  // 如果按下和抬起的时间接口还未反应，则直接取消发送音频
+  bool isSendYY = true;
   int isBlack = 0, length = 0;
   String roomName = '', noteId = '', roomId = '';
   List<String> listImg = [];
@@ -476,6 +480,7 @@ class _ChatPageState extends State<ChatPage> {
                                                 File(allData2[i]['content'])),
                                             width: 160.h,
                                             height: 200.h,
+                                            fit: BoxFit.cover,
                                             errorBuilder: (BuildContext context,
                                                 Object error,
                                                 StackTrace? stackTrace) {
@@ -616,6 +621,7 @@ class _ChatPageState extends State<ChatPage> {
                                           File(allData2[i]['content'])),
                                       width: 160.h,
                                       height: 200.h,
+                                      fit: BoxFit.cover,
                                       errorBuilder: (BuildContext context,
                                           Object error,
                                           StackTrace? stackTrace) {
@@ -1053,16 +1059,24 @@ class _ChatPageState extends State<ChatPage> {
                                 ScreenUtil().setHeight(45)),
                       ),
                       WidgetUtils.commonSizedBox(0, 10),
+                      // 发送音频
                       isAudio
                           ? Expanded(
                               child: GestureDetector(
+
                                 onVerticalDragStart: (details) async {
                                   //判断发送音频
+
                                   if (MyUtils.checkClick()) {
+                                    setState(() {
+                                      downTime = DateTime.now().millisecondsSinceEpoch;
+                                      isSendYY = false;
+                                    });
                                     doPostCanSendUser(3);
                                   }
                                 },
                                 onVerticalDragUpdate: (details) async {
+                                  LogE('上滑==');
                                   if(isLuZhi) {
                                     if (await getPermissionStatus()) {
                                       if (details.delta.dy < -1) {
@@ -1079,31 +1093,16 @@ class _ChatPageState extends State<ChatPage> {
                                   }
                                 },
                                 onVerticalDragEnd: (details) async {
-                                  if(isLuZhi) {
-                                    if (await getPermissionStatus()) {
-                                      // 取消录音后抬起手指
-                                      if (isCancel) {
-                                        //重新初始化音频信息
-                                        setState(() {
-                                          isCancel = false;
-
-                                          mediaRecord = true;
-                                          playRecord = false; //音频文件播放状态
-                                          hasRecord = false; //是否有音频文件可播放
-                                          isLuZhi = false;
-                                          isPlay =
-                                          0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
-                                          djNum = 60; // 录音时长
-                                          audioNum = 0; // 记录录了多久
-                                        });
-                                      } else {
-                                        // 停止录音
-                                        stopRecorder();
-                                        if (audioNum == 0) {
-                                          MyToastUtils.showToastBottom(
-                                              '录音时长过短！');
+                                  LogE('时间差 == ${(DateTime.now().millisecondsSinceEpoch - downTime)}');
+                                  if((DateTime.now().millisecondsSinceEpoch - downTime) >=1000){
+                                    if(isLuZhi) {
+                                      if (await getPermissionStatus()) {
+                                        // 取消录音后抬起手指
+                                        if (isCancel) {
                                           //重新初始化音频信息
                                           setState(() {
+                                            isCancel = false;
+
                                             mediaRecord = true;
                                             playRecord = false; //音频文件播放状态
                                             hasRecord = false; //是否有音频文件可播放
@@ -1113,12 +1112,31 @@ class _ChatPageState extends State<ChatPage> {
                                             djNum = 60; // 录音时长
                                             audioNum = 0; // 记录录了多久
                                           });
-                                        } else {
+                                        }else{
                                           //发送录音
                                           doSendAudio();
                                         }
                                       }
                                     }
+                                  }else{
+                                    setState(() {
+                                      isSendYY = true;
+                                    });
+                                    // 停止录音
+                                    stopRecorder();
+                                    MyToastUtils.showToastBottom(
+                                        '录音时长过短！');
+                                    //重新初始化音频信息
+                                    setState(() {
+                                      mediaRecord = true;
+                                      playRecord = false; //音频文件播放状态
+                                      hasRecord = false; //是否有音频文件可播放
+                                      isLuZhi = false;
+                                      isPlay =
+                                      0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
+                                      djNum = 60; // 录音时长
+                                      audioNum = 0; // 记录录了多久
+                                    });
                                   }
                                 },
                                 child: Container(
@@ -1915,13 +1933,15 @@ class _ChatPageState extends State<ChatPage> {
           }else if(type == 2){
             onTapPickFromGallery();
           }else if(type == 3){
-            if (await getPermissionStatus()) {
-              // 开始录音
-              startRecord();
-              setState(() {
-                audioNum = 0; // 记录录了多久
-                isLuZhi = true;
-              });
+            if(isSendYY == false) {
+              if (await getPermissionStatus()) {
+                // 开始录音
+                startRecord();
+                setState(() {
+                  audioNum = 0; // 记录录了多久
+                  isLuZhi = true;
+                });
+              }
             }
           }else if(type == 4){
             doPostPayPwd();

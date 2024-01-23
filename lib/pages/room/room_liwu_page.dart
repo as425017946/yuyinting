@@ -79,6 +79,8 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
   List<String> listUID = [];
   //是否点击送礼按钮
   bool isCheck = false;
+  // 是否点击了赠送全部背包礼物
+  bool isAllBeibao = false;
 
   Widget _itemPeople(BuildContext context, int i) {
     return GestureDetector(
@@ -561,6 +563,16 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                     url = '';
                                     svga = '';
                                     leixing = 0;
+                                    giftId = '';
+                                    for (int i = 0; i < listPV.length; i++) {
+                                      listPVBool[i] = false;
+                                    }
+                                    for (int i = 0; i < listC.length; i++) {
+                                      listCBool[i] = false;
+                                    }
+                                    for (int i = 0; i < listPl.length; i++) {
+                                      listPlBool[i] = false;
+                                    }
                                   });
                                 }),
                                 child: WidgetUtils.onlyTextCenter(
@@ -586,6 +598,16 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                     url = '';
                                     svga = '';
                                     leixing = 1;
+                                    giftId = '';
+                                    for (int i = 0; i < listPV.length; i++) {
+                                      listPVBool[i] = false;
+                                    }
+                                    for (int i = 0; i < listC.length; i++) {
+                                      listCBool[i] = false;
+                                    }
+                                    for (int i = 0; i < listPl.length; i++) {
+                                      listPlBool[i] = false;
+                                    }
                                   });
                                   if(listPV.isEmpty){
                                     doPostGiftList();
@@ -614,6 +636,16 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                     url = '';
                                     svga = '';
                                     leixing = 2;
+                                    giftId = '';
+                                    for (int i = 0; i < listPV.length; i++) {
+                                      listPVBool[i] = false;
+                                    }
+                                    for (int i = 0; i < listC.length; i++) {
+                                      listCBool[i] = false;
+                                    }
+                                    for (int i = 0; i < listPl.length; i++) {
+                                      listPlBool[i] = false;
+                                    }
                                   });
                                   if(listPl.isEmpty){
                                     doPostGiftListBB();
@@ -641,14 +673,17 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                               leixing == 2
                                   ? GestureDetector(
                                 onTap: (() {
-                                  if(MyUtils.checkClick()) {
+                                  if(MyUtils.checkClick() && isAllBeibao == false) {
                                     setState(() {
+                                      isAllBeibao = true;
                                       if (listUID.length > 1) {
+                                        isAllBeibao = false;
                                         MyToastUtils.showToastBottom(
                                             '赠送全部礼物只能选一个人');
                                         return;
                                       } else {
                                         if (listUID.isEmpty) {
+                                          isAllBeibao = false;
                                           MyToastUtils.showToastBottom(
                                               '请选择要赠送的人');
                                         } else {
@@ -1425,6 +1460,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
         case MyHttpConfig.successCode:
           eventBus.fire(ResidentBack(isBack: true));
           setState(() {
+            isAllBeibao = false;
             for(int i = 0; i < listPeople.length; i++){
               listPeople[i] = false;
             }
@@ -1441,9 +1477,15 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
           break;
         default:
           MyToastUtils.showToastBottom(bean.msg!);
+          setState(() {
+            isAllBeibao = false;
+          });
           break;
       }
     } catch (e) {
+      setState(() {
+        isAllBeibao = false;
+      });
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }

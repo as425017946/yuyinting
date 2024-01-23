@@ -85,18 +85,32 @@ class _RoomPageState extends State<RoomPage>
       //本地图
       if(m['svgaBool'] == false){
         File file = File(m['svgaUrl']);
-        animationControllerSL?.videoItem = await SVGAParser.shared.decodeFromBuffer(file.readAsBytesSync());
+        if(await file.exists()){
+          animationControllerSL?.videoItem = await SVGAParser.shared.decodeFromBuffer(file.readAsBytesSync());
+          animationControllerSL
+              ?.forward() // Try to use .forward() .reverse()
+              .whenComplete(() => animationControllerSL?.videoItem = null);
+          // 监听动画
+          animationControllerSL?.addListener(_animListener);
+        }else{
+          LogE('礼物不存在');
+          setState(() {
+            listUrl.removeAt(0);
+          });
+          //礼物地址没有，直接返回，不进行后续操作
+          return;
+        }
       }else{
         //网络图
         final videoItem = await _loadSVGA(m['svgaBool'], m['svgaUrl']);
         videoItem.autorelease = false;
         animationControllerSL?.videoItem = videoItem;
+        animationControllerSL
+            ?.forward() // Try to use .forward() .reverse()
+            .whenComplete(() => animationControllerSL?.videoItem = null);
+        // 监听动画
+        animationControllerSL?.addListener(_animListener);
       }
-      animationControllerSL
-          ?.forward() // Try to use .forward() .reverse()
-          .whenComplete(() => animationControllerSL?.videoItem = null);
-      // 监听动画
-      animationControllerSL?.addListener(_animListener);
     }
   }
 
@@ -135,7 +149,7 @@ class _RoomPageState extends State<RoomPage>
   }
 
   // 点击的类型
-  int leixing = 0;
+  int leixing = 1;
   bool m0 = false,
       m1 = false,
       m2 = false,
@@ -154,8 +168,8 @@ class _RoomPageState extends State<RoomPage>
   // 老板位
   bool isBoss = true;
 
-  // 房间动效、房间声音、房间密码
-  bool roomDX = true, roomSY = true, mima = false;
+  // 房间动效、房间声音、房间密码、首页展示
+  bool roomDX = true, roomSY = true, mima = false, roomZS =true;
   bool isJinyiin = true;
 
   //是否被禁言了  0否 1是
@@ -217,7 +231,7 @@ class _RoomPageState extends State<RoomPage>
   // list里面的type 0 代表系统公告 1 房间内的公告 2谁进入了房间 3厅内用户正常聊天
   List<Map> list = [];
 
-  // 这个只存用户聊天信息
+  // 这个只存公屏中奖信息
   List<Map> list2 = [];
 
   // 发言倒计时
@@ -351,8 +365,15 @@ class _RoomPageState extends State<RoomPage>
     super.initState();
     //页面渲染完成
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-
+      // 进入房间后清空代理房间id
       sp.setString('daili_roomid','');
+
+      //初始化声网的音频插件
+      initAgora();
+      //初始化声卡采集
+      if (Platform.isWindows || Platform.isMacOS) {
+        starSK();
+      }
 
       animationControllerSL = SVGAAnimationController(vsync: this);
 
@@ -381,12 +402,6 @@ class _RoomPageState extends State<RoomPage>
       }
       for (int i = 0; i < 10; i++) {
         listPeople.add(false);
-      }
-      //初始化声网的音频插件
-      initAgora();
-      //初始化声卡采集
-      if (Platform.isWindows || Platform.isMacOS) {
-        starSK();
       }
       // 厅内设置监听
       listen = eventBus.on<SubmitButtonBack>().listen((event) {
@@ -422,7 +437,15 @@ class _RoomPageState extends State<RoomPage>
           setState(() {
             roomDX = false;
           });
-        } else if (event.title == '房间声音已开启') {
+        } else if (event.title == '首页展示已开启') {
+          setState(() {
+            isHomeShow = 1;
+          });
+        }  else if (event.title == '首页展示已关闭') {
+          setState(() {
+            isHomeShow = 0;
+          });
+        }  else if (event.title == '房间声音已开启') {
           LogE('房间声音已开启');
           setState(() {
             roomSY = true;
@@ -867,6 +890,16 @@ class _RoomPageState extends State<RoomPage>
       });
       // 加入房间事件的监听
       listJoin = eventBus.on<JoinRoomYBack>().listen((event) {
+        /// 用户长时间断网或者杀死app使用
+        if(event.map!['type'] == 'user_leave_room'){
+          if (_timerHot != null) {
+            _timerHot!.cancel();
+          }
+          //离开频道并释放资源
+          _dispose();
+          Navigator.pop(context);
+        }
+        /// 这里是用户的其他正常操作
         if (event.map!['room_id'].toString() == widget.roomId) {
           // 判断是不是点击了欢迎某某人
           if (event.map!['type'] == 'welcome_msg') {
@@ -937,7 +970,6 @@ class _RoomPageState extends State<RoomPage>
 
             setState(() {
               list.add(map);
-              list2.add(map);
             });
           } else if (event.map!['type'] == 'send_gift') {
             // 发png图会用到，其他的不使用
@@ -1095,26 +1127,27 @@ class _RoomPageState extends State<RoomPage>
                 });
               }
               setState(() {
-                // 判断如果不是自己，则可以加入播放队列
-                if (event.map!['from_uid'].toString() !=
-                    sp.getString('user_id').toString()) {
-                  // 这个是为了让别人也能看见自己送出的礼物
-                  if (listUrl.isEmpty) {
-                    Map<dynamic, dynamic> map = {};
-                    map['svgaUrl'] = cb.giftInfo![0].giftImg!;
-                    map['svgaBool'] = true;
-                    // 直接用网络图地址
-                    listUrl.add(map);
-                    isShowSVGA = true;
-                    showStar(listUrl[0]);
-                  } else {
-                    Map<dynamic, dynamic> map = {};
-                    map['svgaUrl'] = cb.giftInfo![0].giftImg!;
-                    map['svgaBool'] = true;
-                    // 直接用网络图地址
-                    listUrl.add(map);
-                  }
+                // 这个是为了让别人也能看见自己送出的礼物
+                if (listUrl.isEmpty) {
+                  Map<dynamic, dynamic> map = {};
+                  map['svgaUrl'] = cb.giftInfo![i].giftImg!;
+                  map['svgaBool'] = true;
+                  // 直接用网络图地址
+                  listUrl.add(map);
+                  isShowSVGA = true;
+                  showStar(listUrl[0]);
+                } else {
+                  Map<dynamic, dynamic> map = {};
+                  map['svgaUrl'] = cb.giftInfo![i].giftImg!;
+                  map['svgaBool'] = true;
+                  // 直接用网络图地址
+                  listUrl.add(map);
                 }
+                // // 判断如果不是自己，则可以加入播放队列
+                // if (event.map!['from_uid'].toString() !=
+                //     sp.getString('user_id').toString()) {
+                //
+                // }
               });
             }
             //厅内发送的送礼物消息
@@ -1202,7 +1235,7 @@ class _RoomPageState extends State<RoomPage>
             // 发送的信息
             map['content'] = '${cb.nickName};在;${cb.gameName};中赢得;$info';
             setState(() {
-              list.add(map);
+              list2.add(map);
             });
           } else if (event.map!['type'] == 'send_all_user') {
             // 是这个厅，并送了带横幅的礼物不做操作
@@ -1295,7 +1328,7 @@ class _RoomPageState extends State<RoomPage>
             // 发送的信息
             map['content'] = '${cb.nickName};在;${cb.gameName};中赢得;$info';
             setState(() {
-              list.add(map);
+              list2.add(map);
             });
 
             WidgetsBinding.instance!.addPostFrameCallback((_) {
@@ -1329,10 +1362,10 @@ class _RoomPageState extends State<RoomPage>
               scrollToLastItem(); // 在widget构建完成后滚动到底部
             });
           } else if (event.map!['type'] == 'send_all_user') {
-            // 厅内出现横幅使用
-            hengFuBean hf = hengFuBean.fromJson(event.map!);
-            myhf = hf;
             if (listMP.isEmpty) {
+              // 厅内出现横幅使用
+              hengFuBean hf = hengFuBean.fromJson(event.map!);
+              myhf = hf;
               //显示横幅、map赋值
               setState(() {
                 isShowHF = true;
@@ -1343,6 +1376,9 @@ class _RoomPageState extends State<RoomPage>
               // 看看集合里面有几个，10s一执行
               hpTimer();
             } else {
+              // 厅内出现横幅使用
+              hengFuBean hf = hengFuBean.fromJson(event.map!);
+              myhf = hf;
               setState(() {
                 listMP.add(hf);
               });
@@ -1646,6 +1682,9 @@ class _RoomPageState extends State<RoomPage>
           listMP.removeAt(0);
         });
         if (listMP.isEmpty) {
+          setState(() {
+            isShowHF = false;
+          });
           _timerhf!.cancel();
         } else {
           setState(() {
@@ -1753,6 +1792,7 @@ class _RoomPageState extends State<RoomPage>
         break;
       case '388800转盘礼物':
         setState(() {
+          name = '388800转盘礼物';
           isBig = true;
           isShowHF = false;
           bigType = 0;
@@ -1760,6 +1800,7 @@ class _RoomPageState extends State<RoomPage>
         break;
       case '送出388800转盘礼物':
         setState(() {
+          name = '送出388800转盘礼物';
           isBig = true;
           isShowHF = false;
           bigType = 1;
@@ -1791,9 +1832,10 @@ class _RoomPageState extends State<RoomPage>
         break;
       case '388800背包礼物':
         setState(() {
+          name = '388800背包礼物';
           isBig = true;
           isShowHF = false;
-          bigType = 0;
+          bigType = 1;
         });
         break;
     }
@@ -1912,7 +1954,7 @@ class _RoomPageState extends State<RoomPage>
       options: const ChannelMediaOptions(
           // 设置用户角色为主播
           // 如果要将用户角色设置为观众，则修改 clientRoleBroadcaster 为 clientRoleAudience
-          clientRoleType: ClientRoleType.clientRoleAudience),
+          clientRoleType: ClientRoleType.clientRoleBroadcaster),
       uid: int.parse(sp.getString('user_id').toString()),
     );
 
@@ -1928,6 +1970,15 @@ class _RoomPageState extends State<RoomPage>
     //     enabled: true, mode: AudioAinsMode.ainsModeUltralowlatency);
     //默认订阅所有远端用户的音频流。
     _engine.muteAllRemoteAudioStreams(false);
+    LogE('本人上麦 ==  $isMeUp');
+    if(isMeUp){
+      // 发布本地音频流
+      _engine.muteLocalAudioStream(false);
+    }else{
+      // 取消发布本地音频流
+      _engine.muteLocalAudioStream(true);
+    }
+
 
     _engine.registerEventHandler(
       RtcEngineEventHandler(
@@ -2094,6 +2145,7 @@ class _RoomPageState extends State<RoomPage>
                               mima,
                               listM,
                               roomDX,
+                              roomSY,
                               isRed,
                               isMeUp,
                               mxIndex),
@@ -2182,18 +2234,18 @@ class _RoomPageState extends State<RoomPage>
                                           padding: EdgeInsets.only(
                                             left: 20.h,
                                           ),
-                                          itemBuilder: itemMessages,
-                                          controller: _scrollController,
-                                          itemCount: list.length,
+                                          itemBuilder: itemMessages2,
+                                          controller: _scrollController2,
+                                          itemCount: list2.length,
                                         )
                                       : ListView.builder(
                                           padding: EdgeInsets.only(
                                             top: ScreenUtil().setHeight(10),
                                             left: 20.h,
                                           ),
-                                          itemBuilder: itemMessages2,
+                                          itemBuilder: itemMessages,
                                           controller: _scrollController,
-                                          itemCount: list2.length,
+                                          itemCount: list.length,
                                         ))
                             ],
                           ),
@@ -2207,11 +2259,11 @@ class _RoomPageState extends State<RoomPage>
                               slideAnimationController.controller,
                               slideAnimationController.animation,
                               name,
-                              myhf)
+                              listMP[0])
                           : const Text(''),
 
                       /// 爆出5w2的礼物横幅推送使用
-                      isBig ? HomeItems.itemBig(myhf, bigType) : const Text(''),
+                      isBig ? HomeItems.itemBig(listMP[0], bigType) : const Text(''),
 
                       /// 厅内送礼物显示动画使用
                       (isShowSVGA == true && roomDX == true)
@@ -2431,10 +2483,12 @@ class _RoomPageState extends State<RoomPage>
             for (int i = 0; i < bean.data!.roomInfo!.mikeList!.length; i++) {
               if (sp.getString('user_id').toString() ==
                   bean.data!.roomInfo!.mikeList![i].uid.toString()) {
+                LogE('哈哈哈 == ${bean.data!.roomInfo!.mikeList![i].isClose}');
                 isMeUp = true;
                 mxIndex =
                     bean.data!.roomInfo!.mikeList![i].serialNumber.toString();
                 if (bean.data!.roomInfo!.mikeList![i].isClose == 0) {
+                  LogE('哈哈哈 == *******');
                   isJinyiin = false;
                   //设置成主播
                   _engine.setClientRole(

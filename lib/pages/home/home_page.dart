@@ -76,10 +76,6 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
     // 马里奥
     MyUtils.goTransparentPageCom(context, const TSCarPage());
 
-    ///首次打开app进入的，弹出编辑页面
-    if (sp.getBool('isFirst') == true) {
-      MyUtils.goTransparentPageCom(context, const EditInfoPage());
-    }
 
     quanxian();
 
@@ -92,12 +88,19 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
       }
     });
 
+    // if(sp.getString('isFirstDown').toString() == '1' || sp.getString('isFirstDown').toString() == 'null'){
+    //   MyUtils.goTransparentPageCom(context, const GPDownPage());
+    // }else{
+    //   eventBus.fire(SubmitButtonBack(title: '资源开始下载'));
+    // }
+    //直接不显示弹窗了，直接下载
+    eventBus.fire(SubmitButtonBack(title: '资源开始下载'));
 
-    if(sp.getString('isFirstDown').toString() == '1' || sp.getString('isFirstDown').toString() == 'null'){
-      MyUtils.goTransparentPageCom(context, const GPDownPage());
-    }else{
-      eventBus.fire(SubmitButtonBack(title: '资源开始下载'));
+    ///首次打开app进入的，弹出编辑页面
+    if (sp.getBool('isFirst') == true) {
+      MyUtils.goTransparentPageCom(context, const EditInfoPage());
     }
+
   }
 
   Future<void> quanxian() async {

@@ -1039,9 +1039,9 @@ class _PaiduiPageState extends State<PaiduiPage>
               }
             } else {
               if (page > 1) {
-                if (bean.data!.length < MyConfig.pageSize) {
-                  _refreshController.loadNoData();
-                }
+                // if (bean.data!.length < MyConfig.pageSize) {
+                //   _refreshController.loadNoData();
+                // }
               }
             }
           });

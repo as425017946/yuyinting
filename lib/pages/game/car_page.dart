@@ -19,6 +19,7 @@ import '../../bean/balanceBean.dart';
 import '../../bean/carTimerBean.dart';
 import '../../bean/carYZBean.dart';
 import '../../bean/commonStringBean.dart';
+import '../../bean/luckUserBean.dart';
 import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
@@ -30,7 +31,7 @@ import 'car/car_guize_page.dart';
 import 'car/car_shop_page.dart';
 import 'car/lishi_page.dart';
 import 'car/zhongjian_page.dart';
-import 'car_landscape_page.dart';
+import 'package:intl/intl.dart';
 
 /// 赛车游戏
 class Carpage extends StatefulWidget {
@@ -99,6 +100,10 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                   isDuiHuan: false,
                   index: i.toString(),
                 ));
+            return;
+          }
+          if(xiazhujine > double.parse(sp.getString('car_jinbi').toString())){
+            MyToastUtils.showToastBottom('钱包余额不足');
             return;
           }
           doPostCarBet(i.toString());
@@ -170,6 +175,10 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                     index: (6 + one).toString()));
             return;
           }
+          if(xiazhujine > double.parse(sp.getString('car_jinbi').toString())){
+            MyToastUtils.showToastBottom('钱包余额不足');
+            return;
+          }
           doPostCarBet((6 + one).toString());
         }
       }),
@@ -221,6 +230,10 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                     jine: xiazhujine,
                     isDuiHuan: false,
                     index: (9 + one).toString()));
+            return;
+          }
+          if(xiazhujine > double.parse(sp.getString('car_jinbi').toString())){
+            MyToastUtils.showToastBottom('钱包余额不足');
             return;
           }
           doPostCarBet((9 + one).toString());
@@ -549,7 +562,10 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
         setState(() {
           sumBG++;
           if (sumBG == 19) {
-            MyUtils.goTransparentPageCom(context, ZhongJiangPage(type: luck));
+            MyUtils.goTransparentPageCom(context, ZhongJiangPage(type: luck, bean: beanLuck,));
+          }
+          if (sumBG == 15) {
+            doPostCarLuckyUser();
           }
         });
         if (_controller.page!.round() >= imagesa.length - 1) {
@@ -892,6 +908,10 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
     // 二次确认弹窗点击确认，开始下注
     listen = eventBus.on<QuerenBack>().listen((event) {
       if (event.title == '竖屏赛车') {
+        if(xiazhujine > double.parse(sp.getString('car_jinbi').toString())){
+          MyToastUtils.showToastBottom('钱包余额不足');
+          return;
+        }
         doPostCarBet(event.index);
       }
     });
@@ -1084,34 +1104,34 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                                   child: Column(
                                     children: [
                                       WidgetUtils.commonSizedBox(20.h, 0),
-                                      isShow ? GestureDetector(
-                                        onTap: (() {
-                                          if (MyUtils.checkClick()) {
-                                            MyUtils.goTransparentPageCom(
-                                                context,
-                                                const CarLandScapePage());
-                                            Navigator.pop(context);
-                                          }
-                                        }),
-                                        child: Container(
-                                          height: 38.h,
-                                          width: 100.h,
-                                          //边框设置
-                                          decoration: const BoxDecoration(
-                                              image: DecorationImage(
-                                            //背景图片修饰
-                                            image: AssetImage(
-                                                "assets/images/car_anniu.png"),
-                                            fit: BoxFit.fill, //覆盖
-                                          )),
-                                          child: WidgetUtils.onlyTextCenter(
-                                              '横屏模式',
-                                              StyleUtils.getCommonTextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 22.sp)),
-                                        ),
-                                      ) : const Text(''),
-                                      WidgetUtils.commonSizedBox(10.h, 0),
+                                      // isShow ? GestureDetector(
+                                      //   onTap: (() {
+                                      //     if (MyUtils.checkClick()) {
+                                      //       MyUtils.goTransparentPageCom(
+                                      //           context,
+                                      //           const CarLandScapePage());
+                                      //       Navigator.pop(context);
+                                      //     }
+                                      //   }),
+                                      //   child: Container(
+                                      //     height: 38.h,
+                                      //     width: 100.h,
+                                      //     //边框设置
+                                      //     decoration: const BoxDecoration(
+                                      //         image: DecorationImage(
+                                      //       //背景图片修饰
+                                      //       image: AssetImage(
+                                      //           "assets/images/car_anniu.png"),
+                                      //       fit: BoxFit.fill, //覆盖
+                                      //     )),
+                                      //     child: WidgetUtils.onlyTextCenter(
+                                      //         '横屏模式',
+                                      //         StyleUtils.getCommonTextStyle(
+                                      //             color: Colors.white,
+                                      //             fontSize: 22.sp)),
+                                      //   ),
+                                      // ) : const Text(''),
+                                      // WidgetUtils.commonSizedBox(10.h, 0),
                                       GestureDetector(
                                         onTap: (() {
                                           if (MyUtils.checkClick()) {
@@ -1138,7 +1158,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                                         ),
                                       ),
                                       WidgetUtils.commonSizedBox(10.h, 0),
-                                      GestureDetector(
+                                      isStarGame== false ? GestureDetector(
                                         onTap: (() {
                                           if (MyUtils.checkClick()) {
                                             MyUtils.goTransparentPageCom(
@@ -1162,8 +1182,8 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                                                   color: Colors.white,
                                                   fontSize: 22.sp)),
                                         ),
-                                      ),
-                                      WidgetUtils.commonSizedBox(10.h, 0),
+                                      ) :  WidgetUtils.commonSizedBox(0, 0),
+                                      isStarGame== false ? WidgetUtils.commonSizedBox(10.h, 0) : WidgetUtils.commonSizedBox(0, 0),
                                       GestureDetector(
                                         onTap: (() {
                                           if (sp.getString('car_audio') ==
@@ -1804,6 +1824,10 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                     Expanded(
                         child: GestureDetector(
                       onTap: (() {
+                        if(xiazhujine > double.parse(sp.getString('car_jinbi').toString())){
+                          MyToastUtils.showToastBottom('钱包余额不足');
+                          return;
+                        }
                         if (isShow) {
                           if (sp.getBool('car_queren') == false ||
                               sp.getBool('car_queren') == null) {
@@ -1906,7 +1930,12 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                     '${(double.parse(jinbi) - int.parse(xiazhujine.toString()))}';
                 if(double.parse(jinbi) > 10000){
                   //保留2位小数
-                  jinbi2 = '${(double.parse(jinbi) / 10000).toStringAsFixed(2)}w';
+                  jinbi2 = (double.parse(jinbi) / 10000).toString();
+                  if(jinbi2.split('.')[1].length >=2){
+                    jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1].substring(0,2)}w';
+                  }else{
+                    jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1]}w';
+                  }
                 }else{
                   jinbi2 = jinbi;
                 }
@@ -1926,8 +1955,12 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                     '${(double.parse(zuanshi) - int.parse(xiazhujine.toString()))}';
                 if(double.parse(zuanshi) > 10000){
                   //保留2位小数
-                  zuanshi2 =
-                  '${(double.parse(zuanshi) / 10000).toStringAsFixed(2)}w';
+                  zuanshi2 = (double.parse(zuanshi) / 10000).toString();
+                  if(zuanshi2.split('.')[1].length >=2){
+                    zuanshi2 = '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1].substring(0,2)}w';
+                  }else{
+                    zuanshi2 = '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1]}w';
+                  }
                 }else{
                   zuanshi2 = zuanshi;
                 }
@@ -1947,9 +1980,17 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                 // 减去花费的V豆
                 mogubi =
                     '${(double.parse(mogubi) - int.parse(xiazhujine.toString()))}';
-                //保留2位小数
-                mogubi2 =
-                    '${(double.parse(mogubi) / 10000).toStringAsFixed(2)}w';
+                if(double.parse(mogubi) > 10000){
+                  //保留2位小数
+                  mogubi2 = (double.parse(mogubi) / 10000).toString();
+                  if(mogubi2.split('.')[1].length >=2){
+                    mogubi2 = '${mogubi2.split('.')[0]}.${mogubi2.split('.')[1].substring(0,2)}w';
+                  }else{
+                    mogubi2 = '${mogubi2.split('.')[0]}.${mogubi2.split('.')[1]}w';
+                  }
+                }else{
+                  mogubi2 = mogubi;
+                }
               } else {
                 mogubi = sp.getString('car_mogu').toString();
                 mogubi =
@@ -2070,22 +2111,35 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
           setState(() {
             jinbi = bean.data!.goldBean!;
             if (double.parse(bean.data!.goldBean!) > 10000) {
-              jinbi2 =
-                  '${(double.parse(bean.data!.goldBean!) / 10000).toStringAsFixed(2)}w';
+              jinbi2 = (double.parse(bean.data!.goldBean!) / 10000).toString();
+              if(jinbi2.split('.')[1].length >=2){
+                jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1].substring(0,2)}w';
+              }else{
+                jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1]}w';
+              }
             } else {
               jinbi2 = bean.data!.goldBean!;
             }
             zuanshi = bean.data!.diamond!;
             if (double.parse(bean.data!.diamond!) > 10000) {
-              zuanshi2 =
-                  '${(double.parse(bean.data!.diamond!) / 10000).toStringAsFixed(2)}w';
+              zuanshi2 = (double.parse(bean.data!.diamond!) / 10000).toString();
+              if(zuanshi2.split('.')[1].length >=2){
+                zuanshi2 = '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1].substring(0,2)}w';
+              }else{
+                zuanshi2 = '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1]}w';
+              }
+
             } else {
               zuanshi2 = bean.data!.diamond!;
             }
             mogubi = bean.data!.mushroom!;
             if (double.parse(bean.data!.mushroom!) > 10000) {
-              mogubi2 =
-                  '${(double.parse(bean.data!.mushroom!) / 10000).toStringAsFixed(2)}w';
+              mogubi2 = (double.parse(bean.data!.mushroom!) / 10000).toString();
+              if(mogubi2.split('.')[1].length >=2){
+                mogubi2 = '${mogubi2.split('.')[0]}.${mogubi2.split('.')[1].substring(0,2)}w';
+              }else{
+                mogubi2 = '${mogubi2.split('.')[0]}.${mogubi2.split('.')[1]}w';
+              }
             } else {
               mogubi2 = bean.data!.mushroom!;
             }
@@ -2103,6 +2157,25 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
           break;
         default:
           MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+  /// 赛车中奖用户
+  late luckUserBean beanLuck;
+  Future<void> doPostCarLuckyUser() async {
+    try {
+      beanLuck = await DataUtils.postCarLuckyUser();
+      switch (beanLuck.code) {
+        case MyHttpConfig.successCode:
+
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
           break;
       }
     } catch (e) {

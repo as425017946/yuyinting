@@ -72,6 +72,8 @@ class _DongtaiPageState extends State<DongtaiPage> {
         width: double.infinity,
         color: Colors.white,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               _list[i].text!,

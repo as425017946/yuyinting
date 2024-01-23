@@ -54,6 +54,7 @@ class _MinePageState extends State<MinePage> {
 
   // 是否有入住审核信息
   bool isShenHe = false;
+  var listenSH;
 
   @override
   void initState() {
@@ -127,6 +128,13 @@ class _MinePageState extends State<MinePage> {
       }
     });
 
+    listenSH = eventBus.on<SubmitButtonBack>().listen((event) {
+      if(event.title == '审核全部完成'){
+        setState(() {
+          isShenHe = false;
+        });
+      }
+    });
     doPostMyIfon();
     doPostKefu();
   }
@@ -136,6 +144,7 @@ class _MinePageState extends State<MinePage> {
     // TODO: implement dispose
     super.dispose();
     listen.cancel();
+    listenSH.cancel();
   }
 
   @override

@@ -844,8 +844,12 @@ class _RoomGongNengState extends State<RoomGongNeng> {
           setState(() {
             if (is_show == 1) {
               MyToastUtils.showToastBottom('首页展示已开启');
+              eventBus
+                  .fire(SubmitButtonBack(title: '首页展示已开启'));
             } else {
               MyToastUtils.showToastBottom('首页展示已关闭');
+              eventBus
+                  .fire(SubmitButtonBack(title: '首页展示已关闭'));
             }
           });
           break;

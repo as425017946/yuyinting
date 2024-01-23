@@ -83,6 +83,8 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
 
   var listen, listenZdy, listenRoomBack, listenMessage, listenZDY,listenShouQi;
   bool isSDKInit = false;
+  // 是否开始预下载
+  bool isDown = false;
 
   @override
   void initState() {
@@ -121,9 +123,10 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     // 接受自定义消息
     listenZdy = eventBus.on<JoinRoomYBack>().listen((event) {
       if (event.map!['type'] == 'send_all_user') {
-        hengFuBean hf = hengFuBean.fromJson(event.map!);
-        myhf = hf;
+        LogE('前面有没有横幅  ${listMP.length}');
         if (listMP.isEmpty) {
+          hengFuBean hf = hengFuBean.fromJson(event.map!);
+          myhf = hf;
           //显示横幅、map赋值
           setState(() {
             isShowHF = true;
@@ -134,6 +137,8 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           // 看看集合里面有几个，10s一执行
           hpTimer();
         } else {
+          hengFuBean hf = hengFuBean.fromJson(event.map!);
+          myhf = hf;
           setState(() {
             listMP.add(hf);
           });
@@ -142,6 +147,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     });
     // 收起房间使用
     listenRoomBack = eventBus.on<SubmitButtonBack>().listen((event) {
+      LogE('账号 == ${event.title}');
       if (event.title == '收起房间') {
         setState(() {
           isJoinRoom = true;
@@ -161,6 +167,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
 
         }
       }else if(event.title == '账号已在其他设备登录'){
+        isJoinRoom = false;
         // 取消发布本地音频流
         _engine.muteLocalAudioStream(true);
         _engine.disableAudio();
@@ -169,7 +176,21 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         doPostLeave();
         MyUtils.jumpLogin(context);
       }else if(event.title == '资源开始下载'){
-        doPostSvgaGiftList();
+        if(isDown == false) {
+          doPostSvgaGiftList();
+        }
+      }else if(event.title == '去掉旋转'){
+        setState(() {
+          isJoinRoom = false;
+        });
+      }else if(event.title == '添加新账号'){
+        isJoinRoom = false;
+        // 取消发布本地音频流
+        _engine.muteLocalAudioStream(true);
+        _engine.disableAudio();
+        _dispose();
+        // 调用离开房间接口
+        doPostLeave();
       }
     });
 
@@ -256,8 +277,12 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       if (listMP.isNotEmpty) {
         setState(() {
           listMP.removeAt(0);
+          LogE('移除信息 ${listMP.length}');
         });
         if (listMP.isEmpty) {
+          setState(() {
+            isShowHF = false;
+          });
           _timer!.cancel();
         } else {
           setState(() {
@@ -338,6 +363,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         break;
       case '388800转盘礼物':
         setState(() {
+          name = '388800转盘礼物';
           isBig = true;
           isShowHF = false;
           bigType = 0;
@@ -345,6 +371,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         break;
       case '送出388800转盘礼物':
         setState(() {
+          name = '送出388800转盘礼物';
           isBig = true;
           isShowHF = false;
           bigType = 1;
@@ -376,9 +403,10 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         break;
       case '388800背包礼物':
         setState(() {
+          name = '388800背包礼物';
           isBig = true;
           isShowHF = false;
-          bigType = 0;
+          bigType = 1;
         });
         break;
     }
@@ -492,11 +520,11 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
                   slideAnimationController.controller,
                   slideAnimationController.animation,
                   name,
-                  myhf)
+                  listMP[0])
               : const Text(''),
 
           /// 爆出5w2的礼物推送使用
-          isBig ? HomeItems.itemBig(myhf, bigType) : const Text(''),
+          isBig ? HomeItems.itemBig(listMP[0], bigType) : const Text(''),
 
           /// 房间图标转动
           isJoinRoom
@@ -621,7 +649,6 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
                       onWillAccept: (data) {
                         setState(() {
                           isRemove = true;
-                          isJoinRoom = true;
                         });
                         return true;
                       },
@@ -858,11 +885,13 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
   String jinduBaifeinbi = '';
   /// 下载礼物
   Future<void> doPostSvgaGiftList() async {
+    setState(() {
+      isDown = true;
+    });
     Map<String, dynamic> params = <String, dynamic>{
       'is_first': sp.getString('isFirstDown').toString() == 'null' ? '1' : sp.getString('isFirstDown').toString(),
     };
     try {
-      Loading.show();
       svgaAllBean bean = await DataUtils.postSvgaGiftList(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
@@ -876,15 +905,23 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           });
           break;
         case MyHttpConfig.errorloginCode:
+          setState(() {
+            isDown = false;
+          });
         // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
+          setState(() {
+            isDown = false;
+          });
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
-      Loading.dismiss();
     } catch (e) {
+      setState(() {
+        isDown = false;
+      });
       Loading.dismiss();
     }
   }

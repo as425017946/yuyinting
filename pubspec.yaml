@@ -154,7 +154,6 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/images/
-    - assets/images/feilong/
     - assets/images/saiche/
     - assets/images/pt/
     - assets/images/cs/

@@ -232,10 +232,23 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
                     ),
                     GestureDetector(
                       onTap: (() {
+                        if(double.parse(sp.getString('zp_jinbi').toString()) < 100 && cishu ==1 ){
+                          MyToastUtils.showToastBottom('钱包余额不足');
+                          return;
+                        }
+                        if(double.parse(sp.getString('zp_jinbi').toString()) < 1000 && cishu ==10 ){
+                          MyToastUtils.showToastBottom('钱包余额不足');
+                          return;
+                        }
+                        if(double.parse(sp.getString('zp_jinbi').toString()) < 10000 && cishu ==100 ){
+                          MyToastUtils.showToastBottom('钱包余额不足');
+                          return;
+                        }
                         if(sp.getBool('zp1_queren') == null || sp.getBool('zp1_queren') == false){
                           MyUtils.goTransparentPageCom(context, XiaZhuQueRenPage(cishu: cishu.toString(), feiyong: feiyong.toString(), title: '心动转盘',));
                         }else{
                           if(MyUtils.checkClick() && isRunning == false && isXiazhu) {
+                            eventBus.fire(ResidentBack(isBack: true));
                             doPostPlayRoulette(cishu.toString());
                           }
                         }
@@ -632,10 +645,18 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
           MyUtils.jumpLogin(context);
           break;
         default:
+          eventBus.fire(ResidentBack(isBack: false));
+          setState(() {
+            isXiazhu = true;
+          });
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
     } catch (e) {
+      setState(() {
+        isXiazhu = true;
+      });
+      eventBus.fire(ResidentBack(isBack: false));
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }

@@ -46,7 +46,7 @@ class _GPDownPageState extends State<GPDownPage> {
       });
       if(jindu == 1){
         MyToastUtils.showToastBottom('资源更新完成');
-        Navigator.pop(context);
+        // Navigator.pop(context);
       }
     });
   }

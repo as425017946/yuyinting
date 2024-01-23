@@ -11,6 +11,7 @@ import '../../bean/balanceBean.dart';
 import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
+import '../../main.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
@@ -49,7 +50,12 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
             jinbi = '${(double.parse(jinbi) - event.jine)}';
             if(double.parse(jinbi) > 10000){
               //保留2位小数
-              jinbi2 = '${(double.parse(jinbi) / 10000).toStringAsFixed(2)}w';
+              jinbi2 = '${(double.parse(jinbi) / 10000)}';
+              if(jinbi2.split('.')[1].length >=2){
+                jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1].substring(0,2)}w';
+              }else{
+                jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1]}w';
+              }
             }else{
               jinbi2 = jinbi;
             }
@@ -58,12 +64,18 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
             jinbi = (double.parse(jinbi) - event.jine).toString();
             jinbi2 = jinbi;
           }
+          sp.setString('zp_jinbi', jinbi);
         }else if(event.type == 2){
           if(double.parse(zuanshi) > 10000){
             // 减去花费的V豆
             zuanshi = '${(double.parse(zuanshi) - event.jine)}';
             if(double.parse(zuanshi) > 10000){
-              zuanshi2 = '${(double.parse(zuanshi) / 10000).toStringAsFixed(2)}w';
+              zuanshi2 = '${(double.parse(zuanshi) / 10000)}';
+              if(zuanshi2.split('.')[1].length >=2){
+                zuanshi2 = '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1].substring(0,2)}w';
+              }else{
+                zuanshi2 = '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1]}w';
+              }
             }else{
               zuanshi2 = zuanshi;
             }
@@ -390,14 +402,25 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
         case MyHttpConfig.successCode:
           setState(() {
             jinbi = bean.data!.goldBean!;
+            sp.setString('zp_jinbi', jinbi);
             if(double.parse(bean.data!.goldBean!) > 10000){
-              jinbi2 = '${(double.parse(bean.data!.goldBean!) / 10000).toStringAsFixed(2)}w';
+              jinbi2 = '${(double.parse(bean.data!.goldBean!) / 10000)}';
+              if(jinbi2.split('.')[1].length >=2){
+                jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1].substring(0,2)}w';
+              }else{
+                jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1]}w';
+              }
             }else{
               jinbi2 = bean.data!.goldBean!;
             }
             zuanshi = bean.data!.diamond!;
             if(double.parse(bean.data!.diamond!) > 10000){
-              zuanshi2 = '${(double.parse(bean.data!.diamond!) / 10000).toStringAsFixed(2)}w';
+              zuanshi2 = '${(double.parse(bean.data!.diamond!) / 10000)}';
+              if(zuanshi2.split('.')[1].length >=2){
+                zuanshi2 = '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1].substring(0,2)}w';
+              }else{
+                zuanshi2 = '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1]}w';
+              }
             }else{
               zuanshi2 = bean.data!.diamond!;
             }

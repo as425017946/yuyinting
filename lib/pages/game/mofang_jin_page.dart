@@ -253,10 +253,23 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                             ),
                             GestureDetector(
                               onTap: ((){
+                                if(double.parse(sp.getString('mofangJBY').toString()) < 200 && cishu ==1 ){
+                                  MyToastUtils.showToastBottom('钱包余额不足');
+                                  return;
+                                }
+                                if(double.parse(sp.getString('mofangJBY').toString()) < 2000 && cishu ==10 ){
+                                  MyToastUtils.showToastBottom('钱包余额不足');
+                                  return;
+                                }
+                                if(double.parse(sp.getString('mofangJBY').toString()) < 20000 && cishu ==100 ){
+                                  MyToastUtils.showToastBottom('钱包余额不足');
+                                  return;
+                                }
                                 if(sp.getBool('mf2_queren') == null || sp.getBool('mf2_queren') == false){
                                   MyUtils.goTransparentPageCom(context, XiaZhuQueRenPage(cishu: cishu.toString(), feiyong: feiyong.toString(), title: '金星魔方',));
                                 }else{
                                   if(MyUtils.checkClick() && isShow == false && isXiazhu) {
+                                    eventBus.fire(ResidentBack(isBack: true));
                                     doPostPlayRoulette(cishu.toString());
                                   }
                                 }
@@ -720,7 +733,12 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
           setState(() {
             jinbi = bean.data!.goldBean!;
             if(double.parse(bean.data!.goldBean!) > 10000){
-              jinbi2 = '${(double.parse(bean.data!.goldBean!) / 10000).toStringAsFixed(2)}w';
+              jinbi2 = '${(double.parse(bean.data!.goldBean!) / 10000)}';
+              if(jinbi2.split('.')[1].length >=2){
+                jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1].substring(0,2)}w';
+              }else{
+                jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1]}w';
+              }
             }else{
               jinbi2 = bean.data!.goldBean!;
             }
@@ -728,7 +746,12 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
             sp.setString('mofangJB', jinbi2);
             zuanshi = bean.data!.diamond!;
             if(double.parse(bean.data!.diamond!) > 10000){
-              zuanshi2 = '${(double.parse(bean.data!.diamond!) / 10000).toStringAsFixed(2)}w';
+              zuanshi2 = '${(double.parse(bean.data!.diamond!) / 10000)}';
+              if(zuanshi2.split('.')[1].length >=2){
+                zuanshi2 = '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1].substring(0,2)}w';
+              }else{
+                zuanshi2 = '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1]}w';
+              }
             }else{
               zuanshi2 = bean.data!.diamond!;
             }
@@ -766,6 +789,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
       playRouletteBean bean = await DataUtils.postPlayRoulette(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
+          eventBus.fire(ResidentBack(isBack: false));
         // 获取数据并赋值
           list.clear();
           list = bean.data!.gifts!;
@@ -807,7 +831,12 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
               jinbi = '${(double.parse(jinbi) - int.parse(number)*200)}';
               if(double.parse(jinbi) > 10000){
                 //保留2位小数
-                jinbi2 = '${(double.parse(jinbi) / 10000).toStringAsFixed(2)}w';
+                jinbi2 = '${(double.parse(jinbi) / 10000)}';
+                if(jinbi2.split('.')[1].length >=2){
+                  jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1].substring(0,2)}w';
+                }else{
+                  jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1]}w';
+                }
               }else{
                 jinbi2 = jinbi;
               }
@@ -825,7 +854,12 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
               zuanshi = '${(double.parse(zuanshi) - int.parse(number)*200)}';
               if(double.parse(zuanshi) > 10000){
                 //保留2位小数
-                zuanshi2 = '${(double.parse(zuanshi) / 10000).toStringAsFixed(2)}w';
+                zuanshi2 = '${(double.parse(zuanshi) / 10000)}';
+                if(zuanshi2.split('.')[1].length >=2){
+                  zuanshi2 = '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1].substring(0,2)}w';
+                }else{
+                  zuanshi2 = '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1]}w';
+                }
               }else{
                 zuanshi2 = zuanshi;
               }
@@ -844,10 +878,18 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
           MyUtils.jumpLogin(context);
           break;
         default:
+          eventBus.fire(ResidentBack(isBack: false));
+          setState(() {
+            isXiazhu = true;
+          });
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
     } catch (e) {
+      eventBus.fire(ResidentBack(isBack: false));
+      setState(() {
+        isXiazhu = true;
+      });
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
