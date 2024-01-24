@@ -23,10 +23,14 @@ import 'package:yuyinting/pages/login/edit_info_page.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import '../../bean/CheckoutBean.dart';
+import '../../bean/pdAddressBean.dart';
+import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
 import '../../utils/event_utils.dart';
+import '../../utils/loading.dart';
+import '../../utils/log_util.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../gongping/gp_dwon_page.dart';
@@ -54,6 +58,7 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
   @override
   void initState() {
     // TODO: implement initState
+    doPostPdAddress();
     doCheck();
     //更新身份
     setState(() {
@@ -640,6 +645,34 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
       );
     } catch (e) {
       print('更新失败，请稍后再试');
+    }
+  }
+
+  /// 判断当前网络是电信还是其他 1电信 0 其他
+  Future<void> doPostPdAddress() async {
+    try {
+      pdAddressBean bean = await DataUtils.postPdAddress();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          LogE('当前网络 ${bean.type!}');
+          String info = bean.type! == 0 ? '其他网络' : '电信网络';
+          MyToastUtils.showToastBottom(info);
+          setState(() {
+            sp.setString('isDian', bean.type.toString());
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

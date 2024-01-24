@@ -430,7 +430,7 @@ class MyUtils {
     //     debugModel: true,
     //     isAutoDownloadThumbnail: true);
     EMOptions options = EMOptions(
-        appKey: "1136231222154558#test",
+        appKey: "1109240124169584#777",
         autoLogin: false,
         debugModel: true,
         isAutoDownloadThumbnail: true);
@@ -516,6 +516,9 @@ class MyUtils {
           if(reason == LeaveReason.Kicked){
             LogE(
                 '客户主动离开聊天室 $roomId 房间名称 $roomName == $participantreason ** $reason');
+            if(sp.getString('roomID').toString() == roomId.toString()){
+              EMClient.getInstance.chatRoomManager.joinChatRoom(roomId);
+            }
           }else{
             //非客户主动离开聊天室 并且判断是否为当前登录的房间
             if(sp.getString('roomID').toString() == roomId.toString()){

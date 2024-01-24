@@ -902,7 +902,7 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                         WidgetUtils.commonSizedBox(0, 10),
                         GestureDetector(
                           onTap: (() {
-                            if(controller.text.trim().isNotEmpty){
+                            if(controller.text.trim().isNotEmpty && MyUtils.checkClick()){
                               _isEmojiPickerVisible = false;
                               doPostComment('create', '', 0);
                               MyUtils.hideKeyboard(context);

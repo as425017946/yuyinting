@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:math';
-
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,10 +9,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/my_utils.dart';
-
-import '../../bean/CommonMyIntBean.dart';
 import '../../bean/Common_bean.dart';
 import '../../bean/loginBean.dart';
+import '../../bean/pdAddressBean.dart';
 import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
@@ -52,6 +49,7 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    doPostPdAddress();
     getIPAddress();
     getDeviceIMEI();
     // 在登录页先设置所有游戏的音频开关默认开启，false为开始，true为关闭
@@ -852,6 +850,34 @@ class _LoginPageState extends State<LoginPage> {
         case MyHttpConfig.successCode:
           //短信发送成功请求倒计时
           _startTimer();
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+  /// 判断当前网络是电信还是其他 1电信 0 其他
+  Future<void> doPostPdAddress() async {
+    try {
+      pdAddressBean bean = await DataUtils.postPdAddress();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          LogE('当前网络 ${bean.type!}');
+          String info = bean.type! == 0 ? '其他网络' : '电信网络';
+          MyToastUtils.showToastBottom(info);
+          setState(() {
+            sp.setString('isDian', bean.type.toString());
+          });
           break;
         case MyHttpConfig.errorloginCode:
         // ignore: use_build_context_synchronously

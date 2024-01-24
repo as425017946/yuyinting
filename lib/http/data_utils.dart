@@ -46,6 +46,7 @@ import '../bean/myHomeBean.dart';
 import '../bean/myInfoBean.dart';
 import '../bean/myShopListBean.dart';
 import '../bean/onlineRoomUserBean.dart';
+import '../bean/pdAddressBean.dart';
 import '../bean/plBean.dart';
 import '../bean/playRouletteBean.dart';
 import '../bean/qiehuanBean.dart';
@@ -79,9 +80,20 @@ import 'my_http_config.dart';
 import 'my_http_request.dart';
 
 class DataUtils{
+
+  ///判断网络
+  static Future<pdAddressBean> postPdAddress() async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.pdAddress,
+        {}, {});
+    print("检查网络：${respons}");
+    return pdAddressBean.fromJson(respons!);
+  }
+
+
   ///更新app
   static Future<CheckoutBean> checkVersion(Map<String,dynamic> params) async {
     print("检查更新：${params}");
+    print("检查更新：${MyHttpConfig.checkVersion}");
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.checkVersion,
         {}, params);
     print("检查更新：${respons}");

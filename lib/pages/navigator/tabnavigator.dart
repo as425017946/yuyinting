@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screen/screen.dart';
@@ -172,8 +173,6 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         _engine.muteLocalAudioStream(true);
         _engine.disableAudio();
         _dispose();
-        // 调用离开房间接口
-        doPostLeave();
         MyUtils.jumpLogin(context);
       }else if(event.title == '资源开始下载'){
         if(isDown == false) {
@@ -234,6 +233,30 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
             _engine.disableAudio();
             _dispose();
           }
+        }
+      }else if(event.type == 'login_kick'){
+        // 这个状态是后台直接封禁了账号，然后直接踢掉app
+        if(isJoinRoom) {
+          // 取消发布本地音频流
+          _engine.muteLocalAudioStream(true);
+          // 调用离开房间接口
+          doPostLeave();
+          _engine.disableAudio();
+          _dispose();
+          sp.setString('user_token', '');
+          sp.setString("user_account", '');
+          sp.setString("user_id", '');
+          sp.setString("em_pwd", '');
+          sp.setString("em_token", '');
+          sp.setString("user_password", '');
+          sp.setString('user_phone', '');
+          sp.setString('nickname', '');
+          sp.setString("user_headimg", '');
+          sp.setString("user_headimg_id", '');
+          // 保存身份
+          sp.setString("user_identity", '');
+          // 直接杀死app
+          SystemNavigator.pop();
         }
       }
     });
@@ -658,6 +681,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
                           _dispose();
                           // 调用离开房间接口
                           doPostLeave();
+                          sp.setString('roomID', '');
                           isRemove = false;
                           isJoinRoom = false;
                         });

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -420,8 +421,6 @@ class _RoomPageState extends State<RoomPage>
         } else if (event.title == '账号已在其他设备登录') {
           // 取消发布本地音频流
           _engine.muteLocalAudioStream(true);
-          // 调用离开房间接口
-          doPostLeave();
           _engine.disableAudio();
           _dispose();
           MyUtils.jumpLogin(context);
@@ -884,6 +883,29 @@ class _RoomPageState extends State<RoomPage>
                 role = 'adminer';
                 sp.setString('role', 'adminer');
               }
+              break;
+            case 'login_kick':
+            // 这个状态是后台直接封禁了账号，然后直接踢掉app
+              // 取消发布本地音频流
+              _engine.muteLocalAudioStream(true);
+              // 调用离开房间接口
+              doPostLeave();
+              _engine.disableAudio();
+              _dispose();
+              sp.setString('user_token', '');
+              sp.setString("user_account", '');
+              sp.setString("user_id", '');
+              sp.setString("em_pwd", '');
+              sp.setString("em_token", '');
+              sp.setString("user_password", '');
+              sp.setString('user_phone', '');
+              sp.setString('nickname', '');
+              sp.setString("user_headimg", '');
+              sp.setString("user_headimg_id", '');
+              // 保存身份
+              sp.setString("user_identity", '');
+              // 直接杀死app
+              SystemNavigator.pop();
               break;
           }
         }
@@ -2323,6 +2345,7 @@ class _RoomPageState extends State<RoomPage>
                                           GestureDetector(
                                             onTap: (() {
                                               if (MyUtils.checkClick()) {
+                                                sp.setString('roomID', '');
                                                 // 调用离开房间接口
                                                 doPostLeave();
                                                 if (_timerHot != null) {

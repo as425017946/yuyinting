@@ -228,70 +228,73 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                 left: ScreenUtil().setWidth(0),
                 width: ScreenUtil().setHeight(590),
                 height: ScreenUtil().setHeight(590),
-                child: Stack(
+                child: Container(
                   alignment: Alignment.center,
-                  children: [
-                    CircleProgressView(backgroundColor: Colors.transparent, progress: -huanlezhi.toDouble(), progressWidth: ScreenUtil().setHeight(12), progressColor: MyColors.zpJD, width: ScreenUtil().setHeight(534), height: ScreenUtil().setHeight(534),),
-                    WidgetUtils.showImages(
-                        'assets/images/zhuanpan_one_bg2.png',
-                        ScreenUtil().setHeight(560),
-                        ScreenUtil().setHeight(560)),
-                    RotationTransition(
-                      turns: _animation,
-                      child: WidgetUtils.showImages(
-                          'assets/images/zhuanpan_one_bg3.png',
-                          ScreenUtil().setHeight(400),
-                          ScreenUtil().setHeight(400)),
-                    ),
-                    GestureDetector(
-                      onTap: (() async {
-                        if(double.parse(sp.getString('zp_jinbi').toString()) < 1000 && cishu ==1 ){
-                          MyToastUtils.showToastBottom('钱包余额不足');
-                          return;
-                        }
-                        if(double.parse(sp.getString('zp_jinbi').toString()) < 10000 && cishu ==10 ){
-                          MyToastUtils.showToastBottom('钱包余额不足');
-                          return;
-                        }
-                        if(double.parse(sp.getString('zp_jinbi').toString()) < 30000 && cishu ==30 ){
-                          MyToastUtils.showToastBottom('钱包余额不足');
-                          return;
-                        }
-                        if(sp.getBool('zp2_queren') == null || sp.getBool('zp2_queren') == false){
-                          MyUtils.goTransparentPageCom(context, XiaZhuQueRenPage(cishu: cishu.toString(), feiyong: feiyong.toString(), title: '超级转盘',));
-                        }else{
-                          if(MyUtils.checkClick() && isRunning == false && isXiazhu) {
-                            eventBus.fire(ResidentBack(isBack: true));
-                            doPostPlayRoulette(cishu.toString());
-                          }
-                        }
-                      }),
-                      child: WidgetUtils.showImages(
-                          'assets/images/zhuanpan_one_qidong.png',
-                          ScreenUtil().setHeight(100),
-                          ScreenUtil().setHeight(100)),
-                    ),
-                    Positioned(
-                        top: ScreenUtil().setHeight(10),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      CircleProgressView(backgroundColor: Colors.transparent, progress: -huanlezhi.toDouble(), progressWidth: ScreenUtil().setHeight(12), progressColor: MyColors.zpJD, width: ScreenUtil().setHeight(534), height: ScreenUtil().setHeight(534),),
+                      WidgetUtils.showImages(
+                          'assets/images/zhuanpan_one_bg2.png',
+                          ScreenUtil().setHeight(560),
+                          ScreenUtil().setHeight(560)),
+                      RotationTransition(
+                        turns: _animation,
                         child: WidgetUtils.showImages(
-                            'assets/images/zhuanpan_one_zhizhen.png',
-                            ScreenUtil().setHeight(120),
-                            ScreenUtil().setHeight(90))),
-                    // 欢乐值
-                    Positioned(
-                      left: ScreenUtil().setHeight(240),
-                      top: ScreenUtil().setHeight(527),
-                      child: Text(
-                        '欢乐值：$zhanshizhi/30',
-                        style: StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(21)),
+                            'assets/images/zhuanpan_one_bg3.png',
+                            ScreenUtil().setHeight(400),
+                            ScreenUtil().setHeight(400)),
                       ),
-                    ),
-                    // 满30显示
-                    zhanshizhi == 30 ? Positioned(
-                        right: ScreenUtil().setHeight(5),
-                        top: ScreenUtil().setHeight(205),
-                        child: SizedBox( height: 70.h, width: 70.h, child: const SVGASimpleImage(assetsName: 'assets/svga/s.svga',),)) : const Text('')
-                  ],
+                      GestureDetector(
+                        onTap: (() async {
+                          if(double.parse(sp.getString('zp_jinbi').toString()) < 1000 && cishu ==1 ){
+                            MyToastUtils.showToastBottom('钱包余额不足');
+                            return;
+                          }
+                          if(double.parse(sp.getString('zp_jinbi').toString()) < 10000 && cishu ==10 ){
+                            MyToastUtils.showToastBottom('钱包余额不足');
+                            return;
+                          }
+                          if(double.parse(sp.getString('zp_jinbi').toString()) < 30000 && cishu ==30 ){
+                            MyToastUtils.showToastBottom('钱包余额不足');
+                            return;
+                          }
+                          if(sp.getBool('zp2_queren') == null || sp.getBool('zp2_queren') == false){
+                            MyUtils.goTransparentPageCom(context, XiaZhuQueRenPage(cishu: cishu.toString(), feiyong: feiyong.toString(), title: '超级转盘',));
+                          }else{
+                            if(MyUtils.checkClick() && isRunning == false && isXiazhu) {
+                              eventBus.fire(ResidentBack(isBack: true));
+                              doPostPlayRoulette(cishu.toString());
+                            }
+                          }
+                        }),
+                        child: WidgetUtils.showImages(
+                            'assets/images/zhuanpan_one_qidong.png',
+                            ScreenUtil().setHeight(100),
+                            ScreenUtil().setHeight(100)),
+                      ),
+                      Positioned(
+                          top: ScreenUtil().setHeight(10),
+                          child: WidgetUtils.showImages(
+                              'assets/images/zhuanpan_one_zhizhen.png',
+                              ScreenUtil().setHeight(120),
+                              ScreenUtil().setHeight(90))),
+                      // 欢乐值
+                      Positioned(
+                        left: ScreenUtil().setHeight(240),
+                        top: ScreenUtil().setHeight(527),
+                        child: Text(
+                          '欢乐值：$zhanshizhi/30',
+                          style: StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(21)),
+                        ),
+                      ),
+                      // 满30显示
+                      zhanshizhi == 30 ? Positioned(
+                          right: ScreenUtil().setHeight(5),
+                          top: ScreenUtil().setHeight(205),
+                          child: SizedBox( height: 70.h, width: 70.h, child: const SVGASimpleImage(assetsName: 'assets/svga/s.svga',),)) : const Text('')
+                    ],
+                  ),
                 ),
               ),
               // 规则说明

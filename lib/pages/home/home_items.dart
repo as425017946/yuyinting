@@ -167,24 +167,24 @@ class HomeItems {
                             //     child: WidgetUtils.CircleImageNet(30.h, 30.h,
                             //         15.h, hf.avatar!)),
                             // 昵称
-                            WidgetSpan(
-                                child: Transform.translate(
-                              offset: Offset(0, 0.h),
-                              child: Text(
-                                hf.fromNickname!,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 30.sp,
-                                  shadows: const [
-                                    Shadow(
-                                      color: Colors.black54,
-                                      offset: Offset(2, 2),
-                                      blurRadius: 3,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )),
+                            // WidgetSpan(
+                            //     child: Transform.translate(
+                            //   offset: Offset(0, 0.h),
+                            //   child: Text(
+                            //     hf.fromNickname!,
+                            //     style: TextStyle(
+                            //       color: Colors.white,
+                            //       fontSize: 30.sp,
+                            //       shadows: const [
+                            //         Shadow(
+                            //           color: Colors.black54,
+                            //           offset: Offset(2, 2),
+                            //           blurRadius: 3,
+                            //         ),
+                            //       ],
+                            //     ),
+                            //   ),
+                            // )),
                             // 提示信息
                             WidgetSpan(
                                 child: Transform.translate(
