@@ -89,24 +89,7 @@ class _QiehuanAccountPageState extends State<QiehuanAccountPage> {
                   }
 
                 }else{
-                  if(isClick){
-                    MyConfig.clickIndex = 1;
-                    MyToastUtils.showToastBottom('删除成功');
-                    sp.setString('user_token', '');
-                    sp.setString(MyConfig.userOneUID, '');
-                    sp.setString(MyConfig.userOneHeaderImg, '');
-                    sp.setString(MyConfig.userOneName, '');
-                    sp.setString(MyConfig.userOneToken, '');
-                    sp.setString(MyConfig.userOneID, '');
-                    Future.delayed(Duration.zero, () {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => const LoginPage()),
-                        // ignore: unnecessary_null_comparison
-                            (route) => route == null,
-                      );
-                    });
-                  }
+                  MyToastUtils.showToastBottom('当前登录账号不能删除');
                 }
               }),
               child: Container(
@@ -183,24 +166,7 @@ class _QiehuanAccountPageState extends State<QiehuanAccountPage> {
                   }
 
                 }else{
-                  if(isClick){
-                    MyConfig.clickIndex = 2;
-                    MyToastUtils.showToastBottom('删除成功');
-                    sp.setString('user_token', '');
-                    sp.setString(MyConfig.userTwoUID, '');
-                    sp.setString(MyConfig.userTwoHeaderImg, '');
-                    sp.setString(MyConfig.userTwoName, '');
-                    sp.setString(MyConfig.userTwoToken, '');
-                    sp.setString(MyConfig.userTwoID, '');
-                    Future.delayed(Duration.zero, () {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => const LoginPage()),
-                        // ignore: unnecessary_null_comparison
-                            (route) => route == null,
-                      );
-                    });
-                  }
+                  MyToastUtils.showToastBottom('当前登录账号不能删除');
                 }
               }),
               child: Container(
@@ -278,24 +244,7 @@ class _QiehuanAccountPageState extends State<QiehuanAccountPage> {
                   }
 
                 }else{
-                  if(isClick){
-                    MyConfig.clickIndex = 3;
-                    MyToastUtils.showToastBottom('删除成功');
-                    sp.setString('user_token', '');
-                    sp.setString(MyConfig.userThreeUID, '');
-                    sp.setString(MyConfig.userThreeHeaderImg, '');
-                    sp.setString(MyConfig.userThreeName, '');
-                    sp.setString(MyConfig.userThreeToken, '');
-                    sp.setString(MyConfig.userThreeID, '');
-                    Future.delayed(Duration.zero, () {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => const LoginPage()),
-                        // ignore: unnecessary_null_comparison
-                            (route) => route == null,
-                      );
-                    });
-                  }
+                  MyToastUtils.showToastBottom('当前登录账号不能删除');
                 }
               }),
               child: Container(
@@ -392,60 +341,75 @@ class _QiehuanAccountPageState extends State<QiehuanAccountPage> {
   Future<void> doPostCheckToken(v1) async {
     try {
       Loading.show("切换中...");
-      qiehuanBean commonBean = await DataUtils.postCheckToken();
+      String token = '';
+      setState(() {
+        if(v1 == 1){
+          token = sp.getString(MyConfig.userOneToken).toString();
+        }else if(v1 == 2){
+          token = sp.getString(MyConfig.userTwoToken).toString();
+        }else{
+          token = sp.getString(MyConfig.userThreeToken).toString();
+        }
+      });
+      Map<String, dynamic> params = <String, dynamic>{
+        'token': token,
+      };
+      qiehuanBean commonBean = await DataUtils.postCheckToken(params);
       switch (commonBean.code) {
         case MyHttpConfig.successCode:
           MyToastUtils.showToastBottom('成功切换');
-          setState(() {
-            sp.setString('user_token', '');
-            sp.setString("user_account", '');
-            sp.setString("user_id", '');
-            sp.setString("em_pwd", '');
-            sp.setString("em_token", '');
-            sp.setString("user_password", '');
-            sp.setString('user_phone', '');
-            sp.setString('nickname', '');
-            sp.setString("user_headimg", '');
-            sp.setString("user_headimg_id", '');
-            // 保存身份
-            sp.setString("user_identity", '');
-          });
-          eventBus.fire(SubmitButtonBack(title: '账号已在其他设备登录'));
           MyUtils.signOut();
-          sp.setString("em_pwd", commonBean.data!.emPwd!);
-          sp.setString('user_identity', commonBean.data!.identity!);
-          eventBus.fire(SubmitButtonBack(title: '更换了身份'));
-          if(v1 == 1){
+          Future.delayed(Duration(milliseconds: 1000),((){
             setState(() {
-              sp.setString('user_token', sp.getString(MyConfig.userOneToken).toString());
-              sp.setString(MyConfig.userOneUID, commonBean.data!.uid.toString());
-              sp.setString('user_id', commonBean.data!.uid.toString());
-              MyUtils.initSDK();
-              MyUtils.addChatListener();
-              //先退出然后在登录
-              MyUtils.signIn();
+              sp.setString('user_token', '');
+              sp.setString("user_account", '');
+              sp.setString("user_id", '');
+              sp.setString("em_pwd", '');
+              sp.setString("em_token", '');
+              sp.setString("user_password", '');
+              sp.setString('user_phone', '');
+              sp.setString('nickname', '');
+              sp.setString("user_headimg", '');
+              sp.setString("user_headimg_id", '');
+              // 保存身份
+              sp.setString("user_identity", '');
             });
-          }else if(v1 == 2){
-            setState(() {
-              sp.setString('user_token', sp.getString(MyConfig.userTwoToken).toString());
-              sp.setString(MyConfig.userTwoUID, commonBean.data!.uid.toString());
-              sp.setString('user_id', commonBean.data!.uid.toString());
-              MyUtils.initSDK();
-              MyUtils.addChatListener();
-              //先退出然后在登录
-              MyUtils.signIn();
-            });
-          }else{
-            setState(() {
-              sp.setString('user_token', sp.getString(MyConfig.userThreeToken).toString());
-              sp.setString(MyConfig.userThreeUID, commonBean.data!.uid.toString());
-              sp.setString('user_id', commonBean.data!.uid.toString());
-              MyUtils.initSDK();
-              MyUtils.addChatListener();
-              //先退出然后在登录
-              MyUtils.signIn();
-            });
-          }
+            eventBus.fire(SubmitButtonBack(title: '成功切换账号'));
+            sp.setString("em_pwd", commonBean.data!.emPwd!);
+            sp.setString('user_identity', commonBean.data!.identity!);
+            eventBus.fire(SubmitButtonBack(title: '更换了身份'));
+            if(v1 == 1){
+              setState(() {
+                sp.setString('user_token', sp.getString(MyConfig.userOneToken).toString());
+                sp.setString(MyConfig.userOneUID, commonBean.data!.uid.toString());
+                sp.setString('user_id', commonBean.data!.uid.toString());
+                MyUtils.initSDK();
+                MyUtils.addChatListener();
+                //先退出然后在登录
+                MyUtils.signIn();
+              });
+            }else if(v1 == 2){
+              setState(() {
+                sp.setString('user_token', sp.getString(MyConfig.userTwoToken).toString());
+                sp.setString(MyConfig.userTwoUID, commonBean.data!.uid.toString());
+                sp.setString('user_id', commonBean.data!.uid.toString());
+                MyUtils.initSDK();
+                MyUtils.addChatListener();
+                //先退出然后在登录
+                MyUtils.signIn();
+              });
+            }else{
+              setState(() {
+                sp.setString('user_token', sp.getString(MyConfig.userThreeToken).toString());
+                sp.setString(MyConfig.userThreeUID, commonBean.data!.uid.toString());
+                sp.setString('user_id', commonBean.data!.uid.toString());
+                MyUtils.initSDK();
+                MyUtils.addChatListener();
+                //先退出然后在登录
+                MyUtils.signIn();
+              });
+            }
+          }));
           break;
         case MyHttpConfig.errorloginCode:
         // ignore: use_build_context_synchronously

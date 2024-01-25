@@ -174,6 +174,12 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         _engine.disableAudio();
         _dispose();
         MyUtils.jumpLogin(context);
+      }else if(event.title == '成功切换账号'){
+        isJoinRoom = false;
+        // 取消发布本地音频流
+        _engine.muteLocalAudioStream(true);
+        _engine.disableAudio();
+        _dispose();
       }else if(event.title == '资源开始下载'){
         if(isDown == false) {
           doPostSvgaGiftList();

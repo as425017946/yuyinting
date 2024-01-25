@@ -968,7 +968,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
               photo_id != photo_id2 ) {
             MyToastUtils.showToastBottom('资料提交成功，请耐心等待审核');
           }else{
-            MyToastUtils.showToastBottom('资料提交成功');
+            MyToastUtils.showToastBottom('资料更新成功');
           }
           Navigator.pop(context);
           break;

@@ -332,7 +332,7 @@ class _ChatPageState extends State<ChatPage> {
 
   // 显示聊天信息
   Widget chatWidget(BuildContext context, int i) {
-    LogE('头像框 == ${allData2[i]['headImg']}');
+    // LogE('头像框 == ${allData2[i]['headImg']}');
     double widthAudio = 0;
     if (allData2[i]['type'] == 3) {
       widthAudio = ScreenUtil().setHeight(60 + allData2[i]['number'] * 4);

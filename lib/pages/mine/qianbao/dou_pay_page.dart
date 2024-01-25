@@ -23,8 +23,8 @@ class _DouPayPageState extends State<DouPayPage> {
   List<String> listS = ['100','300','580','1000','2000','5000','10000','30000','90000'];
   //支付类型 0 支付宝 1云闪付 2 银行卡
   int type = 0;
-  // 是否支持此支付方式
-  bool isChoose0 = true, isChoose1 = true, isChoose2 = false;
+  // 是否支持此支付方式 0支付宝 1云闪付 2银行卡 3微信
+  bool isChoose0 = true, isChoose1 = true, isChoose2 = false, isChoose3 = false;
   ///选择金额使用
   Widget _initlistdata(context, index) {
     return GestureDetector(
@@ -36,6 +36,12 @@ class _DouPayPageState extends State<DouPayPage> {
             isChoose1 = false;
           }else{
             isChoose1 = true;
+          }
+          // 300 580 显示微信
+          if(listD[index] == '36' || listD[index] == '68'){
+            isChoose3 = true;
+          }else{
+            isChoose3 = false;
           }
           // 3q9q不显示云闪付
           if(listD[index] == '12' || listD[index] == '36' || listD[index] == '68' || listD[index] == '9000'){
@@ -233,6 +239,33 @@ class _DouPayPageState extends State<DouPayPage> {
                     ),
                   ) : WidgetUtils.commonSizedBox(0, 0),
                   isChoose1 ? Container(
+                    height: 1.h,
+                    width: double.infinity,
+                    color: MyColors.home_hx,
+                  ) : WidgetUtils.commonSizedBox(0, 0),
+                  isChoose3 ? GestureDetector(
+                    onTap: ((){
+                      setState(() {
+                        type = 3;
+                      });
+                    }),
+                    child: Container(
+                      height: 80.h,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        children: [
+                          WidgetUtils.showImages('assets/images/wallet_wx.png', 40.h, 40.h),
+                          WidgetUtils.commonSizedBox(0, 20.w),
+                          WidgetUtils.onlyText('微信', StyleUtils.getCommonTextStyle(color: Colors.black,fontSize: 28.sp, fontWeight: FontWeight.w600)),
+                          const Spacer(),
+                          type == 3 ? WidgetUtils.showImages('assets/images/wallet_dh.png', 35.h, 35.h) : WidgetUtils.commonSizedBox(0, 0),
+                        ],
+                      ),
+                    ),
+                  ) : WidgetUtils.commonSizedBox(0, 0),
+                  isChoose3 ? Container(
                     height: 1.h,
                     width: double.infinity,
                     color: MyColors.home_hx,

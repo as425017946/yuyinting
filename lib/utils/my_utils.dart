@@ -982,22 +982,6 @@ class MyUtils {
                     // 插入数据
                     await databaseHelper.insertData('messageSLTable', params);
                     eventBus.fire(SendMessageBack(type: 1, msgID: '0'));
-                  } else if (body.event == 'login_kick') {
-                    // 这个状态是后台直接封禁了账号，然后直接踢掉app
-                    sp.setString('user_token', '');
-                    sp.setString("user_account", '');
-                    sp.setString("user_id", '');
-                    sp.setString("em_pwd", '');
-                    sp.setString("em_token", '');
-                    sp.setString("user_password", '');
-                    sp.setString('user_phone', '');
-                    sp.setString('nickname', '');
-                    sp.setString("user_headimg", '');
-                    sp.setString("user_headimg_id", '');
-                    // 保存身份
-                    sp.setString("user_identity", '');
-                    // 直接杀死app
-                    SystemNavigator.pop();
                   }else if(body.event == 'game_turntable_luck'){
                     eventBus.fire(ZDYBack(map: body.params, type: body.event));
                   } else {
@@ -1051,6 +1035,7 @@ class MyUtils {
   static void signIn() async {
     try {
       LogE('初始化UID ${sp.getString('user_id').toString()}');
+      LogE('初始化UID ${sp.getString('em_pwd').toString()}');
       await EMClient.getInstance.login(sp.getString('user_id').toString(),
           sp.getString('em_pwd').toString());
     } on EMError catch (e) {

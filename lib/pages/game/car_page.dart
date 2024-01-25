@@ -596,6 +596,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
       setState(() {
         sum--;
       });
+      LogE('当前秒数 $sum');
       if (sum == 0) {
         if (sp.getString('car_audio') == null ||
             sp.getString('car_audio').toString() == '开启') {
@@ -2021,9 +2022,11 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
   /// 赛车倒计时
   Future<void> doPostGetCarTimer() async {
     try {
+      LogE('请求接口时间==  ${DateTime.now()}');
       carTimerBean bean = await DataUtils.postGetCarTimer();
       switch (bean.code) {
         case MyHttpConfig.successCode:
+          LogE('请求接口响应时间==  ${DateTime.now()}');
           setState(() {
             //
             if (bean.data! >= 20) {
@@ -2034,6 +2037,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
               starTimerPlay();
             } else {
               sum = 20 - bean.data!;
+              LogE('当前秒数 $sum');
               //开启倒计时
               starTimerDJS();
               isShow = true;

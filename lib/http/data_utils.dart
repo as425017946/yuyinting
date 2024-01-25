@@ -224,8 +224,9 @@ class DataUtils{
   }
 
   /// 切换账号验证token
-  static Future<qiehuanBean> postCheckToken() async {
-    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.checkToken, {}, {});
+  static Future<qiehuanBean> postCheckToken(Map<String,dynamic> params) async {
+    print("切换账号验证token：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.checkToken, {}, params);
     print("切换账号验证token：${respons}");
     return qiehuanBean.fromJson(respons!);
   }
