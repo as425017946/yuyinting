@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:connectivity_plus/connectivity_plus.dart';
+// import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -982,31 +982,33 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
 
     // 接受下注的im信息
     listenZDY = eventBus.on<JoinRoomYBack>().listen((event) {
-      if (event.map!['avatar'].toString().isNotEmpty && isShow) {
-        if (listZDY.length < 6) {
-          Map<dynamic, dynamic> map = {};
-          map['avatar'] = event.map!['avatar'];
-          map['amount'] = event.map!['amount'];
-          setState(() {
-            listZDY.add(map);
-          });
-        } else {
-          setState(() {
-            for (int i = 0; i < 5; i++) {
-              listZDY[i] = listZDY[1 + 1];
-            }
+      if(event.type == '赛车押注'){
+        if (event.map!['avatar'].toString().isNotEmpty && isShow) {
+          if (listZDY.length < 6) {
             Map<dynamic, dynamic> map = {};
             map['avatar'] = event.map!['avatar'];
             map['amount'] = event.map!['amount'];
-            listZDY[5] = map;
-          });
+            setState(() {
+              listZDY.add(map);
+            });
+          } else {
+            setState(() {
+              for (int i = 0; i < 5; i++) {
+                listZDY[i] = listZDY[1 + 1];
+              }
+              Map<dynamic, dynamic> map = {};
+              map['avatar'] = event.map!['avatar'];
+              map['amount'] = event.map!['amount'];
+              listZDY[5] = map;
+            });
+          }
+          LogE('**********${listZDY.length}');
         }
-        LogE('**********${listZDY.length}');
       }
     });
 
     // 监听网络状态变化
-    startListening();
+    // startListening();
 
     // 判断当前年月日是否为今天，如果不是，下注还是要提示
     DateTime now = DateTime.now();
@@ -1020,21 +1022,21 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
     }
   }
 
-  Connectivity connectivity = Connectivity();
-  late StreamSubscription<ConnectivityResult> subscription;
-
-  void startListening() {
-    subscription =
-        connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
-      if (result == ConnectivityResult.none) {
-        // 处理网络中断的逻辑
-        MyToastUtils.showToastCenter('网络中断，游戏暂时退出!');
-        Navigator.pop(context);
-      } else {
-        // 处理网络重连的逻辑
-      }
-    });
-  }
+  // Connectivity connectivity = Connectivity();
+  // late StreamSubscription<ConnectivityResult> subscription;
+  //
+  // void startListening() {
+  //   subscription =
+  //       connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
+  //     if (result == ConnectivityResult.none) {
+  //       // 处理网络中断的逻辑
+  //       MyToastUtils.showToastCenter('网络中断，游戏暂时退出!');
+  //       Navigator.pop(context);
+  //     } else {
+  //       // 处理网络重连的逻辑
+  //     }
+  //   });
+  // }
 
   @override
   void dispose() {
@@ -1047,7 +1049,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
     _timer4?.cancel();
     listen.cancel();
     listenZDY.cancel();
-    subscription.cancel();
+    // subscription.cancel();
     super.dispose();
   }
 
@@ -1739,7 +1741,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                             alignment: Alignment.bottomCenter,
                             children: [
                               WidgetUtils.CircleHeadImage(
-                                  90.h, 90.h, listZDY[i]['avatar']),
+                                  90.h, 90.h, listZDY[i]['avatar'].toString().isEmpty ? '' : listZDY[i]['avatar'].toString()),
                               Container(
                                 height: 25.h,
                                 width: 90.h,

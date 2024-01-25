@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:auto_orientation/auto_orientation.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -1022,7 +1021,7 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
     });
 
     // 监听网络状态变化
-    startListening();
+    // startListening();
 
     // 判断当前年月日是否为今天，如果不是，下注还是要提示
     DateTime now = DateTime.now();
@@ -1034,21 +1033,21 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
       sp.setBool('car_queren_h', false);
     }
   }
-  Connectivity connectivity = Connectivity();
-  late StreamSubscription<ConnectivityResult> subscription;
-
-  void startListening() {
-    subscription = connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
-      if (result == ConnectivityResult.none) {
-        // 处理网络中断的逻辑
-        MyToastUtils.showToastCenter('网络中断，游戏暂时退出!');
-        Navigator.pop(context);
-      } else {
-        // 处理网络重连的逻辑
-
-      }
-    });
-  }
+  // Connectivity connectivity = Connectivity();
+  // late StreamSubscription<ConnectivityResult> subscription;
+  //
+  // void startListening() {
+  //   subscription = connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
+  //     if (result == ConnectivityResult.none) {
+  //       // 处理网络中断的逻辑
+  //       MyToastUtils.showToastCenter('网络中断，游戏暂时退出!');
+  //       Navigator.pop(context);
+  //     } else {
+  //       // 处理网络重连的逻辑
+  //
+  //     }
+  //   });
+  // }
 
   @override
   void dispose() {
@@ -1066,7 +1065,7 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
     _timer4?.cancel();
     listen.cancel();
     listenZDY.cancel();
-    subscription.cancel();
+    // subscription.cancel();
     super.dispose();
   }
 

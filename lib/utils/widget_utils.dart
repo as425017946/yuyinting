@@ -735,7 +735,7 @@ class WidgetUtils {
       child: (url.contains('com.leimu.yuyinting') || url.contains('storage'))
           ? Image.file(
               File(url),
-              fit: BoxFit.fill,
+              fit: BoxFit.cover,
               gaplessPlayback: true,
               errorBuilder: (context, error, stackTrace) {
                 return CachedNetworkImage(

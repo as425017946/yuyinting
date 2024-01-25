@@ -281,8 +281,8 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                               ScreenUtil().setHeight(90))),
                       // 欢乐值
                       Positioned(
-                        left: ScreenUtil().setHeight(240),
-                        top: ScreenUtil().setHeight(527),
+                        left: ScreenUtil().setHeight(225),
+                        top: ScreenUtil().setHeight(515),
                         child: Text(
                           '欢乐值：$zhanshizhi/30',
                           style: StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(21)),

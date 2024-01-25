@@ -112,8 +112,6 @@ dependencies:
   auto_orientation: ^2.0.0
   # 保存网络图片
   image_gallery_saver: ^2.0.3
-  # 监听网络状态
-  connectivity_plus: ^5.0.1
   # bugly
   flutter_bugly: ^0.4.4
   # 查看设备版本

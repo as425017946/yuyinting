@@ -545,7 +545,7 @@ class MyUtils {
                   Map info = msg.attributes!;
                   LogE('接收文本信息$info');
                   if (body.content == '赛车押注') {
-                    eventBus.fire(JoinRoomYBack(map: info, type: '0'));
+                    eventBus.fire(JoinRoomYBack(map: info, type: '赛车押注'));
                   }else if (body.content == '离开房间') {
                     eventBus.fire(JoinRoomYBack(map: info, type: 'user_leave_room'));
                   }else {
