@@ -167,7 +167,12 @@ class _MessagePageState extends State<MessagePage> {
                                   fontSize: ScreenUtil().setSp(32)),
                             ),
                             const Expanded(child: Text('')),
-                            Text(
+                            listMessage[i]['nickName'].toString() == '维C客服' ? Text(
+                                  '官方客服',
+                              style: StyleUtils.getCommonTextStyle(
+                                  color: MyColors.homeTopBG,
+                                  fontSize: ScreenUtil().setSp(25)),
+                            ) : Text(
                               DateTime.parse(DateTime.fromMillisecondsSinceEpoch(
                                   int.parse(listMessage[i]['add_time']))
                                   .toString())

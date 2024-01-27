@@ -102,9 +102,11 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                 ));
             return;
           }
-          if(xiazhujine > double.parse(sp.getString('car_jinbi').toString())){
-            MyToastUtils.showToastBottom('钱包余额不足');
-            return;
+          if(xiazhujine > double.parse(sp.getString('car_mogu').toString())){
+            if(xiazhujine > double.parse(sp.getString('car_jinbi').toString())){
+              MyToastUtils.showToastBottom('钱包余额不足');
+              return;
+            }
           }
           doPostCarBet(i.toString());
         }
@@ -175,9 +177,11 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                     index: (6 + one).toString()));
             return;
           }
-          if(xiazhujine > double.parse(sp.getString('car_jinbi').toString())){
-            MyToastUtils.showToastBottom('钱包余额不足');
-            return;
+          if(xiazhujine > double.parse(sp.getString('car_mogu').toString())){
+            if(xiazhujine > double.parse(sp.getString('car_jinbi').toString())){
+              MyToastUtils.showToastBottom('钱包余额不足');
+              return;
+            }
           }
           doPostCarBet((6 + one).toString());
         }
@@ -232,9 +236,11 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                     index: (9 + one).toString()));
             return;
           }
-          if(xiazhujine > double.parse(sp.getString('car_jinbi').toString())){
-            MyToastUtils.showToastBottom('钱包余额不足');
-            return;
+          if(xiazhujine > double.parse(sp.getString('car_mogu').toString())){
+            if(xiazhujine > double.parse(sp.getString('car_jinbi').toString())){
+              MyToastUtils.showToastBottom('钱包余额不足');
+              return;
+            }
           }
           doPostCarBet((9 + one).toString());
         }
@@ -823,8 +829,10 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
   void loadAnimation() async {
     // 清空接受的im下注信息
     listZDY.clear();
-    // 请求中奖赛道
-    doPostGetWinTrack();
+    Future.delayed(const Duration(seconds: 1),(){
+      // 请求中奖赛道
+      doPostGetWinTrack();
+    });
     Future.delayed(const Duration(seconds: 3), () {
       setState(() {
         isPlay = false;
@@ -909,9 +917,11 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
     // 二次确认弹窗点击确认，开始下注
     listen = eventBus.on<QuerenBack>().listen((event) {
       if (event.title == '竖屏赛车') {
-        if(xiazhujine > double.parse(sp.getString('car_jinbi').toString())){
-          MyToastUtils.showToastBottom('钱包余额不足');
-          return;
+        if(xiazhujine > double.parse(sp.getString('car_mogu').toString())){
+          if(xiazhujine > double.parse(sp.getString('car_jinbi').toString())){
+            MyToastUtils.showToastBottom('钱包余额不足');
+            return;
+          }
         }
         doPostCarBet(event.index);
       }
@@ -931,6 +941,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
     // 监听动画
     controller2.addListener(() {
       if (controller2.isCompleted) {
+        LogE('当前时间**  ${DateTime.now()}');
         suijishu();
         controller2.reset();
         //背景暂停
@@ -1058,835 +1069,877 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black54,
-      body: Column(
-        children: [
-          GestureDetector(
-            onTap: (() {
-              Navigator.pop(context);
-            }),
-            child: Container(
-              height: 150.h,
-              width: double.infinity,
-              color: Colors.transparent,
+      body: WillPopScope(
+        onWillPop: () async {
+          if(MyUtils.checkClick()){
+            bool isBack = false;
+            for(int i  = 0; i < listA.length; i++){
+              if(listA[i]){
+                setState(() {
+                  isBack = true;
+                });
+                break;
+              }
+            }
+            if (isBack) {
+              MyToastUtils.showToastBottom('请等待您本轮竞猜结果后再离开~');
+              // 阻止返回操作
+              return false;
+            }
+            return true; // 允许正常的返回操作
+          }else{
+            // 阻止返回操作
+            return false;
+          }
+        },
+        child: Column(
+          children: [
+            GestureDetector(
+              onTap: (() {
+                if(MyUtils.checkClick()) {
+                  bool isBack = false;
+                  for (int i = 0; i < listA.length; i++) {
+                    if (listA[i]) {
+                      setState(() {
+                        isBack = true;
+                      });
+                      break;
+                    }
+                  }
+                  if (isBack) {
+                    MyToastUtils.showToastBottom(
+                        '请等待您本轮竞猜结果后再离开~');
+                    return;
+                  }
+                  Navigator.pop(context);
+                }
+              }),
+              child: Container(
+                height: 150.h,
+                width: double.infinity,
+                color: Colors.transparent,
+              ),
             ),
-          ),
-          SizedBox(
-            height: 750.h,
-            width: double.infinity,
-            child: Stack(
-              children: [
-                //背景图
-                SizedBox(
-                  height: 750.h,
-                  child: PageView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    controller: _controller,
-                    itemBuilder: (context, index) {
-                      final imageIndex = index % imagesa.length;
-                      return Image.asset(
-                        imagesa[imageIndex],
-                        width: double.infinity,
-                        height: 750.h,
-                        fit: BoxFit.fitHeight,
-                        gaplessPlayback: true,
-                      );
-                    },
+            SizedBox(
+              height: 750.h,
+              width: double.infinity,
+              child: Stack(
+                children: [
+                  //背景图
+                  SizedBox(
+                    height: 750.h,
+                    child: PageView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      controller: _controller,
+                      itemBuilder: (context, index) {
+                        final imageIndex = index % imagesa.length;
+                        return Image.asset(
+                          imagesa[imageIndex],
+                          width: double.infinity,
+                          height: 750.h,
+                          fit: BoxFit.fitHeight,
+                          gaplessPlayback: true,
+                        );
+                      },
+                    ),
                   ),
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    // 顶部信息
-                    SizedBox(
-                            height: 240.h,
-                            child: Row(
-                              children: [
-                                // 左侧按键
-                                SizedBox(
-                                  height: 240.h,
-                                  child: Column(
-                                    children: [
-                                      WidgetUtils.commonSizedBox(20.h, 0),
-                                      // isShow ? GestureDetector(
-                                      //   onTap: (() {
-                                      //     if (MyUtils.checkClick()) {
-                                      //       MyUtils.goTransparentPageCom(
-                                      //           context,
-                                      //           const CarLandScapePage());
-                                      //       Navigator.pop(context);
-                                      //     }
-                                      //   }),
-                                      //   child: Container(
-                                      //     height: 38.h,
-                                      //     width: 100.h,
-                                      //     //边框设置
-                                      //     decoration: const BoxDecoration(
-                                      //         image: DecorationImage(
-                                      //       //背景图片修饰
-                                      //       image: AssetImage(
-                                      //           "assets/images/car_anniu.png"),
-                                      //       fit: BoxFit.fill, //覆盖
-                                      //     )),
-                                      //     child: WidgetUtils.onlyTextCenter(
-                                      //         '横屏模式',
-                                      //         StyleUtils.getCommonTextStyle(
-                                      //             color: Colors.white,
-                                      //             fontSize: 22.sp)),
-                                      //   ),
-                                      // ) : const Text(''),
-                                      // WidgetUtils.commonSizedBox(10.h, 0),
-                                      GestureDetector(
-                                        onTap: (() {
-                                          if (MyUtils.checkClick()) {
-                                            MyUtils.goTransparentPageCom(
-                                                context, const CarGuiZePage());
-                                          }
-                                        }),
-                                        child: Container(
-                                          height: 38.h,
-                                          width: 100.h,
-                                          //边框设置
-                                          decoration: const BoxDecoration(
-                                              image: DecorationImage(
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      // 顶部信息
+                      SizedBox(
+                        height: 240.h,
+                        child: Row(
+                          children: [
+                            // 左侧按键
+                            SizedBox(
+                              height: 240.h,
+                              child: Column(
+                                children: [
+                                  WidgetUtils.commonSizedBox(20.h, 0),
+                                  // isShow ? GestureDetector(
+                                  //   onTap: (() {
+                                  //     if (MyUtils.checkClick()) {
+                                  //       MyUtils.goTransparentPageCom(
+                                  //           context,
+                                  //           const CarLandScapePage());
+                                  //       Navigator.pop(context);
+                                  //     }
+                                  //   }),
+                                  //   child: Container(
+                                  //     height: 38.h,
+                                  //     width: 100.h,
+                                  //     //边框设置
+                                  //     decoration: const BoxDecoration(
+                                  //         image: DecorationImage(
+                                  //       //背景图片修饰
+                                  //       image: AssetImage(
+                                  //           "assets/images/car_anniu.png"),
+                                  //       fit: BoxFit.fill, //覆盖
+                                  //     )),
+                                  //     child: WidgetUtils.onlyTextCenter(
+                                  //         '横屏模式',
+                                  //         StyleUtils.getCommonTextStyle(
+                                  //             color: Colors.white,
+                                  //             fontSize: 22.sp)),
+                                  //   ),
+                                  // ) : const Text(''),
+                                  // WidgetUtils.commonSizedBox(10.h, 0),
+                                  GestureDetector(
+                                    onTap: (() {
+                                      if (MyUtils.checkClick()) {
+                                        MyUtils.goTransparentPageCom(
+                                            context, const CarGuiZePage());
+                                      }
+                                    }),
+                                    child: Container(
+                                      height: 38.h,
+                                      width: 100.h,
+                                      //边框设置
+                                      decoration: const BoxDecoration(
+                                          image: DecorationImage(
                                             //背景图片修饰
                                             image: AssetImage(
                                                 "assets/images/car_anniu.png"),
                                             fit: BoxFit.fill, //覆盖
                                           )),
-                                          child: WidgetUtils.onlyTextCenter(
-                                              '游戏规则',
-                                              StyleUtils.getCommonTextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 22.sp)),
+                                      child: WidgetUtils.onlyTextCenter(
+                                          '游戏规则',
+                                          StyleUtils.getCommonTextStyle(
+                                              color: Colors.white,
+                                              fontSize: 22.sp)),
+                                    ),
+                                  ),
+                                  WidgetUtils.commonSizedBox(10.h, 0),
+                                  isStarGame== false ? GestureDetector(
+                                    onTap: (() {
+                                      if (MyUtils.checkClick()) {
+                                        MyUtils.goTransparentPageCom(
+                                            context, const LiShiPage());
+                                      }
+                                    }),
+                                    child: Container(
+                                      height: 38.h,
+                                      width: 100.h,
+                                      //边框设置
+                                      decoration: const BoxDecoration(
+                                          image: DecorationImage(
+                                            //背景图片修饰
+                                            image: AssetImage(
+                                                "assets/images/car_anniu.png"),
+                                            fit: BoxFit.fill, //覆盖
+                                          )),
+                                      child: WidgetUtils.onlyTextCenter(
+                                          '开奖记录',
+                                          StyleUtils.getCommonTextStyle(
+                                              color: Colors.white,
+                                              fontSize: 22.sp)),
+                                    ),
+                                  ) :  WidgetUtils.commonSizedBox(0, 0),
+                                  isStarGame== false ? WidgetUtils.commonSizedBox(10.h, 0) : WidgetUtils.commonSizedBox(0, 0),
+                                  GestureDetector(
+                                    onTap: (() {
+                                      if (sp.getString('car_audio') ==
+                                          null ||
+                                          sp
+                                              .getString('car_audio')
+                                              .toString() ==
+                                              '开启') {
+                                        sp.setString('car_audio', '关闭');
+                                      } else {
+                                        sp.setString('car_audio', '开启');
+                                      }
+                                    }),
+                                    child: Container(
+                                      height: 38.h,
+                                      width: 100.h,
+                                      //边框设置
+                                      decoration: const BoxDecoration(
+                                          image: DecorationImage(
+                                            //背景图片修饰
+                                            image: AssetImage(
+                                                "assets/images/car_anniu.png"),
+                                            fit: BoxFit.fill, //覆盖
+                                          )),
+                                      child: WidgetUtils.onlyTextCenter(
+                                          sp.getString('car_audio') ==
+                                              null ||
+                                              sp
+                                                  .getString(
+                                                  'car_audio')
+                                                  .toString() ==
+                                                  '开启'
+                                              ? '关闭音效'
+                                              : '开启音效',
+                                          StyleUtils.getCommonTextStyle(
+                                              color: sp.getString(
+                                                  'car_audio') ==
+                                                  null ||
+                                                  sp
+                                                      .getString(
+                                                      'car_audio')
+                                                      .toString() ==
+                                                      '开启'
+                                                  ? Colors.white
+                                                  : MyColors.peopleYellow,
+                                              fontSize: 22.sp)),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            const Spacer(),
+                            // 右侧按键
+                            Stack(
+                              children: [
+                                Column(
+                                  children: [
+                                    WidgetUtils.commonSizedBox(20.h, 0),
+                                    GestureDetector(
+                                      onTap: ((){
+                                        MyUtils.goTransparentPageCom(context, DouPayPage(shuliang: sp.getString('car_jinbi2').toString(),));
+                                      }),
+                                      child: Container(
+                                        height: ScreenUtil().setHeight(45),
+                                        margin: EdgeInsets.only(right: 10.h),
+                                        padding: const EdgeInsets.only(
+                                            left: 5,
+                                            right: 5,
+                                            top: 1,
+                                            bottom: 1),
+                                        //边框设置
+                                        decoration: const BoxDecoration(
+                                          //背景
+                                          color: MyColors.zpJLHX,
+                                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(30.0)),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            WidgetUtils.commonSizedBox(0, 5),
+                                            WidgetUtils.showImages(
+                                                'assets/images/car_mogubi.png',
+                                                25.h,
+                                                25.h),
+                                            WidgetUtils.commonSizedBox(
+                                                0, 5.h),
+                                            WidgetUtils.onlyTextCenter(
+                                                sp.getString('car_mogu2').toString(),
+                                                StyleUtils.getCommonTextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: ScreenUtil()
+                                                        .setSp(23),
+                                                    fontWeight:
+                                                    FontWeight.w600)),
+                                            WidgetUtils.commonSizedBox(
+                                                0, 10.h),
+                                            Opacity(
+                                              opacity: 0.8,
+                                              child: Container(
+                                                height: ScreenUtil()
+                                                    .setHeight(20),
+                                                width:
+                                                ScreenUtil().setHeight(1),
+                                                color: MyColors.home_hx,
+                                              ),
+                                            ),
+                                            WidgetUtils.commonSizedBox(
+                                                0, 10.h),
+                                            WidgetUtils.showImages(
+                                                'assets/images/mine_wallet_dd.png',
+                                                ScreenUtil().setHeight(26),
+                                                ScreenUtil().setHeight(24)),
+                                            WidgetUtils.commonSizedBox(
+                                                0, 10.h),
+                                            WidgetUtils.onlyTextCenter(
+                                                sp.getString('car_jinbi2').toString(),
+                                                StyleUtils.getCommonTextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: ScreenUtil()
+                                                        .setSp(23),
+                                                    fontWeight:
+                                                    FontWeight.w600)),
+                                            WidgetUtils.commonSizedBox(0, 5.w),
+                                            Image(
+                                              image: const AssetImage(
+                                                  'assets/images/wallet_more.png'),
+                                              width: 15.h,
+                                              height: 15.h,
+                                            ),
+                                            WidgetUtils.commonSizedBox(
+                                                0, 10.h),
+                                            // 钻石处先隐藏
+                                            // Opacity(
+                                            //   opacity: 0.8,
+                                            //   child: Container(
+                                            //     height: ScreenUtil()
+                                            //         .setHeight(20),
+                                            //     width:
+                                            //         ScreenUtil().setHeight(1),
+                                            //     color: MyColors.home_hx,
+                                            //   ),
+                                            // ),
+                                            // WidgetUtils.commonSizedBox(
+                                            //     0, 10.h),
+                                            // WidgetUtils.showImages(
+                                            //     'assets/images/mine_wallet_zz.png',
+                                            //     ScreenUtil().setHeight(26),
+                                            //     ScreenUtil().setHeight(24)),
+                                            // WidgetUtils.commonSizedBox(
+                                            //     0, 10.h),
+                                            // WidgetUtils.onlyTextCenter(
+                                            //     sp.getString('car_zuanshi2').toString(),
+                                            //     StyleUtils.getCommonTextStyle(
+                                            //         color: Colors.white,
+                                            //         fontSize: ScreenUtil()
+                                            //             .setSp(23),
+                                            //         fontWeight:
+                                            //             FontWeight.w600)),
+                                            // WidgetUtils.commonSizedBox(
+                                            //     0, 10.h),
+                                          ],
                                         ),
                                       ),
-                                      WidgetUtils.commonSizedBox(10.h, 0),
-                                      isStarGame== false ? GestureDetector(
-                                        onTap: (() {
-                                          if (MyUtils.checkClick()) {
-                                            MyUtils.goTransparentPageCom(
-                                                context, const LiShiPage());
-                                          }
-                                        }),
-                                        child: Container(
-                                          height: 38.h,
-                                          width: 100.h,
-                                          //边框设置
-                                          decoration: const BoxDecoration(
-                                              image: DecorationImage(
-                                            //背景图片修饰
-                                            image: AssetImage(
-                                                "assets/images/car_anniu.png"),
-                                            fit: BoxFit.fill, //覆盖
-                                          )),
-                                          child: WidgetUtils.onlyTextCenter(
-                                              '开奖记录',
-                                              StyleUtils.getCommonTextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 22.sp)),
-                                        ),
-                                      ) :  WidgetUtils.commonSizedBox(0, 0),
-                                      isStarGame== false ? WidgetUtils.commonSizedBox(10.h, 0) : WidgetUtils.commonSizedBox(0, 0),
-                                      GestureDetector(
-                                        onTap: (() {
-                                          if (sp.getString('car_audio') ==
-                                                  null ||
-                                              sp
-                                                      .getString('car_audio')
-                                                      .toString() ==
-                                                  '开启') {
-                                            sp.setString('car_audio', '关闭');
-                                          } else {
-                                            sp.setString('car_audio', '开启');
-                                          }
-                                        }),
-                                        child: Container(
-                                          height: 38.h,
-                                          width: 100.h,
-                                          //边框设置
-                                          decoration: const BoxDecoration(
-                                              image: DecorationImage(
-                                            //背景图片修饰
-                                            image: AssetImage(
-                                                "assets/images/car_anniu.png"),
-                                            fit: BoxFit.fill, //覆盖
-                                          )),
-                                          child: WidgetUtils.onlyTextCenter(
-                                              sp.getString('car_audio') ==
-                                                          null ||
-                                                      sp
-                                                              .getString(
-                                                                  'car_audio')
-                                                              .toString() ==
-                                                          '开启'
-                                                  ? '关闭音效'
-                                                  : '开启音效',
-                                              StyleUtils.getCommonTextStyle(
-                                                  color: sp.getString(
-                                                                  'car_audio') ==
-                                                              null ||
-                                                          sp
-                                                                  .getString(
-                                                                      'car_audio')
-                                                                  .toString() ==
-                                                              '开启'
-                                                      ? Colors.white
-                                                      : MyColors.peopleYellow,
-                                                  fontSize: 22.sp)),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                const Spacer(),
-                                // 右侧按键
-                                Stack(
-                                  children: [
-                                    Column(
-                                      children: [
-                                        WidgetUtils.commonSizedBox(20.h, 0),
-                                        GestureDetector(
-                                          onTap: ((){
-                                            MyUtils.goTransparentPageCom(context, DouPayPage(shuliang: sp.getString('car_jinbi2').toString(),));
-                                          }),
-                                          child: Container(
-                                            height: ScreenUtil().setHeight(45),
-                                            margin: EdgeInsets.only(right: 10.h),
-                                            padding: const EdgeInsets.only(
-                                                left: 5,
-                                                right: 5,
-                                                top: 1,
-                                                bottom: 1),
-                                            //边框设置
-                                            decoration: const BoxDecoration(
-                                              //背景
-                                              color: MyColors.zpJLHX,
-                                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(30.0)),
-                                            ),
-                                            child: Row(
-                                              children: [
-                                                WidgetUtils.commonSizedBox(0, 5),
-                                                WidgetUtils.showImages(
-                                                    'assets/images/car_mogubi.png',
-                                                    25.h,
-                                                    25.h),
-                                                WidgetUtils.commonSizedBox(
-                                                    0, 5.h),
-                                                WidgetUtils.onlyTextCenter(
-                                                    sp.getString('car_mogu2').toString(),
-                                                    StyleUtils.getCommonTextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: ScreenUtil()
-                                                            .setSp(23),
-                                                        fontWeight:
-                                                            FontWeight.w600)),
-                                                WidgetUtils.commonSizedBox(
-                                                    0, 10.h),
-                                                Opacity(
-                                                  opacity: 0.8,
-                                                  child: Container(
-                                                    height: ScreenUtil()
-                                                        .setHeight(20),
-                                                    width:
-                                                        ScreenUtil().setHeight(1),
-                                                    color: MyColors.home_hx,
-                                                  ),
-                                                ),
-                                                WidgetUtils.commonSizedBox(
-                                                    0, 10.h),
-                                                WidgetUtils.showImages(
-                                                    'assets/images/mine_wallet_dd.png',
-                                                    ScreenUtil().setHeight(26),
-                                                    ScreenUtil().setHeight(24)),
-                                                WidgetUtils.commonSizedBox(
-                                                    0, 10.h),
-                                                WidgetUtils.onlyTextCenter(
-                                                    sp.getString('car_jinbi2').toString(),
-                                                    StyleUtils.getCommonTextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: ScreenUtil()
-                                                            .setSp(23),
-                                                        fontWeight:
-                                                            FontWeight.w600)),
-                                                WidgetUtils.commonSizedBox(0, 5.w),
-                                                Image(
-                                                  image: const AssetImage(
-                                                      'assets/images/wallet_more.png'),
-                                                  width: 15.h,
-                                                  height: 15.h,
-                                                ),
-                                                WidgetUtils.commonSizedBox(
-                                                    0, 10.h),
-                                                // 钻石处先隐藏
-                                                // Opacity(
-                                                //   opacity: 0.8,
-                                                //   child: Container(
-                                                //     height: ScreenUtil()
-                                                //         .setHeight(20),
-                                                //     width:
-                                                //         ScreenUtil().setHeight(1),
-                                                //     color: MyColors.home_hx,
-                                                //   ),
-                                                // ),
-                                                // WidgetUtils.commonSizedBox(
-                                                //     0, 10.h),
-                                                // WidgetUtils.showImages(
-                                                //     'assets/images/mine_wallet_zz.png',
-                                                //     ScreenUtil().setHeight(26),
-                                                //     ScreenUtil().setHeight(24)),
-                                                // WidgetUtils.commonSizedBox(
-                                                //     0, 10.h),
-                                                // WidgetUtils.onlyTextCenter(
-                                                //     sp.getString('car_zuanshi2').toString(),
-                                                //     StyleUtils.getCommonTextStyle(
-                                                //         color: Colors.white,
-                                                //         fontSize: ScreenUtil()
-                                                //             .setSp(23),
-                                                //         fontWeight:
-                                                //             FontWeight.w600)),
-                                                // WidgetUtils.commonSizedBox(
-                                                //     0, 10.h),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Positioned(
-                                      right: 10.h,
-                                      top: 80.h,
-                                      child: GestureDetector(
-                                          onTap: (() {
-                                            if (MyUtils.checkClick()) {
-                                              MyUtils.goTransparentPageCom(
-                                                  context, const CarShopPage());
-                                            }
-                                          }),
-                                          child: WidgetUtils.showImages(
-                                              'assets/images/car_shop.png',
-                                              100.h,
-                                              100.h)),
                                     ),
                                   ],
                                 ),
-                                WidgetUtils.commonSizedBox(0, 10.h),
+                                Positioned(
+                                  right: 10.h,
+                                  top: 80.h,
+                                  child: GestureDetector(
+                                      onTap: (() {
+                                        if (MyUtils.checkClick()) {
+                                          MyUtils.goTransparentPageCom(
+                                              context, const CarShopPage());
+                                        }
+                                      }),
+                                      child: WidgetUtils.showImages(
+                                          'assets/images/car_shop.png',
+                                          100.h,
+                                          100.h)),
+                                ),
                               ],
                             ),
-                          ),
-                    WidgetUtils.commonSizedBox(140.h, 0),
-                  ],
-                ),
-                Positioned(
-                  top: 330.h,
-                  left: 25.h,
-                  child: SlideTransition(
-                    position: _carPlay(0),
-                    child: Row(
-                      children: [
-                        Stack(
-                          children: [
-                            WidgetUtils.showImages(
-                                listCar[0]
-                                    ? 'assets/images/car/xiaogui+.png'
-                                    : 'assets/images/car/xiaogui.png',
-                                ScreenUtil().setHeight(102),
-                                ScreenUtil().setHeight(180)),
-                            isShow == false
-                                ? Positioned(
-                                    left: 73.h,
-                                    top: 78.h,
-                                    child: WidgetUtils.showImages(
-                                        'assets/images/z_wheel.gif',
-                                        ScreenUtil().setHeight(15),
-                                        ScreenUtil().setHeight(15)))
-                                : const Text(''),
-                            isShow == false
-                                ? Positioned(
-                                    left: 130.h,
-                                    top: 78.h,
-                                    child: WidgetUtils.showImages(
-                                        'assets/images/z_wheel.gif',
-                                        ScreenUtil().setHeight(15),
-                                        ScreenUtil().setHeight(15)))
-                                : const Text(''),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 380.h,
-                  left: 12.h,
-                  child: SlideTransition(
-                    position: _carPlay(1),
-                    child: Row(
-                      children: [
-                        Stack(
-                          children: [
-                            WidgetUtils.showImages(
-                                listCar[1]
-                                    ? 'assets/images/car/guigui+.png'
-                                    : 'assets/images/car/guigui.png',
-                                ScreenUtil().setHeight(102),
-                                ScreenUtil().setHeight(180)),
-                            isShow == false
-                                ? Positioned(
-                                    left: 66.h,
-                                    top: 75.h,
-                                    child: WidgetUtils.showImages(
-                                        'assets/images/z_wheel.gif',
-                                        ScreenUtil().setHeight(18),
-                                        ScreenUtil().setHeight(18)))
-                                : const Text(''),
-                            isShow == false
-                                ? Positioned(
-                                    left: 120.h,
-                                    top: 82.h,
-                                    child: WidgetUtils.showImages(
-                                        'assets/images/z_wheel.gif',
-                                        ScreenUtil().setHeight(15),
-                                        ScreenUtil().setHeight(15)))
-                                : const Text(''),
+                            WidgetUtils.commonSizedBox(0, 10.h),
                           ],
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 430.h,
-                  left: 10.h,
-                  child: SlideTransition(
-                    position: _carPlay(2),
-                    child: Row(
-                      children: [
-                        Stack(
-                          children: [
-                            WidgetUtils.showImages(
-                                listCar[2]
-                                    ? 'assets/images/car/lan+.png'
-                                    : 'assets/images/car/lan.png',
-                                ScreenUtil().setHeight(102),
-                                ScreenUtil().setHeight(180)),
-                            isShow == false
-                                ? Positioned(
-                                    left: 58.h,
-                                    top: 72.h,
-                                    child: WidgetUtils.showImages(
-                                        'assets/images/z_wheel.gif',
-                                        ScreenUtil().setHeight(20),
-                                        ScreenUtil().setHeight(20)))
-                                : const Text(''),
-                            isShow == false
-                                ? Positioned(
-                                    left: 112.h,
-                                    top: 72.h,
-                                    child: WidgetUtils.showImages(
-                                        'assets/images/z_wheel.gif',
-                                        ScreenUtil().setHeight(22),
-                                        ScreenUtil().setHeight(22)))
-                                : const Text(''),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 485.h,
-                  left: -5.h,
-                  child: SlideTransition(
-                    position: _carPlay(3),
-                    child: Row(
-                      children: [
-                        Stack(
-                          children: [
-                            WidgetUtils.showImages(
-                                listCar[3]
-                                    ? 'assets/images/car/hou+.png'
-                                    : 'assets/images/car/hou.png',
-                                ScreenUtil().setHeight(102),
-                                ScreenUtil().setHeight(180)),
-                            isShow == false
-                                ? Positioned(
-                                    left: 54.h,
-                                    top: 74.h,
-                                    child: WidgetUtils.showImages(
-                                        'assets/images/z_wheel.gif',
-                                        ScreenUtil().setHeight(15),
-                                        ScreenUtil().setHeight(15)))
-                                : const Text(''),
-                            isShow == false
-                                ? Positioned(
-                                    left: 128.h,
-                                    top: 80.h,
-                                    child: WidgetUtils.showImages(
-                                        'assets/images/z_wheel.gif',
-                                        ScreenUtil().setHeight(13),
-                                        ScreenUtil().setHeight(13)))
-                                : const Text(''),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 530.h,
-                  left: -12.h,
-                  child: SlideTransition(
-                    position: _carPlay(4),
-                    child: Row(
-                      children: [
-                        Stack(
-                          children: [
-                            WidgetUtils.showImages(
-                                listCar[4]
-                                    ? 'assets/images/car/fen+.png'
-                                    : 'assets/images/car/fen.png',
-                                ScreenUtil().setHeight(102),
-                                ScreenUtil().setHeight(180)),
-                            isShow == false
-                                ? Positioned(
-                                    left: 58.h,
-                                    top: 75.h,
-                                    child: WidgetUtils.showImages(
-                                        'assets/images/z_wheel.gif',
-                                        ScreenUtil().setHeight(18),
-                                        ScreenUtil().setHeight(18)))
-                                : const Text(''),
-                            isShow == false
-                                ? Positioned(
-                                    left: 117.h,
-                                    top: 78.h,
-                                    child: WidgetUtils.showImages(
-                                        'assets/images/z_wheel.gif',
-                                        ScreenUtil().setHeight(18),
-                                        ScreenUtil().setHeight(18)))
-                                : const Text(''),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 585.h,
-                  left: -30.h,
-                  child: SlideTransition(
-                    position: _carPlay(5),
-                    child: Row(
-                      children: [
-                        Stack(
-                          children: [
-                            WidgetUtils.showImages(
-                                listCar[5]
-                                    ? 'assets/images/car/lv+.png'
-                                    : 'assets/images/car/lv.png',
-                                ScreenUtil().setHeight(102),
-                                ScreenUtil().setHeight(180)),
-                            isShow == false
-                                ? Positioned(
-                                    left: 60.h,
-                                    top: 72.h,
-                                    child: WidgetUtils.showImages(
-                                        'assets/images/z_wheel.gif',
-                                        ScreenUtil().setHeight(20),
-                                        ScreenUtil().setHeight(20)))
-                                : const Text(''),
-                            isShow == false
-                                ? Positioned(
-                                    left: 114.h,
-                                    top: 78.h,
-                                    child: WidgetUtils.showImages(
-                                        'assets/images/z_wheel.gif',
-                                        ScreenUtil().setHeight(15),
-                                        ScreenUtil().setHeight(15)))
-                                : const Text(''),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 635.h,
-                  left: -40.h,
-                  child: SlideTransition(
-                    position: _carPlay(6),
-                    child: Row(
-                      children: [
-                        Stack(
-                          children: [
-                            WidgetUtils.showImages(
-                                listCar[6]
-                                    ? 'assets/images/car/maliao+.png'
-                                    : 'assets/images/car/maliao.png',
-                                ScreenUtil().setHeight(102),
-                                ScreenUtil().setHeight(180)),
-                            isShow == false
-                                ? Positioned(
-                                    left: 58.h,
-                                    top: 67.h,
-                                    child: WidgetUtils.showImages(
-                                        'assets/images/z_wheel.gif',
-                                        ScreenUtil().setHeight(22),
-                                        ScreenUtil().setHeight(22)))
-                                : const Text(''),
-                            isShow == false
-                                ? Positioned(
-                                    left: 112.h,
-                                    top: 75.h,
-                                    child: WidgetUtils.showImages(
-                                        'assets/images/z_wheel.gif',
-                                        ScreenUtil().setHeight(18),
-                                        ScreenUtil().setHeight(18)))
-                                : const Text(''),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                // 倒计时闹钟
-                isShow
-                    ? Positioned(
-                        top: 280.h,
-                        left: 215.h,
-                        child: Stack(
-                          children: [
-                            WidgetUtils.showImages(
-                                'assets/images/car_jingcai.png', 180.h, 180.h),
-                            Container(
-                              height: 160.h,
-                              width: 180.h,
-                              alignment: Alignment.center,
-                              child: WidgetUtils.onlyTextCenter(
-                                  sum.toString(),
-                                  StyleUtils.getCommonTextStyle(
-                                      color: MyColors.mineRed,
-                                      fontSize: 50.sp,
-                                      fontWeight: FontWeight.w600)),
-                            )
-                          ],
-                        ),
-                      )
-                    : const Text(''),
-                isPlay
-                    ? Positioned(
-                        top: 50.h,
-                        left: 0.h,
-                        height: ScreenUtil().setHeight(600),
-                        width: ScreenUtil().setHeight(600),
-                        child: const SVGASimpleImage(
-                          assetsName: 'assets/svga/gp/djs.svga',
-                        ),
-                      )
-                    : const Text(''),
-                isGo
-                    ? Positioned(
-                        top: 230.h,
-                        left: 180.h,
-                        child: ScaleTransition(
-                          scale: animationGO,
-                          child: WidgetUtils.showImages(
-                              'assets/images/car_go.png', 300.h, 260.h),
-                        ),
-                      )
-                    : const Text(''),
-                // 中途进来
-                isStarGame
-                    ? Center(
-                        child: SizedBox(
-                          height: 450.h,
-                          width: 350.h,
-                          child: Stack(
-                            children: [
-                              WidgetUtils.showImages(
-                                  'assets/images/car/car_star.png',
-                                  450.h,
-                                  350.h),
-                              Container(
-                                height: 120.h,
-                                width: 350.h,
-                                margin: EdgeInsets.only(top: 320.h),
-                                child: WidgetUtils.onlyTextCenter(
-                                    '本场竞赛已开始，请耐心等待~',
-                                    StyleUtils.getCommonTextStyle(
-                                        color: Colors.black87,
-                                        fontSize: 28.sp,
-                                        fontWeight: FontWeight.w600)),
-                              )
-                            ],
-                          ),
-                        ),
-                      )
-                    : const Text(''),
-                // 及时接受im下注信息
-                Container(
-                  height: 100.h,
-                  margin: EdgeInsets.only(top: 170.h),
-                  width: double.infinity,
-                  alignment: Alignment.center,
-                  child: Row(
-                    children: [
-                      for (int i = 0; i < listZDY.length; i++)
-                        Container(
-                          height: 90.h,
-                          width: 90.h,
-                          margin: EdgeInsets.only(left: 10.h),
-                          child: Stack(
-                            alignment: Alignment.bottomCenter,
-                            children: [
-                              WidgetUtils.CircleHeadImage(
-                                  90.h, 90.h, listZDY[i]['avatar'].toString().isEmpty ? '' : listZDY[i]['avatar'].toString()),
-                              Container(
-                                height: 25.h,
-                                width: 90.h,
-                                //边框设置
-                                decoration: const BoxDecoration(
-                                    image: DecorationImage(
-                                  //背景图片修饰
-                                  image:
-                                      AssetImage("assets/images/car_btn2.png"),
-                                  fit: BoxFit.fill, //覆盖
-                                )),
-                                child: WidgetUtils.onlyTextCenter(
-                                    listZDY[i]['amount'].toString(),
-                                    StyleUtils.getCommonTextStyle(
-                                        color: Colors.white, fontSize: 22.sp)),
-                              ),
-                            ],
-                          ),
-                        )
+                      ),
+                      WidgetUtils.commonSizedBox(140.h, 0),
                     ],
                   ),
-                )
-              ],
-            ),
-          ),
-          //下注区域
-          Expanded(
-              child: Container(
-            padding: EdgeInsets.only(left: 5.h, right: 10.h),
-            color: MyColors.CarBG,
-            child: Column(
-              children: [
-                WidgetUtils.commonSizedBox(20.h, 0),
-                //6倍
-                Row(
-                  children: [
-                    WidgetUtils.showImagesFill(
-                        'assets/images/car_b6.png', 73.h, 69.h),
-                    SixInfo(1),
-                    WidgetUtils.commonSizedBox(0, 5.h),
-                    SixInfo(2),
-                    WidgetUtils.commonSizedBox(0, 5.h),
-                    SixInfo(3),
-                    WidgetUtils.commonSizedBox(0, 5.h),
-                    SixInfo(4),
-                    WidgetUtils.commonSizedBox(0, 5.h),
-                    SixInfo(5),
-                    WidgetUtils.commonSizedBox(0, 5.h),
-                    SixInfo(6),
-                  ],
-                ),
-                WidgetUtils.commonSizedBox(4.h, 0),
-                //3倍
-                Row(
-                  children: [
-                    WidgetUtils.showImagesFill(
-                        'assets/images/car_b3.png', 73.h, 69.h),
-                    SixInfo2(1),
-                    WidgetUtils.commonSizedBox(0, 4.h),
-                    SixInfo2(2),
-                    WidgetUtils.commonSizedBox(0, 4.h),
-                    SixInfo2(3),
-                  ],
-                ),
-                WidgetUtils.commonSizedBox(4.h, 0),
-                //2倍
-                Row(
-                  children: [
-                    WidgetUtils.showImagesFill(
-                        'assets/images/car_b2.png', 73.h, 69.h),
-                    SixInfo3(1),
-                    WidgetUtils.commonSizedBox(0, 4.h),
-                    SixInfo3(2),
-                  ],
-                ),
-                WidgetUtils.commonSizedBox(4.h, 0),
-                //12倍
-                Row(
-                  children: [
-                    WidgetUtils.showImagesFill(
-                        'assets/images/car_b8.png', 73.h, 69.h),
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        if(xiazhujine > double.parse(sp.getString('car_jinbi').toString())){
-                          MyToastUtils.showToastBottom('钱包余额不足');
-                          return;
-                        }
-                        if (isShow) {
-                          if (sp.getBool('car_queren') == false ||
-                              sp.getBool('car_queren') == null) {
-                            MyUtils.goTransparentPageCom(
-                                context,
-                                QueRenPage(
-                                    title: '赛车下注',
-                                    jine: xiazhujine,
-                                    isDuiHuan: false,
-                                    index: '12'));
-                            return;
-                          }
-                          doPostCarBet('12');
-                        }
-                      }),
+                  Positioned(
+                    top: 330.h,
+                    left: 25.h,
+                    child: SlideTransition(
+                      position: _carPlay(0),
+                      child: Row(
+                        children: [
+                          Stack(
+                            children: [
+                              WidgetUtils.showImages(
+                                  listCar[0]
+                                      ? 'assets/images/car/xiaogui+.png'
+                                      : 'assets/images/car/xiaogui.png',
+                                  ScreenUtil().setHeight(102),
+                                  ScreenUtil().setHeight(180)),
+                              isShow == false
+                                  ? Positioned(
+                                  left: 73.h,
+                                  top: 78.h,
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/z_wheel.gif',
+                                      ScreenUtil().setHeight(15),
+                                      ScreenUtil().setHeight(15)))
+                                  : const Text(''),
+                              isShow == false
+                                  ? Positioned(
+                                  left: 130.h,
+                                  top: 78.h,
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/z_wheel.gif',
+                                      ScreenUtil().setHeight(15),
+                                      ScreenUtil().setHeight(15)))
+                                  : const Text(''),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 380.h,
+                    left: 12.h,
+                    child: SlideTransition(
+                      position: _carPlay(1),
+                      child: Row(
+                        children: [
+                          Stack(
+                            children: [
+                              WidgetUtils.showImages(
+                                  listCar[1]
+                                      ? 'assets/images/car/guigui+.png'
+                                      : 'assets/images/car/guigui.png',
+                                  ScreenUtil().setHeight(102),
+                                  ScreenUtil().setHeight(180)),
+                              isShow == false
+                                  ? Positioned(
+                                  left: 66.h,
+                                  top: 75.h,
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/z_wheel.gif',
+                                      ScreenUtil().setHeight(18),
+                                      ScreenUtil().setHeight(18)))
+                                  : const Text(''),
+                              isShow == false
+                                  ? Positioned(
+                                  left: 120.h,
+                                  top: 82.h,
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/z_wheel.gif',
+                                      ScreenUtil().setHeight(15),
+                                      ScreenUtil().setHeight(15)))
+                                  : const Text(''),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 430.h,
+                    left: 10.h,
+                    child: SlideTransition(
+                      position: _carPlay(2),
+                      child: Row(
+                        children: [
+                          Stack(
+                            children: [
+                              WidgetUtils.showImages(
+                                  listCar[2]
+                                      ? 'assets/images/car/lan+.png'
+                                      : 'assets/images/car/lan.png',
+                                  ScreenUtil().setHeight(102),
+                                  ScreenUtil().setHeight(180)),
+                              isShow == false
+                                  ? Positioned(
+                                  left: 58.h,
+                                  top: 72.h,
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/z_wheel.gif',
+                                      ScreenUtil().setHeight(20),
+                                      ScreenUtil().setHeight(20)))
+                                  : const Text(''),
+                              isShow == false
+                                  ? Positioned(
+                                  left: 112.h,
+                                  top: 72.h,
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/z_wheel.gif',
+                                      ScreenUtil().setHeight(22),
+                                      ScreenUtil().setHeight(22)))
+                                  : const Text(''),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 485.h,
+                    left: -5.h,
+                    child: SlideTransition(
+                      position: _carPlay(3),
+                      child: Row(
+                        children: [
+                          Stack(
+                            children: [
+                              WidgetUtils.showImages(
+                                  listCar[3]
+                                      ? 'assets/images/car/hou+.png'
+                                      : 'assets/images/car/hou.png',
+                                  ScreenUtil().setHeight(102),
+                                  ScreenUtil().setHeight(180)),
+                              isShow == false
+                                  ? Positioned(
+                                  left: 54.h,
+                                  top: 74.h,
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/z_wheel.gif',
+                                      ScreenUtil().setHeight(15),
+                                      ScreenUtil().setHeight(15)))
+                                  : const Text(''),
+                              isShow == false
+                                  ? Positioned(
+                                  left: 128.h,
+                                  top: 80.h,
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/z_wheel.gif',
+                                      ScreenUtil().setHeight(13),
+                                      ScreenUtil().setHeight(13)))
+                                  : const Text(''),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 530.h,
+                    left: -12.h,
+                    child: SlideTransition(
+                      position: _carPlay(4),
+                      child: Row(
+                        children: [
+                          Stack(
+                            children: [
+                              WidgetUtils.showImages(
+                                  listCar[4]
+                                      ? 'assets/images/car/fen+.png'
+                                      : 'assets/images/car/fen.png',
+                                  ScreenUtil().setHeight(102),
+                                  ScreenUtil().setHeight(180)),
+                              isShow == false
+                                  ? Positioned(
+                                  left: 58.h,
+                                  top: 75.h,
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/z_wheel.gif',
+                                      ScreenUtil().setHeight(18),
+                                      ScreenUtil().setHeight(18)))
+                                  : const Text(''),
+                              isShow == false
+                                  ? Positioned(
+                                  left: 117.h,
+                                  top: 78.h,
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/z_wheel.gif',
+                                      ScreenUtil().setHeight(18),
+                                      ScreenUtil().setHeight(18)))
+                                  : const Text(''),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 585.h,
+                    left: -30.h,
+                    child: SlideTransition(
+                      position: _carPlay(5),
+                      child: Row(
+                        children: [
+                          Stack(
+                            children: [
+                              WidgetUtils.showImages(
+                                  listCar[5]
+                                      ? 'assets/images/car/lv+.png'
+                                      : 'assets/images/car/lv.png',
+                                  ScreenUtil().setHeight(102),
+                                  ScreenUtil().setHeight(180)),
+                              isShow == false
+                                  ? Positioned(
+                                  left: 60.h,
+                                  top: 72.h,
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/z_wheel.gif',
+                                      ScreenUtil().setHeight(20),
+                                      ScreenUtil().setHeight(20)))
+                                  : const Text(''),
+                              isShow == false
+                                  ? Positioned(
+                                  left: 114.h,
+                                  top: 78.h,
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/z_wheel.gif',
+                                      ScreenUtil().setHeight(15),
+                                      ScreenUtil().setHeight(15)))
+                                  : const Text(''),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 635.h,
+                    left: -40.h,
+                    child: SlideTransition(
+                      position: _carPlay(6),
+                      child: Row(
+                        children: [
+                          Stack(
+                            children: [
+                              WidgetUtils.showImages(
+                                  listCar[6]
+                                      ? 'assets/images/car/maliao+.png'
+                                      : 'assets/images/car/maliao.png',
+                                  ScreenUtil().setHeight(102),
+                                  ScreenUtil().setHeight(180)),
+                              isShow == false
+                                  ? Positioned(
+                                  left: 58.h,
+                                  top: 67.h,
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/z_wheel.gif',
+                                      ScreenUtil().setHeight(22),
+                                      ScreenUtil().setHeight(22)))
+                                  : const Text(''),
+                              isShow == false
+                                  ? Positioned(
+                                  left: 112.h,
+                                  top: 75.h,
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/z_wheel.gif',
+                                      ScreenUtil().setHeight(18),
+                                      ScreenUtil().setHeight(18)))
+                                  : const Text(''),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  // 倒计时闹钟
+                  isShow
+                      ? Positioned(
+                    top: 280.h,
+                    left: 215.h,
+                    child: Stack(
+                      children: [
+                        WidgetUtils.showImages(
+                            'assets/images/car_jingcai.png', 180.h, 180.h),
+                        Container(
+                          height: 160.h,
+                          width: 180.h,
+                          alignment: Alignment.center,
+                          child: WidgetUtils.onlyTextCenter(
+                              sum.toString(),
+                              StyleUtils.getCommonTextStyle(
+                                  color: MyColors.mineRed,
+                                  fontSize: 50.sp,
+                                  fontWeight: FontWeight.w600)),
+                        )
+                      ],
+                    ),
+                  )
+                      : const Text(''),
+                  isPlay
+                      ? Positioned(
+                    top: 50.h,
+                    left: 0.h,
+                    height: ScreenUtil().setHeight(600),
+                    width: ScreenUtil().setHeight(600),
+                    child: const SVGASimpleImage(
+                      assetsName: 'assets/svga/gp/djs.svga',
+                    ),
+                  )
+                      : const Text(''),
+                  isGo
+                      ? Positioned(
+                    top: 230.h,
+                    left: 180.h,
+                    child: ScaleTransition(
+                      scale: animationGO,
+                      child: WidgetUtils.showImages(
+                          'assets/images/car_go.png', 300.h, 260.h),
+                    ),
+                  )
+                      : const Text(''),
+                  // 中途进来
+                  isStarGame
+                      ? Center(
+                    child: SizedBox(
+                      height: 450.h,
+                      width: 350.h,
                       child: Stack(
                         children: [
-                          WidgetUtils.showImagesFill(
-                              listA[11]
-                                  ? 'assets/images/car_jl_8_yes.png'
-                                  : 'assets/images/car_jl_8_no.png',
-                              70.h,
-                              double.infinity),
-                          Positioned(
-                            left: 5.h,
-                            top: 10.h,
-                            child: WidgetUtils.onlyText(
-                                listJL[11].toString(),
+                          WidgetUtils.showImages(
+                              'assets/images/car/car_star.png',
+                              450.h,
+                              350.h),
+                          Container(
+                            height: 120.h,
+                            width: 350.h,
+                            margin: EdgeInsets.only(top: 320.h),
+                            child: WidgetUtils.onlyTextCenter(
+                                '本场竞赛已开始，请耐心等待~',
                                 StyleUtils.getCommonTextStyle(
-                                    color: Colors.white,
-                                    fontSize: 17.sp,
+                                    color: Colors.black87,
+                                    fontSize: 28.sp,
                                     fontWeight: FontWeight.w600)),
                           )
                         ],
                       ),
-                    ))
-                  ],
-                ),
-                const Spacer(),
-                //下注
-                Row(
-                  children: [
-                    jine(0),
-                    WidgetUtils.commonSizedBox(0, 10.h),
-                    jine(1),
-                    WidgetUtils.commonSizedBox(0, 10.h),
-                    jine(2),
-                    WidgetUtils.commonSizedBox(0, 10.h),
-                    jine(3),
-                  ],
-                ),
-                const Spacer(),
-              ],
+                    ),
+                  )
+                      : const Text(''),
+                  // 及时接受im下注信息
+                  Container(
+                    height: 100.h,
+                    margin: EdgeInsets.only(top: 170.h),
+                    width: double.infinity,
+                    alignment: Alignment.center,
+                    child: Row(
+                      children: [
+                        for (int i = 0; i < listZDY.length; i++)
+                          Container(
+                            height: 90.h,
+                            width: 90.h,
+                            margin: EdgeInsets.only(left: 10.h),
+                            child: Stack(
+                              alignment: Alignment.bottomCenter,
+                              children: [
+                                WidgetUtils.CircleHeadImage(
+                                    90.h, 90.h, listZDY[i]['avatar'].toString().isEmpty ? '' : listZDY[i]['avatar'].toString()),
+                                Container(
+                                  height: 25.h,
+                                  width: 90.h,
+                                  //边框设置
+                                  decoration: const BoxDecoration(
+                                      image: DecorationImage(
+                                        //背景图片修饰
+                                        image:
+                                        AssetImage("assets/images/car_btn2.png"),
+                                        fit: BoxFit.fill, //覆盖
+                                      )),
+                                  child: WidgetUtils.onlyTextCenter(
+                                      listZDY[i]['amount'].toString(),
+                                      StyleUtils.getCommonTextStyle(
+                                          color: Colors.white, fontSize: 22.sp)),
+                                ),
+                              ],
+                            ),
+                          )
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
-          ))
-        ],
+            //下注区域
+            Expanded(
+                child: Container(
+                  padding: EdgeInsets.only(left: 5.h, right: 10.h),
+                  color: MyColors.CarBG,
+                  child: Column(
+                    children: [
+                      WidgetUtils.commonSizedBox(20.h, 0),
+                      //6倍
+                      Row(
+                        children: [
+                          WidgetUtils.showImagesFill(
+                              'assets/images/car_b6.png', 73.h, 69.h),
+                          SixInfo(1),
+                          WidgetUtils.commonSizedBox(0, 5.h),
+                          SixInfo(2),
+                          WidgetUtils.commonSizedBox(0, 5.h),
+                          SixInfo(3),
+                          WidgetUtils.commonSizedBox(0, 5.h),
+                          SixInfo(4),
+                          WidgetUtils.commonSizedBox(0, 5.h),
+                          SixInfo(5),
+                          WidgetUtils.commonSizedBox(0, 5.h),
+                          SixInfo(6),
+                        ],
+                      ),
+                      WidgetUtils.commonSizedBox(4.h, 0),
+                      //3倍
+                      Row(
+                        children: [
+                          WidgetUtils.showImagesFill(
+                              'assets/images/car_b3.png', 73.h, 69.h),
+                          SixInfo2(1),
+                          WidgetUtils.commonSizedBox(0, 4.h),
+                          SixInfo2(2),
+                          WidgetUtils.commonSizedBox(0, 4.h),
+                          SixInfo2(3),
+                        ],
+                      ),
+                      WidgetUtils.commonSizedBox(4.h, 0),
+                      //2倍
+                      Row(
+                        children: [
+                          WidgetUtils.showImagesFill(
+                              'assets/images/car_b2.png', 73.h, 69.h),
+                          SixInfo3(1),
+                          WidgetUtils.commonSizedBox(0, 4.h),
+                          SixInfo3(2),
+                        ],
+                      ),
+                      WidgetUtils.commonSizedBox(4.h, 0),
+                      //12倍
+                      Row(
+                        children: [
+                          WidgetUtils.showImagesFill(
+                              'assets/images/car_b8.png', 73.h, 69.h),
+                          Expanded(
+                              child: GestureDetector(
+                                onTap: (() {
+                                  if(xiazhujine > double.parse(sp.getString('car_mogu').toString())){
+                                    if(xiazhujine > double.parse(sp.getString('car_jinbi').toString())){
+                                      MyToastUtils.showToastBottom('钱包余额不足');
+                                      return;
+                                    }
+                                  }
+                                  if (isShow) {
+                                    if (sp.getBool('car_queren') == false ||
+                                        sp.getBool('car_queren') == null) {
+                                      MyUtils.goTransparentPageCom(
+                                          context,
+                                          QueRenPage(
+                                              title: '赛车下注',
+                                              jine: xiazhujine,
+                                              isDuiHuan: false,
+                                              index: '12'));
+                                      return;
+                                    }
+                                    doPostCarBet('12');
+                                  }
+                                }),
+                                child: Stack(
+                                  children: [
+                                    WidgetUtils.showImagesFill(
+                                        listA[11]
+                                            ? 'assets/images/car_jl_8_yes.png'
+                                            : 'assets/images/car_jl_8_no.png',
+                                        70.h,
+                                        double.infinity),
+                                    Positioned(
+                                      left: 5.h,
+                                      top: 10.h,
+                                      child: WidgetUtils.onlyText(
+                                          listJL[11].toString(),
+                                          StyleUtils.getCommonTextStyle(
+                                              color: Colors.white,
+                                              fontSize: 17.sp,
+                                              fontWeight: FontWeight.w600)),
+                                    )
+                                  ],
+                                ),
+                              ))
+                        ],
+                      ),
+                      const Spacer(),
+                      //下注
+                      Row(
+                        children: [
+                          jine(0),
+                          WidgetUtils.commonSizedBox(0, 10.h),
+                          jine(1),
+                          WidgetUtils.commonSizedBox(0, 10.h),
+                          jine(2),
+                          WidgetUtils.commonSizedBox(0, 10.h),
+                          jine(3),
+                        ],
+                      ),
+                      const Spacer(),
+                    ],
+                  ),
+                ))
+          ],
+        ),
       ),
     );
   }
@@ -2083,6 +2136,10 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
             } else if (bean.data! == 1) {
               //更新
               luck = 6;
+            }else if (bean.data! == 0){
+              MyToastUtils.showToastBottom("数据异常,游戏即将关闭，稍后请在开奖记录查看！");
+              // ignore: use_build_context_synchronously
+              Navigator.pop(context);
             }
           });
           break;

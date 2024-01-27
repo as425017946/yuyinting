@@ -199,8 +199,8 @@ class _RoomPageState extends State<RoomPage>
   late final Gradient gradient;
   FocusNode? _focusNode;
 
-  // 判断自己是不是在麦上使用
-  bool isMeUp = false;
+  // 判断自己是不是在麦上使用/ 本人是否开麦状态
+  bool isMeUp = false, isMeStatus = false;
 
   // 在几号麦上
   String mxIndex = '';
@@ -896,28 +896,30 @@ class _RoomPageState extends State<RoomPage>
               break;
           }
         }else{
-          if(event.type == 'login_kick')
-          // 这个状态是后台直接封禁了账号，然后直接踢掉app
-          // 取消发布本地音频流
-          _engine.muteLocalAudioStream(true);
-          // 调用离开房间接口
-          doPostLeave();
-          _engine.disableAudio();
-          _dispose();
-          sp.setString('user_token', '');
-          sp.setString("user_account", '');
-          sp.setString("user_id", '');
-          sp.setString("em_pwd", '');
-          sp.setString("em_token", '');
-          sp.setString("user_password", '');
-          sp.setString('user_phone', '');
-          sp.setString('nickname', '');
-          sp.setString("user_headimg", '');
-          sp.setString("user_headimg_id", '');
-          // 保存身份
-          sp.setString("user_identity", '');
-          // 直接杀死app
-          SystemNavigator.pop();
+          if(event.type == 'login_kick'){
+            // 这个状态是后台直接封禁了账号，然后直接踢掉app
+            MyUtils.signOut();
+            // 取消发布本地音频流
+            _engine.muteLocalAudioStream(true);
+            _engine.disableAudio();
+            _dispose();
+            // 调用离开房间接口
+            doPostLeave();
+            sp.setString('user_token', '');
+            sp.setString("user_account", '');
+            sp.setString("user_id", '');
+            sp.setString("em_pwd", '');
+            sp.setString("em_token", '');
+            sp.setString("user_password", '');
+            sp.setString('user_phone', '');
+            sp.setString('nickname', '');
+            sp.setString("user_headimg", '');
+            sp.setString("user_headimg_id", '');
+            // 保存身份
+            sp.setString("user_identity", '');
+            // 直接杀死app
+            SystemNavigator.pop();
+          }
         }
       });
       // 加入房间事件的监听
@@ -1479,153 +1481,153 @@ class _RoomPageState extends State<RoomPage>
         slideAnimationController.playAnimation();
       });
 
-      // // 接受播放礼物
-      // listenSVGA = eventBus.on<SVGABack>().listen((event) {
-      //   // 赠送了全部
-      //   if (event.isAll) {
-      //     setState(() {
-      //       // 虽然赠送了全部礼物，但是之前有人送了，还没结束
-      //       if (listUrl.isNotEmpty) {
-      //         for (int i = 0; i < event.listurl.length; i++) {
-      //           if (event.url.contains('霸下') ||
-      //               event.url.contains('北欧天马') ||
-      //               event.url.contains('浮生若梦') ||
-      //               event.url.contains('光之子') ||
-      //               event.url.contains('环游世界') ||
-      //               event.url.contains('鲸遇心海') ||
-      //               event.url.contains('竞速时刻') ||
-      //               event.url.contains('君临天下') ||
-      //               event.url.contains('狂欢宇宙') ||
-      //               event.url.contains('恋爱摩天轮') ||
-      //               event.url.contains('玫瑰花海') ||
-      //               event.url.contains('梦回长安') ||
-      //               event.url.contains('魔幻泡泡') ||
-      //               event.url.contains('木马奇缘') ||
-      //               event.url.contains('奇幻游记') ||
-      //               event.url.contains('热气球') ||
-      //               event.url.contains('瑞麟') ||
-      //               event.url.contains('时光回想') ||
-      //               event.url.contains('童话岛') ||
-      //               event.url.contains('雪山飞虎') ||
-      //               event.url.contains('御龙豪杰')) {
-      //             saveSVGAIMAGE(event.url);
-      //           } else {
-      //             // 直接用网络图地址
-      //             Map<dynamic, dynamic> map = {};
-      //             map['svgaUrl'] = event.url;
-      //             map['svgaBool'] = true;
-      //             // 直接用网络图地址
-      //             listUrl.add(map);
-      //           }
-      //         }
-      //       } else {
-      //         for (int i = 0; i < event.listurl.length; i++) {
-      //           if (event.url.contains('霸下') ||
-      //               event.url.contains('北欧天马') ||
-      //               event.url.contains('浮生若梦') ||
-      //               event.url.contains('光之子') ||
-      //               event.url.contains('环游世界') ||
-      //               event.url.contains('鲸遇心海') ||
-      //               event.url.contains('竞速时刻') ||
-      //               event.url.contains('君临天下') ||
-      //               event.url.contains('狂欢宇宙') ||
-      //               event.url.contains('恋爱摩天轮') ||
-      //               event.url.contains('玫瑰花海') ||
-      //               event.url.contains('梦回长安') ||
-      //               event.url.contains('魔幻泡泡') ||
-      //               event.url.contains('木马奇缘') ||
-      //               event.url.contains('奇幻游记') ||
-      //               event.url.contains('热气球') ||
-      //               event.url.contains('瑞麟') ||
-      //               event.url.contains('时光回想') ||
-      //               event.url.contains('童话岛') ||
-      //               event.url.contains('雪山飞虎') ||
-      //               event.url.contains('御龙豪杰')) {
-      //             saveSVGAIMAGE(event.url);
-      //           } else {
-      //             // 直接用网络图地址
-      //             Map<dynamic, dynamic> map = {};
-      //             map['svgaUrl'] = event.url;
-      //             map['svgaBool'] = true;
-      //             // 直接用网络图地址
-      //             listUrl.add(map);
-      //           }
-      //         }
-      //         // 执行后显示
-      //         isShowSVGA = true;
-      //         showStar(listUrl[0]);
-      //       }
-      //     });
-      //   } else {
-      //     setState(() {
-      //       if (listUrl.isEmpty) {
-      //         if (event.url.contains('霸下') ||
-      //             event.url.contains('北欧天马') ||
-      //             event.url.contains('浮生若梦') ||
-      //             event.url.contains('光之子') ||
-      //             event.url.contains('环游世界') ||
-      //             event.url.contains('鲸遇心海') ||
-      //             event.url.contains('竞速时刻') ||
-      //             event.url.contains('君临天下') ||
-      //             event.url.contains('狂欢宇宙') ||
-      //             event.url.contains('恋爱摩天轮') ||
-      //             event.url.contains('玫瑰花海') ||
-      //             event.url.contains('梦回长安') ||
-      //             event.url.contains('魔幻泡泡') ||
-      //             event.url.contains('木马奇缘') ||
-      //             event.url.contains('奇幻游记') ||
-      //             event.url.contains('热气球') ||
-      //             event.url.contains('瑞麟') ||
-      //             event.url.contains('时光回想') ||
-      //             event.url.contains('童话岛') ||
-      //             event.url.contains('雪山飞虎') ||
-      //             event.url.contains('御龙豪杰')) {
-      //           saveSVGAIMAGE(event.url);
-      //         } else {
-      //           // 直接用网络图地址
-      //           Map<dynamic, dynamic> map = {};
-      //           map['svgaUrl'] = event.url;
-      //           map['svgaBool'] = true;
-      //           // 直接用网络图地址
-      //           listUrl.add(map);
-      //           isShowSVGA = true;
-      //           showStar(listUrl[0]);
-      //         }
-      //       } else {
-      //         if (event.url.contains('霸下') ||
-      //             event.url.contains('北欧天马') ||
-      //             event.url.contains('浮生若梦') ||
-      //             event.url.contains('光之子') ||
-      //             event.url.contains('环游世界') ||
-      //             event.url.contains('鲸遇心海') ||
-      //             event.url.contains('竞速时刻') ||
-      //             event.url.contains('君临天下') ||
-      //             event.url.contains('狂欢宇宙') ||
-      //             event.url.contains('恋爱摩天轮') ||
-      //             event.url.contains('玫瑰花海') ||
-      //             event.url.contains('梦回长安') ||
-      //             event.url.contains('魔幻泡泡') ||
-      //             event.url.contains('木马奇缘') ||
-      //             event.url.contains('奇幻游记') ||
-      //             event.url.contains('热气球') ||
-      //             event.url.contains('瑞麟') ||
-      //             event.url.contains('时光回想') ||
-      //             event.url.contains('童话岛') ||
-      //             event.url.contains('雪山飞虎') ||
-      //             event.url.contains('御龙豪杰')) {
-      //           saveSVGAIMAGE(event.url);
-      //         } else {
-      //           // 直接用网络图地址
-      //           Map<dynamic, dynamic> map = {};
-      //           map['svgaUrl'] = event.url;
-      //           map['svgaBool'] = true;
-      //           // 直接用网络图地址
-      //           listUrl.add(map);
-      //         }
-      //       }
-      //     });
-      //   }
-      // });
+      // 接受播放礼物
+      listenSVGA = eventBus.on<SVGABack>().listen((event) {
+        // 赠送了全部
+        if (event.isAll) {
+          // setState(() {
+          //   // 虽然赠送了全部礼物，但是之前有人送了，还没结束
+          //   if (listUrl.isNotEmpty) {
+          //     for (int i = 0; i < event.listurl.length; i++) {
+          //       if (event.url.contains('霸下') ||
+          //           event.url.contains('北欧天马') ||
+          //           event.url.contains('浮生若梦') ||
+          //           event.url.contains('光之子') ||
+          //           event.url.contains('环游世界') ||
+          //           event.url.contains('鲸遇心海') ||
+          //           event.url.contains('竞速时刻') ||
+          //           event.url.contains('君临天下') ||
+          //           event.url.contains('狂欢宇宙') ||
+          //           event.url.contains('恋爱摩天轮') ||
+          //           event.url.contains('玫瑰花海') ||
+          //           event.url.contains('梦回长安') ||
+          //           event.url.contains('魔幻泡泡') ||
+          //           event.url.contains('木马奇缘') ||
+          //           event.url.contains('奇幻游记') ||
+          //           event.url.contains('热气球') ||
+          //           event.url.contains('瑞麟') ||
+          //           event.url.contains('时光回想') ||
+          //           event.url.contains('童话岛') ||
+          //           event.url.contains('雪山飞虎') ||
+          //           event.url.contains('御龙豪杰')) {
+          //         saveSVGAIMAGE(event.url);
+          //       } else {
+          //         // 直接用网络图地址
+          //         Map<dynamic, dynamic> map = {};
+          //         map['svgaUrl'] = event.url;
+          //         map['svgaBool'] = true;
+          //         // 直接用网络图地址
+          //         listUrl.add(map);
+          //       }
+          //     }
+          //   } else {
+          //     for (int i = 0; i < event.listurl.length; i++) {
+          //       if (event.url.contains('霸下') ||
+          //           event.url.contains('北欧天马') ||
+          //           event.url.contains('浮生若梦') ||
+          //           event.url.contains('光之子') ||
+          //           event.url.contains('环游世界') ||
+          //           event.url.contains('鲸遇心海') ||
+          //           event.url.contains('竞速时刻') ||
+          //           event.url.contains('君临天下') ||
+          //           event.url.contains('狂欢宇宙') ||
+          //           event.url.contains('恋爱摩天轮') ||
+          //           event.url.contains('玫瑰花海') ||
+          //           event.url.contains('梦回长安') ||
+          //           event.url.contains('魔幻泡泡') ||
+          //           event.url.contains('木马奇缘') ||
+          //           event.url.contains('奇幻游记') ||
+          //           event.url.contains('热气球') ||
+          //           event.url.contains('瑞麟') ||
+          //           event.url.contains('时光回想') ||
+          //           event.url.contains('童话岛') ||
+          //           event.url.contains('雪山飞虎') ||
+          //           event.url.contains('御龙豪杰')) {
+          //         saveSVGAIMAGE(event.url);
+          //       } else {
+          //         // 直接用网络图地址
+          //         Map<dynamic, dynamic> map = {};
+          //         map['svgaUrl'] = event.url;
+          //         map['svgaBool'] = true;
+          //         // 直接用网络图地址
+          //         listUrl.add(map);
+          //       }
+          //     }
+          //     // 执行后显示
+          //     isShowSVGA = true;
+          //     showStar(listUrl[0]);
+          //   }
+          // });
+        } else {
+          setState(() {
+            if (listUrl.isEmpty) {
+              if (event.url.contains('霸下') ||
+                  event.url.contains('北欧天马') ||
+                  event.url.contains('浮生若梦') ||
+                  event.url.contains('光之子') ||
+                  event.url.contains('环游世界') ||
+                  event.url.contains('鲸遇心海') ||
+                  event.url.contains('竞速时刻') ||
+                  event.url.contains('君临天下') ||
+                  event.url.contains('狂欢宇宙') ||
+                  event.url.contains('恋爱摩天轮') ||
+                  event.url.contains('玫瑰花海') ||
+                  event.url.contains('梦回长安') ||
+                  event.url.contains('魔幻泡泡') ||
+                  event.url.contains('木马奇缘') ||
+                  event.url.contains('奇幻游记') ||
+                  event.url.contains('热气球') ||
+                  event.url.contains('瑞麟') ||
+                  event.url.contains('时光回想') ||
+                  event.url.contains('童话岛') ||
+                  event.url.contains('雪山飞虎') ||
+                  event.url.contains('御龙豪杰')) {
+                saveSVGAIMAGE(event.url);
+              } else {
+                // 直接用网络图地址
+                Map<dynamic, dynamic> map = {};
+                map['svgaUrl'] = event.url;
+                map['svgaBool'] = true;
+                // 直接用网络图地址
+                listUrl.add(map);
+                isShowSVGA = true;
+                showStar(listUrl[0]);
+              }
+            } else {
+              if (event.url.contains('霸下') ||
+                  event.url.contains('北欧天马') ||
+                  event.url.contains('浮生若梦') ||
+                  event.url.contains('光之子') ||
+                  event.url.contains('环游世界') ||
+                  event.url.contains('鲸遇心海') ||
+                  event.url.contains('竞速时刻') ||
+                  event.url.contains('君临天下') ||
+                  event.url.contains('狂欢宇宙') ||
+                  event.url.contains('恋爱摩天轮') ||
+                  event.url.contains('玫瑰花海') ||
+                  event.url.contains('梦回长安') ||
+                  event.url.contains('魔幻泡泡') ||
+                  event.url.contains('木马奇缘') ||
+                  event.url.contains('奇幻游记') ||
+                  event.url.contains('热气球') ||
+                  event.url.contains('瑞麟') ||
+                  event.url.contains('时光回想') ||
+                  event.url.contains('童话岛') ||
+                  event.url.contains('雪山飞虎') ||
+                  event.url.contains('御龙豪杰')) {
+                saveSVGAIMAGE(event.url);
+              } else {
+                // 直接用网络图地址
+                Map<dynamic, dynamic> map = {};
+                map['svgaUrl'] = event.url;
+                map['svgaBool'] = true;
+                // 直接用网络图地址
+                listUrl.add(map);
+              }
+            }
+          });
+        }
+      });
       // 贵族特权进场动画播放完成
       listenGZOK = eventBus.on<RoomGZSVGABack>().listen((event) {
         if (event.isOK) {
@@ -2003,7 +2005,7 @@ class _RoomPageState extends State<RoomPage>
     //默认订阅所有远端用户的音频流。
     _engine.muteAllRemoteAudioStreams(false);
     LogE('本人上麦 ==  $isMeUp');
-    if(isMeUp){
+    if(isMeUp && isMeStatus){
       // 发布本地音频流
       _engine.muteLocalAudioStream(false);
     }else{
@@ -2516,12 +2518,11 @@ class _RoomPageState extends State<RoomPage>
             for (int i = 0; i < bean.data!.roomInfo!.mikeList!.length; i++) {
               if (sp.getString('user_id').toString() ==
                   bean.data!.roomInfo!.mikeList![i].uid.toString()) {
-                LogE('哈哈哈 == ${bean.data!.roomInfo!.mikeList![i].isClose}');
                 isMeUp = true;
                 mxIndex =
                     bean.data!.roomInfo!.mikeList![i].serialNumber.toString();
                 if (bean.data!.roomInfo!.mikeList![i].isClose == 0) {
-                  LogE('哈哈哈 == *******');
+                  isMeStatus = true;
                   isJinyiin = false;
                   //设置成主播
                   _engine.setClientRole(

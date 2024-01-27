@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
   @override
   void initState() {
     // TODO: implement initState
-    doPostPdAddress();
+    // doPostPdAddress();
     doCheck();
     //更新身份
     setState(() {

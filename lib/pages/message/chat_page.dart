@@ -87,6 +87,8 @@ class _ChatPageState extends State<ChatPage> {
 
   bool _isEmojiPickerVisible = false;
   FocusNode? _focusNode;
+  // 是否有录音权限
+  bool isQuanxian = false;
 
   void _onFocusChange() {
     if (_focusNode!.hasFocus) {
@@ -104,6 +106,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   void initState() {
     // TODO: implement initState
+    getPermissionStatus();
     _initialize();
     super.initState();
     eventBus.fire(SubmitButtonBack(title: '清空红点'));
@@ -213,6 +216,7 @@ class _ChatPageState extends State<ChatPage> {
     await _mPlayer!.openPlayer();
     await _mRecorder!.openRecorder();
   }
+
 
   @override
   void dispose() {
@@ -348,6 +352,7 @@ class _ChatPageState extends State<ChatPage> {
     int day = date.day;
     //获取当前时间的时
     int hour = date.hour;
+
     //获取当前时间的分
     int minute = date.minute;
     // 获取当前时间对象
@@ -356,7 +361,13 @@ class _ChatPageState extends State<ChatPage> {
     //获取当前时间的日
     int day2 = now.day;
     if (month == month2 && day == day2) {
-      addTime = '$hour:$minute';
+      if(hour < 10 && minute < 10){
+        addTime = '0$hour:0$minute';
+      }else if(hour < 10 && minute > 10){
+        addTime = '0$hour:$minute';
+      }else if(hour > 10 && minute < 10){
+        addTime = '$hour:0$minute';
+      }
     } else if (month == month2 && day2 - day == 1) {
       addTime = '昨天 $hour:$minute';
     } else if (month == month2 && day2 - day > 1) {
@@ -681,6 +692,9 @@ class _ChatPageState extends State<ChatPage> {
     //granted 通过，denied 被拒绝，permanentlyDenied 拒绝且不在提示
     PermissionStatus status = await permission.status;
     if (status.isGranted) {
+      setState(() {
+        isQuanxian = true;
+      });
       return true;
     } else if (status.isDenied) {
       requestPermission(permission);
@@ -689,6 +703,9 @@ class _ChatPageState extends State<ChatPage> {
     } else if (status.isRestricted) {
       requestPermission(permission);
     } else {}
+    setState(() {
+      isQuanxian = false;
+    });
     return false;
   }
 
@@ -704,60 +721,63 @@ class _ChatPageState extends State<ChatPage> {
 
 //点击开始录音
   startRecord() {
-    record();
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        djNum--;
-        audioNum++;
+    try{
+      record();
+      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        setState(() {
+          djNum--;
+          audioNum++;
+        });
+        if (djNum == 0) {
+          timer.cancel();
+          stopRecorder();
+        }
       });
-      if (djNum == 0) {
-        timer.cancel();
-        stopRecorder();
-      }
-    });
+    }catch(e){
+      MyToastUtils.showToastBottom('录音出错 $e');
+    }
   }
 
 //开始录音
   void record() async {
     try {
-      await getPermissionStatus().then((value) async {
-        if (!value) {
-          return;
-        }
+      if (!isQuanxian) {
+        return;
+      }
 
-        if (playRecord) {
-          stopPlayer();
-          setState(() {
-            playRecord = false;
-          });
-        }
-        // 缓存目录
-        // Directory tempDir = await getTemporaryDirectory();
-        var time = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-        Directory appDir = await getApplicationDocumentsDirectory();
-        // String folderName = 'myAudio'; // 指定文件夹名称
-        // // Directory folderDir = Directory('$appDir/$folderName');
-        // Directory folderDir = Directory(path);
-        // if (!folderDir.existsSync()) {
-        //   folderDir.createSync();
-        // }
-        String path = '${appDir.path}/$time${ext[Codec.aacADTS.index]}';
+      if (playRecord) {
+        stopPlayer();
         setState(() {
-          _mPath = path;
+          playRecord = false;
         });
-        LogE('录音地址:$path');
-        _mRecorder!
-            .startRecorder(
-          toFile: path,
-          codec: _codec,
-          audioSource: AudioSource.microphone,
-        )
-            .then((value) {
-          setState(() {
-            mediaRecord = false;
-            hasRecord = false;
-            _mPath = path;
-          });
+      }
+      // 缓存目录
+      // Directory tempDir = await getTemporaryDirectory();
+      var time = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+      Directory appDir = await getApplicationDocumentsDirectory();
+      // 文件名称
+      String path = '${appDir.path}/$time${ext[Codec.aacADTS.index]}';
+      // // Directory folderDir = Directory('$appDir/$folderName');
+      // Directory folderDir = Directory(path);
+      // if (!folderDir.existsSync()) {
+      //   folderDir.createSync();
+      // }
+      setState(() {
+        _mPath = path;
+      });
+      await _mRecorder!.openRecorder();
+      LogE('录音地址:$path');
+      _mRecorder!
+          .startRecorder(
+        toFile: path,
+        codec:  _codec,
+        audioSource: AudioSource.microphone,
+      )
+          .then((value) {
+        setState(() {
+          mediaRecord = false;
+          hasRecord = false;
+          _mPath = path;
         });
       });
     } catch (err) {}
@@ -774,6 +794,7 @@ class _ChatPageState extends State<ChatPage> {
         djNum = 60;
       });
     });
+    await _mRecorder!.closeRecorder();
   }
 
 //删除录音
@@ -1076,9 +1097,9 @@ class _ChatPageState extends State<ChatPage> {
                                   }
                                 },
                                 onVerticalDragUpdate: (details) async {
-                                  LogE('上滑==');
+                                  LogE('上滑== $isQuanxian');
                                   if(isLuZhi) {
-                                    if (await getPermissionStatus()) {
+                                    if (isQuanxian) {
                                       if (details.delta.dy < -1) {
                                         if (_timer.isActive) {
                                           _timer.cancel();
@@ -1096,13 +1117,13 @@ class _ChatPageState extends State<ChatPage> {
                                   LogE('时间差 == ${(DateTime.now().millisecondsSinceEpoch - downTime)}');
                                   if((DateTime.now().millisecondsSinceEpoch - downTime) >=1000){
                                     if(isLuZhi) {
-                                      if (await getPermissionStatus()) {
+                                      if (isQuanxian) {
                                         // 取消录音后抬起手指
                                         if (isCancel) {
+                                          LogE('发送录音 1');
                                           //重新初始化音频信息
                                           setState(() {
                                             isCancel = false;
-
                                             mediaRecord = true;
                                             playRecord = false; //音频文件播放状态
                                             hasRecord = false; //是否有音频文件可播放
@@ -1113,9 +1134,12 @@ class _ChatPageState extends State<ChatPage> {
                                             audioNum = 0; // 记录录了多久
                                           });
                                         }else{
+                                          LogE('发送录音 2');
                                           //发送录音
                                           doSendAudio();
                                         }
+                                      }else{
+                                        MyToastUtils.showToastBottom('尚未开启录音权限！');
                                       }
                                     }
                                   }else{
@@ -1738,72 +1762,88 @@ class _ChatPageState extends State<ChatPage> {
 
   /// 发送音频
   Future<void> doSendAudio() async {
-    final voiceMsg = EMMessage.createVoiceSendMessage(
-      targetId: widget.otherUid,
-      filePath: _mPath,
-      duration: audioNum,
-    );
-    voiceMsg.attributes = {
-      'nickname': sp.getString('nickname'),
-      'avatar': sp.getString('user_headimg'),
-      'weight': 50
-    };
-    EMClient.getInstance.chatManager.sendMessage(voiceMsg);
+    LogE('录音地址==  $_mPath');
+    File file = File(_mPath);
+    if(await file.exists()){
+      final voiceMsg = EMMessage.createVoiceSendMessage(
+        targetId: widget.otherUid,
+        filePath: _mPath,
+        duration: audioNum,
+      );
+      voiceMsg.attributes = {
+        'nickname': sp.getString('nickname'),
+        'avatar': sp.getString('user_headimg'),
+        'weight': 50
+      };
+      EMClient.getInstance.chatManager.sendMessage(voiceMsg);
 
-    DatabaseHelper databaseHelper = DatabaseHelper();
-    Database? db = await databaseHelper.database;
-    String combineID = '';
-    if (int.parse(sp.getString('user_id').toString()) >
-        int.parse(widget.otherUid)) {
-      combineID = '${widget.otherUid}-${sp.getString('user_id').toString()}';
-    } else {
-      combineID = '${sp.getString('user_id').toString()}-${widget.otherUid}';
+      DatabaseHelper databaseHelper = DatabaseHelper();
+      Database? db = await databaseHelper.database;
+      String combineID = '';
+      if (int.parse(sp.getString('user_id').toString()) >
+          int.parse(widget.otherUid)) {
+        combineID = '${widget.otherUid}-${sp.getString('user_id').toString()}';
+      } else {
+        combineID = '${sp.getString('user_id').toString()}-${widget.otherUid}';
+      }
+      Map<String, dynamic> params = <String, dynamic>{
+        'uid': sp.getString('user_id').toString(),
+        'otherUid': widget.otherUid,
+        'whoUid': sp.getString('user_id').toString(),
+        'combineID': combineID,
+        'nickName': widget.nickName,
+        'content': _mPath,
+        'headImg': myHeadImg,
+        'headNetImg': sp.getString('user_headimg').toString(),
+        'otherHeadImg': otherHeadImg,
+        'otherHeadNetImg': widget.otherImg,
+        'add_time': DateTime.now().millisecondsSinceEpoch,
+        'type': 3,
+        'number': audioNum,
+        'status': 0,
+        'readStatus': 1,
+        'liveStatus': 0,
+        'loginStatus': 0,
+      };
+      // 插入数据
+      await databaseHelper.insertData('messageSLTable', params);
+      // 获取所有数据
+      List<Map<String, dynamic>> result = await db.query('messageSLTable',
+          columns: null,
+          whereArgs: [combineID, sp.getString('user_id')],
+          where: 'combineID = ? and uid = ?');
+
+      setState(() {
+        allData2 = result;
+        length = allData2.length;
+      });
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
+        scrollToLastItem(); // 在widget构建完成后滚动到底部
+      });
+
+      //重新初始化音频信息
+      setState(() {
+        mediaRecord = true;
+        playRecord = false; //音频文件播放状态
+        hasRecord = false; //是否有音频文件可播放
+        isLuZhi = false;
+        isPlay = 0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
+        djNum = 60; // 录音时长
+        audioNum = 0; // 记录录了多久
+      });
+    }else{
+      MyToastUtils.showToastBottom('录音失败，请重新录制');
+      //重新初始化音频信息
+      setState(() {
+        mediaRecord = true;
+        playRecord = false; //音频文件播放状态
+        hasRecord = false; //是否有音频文件可播放
+        isLuZhi = false;
+        isPlay = 0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
+        djNum = 60; // 录音时长
+        audioNum = 0; // 记录录了多久
+      });
     }
-    Map<String, dynamic> params = <String, dynamic>{
-      'uid': sp.getString('user_id').toString(),
-      'otherUid': widget.otherUid,
-      'whoUid': sp.getString('user_id').toString(),
-      'combineID': combineID,
-      'nickName': widget.nickName,
-      'content': _mPath,
-      'headImg': myHeadImg,
-      'headNetImg': sp.getString('user_headimg').toString(),
-      'otherHeadImg': otherHeadImg,
-      'otherHeadNetImg': widget.otherImg,
-      'add_time': DateTime.now().millisecondsSinceEpoch,
-      'type': 3,
-      'number': audioNum,
-      'status': 0,
-      'readStatus': 1,
-      'liveStatus': 0,
-      'loginStatus': 0,
-    };
-    // 插入数据
-    await databaseHelper.insertData('messageSLTable', params);
-    // 获取所有数据
-    List<Map<String, dynamic>> result = await db.query('messageSLTable',
-        columns: null,
-        whereArgs: [combineID, sp.getString('user_id')],
-        where: 'combineID = ? and uid = ?');
-
-    setState(() {
-      allData2 = result;
-      length = allData2.length;
-    });
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      scrollToLastItem(); // 在widget构建完成后滚动到底部
-    });
-
-    //重新初始化音频信息
-    setState(() {
-      mediaRecord = true;
-      playRecord = false; //音频文件播放状态
-      hasRecord = false; //是否有音频文件可播放
-      isLuZhi = false;
-      isPlay = 0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
-      djNum = 60; // 录音时长
-      audioNum = 0; // 记录录了多久
-    });
   }
 
   /// 加入房间前
@@ -1934,13 +1974,15 @@ class _ChatPageState extends State<ChatPage> {
             onTapPickFromGallery();
           }else if(type == 3){
             if(isSendYY == false) {
-              if (await getPermissionStatus()) {
+              if (isQuanxian) {
                 // 开始录音
                 startRecord();
                 setState(() {
                   audioNum = 0; // 记录录了多久
                   isLuZhi = true;
                 });
+              }else{
+                MyToastUtils.showToastBottom('尚未开启录音权限！');
               }
             }
           }else if(type == 4){

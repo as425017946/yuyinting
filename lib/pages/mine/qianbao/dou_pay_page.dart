@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yuyinting/pages/gongping/web_page.dart';
+import 'package:yuyinting/utils/event_utils.dart';
 
+import '../../../bean/orderPayBean.dart';
 import '../../../colors/my_colors.dart';
+import '../../../http/data_utils.dart';
+import '../../../http/my_http_config.dart';
+import '../../../utils/loading.dart';
+import '../../../utils/my_toast_utils.dart';
+import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 
@@ -21,16 +29,20 @@ class _DouPayPageState extends State<DouPayPage> {
   List<bool> isClick = [true,false,false,false,false,false,false,false,false];
   List<String> listD = ['12','36','68','100','200','500','1000','3000','9000'];
   List<String> listS = ['100','300','580','1000','2000','5000','10000','30000','90000'];
-  //支付类型 0 支付宝 1云闪付 2 银行卡
+  //支付类型 0 支付宝 1云闪付 2 银行卡 3微信
   int type = 0;
   // 是否支持此支付方式 0支付宝 1云闪付 2银行卡 3微信
   bool isChoose0 = true, isChoose1 = true, isChoose2 = false, isChoose3 = false;
+  // 想要充值多少钱 给多少豆子
+  String money = '', moneyDou = '';
   ///选择金额使用
   Widget _initlistdata(context, index) {
     return GestureDetector(
       onTap: ((){
         setState(() {
           //选择金额要判断显示的支付方式
+          money = listD[index];
+          moneyDou = listS[index];
           // 3q9q不显示云闪付
           if(listD[index] == '3000' || listD[index] == '9000'){
             isChoose1 = false;
@@ -49,7 +61,7 @@ class _DouPayPageState extends State<DouPayPage> {
           }else{
             isChoose2 = true;
           }
-          isClick[index] = !isClick[index];
+          isClick[index] = true;
           for(int i = 0; i < 9; i++){
             if(i != index){
               isClick[i] = false;
@@ -95,11 +107,18 @@ class _DouPayPageState extends State<DouPayPage> {
     );
   }
 
+  var listen;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     appBar = WidgetUtils.getAppBar('充值V豆', true, context, false, 0);
+    listen = eventBus.on<SubmitButtonBack>().listen((event) {
+      if(event.title == '确认充值'){
+        doPostOrderCreate();
+      }
+    });
   }
   @override
   Widget build(BuildContext context) {
@@ -149,7 +168,6 @@ class _DouPayPageState extends State<DouPayPage> {
                                             color: Colors.white,
                                             fontSize: ScreenUtil().setSp(38))),
                                     const Spacer(),
-                                    WidgetUtils.commonSizedBox(0, 50),
                                     WidgetUtils.onlyText(widget.shuliang, StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(56), fontWeight: FontWeight.w600)),
                                     const Expanded(child: Text('')),
                                   ],
@@ -337,5 +355,58 @@ class _DouPayPageState extends State<DouPayPage> {
         ),
       ),
     );
+  }
+
+  /// 充值接口
+  /// 支付方式 zfb(支付宝) wx(微信) yhk(银行卡) ysf(云闪付)
+  /// 充值金额
+  /// 充值类型 1人民币 2u币
+  /// 货币类型 1金豆 2钻石
+  /// 金豆数量
+  /// 充值订单用途 1游戏币 2购买贵族
+  /// 是否首充 1是 0否
+  Future<void> doPostOrderCreate() async {
+    //支付类型 0 支付宝 1云闪付 2 银行卡 3微信
+    String payType = '';
+    setState(() {
+      if(type == 0){
+        payType = 'zfb';
+      }else if(type == 1){
+        payType = 'ysf';
+      }else if(type == 2){
+        payType = 'yhk';
+      }else if(type == 3){
+        payType = 'wx';
+      }
+    });
+    Map<String, dynamic> params = <String, dynamic>{
+      'recharge_method': payType,
+      'recharge_cur_amount': money,
+      'recharge_cur_type' : '1',
+      'game_cur_type' : '1',
+      'game_cur_amount' : moneyDou,
+      'use' : '1',
+      'is_first' : '0',
+    };
+    try {
+      Loading.show();
+      orderPayBean bean = await DataUtils.postOrderCreate(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          // ignore: use_build_context_synchronously
+          MyUtils.goTransparentPageCom(context, WebPage(url: bean.data!.payUrl!));
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+    }
   }
 }

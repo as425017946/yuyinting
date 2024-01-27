@@ -1021,9 +1021,11 @@ class MyUtils {
             addLogToConsole("send message succeed");
           },
           onProgress: (msgId, progress) {
+            LogE('语音发送失败1');
             addLogToConsole("send message succeed");
           },
           onError: (msgId, msg, error) {
+            LogE('语音发送失败2');
             addLogToConsole(
               "send message failed, code: ${error.code}, desc: ${error.description}",
             );

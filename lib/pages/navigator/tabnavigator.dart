@@ -168,18 +168,26 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
 
         }
       }else if(event.title == '账号已在其他设备登录'){
-        isJoinRoom = false;
-        // 取消发布本地音频流
-        _engine.muteLocalAudioStream(true);
-        _engine.disableAudio();
-        _dispose();
-        MyUtils.jumpLogin(context);
+        if(isJoinRoom) {
+          setState(() {
+            isJoinRoom = false;
+            // 取消发布本地音频流
+            _engine.muteLocalAudioStream(true);
+            _engine.disableAudio();
+            _dispose();
+            MyUtils.jumpLogin(context);
+          });
+        }
       }else if(event.title == '成功切换账号'){
-        isJoinRoom = false;
-        // 取消发布本地音频流
-        _engine.muteLocalAudioStream(true);
-        _engine.disableAudio();
-        _dispose();
+       if(isJoinRoom){
+         setState(() {
+           isJoinRoom = false;
+           // 取消发布本地音频流
+           _engine.muteLocalAudioStream(true);
+           _engine.disableAudio();
+           _dispose();
+         });
+       }
       }else if(event.title == '资源开始下载'){
         if(isDown == false) {
           doPostSvgaGiftList();
@@ -189,13 +197,27 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           isJoinRoom = false;
         });
       }else if(event.title == '添加新账号'){
-        isJoinRoom = false;
-        // 取消发布本地音频流
-        _engine.muteLocalAudioStream(true);
-        _engine.disableAudio();
-        _dispose();
-        // 调用离开房间接口
-        doPostLeave();
+        if(isJoinRoom){
+          setState(() {
+            isJoinRoom = false;
+            // 取消发布本地音频流
+            _engine.muteLocalAudioStream(true);
+            _engine.disableAudio();
+            _dispose();
+            // 调用离开房间接口
+            doPostLeave();
+          });
+        }
+      }else if(event.title == '账号退出登录'){
+        if(isJoinRoom) {
+          setState(() {
+            isJoinRoom = false;
+            // 取消发布本地音频流
+            _engine.muteLocalAudioStream(true);
+            _engine.disableAudio();
+            _dispose();
+          });
+        }
       }
     });
 
@@ -243,6 +265,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       }else if(event.type == 'login_kick'){
         // 这个状态是后台直接封禁了账号，然后直接踢掉app
         if(isJoinRoom) {
+          MyUtils.signOut();
           // 取消发布本地音频流
           _engine.muteLocalAudioStream(true);
           // 调用离开房间接口

@@ -49,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    doPostPdAddress();
+    // doPostPdAddress();
     getIPAddress();
     getDeviceIMEI();
     // 在登录页先设置所有游戏的音频开关默认开启，false为开始，true为关闭
@@ -123,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
         }
       });
     }else{
-      MyToastUtils.showToastBottom('没有获取到剪切板信息');
+      // MyToastUtils.showToastBottom('没有获取到剪切板信息');
     }
   }
 
@@ -201,11 +201,17 @@ class _LoginPageState extends State<LoginPage> {
             color: MyColors.loginBG,
             child: Column(
               children: [
-                SizedBox(
-                  height: 630.h,
-                  width: double.infinity,
-                  child: const SVGASimpleImage(
-                    assetsName: 'assets/svga/login.svga',
+                GestureDetector(
+                  onTap: (() {
+                    MyUtils.hideKeyboard(context);
+                  }),
+                  child: Container(
+                    height: 630.h,
+                    width: double.infinity,
+                    color: Colors.transparent,
+                    child: const SVGASimpleImage(
+                      assetsName: 'assets/svga/login.svga',
+                    ),
                   ),
                 ),
                 Container(
@@ -574,17 +580,6 @@ class _LoginPageState extends State<LoginPage> {
 
     ceshi();
 
-    /// 测试使用后期删除
-    if (userPhone == '1' && userMsg == '1') {
-      // ignore: use_build_context_synchronously
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => const Tab_Navigator()),
-        // ignore: unnecessary_null_comparison
-        (route) => route == null,
-      );
-      return;
-    }
 
     if (isClick) {
       if (userName.isEmpty) {

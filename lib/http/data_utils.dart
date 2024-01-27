@@ -46,6 +46,7 @@ import '../bean/myHomeBean.dart';
 import '../bean/myInfoBean.dart';
 import '../bean/myShopListBean.dart';
 import '../bean/onlineRoomUserBean.dart';
+import '../bean/orderPayBean.dart';
 import '../bean/pdAddressBean.dart';
 import '../bean/plBean.dart';
 import '../bean/playRouletteBean.dart';
@@ -1103,5 +1104,14 @@ class DataUtils{
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.delDT, {}, params);
     print("删除动态：$respons");
     return CommonBean.fromJson(respons!);
+  }
+
+
+  /// 充值
+  static Future<orderPayBean> postOrderCreate(Map<String,dynamic> params) async {
+    print("充值：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.orderCreate, {}, params);
+    print("充值：$respons");
+    return orderPayBean.fromJson(respons!);
   }
 }

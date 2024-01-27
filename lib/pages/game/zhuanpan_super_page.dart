@@ -137,11 +137,13 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
     }
 
     listenZDY = eventBus.on<ZDYBack>().listen((event) {
-      LogE('****${event.map!['luck']}');
-      setState(() {
-        huanlezhi = int.parse(event.map!['luck'].toString()) ~/ 1.5;
-        zhanshizhi = int.parse(event.map!['luck'].toString());
-      });
+      if(event.type == 'game_turntable_luck'){
+        LogE('****${event.map!['luck']}');
+        setState(() {
+          huanlezhi = int.parse(event.map!['luck'].toString()) ~/ 1.5;
+          zhanshizhi = int.parse(event.map!['luck'].toString());
+        });
+      }
     });
   }
   int luckyName = 0;

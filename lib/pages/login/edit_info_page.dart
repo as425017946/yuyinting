@@ -310,7 +310,7 @@ class _EditInfoPageState extends State<EditInfoPage> {
           // ignore: use_build_context_synchronously
           Navigator.pop(context);
           //判断有无代理房间
-          if(sp.getString('daili_roomid').toString().isNotEmpty){
+          if(sp.getString('daili_roomid').toString() != 'null'){
             //有房间直接进入
             doPostBeforeJoin(sp.getString('daili_roomid').toString(),'');
           }

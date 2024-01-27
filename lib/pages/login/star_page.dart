@@ -6,6 +6,7 @@ import 'package:yuyinting/utils/widget_utils.dart';
 
 import '../../config/my_config.dart';
 import '../../main.dart';
+import '../../utils/log_util.dart';
 import '../navigator/tabnavigator.dart';
 /// 启动页后展示的页面
 class StarPage extends StatefulWidget {
@@ -22,7 +23,9 @@ class _StarPageState extends State<StarPage> {
     super.initState();
     Future.delayed(const Duration(milliseconds: 2000), ((){
         Navigator.pop(context);
-        if (sp.getString('user_token').toString().isNotEmpty &&
+        LogE('用户token   ${sp.getString('user_token').toString()}');
+        LogE('用户token   ${sp.getString('user_token').toString().isNotEmpty}');
+        if (sp.getString('user_token').toString() != 'null' &&
             MyConfig.issAdd == false) {
           doGo();
         }else{
