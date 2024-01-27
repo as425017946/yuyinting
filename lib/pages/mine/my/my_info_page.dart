@@ -44,9 +44,20 @@ class _MyInfoPageState extends State<MyInfoPage> {
       avatarFrameGifImg = '';
   final TextEditingController _souSuoName = TextEditingController();
 
+  // 设备是安卓还是ios
+  String isDevices = 'android';
   @override
   void initState() {
     super.initState();
+    if (Platform.isAndroid) {
+      setState(() {
+        isDevices = 'android';
+      });
+    }else if (Platform.isIOS){
+      setState(() {
+        isDevices = 'ios';
+      });
+    }
     _currentIndex = 0;
     _controller = PageController(
       initialPage: 0,
@@ -106,8 +117,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
           ),
           child: Column(
             children: [
-              WidgetUtils.commonSizedBox(35, 0),
-
+              WidgetUtils.commonSizedBox(isDevices == 'ios' ? 80.h : 60.h, 0),
               ///头部信息
               Container(
                 height: ScreenUtil().setHeight(60),
@@ -140,8 +150,10 @@ class _MyInfoPageState extends State<MyInfoPage> {
                           });
                         }
                       }),
-                      child: SizedBox(
-                        width: ScreenUtil().setWidth(100),
+                      child: Container(
+                        width: 100.h,
+                        height: 33.h,
+                        color: Colors.transparent,
                         child: WidgetUtils.showImages(
                             'assets/images/mine_edit.png',
                             ScreenUtil().setHeight(33),

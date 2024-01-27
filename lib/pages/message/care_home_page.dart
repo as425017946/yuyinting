@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/pages/message/geren/who_lock_me_page.dart';
@@ -21,10 +23,21 @@ class _CareHomePageState extends State<CareHomePage> {
   int _currentIndex = 0;
   late final PageController _controller ;
   final TextEditingController _souSuoName = TextEditingController();
-
+  // 设备是安卓还是ios
+  String isDevices = 'android';
   @override
   void initState() {
     super.initState();
+    if (Platform.isAndroid) {
+      setState(() {
+        isDevices = 'android';
+      });
+    }else if (Platform.isIOS){
+      setState(() {
+        isDevices = 'ios';
+      });
+    }
+
     _currentIndex = widget.index;
     _controller = PageController(
       initialPage: widget.index,
@@ -37,7 +50,7 @@ class _CareHomePageState extends State<CareHomePage> {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          WidgetUtils.commonSizedBox(35, 0),
+          WidgetUtils.commonSizedBox(isDevices == 'ios' ? 80.h : 60.h, 0),
           ///头部信息
           Container(
             height: ScreenUtil().setHeight(60),

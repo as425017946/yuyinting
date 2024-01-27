@@ -55,11 +55,22 @@ class _MinePageState extends State<MinePage> {
   // 是否有入住审核信息
   bool isShenHe = false;
   var listenSH;
+  // 设备是安卓还是ios
+  String isDevices = 'android';
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    if (Platform.isAndroid) {
+      setState(() {
+        isDevices = 'android';
+      });
+    }else if (Platform.isIOS){
+      setState(() {
+        isDevices = 'ios';
+      });
+    }
     listen = eventBus.on<SubmitButtonBack>().listen((event) {
       if (event.title == '我的装扮') {
         // Navigator.pushNamed(context, 'JiesuanPage');
@@ -162,7 +173,7 @@ class _MinePageState extends State<MinePage> {
         ),
         child: Column(
           children: [
-            WidgetUtils.commonSizedBox(35, 0),
+            WidgetUtils.commonSizedBox(isDevices == 'ios' ? 80.h : 60.h, 0),
             GestureDetector(
               onTap: (() {
                 if (MyUtils.checkClick()) {

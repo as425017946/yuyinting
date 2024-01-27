@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:marquee/marquee.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/widget/SVGASimpleImage3.dart';
-
 import '../../bean/hengFuBean.dart';
-import '../../utils/widget_utils.dart';
-import '../../widget/Marquee.dart';
 import '../../widget/SVGASimpleImage.dart';
 
 class HomeItems {
@@ -137,88 +135,43 @@ class HomeItems {
                 child: Padding(
                   padding: EdgeInsets.only(top: topHD, left: gd, right: 50.h),
                   child: Marquee(
-                    speed: 10,
-                    child: name == '低贵族' ||
-                            name == '高贵族' ||
-                            name == '马里奥' ||
-                            name == '白鬼'
-                        ? RichText(
-                            text: TextSpan(children: [
-                            WidgetSpan(
-                                child: Transform.translate(
-                              offset: Offset(0, 0.h),
-                              child: Text(
-                                '恭喜',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 30.sp,
-                                  shadows: const [
-                                    Shadow(
-                                      color: Colors.black54,
-                                      offset: Offset(2, 2),
-                                      blurRadius: 3,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )),
-                            // // 显示头像
-                            // WidgetSpan(
-                            //     child: WidgetUtils.CircleImageNet(30.h, 30.h,
-                            //         15.h, hf.avatar!)),
-                            // 昵称
-                            // WidgetSpan(
-                            //     child: Transform.translate(
-                            //   offset: Offset(0, 0.h),
-                            //   child: Text(
-                            //     hf.fromNickname!,
-                            //     style: TextStyle(
-                            //       color: Colors.white,
-                            //       fontSize: 30.sp,
-                            //       shadows: const [
-                            //         Shadow(
-                            //           color: Colors.black54,
-                            //           offset: Offset(2, 2),
-                            //           blurRadius: 3,
-                            //         ),
-                            //       ],
-                            //     ),
-                            //   ),
-                            // )),
-                            // 提示信息
-                            WidgetSpan(
-                                child: Transform.translate(
-                              offset: Offset(0, 0.h),
-                              child: Text(
-                                info,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 30.sp,
-                                  shadows: const [
-                                    Shadow(
-                                      color: Colors.black54,
-                                      offset: Offset(2, 2),
-                                      blurRadius: 3,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )),
-                          ]))
-                        : Text(
-                            info,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 30.sp,
-                              shadows: const [
-                                Shadow(
-                                  color: Colors.black54,
-                                  offset: Offset(2, 2),
-                                  blurRadius: 3,
-                                ),
-                              ],
-                            ),
+                      // 文本
+                      text:  name == '低贵族' ||
+                          name == '高贵族' ||
+                          name == '马里奥' ||
+                          name == '白鬼' ? '恭喜$info' : info,
+                      // 文本样式
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 30.sp,
+                        shadows: const [
+                          Shadow(
+                            color: Colors.black54,
+                            offset: Offset(2, 2),
+                            blurRadius: 3,
                           ),
+                        ],
+                      ),
+                      // 滚动轴：水平或者竖直
+                      scrollAxis: Axis.horizontal,
+                      // 轴对齐方式start
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      // 空白间距
+                      blankSpace: 20.0,
+                      // 速度
+                      velocity: 100.0,
+                      // 暂停时长
+                      pauseAfterRound: Duration(seconds: 1),
+                      // startPadding
+                      startPadding: 10.0,
+                      // 加速时长
+                      accelerationDuration: Duration(seconds: 1),
+                      // 加速Curve
+                      accelerationCurve: Curves.linear,
+                      // 减速时长
+                      decelerationDuration: Duration(milliseconds: 500),
+                      // 减速Curve
+                      decelerationCurve: Curves.easeOut,
                   ),
                 ),
               ),
@@ -255,70 +208,40 @@ class HomeItems {
                 child: Padding(
                   padding: EdgeInsets.only(top: type == 0 ? 220.h : 185.h, left: 60.h, right: 50.h),
                   child: Marquee(
-                    speed: 10,
-                    child: RichText(
-                        text: TextSpan(children: [
-                      WidgetSpan(
-                          child: Transform.translate(
-                        offset: Offset(0, 0.h),
-                        child: Text(
-                          type == 0 ? '恭喜' : '',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 30.sp,
-                            shadows: const [
-                              Shadow(
-                                color: Colors.black54,
-                                offset: Offset(2, 2),
-                                blurRadius: 3,
-                              ),
-                            ],
-                          ),
+                    // 文本
+                    text: type == 0 ? '恭喜$info' : info,
+                    // 文本样式
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 30.sp,
+                      shadows: const [
+                        Shadow(
+                          color: Colors.black54,
+                          offset: Offset(2, 2),
+                          blurRadius: 3,
                         ),
-                      )),
-                      // // 显示头像
-                      // WidgetSpan(
-                      //     child: type == 0 ? WidgetUtils.CircleImageNet(
-                      //         30.h, 30.h, 15.h, hf.avatar!) : const Text('')),
-                      // 昵称
-                      WidgetSpan(
-                          child: Transform.translate(
-                        offset: Offset(0, 0.h),
-                        child: type == 0 ? Text(
-                          hf.fromNickname!,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 30.sp,
-                            shadows: const [
-                              Shadow(
-                                color: Colors.black54,
-                                offset: Offset(2, 2),
-                                blurRadius: 3,
-                              ),
-                            ],
-                          ),
-                        ) : const Text(''),
-                      )),
-                      // 提示信息
-                      WidgetSpan(
-                          child: Transform.translate(
-                        offset: Offset(0, 0.h),
-                        child: Text(
-                          info,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 30.sp,
-                            shadows: const [
-                              Shadow(
-                                color: Colors.black54,
-                                offset: Offset(2, 2),
-                                blurRadius: 3,
-                              ),
-                            ],
-                          ),
-                        ),
-                      )),
-                    ])),
+                      ],
+                    ),
+                    // 滚动轴：水平或者竖直
+                    scrollAxis: Axis.horizontal,
+                    // 轴对齐方式start
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    // 空白间距
+                    blankSpace: 20.0,
+                    // 速度
+                    velocity: 100.0,
+                    // 暂停时长
+                    pauseAfterRound: Duration(seconds: 1),
+                    // startPadding
+                    startPadding: 10.0,
+                    // 加速时长
+                    accelerationDuration: Duration(seconds: 1),
+                    // 加速Curve
+                    accelerationCurve: Curves.linear,
+                    // 减速时长
+                    decelerationDuration: Duration(milliseconds: 500),
+                    // 减速Curve
+                    decelerationCurve: Curves.easeOut,
                   ),
                 ),
               ),

@@ -287,6 +287,19 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           // 直接杀死app
           SystemNavigator.pop();
         }
+      }else if(event.type == 'user_room_black'){
+        if(isJoinRoom) {
+          if (event.map!['uid'].toString() ==
+              sp.getString('user_id').toString()) {
+            MyToastUtils.showToastBottom('你已被房间设置为黑名单用户！');
+            // 取消发布本地音频流
+            _engine.muteLocalAudioStream(true);
+            // 调用离开房间接口
+            doPostLeave();
+            _engine.disableAudio();
+            _dispose();
+          }
+        }
       }
     });
 
@@ -465,7 +478,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     // 在页面中使用自定义时间和图片地址
     slideAnimationController = SlideAnimationController(
       vsync: this,
-      duration: const Duration(seconds: 15), // 自定义时间
+      duration: const Duration(seconds: 16), // 自定义时间
     );
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       slideAnimationController.playAnimation();

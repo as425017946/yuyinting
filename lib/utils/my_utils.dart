@@ -163,11 +163,13 @@ class MyUtils {
     if (len == 18) {
       //处理18位的身份证号码从号码中得到生日和性别代码
       strBirthday =
-          "${cardId.substring(6, 10)}-${cardId.substring(10, 12)}-${cardId.substring(12, 14)}";
+      "${cardId.substring(6, 10)}-${cardId.substring(10, 12)}-${cardId
+          .substring(12, 14)}";
     }
     if (len == 15) {
       strBirthday =
-          "19${cardId.substring(6, 8)}-${cardId.substring(8, 10)}-${cardId.substring(10, 12)}";
+      "19${cardId.substring(6, 8)}-${cardId.substring(8, 10)}-${cardId
+          .substring(10, 12)}";
     }
     int age = getAgeFromBirthday(strBirthday);
     return age;
@@ -224,7 +226,7 @@ class MyUtils {
         context,
         MaterialPageRoute(builder: (context) => const LoginPage()),
         // ignore: unnecessary_null_comparison
-        (route) => route == null,
+            (route) => route == null,
       );
     });
   }
@@ -357,7 +359,9 @@ class MyUtils {
 
   // 保存网络图片到包下
   static void saveImg(String imgUrl, String name) async {
-    if (await Permission.storage.request().isGranted) {
+    if (await Permission.storage
+        .request()
+        .isGranted) {
       var response = await Dio()
           .get(imgUrl, options: Options(responseType: ResponseType.bytes));
       // 生成新的文件名
@@ -513,21 +517,21 @@ class MyUtils {
         EMChatRoomEventHandler(onRemovedFromChatRoom:
             (roomId, roomName, participantreason, reason) {
           // ignore: unrelated_type_equality_checks
-          if(reason == LeaveReason.Kicked){
+          if (reason == LeaveReason.Kicked) {
             LogE(
                 '客户主动离开聊天室 $roomId 房间名称 $roomName == $participantreason ** $reason');
-            if(sp.getString('roomID').toString() == roomId.toString()){
+            if (sp.getString('roomID').toString() == roomId.toString()) {
               EMClient.getInstance.chatRoomManager.joinChatRoom(roomId);
             }
-          }else{
+          } else {
             //非客户主动离开聊天室 并且判断是否为当前登录的房间
-            if(sp.getString('roomID').toString() == roomId.toString()){
+            if (sp.getString('roomID').toString() == roomId.toString()) {
               EMClient.getInstance.chatRoomManager.joinChatRoom(roomId);
             }
             LogE(
                 '非客户主动离开聊天室 $roomId 房间名称 $roomName == $participantreason ** $reason');
           }
-    }));
+        }));
 
     // 添加收消息监听
     EMClient.getInstance.chatManager.addEventHandler(
@@ -546,9 +550,10 @@ class MyUtils {
                   LogE('接收文本信息$info');
                   if (body.content == '赛车押注') {
                     eventBus.fire(JoinRoomYBack(map: info, type: '赛车押注'));
-                  }else if (body.content == '离开房间') {
-                    eventBus.fire(JoinRoomYBack(map: info, type: 'user_leave_room'));
-                  }else {
+                  } else if (body.content == '离开房间') {
+                    eventBus.fire(
+                        JoinRoomYBack(map: info, type: 'user_leave_room'));
+                  } else {
                     if (info['lv'] == '' || info['lv'] == null) {
                       if (info['type'] == 'clean_charm') {
                         // 厅内清空魅力值
@@ -565,10 +570,10 @@ class MyUtils {
                         if (int.parse(sp.getString('user_id').toString()) >
                             int.parse(msg.from!)) {
                           combineID =
-                              '${msg.from}-${sp.getString('user_id').toString()}';
+                          '${msg.from}-${sp.getString('user_id').toString()}';
                         } else {
                           combineID =
-                              '${sp.getString('user_id').toString()}-${msg.from}';
+                          '${sp.getString('user_id').toString()}-${msg.from}';
                         }
 
                         //保存头像
@@ -582,38 +587,38 @@ class MyUtils {
                         String otherHeadImg = '';
                         //保存自己头像
                         if (sp
-                                .getString('user_headimg')
-                                .toString()
-                                .contains('.gif') ||
+                            .getString('user_headimg')
+                            .toString()
+                            .contains('.gif') ||
                             sp
                                 .getString('user_headimg')
                                 .toString()
                                 .contains('.GIF')) {
                           myHeadImg =
-                              '${directory!.path}/${sp.getString('user_id')}.gif';
+                          '${directory!.path}/${sp.getString('user_id')}.gif';
                         } else if (sp
-                                .getString('user_headimg')
-                                .toString()
-                                .contains('.jpg') ||
+                            .getString('user_headimg')
+                            .toString()
+                            .contains('.jpg') ||
                             sp
                                 .getString('user_headimg')
                                 .toString()
                                 .contains('.GPG')) {
                           myHeadImg =
-                              '${directory!.path}/${sp.getString('user_id')}.gif';
+                          '${directory!.path}/${sp.getString('user_id')}.gif';
                         } else if (sp
-                                .getString('user_headimg')
-                                .toString()
-                                .contains('.jpeg') ||
+                            .getString('user_headimg')
+                            .toString()
+                            .contains('.jpeg') ||
                             sp
                                 .getString('user_headimg')
                                 .toString()
                                 .contains('.GPEG')) {
                           myHeadImg =
-                              '${directory!.path}/${sp.getString('user_id')}.jpeg';
+                          '${directory!.path}/${sp.getString('user_id')}.jpeg';
                         } else {
                           myHeadImg =
-                              '${directory!.path}/${sp.getString('user_id')}.png';
+                          '${directory!.path}/${sp.getString('user_id')}.png';
                         }
                         // 保存他人头像
                         if (headImg.contains('.gif') ||
@@ -640,7 +645,8 @@ class MyUtils {
                           'bigImg': '',
                           'headImg': myHeadImg,
                           'otherHeadImg': otherHeadImg,
-                          'add_time': nickName == '维C客服' ? '1893494560' : msg.serverTime,
+                          'add_time': nickName == '维C客服' ? '1893494560' : msg
+                              .serverTime,
                           'type': 1,
                           'number': 0,
                           'status': 1,
@@ -673,10 +679,10 @@ class MyUtils {
                   if (int.parse(sp.getString('user_id').toString()) >
                       int.parse(msg.from!)) {
                     combineID =
-                        '${msg.from}-${sp.getString('user_id').toString()}';
+                    '${msg.from}-${sp.getString('user_id').toString()}';
                   } else {
                     combineID =
-                        '${sp.getString('user_id').toString()}-${msg.from}';
+                    '${sp.getString('user_id').toString()}-${msg.from}';
                   }
                   //保存自己头像
                   MyUtils.saveImgTemp(sp.getString('user_headimg').toString(),
@@ -689,38 +695,38 @@ class MyUtils {
                   String otherHeadImg = '';
                   //保存自己头像
                   if (sp
-                          .getString('user_headimg')
-                          .toString()
-                          .contains('.gif') ||
+                      .getString('user_headimg')
+                      .toString()
+                      .contains('.gif') ||
                       sp
                           .getString('user_headimg')
                           .toString()
                           .contains('.GIF')) {
                     myHeadImg =
-                        '${directory!.path}/${sp.getString('user_id')}.gif';
+                    '${directory!.path}/${sp.getString('user_id')}.gif';
                   } else if (sp
-                          .getString('user_headimg')
-                          .toString()
-                          .contains('.jpg') ||
+                      .getString('user_headimg')
+                      .toString()
+                      .contains('.jpg') ||
                       sp
                           .getString('user_headimg')
                           .toString()
                           .contains('.GPG')) {
                     myHeadImg =
-                        '${directory!.path}/${sp.getString('user_id')}.gif';
+                    '${directory!.path}/${sp.getString('user_id')}.gif';
                   } else if (sp
-                          .getString('user_headimg')
-                          .toString()
-                          .contains('.jpeg') ||
+                      .getString('user_headimg')
+                      .toString()
+                      .contains('.jpeg') ||
                       sp
                           .getString('user_headimg')
                           .toString()
                           .contains('.GPEG')) {
                     myHeadImg =
-                        '${directory!.path}/${sp.getString('user_id')}.jpeg';
+                    '${directory!.path}/${sp.getString('user_id')}.jpeg';
                   } else {
                     myHeadImg =
-                        '${directory!.path}/${sp.getString('user_id')}.png';
+                    '${directory!.path}/${sp.getString('user_id')}.png';
                   }
                   // 保存他人头像
                   if (headImg.contains('.gif') || headImg.contains('.GIF')) {
@@ -747,7 +753,8 @@ class MyUtils {
                     'headNetImg': sp.getString('user_headimg').toString(),
                     'otherHeadImg': otherHeadImg,
                     'otherHeadNetImg': headImg,
-                    'add_time':  nickName == '维C客服' ? '1893494560' : msg.serverTime,
+                    'add_time': nickName == '维C客服' ? '1893494560' : msg
+                        .serverTime,
                     'type': 2,
                     'number': 0,
                     'status': 1,
@@ -787,10 +794,10 @@ class MyUtils {
                   if (int.parse(sp.getString('user_id').toString()) >
                       int.parse(msg.from!)) {
                     combineID =
-                        '${msg.from}-${sp.getString('user_id').toString()}';
+                    '${msg.from}-${sp.getString('user_id').toString()}';
                   } else {
                     combineID =
-                        '${sp.getString('user_id').toString()}-${msg.from}';
+                    '${sp.getString('user_id').toString()}-${msg.from}';
                   }
                   //保存自己头像
                   MyUtils.saveImgTemp(sp.getString('user_headimg').toString(),
@@ -803,38 +810,38 @@ class MyUtils {
                   String otherHeadImg = '';
                   //保存自己头像
                   if (sp
-                          .getString('user_headimg')
-                          .toString()
-                          .contains('.gif') ||
+                      .getString('user_headimg')
+                      .toString()
+                      .contains('.gif') ||
                       sp
                           .getString('user_headimg')
                           .toString()
                           .contains('.GIF')) {
                     myHeadImg =
-                        '${directory!.path}/${sp.getString('user_id')}.gif';
+                    '${directory!.path}/${sp.getString('user_id')}.gif';
                   } else if (sp
-                          .getString('user_headimg')
-                          .toString()
-                          .contains('.jpg') ||
+                      .getString('user_headimg')
+                      .toString()
+                      .contains('.jpg') ||
                       sp
                           .getString('user_headimg')
                           .toString()
                           .contains('.GPG')) {
                     myHeadImg =
-                        '${directory!.path}/${sp.getString('user_id')}.gif';
+                    '${directory!.path}/${sp.getString('user_id')}.gif';
                   } else if (sp
-                          .getString('user_headimg')
-                          .toString()
-                          .contains('.jpeg') ||
+                      .getString('user_headimg')
+                      .toString()
+                      .contains('.jpeg') ||
                       sp
                           .getString('user_headimg')
                           .toString()
                           .contains('.GPEG')) {
                     myHeadImg =
-                        '${directory!.path}/${sp.getString('user_id')}.jpeg';
+                    '${directory!.path}/${sp.getString('user_id')}.jpeg';
                   } else {
                     myHeadImg =
-                        '${directory!.path}/${sp.getString('user_id')}.png';
+                    '${directory!.path}/${sp.getString('user_id')}.png';
                   }
                   // 保存他人头像
                   if (headImg.contains('.gif') || headImg.contains('.GIF')) {
@@ -861,7 +868,8 @@ class MyUtils {
                     'headNetImg': sp.getString('user_headimg').toString(),
                     'otherHeadImg': otherHeadImg,
                     'otherHeadNetImg': headImg,
-                    'add_time':  nickName == '维C客服' ? '1893494560' : msg.serverTime,
+                    'add_time': nickName == '维C客服' ? '1893494560' : msg
+                        .serverTime,
                     'type': 3,
                     'number': body.duration,
                     'status': 1,
@@ -896,10 +904,10 @@ class MyUtils {
                     if (int.parse(sp.getString('user_id').toString()) >
                         int.parse(msg.from!)) {
                       combineID =
-                          '${msg.from}-${sp.getString('user_id').toString()}';
+                      '${msg.from}-${sp.getString('user_id').toString()}';
                     } else {
                       combineID =
-                          '${sp.getString('user_id').toString()}-${msg.from}';
+                      '${sp.getString('user_id').toString()}-${msg.from}';
                     }
 
                     //保存自己头像
@@ -913,38 +921,38 @@ class MyUtils {
                     String otherHeadImg = '';
                     //保存自己头像
                     if (sp
-                            .getString('user_headimg')
-                            .toString()
-                            .contains('.gif') ||
+                        .getString('user_headimg')
+                        .toString()
+                        .contains('.gif') ||
                         sp
                             .getString('user_headimg')
                             .toString()
                             .contains('.GIF')) {
                       myHeadImg =
-                          '${directory!.path}/${sp.getString('user_id')}.gif';
+                      '${directory!.path}/${sp.getString('user_id')}.gif';
                     } else if (sp
-                            .getString('user_headimg')
-                            .toString()
-                            .contains('.jpg') ||
+                        .getString('user_headimg')
+                        .toString()
+                        .contains('.jpg') ||
                         sp
                             .getString('user_headimg')
                             .toString()
                             .contains('.GPG')) {
                       myHeadImg =
-                          '${directory!.path}/${sp.getString('user_id')}.gif';
+                      '${directory!.path}/${sp.getString('user_id')}.gif';
                     } else if (sp
-                            .getString('user_headimg')
-                            .toString()
-                            .contains('.jpeg') ||
+                        .getString('user_headimg')
+                        .toString()
+                        .contains('.jpeg') ||
                         sp
                             .getString('user_headimg')
                             .toString()
                             .contains('.GPEG')) {
                       myHeadImg =
-                          '${directory!.path}/${sp.getString('user_id')}.jpeg';
+                      '${directory!.path}/${sp.getString('user_id')}.jpeg';
                     } else {
                       myHeadImg =
-                          '${directory!.path}/${sp.getString('user_id')}.png';
+                      '${directory!.path}/${sp.getString('user_id')}.png';
                     }
                     // 保存他人头像
                     if (headImg.contains('.gif') || headImg.contains('.GIF')) {
@@ -971,7 +979,8 @@ class MyUtils {
                       'headNetImg': sp.getString('user_headimg').toString(),
                       'otherHeadImg': otherHeadImg,
                       'otherHeadNetImg': headImg,
-                      'add_time':  nickName == '维C客服' ? '1893494560' : msg.serverTime,
+                      'add_time': nickName == '维C客服' ? '1893494560' : msg
+                          .serverTime,
                       'type': 6,
                       'number': 0,
                       'status': 1,
@@ -982,7 +991,9 @@ class MyUtils {
                     // 插入数据
                     await databaseHelper.insertData('messageSLTable', params);
                     eventBus.fire(SendMessageBack(type: 1, msgID: '0'));
-                  }else if(body.event == 'game_turntable_luck'){
+                  } else if (body.event == 'game_turntable_luck') {
+                    eventBus.fire(ZDYBack(map: body.params, type: body.event));
+                  } else if (body.event == 'user_room_black') {
                     eventBus.fire(ZDYBack(map: body.params, type: body.event));
                   } else {
                     eventBus.fire(ZDYBack(map: body.params, type: body.event));
@@ -1002,7 +1013,7 @@ class MyUtils {
     );
     // 添加消息状态变更监听
     EMClient.getInstance.chatManager.addMessageEvent(
-        // ChatMessageEvent 对应的 key。
+      // ChatMessageEvent 对应的 key。
         "UNIQUE_HANDLER_ID",
         ChatMessageEvent(
           onSuccess: (msgId, msg) {
@@ -1027,7 +1038,8 @@ class MyUtils {
           onError: (msgId, msg, error) {
             LogE('语音发送失败2');
             addLogToConsole(
-              "send message failed, code: ${error.code}, desc: ${error.description}",
+              "send message failed, code: ${error.code}, desc: ${error
+                  .description}",
             );
           },
         ));

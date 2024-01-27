@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -39,6 +40,7 @@ import 'package:flutter_sound/public/flutter_sound_player.dart';
 import 'package:flutter_sound_platform_interface/flutter_sound_recorder_platform_interface.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/foundation.dart' as foundation;
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'hongbao_page.dart';
 
@@ -77,6 +79,8 @@ class _ChatPageState extends State<ChatPage> {
   String _mPath = ''; //录音文件路径
   FlutterSoundPlayer? _mPlayer = FlutterSoundPlayer();
   FlutterSoundRecorder? _mRecorder = FlutterSoundRecorder();
+  //录制权限
+  bool _voiceRecorderIsInitialized = false;
   bool mediaRecord = true;
   bool playRecord = false; //音频文件播放状态
   bool hasRecord = false; //是否有音频文件可播放
@@ -214,7 +218,12 @@ class _ChatPageState extends State<ChatPage> {
   void _initialize() async {
     await _mPlayer!.closePlayer();
     await _mPlayer!.openPlayer();
-    await _mRecorder!.openRecorder();
+    await _mRecorder!.openRecorder().then((value) {
+      setState(() {
+        _voiceRecorderIsInitialized = true;
+      });
+    });
+    openTheRecorder();
   }
 
 
@@ -738,6 +747,40 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
+  Future<void> openTheRecorder() async {
+    if (!kIsWeb) {
+      var status = await Permission.microphone.request();
+      if (status != PermissionStatus.granted) {
+        throw RecordingPermissionException('Microphone permission not granted');
+      }
+    }
+    await _mRecorder!.openRecorder();
+    if (!await _mRecorder!.isEncoderSupported(_codec) && kIsWeb) {
+      _codec = Codec.opusWebM;
+      _mPath = 'tau_file.webm';
+      if (!await _mRecorder!.isEncoderSupported(_codec) && kIsWeb) {
+        return;
+      }
+    }
+    final session = await AudioSession.instance;
+    await session.configure(AudioSessionConfiguration(
+      avAudioSessionCategory: AVAudioSessionCategory.playAndRecord,
+      avAudioSessionCategoryOptions:
+      AVAudioSessionCategoryOptions.allowBluetooth |
+      AVAudioSessionCategoryOptions.defaultToSpeaker,
+      avAudioSessionMode: AVAudioSessionMode.spokenAudio,
+      avAudioSessionRouteSharingPolicy:
+      AVAudioSessionRouteSharingPolicy.defaultPolicy,
+      avAudioSessionSetActiveOptions: AVAudioSessionSetActiveOptions.none,
+      androidAudioAttributes: const AndroidAudioAttributes(
+        contentType: AndroidAudioContentType.speech,
+        flags: AndroidAudioFlags.none,
+        usage: AndroidAudioUsage.voiceCommunication,
+      ),
+      androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
+      androidWillPauseWhenDucked: true,
+    ));
+  }
 //开始录音
   void record() async {
     try {
@@ -899,12 +942,15 @@ class _ChatPageState extends State<ChatPage> {
                           });
                         }),
                         child: Container(
-                          width: ScreenUtil().setWidth(100),
+                          width: ScreenUtil().setWidth(120),
+                          height: 50.h,
+                          color: Colors.transparent,
+                          alignment: Alignment.centerLeft,
                           padding: const EdgeInsets.only(right: 15),
                           child: WidgetUtils.showImages(
                               'assets/images/chat_dian.png',
-                              ScreenUtil().setHeight(10),
-                              ScreenUtil().setHeight(7)),
+                              ScreenUtil().setHeight(30),
+                              ScreenUtil().setHeight(50)),
                         ),
                       ),
                     ],
@@ -1116,6 +1162,8 @@ class _ChatPageState extends State<ChatPage> {
                                 onVerticalDragEnd: (details) async {
                                   LogE('时间差 == ${(DateTime.now().millisecondsSinceEpoch - downTime)}');
                                   if((DateTime.now().millisecondsSinceEpoch - downTime) >=1000){
+                                    // 停止录音
+                                    stopRecorder();
                                     if(isLuZhi) {
                                       if (isQuanxian) {
                                         // 取消录音后抬起手指

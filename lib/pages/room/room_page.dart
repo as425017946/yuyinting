@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -362,11 +363,22 @@ class _RoomPageState extends State<RoomPage>
 
   // 上麦更新麦序记录第一次时间，用于判断切换麦序2s可切换一次，2s内不能随意切换
   int maiTime = 0;
+  // 设备是安卓还是ios
+  String isDevices = 'android';
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    if (Platform.isAndroid) {
+      setState(() {
+        isDevices = 'android';
+      });
+    }else if (Platform.isIOS){
+      setState(() {
+        isDevices = 'ios';
+      });
+    }
     //页面渲染完成
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       // 进入房间后清空代理房间id
@@ -615,20 +627,27 @@ class _RoomPageState extends State<RoomPage>
             doPostSetLock(event.index!, 'no');
             break;
           case '下麦':
-            if (event.index!.contains(';')) {
-              doPostSetmai(event.index!.split(';')[0], 'down',
-                  event.index!.split(';')[1]);
-            } else {
-              doPostSetmai(
-                  event.index!, 'down', sp.getString('user_id').toString());
+            if(DateTime.now().millisecondsSinceEpoch - maiTime > 2000){
               setState(() {
-                for (int i = 0; i < 9; i++) {
-                  isMy[i] = false;
-                }
-                for (int i = 0; i < 9; i++) {
-                  upOrDown[i] = false;
-                }
+                maiTime = DateTime.now().millisecondsSinceEpoch;
               });
+              if (event.index!.contains(';')) {
+                doPostSetmai(event.index!.split(';')[0], 'down',
+                    event.index!.split(';')[1]);
+              } else {
+                doPostSetmai(
+                    event.index!, 'down', sp.getString('user_id').toString());
+                setState(() {
+                  for (int i = 0; i < 9; i++) {
+                    isMy[i] = false;
+                  }
+                  for (int i = 0; i < 9; i++) {
+                    upOrDown[i] = false;
+                  }
+                });
+              }
+            }else{
+              MyToastUtils.showToastBottom('亲，不能频繁上线哦~');
             }
             break;
           case 'leave_room':
@@ -874,6 +893,26 @@ class _RoomPageState extends State<RoomPage>
               } else {
                 // 别人被拉黑了，刷新一下麦上的人员信息
                 doPostRoomMikeInfo();
+              }
+              break;
+            case 'user_room_black':
+              // 这个是针对，用户被拉黑前，用户断网使用，保证他会被踢出去
+              if (event.map!['uid'].toString() ==
+                  sp.getString('user_id').toString()) {
+                MyToastUtils.showToastBottom('你已被房间设置为黑名单用户！');
+                setState(() {
+                  isMeUp = false;
+                });
+                if (_timerHot != null) {
+                  _timerHot!.cancel();
+                }
+                // 取消发布本地音频流
+                _engine.muteLocalAudioStream(true);
+                // 调用离开房间接口
+                doPostLeave();
+                _engine.disableAudio();
+                _dispose();
+                Navigator.pop(context);
               }
               break;
             case 'room_admin': //设置管理员
@@ -2123,7 +2162,7 @@ class _RoomPageState extends State<RoomPage>
                               : const Text(''),
                       Column(
                         children: [
-                          WidgetUtils.commonSizedBox(35, 0),
+                          WidgetUtils.commonSizedBox(isDevices == 'ios' ? 80.h : 60.h, 0),
                           // 头部
                           RoomItems.roomTop(
                               context,

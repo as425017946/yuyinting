@@ -394,9 +394,7 @@ class RoomItems {
                     children: [
                       WidgetUtils.commonSizedBox(28.h, 10.h),
                       Text(' ${list[i]['info']
-                          .toString()
-                          .length > 8 ? '${list[i]['info'].toString().substring(
-                          0, 8)}...' : list[i]['info']}',
+                          .toString()}',
                           style: TextStyle(
                             color: MyColors.roomMessageYellow2,
                             fontSize: 24.sp,
@@ -665,10 +663,7 @@ class RoomItems {
                 alignment: Alignment.center,
                 children: [
                   WidgetUtils.commonSizedBox(28.h, 10.h),
-                  Text(' ${list[i]['info']
-                      .toString()
-                      .length > 8 ? '${list[i]['info'].toString().substring(0,
-                      8)}...' : list[i]['info']}',
+                  Text(' ${list[i]['info']}',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 24.sp,
@@ -1300,11 +1295,7 @@ class RoomItems {
                       alignment: Alignment.center,
                       children: [
                         WidgetUtils.commonSizedBox(28.h, 10.h),
-                        Text(' ${list[i]['info']
-                            .toString()
-                            .length > 8 ? '${list[i]['info']
-                            .toString()
-                            .substring(0, 8)}...' : list[i]['info']}',
+                        Text(' ${list[i]['info']}',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 24.sp,
@@ -1635,6 +1626,7 @@ class RoomItems {
               child: WidgetUtils.showImages('assets/images/room_dian.png',
                   ScreenUtil().setHeight(32), ScreenUtil().setHeight(7))),
         ),
+        WidgetUtils.commonSizedBox(0, 10.w),
       ],
     );
   }

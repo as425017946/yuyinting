@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/colors/my_colors.dart';
@@ -22,10 +24,20 @@ class _TrendsPageState extends State<TrendsPage> with AutomaticKeepAliveClientMi
 
   int _currentIndex = 1;
   late final PageController _controller;
-
+  // 设备是安卓还是ios
+  String isDevices = 'android';
   @override
   void initState() {
     // TODO: implement initState
+    if (Platform.isAndroid) {
+      setState(() {
+        isDevices = 'android';
+      });
+    }else if (Platform.isIOS){
+      setState(() {
+        isDevices = 'ios';
+      });
+    }
     super.initState();
     _currentIndex = 1;
     _controller = PageController(
@@ -39,7 +51,7 @@ class _TrendsPageState extends State<TrendsPage> with AutomaticKeepAliveClientMi
       backgroundColor: Colors.white,
       body:Column(
         children: [
-          WidgetUtils.commonSizedBox(35, 0),
+          WidgetUtils.commonSizedBox(isDevices == 'ios' ? 80.h : 60.h, 0),
           ///头部信息
           Container(
             padding: const EdgeInsets.only(left: 20, right: 20),
@@ -89,7 +101,8 @@ class _TrendsPageState extends State<TrendsPage> with AutomaticKeepAliveClientMi
                   child: Container(
                     height: ScreenUtil().setHeight(60),
                     width: ScreenUtil().setWidth(150),
-                    alignment: Alignment.center,
+                    color: Colors.transparent,
+                    alignment: Alignment.bottomLeft,
                     child: Stack(
                       children: [
                         WidgetUtils.showImages('assets/images/trends_fabu_btn.png', ScreenUtil().setHeight(60), ScreenUtil().setWidth(150)),

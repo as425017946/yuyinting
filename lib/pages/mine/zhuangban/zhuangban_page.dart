@@ -78,6 +78,8 @@ class _ZhuangbanPageState extends State<ZhuangbanPage> {
                       }),
                       child: Container(
                         width: ScreenUtil().setWidth(150),
+                        height: 60.h,
+                        color: Colors.transparent,
                         alignment: Alignment.centerRight,
                         child: Text(
                           '背包',

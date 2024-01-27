@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -39,11 +41,21 @@ class _MessagePageState extends State<MessagePage> {
   int unRead = 0;
   int length = 0;
   var list1,list2,list3;
-
+  // 设备是安卓还是ios
+  String isDevices = 'android';
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    if (Platform.isAndroid) {
+      setState(() {
+        isDevices = 'android';
+      });
+    }else if (Platform.isIOS){
+      setState(() {
+        isDevices = 'ios';
+      });
+    }
     doPostSystemMsgList();
     MyUtils.addChatListener();
     list1 = eventBus.on<ResidentBack>().listen((event) {
@@ -266,8 +278,7 @@ class _MessagePageState extends State<MessagePage> {
         backgroundColor: Colors.white,
         body: Column(
           children: [
-            WidgetUtils.commonSizedBox(35, 0),
-
+            WidgetUtils.commonSizedBox(isDevices == 'ios' ? 80.h : 60.h, 0),
             ///头部信息
             Container(
               padding: const EdgeInsets.only(left: 20, right: 20),
@@ -287,10 +298,16 @@ class _MessagePageState extends State<MessagePage> {
                     onTap: (() {
                       exitLogin(context);
                     }),
-                    child: WidgetUtils.showImages(
-                        'assets/images/messages_yidu.png',
-                        ScreenUtil().setHeight(30),
-                        ScreenUtil().setHeight(30)),
+                    child: Container(
+                      height: 50.h,
+                      width: 50.h,
+                      color: Colors.transparent,
+                      alignment: Alignment.centerRight,
+                      child: WidgetUtils.showImages(
+                          'assets/images/messages_yidu.png',
+                          ScreenUtil().setHeight(30),
+                          ScreenUtil().setHeight(30)),
+                    ),
                   )
                 ],
               ),
