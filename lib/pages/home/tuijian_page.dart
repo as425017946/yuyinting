@@ -25,7 +25,6 @@ import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
-import '../gongping/gp_dwon_page.dart';
 import '../gongping/gp_quanxian_page.dart';
 import '../message/geren/people_info_page.dart';
 import '../mine/my/my_info_page.dart';
@@ -426,7 +425,7 @@ class _TuijianPageState extends State<TuijianPage> {
                                     onIndexChanged: (index) {},
                                     onTap: (index) {
                                       if (MyUtils.checkClick()) {
-                                        quanxian(listRoom[index].id.toString());
+                                        doPostBeforeJoin(listRoom[index].id.toString(), '');
                                       }
                                     },
                                   ),
@@ -494,8 +493,7 @@ class _TuijianPageState extends State<TuijianPage> {
                                         duration: 2000,
                                         onTap: (index) {
                                           if (MyUtils.checkClick()) {
-                                            quanxian(
-                                                listRoom2[index].id.toString());
+                                            doPostBeforeJoin(listRoom2[index].id.toString(), '');
                                           }
                                         },
                                       ),
@@ -560,8 +558,7 @@ class _TuijianPageState extends State<TuijianPage> {
                                         duration: 2000,
                                         onTap: (index) {
                                           if (MyUtils.checkClick()) {
-                                            quanxian(
-                                                listRoom3[index].id.toString());
+                                            doPostBeforeJoin(listRoom3[index].id.toString(), '');
                                           }
                                           // doPostBeforeJoin(listRoom3[index].id.toString());
                                         },
