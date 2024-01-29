@@ -53,6 +53,7 @@ dependencies:
   # app升级
   package_info_plus: ^4.1.0
   ota_update: ^5.1.0
+  # 打开外部浏览器
   url_launcher: ^6.1.5
   progress_dialog_null_safe: ^1.0.7
   open_file: ^3.3.2
