@@ -306,410 +306,465 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
           }
           return true;
         },
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              WidgetUtils.commonSizedBox(20, 0),
+        child: GestureDetector(
+          onTap: () {
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus &&
+                currentFocus.focusedChild != null) {
+              FocusManager.instance.primaryFocus?.unfocus();
+            }
+          },
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                WidgetUtils.commonSizedBox(20, 0),
 
-              /// 头像
-              GestureDetector(
-                onTap: (() {
-                  if (MyUtils.checkClick()) {
-                    Future.delayed(const Duration(seconds: 0), () {
-                      Navigator.of(context).push(PageRouteBuilder(
-                          opaque: false,
-                          pageBuilder: (context, animation, secondaryAnimation) {
-                            return const EditHeadPage();
-                          }));
-                    });
-                  }
-                }),
-                child: Container(
-                  height: ScreenUtil().setHeight(110),
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: Row(
-                    children: [
-                      WidgetUtils.onlyText(
-                          '头像',
-                          StyleUtils.getCommonTextStyle(
-                              color: Colors.black,
-                              fontSize: ScreenUtil().setSp(28))),
-                      const Expanded(child: Text('')),
-                      WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(90),
-                          ScreenUtil().setHeight(90), headImg),
-                      WidgetUtils.commonSizedBox(0, 10),
-                      WidgetUtils.showImages('assets/images/mine_more2.png',
-                          ScreenUtil().setHeight(27), ScreenUtil().setHeight(16))
-                    ],
+                /// 头像
+                GestureDetector(
+                  onTap: (() {
+                    if (MyUtils.checkClick()) {
+                      Future.delayed(const Duration(seconds: 0), () {
+                        Navigator.of(context).push(PageRouteBuilder(
+                            opaque: false,
+                            pageBuilder: (context, animation, secondaryAnimation) {
+                              return const EditHeadPage();
+                            }));
+                      });
+                    }
+                  }),
+                  child: Container(
+                    height: ScreenUtil().setHeight(110),
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    child: Row(
+                      children: [
+                        WidgetUtils.onlyText(
+                            '头像',
+                            StyleUtils.getCommonTextStyle(
+                                color: Colors.black,
+                                fontSize: ScreenUtil().setSp(28))),
+                        const Expanded(child: Text('')),
+                        WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(90),
+                            ScreenUtil().setHeight(90), headImg),
+                        WidgetUtils.commonSizedBox(0, 10),
+                        WidgetUtils.showImages('assets/images/mine_more2.png',
+                            ScreenUtil().setHeight(27), ScreenUtil().setHeight(16))
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              WidgetUtils.myLine(indent: 20, endIndent: 20),
+                WidgetUtils.myLine(indent: 20, endIndent: 20),
 
-              /// 昵称
-              Container(
-                height: ScreenUtil().setHeight(100),
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: Column(
-                  children: [
-                    const Expanded(child: Text('')),
-                    WidgetUtils.onlyText(
-                        '昵称',
-                        StyleUtils.getCommonTextStyle(
-                            color: Colors.black,
-                            fontSize: ScreenUtil().setSp(28))),
-                    SizedBox(
-                      height: ScreenUtil().setHeight(60),
-                      child: TextField(
-                        controller: controller,
-                        inputFormatters: [
-                          RegexFormatter(regex: MyUtils.regexFirstNotNull),
-                          LengthLimitingTextInputFormatter(8) //限制输入长度
-                        ],
-                        style: StyleUtils.getCommonTextStyle(
-                            color: MyColors.g3, fontSize: ScreenUtil().setSp(25)),
-                        onChanged: (value) {
-                          setState(() {
-                            nickName = value;
-                          });
-                        },
-                        decoration: InputDecoration(
-                          hintText: '请输入昵称',
-                          hintStyle: StyleUtils.getCommonTextStyle(
-                              color: MyColors.g9, fontSize: ScreenUtil().setSp(25)),
-
-                          contentPadding: const EdgeInsets.only(top: 0, bottom: 0),
-                          border: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
-                          ),
-                          enabledBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                            ),
-                          ),
-                          disabledBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                            ),
-                          ),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                            ),
-                          ),
-                          // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              WidgetUtils.myLine(indent: 20, endIndent: 20),
-
-              /// 性别
-              Container(
-                height: ScreenUtil().setHeight(80),
-                alignment: Alignment.center,
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: Row(
-                  children: [
-                    WidgetUtils.onlyText(
-                        '性别',
-                        StyleUtils.getCommonTextStyle(
-                            color: Colors.black,
-                            fontSize: ScreenUtil().setSp(28))),
-                    const Expanded(child: Text('')),
-                    WidgetUtils.onlyText(
-                        sex == 0
-                            ? '未知'
-                            : sex == 1
-                                ? '男'
-                                : '女',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.g6,
-                            fontSize: ScreenUtil().setSp(28))),
-                    WidgetUtils.commonSizedBox(0, 10),
-                    Opacity(
-                      opacity: 0,
-                      child: WidgetUtils.showImages(
-                          'assets/images/mine_more2.png',
-                          ScreenUtil().setHeight(27),
-                          ScreenUtil().setHeight(16)),
-                    )
-                  ],
-                ),
-              ),
-              WidgetUtils.myLine(indent: 20, endIndent: 20),
-
-              /// 个性签名
-              Container(
-                height: ScreenUtil().setHeight(100),
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: Column(
-                  children: [
-                    const Expanded(child: Text('')),
-                    WidgetUtils.onlyText(
-                        '个性签名',
-                        StyleUtils.getCommonTextStyle(
-                            color: Colors.black,
-                            fontSize: ScreenUtil().setSp(28))),
-                    SizedBox(
-                      height: ScreenUtil().setHeight(60),
-                      child: TextField(
-                        controller: controllerGexing,
-                        inputFormatters: [
-                          RegexFormatter(regex: MyUtils.regexFirstNotNull),
-                          LengthLimitingTextInputFormatter(16) //限制输入长度
-                        ],
-                        style: StyleUtils.getCommonTextStyle(
-                            color: MyColors.g3, fontSize: ScreenUtil().setSp(25)),
-                        onChanged: (value) {
-                          setState(() {
-                            description = value;
-                          });
-                        },
-                        decoration: InputDecoration(
-                          hintText: '输入签名，展示你的独特个性吧',
-                          hintStyle: StyleUtils.getCommonTextStyle(
-                              color: MyColors.g9, fontSize: ScreenUtil().setSp(25)),
-
-                          contentPadding: const EdgeInsets.only(top: 0, bottom: 0),
-                          border: const OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
-                          ),
-                          enabledBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                            ),
-                          ),
-                          disabledBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                            ),
-                          ),
-                          focusedBorder: const OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.transparent,
-                            ),
-                          ),
-                          // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              WidgetUtils.myLine(indent: 20, endIndent: 20),
-
-              /// 生日
-              GestureDetector(
-                onTap: (() {
-                  if (MyUtils.checkClick()) {
-                    DateTime now = DateTime.now();
-                    int year = now.year;
-                    int month = now.month;
-                    int day = now.day;
-                    DatePicker.show(
-                      context,
-                      startDate: DateTime(1970, 1, 1),
-                      selectedDate: DateTime(year, month, day),
-                      endDate: DateTime(2024, 12, 31),
-                      onSelected: (date) {
-                        setState(() {
-                          birthday = date.toString().substring(0, 10);
-                        });
-                      },
-                    );
-                  }
-                }),
-                child: Container(
+                /// 昵称
+                Container(
                   height: ScreenUtil().setHeight(100),
                   alignment: Alignment.centerLeft,
                   padding: const EdgeInsets.only(left: 20, right: 20),
-                  color: Colors.white,
-                  child: Row(
+                  child: Column(
                     children: [
-                      Expanded(
-                          child: Column(
-                        children: [
-                          const Expanded(child: Text('')),
-                          WidgetUtils.onlyText(
-                              '生日',
-                              StyleUtils.getCommonTextStyle(
-                                  color: Colors.black,
-                                  fontSize: ScreenUtil().setSp(28))),
-                          WidgetUtils.commonSizedBox(10, 0),
-                          WidgetUtils.onlyText(
-                              birthday == '0' ? '未填写' : birthday,
-                              StyleUtils.getCommonTextStyle(
-                                  color: MyColors.g6,
-                                  fontSize: ScreenUtil().setSp(28))),
-                        ],
-                      )),
-                      WidgetUtils.showImages('assets/images/mine_more2.png',
-                          ScreenUtil().setHeight(27), ScreenUtil().setHeight(16))
+                      const Expanded(child: Text('')),
+                      WidgetUtils.onlyText(
+                          '昵称',
+                          StyleUtils.getCommonTextStyle(
+                              color: Colors.black,
+                              fontSize: ScreenUtil().setSp(28))),
+                      SizedBox(
+                        height: ScreenUtil().setHeight(60),
+                        child: TextField(
+                          controller: controller,
+                          inputFormatters: [
+                            RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                            LengthLimitingTextInputFormatter(8) //限制输入长度
+                          ],
+                          style: StyleUtils.getCommonTextStyle(
+                              color: MyColors.g3, fontSize: ScreenUtil().setSp(25)),
+                          onChanged: (value) {
+                            setState(() {
+                              nickName = value;
+                            });
+                          },
+                          decoration: InputDecoration(
+                            hintText: '请输入昵称',
+                            hintStyle: StyleUtils.getCommonTextStyle(
+                                color: MyColors.g9, fontSize: ScreenUtil().setSp(25)),
+
+                            contentPadding: const EdgeInsets.only(top: 0, bottom: 0),
+                            border: const OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.transparent),
+                            ),
+                            enabledBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.transparent,
+                              ),
+                            ),
+                            disabledBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.transparent,
+                              ),
+                            ),
+                            focusedBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.transparent,
+                              ),
+                            ),
+                            // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 ),
-              ),
-              WidgetUtils.myLine(indent: 20, endIndent: 20),
+                WidgetUtils.myLine(indent: 20, endIndent: 20),
 
-              /// 声音名片
-              GestureDetector(
-                onTap: (() {
-                  if (MyUtils.checkClick()) {
-                    MyUtils.goTransparentPageCom(
-                        context, EditAudioPage(audioUrl: voiceCardUrl));
-                  }
-                }),
-                child: Container(
-                  height: ScreenUtil().setHeight(100),
+                /// 性别
+                Container(
+                  height: ScreenUtil().setHeight(80),
                   alignment: Alignment.center,
                   padding: const EdgeInsets.only(left: 20, right: 20),
                   child: Row(
                     children: [
                       WidgetUtils.onlyText(
-                          '声音名片',
-                          StyleUtils.getCommonTextStyle(
-                              color: Colors.black,
-                              fontSize: ScreenUtil().setSp(28))),
-                      const Expanded(child: Text('')),
-                      WidgetUtils.showImages('assets/images/mine_more2.png',
-                          ScreenUtil().setHeight(27), ScreenUtil().setHeight(16))
-                    ],
-                  ),
-                ),
-              ),
-              WidgetUtils.myLine(indent: 20, endIndent: 20),
-
-              /// 所在城市
-              GestureDetector(
-                onTap: (() {
-                  if (MyUtils.checkClick()) {
-                    _onClickItem(listCity, '未知');
-                  }
-                }),
-                child: Container(
-                  height: ScreenUtil().setHeight(100),
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: Row(
-                    children: [
-                      WidgetUtils.onlyText(
-                          '所在城市',
+                          '性别',
                           StyleUtils.getCommonTextStyle(
                               color: Colors.black,
                               fontSize: ScreenUtil().setSp(28))),
                       const Expanded(child: Text('')),
                       WidgetUtils.onlyText(
-                          city.isEmpty ? '未知' : city,
+                          sex == 0
+                              ? '未知'
+                              : sex == 1
+                                  ? '男'
+                                  : '女',
                           StyleUtils.getCommonTextStyle(
                               color: MyColors.g6,
                               fontSize: ScreenUtil().setSp(28))),
                       WidgetUtils.commonSizedBox(0, 10),
-                      WidgetUtils.showImages('assets/images/mine_more2.png',
-                          ScreenUtil().setHeight(27), ScreenUtil().setHeight(16))
+                      Opacity(
+                        opacity: 0,
+                        child: WidgetUtils.showImages(
+                            'assets/images/mine_more2.png',
+                            ScreenUtil().setHeight(27),
+                            ScreenUtil().setHeight(16)),
+                      )
                     ],
                   ),
                 ),
-              ),
-              WidgetUtils.myLine(thickness: 10),
+                WidgetUtils.myLine(indent: 20, endIndent: 20),
 
-              /// 我的标签
-              // GestureDetector(
-              //   onTap: (() {
-              //     if (MyUtils.checkClick()) {
-              //       Future.delayed(const Duration(seconds: 0), () {
-              //         Navigator.of(context).push(PageRouteBuilder(
-              //             opaque: false,
-              //             pageBuilder: (context, animation, secondaryAnimation) {
-              //               return const EditBiaoqianPage();
-              //             }));
-              //       });
-              //     }
-              //   }),
-              //   child: Container(
-              //     constraints: BoxConstraints(
-              //       minHeight: ScreenUtil().setHeight(120),
-              //     ),
-              //     alignment: Alignment.center,
-              //     padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
-              //     child: Column(
-              //       children: [
-              //         WidgetUtils.commonSizedBox(10, 0),
-              //         Row(
-              //           children: [
-              //             WidgetUtils.onlyText(
-              //                 '我的标签',
-              //                 StyleUtils.getCommonTextStyle(
-              //                     color: Colors.black,
-              //                     fontSize: ScreenUtil().setSp(28),
-              //                     fontWeight: FontWeight.w600)),
-              //             const Expanded(child: Text('')),
-              //             WidgetUtils.showImages(
-              //                 'assets/images/mine_more2.png',
-              //                 ScreenUtil().setHeight(27),
-              //                 ScreenUtil().setHeight(16))
-              //           ],
-              //         ),
-              //         WidgetUtils.commonSizedBox(10, 0),
-              //         Container(
-              //           alignment: Alignment.centerLeft,
-              //           child: Wrap(
-              //             alignment: WrapAlignment.start,
-              //             spacing: ScreenUtil().setHeight(15),
-              //             runSpacing: ScreenUtil().setHeight(15),
-              //             children: List.generate(
-              //                 list_label.length,
-              //                 (index) => WidgetUtils.myContainerZishiying(
-              //                     MyColors.careBlue,
-              //                     list_label[index],
-              //                     StyleUtils.getCommonTextStyle(
-              //                         color: Colors.white,
-              //                         fontSize: ScreenUtil().setSp(26)))),
-              //           ),
-              //         ),
-              //       ],
-              //     ),
-              //   ),
-              // ),
-              // WidgetUtils.myLine(thickness: 10),
+                /// 个性签名
+                Container(
+                  height: ScreenUtil().setHeight(100),
+                  alignment: Alignment.centerLeft,
+                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  child: Column(
+                    children: [
+                      const Expanded(child: Text('')),
+                      WidgetUtils.onlyText(
+                          '个性签名',
+                          StyleUtils.getCommonTextStyle(
+                              color: Colors.black,
+                              fontSize: ScreenUtil().setSp(28))),
+                      SizedBox(
+                        height: ScreenUtil().setHeight(60),
+                        child: TextField(
+                          controller: controllerGexing,
+                          inputFormatters: [
+                            RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                            LengthLimitingTextInputFormatter(16) //限制输入长度
+                          ],
+                          style: StyleUtils.getCommonTextStyle(
+                              color: MyColors.g3, fontSize: ScreenUtil().setSp(25)),
+                          onChanged: (value) {
+                            setState(() {
+                              description = value;
+                            });
+                          },
+                          decoration: InputDecoration(
+                            hintText: '输入签名，展示你的独特个性吧',
+                            hintStyle: StyleUtils.getCommonTextStyle(
+                                color: MyColors.g9, fontSize: ScreenUtil().setSp(25)),
 
-              /// 照片墙
-              Container(
-                height: ScreenUtil().setHeight(220),
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: Column(
-                  children: [
-                    WidgetUtils.commonSizedBox(10, 0),
-                    WidgetUtils.onlyText(
-                        '照片墙',
-                        StyleUtils.getCommonTextStyle(
-                            color: Colors.black,
-                            fontSize: ScreenUtil().setSp(28),
-                            fontWeight: FontWeight.w600)),
-                    WidgetUtils.commonSizedBox(10, 0),
-                    SizedBox(
-                      width: double.infinity,
-                      child: Wrap(
-                        direction: Axis.horizontal,
-                        spacing: 10.h,
-                        children: [
-                          for (int i = 0; i < list_p.length; i++)
-                            SizedBox(
-                              height: 150.h,
-                              width: 190.w,
-                              child: Stack(
+                            contentPadding: const EdgeInsets.only(top: 0, bottom: 0),
+                            border: const OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.transparent),
+                            ),
+                            enabledBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.transparent,
+                              ),
+                            ),
+                            disabledBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.transparent,
+                              ),
+                            ),
+                            focusedBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.transparent,
+                              ),
+                            ),
+                            // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                WidgetUtils.myLine(indent: 20, endIndent: 20),
+
+                /// 生日
+                GestureDetector(
+                  onTap: (() {
+                    if (MyUtils.checkClick()) {
+                      DateTime now = DateTime.now();
+                      int year = now.year;
+                      int month = now.month;
+                      int day = now.day;
+                      DatePicker.show(
+                        context,
+                        startDate: DateTime(1970, 1, 1),
+                        selectedDate: DateTime(year, month, day),
+                        endDate: DateTime(2024, 12, 31),
+                        onSelected: (date) {
+                          setState(() {
+                            birthday = date.toString().substring(0, 10);
+                          });
+                        },
+                      );
+                    }
+                  }),
+                  child: Container(
+                    height: ScreenUtil().setHeight(100),
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    color: Colors.white,
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: Column(
+                          children: [
+                            const Expanded(child: Text('')),
+                            WidgetUtils.onlyText(
+                                '生日',
+                                StyleUtils.getCommonTextStyle(
+                                    color: Colors.black,
+                                    fontSize: ScreenUtil().setSp(28))),
+                            WidgetUtils.commonSizedBox(10, 0),
+                            WidgetUtils.onlyText(
+                                birthday == '0' ? '未填写' : birthday,
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.g6,
+                                    fontSize: ScreenUtil().setSp(28))),
+                          ],
+                        )),
+                        WidgetUtils.showImages('assets/images/mine_more2.png',
+                            ScreenUtil().setHeight(27), ScreenUtil().setHeight(16))
+                      ],
+                    ),
+                  ),
+                ),
+                WidgetUtils.myLine(indent: 20, endIndent: 20),
+
+                /// 声音名片
+                GestureDetector(
+                  onTap: (() {
+                    if (MyUtils.checkClick()) {
+                      MyUtils.goTransparentPageCom(
+                          context, EditAudioPage(audioUrl: voiceCardUrl));
+                    }
+                  }),
+                  child: Container(
+                    height: ScreenUtil().setHeight(100),
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    child: Row(
+                      children: [
+                        WidgetUtils.onlyText(
+                            '声音名片',
+                            StyleUtils.getCommonTextStyle(
+                                color: Colors.black,
+                                fontSize: ScreenUtil().setSp(28))),
+                        const Expanded(child: Text('')),
+                        WidgetUtils.showImages('assets/images/mine_more2.png',
+                            ScreenUtil().setHeight(27), ScreenUtil().setHeight(16))
+                      ],
+                    ),
+                  ),
+                ),
+                WidgetUtils.myLine(indent: 20, endIndent: 20),
+
+                /// 所在城市
+                GestureDetector(
+                  onTap: (() {
+                    if (MyUtils.checkClick()) {
+                      _onClickItem(listCity, '未知');
+                    }
+                  }),
+                  child: Container(
+                    height: ScreenUtil().setHeight(100),
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    child: Row(
+                      children: [
+                        WidgetUtils.onlyText(
+                            '所在城市',
+                            StyleUtils.getCommonTextStyle(
+                                color: Colors.black,
+                                fontSize: ScreenUtil().setSp(28))),
+                        const Expanded(child: Text('')),
+                        WidgetUtils.onlyText(
+                            city.isEmpty ? '未知' : city,
+                            StyleUtils.getCommonTextStyle(
+                                color: MyColors.g6,
+                                fontSize: ScreenUtil().setSp(28))),
+                        WidgetUtils.commonSizedBox(0, 10),
+                        WidgetUtils.showImages('assets/images/mine_more2.png',
+                            ScreenUtil().setHeight(27), ScreenUtil().setHeight(16))
+                      ],
+                    ),
+                  ),
+                ),
+                WidgetUtils.myLine(thickness: 10),
+
+                /// 我的标签
+                // GestureDetector(
+                //   onTap: (() {
+                //     if (MyUtils.checkClick()) {
+                //       Future.delayed(const Duration(seconds: 0), () {
+                //         Navigator.of(context).push(PageRouteBuilder(
+                //             opaque: false,
+                //             pageBuilder: (context, animation, secondaryAnimation) {
+                //               return const EditBiaoqianPage();
+                //             }));
+                //       });
+                //     }
+                //   }),
+                //   child: Container(
+                //     constraints: BoxConstraints(
+                //       minHeight: ScreenUtil().setHeight(120),
+                //     ),
+                //     alignment: Alignment.center,
+                //     padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                //     child: Column(
+                //       children: [
+                //         WidgetUtils.commonSizedBox(10, 0),
+                //         Row(
+                //           children: [
+                //             WidgetUtils.onlyText(
+                //                 '我的标签',
+                //                 StyleUtils.getCommonTextStyle(
+                //                     color: Colors.black,
+                //                     fontSize: ScreenUtil().setSp(28),
+                //                     fontWeight: FontWeight.w600)),
+                //             const Expanded(child: Text('')),
+                //             WidgetUtils.showImages(
+                //                 'assets/images/mine_more2.png',
+                //                 ScreenUtil().setHeight(27),
+                //                 ScreenUtil().setHeight(16))
+                //           ],
+                //         ),
+                //         WidgetUtils.commonSizedBox(10, 0),
+                //         Container(
+                //           alignment: Alignment.centerLeft,
+                //           child: Wrap(
+                //             alignment: WrapAlignment.start,
+                //             spacing: ScreenUtil().setHeight(15),
+                //             runSpacing: ScreenUtil().setHeight(15),
+                //             children: List.generate(
+                //                 list_label.length,
+                //                 (index) => WidgetUtils.myContainerZishiying(
+                //                     MyColors.careBlue,
+                //                     list_label[index],
+                //                     StyleUtils.getCommonTextStyle(
+                //                         color: Colors.white,
+                //                         fontSize: ScreenUtil().setSp(26)))),
+                //           ),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
+                // WidgetUtils.myLine(thickness: 10),
+
+                /// 照片墙
+                Container(
+                  height: ScreenUtil().setHeight(220),
+                  alignment: Alignment.centerLeft,
+                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  child: Column(
+                    children: [
+                      WidgetUtils.commonSizedBox(10, 0),
+                      WidgetUtils.onlyText(
+                          '照片墙',
+                          StyleUtils.getCommonTextStyle(
+                              color: Colors.black,
+                              fontSize: ScreenUtil().setSp(28),
+                              fontWeight: FontWeight.w600)),
+                      WidgetUtils.commonSizedBox(10, 0),
+                      SizedBox(
+                        width: double.infinity,
+                        child: Wrap(
+                          direction: Axis.horizontal,
+                          spacing: 10.h,
+                          children: [
+                            for (int i = 0; i < list_p.length; i++)
+                              SizedBox(
+                                height: 150.h,
+                                width: 190.w,
+                                child: Stack(
+                                  children: [
+                                    WidgetUtils.CircleImageNet(
+                                        120.h,
+                                        190.w,
+                                        ScreenUtil().setHeight(20),
+                                        list_p[i]),
+                                    Positioned(
+                                      right: 0,
+                                      top: 0,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          if (MyUtils.checkClick()) {
+                                            setState(() {
+                                              _removeImage(i);
+                                            });
+                                          }
+                                        },
+                                        child: ClipOval(
+                                          child: Container(
+                                            color: Colors.white.withOpacity(0.7),
+                                            width: 20,
+                                            height: 20,
+                                            child: const Icon(
+                                              Icons.close,
+                                              size: 20,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            for (int i = 0; i < lista.length; i++)
+                              Stack(
                                 children: [
-                                  WidgetUtils.CircleImageNet(
-                                      120.h,
-                                      190.w,
-                                      ScreenUtil().setHeight(20),
-                                      list_p[i]),
+                                  Container(
+                                    height: 150.h,
+                                    width: 190.w,
+                                    //超出部分，可裁剪
+                                    clipBehavior: Clip.hardEdge,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(
+                                          ScreenUtil().setHeight(20)),
+                                    ),
+                                    child: AssetEntityImage(
+                                      lista[i],
+                                      width: ScreenUtil().setHeight(120),
+                                      height: ScreenUtil().setHeight(120),
+                                      fit: BoxFit.cover,
+                                      isOriginal: false,
+                                    ),
+                                  ),
                                   Positioned(
                                     right: 0,
                                     top: 0,
@@ -717,7 +772,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                                       onTap: () {
                                         if (MyUtils.checkClick()) {
                                           setState(() {
-                                            _removeImage(i);
+                                            _removeImage2(i);
                                           });
                                         }
                                       },
@@ -736,86 +791,40 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                                   ),
                                 ],
                               ),
-                            ),
-                          for (int i = 0; i < lista.length; i++)
-                            Stack(
-                              children: [
-                                Container(
-                                  height: 150.h,
-                                  width: 190.w,
-                                  //超出部分，可裁剪
-                                  clipBehavior: Clip.hardEdge,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(
-                                        ScreenUtil().setHeight(20)),
-                                  ),
-                                  child: AssetEntityImage(
-                                    lista[i],
-                                    width: ScreenUtil().setHeight(120),
-                                    height: ScreenUtil().setHeight(120),
-                                    fit: BoxFit.cover,
-                                    isOriginal: false,
-                                  ),
-                                ),
-                                Positioned(
-                                  right: 0,
-                                  top: 0,
-                                  child: GestureDetector(
-                                    onTap: () {
+                            list_p.length + lista.length < 3
+                                ? GestureDetector(
+                                    onTap: (() {
                                       if (MyUtils.checkClick()) {
-                                        setState(() {
-                                          _removeImage2(i);
+                                        Future.delayed(const Duration(seconds: 0),
+                                            () {
+                                          Navigator.of(context).push(
+                                              PageRouteBuilder(
+                                                  opaque: false,
+                                                  pageBuilder: (context, animation,
+                                                      secondaryAnimation) {
+                                                    return EditPhotoPage(
+                                                      length: 3 -
+                                                          list_p.length -
+                                                          lista.length,
+                                                    );
+                                                  }));
                                         });
                                       }
-                                    },
-                                    child: ClipOval(
-                                      child: Container(
-                                        color: Colors.white.withOpacity(0.7),
-                                        width: 20,
-                                        height: 20,
-                                        child: const Icon(
-                                          Icons.close,
-                                          size: 20,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          list_p.length + lista.length < 3
-                              ? GestureDetector(
-                                  onTap: (() {
-                                    if (MyUtils.checkClick()) {
-                                      Future.delayed(const Duration(seconds: 0),
-                                          () {
-                                        Navigator.of(context).push(
-                                            PageRouteBuilder(
-                                                opaque: false,
-                                                pageBuilder: (context, animation,
-                                                    secondaryAnimation) {
-                                                  return EditPhotoPage(
-                                                    length: 3 -
-                                                        list_p.length -
-                                                        lista.length,
-                                                  );
-                                                }));
-                                      });
-                                    }
-                                  }),
-                                  child: WidgetUtils.showImages(
-                                      'assets/images/images_add.png',
-                                      150.h,
-                                      190.w),
-                                )
-                              : const Text(''),
-                        ],
+                                    }),
+                                    child: WidgetUtils.showImages(
+                                        'assets/images/images_add.png',
+                                        150.h,
+                                        190.w),
+                                  )
+                                : const Text(''),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

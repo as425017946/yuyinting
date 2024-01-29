@@ -169,33 +169,33 @@ class _SettingPageState extends State<SettingPage> {
                 'assets/images/mine_more.png'),
           ),
           WidgetUtils.commonSizedBox(10, 0),
-          GestureDetector(
-            onTap: (() {}),
-            child: Container(
-              width: double.infinity,
-              height: ScreenUtil().setHeight(90),
-              color: Colors.white,
-              padding: EdgeInsets.only(
-                  left: ScreenUtil().setHeight(20),
-                  right: ScreenUtil().setHeight(20)),
-              child: Row(
-                children: [
-                  WidgetUtils.onlyText(
-                      '清除缓存',
-                      StyleUtils.getCommonTextStyle(
-                          color: Colors.black,
-                          fontSize: ScreenUtil().setSp(29))),
-                  const Expanded(child: Text('')),
-                  WidgetUtils.onlyText(
-                      '0MB',
-                      StyleUtils.getCommonTextStyle(
-                          color: MyColors.g9,
-                          fontSize: ScreenUtil().setSp(25))),
-                ],
-              ),
-            ),
-          ),
-          WidgetUtils.commonSizedBox(10, 0),
+          // GestureDetector(
+          //   onTap: (() {}),
+          //   child: Container(
+          //     width: double.infinity,
+          //     height: ScreenUtil().setHeight(90),
+          //     color: Colors.white,
+          //     padding: EdgeInsets.only(
+          //         left: ScreenUtil().setHeight(20),
+          //         right: ScreenUtil().setHeight(20)),
+          //     child: Row(
+          //       children: [
+          //         WidgetUtils.onlyText(
+          //             '清除缓存',
+          //             StyleUtils.getCommonTextStyle(
+          //                 color: Colors.black,
+          //                 fontSize: ScreenUtil().setSp(29))),
+          //         const Expanded(child: Text('')),
+          //         WidgetUtils.onlyText(
+          //             '0MB',
+          //             StyleUtils.getCommonTextStyle(
+          //                 color: MyColors.g9,
+          //                 fontSize: ScreenUtil().setSp(25))),
+          //       ],
+          //     ),
+          //   ),
+          // ),
+          // WidgetUtils.commonSizedBox(10, 0),
           GestureDetector(
             onTap: (() {
               Navigator.pushNamed(context, 'AboutPage');

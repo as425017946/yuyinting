@@ -109,287 +109,296 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.only(left: 30.w, right: 30.w),
-        child: Column(
-          children: [
-            WidgetUtils.commonSizedBox(65.h, 0),
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: (() {
-                    if (MyUtils.checkClick()) {
-                      Navigator.pop(context);
-                    }
-                  }),
-                  child: WidgetUtils.showImages('assets/images/back.jpg',
-                      ScreenUtil().setHeight(35), ScreenUtil().setHeight(25)),
-                ),
-                Expanded(
-                    child: Container(
-                  height: 100.h,
-                  padding: const EdgeInsets.only(top: 10, bottom: 10),
-                  child: Container(
-                    margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                    height: 50,
-                    alignment: Alignment.centerLeft,
-                    width: double.infinity,
-                    //边框设置
-                    decoration: BoxDecoration(
-                      //背景
-                      color: MyColors.home_hx,
-                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(25.0)),
-                      //设置四周边框
-                      border: Border.all(width: 1, color: MyColors.home_hx),
-                    ),
-                    child: Row(
-                      children: [
-                        WidgetUtils.commonSizedBox(0, 10),
-                        WidgetUtils.showImages(
-                            'assets/images/sousuo_hui.png', 25.h, 25.h),
-                        WidgetUtils.commonSizedBox(0, 10),
-                        Expanded(
-                            child: WidgetUtils.commonTextField(
-                                _souSuoName, '搜索ID昵称房间名')),
-                      ],
-                    ),
-                  ),
-                )),
-                GestureDetector(
+        child: GestureDetector(
+          onTap: () {
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus &&
+                currentFocus.focusedChild != null) {
+              FocusManager.instance.primaryFocus?.unfocus();
+            }
+          },
+          child: Column(
+            children: [
+              WidgetUtils.commonSizedBox(65.h, 0),
+              Row(
+                children: [
+                  GestureDetector(
                     onTap: (() {
                       if (MyUtils.checkClick()) {
-                        if (_souSuoName.text.trim().isEmpty) {
-                          MyToastUtils.showToastBottom('请输入要搜索的信息');
-                          return;
-                        } else {
-                          saveInfo();
-                          doPostSearchAll();
-                          MyUtils.hideKeyboard(context);
-                        }
+                        Navigator.pop(context);
                       }
                     }),
-                    child: WidgetUtils.onlyText(
-                        '搜索',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.loginBtnP,
-                            fontSize: 30.sp,
-                            fontWeight: FontWeight.w600))),
-                WidgetUtils.commonSizedBox(0, 20.w),
-              ],
-            ),
-            WidgetUtils.commonSizedBox(20.h, 0),
-            WidgetUtils.onlyText(
-                '搜索历史',
-                StyleUtils.getCommonTextStyle(
-                    color: Colors.black,
-                    fontSize: ScreenUtil().setSp(28),
-                    fontWeight: FontWeight.w600)),
-            WidgetUtils.commonSizedBox(20.h, 0),
-            Container(
-              alignment: Alignment.centerLeft,
-              child: Wrap(
-                alignment: WrapAlignment.start,
-                spacing: ScreenUtil().setHeight(15),
-                runSpacing: ScreenUtil().setHeight(15),
-                children: List.generate(
-                    list_label.length,
-                    (index) => GestureDetector(
-                          onTap: (() {
-                            if (MyUtils.checkClick()) {
-                              setState(() {
-                                _souSuoName.text = list_label[index]['text'];
-                                doPostSearchAll();
-                                MyUtils.hideKeyboard(context);
-                              });
-                            }
-                          }),
-                          child: WidgetUtils.myContainerZishiying(
-                              MyColors.d8,
-                              list_label[index]['text'].toString().length > 6
-                                  ? '${list_label[index]['text'].toString().substring(0, 6)}...'
-                                  : list_label[index]['text'],
-                              StyleUtils.getCommonTextStyle(
-                                  color: Colors.black,
-                                  fontSize: ScreenUtil().setSp(26))),
-                        )),
+                    child: WidgetUtils.showImages('assets/images/back.jpg',
+                        ScreenUtil().setHeight(35), ScreenUtil().setHeight(25)),
+                  ),
+                  Expanded(
+                      child: Container(
+                    height: 100.h,
+                    padding: const EdgeInsets.only(top: 10, bottom: 10),
+                    child: Container(
+                      margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                      height: 50,
+                      alignment: Alignment.centerLeft,
+                      width: double.infinity,
+                      //边框设置
+                      decoration: BoxDecoration(
+                        //背景
+                        color: MyColors.home_hx,
+                        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(25.0)),
+                        //设置四周边框
+                        border: Border.all(width: 1, color: MyColors.home_hx),
+                      ),
+                      child: Row(
+                        children: [
+                          WidgetUtils.commonSizedBox(0, 10),
+                          WidgetUtils.showImages(
+                              'assets/images/sousuo_hui.png', 25.h, 25.h),
+                          WidgetUtils.commonSizedBox(0, 10),
+                          Expanded(
+                              child: WidgetUtils.commonTextField(
+                                  _souSuoName, '搜索ID昵称房间名')),
+                        ],
+                      ),
+                    ),
+                  )),
+                  GestureDetector(
+                      onTap: (() {
+                        if (MyUtils.checkClick()) {
+                          if (_souSuoName.text.trim().isEmpty) {
+                            MyToastUtils.showToastBottom('请输入要搜索的信息');
+                            return;
+                          } else {
+                            saveInfo();
+                            doPostSearchAll();
+                            MyUtils.hideKeyboard(context);
+                          }
+                        }
+                      }),
+                      child: WidgetUtils.onlyText(
+                          '搜索',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.loginBtnP,
+                              fontSize: 30.sp,
+                              fontWeight: FontWeight.w600))),
+                  WidgetUtils.commonSizedBox(0, 20.w),
+                ],
               ),
-            ),
-            WidgetUtils.commonSizedBox(20.h, 0),
-            // 房间和用户的按钮
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: (() {
-                    setState(() {
-                      type = 0;
-                    });
-                  }),
-                  child: Container(
-                    width: 100.w,
-                    color: Colors.transparent,
-                    alignment: Alignment.center,
-                    child: Column(
-                      children: [
-                        WidgetUtils.onlyTextCenter(
-                            '房间',
-                            StyleUtils.getCommonTextStyle(
-                                color: type == 0 ? Colors.black : MyColors.g6,
-                                fontSize: ScreenUtil().setSp(32),
-                                fontWeight: type == 0
-                                    ? FontWeight.w600
-                                    : FontWeight.w400)),
-                        WidgetUtils.commonSizedBox(5.h, 0),
-                        type == 0
-                            ? Container(
-                                width: ScreenUtil().setHeight(20),
-                                height: ScreenUtil().setHeight(4),
-                                //边框设置
-                                decoration: const BoxDecoration(
-                                  //背景
-                                  color: MyColors.homeTopBG,
-                                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10.0)),
-                                ),
-                              )
-                            : Opacity(
-                                opacity: 0,
-                                child: Container(
-                                  width: ScreenUtil().setHeight(20),
-                                  height: ScreenUtil().setHeight(4),
-                                  //边框设置
-                                  decoration: const BoxDecoration(
-                                    //背景
-                                    color: MyColors.homeTopBG,
-                                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10.0)),
-                                  ),
-                                ),
-                              ),
-                      ],
-                    ),
-                  ),
+              WidgetUtils.commonSizedBox(20.h, 0),
+              WidgetUtils.onlyText(
+                  '搜索历史',
+                  StyleUtils.getCommonTextStyle(
+                      color: Colors.black,
+                      fontSize: ScreenUtil().setSp(28),
+                      fontWeight: FontWeight.w600)),
+              WidgetUtils.commonSizedBox(20.h, 0),
+              Container(
+                alignment: Alignment.centerLeft,
+                child: Wrap(
+                  alignment: WrapAlignment.start,
+                  spacing: ScreenUtil().setHeight(15),
+                  runSpacing: ScreenUtil().setHeight(15),
+                  children: List.generate(
+                      list_label.length,
+                      (index) => GestureDetector(
+                            onTap: (() {
+                              if (MyUtils.checkClick()) {
+                                setState(() {
+                                  _souSuoName.text = list_label[index]['text'];
+                                  doPostSearchAll();
+                                  MyUtils.hideKeyboard(context);
+                                });
+                              }
+                            }),
+                            child: WidgetUtils.myContainerZishiying(
+                                MyColors.d8,
+                                list_label[index]['text'].toString().length > 6
+                                    ? '${list_label[index]['text'].toString().substring(0, 6)}...'
+                                    : list_label[index]['text'],
+                                StyleUtils.getCommonTextStyle(
+                                    color: Colors.black,
+                                    fontSize: ScreenUtil().setSp(26))),
+                          )),
                 ),
-                GestureDetector(
-                  onTap: (() {
-                    setState(() {
-                      type = 1;
-                    });
-                  }),
-                  child: Container(
-                    width: 100.w,
-                    color: Colors.transparent,
-                    alignment: Alignment.center,
-                    child: Column(
-                      children: [
-                        WidgetUtils.onlyTextCenter(
-                            '用户',
-                            StyleUtils.getCommonTextStyle(
-                                color: type == 1 ? Colors.black : MyColors.g6,
-                                fontSize: ScreenUtil().setSp(32),
-                                fontWeight: type == 1
-                                    ? FontWeight.w600
-                                    : FontWeight.w400)),
-                        WidgetUtils.commonSizedBox(5.h, 0),
-                        type == 1
-                            ? Container(
-                                width: ScreenUtil().setHeight(20),
-                                height: ScreenUtil().setHeight(4),
-                                //边框设置
-                                decoration: const BoxDecoration(
-                                  //背景
-                                  color: MyColors.homeTopBG,
-                                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10.0)),
-                                ),
-                              )
-                            : Opacity(
-                                opacity: 0,
-                                child: Container(
-                                  width: ScreenUtil().setHeight(20),
-                                  height: ScreenUtil().setHeight(4),
-                                  //边框设置
-                                  decoration: const BoxDecoration(
-                                    //背景
-                                    color: MyColors.homeTopBG,
-                                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10.0)),
-                                  ),
-                                ),
-                              ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            // // 搜索显示房间和用户
-            isShowInfo
-                ? Expanded(
-                    child: SizedBox(
-                      child: // 展示信息
+              ),
+              WidgetUtils.commonSizedBox(20.h, 0),
+              // 房间和用户的按钮
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: (() {
+                      setState(() {
+                        type = 0;
+                      });
+                    }),
+                    child: Container(
+                      width: 100.w,
+                      color: Colors.transparent,
+                      alignment: Alignment.center,
+                      child: Column(
+                        children: [
+                          WidgetUtils.onlyTextCenter(
+                              '房间',
+                              StyleUtils.getCommonTextStyle(
+                                  color: type == 0 ? Colors.black : MyColors.g6,
+                                  fontSize: ScreenUtil().setSp(32),
+                                  fontWeight: type == 0
+                                      ? FontWeight.w600
+                                      : FontWeight.w400)),
+                          WidgetUtils.commonSizedBox(5.h, 0),
                           type == 0
-                              ? listRoom.isNotEmpty
-                                  ? ListView.builder(
-                                      padding: const EdgeInsets.only(top: 2.5),
-                                      itemBuilder: jilu,
-                                      itemCount: listRoom.length,
-                                    )
-                                  : Container(
-                                      height: 400.h,
-                                      alignment: Alignment.center,
-                                      child: Column(
-                                        children: [
-                                          const Expanded(child: Text('')),
-                                          WidgetUtils.showImages(
-                                              'assets/images/no_have.png',
-                                              100,
-                                              100),
-                                          WidgetUtils.commonSizedBox(10, 0),
-                                          WidgetUtils.onlyTextCenter(
-                                              '暂无搜索房间',
-                                              StyleUtils.getCommonTextStyle(
-                                                  color: MyColors.g6,
-                                                  fontSize:
-                                                      ScreenUtil().setSp(26))),
-                                          const Expanded(child: Text('')),
-                                        ],
-                                      ),
-                                    )
-                              : listUser.isNotEmpty
-                                  ? ListView.builder(
-                                      padding: const EdgeInsets.only(top: 2.5),
-                                      itemBuilder: jilu,
-                                      itemCount: listUser.length,
-                                    )
-                                  : Container(
-                                      height: 400.h,
-                                      alignment: Alignment.center,
-                                      child: Column(
-                                        children: [
-                                          const Expanded(child: Text('')),
-                                          WidgetUtils.showImages(
-                                              'assets/images/no_have.png',
-                                              100,
-                                              100),
-                                          WidgetUtils.commonSizedBox(10, 0),
-                                          WidgetUtils.onlyTextCenter(
-                                              '暂无搜索人员',
-                                              StyleUtils.getCommonTextStyle(
-                                                  color: MyColors.g6,
-                                                  fontSize:
-                                                      ScreenUtil().setSp(26))),
-                                          const Expanded(child: Text('')),
-                                        ],
-                                      ),
+                              ? Container(
+                                  width: ScreenUtil().setHeight(20),
+                                  height: ScreenUtil().setHeight(4),
+                                  //边框设置
+                                  decoration: const BoxDecoration(
+                                    //背景
+                                    color: MyColors.homeTopBG,
+                                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10.0)),
+                                  ),
+                                )
+                              : Opacity(
+                                  opacity: 0,
+                                  child: Container(
+                                    width: ScreenUtil().setHeight(20),
+                                    height: ScreenUtil().setHeight(4),
+                                    //边框设置
+                                    decoration: const BoxDecoration(
+                                      //背景
+                                      color: MyColors.homeTopBG,
+                                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10.0)),
                                     ),
+                                  ),
+                                ),
+                        ],
+                      ),
                     ),
-                  )
-                : const Text('')
-          ],
+                  ),
+                  GestureDetector(
+                    onTap: (() {
+                      setState(() {
+                        type = 1;
+                      });
+                    }),
+                    child: Container(
+                      width: 100.w,
+                      color: Colors.transparent,
+                      alignment: Alignment.center,
+                      child: Column(
+                        children: [
+                          WidgetUtils.onlyTextCenter(
+                              '用户',
+                              StyleUtils.getCommonTextStyle(
+                                  color: type == 1 ? Colors.black : MyColors.g6,
+                                  fontSize: ScreenUtil().setSp(32),
+                                  fontWeight: type == 1
+                                      ? FontWeight.w600
+                                      : FontWeight.w400)),
+                          WidgetUtils.commonSizedBox(5.h, 0),
+                          type == 1
+                              ? Container(
+                                  width: ScreenUtil().setHeight(20),
+                                  height: ScreenUtil().setHeight(4),
+                                  //边框设置
+                                  decoration: const BoxDecoration(
+                                    //背景
+                                    color: MyColors.homeTopBG,
+                                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10.0)),
+                                  ),
+                                )
+                              : Opacity(
+                                  opacity: 0,
+                                  child: Container(
+                                    width: ScreenUtil().setHeight(20),
+                                    height: ScreenUtil().setHeight(4),
+                                    //边框设置
+                                    decoration: const BoxDecoration(
+                                      //背景
+                                      color: MyColors.homeTopBG,
+                                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10.0)),
+                                    ),
+                                  ),
+                                ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              // // 搜索显示房间和用户
+              isShowInfo
+                  ? Expanded(
+                      child: SizedBox(
+                        child: // 展示信息
+                            type == 0
+                                ? listRoom.isNotEmpty
+                                    ? ListView.builder(
+                                        padding: const EdgeInsets.only(top: 2.5),
+                                        itemBuilder: jilu,
+                                        itemCount: listRoom.length,
+                                      )
+                                    : Container(
+                                        height: 400.h,
+                                        alignment: Alignment.center,
+                                        child: Column(
+                                          children: [
+                                            const Expanded(child: Text('')),
+                                            WidgetUtils.showImages(
+                                                'assets/images/no_have.png',
+                                                100,
+                                                100),
+                                            WidgetUtils.commonSizedBox(10, 0),
+                                            WidgetUtils.onlyTextCenter(
+                                                '暂无搜索房间',
+                                                StyleUtils.getCommonTextStyle(
+                                                    color: MyColors.g6,
+                                                    fontSize:
+                                                        ScreenUtil().setSp(26))),
+                                            const Expanded(child: Text('')),
+                                          ],
+                                        ),
+                                      )
+                                : listUser.isNotEmpty
+                                    ? ListView.builder(
+                                        padding: const EdgeInsets.only(top: 2.5),
+                                        itemBuilder: jilu,
+                                        itemCount: listUser.length,
+                                      )
+                                    : Container(
+                                        height: 400.h,
+                                        alignment: Alignment.center,
+                                        child: Column(
+                                          children: [
+                                            const Expanded(child: Text('')),
+                                            WidgetUtils.showImages(
+                                                'assets/images/no_have.png',
+                                                100,
+                                                100),
+                                            WidgetUtils.commonSizedBox(10, 0),
+                                            WidgetUtils.onlyTextCenter(
+                                                '暂无搜索人员',
+                                                StyleUtils.getCommonTextStyle(
+                                                    color: MyColors.g6,
+                                                    fontSize:
+                                                        ScreenUtil().setSp(26))),
+                                            const Expanded(child: Text('')),
+                                          ],
+                                        ),
+                                      ),
+                      ),
+                    )
+                  : const Text('')
+            ],
+          ),
         ),
       ),
     );

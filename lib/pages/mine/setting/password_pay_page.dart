@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/utils/my_utils.dart';
 
@@ -10,6 +11,7 @@ import '../../../http/my_http_config.dart';
 import '../../../utils/event_utils.dart';
 import '../../../utils/loading.dart';
 import '../../../utils/my_toast_utils.dart';
+import '../../../utils/regex_formatter.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 
@@ -59,98 +61,174 @@ class _PasswordPayPageState extends State<PasswordPayPage> {
       resizeToAvoidBottomInset: false, // 解决键盘顶起页面
       appBar: appBar,
       backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          WidgetUtils.commonSizedBox(20, 0),
-          Container(
-            height: ScreenUtil().setHeight(90),
-            margin: const EdgeInsets.only(left: 20, right: 20),
-            //边框设置
-            decoration: BoxDecoration(
-              //背景
-              color: Colors.white,
-              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-              //设置四周边框
-              border: Border.all(width: 1, color: Colors.white),
-            ),
-            child: Row(
-              children: [
-                WidgetUtils.onlyText('旧密码', StyleUtils.getCommonTextStyle(color: MyColors.g3,fontSize: ScreenUtil().setSp(33))),
-                WidgetUtils.commonSizedBox(0, 20),
-                Expanded(child: WidgetUtils.commonTextFieldNumber2(
-                    controller: controllerPas1, hintText: '请输入旧密码(未设置可不填)', enabled: true, obscureText: true)),
-              ],
-            ),
-          ),
-          WidgetUtils.myLine(endIndent: 20, indent: 20),
-          Container(
-            height: ScreenUtil().setHeight(90),
-            margin: const EdgeInsets.only(left: 20, right: 20),
-            //边框设置
-            decoration: BoxDecoration(
-              //背景
-              color: Colors.white,
-              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-              //设置四周边框
-              border: Border.all(width: 1, color: Colors.white),
-            ),
-            child: Row(
-              children: [
-                WidgetUtils.onlyText('新密码', StyleUtils.getCommonTextStyle(color: MyColors.g3,fontSize: ScreenUtil().setSp(33))),
-                WidgetUtils.commonSizedBox(0, 20),
-                Expanded(child: WidgetUtils.commonTextFieldNumber2(
-                    controller: controllerPas2, hintText: '请输入新密码', enabled: true, obscureText: true)),
-              ],
-            ),
-          ),
-          WidgetUtils.myLine(endIndent: 20, indent: 20),
-          Container(
-            height: ScreenUtil().setHeight(90),
-            margin: const EdgeInsets.only(left: 20, right: 20),
-            //边框设置
-            decoration: BoxDecoration(
-              //背景
-              color: Colors.white,
-              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-              //设置四周边框
-              border: Border.all(width: 1, color: Colors.white),
-            ),
-            child: Row(
-              children: [
-                WidgetUtils.onlyText('确认密码', StyleUtils.getCommonTextStyle(color: MyColors.g3,fontSize: ScreenUtil().setSp(33))),
-                WidgetUtils.commonSizedBox(0, 20),
-                Expanded(child: WidgetUtils.commonTextFieldNumber2(
-                    controller: controllerPas3, hintText: '请输入确认密码', enabled: true, obscureText: true)),
-              ],
-            ),
-          ),
-          WidgetUtils.myLine(endIndent: 20, indent: 20),
-          WidgetUtils.commonSizedBox(10, 0),
-          Container(
-            margin: const EdgeInsets.only(left: 20, right: 20),
-            child: WidgetUtils.onlyText('*密码长度为6位数字', StyleUtils.getCommonTextStyle(color: MyColors.g9,fontSize: ScreenUtil().setSp(28))),
-          ),
-          WidgetUtils.commonSizedBox(100, 0),
-          GestureDetector(
-            onTap: (() {
-              doForgetPassword();
-            }),
-            child: Container(
+      body: GestureDetector(
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+          if (!currentFocus.hasPrimaryFocus &&
+              currentFocus.focusedChild != null) {
+            FocusManager.instance.primaryFocus?.unfocus();
+          }
+        },
+        child: Column(
+          children: [
+            WidgetUtils.commonSizedBox(20, double.infinity),
+            Container(
+              height: ScreenUtil().setHeight(90),
               margin: const EdgeInsets.only(left: 20, right: 20),
-              child: WidgetUtils.myContainer(
-                  ScreenUtil().setHeight(80),
-                  double.infinity,
-                  MyColors.homeTopBG,
-                  MyColors.homeTopBG,
-                  '确定',
-                  ScreenUtil().setSp(33),
-                  Colors.white),
+              //边框设置
+              decoration: BoxDecoration(
+                //背景
+                color: Colors.white,
+                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                //设置四周边框
+                border: Border.all(width: 1, color: Colors.white),
+              ),
+              child: Row(
+                children: [
+                  WidgetUtils.onlyText('旧密码', StyleUtils.getCommonTextStyle(color: MyColors.g3,fontSize: ScreenUtil().setSp(33))),
+                  WidgetUtils.commonSizedBox(0, 20),
+                  Expanded(child: TextField(
+                    enabled: true,
+                    obscureText: false,
+                    controller: controllerPas1,
+                    inputFormatters: [
+                      RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                      FilteringTextInputFormatter.digitsOnly,
+                      //设置只能输入6位
+                      LengthLimitingTextInputFormatter(6),
+                    ],
+                    keyboardType: TextInputType.number,
+                    //设置键盘为数字
+                    style: StyleUtils.loginTextStyle,
+                    onChanged: (value) {
+                    },
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      // labelText: "请输入用户名",
+                      // icon: Icon(Icons.people), //前面的图标
+                      hintText: '请输入确认密码',
+                      hintStyle: StyleUtils.loginHintTextStyle,
+                      // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
+                    ),
+                  )),
+                ],
+              ),
             ),
-          ),
-        ],
+            WidgetUtils.myLine(endIndent: 20, indent: 20),
+            Container(
+              height: ScreenUtil().setHeight(90),
+              margin: const EdgeInsets.only(left: 20, right: 20),
+              //边框设置
+              decoration: BoxDecoration(
+                //背景
+                color: Colors.white,
+                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                //设置四周边框
+                border: Border.all(width: 1, color: Colors.white),
+              ),
+              child: Row(
+                children: [
+                  WidgetUtils.onlyText('新密码', StyleUtils.getCommonTextStyle(color: MyColors.g3,fontSize: ScreenUtil().setSp(33))),
+                  WidgetUtils.commonSizedBox(0, 20),
+                  Expanded(child: TextField(
+                    enabled: true,
+                    obscureText: false,
+                    controller: controllerPas2,
+                    inputFormatters: [
+                      RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                      FilteringTextInputFormatter.digitsOnly,
+                      //设置只能输入6位
+                      LengthLimitingTextInputFormatter(6),
+                    ],
+                    keyboardType: TextInputType.number,
+                    //设置键盘为数字
+                    style: StyleUtils.loginTextStyle,
+                    onChanged: (value) {
+                    },
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      // labelText: "请输入用户名",
+                      // icon: Icon(Icons.people), //前面的图标
+                      hintText: '请输入新密码',
+                      hintStyle: StyleUtils.loginHintTextStyle,
+                      // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
+                    ),
+                  )),
+                ],
+              ),
+            ),
+            WidgetUtils.myLine(endIndent: 20, indent: 20),
+            Container(
+              height: ScreenUtil().setHeight(90),
+              margin: const EdgeInsets.only(left: 20, right: 20),
+              //边框设置
+              decoration: BoxDecoration(
+                //背景
+                color: Colors.white,
+                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                //设置四周边框
+                border: Border.all(width: 1, color: Colors.white),
+              ),
+              child: Row(
+                children: [
+                  WidgetUtils.onlyText('确认密码', StyleUtils.getCommonTextStyle(color: MyColors.g3,fontSize: ScreenUtil().setSp(33))),
+                  WidgetUtils.commonSizedBox(0, 20),
+                  Expanded(child: TextField(
+                    enabled: true,
+                    obscureText: false,
+                    controller: controllerPas3,
+                    inputFormatters: [
+                      RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                      FilteringTextInputFormatter.digitsOnly,
+                      //设置只能输入6位
+                      LengthLimitingTextInputFormatter(6),
+                    ],
+                    keyboardType: TextInputType.number,
+                    //设置键盘为数字
+                    style: StyleUtils.loginTextStyle,
+                    onChanged: (value) {
+                    },
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      // labelText: "请输入用户名",
+                      // icon: Icon(Icons.people), //前面的图标
+                      hintText: '请输入确认密码',
+                      hintStyle: StyleUtils.loginHintTextStyle,
+                      // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
+                    ),
+                  )),
+                ],
+              ),
+            ),
+            WidgetUtils.myLine(endIndent: 20, indent: 20),
+            WidgetUtils.commonSizedBox(10, 0),
+            Container(
+              width: double.infinity,
+              margin: const EdgeInsets.only(left: 20, right: 20),
+              child: WidgetUtils.onlyText('*密码长度为6位数字', StyleUtils.getCommonTextStyle(color: MyColors.g9,fontSize: ScreenUtil().setSp(28))),
+            ),
+            WidgetUtils.commonSizedBox(100, 0),
+            GestureDetector(
+              onTap: (() {
+                doForgetPassword();
+              }),
+              child: Container(
+                margin: const EdgeInsets.only(left: 20, right: 20),
+                child: WidgetUtils.myContainer(
+                    ScreenUtil().setHeight(80),
+                    double.infinity,
+                    MyColors.homeTopBG,
+                    MyColors.homeTopBG,
+                    '确定',
+                    ScreenUtil().setSp(33),
+                    Colors.white),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

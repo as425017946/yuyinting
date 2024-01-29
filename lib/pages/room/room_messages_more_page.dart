@@ -98,12 +98,13 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
     // 保存路径
     Directory? directory = await getTemporaryDirectory();
     //保存自己头像
+    //保存自己头像
     if (sp.getString('user_headimg').toString().contains('.gif') ||
         sp.getString('user_headimg').toString().contains('.GIF')) {
       myHeadImg = '${directory!.path}/${sp.getString('user_id')}.gif';
     } else if (sp.getString('user_headimg').toString().contains('.jpg') ||
         sp.getString('user_headimg').toString().contains('.GPG')) {
-      myHeadImg = '${directory!.path}/${sp.getString('user_id')}.gif';
+      myHeadImg = '${directory!.path}/${sp.getString('user_id')}.jpg';
     } else if (sp.getString('user_headimg').toString().contains('.jpeg') ||
         sp.getString('user_headimg').toString().contains('.GPEG')) {
       myHeadImg = '${directory!.path}/${sp.getString('user_id')}.jpeg';
@@ -146,7 +147,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
       'headNetImg': sp.getString('user_headimg').toString(),
       'otherHeadImg': otherHeadImg,
       'otherHeadNetImg': widget.otherImg,
-      'add_time': DateTime.now().millisecondsSinceEpoch,
+      'add_time': widget.nickName == '维C客服' ? '1893494560' : DateTime.now().millisecondsSinceEpoch,
       'type': 6,
       'number': 0,
       'status': 1,
@@ -321,7 +322,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                           Object error,
                           StackTrace? stackTrace) {
                         return WidgetUtils.showImages(
-                            'assets/images/img_error.png',
+                            'assets/images/img_placeholder.png',
                             200.h,
                             160.h);
                       },
@@ -461,7 +462,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                           Object error,
                           StackTrace? stackTrace) {
                         return WidgetUtils.showImages(
-                            'assets/images/img_error.png',
+                            'assets/images/img_placeholder.png',
                             200.h,
                             160.h);
                       },
@@ -552,209 +553,218 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
           Navigator.of(context).pop();
           return false;
         },
-        child: Column(
-          children: [
-            Expanded(
-              child: GestureDetector(
-                onTap: (() {
-                  if (MyUtils.checkClick()) {
-                    //这里可以响应物理返回键
-                    listen.cancel();
-                    listenHB.cancel();
-                    eventBus.fire(SubmitButtonBack(title: '厅内聊天返回'));
-                    Navigator.of(context).pop();
-                  }
-                }),
-                child: Container(
-                  height: double.infinity,
-                  width: double.infinity,
-                  color: Colors.transparent,
-                ),
-              ),
-            ),
-            Container(
-              height: ScreenUtil().setHeight(856),
-              decoration: const BoxDecoration(
-                //设置Container修饰
-                image: DecorationImage(
-                  //背景图片修饰
-                  image: AssetImage("assets/images/room_tc1.png"),
-                  fit: BoxFit.fill, //覆盖
-                ),
-              ),
-              child: Stack(
-                alignment: Alignment.bottomCenter,
-                children: [
-                  Column(
-                    children: [
-                      /// 头部展示
-                      SizedBox(
-                        height: ScreenUtil().setHeight(80),
-                        child: Row(
-                          children: [
-                            WidgetUtils.commonSizedBox(0, 20),
-                            GestureDetector(
-                              onTap: (() {
-                                if (MyUtils.checkClick()) {
-                                  //这里可以响应物理返回键
-                                  eventBus.fire(SubmitButtonBack(title: '厅内聊天返回'));
-                                  Navigator.of(context).pop();
-                                }
-                              }),
-                              child: WidgetUtils.showImages(
-                                  'assets/images/room_message_left.png',
-                                  ScreenUtil().setHeight(22),
-                                  ScreenUtil().setHeight(13)),
-                            ),
-                            WidgetUtils.commonSizedBox(0, 20),
-                            WidgetUtils.onlyText(
-                                widget.nickName,
-                                StyleUtils.getCommonTextStyle(
-                                    color: MyColors.roomTCWZ2,
-                                    fontSize: ScreenUtil().setSp(28))),
-                            const Expanded(child: Text('')),
-                            GestureDetector(
-                              onTap: (() {
-                                if (MyUtils.checkClick()) {
-                                  doPostFollow();
-                                }
-                              }),
-                              child: SizedBox(
-                                width: ScreenUtil().setHeight(80),
-                                height: ScreenUtil().setHeight(38),
-                                child: Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    WidgetUtils.showImagesFill(
-                                        'assets/images/room_shoucang.png',
-                                        double.infinity,
-                                        double.infinity),
-                                    Container(
-                                      width: ScreenUtil().setHeight(80),
-                                      height: ScreenUtil().setHeight(38),
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        isGZ == '0' ? '关注' : '已关注',
-                                        style: StyleUtils.getCommonTextStyle(
-                                            color: Colors.white,
-                                            fontSize: ScreenUtil().setSp(21)),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                            WidgetUtils.commonSizedBox(0, 20),
-                          ],
-                        ),
-                      ),
-                      length != 0
-                          ? Expanded(
-                              child: Container(
-                                height: double.infinity,
-                                color: MyColors.roomMessageBlackBG,
-                                margin: EdgeInsets.only(bottom: 130.h),
-                                child: ListView.builder(
-                                  itemBuilder: chatWidget,
-                                  controller: _scrollController,
-                                  itemCount: allData2.length,
-                                ),
-                              ),
-                            )
-                          : const Text('')
-                    ],
-                  ),
-                  Container(
-                    height: 122.h,
+        child: GestureDetector(
+          onTap: () {
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus &&
+                currentFocus.focusedChild != null) {
+              FocusManager.instance.primaryFocus?.unfocus();
+            }
+          },
+          child: Column(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: (() {
+                    if (MyUtils.checkClick()) {
+                      //这里可以响应物理返回键
+                      listen.cancel();
+                      listenHB.cancel();
+                      eventBus.fire(SubmitButtonBack(title: '厅内聊天返回'));
+                      Navigator.of(context).pop();
+                    }
+                  }),
+                  child: Container(
+                    height: double.infinity,
                     width: double.infinity,
-                    decoration: const BoxDecoration(
-                      //背景
-                      color: MyColors.roomXZ1,
-                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(35),
-                          topRight: Radius.circular(35)),
-                    ),
-                    alignment: Alignment.center,
-                    child: Row(
+                    color: Colors.transparent,
+                  ),
+                ),
+              ),
+              Container(
+                height: ScreenUtil().setHeight(856),
+                decoration: const BoxDecoration(
+                  //设置Container修饰
+                  image: DecorationImage(
+                    //背景图片修饰
+                    image: AssetImage("assets/images/room_tc1.png"),
+                    fit: BoxFit.fill, //覆盖
+                  ),
+                ),
+                child: Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: [
+                    Column(
                       children: [
-                        Expanded(
-                          child: Container(
-                            height: 78.h,
-                            width: double.infinity,
-                            margin: EdgeInsets.only(left: 20.h, right: 20.h),
-                            padding: EdgeInsets.only(left: 20.h, right: 20.h),
-                            decoration: const BoxDecoration(
-                              //背景
-                              color: MyColors.roomXZ2,
-                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                              borderRadius: BorderRadius.all(Radius.circular(38)),
-                            ),
-                            child: TextField(
-                              textInputAction: TextInputAction.send,
-                              // 设置为发送按钮
-                              controller: controller,
-                              inputFormatters: [
-                                RegexFormatter(regex: MyUtils.regexFirstNotNull),
-                                LengthLimitingTextInputFormatter(25) //限制输入长度
-                              ],
-                              style: StyleUtils.loginTextStyle,
-                              onSubmitted: (value) {
-                                MyUtils.sendMessage(widget.otherUid, value);
-                                doPostSendUserMsg(value);
-                              },
-                              decoration: InputDecoration(
-                                // border: InputBorder.none,
-                                // labelText: "请输入用户名",
-                                // icon: Icon(Icons.people), //前面的图标
-                                hintText: '请输入信息...',
-                                hintStyle: StyleUtils.loginHintTextStyle,
+                        /// 头部展示
+                        SizedBox(
+                          height: ScreenUtil().setHeight(80),
+                          child: Row(
+                            children: [
+                              WidgetUtils.commonSizedBox(0, 20),
+                              GestureDetector(
+                                onTap: (() {
+                                  if (MyUtils.checkClick()) {
+                                    //这里可以响应物理返回键
+                                    eventBus.fire(SubmitButtonBack(title: '厅内聊天返回'));
+                                    Navigator.of(context).pop();
+                                  }
+                                }),
+                                child: WidgetUtils.showImages(
+                                    'assets/images/room_message_left.png',
+                                    ScreenUtil().setHeight(22),
+                                    ScreenUtil().setHeight(13)),
+                              ),
+                              WidgetUtils.commonSizedBox(0, 20),
+                              WidgetUtils.onlyText(
+                                  widget.nickName,
+                                  StyleUtils.getCommonTextStyle(
+                                      color: MyColors.roomTCWZ2,
+                                      fontSize: ScreenUtil().setSp(28))),
+                              const Expanded(child: Text('')),
+                              GestureDetector(
+                                onTap: (() {
+                                  if (MyUtils.checkClick()) {
+                                    doPostFollow();
+                                  }
+                                }),
+                                child: SizedBox(
+                                  width: ScreenUtil().setHeight(80),
+                                  height: ScreenUtil().setHeight(38),
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      WidgetUtils.showImagesFill(
+                                          'assets/images/room_shoucang.png',
+                                          double.infinity,
+                                          double.infinity),
+                                      Container(
+                                        width: ScreenUtil().setHeight(80),
+                                        height: ScreenUtil().setHeight(38),
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          isGZ == '0' ? '关注' : '已关注',
+                                          style: StyleUtils.getCommonTextStyle(
+                                              color: Colors.white,
+                                              fontSize: ScreenUtil().setSp(21)),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              WidgetUtils.commonSizedBox(0, 20),
+                            ],
+                          ),
+                        ),
+                        length != 0
+                            ? Expanded(
+                                child: Container(
+                                  height: double.infinity,
+                                  color: MyColors.roomMessageBlackBG,
+                                  margin: EdgeInsets.only(bottom: 130.h),
+                                  child: ListView.builder(
+                                    itemBuilder: chatWidget,
+                                    controller: _scrollController,
+                                    itemCount: allData2.length,
+                                  ),
+                                ),
+                              )
+                            : const Text('')
+                      ],
+                    ),
+                    Container(
+                      height: 122.h,
+                      width: double.infinity,
+                      decoration: const BoxDecoration(
+                        //背景
+                        color: MyColors.roomXZ1,
+                        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(35),
+                            topRight: Radius.circular(35)),
+                      ),
+                      alignment: Alignment.center,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              height: 78.h,
+                              width: double.infinity,
+                              margin: EdgeInsets.only(left: 20.h, right: 20.h),
+                              padding: EdgeInsets.only(left: 20.h, right: 20.h),
+                              decoration: const BoxDecoration(
+                                //背景
+                                color: MyColors.roomXZ2,
+                                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                borderRadius: BorderRadius.all(Radius.circular(38)),
+                              ),
+                              child: TextField(
+                                textInputAction: TextInputAction.send,
+                                // 设置为发送按钮
+                                controller: controller,
+                                inputFormatters: [
+                                  RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                                  LengthLimitingTextInputFormatter(25) //限制输入长度
+                                ],
+                                style: StyleUtils.loginTextStyle,
+                                onSubmitted: (value) {
+                                  MyUtils.sendMessage(widget.otherUid, value);
+                                  doPostSendUserMsg(value);
+                                },
+                                decoration: InputDecoration(
+                                  // border: InputBorder.none,
+                                  // labelText: "请输入用户名",
+                                  // icon: Icon(Icons.people), //前面的图标
+                                  hintText: '请输入信息...',
+                                  hintStyle: StyleUtils.loginHintTextStyle,
 
-                                contentPadding:
-                                    const EdgeInsets.only(top: 0, bottom: 0),
-                                border: const OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Colors.transparent),
-                                ),
-                                enabledBorder: const OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.transparent,
+                                  contentPadding:
+                                      const EdgeInsets.only(top: 0, bottom: 0),
+                                  border: const OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.transparent),
                                   ),
-                                ),
-                                disabledBorder: const OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.transparent,
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.transparent,
+                                    ),
                                   ),
-                                ),
-                                focusedBorder: const OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.transparent,
+                                  disabledBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.transparent,
+                                    ),
                                   ),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.transparent,
+                                    ),
+                                  ),
+                                  // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
                                 ),
-                                // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
                               ),
                             ),
                           ),
-                        ),
-                        GestureDetector(
-                          onTap: (() {
-                            if (MyUtils.checkClick()) {
-                              doPostCanSendUser(4);
-                            }
-                          }),
-                          child: WidgetUtils.showImages(
-                              'assets/images/chat_hongbao.png',
-                              ScreenUtil().setHeight(45),
-                              ScreenUtil().setHeight(45)),
-                        ),
-                        WidgetUtils.commonSizedBox(0, 20.h),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
+                          GestureDetector(
+                            onTap: (() {
+                              if (MyUtils.checkClick()) {
+                                doPostCanSendUser(4);
+                              }
+                            }),
+                            child: WidgetUtils.showImages(
+                                'assets/images/chat_hongbao.png',
+                                ScreenUtil().setHeight(45),
+                                ScreenUtil().setHeight(45)),
+                          ),
+                          WidgetUtils.commonSizedBox(0, 20.h),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -782,6 +792,17 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
       allData2 = result;
       length = allData2.length;
     });
+    for(int i =0; i < allData2.length; i++){
+      // 更新头像和昵称
+      await db.update(
+          'messageSLTable',
+          {
+            'headImg': myHeadImg,
+            'headNetImg': sp.getString('user_headimg').toString(),
+          },
+          whereArgs: [allData2[i]['uid']],
+          where: 'uid = ?');
+    }
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       scrollToLastItem(); // 在widget构建完成后滚动到底部
     });
@@ -824,7 +845,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
             'headNetImg': sp.getString('user_headimg').toString(),
             'otherHeadImg': otherHeadImg,
             'otherHeadNetImg': widget.otherImg,
-            'add_time': DateTime.now().millisecondsSinceEpoch,
+            'add_time': widget.nickName == '维C客服' ? '1893494560' : DateTime.now().millisecondsSinceEpoch,
             'type': 1,
             'number': 0,
             'status': 1,

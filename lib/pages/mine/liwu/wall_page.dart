@@ -65,7 +65,7 @@ class _WallPageState extends State<WallPage> {
                       130.h,
                       130.h,
                       130.h / 2,
-                      'assets/images/img_error.png',
+                      'assets/images/img_placeholder.png',
                     );
                   },
                 ),

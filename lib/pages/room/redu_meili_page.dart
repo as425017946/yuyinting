@@ -30,7 +30,7 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage>  with AutomaticKeepAliveC
   bool get wantKeepAlive => true;
   int page = 1;
   // 财富榜传wealth 魅力榜传charm : 日榜day 周榜week 月榜month
-  String dateType = 'day';
+  String dateType = 'day', oldDateType = 'day';
   List<ListBD> _list = [];
   List<ListBD> _list2 = [];
 
@@ -203,13 +203,19 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage>  with AutomaticKeepAliveC
                                     showPage = 0;
                                     dateType = 'day';
                                   });
-                                  if(MyUtils.checkClick()){
+                                  if (dateType != oldDateType) {
+                                    setState(() {
+                                      _list.clear();
+                                      _list2.clear();
+                                      oldDateType = 'day';
+                                    });
                                     doPostRankList();
                                   }
                                 }),
-                                child: SizedBox(
+                                child: Container(
                                   width: double.infinity,
                                   height: double.infinity,
+                                  color: Colors.transparent,
                                   child: WidgetUtils.onlyTextCenter('日榜', StyleUtils.getCommonTextStyle(color: showPage == 0 ? MyColors.roomTCWZ2 : MyColors.roomTCWZ3, fontSize: ScreenUtil().setSp(25))),
                                 ),
                               )
@@ -239,13 +245,19 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage>  with AutomaticKeepAliveC
                                     showPage = 1;
                                     dateType = 'week';
                                   });
-                                  if(MyUtils.checkClick()){
+                                  if (dateType != oldDateType) {
+                                    setState(() {
+                                      _list.clear();
+                                      _list2.clear();
+                                      oldDateType = 'week';
+                                    });
                                     doPostRankList();
                                   }
                                 }),
-                                child: SizedBox(
+                                child: Container(
                                   width: double.infinity,
                                   height: double.infinity,
+                                  color: Colors.transparent,
                                   child: WidgetUtils.onlyTextCenter('周榜', StyleUtils.getCommonTextStyle(color: showPage == 1 ? MyColors.roomTCWZ2 : MyColors.roomTCWZ3, fontSize: ScreenUtil().setSp(25))),
                                 ),
                               )
@@ -275,13 +287,19 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage>  with AutomaticKeepAliveC
                                     showPage = 2;
                                     dateType = 'month';
                                   });
-                                  if(MyUtils.checkClick()){
+                                  if (dateType != oldDateType) {
+                                    setState(() {
+                                      _list.clear();
+                                      _list2.clear();
+                                      oldDateType = 'month';
+                                    });
                                     doPostRankList();
                                   }
                                 }),
-                                child: SizedBox(
+                                child: Container(
                                   width: double.infinity,
                                   height: double.infinity,
+                                  color: Colors.transparent,
                                   child: WidgetUtils.onlyTextCenter('月榜', StyleUtils.getCommonTextStyle(color: showPage == 2 ? MyColors.roomTCWZ2 : MyColors.roomTCWZ3, fontSize: ScreenUtil().setSp(25))),
                                 ),
                               )

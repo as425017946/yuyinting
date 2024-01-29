@@ -36,7 +36,8 @@ class _RoomBG2PageState extends State<RoomBG2Page>
   @override
   bool get wantKeepAlive => true;
   String chooseID = '';
-
+  // 选中的下标
+  int chooseIndes = 0;
   @override
   void initState() {
     // TODO: implement initState
@@ -86,10 +87,12 @@ class _RoomBG2PageState extends State<RoomBG2Page>
                       list[i].type = 0;
                     }
                   }
+                  chooseIndes = index;
                   eventBus.fire(RoomBGBack(
                       bgID: list[index].bgId.toString(),
                       bgType: list[index].bgType.toString(),
-                      bgImagUrl: list[index].img.toString()));
+                      bgImagUrl: list[index].img.toString(),
+                      delete: false));
                 });
               }
             }),
@@ -187,6 +190,16 @@ class _RoomBG2PageState extends State<RoomBG2Page>
 
   /// 删除背景图
   Future<void> postRemoveRoomBg(String bgID,int index) async {
+    LogE('删除状态下标  $index');
+    if(chooseIndes == index){
+      LogE('删除状态  $chooseIndes');
+      //上传后的图片是否被选中后，又删除了图片
+      eventBus.fire(RoomBGBack(
+          bgID: list[index].bgId.toString(),
+          bgType: list[index].bgType.toString(),
+          bgImagUrl: list[index].img.toString(),
+          delete: true));
+    }
     Map<String, dynamic> params = <String, dynamic>{
       'room_id': sp.getString('roomID').toString(),
       'bg_id': bgID,
@@ -230,6 +243,7 @@ class _RoomBG2PageState extends State<RoomBG2Page>
             for(int i = 0; i < bean.data!.customBglist!.length; i++){
               if(bean.data!.customBglist![i].type == 1){
                 chooseID = bean.data!.customBglist![i].bgId.toString();
+                chooseIndes = i;
                 break;
               }
             }

@@ -71,6 +71,7 @@
     <string>需要您的同意，才能访问麦克风</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>需要使用震动功能</string>
-
+    <key>NSSystemAdministrationUsageDescription</key>
+    <string>需要获取您的存储权限</string>
 </dict>
 </plist>

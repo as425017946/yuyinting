@@ -213,7 +213,16 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                     color: Colors.white,
                     fontSize: 17.sp,
                     fontWeight: FontWeight.w600)),
-          )
+          ),
+          SizedBox(
+            height: 70.h,
+            width: double.infinity,
+            child: listA1[6 + one]
+                ? const SVGASimpleImage(
+              assetsName: 'assets/svga/gp/star.svga',
+            )
+                : const Text(''),
+          ),
         ],
       ),
     ));
@@ -268,7 +277,16 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                     color: Colors.white,
                     fontSize: 17.sp,
                     fontWeight: FontWeight.w600)),
-          )
+          ),
+          SizedBox(
+            height: 70.h,
+            width: double.infinity,
+            child: listA1[8 + one]
+                ? const SVGASimpleImage(
+              assetsName: 'assets/svga/gp/star.svga',
+            )
+                : const Text(''),
+          ),
         ],
       ),
     ));
@@ -1004,15 +1022,23 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
               listZDY.add(map);
             });
           } else {
-            setState(() {
-              for (int i = 0; i < 5; i++) {
-                listZDY[i] = listZDY[1 + 1];
+            for (int i = 0; i < 6; i++) {
+              if(i == 5){
+                Map<dynamic, dynamic> map = {};
+                map['avatar'] = event.map!['avatar'];
+                map['amount'] = event.map!['amount'];
+                setState(() {
+                  listZDY[5] = map;
+                });
+              }else{
+                Map<dynamic, dynamic> map = {};
+                map['avatar'] = listZDY[i + 1]['avatar'];
+                map['amount'] = listZDY[i + 1]['amount'];
+                setState(() {
+                  listZDY[i] = map;
+                });
               }
-              Map<dynamic, dynamic> map = {};
-              map['avatar'] = event.map!['avatar'];
-              map['amount'] = event.map!['amount'];
-              listZDY[5] = map;
-            });
+            }
           }
           LogE('**********${listZDY.length}');
         }
@@ -1915,7 +1941,16 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                                               color: Colors.white,
                                               fontSize: 17.sp,
                                               fontWeight: FontWeight.w600)),
-                                    )
+                                    ),
+                                    SizedBox(
+                                      height: 70.h,
+                                      width: double.infinity,
+                                      child: listA1[11]
+                                          ? const SVGASimpleImage(
+                                        assetsName: 'assets/svga/gp/star.svga',
+                                      )
+                                          : const Text(''),
+                                    ),
                                   ],
                                 ),
                               ))
@@ -2137,7 +2172,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
               //更新
               luck = 6;
             }else if (bean.data! == 0){
-              MyToastUtils.showToastBottom("数据异常,游戏即将关闭，稍后请在开奖记录查看！");
+              MyToastUtils.showToastBottom2("您的网络不佳，游戏即将关闭，稍后请在开奖记录查看！");
               // ignore: use_build_context_synchronously
               Navigator.pop(context);
             }
@@ -2148,7 +2183,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
           MyUtils.jumpLogin(context);
           break;
         default:
-          MyToastUtils.showToastBottom("数据异常,游戏即将关闭，稍后请在开奖记录查看！");
+          MyToastUtils.showToastBottom2("您的网络不佳，游戏即将关闭，稍后请在开奖记录查看！");
           // ignore: use_build_context_synchronously
           Navigator.pop(context);
       }

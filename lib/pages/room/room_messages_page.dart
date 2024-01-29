@@ -282,6 +282,15 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
       }
     });
     for (int i = 0; i < listMessage.length; i++) {
+      // 更新头像和昵称
+      await db.update(
+          'messageSLTable',
+          {
+            'otherHeadImg': listMessage[i]['otherHeadImg'],
+            'nickName': listMessage[i]['nickName']
+          },
+          whereArgs: [listMessage[i]['combineID']],
+          where: 'combineID = ?');
       String query =
           "SELECT * FROM messageSLTable WHERE  combineID = '${listMessage[i]['combineID']}' and readStatus = 0 and uid = ${sp.getString('user_id')} ";
       List<Map<String, dynamic>> result3 = await db.rawQuery(query);

@@ -80,129 +80,138 @@ class _BiZhuanDouPageState extends State<BiZhuanDouPage> {
       appBar: appBar,
       resizeToAvoidBottomInset: false, // 解决键盘顶起页面
       backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          WidgetUtils.myLine(thickness: 10),
-          Container(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              children: [
-                /// 豆子
-                SizedBox(
-                  height: ScreenUtil().setHeight(250),
-                  child: Stack(
-                    alignment: Alignment.bottomRight,
-                    children: [
-                      WidgetUtils.showImagesFill(
-                          'assets/images/mine_wallet_bbj.jpg',
-                          ScreenUtil().setHeight(250),
-                          double.infinity),
-                      Row(
-                        children: [
-                          WidgetUtils.commonSizedBox(0, 20),
-                          WidgetUtils.showImages(
-                              'assets/images/mine_wallet_bb.png',
-                              ScreenUtil().setHeight(100),
-                              ScreenUtil().setHeight(100)),
-                          WidgetUtils.commonSizedBox(0, 15),
-                          Expanded(
-                              child: Column(
-                                children: [
-                                  const Expanded(child: Text('')),
-                                  Row(
-                                    children: [
-                                      WidgetUtils.onlyText(
-                                          'V币',
-                                          StyleUtils.getCommonTextStyle(
-                                              color: Colors.white,
-                                              fontSize: ScreenUtil().setSp(38))),
-                                      const Spacer(),
-                                      WidgetUtils.onlyText(
-                                          widget.shuliang,
-                                          StyleUtils.getCommonTextStyle(
-                                              color: Colors.white,
-                                              fontSize: ScreenUtil().setSp(56),
-                                              fontWeight: FontWeight.w600)),
-                                      const Expanded(child: Text('')),
-                                    ],
-                                  ),
-                                  const Expanded(child: Text('')),
-                                ],
-                              )),
-                        ],
-                      ),
-
-                      /// 兑换提示
-                      Container(
-                        margin: const EdgeInsets.only(right: 15, bottom: 15),
-                        child: Text(
-                          '1V币=1V豆',
-                          style: TextStyle(
-                              fontSize: ScreenUtil().setSp(21),
-                              color: Colors.white),
+      body: GestureDetector(
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+          if (!currentFocus.hasPrimaryFocus &&
+              currentFocus.focusedChild != null) {
+            FocusManager.instance.primaryFocus?.unfocus();
+          }
+        },
+        child: Column(
+          children: [
+            WidgetUtils.myLine(thickness: 10),
+            Container(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  /// 豆子
+                  SizedBox(
+                    height: ScreenUtil().setHeight(250),
+                    child: Stack(
+                      alignment: Alignment.bottomRight,
+                      children: [
+                        WidgetUtils.showImagesFill(
+                            'assets/images/mine_wallet_bbj.jpg',
+                            ScreenUtil().setHeight(250),
+                            double.infinity),
+                        Row(
+                          children: [
+                            WidgetUtils.commonSizedBox(0, 20),
+                            WidgetUtils.showImages(
+                                'assets/images/mine_wallet_bb.png',
+                                ScreenUtil().setHeight(100),
+                                ScreenUtil().setHeight(100)),
+                            WidgetUtils.commonSizedBox(0, 15),
+                            Expanded(
+                                child: Column(
+                                  children: [
+                                    const Expanded(child: Text('')),
+                                    Row(
+                                      children: [
+                                        WidgetUtils.onlyText(
+                                            'V币',
+                                            StyleUtils.getCommonTextStyle(
+                                                color: Colors.white,
+                                                fontSize: ScreenUtil().setSp(38))),
+                                        const Spacer(),
+                                        WidgetUtils.onlyText(
+                                            widget.shuliang,
+                                            StyleUtils.getCommonTextStyle(
+                                                color: Colors.white,
+                                                fontSize: ScreenUtil().setSp(56),
+                                                fontWeight: FontWeight.w600)),
+                                        const Expanded(child: Text('')),
+                                      ],
+                                    ),
+                                    const Expanded(child: Text('')),
+                                  ],
+                                )),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                WidgetUtils.commonSizedBox(20, 20),
-                Container(
-                  height: ScreenUtil().setHeight(280),
-                  padding: const EdgeInsets.only(left: 30, right: 30),
-                  //边框设置
-                  decoration: const BoxDecoration(
-                    //背景
-                    color: MyColors.walletGrayBG,
-                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                    borderRadius: BorderRadius.all(Radius.circular(13)),
-                  ),
-                  child: Column(
-                    children: [
-                      WidgetUtils.commonSizedBox(30, 20),
-                      WidgetUtils.onlyText('提取V币', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(32))),
-                      Row(
-                        children: [
-                          WidgetUtils.showImages('assets/images/mine_wallet_bb.png', ScreenUtil().setHeight(48), ScreenUtil().setHeight(48)),
-                          WidgetUtils.commonSizedBox(0, 20),
-                          Expanded(
-                            child: WidgetUtils.commonTextFieldNumber(
-                                controller: controllerNumber, hintText: '请输入V币数量'),
+
+                        /// 兑换提示
+                        Container(
+                          margin: const EdgeInsets.only(right: 15, bottom: 15),
+                          child: Text(
+                            '1V币=1V豆',
+                            style: TextStyle(
+                                fontSize: ScreenUtil().setSp(21),
+                                color: Colors.white),
                           ),
-                          GestureDetector(
-                            onTap: ((){
-                              if(double.parse(widget.shuliang) > 1){
-                                setState(() {
-                                  //舍弃当前变量的小数部分
-                                  controllerNumber.text = (double.parse(widget.shuliang).truncate()).toStringAsFixed(0);
-                                  daozhang = (double.parse(widget.shuliang).truncate()).toStringAsFixed(0);
-                                });
-                              }else{
-                                MyToastUtils.showToastBottom('提现数量不足1个');
-                              }
-                            }),
-                            child: WidgetUtils.onlyText('全部', StyleUtils.getCommonTextStyle(color: MyColors.walletWZBlue, fontSize: ScreenUtil().setSp(32))),
-                          ),
-                        ],
-                      ),
-                      WidgetUtils.myLine(),
-                      WidgetUtils.commonSizedBox(20, 20),
-                      Row(
-                        children: [
-                          WidgetUtils.onlyText('到账', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(32))),
-                          WidgetUtils.showImages('assets/images/mine_wallet_dd.png', ScreenUtil().setHeight(30), ScreenUtil().setHeight(30)),
-                          WidgetUtils.commonSizedBox(0, 10),
-                          WidgetUtils.onlyText('$daozhang V豆', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(32), fontWeight: FontWeight.w600)),
-                        ],
-                      )
-                    ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                WidgetUtils.commonSizedBox(20, 20),
-                WidgetUtils.commonSubmitButton2('确认兑换', MyColors.walletWZBlue),
-              ],
-            ),
-          )
-        ],
+                  WidgetUtils.commonSizedBox(20, 20),
+                  Container(
+                    height: ScreenUtil().setHeight(280),
+                    padding: const EdgeInsets.only(left: 30, right: 30),
+                    //边框设置
+                    decoration: const BoxDecoration(
+                      //背景
+                      color: MyColors.walletGrayBG,
+                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                      borderRadius: BorderRadius.all(Radius.circular(13)),
+                    ),
+                    child: Column(
+                      children: [
+                        WidgetUtils.commonSizedBox(30, 20),
+                        WidgetUtils.onlyText('提取V币', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(32))),
+                        Row(
+                          children: [
+                            WidgetUtils.showImages('assets/images/mine_wallet_bb.png', ScreenUtil().setHeight(48), ScreenUtil().setHeight(48)),
+                            WidgetUtils.commonSizedBox(0, 20),
+                            Expanded(
+                              child: WidgetUtils.commonTextFieldNumber(
+                                  controller: controllerNumber, hintText: '请输入V币数量'),
+                            ),
+                            GestureDetector(
+                              onTap: ((){
+                                if(double.parse(widget.shuliang) > 1){
+                                  setState(() {
+                                    //舍弃当前变量的小数部分
+                                    controllerNumber.text = double.parse(widget.shuliang).toInt().toString();
+                                    daozhang = (double.parse(widget.shuliang).truncate()).toInt().toString();
+                                  });
+                                }else{
+                                  MyToastUtils.showToastBottom('提现数量不足1个');
+                                }
+                              }),
+                              child: WidgetUtils.onlyText('全部', StyleUtils.getCommonTextStyle(color: MyColors.walletWZBlue, fontSize: ScreenUtil().setSp(32))),
+                            ),
+                          ],
+                        ),
+                        WidgetUtils.myLine(),
+                        WidgetUtils.commonSizedBox(20, 20),
+                        Row(
+                          children: [
+                            WidgetUtils.onlyText('到账', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(32))),
+                            WidgetUtils.showImages('assets/images/mine_wallet_dd.png', ScreenUtil().setHeight(30), ScreenUtil().setHeight(30)),
+                            WidgetUtils.commonSizedBox(0, 10),
+                            WidgetUtils.onlyText('$daozhang V豆', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(32), fontWeight: FontWeight.w600)),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  WidgetUtils.commonSizedBox(20, 20),
+                  WidgetUtils.commonSubmitButton2('确认兑换', MyColors.walletWZBlue),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

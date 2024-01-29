@@ -69,212 +69,221 @@ class _EditInfoPageState extends State<EditInfoPage> {
         onWillPop: () async {
           return Future.value(false);
         },
-        child: Column(
-          children: [
-            WidgetUtils.commonSizedBox(ScreenUtil().setHeight(450), 0),
-            Expanded(
-              child: Container(
-                width: double.infinity,
-                height: double.infinity,
-                decoration: const BoxDecoration(
-                  //设置Container修饰
-                  image: DecorationImage(
-                    //背景图片修饰
-                    image: AssetImage("assets/images/login_ziliao_bg.png"),
-                    fit: BoxFit.fill, //覆盖
+        child: GestureDetector(
+          onTap: () {
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus &&
+                currentFocus.focusedChild != null) {
+              FocusManager.instance.primaryFocus?.unfocus();
+            }
+          },
+          child: Column(
+            children: [
+              WidgetUtils.commonSizedBox(ScreenUtil().setHeight(450), 0),
+              Expanded(
+                child: Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  decoration: const BoxDecoration(
+                    //设置Container修饰
+                    image: DecorationImage(
+                      //背景图片修饰
+                      image: AssetImage("assets/images/login_ziliao_bg.png"),
+                      fit: BoxFit.fill, //覆盖
+                    ),
                   ),
-                ),
-                child: Column(
-                  children: [
-                    WidgetUtils.commonSizedBox(15, 0),
-                    WidgetUtils.onlyTextCenter(
-                        '填写个人信息',
-                        StyleUtils.getCommonTextStyle(
-                            color: Colors.black,
-                            fontSize: ScreenUtil().setSp(36),
-                            fontWeight: FontWeight.w600)),
-                    WidgetUtils.onlyTextCenter(
-                        '更容易遇到合拍的小伙伴哦',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.g9,
-                            fontSize: ScreenUtil().setSp(21))),
-                    WidgetUtils.commonSizedBox(50, 0),
-                    GestureDetector(
-                      onTap: (() {
-                        MyUtils.goTransparentPage(
-                            context, const EditHeadPage());
-                      }),
-                      child: SizedBox(
-                        height: ScreenUtil().setHeight(130),
-                        width: ScreenUtil().setHeight(130),
-                        child: Stack(
-                          alignment: Alignment.bottomRight,
-                          children: [
-                            WidgetUtils.CircleImageNet(ScreenUtil().setHeight(130), ScreenUtil().setHeight(130), ScreenUtil().setHeight(65), avatar),
-                            WidgetUtils.showImages(
-                                'assets/images/login_paizhao.png',
-                                ScreenUtil().setHeight(40),
-                                ScreenUtil().setHeight(40)),
-                          ],
-                        ),
-                      ),
-                    ),
-                    WidgetUtils.commonSizedBox(40, 0),
-                    Container(
-                      height: ScreenUtil().setHeight(80),
-                      width: double.infinity,
-                      margin: const EdgeInsets.only(left: 40, right: 40),
-                      //边框设置
-                      decoration: const BoxDecoration(
-                        //背景
-                        color: MyColors.f2,
-                        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                        borderRadius: BorderRadius.all(Radius.circular(17.0)),
-                      ),
-                      child: Row(
-                        children: [
-                          WidgetUtils.commonSizedBox(0, 20),
-                          Expanded(
-                              child: WidgetUtils.commonTextField(
-                                  controller, '请输入昵称')),
-                          GestureDetector(
-                            onTap: (() {
-                              setState(() {
-                                controller.text = '';
-                              });
-                            }),
-                            child: WidgetUtils.showImages(
-                                'assets/images/login_colse.png',
-                                ScreenUtil().setHeight(24),
-                                ScreenUtil().setHeight(24)),
-                          ),
-                          WidgetUtils.commonSizedBox(0, 20),
-                        ],
-                      ),
-                    ),
-                    WidgetUtils.commonSizedBox(20, 10),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: (() {
-                              setState(() {
-                                sex = 1;
-                              });
-                            }),
-                            child: Container(
-                              height: ScreenUtil().setHeight(80),
-                              width: double.infinity,
-                              margin: const EdgeInsets.only(left: 40),
-                              //边框设置
-                              decoration: BoxDecoration(
-                                //背景
-                                color: sex == 1
-                                    ? MyColors.loginBlue
-                                    : MyColors.loginBlue2,
-                                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(17.0)),
-                              ),
-                              child: Row(
-                                children: [
-                                  const Expanded(child: Text('')),
-                                  WidgetUtils.showImages(
-                                      'assets/images/nan.png',
-                                      ScreenUtil().setHeight(26),
-                                      ScreenUtil().setHeight(26)),
-                                  WidgetUtils.commonSizedBox(0, 10),
-                                  WidgetUtils.onlyTextCenter(
-                                      '男生',
-                                      StyleUtils.getCommonTextStyle(
-                                          color: Colors.white,
-                                          fontSize: ScreenUtil().setSp(33))),
-                                  const Expanded(child: Text('')),
-                                ],
-                              ),
-                            ),
+                  child: Column(
+                    children: [
+                      WidgetUtils.commonSizedBox(15, 0),
+                      WidgetUtils.onlyTextCenter(
+                          '填写个人信息',
+                          StyleUtils.getCommonTextStyle(
+                              color: Colors.black,
+                              fontSize: ScreenUtil().setSp(36),
+                              fontWeight: FontWeight.w600)),
+                      WidgetUtils.onlyTextCenter(
+                          '更容易遇到合拍的小伙伴哦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.g9,
+                              fontSize: ScreenUtil().setSp(21))),
+                      WidgetUtils.commonSizedBox(50, 0),
+                      GestureDetector(
+                        onTap: (() {
+                          MyUtils.goTransparentPage(
+                              context, const EditHeadPage());
+                        }),
+                        child: SizedBox(
+                          height: ScreenUtil().setHeight(130),
+                          width: ScreenUtil().setHeight(130),
+                          child: Stack(
+                            alignment: Alignment.bottomRight,
+                            children: [
+                              WidgetUtils.CircleImageNet(ScreenUtil().setHeight(130), ScreenUtil().setHeight(130), ScreenUtil().setHeight(65), avatar),
+                              WidgetUtils.showImages(
+                                  'assets/images/login_paizhao.png',
+                                  ScreenUtil().setHeight(40),
+                                  ScreenUtil().setHeight(40)),
+                            ],
                           ),
                         ),
-                        WidgetUtils.commonSizedBox(0, 10),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: (() {
-                              setState(() {
-                                sex = 2;
-                              });
-                            }),
-                            child: Container(
-                              height: ScreenUtil().setHeight(80),
-                              width: double.infinity,
-                              margin: const EdgeInsets.only(right: 40),
-                              //边框设置
-                              decoration: BoxDecoration(
-                                //背景
-                                color: sex == 2
-                                    ? MyColors.loginPink
-                                    : MyColors.loginPink2,
-                                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(17.0)),
-                              ),
-                              child: Row(
-                                children: [
-                                  const Expanded(child: Text('')),
-                                  WidgetUtils.showImages(
-                                      'assets/images/nv.png',
-                                      ScreenUtil().setHeight(26),
-                                      ScreenUtil().setHeight(26)),
-                                  WidgetUtils.commonSizedBox(0, 10),
-                                  WidgetUtils.onlyTextCenter(
-                                      '女生',
-                                      StyleUtils.getCommonTextStyle(
-                                          color: Colors.white,
-                                          fontSize: ScreenUtil().setSp(33))),
-                                  const Expanded(child: Text('')),
-                                ],
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    WidgetUtils.commonSizedBox(10, 10),
-                    WidgetUtils.onlyTextCenter(
-                        '性别后续不可修改',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.g9,
-                            fontSize: ScreenUtil().setSp(29))),
-                    const Expanded(child: Text('')),
-                    GestureDetector(
-                      onTap: (() {
-                        doSaveInfo();
-                      }),
-                      child: Container(
+                      ),
+                      WidgetUtils.commonSizedBox(40, 0),
+                      Container(
                         height: ScreenUtil().setHeight(80),
                         width: double.infinity,
-                        alignment: Alignment.center,
+                        margin: const EdgeInsets.only(left: 40, right: 40),
                         //边框设置
                         decoration: const BoxDecoration(
                           //背景
-                          color: MyColors.walletWZBlue,
+                          color: MyColors.f2,
                           //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                          borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                          borderRadius: BorderRadius.all(Radius.circular(17.0)),
                         ),
-                        margin: const EdgeInsets.only(left: 40, right: 40),
-                        child: Text(
-                          '去听好声音',
-                          style: StyleUtils.getCommonTextStyle(
-                              color: Colors.white,
-                              fontSize: ScreenUtil().setSp(33)),
+                        child: Row(
+                          children: [
+                            WidgetUtils.commonSizedBox(0, 20),
+                            Expanded(
+                                child: WidgetUtils.commonTextField(
+                                    controller, '请输入昵称')),
+                            GestureDetector(
+                              onTap: (() {
+                                setState(() {
+                                  controller.text = '';
+                                });
+                              }),
+                              child: WidgetUtils.showImages(
+                                  'assets/images/login_colse.png',
+                                  ScreenUtil().setHeight(24),
+                                  ScreenUtil().setHeight(24)),
+                            ),
+                            WidgetUtils.commonSizedBox(0, 20),
+                          ],
                         ),
                       ),
-                    ),
-                    WidgetUtils.commonSizedBox(20, 10),
-                  ],
+                      WidgetUtils.commonSizedBox(20, 10),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: (() {
+                                setState(() {
+                                  sex = 1;
+                                });
+                              }),
+                              child: Container(
+                                height: ScreenUtil().setHeight(80),
+                                width: double.infinity,
+                                margin: const EdgeInsets.only(left: 40),
+                                //边框设置
+                                decoration: BoxDecoration(
+                                  //背景
+                                  color: sex == 1
+                                      ? MyColors.loginBlue
+                                      : MyColors.loginBlue2,
+                                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(17.0)),
+                                ),
+                                child: Row(
+                                  children: [
+                                    const Expanded(child: Text('')),
+                                    WidgetUtils.showImages(
+                                        'assets/images/nan.png',
+                                        ScreenUtil().setHeight(26),
+                                        ScreenUtil().setHeight(26)),
+                                    WidgetUtils.commonSizedBox(0, 10),
+                                    WidgetUtils.onlyTextCenter(
+                                        '男生',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: Colors.white,
+                                            fontSize: ScreenUtil().setSp(33))),
+                                    const Expanded(child: Text('')),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          WidgetUtils.commonSizedBox(0, 10),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: (() {
+                                setState(() {
+                                  sex = 2;
+                                });
+                              }),
+                              child: Container(
+                                height: ScreenUtil().setHeight(80),
+                                width: double.infinity,
+                                margin: const EdgeInsets.only(right: 40),
+                                //边框设置
+                                decoration: BoxDecoration(
+                                  //背景
+                                  color: sex == 2
+                                      ? MyColors.loginPink
+                                      : MyColors.loginPink2,
+                                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(17.0)),
+                                ),
+                                child: Row(
+                                  children: [
+                                    const Expanded(child: Text('')),
+                                    WidgetUtils.showImages(
+                                        'assets/images/nv.png',
+                                        ScreenUtil().setHeight(26),
+                                        ScreenUtil().setHeight(26)),
+                                    WidgetUtils.commonSizedBox(0, 10),
+                                    WidgetUtils.onlyTextCenter(
+                                        '女生',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: Colors.white,
+                                            fontSize: ScreenUtil().setSp(33))),
+                                    const Expanded(child: Text('')),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      WidgetUtils.commonSizedBox(10, 10),
+                      WidgetUtils.onlyTextCenter(
+                          '性别后续不可修改',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.g9,
+                              fontSize: ScreenUtil().setSp(29))),
+                      const Expanded(child: Text('')),
+                      GestureDetector(
+                        onTap: (() {
+                          doSaveInfo();
+                        }),
+                        child: Container(
+                          height: ScreenUtil().setHeight(80),
+                          width: double.infinity,
+                          alignment: Alignment.center,
+                          //边框设置
+                          decoration: const BoxDecoration(
+                            //背景
+                            color: MyColors.walletWZBlue,
+                            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                            borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                          ),
+                          margin: const EdgeInsets.only(left: 40, right: 40),
+                          child: Text(
+                            '去听好声音',
+                            style: StyleUtils.getCommonTextStyle(
+                                color: Colors.white,
+                                fontSize: ScreenUtil().setSp(33)),
+                          ),
+                        ),
+                      ),
+                      WidgetUtils.commonSizedBox(20, 10),
+                    ],
+                  ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );

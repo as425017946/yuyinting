@@ -33,7 +33,7 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>
   int page = 1;
 
   // 财富榜传wealth 魅力榜传charm : 日榜day 周榜week 月榜month
-  String dateType = 'day';
+  String dateType = 'day', oldDateType = 'day';
   List<ListBD> _list = [];
   List<ListBD> _list2 = [];
 
@@ -208,16 +208,20 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>
                                   setState(() {
                                     showPage = 0;
                                     dateType = 'day';
-                                    _list.clear();
-                                    _list2.clear();
                                   });
-                                  if (MyUtils.checkClick()) {
+                                  if (dateType != oldDateType) {
+                                    setState(() {
+                                      _list.clear();
+                                      _list2.clear();
+                                      oldDateType = 'day';
+                                    });
                                     doPostRankList();
                                   }
                                 }),
-                                child: SizedBox(
+                                child: Container(
                                   width: double.infinity,
                                   height: double.infinity,
+                                  color: Colors.transparent,
                                   child: WidgetUtils.onlyTextCenter(
                                       '日榜',
                                       StyleUtils.getCommonTextStyle(
@@ -253,16 +257,20 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>
                                   setState(() {
                                     showPage = 1;
                                     dateType = 'week';
-                                    _list.clear();
-                                    _list2.clear();
                                   });
-                                  if (MyUtils.checkClick()) {
+                                  if (dateType != oldDateType) {
+                                    setState(() {
+                                      _list.clear();
+                                      _list2.clear();
+                                      oldDateType = 'week';
+                                    });
                                     doPostRankList();
                                   }
                                 }),
-                                child: SizedBox(
+                                child: Container(
                                   width: double.infinity,
                                   height: double.infinity,
+                                  color: Colors.transparent,
                                   child: WidgetUtils.onlyTextCenter(
                                       '周榜',
                                       StyleUtils.getCommonTextStyle(
@@ -298,16 +306,20 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>
                                   setState(() {
                                     showPage = 2;
                                     dateType = 'month';
-                                    _list.clear();
-                                    _list2.clear();
                                   });
-                                  if (MyUtils.checkClick()) {
+                                  if (dateType != oldDateType) {
+                                    setState(() {
+                                      _list.clear();
+                                      _list2.clear();
+                                      oldDateType = 'month';
+                                    });
                                     doPostRankList();
                                   }
                                 }),
-                                child: SizedBox(
+                                child: Container(
                                   width: double.infinity,
                                   height: double.infinity,
+                                  color: Colors.transparent,
                                   child: WidgetUtils.onlyTextCenter(
                                       '月榜',
                                       StyleUtils.getCommonTextStyle(

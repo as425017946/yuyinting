@@ -215,6 +215,15 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                                         ],
                                       ),
                                     ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  height: 90.h,
+                                  width: 30.h,
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/people_right.png',
+                                      ScreenUtil().setHeight(25),
+                                      ScreenUtil().setHeight(15)),
+                                )
                               ],
                             ),
                           ),
@@ -258,6 +267,16 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                                               color: MyColors.g2,
                                               fontSize: ScreenUtil().setSp(25),
                                               fontWeight: FontWeight.w600)),
+                                      const Spacer(),
+                                      Container(
+                                        alignment: Alignment.center,
+                                        height: 110.h,
+                                        width: 30.h,
+                                        child: WidgetUtils.showImages(
+                                            'assets/images/people_right.png',
+                                            ScreenUtil().setHeight(25),
+                                            ScreenUtil().setHeight(15)),
+                                      )
                                     ],
                                   ),
                                 ),
@@ -269,21 +288,34 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                                     Navigator.pushNamed(
                                         context, 'RoomMorePage');
                                   }),
-                                  child: Row(
-                                    children: [
-                                      WidgetUtils.CircleImageNet(
-                                          ScreenUtil().setHeight(110),
-                                          ScreenUtil().setHeight(110),
-                                          10,
-                                          listRoom[i].coverImg!),
-                                      WidgetUtils.commonSizedBox(10, 20),
-                                      WidgetUtils.onlyText(
-                                          listRoom[i].roomName!,
-                                          StyleUtils.getCommonTextStyle(
-                                              color: MyColors.g2,
-                                              fontSize: ScreenUtil().setSp(25),
-                                              fontWeight: FontWeight.w600)),
-                                    ],
+                                  child: Container(
+                                    color: Colors.transparent,
+                                    child: Row(
+                                      children: [
+                                        WidgetUtils.CircleImageNet(
+                                            ScreenUtil().setHeight(110),
+                                            ScreenUtil().setHeight(110),
+                                            10,
+                                            listRoom[i].coverImg!),
+                                        WidgetUtils.commonSizedBox(10, 20),
+                                        WidgetUtils.onlyText(
+                                            listRoom[i].roomName!,
+                                            StyleUtils.getCommonTextStyle(
+                                                color: MyColors.g2,
+                                                fontSize: ScreenUtil().setSp(25),
+                                                fontWeight: FontWeight.w600)),
+                                        const Spacer(),
+                                        Container(
+                                          alignment: Alignment.center,
+                                          height: 110.h,
+                                          width: 30.h,
+                                          child: WidgetUtils.showImages(
+                                              'assets/images/people_right.png',
+                                              ScreenUtil().setHeight(25),
+                                              ScreenUtil().setHeight(15)),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 ),
                             WidgetUtils.commonSizedBox(10, 20),

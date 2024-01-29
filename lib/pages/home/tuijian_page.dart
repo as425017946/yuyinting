@@ -333,7 +333,12 @@ class _TuijianPageState extends State<TuijianPage> {
                                     'assets/images/img_placeholder.png',
                                   ),
                                   errorWidget: (context, url, error) =>
-                                      const Icon(Icons.error),
+                                      WidgetUtils.CircleImageAss(
+                                        ScreenUtil().setHeight(140),
+                                        double.infinity,
+                                        ScreenUtil().setHeight(10),
+                                        'assets/images/img_placeholder.png',
+                                      ),
                                 );
                               },
                               // 配置图片数量
@@ -393,7 +398,17 @@ class _TuijianPageState extends State<TuijianPage> {
                                               placeholder:
                                                   'assets/images/img_placeholder.png',
                                               image: listRoom[index].coverImg!,
-                                              fit: BoxFit.fill,
+                                              fit: BoxFit.cover,
+                                              imageErrorBuilder: (context, error, stackTrace) {
+                                                // TODO 图片加载错误后展示的 widget
+                                                // print("---图片加载错误---");
+                                                // 此处不能 setState
+                                                return WidgetUtils.showImages(
+                                                  'assets/images/img_placeholder.png',
+                                                  double.infinity,
+                                                  double.infinity,
+                                                );
+                                              },
                                             ),
                                           ),
                                           Positioned(
@@ -461,7 +476,17 @@ class _TuijianPageState extends State<TuijianPage> {
                                                       'assets/images/img_placeholder.png',
                                                   image: listRoom2[index]
                                                       .coverImg!,
-                                                  fit: BoxFit.fill,
+                                                  fit: BoxFit.cover,
+                                                  imageErrorBuilder: (context, error, stackTrace) {
+                                                    // TODO 图片加载错误后展示的 widget
+                                                    // print("---图片加载错误---");
+                                                    // 此处不能 setState
+                                                    return WidgetUtils.showImages(
+                                                      'assets/images/img_placeholder.png',
+                                                      double.infinity,
+                                                      double.infinity,
+                                                    );
+                                                  },
                                                 ),
                                               ),
                                               Positioned(
@@ -526,7 +551,17 @@ class _TuijianPageState extends State<TuijianPage> {
                                                       'assets/images/img_placeholder.png',
                                                   image: listRoom3[index]
                                                       .coverImg!,
-                                                  fit: BoxFit.fill,
+                                                  fit: BoxFit.cover,
+                                                  imageErrorBuilder: (context, error, stackTrace) {
+                                                    // TODO 图片加载错误后展示的 widget
+                                                    // print("---图片加载错误---");
+                                                    // 此处不能 setState
+                                                    return WidgetUtils.showImages(
+                                                      'assets/images/img_placeholder.png',
+                                                      double.infinity,
+                                                      double.infinity,
+                                                    );
+                                                  },
                                                 ),
                                               ),
                                               Positioned(

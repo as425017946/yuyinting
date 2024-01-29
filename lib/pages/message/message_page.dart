@@ -40,9 +40,11 @@ class _MessagePageState extends State<MessagePage> {
   String info = '', time = '';
   int unRead = 0;
   int length = 0;
-  var list1,list2,list3;
+  var list1, list2, list3;
+
   // 设备是安卓还是ios
   String isDevices = 'android';
+
   @override
   void initState() {
     // TODO: implement initState
@@ -51,7 +53,7 @@ class _MessagePageState extends State<MessagePage> {
       setState(() {
         isDevices = 'android';
       });
-    }else if (Platform.isIOS){
+    } else if (Platform.isIOS) {
       setState(() {
         isDevices = 'ios';
       });
@@ -67,7 +69,7 @@ class _MessagePageState extends State<MessagePage> {
       doPostSystemMsgList();
     });
     list3 = eventBus.on<SubmitButtonBack>().listen((event) {
-      if(event.title == '聊天返回'){
+      if (event.title == '聊天返回') {
         doPostSystemMsgList();
       }
     });
@@ -80,9 +82,10 @@ class _MessagePageState extends State<MessagePage> {
     list2.cancel();
     list3.cancel();
     super.dispose();
-
   }
-  Widget buildIconSlideAction(String title, IconData icons, Color color,int i) {
+
+  Widget buildIconSlideAction(
+      String title, IconData icons, Color color, int i) {
     return Container(
       width: 50,
       child: IconSlideAction(
@@ -92,7 +95,7 @@ class _MessagePageState extends State<MessagePage> {
         onTap: () {
           // MyToastUtils.showToastBottom('第几个$i');
           doDelete(listMessage[i]['combineID']);
-              //移除当前项
+          //移除当前项
           setState(() {
             listMessage.removeAt(i);
           });
@@ -120,31 +123,39 @@ class _MessagePageState extends State<MessagePage> {
         child: Row(
           children: [
             GestureDetector(
-              onTap: ((){
+              onTap: (() {
                 // 点击头像进入个人主页
-                MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: listMessage[i]['otherUid'],));
+                MyUtils.goTransparentRFPage(
+                    context,
+                    PeopleInfoPage(
+                      otherId: listMessage[i]['otherUid'],
+                    ));
               }),
               child: Stack(
                 alignment: Alignment.center,
                 children: [
                   WidgetUtils.CircleImageAssNet(
-                      100.h, 100.h, 50.h, listMessage[i]['otherHeadImg'],listMessage[i]['otherHeadNetImg']),
+                      100.h,
+                      100.h,
+                      50.h,
+                      listMessage[i]['otherHeadImg'],
+                      listMessage[i]['otherHeadNetImg']),
                   listU[i].liveStatus == 1
                       ? WidgetUtils.showImages(
-                    'assets/images/zhibozhong.webp',
-                    110.h,
-                    110.h,
-                  )
+                          'assets/images/zhibozhong.webp',
+                          110.h,
+                          110.h,
+                        )
                       : listU[i].loginStatus == 1
-                      ? Container(
-                    height: 60.h,
-                    width: 60.h,
-                    alignment: Alignment.bottomRight,
-                    child: CustomPaint(
-                      painter: LinePainter2(colors: Colors.green),
-                    ),
-                  )
-                      : const Text(''),
+                          ? Container(
+                              height: 60.h,
+                              width: 60.h,
+                              alignment: Alignment.bottomRight,
+                              child: CustomPaint(
+                                painter: LinePainter2(colors: Colors.green),
+                              ),
+                            )
+                          : const Text(''),
                 ],
               ),
             ),
@@ -152,7 +163,7 @@ class _MessagePageState extends State<MessagePage> {
             Expanded(
               child: GestureDetector(
                 onTap: (() {
-                  if(MyUtils.checkClick()) {
+                  if (MyUtils.checkClick()) {
                     MyUtils.goTransparentPageCom(
                         context,
                         ChatPage(
@@ -173,27 +184,31 @@ class _MessagePageState extends State<MessagePage> {
                         child: Row(
                           children: [
                             Text(
-                              listMessage[i]['nickName']?? '',
+                              listMessage[i]['nickName'] ?? '',
                               style: StyleUtils.getCommonTextStyle(
                                   color: Colors.black,
                                   fontSize: ScreenUtil().setSp(32)),
                             ),
                             const Expanded(child: Text('')),
-                            listMessage[i]['nickName'].toString() == '维C客服' ? Text(
-                                  '官方客服',
-                              style: StyleUtils.getCommonTextStyle(
-                                  color: MyColors.homeTopBG,
-                                  fontSize: ScreenUtil().setSp(25)),
-                            ) : Text(
-                              DateTime.parse(DateTime.fromMillisecondsSinceEpoch(
-                                  int.parse(listMessage[i]['add_time']))
-                                  .toString())
-                                  .toString()
-                                  .substring(0, 10),
-                              style: StyleUtils.getCommonTextStyle(
-                                  color: MyColors.g9,
-                                  fontSize: ScreenUtil().setSp(25)),
-                            ),
+                            listMessage[i]['nickName'].toString() == '维C客服'
+                                ? Text(
+                                    '官方客服',
+                                    style: StyleUtils.getCommonTextStyle(
+                                        color: MyColors.homeTopBG,
+                                        fontSize: ScreenUtil().setSp(25)),
+                                  )
+                                : Text(
+                                    DateTime.parse(
+                                            DateTime.fromMillisecondsSinceEpoch(
+                                                    int.parse(listMessage[i]
+                                                        ['add_time']))
+                                                .toString())
+                                        .toString()
+                                        .substring(0, 10),
+                                    style: StyleUtils.getCommonTextStyle(
+                                        color: MyColors.g9,
+                                        fontSize: ScreenUtil().setSp(25)),
+                                  ),
                           ],
                         ),
                       ),
@@ -205,48 +220,66 @@ class _MessagePageState extends State<MessagePage> {
                           children: [
                             listMessage[i]['type'] == 1
                                 ? Text(
-                              listMessage[i]['content'].toString().length > 15 ? listMessage[i]['content'].toString().substring(0,15) : listMessage[i]['content'],
-                              overflow: TextOverflow.ellipsis,
-                              style: StyleUtils.getCommonTextStyle(
-                                  color: MyColors.g9,
-                                  fontSize: ScreenUtil().setSp(25)),
-                            )
-                                :  listMessage[i]['type'] == 2 ? Text(
-                              '[图片]',
-                              style: StyleUtils.getCommonTextStyle(
-                                  color: MyColors.homeTopBG,
-                                  fontSize: ScreenUtil().setSp(23)),
-                            ) : listMessage[i]['type'] == 3 ? Text(
-                              '[语音]',
-                              style: StyleUtils.getCommonTextStyle(
-                                  color: MyColors.homeTopBG,
-                                  fontSize: ScreenUtil().setSp(23)),
-                            ) : Text(
-                              '[红包]',
-                              style: StyleUtils.getCommonTextStyle(
-                                  color: Colors.red,
-                                  fontSize: ScreenUtil().setSp(23)),
-                            ),
+                                    listMessage[i]['content']
+                                                .toString()
+                                                .length >
+                                            15
+                                        ? listMessage[i]['content']
+                                            .toString()
+                                            .substring(0, 15)
+                                        : listMessage[i]['content'],
+                                    overflow: TextOverflow.ellipsis,
+                                    style: StyleUtils.getCommonTextStyle(
+                                        color: MyColors.g9,
+                                        fontSize: ScreenUtil().setSp(25)),
+                                  )
+                                : listMessage[i]['type'] == 2
+                                    ? Text(
+                                        '[图片]',
+                                        style: StyleUtils.getCommonTextStyle(
+                                            color: MyColors.homeTopBG,
+                                            fontSize: ScreenUtil().setSp(23)),
+                                      )
+                                    : listMessage[i]['type'] == 3
+                                        ? Text(
+                                            '[语音]',
+                                            style:
+                                                StyleUtils.getCommonTextStyle(
+                                                    color: MyColors.homeTopBG,
+                                                    fontSize:
+                                                        ScreenUtil().setSp(23)),
+                                          )
+                                        : Text(
+                                            '[红包]',
+                                            style:
+                                                StyleUtils.getCommonTextStyle(
+                                                    color: Colors.red,
+                                                    fontSize:
+                                                        ScreenUtil().setSp(23)),
+                                          ),
                             const Spacer(),
-                            listRead[i] > 0 ? Container(
-                              width: 30.h,
-                              height: 30.h,
-                              //边框设置
-                              decoration: const BoxDecoration(
-                                //背景
-                                color: Colors.red,
-                                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                              ),
-                              alignment: Alignment.center,
-                              child: Text(
-                                listRead[i].toString(),
-                                style: StyleUtils.getCommonTextStyle(
-                                    color: Colors.white,
-                                    fontSize: ScreenUtil().setSp(22),
-                                    fontWeight: FontWeight.w600),
-                              ),
-                            ) : const Text('')
+                            listRead[i] > 0
+                                ? Container(
+                                    width: 30.h,
+                                    height: 30.h,
+                                    //边框设置
+                                    decoration: const BoxDecoration(
+                                      //背景
+                                      color: Colors.red,
+                                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(15.0)),
+                                    ),
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      listRead[i].toString(),
+                                      style: StyleUtils.getCommonTextStyle(
+                                          color: Colors.white,
+                                          fontSize: ScreenUtil().setSp(22),
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                  )
+                                : const Text('')
                           ],
                         ),
                       ),
@@ -263,14 +296,14 @@ class _MessagePageState extends State<MessagePage> {
   }
 
   String mbIdl = '';
-  void doDelete(String cbID) async{
+
+  void doDelete(String cbID) async {
     DatabaseHelper databaseHelper = DatabaseHelper();
     Database? db = await databaseHelper.database;
     //删除
-    db.delete('messageSLTable',where: 'combineID = ?',whereArgs: [cbID]);
+    db.delete('messageSLTable', where: 'combineID = ?', whereArgs: [cbID]);
     doPostSystemMsgList();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -279,6 +312,7 @@ class _MessagePageState extends State<MessagePage> {
         body: Column(
           children: [
             WidgetUtils.commonSizedBox(isDevices == 'ios' ? 80.h : 60.h, 0),
+
             ///头部信息
             Container(
               padding: const EdgeInsets.only(left: 20, right: 20),
@@ -415,7 +449,7 @@ class _MessagePageState extends State<MessagePage> {
   }
 
   /// 一键已读使用
-  void readInfo() async{
+  void readInfo() async {
     DatabaseHelper databaseHelper = DatabaseHelper();
     Database? db = await databaseHelper.database;
     // 执行查询操作
@@ -429,7 +463,8 @@ class _MessagePageState extends State<MessagePage> {
       LogE('标记已读 ${result[i]['combineID']}');
 
       await db.update('messageSLTable', {'readStatus': 1},
-          whereArgs: [result[i]['combineID'], sp.getString('user_id')], where: 'combineID = ? and uid = ?');
+          whereArgs: [result[i]['combineID'], sp.getString('user_id')],
+          where: 'combineID = ? and uid = ?');
     }
     // 修改数据成功后在重新查询一遍
     // 查询出来后在查询单条信息具体信息
@@ -445,7 +480,7 @@ class _MessagePageState extends State<MessagePage> {
     }
     // 生成占位符字符串，例如: ?,?,?,?
     String placeholders =
-    List.generate(listId.length, (index) => '?').join(',');
+        List.generate(listId.length, (index) => '?').join(',');
     // 构建查询语句和参数
     String query =
         'SELECT * FROM messageSLTable WHERE id IN ($placeholders)  and uid = ${sp.getString('user_id')} order by add_time desc';
@@ -457,11 +492,11 @@ class _MessagePageState extends State<MessagePage> {
     setState(() {
       listMessage = result2;
       listRead.clear();
-      for(int i = 0; i < listMessage.length; i++){
+      for (int i = 0; i < listMessage.length; i++) {
         listRead.add(0);
-        if(myIds.isNotEmpty){
+        if (myIds.isNotEmpty) {
           myIds = '$myIds,${listMessage[i]['otherUid'].toString()}';
-        }else{
+        } else {
           myIds = listMessage[i]['otherUid'].toString();
         }
       }
@@ -530,12 +565,11 @@ class _MessagePageState extends State<MessagePage> {
       List<Map<String, dynamic>> allData =
           await databaseHelper.getAllData('messageSLTable');
       // 执行查询操作
-      List<Map<String, dynamic>> result = await db.query(
-        'messageSLTable',
-        columns: ['MAX(id) AS id'],
-        groupBy: 'combineID',
-        orderBy: 'add_time desc'
-      );
+      List<Map<String, dynamic>> result = await db.query('messageSLTable',
+          columns: ['MAX(id) AS id'],
+          groupBy: 'combineID',
+          orderBy: 'add_time desc');
+
       // 查询出来后在查询单条信息具体信息
       List<int> listId = [];
       String ids = '';
@@ -561,31 +595,40 @@ class _MessagePageState extends State<MessagePage> {
       setState(() {
         listMessage = result2;
         listRead.clear();
-        for(int i = 0; i < listMessage.length; i++){
+        for (int i = 0; i < listMessage.length; i++) {
           listRead.add(0);
-          if(myIds.isNotEmpty){
+          if (myIds.isNotEmpty) {
             myIds = '$myIds,${listMessage[i]['otherUid'].toString()}';
-          }else{
+          } else {
             myIds = listMessage[i]['otherUid'].toString();
           }
         }
       });
-      for(int i = 0; i < listMessage.length; i++){
+      for (int i = 0; i < listMessage.length; i++) {
+        // 更新头像和昵称
+        await db.update(
+            'messageSLTable',
+            {
+              'otherHeadImg': listMessage[i]['otherHeadImg'],
+              'nickName': listMessage[i]['nickName']
+            },
+            whereArgs: [listMessage[i]['combineID']],
+            where: 'combineID = ?');
         String query =
             "SELECT * FROM messageSLTable WHERE  combineID = '${listMessage[i]['combineID']}' and readStatus = 0  and uid = ${sp.getString('user_id')} ";
         List<Map<String, dynamic>> result3 = await db.rawQuery(query);
-        if(result3.isNotEmpty){
+        if (result3.isNotEmpty) {
           setState(() {
             listRead[i] = result3.length;
             LogE('结果==${listRead.length}');
           });
-        }else{
+        } else {
           setState(() {
             listRead[i] = 0;
           });
         }
       }
-      if(myIds.isNotEmpty) {
+      if (myIds.isNotEmpty) {
         //调用接口
         doPostSendUserMsg(myIds);
       }
@@ -609,7 +652,7 @@ class _MessagePageState extends State<MessagePage> {
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
-            if(bean.data!.isNotEmpty) {
+            if (bean.data!.isNotEmpty) {
               listU = bean.data!;
               length = listU.length;
             }

@@ -49,7 +49,7 @@ class _RoomBG1PageState extends State<RoomBG1Page> with AutomaticKeepAliveClient
               list[i].type = 0;
             }
           }
-          eventBus.fire(RoomBGBack(bgID: list[index].bgId.toString(), bgType: list[index].bgType.toString(), bgImagUrl: list[index].img.toString()));
+          eventBus.fire(RoomBGBack(bgID: list[index].bgId.toString(), bgType: list[index].bgType.toString(), bgImagUrl: list[index].img.toString(),delete: false));
         });
       }),
       child: Column(

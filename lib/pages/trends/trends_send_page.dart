@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 import 'package:yuyinting/bean/Common_bean.dart';
+import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import '../../colors/my_colors.dart';
@@ -210,177 +211,186 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        body: Stack(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(
-                  left: ScreenUtil().setWidth(10),
-                  right: ScreenUtil().setWidth(20)),
-              child: Column(
-                children: [
-                  WidgetUtils.commonSizedBox(35, 0),
+        body: GestureDetector(
+          onTap: () {
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus &&
+                currentFocus.focusedChild != null) {
+              FocusManager.instance.primaryFocus?.unfocus();
+            }
+          },
+          child: Stack(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(
+                    left: ScreenUtil().setWidth(10),
+                    right: ScreenUtil().setWidth(20)),
+                child: Column(
+                  children: [
+                    WidgetUtils.commonSizedBox(35, 0),
 
-                  ///头部信息
-                  Container(
-                    height: ScreenUtil().setHeight(60),
-                    width: double.infinity,
-                    alignment: Alignment.bottomLeft,
-                    child: Row(
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.arrow_back_ios),
-                          color: Colors.black,
-                          onPressed: (() {
-                            Navigator.of(context).pop();
-                          }),
-                        ),
-                        const Expanded(child: Text('')),
-                        Text(
-                          '发动态',
-                          style: TextStyle(
-                              overflow: TextOverflow.ellipsis,
-                              color: Colors.black,
-                              fontSize: ScreenUtil().setSp(36),
-                              fontWeight: FontWeight.w600),
-                        ),
-                        const Expanded(child: Text('')),
-                        GestureDetector(
-                          onTap: (() {
-                            if(MyUtils.checkClick()) {
-                              doPostSendDT();
-                              MyUtils.hideKeyboard(context);
-                            }
-                          }),
-                          child: WidgetUtils.myContainer(
-                              ScreenUtil().setHeight(55),
-                              ScreenUtil().setWidth(120),
-                              MyColors.zhouBangBg,
-                              MyColors.zhouBangBg,
-                              '发布',
-                              ScreenUtil().setSp(30),
-                              Colors.white),
-                        )
-                      ],
+                    ///头部信息
+                    Container(
+                      height: ScreenUtil().setHeight(60),
+                      width: double.infinity,
+                      alignment: Alignment.bottomLeft,
+                      child: Row(
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.arrow_back_ios),
+                            color: Colors.black,
+                            onPressed: (() {
+                              Navigator.of(context).pop();
+                            }),
+                          ),
+                          const Expanded(child: Text('')),
+                          Text(
+                            '发动态',
+                            style: TextStyle(
+                                overflow: TextOverflow.ellipsis,
+                                color: Colors.black,
+                                fontSize: ScreenUtil().setSp(36),
+                                fontWeight: FontWeight.w600),
+                          ),
+                          const Expanded(child: Text('')),
+                          GestureDetector(
+                            onTap: (() {
+                              if(MyUtils.checkClick()) {
+                                doPostSendDT();
+                                MyUtils.hideKeyboard(context);
+                              }
+                            }),
+                            child: WidgetUtils.myContainer(
+                                ScreenUtil().setHeight(55),
+                                ScreenUtil().setWidth(120),
+                                MyColors.zhouBangBg,
+                                MyColors.zhouBangBg,
+                                '发布',
+                                ScreenUtil().setSp(30),
+                                Colors.white),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                  WidgetUtils.commonSizedBox(15, 0),
-                  Container(
-                    margin: const EdgeInsets.only(left: 10),
-                    child:
-                        WidgetUtils.commonTextFieldDT(controller, '记录一下此刻的想法~'),
-                  ),
-                  WidgetUtils.commonSizedBox(15, 0),
-                  videoId.isEmpty ? Container(
-                    width: double.infinity,
-                    margin: const EdgeInsets.only(left: 10, right: 10),
-                    child: Wrap(
-                      direction: Axis.horizontal,
-                      spacing: 10.h,
-                      runSpacing: 15.h,
-                      children: [
-                        for (int i = 0; i < imgArray.length; i++)
-                          Stack(
-                            children: [
-                              Container(
-                                height: 160.h,
-                                width: 160.h,
-                                //超出部分，可裁剪
-                                clipBehavior: Clip.hardEdge,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(
-                                      ScreenUtil().setHeight(20)),
+                    WidgetUtils.commonSizedBox(15, 0),
+                    Container(
+                      margin: const EdgeInsets.only(left: 10),
+                      child:
+                          WidgetUtils.commonTextFieldDT(controller, '记录一下此刻的想法~'),
+                    ),
+                    WidgetUtils.commonSizedBox(15, 0),
+                    videoId.isEmpty ? Container(
+                      width: double.infinity,
+                      margin: const EdgeInsets.only(left: 10, right: 10),
+                      child: Wrap(
+                        direction: Axis.horizontal,
+                        spacing: 10.h,
+                        runSpacing: 15.h,
+                        children: [
+                          for (int i = 0; i < imgArray.length; i++)
+                            Stack(
+                              children: [
+                                Container(
+                                  height: 160.h,
+                                  width: 160.h,
+                                  //超出部分，可裁剪
+                                  clipBehavior: Clip.hardEdge,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(
+                                        ScreenUtil().setHeight(20)),
+                                  ),
+                                  child: WidgetUtils.showImages(
+                                    imgArray[i].path,
+                                    160.h,
+                                    160.h,
+                                  ),
                                 ),
-                                child: WidgetUtils.showImages(
-                                  imgArray[i].path,
-                                  160.h,
-                                  160.h,
-                                ),
-                              ),
-                              Positioned(
-                                right: 0,
-                                top: 0,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      _removeImage2(i);
-                                    });
-                                  },
-                                  child: ClipOval(
-                                    child: Container(
-                                      color: Colors.white.withOpacity(0.7),
-                                      width: 20,
-                                      height: 20,
-                                      child: const Icon(
-                                        Icons.close,
-                                        size: 20,
+                                Positioned(
+                                  right: 0,
+                                  top: 0,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        _removeImage2(i);
+                                      });
+                                    },
+                                    child: ClipOval(
+                                      child: Container(
+                                        color: Colors.white.withOpacity(0.7),
+                                        width: 20,
+                                        height: 20,
+                                        child: const Icon(
+                                          Icons.close,
+                                          size: 20,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        imgArray.length < 6
-                            ? GestureDetector(
-                                onTap: (() {
-                                  _showSheetAction();
-                                }),
-                                child: WidgetUtils.showImages(
-                                    'assets/images/images_add.png',
-                                    160.h,
-                                    160.h),
-                              )
-                            : const Text(''),
-                      ],
-                    ),
-                  ) :
-                 Row(
-                   children: [
-                     SizedBox(
-                       width: ScreenUtil().setHeight(200),
-                       height: ScreenUtil().setHeight(200),
-                       child: Stack(
-                         alignment: Alignment.center,
-                         children: [
-                           SizedBox(
-                             width: ScreenUtil().setHeight(200),
-                             height: ScreenUtil().setHeight(200),
-                             child: AspectRatio(
-                               aspectRatio: _videoController.value.aspectRatio,
-                               child: VideoPlayer(_videoController),
+                              ],
+                            ),
+                          imgArray.length < 6
+                              ? GestureDetector(
+                                  onTap: (() {
+                                    _showSheetAction();
+                                  }),
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/images_add.png',
+                                      160.h,
+                                      160.h),
+                                )
+                              : const Text(''),
+                        ],
+                      ),
+                    ) :
+                   Row(
+                     children: [
+                       SizedBox(
+                         width: ScreenUtil().setHeight(200),
+                         height: ScreenUtil().setHeight(200),
+                         child: Stack(
+                           alignment: Alignment.center,
+                           children: [
+                             SizedBox(
+                               width: ScreenUtil().setHeight(200),
+                               height: ScreenUtil().setHeight(200),
+                               child: AspectRatio(
+                                 aspectRatio: _videoController.value.aspectRatio,
+                                 child: VideoPlayer(_videoController),
+                               ),
                              ),
-                           ),
-                           GestureDetector(
-                             onTap: () {
-                                MyUtils.goTransparentRFPage(context, PagePreviewVideo(url: videoUrl));
-                             },
-                             child: const Icon(
-                               Icons.play_circle_fill_outlined,
-                               color: Colors.white,
-                               size: 50,
+                             GestureDetector(
+                               onTap: () {
+                                  MyUtils.goTransparentRFPage(context, PagePreviewVideo(url: videoUrl));
+                               },
+                               child: const Icon(
+                                 Icons.play_circle_fill_outlined,
+                                 color: Colors.white,
+                                 size: 50,
+                               ),
                              ),
-                           ),
-                         ],
+                           ],
+                         ),
                        ),
-                     ),
-                     const Spacer(),
-                   ],
-                 )
-                ],
-              ),
-            )
-            // Align(
-            //   alignment: Alignment.bottomCenter,
-            //   child: Row(
-            //     children: [
-            //       WidgetUtils.commonSizedBox(0, 10),
-            //       WidgetUtils.showImages('assets/images/trends_biaoqing.png', 25, 25),
-            //       WidgetUtils.commonSizedBox(0, 10),
-            //       WidgetUtils.showImages('assets/images/trends_biaoqing.png', 25, 25),
-            //     ],
-            //   ),
-            // )
-          ],
+                       const Spacer(),
+                     ],
+                   )
+                  ],
+                ),
+              )
+              // Align(
+              //   alignment: Alignment.bottomCenter,
+              //   child: Row(
+              //     children: [
+              //       WidgetUtils.commonSizedBox(0, 10),
+              //       WidgetUtils.showImages('assets/images/trends_biaoqing.png', 25, 25),
+              //       WidgetUtils.commonSizedBox(0, 10),
+              //       WidgetUtils.showImages('assets/images/trends_biaoqing.png', 25, 25),
+              //     ],
+              //   ),
+              // )
+            ],
+          ),
         ));
   }
 
@@ -505,7 +515,10 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
     try {
       var respone = await dio.post(MyHttpConfig.fileUpload, data: formdata);
       Map jsonResponse = json.decode(respone.data.toString());
-      if (respone.statusCode == 200) {
+      LogE('视频上传  $formdata');
+      LogE('视频上传  $jsonResponse');
+      if (jsonResponse['code'] == 200) {
+        LogE('视频上传  ${jsonResponse['data'].toString()}');
         setState(() {
           if(type == 0){
             if(imgID.isNotEmpty){
@@ -520,7 +533,7 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
 
         MyToastUtils.showToastBottom('上传成功');
         Loading.dismiss();
-      } else if (respone.statusCode == 401) {
+      } else if (jsonResponse['code'] == 401) {
         // ignore: use_build_context_synchronously
         MyUtils.jumpLogin(context);
       } else {
@@ -642,7 +655,7 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
         var respone = await dio.post(MyHttpConfig.fileUpload, data: formdata);
         Map jsonResponse = json.decode(respone.data.toString());
 
-        if (respone.statusCode == 200) {
+        if (jsonResponse['code'] == 200) {
           if (id.isEmpty) {
             id = jsonResponse['data'].toString();
           } else {
@@ -661,7 +674,7 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
             MyToastUtils.showToastBottom('上传成功');
             Loading.dismiss();
           }
-        } else if (respone.statusCode == 401) {
+        } else if (jsonResponse['code'] == 401) {
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
         } else {

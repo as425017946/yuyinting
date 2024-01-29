@@ -3,8 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/bean/Common_bean.dart';
 import 'package:yuyinting/pages/room/room_bg1_page.dart';
 import 'package:yuyinting/pages/room/room_bg2_page.dart';
-import 'package:yuyinting/pages/room/room_manager_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
+import 'package:yuyinting/utils/log_util.dart';
 
 import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
@@ -27,7 +27,7 @@ class RoomBGPage extends StatefulWidget {
 class _RoomBGPageState extends State<RoomBGPage> {
   int _currentIndex = 0;
   late final PageController _controller;
-  bool isOK = false;
+  bool isOK = true;
   var listen;
   String bgID = '', bgType = '', bgImagUrl = '';
   @override
@@ -41,12 +41,20 @@ class _RoomBGPageState extends State<RoomBGPage> {
 
     listen = eventBus.on<RoomBGBack>().listen((event) {
       if(event.bgID.isNotEmpty){
-        setState(() {
-          bgID = event.bgID;
-          bgType = event.bgType;
-          bgImagUrl = event.bgImagUrl;
-          isOK = true;
-        });
+        LogE('删除状态  ${event.delete}');
+        if(event.delete){
+          setState(() {
+            bgID = '';
+            bgType = '';
+            bgImagUrl = '';
+          });
+        }else{
+          setState(() {
+            bgID = event.bgID;
+            bgType = event.bgType;
+            bgImagUrl = event.bgImagUrl;
+          });
+        }
       }
     });
   }
@@ -107,7 +115,9 @@ class _RoomBGPageState extends State<RoomBGPage> {
                     GestureDetector(
                       onTap: (() {
                         if(MyUtils.checkClick()) {
-                          if (isOK) {
+                          if(bgID.isEmpty){
+                            MyToastUtils.showToastBottom('请选择要更换的厅图');
+                          }else{
                             doPostCheckRoomBg();
                             Navigator.pop(context);
                           }

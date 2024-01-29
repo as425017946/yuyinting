@@ -6,6 +6,7 @@ import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/my_utils.dart';
+import '../../../utils/regex_formatter.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 
@@ -69,143 +70,224 @@ class _ShimingzhiPageState extends State<ShimingzhiPage> {
       resizeToAvoidBottomInset: false, // 解决键盘顶起页面
       appBar: appBar,
       backgroundColor: MyColors.homeBG,
-      body: Column(
-        children: [
-          Container(
-            height: ScreenUtil().setHeight(100),
-            alignment: Alignment.center,
-            child: Row(
-              children: [
-                const Expanded(child: Text('')),
-                SizedBox(
-                  height: ScreenUtil().setHeight(60),
-                  width: ScreenUtil().setHeight(60),
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Container(
-                        width: ScreenUtil().setHeight(40),
-                        height: ScreenUtil().setHeight(40),
-                        //边框设置
-                        decoration: const BoxDecoration(
-                          //背景
-                          color: MyColors.homeTopBG,
-                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
+      body: GestureDetector(
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+          if (!currentFocus.hasPrimaryFocus &&
+              currentFocus.focusedChild != null) {
+            FocusManager.instance.primaryFocus?.unfocus();
+          }
+        },
+        child: Column(
+          children: [
+            Container(
+              height: ScreenUtil().setHeight(100),
+              alignment: Alignment.center,
+              child: Row(
+                children: [
+                  const Expanded(child: Text('')),
+                  SizedBox(
+                    height: ScreenUtil().setHeight(60),
+                    width: ScreenUtil().setHeight(60),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Container(
+                          width: ScreenUtil().setHeight(40),
+                          height: ScreenUtil().setHeight(40),
+                          //边框设置
+                          decoration: const BoxDecoration(
+                            //背景
+                            color: MyColors.homeTopBG,
+                            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                            borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                          ),
                         ),
-                      ),
-                      WidgetUtils.onlyTextCenter(
-                          '1',
-                          StyleUtils.getCommonTextStyle(
-                              color: Colors.white,
-                              fontSize: ScreenUtil().setSp(30))),
-                    ],
+                        WidgetUtils.onlyTextCenter(
+                            '1',
+                            StyleUtils.getCommonTextStyle(
+                                color: Colors.white,
+                                fontSize: ScreenUtil().setSp(30))),
+                      ],
+                    ),
                   ),
-                ),
-                WidgetUtils.onlyText(
-                    '填写身份资料',
-                    StyleUtils.getCommonTextStyle(
-                        color: Colors.black, fontSize: ScreenUtil().setSp(29))),
-                WidgetUtils.commonSizedBox(0, 5),
-                WidgetUtils.onlyText(
-                    '-----',
-                    StyleUtils.getCommonTextStyle(
-                        color: MyColors.g9, fontSize: ScreenUtil().setSp(29))),
-                WidgetUtils.commonSizedBox(0, 5),
-                SizedBox(
-                  height: ScreenUtil().setHeight(60),
-                  width: ScreenUtil().setHeight(60),
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Container(
-                        width: ScreenUtil().setHeight(40),
-                        height: ScreenUtil().setHeight(40),
-                        //边框设置
-                        decoration: const BoxDecoration(
-                          //背景
-                          color: MyColors.g9,
-                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                  WidgetUtils.onlyText(
+                      '填写身份资料',
+                      StyleUtils.getCommonTextStyle(
+                          color: Colors.black, fontSize: ScreenUtil().setSp(29))),
+                  WidgetUtils.commonSizedBox(0, 5),
+                  WidgetUtils.onlyText(
+                      '-----',
+                      StyleUtils.getCommonTextStyle(
+                          color: MyColors.g9, fontSize: ScreenUtil().setSp(29))),
+                  WidgetUtils.commonSizedBox(0, 5),
+                  SizedBox(
+                    height: ScreenUtil().setHeight(60),
+                    width: ScreenUtil().setHeight(60),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Container(
+                          width: ScreenUtil().setHeight(40),
+                          height: ScreenUtil().setHeight(40),
+                          //边框设置
+                          decoration: const BoxDecoration(
+                            //背景
+                            color: MyColors.g9,
+                            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                            borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                          ),
                         ),
-                      ),
-                      WidgetUtils.onlyTextCenter(
-                          '2',
-                          StyleUtils.getCommonTextStyle(
-                              color: Colors.white,
-                              fontSize: ScreenUtil().setSp(30))),
-                    ],
+                        WidgetUtils.onlyTextCenter(
+                            '2',
+                            StyleUtils.getCommonTextStyle(
+                                color: Colors.white,
+                                fontSize: ScreenUtil().setSp(30))),
+                      ],
+                    ),
                   ),
-                ),
-                WidgetUtils.onlyText(
-                    '身份认证',
-                    StyleUtils.getCommonTextStyle(
-                        color: MyColors.g9, fontSize: ScreenUtil().setSp(29))),
-                const Expanded(child: Text('')),
-              ],
+                  WidgetUtils.onlyText(
+                      '身份认证',
+                      StyleUtils.getCommonTextStyle(
+                          color: MyColors.g9, fontSize: ScreenUtil().setSp(29))),
+                  const Expanded(child: Text('')),
+                ],
+              ),
             ),
-          ),
-          Container(
-            height: ScreenUtil().setHeight(150),
-            width: double.infinity,
-            padding: const EdgeInsets.only(top: 10, left: 20, right: 20),
-            color: Colors.white,
-            child: Column(
-              children: [
-                WidgetUtils.onlyText(
-                    '姓名',
-                    StyleUtils.getCommonTextStyle(
-                        color: Colors.black, fontSize: ScreenUtil().setSp(29))),
-                WidgetUtils.commonSizedBox(10, 10),
-                WidgetUtils.commonTextFieldRenzheng(controllerName, '请输入真实姓名'),
-              ],
-            ),
-          ),
-          WidgetUtils.commonSizedBox(10, 10),
-          Container(
-            height: ScreenUtil().setHeight(150),
-            width: double.infinity,
-            padding: const EdgeInsets.only(top: 10, left: 20, right: 20),
-            color: Colors.white,
-            child: Column(
-              children: [
-                WidgetUtils.onlyText(
-                    '身份证号',
-                    StyleUtils.getCommonTextStyle(
-                        color: Colors.black, fontSize: ScreenUtil().setSp(29))),
-                WidgetUtils.commonSizedBox(10, 10),
-                WidgetUtils.commonTextFieldRenzheng(controllerCard, '请输入身份证号码'),
-              ],
-            ),
-          ),
-          WidgetUtils.renzhengText(
-              '温馨提示:\n1.根据相关法律法规，在使用直播、提现服务之前，您需要填写身份信息实名认证;\n2.未满18周岁的用户无法进行实名，部分功能将无法正常使用，如无法成功提现;\n3.请您填写准确、真实的身份信息，实名信息将被作为身份识别，判定您的账号使用权归属依据；\n4.您所提交的身份信息将被严格保密，不会被用于其他用途'),
-          WidgetUtils.commonSizedBox(20, 10),
-          GestureDetector(
-            onTap: (() {
-              MyUtils.hideKeyboard(context);
-              if(MyUtils.verifyCardId(controllerCard.text.trim())){
-                sp.setString('identity', controllerCard.text.trim());
-                sp.setString('realname', controllerName.text.trim());
-                Navigator.pushNamed(context, 'ShimingzhiCardPage');
-              }else{
-                MyToastUtils.showToastBottom('输入的身份证号不合法');
-              }
+            Container(
+              height: ScreenUtil().setHeight(150),
+              width: double.infinity,
+              padding: const EdgeInsets.only(top: 10, left: 20, right: 20),
+              color: Colors.white,
+              child: Column(
+                children: [
+                  WidgetUtils.onlyText(
+                      '姓名',
+                      StyleUtils.getCommonTextStyle(
+                          color: Colors.black, fontSize: ScreenUtil().setSp(29))),
+                  WidgetUtils.commonSizedBox(10, 10),
+                  TextField(
+                    controller: controllerName,
+                    inputFormatters: [
+                      RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                    ],
+                    style: StyleUtils.loginTextStyle,
+                    onChanged: (value) {
+                      LogE('长度$value');
+                      eventBus.fire(InfoBack(info: value));
+                    },
+                    decoration: InputDecoration(
+                      hintText: '请输入真实姓名',
+                      hintStyle: StyleUtils.getCommonTextStyle(
+                          color: MyColors.g9, fontSize: ScreenUtil().setSp(32)),
 
-            }),
-            child: Container(
-              margin: const EdgeInsets.only(left: 20, right: 20),
-              child: WidgetUtils.myContainer(
-                  ScreenUtil().setHeight(80),
-                  double.infinity,
-                  isShow == true ? MyColors.homeTopBG : MyColors.d8,
-                  isShow == true ? MyColors.homeTopBG : MyColors.d8,
-                  '下一步',
-                  ScreenUtil().setSp(33),
-                  Colors.white),
+                      contentPadding: const EdgeInsets.only(top: 0, bottom: 0),
+                      border: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.transparent),
+                      ),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.transparent,
+                        ),
+                      ),
+                      disabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.transparent,
+                        ),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.transparent,
+                        ),
+                      ),
+                      // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+            WidgetUtils.commonSizedBox(10, 10),
+            Container(
+              height: ScreenUtil().setHeight(150),
+              width: double.infinity,
+              padding: const EdgeInsets.only(top: 10, left: 20, right: 20),
+              color: Colors.white,
+              child: Column(
+                children: [
+                  WidgetUtils.onlyText(
+                      '身份证号',
+                      StyleUtils.getCommonTextStyle(
+                          color: Colors.black, fontSize: ScreenUtil().setSp(29))),
+                  WidgetUtils.commonSizedBox(10, 10),
+                  TextField(
+                    controller: controllerCard,
+                    inputFormatters: [
+                      RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                    ],
+                    style: StyleUtils.loginTextStyle,
+                    onChanged: (value) {
+                      LogE('长度$value');
+                      eventBus.fire(InfoBack(info: value));
+                    },
+                    decoration: InputDecoration(
+                      hintText: '请输入身份证号码',
+                      hintStyle: StyleUtils.getCommonTextStyle(
+                          color: MyColors.g9, fontSize: ScreenUtil().setSp(32)),
+
+                      contentPadding: const EdgeInsets.only(top: 0, bottom: 0),
+                      border: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.transparent),
+                      ),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.transparent,
+                        ),
+                      ),
+                      disabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.transparent,
+                        ),
+                      ),
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.transparent,
+                        ),
+                      ),
+                      // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            WidgetUtils.renzhengText(
+                '温馨提示:\n1.根据相关法律法规，在使用直播、提现服务之前，您需要填写身份信息实名认证;\n2.未满18周岁的用户无法进行实名，部分功能将无法正常使用，如无法成功提现;\n3.请您填写准确、真实的身份信息，实名信息将被作为身份识别，判定您的账号使用权归属依据；\n4.您所提交的身份信息将被严格保密，不会被用于其他用途'),
+            WidgetUtils.commonSizedBox(20, 10),
+            GestureDetector(
+              onTap: (() {
+                MyUtils.hideKeyboard(context);
+                if(MyUtils.verifyCardId(controllerCard.text.trim())){
+                  sp.setString('identity', controllerCard.text.trim());
+                  sp.setString('realname', controllerName.text.trim());
+                  Navigator.pushNamed(context, 'ShimingzhiCardPage');
+                }else{
+                  MyToastUtils.showToastBottom('输入的身份证号不合法');
+                }
+
+              }),
+              child: Container(
+                margin: const EdgeInsets.only(left: 20, right: 20),
+                child: WidgetUtils.myContainer(
+                    ScreenUtil().setHeight(80),
+                    double.infinity,
+                    isShow == true ? MyColors.homeTopBG : MyColors.d8,
+                    isShow == true ? MyColors.homeTopBG : MyColors.d8,
+                    '下一步',
+                    ScreenUtil().setSp(33),
+                    Colors.white),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

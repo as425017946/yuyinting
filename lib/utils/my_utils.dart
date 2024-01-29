@@ -489,14 +489,12 @@ class MyUtils {
         // 调用 `kickDevice` 方法将设备踢下线，被踢设备会收到该回调；
         onUserKickedByOtherDevice: (() {
           LogE('IM 登将设备踢下线');
-          signOut();
           eventBus.fire(SubmitButtonBack(title: '账号已在其他设备登录'));
           MyToastUtils.showToastBottom('账号已在其他设备登录！');
         }),
         // 登录新设备时因达到了登录设备数量限制而导致当前设备被踢下线，被踢设备收到该回调；
         onUserDidLoginFromOtherDevice: ((String deviceName) {
           LogE('IM 登登录设备数量限制而导致当前设备被踢下线');
-          signOut();
           MyToastUtils.showToastBottom('账号已在其他设备登录！');
           eventBus.fire(SubmitButtonBack(title: '账号已在其他设备登录'));
         }),
@@ -605,7 +603,7 @@ class MyUtils {
                                 .toString()
                                 .contains('.GPG')) {
                           myHeadImg =
-                          '${directory!.path}/${sp.getString('user_id')}.gif';
+                          '${directory!.path}/${sp.getString('user_id')}.jpg';
                         } else if (sp
                             .getString('user_headimg')
                             .toString()
@@ -713,7 +711,7 @@ class MyUtils {
                           .toString()
                           .contains('.GPG')) {
                     myHeadImg =
-                    '${directory!.path}/${sp.getString('user_id')}.gif';
+                    '${directory!.path}/${sp.getString('user_id')}.jpg';
                   } else if (sp
                       .getString('user_headimg')
                       .toString()
@@ -828,7 +826,7 @@ class MyUtils {
                           .toString()
                           .contains('.GPG')) {
                     myHeadImg =
-                    '${directory!.path}/${sp.getString('user_id')}.gif';
+                    '${directory!.path}/${sp.getString('user_id')}.jpg';
                   } else if (sp
                       .getString('user_headimg')
                       .toString()
@@ -939,7 +937,7 @@ class MyUtils {
                             .toString()
                             .contains('.GPG')) {
                       myHeadImg =
-                      '${directory!.path}/${sp.getString('user_id')}.gif';
+                      '${directory!.path}/${sp.getString('user_id')}.jpg';
                     } else if (sp
                         .getString('user_headimg')
                         .toString()

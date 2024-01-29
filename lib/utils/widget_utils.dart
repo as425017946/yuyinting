@@ -626,7 +626,7 @@ class WidgetUtils {
                         height,
                         width,
                         height / 2,
-                        'assets/images/img_error.png',
+                        'assets/images/img_placeholder.png',
                       );
                     },
                   )
@@ -681,7 +681,7 @@ class WidgetUtils {
                       height,
                       width,
                       ScreenUtil().setHeight(10),
-                      'assets/images/img_error.png',
+                      'assets/images/img_placeholder.png',
                     );
                   },
                 )
@@ -724,6 +724,8 @@ class WidgetUtils {
   ///圆角图片 本地，加载失败展示网络图
   static Widget CircleImageAssNet(
       double height, double width, double radius, String url, String netUrl) {
+    LogE('头像信息 == $url');
+    LogE('头像信息 ==*9*** $netUrl');
     return Container(
       width: width,
       height: height,
@@ -754,7 +756,7 @@ class WidgetUtils {
                       height,
                       width,
                       ScreenUtil().setHeight(10),
-                      'assets/images/img_error.png',
+                      'assets/images/img_placeholder.png',
                     );
                   },
                 );
@@ -783,7 +785,7 @@ class WidgetUtils {
                       height,
                       width,
                       ScreenUtil().setHeight(10),
-                      'assets/images/img_error.png',
+                      'assets/images/img_placeholder.png',
                     );
                   },
                 );
@@ -814,7 +816,7 @@ class WidgetUtils {
               height,
               width,
               ScreenUtil().setHeight(10),
-              'assets/images/img_error.png',
+              'assets/images/img_placeholder.png',
             );
           },
         ),
@@ -859,7 +861,35 @@ class WidgetUtils {
             height,
             width,
             ScreenUtil().setHeight(10),
-            'assets/images/img_error.png',
+            'assets/images/img_placeholder.png',
+          );
+        },
+      ),
+    );
+  }
+
+  ///展示图片使用厅内使用，主要是用于加载不出来直接给一个默认的厅图
+  static Widget showImagesNetRoom(String url, double height, double width) {
+    return SizedBox(
+      height: height,
+      width: width,
+      child: CachedNetworkImage(
+        imageUrl: url,
+        fit: BoxFit.cover,
+        placeholder: (context, url) => CircleImageAss(
+          height,
+          width,
+          ScreenUtil().setHeight(10),
+          'assets/images/img_placeholder.png',
+        ),
+        errorWidget: (context, url, error) {
+          LogE('加载错误提示 $error');
+          // return const Icon(Icons.error);
+          return CircleImageAss(
+            height,
+            width,
+            ScreenUtil().setHeight(10),
+            'assets/images/img_placeholder_room.png',
           );
         },
       ),

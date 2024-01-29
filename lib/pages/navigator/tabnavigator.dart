@@ -158,12 +158,14 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         if(isJoinRoom){
           setState(() {
             isJoinRoom = false;
+            //取消订阅所有远端用户的音频流。
+            _engine.muteAllRemoteAudioStreams(true);
             // 取消发布本地音频流
             _engine.muteLocalAudioStream(true);
             _engine.disableAudio();
             _dispose();
             // 调用离开房间接口
-            doPostLeave();
+            doPostLeave(sp.getString('roomIDJoinOther').toString());
           });
 
         }
@@ -171,6 +173,8 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         if(isJoinRoom) {
           setState(() {
             isJoinRoom = false;
+            //取消订阅所有远端用户的音频流。
+            _engine.muteAllRemoteAudioStreams(true);
             // 取消发布本地音频流
             _engine.muteLocalAudioStream(true);
             _engine.disableAudio();
@@ -182,6 +186,8 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
        if(isJoinRoom){
          setState(() {
            isJoinRoom = false;
+           //取消订阅所有远端用户的音频流。
+           _engine.muteAllRemoteAudioStreams(true);
            // 取消发布本地音频流
            _engine.muteLocalAudioStream(true);
            _engine.disableAudio();
@@ -200,18 +206,22 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         if(isJoinRoom){
           setState(() {
             isJoinRoom = false;
+            //取消订阅所有远端用户的音频流。
+            _engine.muteAllRemoteAudioStreams(true);
             // 取消发布本地音频流
             _engine.muteLocalAudioStream(true);
             _engine.disableAudio();
             _dispose();
             // 调用离开房间接口
-            doPostLeave();
+            doPostLeave(sp.getString('roomID').toString());
           });
         }
       }else if(event.title == '账号退出登录'){
         if(isJoinRoom) {
           setState(() {
             isJoinRoom = false;
+            //取消订阅所有远端用户的音频流。
+            _engine.muteAllRemoteAudioStreams(true);
             // 取消发布本地音频流
             _engine.muteLocalAudioStream(true);
             _engine.disableAudio();
@@ -269,7 +279,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           // 取消发布本地音频流
           _engine.muteLocalAudioStream(true);
           // 调用离开房间接口
-          doPostLeave();
+          doPostLeave(sp.getString('roomID').toString());
           _engine.disableAudio();
           _dispose();
           sp.setString('user_token', '');
@@ -295,7 +305,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
             // 取消发布本地音频流
             _engine.muteLocalAudioStream(true);
             // 调用离开房间接口
-            doPostLeave();
+            doPostLeave(sp.getString('roomID').toString());
             _engine.disableAudio();
             _dispose();
           }
@@ -508,6 +518,14 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           return Future.value(false);
         } else {
           lastPopTime = DateTime.now();
+          if(isJoinRoom) {
+            // 取消发布本地音频流
+            _engine.muteLocalAudioStream(true);
+            // 调用离开房间接口
+            doPostLeave(sp.getString('roomID').toString());
+            _engine.disableAudio();
+            _dispose();
+          }
           // 退出app
           return Future.value(true);
         }
@@ -722,7 +740,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
                         setState(() {
                           _dispose();
                           // 调用离开房间接口
-                          doPostLeave();
+                          doPostLeave(sp.getString('roomID').toString());
                           sp.setString('roomID', '');
                           isRemove = false;
                           isJoinRoom = false;
@@ -924,9 +942,9 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
 
 
   /// 离开房间下麦
-  Future<void> doPostLeave() async {
+  Future<void> doPostLeave(String roomID) async {
     Map<String, dynamic> params = <String, dynamic>{
-      'room_id': sp.getString('roomID'),
+      'room_id': roomID,
     };
     try {
       CommonBean bean = await DataUtils.postLeave(params);

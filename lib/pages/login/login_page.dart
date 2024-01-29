@@ -193,361 +193,370 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false, // 解决键盘顶起页面
       backgroundColor: Colors.transparent,
-      body: Stack(
-        children: [
-          Container(
-            width: double.infinity,
-            height: double.infinity,
-            color: MyColors.loginBG,
-            child: Column(
-              children: [
-                GestureDetector(
-                  onTap: (() {
-                    MyUtils.hideKeyboard(context);
-                  }),
-                  child: Container(
-                    height: 630.h,
-                    width: double.infinity,
-                    color: Colors.transparent,
-                    child: const SVGASimpleImage(
-                      assetsName: 'assets/svga/login.svga',
+      body: GestureDetector(
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+          if (!currentFocus.hasPrimaryFocus &&
+              currentFocus.focusedChild != null) {
+            FocusManager.instance.primaryFocus?.unfocus();
+          }
+        },
+        child: Stack(
+          children: [
+            Container(
+              width: double.infinity,
+              height: double.infinity,
+              color: MyColors.loginBG,
+              child: Column(
+                children: [
+                  GestureDetector(
+                    onTap: (() {
+                      MyUtils.hideKeyboard(context);
+                    }),
+                    child: Container(
+                      height: 630.h,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: const SVGASimpleImage(
+                        assetsName: 'assets/svga/login.svga',
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                  height: ScreenUtil().setHeight(80),
-                  width: double.infinity,
-                  margin: const EdgeInsets.only(
-                      top: 10, left: 40, right: 40, bottom: 20),
-                  //边框设置
-                  decoration: const BoxDecoration(
-                    //背景
-                    color: Colors.white,
-                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                    borderRadius: BorderRadius.all(Radius.circular(25.0)),
-                  ),
-                  child: isClick == false
-                      ? Row(
-                          children: [
-                            GestureDetector(
-                              onTap: (() {
-                                // Navigator.pushNamed(
-                                //     context, 'ChooseCountryPage');
-                              }),
-                              child: Row(
-                                children: [
-                                  WidgetUtils.commonSizedBox(0, 15),
-                                  WidgetUtils.onlyText(
-                                      quhao,
-                                      StyleUtils.getCommonTextStyle(
-                                          color: MyColors.g3,
-                                          fontSize: ScreenUtil().setSp(30),
-                                          fontWeight: FontWeight.w600)),
-                                  WidgetUtils.commonSizedBox(0, 5),
-                                  // WidgetUtils.showImages(
-                                  //     'assets/images/login_xia.png',
-                                  //     ScreenUtil().setHeight(12),
-                                  //     ScreenUtil().setHeight(18))
-                                ],
-                              ),
-                            ),
-                            WidgetUtils.commonSizedBox(0, 20),
-                            Expanded(
-                              child: Container(
-                                height: ScreenUtil().setHeight(60),
-                                width: double.infinity,
-                                alignment: Alignment.center,
-                                child: TextField(
-                                  enabled: true,
-                                  obscureText: false,
-                                  controller: controllerPhone,
-                                  inputFormatters: [
-                                    RegexFormatter(regex: MyUtils.regexFirstNotNull),
-                                    FilteringTextInputFormatter.digitsOnly,
-                                    //设置只能输入11位
-                                    LengthLimitingTextInputFormatter(11),
-                                  ],
-                                  keyboardType: TextInputType.number,
-                                  //设置键盘为数字
-                                  style: StyleUtils.loginTextStyle,
-                                  onChanged: (value) {
-                                    ceshi();
-                                  },
-                                  decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: '请输入手机号',
-                                    hintStyle: StyleUtils.loginHintTextStyle,
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
-                        )
-                      : Row(
-                          children: [
-                            WidgetUtils.commonSizedBox(0, 20),
-                            Expanded(
-                              child: Container(
-                                height: ScreenUtil().setHeight(60),
-                                width: double.infinity,
-                                alignment: Alignment.center,
-                                child: WidgetUtils.commonTextField(
-                                    controllerAccount, '请输入账号'),
-                              ),
-                            )
-                          ],
-                        ),
-                ),
-                isMiMa == false && isClick == false
-                    ? SizedBox(
-                        height: ScreenUtil().setHeight(80),
-                        child: Row(
-                          children: [
-                            WidgetUtils.commonSizedBox(0, 40),
-                            Expanded(
-                              child: Container(
-                                  height: ScreenUtil().setHeight(80),
-                                  padding: const EdgeInsets.only(left: 15),
-                                  width: double.infinity,
-                                  //边框设置
-                                  decoration: const BoxDecoration(
-                                    //背景
-                                    color: Colors.white,
-                                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(25.0)),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                          child:
-                                              WidgetUtils.commonTextFieldNumber(
-                                                  controller: controllerSmg,
-                                                  hintText: '请输入验证码')),
-                                      GestureDetector(
-                                        onTap: (() {
-                                          if(MyUtils.checkClick()) {
-                                            if (_autoCodeText == '发送验证码' ||
-                                                _autoCodeText == '重新获取') {
-                                              if (controllerPhone.text
-                                                  .trim()
-                                                  .isEmpty) {
-                                                MyToastUtils.showToastBottom(
-                                                    '请输入手机号');
-                                              } else if (!MyUtils.chinaPhoneNumber(controllerPhone.text.trim())) {
-                                                MyToastUtils.showToastBottom(
-                                                    '输入的手机号码格式错误');
-                                              } else {
-                                                doPostLoginSms();
-                                              }
-                                            }
-                                          }
-                                        }),
-                                        child: Container(
-                                          height: 60.h,
-                                          width: ScreenUtil().setHeight(150),
-                                          //边框设置
-                                          decoration: const BoxDecoration(
-                                            //背景
-                                            color: MyColors.dailiBaobiao,
-                                            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(25.0)),
-                                          ),
-                                          child: WidgetUtils.onlyTextCenter(
-                                              _autoCodeText,
-                                              StyleUtils.getCommonTextStyle(
-                                                  color: MyColors.homeTopBG,
-                                                  fontSize: 26.sp)),
-                                        ),
-                                      ),
-                                      WidgetUtils.commonSizedBox(0, 5),
-                                    ],
-                                  )),
-                            ),
-                            WidgetUtils.commonSizedBox(0, 10),
-                            GestureDetector(
-                              onTap: (() {
-                                setState(() {
-                                  isMiMa = !isMiMa;
-                                });
-                              }),
-                              child: Container(
-                                width: 100.h,
-                                color: Colors.transparent,
-                                child: WidgetUtils.onlyText('密码登录', StyleUtils.getCommonTextStyle(color: MyColors.homeTopBG,
-                                    fontSize: 26.sp, fontWeight: FontWeight.w600)),
-                              )
-                              // WidgetUtils.showImages(
-                              //     isMiMa
-                              //         ? 'assets/images/login_sms.png'
-                              //         : 'assets/images/login_password.png',
-                              //     80.h,
-                              //     50.h),
-                            ),
-                            WidgetUtils.commonSizedBox(0, 40),
-                          ],
-                        ),
-                      )
-                    : Container(
-                        height: ScreenUtil().setHeight(80),
-                        margin: const EdgeInsets.only(left: 40, right: 40),
-                        width: double.infinity,
-                        child: Row(
-                          children: [
-                            Expanded(
-                                child: Container(
-                              height: ScreenUtil().setHeight(80),
-                              padding: EdgeInsets.only(left: 15, top: 5.h),
-                              //边框设置
-                              decoration: const BoxDecoration(
-                                //背景
-                                color: Colors.white,
-                                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(25.0)),
-                              ),
-                              child: WidgetUtils.commonTextFieldIsShow(
-                                  controllerPass, '请输入密码', true),
-                            )),
-                            WidgetUtils.commonSizedBox(0, 10),
-                            zhanghao == '账号登录' ? GestureDetector(
-                              onTap: (() {
-                                setState(() {
-                                  isMiMa = !isMiMa;
-                                });
-                              }),
-                              child: Container(
-                                width: 110.h,
-                                color: Colors.transparent,
-                                child: WidgetUtils.onlyText(isMiMa ? '验证码登录' : '密码', StyleUtils.getCommonTextStyle(color: MyColors.homeTopBG,
-                                    fontSize: 26.sp, fontWeight: FontWeight.w600)),
-                              ),
-                            ) : const Text(''),
-                          ],
-                        )),
-                WidgetUtils.commonSizedBox(30, 0),
-                GestureDetector(
-                  onTap: (() {
-                    if (MyUtils.checkClick()) {
-                      doLogin();
-                    }
-                  }),
-                  child: Container(
-                    margin: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+                  Container(
                     height: ScreenUtil().setHeight(80),
-                    alignment: Alignment.center,
                     width: double.infinity,
+                    margin: const EdgeInsets.only(
+                        top: 10, left: 40, right: 40, bottom: 20),
                     //边框设置
                     decoration: const BoxDecoration(
                       //背景
-                      color: MyColors.loginBtnP,
+                      color: Colors.white,
                       //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                       borderRadius: BorderRadius.all(Radius.circular(25.0)),
                     ),
-                    child: Text(
-                      '立即登录',
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(28),
-                        color: Colors.white,
+                    child: isClick == false
+                        ? Row(
+                            children: [
+                              GestureDetector(
+                                onTap: (() {
+                                  // Navigator.pushNamed(
+                                  //     context, 'ChooseCountryPage');
+                                }),
+                                child: Row(
+                                  children: [
+                                    WidgetUtils.commonSizedBox(0, 15),
+                                    WidgetUtils.onlyText(
+                                        quhao,
+                                        StyleUtils.getCommonTextStyle(
+                                            color: MyColors.g3,
+                                            fontSize: ScreenUtil().setSp(30),
+                                            fontWeight: FontWeight.w600)),
+                                    WidgetUtils.commonSizedBox(0, 5),
+                                    // WidgetUtils.showImages(
+                                    //     'assets/images/login_xia.png',
+                                    //     ScreenUtil().setHeight(12),
+                                    //     ScreenUtil().setHeight(18))
+                                  ],
+                                ),
+                              ),
+                              WidgetUtils.commonSizedBox(0, 20),
+                              Expanded(
+                                child: Container(
+                                  height: ScreenUtil().setHeight(60),
+                                  width: double.infinity,
+                                  alignment: Alignment.center,
+                                  child: TextField(
+                                    enabled: true,
+                                    obscureText: false,
+                                    controller: controllerPhone,
+                                    inputFormatters: [
+                                      RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                                      FilteringTextInputFormatter.digitsOnly,
+                                      //设置只能输入11位
+                                      LengthLimitingTextInputFormatter(11),
+                                    ],
+                                    keyboardType: TextInputType.number,
+                                    //设置键盘为数字
+                                    style: StyleUtils.loginTextStyle,
+                                    onChanged: (value) {
+                                      ceshi();
+                                    },
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: '请输入手机号',
+                                      hintStyle: StyleUtils.loginHintTextStyle,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          )
+                        : Row(
+                            children: [
+                              WidgetUtils.commonSizedBox(0, 20),
+                              Expanded(
+                                child: Container(
+                                  height: ScreenUtil().setHeight(60),
+                                  width: double.infinity,
+                                  alignment: Alignment.center,
+                                  child: WidgetUtils.commonTextField(
+                                      controllerAccount, '请输入账号'),
+                                ),
+                              )
+                            ],
+                          ),
+                  ),
+                  isMiMa == false && isClick == false
+                      ? SizedBox(
+                          height: ScreenUtil().setHeight(80),
+                          child: Row(
+                            children: [
+                              WidgetUtils.commonSizedBox(0, 40),
+                              Expanded(
+                                child: Container(
+                                    height: ScreenUtil().setHeight(80),
+                                    padding: const EdgeInsets.only(left: 15),
+                                    width: double.infinity,
+                                    //边框设置
+                                    decoration: const BoxDecoration(
+                                      //背景
+                                      color: Colors.white,
+                                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(25.0)),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                            child:
+                                                WidgetUtils.commonTextFieldNumber(
+                                                    controller: controllerSmg,
+                                                    hintText: '请输入验证码')),
+                                        GestureDetector(
+                                          onTap: (() {
+                                            if(MyUtils.checkClick()) {
+                                              if (_autoCodeText == '发送验证码' ||
+                                                  _autoCodeText == '重新获取') {
+                                                if (controllerPhone.text
+                                                    .trim()
+                                                    .isEmpty) {
+                                                  MyToastUtils.showToastBottom(
+                                                      '请输入手机号');
+                                                } else if (!MyUtils.chinaPhoneNumber(controllerPhone.text.trim())) {
+                                                  MyToastUtils.showToastBottom(
+                                                      '输入的手机号码格式错误');
+                                                } else {
+                                                  doPostLoginSms();
+                                                }
+                                              }
+                                            }
+                                          }),
+                                          child: Container(
+                                            height: 60.h,
+                                            width: ScreenUtil().setHeight(150),
+                                            //边框设置
+                                            decoration: const BoxDecoration(
+                                              //背景
+                                              color: MyColors.dailiBaobiao,
+                                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(25.0)),
+                                            ),
+                                            child: WidgetUtils.onlyTextCenter(
+                                                _autoCodeText,
+                                                StyleUtils.getCommonTextStyle(
+                                                    color: MyColors.homeTopBG,
+                                                    fontSize: 26.sp)),
+                                          ),
+                                        ),
+                                        WidgetUtils.commonSizedBox(0, 5),
+                                      ],
+                                    )),
+                              ),
+                              WidgetUtils.commonSizedBox(0, 10),
+                              GestureDetector(
+                                onTap: (() {
+                                  setState(() {
+                                    isMiMa = !isMiMa;
+                                  });
+                                }),
+                                child: Container(
+                                  width: 100.h,
+                                  color: Colors.transparent,
+                                  child: WidgetUtils.onlyText('密码登录', StyleUtils.getCommonTextStyle(color: MyColors.homeTopBG,
+                                      fontSize: 26.sp, fontWeight: FontWeight.w600)),
+                                )
+                                // WidgetUtils.showImages(
+                                //     isMiMa
+                                //         ? 'assets/images/login_sms.png'
+                                //         : 'assets/images/login_password.png',
+                                //     80.h,
+                                //     50.h),
+                              ),
+                              WidgetUtils.commonSizedBox(0, 40),
+                            ],
+                          ),
+                        )
+                      : Container(
+                          height: ScreenUtil().setHeight(80),
+                          margin: const EdgeInsets.only(left: 40, right: 40),
+                          width: double.infinity,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                  child: Container(
+                                height: ScreenUtil().setHeight(80),
+                                padding: EdgeInsets.only(left: 15, top: 5.h),
+                                //边框设置
+                                decoration: const BoxDecoration(
+                                  //背景
+                                  color: Colors.white,
+                                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(25.0)),
+                                ),
+                                child: WidgetUtils.commonTextFieldIsShow(
+                                    controllerPass, '请输入密码', true),
+                              )),
+                              WidgetUtils.commonSizedBox(0, 10),
+                              zhanghao == '账号登录' ? GestureDetector(
+                                onTap: (() {
+                                  setState(() {
+                                    isMiMa = !isMiMa;
+                                  });
+                                }),
+                                child: Container(
+                                  width: 110.h,
+                                  color: Colors.transparent,
+                                  child: WidgetUtils.onlyText(isMiMa ? '验证码登录' : '密码', StyleUtils.getCommonTextStyle(color: MyColors.homeTopBG,
+                                      fontSize: 26.sp, fontWeight: FontWeight.w600)),
+                                ),
+                              ) : const Text(''),
+                            ],
+                          )),
+                  WidgetUtils.commonSizedBox(30, 0),
+                  GestureDetector(
+                    onTap: (() {
+                      if (MyUtils.checkClick()) {
+                        doLogin();
+                      }
+                    }),
+                    child: Container(
+                      margin: const EdgeInsets.fromLTRB(30, 0, 30, 0),
+                      height: ScreenUtil().setHeight(80),
+                      alignment: Alignment.center,
+                      width: double.infinity,
+                      //边框设置
+                      decoration: const BoxDecoration(
+                        //背景
+                        color: MyColors.loginBtnP,
+                        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                        borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                      ),
+                      child: Text(
+                        '立即登录',
+                        style: TextStyle(
+                          fontSize: ScreenUtil().setSp(28),
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                WidgetUtils.commonSizedBox(20, 0),
-                Container(
-                  margin: const EdgeInsets.only(left: 40, right: 40),
-                  child: Row(
+                  WidgetUtils.commonSizedBox(20, 0),
+                  Container(
+                    margin: const EdgeInsets.only(left: 40, right: 40),
+                    child: Row(
+                      children: [
+                        // const Expanded(child: Text('')),
+                        GestureDetector(
+                          onTap: (() {
+                            setState(() {
+                              isClick = !isClick;
+                              if (zhanghao == '账号登录') {
+                                zhanghao = '手机号登录';
+                              } else {
+                                zhanghao = '账号登录';
+                              }
+                            });
+                          }),
+                          child: WidgetUtils.onlyText(
+                              zhanghao,
+                              StyleUtils.getCommonTextStyle(
+                                  color: MyColors.homeTopBG,
+                                  fontSize: ScreenUtil().setSp(28))),
+                        ),
+                        const Expanded(child: Text('')),
+                        zhanghao == '账号登录' ? GestureDetector(
+                          onTap: (() {
+                            Navigator.pushNamed(context, 'ForgotPasswordPage');
+                          }),
+                          child: WidgetUtils.onlyText(
+                              '忘记密码',
+                              StyleUtils.getCommonTextStyle(
+                                  color: MyColors.g6,
+                                  fontSize: ScreenUtil().setSp(28))),
+                        ) : const Text(''),
+                      ],
+                    ),
+                  ),
+                  const Expanded(child: Text('')),
+                  WidgetUtils.commonSizedBox(15, 0),
+                  Row(
                     children: [
-                      // const Expanded(child: Text('')),
+                      const Expanded(child: Text('')),
                       GestureDetector(
                         onTap: (() {
                           setState(() {
-                            isClick = !isClick;
-                            if (zhanghao == '账号登录') {
-                              zhanghao = '手机号登录';
-                            } else {
-                              zhanghao = '账号登录';
-                            }
+                            gz = !gz;
                           });
                         }),
-                        child: WidgetUtils.onlyText(
-                            zhanghao,
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.homeTopBG,
-                                fontSize: ScreenUtil().setSp(28))),
+                        child: WidgetUtils.showImages(
+                            gz == false
+                                ? 'assets/images/login_ck1.png'
+                                : 'assets/images/login_ck2.png',
+                            15,
+                            15),
                       ),
-                      const Expanded(child: Text('')),
-                      zhanghao == '账号登录' ? GestureDetector(
+                      WidgetUtils.commonSizedBox(0, 5),
+                      WidgetUtils.onlyText(
+                          '继续即表示同意',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.g6,
+                              fontSize: ScreenUtil().setSp(28))),
+                      GestureDetector(
                         onTap: (() {
-                          Navigator.pushNamed(context, 'ForgotPasswordPage');
+                          Navigator.pushNamed(context, 'YonghuPage');
                         }),
                         child: WidgetUtils.onlyText(
-                            '忘记密码',
+                            '用户协议',
                             StyleUtils.getCommonTextStyle(
-                                color: MyColors.g6,
-                                fontSize: ScreenUtil().setSp(28))),
-                      ) : const Text(''),
+                                color: MyColors.homeTopBG,
+                                fontSize: ScreenUtil().setSp(25))),
+                      ),
+                      WidgetUtils.onlyText(
+                          '和',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.g6,
+                              fontSize: ScreenUtil().setSp(25))),
+                      GestureDetector(
+                        onTap: (() {
+                          Navigator.pushNamed(context, 'YinsiPage');
+                        }),
+                        child: WidgetUtils.onlyText(
+                            '隐私协议',
+                            StyleUtils.getCommonTextStyle(
+                                color: MyColors.homeTopBG,
+                                fontSize: ScreenUtil().setSp(25))),
+                      ),
+                      const Expanded(child: Text('')),
                     ],
                   ),
-                ),
-                const Expanded(child: Text('')),
-                WidgetUtils.commonSizedBox(15, 0),
-                Row(
-                  children: [
-                    const Expanded(child: Text('')),
-                    GestureDetector(
-                      onTap: (() {
-                        setState(() {
-                          gz = !gz;
-                        });
-                      }),
-                      child: WidgetUtils.showImages(
-                          gz == false
-                              ? 'assets/images/login_ck1.png'
-                              : 'assets/images/login_ck2.png',
-                          15,
-                          15),
-                    ),
-                    WidgetUtils.commonSizedBox(0, 5),
-                    WidgetUtils.onlyText(
-                        '继续即表示同意',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.g6,
-                            fontSize: ScreenUtil().setSp(28))),
-                    GestureDetector(
-                      onTap: (() {
-                        Navigator.pushNamed(context, 'YonghuPage');
-                      }),
-                      child: WidgetUtils.onlyText(
-                          '用户协议',
-                          StyleUtils.getCommonTextStyle(
-                              color: MyColors.homeTopBG,
-                              fontSize: ScreenUtil().setSp(25))),
-                    ),
-                    WidgetUtils.onlyText(
-                        '和',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.g6,
-                            fontSize: ScreenUtil().setSp(25))),
-                    GestureDetector(
-                      onTap: (() {
-                        Navigator.pushNamed(context, 'YinsiPage');
-                      }),
-                      child: WidgetUtils.onlyText(
-                          '隐私协议',
-                          StyleUtils.getCommonTextStyle(
-                              color: MyColors.homeTopBG,
-                              fontSize: ScreenUtil().setSp(25))),
-                    ),
-                    const Expanded(child: Text('')),
-                  ],
-                ),
-                WidgetUtils.commonSizedBox(20, 0),
-              ],
+                  WidgetUtils.commonSizedBox(20, 0),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

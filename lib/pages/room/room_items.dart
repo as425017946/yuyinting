@@ -8,6 +8,7 @@ import '../../bean/roomInfoBean.dart';
 import '../../colors/my_colors.dart';
 import '../../main.dart';
 import '../../utils/event_utils.dart';
+import '../../utils/log_util.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../../widget/Marquee.dart';
@@ -383,7 +384,7 @@ class RoomItems {
                   // 靓号
                   WidgetSpan(
                       child: Transform.translate(offset: Offset(0, 1.h),
-                        child: list[i]['is_pretty'] == '0'
+                        child: list[i]['is_pretty'].toString() == '0'
                             ? const Text('')
                             : WidgetUtils.showImages(
                             'assets/images/dj/lianghao.png', 30.h, 30.h),)
@@ -653,7 +654,7 @@ class RoomItems {
               WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
               // 靓号
               WidgetSpan(
-                child: list[i]['is_pretty'] == '0'
+                child: list[i]['is_pretty'].toString() == '0'
                     ? const Text('')
                     : WidgetUtils.showImages(
                     'assets/images/dj/lianghao.png', 28.h, 28.h),
@@ -998,61 +999,77 @@ class RoomItems {
               ),
             ),
           ),
-          Container(
-            margin: EdgeInsets.only(bottom: 10.h),
-            padding: EdgeInsets.only(
-                top: 5.h, bottom: 10.h, left: 10.h, right: 10.h
+          GestureDetector(
+            onTap: (() {
+              if (MyUtils.checkClick() &&
+                  list[i]['uid'].toString() != sp.getString('user_id').toString()) {
+                MyUtils.goTransparentPage(
+                    context,
+                    RoomPeopleInfoPage(
+                      uid: list[i]['uid'].toString(),
+                      index: '-1',
+                      roomID: roomID,
+                      isClose: '',
+                      listM: listm,
+                    ));
+              }
+            }),
+            child: Container(
+              margin: EdgeInsets.only(bottom: 10.h),
+              padding: EdgeInsets.only(
+                  top: 5.h, bottom: 10.h, left: 10.h, right: 10.h
+              ),
+              //边框设置
+              decoration: const BoxDecoration(
+                //背景
+                color: Colors.transparent,
+                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(5),
+                    topRight: Radius.circular(5),
+                    bottomLeft: Radius.circular(5),
+                    bottomRight: Radius.circular(5)),
+              ),
+              child: RichText(
+                text: TextSpan(
+                    text: infos[0],
+                    style: StyleUtils.getCommonTextStyle(
+                      color: MyColors.roomMessageYellow2, fontSize: 24.sp,),
+                    children: [
+                      TextSpan(
+                          text: infos[1],
+                          style: StyleUtils.getCommonTextStyle(
+                            color: Colors.white, fontSize: 24.sp,)),
+                      TextSpan(
+                          text: infos[2],
+                          style: StyleUtils.getCommonTextStyle(
+                            color: MyColors.roomMessageYellow2,
+                            fontSize: 24.sp,)),
+                      TextSpan(
+                          text: infos[3],
+                          style: StyleUtils.getCommonTextStyle(
+                            color: Colors.white, fontSize: 24.sp,)),
+                      TextSpan(
+                          text: infos[4],
+                          style: StyleUtils.getCommonTextStyle(
+                            color: MyColors.loginPink, fontSize: 24.sp,)),
+                    ]),
+              ),
+              // child: Wrap(
+              //   children: [
+              //     Text(infos[0], style: StyleUtils.getCommonTextStyle(
+              //       color: MyColors.roomMessageYellow2, fontSize: 24.sp,)),
+              //     Text(infos[1], style: StyleUtils.getCommonTextStyle(
+              //         color: Colors.white, fontSize: 24.sp)),
+              //     Text(infos[2], style: StyleUtils.getCommonTextStyle(
+              //         color: MyColors.loginPink, fontSize: 24.sp)),
+              //     Text(infos[3], style: StyleUtils.getCommonTextStyle(
+              //         color: Colors.white, fontSize: 24.sp)),
+              //     Text(infos[4], maxLines: 20, style: StyleUtils.getCommonTextStyle(
+              //         color: MyColors.loginPink, fontSize: 24.sp)),
+              //   ],
+              // ),
             ),
-            //边框设置
-            decoration: const BoxDecoration(
-              //背景
-              color: Colors.transparent,
-              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(5),
-                  topRight: Radius.circular(5),
-                  bottomLeft: Radius.circular(5),
-                  bottomRight: Radius.circular(5)),
-            ),
-            child: RichText(
-              text: TextSpan(
-                  text: infos[0],
-                  style: StyleUtils.getCommonTextStyle(
-                    color: MyColors.roomMessageYellow2, fontSize: 24.sp,),
-                  children: [
-                    TextSpan(
-                        text: infos[1],
-                        style: StyleUtils.getCommonTextStyle(
-                          color: Colors.white, fontSize: 24.sp,)),
-                    TextSpan(
-                        text: infos[2],
-                        style: StyleUtils.getCommonTextStyle(
-                          color: MyColors.roomMessageYellow2,
-                          fontSize: 24.sp,)),
-                    TextSpan(
-                        text: infos[3],
-                        style: StyleUtils.getCommonTextStyle(
-                          color: Colors.white, fontSize: 24.sp,)),
-                    TextSpan(
-                        text: infos[4],
-                        style: StyleUtils.getCommonTextStyle(
-                          color: MyColors.loginPink, fontSize: 24.sp,)),
-                  ]),
-            ),
-            // child: Wrap(
-            //   children: [
-            //     Text(infos[0], style: StyleUtils.getCommonTextStyle(
-            //       color: MyColors.roomMessageYellow2, fontSize: 24.sp,)),
-            //     Text(infos[1], style: StyleUtils.getCommonTextStyle(
-            //         color: Colors.white, fontSize: 24.sp)),
-            //     Text(infos[2], style: StyleUtils.getCommonTextStyle(
-            //         color: MyColors.loginPink, fontSize: 24.sp)),
-            //     Text(infos[3], style: StyleUtils.getCommonTextStyle(
-            //         color: Colors.white, fontSize: 24.sp)),
-            //     Text(infos[4], maxLines: 20, style: StyleUtils.getCommonTextStyle(
-            //         color: MyColors.loginPink, fontSize: 24.sp)),
-            //   ],
-            // ),
           )
         ],
       );
@@ -1285,7 +1302,7 @@ class RoomItems {
                     WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
                     // 靓号
                     WidgetSpan(
-                      child: list[i]['is_pretty'] == '0'
+                      child: list[i]['is_pretty'].toString() == '0'
                           ? const Text('')
                           : WidgetUtils.showImages(
                           'assets/images/dj/lianghao.png', 28.h, 28.h),
@@ -1580,9 +1597,10 @@ class RoomItems {
                   ));
                 }
               }),
-              child: SizedBox(
+              child: Container(
                 width: ScreenUtil().setHeight(130),
                 height: ScreenUtil().setHeight(30),
+                color: Colors.transparent,
                 child: Row(
                   children: [
                     const Expanded(child: Text('')),
@@ -3477,6 +3495,7 @@ class RoomItems {
   static Widget footBtn(BuildContext context, bool isJinyiin, int isForbation,
       String roomID, int isShow, int isBoss, bool mima, List<MikeList> listM,
       bool roomDX, bool roomSY, bool isRed, bool isMeUp, String mxIndex) {
+    LogE('*** 是否闭麦 $isJinyiin');
     return SizedBox(
       height: ScreenUtil().setHeight(90),
       child: Row(

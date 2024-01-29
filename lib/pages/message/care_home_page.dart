@@ -6,6 +6,8 @@ import 'package:yuyinting/pages/message/geren/who_lock_me_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/my_utils.dart';
 import '../../colors/my_colors.dart';
+import '../../utils/regex_formatter.dart';
+import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import 'be_care_page.dart';
 import 'care_page.dart';
@@ -157,7 +159,45 @@ class _CareHomePageState extends State<CareHomePage> {
                       ScreenUtil().setHeight(30), ScreenUtil().setHeight(30)),
                 ),
                 WidgetUtils.commonSizedBox(0, 10),
-                Expanded(child: WidgetUtils.commonTextField(_souSuoName, '请搜索昵称或ID')),
+                Expanded(child: TextField(
+                  controller: _souSuoName,
+                  inputFormatters: [
+                    RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                  ],
+                  style: StyleUtils.loginTextStyle,
+                  onSubmitted: (value) {
+                    MyUtils.hideKeyboard(context);
+                    eventBus.fire(CareBack(info: value));
+                  },
+                  decoration: InputDecoration(
+                    // border: InputBorder.none,
+                    // labelText: "请输入用户名",
+                    // icon: Icon(Icons.people), //前面的图标
+                    hintText: '请搜索昵称或ID',
+                    hintStyle: StyleUtils.loginHintTextStyle,
+
+                    contentPadding: const EdgeInsets.only(top: 0, bottom: 0),
+                    border: const OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.transparent),
+                    ),
+                    enabledBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.transparent,
+                      ),
+                    ),
+                    disabledBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.transparent,
+                      ),
+                    ),
+                    focusedBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.transparent,
+                      ),
+                    ),
+                    // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
+                  ),
+                )),
               ],
             ),
           ) : WidgetUtils.commonSizedBox(0, 0),

@@ -971,7 +971,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
     Map<String, dynamic> params = <String, dynamic>{
       'room_id': widget.roomID,
       'serial_number': int.parse(serial_number) + 1,
-      'uid': sp.getString('user_id').toString(),
+      'uid': widget.uid,
       'status': status
     };
     try {
@@ -979,14 +979,14 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
       switch (bean.code) {
         case MyHttpConfig.successCode:
           if (zhuangtai == '闭麦') {
-            eventBus.fire(RoomBack(title: '闭麦', index: serial_number));
+            // eventBus.fire(RoomBack(title: '闭麦', index: serial_number));
             setState(() {
               zhuangtai = '开麦';
             });
             MyToastUtils.showToastBottom('已闭麦');
           } else {
             setState(() {
-              eventBus.fire(RoomBack(title: '开麦', index: serial_number));
+              // eventBus.fire(RoomBack(title: '开麦', index: serial_number));
               zhuangtai = '闭麦';
             });
             MyToastUtils.showToastBottom('已开麦');

@@ -670,8 +670,10 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                     const Expanded(child: Text('')),
                     GestureDetector(
                       onTap: (() {
-                        // 先判断能否发私聊
-                        doPostCanSendUser();
+                        if(MyUtils.checkClick()) {
+                          // 先判断能否发私聊
+                          doPostCanSendUser();
+                        }
                       }),
                       child: WidgetUtils.PeopleButton(
                           'assets/images/people_sixin.png',

@@ -133,7 +133,8 @@ class RoomBGBack {
   String bgID;
   String bgType;
   String bgImagUrl;
-  RoomBGBack({required this.bgID, required this.bgType, required this.bgImagUrl});
+  bool delete;
+  RoomBGBack({required this.bgID, required this.bgType, required this.bgImagUrl, required this.delete});
 }
 
 /// 房间背景
