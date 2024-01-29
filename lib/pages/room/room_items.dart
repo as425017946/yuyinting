@@ -206,17 +206,17 @@ class RoomItems {
                   // 萌新/新贵/新锐 三选一
                   // 不是新锐新贵，并且是萌新直接显示萌新
                   WidgetSpan(
-                      child: list[i]['new_noble'] == 0 &&
-                          list[i]['is_new'] == 1
+                      child: list[i]['new_noble'].toString() == '0' &&
+                          list[i]['is_new'].toString() == '1'
                           ? WidgetUtils.showImages(
                           'assets/images/dj/room_role_common.png', 30.h, 50.h)
                           : const Text('')),
                   // 不管是不是萌新，只要是新锐或者新贵就优先展示
                   WidgetSpan(
-                      child: list[i]['new_noble'] == 1
+                      child: list[i]['new_noble'].toString() == "1"
                           ? WidgetUtils.showImages(
                           'assets/images/dj/room_rui.png', 30.h, 50.h)
-                          : list[i]['new_noble'] == 2
+                          : list[i]['new_noble'].toString() == "2"
                           ? WidgetUtils.showImages(
                           'assets/images/dj/room_gui.png', 30.h, 50.h)
                           : const Text('')),
@@ -351,29 +351,29 @@ class RoomItems {
                   //贵族
                   WidgetSpan(
                       child: Transform.translate(
-                        offset: Offset(0, 5.h), child: list[i]['noble_id'] == 1
+                        offset: Offset(0, 5.h), child: list[i]['noble_id'].toString() == "1"
                           ? WidgetUtils.showImages(
                           'assets/images/tequan_yongshi.png', 38.h, 38.h)
-                          : list[i]['noble_id'] == 2
+                          : list[i]['noble_id'].toString() == "2"
                           ? WidgetUtils.showImages(
                           'assets/images/tequan_qishi.png', 38.h, 38.h)
-                          : list[i]['noble_id'] == 3
+                          : list[i]['noble_id'].toString() == "3"
                           ? WidgetUtils.showImages(
                           'assets/images/tequan_bojue.png', 38.h, 38.h)
-                          : list[i]['noble_id'] == 4
+                          : list[i]['noble_id'].toString() == "4"
                           ? WidgetUtils.showImages(
                           'assets/images/tequan_houjue.png', 38.h, 38.h)
-                          : list[i]['noble_id'] == 5
+                          : list[i]['noble_id'].toString() == "5"
                           ? WidgetUtils.showImages(
                           'assets/images/tequan_gongjue.png',
                           38.h,
                           38.h)
-                          : list[i]['noble_id'] == 6
+                          : list[i]['noble_id'].toString() == "6"
                           ? WidgetUtils.showImages(
                           'assets/images/tequan_guowang.png',
                           38.h,
                           38.h)
-                          : list[i]['noble_id'] == 7
+                          : list[i]['noble_id'].toString() == "7"
                           ? WidgetUtils.showImages(
                           'assets/images/tequan_diwang.png',
                           38.h,
@@ -478,186 +478,193 @@ class RoomItems {
                       ? WidgetUtils.showImages(
                       'assets/images/dj/room_role_director.png', 30.h, 30.h)
                       : WidgetUtils.showImages(
-                      'assets/images/dj/room_role_manager.png', 30.h, 30.h)),
-              WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
+                      'assets/images/dj/room_role_manager.png', 30.h,
+                      30.h)),
               // 萌新/新贵/新锐 三选一
               // 不是新锐新贵，并且是萌新直接显示萌新
               WidgetSpan(
-                  child: list[i]['new_noble'] == 0 && list[i]['is_new'] == 1
+                  child: list[i]['new_noble'].toString() == '0' &&
+                      list[i]['is_new'].toString() == '1'
                       ? WidgetUtils.showImages(
-                      'assets/images/dj/room_role_common.png', 28.h, 50.h)
+                      'assets/images/dj/room_role_common.png', 30.h, 50.h)
                       : const Text('')),
               // 不管是不是萌新，只要是新锐或者新贵就优先展示
               WidgetSpan(
-                  child: list[i]['new_noble'] == 1
+                  child: list[i]['new_noble'].toString() == "1"
                       ? WidgetUtils.showImages(
-                      'assets/images/dj/room_rui.png', 28.h, 50.h)
-                      : list[i]['new_noble'] == 2
+                      'assets/images/dj/room_rui.png', 30.h, 50.h)
+                      : list[i]['new_noble'].toString() == "2"
                       ? WidgetUtils.showImages(
-                      'assets/images/dj/room_gui.png', 28.h, 50.h)
+                      'assets/images/dj/room_gui.png', 30.h, 50.h)
                       : const Text('')),
               WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
               //等级
               WidgetSpan(
-                  child: SizedBox(
-                    height: 28.h,
-                    width: 28.h,
-                    child: Stack(
-                      children: [
-                        int.parse(list[i]['lv'].toString()) >= 1 &&
-                            int.parse(list[i]['lv'].toString()) <= 10
-                            ? WidgetUtils.showImages(
-                            'assets/images/dj/dj_1-10.png', 28.h, 28.h)
-                            : int.parse(list[i]['lv'].toString()) >= 11 &&
-                            int.parse(list[i]['lv'].toString()) <= 15
-                            ? WidgetUtils.showImages(
-                            'assets/images/dj/dj_11-15.png', 28.h, 28.h)
-                            : int.parse(list[i]['lv'].toString()) >= 16 && int
-                            .parse(list[i]['lv'].toString()) <= 20
-                            ? WidgetUtils.showImages(
-                            'assets/images/dj/dj_16-20.png', 28.h, 28.h)
-                            : int.parse(list[i]['lv'].toString()) >= 21 && int
-                            .parse(list[i]['lv'].toString()) <= 25
-                            ? WidgetUtils.showImages(
-                            'assets/images/dj/dj_21-25.png',
-                            28.h,
-                            28.h)
-                            : int.parse(list[i]['lv'].toString()) >= 26 && int
-                            .parse(list[i]['lv'].toString()) <= 30
-                            ? WidgetUtils.showImages(
-                            'assets/images/dj/dj_26-30.png',
-                            28.h,
-                            28.h)
-                            : int.parse(list[i]['lv'].toString()) >= 31 &&
-                            int.parse(list[i]['lv'].toString()) <= 35
-                            ? WidgetUtils.showImages(
-                            'assets/images/dj/dj_31-35.png',
-                            28.h,
-                            28.h)
-                            : int.parse(list[i]['lv'].toString()) >= 36 &&
-                            int.parse(list[i]['lv'].toString()) <= 40
-                            ? WidgetUtils.showImages(
-                            'assets/images/dj/dj_36-40.png',
-                            28.h,
-                            28.h)
-                            : int.parse(list[i]['lv'].toString()) >= 41 &&
-                            int.parse(list[i]['lv'].toString()) <= 45
-                            ? WidgetUtils.showImages(
-                            'assets/images/dj/dj_41-45.png', 28.h, 28.h)
-                            : WidgetUtils.showImages(
-                            'assets/images/dj/dj_46-50.png', 28.h, 28.h),
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: Stack(
-                            children: [
-                              Text(
-                                int.parse(list[i]['lv'].toString()).toString(),
-                                style: TextStyle(
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: 'Impact',
-                                    foreground: Paint()
-                                      ..style = PaintingStyle.stroke
-                                      ..strokeWidth = 2
-                                      ..color = (int.parse(
-                                          list[i]['lv'].toString()) >= 1 &&
-                                          int.parse(list[i]['lv'].toString()) <=
-                                              10)
-                                          ? MyColors.djOneM
-                                          : (int.parse(
-                                          list[i]['lv'].toString()) >= 11 &&
-                                          int.parse(list[i]['lv'].toString()) <=
-                                              15)
-                                          ? MyColors.djTwoM
-                                          : (int.parse(
-                                          list[i]['lv'].toString()) >= 16 &&
-                                          int.parse(list[i]['lv'].toString()) <=
-                                              20)
-                                          ? MyColors.djThreeM
-                                          : (int.parse(
-                                          list[i]['lv'].toString()) >= 21 &&
-                                          int.parse(list[i]['lv'].toString()) <=
-                                              25)
-                                          ? MyColors.djFourM
-                                          : (int.parse(
-                                          list[i]['lv'].toString()) >= 26 &&
-                                          int.parse(list[i]['lv'].toString()) <=
-                                              30)
-                                          ? MyColors
-                                          .djFiveM
-                                          : (int.parse(
-                                          list[i]['lv'].toString()) >= 31 &&
-                                          int.parse(list[i]['lv'].toString()) <=
-                                              35)
-                                          ? MyColors
-                                          .djSixM
-                                          : (int.parse(
-                                          list[i]['lv'].toString()) >= 36 &&
-                                          int.parse(list[i]['lv'].toString()) <=
-                                              40)
-                                          ? MyColors
-                                          .djSevenM
-                                          : (int.parse(
-                                          list[i]['lv'].toString()) >= 41 &&
-                                          int.parse(list[i]['lv'].toString()) <=
-                                              45)
-                                          ? MyColors.djEightM
-                                          : MyColors.djNineM),
-                              ),
-                              Text(
-                                int.parse(list[i]['lv'].toString()).toString(),
-                                style: TextStyle(
-                                    color: MyColors.djOne,
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: 'Impact'),
-                              ),
-                            ],
-                          ),
+                child: SizedBox(
+                  height: 28.h,
+                  width: 28.h,
+                  child: Stack(
+                    children: [
+                      int.parse(list[i]['lv'].toString()) >= 1 &&
+                          int.parse(list[i]['lv'].toString()) <= 10
+                          ? WidgetUtils.showImages(
+                          'assets/images/dj/dj_1-10.png', 28.h, 28.h)
+                          : int.parse(list[i]['lv'].toString()) >= 11 &&
+                          int.parse(list[i]['lv'].toString()) <= 15
+                          ? WidgetUtils.showImages(
+                          'assets/images/dj/dj_11-15.png', 28.h, 28.h)
+                          : int.parse(list[i]['lv'].toString()) >= 16 &&
+                          int.parse(list[i]['lv'].toString()) <= 20
+                          ? WidgetUtils.showImages(
+                          'assets/images/dj/dj_16-20.png', 28.h, 28.h)
+                          : int.parse(list[i]['lv'].toString()) >= 21 &&
+                          int.parse(list[i]['lv'].toString()) <= 25
+                          ? WidgetUtils.showImages(
+                          'assets/images/dj/dj_21-25.png',
+                          28.h,
+                          28.h)
+                          : int.parse(list[i]['lv'].toString()) >= 26 &&
+                          int.parse(list[i]['lv'].toString()) <= 30
+                          ? WidgetUtils.showImages(
+                          'assets/images/dj/dj_26-30.png',
+                          28.h,
+                          28.h)
+                          : int.parse(list[i]['lv'].toString()) >= 31 &&
+                          int.parse(list[i]['lv'].toString()) <= 35
+                          ? WidgetUtils.showImages(
+                          'assets/images/dj/dj_31-35.png',
+                          28.h,
+                          28.h)
+                          : int.parse(list[i]['lv'].toString()) >= 36 &&
+                          int.parse(list[i]['lv'].toString()) <= 40
+                          ? WidgetUtils.showImages(
+                          'assets/images/dj/dj_36-40.png',
+                          28.h,
+                          28.h)
+                          : int.parse(list[i]['lv'].toString()) >= 41 &&
+                          int.parse(list[i]['lv'].toString()) <= 45
+                          ? WidgetUtils.showImages(
+                          'assets/images/dj/dj_41-45.png', 28.h, 28.h)
+                          : WidgetUtils.showImages(
+                          'assets/images/dj/dj_46-50.png', 28.h, 28.h),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Stack(
+                          children: [
+                            Text(
+                              int.parse(list[i]['lv'].toString())
+                                  .toString(),
+                              style: TextStyle(
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'Impact',
+                                  foreground: Paint()
+                                    ..style = PaintingStyle.stroke
+                                    ..strokeWidth = 2
+                                    ..color = (int.parse(
+                                        list[i]['lv'].toString()) >= 1 &&
+                                        int.parse(
+                                            list[i]['lv'].toString()) <= 10)
+                                        ? MyColors.djOneM
+                                        : (int.parse(
+                                        list[i]['lv'].toString()) >= 11 &&
+                                        int.parse(
+                                            list[i]['lv'].toString()) <= 15)
+                                        ? MyColors.djTwoM
+                                        : (int.parse(
+                                        list[i]['lv'].toString()) >= 16 &&
+                                        int.parse(
+                                            list[i]['lv'].toString()) <= 20)
+                                        ? MyColors.djThreeM
+                                        : (int.parse(
+                                        list[i]['lv'].toString()) >= 21 &&
+                                        int.parse(
+                                            list[i]['lv'].toString()) <= 25)
+                                        ? MyColors.djFourM
+                                        : (int.parse(
+                                        list[i]['lv'].toString()) >= 26 &&
+                                        int.parse(
+                                            list[i]['lv'].toString()) <= 30)
+                                        ? MyColors
+                                        .djFiveM
+                                        : (int.parse(
+                                        list[i]['lv'].toString()) >= 31 &&
+                                        int.parse(
+                                            list[i]['lv'].toString()) <=
+                                            35)
+                                        ? MyColors
+                                        .djSixM
+                                        : (int.parse(
+                                        list[i]['lv'].toString()) >= 36 &&
+                                        int.parse(
+                                            list[i]['lv'].toString()) <=
+                                            40)
+                                        ? MyColors
+                                        .djSevenM
+                                        : (int.parse(
+                                        list[i]['lv'].toString()) >= 41 &&
+                                        int.parse(
+                                            list[i]['lv'].toString()) <= 45)
+                                        ? MyColors.djEightM
+                                        : MyColors.djNineM),
+                            ),
+                            Text(
+                              int.parse(list[i]['lv'].toString())
+                                  .toString(),
+                              style: TextStyle(
+                                  color: MyColors.djOne,
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'Impact'),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  )),
+                      ),
+                    ],
+                  ),
+                ),),
               WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
               //贵族
               WidgetSpan(
-                child: list[i]['noble_id'] == 1
-                    ? WidgetUtils.showImages(
-                    'assets/images/tequan_yongshi.png', 28.h, 28.h)
-                    : list[i]['noble_id'] == 2
-                    ? WidgetUtils.showImages(
-                    'assets/images/tequan_qishi.png', 28.h, 28.h)
-                    : list[i]['noble_id'] == 3
-                    ? WidgetUtils.showImages(
-                    'assets/images/tequan_bojue.png', 28.h, 28.h)
-                    : list[i]['noble_id'] == 4
-                    ? WidgetUtils.showImages(
-                    'assets/images/tequan_houjue.png', 28.h, 28.h)
-                    : list[i]['noble_id'] == 5
-                    ? WidgetUtils.showImages(
-                    'assets/images/tequan_gongjue.png',
-                    28.h,
-                    28.h)
-                    : list[i]['noble_id'] == 6
-                    ? WidgetUtils.showImages(
-                    'assets/images/tequan_guowang.png',
-                    28.h,
-                    28.h)
-                    : list[i]['noble_id'] == 7
-                    ? WidgetUtils.showImages(
-                    'assets/images/tequan_diwang.png',
-                    28.h,
-                    28.h)
-                    : const Text(''),
+                  child: Transform.translate(
+                    offset: Offset(0, 5.h), child: list[i]['noble_id'].toString() == "1"
+                      ? WidgetUtils.showImages(
+                      'assets/images/tequan_yongshi.png', 38.h, 38.h)
+                      : list[i]['noble_id'].toString() == "2"
+                      ? WidgetUtils.showImages(
+                      'assets/images/tequan_qishi.png', 38.h, 38.h)
+                      : list[i]['noble_id'].toString() == "3"
+                      ? WidgetUtils.showImages(
+                      'assets/images/tequan_bojue.png', 38.h, 38.h)
+                      : list[i]['noble_id'].toString() == "4"
+                      ? WidgetUtils.showImages(
+                      'assets/images/tequan_houjue.png', 38.h, 38.h)
+                      : list[i]['noble_id'].toString() == "5"
+                      ? WidgetUtils.showImages(
+                      'assets/images/tequan_gongjue.png',
+                      38.h,
+                      38.h)
+                      : list[i]['noble_id'].toString() == "6"
+                      ? WidgetUtils.showImages(
+                      'assets/images/tequan_guowang.png',
+                      38.h,
+                      38.h)
+                      : list[i]['noble_id'].toString() == "7"
+                      ? WidgetUtils.showImages(
+                      'assets/images/tequan_diwang.png',
+                      38.h,
+                      38.h)
+                      : const Text(''),)
               ),
               WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
               // 靓号
               WidgetSpan(
-                child: list[i]['is_pretty'].toString() == '0'
-                    ? const Text('')
-                    : WidgetUtils.showImages(
-                    'assets/images/dj/lianghao.png', 28.h, 28.h),
+                  child: Transform.translate(offset: Offset(0, 1.h),
+                    child: list[i]['is_pretty'].toString() == '0'
+                        ? const Text('')
+                        : WidgetUtils.showImages(
+                        'assets/images/dj/lianghao.png', 30.h, 30.h),)
               ),
               //用户昵称
               WidgetSpan(child: Stack(
@@ -1105,207 +1112,195 @@ class RoomItems {
                             ? const Text('')
                             : list[i]['identity'] == 'leader'
                             ? WidgetUtils.showImages(
-                            'assets/images/dj/room_role_director.png', 30.h,
-                            30.h)
+                            'assets/images/dj/room_role_director.png', 30.h, 30.h)
                             : WidgetUtils.showImages(
                             'assets/images/dj/room_role_manager.png', 30.h,
                             30.h)),
-                    WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
                     // 萌新/新贵/新锐 三选一
                     // 不是新锐新贵，并且是萌新直接显示萌新
                     WidgetSpan(
-                        child: list[i]['new_noble'] == 0 &&
-                            list[i]['is_new'] == 1
+                        child: list[i]['new_noble'].toString() == '0' &&
+                            list[i]['is_new'].toString() == '1'
                             ? WidgetUtils.showImages(
-                            'assets/images/dj/room_role_common.png', 28.h, 50.h)
+                            'assets/images/dj/room_role_common.png', 30.h, 50.h)
                             : const Text('')),
                     // 不管是不是萌新，只要是新锐或者新贵就优先展示
                     WidgetSpan(
-                        child: list[i]['new_noble'] == 1
+                        child: list[i]['new_noble'].toString() == "1"
                             ? WidgetUtils.showImages(
-                            'assets/images/dj/room_rui.png', 28.h, 50.h)
-                            : list[i]['new_noble'] == 2
+                            'assets/images/dj/room_rui.png', 30.h, 50.h)
+                            : list[i]['new_noble'].toString() == "2"
                             ? WidgetUtils.showImages(
-                            'assets/images/dj/room_gui.png', 28.h, 50.h)
+                            'assets/images/dj/room_gui.png', 30.h, 50.h)
                             : const Text('')),
                     WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
                     //等级
                     WidgetSpan(
-                        child: SizedBox(
-                          height: 28.h,
-                          width: 28.h,
-                          child: Stack(
-                            children: [
-                              int.parse(list[i]['lv'].toString()) >= 1 &&
-                                  int.parse(list[i]['lv'].toString()) <= 10
-                                  ? WidgetUtils.showImages(
-                                  'assets/images/dj/dj_1-10.png', 28.h, 28.h)
-                                  : int.parse(list[i]['lv'].toString()) >= 11 &&
-                                  int.parse(list[i]['lv'].toString()) <= 15
-                                  ? WidgetUtils.showImages(
-                                  'assets/images/dj/dj_11-15.png', 28.h, 28.h)
-                                  : int.parse(list[i]['lv'].toString()) >= 16 &&
-                                  int.parse(list[i]['lv'].toString()) <= 20
-                                  ? WidgetUtils.showImages(
-                                  'assets/images/dj/dj_16-20.png', 28.h, 28.h)
-                                  : int.parse(list[i]['lv'].toString()) >= 21 &&
-                                  int.parse(list[i]['lv'].toString()) <= 25
-                                  ? WidgetUtils.showImages(
-                                  'assets/images/dj/dj_21-25.png',
-                                  28.h,
-                                  28.h)
-                                  : int.parse(list[i]['lv'].toString()) >= 26 &&
-                                  int.parse(list[i]['lv'].toString()) <= 30
-                                  ? WidgetUtils.showImages(
-                                  'assets/images/dj/dj_26-30.png',
-                                  28.h,
-                                  28.h)
-                                  : int.parse(list[i]['lv'].toString()) >= 31 &&
-                                  int.parse(list[i]['lv'].toString()) <= 35
-                                  ? WidgetUtils.showImages(
-                                  'assets/images/dj/dj_31-35.png',
-                                  28.h,
-                                  28.h)
-                                  : int.parse(list[i]['lv'].toString()) >= 36 &&
-                                  int.parse(list[i]['lv'].toString()) <= 40
-                                  ? WidgetUtils.showImages(
-                                  'assets/images/dj/dj_36-40.png',
-                                  28.h,
-                                  28.h)
-                                  : int.parse(list[i]['lv'].toString()) >= 41 &&
-                                  int.parse(list[i]['lv'].toString()) <= 45
-                                  ? WidgetUtils.showImages(
-                                  'assets/images/dj/dj_41-45.png', 28.h, 28.h)
-                                  : WidgetUtils.showImages(
-                                  'assets/images/dj/dj_46-50.png', 28.h, 28.h),
-                              Positioned(
-                                bottom: 0,
-                                right: 0,
-                                child: Stack(
-                                  children: [
-                                    Text(
-                                      int.parse(list[i]['lv'].toString())
-                                          .toString(),
-                                      style: TextStyle(
-                                          fontSize: 18.sp,
-                                          fontWeight: FontWeight.w600,
-                                          fontFamily: 'Impact',
-                                          foreground: Paint()
-                                            ..style = PaintingStyle.stroke
-                                            ..strokeWidth = 2
-                                            ..color = (int.parse(
-                                                list[i]['lv'].toString()) >=
-                                                1 &&
-                                                int.parse(
-                                                    list[i]['lv'].toString()) <=
-                                                    10)
-                                                ? MyColors.djOneM
-                                                : (int.parse(
-                                                list[i]['lv'].toString()) >=
-                                                11 && int.parse(
-                                                list[i]['lv'].toString()) <= 15)
-                                                ? MyColors.djTwoM
-                                                : (int.parse(
-                                                list[i]['lv'].toString()) >=
-                                                16 &&
-                                                int.parse(
-                                                    list[i]['lv'].toString()) <=
-                                                    20)
-                                                ? MyColors.djThreeM
-                                                : (int.parse(
-                                                list[i]['lv'].toString()) >=
-                                                21 &&
-                                                int.parse(
-                                                    list[i]['lv'].toString()) <=
-                                                    25)
-                                                ? MyColors.djFourM
-                                                : (int.parse(
-                                                list[i]['lv'].toString()) >=
-                                                26 &&
-                                                int.parse(
-                                                    list[i]['lv'].toString()) <=
-                                                    30)
-                                                ? MyColors
-                                                .djFiveM
-                                                : (int.parse(
-                                                list[i]['lv'].toString()) >=
-                                                31 &&
-                                                int.parse(
-                                                    list[i]['lv'].toString()) <=
-                                                    35)
-                                                ? MyColors
-                                                .djSixM
-                                                : (int.parse(
-                                                list[i]['lv'].toString()) >=
-                                                36 &&
-                                                int.parse(
-                                                    list[i]['lv'].toString()) <=
-                                                    40)
-                                                ? MyColors
-                                                .djSevenM
-                                                : (int.parse(
-                                                list[i]['lv'].toString()) >=
-                                                41 &&
-                                                int.parse(
-                                                    list[i]['lv'].toString()) <=
-                                                    45)
-                                                ? MyColors.djEightM
-                                                : MyColors.djNineM),
-                                    ),
-                                    Text(
-                                      int.parse(list[i]['lv'].toString())
-                                          .toString(),
-                                      style: TextStyle(
-                                          color: MyColors.djOne,
-                                          fontSize: 18.sp,
-                                          fontWeight: FontWeight.w600,
-                                          fontFamily: 'Impact'),
-                                    ),
-                                  ],
-                                ),
+                      child: SizedBox(
+                        height: 28.h,
+                        width: 28.h,
+                        child: Stack(
+                          children: [
+                            int.parse(list[i]['lv'].toString()) >= 1 &&
+                                int.parse(list[i]['lv'].toString()) <= 10
+                                ? WidgetUtils.showImages(
+                                'assets/images/dj/dj_1-10.png', 28.h, 28.h)
+                                : int.parse(list[i]['lv'].toString()) >= 11 &&
+                                int.parse(list[i]['lv'].toString()) <= 15
+                                ? WidgetUtils.showImages(
+                                'assets/images/dj/dj_11-15.png', 28.h, 28.h)
+                                : int.parse(list[i]['lv'].toString()) >= 16 &&
+                                int.parse(list[i]['lv'].toString()) <= 20
+                                ? WidgetUtils.showImages(
+                                'assets/images/dj/dj_16-20.png', 28.h, 28.h)
+                                : int.parse(list[i]['lv'].toString()) >= 21 &&
+                                int.parse(list[i]['lv'].toString()) <= 25
+                                ? WidgetUtils.showImages(
+                                'assets/images/dj/dj_21-25.png',
+                                28.h,
+                                28.h)
+                                : int.parse(list[i]['lv'].toString()) >= 26 &&
+                                int.parse(list[i]['lv'].toString()) <= 30
+                                ? WidgetUtils.showImages(
+                                'assets/images/dj/dj_26-30.png',
+                                28.h,
+                                28.h)
+                                : int.parse(list[i]['lv'].toString()) >= 31 &&
+                                int.parse(list[i]['lv'].toString()) <= 35
+                                ? WidgetUtils.showImages(
+                                'assets/images/dj/dj_31-35.png',
+                                28.h,
+                                28.h)
+                                : int.parse(list[i]['lv'].toString()) >= 36 &&
+                                int.parse(list[i]['lv'].toString()) <= 40
+                                ? WidgetUtils.showImages(
+                                'assets/images/dj/dj_36-40.png',
+                                28.h,
+                                28.h)
+                                : int.parse(list[i]['lv'].toString()) >= 41 &&
+                                int.parse(list[i]['lv'].toString()) <= 45
+                                ? WidgetUtils.showImages(
+                                'assets/images/dj/dj_41-45.png', 28.h, 28.h)
+                                : WidgetUtils.showImages(
+                                'assets/images/dj/dj_46-50.png', 28.h, 28.h),
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Stack(
+                                children: [
+                                  Text(
+                                    int.parse(list[i]['lv'].toString())
+                                        .toString(),
+                                    style: TextStyle(
+                                        fontSize: 18.sp,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'Impact',
+                                        foreground: Paint()
+                                          ..style = PaintingStyle.stroke
+                                          ..strokeWidth = 2
+                                          ..color = (int.parse(
+                                              list[i]['lv'].toString()) >= 1 &&
+                                              int.parse(
+                                                  list[i]['lv'].toString()) <= 10)
+                                              ? MyColors.djOneM
+                                              : (int.parse(
+                                              list[i]['lv'].toString()) >= 11 &&
+                                              int.parse(
+                                                  list[i]['lv'].toString()) <= 15)
+                                              ? MyColors.djTwoM
+                                              : (int.parse(
+                                              list[i]['lv'].toString()) >= 16 &&
+                                              int.parse(
+                                                  list[i]['lv'].toString()) <= 20)
+                                              ? MyColors.djThreeM
+                                              : (int.parse(
+                                              list[i]['lv'].toString()) >= 21 &&
+                                              int.parse(
+                                                  list[i]['lv'].toString()) <= 25)
+                                              ? MyColors.djFourM
+                                              : (int.parse(
+                                              list[i]['lv'].toString()) >= 26 &&
+                                              int.parse(
+                                                  list[i]['lv'].toString()) <= 30)
+                                              ? MyColors
+                                              .djFiveM
+                                              : (int.parse(
+                                              list[i]['lv'].toString()) >= 31 &&
+                                              int.parse(
+                                                  list[i]['lv'].toString()) <=
+                                                  35)
+                                              ? MyColors
+                                              .djSixM
+                                              : (int.parse(
+                                              list[i]['lv'].toString()) >= 36 &&
+                                              int.parse(
+                                                  list[i]['lv'].toString()) <=
+                                                  40)
+                                              ? MyColors
+                                              .djSevenM
+                                              : (int.parse(
+                                              list[i]['lv'].toString()) >= 41 &&
+                                              int.parse(
+                                                  list[i]['lv'].toString()) <= 45)
+                                              ? MyColors.djEightM
+                                              : MyColors.djNineM),
+                                  ),
+                                  Text(
+                                    int.parse(list[i]['lv'].toString())
+                                        .toString(),
+                                    style: TextStyle(
+                                        color: MyColors.djOne,
+                                        fontSize: 18.sp,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'Impact'),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        )),
+                            ),
+                          ],
+                        ),
+                      ),),
                     WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
                     //贵族
                     WidgetSpan(
-                      child: list[i]['noble_id'] == 1
-                          ? WidgetUtils.showImages(
-                          'assets/images/tequan_yongshi.png', 28.h, 28.h)
-                          : list[i]['noble_id'] == 2
-                          ? WidgetUtils.showImages(
-                          'assets/images/tequan_qishi.png', 28.h, 28.h)
-                          : list[i]['noble_id'] == 3
-                          ? WidgetUtils.showImages(
-                          'assets/images/tequan_bojue.png', 28.h, 28.h)
-                          : list[i]['noble_id'] == 4
-                          ? WidgetUtils.showImages(
-                          'assets/images/tequan_houjue.png', 28.h, 28.h)
-                          : list[i]['noble_id'] == 5
-                          ? WidgetUtils.showImages(
-                          'assets/images/tequan_gongjue.png',
-                          28.h,
-                          28.h)
-                          : list[i]['noble_id'] == 6
-                          ? WidgetUtils.showImages(
-                          'assets/images/tequan_guowang.png',
-                          28.h,
-                          28.h)
-                          : list[i]['noble_id'] == 7
-                          ? WidgetUtils.showImages(
-                          'assets/images/tequan_diwang.png',
-                          28.h,
-                          28.h)
-                          : const Text(''),
+                        child: Transform.translate(
+                          offset: Offset(0, 5.h), child: list[i]['noble_id'].toString() == "1"
+                            ? WidgetUtils.showImages(
+                            'assets/images/tequan_yongshi.png', 38.h, 38.h)
+                            : list[i]['noble_id'].toString() == "2"
+                            ? WidgetUtils.showImages(
+                            'assets/images/tequan_qishi.png', 38.h, 38.h)
+                            : list[i]['noble_id'].toString() == "3"
+                            ? WidgetUtils.showImages(
+                            'assets/images/tequan_bojue.png', 38.h, 38.h)
+                            : list[i]['noble_id'].toString() == "4"
+                            ? WidgetUtils.showImages(
+                            'assets/images/tequan_houjue.png', 38.h, 38.h)
+                            : list[i]['noble_id'].toString() == "5"
+                            ? WidgetUtils.showImages(
+                            'assets/images/tequan_gongjue.png',
+                            38.h,
+                            38.h)
+                            : list[i]['noble_id'].toString() == "6"
+                            ? WidgetUtils.showImages(
+                            'assets/images/tequan_guowang.png',
+                            38.h,
+                            38.h)
+                            : list[i]['noble_id'].toString() == "7"
+                            ? WidgetUtils.showImages(
+                            'assets/images/tequan_diwang.png',
+                            38.h,
+                            38.h)
+                            : const Text(''),)
                     ),
                     WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
                     // 靓号
                     WidgetSpan(
-                      child: list[i]['is_pretty'].toString() == '0'
-                          ? const Text('')
-                          : WidgetUtils.showImages(
-                          'assets/images/dj/lianghao.png', 28.h, 28.h),
+                        child: Transform.translate(offset: Offset(0, 1.h),
+                          child: list[i]['is_pretty'].toString() == '0'
+                              ? const Text('')
+                              : WidgetUtils.showImages(
+                              'assets/images/dj/lianghao.png', 30.h, 30.h),)
                     ),
                     //用户昵称
                     WidgetSpan(child: Stack(

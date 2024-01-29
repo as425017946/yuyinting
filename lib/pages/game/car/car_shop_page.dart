@@ -9,6 +9,7 @@ import '../../../bean/gameStoreBean.dart';
 import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
+import '../../../main.dart';
 import '../../../utils/event_utils.dart';
 import '../../../utils/my_toast_utils.dart';
 import '../../../utils/widget_utils.dart';
@@ -126,7 +127,9 @@ class _CarShopPageState extends State<CarShopPage> {
                     WidgetUtils.commonSizedBox(0, 350.h),
                     WidgetUtils.showImages('assets/images/car_mogubi.png', 40.h, 40.h),
                     WidgetUtils.commonSizedBox(0, 5.h),
-                    WidgetUtils.onlyText(mogubi, StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: 40.sp, fontWeight: FontWeight.w600)),
+                    WidgetUtils.onlyText(sp
+                        .getString('car_mogu2')
+                        .toString(), StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: 40.sp, fontWeight: FontWeight.w600)),
                   ],
                 ),
                 WidgetUtils.commonSizedBox(40.h, 0.h),
@@ -178,11 +181,12 @@ class _CarShopPageState extends State<CarShopPage> {
           setState(() {
             list.clear();
             list = bean.data!.goodsList!;
-            if(double.parse(bean.data!.amount!) > 10000){
-              mogubi = '${double.parse(bean.data!.amount!)/10000}w';
-            }else{
-              mogubi = bean.data!.amount!.toString();
-            }
+            // if(double.parse(bean.data!.amount!) > 10000){
+            //   mogubi = '${double.parse(bean.data!.amount!)/10000}w';
+            // }else{
+            //   mogubi = bean.data!.amount!.toString();
+            // }
+
           });
           break;
         case MyHttpConfig.errorloginCode:

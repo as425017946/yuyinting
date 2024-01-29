@@ -6,12 +6,7 @@ import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 
 import '../../../bean/luckUserBean.dart';
-import '../../../config/my_config.dart';
-import '../../../http/data_utils.dart';
-import '../../../http/my_http_config.dart';
 import '../../../main.dart';
-import '../../../utils/my_toast_utils.dart';
-import '../../../utils/my_utils.dart';
 
 /// 中奖页面
 class ZhongJiangPage extends StatefulWidget {
