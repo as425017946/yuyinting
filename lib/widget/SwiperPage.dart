@@ -43,7 +43,7 @@ class _SwiperPageState extends State<SwiperPage> {
                         widget.imgList[index].contains('storage'))
                     ? Image.file(
                         File(widget.imgList[index].toString()),
-                        fit: BoxFit.fill,
+                        fit: BoxFit.contain,
                         gaplessPlayback: true,
                       )
                     : FadeInImage.assetNetwork(

@@ -139,7 +139,6 @@ class _ChatPageState extends State<ChatPage> {
 
     _focusNode = FocusNode();
     _focusNode!.addListener(_onFocusChange);
-    saveImages();
   }
 
   // 保存发红包的信息 type 1自己给别人发，2收到别人发的红包
@@ -160,9 +159,7 @@ class _ChatPageState extends State<ChatPage> {
       'combineID': combineID,
       'nickName': widget.nickName,
       'content': '送出$info个V豆',
-      'headImg': myHeadImg,
       'headNetImg': sp.getString('user_headimg').toString(),
-      'otherHeadImg': otherHeadImg,
       'otherHeadNetImg': widget.otherImg,
       'add_time': widget.nickName == '维C客服' ? '1893494560' : DateTime.now().millisecondsSinceEpoch,
       'type': 6,
@@ -189,42 +186,6 @@ class _ChatPageState extends State<ChatPage> {
     });
   }
 
-  // 自己头像和他人头像
-  String myHeadImg = '', otherHeadImg = '';
-
-  saveImages() async {
-    //保存头像
-    MyUtils.saveImgTemp(sp.getString('user_headimg').toString(),
-        sp.getString('user_id').toString());
-    MyUtils.saveImgTemp(widget.otherImg, widget.otherUid);
-    // 保存路径
-    Directory? directory = await getTemporaryDirectory();
-    //保存自己头像
-    if (sp.getString('user_headimg').toString().contains('.gif') ||
-        sp.getString('user_headimg').toString().contains('.GIF')) {
-      myHeadImg = '${directory!.path}/${sp.getString('user_id')}.gif';
-    } else if (sp.getString('user_headimg').toString().contains('.jpg') ||
-        sp.getString('user_headimg').toString().contains('.GPG')) {
-      myHeadImg = '${directory!.path}/${sp.getString('user_id')}.jpg';
-    } else if (sp.getString('user_headimg').toString().contains('.jpeg') ||
-        sp.getString('user_headimg').toString().contains('.GPEG')) {
-      myHeadImg = '${directory!.path}/${sp.getString('user_id')}.jpeg';
-    } else {
-      myHeadImg = '${directory!.path}/${sp.getString('user_id')}.png';
-    }
-    // 保存他人头像
-    if (widget.otherImg.contains('.gif') || widget.otherImg.contains('.GIF')) {
-      otherHeadImg = '${directory!.path}/${widget.otherUid}.gif';
-    } else if (widget.otherImg.contains('.jpg') ||
-        widget.otherImg.contains('.GPG')) {
-      otherHeadImg = '${directory!.path}/${widget.otherUid}.jpg';
-    } else if (widget.otherImg.contains('.jpeg') ||
-        widget.otherImg.contains('.GPEG')) {
-      otherHeadImg = '${directory!.path}/${widget.otherUid}.jpeg';
-    } else {
-      otherHeadImg = '${directory!.path}/${widget.otherUid}.png';
-    }
-  }
 
   void _initialize() async {
     await _mPlayer!.closePlayer();
@@ -356,7 +317,6 @@ class _ChatPageState extends State<ChatPage> {
 
   // 显示聊天信息
   Widget chatWidget(BuildContext context, int i) {
-    // LogE('头像框 == ${allData2[i]['headImg']}');
     double widthAudio = 0;
     if (allData2[i]['type'] == 3) {
       widthAudio = ScreenUtil().setHeight(60 + allData2[i]['number'] * 4);
@@ -418,11 +378,10 @@ class _ChatPageState extends State<ChatPage> {
               ScreenUtil().setHeight(10), ScreenUtil().setHeight(10)),
           Row(
             children: [
-              WidgetUtils.CircleImageAssNet(
+              WidgetUtils.CircleImageNet(
                   ScreenUtil().setHeight(80),
                   ScreenUtil().setHeight(80),
                   40.h,
-                  allData2[i]['otherHeadImg'],
                   allData2[i]['otherHeadNetImg']),
               WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(10)),
               // 6v豆红包
@@ -693,11 +652,10 @@ class _ChatPageState extends State<ChatPage> {
                       ),
                     ),
               WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(10)),
-              WidgetUtils.CircleImageAssNet(
+              WidgetUtils.CircleImageNet(
                   ScreenUtil().setHeight(80),
                   ScreenUtil().setHeight(80),
                   40.h,
-                  allData2[i]['headImg'],
                   allData2[i]['headNetImg']),
             ],
           ),
@@ -1680,7 +1638,6 @@ class _ChatPageState extends State<ChatPage> {
       await db.update(
           'messageSLTable',
           {
-            'headImg': myHeadImg,
             'headNetImg': sp.getString('user_headimg').toString(),
           },
           whereArgs: [allData2[i]['uid']],
@@ -1725,9 +1682,7 @@ class _ChatPageState extends State<ChatPage> {
             'combineID': combineID,
             'nickName': widget.nickName,
             'content': content,
-            'headImg': myHeadImg,
             'headNetImg': sp.getString('user_headimg').toString(),
-            'otherHeadImg': otherHeadImg,
             'otherHeadNetImg': widget.otherImg,
             'add_time': widget.nickName == '维C客服' ? '1893494560' : DateTime.now().millisecondsSinceEpoch,
             'type': 1,
@@ -1808,9 +1763,7 @@ class _ChatPageState extends State<ChatPage> {
       'combineID': combineID,
       'nickName': widget.nickName,
       'content': filePath,
-      'headImg': myHeadImg,
       'headNetImg': sp.getString('user_headimg').toString(),
-      'otherHeadImg': otherHeadImg,
       'otherHeadNetImg': widget.otherImg,
       'add_time': widget.nickName == '维C客服' ? '1893494560' : DateTime.now().millisecondsSinceEpoch,
       'type': 2,
@@ -1870,9 +1823,7 @@ class _ChatPageState extends State<ChatPage> {
         'combineID': combineID,
         'nickName': widget.nickName,
         'content': _mPath,
-        'headImg': myHeadImg,
         'headNetImg': sp.getString('user_headimg').toString(),
-        'otherHeadImg': otherHeadImg,
         'otherHeadNetImg': widget.otherImg,
         'add_time': widget.nickName == '维C客服' ? '1893494560' : DateTime.now().millisecondsSinceEpoch,
         'type': 3,

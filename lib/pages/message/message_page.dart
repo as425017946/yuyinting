@@ -105,7 +105,6 @@ class _MessagePageState extends State<MessagePage> {
   }
 
   Widget message(BuildContext context, int i) {
-    LogE('他人头像 == ${listMessage[i]['otherHeadImg']}');
     return Slidable(
       //列表中只有一个能滑动
       key: Key(UniqueKey().toString()),
@@ -134,11 +133,10 @@ class _MessagePageState extends State<MessagePage> {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  WidgetUtils.CircleImageAssNet(
+                  WidgetUtils.CircleImageNet(
                       100.h,
                       100.h,
                       50.h,
-                      listMessage[i]['otherHeadImg'],
                       listMessage[i]['otherHeadNetImg']),
                   listU[i].liveStatus == 1
                       ? WidgetUtils.showImages(
@@ -169,7 +167,7 @@ class _MessagePageState extends State<MessagePage> {
                         ChatPage(
                             nickName: listMessage[i]['nickName'] ?? '',
                             otherUid: listMessage[i]['otherUid'],
-                            otherImg: listMessage[i]['otherHeadImg']));
+                            otherImg: listMessage[i]['otherHeadNetImg']));
                   }
                 }),
                 child: Container(
@@ -609,7 +607,7 @@ class _MessagePageState extends State<MessagePage> {
         await db.update(
             'messageSLTable',
             {
-              'otherHeadImg': listMessage[i]['otherHeadImg'],
+              'otherHeadNetImg': listMessage[i]['otherHeadNetImg'],
               'nickName': listMessage[i]['nickName']
             },
             whereArgs: [listMessage[i]['combineID']],

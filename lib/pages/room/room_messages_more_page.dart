@@ -60,7 +60,6 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
     MyUtils.addChatListener();
     doPostUserFollowStatus();
     doLocationInfo();
-    saveImages();
     listen = eventBus.on<SendMessageBack>().listen((event) {
       doLocationInfo();
     });
@@ -87,44 +86,6 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
     );
   }
 
-  // 自己头像和他人头像
-  String myHeadImg = '', otherHeadImg = '';
-
-  saveImages() async {
-    //保存头像
-    MyUtils.saveImgTemp(sp.getString('user_headimg').toString(),
-        sp.getString('user_id').toString());
-    MyUtils.saveImgTemp(widget.otherImg, widget.otherUid);
-    // 保存路径
-    Directory? directory = await getTemporaryDirectory();
-    //保存自己头像
-    //保存自己头像
-    if (sp.getString('user_headimg').toString().contains('.gif') ||
-        sp.getString('user_headimg').toString().contains('.GIF')) {
-      myHeadImg = '${directory!.path}/${sp.getString('user_id')}.gif';
-    } else if (sp.getString('user_headimg').toString().contains('.jpg') ||
-        sp.getString('user_headimg').toString().contains('.GPG')) {
-      myHeadImg = '${directory!.path}/${sp.getString('user_id')}.jpg';
-    } else if (sp.getString('user_headimg').toString().contains('.jpeg') ||
-        sp.getString('user_headimg').toString().contains('.GPEG')) {
-      myHeadImg = '${directory!.path}/${sp.getString('user_id')}.jpeg';
-    } else {
-      myHeadImg = '${directory!.path}/${sp.getString('user_id')}.png';
-    }
-    // 保存他人头像
-    if (widget.otherImg.contains('.gif') || widget.otherImg.contains('.GIF')) {
-      otherHeadImg = '${directory!.path}/${widget.otherUid}.gif';
-    } else if (widget.otherImg.contains('.jpg') ||
-        widget.otherImg.contains('.GPG')) {
-      otherHeadImg = '${directory!.path}/${widget.otherUid}.jpg';
-    } else if (widget.otherImg.contains('.jpeg') ||
-        widget.otherImg.contains('.GPEG')) {
-      otherHeadImg = '${directory!.path}/${widget.otherUid}.jpeg';
-    } else {
-      otherHeadImg = '${directory!.path}/${widget.otherUid}.png';
-    }
-  }
-
   // 保存发红包的信息 type 1自己给别人发，2收到别人发的红包
   saveHBinfo(String info) async {
     DatabaseHelper databaseHelper = DatabaseHelper();
@@ -143,9 +104,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
       'combineID': combineID,
       'nickName': widget.nickName,
       'content': '送出$info个V豆',
-      'headImg': myHeadImg,
       'headNetImg': sp.getString('user_headimg').toString(),
-      'otherHeadImg': otherHeadImg,
       'otherHeadNetImg': widget.otherImg,
       'add_time': widget.nickName == '维C客服' ? '1893494560' : DateTime.now().millisecondsSinceEpoch,
       'type': 6,
@@ -225,11 +184,10 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
           Row(
             children: [
               WidgetUtils.commonSizedBox(0, 15.w),
-              WidgetUtils.CircleImageAssNet(
+              WidgetUtils.CircleImageNet(
                   ScreenUtil().setHeight(80),
                   ScreenUtil().setHeight(80),
                   40.h,
-                  allData2[i]['otherHeadImg'],
                   allData2[i]['otherHeadNetImg']),
               WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(10)),
               // 6v豆红包
@@ -498,11 +456,10 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                 ),
               ),
               WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(10)),
-              WidgetUtils.CircleImageAssNet(
+              WidgetUtils.CircleImageNet(
                   ScreenUtil().setHeight(80),
                   ScreenUtil().setHeight(80),
                   40.h,
-                  allData2[i]['headImg'],
                   allData2[i]['headNetImg']),
               WidgetUtils.commonSizedBox(0, 15.w),
             ],
@@ -797,7 +754,6 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
       await db.update(
           'messageSLTable',
           {
-            'headImg': myHeadImg,
             'headNetImg': sp.getString('user_headimg').toString(),
           },
           whereArgs: [allData2[i]['uid']],
@@ -841,9 +797,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
             'combineID': combineID,
             'nickName': widget.nickName,
             'content': content,
-            'headImg': myHeadImg,
             'headNetImg': sp.getString('user_headimg').toString(),
-            'otherHeadImg': otherHeadImg,
             'otherHeadNetImg': widget.otherImg,
             'add_time': widget.nickName == '维C客服' ? '1893494560' : DateTime.now().millisecondsSinceEpoch,
             'type': 1,

@@ -87,7 +87,7 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
       });
     });
 
-    listen2 = eventBus.on<ResidentBack>().listen((event) {
+    listen2 = eventBus.on<GameBack>().listen((event) {
       setState(() {
         isBack = event.isBack;
       });

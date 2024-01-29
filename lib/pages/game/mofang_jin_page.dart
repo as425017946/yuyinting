@@ -269,7 +269,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                                   MyUtils.goTransparentPageCom(context, XiaZhuQueRenPage(cishu: cishu.toString(), feiyong: feiyong.toString(), title: '金星魔方',));
                                 }else{
                                   if(MyUtils.checkClick() && isShow == false && isXiazhu) {
-                                    eventBus.fire(ResidentBack(isBack: true));
+                                    eventBus.fire(GameBack(isBack: true));
                                     doPostPlayRoulette(cishu.toString());
                                   }
                                 }
@@ -789,7 +789,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
       playRouletteBean bean = await DataUtils.postPlayRoulette(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          eventBus.fire(ResidentBack(isBack: false));
+          eventBus.fire(GameBack(isBack: false));
         // 获取数据并赋值
           list.clear();
           list = bean.data!.gifts!;
@@ -878,7 +878,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
           MyUtils.jumpLogin(context);
           break;
         default:
-          eventBus.fire(ResidentBack(isBack: false));
+          eventBus.fire(GameBack(isBack: false));
           setState(() {
             isXiazhu = true;
           });
@@ -886,7 +886,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
           break;
       }
     } catch (e) {
-      eventBus.fire(ResidentBack(isBack: false));
+      eventBus.fire(GameBack(isBack: false));
       setState(() {
         isXiazhu = true;
       });

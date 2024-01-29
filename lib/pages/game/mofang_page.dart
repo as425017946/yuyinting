@@ -41,7 +41,7 @@ class _MoFangPageState extends State<MoFangPage> with TickerProviderStateMixin {
         });
     });
 
-    listen2 = eventBus.on<ResidentBack>().listen((event) {
+    listen2 = eventBus.on<GameBack>().listen((event) {
       setState(() {
         isBack = event.isBack;
       });

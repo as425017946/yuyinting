@@ -93,7 +93,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
           isXiazhu = true;
         });
         // 通知用户游戏结束，可以离开页面
-        eventBus.fire(ResidentBack(isBack: false));
+        eventBus.fire(GameBack(isBack: false));
         // 打开礼物结果
         MyUtils.goTransparentPageCom(context, ZhuanPanDaoJuPage(list: list, zonge: zonge, title: '超级转盘',));
         // 归位
@@ -265,7 +265,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                             MyUtils.goTransparentPageCom(context, XiaZhuQueRenPage(cishu: cishu.toString(), feiyong: feiyong.toString(), title: '超级转盘',));
                           }else{
                             if(MyUtils.checkClick() && isRunning == false && isXiazhu) {
-                              eventBus.fire(ResidentBack(isBack: true));
+                              eventBus.fire(GameBack(isBack: true));
                               doPostPlayRoulette(cishu.toString());
                             }
                           }
@@ -599,7 +599,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
       switch (bean.code) {
         case MyHttpConfig.successCode:
           // 通知用户游戏开始不能离开
-          eventBus.fire(ResidentBack(isBack: true));
+          eventBus.fire(GameBack(isBack: true));
           // 发送要减多少V豆
           eventBus.fire(XiaZhuBack(jine: int.parse(number)*1000, type: bean.data!.curType as int));
           // 获取数据并赋值
@@ -678,7 +678,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
           MyUtils.jumpLogin(context);
           break;
         default:
-          eventBus.fire(ResidentBack(isBack: false));
+          eventBus.fire(GameBack(isBack: false));
           setState(() {
             isXiazhu = true;
           });
@@ -686,7 +686,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
           break;
       }
     } catch (e) {
-      eventBus.fire(ResidentBack(isBack: false));
+      eventBus.fire(GameBack(isBack: false));
       setState(() {
         isXiazhu = true;
       });

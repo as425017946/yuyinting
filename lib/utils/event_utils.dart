@@ -262,3 +262,10 @@ class DownLoadingBack {
   double jinduNum;
   DownLoadingBack({required this.jindu, required this.jinduNum});
 }
+
+///返回数据解析
+class GameBack {
+  bool isBack;
+  GameBack({required this.isBack});
+}
+

@@ -232,7 +232,7 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
                                   MyUtils.goTransparentPageCom(context, XiaZhuQueRenPage(cishu: cishu.toString(), feiyong: feiyong.toString(), title: '水星魔方',));
                                 }else{
                                   if(MyUtils.checkClick() && isShow == false && isXiazhu) {
-                                    eventBus.fire(ResidentBack(isBack: true));
+                                    eventBus.fire(GameBack(isBack: true));
                                     doPostPlayRoulette(cishu.toString());
                                   }
                                 }
@@ -844,7 +844,7 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
           MyUtils.jumpLogin(context);
           break;
         default:
-          eventBus.fire(ResidentBack(isBack: false));
+          eventBus.fire(GameBack(isBack: false));
           setState(() {
             isXiazhu = true;
           });
@@ -852,7 +852,7 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
           break;
       }
     } catch (e) {
-      eventBus.fire(ResidentBack(isBack: false));
+      eventBus.fire(GameBack(isBack: false));
       setState(() {
         isXiazhu = true;
       });

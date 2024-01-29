@@ -17,6 +17,7 @@ import 'package:yuyinting/widget/SVGASimpleImage.dart';
 import '../../bean/Common_bean.dart';
 import '../../bean/hengFuBean.dart';
 import '../../bean/joinRoomBean.dart';
+import '../../bean/qiehuanBean.dart';
 import '../../bean/svgaAllBean.dart';
 import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
@@ -228,6 +229,8 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
             _dispose();
           });
         }
+      }else if(event.title == 'im重连'){
+        doPostCheckToken();
       }
     });
 
@@ -1056,4 +1059,32 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       return false;
     }
   }
+  /// 切换用户
+  Future<void> doPostCheckToken() async {
+    try {
+      Map<String, dynamic> params = <String, dynamic>{
+        'token': sp.getString('user_token').toString(),
+      };
+      qiehuanBean commonBean = await DataUtils.postCheckToken(params);
+      switch (commonBean.code) {
+        case MyHttpConfig.successCode:
+          break;
+        case MyHttpConfig.errorloginCode:
+        // 取消发布本地音频流
+          _engine.muteLocalAudioStream(true);
+          // 调用离开房间接口
+          doPostLeave(sp.getString('roomID').toString());
+          _engine.disableAudio();
+          _dispose();
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(commonBean.msg!);
+          break;
+      }
+    } catch (e) {
+    }
+  }
+
 }

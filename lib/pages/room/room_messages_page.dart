@@ -21,7 +21,7 @@ class RoomMessagesPage extends StatefulWidget {
 class _RoomMessagesPageState extends State<RoomMessagesPage> {
   List<Map<String, dynamic>> listMessage = [];
   List<int> listRead = [];
-  var listen;
+  var listen,listen2;
   @override
   void initState() {
     // TODO: implement initState
@@ -32,12 +32,16 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
         doPostSystemMsgList();
       }
     });
+    listen2 = eventBus.on<SendMessageBack>().listen((event) {
+      doPostSystemMsgList();
+    });
   }
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
     listen.cancel();
+    listen2.cancel();
   }
 
   /// 消息列表
@@ -54,7 +58,7 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
                       return RoomMessagesMorePage(
                         otherUid: listMessage[i]['otherUid'],
                         nickName: listMessage[i]['nickName'],
-                        otherImg: listMessage[i]['otherHeadImg'],
+                        otherImg: listMessage[i]['otherHeadNetImg'],
                       );
                     }));
               });
@@ -67,11 +71,11 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
             color: Colors.transparent,
             child: Row(
               children: [
-                WidgetUtils.CircleImageAssNet(
+                WidgetUtils.CircleImageNet(
                     ScreenUtil().setHeight(90),
                     ScreenUtil().setHeight(90),
                     45.h,
-                    listMessage[i]['otherHeadImg'],listMessage[i]['otherHeadNetImg'],),
+                    listMessage[i]['otherHeadNetImg'],),
                 WidgetUtils.commonSizedBox(0, 10),
                 Expanded(
                   child: Column(
@@ -286,7 +290,7 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
       await db.update(
           'messageSLTable',
           {
-            'otherHeadImg': listMessage[i]['otherHeadImg'],
+            'otherHeadNetImg': listMessage[i]['otherHeadNetImg'],
             'nickName': listMessage[i]['nickName']
           },
           whereArgs: [listMessage[i]['combineID']],

@@ -79,22 +79,24 @@ class _RoomPageState extends State<RoomPage>
 
   /// 厅内送礼物使用
   int shuliang = 0;
+
   void showStar(Map m) async {
     // 动画正在进行中不做处理
     if (animationControllerSL.isAnimating) {
       LogE('进行中====');
     } else {
       //本地图
-      if(m['svgaBool'] == false){
+      if (m['svgaBool'] == false) {
         File file = File(m['svgaUrl']);
-        if(await file.exists()){
-          animationControllerSL?.videoItem = await SVGAParser.shared.decodeFromBuffer(file.readAsBytesSync());
+        if (await file.exists()) {
+          animationControllerSL?.videoItem =
+              await SVGAParser.shared.decodeFromBuffer(file.readAsBytesSync());
           animationControllerSL
               ?.forward() // Try to use .forward() .reverse()
               .whenComplete(() => animationControllerSL?.videoItem = null);
           // 监听动画
           animationControllerSL?.addListener(_animListener);
-        }else{
+        } else {
           LogE('礼物不存在');
           setState(() {
             listUrl.removeAt(0);
@@ -102,7 +104,7 @@ class _RoomPageState extends State<RoomPage>
           //礼物地址没有，直接返回，不进行后续操作
           return;
         }
-      }else{
+      } else {
         //网络图
         final videoItem = await _loadSVGA(m['svgaBool'], m['svgaUrl']);
         videoItem.autorelease = false;
@@ -171,7 +173,7 @@ class _RoomPageState extends State<RoomPage>
   bool isBoss = true;
 
   // 房间动效、房间声音、房间密码、首页展示
-  bool roomDX = true, roomSY = true, mima = false, roomZS =true;
+  bool roomDX = true, roomSY = true, mima = false, roomZS = true;
   bool isJinyiin = true;
 
   //是否被禁言了  0否 1是
@@ -363,6 +365,7 @@ class _RoomPageState extends State<RoomPage>
 
   // 上麦更新麦序记录第一次时间，用于判断切换麦序2s可切换一次，2s内不能随意切换
   int maiTime = 0;
+
   // 设备是安卓还是ios
   String isDevices = 'android';
 
@@ -374,7 +377,7 @@ class _RoomPageState extends State<RoomPage>
       setState(() {
         isDevices = 'android';
       });
-    }else if (Platform.isIOS){
+    } else if (Platform.isIOS) {
       setState(() {
         isDevices = 'ios';
       });
@@ -382,7 +385,7 @@ class _RoomPageState extends State<RoomPage>
     //页面渲染完成
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       // 进入房间后清空代理房间id
-      sp.setString('daili_roomid','');
+      sp.setString('daili_roomid', '');
       LogE('用户id ${sp.getString('user_id').toString()}');
       LogE('用户token ${sp.getString('user_token').toString()}');
       //初始化声网的音频插件
@@ -459,11 +462,11 @@ class _RoomPageState extends State<RoomPage>
           setState(() {
             isHomeShow = 1;
           });
-        }  else if (event.title == '首页展示已关闭') {
+        } else if (event.title == '首页展示已关闭') {
           setState(() {
             isHomeShow = 0;
           });
-        }  else if (event.title == '房间声音已开启') {
+        } else if (event.title == '房间声音已开启') {
           LogE('房间声音已开启');
           setState(() {
             roomSY = true;
@@ -557,7 +560,7 @@ class _RoomPageState extends State<RoomPage>
           setState(() {
             isRed = false;
           });
-        }else if(event.title == '成功切换账号'){
+        } else if (event.title == '成功切换账号') {
           //取消订阅所有远端用户的音频流。
           _engine.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
@@ -615,7 +618,7 @@ class _RoomPageState extends State<RoomPage>
             break;
           case '上麦':
             //判断上麦或者换麦的时间间隔是否大于了2s
-            if(DateTime.now().millisecondsSinceEpoch - maiTime > 2000){
+            if (DateTime.now().millisecondsSinceEpoch - maiTime > 2000) {
               //设置成主播
               _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
               doPostSetmai(
@@ -626,7 +629,7 @@ class _RoomPageState extends State<RoomPage>
                   upOrDown[i] = false;
                 }
               });
-            }else{
+            } else {
               MyToastUtils.showToastBottom('亲，跳麦需间隔2S以上哦~');
             }
             break;
@@ -637,7 +640,7 @@ class _RoomPageState extends State<RoomPage>
             doPostSetLock(event.index!, 'no');
             break;
           case '下麦':
-            if(DateTime.now().millisecondsSinceEpoch - maiTime > 2000){
+            if (DateTime.now().millisecondsSinceEpoch - maiTime > 2000) {
               setState(() {
                 maiTime = DateTime.now().millisecondsSinceEpoch;
               });
@@ -656,7 +659,7 @@ class _RoomPageState extends State<RoomPage>
                   }
                 });
               }
-            }else{
+            } else {
               MyToastUtils.showToastBottom('下麦太快了哦~');
             }
             break;
@@ -788,7 +791,7 @@ class _RoomPageState extends State<RoomPage>
               doPostRoomMikeInfo();
               // 上下麦操作不是本地才刷新
               if (event.map!['uid'].toString() != sp.getString('user_id')) {
-              }else{
+              } else {
                 setState(() {
                   isJinyiin = false;
                 });
@@ -803,13 +806,12 @@ class _RoomPageState extends State<RoomPage>
               // 上下麦操作不是本地才刷新
               doPostRoomMikeInfo();
               if (event.map!['uid'].toString() != sp.getString('user_id')) {
-              }else{
+              } else {
                 setState(() {
                   isJinyiin = true;
                 });
                 // 设置成观众
-                _engine.setClientRole(
-                    role: ClientRoleType.clientRoleAudience);
+                _engine.setClientRole(role: ClientRoleType.clientRoleAudience);
                 // 取消发布本地音频流
                 _engine.muteLocalAudioStream(true);
               }
@@ -962,8 +964,8 @@ class _RoomPageState extends State<RoomPage>
               }
               break;
           }
-        }else{
-          if(event.type == 'login_kick'){
+        } else {
+          if (event.type == 'login_kick') {
             // 这个状态是后台直接封禁了账号，然后直接踢掉app
             MyUtils.signOut();
             // 取消发布本地音频流
@@ -992,7 +994,7 @@ class _RoomPageState extends State<RoomPage>
       // 加入房间事件的监听
       listJoin = eventBus.on<JoinRoomYBack>().listen((event) {
         /// 用户长时间断网或者杀死app使用
-        if(event.map!['type'] == 'user_leave_room'){
+        if (event.map!['type'] == 'user_leave_room') {
           if (_timerHot != null) {
             _timerHot!.cancel();
           }
@@ -1000,6 +1002,7 @@ class _RoomPageState extends State<RoomPage>
           _dispose();
           Navigator.pop(context);
         }
+
         /// 这里是用户的其他正常操作
         if (event.map!['room_id'].toString() == widget.roomId) {
           // 判断是不是点击了欢迎某某人
@@ -1733,9 +1736,10 @@ class _RoomPageState extends State<RoomPage>
     // 获取保存路径
     Directory? directory = await getExternalStorageDirectory();
     LogE('获取保存路径 $directory');
-    String savePath = "/sdcard/Android/data/com.leimu.yuyinting/files/${lujing[lujing.length - 1]}";
+    String savePath =
+        "/sdcard/Android/data/com.leimu.yuyinting/files/${lujing[lujing.length - 1]}";
     LogE('礼物地址 $savePath');
-    if(listUrl.isEmpty){
+    if (listUrl.isEmpty) {
       setState(() {
         // 直接用本地图
         Map<dynamic, dynamic> map = {};
@@ -1746,7 +1750,7 @@ class _RoomPageState extends State<RoomPage>
       });
       isShowSVGA = true;
       showStar(listUrl[0]);
-    }else{
+    } else {
       setState(() {
         // 直接用本地图
         Map<dynamic, dynamic> map = {};
@@ -1756,7 +1760,6 @@ class _RoomPageState extends State<RoomPage>
         listUrl.add(map);
       });
     }
-
   }
 
   //保持屏幕常亮
@@ -1958,8 +1961,8 @@ class _RoomPageState extends State<RoomPage>
       duration: const Duration(milliseconds: 100),
       curve: Curves.easeInOut,
     );
-
   }
+
   // 在数据变化后将滚动位置设置为最后一个item的位置
   void scrollToLastItem2() {
     _scrollController2.animateTo(
@@ -1967,7 +1970,6 @@ class _RoomPageState extends State<RoomPage>
       duration: const Duration(milliseconds: 100),
       curve: Curves.easeInOut,
     );
-
   }
 
   @override
@@ -2042,14 +2044,13 @@ class _RoomPageState extends State<RoomPage>
     //默认订阅所有远端用户的音频流。
     _engine.muteAllRemoteAudioStreams(false);
     LogE('本人上麦 ==  $isMeUp');
-    if(isMeUp && isMeStatus){
+    if (isMeUp && isMeStatus) {
       // 发布本地音频流
       _engine.muteLocalAudioStream(false);
-    }else{
+    } else {
       // 取消发布本地音频流
       _engine.muteLocalAudioStream(true);
     }
-
 
     _engine.registerEventHandler(
       RtcEngineEventHandler(
@@ -2146,8 +2147,10 @@ class _RoomPageState extends State<RoomPage>
                                   ? SizedBox(
                                       height: double.infinity,
                                       width: double.infinity,
-                                      child: WidgetUtils.showImagesNetRoom(bgSVGA,
-                                          double.infinity, double.infinity),
+                                      child: WidgetUtils.showImagesNetRoom(
+                                          bgSVGA,
+                                          double.infinity,
+                                          double.infinity),
                                     )
                                   : SizedBox(
                                       height: double.infinity,
@@ -2160,7 +2163,8 @@ class _RoomPageState extends State<RoomPage>
                               : const Text(''),
                       Column(
                         children: [
-                          WidgetUtils.commonSizedBox(isDevices == 'ios' ? 80.h : 60.h, 0),
+                          WidgetUtils.commonSizedBox(
+                              isDevices == 'ios' ? 80.h : 60.h, 0),
                           // 头部
                           RoomItems.roomTop(
                               context,
@@ -2334,7 +2338,9 @@ class _RoomPageState extends State<RoomPage>
                           : const Text(''),
 
                       /// 爆出5w2的礼物横幅推送使用
-                      isBig ? HomeItems.itemBig(listMP[0], bigType) : const Text(''),
+                      isBig
+                          ? HomeItems.itemBig(listMP[0], bigType)
+                          : const Text(''),
 
                       /// 厅内送礼物显示动画使用
                       (isShowSVGA == true && roomDX == true)
@@ -2587,6 +2593,12 @@ class _RoomPageState extends State<RoomPage>
           });
           break;
         case MyHttpConfig.errorloginCode:
+          //取消订阅所有远端用户的音频流。
+          _engine.muteAllRemoteAudioStreams(true);
+          // 取消发布本地音频流
+          _engine.muteLocalAudioStream(true);
+          _engine.disableAudio();
+          _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
@@ -2611,6 +2623,12 @@ class _RoomPageState extends State<RoomPage>
           });
           break;
         case MyHttpConfig.errorloginCode:
+          //取消订阅所有远端用户的音频流。
+          _engine.muteAllRemoteAudioStreams(true);
+          // 取消发布本地音频流
+          _engine.muteLocalAudioStream(true);
+          _engine.disableAudio();
+          _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
@@ -2640,6 +2658,12 @@ class _RoomPageState extends State<RoomPage>
           });
           break;
         case MyHttpConfig.errorloginCode:
+          //取消订阅所有远端用户的音频流。
+          _engine.muteAllRemoteAudioStreams(true);
+          // 取消发布本地音频流
+          _engine.muteLocalAudioStream(true);
+          _engine.disableAudio();
+          _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
@@ -2727,6 +2751,12 @@ class _RoomPageState extends State<RoomPage>
           });
           break;
         case MyHttpConfig.errorloginCode:
+          //取消订阅所有远端用户的音频流。
+          _engine.muteAllRemoteAudioStreams(true);
+          // 取消发布本地音频流
+          _engine.muteLocalAudioStream(true);
+          _engine.disableAudio();
+          _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
@@ -2800,6 +2830,12 @@ class _RoomPageState extends State<RoomPage>
           });
           break;
         case MyHttpConfig.errorloginCode:
+          //取消订阅所有远端用户的音频流。
+          _engine.muteAllRemoteAudioStreams(true);
+          // 取消发布本地音频流
+          _engine.muteLocalAudioStream(true);
+          _engine.disableAudio();
+          _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
@@ -2827,6 +2863,12 @@ class _RoomPageState extends State<RoomPage>
           });
           break;
         case MyHttpConfig.errorloginCode:
+          //取消订阅所有远端用户的音频流。
+          _engine.muteAllRemoteAudioStreams(true);
+          // 取消发布本地音频流
+          _engine.muteLocalAudioStream(true);
+          _engine.disableAudio();
+          _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
@@ -2867,6 +2909,12 @@ class _RoomPageState extends State<RoomPage>
           }
           break;
         case MyHttpConfig.errorloginCode:
+          //取消订阅所有远端用户的音频流。
+          _engine.muteAllRemoteAudioStreams(true);
+          // 取消发布本地音频流
+          _engine.muteLocalAudioStream(true);
+          _engine.disableAudio();
+          _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
@@ -2906,6 +2954,12 @@ class _RoomPageState extends State<RoomPage>
           });
           break;
         case MyHttpConfig.errorloginCode:
+          //取消订阅所有远端用户的音频流。
+          _engine.muteAllRemoteAudioStreams(true);
+          // 取消发布本地音频流
+          _engine.muteLocalAudioStream(true);
+          _engine.disableAudio();
+          _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
@@ -2931,6 +2985,12 @@ class _RoomPageState extends State<RoomPage>
         case MyHttpConfig.successCode:
           break;
         case MyHttpConfig.errorloginCode:
+          //取消订阅所有远端用户的音频流。
+          _engine.muteAllRemoteAudioStreams(true);
+          // 取消发布本地音频流
+          _engine.muteLocalAudioStream(true);
+          _engine.disableAudio();
+          _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
@@ -2957,6 +3017,12 @@ class _RoomPageState extends State<RoomPage>
         case MyHttpConfig.successCode:
           break;
         case MyHttpConfig.errorloginCode:
+          //取消订阅所有远端用户的音频流。
+          _engine.muteAllRemoteAudioStreams(true);
+          // 取消发布本地音频流
+          _engine.muteLocalAudioStream(true);
+          _engine.disableAudio();
+          _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
@@ -2980,6 +3046,12 @@ class _RoomPageState extends State<RoomPage>
         case MyHttpConfig.successCode:
           break;
         case MyHttpConfig.errorloginCode:
+          //取消订阅所有远端用户的音频流。
+          _engine.muteAllRemoteAudioStreams(true);
+          // 取消发布本地音频流
+          _engine.muteLocalAudioStream(true);
+          _engine.disableAudio();
+          _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
@@ -3046,7 +3118,6 @@ class _RoomPageState extends State<RoomPage>
       await db.update(
           'messageSLTable',
           {
-            'headImg': myHeadImg,
             'headNetImg': sp.getString('user_headimg').toString(),
           },
           whereArgs: [listMessage[i]['uid']],
@@ -3151,7 +3222,6 @@ class _RoomPageState extends State<RoomPage>
             'combineID': combineID,
             'nickName': cb.toNickname,
             'content': content,
-            'headImg': myHeadImg,
             'headNetImg': sp.getString('user_headimg').toString(),
             'otherHeadImg': otherHeadImg,
             'otherHeadNetImg': cb.avatar!,
@@ -3167,6 +3237,12 @@ class _RoomPageState extends State<RoomPage>
           await databaseHelper.insertData('messageSLTable', params);
           break;
         case MyHttpConfig.errorloginCode:
+          //取消订阅所有远端用户的音频流。
+          _engine.muteAllRemoteAudioStreams(true);
+          // 取消发布本地音频流
+          _engine.muteLocalAudioStream(true);
+          _engine.disableAudio();
+          _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
@@ -3193,6 +3269,12 @@ class _RoomPageState extends State<RoomPage>
           });
           break;
         case MyHttpConfig.errorloginCode:
+          //取消订阅所有远端用户的音频流。
+          _engine.muteAllRemoteAudioStreams(true);
+          // 取消发布本地音频流
+          _engine.muteLocalAudioStream(true);
+          _engine.disableAudio();
+          _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
@@ -3236,6 +3318,12 @@ class _RoomPageState extends State<RoomPage>
                   roomID: roomID, roomToken: bean.data!.rtc!, anchorUid: ''));
           break;
         case MyHttpConfig.errorloginCode:
+          //取消订阅所有远端用户的音频流。
+          _engine.muteAllRemoteAudioStreams(true);
+          // 取消发布本地音频流
+          _engine.muteLocalAudioStream(true);
+          _engine.disableAudio();
+          _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
@@ -3273,6 +3361,12 @@ class _RoomPageState extends State<RoomPage>
               ));
           break;
         case MyHttpConfig.errorloginCode:
+          //取消订阅所有远端用户的音频流。
+          _engine.muteAllRemoteAudioStreams(true);
+          // 取消发布本地音频流
+          _engine.muteLocalAudioStream(true);
+          _engine.disableAudio();
+          _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;

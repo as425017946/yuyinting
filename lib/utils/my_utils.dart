@@ -454,6 +454,7 @@ class MyUtils {
         // sdk 连接成功;
         onConnected: (() {
           LogE('IM 登录成功');
+          eventBus.fire(SubmitButtonBack(title: 'im重连'));
           MyToastUtils.showToastBottom('IM登录成功');
         }),
         // 由于网络问题导致的断开，sdk会尝试自动重连，连接成功后会回调 "onConnected";
@@ -574,64 +575,6 @@ class MyUtils {
                           '${sp.getString('user_id').toString()}-${msg.from}';
                         }
 
-                        //保存头像
-                        MyUtils.saveImgTemp(
-                            sp.getString('user_headimg').toString(),
-                            sp.getString('user_id').toString());
-                        MyUtils.saveImgTemp(headImg, msg.from.toString());
-                        // 保存路径
-                        Directory? directory = await getTemporaryDirectory();
-                        String myHeadImg = '';
-                        String otherHeadImg = '';
-                        //保存自己头像
-                        if (sp
-                            .getString('user_headimg')
-                            .toString()
-                            .contains('.gif') ||
-                            sp
-                                .getString('user_headimg')
-                                .toString()
-                                .contains('.GIF')) {
-                          myHeadImg =
-                          '${directory!.path}/${sp.getString('user_id')}.gif';
-                        } else if (sp
-                            .getString('user_headimg')
-                            .toString()
-                            .contains('.jpg') ||
-                            sp
-                                .getString('user_headimg')
-                                .toString()
-                                .contains('.GPG')) {
-                          myHeadImg =
-                          '${directory!.path}/${sp.getString('user_id')}.jpg';
-                        } else if (sp
-                            .getString('user_headimg')
-                            .toString()
-                            .contains('.jpeg') ||
-                            sp
-                                .getString('user_headimg')
-                                .toString()
-                                .contains('.GPEG')) {
-                          myHeadImg =
-                          '${directory!.path}/${sp.getString('user_id')}.jpeg';
-                        } else {
-                          myHeadImg =
-                          '${directory!.path}/${sp.getString('user_id')}.png';
-                        }
-                        // 保存他人头像
-                        if (headImg.contains('.gif') ||
-                            headImg.contains('.GIF')) {
-                          otherHeadImg = '${directory!.path}/${msg.from}.gif';
-                        } else if (headImg.contains('.jpg') ||
-                            headImg.contains('.GPG')) {
-                          otherHeadImg = '${directory!.path}/${msg.from}.jpg';
-                        } else if (headImg.contains('.jpeg') ||
-                            headImg.contains('.GPEG')) {
-                          otherHeadImg = '${directory!.path}/${msg.from}.jpeg';
-                        } else {
-                          otherHeadImg = '${directory!.path}/${msg.from}.png';
-                        }
-
                         // 接收别人发来的消息
                         Map<String, dynamic> params = <String, dynamic>{
                           'uid': sp.getString('user_id').toString(),
@@ -641,8 +584,8 @@ class MyUtils {
                           'nickName': nickName,
                           'content': body.content,
                           'bigImg': '',
-                          'headImg': myHeadImg,
-                          'otherHeadImg': otherHeadImg,
+                          'headNetImg': sp.getString('user_headimg').toString(),
+                          'otherHeadNetImg': headImg,
                           'add_time': nickName == '维C客服' ? '1893494560' : msg
                               .serverTime,
                           'type': 1,
@@ -682,62 +625,6 @@ class MyUtils {
                     combineID =
                     '${sp.getString('user_id').toString()}-${msg.from}';
                   }
-                  //保存自己头像
-                  MyUtils.saveImgTemp(sp.getString('user_headimg').toString(),
-                      sp.getString('user_id').toString());
-                  // 保存他人
-                  MyUtils.saveImgTemp(headImg, msg.from.toString());
-                  // 保存路径
-                  Directory? directory = await getTemporaryDirectory();
-                  String myHeadImg = '';
-                  String otherHeadImg = '';
-                  //保存自己头像
-                  if (sp
-                      .getString('user_headimg')
-                      .toString()
-                      .contains('.gif') ||
-                      sp
-                          .getString('user_headimg')
-                          .toString()
-                          .contains('.GIF')) {
-                    myHeadImg =
-                    '${directory!.path}/${sp.getString('user_id')}.gif';
-                  } else if (sp
-                      .getString('user_headimg')
-                      .toString()
-                      .contains('.jpg') ||
-                      sp
-                          .getString('user_headimg')
-                          .toString()
-                          .contains('.GPG')) {
-                    myHeadImg =
-                    '${directory!.path}/${sp.getString('user_id')}.jpg';
-                  } else if (sp
-                      .getString('user_headimg')
-                      .toString()
-                      .contains('.jpeg') ||
-                      sp
-                          .getString('user_headimg')
-                          .toString()
-                          .contains('.GPEG')) {
-                    myHeadImg =
-                    '${directory!.path}/${sp.getString('user_id')}.jpeg';
-                  } else {
-                    myHeadImg =
-                    '${directory!.path}/${sp.getString('user_id')}.png';
-                  }
-                  // 保存他人头像
-                  if (headImg.contains('.gif') || headImg.contains('.GIF')) {
-                    otherHeadImg = '${directory!.path}/${msg.from}.gif';
-                  } else if (headImg.contains('.jpg') ||
-                      headImg.contains('.GPG')) {
-                    otherHeadImg = '${directory!.path}/${msg.from}.jpg';
-                  } else if (headImg.contains('.jpeg') ||
-                      headImg.contains('.GPEG')) {
-                    otherHeadImg = '${directory!.path}/${msg.from}.jpeg';
-                  } else {
-                    otherHeadImg = '${directory!.path}/${msg.from}.png';
-                  }
 
                   Map<String, dynamic> params = <String, dynamic>{
                     'uid': sp.getString('user_id').toString(),
@@ -747,9 +634,7 @@ class MyUtils {
                     'nickName': nickName,
                     'content': body.remotePath,
                     'bigImg': body.remotePath,
-                    'headImg': myHeadImg,
                     'headNetImg': sp.getString('user_headimg').toString(),
-                    'otherHeadImg': otherHeadImg,
                     'otherHeadNetImg': headImg,
                     'add_time': nickName == '维C客服' ? '1893494560' : msg
                         .serverTime,
@@ -797,63 +682,6 @@ class MyUtils {
                     combineID =
                     '${sp.getString('user_id').toString()}-${msg.from}';
                   }
-                  //保存自己头像
-                  MyUtils.saveImgTemp(sp.getString('user_headimg').toString(),
-                      sp.getString('user_id').toString());
-                  // 保存他人
-                  MyUtils.saveImgTemp(headImg, msg.from.toString());
-                  // 保存路径
-                  Directory? directory = await getTemporaryDirectory();
-                  String myHeadImg = '';
-                  String otherHeadImg = '';
-                  //保存自己头像
-                  if (sp
-                      .getString('user_headimg')
-                      .toString()
-                      .contains('.gif') ||
-                      sp
-                          .getString('user_headimg')
-                          .toString()
-                          .contains('.GIF')) {
-                    myHeadImg =
-                    '${directory!.path}/${sp.getString('user_id')}.gif';
-                  } else if (sp
-                      .getString('user_headimg')
-                      .toString()
-                      .contains('.jpg') ||
-                      sp
-                          .getString('user_headimg')
-                          .toString()
-                          .contains('.GPG')) {
-                    myHeadImg =
-                    '${directory!.path}/${sp.getString('user_id')}.jpg';
-                  } else if (sp
-                      .getString('user_headimg')
-                      .toString()
-                      .contains('.jpeg') ||
-                      sp
-                          .getString('user_headimg')
-                          .toString()
-                          .contains('.GPEG')) {
-                    myHeadImg =
-                    '${directory!.path}/${sp.getString('user_id')}.jpeg';
-                  } else {
-                    myHeadImg =
-                    '${directory!.path}/${sp.getString('user_id')}.png';
-                  }
-                  // 保存他人头像
-                  if (headImg.contains('.gif') || headImg.contains('.GIF')) {
-                    otherHeadImg = '${directory!.path}/${msg.from}.gif';
-                  } else if (headImg.contains('.jpg') ||
-                      headImg.contains('.GPG')) {
-                    otherHeadImg = '${directory!.path}/${msg.from}.jpg';
-                  } else if (headImg.contains('.jpeg') ||
-                      headImg.contains('.GPEG')) {
-                    otherHeadImg = '${directory!.path}/${msg.from}.jpeg';
-                  } else {
-                    otherHeadImg = '${directory!.path}/${msg.from}.png';
-                  }
-
                   Map<String, dynamic> params = <String, dynamic>{
                     'uid': sp.getString('user_id').toString(),
                     'otherUid': msg.from,
@@ -862,9 +690,7 @@ class MyUtils {
                     'nickName': nickName,
                     'content': body.remotePath,
                     'bigImg': body.remotePath,
-                    'headImg': myHeadImg,
                     'headNetImg': sp.getString('user_headimg').toString(),
-                    'otherHeadImg': otherHeadImg,
                     'otherHeadNetImg': headImg,
                     'add_time': nickName == '维C客服' ? '1893494560' : msg
                         .serverTime,
@@ -908,63 +734,6 @@ class MyUtils {
                       '${sp.getString('user_id').toString()}-${msg.from}';
                     }
 
-                    //保存自己头像
-                    MyUtils.saveImgTemp(sp.getString('user_headimg').toString(),
-                        sp.getString('user_id').toString());
-                    // 保存他人
-                    MyUtils.saveImgTemp(headImg, msg.from.toString());
-                    // 保存路径
-                    Directory? directory = await getTemporaryDirectory();
-                    String myHeadImg = '';
-                    String otherHeadImg = '';
-                    //保存自己头像
-                    if (sp
-                        .getString('user_headimg')
-                        .toString()
-                        .contains('.gif') ||
-                        sp
-                            .getString('user_headimg')
-                            .toString()
-                            .contains('.GIF')) {
-                      myHeadImg =
-                      '${directory!.path}/${sp.getString('user_id')}.gif';
-                    } else if (sp
-                        .getString('user_headimg')
-                        .toString()
-                        .contains('.jpg') ||
-                        sp
-                            .getString('user_headimg')
-                            .toString()
-                            .contains('.GPG')) {
-                      myHeadImg =
-                      '${directory!.path}/${sp.getString('user_id')}.jpg';
-                    } else if (sp
-                        .getString('user_headimg')
-                        .toString()
-                        .contains('.jpeg') ||
-                        sp
-                            .getString('user_headimg')
-                            .toString()
-                            .contains('.GPEG')) {
-                      myHeadImg =
-                      '${directory!.path}/${sp.getString('user_id')}.jpeg';
-                    } else {
-                      myHeadImg =
-                      '${directory!.path}/${sp.getString('user_id')}.png';
-                    }
-                    // 保存他人头像
-                    if (headImg.contains('.gif') || headImg.contains('.GIF')) {
-                      otherHeadImg = '${directory!.path}/${msg.from}.gif';
-                    } else if (headImg.contains('.jpg') ||
-                        headImg.contains('.GPG')) {
-                      otherHeadImg = '${directory!.path}/${msg.from}.jpg';
-                    } else if (headImg.contains('.jpeg') ||
-                        headImg.contains('.GPEG')) {
-                      otherHeadImg = '${directory!.path}/${msg.from}.jpeg';
-                    } else {
-                      otherHeadImg = '${directory!.path}/${msg.from}.png';
-                    }
-
                     Map<String, dynamic> params = <String, dynamic>{
                       'uid': sp.getString('user_id').toString(),
                       'otherUid': msg.from,
@@ -973,9 +742,7 @@ class MyUtils {
                       'nickName': nickName,
                       'content': '收到${info['value']}个V豆',
                       'bigImg': '',
-                      'headImg': myHeadImg,
                       'headNetImg': sp.getString('user_headimg').toString(),
-                      'otherHeadImg': otherHeadImg,
                       'otherHeadNetImg': headImg,
                       'add_time': nickName == '维C客服' ? '1893494560' : msg
                           .serverTime,
