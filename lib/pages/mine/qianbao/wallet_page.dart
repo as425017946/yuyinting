@@ -105,7 +105,14 @@ class _WalletPageState extends State<WalletPage> {
                         /// 充值按钮
                         GestureDetector(
                           onTap: ((){
-                              MyUtils.goTransparentPageCom(context, DouPayPage(shuliang: jinbi));
+                            if (MyUtils.checkClick()) {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                    return DouPayPage(shuliang: jinbi);
+                                  })).then((value) {
+                                doPostBalance();
+                              });
+                            }
                           }),
                           child: Container(
                             width: ScreenUtil().setHeight(115),
@@ -179,7 +186,14 @@ class _WalletPageState extends State<WalletPage> {
                         GestureDetector(
                           onTap: ((){
                             if(sp.getString('shimingzhi').toString() == '1'){
-                              MyUtils.goTransparentPageCom(context, TixianBiPage(shuliang: shouyi));
+                              if (MyUtils.checkClick()) {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                      return TixianBiPage(shuliang: shouyi);
+                                    })).then((value) {
+                                  doPostBalance();
+                                });
+                              }
                             }else if(sp.getString('shimingzhi').toString() == '0'){
                               MyToastUtils.showToastBottom('审核中，请耐心等待！');
                             }else{
@@ -207,7 +221,14 @@ class _WalletPageState extends State<WalletPage> {
                         /// 兑换
                         GestureDetector(
                           onTap: ((){
-                            MyUtils.goTransparentPageCom(context, BiZhuanDouPage(shuliang: shouyi));
+                            if (MyUtils.checkClick()) {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                    return BiZhuanDouPage(shuliang: shouyi);
+                                  })).then((value) {
+                                doPostBalance();
+                              });
+                            }
                           }),
                           child: Container(
                             width: ScreenUtil().setHeight(115),

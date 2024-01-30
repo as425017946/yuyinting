@@ -43,6 +43,7 @@ class _MinePageState extends State<MinePage> {
   int level = 0; //用户等级
   int isAgent = 0; //是否有代理权限 0无1有
   int isNew = 0; // 是否萌新
+  int isNewNoble = 0; // 是否新贵
   int isPretty = 0; // 是否靓号
   String userNumber = '',
       care = '',
@@ -272,16 +273,35 @@ class _MinePageState extends State<MinePage> {
                                         fontSize: ScreenUtil().setSp(38)),
                                   ),
                             WidgetUtils.commonSizedBox(0, 5),
-                            isNew == 1
+                            // 只有不是新贵或者新锐的时候展示萌新
+                            (isNew == 1 && isNewNoble == 0)
                                 ? WidgetUtils.showImages(
-                                'assets/images/dj/room_role_common.png',
-                                30.h,
-                                50.h)
+                                    'assets/images/dj/room_role_common.png',
+                                    30.h,
+                                    50.h)
                                 : const Text(''),
-                            isNew == 1 ? WidgetUtils.commonSizedBox(0, 5) : const Text(''),
+                            (isNew == 1 && isNewNoble == 0)
+                                ? WidgetUtils.commonSizedBox(0, 5)
+                                : const Text(''),
+                            // 展示新贵或者新锐图标
+                            isNewNoble == 1
+                                ? WidgetUtils.showImages(
+                                    'assets/images/dj/room_rui.png', 30.h, 50.h)
+                                : isNewNoble == 2
+                                    ? WidgetUtils.showImages(
+                                        'assets/images/dj/room_gui.png',
+                                        30.h,
+                                        50.h)
+                                    : isNewNoble == 3 ? WidgetUtils.showImages(
+                                        'assets/images/dj/room_gui.png',
+                                        30.h,
+                                        50.h) : const Text(''),
+                            isNewNoble != 0
+                                ? WidgetUtils.commonSizedBox(0, 5)
+                                : const Text(''),
                             isPretty == 1
                                 ? WidgetUtils.showImages(
-                                'assets/images/dj/lianghao.png', 30.h, 30.h)
+                                    'assets/images/dj/lianghao.png', 30.h, 30.h)
                                 : const Text(''),
                           ],
                         ),
@@ -800,6 +820,7 @@ class _MinePageState extends State<MinePage> {
             identity = bean.data!.identity!;
             isAgent = bean.data!.isAgent as int;
             isNew = bean.data!.isNew as int;
+            isNewNoble = bean.data!.newNoble as int;
             isPretty = bean.data!.isPretty as int;
             // 如果身份变了
             if (sp.getString('user_identity').toString() != identity) {

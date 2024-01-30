@@ -70,24 +70,24 @@ class _YouxiPageState extends State<YouxiPage>  with AutomaticKeepAliveClientMix
                     child: SizedBox(
                   height: 270.h,
                   width: 270.h,
-                  child: SVGASimpleImage(
-                      resUrl: list[i].svga_img!),
+                  child: const SVGASimpleImage(
+                      assetsName: 'assets/svga/zhuanpan_room.svga'),
                 )) : i == 1 ? Positioned(
                     top: 0,
                     right: 0,
                     child: SizedBox(
                       height: 280.h,
                       width: 280.h,
-                      child: SVGASimpleImage(
-                          resUrl: list[i].svga_img!),
+                      child: const SVGASimpleImage(
+                          assetsName: 'assets/svga/maliao_room.svga'),
                     )) : Positioned(
                     top: -20,
                     right: 25,
                     child: SizedBox(
                       height: 260.h,
                       width: 260.h,
-                      child: SVGASimpleImage(
-                          resUrl: list[i].svga_img!),
+                      child: const SVGASimpleImage(
+                          assetsName: 'assets/svga/mofang_jin_room_show.svga'),
                     )),
               ],
             ),

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/pages/home/rank/rank_caifu_page.dart';
@@ -17,11 +19,21 @@ class RankingPage extends StatefulWidget {
 class _RankingPageState extends State<RankingPage> {
   int _currentIndex = 0;
   late final PageController _controller;
-
+  // 设备是安卓还是ios
+  String isDevices = 'android';
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    if (Platform.isAndroid) {
+      setState(() {
+        isDevices = 'android';
+      });
+    }else if (Platform.isIOS){
+      setState(() {
+        isDevices = 'ios';
+      });
+    }
     _controller = PageController(
       initialPage: _currentIndex,
     );
@@ -34,7 +46,11 @@ class _RankingPageState extends State<RankingPage> {
       body: Container(
         decoration: BoxDecoration(
           //设置Container修饰
-          image: DecorationImage(
+          image: isDevices == 'ios' ? DecorationImage(
+            //背景图片修饰
+            image: AssetImage(_currentIndex == 0 ? "assets/images/py_meili_ios_bg.png" :  "assets/images/py_caifu_ios_bg.png"),
+            fit: BoxFit.fill, //覆盖
+          ) : DecorationImage(
             //背景图片修饰
             image: AssetImage(_currentIndex == 0 ? "assets/images/py_meili_bg.png" :  "assets/images/py_caifu_bg.png"),
             fit: BoxFit.fill, //覆盖
@@ -42,7 +58,7 @@ class _RankingPageState extends State<RankingPage> {
         ),
         child: Column(
           children: [
-            WidgetUtils.commonSizedBox(35, 0),
+            WidgetUtils.commonSizedBox(isDevices == 'ios' ? 90.h : 55.h, 0),
 
             ///头部
             SizedBox(

@@ -28,6 +28,7 @@ import '../bean/ghPeopleBean.dart';
 import '../bean/ghRoomBean.dart';
 import '../bean/giftListBean.dart';
 import '../bean/homeTJBean.dart';
+import '../bean/isFirstOrderBean.dart';
 import '../bean/isPayBean.dart';
 import '../bean/joinRoomBean.dart';
 import '../bean/kefuBean.dart';
@@ -1113,5 +1114,12 @@ class DataUtils{
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.orderCreate, {}, params);
     print("充值：$respons");
     return orderPayBean.fromJson(respons!);
+  }
+
+  /// 首充
+  static Future<isFirstOrderBean> postIsFirstOrder() async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.isFirstOrder, {}, {});
+    print("首充：$respons");
+    return isFirstOrderBean.fromJson(respons!);
   }
 }

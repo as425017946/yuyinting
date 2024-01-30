@@ -39,6 +39,7 @@ class Data {
   String? avatarFrameGifImg;
   int? isNew;
   int? isPretty;
+  int? newNoble;
 
   Data(
       {this.uid,
@@ -56,7 +57,8 @@ class Data {
         this.avatarFrameGifImg,
         this.avatarFrameImg,
         this.isNew,
-        this.isPretty});
+        this.isPretty,
+        this.newNoble});
 
   Data.fromJson(Map<String, dynamic> json) {
     uid = json['uid'];
@@ -75,6 +77,7 @@ class Data {
     avatarFrameGifImg = json['avatar_frame_gif_img'];
     isNew = json['is_new'];
     isPretty = json['is_pretty'];
+    newNoble = json['new_noble'];
   }
 
   Map<String, dynamic> toJson() {
@@ -95,6 +98,7 @@ class Data {
     data['avatar_frame_gif_img'] = this.avatarFrameGifImg;
     data['is_new'] = this.isNew;
     data['is_pretty'] = this.isPretty;
+    data['new_noble'] = this.newNoble;
     return data;
   }
 }

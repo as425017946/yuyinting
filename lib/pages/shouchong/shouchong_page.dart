@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 
+import '../../bean/isFirstOrderBean.dart';
+import '../../bean/orderPayBean.dart';
 import '../../colors/my_colors.dart';
+import '../../http/data_utils.dart';
+import '../../http/my_http_config.dart';
+import '../../utils/loading.dart';
+import '../../utils/my_toast_utils.dart';
+import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 
 /// 首充页面
@@ -15,7 +23,12 @@ class ShouChongPage extends StatefulWidget {
 
 class _ShouChongPageState extends State<ShouChongPage> {
   int type = 0;
-
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    doPostIsFirstOrder();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,30 +40,30 @@ class _ShouChongPageState extends State<ShouChongPage> {
             children: [
               type == 0
                   ? Container(
-                height: 400.h,
-                margin: EdgeInsets.only(left: 20.h, right: 20.h),
-                child: WidgetUtils.showImages(
-                    'assets/images/shouchong_30.png',
-                    400.h,
-                    double.infinity),
-              )
+                      height: 400.h,
+                      margin: EdgeInsets.only(left: 20.h, right: 20.h),
+                      child: WidgetUtils.showImages(
+                          'assets/images/shouchong_30.png',
+                          400.h,
+                          double.infinity),
+                    )
                   : type == 1
-                  ? Container(
-                height: 400.h,
-                margin: EdgeInsets.only(left: 20.h, right: 20.h),
-                child: WidgetUtils.showImages(
-                    'assets/images/shouchong_68.png',
-                    400.h,
-                    double.infinity),
-              )
-                  : Container(
-                height: 400.h,
-                margin: EdgeInsets.only(left: 20.h, right: 20.h),
-                child: WidgetUtils.showImages(
-                    'assets/images/shouchong_98.png',
-                    400.h,
-                    double.infinity),
-              ),
+                      ? Container(
+                          height: 400.h,
+                          margin: EdgeInsets.only(left: 20.h, right: 20.h),
+                          child: WidgetUtils.showImages(
+                              'assets/images/shouchong_68.png',
+                              400.h,
+                              double.infinity),
+                        )
+                      : Container(
+                          height: 400.h,
+                          margin: EdgeInsets.only(left: 20.h, right: 20.h),
+                          child: WidgetUtils.showImages(
+                              'assets/images/shouchong_98.png',
+                              400.h,
+                              double.infinity),
+                        ),
               // type == 0
               //     ? SizedBox(
               //   height: 400.h,
@@ -615,15 +628,129 @@ class _ShouChongPageState extends State<ShouChongPage> {
                   )),
             ],
           ),
-          GestureDetector(
-            onTap: ((){
-
-            }),
-            child: WidgetUtils.showImages('assets/images/shouchong_btn1.png', 100.h, 260.h),
-          ),
+          isShow
+              ? GestureDetector(
+                  onTap: (() {
+                    doPostOrderCreate();
+                  }),
+                  child: (sc12 == 0 && type == 0)
+                      ? WidgetUtils.showImages(
+                          'assets/images/shouchong_btn1.png', 100.h, 260.h)
+                      : (sc12 == 1 && type == 0)
+                          ? WidgetUtils.showImages(
+                              'assets/images/shouchong_btn2.png', 100.h, 260.h)
+                          : (sc100 == 0 && type == 1)
+                              ? WidgetUtils.showImages(
+                                  'assets/images/shouchong_btn1.png',
+                                  100.h,
+                                  260.h)
+                              : (sc100 == 1 && type == 1)
+                                  ? WidgetUtils.showImages(
+                                      'assets/images/shouchong_btn2.png',
+                                      100.h,
+                                      260.h)
+                                  : (sc266 == 0 && type == 2)
+                                      ? WidgetUtils.showImages(
+                                          'assets/images/shouchong_btn1.png',
+                                          100.h,
+                                          260.h)
+                                      : WidgetUtils.showImages(
+                                          'assets/images/shouchong_btn2.png',
+                                          100.h,
+                                          260.h),
+                )
+              : const Text(''),
           const Spacer(),
         ],
       ),
     );
+  }
+
+  /// 充值接口
+  /// 支付方式 zfb(支付宝) wx(微信) yhk(银行卡) ysf(云闪付)
+  /// 充值金额
+  /// 充值类型 1人民币 2u币
+  /// 货币类型 1金豆 2钻石
+  /// 金豆数量
+  /// 充值订单用途 1游戏币 2购买贵族
+  /// 是否首充 1是 0否
+  Future<void> doPostOrderCreate() async {
+    String money = '', moneyDou = '';
+    setState(() {
+      if (type == 0) {
+        money = '12';
+        moneyDou = '100';
+      } else if (type == 1) {
+        money = '100';
+        moneyDou = '1000';
+      } else if (type == 2) {
+        money = '266';
+        moneyDou = '2660';
+      }
+    });
+    Map<String, dynamic> params = <String, dynamic>{
+      'recharge_method': 'zfb',
+      'recharge_cur_amount': money,
+      'recharge_cur_type': '1',
+      'game_cur_type': '1',
+      'game_cur_amount': moneyDou,
+      'use': '1',
+      'is_first': '1',
+    };
+    try {
+      Loading.show();
+      orderPayBean bean = await DataUtils.postOrderCreate(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          // // ignore: use_build_context_synchronously
+          // MyUtils.goTransparentPageCom(context, WebPage(url: bean.data!.payUrl!));
+          if (await canLaunch(bean.data!.payUrl!)) {
+            await launch(bean.data!.payUrl!, forceSafariVC: false);
+          } else {
+            throw 'Could not launch $bean.data!.payUrl!';
+          }
+          break;
+        case MyHttpConfig.errorloginCode:
+          // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+    }
+  }
+
+  // 首充金额12、100、266状态0未首充1冲过了
+  int sc12 = 0, sc100 = 0, sc266 = 0;
+
+  // 是否显示充值按钮
+  bool isShow = false;
+
+  /// 首充
+  Future<void> doPostIsFirstOrder() async {
+    try {
+      isFirstOrderBean bean = await DataUtils.postIsFirstOrder();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            isShow = true;
+            sc12 = bean.data!.twelve as int;
+            sc100 = bean.data!.oneHundred as int;
+            sc266 = bean.data!.twoSixSix as int;
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+          // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {}
   }
 }

@@ -764,12 +764,12 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                             ScreenUtil().setHeight(24)),
                                         WidgetUtils.commonSizedBox(0, 5),
                                         WidgetUtils.onlyTextCenter(
-                                            jinbi2,
+                                            jinbi,
                                             StyleUtils.getCommonTextStyle(
                                                 color: Colors.white,
                                                 fontSize: ScreenUtil().setSp(25))),
                                         WidgetUtils.commonSizedBox(0, 5),
-                                        // 钻石处先隐藏
+                                        //钻石处先隐藏
                                         // WidgetUtils.showImages(
                                         //     'assets/images/mine_wallet_zz.png',
                                         //     ScreenUtil().setHeight(26),
@@ -1445,7 +1445,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
       setState(() {
         isCheck = false;
       });
-      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      MyToastUtils.showToastBottom(e.toString());
     }
   }
   /// 一键赠送背包礼物
@@ -1486,7 +1486,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
       setState(() {
         isAllBeibao = false;
       });
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      MyToastUtils.showToastBottom(e.toString());
     }
   }
 

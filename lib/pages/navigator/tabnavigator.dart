@@ -16,6 +16,7 @@ import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/widget/SVGASimpleImage.dart';
 import '../../bean/Common_bean.dart';
 import '../../bean/hengFuBean.dart';
+import '../../bean/isFirstOrderBean.dart';
 import '../../bean/joinRoomBean.dart';
 import '../../bean/qiehuanBean.dart';
 import '../../bean/svgaAllBean.dart';
@@ -96,7 +97,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     MyUtils.signOutLogin();
     //保持屏幕常亮
     saveLiang();
-
+    doPostIsFirstOrder();
     super.initState();
     initE();
     _currentIndex = 0;
@@ -1086,5 +1087,28 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     } catch (e) {
     }
   }
-
+  /// 首充
+  Future<void> doPostIsFirstOrder() async {
+    try {
+      isFirstOrderBean bean = await DataUtils.postIsFirstOrder();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            if(bean.data!.twelve == 1 && bean.data!.oneHundred == 1 && bean.data!.twoSixSix == 1){
+              sp.setString('scIsOk', '1');
+            }else{
+              sp.setString('scIsOk', '0');
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {}
+  }
 }

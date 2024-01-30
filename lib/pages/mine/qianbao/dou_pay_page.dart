@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:yuyinting/pages/gongping/web_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 
+import '../../../bean/balanceBean.dart';
 import '../../../bean/orderPayBean.dart';
 import '../../../colors/my_colors.dart';
 import '../../../http/data_utils.dart';
@@ -114,13 +115,24 @@ class _DouPayPageState extends State<DouPayPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    doPostBalance();
     appBar = WidgetUtils.getAppBar('充值V豆', true, context, false, 0);
     listen = eventBus.on<SubmitButtonBack>().listen((event) {
       if(event.title == '确认充值'){
         doPostOrderCreate();
+      }else if(event.title == '充值成功'){
+        doPostBalance();
       }
     });
   }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    listen.cancel();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -169,7 +181,7 @@ class _DouPayPageState extends State<DouPayPage> {
                                             color: Colors.white,
                                             fontSize: ScreenUtil().setSp(38))),
                                     const Spacer(),
-                                    WidgetUtils.onlyText(widget.shuliang, StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(56), fontWeight: FontWeight.w600)),
+                                    WidgetUtils.onlyText(jinbi, StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(56), fontWeight: FontWeight.w600)),
                                     const Expanded(child: Text('')),
                                   ],
                                 ),
@@ -401,6 +413,36 @@ class _DouPayPageState extends State<DouPayPage> {
           } else {
             throw 'Could not launch $bean.data!.payUrl!';
           }
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+    }
+  }
+
+
+  // 金币 钻石
+  String jinbi = '', zuanshi = '', shouyi  = '';
+  /// 钱包余额
+  Future<void> doPostBalance() async {
+    Loading.show();
+    try {
+      balanceBean bean = await DataUtils.postBalance();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            jinbi = bean.data!.goldBean!;
+            // zuanshi = bean.data!.diamond!;
+            shouyi = bean.data!.goldCoin!;
+          });
           break;
         case MyHttpConfig.errorloginCode:
         // ignore: use_build_context_synchronously

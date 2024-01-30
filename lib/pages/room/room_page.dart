@@ -227,6 +227,9 @@ class _RoomPageState extends State<RoomPage>
     {"url": "assets/svga/gp/l_maliao.svga"},
     {"url": "assets/svga/gp/l_sc.svga"},
   ];
+  List<Map> imgListCar = [
+    {"url": "assets/svga/gp/l_maliao.svga"},
+  ];
   List<Map> imgList2 = [
     {"url": "assets/svga/gp/l_zp.svga"},
     {"url": "assets/svga/gp/l_mf.svga"},
@@ -1340,7 +1343,28 @@ class _RoomPageState extends State<RoomPage>
               scrollToLastItem2(); // 在widget构建完成后滚动到底部
             });
           } else if (event.map!['type'] == 'send_all_user') {
-            // 是这个厅，并送了带横幅的礼物不做操作
+            // 是这个厅，并送了带横幅的礼物
+            if (listMP.isEmpty) {
+              // 厅内出现横幅使用
+              hengFuBean hf = hengFuBean.fromJson(event.map!);
+              myhf = hf;
+              //显示横幅、map赋值
+              setState(() {
+                isShowHF = true;
+                listMP.add(hf);
+              });
+              // 判断数据显示使用
+              showInfo(hf);
+              // 看看集合里面有几个，10s一执行
+              hpTimer();
+            } else {
+              // 厅内出现横幅使用
+              hengFuBean hf = hengFuBean.fromJson(event.map!);
+              myhf = hf;
+              setState(() {
+                listMP.add(hf);
+              });
+            }
           } else if (event.map!['type'] == 'send_screen_all') {
             // 厅内送礼
             charmAllBean cb = charmAllBean.fromJson(event.map!);
@@ -2201,7 +2225,7 @@ class _RoomPageState extends State<RoomPage>
                               offset: Offset(0, -80.h),
                               child: Stack(
                                 children: [
-                                  RoomItems.lunbotu1(context, imgList),
+                                  RoomItems.lunbotu1(context, sp.getString('scIsOk').toString() == '0' ? imgList : imgListCar),
                                   RoomItems.lunbotu2(
                                       context, imgList2, widget.roomId),
                                 ],
@@ -3223,7 +3247,6 @@ class _RoomPageState extends State<RoomPage>
             'nickName': cb.toNickname,
             'content': content,
             'headNetImg': sp.getString('user_headimg').toString(),
-            'otherHeadImg': otherHeadImg,
             'otherHeadNetImg': cb.avatar!,
             'add_time': DateTime.now().millisecondsSinceEpoch,
             'type': 1,

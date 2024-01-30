@@ -226,13 +226,32 @@ class _MyInfoPageState extends State<MyInfoPage> {
                                     12),
                               ) : const Text(''),
                               WidgetUtils.commonSizedBox(0, 10.h),
-                              isNew == 1
+                              // 只有不是新贵或者新锐的时候展示萌新
+                              (isNew == 1 && isNewNoble == 0)
                                   ? WidgetUtils.showImages(
                                   'assets/images/dj/room_role_common.png',
                                   30.h,
                                   50.h)
                                   : const Text(''),
-                              isNew == 1 ? WidgetUtils.commonSizedBox(0, 10.h): WidgetUtils.commonSizedBox(0, 0),
+                              (isNew == 1 && isNewNoble == 0)
+                                  ? WidgetUtils.commonSizedBox(0, 5)
+                                  : const Text(''),
+                              // 展示新贵或者新锐图标
+                              isNewNoble == 1
+                                  ? WidgetUtils.showImages(
+                                  'assets/images/dj/room_rui.png', 30.h, 50.h)
+                                  : isNewNoble == 2
+                                  ? WidgetUtils.showImages(
+                                  'assets/images/dj/room_gui.png',
+                                  30.h,
+                                  50.h)
+                                  :  isNewNoble == 3 ? WidgetUtils.showImages(
+                                  'assets/images/dj/room_gui.png',
+                                  30.h,
+                                  50.h) : const Text(''),
+                              isNewNoble != 0
+                                  ? WidgetUtils.commonSizedBox(0, 5)
+                                  : const Text(''),
                               isPretty == 1
                                   ? WidgetUtils.showImages(
                                   'assets/images/dj/lianghao.png', 30.h, 30.h)
@@ -608,6 +627,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
   bool isOK = false;
   int isNew = 0; // 是否萌新
   int isPretty = 0; // 是否靓号
+  int isNewNoble = 0; // 是否新贵
 
   Future<void> doPostMyIfon() async {
     LogE('token ${sp.getString('user_id')}');
@@ -633,6 +653,8 @@ class _MyInfoPageState extends State<MyInfoPage> {
             giftList = bean.data!.giftList!;
             isNew = bean.data!.userInfo!.isNew as int;
             isPretty = bean.data!.userInfo!.isPretty as int;
+            isNewNoble = bean.data!.userInfo!.newNoble as int;
+
           });
           // 发送通知
           eventBus.fire(myInfoBack(userInfo: userInfo, giftList: giftList));

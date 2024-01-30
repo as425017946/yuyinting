@@ -54,7 +54,8 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
 
   // 用户身份
   String identity = 'user';
-
+  // 显示马里奥弹窗次数是否刷新
+  int mla = 0;
   @override
   void initState() {
     // TODO: implement initState
@@ -78,8 +79,14 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
       initialPage: 1,
     );
 
-    // 马里奥
-    MyUtils.goTransparentPageCom(context, const TSCarPage());
+    if(mla == 0){
+      MyToastUtils.showToastBottom('首次加载马里奥 $mla');
+      setState(() {
+        mla++;
+      });
+      // 马里奥
+      MyUtils.goTransparentPageCom(context, const TSCarPage());
+    }
 
 
     quanxian();

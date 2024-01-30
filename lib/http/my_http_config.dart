@@ -281,6 +281,8 @@ class MyHttpConfig{
   static  String showRoomList = "$baseURL/room/showRoomList";
   // 充值
   static  String orderCreate = "$baseURL/order/create";
+  // 首充
+  static  String isFirstOrder = "$baseURL/order/isFirstOrder";
 
 
 

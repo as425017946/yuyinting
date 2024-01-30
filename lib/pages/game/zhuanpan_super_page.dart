@@ -56,8 +56,9 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
   // 转几次 要花费多少
   int cishu = 1, feiyong = 1000;
   var listen, listenZDY, listen2;
-  // 当前欢乐值进度，展示值
-  int huanlezhi = 0, zhanshizhi = 0;
+  // 展示值
+  int zhanshizhi = 0;
+  String imgUrl = 'assets/images/zhuanpan_1.png';
   // 是否可以点击启动
   bool isXiazhu = true;
 
@@ -116,8 +117,8 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
       if(event.type == 'game_turntable_luck'){
         LogE('****${event.map!['luck']}');
         setState(() {
-          huanlezhi = int.parse(event.map!['luck'].toString()) ~/ 1.5;
           zhanshizhi = int.parse(event.map!['luck'].toString());
+          imgUrl = 'assets/images/zhuanpan_$zhanshizhi.png';
         });
       }
     });
@@ -240,9 +241,9 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      CircleProgressView(backgroundColor: Colors.transparent, progress: -huanlezhi.toDouble(), progressWidth: ScreenUtil().setHeight(12), progressColor: MyColors.zpJD, width: ScreenUtil().setHeight(534), height: ScreenUtil().setHeight(534),),
+                      // CircleProgressView(backgroundColor: Colors.transparent, progress: -huanlezhi.toDouble(), progressWidth: ScreenUtil().setHeight(12), progressColor: MyColors.zpJD, width: ScreenUtil().setHeight(534), height: ScreenUtil().setHeight(534),),
                       WidgetUtils.showImages(
-                          'assets/images/zhuanpan_one_bg2.png',
+                          imgUrl,
                           ScreenUtil().setHeight(560),
                           ScreenUtil().setHeight(560)),
                       RotationTransition(
@@ -287,19 +288,19 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                               ScreenUtil().setHeight(120),
                               ScreenUtil().setHeight(90))),
                       // 欢乐值
-                      Positioned(
-                        left: ScreenUtil().setHeight(225),
-                        top: ScreenUtil().setHeight(515),
-                        child: Text(
-                          '欢乐值：$zhanshizhi/30',
-                          style: StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(21)),
-                        ),
-                      ),
-                      // 满30显示
-                      zhanshizhi == 30 ? Positioned(
-                          right: ScreenUtil().setHeight(5),
-                          top: ScreenUtil().setHeight(205),
-                          child: SizedBox( height: 70.h, width: 70.h, child: const SVGASimpleImage(assetsName: 'assets/svga/s.svga',),)) : const Text('')
+                      // Positioned(
+                      //   left: ScreenUtil().setHeight(225),
+                      //   top: ScreenUtil().setHeight(515),
+                      //   child: Text(
+                      //     '欢乐值：$zhanshizhi/30',
+                      //     style: StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: ScreenUtil().setSp(21)),
+                      //   ),
+                      // ),
+                      // // 满30显示
+                      // zhanshizhi == 30 ? Positioned(
+                      //     right: ScreenUtil().setHeight(5),
+                      //     top: ScreenUtil().setHeight(205),
+                      //     child: SizedBox( height: 70.h, width: 70.h, child: const SVGASimpleImage(assetsName: 'assets/svga/s.svga',),)) : const Text('')
                     ],
                   ),
                 ),
@@ -706,9 +707,8 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
-            huanlezhi = int.parse(bean.data!) ~/ 1.5;
             zhanshizhi = int.parse(bean.data!);
-            LogE('欢乐值$huanlezhi');
+            imgUrl = 'assets/images/zhuanpan_$zhanshizhi.png';
           });
           break;
         case MyHttpConfig.errorloginCode:

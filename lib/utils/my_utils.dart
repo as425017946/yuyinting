@@ -546,13 +546,17 @@ class MyUtils {
                   EMTextMessageBody body = msg.body as EMTextMessageBody;
                   LogE('接收文本信息$msg');
                   Map info = msg.attributes!;
+                  LogE('接收文本信息类型 ${info['type']}');
                   LogE('接收文本信息$info');
                   if (body.content == '赛车押注') {
                     eventBus.fire(JoinRoomYBack(map: info, type: '赛车押注'));
                   } else if (body.content == '离开房间') {
                     eventBus.fire(
                         JoinRoomYBack(map: info, type: 'user_leave_room'));
-                  } else {
+                  } else if (body.content == '充值成功') {
+                    eventBus.fire(
+                        SubmitButtonBack(title: '充值成功'));
+                  }else {
                     if (info['lv'] == '' || info['lv'] == null) {
                       if (info['type'] == 'clean_charm') {
                         // 厅内清空魅力值

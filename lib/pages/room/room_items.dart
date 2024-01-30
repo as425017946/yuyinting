@@ -219,6 +219,9 @@ class RoomItems {
                           : list[i]['new_noble'].toString() == "2"
                           ? WidgetUtils.showImages(
                           'assets/images/dj/room_gui.png', 30.h, 50.h)
+                          : list[i]['new_noble'].toString() == "3"
+                          ? WidgetUtils.showImages(
+                          'assets/images/dj/room_gui.png', 30.h, 50.h)
                           : const Text('')),
                   WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
                   //等级
@@ -351,34 +354,35 @@ class RoomItems {
                   //贵族
                   WidgetSpan(
                       child: Transform.translate(
-                        offset: Offset(0, 5.h), child: list[i]['noble_id'].toString() == "1"
-                          ? WidgetUtils.showImages(
-                          'assets/images/tequan_yongshi.png', 38.h, 38.h)
-                          : list[i]['noble_id'].toString() == "2"
-                          ? WidgetUtils.showImages(
-                          'assets/images/tequan_qishi.png', 38.h, 38.h)
-                          : list[i]['noble_id'].toString() == "3"
-                          ? WidgetUtils.showImages(
-                          'assets/images/tequan_bojue.png', 38.h, 38.h)
-                          : list[i]['noble_id'].toString() == "4"
-                          ? WidgetUtils.showImages(
-                          'assets/images/tequan_houjue.png', 38.h, 38.h)
-                          : list[i]['noble_id'].toString() == "5"
-                          ? WidgetUtils.showImages(
-                          'assets/images/tequan_gongjue.png',
-                          38.h,
-                          38.h)
-                          : list[i]['noble_id'].toString() == "6"
-                          ? WidgetUtils.showImages(
-                          'assets/images/tequan_guowang.png',
-                          38.h,
-                          38.h)
-                          : list[i]['noble_id'].toString() == "7"
-                          ? WidgetUtils.showImages(
-                          'assets/images/tequan_diwang.png',
-                          38.h,
-                          38.h)
-                          : const Text(''),)
+                        offset: Offset(0, 5.h),
+                        child: list[i]['noble_id'].toString() == "1"
+                            ? WidgetUtils.showImages(
+                            'assets/images/tequan_yongshi.png', 38.h, 38.h)
+                            : list[i]['noble_id'].toString() == "2"
+                            ? WidgetUtils.showImages(
+                            'assets/images/tequan_qishi.png', 38.h, 38.h)
+                            : list[i]['noble_id'].toString() == "3"
+                            ? WidgetUtils.showImages(
+                            'assets/images/tequan_bojue.png', 38.h, 38.h)
+                            : list[i]['noble_id'].toString() == "4"
+                            ? WidgetUtils.showImages(
+                            'assets/images/tequan_houjue.png', 38.h, 38.h)
+                            : list[i]['noble_id'].toString() == "5"
+                            ? WidgetUtils.showImages(
+                            'assets/images/tequan_gongjue.png',
+                            38.h,
+                            38.h)
+                            : list[i]['noble_id'].toString() == "6"
+                            ? WidgetUtils.showImages(
+                            'assets/images/tequan_guowang.png',
+                            38.h,
+                            38.h)
+                            : list[i]['noble_id'].toString() == "7"
+                            ? WidgetUtils.showImages(
+                            'assets/images/tequan_diwang.png',
+                            38.h,
+                            38.h)
+                            : const Text(''),)
                   ),
                   WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
                   // 靓号
@@ -494,6 +498,9 @@ class RoomItems {
                       ? WidgetUtils.showImages(
                       'assets/images/dj/room_rui.png', 30.h, 50.h)
                       : list[i]['new_noble'].toString() == "2"
+                      ? WidgetUtils.showImages(
+                      'assets/images/dj/room_gui.png', 30.h, 50.h)
+                      : list[i]['new_noble'].toString() == "3"
                       ? WidgetUtils.showImages(
                       'assets/images/dj/room_gui.png', 30.h, 50.h)
                       : const Text('')),
@@ -628,34 +635,35 @@ class RoomItems {
               //贵族
               WidgetSpan(
                   child: Transform.translate(
-                    offset: Offset(0, 5.h), child: list[i]['noble_id'].toString() == "1"
-                      ? WidgetUtils.showImages(
-                      'assets/images/tequan_yongshi.png', 38.h, 38.h)
-                      : list[i]['noble_id'].toString() == "2"
-                      ? WidgetUtils.showImages(
-                      'assets/images/tequan_qishi.png', 38.h, 38.h)
-                      : list[i]['noble_id'].toString() == "3"
-                      ? WidgetUtils.showImages(
-                      'assets/images/tequan_bojue.png', 38.h, 38.h)
-                      : list[i]['noble_id'].toString() == "4"
-                      ? WidgetUtils.showImages(
-                      'assets/images/tequan_houjue.png', 38.h, 38.h)
-                      : list[i]['noble_id'].toString() == "5"
-                      ? WidgetUtils.showImages(
-                      'assets/images/tequan_gongjue.png',
-                      38.h,
-                      38.h)
-                      : list[i]['noble_id'].toString() == "6"
-                      ? WidgetUtils.showImages(
-                      'assets/images/tequan_guowang.png',
-                      38.h,
-                      38.h)
-                      : list[i]['noble_id'].toString() == "7"
-                      ? WidgetUtils.showImages(
-                      'assets/images/tequan_diwang.png',
-                      38.h,
-                      38.h)
-                      : const Text(''),)
+                    offset: Offset(0, 5.h),
+                    child: list[i]['noble_id'].toString() == "1"
+                        ? WidgetUtils.showImages(
+                        'assets/images/tequan_yongshi.png', 38.h, 38.h)
+                        : list[i]['noble_id'].toString() == "2"
+                        ? WidgetUtils.showImages(
+                        'assets/images/tequan_qishi.png', 38.h, 38.h)
+                        : list[i]['noble_id'].toString() == "3"
+                        ? WidgetUtils.showImages(
+                        'assets/images/tequan_bojue.png', 38.h, 38.h)
+                        : list[i]['noble_id'].toString() == "4"
+                        ? WidgetUtils.showImages(
+                        'assets/images/tequan_houjue.png', 38.h, 38.h)
+                        : list[i]['noble_id'].toString() == "5"
+                        ? WidgetUtils.showImages(
+                        'assets/images/tequan_gongjue.png',
+                        38.h,
+                        38.h)
+                        : list[i]['noble_id'].toString() == "6"
+                        ? WidgetUtils.showImages(
+                        'assets/images/tequan_guowang.png',
+                        38.h,
+                        38.h)
+                        : list[i]['noble_id'].toString() == "7"
+                        ? WidgetUtils.showImages(
+                        'assets/images/tequan_diwang.png',
+                        38.h,
+                        38.h)
+                        : const Text(''),)
               ),
               WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
               // 靓号
@@ -1009,7 +1017,8 @@ class RoomItems {
           GestureDetector(
             onTap: (() {
               if (MyUtils.checkClick() &&
-                  list[i]['uid'].toString() != sp.getString('user_id').toString()) {
+                  list[i]['uid'].toString() !=
+                      sp.getString('user_id').toString()) {
                 MyUtils.goTransparentPage(
                     context,
                     RoomPeopleInfoPage(
@@ -1112,7 +1121,8 @@ class RoomItems {
                             ? const Text('')
                             : list[i]['identity'] == 'leader'
                             ? WidgetUtils.showImages(
-                            'assets/images/dj/room_role_director.png', 30.h, 30.h)
+                            'assets/images/dj/room_role_director.png', 30.h,
+                            30.h)
                             : WidgetUtils.showImages(
                             'assets/images/dj/room_role_manager.png', 30.h,
                             30.h)),
@@ -1130,6 +1140,9 @@ class RoomItems {
                             ? WidgetUtils.showImages(
                             'assets/images/dj/room_rui.png', 30.h, 50.h)
                             : list[i]['new_noble'].toString() == "2"
+                            ? WidgetUtils.showImages(
+                            'assets/images/dj/room_gui.png', 30.h, 50.h)
+                            : list[i]['new_noble'].toString() == "3"
                             ? WidgetUtils.showImages(
                             'assets/images/dj/room_gui.png', 30.h, 50.h)
                             : const Text('')),
@@ -1201,27 +1214,32 @@ class RoomItems {
                                           ..color = (int.parse(
                                               list[i]['lv'].toString()) >= 1 &&
                                               int.parse(
-                                                  list[i]['lv'].toString()) <= 10)
+                                                  list[i]['lv'].toString()) <=
+                                                  10)
                                               ? MyColors.djOneM
                                               : (int.parse(
                                               list[i]['lv'].toString()) >= 11 &&
                                               int.parse(
-                                                  list[i]['lv'].toString()) <= 15)
+                                                  list[i]['lv'].toString()) <=
+                                                  15)
                                               ? MyColors.djTwoM
                                               : (int.parse(
                                               list[i]['lv'].toString()) >= 16 &&
                                               int.parse(
-                                                  list[i]['lv'].toString()) <= 20)
+                                                  list[i]['lv'].toString()) <=
+                                                  20)
                                               ? MyColors.djThreeM
                                               : (int.parse(
                                               list[i]['lv'].toString()) >= 21 &&
                                               int.parse(
-                                                  list[i]['lv'].toString()) <= 25)
+                                                  list[i]['lv'].toString()) <=
+                                                  25)
                                               ? MyColors.djFourM
                                               : (int.parse(
                                               list[i]['lv'].toString()) >= 26 &&
                                               int.parse(
-                                                  list[i]['lv'].toString()) <= 30)
+                                                  list[i]['lv'].toString()) <=
+                                                  30)
                                               ? MyColors
                                               .djFiveM
                                               : (int.parse(
@@ -1241,7 +1259,8 @@ class RoomItems {
                                               : (int.parse(
                                               list[i]['lv'].toString()) >= 41 &&
                                               int.parse(
-                                                  list[i]['lv'].toString()) <= 45)
+                                                  list[i]['lv'].toString()) <=
+                                                  45)
                                               ? MyColors.djEightM
                                               : MyColors.djNineM),
                                   ),
@@ -1264,34 +1283,35 @@ class RoomItems {
                     //贵族
                     WidgetSpan(
                         child: Transform.translate(
-                          offset: Offset(0, 5.h), child: list[i]['noble_id'].toString() == "1"
-                            ? WidgetUtils.showImages(
-                            'assets/images/tequan_yongshi.png', 38.h, 38.h)
-                            : list[i]['noble_id'].toString() == "2"
-                            ? WidgetUtils.showImages(
-                            'assets/images/tequan_qishi.png', 38.h, 38.h)
-                            : list[i]['noble_id'].toString() == "3"
-                            ? WidgetUtils.showImages(
-                            'assets/images/tequan_bojue.png', 38.h, 38.h)
-                            : list[i]['noble_id'].toString() == "4"
-                            ? WidgetUtils.showImages(
-                            'assets/images/tequan_houjue.png', 38.h, 38.h)
-                            : list[i]['noble_id'].toString() == "5"
-                            ? WidgetUtils.showImages(
-                            'assets/images/tequan_gongjue.png',
-                            38.h,
-                            38.h)
-                            : list[i]['noble_id'].toString() == "6"
-                            ? WidgetUtils.showImages(
-                            'assets/images/tequan_guowang.png',
-                            38.h,
-                            38.h)
-                            : list[i]['noble_id'].toString() == "7"
-                            ? WidgetUtils.showImages(
-                            'assets/images/tequan_diwang.png',
-                            38.h,
-                            38.h)
-                            : const Text(''),)
+                          offset: Offset(0, 5.h),
+                          child: list[i]['noble_id'].toString() == "1"
+                              ? WidgetUtils.showImages(
+                              'assets/images/tequan_yongshi.png', 38.h, 38.h)
+                              : list[i]['noble_id'].toString() == "2"
+                              ? WidgetUtils.showImages(
+                              'assets/images/tequan_qishi.png', 38.h, 38.h)
+                              : list[i]['noble_id'].toString() == "3"
+                              ? WidgetUtils.showImages(
+                              'assets/images/tequan_bojue.png', 38.h, 38.h)
+                              : list[i]['noble_id'].toString() == "4"
+                              ? WidgetUtils.showImages(
+                              'assets/images/tequan_houjue.png', 38.h, 38.h)
+                              : list[i]['noble_id'].toString() == "5"
+                              ? WidgetUtils.showImages(
+                              'assets/images/tequan_gongjue.png',
+                              38.h,
+                              38.h)
+                              : list[i]['noble_id'].toString() == "6"
+                              ? WidgetUtils.showImages(
+                              'assets/images/tequan_guowang.png',
+                              38.h,
+                              38.h)
+                              : list[i]['noble_id'].toString() == "7"
+                              ? WidgetUtils.showImages(
+                              'assets/images/tequan_diwang.png',
+                              38.h,
+                              38.h)
+                              : const Text(''),)
                     ),
                     WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
                     // 靓号

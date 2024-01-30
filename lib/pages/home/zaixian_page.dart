@@ -152,10 +152,32 @@ class _ZaixianPageState extends State<ZaixianPage>
                                 ),
                               ],
                             ),
-                            list[i].isNew.toString() == '1'
+                            // 只有不是新贵或者新锐的时候展示萌新
+                            (list[i].isNew.toString() == '1' && list[i].newNoble.toString() == '0')
                                 ? WidgetUtils.showImages(
-                                'assets/images/dj/room_role_common.png', 30.h, 50.h)
-                                : const Text('')
+                                'assets/images/dj/room_role_common.png',
+                                30.h,
+                                50.h)
+                                : const Text(''),
+                            (list[i].isNew.toString() == '1' && list[i].newNoble.toString() == '0')
+                                ? WidgetUtils.commonSizedBox(0, 5)
+                                : const Text(''),
+                            // 展示新贵或者新锐图标
+                            list[i].newNoble.toString() == '1'
+                                ? WidgetUtils.showImages(
+                                'assets/images/dj/room_rui.png', 30.h, 50.h)
+                                : list[i].newNoble.toString() == '2'
+                                ? WidgetUtils.showImages(
+                                'assets/images/dj/room_gui.png',
+                                30.h,
+                                50.h)
+                                :  list[i].newNoble.toString() == '3' ? WidgetUtils.showImages(
+                                'assets/images/dj/room_gui.png',
+                                30.h,
+                                50.h) : const Text(''),
+                            list[i].newNoble.toString() != '0'
+                                ? WidgetUtils.commonSizedBox(0, 5)
+                                : const Text(''),
                           ],
                         ),
                       ),

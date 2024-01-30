@@ -40,6 +40,7 @@ class Data {
   String? labelName;
   int? live;
   int? isHi;
+  int? newNoble;
 
   Data(
       {this.uid,
@@ -53,7 +54,8 @@ class Data {
         this.isNew,
         this.labelName,
         this.live,
-        this.isHi});
+        this.isHi,
+        this.newNoble});
 
   Data.fromJson(Map<String, dynamic> json) {
     uid = json['uid'];
@@ -68,6 +70,7 @@ class Data {
     labelName = json['label_name'];
     live = json['live'];
     isHi = json['is_hi'];
+    newNoble = json['new_noble'];
   }
 
   Map<String, dynamic> toJson() {
@@ -84,6 +87,7 @@ class Data {
     data['label_name'] = this.labelName;
     data['live'] = this.live;
     data['is_hi'] = this.isHi;
+    data['new_noble'] = this.newNoble;
     return data;
   }
 }
