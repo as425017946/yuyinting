@@ -100,6 +100,7 @@ dependencies:
   cached_network_image: ^3.2.3
   # 播放视频
   video_player: ^2.7.0
+  video_thumbnail: ^0.5.3
   flutter_cache_manager: ^3.1.2
   # 数据库
   sqflite: ^2.2.8

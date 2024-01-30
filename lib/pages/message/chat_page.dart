@@ -1294,7 +1294,11 @@ class _ChatPageState extends State<ChatPage> {
                         onTap: (() {
                           //判断表情发送
                           if (MyUtils.checkClick()) {
-                            doPostCanSendUser(1);
+                            if(controller.text.length > 25){
+                              MyToastUtils.showToastBottom('单条消息要小于25个字呦~');
+                            }else{
+                              doPostCanSendUser(1);
+                            }
                           }
                         }),
                         child: Container(
@@ -1355,7 +1359,12 @@ class _ChatPageState extends State<ChatPage> {
                   child: SizedBox(
                     height: 450.h,
                     child: EmojiPicker(
-                      onEmojiSelected: (Category? category, Emoji emoji) {},
+                      onEmojiSelected: (Category? category, Emoji emoji) {
+                        final currentText = controller.text;
+                        if (currentText.length < 25) {
+                          controller.text = currentText + emoji.emoji;
+                        }
+                      },
                       onBackspacePressed: () {
                         // Do something when the user taps the backspace button (optional)
                         // Set it to null to hide the Backspace-Button

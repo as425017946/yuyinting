@@ -226,6 +226,18 @@ class _MyInfoPageState extends State<MyInfoPage> {
                                     12),
                               ) : const Text(''),
                               WidgetUtils.commonSizedBox(0, 10.h),
+                              isNew == 1
+                                  ? WidgetUtils.showImages(
+                                  'assets/images/dj/room_role_common.png',
+                                  30.h,
+                                  50.h)
+                                  : const Text(''),
+                              isNew == 1 ? WidgetUtils.commonSizedBox(0, 10.h): WidgetUtils.commonSizedBox(0, 0),
+                              isPretty == 1
+                                  ? WidgetUtils.showImages(
+                                  'assets/images/dj/lianghao.png', 30.h, 30.h)
+                                  : const Text(''),
+                              isPretty == 1 ? WidgetUtils.commonSizedBox(0, 10.h) : WidgetUtils.commonSizedBox(0, 0),
                               // 用户等级
                               level != 0
                                   ? Stack(
@@ -594,6 +606,9 @@ class _MyInfoPageState extends State<MyInfoPage> {
   late MyUserInfo userInfo;
   late GiftList giftList;
   bool isOK = false;
+  int isNew = 0; // 是否萌新
+  int isPretty = 0; // 是否靓号
+
   Future<void> doPostMyIfon() async {
     LogE('token ${sp.getString('user_id')}');
     LogE('token ${sp.getString('user_token')}');
@@ -616,6 +631,8 @@ class _MyInfoPageState extends State<MyInfoPage> {
             level = bean.data!.userInfo!.level as int;
             userInfo = bean.data!.userInfo!;
             giftList = bean.data!.giftList!;
+            isNew = bean.data!.userInfo!.isNew as int;
+            isPretty = bean.data!.userInfo!.isPretty as int;
           });
           // 发送通知
           eventBus.fire(myInfoBack(userInfo: userInfo, giftList: giftList));

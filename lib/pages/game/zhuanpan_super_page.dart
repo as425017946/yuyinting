@@ -38,7 +38,6 @@ class ZhuanPanSuperPage extends StatefulWidget {
 class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProviderStateMixin {
   late AnimationController animationController;
   late Animation<double> _animation;
-  late Animation<double> _curveAnimation;
 
   //是否正在转动
   bool isRunning = false;
@@ -84,31 +83,8 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
       vsync: this,
       duration: const Duration(milliseconds: 7000),
     );
-    //动画监听
-    animationController.addListener(() {
-      if (animationController.status == AnimationStatus.completed) {
-        LogE('停止了');
-        setState(() {
-          isRunning = false;
-          isXiazhu = true;
-        });
-        // 通知用户游戏结束，可以离开页面
-        eventBus.fire(GameBack(isBack: false));
-        // 打开礼物结果
-        MyUtils.goTransparentPageCom(context, ZhuanPanDaoJuPage(list: list, zonge: zonge, title: '超级转盘',));
-        // 归位
-        Future.delayed(const Duration(milliseconds: 500),((){
-          animationController.reset();
-        }));
-        //结束了
-      } else if (animationController.status == AnimationStatus.forward) {
-        //动画正在从开始处运行到结束处（正向运行）
-        // print('forward');
-      } else if (animationController.status == AnimationStatus.reverse) {
-        //动画正在从结束处运行到开始处（反向运行）。
-        // print('reverse');
-      }
-    });
+    // 监听动画
+    animationController?.addListener(_animListener);
     //初始位置
     _animation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
@@ -146,6 +122,35 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
       }
     });
   }
+
+  //网络动画
+  void _animListener() {
+    //TODO
+    if (animationController.status == AnimationStatus.completed) {
+      LogE('停止了');
+      setState(() {
+        isRunning = false;
+        isXiazhu = true;
+      });
+      // 通知用户游戏结束，可以离开页面
+      eventBus.fire(GameBack(isBack: false));
+      // 打开礼物结果
+      MyUtils.goTransparentPageCom(context, ZhuanPanDaoJuPage(list: list, zonge: zonge, title: '超级转盘',));
+      // 归位
+      Future.delayed(const Duration(milliseconds: 500),((){
+        animationController.reset();
+      }));
+      //结束了
+    } else if (animationController.status == AnimationStatus.forward) {
+      //动画正在从开始处运行到结束处（正向运行）
+      // print('forward');
+    } else if (animationController.status == AnimationStatus.reverse) {
+      //动画正在从结束处运行到开始处（反向运行）。
+      // print('reverse');
+    }
+  }
+
+
   int luckyName = 0;
   void start() {
     if(!isClose){

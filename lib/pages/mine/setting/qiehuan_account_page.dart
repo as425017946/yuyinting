@@ -412,6 +412,7 @@ class _QiehuanAccountPageState extends State<QiehuanAccountPage> {
           }));
           break;
         case MyHttpConfig.errorloginCode:
+          eventBus.fire(SubmitButtonBack(title: '成功切换账号'));
         // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;

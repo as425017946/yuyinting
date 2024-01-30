@@ -152,6 +152,10 @@ class _ZaixianPageState extends State<ZaixianPage>
                                 ),
                               ],
                             ),
+                            list[i].isNew.toString() == '1'
+                                ? WidgetUtils.showImages(
+                                'assets/images/dj/room_role_common.png', 30.h, 50.h)
+                                : const Text('')
                           ],
                         ),
                       ),

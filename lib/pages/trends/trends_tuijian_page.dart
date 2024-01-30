@@ -1,12 +1,14 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
-import 'package:svgaplayer_flutter/parser.dart';
-import 'package:svgaplayer_flutter/player.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
+import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 import 'package:yuyinting/pages/trends/trends_hi_page.dart';
 import 'package:yuyinting/pages/trends/trends_more_page.dart';
 import 'package:yuyinting/utils/log_util.dart';
@@ -32,6 +34,8 @@ import '../message/chat_page.dart';
 import '../message/geren/people_info_page.dart';
 import '../mine/my/my_info_page.dart';
 import 'PagePreviewVideo.dart';
+
+
 /// 动态-推荐页面
 class TrendsTuiJianPage extends StatefulWidget {
   const TrendsTuiJianPage({super.key});
@@ -40,23 +44,23 @@ class TrendsTuiJianPage extends StatefulWidget {
   State<TrendsTuiJianPage> createState() => _TrendsTuiJianPageState();
 }
 
-class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> with AutomaticKeepAliveClientMixin,SingleTickerProviderStateMixin{
+class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
+    with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
   @override
   bool get wantKeepAlive => true;
 
   String action = 'create';
   int index = 0;
   int length = 1;
-  double x = 0 , y = 0;
+  double x = 0, y = 0;
 
   List<ListTJ> _list = [];
   List<String> imgListUrl = [];
   List<BannerTJ> imgList = [];
   final RefreshController _refreshController =
-  RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: false);
   var listen;
   int page = 1;
-
 
   void _onRefresh() async {
     // monitor network fetch
@@ -90,17 +94,17 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> with AutomaticKee
     super.initState();
     doPostRecommendList('1');
 
-    animationController = SVGAAnimationController(vsync: this);
-    loadAnimation();
+    // animationController = SVGAAnimationController(vsync: this);
+    // loadAnimation();
 
     listen = eventBus.on<HiBack>().listen((event) {
       LogE('打招呼回调 == ${event.isBack}');
       LogE('打招呼回调 == ${_list.length}');
-      if(event.isBack){
+      if (event.isBack) {
         //目的是为了有打过招呼的这个人的hi都变成私信按钮
-        for(int i = 0 ; i < _list.length; i++){
+        for (int i = 0; i < _list.length; i++) {
           setState(() {
-            if(_list[i].uid.toString() == event.index){
+            if (_list[i].uid.toString() == event.index) {
               _list[i].isHi = 1;
             }
           });
@@ -109,244 +113,289 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> with AutomaticKee
     });
   }
 
-
   @override
   void dispose() {
-    animationController?.stop(); // 停止动画播放
-    animationController?.dispose();
-    // 移除监听器
-    animationController?.removeListener(() {
-      // 在这里处理动画的更新逻辑
-    });
-    animationController = null;
+    // animationController?.stop(); // 停止动画播放
+    // animationController?.dispose();
+    // // 移除监听器
+    // animationController?.removeListener(() {
+    //   // 在这里处理动画的更新逻辑
+    // });
+    // animationController = null;
     super.dispose();
     listen.cancel();
-    _videoController.dispose();
+    // _videoController.dispose();
   }
 
+  // SVGAAnimationController? animationController;
+  // //动画是否在播放
+  // bool isShow = false;
+  // void loadAnimation() async {
+  //   final videoItem = await _loadSVGA(false, 'assets/svga/dianzan_2.svga');
+  //   videoItem.autorelease = false;
+  //   animationController?.videoItem = videoItem;
+  //   animationController
+  //       ?.repeat() // Try to use .forward() .reverse()
+  //       .whenComplete(() => animationController?.videoItem = null);
+  //
+  //   // 监听动画
+  //   animationController?.addListener(() {
+  //     if (animationController!.currentFrame >= animationController!.frames - 1) {
+  //       // 动画播放到最后一帧时停止播放
+  //       animationController?.stop();
+  //       if(mounted) {
+  //         setState(() {
+  //           isShow = false;
+  //         });
+  //       }
+  //     }
+  //   });
+  // }
+  //
+  //
+  // Future _loadSVGA(isUrl, svgaUrl) {
+  //   Future Function(String) decoder;
+  //   if (isUrl) {
+  //     decoder = SVGAParser.shared.decodeFromURL;
+  //   } else {
+  //     decoder = SVGAParser.shared.decodeFromAssets;
+  //   }
+  //   return decoder(svgaUrl);
+  // }
 
-  SVGAAnimationController? animationController;
-  //动画是否在播放
-  bool isShow = false;
-  void loadAnimation() async {
-    final videoItem = await _loadSVGA(false, 'assets/svga/dianzan_2.svga');
-    videoItem.autorelease = false;
-    animationController?.videoItem = videoItem;
-    animationController
-        ?.repeat() // Try to use .forward() .reverse()
-        .whenComplete(() => animationController?.videoItem = null);
-
-    // 监听动画
-    animationController?.addListener(() {
-      if (animationController!.currentFrame >= animationController!.frames - 1) {
-        // 动画播放到最后一帧时停止播放
-        animationController?.stop();
-        if(mounted) {
-          setState(() {
-            isShow = false;
-          });
-        }
-      }
-    });
-  }
-
-
-  Future _loadSVGA(isUrl, svgaUrl) {
-    Future Function(String) decoder;
-    if (isUrl) {
-      decoder = SVGAParser.shared.decodeFromURL;
-    } else {
-      decoder = SVGAParser.shared.decodeFromAssets;
-    }
-    return decoder(svgaUrl);
-  }
-
-  Widget _itemsTuijian(BuildContext context, int i){
-    return
-      Column(
-        children: [
-          WidgetUtils.commonSizedBox(10, 0),
-          Container(
-            height: ScreenUtil().setHeight(100),
-            alignment: Alignment.centerLeft,
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: ((){
-                    if(MyUtils.checkClick()){
-                      // 如果点击的是自己，进入自己的主页
-                      if(sp.getString('user_id').toString() == _list[i].uid.toString()){
-                        MyUtils.goTransparentRFPage(context, const MyInfoPage());
-                      }else{
-                        sp.setString('other_id', _list[i].uid.toString());
-                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[i].uid.toString(),));
-                      }
-                    }
-                  }),
-                  child: WidgetUtils.CircleHeadImage(40, 40, _list[i].avatar!),
-                ),
-                WidgetUtils.commonSizedBox(0, 8),
-                Column(
-                  children: [
-                    const Expanded(child: Text('')),
-                    Container(
-                      width: ScreenUtil().setWidth(300),
-                      padding: EdgeInsets.only(left: ScreenUtil().setHeight(8)),
-                      child: Text(
-                        _list[i].nickname!,
-                        style: StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(30), fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                    SizedBox(
-                      height: ScreenUtil().setHeight(30),
-                      width: ScreenUtil().setWidth(300),
-                      child: Row(
-                        children: [
-                          Container(
-                            height: ScreenUtil().setHeight(25),
-                            padding: const EdgeInsets.only(left: 5, right: 5),
-                            margin: const EdgeInsets.only(top: 2),
-                            alignment: Alignment.center,
-                            //边框设置
-                            decoration: BoxDecoration(
-                              //背景
-                              color:  _list[i].gender == 1
-                                  ? MyColors.dtBlue
-                                  : MyColors.dtPink,
-                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                              borderRadius: const BorderRadius.all(Radius.circular(15.0)),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                WidgetUtils.showImages(_list[i].gender == 1 ? 'assets/images/nan.png' : 'assets/images/nv.png', 10, 10),
-                                WidgetUtils.commonSizedBox(0, 5),
-                                Column(
-                                  children: [
-                                    WidgetUtils.onlyText(_list[i].age == -1 ? '0·${_list[i].constellation!}' : '${_list[i].age.toString()}·${_list[i].constellation!}', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 10)),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                          const Spacer(),
-                        ],
-                      ),
-                    ),
-                    const Expanded(child: Text('')),
-                  ],
-                ),
-                const Expanded(child: Text('')),
-                _list[i].uid.toString() == sp.getString('user_id') ? const Text('') :
-                _list[i].isHi == 0
-                    ? GestureDetector(
-                  onTap: ((){
-                    MyUtils.goTransparentPageCom(context, TrendsHiPage(imgUrl: _list[i].avatar!, uid: _list[i].uid.toString(), index: i));
-                  }),
-                  child:  WidgetUtils.showImages(
-                      'assets/images/trends_hi.png', 124, 59),
-                )
-                    : GestureDetector(
-                  onTap: (() {
-                    MyUtils.goTransparentRFPage(context, ChatPage(nickName: _list[i].nickname!, otherUid: _list[i].uid.toString(), otherImg: _list[i].avatar!));
-                  }),
-                  child: WidgetUtils.myContainer(
-                      ScreenUtil().setHeight(45),
-                      ScreenUtil().setHeight(100),
-                      Colors.white,
-                      MyColors.homeTopBG,
-                      '私信',
-                      ScreenUtil().setSp(25),
-                      MyColors.homeTopBG),
-                ),
-              ],
-            ),
-          ),
-          WidgetUtils.commonSizedBox(5, 0),
-          GestureDetector(
-            onTap: ((){
-              MyUtils.goTransparentRFPage(context, TrendsMorePage( note_id: _list[i].id.toString(), index: i));
-            }),
-            child: WidgetUtils.onlyText(
-                _list[i].text!,
-                StyleUtils.getCommonTextStyle(
-                  color: Colors.black,
-                  fontSize: ScreenUtil().setSp(28),
-                )),
-          ),
-          WidgetUtils.commonSizedBox(10, 0),
-          _list[i].type == 2 ? showVideo(_list[i].imgUrl!) : showImag(_list[i].imgUrl!, i),
-          WidgetUtils.commonSizedBox(20, 0),
-          Row(
+  Widget _itemsTuijian(BuildContext context, int i) {
+    return Column(
+      children: [
+        WidgetUtils.commonSizedBox(10, 0),
+        Container(
+          height: ScreenUtil().setHeight(100),
+          alignment: Alignment.centerLeft,
+          child: Row(
             children: [
-              WidgetUtils.onlyText(
-                  '${_list[i].addTime}·来自：${_list[i].city}',
+              GestureDetector(
+                onTap: (() {
+                  if (MyUtils.checkClick()) {
+                    // 如果点击的是自己，进入自己的主页
+                    if (sp.getString('user_id').toString() ==
+                        _list[i].uid.toString()) {
+                      MyUtils.goTransparentRFPage(context, const MyInfoPage());
+                    } else {
+                      sp.setString('other_id', _list[i].uid.toString());
+                      MyUtils.goTransparentRFPage(
+                          context,
+                          PeopleInfoPage(
+                            otherId: _list[i].uid.toString(),
+                          ));
+                    }
+                  }
+                }),
+                child: WidgetUtils.CircleHeadImage(40, 40, _list[i].avatar!),
+              ),
+              WidgetUtils.commonSizedBox(0, 8),
+              Column(
+                children: [
+                  const Expanded(child: Text('')),
+                  Container(
+                    width: ScreenUtil().setWidth(300),
+                    padding: EdgeInsets.only(left: ScreenUtil().setHeight(8)),
+                    child: Text(
+                      _list[i].nickname!,
+                      style: StyleUtils.getCommonTextStyle(
+                          color: Colors.black,
+                          fontSize: ScreenUtil().setSp(30),
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                  SizedBox(
+                    height: ScreenUtil().setHeight(30),
+                    width: ScreenUtil().setWidth(300),
+                    child: Row(
+                      children: [
+                        Container(
+                          height: ScreenUtil().setHeight(25),
+                          padding: const EdgeInsets.only(left: 5, right: 5),
+                          margin: const EdgeInsets.only(top: 2),
+                          alignment: Alignment.center,
+                          //边框设置
+                          decoration: BoxDecoration(
+                            //背景
+                            color: _list[i].gender == 1
+                                ? MyColors.dtBlue
+                                : MyColors.dtPink,
+                            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(15.0)),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              WidgetUtils.showImages(
+                                  _list[i].gender == 1
+                                      ? 'assets/images/nan.png'
+                                      : 'assets/images/nv.png',
+                                  10,
+                                  10),
+                              WidgetUtils.commonSizedBox(0, 5),
+                              Column(
+                                children: [
+                                  WidgetUtils.onlyText(
+                                      _list[i].age == -1
+                                          ? '0·${_list[i].constellation!}'
+                                          : '${_list[i].age.toString()}·${_list[i].constellation!}',
+                                      StyleUtils.getCommonTextStyle(
+                                          color: Colors.white, fontSize: 10)),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                        const Spacer(),
+                      ],
+                    ),
+                  ),
+                  const Expanded(child: Text('')),
+                ],
+              ),
+              const Expanded(child: Text('')),
+              _list[i].uid.toString() == sp.getString('user_id')
+                  ? const Text('')
+                  : _list[i].isHi == 0
+                      ? GestureDetector(
+                          onTap: (() {
+                            MyUtils.goTransparentPageCom(
+                                context,
+                                TrendsHiPage(
+                                    imgUrl: _list[i].avatar!,
+                                    uid: _list[i].uid.toString(),
+                                    index: i));
+                          }),
+                          child: WidgetUtils.showImages(
+                              'assets/images/trends_hi.png', 124, 59),
+                        )
+                      : GestureDetector(
+                          onTap: (() {
+                            MyUtils.goTransparentRFPage(
+                                context,
+                                ChatPage(
+                                    nickName: _list[i].nickname!,
+                                    otherUid: _list[i].uid.toString(),
+                                    otherImg: _list[i].avatar!));
+                          }),
+                          child: WidgetUtils.myContainer(
+                              ScreenUtil().setHeight(45),
+                              ScreenUtil().setHeight(100),
+                              Colors.white,
+                              MyColors.homeTopBG,
+                              '私信',
+                              ScreenUtil().setSp(25),
+                              MyColors.homeTopBG),
+                        ),
+            ],
+          ),
+        ),
+        WidgetUtils.commonSizedBox(5, 0),
+        GestureDetector(
+          onTap: (() {
+            MyUtils.goTransparentRFPage(context,
+                TrendsMorePage(note_id: _list[i].id.toString(), index: i));
+          }),
+          child: WidgetUtils.onlyText(
+              _list[i].text!,
+              StyleUtils.getCommonTextStyle(
+                color: Colors.black,
+                fontSize: ScreenUtil().setSp(28),
+              )),
+        ),
+        WidgetUtils.commonSizedBox(10, 0),
+        _list[i].type == 2
+            ? showVideo(_list[i].imgUrl!,i)
+            : showImag(_list[i].imgUrl!, i),
+        WidgetUtils.commonSizedBox(20, 0),
+        Row(
+          children: [
+            WidgetUtils.onlyText(
+                '${_list[i].addTime}·来自：${_list[i].city}',
+                StyleUtils.getCommonTextStyle(
+                  color: Colors.grey,
+                  fontSize: ScreenUtil().setSp(21),
+                )),
+            const Expanded(child: Text('')),
+            GestureDetector(
+              onTap: (() {
+                setState(() {
+                  if (_list[i].isLike == 1) {
+                    action = 'delete';
+                  } else {
+                    action = 'create';
+                    // isShow = false;
+                  }
+                });
+                if (_list[i].isLike == 0) {
+                  // animationController?.reset();
+                  // animationController?.forward();
+                }
+                doPostLike(_list[i].id.toString(), i);
+              }),
+              child: WidgetUtils.showImages(
+                  _list[i].isLike == 0
+                      ? 'assets/images/trends_zan1.png'
+                      : 'assets/images/trends_zan_2.png',
+                  18,
+                  18),
+            ),
+            WidgetUtils.commonSizedBox(0, 5),
+            SizedBox(
+              width: ScreenUtil().setHeight(80),
+              child: WidgetUtils.onlyText(
+                  _list[i].like == 0 ? '抢首赞' : _list[i].like.toString(),
                   StyleUtils.getCommonTextStyle(
                     color: Colors.grey,
                     fontSize: ScreenUtil().setSp(21),
                   )),
-              const Expanded(child: Text('')),
-              GestureDetector(
-                onTap: ((){
-                  setState(() {
-                    if(_list[i].isLike == 1){
-                      action = 'delete';
-                    }else{
-                      action = 'create';
-                      isShow = false;
-                    }
-                  });
-                  if(_list[i].isLike == 0){
-                    animationController?.reset();
-                    animationController?.forward();
-                  }
-                  doPostLike(_list[i].id.toString(),i);
-                }),
-                child: WidgetUtils.showImages(_list[i].isLike == 0 ? 'assets/images/trends_zan1.png' : 'assets/images/trends_zan_2.png', 18, 18),
-              ),
-              WidgetUtils.commonSizedBox(0, 5),
-              SizedBox(
-                width: ScreenUtil().setHeight(80),
-                child: WidgetUtils.onlyText(
-                    _list[i].like == 0 ? '抢首赞' : _list[i].like.toString(),
-                    StyleUtils.getCommonTextStyle(
-                      color: Colors.grey,
-                      fontSize: ScreenUtil().setSp(21),
-                    )),
-              ),
-              GestureDetector(
-                onTap: ((){
-                  MyUtils.goTransparentRFPage(context, TrendsMorePage( note_id: _list[i].id.toString(),index:i));
-                }),
-                child: WidgetUtils.showImages(
-                    'assets/images/trends_message.png', 18, 18),
-              ),
-              WidgetUtils.commonSizedBox(0, 5),
-              GestureDetector(
-                onTap: ((){
-                  MyUtils.goTransparentRFPage(context, TrendsMorePage( note_id: _list[i].id.toString(),index:i));
-                }),
-                child: WidgetUtils.onlyText(
-                    _list[i].comment == 0 ? '评论' : _list[i].comment.toString(),
-                    StyleUtils.getCommonTextStyle(
-                      color: Colors.grey,
-                      fontSize: ScreenUtil().setSp(21),
-                    )),
-              ),
-            ],
-          ),
-          WidgetUtils.commonSizedBox(10, 0),
-          WidgetUtils.myLine()
-        ],
-      );
+            ),
+            GestureDetector(
+              onTap: (() {
+                MyUtils.goTransparentRFPage(context,
+                    TrendsMorePage(note_id: _list[i].id.toString(), index: i));
+              }),
+              child: WidgetUtils.showImages(
+                  'assets/images/trends_message.png', 18, 18),
+            ),
+            WidgetUtils.commonSizedBox(0, 5),
+            GestureDetector(
+              onTap: (() {
+                MyUtils.goTransparentRFPage(context,
+                    TrendsMorePage(note_id: _list[i].id.toString(), index: i));
+              }),
+              child: WidgetUtils.onlyText(
+                  _list[i].comment == 0 ? '评论' : _list[i].comment.toString(),
+                  StyleUtils.getCommonTextStyle(
+                    color: Colors.grey,
+                    fontSize: ScreenUtil().setSp(21),
+                  )),
+            ),
+          ],
+        ),
+        WidgetUtils.commonSizedBox(10, 0),
+        WidgetUtils.myLine()
+      ],
+    );
   }
 
-  late VideoPlayerController _videoController;
-  Widget showVideo(List<String> listImg) {
-    String a = listImg[0];
-    _videoController = VideoPlayerController.network(a,
-      videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+  _initializeVideoController(List<String> listImg,int i) async {
+    final fileName = await VideoThumbnail.thumbnailFile(
+      video: listImg[0],
+      thumbnailPath: (await getTemporaryDirectory()).path,
+      quality: 30,
     );
+    setState(() {
+      _list[i].imgUrl![1] = fileName!;
+    });
+    LogE('视频图片 $fileName');
+  }
+
+  Widget showVideo(List<String> listImg, int i) {
+    _initializeVideoController(listImg,i);
     return Row(
       children: [
         Container(
@@ -361,17 +410,24 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> with AutomaticKee
           child: Stack(
             alignment: Alignment.center,
             children: [
-              SizedBox(
+              Container(
                 width: ScreenUtil().setHeight(200),
                 height: ScreenUtil().setHeight(200),
-                child: AspectRatio(
-                  aspectRatio: _videoController.value.aspectRatio,
-                  child: VideoPlayer(_videoController),
+                //超出部分，可裁剪
+                clipBehavior: Clip.hardEdge,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.h),
                 ),
+                child: _list[i].imgUrl![1].isNotEmpty ?Image.file(
+                  File(_list[i].imgUrl![1]),
+                  fit: BoxFit.cover,
+                  gaplessPlayback: true,
+                ) : const Text(''),
               ),
               GestureDetector(
                 onTap: () {
-                  MyUtils.goTransparentRFPage(context, PagePreviewVideo(url: a));
+                  MyUtils.goTransparentRFPage(
+                      context, PagePreviewVideo(url: listImg[0]));
                 },
                 child: const Icon(
                   Icons.play_circle_fill_outlined,
@@ -448,19 +504,22 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> with AutomaticKee
           height: ScreenUtil().setHeight(350),
           child: Row(
             children: [
-              WidgetUtils.CircleImageNet(ScreenUtil().setHeight(350),
-                  ScreenUtil().setHeight(350), ScreenUtil().setHeight(10), listImg[0]),
+              WidgetUtils.CircleImageNet(
+                  ScreenUtil().setHeight(350),
+                  ScreenUtil().setHeight(350),
+                  ScreenUtil().setHeight(10),
+                  listImg[0]),
               WidgetUtils.commonSizedBox(0, 10),
               Expanded(
                   child: Column(
-                    children: [
-                      WidgetUtils.CircleImageNet(ScreenUtil().setHeight(170),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[1]),
-                      const Spacer(),
-                      WidgetUtils.CircleImageNet(ScreenUtil().setHeight(170),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[2]),
-                    ],
-                  )),
+                children: [
+                  WidgetUtils.CircleImageNet(ScreenUtil().setHeight(170),
+                      double.infinity, ScreenUtil().setHeight(10), listImg[1]),
+                  const Spacer(),
+                  WidgetUtils.CircleImageNet(ScreenUtil().setHeight(170),
+                      double.infinity, ScreenUtil().setHeight(10), listImg[2]),
+                ],
+              )),
             ],
           ),
         ),
@@ -482,24 +541,36 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> with AutomaticKee
               Row(
                 children: [
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(240),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[0])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(240),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[0])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(240),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[1])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(240),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[1])),
                 ],
               ),
               WidgetUtils.commonSizedBox(ScreenUtil().setHeight(10), 10),
               Row(
                 children: [
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(240),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[2])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(240),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[2])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(240),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[3])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(240),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[3])),
                 ],
               )
             ],
@@ -523,35 +594,53 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> with AutomaticKee
               Row(
                 children: [
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[0])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[0])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[1])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[1])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[2])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[2])),
                 ],
               ),
               WidgetUtils.commonSizedBox(ScreenUtil().setHeight(10), 10),
               Row(
                 children: [
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[3])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[3])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[4])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[4])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
                       child: Opacity(
-                        opacity: 0,
-                        child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                            double.infinity, ScreenUtil().setHeight(10), listImg[0]),
-                      )),
+                    opacity: 0,
+                    child: WidgetUtils.CircleImageNet(
+                        ScreenUtil().setHeight(180),
+                        double.infinity,
+                        ScreenUtil().setHeight(10),
+                        listImg[0]),
+                  )),
                 ],
               )
             ],
@@ -575,32 +664,50 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> with AutomaticKee
               Row(
                 children: [
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[0])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[0])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[1])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[1])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[2])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[2])),
                 ],
               ),
               WidgetUtils.commonSizedBox(ScreenUtil().setHeight(10), 10),
               Row(
                 children: [
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[3])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[3])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[4])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[4])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[5])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[5])),
                 ],
               )
             ],
@@ -615,7 +722,7 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> with AutomaticKee
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapDown: ((details){
+      onTapDown: ((details) {
         final tapPosition = details.globalPosition;
         setState(() {
           x = tapPosition.dx;
@@ -627,77 +734,94 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> with AutomaticKee
           Column(
             children: [
               WidgetUtils.commonSizedBox(20, 0),
+
               ///轮播图
-              imgList.isNotEmpty ? Container(
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                height:ScreenUtil().setHeight(140),
-                //超出部分，可裁剪
-                clipBehavior: Clip.hardEdge,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
+              imgList.isNotEmpty
+                  ? Container(
+                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      height: ScreenUtil().setHeight(140),
+                      //超出部分，可裁剪
+                      clipBehavior: Clip.hardEdge,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Swiper(
+                        itemBuilder: (BuildContext context, int index) {
+                          // 配置图片地址
+                          return CachedNetworkImage(
+                            imageUrl: imgList[index].img!,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) =>
+                                WidgetUtils.CircleImageAss(
+                              ScreenUtil().setHeight(140),
+                              double.infinity,
+                              ScreenUtil().setHeight(10),
+                              'assets/images/img_placeholder.png',
+                            ),
+                            errorWidget: (context, url, error) =>
+                                WidgetUtils.CircleImageAss(
+                              ScreenUtil().setHeight(140),
+                              double.infinity,
+                              ScreenUtil().setHeight(10),
+                              'assets/images/img_placeholder.png',
+                            ),
+                          );
+                        },
+                        // 配置图片数量
+                        itemCount: imgList.length,
+                        // 无限循环
+                        loop: true,
+                        // 自动轮播
+                        autoplay: true,
+                        autoplayDelay: 5000,
+                        duration: 2000,
+                        onTap: (index) {
+                          // LogE('用户点击引起下标改变调用');
+                          if (MyUtils.checkClick()) {
+                            MyUtils.goTransparentPageCom(
+                                context, WebPage(url: imgList[index].url!));
+                          }
+                        },
+                      ),
+                    )
+                  : Container(
+                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      height: ScreenUtil().setHeight(140),
+                      //超出部分，可裁剪
+                      clipBehavior: Clip.hardEdge,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+              Expanded(
+                child: SmartRefresher(
+                  header: MyUtils.myHeader(),
+                  footer: MyUtils.myFotter(),
+                  controller: _refreshController,
+                  enablePullUp: true,
+                  onLoading: _onLoading,
+                  onRefresh: _onRefresh,
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(20),
+                    itemBuilder: _itemsTuijian,
+                    itemCount: _list.length,
+                  ),
                 ),
-                child: Swiper(
-                  itemBuilder: (BuildContext context,int index){
-                    // 配置图片地址
-                    return CachedNetworkImage(
-                      imageUrl: imgList[index].img!,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => WidgetUtils.CircleImageAss(ScreenUtil().setHeight(140), double.infinity, ScreenUtil().setHeight(10) , 'assets/images/img_placeholder.png',),
-                      errorWidget: (context, url, error) => const Icon(Icons.error),
-                    );
-                  },
-                  // 配置图片数量
-                  itemCount: imgList.length ,
-                  // 无限循环
-                  loop: true,
-                  // 自动轮播
-                  autoplay: true,
-                  autoplayDelay: 5000,
-                  duration: 2000,
-                  onTap: (index){
-                    // LogE('用户点击引起下标改变调用');
-                    if(MyUtils.checkClick()){
-                      MyUtils.goTransparentPageCom(context, WebPage(url: imgList[index].url!));
-                    }
-                  },
-                ),
-              ) : Container(
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                height:ScreenUtil().setHeight(140),
-                //超出部分，可裁剪
-                clipBehavior: Clip.hardEdge,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              Expanded(child: SmartRefresher(
-                header: MyUtils.myHeader(),
-                footer: MyUtils.myFotter(),
-                controller: _refreshController,
-                enablePullUp: true,
-                onLoading: _onLoading,
-                onRefresh: _onRefresh,
-                child: ListView.builder(
-                  padding: const EdgeInsets.all(20),
-                  itemBuilder: _itemsTuijian,
-                  itemCount: _list.length,
-                ),
-              ),)
+              )
             ],
           ),
-          ///点赞显示样式
-          isShow ? Positioned(
-            left: x-ScreenUtil().setHeight(50),
-            top: y-ScreenUtil().setHeight(175),
-            height: ScreenUtil().setHeight(100),
-            width: ScreenUtil().setHeight(100),
-            child: SVGAImage(animationController!),
-          ) : const Text('')
+          // ///点赞显示样式
+          // isShow ? Positioned(
+          //   left: x-ScreenUtil().setHeight(50),
+          //   top: y-ScreenUtil().setHeight(175),
+          //   height: ScreenUtil().setHeight(100),
+          //   width: ScreenUtil().setHeight(100),
+          //   child: SVGAImage(animationController!),
+          // ) : const Text('')
         ],
       ),
     );
   }
-
 
   /// 推荐动态列表
   Future<void> doPostRecommendList(is_refresh) async {
@@ -715,30 +839,32 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> with AutomaticKee
             if (page == 1) {
               _list.clear();
             }
-            if(bean.data!.banner!.isNotEmpty){
+            if (bean.data!.banner!.isNotEmpty) {
               imgList.clear();
               imgList = bean.data!.banner!;
             }
             if (bean.data!.list!.isNotEmpty) {
-              for(int i =0; i < bean.data!.list!.length; i++){
+              for (int i = 0; i < bean.data!.list!.length; i++) {
                 _list.add(bean.data!.list![i]);
+                if(bean.data!.list![i].type == 2){
+                  _list[i].imgUrl!.add('');
+                }
               }
               LogE('推荐${_list.length}');
               length = bean.data!.list!.length;
-            }else{
+            } else {
               if (page == 1) {
                 length = 0;
-              }else{
-                if(bean.data!.list!.length < MyConfig.pageSize){
+              } else {
+                if (bean.data!.list!.length < MyConfig.pageSize) {
                   _refreshController.loadNoData();
                 }
               }
             }
-
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -753,7 +879,7 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> with AutomaticKee
   }
 
   /// 点赞
-  Future<void> doPostLike(note_id,index) async {
+  Future<void> doPostLike(note_id, index) async {
     LogE('点赞数据$note_id');
     Map<String, dynamic> params = <String, dynamic>{
       'note_id': note_id,
@@ -765,17 +891,17 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> with AutomaticKee
         case MyHttpConfig.successCode:
           int a = _list[index].like as int;
           setState(() {
-            if(action == 'delete'){
+            if (action == 'delete') {
               _list[index].isLike = 0;
               _list[index].like = a - 1;
-            }else{
+            } else {
               _list[index].isLike = 1;
               _list[index].like = a + 1;
             }
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -786,5 +912,4 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage> with AutomaticKee
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
-
 }

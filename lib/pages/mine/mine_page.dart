@@ -42,6 +42,8 @@ class _MinePageState extends State<MinePage> {
   var listen;
   int level = 0; //用户等级
   int isAgent = 0; //是否有代理权限 0无1有
+  int isNew = 0; // 是否萌新
+  int isPretty = 0; // 是否靓号
   String userNumber = '',
       care = '',
       beCare = '',
@@ -55,6 +57,7 @@ class _MinePageState extends State<MinePage> {
   // 是否有入住审核信息
   bool isShenHe = false;
   var listenSH;
+
   // 设备是安卓还是ios
   String isDevices = 'android';
 
@@ -66,7 +69,7 @@ class _MinePageState extends State<MinePage> {
       setState(() {
         isDevices = 'android';
       });
-    }else if (Platform.isIOS){
+    } else if (Platform.isIOS) {
       setState(() {
         isDevices = 'ios';
       });
@@ -140,7 +143,7 @@ class _MinePageState extends State<MinePage> {
     });
 
     listenSH = eventBus.on<SubmitButtonBack>().listen((event) {
-      if(event.title == '审核全部完成'){
+      if (event.title == '审核全部完成') {
         setState(() {
           isShenHe = false;
         });
@@ -269,6 +272,17 @@ class _MinePageState extends State<MinePage> {
                                         fontSize: ScreenUtil().setSp(38)),
                                   ),
                             WidgetUtils.commonSizedBox(0, 5),
+                            isNew == 1
+                                ? WidgetUtils.showImages(
+                                'assets/images/dj/room_role_common.png',
+                                30.h,
+                                50.h)
+                                : const Text(''),
+                            isNew == 1 ? WidgetUtils.commonSizedBox(0, 5) : const Text(''),
+                            isPretty == 1
+                                ? WidgetUtils.showImages(
+                                'assets/images/dj/lianghao.png', 30.h, 30.h)
+                                : const Text(''),
                           ],
                         ),
                       ),
@@ -286,8 +300,8 @@ class _MinePageState extends State<MinePage> {
                                   ? MyColors.dtBlue
                                   : MyColors.dtPink,
                               //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                              borderRadius: const BorderRadius.all(
-                                  Radius.circular(20.0)),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(20.0)),
                             ),
                             child: WidgetUtils.showImages(
                                 sp.getInt('user_gender') == 1
@@ -300,93 +314,93 @@ class _MinePageState extends State<MinePage> {
                           // 用户等级
                           level != 0
                               ? Stack(
-                            alignment: Alignment.centerLeft,
-                            children: [
-                              WidgetUtils.showImagesFill(
-                                  (level >= 1 && level <= 10)
-                                      ? 'assets/images/dj/dj_c_1-10.png'
-                                      : (level >= 11 && level <= 15)
-                                      ? 'assets/images/dj/dj_c_11-15.png'
-                                      : (level >= 16 && level <= 20)
-                                      ? 'assets/images/dj/dj_c_16-20.png'
-                                      : (level >= 21 &&
-                                      level <= 25)
-                                      ? 'assets/images/dj/dj_c_21-25.png'
-                                      : (level >= 26 &&
-                                      level <= 30)
-                                      ? 'assets/images/dj/dj_c_26-30.png'
-                                      : (level >= 31 &&
-                                      level <=
-                                          35)
-                                      ? 'assets/images/dj/dj_c_31-35.png'
-                                      : (level >= 36 &&
-                                      level <=
-                                          40)
-                                      ? 'assets/images/dj/dj_c_36-40.png'
-                                      : (level >= 41 &&
-                                      level <= 45)
-                                      ? 'assets/images/dj/dj_c_41-45.png'
-                                      : 'assets/images/dj/dj_c_46-50.png',
-                                  ScreenUtil().setHeight(30),
-                                  ScreenUtil().setHeight(85)),
-                              Positioned(
-                                  left: 45.w,
-                                  child: Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      Text(
-                                        'LV.${level.toString()}',
-                                        style: TextStyle(
-                                            fontSize:
-                                            ScreenUtil().setSp(18),
-                                            fontWeight: FontWeight.w600,
-                                            fontFamily: 'ARIAL',
-                                            foreground: Paint()
-                                              ..style =
-                                                  PaintingStyle.stroke
-                                              ..strokeWidth = 2
-                                              ..color = (level >= 1 &&
-                                                  level <= 10)
-                                                  ? MyColors.djOneM
-                                                  : (level >= 11 &&
-                                                  level <= 15)
-                                                  ? MyColors.djTwoM
-                                                  : (level >= 16 &&
-                                                  level <=
-                                                      20)
-                                                  ? MyColors
-                                                  .djThreeM
-                                                  : (level >= 21 &&
-                                                  level <=
-                                                      25)
-                                                  ? MyColors
-                                                  .djFourM
-                                                  : (level >= 26 &&
-                                                  level <=
-                                                      30)
-                                                  ? MyColors
-                                                  .djFiveM
-                                                  : (level >= 31 && level <= 35)
-                                                  ? MyColors.djSixM
-                                                  : (level >= 36 && level <= 40)
-                                                  ? MyColors.djSevenM
-                                                  : (level >= 41 && level <= 45)
-                                                  ? MyColors.djEightM
-                                                  : MyColors.djNineM),
-                                      ),
-                                      Text(
-                                        'LV.${level.toString()}',
-                                        style: TextStyle(
-                                            color: MyColors.djOne,
-                                            fontSize:
-                                            ScreenUtil().setSp(18),
-                                            fontWeight: FontWeight.w600,
-                                            fontFamily: 'ARIAL'),
-                                      ),
-                                    ],
-                                  ))
-                            ],
-                          )
+                                  alignment: Alignment.centerLeft,
+                                  children: [
+                                    WidgetUtils.showImagesFill(
+                                        (level >= 1 && level <= 10)
+                                            ? 'assets/images/dj/dj_c_1-10.png'
+                                            : (level >= 11 && level <= 15)
+                                                ? 'assets/images/dj/dj_c_11-15.png'
+                                                : (level >= 16 && level <= 20)
+                                                    ? 'assets/images/dj/dj_c_16-20.png'
+                                                    : (level >= 21 &&
+                                                            level <= 25)
+                                                        ? 'assets/images/dj/dj_c_21-25.png'
+                                                        : (level >= 26 &&
+                                                                level <= 30)
+                                                            ? 'assets/images/dj/dj_c_26-30.png'
+                                                            : (level >= 31 &&
+                                                                    level <= 35)
+                                                                ? 'assets/images/dj/dj_c_31-35.png'
+                                                                : (level >= 36 &&
+                                                                        level <=
+                                                                            40)
+                                                                    ? 'assets/images/dj/dj_c_36-40.png'
+                                                                    : (level >= 41 &&
+                                                                            level <=
+                                                                                45)
+                                                                        ? 'assets/images/dj/dj_c_41-45.png'
+                                                                        : 'assets/images/dj/dj_c_46-50.png',
+                                        ScreenUtil().setHeight(30),
+                                        ScreenUtil().setHeight(85)),
+                                    Positioned(
+                                        left: 45.w,
+                                        child: Stack(
+                                          alignment: Alignment.center,
+                                          children: [
+                                            Text(
+                                              'LV.${level.toString()}',
+                                              style: TextStyle(
+                                                  fontSize:
+                                                      ScreenUtil().setSp(18),
+                                                  fontWeight: FontWeight.w600,
+                                                  fontFamily: 'ARIAL',
+                                                  foreground: Paint()
+                                                    ..style =
+                                                        PaintingStyle.stroke
+                                                    ..strokeWidth = 2
+                                                    ..color = (level >= 1 &&
+                                                            level <= 10)
+                                                        ? MyColors.djOneM
+                                                        : (level >= 11 &&
+                                                                level <= 15)
+                                                            ? MyColors.djTwoM
+                                                            : (level >= 16 &&
+                                                                    level <= 20)
+                                                                ? MyColors
+                                                                    .djThreeM
+                                                                : (level >= 21 &&
+                                                                        level <=
+                                                                            25)
+                                                                    ? MyColors
+                                                                        .djFourM
+                                                                    : (level >= 26 &&
+                                                                            level <=
+                                                                                30)
+                                                                        ? MyColors
+                                                                            .djFiveM
+                                                                        : (level >= 31 &&
+                                                                                level <= 35)
+                                                                            ? MyColors.djSixM
+                                                                            : (level >= 36 && level <= 40)
+                                                                                ? MyColors.djSevenM
+                                                                                : (level >= 41 && level <= 45)
+                                                                                    ? MyColors.djEightM
+                                                                                    : MyColors.djNineM),
+                                            ),
+                                            Text(
+                                              'LV.${level.toString()}',
+                                              style: TextStyle(
+                                                  color: MyColors.djOne,
+                                                  fontSize:
+                                                      ScreenUtil().setSp(18),
+                                                  fontWeight: FontWeight.w600,
+                                                  fontFamily: 'ARIAL'),
+                                            ),
+                                          ],
+                                        ))
+                                  ],
+                                )
                               : const Text(''),
                           WidgetUtils.commonSizedBox(0, 5),
                           GestureDetector(
@@ -736,8 +750,10 @@ class _MinePageState extends State<MinePage> {
                         'assets/images/mine_zhuangban.png', '我的装扮', false),
                     WidgetUtils.whiteKuang(
                         'assets/images/mine_gonghui.png', '公会中心', isShenHe),
-                    isAgent == 1 ?  WidgetUtils.whiteKuang(
-                        'assets/images/mine_quan.png', '全民代理', false) : WidgetUtils.commonSizedBox(0, 0),
+                    isAgent == 1
+                        ? WidgetUtils.whiteKuang(
+                            'assets/images/mine_quan.png', '全民代理', false)
+                        : WidgetUtils.commonSizedBox(0, 0),
                     WidgetUtils.whiteKuang(
                         'assets/images/mine_daili.png', '等级成就', false),
                     WidgetUtils.whiteKuang(
@@ -783,6 +799,8 @@ class _MinePageState extends State<MinePage> {
             guizuType = bean.data!.nobleId as int;
             identity = bean.data!.identity!;
             isAgent = bean.data!.isAgent as int;
+            isNew = bean.data!.isNew as int;
+            isPretty = bean.data!.isPretty as int;
             // 如果身份变了
             if (sp.getString('user_identity').toString() != identity) {
               eventBus.fire(SubmitButtonBack(title: '更换了身份'));

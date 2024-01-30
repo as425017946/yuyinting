@@ -49,6 +49,7 @@ class Data {
   String? avatarFrameImg;
   String? avatarFrameGifImg;
   int? level;
+  int? isNew;
 
   Data(
       {this.number,
@@ -76,7 +77,8 @@ class Data {
         this.isFollow,
         this.avatarFrameGifImg,
         this.avatarFrameImg,
-        this.level});
+        this.level,
+        this.isNew,});
 
   Data.fromJson(Map<String, dynamic> json) {
     number = json['number'];
@@ -105,6 +107,7 @@ class Data {
     avatarFrameImg = json['avatar_frame_img'];
     avatarFrameGifImg = json['avatar_frame_gif_img'];
     level = json['level'];
+    isNew = json['is_new'];
   }
 
   Map<String, dynamic> toJson() {
@@ -133,6 +136,7 @@ class Data {
     data['avatar_frame_img'] = this.avatarFrameImg;
     data['avatar_frame_gif_img'] = this.avatarFrameGifImg;
     data['level'] = this.level;
+    data['is_new'] = this.isNew;
     return data;
   }
 }

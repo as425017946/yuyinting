@@ -898,20 +898,8 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
     animationController
         ?.repeat() // Try to use .forward() .reverse()
         .whenComplete(() => animationController?.videoItem = null);
-
-    // 监听动画
-    animationController?.addListener(() {
-      if (animationController!.currentFrame >=
-          animationController!.frames - 1) {
-        // 动画播放到最后一帧时停止播放
-        animationController?.stop();
-        if (mounted) {
-          setState(() {
-            isStar = false;
-          });
-        }
-      }
-    });
+    // 监听动画_animListenerStar
+    animationController?.addListener(_animListenerStar);
   }
 
   Future _loadSVGA(isUrl, svgaUrl) {
@@ -966,58 +954,14 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
     controller2 =
         AnimationController(duration: const Duration(seconds: 20), vsync: this);
     // 监听动画
-    controller2.addListener(() {
-      if (controller2.isCompleted) {
-        LogE('当前时间**  ${DateTime.now()}');
-        suijishu();
-        controller2.reset();
-        //背景暂停
-        pauseTimer();
-        _controller.jumpToPage(0);
-        //小车状态全部变成false状态
-        for (int i = 0; i < 7; i++) {
-          setState(() {
-            listCar[i] = false;
-          });
-        }
-        //下注状态
-        for (int i = 0; i < listA.length; i++) {
-          setState(() {
-            listA[i] = false;
-          });
-        }
-        // 下注记录清空
-        for (int i = 0; i < listJL.length; i++) {
-          setState(() {
-            listJL[i] = 0;
-          });
-        }
-        controllerGO.reset();
-        _timer3?.cancel();
-        Future.delayed(const Duration(seconds: 2), () {
-          setState(() {
-            isShow = true;
-          });
-          starTimerDJS();
-        });
-        // controllerZD.reset();
-        //等1秒钟打开中奖页面
-        // MyUtils.goTransparentPageCom(context, const ZhongJiangPage());
-      }
-    });
+    controller2.addListener(_animListenerCar);
 
     // GO的动画
     controllerGO = AnimationController(
         duration: const Duration(milliseconds: 1000), vsync: this)
       ..addStatusListener((status) {});
     animationGO = Tween<double>(begin: 0, end: 1).animate(controllerGO);
-    controllerGO.addListener(() {
-      if (controllerGO.isCompleted) {
-        setState(() {
-          isGo = false;
-        });
-      }
-    });
+    controllerGO.addListener(_animListenerGo);
 
     // 接受下注的im信息
     listenZDY = eventBus.on<JoinRoomYBack>().listen((event) {
@@ -1068,6 +1012,72 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
       sp.setBool('car_queren', false);
     }
   }
+  //网络动画
+  void _animListenerCar() {
+    //TODO
+
+    if (controller2.isCompleted) {
+      LogE('当前时间**  ${DateTime.now()}');
+      suijishu();
+      controller2.reset();
+      //背景暂停
+      pauseTimer();
+      _controller.jumpToPage(0);
+      //小车状态全部变成false状态
+      for (int i = 0; i < 7; i++) {
+        setState(() {
+          listCar[i] = false;
+        });
+      }
+      //下注状态
+      for (int i = 0; i < listA.length; i++) {
+        setState(() {
+          listA[i] = false;
+        });
+      }
+      // 下注记录清空
+      for (int i = 0; i < listJL.length; i++) {
+        setState(() {
+          listJL[i] = 0;
+        });
+      }
+      controllerGO.reset();
+      _timer3?.cancel();
+      Future.delayed(const Duration(seconds: 2), () {
+        setState(() {
+          isShow = true;
+        });
+        starTimerDJS();
+      });
+      // controllerZD.reset();
+      //等1秒钟打开中奖页面
+      // MyUtils.goTransparentPageCom(context, const ZhongJiangPage());
+    }
+  }
+  //网络动画
+  void _animListenerGo() {
+    //TODO
+    if (controllerGO.isCompleted) {
+      setState(() {
+        isGo = false;
+      });
+    }
+  }
+  //网络动画
+  void _animListenerStar() {
+    //TODO
+    if (animationController!.currentFrame >=
+        animationController!.frames - 1) {
+      // 动画播放到最后一帧时停止播放
+      animationController?.stop();
+      if (mounted) {
+        setState(() {
+          isStar = false;
+        });
+      }
+    }
+  }
+
 
   // Connectivity connectivity = Connectivity();
   // late StreamSubscription<ConnectivityResult> subscription;

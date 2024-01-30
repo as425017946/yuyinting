@@ -188,7 +188,7 @@ class HomeItems {
     String info = '';
     if(type == 0) {
       info =
-          '在${hf.roomName}的超级转盘玩法中赢得价值388800的瑞麟*1';
+          '${hf.fromNickname!}在${hf.roomName!}的超级转盘玩法中赢得价值388800的瑞麟*1';
     }else{
       info =
       '神豪降临${hf.fromNickname!}在${hf.roomName!}送给了${hf.toNickname!}价值388800的瑞麟*1 快来围观吧！';

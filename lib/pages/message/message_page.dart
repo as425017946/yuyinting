@@ -508,58 +508,58 @@ class _MessagePageState extends State<MessagePage> {
     Database? db = await databaseHelper.database;
     Loading.show();
     try {
-      xtListBean bean = await DataUtils.postSystemMsgList();
-      switch (bean.code) {
-        case MyHttpConfig.successCode:
-          // if (bean.data!.list!.isNotEmpty) {
-          //   setState(() {
-          //     info = bean.data!.list![bean.data!.list!.length - 1].text!;
-          //     time = bean.data!.list![bean.data!.list!.length - 1].addTime!
-          //         .substring(0, 10);
-          //     unRead = bean.data!.list!.length;
-          //   });
-          //   for (int i = 0; i < bean.data!.list!.length; i++) {
-          //     Map<String, dynamic> params = <String, dynamic>{
-          //       'messageID': bean.data!.list![i].id as int,
-          //       'type': bean.data!.list![i].type,
-          //       'title': bean.data!.list![i].title,
-          //       'text': bean.data!.list![i].text,
-          //       'img': bean.data!.list![i].img,
-          //       'url': bean.data!.list![i].url,
-          //       'add_time': bean.data!.list![i].addTime,
-          //       'data_status': 0,
-          //       'img_url': bean.data!.list![i].imgUrl,
-          //     };
-          //     // 插入数据
-          //     await databaseHelper.insertData('messageXTTable', params);
-          //   }
-          // } else {
-          //   // 获取所有数据
-          //   List<Map<String, dynamic>> allData =
-          //       await databaseHelper.getAllData('messageXTTable');
-          //   if (allData.isNotEmpty) {
-          //     for (int i = 0; i < allData.length; i++) {
-          //       if (allData[i]['data_status'] == 0) {
-          //         setState(() {
-          //           unRead++;
-          //         });
-          //       }
-          //     }
-          //     setState(() {
-          //       info = allData[allData.length - 1]['text'];
-          //       time = allData[allData.length - 1]['add_time'].substring(0, 10);
-          //     });
-          //   }
-          // }
-          break;
-        case MyHttpConfig.errorloginCode:
-          // ignore: use_build_context_synchronously
-          MyUtils.jumpLogin(context);
-          break;
-        default:
-          MyToastUtils.showToastBottom(bean.msg!);
-          break;
-      }
+      // xtListBean bean = await DataUtils.postSystemMsgList();
+      // switch (bean.code) {
+      //   case MyHttpConfig.successCode:
+      //     // if (bean.data!.list!.isNotEmpty) {
+      //     //   setState(() {
+      //     //     info = bean.data!.list![bean.data!.list!.length - 1].text!;
+      //     //     time = bean.data!.list![bean.data!.list!.length - 1].addTime!
+      //     //         .substring(0, 10);
+      //     //     unRead = bean.data!.list!.length;
+      //     //   });
+      //     //   for (int i = 0; i < bean.data!.list!.length; i++) {
+      //     //     Map<String, dynamic> params = <String, dynamic>{
+      //     //       'messageID': bean.data!.list![i].id as int,
+      //     //       'type': bean.data!.list![i].type,
+      //     //       'title': bean.data!.list![i].title,
+      //     //       'text': bean.data!.list![i].text,
+      //     //       'img': bean.data!.list![i].img,
+      //     //       'url': bean.data!.list![i].url,
+      //     //       'add_time': bean.data!.list![i].addTime,
+      //     //       'data_status': 0,
+      //     //       'img_url': bean.data!.list![i].imgUrl,
+      //     //     };
+      //     //     // 插入数据
+      //     //     await databaseHelper.insertData('messageXTTable', params);
+      //     //   }
+      //     // } else {
+      //     //   // 获取所有数据
+      //     //   List<Map<String, dynamic>> allData =
+      //     //       await databaseHelper.getAllData('messageXTTable');
+      //     //   if (allData.isNotEmpty) {
+      //     //     for (int i = 0; i < allData.length; i++) {
+      //     //       if (allData[i]['data_status'] == 0) {
+      //     //         setState(() {
+      //     //           unRead++;
+      //     //         });
+      //     //       }
+      //     //     }
+      //     //     setState(() {
+      //     //       info = allData[allData.length - 1]['text'];
+      //     //       time = allData[allData.length - 1]['add_time'].substring(0, 10);
+      //     //     });
+      //     //   }
+      //     // }
+      //     break;
+      //   case MyHttpConfig.errorloginCode:
+      //     // ignore: use_build_context_synchronously
+      //     MyUtils.jumpLogin(context);
+      //     break;
+      //   default:
+      //     MyToastUtils.showToastBottom(bean.msg!);
+      //     break;
+      // }
       List<Map<String, dynamic>> allData =
           await databaseHelper.getAllData('messageSLTable');
       // 执行查询操作
