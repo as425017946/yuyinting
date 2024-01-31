@@ -138,13 +138,13 @@ class _MessagePageState extends State<MessagePage> {
                       100.h,
                       50.h,
                       listMessage[i]['otherHeadNetImg']),
-                  listU[i].liveStatus == 1
+                  listMessage[i]['liveStatus'] == 1
                       ? WidgetUtils.showImages(
                           'assets/images/zhibozhong.webp',
                           110.h,
                           110.h,
                         )
-                      : listU[i].loginStatus == 1
+                      : listMessage[i]['loginStatus'] == 1
                           ? Container(
                               height: 60.h,
                               width: 60.h,
@@ -418,7 +418,7 @@ class _MessagePageState extends State<MessagePage> {
             //     ),
             //   ),
             // ),
-            length > 0
+            listMessage.isNotEmpty
                 ? Expanded(
                     child: ListView.builder(
                       padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
@@ -560,7 +560,8 @@ class _MessagePageState extends State<MessagePage> {
       //     MyToastUtils.showToastBottom(bean.msg!);
       //     break;
       // }
-
+      List<Map<String, dynamic>> allData =
+          await databaseHelper.getAllData('messageSLTable');
       // 执行查询操作
       String queryM =
           'select MAX(id) AS id from messageSLTable group by combineID order by weight desc,add_time desc';
@@ -570,7 +571,6 @@ class _MessagePageState extends State<MessagePage> {
       List<int> listId = [];
       String ids = '';
       for (int i = 0; i < result.length; i++) {
-        LogE('用户id  ${result[i]['id']}');
         listId.add(result[i]['id']);
         if (ids.isNotEmpty) {
           ids = '$ids,${result[i]['id'].toString()}';
@@ -583,7 +583,7 @@ class _MessagePageState extends State<MessagePage> {
           List.generate(listId.length, (index) => '?').join(',');
       // 构建查询语句和参数
       String query =
-          'SELECT * FROM messageSLTable WHERE id IN ($placeholders) and uid = ${sp.getString('user_id')}';
+          'SELECT * FROM messageSLTable WHERE id IN ($placeholders) and uid = ${sp.getString('user_id')} order by weight desc,add_time desc';
       List<dynamic> args = listId;
       // 执行查询
       List<Map<String, dynamic>> result2 = await db.rawQuery(query, args);
@@ -650,8 +650,12 @@ class _MessagePageState extends State<MessagePage> {
         case MyHttpConfig.successCode:
           setState(() {
             if (bean.data!.isNotEmpty) {
-              listU = bean.data!;
-              length = listU.length;
+              for (int i = 0; i < bean.data!.length; i++) {
+                setState(() {
+                  listMessage[i]['liveStatus'] = bean.data![i].liveStatus;
+                  listMessage[i]['loginStatus'] = bean.data![i].loginStatus;
+                });
+              }
             }
           });
           break;
@@ -664,7 +668,7 @@ class _MessagePageState extends State<MessagePage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
+
 }

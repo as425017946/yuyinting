@@ -95,17 +95,25 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
                             //     ScreenUtil().setHeight(31),
                             //     ScreenUtil().setHeight(29)),
                             const Expanded(child: Text('')),
-                            WidgetUtils.onlyText(
-                                DateTime.parse(
-                                        DateTime.fromMillisecondsSinceEpoch(
-                                                int.parse(
-                                                    listMessage[i]['add_time']))
-                                            .toString())
-                                    .toString()
-                                    .substring(0, 10),
-                                StyleUtils.getCommonTextStyle(
-                                    color: MyColors.roomTCWZ3,
-                                    fontSize: ScreenUtil().setSp(25)))
+                            listMessage[i]['nickName'].toString() == '维C客服'
+                                ? Text(
+                              '官方客服',
+                              style: StyleUtils.getCommonTextStyle(
+                                  color: MyColors.homeTopBG,
+                                  fontSize: ScreenUtil().setSp(25)),
+                            )
+                                : Text(
+                              DateTime.parse(
+                                  DateTime.fromMillisecondsSinceEpoch(
+                                      int.parse(listMessage[i]
+                                      ['add_time']))
+                                      .toString())
+                                  .toString()
+                                  .substring(0, 10),
+                              style: StyleUtils.getCommonTextStyle(
+                                  color: MyColors.roomTCWZ3,
+                                  fontSize: ScreenUtil().setSp(25)),
+                            ),
                           ],
                         ),
                       ),
@@ -242,9 +250,6 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
   Future<void> doPostSystemMsgList() async {
     DatabaseHelper databaseHelper = DatabaseHelper();
     Database? db = await databaseHelper.database;
-
-    List<Map<String, dynamic>> allData =
-        await databaseHelper.getAllData('messageSLTable');
     // 执行查询操作
     String queryM =
         'select MAX(id) AS id from messageSLTable group by combineID order by weight desc,add_time desc';
@@ -265,7 +270,7 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
         List.generate(listId.length, (index) => '?').join(',');
     // 构建查询语句和参数
     String query =
-        'SELECT * FROM messageSLTable WHERE id IN ($placeholders)  and uid = ${sp.getString('user_id')}';
+        'SELECT * FROM messageSLTable WHERE id IN ($placeholders)  and uid = ${sp.getString('user_id')}  order by weight desc,add_time desc';
     List<dynamic> args = listId;
     // 执行查询
     List<Map<String, dynamic>> result2 = await db.rawQuery(query, args);
