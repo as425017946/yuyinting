@@ -1461,7 +1461,8 @@ class RoomItems {
       String roomNumber,
       String follow_status,
       String hot_degree,
-      String roomID) {
+      String roomID,
+      List<MikeList> listm) {
     return Row(
       children: [
         WidgetUtils.commonSizedBox(0, 20),
@@ -1609,6 +1610,7 @@ class RoomItems {
                 if (MyUtils.checkClick()) {
                   MyUtils.goTransparentPage(context, RoomReDuPage(
                     roomID: roomID,
+                    listm: listm,
                   ));
                 }
               }),

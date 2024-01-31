@@ -368,7 +368,7 @@ class WidgetUtils {
       TextEditingController controller, String hintText) {
     return TextField(
       controller: controller,
-      maxLength: 150,
+      maxLength: 30,
       maxLines: 8,
       inputFormatters: [
         RegexFormatter(regex: MyUtils.regexFirstNotNull),
@@ -598,9 +598,14 @@ class WidgetUtils {
 
   /// 圆形图片
   static Widget CircleHeadImage(double height, double width, String imgUrl) {
-    return SizedBox(
+    return Container(
       height: height,
       width: width,
+      //超出部分，可裁剪
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(height/2),
+      ),
       child: imgUrl.isNotEmpty ? ClipOval(
         child: imgUrl.contains('com.leimu.yuyinting') ||
                 imgUrl.contains('storage')

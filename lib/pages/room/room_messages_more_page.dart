@@ -106,13 +106,14 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
       'content': '送出$info个V豆',
       'headNetImg': sp.getString('user_headimg').toString(),
       'otherHeadNetImg': widget.otherImg,
-      'add_time': widget.nickName == '维C客服' ? '1893494560' : DateTime.now().millisecondsSinceEpoch,
+      'add_time': DateTime.now().millisecondsSinceEpoch,
       'type': 6,
       'number': 0,
       'status': 1,
       'readStatus': 1,
       'liveStatus': 0,
       'loginStatus': 0,
+      'weight': widget.otherUid.toString() == '1' ? 1 : 0,
     };
     // 插入数据
     await databaseHelper.insertData('messageSLTable', params);
@@ -799,13 +800,14 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
             'content': content,
             'headNetImg': sp.getString('user_headimg').toString(),
             'otherHeadNetImg': widget.otherImg,
-            'add_time': widget.nickName == '维C客服' ? '1893494560' : DateTime.now().millisecondsSinceEpoch,
+            'add_time': DateTime.now().millisecondsSinceEpoch,
             'type': 1,
             'number': 0,
             'status': 1,
             'readStatus': 1,
             'liveStatus': 0,
             'loginStatus': 0,
+            'weight': widget.otherUid.toString() == '1' ? 1 : 0,
           };
           // 插入数据
           await databaseHelper.insertData('messageSLTable', params);

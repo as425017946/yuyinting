@@ -194,38 +194,6 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                         ],
                       ),
                       WidgetUtils.commonSizedBox(40.h, 0),
-                      // 中奖信息滚动
-                      // Stack(
-                      //   children: [
-                      //     Opacity(
-                      //       opacity: 0.14,
-                      //       child: Container(
-                      //         width: ScreenUtil().setHeight(310),
-                      //         height: ScreenUtil().setHeight(42),
-                      //         decoration: const BoxDecoration(
-                      //           //背景
-                      //           color: Colors.white,
-                      //           //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                      //           borderRadius:
-                      //           BorderRadius.all(Radius.circular(21)),
-                      //         ),
-                      //       ),
-                      //     ),
-                      //     SizedBox(
-                      //       width: ScreenUtil().setHeight(310),
-                      //       height: ScreenUtil().setHeight(42),
-                      //       child: Marquee(
-                      //         speed: 10,
-                      //         child: Text(
-                      //           '恭喜某某用户单抽喜中价值500元的小柴一个',
-                      //           style: TextStyle(
-                      //               color: Colors.white,
-                      //               fontSize: ScreenUtil().setSp(21)),
-                      //         ),
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
                       // 切换魔方svga图
                       Opacity(opacity: isShow == false ? 1 : 0 ,
                         child: Stack(

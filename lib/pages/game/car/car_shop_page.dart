@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/colors/my_colors.dart';
+import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/my_utils.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 
@@ -166,8 +167,7 @@ class _CarShopPageState extends State<CarShopPage> {
   }
 
 
-  // 蘑菇币
-  String mogubi = '';
+
   List<GoodsList> list = [];
   /// 游戏商店
   Future<void> doPostGameStore() async {
@@ -213,15 +213,21 @@ class _CarShopPageState extends State<CarShopPage> {
       CommonBean bean = await DataUtils.postExchangeGoods(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
+          // 蘑菇币
+          String mogubi = '';
           MyToastUtils.showToastBottom('兑换成功！');
           setState(() {
-            if(mogubi.contains('w')){
+            if(sp.getString('car_mogu2').toString().contains('w')){
               // 目的是先把 1w 转换成 10000
-              mogubi = (double.parse(mogubi.substring(0,mogubi.length - 1)) * 10000).toString();
-              // 减去花费的V豆
-              mogubi = '${(double.parse(mogubi) - sl)/10000}w';
+              String a = sp.getString('car_mogu2').toString().substring(0,sp.getString('car_mogu2').toString().length-1);
+              double b = sl/10000;
+              double c = double.parse(a) - b;
+              LogE('余额 $c');
+              sp.setString('car_mogu2', '${c.toString()}w');
             }else{
-              mogubi = (double.parse(mogubi) - sl).toString();
+              mogubi = (double.parse(sp.getString('car_mogu2').toString()) - sl).toString();
+              LogE('余额 $mogubi');
+              sp.setString('car_mogu2', mogubi);
             }
           });
           break;
@@ -234,7 +240,6 @@ class _CarShopPageState extends State<CarShopPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

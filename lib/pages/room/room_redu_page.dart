@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/pages/room/redu_caifu_page.dart';
 import 'package:yuyinting/pages/room/redu_meili_page.dart';
 import 'package:yuyinting/pages/room/redu_zaixian_page.dart';
+import '../../bean/roomInfoBean.dart';
 import '../../colors/my_colors.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
@@ -11,8 +12,8 @@ import '../../utils/widget_utils.dart';
 /// 房间内的热度
 class RoomReDuPage extends StatefulWidget {
   String roomID;
-
-  RoomReDuPage({super.key, required this.roomID});
+  List<MikeList> listm;
+  RoomReDuPage({super.key, required this.roomID, required this.listm});
 
   @override
   State<RoomReDuPage> createState() => _RoomReDuPageState();
@@ -143,7 +144,7 @@ class _RoomReDuPageState extends State<RoomReDuPage> {
                         });
                       },
                       children: [
-                        ReDuZaiXianPage(roomID: widget.roomID),
+                        ReDuZaiXianPage(roomID: widget.roomID,listM:widget.listm),
                         ReDuCaiFuPage(roomID: widget.roomID),
                         ReDuMeiLiPage(roomID: widget.roomID),
                       ],

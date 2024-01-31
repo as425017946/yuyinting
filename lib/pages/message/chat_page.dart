@@ -161,13 +161,14 @@ class _ChatPageState extends State<ChatPage> {
       'content': '送出$info个V豆',
       'headNetImg': sp.getString('user_headimg').toString(),
       'otherHeadNetImg': widget.otherImg,
-      'add_time': widget.nickName == '维C客服' ? '1893494560' : DateTime.now().millisecondsSinceEpoch,
+      'add_time': DateTime.now().millisecondsSinceEpoch,
       'type': 6,
       'number': 0,
       'status': 1,
       'readStatus': 1,
       'liveStatus': 0,
       'loginStatus': 0,
+      'weight': widget.otherUid.toString() == '1' ? 1 : 0,
     };
     // 插入数据
     await databaseHelper.insertData('messageSLTable', params);
@@ -1132,6 +1133,18 @@ class _ChatPageState extends State<ChatPage> {
                                     isCancel = true;
                                   });
                                 }
+                              }else{
+                                ///ios
+                                if (details.delta.dy < -1) {
+                                  if (_timer.isActive) {
+                                    _timer.cancel();
+                                  }
+                                  // 停止录音
+                                  stopRecorder();
+                                  setState(() {
+                                    isCancel = true;
+                                  });
+                                }
                               }
                             }
                           },
@@ -1163,7 +1176,27 @@ class _ChatPageState extends State<ChatPage> {
                                     doSendAudio();
                                   }
                                 }else{
-                                  MyToastUtils.showToastBottom('尚未开启录音权限！');
+                                  /// ios
+                                  // 取消录音后抬起手指
+                                  if (isCancel) {
+                                    LogE('发送录音 1');
+                                    //重新初始化音频信息
+                                    setState(() {
+                                      isCancel = false;
+                                      mediaRecord = true;
+                                      playRecord = false; //音频文件播放状态
+                                      hasRecord = false; //是否有音频文件可播放
+                                      isLuZhi = false;
+                                      isPlay =
+                                      0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
+                                      djNum = 60; // 录音时长
+                                      audioNum = 0; // 记录录了多久
+                                    });
+                                  }else{
+                                    LogE('发送录音 2');
+                                    //发送录音
+                                    doSendAudio();
+                                  }
                                 }
                               }
                             }else{
@@ -1360,10 +1393,7 @@ class _ChatPageState extends State<ChatPage> {
                     height: 450.h,
                     child: EmojiPicker(
                       onEmojiSelected: (Category? category, Emoji emoji) {
-                        final currentText = controller.text;
-                        if (currentText.length < 25) {
-                          controller.text = currentText + emoji.emoji;
-                        }
+
                       },
                       onBackspacePressed: () {
                         // Do something when the user taps the backspace button (optional)
@@ -1693,13 +1723,14 @@ class _ChatPageState extends State<ChatPage> {
             'content': content,
             'headNetImg': sp.getString('user_headimg').toString(),
             'otherHeadNetImg': widget.otherImg,
-            'add_time': widget.nickName == '维C客服' ? '1893494560' : DateTime.now().millisecondsSinceEpoch,
+            'add_time': DateTime.now().millisecondsSinceEpoch,
             'type': 1,
             'number': 0,
             'status': 1,
             'readStatus': 1,
             'liveStatus': 0,
             'loginStatus': 0,
+            'weight': widget.otherUid.toString() == '1' ? 1 : 0,
           };
           // 插入数据
           await databaseHelper.insertData('messageSLTable', params);
@@ -1774,13 +1805,14 @@ class _ChatPageState extends State<ChatPage> {
       'content': filePath,
       'headNetImg': sp.getString('user_headimg').toString(),
       'otherHeadNetImg': widget.otherImg,
-      'add_time': widget.nickName == '维C客服' ? '1893494560' : DateTime.now().millisecondsSinceEpoch,
+      'add_time': DateTime.now().millisecondsSinceEpoch,
       'type': 2,
       'number': 0,
       'status': 0,
       'readStatus': 1,
       'liveStatus': 0,
       'loginStatus': 0,
+      'weight': widget.otherUid.toString() == '1' ? 1 : 0,
     };
     // 插入数据
     await databaseHelper.insertData('messageSLTable', params);
@@ -1834,13 +1866,14 @@ class _ChatPageState extends State<ChatPage> {
         'content': _mPath,
         'headNetImg': sp.getString('user_headimg').toString(),
         'otherHeadNetImg': widget.otherImg,
-        'add_time': widget.nickName == '维C客服' ? '1893494560' : DateTime.now().millisecondsSinceEpoch,
+        'add_time': DateTime.now().millisecondsSinceEpoch,
         'type': 3,
         'number': audioNum,
         'status': 0,
         'readStatus': 1,
         'liveStatus': 0,
         'loginStatus': 0,
+        'weight': widget.otherUid.toString() == '1' ? 1 : 0,
       };
       // 插入数据
       await databaseHelper.insertData('messageSLTable', params);
@@ -2019,7 +2052,13 @@ class _ChatPageState extends State<ChatPage> {
                   isLuZhi = true;
                 });
               }else{
-                MyToastUtils.showToastBottom('尚未开启录音权限！');
+                /// ios
+                // 开始录音
+                startRecord();
+                setState(() {
+                  audioNum = 0; // 记录录了多久
+                  isLuZhi = true;
+                });
               }
             }
           }else if(type == 4){

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+import 'package:yuyinting/pages/room/room_people_info_page.dart';
 import 'package:yuyinting/utils/loading.dart';
 
 import '../../bean/memberListBean.dart';
+import '../../bean/roomInfoBean.dart';
 import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
@@ -18,7 +20,8 @@ import '../mine/my/my_info_page.dart';
 /// 热度-在线列表
 class ReDuZaiXianPage extends StatefulWidget {
   String roomID;
-  ReDuZaiXianPage({super.key, required this.roomID});
+  List<MikeList> listM;
+  ReDuZaiXianPage({super.key, required this.roomID, required this.listM});
 
   @override
   State<ReDuZaiXianPage> createState() => _ReDuZaiXianPageState();
@@ -76,10 +79,19 @@ class _ReDuZaiXianPageState extends State<ReDuZaiXianPage> with AutomaticKeepAli
             if(MyUtils.checkClick()){
               // 如果点击的是自己，进入自己的主页
               if(sp.getString('user_id').toString() == list[i].uid.toString()){
-                MyUtils.goTransparentRFPage(context, const MyInfoPage());
+                // MyUtils.goTransparentRFPage(context, const MyInfoPage());
               }else{
+                Navigator.pop(context);
                 sp.setString('other_id', list[i].uid.toString());
-                MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: list[i].uid.toString(),));
+                MyUtils.goTransparentPage(
+                    context,
+                    RoomPeopleInfoPage(
+                      uid: list[i].uid.toString(),
+                      index: '-1',
+                      roomID: widget.roomID,
+                      isClose: '',
+                      listM: widget.listM,
+                    ));
               }
             }
           }),

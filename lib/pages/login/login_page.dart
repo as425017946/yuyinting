@@ -173,11 +173,10 @@ class _LoginPageState extends State<LoginPage> {
     final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if (Platform.isAndroid) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      String imei = androidInfo.id; // 获取 Android 设备的 IMEI
+      String imei = '${androidInfo.id}:${androidInfo.device}:${androidInfo.model}:${androidInfo.product}:${androidInfo.isPhysicalDevice}:${sp.getString('miyao')}'; // 获取 Android 设备的 IMEI
       setState(() {
         IMEI = imei;
       });
-      print('IMEI: $imei');
     } else if (Platform.isIOS) {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
       String identifierForVendor = iosInfo.identifierForVendor.toString(); // 获取 iOS 设备的 IMEI

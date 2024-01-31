@@ -163,13 +163,11 @@ class MyUtils {
     if (len == 18) {
       //处理18位的身份证号码从号码中得到生日和性别代码
       strBirthday =
-      "${cardId.substring(6, 10)}-${cardId.substring(10, 12)}-${cardId
-          .substring(12, 14)}";
+          "${cardId.substring(6, 10)}-${cardId.substring(10, 12)}-${cardId.substring(12, 14)}";
     }
     if (len == 15) {
       strBirthday =
-      "19${cardId.substring(6, 8)}-${cardId.substring(8, 10)}-${cardId
-          .substring(10, 12)}";
+          "19${cardId.substring(6, 8)}-${cardId.substring(8, 10)}-${cardId.substring(10, 12)}";
     }
     int age = getAgeFromBirthday(strBirthday);
     return age;
@@ -226,7 +224,7 @@ class MyUtils {
         context,
         MaterialPageRoute(builder: (context) => const LoginPage()),
         // ignore: unnecessary_null_comparison
-            (route) => route == null,
+        (route) => route == null,
       );
     });
   }
@@ -359,9 +357,7 @@ class MyUtils {
 
   // 保存网络图片到包下
   static void saveImg(String imgUrl, String name) async {
-    if (await Permission.storage
-        .request()
-        .isGranted) {
+    if (await Permission.storage.request().isGranted) {
       var response = await Dio()
           .get(imgUrl, options: Options(responseType: ResponseType.bytes));
       // 生成新的文件名
@@ -460,6 +456,7 @@ class MyUtils {
         // 由于网络问题导致的断开，sdk会尝试自动重连，连接成功后会回调 "onConnected";
         onDisconnected: (() {
           LogE('IM 断开连接');
+          eventBus.fire(SubmitButtonBack(title: 'im断开链接'));
           MyToastUtils.showToastBottom('IM断开连接');
         }),
         // 用户 token 鉴权失败;
@@ -515,22 +512,22 @@ class MyUtils {
     EMClient.getInstance.chatRoomManager.addEventHandler('123',
         EMChatRoomEventHandler(onRemovedFromChatRoom:
             (roomId, roomName, participantreason, reason) {
-          // ignore: unrelated_type_equality_checks
-          if (reason == LeaveReason.Kicked) {
-            LogE(
-                '客户主动离开聊天室 $roomId 房间名称 $roomName == $participantreason ** $reason');
-            if (sp.getString('roomID').toString() == roomId.toString()) {
-              EMClient.getInstance.chatRoomManager.joinChatRoom(roomId);
-            }
-          } else {
-            //非客户主动离开聊天室 并且判断是否为当前登录的房间
-            if (sp.getString('roomID').toString() == roomId.toString()) {
-              EMClient.getInstance.chatRoomManager.joinChatRoom(roomId);
-            }
-            LogE(
-                '非客户主动离开聊天室 $roomId 房间名称 $roomName == $participantreason ** $reason');
-          }
-        }));
+      // ignore: unrelated_type_equality_checks
+      if (reason == LeaveReason.Kicked) {
+        LogE(
+            '客户主动离开聊天室 $roomId 房间名称 $roomName == $participantreason ** $reason');
+        if (sp.getString('roomID').toString() == roomId.toString()) {
+          EMClient.getInstance.chatRoomManager.joinChatRoom(roomId);
+        }
+      } else {
+        //非客户主动离开聊天室 并且判断是否为当前登录的房间
+        if (sp.getString('roomID').toString() == roomId.toString()) {
+          EMClient.getInstance.chatRoomManager.joinChatRoom(roomId);
+        }
+        LogE(
+            '非客户主动离开聊天室 $roomId 房间名称 $roomName == $participantreason ** $reason');
+      }
+    }));
 
     // 添加收消息监听
     EMClient.getInstance.chatManager.addEventHandler(
@@ -554,9 +551,17 @@ class MyUtils {
                     eventBus.fire(
                         JoinRoomYBack(map: info, type: 'user_leave_room'));
                   } else if (body.content == '充值成功') {
+                    eventBus.fire(SubmitButtonBack(title: '充值成功'));
+                  } else if (body.content == '下麦') {
                     eventBus.fire(
-                        SubmitButtonBack(title: '充值成功'));
-                  }else {
+                        JoinRoomYBack(map: info, type: 'user_down_mic'));
+                  } else if (body.content == '开麦') {
+                    eventBus.fire(
+                        JoinRoomYBack(map: info, type: 'user_un_close_mic'));
+                  } else if (body.content == '闭麦') {
+                    eventBus.fire(
+                        JoinRoomYBack(map: info, type: 'user_close_mic'));
+                  } else {
                     if (info['lv'] == '' || info['lv'] == null) {
                       if (info['type'] == 'clean_charm') {
                         // 厅内清空魅力值
@@ -573,10 +578,10 @@ class MyUtils {
                         if (int.parse(sp.getString('user_id').toString()) >
                             int.parse(msg.from!)) {
                           combineID =
-                          '${msg.from}-${sp.getString('user_id').toString()}';
+                              '${msg.from}-${sp.getString('user_id').toString()}';
                         } else {
                           combineID =
-                          '${sp.getString('user_id').toString()}-${msg.from}';
+                              '${sp.getString('user_id').toString()}-${msg.from}';
                         }
 
                         // 接收别人发来的消息
@@ -590,14 +595,14 @@ class MyUtils {
                           'bigImg': '',
                           'headNetImg': sp.getString('user_headimg').toString(),
                           'otherHeadNetImg': headImg,
-                          'add_time': nickName == '维C客服' ? '1893494560' : msg
-                              .serverTime,
+                          'add_time': msg.serverTime,
                           'type': 1,
                           'number': 0,
                           'status': 1,
                           'readStatus': 0,
                           'liveStatus': 0,
                           'loginStatus': 0,
+                          'weight': msg.from.toString() == '1' ? 1 : 0,
                         };
                         // 插入数据
                         await databaseHelper.insertData(
@@ -624,10 +629,10 @@ class MyUtils {
                   if (int.parse(sp.getString('user_id').toString()) >
                       int.parse(msg.from!)) {
                     combineID =
-                    '${msg.from}-${sp.getString('user_id').toString()}';
+                        '${msg.from}-${sp.getString('user_id').toString()}';
                   } else {
                     combineID =
-                    '${sp.getString('user_id').toString()}-${msg.from}';
+                        '${sp.getString('user_id').toString()}-${msg.from}';
                   }
 
                   Map<String, dynamic> params = <String, dynamic>{
@@ -640,14 +645,14 @@ class MyUtils {
                     'bigImg': body.remotePath,
                     'headNetImg': sp.getString('user_headimg').toString(),
                     'otherHeadNetImg': headImg,
-                    'add_time': nickName == '维C客服' ? '1893494560' : msg
-                        .serverTime,
+                    'add_time': msg.serverTime,
                     'type': 2,
                     'number': 0,
                     'status': 1,
                     'readStatus': 0,
                     'liveStatus': 0,
                     'loginStatus': 0,
+                    'weight': msg.from.toString() == '1' ? 1 : 0,
                   };
                   // 插入数据
                   await databaseHelper.insertData('messageSLTable', params);
@@ -681,10 +686,10 @@ class MyUtils {
                   if (int.parse(sp.getString('user_id').toString()) >
                       int.parse(msg.from!)) {
                     combineID =
-                    '${msg.from}-${sp.getString('user_id').toString()}';
+                        '${msg.from}-${sp.getString('user_id').toString()}';
                   } else {
                     combineID =
-                    '${sp.getString('user_id').toString()}-${msg.from}';
+                        '${sp.getString('user_id').toString()}-${msg.from}';
                   }
                   Map<String, dynamic> params = <String, dynamic>{
                     'uid': sp.getString('user_id').toString(),
@@ -696,14 +701,14 @@ class MyUtils {
                     'bigImg': body.remotePath,
                     'headNetImg': sp.getString('user_headimg').toString(),
                     'otherHeadNetImg': headImg,
-                    'add_time': nickName == '维C客服' ? '1893494560' : msg
-                        .serverTime,
+                    'add_time': msg.serverTime,
                     'type': 3,
                     'number': body.duration,
                     'status': 1,
                     'readStatus': 0,
                     'liveStatus': 0,
                     'loginStatus': 0,
+                    'weight': msg.from.toString() == '1' ? 1 : 0,
                   };
                   // 插入数据
                   await databaseHelper.insertData('messageSLTable', params);
@@ -732,10 +737,10 @@ class MyUtils {
                     if (int.parse(sp.getString('user_id').toString()) >
                         int.parse(msg.from!)) {
                       combineID =
-                      '${msg.from}-${sp.getString('user_id').toString()}';
+                          '${msg.from}-${sp.getString('user_id').toString()}';
                     } else {
                       combineID =
-                      '${sp.getString('user_id').toString()}-${msg.from}';
+                          '${sp.getString('user_id').toString()}-${msg.from}';
                     }
 
                     Map<String, dynamic> params = <String, dynamic>{
@@ -748,14 +753,14 @@ class MyUtils {
                       'bigImg': '',
                       'headNetImg': sp.getString('user_headimg').toString(),
                       'otherHeadNetImg': headImg,
-                      'add_time': nickName == '维C客服' ? '1893494560' : msg
-                          .serverTime,
+                      'add_time': msg.serverTime,
                       'type': 6,
                       'number': 0,
                       'status': 1,
                       'readStatus': 0,
                       'liveStatus': 0,
                       'loginStatus': 0,
+                      'weight': msg.from.toString() == '1' ? 1 : 0,
                     };
                     // 插入数据
                     await databaseHelper.insertData('messageSLTable', params);
@@ -782,7 +787,7 @@ class MyUtils {
     );
     // 添加消息状态变更监听
     EMClient.getInstance.chatManager.addMessageEvent(
-      // ChatMessageEvent 对应的 key。
+        // ChatMessageEvent 对应的 key。
         "UNIQUE_HANDLER_ID",
         ChatMessageEvent(
           onSuccess: (msgId, msg) {
@@ -807,8 +812,7 @@ class MyUtils {
           onError: (msgId, msg, error) {
             LogE('语音发送失败2');
             addLogToConsole(
-              "send message failed, code: ${error.code}, desc: ${error
-                  .description}",
+              "send message failed, code: ${error.code}, desc: ${error.description}",
             );
           },
         ));

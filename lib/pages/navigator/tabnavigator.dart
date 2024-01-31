@@ -88,9 +88,20 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
   bool isSDKInit = false;
   // 是否开始预下载
   bool isDown = false;
+  // 设备是安卓还是ios
+  String isDevices = 'android';
 
   @override
   void initState() {
+    if (Platform.isAndroid) {
+      setState(() {
+        isDevices = 'android';
+      });
+    }else if (Platform.isIOS){
+      setState(() {
+        isDevices = 'ios';
+      });
+    }
     MyUtils.initSDK();
     MyUtils.addChatListener();
     //先退出然后在登录
@@ -232,6 +243,15 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         }
       }else if(event.title == 'im重连'){
         doPostCheckToken();
+      }else if(event.title == 'im断开链接'){
+        if(isJoinRoom){
+          setState(() {
+            //取消订阅所有远端用户的音频流。
+            _engine.muteAllRemoteAudioStreams(true);
+            // 取消发布本地音频流
+            _engine.muteLocalAudioStream(true);
+          });
+        }
       }
     });
 
@@ -989,7 +1009,9 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
             LogE('需要下载数量 ${bean.data!.imgList!.length}');
             jinduBaifeinbi = (1 / bean.data!.total! ).toStringAsFixed(2);
             LogE('百分比 $jinduBaifeinbi');
-            downloadAllImages(bean);
+            if(isDevices == 'android'){
+              downloadAllImages(bean);
+            }
           });
           break;
         case MyHttpConfig.errorloginCode:

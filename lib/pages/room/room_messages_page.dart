@@ -246,11 +246,9 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
     List<Map<String, dynamic>> allData =
         await databaseHelper.getAllData('messageSLTable');
     // 执行查询操作
-    List<Map<String, dynamic>> result = await db.query(
-      'messageSLTable',
-      columns: ['MAX(id) AS id', 'combineID'],
-      groupBy: 'combineID',
-    );
+    String queryM =
+        'select MAX(id) AS id from messageSLTable group by combineID order by weight desc,add_time desc';
+    List<Map<String, dynamic>> result = await db.rawQuery(queryM);
     // 查询出来后在查询单条信息具体信息
     List<int> listId = [];
     String ids = '';
@@ -267,7 +265,7 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
         List.generate(listId.length, (index) => '?').join(',');
     // 构建查询语句和参数
     String query =
-        'SELECT * FROM messageSLTable WHERE id IN ($placeholders)  and uid = ${sp.getString('user_id')}  order by add_time desc';
+        'SELECT * FROM messageSLTable WHERE id IN ($placeholders)  and uid = ${sp.getString('user_id')}';
     List<dynamic> args = listId;
     // 执行查询
     List<Map<String, dynamic>> result2 = await db.rawQuery(query, args);

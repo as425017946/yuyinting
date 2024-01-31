@@ -31,6 +31,9 @@ class _StarPageState extends State<StarPage> {
         }else{
           MyUtils.goTransparentPageCom(context, const LoginPage());
         }
+        if(sp.getString('miyao').toString() != 'null' || sp.getString('miyao').toString().isEmpty){
+          sp.setString('miyao',DateTime.now().millisecondsSinceEpoch.toString());
+        }
     }));
   }
   @override

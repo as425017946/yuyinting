@@ -564,12 +564,30 @@ class _RoomPageState extends State<RoomPage>
             isRed = false;
           });
         } else if (event.title == '成功切换账号') {
-          //取消订阅所有远端用户的音频流。
-          _engine.muteAllRemoteAudioStreams(true);
-          // 取消发布本地音频流
-          _engine.muteLocalAudioStream(true);
-          _engine.disableAudio();
+          setState(() {
+            //取消订阅所有远端用户的音频流。
+            _engine.muteAllRemoteAudioStreams(true);
+            // 取消发布本地音频流
+            _engine.muteLocalAudioStream(true);
+            _engine.disableAudio();
+          });
           _dispose();
+        }else if(event.title == 'im重连'){
+          setState(() {
+            //订阅所有远端用户的音频流。
+            _engine.muteAllRemoteAudioStreams(false);
+            if(isJinyiin == false) {
+              // 发布本地音频流
+              _engine.muteLocalAudioStream(false);
+            }
+          });
+        }else if(event.title == 'im断开链接'){
+          setState(() {
+            //取消订阅所有远端用户的音频流。
+            _engine.muteAllRemoteAudioStreams(true);
+            // 取消发布本地音频流
+            _engine.muteLocalAudioStream(true);
+          });
         }
       });
       // 厅内操作监听
@@ -1004,538 +1022,615 @@ class _RoomPageState extends State<RoomPage>
           //离开频道并释放资源
           _dispose();
           Navigator.pop(context);
-        }
-
-        /// 这里是用户的其他正常操作
-        if (event.map!['room_id'].toString() == widget.roomId) {
-          // 判断是不是点击了欢迎某某人
-          if (event.map!['type'] == 'welcome_msg') {
-            Map<dynamic, dynamic> map = {};
-            map['info'] = event.map!['send_nickname'];
-            map['uid'] = event.map!['from_uid'];
-            map['type'] = '3';
-            // 欢迎语信息
-            map['content'] =
-                '${event.map!['nickname']},${event.map!['content']}';
-            // 身份
-            map['identity'] = event.map!['identity'];
-            // 等级
-            map['lv'] = event.map!['send_level'];
-            // 贵族
-            map['noble_id'] = event.map!['noble_id'];
-            // 萌新
-            map['is_new'] = event.map!['is_new'];
-            // 是否靓号
-            map['is_pretty'] = event.map!['is_pretty'];
-            // 新贵
-            map['new_noble'] = event.map!['new_noble'];
-            // 是否点击了欢迎 0未欢迎 1已欢迎
-            map['isWelcome'] = '0';
-
-            setState(() {
-              list.add(map);
-            });
-          } else if (event.map!['type'] == 'clean_charm') {
-            // 清除魅力值
-            setState(() {
-              for (int i = 0; i < listM.length; i++) {
-                listM[i].charm = 0;
-              }
-            });
-          } else if (event.map!['type'] == 'clean_public_screen') {
-            // 清除公屏
-            setState(() {
-              list.clear();
-              list2.clear();
-            });
-          } else if (event.map!['type'] == 'chatroom_msg') {
-            //厅内发送的文字消息
-            Map<dynamic, dynamic> map = {};
-            map['info'] = event.map!['nickname'];
-            map['uid'] = event.map!['uid'];
-            map['type'] = '4';
-            // 发送的信息
-            map['content'] = event.map!['content'];
-            // 发送的图片
-            map['image'] = event.map!['image'];
-            // 身份
-            map['identity'] = event.map!['identity'];
-            // 等级
-            map['lv'] = event.map!['lv'];
-            // 贵族
-            map['noble_id'] = event.map!['noble_id'];
-            // 萌新
-            map['is_new'] = event.map!['is_new'];
-            // 是否靓号
-            map['is_pretty'] = event.map!['is_pretty'];
-            // 新贵
-            map['new_noble'] = event.map!['new_noble'];
-            // 是否点击了欢迎 0未欢迎 1已欢迎
-            map['isWelcome'] = '0';
-            // svga动画是否播放完成
-            map['isOk'] = 'false';
-
-            setState(() {
-              list.add(map);
-            });
-          } else if (event.map!['type'] == 'send_gift') {
-            // 发png图会用到，其他的不使用
-            List<bool> listPeoplepng = [];
-            for (int i = 0; i < 10; i++) {
-              listPeoplepng.add(false);
+        }else if(event.map!['type'] == 'user_down_mic'){
+          //通知用户下麦
+          setState(() {
+            for (int i = 0; i < 9; i++) {
+              isMy[i] = false;
             }
-            //厅内发送的送礼物消息
-            charmAllBean cb = charmAllBean.fromJson(event.map);
-            for (int i = 0; i < listM.length; i++) {
-              for (int a = 0; a < cb.charm!.length; a++) {
-                if (listM[i].uid.toString() == cb.charm![a].uid) {
-                  setState(() {
-                    listPeoplepng[i] = true;
-                    listM[i].charm = int.parse(cb.charm![a].charm.toString());
-                  });
-                }
-              }
+            for (int i = 0; i < 9; i++) {
+              upOrDown[i] = false;
             }
-            if (listPeoplepng[0] == false &&
-                listPeoplepng[1] == false &&
-                listPeoplepng[2] == false &&
-                listPeoplepng[3] == false &&
-                listPeoplepng[4] == false &&
-                listPeoplepng[5] == false &&
-                listPeoplepng[6] == false &&
-                listPeoplepng[7] == false &&
-                listPeoplepng[8] == false) {
-              listPeoplepng[9] = true;
+          });
+          if (mounted) {
+            // 上下麦操作不是本地才刷新
+            if (event.map!['uid'].toString() ==
+                sp.getString('user_id').toString()) {
+              // 设置成观众
+              _engine.setClientRole(
+                  role: ClientRoleType.clientRoleAudience);
+              // 取消发布本地音频流
+              _engine.muteLocalAudioStream(true);
+              setState(() {
+                isMeUp = false;
+              });
+              doPostRoomMikeInfo();
+            } else {
+              doPostRoomMikeInfo();
             }
-            Map<dynamic, dynamic> map = {};
-            map['info'] = event.map!['nickname'];
-            map['uid'] = event.map!['from_uid'];
-            map['type'] = '5';
-            // 发送的信息
-            map['content'] =
-                '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出${cb.giftInfo![0].giftName!}(${cb.giftInfo![0].giftPrice.toString()}); x${cb.giftInfo![0].giftNumber.toString()}';
-            if (cb.giftInfo![0].giftImg!.contains('png')) {
+          }
+        }else if(event.map!['type'] == 'user_un_close_mic'){
+          //通知用户开麦
+          doPostRoomMikeInfo();
+          // 上下麦操作不是本地才刷新
+          if (event.map!['uid'].toString() != sp.getString('user_id')) {
+          } else {
+            setState(() {
+              isJinyiin = false;
+            });
+            //设置成主播
+            _engine.setClientRole(
+                role: ClientRoleType.clientRoleBroadcaster);
+            // 发布本地音频流
+            _engine.muteLocalAudioStream(false);
+          }
+        }else if(event.map!['type'] == 'user_close_mic'){
+          //通知用户闭麦
+          // 上下麦操作不是本地才刷新
+          doPostRoomMikeInfo();
+          if (event.map!['uid'].toString() != sp.getString('user_id')) {
+          } else {
+            setState(() {
+              isJinyiin = true;
+            });
+            // 设置成观众
+            _engine.setClientRole(role: ClientRoleType.clientRoleAudience);
+            // 取消发布本地音频流
+            _engine.muteLocalAudioStream(true);
+          }
+        }else{
+          /// 这里是用户的其他正常操作
+          if (event.map!['room_id'].toString() == widget.roomId) {
+            // 判断是不是点击了欢迎某某人
+            if (event.map!['type'] == 'welcome_msg') {
+              Map<dynamic, dynamic> map = {};
+              map['info'] = event.map!['send_nickname'];
+              map['uid'] = event.map!['from_uid'];
+              map['type'] = '3';
+              // 欢迎语信息
+              map['content'] =
+              '${event.map!['nickname']},${event.map!['content']}';
+              // 身份
+              map['identity'] = event.map!['identity'];
+              // 等级
+              map['lv'] = event.map!['send_level'];
+              // 贵族
+              map['noble_id'] = event.map!['noble_id'];
+              // 萌新
+              map['is_new'] = event.map!['is_new'];
+              // 是否靓号
+              map['is_pretty'] = event.map!['is_pretty'];
+              // 新贵
+              map['new_noble'] = event.map!['new_noble'];
+              // 是否点击了欢迎 0未欢迎 1已欢迎
+              map['isWelcome'] = '0';
+
               setState(() {
                 list.add(map);
-                if (listCMb.isEmpty) {
-                  listCM.add(cb);
-                  listCMb.add(listPeoplepng);
-                  MyUtils.goTransparentPageCom(
-                      context,
-                      RoomShowLiWuPage(
-                          listPeople: listCMb[0],
-                          url: listCM[0].giftInfo![0].giftImg!));
-                  hpTimer2();
-                } else {
-                  listCM.add(cb);
-                  listCMb.add(listPeoplepng);
-                  hpTimer2();
+              });
+            } else if (event.map!['type'] == 'clean_charm') {
+              // 清除魅力值
+              setState(() {
+                for (int i = 0; i < listM.length; i++) {
+                  listM[i].charm = 0;
                 }
               });
-            } else if (cb.giftInfo![0].giftImg!.contains('svga')) {
+            } else if (event.map!['type'] == 'clean_public_screen') {
+              // 清除公屏
+              setState(() {
+                list.clear();
+                list2.clear();
+              });
+            } else if (event.map!['type'] == 'chatroom_msg') {
+              //厅内发送的文字消息
+              Map<dynamic, dynamic> map = {};
+              map['info'] = event.map!['nickname'];
+              map['uid'] = event.map!['uid'];
+              map['type'] = '4';
+              // 发送的信息
+              map['content'] = event.map!['content'];
+              // 发送的图片
+              map['image'] = event.map!['image'];
+              // 身份
+              map['identity'] = event.map!['identity'];
+              // 等级
+              map['lv'] = event.map!['lv'];
+              // 贵族
+              map['noble_id'] = event.map!['noble_id'];
+              // 萌新
+              map['is_new'] = event.map!['is_new'];
+              // 是否靓号
+              map['is_pretty'] = event.map!['is_pretty'];
+              // 新贵
+              map['new_noble'] = event.map!['new_noble'];
+              // 是否点击了欢迎 0未欢迎 1已欢迎
+              map['isWelcome'] = '0';
+              // svga动画是否播放完成
+              map['isOk'] = 'false';
+
               setState(() {
                 list.add(map);
-                // 判断如果不是自己，则可以加入播放队列
-                if (event.map!['from_uid'].toString() !=
-                    sp.getString('user_id').toString()) {
-                  // 这个是为了让别人也能看见自己送出的礼物
-                  if (listUrl.isEmpty) {
-                    if (cb.giftInfo![0].giftName! == '霸下' ||
-                        cb.giftInfo![0].giftName! == '北欧天马' ||
-                        cb.giftInfo![0].giftName! == '浮生若梦' ||
-                        cb.giftInfo![0].giftName! == '光之子' ||
-                        cb.giftInfo![0].giftName! == '环游世界' ||
-                        cb.giftInfo![0].giftName! == '鲸遇心海' ||
-                        cb.giftInfo![0].giftName! == '竞速时刻' ||
-                        cb.giftInfo![0].giftName! == '君临天下' ||
-                        cb.giftInfo![0].giftName! == '狂欢宇宙' ||
-                        cb.giftInfo![0].giftName! == '恋爱摩天轮' ||
-                        cb.giftInfo![0].giftName! == '玫瑰花海' ||
-                        cb.giftInfo![0].giftName! == '梦回长安' ||
-                        cb.giftInfo![0].giftName! == '魔幻泡泡' ||
-                        cb.giftInfo![0].giftName! == '木马奇缘' ||
-                        cb.giftInfo![0].giftName! == '奇幻游记' ||
-                        cb.giftInfo![0].giftName! == '热气球' ||
-                        cb.giftInfo![0].giftName! == '瑞麟' ||
-                        cb.giftInfo![0].giftName! == '时光回想' ||
-                        cb.giftInfo![0].giftName! == '童话岛' ||
-                        cb.giftInfo![0].giftName! == '雪山飞虎' ||
-                        cb.giftInfo![0].giftName! == '御龙豪杰') {
-                      saveSVGAIMAGE(cb.giftInfo![0].giftImg!);
-                    } else {
-                      Map<dynamic, dynamic> map = {};
-                      map['svgaUrl'] = cb.giftInfo![0].giftImg!;
-                      map['svgaBool'] = true;
-                      // 直接用网络图地址
-                      listUrl.add(map);
-                      isShowSVGA = true;
-                      showStar(listUrl[0]);
-                    }
-                  } else {
-                    if (cb.giftInfo![0].giftName! == '霸下' ||
-                        cb.giftInfo![0].giftName! == '北欧天马' ||
-                        cb.giftInfo![0].giftName! == '浮生若梦' ||
-                        cb.giftInfo![0].giftName! == '光之子' ||
-                        cb.giftInfo![0].giftName! == '环游世界' ||
-                        cb.giftInfo![0].giftName! == '鲸遇心海' ||
-                        cb.giftInfo![0].giftName! == '竞速时刻' ||
-                        cb.giftInfo![0].giftName! == '君临天下' ||
-                        cb.giftInfo![0].giftName! == '狂欢宇宙' ||
-                        cb.giftInfo![0].giftName! == '恋爱摩天轮' ||
-                        cb.giftInfo![0].giftName! == '玫瑰花海' ||
-                        cb.giftInfo![0].giftName! == '梦回长安' ||
-                        cb.giftInfo![0].giftName! == '魔幻泡泡' ||
-                        cb.giftInfo![0].giftName! == '木马奇缘' ||
-                        cb.giftInfo![0].giftName! == '奇幻游记' ||
-                        cb.giftInfo![0].giftName! == '热气球' ||
-                        cb.giftInfo![0].giftName! == '瑞麟' ||
-                        cb.giftInfo![0].giftName! == '时光回想' ||
-                        cb.giftInfo![0].giftName! == '童话岛' ||
-                        cb.giftInfo![0].giftName! == '雪山飞虎' ||
-                        cb.giftInfo![0].giftName! == '御龙豪杰') {
-                      saveSVGAIMAGE(cb.giftInfo![0].giftImg!);
-                    } else {
-                      // 直接用网络图地址
-                      Map<dynamic, dynamic> map = {};
-                      map['svgaUrl'] = cb.giftInfo![0].giftImg!;
-                      map['svgaBool'] = true;
-                      // 直接用网络图地址
-                      listUrl.add(map);
-                    }
+              });
+            } else if (event.map!['type'] == 'send_gift') {
+              // 发png图会用到，其他的不使用
+              List<bool> listPeoplepng = [];
+              for (int i = 0; i < 10; i++) {
+                listPeoplepng.add(false);
+              }
+              //厅内发送的送礼物消息
+              charmAllBean cb = charmAllBean.fromJson(event.map);
+              for (int i = 0; i < listM.length; i++) {
+                for (int a = 0; a < cb.charm!.length; a++) {
+                  if (listM[i].uid.toString() == cb.charm![a].uid) {
+                    setState(() {
+                      listPeoplepng[i] = true;
+                      listM[i].charm = int.parse(cb.charm![a].charm.toString());
+                    });
                   }
                 }
-              });
-            }
-          } else if (event.map!['type'] == 'one_click_gift') {
-            //赠送全部背包礼物
-            String infos = ''; // 这个是拼接用户送的礼物信息使用
-            charmAllBean cb = charmAllBean.fromJson(event.map);
-            //判断一键赠送给的谁加入本地数据库里面
-            saveImages(cb);
-            for (int i = 0; i < listM.length; i++) {
-              for (int a = 0; a < cb.charm!.length; a++) {
-                if (listM[i].uid.toString() == cb.charm![a].uid) {
+              }
+              if (listPeoplepng[0] == false &&
+                  listPeoplepng[1] == false &&
+                  listPeoplepng[2] == false &&
+                  listPeoplepng[3] == false &&
+                  listPeoplepng[4] == false &&
+                  listPeoplepng[5] == false &&
+                  listPeoplepng[6] == false &&
+                  listPeoplepng[7] == false &&
+                  listPeoplepng[8] == false) {
+                listPeoplepng[9] = true;
+              }
+              Map<dynamic, dynamic> map = {};
+              map['info'] = event.map!['nickname'];
+              map['uid'] = event.map!['from_uid'];
+              map['type'] = '5';
+              // 发送的信息
+              map['content'] =
+              '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出${cb.giftInfo![0].giftName!}(${cb.giftInfo![0].giftPrice.toString()}); x${cb.giftInfo![0].giftNumber.toString()}';
+              if (cb.giftInfo![0].giftImg!.contains('png')) {
+                setState(() {
+                  list.add(map);
+                  if (listCMb.isEmpty) {
+                    listCM.add(cb);
+                    listCMb.add(listPeoplepng);
+                    MyUtils.goTransparentPageCom(
+                        context,
+                        RoomShowLiWuPage(
+                            listPeople: listCMb[0],
+                            url: listCM[0].giftInfo![0].giftImg!));
+                    hpTimer2();
+                  } else {
+                    listCM.add(cb);
+                    listCMb.add(listPeoplepng);
+                    hpTimer2();
+                  }
+                });
+              } else if (cb.giftInfo![0].giftImg!.contains('svga')) {
+                setState(() {
+                  list.add(map);
+                  // 判断如果不是自己，则可以加入播放队列
+                  if (event.map!['from_uid'].toString() !=
+                      sp.getString('user_id').toString()) {
+                    if(isDevices == 'android'){
+                      // 这个是为了让别人也能看见自己送出的礼物
+                      if (listUrl.isEmpty) {
+                        if (cb.giftInfo![0].giftName! == '霸下' ||
+                            cb.giftInfo![0].giftName! == '北欧天马' ||
+                            cb.giftInfo![0].giftName! == '浮生若梦' ||
+                            cb.giftInfo![0].giftName! == '光之子' ||
+                            cb.giftInfo![0].giftName! == '环游世界' ||
+                            cb.giftInfo![0].giftName! == '鲸遇心海' ||
+                            cb.giftInfo![0].giftName! == '竞速时刻' ||
+                            cb.giftInfo![0].giftName! == '君临天下' ||
+                            cb.giftInfo![0].giftName! == '狂欢宇宙' ||
+                            cb.giftInfo![0].giftName! == '恋爱摩天轮' ||
+                            cb.giftInfo![0].giftName! == '玫瑰花海' ||
+                            cb.giftInfo![0].giftName! == '梦回长安' ||
+                            cb.giftInfo![0].giftName! == '魔幻泡泡' ||
+                            cb.giftInfo![0].giftName! == '木马奇缘' ||
+                            cb.giftInfo![0].giftName! == '奇幻游记' ||
+                            cb.giftInfo![0].giftName! == '热气球' ||
+                            cb.giftInfo![0].giftName! == '瑞麟' ||
+                            cb.giftInfo![0].giftName! == '时光回想' ||
+                            cb.giftInfo![0].giftName! == '童话岛' ||
+                            cb.giftInfo![0].giftName! == '雪山飞虎' ||
+                            cb.giftInfo![0].giftName! == '御龙豪杰') {
+                          saveSVGAIMAGE(cb.giftInfo![0].giftImg!);
+                        } else {
+                          Map<dynamic, dynamic> map = {};
+                          map['svgaUrl'] = cb.giftInfo![0].giftImg!;
+                          map['svgaBool'] = true;
+                          // 直接用网络图地址
+                          listUrl.add(map);
+                          isShowSVGA = true;
+                          showStar(listUrl[0]);
+                        }
+                      } else {
+                        if (cb.giftInfo![0].giftName! == '霸下' ||
+                            cb.giftInfo![0].giftName! == '北欧天马' ||
+                            cb.giftInfo![0].giftName! == '浮生若梦' ||
+                            cb.giftInfo![0].giftName! == '光之子' ||
+                            cb.giftInfo![0].giftName! == '环游世界' ||
+                            cb.giftInfo![0].giftName! == '鲸遇心海' ||
+                            cb.giftInfo![0].giftName! == '竞速时刻' ||
+                            cb.giftInfo![0].giftName! == '君临天下' ||
+                            cb.giftInfo![0].giftName! == '狂欢宇宙' ||
+                            cb.giftInfo![0].giftName! == '恋爱摩天轮' ||
+                            cb.giftInfo![0].giftName! == '玫瑰花海' ||
+                            cb.giftInfo![0].giftName! == '梦回长安' ||
+                            cb.giftInfo![0].giftName! == '魔幻泡泡' ||
+                            cb.giftInfo![0].giftName! == '木马奇缘' ||
+                            cb.giftInfo![0].giftName! == '奇幻游记' ||
+                            cb.giftInfo![0].giftName! == '热气球' ||
+                            cb.giftInfo![0].giftName! == '瑞麟' ||
+                            cb.giftInfo![0].giftName! == '时光回想' ||
+                            cb.giftInfo![0].giftName! == '童话岛' ||
+                            cb.giftInfo![0].giftName! == '雪山飞虎' ||
+                            cb.giftInfo![0].giftName! == '御龙豪杰') {
+                          saveSVGAIMAGE(cb.giftInfo![0].giftImg!);
+                        } else {
+                          // 直接用网络图地址
+                          Map<dynamic, dynamic> map = {};
+                          map['svgaUrl'] = cb.giftInfo![0].giftImg!;
+                          map['svgaBool'] = true;
+                          // 直接用网络图地址
+                          listUrl.add(map);
+                        }
+                      }
+                    }else{
+                      // ios
+                      // 这个是为了让别人也能看见自己送出的礼物
+                      if (listUrl.isEmpty) {
+                        Map<dynamic, dynamic> map = {};
+                        map['svgaUrl'] = cb.giftInfo![0].giftImg!;
+                        map['svgaBool'] = true;
+                        // 直接用网络图地址
+                        listUrl.add(map);
+                        isShowSVGA = true;
+                        showStar(listUrl[0]);
+                      } else {
+                        // 直接用网络图地址
+                        Map<dynamic, dynamic> map = {};
+                        map['svgaUrl'] = cb.giftInfo![0].giftImg!;
+                        map['svgaBool'] = true;
+                        // 直接用网络图地址
+                        listUrl.add(map);
+                      }
+                    }
+                  }
+                });
+              }
+            } else if (event.map!['type'] == 'one_click_gift') {
+              //赠送全部背包礼物
+              String infos = ''; // 这个是拼接用户送的礼物信息使用
+              charmAllBean cb = charmAllBean.fromJson(event.map);
+              //判断一键赠送给的谁加入本地数据库里面
+              saveImages(cb);
+              for (int i = 0; i < listM.length; i++) {
+                for (int a = 0; a < cb.charm!.length; a++) {
+                  if (listM[i].uid.toString() == cb.charm![a].uid) {
+                    setState(() {
+                      listM[i].charm = int.parse(cb.charm![a].charm.toString());
+                    });
+                  }
+                }
+              }
+              for (int i = 0; i < cb.giftInfo!.length; i++) {
+                if (infos.isEmpty) {
                   setState(() {
-                    listM[i].charm = int.parse(cb.charm![a].charm.toString());
+                    infos =
+                    '${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber}';
+                  });
+                } else {
+                  setState(() {
+                    infos =
+                    '$infos,${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber}';
+                  });
+                }
+                setState(() {
+                  // 这个是为了让别人也能看见自己送出的礼物
+                  if (listUrl.isEmpty) {
+                    Map<dynamic, dynamic> map = {};
+                    map['svgaUrl'] = cb.giftInfo![i].giftImg!;
+                    map['svgaBool'] = true;
+                    // 直接用网络图地址
+                    listUrl.add(map);
+                    isShowSVGA = true;
+                    showStar(listUrl[0]);
+                  } else {
+                    Map<dynamic, dynamic> map = {};
+                    map['svgaUrl'] = cb.giftInfo![i].giftImg!;
+                    map['svgaBool'] = true;
+                    // 直接用网络图地址
+                    listUrl.add(map);
+                  }
+                });
+              }
+              //厅内发送的送礼物消息
+              Map<dynamic, dynamic> map = {};
+              map['info'] = event.map!['from_nickname'];
+              map['uid'] = event.map!['from_uid'];
+              map['type'] = '6';
+              // 发送的信息
+              map['content'] =
+              '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出;$infos';
+              setState(() {
+                list.add(map);
+                // 这个是为了让别人也能看见自己送出的礼物
+              });
+            } else if (event.map!['type'] == 'collect_room') {
+              // 收藏房间使用
+              Map<dynamic, dynamic> map = {};
+              map['type'] = '7';
+              map['uid'] = event.map!['from_uid'];
+              // 发送的信息
+              map['content'] = event.map!['info'];
+              setState(() {
+                list.add(map);
+              });
+            } else if (event.map!['type'] == 'join_room') {
+              LogE('***信息 == ${event.map!['follow_info']}');
+              // 跟随主播进入房间
+              Map<dynamic, dynamic> map = {};
+              map['type'] = '8';
+              map['info'] = event.map!['nickname'];
+              map['uid'] = event.map!['uid'];
+              // 发送的信息
+              map['content'] = event.map!['follow_info'];
+              setState(() {
+                list.add(map);
+              });
+            } else if (event.map!['type'] == 'play_win_gift') {
+              // 厅内小礼物不在显示
+            } else if (event.map!['type'] == 'send_screen_gift') {
+              // 这个是本房间收到了在房间送出的3w8礼物
+              zjgpBean cb = zjgpBean.fromJson(event.map!);
+              String info = '';
+              for (int i = 0; i < cb.giftInfo!.length; i++) {
+                if (info.isEmpty) {
+                  info =
+                  '${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber!}';
+                } else {
+                  info =
+                  '$info ${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber!}';
+                }
+              }
+              //厅内发送的送礼物消息
+              Map<dynamic, dynamic> map = {};
+              map['info'] = event.map!['nickname'];
+              map['uid'] = event.map!['uid'];
+              map['type'] = '9';
+              // 发送的信息
+              map['content'] =
+              '${cb.nickName};在${event.map!['room_name']}向;${event.map!['to_nickname']};送出;$info';
+              setState(() {
+                list.add(map);
+              });
+            } else if (event.map!['type'] == 'send_screen') {
+              // 这个是本房间收到了在本房间玩游戏中奖的信息（公屏信息）
+              // 厅内抽奖使用
+              zjgpBean cb = zjgpBean.fromJson(event.map!);
+              String info = '';
+              for (int i = 0; i < cb.giftInfo!.length; i++) {
+                if (info.isEmpty) {
+                  info =
+                  '${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber!}';
+                } else {
+                  info =
+                  '$info ${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber!}';
+                }
+              }
+              if (cb.gameName! == '赛车游戏') {
+                info = cb.amount!;
+              }
+              //厅内发送的送礼物消息
+              Map<dynamic, dynamic> map = {};
+              map['info'] = event.map!['nickname'];
+              map['uid'] = event.map!['uid'];
+              map['type'] = '9';
+              // 发送的信息
+              map['content'] = '${cb.nickName};在;${cb.gameName};中赢得;$info';
+              setState(() {
+                list2.add(map);
+              });
+              WidgetsBinding.instance!.addPostFrameCallback((_) {
+                scrollToLastItem2(); // 在widget构建完成后滚动到底部
+              });
+            } else if (event.map!['type'] == 'send_all_user') {
+              // 是这个厅，并送了带横幅的礼物
+              if (listMP.isEmpty) {
+                // 厅内出现横幅使用
+                hengFuBean hf = hengFuBean.fromJson(event.map!);
+                myhf = hf;
+                //显示横幅、map赋值
+                setState(() {
+                  isShowHF = true;
+                  listMP.add(hf);
+                });
+                // 判断数据显示使用
+                showInfo(hf);
+                // 看看集合里面有几个，10s一执行
+                hpTimer();
+              } else {
+                // 厅内出现横幅使用
+                hengFuBean hf = hengFuBean.fromJson(event.map!);
+                myhf = hf;
+                setState(() {
+                  listMP.add(hf);
+                });
+              }
+            } else if (event.map!['type'] == 'send_screen_all') {
+              // 厅内送礼
+              charmAllBean cb = charmAllBean.fromJson(event.map!);
+              String info = '';
+              for (int i = 0; i < cb.giftInfo!.length; i++) {
+                if (info.isEmpty) {
+                  info =
+                  '${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice!}) x${cb.giftInfo![i].giftNumber!}';
+                } else {
+                  info =
+                  '$info ${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice!}) x${cb.giftInfo![i].giftNumber!}';
+                }
+              }
+              //厅内发送的送礼物消息
+              Map<dynamic, dynamic> map = {};
+              map['info'] = cb.fromNickname;
+              map['uid'] = event.map!['from_uid'];
+              map['type'] = '9';
+              // 发送的信息
+              map['content'] = '${cb.fromNickname};向;${cb.toNickname};赠送了;$info';
+              setState(() {
+                list.add(map);
+              });
+            } else {
+              // 正常进入房间使用
+              bool isHave = false;
+              for (int i = 0; i < list.length; i++) {
+                if (list[i]['type'] == '1') {
+                  setState(() {
+                    isHave = true;
                   });
                 }
               }
-            }
-            for (int i = 0; i < cb.giftInfo!.length; i++) {
-              if (infos.isEmpty) {
-                setState(() {
-                  infos =
-                      '${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber}';
-                });
-              } else {
-                setState(() {
-                  infos =
-                      '$infos,${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber}';
-                });
-              }
+
+              Map<dynamic, dynamic> map = {};
+              map['info'] = event.map!['nickname'];
+              map['type'] = '2';
+              map['uid'] = event.map!['uid'];
+              //身份
+              map['identity'] = event.map!['identity'];
+              //等级
+              map['lv'] = event.map!['lv'];
+              // 贵族
+              map['noble_id'] = event.map!['noble_id'];
+              // 萌新
+              map['is_new'] = event.map!['is_new'];
+              // 是否靓号
+              map['is_pretty'] = event.map!['is_pretty'];
+              // 新贵
+              map['new_noble'] = event.map!['new_noble'];
+              LogE('特权== ${event.map!['noble_id']}');
+              // if(event.map!['noble_id'].toString() != '0'){
+              //   setState(() {
+              //     isGuZu = true;
+              //   });
+              // }
+              // 是否点击了欢迎 0未欢迎 1已欢迎
+              map['isWelcome'] = '0';
               setState(() {
-                // 这个是为了让别人也能看见自己送出的礼物
-                if (listUrl.isEmpty) {
-                  Map<dynamic, dynamic> map = {};
-                  map['svgaUrl'] = cb.giftInfo![i].giftImg!;
-                  map['svgaBool'] = true;
-                  // 直接用网络图地址
-                  listUrl.add(map);
-                  isShowSVGA = true;
-                  showStar(listUrl[0]);
-                } else {
-                  Map<dynamic, dynamic> map = {};
-                  map['svgaUrl'] = cb.giftInfo![i].giftImg!;
-                  map['svgaBool'] = true;
-                  // 直接用网络图地址
-                  listUrl.add(map);
-                }
+                list.add(map);
               });
             }
-            //厅内发送的送礼物消息
-            Map<dynamic, dynamic> map = {};
-            map['info'] = event.map!['from_nickname'];
-            map['uid'] = event.map!['from_uid'];
-            map['type'] = '6';
-            // 发送的信息
-            map['content'] =
-                '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出;$infos';
-            setState(() {
-              list.add(map);
-              // 这个是为了让别人也能看见自己送出的礼物
-            });
-          } else if (event.map!['type'] == 'collect_room') {
-            // 收藏房间使用
-            Map<dynamic, dynamic> map = {};
-            map['type'] = '7';
-            map['uid'] = event.map!['from_uid'];
-            // 发送的信息
-            map['content'] = event.map!['info'];
-            setState(() {
-              list.add(map);
-            });
-          } else if (event.map!['type'] == 'join_room') {
-            LogE('***信息 == ${event.map!['follow_info']}');
-            // 跟随主播进入房间
-            Map<dynamic, dynamic> map = {};
-            map['type'] = '8';
-            map['info'] = event.map!['nickname'];
-            map['uid'] = event.map!['uid'];
-            // 发送的信息
-            map['content'] = event.map!['follow_info'];
-            setState(() {
-              list.add(map);
-            });
-          } else if (event.map!['type'] == 'play_win_gift') {
-            // 厅内小礼物不在显示
-          } else if (event.map!['type'] == 'send_screen_gift') {
-            // 这个是本房间收到了在房间送出的3w8礼物
-            zjgpBean cb = zjgpBean.fromJson(event.map!);
-            String info = '';
-            for (int i = 0; i < cb.giftInfo!.length; i++) {
-              if (info.isEmpty) {
-                info =
-                    '${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber!}';
-              } else {
-                info =
-                    '$info ${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber!}';
-              }
-            }
-            //厅内发送的送礼物消息
-            Map<dynamic, dynamic> map = {};
-            map['info'] = event.map!['nickname'];
-            map['uid'] = event.map!['uid'];
-            map['type'] = '9';
-            // 发送的信息
-            map['content'] =
-                '${cb.nickName};在${event.map!['room_name']}向;${event.map!['to_nickname']};送出;$info';
-            setState(() {
-              list.add(map);
-            });
-          } else if (event.map!['type'] == 'send_screen') {
-            // 这个是本房间收到了在本房间玩游戏中奖的信息（公屏信息）
-            // 厅内抽奖使用
-            zjgpBean cb = zjgpBean.fromJson(event.map!);
-            String info = '';
-            for (int i = 0; i < cb.giftInfo!.length; i++) {
-              if (info.isEmpty) {
-                info =
-                    '${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber!}';
-              } else {
-                info =
-                    '$info ${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber!}';
-              }
-            }
-            if (cb.gameName! == '赛车游戏') {
-              info = cb.amount!;
-            }
-            //厅内发送的送礼物消息
-            Map<dynamic, dynamic> map = {};
-            map['info'] = event.map!['nickname'];
-            map['uid'] = event.map!['uid'];
-            map['type'] = '9';
-            // 发送的信息
-            map['content'] = '${cb.nickName};在;${cb.gameName};中赢得;$info';
-            setState(() {
-              list2.add(map);
-            });
+
             WidgetsBinding.instance!.addPostFrameCallback((_) {
-              scrollToLastItem2(); // 在widget构建完成后滚动到底部
-            });
-          } else if (event.map!['type'] == 'send_all_user') {
-            // 是这个厅，并送了带横幅的礼物
-            if (listMP.isEmpty) {
-              // 厅内出现横幅使用
-              hengFuBean hf = hengFuBean.fromJson(event.map!);
-              myhf = hf;
-              //显示横幅、map赋值
-              setState(() {
-                isShowHF = true;
-                listMP.add(hf);
-              });
-              // 判断数据显示使用
-              showInfo(hf);
-              // 看看集合里面有几个，10s一执行
-              hpTimer();
-            } else {
-              // 厅内出现横幅使用
-              hengFuBean hf = hengFuBean.fromJson(event.map!);
-              myhf = hf;
-              setState(() {
-                listMP.add(hf);
-              });
-            }
-          } else if (event.map!['type'] == 'send_screen_all') {
-            // 厅内送礼
-            charmAllBean cb = charmAllBean.fromJson(event.map!);
-            String info = '';
-            for (int i = 0; i < cb.giftInfo!.length; i++) {
-              if (info.isEmpty) {
-                info =
-                    '${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice!}) x${cb.giftInfo![i].giftNumber!}';
-              } else {
-                info =
-                    '$info ${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice!}) x${cb.giftInfo![i].giftNumber!}';
-              }
-            }
-            //厅内发送的送礼物消息
-            Map<dynamic, dynamic> map = {};
-            map['info'] = cb.fromNickname;
-            map['uid'] = event.map!['from_uid'];
-            map['type'] = '9';
-            // 发送的信息
-            map['content'] = '${cb.fromNickname};向;${cb.toNickname};赠送了;$info';
-            setState(() {
-              list.add(map);
+              scrollToLastItem(); // 在widget构建完成后滚动到底部
             });
           } else {
-            // 正常进入房间使用
-            bool isHave = false;
-            for (int i = 0; i < list.length; i++) {
-              if (list[i]['type'] == '1') {
+            LogE('其他房间发送im接收数据 ===  ${event.map!['type']}');
+            if (event.map!['type'] == 'send_screen') {
+              // 厅内抽奖使用
+              zjgpBean cb = zjgpBean.fromJson(event.map!);
+              String info = '';
+              for (int i = 0; i < cb.giftInfo!.length; i++) {
+                if (info.isEmpty) {
+                  info =
+                  '${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice!}) x${cb.giftInfo![i].giftNumber!}';
+                } else {
+                  info =
+                  '$info ${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice!}) x${cb.giftInfo![i].giftNumber!}';
+                }
+              }
+              //厅内发送的送礼物消息
+              Map<dynamic, dynamic> map = {};
+              map['info'] = event.map!['nickname'];
+              map['uid'] = event.map!['uid'];
+              map['type'] = '9';
+              // 发送的信息
+              map['content'] = '${cb.nickName};在;${cb.gameName};中赢得;$info';
+              setState(() {
+                list2.add(map);
+              });
+
+              WidgetsBinding.instance!.addPostFrameCallback((_) {
+                scrollToLastItem2(); // 在widget构建完成后滚动到底部
+              });
+            } else if (event.map!['type'] == 'send_screen_all') {
+              // 厅内送礼
+              charmAllBean cb = charmAllBean.fromJson(event.map!);
+              String info = '';
+              for (int i = 0; i < cb.giftInfo!.length; i++) {
+                if (info.isEmpty) {
+                  info =
+                  '${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice!}) x${cb.giftInfo![i].giftNumber!}';
+                } else {
+                  info =
+                  '$info ${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice!}) x${cb.giftInfo![i].giftNumber!}';
+                }
+              }
+              //厅内发送的送礼物消息
+              Map<dynamic, dynamic> map = {};
+              map['info'] = cb.fromNickname;
+              map['uid'] = event.map!['from_uid'];
+              map['type'] = '9';
+              // 发送的信息
+              map['content'] = '${cb.fromNickname};向;${cb.toNickname};赠送了;$info';
+              setState(() {
+                list.add(map);
+              });
+
+              WidgetsBinding.instance!.addPostFrameCallback((_) {
+                scrollToLastItem(); // 在widget构建完成后滚动到底部
+              });
+            } else if (event.map!['type'] == 'send_all_user') {
+              if (listMP.isEmpty) {
+                // 厅内出现横幅使用
+                hengFuBean hf = hengFuBean.fromJson(event.map!);
+                myhf = hf;
+                //显示横幅、map赋值
                 setState(() {
-                  isHave = true;
+                  isShowHF = true;
+                  listMP.add(hf);
+                });
+                // 判断数据显示使用
+                showInfo(hf);
+                // 看看集合里面有几个，10s一执行
+                hpTimer();
+              } else {
+                // 厅内出现横幅使用
+                hengFuBean hf = hengFuBean.fromJson(event.map!);
+                myhf = hf;
+                setState(() {
+                  listMP.add(hf);
                 });
               }
-            }
-
-            Map<dynamic, dynamic> map = {};
-            map['info'] = event.map!['nickname'];
-            map['type'] = '2';
-            map['uid'] = event.map!['uid'];
-            //身份
-            map['identity'] = event.map!['identity'];
-            //等级
-            map['lv'] = event.map!['lv'];
-            // 贵族
-            map['noble_id'] = event.map!['noble_id'];
-            // 萌新
-            map['is_new'] = event.map!['is_new'];
-            // 是否靓号
-            map['is_pretty'] = event.map!['is_pretty'];
-            // 新贵
-            map['new_noble'] = event.map!['new_noble'];
-            LogE('特权== ${event.map!['noble_id']}');
-            // if(event.map!['noble_id'].toString() != '0'){
-            //   setState(() {
-            //     isGuZu = true;
-            //   });
-            // }
-            // 是否点击了欢迎 0未欢迎 1已欢迎
-            map['isWelcome'] = '0';
-            setState(() {
-              list.add(map);
-            });
-          }
-
-          WidgetsBinding.instance!.addPostFrameCallback((_) {
-            scrollToLastItem(); // 在widget构建完成后滚动到底部
-          });
-        } else {
-          LogE('其他房间发送im接收数据 ===  ${event.map!['type']}');
-          if (event.map!['type'] == 'send_screen') {
-            // 厅内抽奖使用
-            zjgpBean cb = zjgpBean.fromJson(event.map!);
-            String info = '';
-            for (int i = 0; i < cb.giftInfo!.length; i++) {
-              if (info.isEmpty) {
-                info =
-                    '${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice!}) x${cb.giftInfo![i].giftNumber!}';
-              } else {
-                info =
-                    '$info ${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice!}) x${cb.giftInfo![i].giftNumber!}';
+            } else if (event.map!['type'] == 'send_screen_gift') {
+              // 这个是其他房间收到了在其他房间送出的3w8礼物
+              zjgpBean cb = zjgpBean.fromJson(event.map!);
+              String info = '';
+              for (int i = 0; i < cb.giftInfo!.length; i++) {
+                if (info.isEmpty) {
+                  info =
+                  '${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber!}';
+                } else {
+                  info =
+                  '$info ${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber!}';
+                }
               }
-            }
-            //厅内发送的送礼物消息
-            Map<dynamic, dynamic> map = {};
-            map['info'] = event.map!['nickname'];
-            map['uid'] = event.map!['uid'];
-            map['type'] = '9';
-            // 发送的信息
-            map['content'] = '${cb.nickName};在;${cb.gameName};中赢得;$info';
-            setState(() {
-              list2.add(map);
-            });
-
-            WidgetsBinding.instance!.addPostFrameCallback((_) {
-              scrollToLastItem2(); // 在widget构建完成后滚动到底部
-            });
-          } else if (event.map!['type'] == 'send_screen_all') {
-            // 厅内送礼
-            charmAllBean cb = charmAllBean.fromJson(event.map!);
-            String info = '';
-            for (int i = 0; i < cb.giftInfo!.length; i++) {
-              if (info.isEmpty) {
-                info =
-                    '${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice!}) x${cb.giftInfo![i].giftNumber!}';
-              } else {
-                info =
-                    '$info ${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice!}) x${cb.giftInfo![i].giftNumber!}';
-              }
-            }
-            //厅内发送的送礼物消息
-            Map<dynamic, dynamic> map = {};
-            map['info'] = cb.fromNickname;
-            map['uid'] = event.map!['from_uid'];
-            map['type'] = '9';
-            // 发送的信息
-            map['content'] = '${cb.fromNickname};向;${cb.toNickname};赠送了;$info';
-            setState(() {
-              list.add(map);
-            });
-
-            WidgetsBinding.instance!.addPostFrameCallback((_) {
-              scrollToLastItem(); // 在widget构建完成后滚动到底部
-            });
-          } else if (event.map!['type'] == 'send_all_user') {
-            if (listMP.isEmpty) {
-              // 厅内出现横幅使用
-              hengFuBean hf = hengFuBean.fromJson(event.map!);
-              myhf = hf;
-              //显示横幅、map赋值
+              //厅内发送的送礼物消息
+              Map<dynamic, dynamic> map = {};
+              map['info'] = event.map!['nickname'];
+              map['uid'] = event.map!['uid'];
+              map['type'] = '9';
+              // 发送的信息
+              map['content'] =
+              '${cb.nickName};在${event.map!['room_name']}向;${event.map!['to_nickname']};送出;$info';
               setState(() {
-                isShowHF = true;
-                listMP.add(hf);
+                list.add(map);
               });
-              // 判断数据显示使用
-              showInfo(hf);
-              // 看看集合里面有几个，10s一执行
-              hpTimer();
-            } else {
-              // 厅内出现横幅使用
-              hengFuBean hf = hengFuBean.fromJson(event.map!);
-              myhf = hf;
-              setState(() {
-                listMP.add(hf);
+              WidgetsBinding.instance!.addPostFrameCallback((_) {
+                scrollToLastItem(); // 在widget构建完成后滚动到底部
               });
             }
-          } else if (event.map!['type'] == 'send_screen_gift') {
-            // 这个是其他房间收到了在其他房间送出的3w8礼物
-            zjgpBean cb = zjgpBean.fromJson(event.map!);
-            String info = '';
-            for (int i = 0; i < cb.giftInfo!.length; i++) {
-              if (info.isEmpty) {
-                info =
-                    '${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber!}';
-              } else {
-                info =
-                    '$info ${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber!}';
-              }
-            }
-            //厅内发送的送礼物消息
-            Map<dynamic, dynamic> map = {};
-            map['info'] = event.map!['nickname'];
-            map['uid'] = event.map!['uid'];
-            map['type'] = '9';
-            // 发送的信息
-            map['content'] =
-                '${cb.nickName};在${event.map!['room_name']}向;${event.map!['to_nickname']};送出;$info';
-            setState(() {
-              list.add(map);
-            });
-            WidgetsBinding.instance!.addPostFrameCallback((_) {
-              scrollToLastItem(); // 在widget构建完成后滚动到底部
-            });
           }
         }
       });
@@ -1577,79 +1672,6 @@ class _RoomPageState extends State<RoomPage>
       listenSVGA = eventBus.on<SVGABack>().listen((event) {
         // 赠送了全部
         if (event.isAll) {
-          // setState(() {
-          //   // 虽然赠送了全部礼物，但是之前有人送了，还没结束
-          //   if (listUrl.isNotEmpty) {
-          //     for (int i = 0; i < event.listurl.length; i++) {
-          //       if (event.url.contains('霸下') ||
-          //           event.url.contains('北欧天马') ||
-          //           event.url.contains('浮生若梦') ||
-          //           event.url.contains('光之子') ||
-          //           event.url.contains('环游世界') ||
-          //           event.url.contains('鲸遇心海') ||
-          //           event.url.contains('竞速时刻') ||
-          //           event.url.contains('君临天下') ||
-          //           event.url.contains('狂欢宇宙') ||
-          //           event.url.contains('恋爱摩天轮') ||
-          //           event.url.contains('玫瑰花海') ||
-          //           event.url.contains('梦回长安') ||
-          //           event.url.contains('魔幻泡泡') ||
-          //           event.url.contains('木马奇缘') ||
-          //           event.url.contains('奇幻游记') ||
-          //           event.url.contains('热气球') ||
-          //           event.url.contains('瑞麟') ||
-          //           event.url.contains('时光回想') ||
-          //           event.url.contains('童话岛') ||
-          //           event.url.contains('雪山飞虎') ||
-          //           event.url.contains('御龙豪杰')) {
-          //         saveSVGAIMAGE(event.url);
-          //       } else {
-          //         // 直接用网络图地址
-          //         Map<dynamic, dynamic> map = {};
-          //         map['svgaUrl'] = event.url;
-          //         map['svgaBool'] = true;
-          //         // 直接用网络图地址
-          //         listUrl.add(map);
-          //       }
-          //     }
-          //   } else {
-          //     for (int i = 0; i < event.listurl.length; i++) {
-          //       if (event.url.contains('霸下') ||
-          //           event.url.contains('北欧天马') ||
-          //           event.url.contains('浮生若梦') ||
-          //           event.url.contains('光之子') ||
-          //           event.url.contains('环游世界') ||
-          //           event.url.contains('鲸遇心海') ||
-          //           event.url.contains('竞速时刻') ||
-          //           event.url.contains('君临天下') ||
-          //           event.url.contains('狂欢宇宙') ||
-          //           event.url.contains('恋爱摩天轮') ||
-          //           event.url.contains('玫瑰花海') ||
-          //           event.url.contains('梦回长安') ||
-          //           event.url.contains('魔幻泡泡') ||
-          //           event.url.contains('木马奇缘') ||
-          //           event.url.contains('奇幻游记') ||
-          //           event.url.contains('热气球') ||
-          //           event.url.contains('瑞麟') ||
-          //           event.url.contains('时光回想') ||
-          //           event.url.contains('童话岛') ||
-          //           event.url.contains('雪山飞虎') ||
-          //           event.url.contains('御龙豪杰')) {
-          //         saveSVGAIMAGE(event.url);
-          //       } else {
-          //         // 直接用网络图地址
-          //         Map<dynamic, dynamic> map = {};
-          //         map['svgaUrl'] = event.url;
-          //         map['svgaBool'] = true;
-          //         // 直接用网络图地址
-          //         listUrl.add(map);
-          //       }
-          //     }
-          //     // 执行后显示
-          //     isShowSVGA = true;
-          //     showStar(listUrl[0]);
-          //   }
-          // });
         } else {
           setState(() {
             if (listUrl.isEmpty) {
@@ -2197,7 +2219,8 @@ class _RoomPageState extends State<RoomPage>
                               roomNumber,
                               follow_status,
                               hot_degree,
-                              widget.roomId),
+                              widget.roomId,
+                              listM),
                           WidgetUtils.commonSizedBox(10, 0),
 
                           /// 公告 和 厅主
@@ -3255,6 +3278,7 @@ class _RoomPageState extends State<RoomPage>
             'readStatus': 1,
             'liveStatus': 0,
             'loginStatus': 0,
+            'weight': cb.toUids!.toString() == '1' ? 1 : 0,
           };
           // 插入数据
           await databaseHelper.insertData('messageSLTable', params);
