@@ -1673,73 +1673,94 @@ class _RoomPageState extends State<RoomPage>
         // 赠送了全部
         if (event.isAll) {
         } else {
-          setState(() {
+          if(isDevices == 'android') {
+            setState(() {
+              if (listUrl.isEmpty) {
+                if (event.url.contains('霸下') ||
+                    event.url.contains('北欧天马') ||
+                    event.url.contains('浮生若梦') ||
+                    event.url.contains('光之子') ||
+                    event.url.contains('环游世界') ||
+                    event.url.contains('鲸遇心海') ||
+                    event.url.contains('竞速时刻') ||
+                    event.url.contains('君临天下') ||
+                    event.url.contains('狂欢宇宙') ||
+                    event.url.contains('恋爱摩天轮') ||
+                    event.url.contains('玫瑰花海') ||
+                    event.url.contains('梦回长安') ||
+                    event.url.contains('魔幻泡泡') ||
+                    event.url.contains('木马奇缘') ||
+                    event.url.contains('奇幻游记') ||
+                    event.url.contains('热气球') ||
+                    event.url.contains('瑞麟') ||
+                    event.url.contains('时光回想') ||
+                    event.url.contains('童话岛') ||
+                    event.url.contains('雪山飞虎') ||
+                    event.url.contains('御龙豪杰')) {
+                  saveSVGAIMAGE(event.url);
+                } else {
+                  // 直接用网络图地址
+                  Map<dynamic, dynamic> map = {};
+                  map['svgaUrl'] = event.url;
+                  map['svgaBool'] = true;
+                  // 直接用网络图地址
+                  listUrl.add(map);
+                  isShowSVGA = true;
+                  showStar(listUrl[0]);
+                }
+              } else {
+                if (event.url.contains('霸下') ||
+                    event.url.contains('北欧天马') ||
+                    event.url.contains('浮生若梦') ||
+                    event.url.contains('光之子') ||
+                    event.url.contains('环游世界') ||
+                    event.url.contains('鲸遇心海') ||
+                    event.url.contains('竞速时刻') ||
+                    event.url.contains('君临天下') ||
+                    event.url.contains('狂欢宇宙') ||
+                    event.url.contains('恋爱摩天轮') ||
+                    event.url.contains('玫瑰花海') ||
+                    event.url.contains('梦回长安') ||
+                    event.url.contains('魔幻泡泡') ||
+                    event.url.contains('木马奇缘') ||
+                    event.url.contains('奇幻游记') ||
+                    event.url.contains('热气球') ||
+                    event.url.contains('瑞麟') ||
+                    event.url.contains('时光回想') ||
+                    event.url.contains('童话岛') ||
+                    event.url.contains('雪山飞虎') ||
+                    event.url.contains('御龙豪杰')) {
+                  saveSVGAIMAGE(event.url);
+                } else {
+                  // 直接用网络图地址
+                  Map<dynamic, dynamic> map = {};
+                  map['svgaUrl'] = event.url;
+                  map['svgaBool'] = true;
+                  // 直接用网络图地址
+                  listUrl.add(map);
+                }
+              }
+            });
+          }else{
+
             if (listUrl.isEmpty) {
-              if (event.url.contains('霸下') ||
-                  event.url.contains('北欧天马') ||
-                  event.url.contains('浮生若梦') ||
-                  event.url.contains('光之子') ||
-                  event.url.contains('环游世界') ||
-                  event.url.contains('鲸遇心海') ||
-                  event.url.contains('竞速时刻') ||
-                  event.url.contains('君临天下') ||
-                  event.url.contains('狂欢宇宙') ||
-                  event.url.contains('恋爱摩天轮') ||
-                  event.url.contains('玫瑰花海') ||
-                  event.url.contains('梦回长安') ||
-                  event.url.contains('魔幻泡泡') ||
-                  event.url.contains('木马奇缘') ||
-                  event.url.contains('奇幻游记') ||
-                  event.url.contains('热气球') ||
-                  event.url.contains('瑞麟') ||
-                  event.url.contains('时光回想') ||
-                  event.url.contains('童话岛') ||
-                  event.url.contains('雪山飞虎') ||
-                  event.url.contains('御龙豪杰')) {
-                saveSVGAIMAGE(event.url);
-              } else {
-                // 直接用网络图地址
-                Map<dynamic, dynamic> map = {};
-                map['svgaUrl'] = event.url;
-                map['svgaBool'] = true;
-                // 直接用网络图地址
-                listUrl.add(map);
-                isShowSVGA = true;
-                showStar(listUrl[0]);
-              }
+              // 直接用网络图地址
+              Map<dynamic, dynamic> map = {};
+              map['svgaUrl'] = event.url;
+              map['svgaBool'] = true;
+              // 直接用网络图地址
+              listUrl.add(map);
+              isShowSVGA = true;
+              showStar(listUrl[0]);
             } else {
-              if (event.url.contains('霸下') ||
-                  event.url.contains('北欧天马') ||
-                  event.url.contains('浮生若梦') ||
-                  event.url.contains('光之子') ||
-                  event.url.contains('环游世界') ||
-                  event.url.contains('鲸遇心海') ||
-                  event.url.contains('竞速时刻') ||
-                  event.url.contains('君临天下') ||
-                  event.url.contains('狂欢宇宙') ||
-                  event.url.contains('恋爱摩天轮') ||
-                  event.url.contains('玫瑰花海') ||
-                  event.url.contains('梦回长安') ||
-                  event.url.contains('魔幻泡泡') ||
-                  event.url.contains('木马奇缘') ||
-                  event.url.contains('奇幻游记') ||
-                  event.url.contains('热气球') ||
-                  event.url.contains('瑞麟') ||
-                  event.url.contains('时光回想') ||
-                  event.url.contains('童话岛') ||
-                  event.url.contains('雪山飞虎') ||
-                  event.url.contains('御龙豪杰')) {
-                saveSVGAIMAGE(event.url);
-              } else {
-                // 直接用网络图地址
-                Map<dynamic, dynamic> map = {};
-                map['svgaUrl'] = event.url;
-                map['svgaBool'] = true;
-                // 直接用网络图地址
-                listUrl.add(map);
-              }
+              // 直接用网络图地址
+              Map<dynamic, dynamic> map = {};
+              map['svgaUrl'] = event.url;
+              map['svgaBool'] = true;
+              // 直接用网络图地址
+              listUrl.add(map);
             }
-          });
+          }
         }
       });
       // 贵族特权进场动画播放完成

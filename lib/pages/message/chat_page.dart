@@ -495,7 +495,8 @@ class _ChatPageState extends State<ChatPage> {
                                         play(allData2[i]['content']);
                                       }
                                     }),
-                                    child: SizedBox(
+                                    child: Container(
+                                      color: Colors.transparent,
                                       width: widthAudio,
                                       child: Row(
                                         children: [
@@ -633,7 +634,8 @@ class _ChatPageState extends State<ChatPage> {
                                             play(allData2[i]['content']);
                                           }
                                         }),
-                                        child: SizedBox(
+                                        child: Container(
+                                          color: Colors.transparent,
                                           width: widthAudio,
                                           child: Row(
                                             children: [
