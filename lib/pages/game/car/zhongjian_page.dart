@@ -147,7 +147,7 @@ class _ZhongJiangPageState extends State<ZhongJiangPage> {
                                                           FontWeight
                                                               .w600,
                                                           fontSize:
-                                                          18.sp))),
+                                                          16.sp))),
                                               WidgetUtils.commonSizedBox(
                                                   0, 20.h),
                                             ],
@@ -199,7 +199,7 @@ class _ZhongJiangPageState extends State<ZhongJiangPage> {
                                                           FontWeight
                                                               .w600,
                                                           fontSize:
-                                                          18.sp))),
+                                                          16.sp))),
                                               WidgetUtils.commonSizedBox(
                                                   0, 20.h),
                                             ],
@@ -247,7 +247,7 @@ class _ZhongJiangPageState extends State<ZhongJiangPage> {
                                                           FontWeight
                                                               .w600,
                                                           fontSize:
-                                                          18.sp))),
+                                                          16.sp))),
                                               WidgetUtils.commonSizedBox(
                                                   0, 20.h),
                                             ],
@@ -299,7 +299,7 @@ class _ZhongJiangPageState extends State<ZhongJiangPage> {
                                                           FontWeight
                                                               .w600,
                                                           fontSize:
-                                                          18.sp))),
+                                                          16.sp))),
                                               WidgetUtils.commonSizedBox(
                                                   0, 20.h),
                                             ],
@@ -347,7 +347,7 @@ class _ZhongJiangPageState extends State<ZhongJiangPage> {
                                                           FontWeight
                                                               .w600,
                                                           fontSize:
-                                                          18.sp))),
+                                                          16.sp))),
                                               WidgetUtils.commonSizedBox(
                                                   0, 20.h),
                                             ],
@@ -395,7 +395,7 @@ class _ZhongJiangPageState extends State<ZhongJiangPage> {
                                                           FontWeight
                                                               .w600,
                                                           fontSize:
-                                                          18.sp))),
+                                                          16.sp))),
                                               WidgetUtils.commonSizedBox(
                                                   0, 20.h),
                                             ],
