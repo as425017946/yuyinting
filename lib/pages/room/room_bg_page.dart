@@ -154,8 +154,8 @@ class _RoomBGPageState extends State<RoomBGPage> {
                           });
                         }),
                         child: Container(
-                          height: 50.h,
-                          width: 120.h,
+                          height: 60.h,
+                          width: 150.h,
                           color: Colors.red,
                           child: Column(
                             children: [
@@ -194,8 +194,8 @@ class _RoomBGPageState extends State<RoomBGPage> {
                           });
                         }),
                         child: Container(
-                          height: 50.h,
-                          width: 120.h,
+                          height: 60.h,
+                          width: 150.h,
                           color: Colors.blue,
                           child: Column(
                             children: [
