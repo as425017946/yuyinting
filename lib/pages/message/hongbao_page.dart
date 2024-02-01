@@ -92,8 +92,14 @@ class _HongBaoPageState extends State<HongBaoPage> {
                       onTap: (() {
                         Navigator.pop(context);
                       }),
-                      child: WidgetUtils.showImages(
-                          'assets/images/hb_close.png', 30.h, 30.h)),
+                      child: Container(
+                        color: Colors.transparent,
+                        height: 60.h,
+                        width: 60.h,
+                        padding: EdgeInsets.all(15.h),
+                        child: WidgetUtils.showImages(
+                            'assets/images/hb_close.png', 30.h, 30.h),
+                      )),
                 ],
               ),
               WidgetUtils.commonSizedBox(30.h, 0),

@@ -193,16 +193,20 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
                                 _controller.jumpToPage(0);
                               });
                             }),
-                            child: WidgetUtils.onlyTextBottom(
-                                '收藏',
-                                StyleUtils.getCommonTextStyle(
-                                    color: Colors.white,
-                                    fontSize: _currentIndex == 0
-                                        ? ScreenUtil().setSp(38)
-                                        : ScreenUtil().setSp(32),
-                                    fontWeight: _currentIndex == 0
-                                        ? FontWeight.w600
-                                        : FontWeight.normal)),
+                            child: Container(
+                              width: double.infinity,
+                              color: Colors.transparent,
+                              child: WidgetUtils.onlyTextBottom(
+                                  '收藏',
+                                  StyleUtils.getCommonTextStyle(
+                                      color: Colors.white,
+                                      fontSize: _currentIndex == 0
+                                          ? ScreenUtil().setSp(38)
+                                          : ScreenUtil().setSp(32),
+                                      fontWeight: _currentIndex == 0
+                                          ? FontWeight.w600
+                                          : FontWeight.normal)),
+                            ),
                           )),
                           Expanded(
                               child: GestureDetector(
@@ -212,16 +216,20 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
                                 _controller.jumpToPage(1);
                               });
                             }),
-                            child: WidgetUtils.onlyTextBottom(
-                                '推荐',
-                                StyleUtils.getCommonTextStyle(
-                                    color: Colors.white,
-                                    fontSize: _currentIndex == 1
-                                        ? ScreenUtil().setSp(38)
-                                        : ScreenUtil().setSp(32),
-                                    fontWeight: _currentIndex == 1
-                                        ? FontWeight.w600
-                                        : FontWeight.normal)),
+                            child: Container(
+                                width: double.infinity,
+                                color: Colors.transparent,
+                              child: WidgetUtils.onlyTextBottom(
+                                  '推荐',
+                                  StyleUtils.getCommonTextStyle(
+                                      color: Colors.white,
+                                      fontSize: _currentIndex == 1
+                                          ? ScreenUtil().setSp(38)
+                                          : ScreenUtil().setSp(32),
+                                      fontWeight: _currentIndex == 1
+                                          ? FontWeight.w600
+                                          : FontWeight.normal)),
+                            ),
                           )),
                           Expanded(
                               child: GestureDetector(
@@ -231,16 +239,20 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
                                 _controller.jumpToPage(2);
                               });
                             }),
-                            child: WidgetUtils.onlyTextBottom(
-                                '派对',
-                                StyleUtils.getCommonTextStyle(
-                                    color: Colors.white,
-                                    fontSize: _currentIndex == 2
-                                        ? ScreenUtil().setSp(38)
-                                        : ScreenUtil().setSp(32),
-                                    fontWeight: _currentIndex == 2
-                                        ? FontWeight.w600
-                                        : FontWeight.normal)),
+                            child: Container(
+                              width: double.infinity,
+                              color: Colors.transparent,
+                              child: WidgetUtils.onlyTextBottom(
+                                  '派对',
+                                  StyleUtils.getCommonTextStyle(
+                                      color: Colors.white,
+                                      fontSize: _currentIndex == 2
+                                          ? ScreenUtil().setSp(38)
+                                          : ScreenUtil().setSp(32),
+                                      fontWeight: _currentIndex == 2
+                                          ? FontWeight.w600
+                                          : FontWeight.normal)),
+                            ),
                           )),
                           Expanded(
                               child: GestureDetector(
@@ -277,16 +289,20 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
                                       _controller.jumpToPage(4);
                                     });
                                   }),
-                                  child: WidgetUtils.onlyTextBottom(
-                                      '在线',
-                                      StyleUtils.getCommonTextStyle(
-                                          color: Colors.white,
-                                          fontSize: _currentIndex == 4
-                                              ? ScreenUtil().setSp(38)
-                                              : ScreenUtil().setSp(32),
-                                          fontWeight: _currentIndex == 4
-                                              ? FontWeight.w600
-                                              : FontWeight.normal)),
+                                  child: Container(
+                                    width: double.infinity,
+                                    color: Colors.transparent,
+                                    child: WidgetUtils.onlyTextBottom(
+                                        '在线',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: Colors.white,
+                                            fontSize: _currentIndex == 4
+                                                ? ScreenUtil().setSp(38)
+                                                : ScreenUtil().setSp(32),
+                                            fontWeight: _currentIndex == 4
+                                                ? FontWeight.w600
+                                                : FontWeight.normal)),
+                                  ),
                                 ))
                               : Expanded(
                                   child: Opacity(

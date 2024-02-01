@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:svgaplayer_flutter/parser.dart';
 import 'package:svgaplayer_flutter/player.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:yuyinting/pages/trends/trends_hi_page.dart';
 import 'package:yuyinting/pages/trends/trends_more_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
@@ -119,7 +123,6 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
     animationController = null;
     super.dispose();
     listen.cancel();
-    _videoController.dispose();
   }
 
   SVGAAnimationController? animationController;
@@ -188,7 +191,6 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
               ),
               WidgetUtils.commonSizedBox(0, 8),
               Column(
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const Expanded(child: Text('')),
                   Container(
@@ -220,7 +222,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
                                 : MyColors.dtPink,
                             //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                             borderRadius:
-                                const BorderRadius.all(Radius.circular(15.0)),
+                            const BorderRadius.all(Radius.circular(15.0)),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -241,7 +243,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
                             ],
                           ),
                         ),
-                        const Expanded(child: Text('')),
+                        const Spacer(),
                       ],
                     ),
                   ),
@@ -252,64 +254,58 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
               _list[i].uid.toString() == sp.getString('user_id')
                   ? const Text('')
                   : _list[i].isHi == 0
-                      ? GestureDetector(
-                          onTap: (() {
-                            if (MyUtils.checkClick()) {
-                              MyUtils.goTransparentPageCom(
-                                  context,
-                                  TrendsHiPage(
-                                      imgUrl: _list[i].avatar!,
-                                      uid: _list[i].uid.toString(),
-                                      index: i));
-                            }
-                          }),
-                          child: WidgetUtils.showImages(
-                              'assets/images/trends_hi.png', 124, 59),
-                        )
-                      : GestureDetector(
-                          onTap: (() {
-                            if (MyUtils.checkClick()) {
-                              MyUtils.goTransparentRFPage(
-                                  context,
-                                  ChatPage(
-                                      nickName: _list[i].nickname!,
-                                      otherUid: _list[i].uid.toString(),
-                                      otherImg: _list[i].avatar!));
-                            }
-                          }),
-                          child: WidgetUtils.myContainer(
-                              ScreenUtil().setHeight(45),
-                              ScreenUtil().setHeight(100),
-                              Colors.white,
-                              MyColors.homeTopBG,
-                              '私信',
-                              ScreenUtil().setSp(25),
-                              MyColors.homeTopBG),
-                        ),
+                  ? GestureDetector(
+                onTap: (() {
+                  MyUtils.goTransparentPageCom(
+                      context,
+                      TrendsHiPage(
+                          imgUrl: _list[i].avatar!,
+                          uid: _list[i].uid.toString(),
+                          index: i));
+                }),
+                child: WidgetUtils.showImages(
+                    'assets/images/trends_hi.png', 124, 59),
+              )
+                  : GestureDetector(
+                onTap: (() {
+                  MyUtils.goTransparentRFPage(
+                      context,
+                      ChatPage(
+                          nickName: _list[i].nickname!,
+                          otherUid: _list[i].uid.toString(),
+                          otherImg: _list[i].avatar!));
+                }),
+                child: WidgetUtils.myContainer(
+                    ScreenUtil().setHeight(45),
+                    ScreenUtil().setHeight(100),
+                    Colors.white,
+                    MyColors.homeTopBG,
+                    '私信',
+                    ScreenUtil().setSp(25),
+                    MyColors.homeTopBG),
+              ),
             ],
           ),
         ),
         WidgetUtils.commonSizedBox(5, 0),
         GestureDetector(
           onTap: (() {
-            if (MyUtils.checkClick()) {
-              MyUtils.goTransparentRFPage(
-                  context,
-                  TrendsMorePage(
-                    note_id: _list[i].id.toString(), index: i
-                  ));
-            }
+            MyUtils.goTransparentRFPage(context,
+                TrendsMorePage(note_id: _list[i].id.toString(), index: i));
           }),
-          child: WidgetUtils.onlyText(
-              _list[i].text!,
-              StyleUtils.getCommonTextStyle(
-                color: Colors.black,
-                fontSize: ScreenUtil().setSp(28),
-              )),
+          child: Container(
+            color: Colors.transparent,
+            child: WidgetUtils.onlyText(
+                _list[i].text!,
+                StyleUtils.getCommonTextStyle(
+                  color: Colors.black,
+                  fontSize: ScreenUtil().setSp(28),
+                )),
+          ),
         ),
         WidgetUtils.commonSizedBox(10, 0),
         _list[i].type == 2
-            ? showVideo(_list[i].imgUrl!)
+            ? showVideo(_list[i].imgUrl!,i)
             : showImag(_list[i].imgUrl!, i),
         WidgetUtils.commonSizedBox(20, 0),
         Row(
@@ -328,67 +324,128 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
                     action = 'delete';
                   } else {
                     action = 'create';
-                    isShow = false;
+                    // isShow = false;
                   }
                 });
                 if (_list[i].isLike == 0) {
-                  animationController?.reset();
-                  animationController?.forward();
+                  // animationController?.reset();
+                  // animationController?.forward();
                 }
                 doPostLike(_list[i].id.toString(), i);
               }),
-              child: WidgetUtils.showImages(
-                  _list[i].isLike == 0
-                      ? 'assets/images/trends_zan1.png'
-                      : 'assets/images/trends_zan_2.png',
-                  18,
-                  18),
-            ),
-            WidgetUtils.commonSizedBox(0, 5),
-            SizedBox(
-              width: ScreenUtil().setHeight(80),
-              child: WidgetUtils.onlyText(
-                  _list[i].like == 0 ? '抢首赞' : _list[i].like.toString(),
-                  StyleUtils.getCommonTextStyle(
-                    color: Colors.grey,
-                    fontSize: ScreenUtil().setSp(21),
-                  )),
+              child: Container(
+                color: Colors.transparent,
+                padding: EdgeInsets.only(left: 20.w),
+                child: Row(
+                  children: [
+                    WidgetUtils.showImages(
+                        _list[i].isLike == 0
+                            ? 'assets/images/trends_zan1.png'
+                            : 'assets/images/trends_zan_2.png',
+                        18,
+                        18),
+                    WidgetUtils.commonSizedBox(0, 5),
+                    SizedBox(
+                      width: ScreenUtil().setHeight(60),
+                      child: WidgetUtils.onlyText(
+                          _list[i].like == 0 ? '抢首赞' : _list[i].like.toString(),
+                          StyleUtils.getCommonTextStyle(
+                            color: Colors.grey,
+                            fontSize: ScreenUtil().setSp(21),
+                          )),
+                    ),
+                  ],
+                ),
+              ),
             ),
             GestureDetector(
               onTap: (() {
-                if (MyUtils.checkClick()) {
-                  MyUtils.goTransparentRFPage(
-                      context,
-                      TrendsMorePage(
-                        note_id: _list[i].id.toString(),index:i
-                      ));
-                }
+                MyUtils.goTransparentRFPage(context,
+                    TrendsMorePage(note_id: _list[i].id.toString(), index: i));
               }),
-              child: WidgetUtils.showImages(
-                  'assets/images/trends_message.png', 18, 18),
-            ),
-            WidgetUtils.commonSizedBox(0, 5),
-            GestureDetector(
-              onTap: (() {
-                if (MyUtils.checkClick()) {
-                  MyUtils.goTransparentRFPage(
-                      context,
-                      TrendsMorePage(
-                        note_id: _list[i].id.toString(),index:i
-                      ));
-                }
-              }),
-              child: WidgetUtils.onlyText(
-                  _list[i].comment == 0 ? '评论' : _list[i].comment.toString(),
-                  StyleUtils.getCommonTextStyle(
-                    color: Colors.grey,
-                    fontSize: ScreenUtil().setSp(21),
-                  )),
+              child: Container(
+                color: Colors.transparent,
+                padding: EdgeInsets.only(left: 20.w),
+                child: Row(
+                  children: [
+                    WidgetUtils.showImages(
+                        'assets/images/trends_message.png', 18, 18),
+                    WidgetUtils.commonSizedBox(0, 5),
+                    WidgetUtils.onlyText(
+                        _list[i].comment == 0 ? '评论' : _list[i].comment.toString(),
+                        StyleUtils.getCommonTextStyle(
+                          color: Colors.grey,
+                          fontSize: ScreenUtil().setSp(21),
+                        )),
+                  ],
+                ),
+              ),
             ),
           ],
         ),
         WidgetUtils.commonSizedBox(10, 0),
         WidgetUtils.myLine()
+      ],
+    );
+  }
+
+  _initializeVideoController(List<String> listImg,int i) async {
+    final fileName = await VideoThumbnail.thumbnailFile(
+      video: listImg[0],
+      thumbnailPath: (await getTemporaryDirectory()).path,
+      quality: 30,
+    );
+    setState(() {
+      _list[i].imgUrl![1] = fileName!;
+    });
+    LogE('视频图片 $fileName');
+  }
+
+  Widget showVideo(List<String> listImg, int i) {
+    _initializeVideoController(listImg,i);
+    return Row(
+      children: [
+        Container(
+          width: ScreenUtil().setHeight(200),
+          height: ScreenUtil().setHeight(200),
+          decoration: const BoxDecoration(
+            //背景
+            color: Colors.black87,
+            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+          ),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(
+                width: ScreenUtil().setHeight(200),
+                height: ScreenUtil().setHeight(200),
+                //超出部分，可裁剪
+                clipBehavior: Clip.hardEdge,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.h),
+                ),
+                child: _list[i].imgUrl![1].isNotEmpty ?Image.file(
+                  File(_list[i].imgUrl![1]),
+                  fit: BoxFit.cover,
+                  gaplessPlayback: true,
+                ) : const Text(''),
+              ),
+              GestureDetector(
+                onTap: () {
+                  MyUtils.goTransparentRFPage(
+                      context, PagePreviewVideo(url: listImg[0]));
+                },
+                child: const Icon(
+                  Icons.play_circle_fill_outlined,
+                  color: Colors.white,
+                  size: 50,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const Spacer(),
       ],
     );
   }
@@ -423,7 +480,6 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
               ),
               WidgetUtils.commonSizedBox(0, 8),
               Column(
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const Expanded(child: Text('')),
                   Container(
@@ -455,7 +511,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
                                 : MyColors.dtPink,
                             //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                             borderRadius:
-                                const BorderRadius.all(Radius.circular(15.0)),
+                            const BorderRadius.all(Radius.circular(15.0)),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -476,7 +532,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
                             ],
                           ),
                         ),
-                        const Expanded(child: Text('')),
+                        const Spacer(),
                       ],
                     ),
                   ),
@@ -487,64 +543,58 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
               _list_tj[i].uid.toString() == sp.getString('user_id')
                   ? const Text('')
                   : _list_tj[i].isHi == 0
-                      ? GestureDetector(
-                          onTap: (() {
-                            if (MyUtils.checkClick()) {
-                              MyUtils.goTransparentPageCom(
-                                  context,
-                                  TrendsHiPage(
-                                      imgUrl: _list_tj[i].avatar!,
-                                      uid: _list_tj[i].uid.toString(),
-                                      index: i));
-                            }
-                          }),
-                          child: WidgetUtils.showImages(
-                              'assets/images/trends_hi.png', 124, 59),
-                        )
-                      : GestureDetector(
-                          onTap: (() {
-                            if (MyUtils.checkClick()) {
-                              MyUtils.goTransparentRFPage(
-                                  context,
-                                  ChatPage(
-                                      nickName: _list_tj[i].nickname!,
-                                      otherUid: _list_tj[i].uid.toString(),
-                                      otherImg: _list_tj[i].avatar!));
-                            }
-                          }),
-                          child: WidgetUtils.myContainer(
-                              ScreenUtil().setHeight(45),
-                              ScreenUtil().setHeight(100),
-                              Colors.white,
-                              MyColors.homeTopBG,
-                              '私信',
-                              ScreenUtil().setSp(25),
-                              MyColors.homeTopBG),
-                        ),
+                  ? GestureDetector(
+                onTap: (() {
+                  MyUtils.goTransparentPageCom(
+                      context,
+                      TrendsHiPage(
+                          imgUrl: _list_tj[i].avatar!,
+                          uid: _list_tj[i].uid.toString(),
+                          index: i));
+                }),
+                child: WidgetUtils.showImages(
+                    'assets/images/trends_hi.png', 124, 59),
+              )
+                  : GestureDetector(
+                onTap: (() {
+                  MyUtils.goTransparentRFPage(
+                      context,
+                      ChatPage(
+                          nickName: _list_tj[i].nickname!,
+                          otherUid: _list_tj[i].uid.toString(),
+                          otherImg: _list_tj[i].avatar!));
+                }),
+                child: WidgetUtils.myContainer(
+                    ScreenUtil().setHeight(45),
+                    ScreenUtil().setHeight(100),
+                    Colors.white,
+                    MyColors.homeTopBG,
+                    '私信',
+                    ScreenUtil().setSp(25),
+                    MyColors.homeTopBG),
+              ),
             ],
           ),
         ),
         WidgetUtils.commonSizedBox(5, 0),
         GestureDetector(
           onTap: (() {
-            if (MyUtils.checkClick()) {
-              MyUtils.goTransparentRFPage(
-                  context,
-                  TrendsMorePage(
-                    note_id: _list_tj[i].id.toString(),index:i
-                  ));
-            }
+            MyUtils.goTransparentRFPage(context,
+                TrendsMorePage(note_id: _list_tj[i].id.toString(), index: i));
           }),
-          child: WidgetUtils.onlyText(
-              _list_tj[i].text!,
-              StyleUtils.getCommonTextStyle(
-                color: Colors.black,
-                fontSize: ScreenUtil().setSp(28),
-              )),
+          child: Container(
+            color: Colors.transparent,
+            child: WidgetUtils.onlyText(
+                _list_tj[i].text!,
+                StyleUtils.getCommonTextStyle(
+                  color: Colors.black,
+                  fontSize: ScreenUtil().setSp(28),
+                )),
+          ),
         ),
         WidgetUtils.commonSizedBox(10, 0),
         _list_tj[i].type == 2
-            ? showVideo(_list_tj[i].imgUrl!)
+            ? showVideo2(_list_tj[i].imgUrl!,i)
             : showImag(_list_tj[i].imgUrl!, i),
         WidgetUtils.commonSizedBox(20, 0),
         Row(
@@ -563,64 +613,62 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
                     action = 'delete';
                   } else {
                     action = 'create';
-                    isShow = false;
+                    // isShow = false;
                   }
                 });
                 if (_list_tj[i].isLike == 0) {
-                  animationController?.reset();
-                  animationController?.forward();
+                  // animationController?.reset();
+                  // animationController?.forward();
                 }
                 doPostLike(_list_tj[i].id.toString(), i);
               }),
-              child: WidgetUtils.showImages(
-                  _list_tj[i].isLike == 0
-                      ? 'assets/images/trends_zan1.png'
-                      : 'assets/images/trends_zan_2.png',
-                  18,
-                  18),
-            ),
-            WidgetUtils.commonSizedBox(0, 5),
-            SizedBox(
-              width: ScreenUtil().setHeight(80),
-              child: WidgetUtils.onlyText(
-                  _list_tj[i].like == 0 ? '抢首赞' : _list_tj[i].like.toString(),
-                  StyleUtils.getCommonTextStyle(
-                    color: Colors.grey,
-                    fontSize: ScreenUtil().setSp(21),
-                  )),
+              child: Container(
+                color: Colors.transparent,
+                padding: EdgeInsets.only(left: 20.w),
+                child: Row(
+                  children: [
+                    WidgetUtils.showImages(
+                        _list_tj[i].isLike == 0
+                            ? 'assets/images/trends_zan1.png'
+                            : 'assets/images/trends_zan_2.png',
+                        18,
+                        18),
+                    WidgetUtils.commonSizedBox(0, 5),
+                    SizedBox(
+                      width: ScreenUtil().setHeight(60),
+                      child: WidgetUtils.onlyText(
+                          _list_tj[i].like == 0 ? '抢首赞' : _list_tj[i].like.toString(),
+                          StyleUtils.getCommonTextStyle(
+                            color: Colors.grey,
+                            fontSize: ScreenUtil().setSp(21),
+                          )),
+                    ),
+                  ],
+                ),
+              ),
             ),
             GestureDetector(
               onTap: (() {
-                if (MyUtils.checkClick()) {
-                  MyUtils.goTransparentRFPage(
-                      context,
-                      TrendsMorePage(
-                        note_id: _list_tj[i].id.toString(),index:i
-                      ));
-                }
+                MyUtils.goTransparentRFPage(context,
+                    TrendsMorePage(note_id: _list_tj[i].id.toString(), index: i));
               }),
-              child: WidgetUtils.showImages(
-                  'assets/images/trends_message.png', 18, 18),
-            ),
-            WidgetUtils.commonSizedBox(0, 5),
-            GestureDetector(
-              onTap: (() {
-                if (MyUtils.checkClick()) {
-                  MyUtils.goTransparentRFPage(
-                      context,
-                      TrendsMorePage(
-                        note_id: _list_tj[i].id.toString(),index:i
-                      ));
-                }
-              }),
-              child: WidgetUtils.onlyText(
-                  _list_tj[i].comment == 0
-                      ? '评论'
-                      : _list_tj[i].comment.toString(),
-                  StyleUtils.getCommonTextStyle(
-                    color: Colors.grey,
-                    fontSize: ScreenUtil().setSp(21),
-                  )),
+              child: Container(
+                color: Colors.transparent,
+                padding: EdgeInsets.only(left: 20.w),
+                child: Row(
+                  children: [
+                    WidgetUtils.showImages(
+                        'assets/images/trends_message.png', 18, 18),
+                    WidgetUtils.commonSizedBox(0, 5),
+                    WidgetUtils.onlyText(
+                        _list_tj[i].comment == 0 ? '评论' : _list_tj[i].comment.toString(),
+                        StyleUtils.getCommonTextStyle(
+                          color: Colors.grey,
+                          fontSize: ScreenUtil().setSp(21),
+                        )),
+                  ],
+                ),
+              ),
             ),
           ],
         ),
@@ -629,15 +677,20 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
       ],
     );
   }
-
-  late VideoPlayerController _videoController;
-
-  Widget showVideo(List<String> listImg) {
-    String a = listImg[0];
-    _videoController = VideoPlayerController.network(
-      a,
-      videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+  _initializeVideoController2(List<String> listImg,int i) async {
+    final fileName = await VideoThumbnail.thumbnailFile(
+      video: listImg[0],
+      thumbnailPath: (await getTemporaryDirectory()).path,
+      quality: 30,
     );
+    setState(() {
+      _list_tj[i].imgUrl![1] = fileName!;
+    });
+    LogE('视频图片 $fileName');
+  }
+
+  Widget showVideo2(List<String> listImg, int i) {
+    _initializeVideoController2(listImg,i);
     return Row(
       children: [
         Container(
@@ -652,18 +705,24 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
           child: Stack(
             alignment: Alignment.center,
             children: [
-              SizedBox(
+              Container(
                 width: ScreenUtil().setHeight(200),
                 height: ScreenUtil().setHeight(200),
-                child: AspectRatio(
-                  aspectRatio: _videoController.value.aspectRatio,
-                  child: VideoPlayer(_videoController),
+                //超出部分，可裁剪
+                clipBehavior: Clip.hardEdge,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.h),
                 ),
+                child: _list_tj[i].imgUrl![1].isNotEmpty ?Image.file(
+                  File(_list_tj[i].imgUrl![1]),
+                  fit: BoxFit.cover,
+                  gaplessPlayback: true,
+                ) : const Text(''),
               ),
               GestureDetector(
                 onTap: () {
                   MyUtils.goTransparentRFPage(
-                      context, PagePreviewVideo(url: a));
+                      context, PagePreviewVideo(url: listImg[0]));
                 },
                 child: const Icon(
                   Icons.play_circle_fill_outlined,
@@ -678,6 +737,8 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
       ],
     );
   }
+
+
 
   ///显示图片
   Widget showImag(List<String> listImg, int i) {
@@ -1061,7 +1122,12 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
               _list.clear();
             }
             if (bean.data!.list!.isNotEmpty) {
-              _list = bean.data!.list!;
+              for (int i = 0; i < bean.data!.list!.length; i++) {
+                _list.add(bean.data!.list![i]);
+                if(bean.data!.list![i].type == 2){
+                  _list[i].imgUrl!.add('');
+                }
+              }
               length = _list.length;
             } else {
               // 没有关注的人，需要请求推荐的接口
@@ -1112,6 +1178,9 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
             if (bean.data!.list!.isNotEmpty) {
               for (int i = 0; i < bean.data!.list!.length; i++) {
                 _list_tj.add(bean.data!.list![i]);
+                if(bean.data!.list![i].type == 2){
+                  _list_tj[i].imgUrl!.add('');
+                }
               }
               LogE('推荐${_list_tj.length}');
             } else {

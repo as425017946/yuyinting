@@ -66,6 +66,9 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
   // 是否有进入房间返回出来
   bool isJoinRoom = false;
 
+  // 收起房间是否点击了回去
+  bool isFirstJoinRoom = false;
+
   /// 会重复播放的控制器
   late AnimationController _repeatController;
 
@@ -640,7 +643,12 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
                   right: 20,
                   child: GestureDetector(
                     onTap: (() {
-                      doPostBeforeJoin(sp.getString('roomID'));
+                      if(MyUtils.checkClick() && isFirstJoinRoom == false){
+                        setState(() {
+                          isFirstJoinRoom = true;
+                        });
+                        doPostBeforeJoin(sp.getString('roomID'));
+                      }
                     }),
                     child: RotationTransition(
                       turns: _animation,
@@ -849,11 +857,17 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           MyUtils.jumpLogin(context);
           break;
         default:
+          setState(() {
+            isFirstJoinRoom = false;
+          });
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
       Loading.dismiss();
     } catch (e) {
+      setState(() {
+        isFirstJoinRoom = false;
+      });
       Loading.dismiss();
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
@@ -887,11 +901,17 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           MyUtils.jumpLogin(context);
           break;
         default:
+          setState(() {
+            isFirstJoinRoom = false;
+          });
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
       Loading.dismiss();
     } catch (e) {
+      setState(() {
+        isFirstJoinRoom = false;
+      });
       Loading.dismiss();
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
