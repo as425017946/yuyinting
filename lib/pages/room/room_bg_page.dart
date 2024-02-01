@@ -126,7 +126,7 @@ class _RoomBGPageState extends State<RoomBGPage> {
                       child: Container(
                         width: ScreenUtil().setHeight(180),
                         height: 50.h,
-                        color: Colors.red,
+                        color: Colors.transparent,
                         padding:
                             EdgeInsets.only(right: ScreenUtil().setHeight(40)),
                         alignment: Alignment.centerRight,
@@ -153,32 +153,35 @@ class _RoomBGPageState extends State<RoomBGPage> {
                             _controller.animateToPage(0, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                           });
                         }),
-                        child: Column(
-                          children: [
-                            Text(
-                              '默认背景',
-                              style: StyleUtils.getCommonTextStyle(
-                                  color: _currentIndex == 0 ? MyColors.roomTCWZ2 : MyColors.roomTCWZ3,
-                                  fontSize: ScreenUtil().setSp(28),
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            WidgetUtils.commonSizedBox(5, 0),
-                            Opacity(
-                              opacity: _currentIndex == 0 ? 1 : 0,
-                              child: Container(
-                                height: ScreenUtil().setHeight(6),
-                                width: ScreenUtil().setWidth(26),
-                                //边框设置
-                                decoration: const BoxDecoration(
-                                  //背景
-                                  color: MyColors.roomTCWZ2,
-                                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(3.0)),
-                                ),
+                        child: Container(
+                          color: Colors.red,
+                          child: Column(
+                            children: [
+                              Text(
+                                '默认背景',
+                                style: StyleUtils.getCommonTextStyle(
+                                    color: _currentIndex == 0 ? MyColors.roomTCWZ2 : MyColors.roomTCWZ3,
+                                    fontSize: ScreenUtil().setSp(28),
+                                    fontWeight: FontWeight.w600),
                               ),
-                            )
-                          ],
+                              WidgetUtils.commonSizedBox(5, 0),
+                              Opacity(
+                                opacity: _currentIndex == 0 ? 1 : 0,
+                                child: Container(
+                                  height: ScreenUtil().setHeight(6),
+                                  width: ScreenUtil().setWidth(26),
+                                  //边框设置
+                                  decoration: const BoxDecoration(
+                                    //背景
+                                    color: MyColors.roomTCWZ2,
+                                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(3.0)),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                       WidgetUtils.commonSizedBox(0, 50),
