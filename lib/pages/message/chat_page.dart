@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -119,11 +118,11 @@ class _ChatPageState extends State<ChatPage> {
         isDevices = 'android';
       });
     }else if (Platform.isIOS){
+      //获取权限
+      initAgora();
       setState(() {
         isDevices = 'ios';
       });
-      //获取权限
-      initAgora();
     }
     _initialize();
     super.initState();
@@ -143,6 +142,16 @@ class _ChatPageState extends State<ChatPage> {
       if(event.title == '语音发送成功'){
         successAudio();
       }else if(event.title == '语音发送失败'){
+        //重新初始化音频信息
+        setState(() {
+          mediaRecord = true;
+          playRecord = false; //音频文件播放状态
+          hasRecord = false; //是否有音频文件可播放
+          isLuZhi = false;
+          isPlay = 0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
+          djNum = 60; // 录音时长
+          audioNum = 0; // 记录录了多久
+        });
         MyToastUtils.showToastBottom('语音发送失败');
       }
     });
