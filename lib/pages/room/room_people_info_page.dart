@@ -173,8 +173,8 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                     });
                                   }),
                                   child: Container(
-                                    color: Colors.red,
-                                    width: 43.h,
+                                    color: Colors.transparent,
+                                    width: 53.h,
                                     height: 40.h,
                                     alignment: Alignment.centerLeft,
                                     child: WidgetUtils.showImages(
@@ -192,7 +192,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                   }),
                                   child: Container(
                                     color: Colors.transparent,
-                                    width: 43.h,
+                                    width: 53.h,
                                     height: 40.h,
                                     alignment: Alignment.centerLeft,
                                     child: WidgetUtils.showImages(
@@ -201,7 +201,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                         ScreenUtil().setHeight(33)),
                                   ),
                                 ),
-                                WidgetUtils.commonSizedBox(0, 20),
+                                WidgetUtils.commonSizedBox(0, 10),
                               ],
                             )
                           : sp.getString('role').toString() == 'adminer'
