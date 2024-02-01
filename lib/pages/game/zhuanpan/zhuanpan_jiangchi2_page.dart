@@ -225,10 +225,16 @@ class _ZhuanPanJiangChi2PageState extends State<ZhuanPanJiangChi2Page> {
                         onTap: (() {
                           MyUtils.goTransparentPageCom(context, const ZhuanPanShuoMing2Page());
                         }),
-                        child: WidgetUtils.onlyText(
-                            '帮助',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.zpGZYellow, fontSize: 24.sp))),
+                        child: Container(
+                          color: Colors.transparent,
+                          width: 60.h,
+                          height: 50.h,
+                          alignment: Alignment.centerRight,
+                          child: WidgetUtils.onlyTextCenter(
+                              '帮助',
+                              StyleUtils.getCommonTextStyle(
+                                  color: MyColors.zpGZYellow, fontSize: 24.sp)),
+                        )),
                     WidgetUtils.commonSizedBox(0, 30.h),
                   ],
                 ),

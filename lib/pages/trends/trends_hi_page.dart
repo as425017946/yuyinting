@@ -59,9 +59,6 @@ class _TrendsHiPageState extends State<TrendsHiPage> {
                 ),
                 child: Column(
                   children: [
-                    const SizedBox(
-                      height: 20,
-                    ),
                     Row(
                       children: [
                         const Expanded(child: Text('')),
@@ -70,11 +67,14 @@ class _TrendsHiPageState extends State<TrendsHiPage> {
                             ///关闭当前页面
                             Navigator.pop(context);
                           }),
-                          child: WidgetUtils.showImages(
-                              'assets/images/close.png', 15, 15),
-                        ),
-                        const SizedBox(
-                          width: 20,
+                          child: Container(
+                            height: 100.h,
+                            width: 100.h,
+                            color: Colors.transparent,
+                            alignment: Alignment.center,
+                            child: WidgetUtils.showImages(
+                                'assets/images/close.png', 15, 15),
+                          ),
                         ),
                       ],
                     ),

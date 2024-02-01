@@ -119,10 +119,16 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                                   doPostMyGh();
                                 });
                               }),
-                              child: WidgetUtils.showImages(
-                                  'assets/images/gonghui_bianji.png',
-                                  ScreenUtil().setHeight(38),
-                                  ScreenUtil().setHeight(38)),
+                              child: Container(
+                                height: 60.h,
+                                width: 60.h,
+                                color: Colors.transparent,
+                                alignment: Alignment.centerRight,
+                                child: WidgetUtils.showImages(
+                                    'assets/images/gonghui_bianji.png',
+                                    ScreenUtil().setHeight(38),
+                                    ScreenUtil().setHeight(38)),
+                              ),
                             )
                           : const Text(''),
                       WidgetUtils.commonSizedBox(20, 20),

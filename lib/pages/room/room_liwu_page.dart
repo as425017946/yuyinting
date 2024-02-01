@@ -575,23 +575,27 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                     }
                                   });
                                 }),
-                                child: WidgetUtils.onlyTextCenter(
-                                    '经典',
-                                    StyleUtils.getCommonTextStyle(
-                                        color: leixing == 0
-                                            ? MyColors.roomTCWZ2
-                                            : MyColors.roomTCWZ3,
-                                        fontSize: leixing == 0
-                                            ? ScreenUtil().setSp(28)
-                                            : ScreenUtil().setSp(25))),
+                                child: Container(
+                                  color: Colors.transparent,
+                                  width: 80.h,
+                                  height: 40.h,
+                                  alignment: Alignment.center,
+                                  child: WidgetUtils.onlyTextCenter(
+                                      '经典',
+                                      StyleUtils.getCommonTextStyle(
+                                          color: leixing == 0
+                                              ? MyColors.roomTCWZ2
+                                              : MyColors.roomTCWZ3,
+                                          fontSize: leixing == 0
+                                              ? ScreenUtil().setSp(28)
+                                              : ScreenUtil().setSp(25))),
+                                ),
                               ),
-                              WidgetUtils.commonSizedBox(0, 10),
                               Container(
                                 height: ScreenUtil().setHeight(10),
                                 width: ScreenUtil().setWidth(1),
                                 color: MyColors.roomTCWZ3,
                               ),
-                              WidgetUtils.commonSizedBox(0, 10),
                               GestureDetector(
                                 onTap: (() {
                                   setState(() {
@@ -613,23 +617,26 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                     doPostGiftList();
                                   }
                                 }),
-                                child: WidgetUtils.onlyTextCenter(
-                                    '特权',
-                                    StyleUtils.getCommonTextStyle(
-                                        color: leixing == 1
-                                            ? MyColors.roomTCWZ2
-                                            : MyColors.roomTCWZ3,
-                                        fontSize: leixing == 1
-                                            ? ScreenUtil().setSp(28)
-                                            : ScreenUtil().setSp(25))),
+                                child: Container(
+                                  color: Colors.transparent,
+                                  width: 80.h,
+                                  height: 40.h,
+                                  child: WidgetUtils.onlyTextCenter(
+                                      '特权',
+                                      StyleUtils.getCommonTextStyle(
+                                          color: leixing == 1
+                                              ? MyColors.roomTCWZ2
+                                              : MyColors.roomTCWZ3,
+                                          fontSize: leixing == 1
+                                              ? ScreenUtil().setSp(28)
+                                              : ScreenUtil().setSp(25))),
+                                ),
                               ),
-                              WidgetUtils.commonSizedBox(0, 10),
                               Container(
                                 height: ScreenUtil().setHeight(10),
                                 width: ScreenUtil().setWidth(1),
                                 color: MyColors.roomTCWZ3,
                               ),
-                              WidgetUtils.commonSizedBox(0, 10),
                               GestureDetector(
                                 onTap: (() {
                                   setState(() {
@@ -651,15 +658,20 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                     doPostGiftListBB();
                                   }
                                 }),
-                                child: WidgetUtils.onlyTextCenter(
-                                    '背包',
-                                    StyleUtils.getCommonTextStyle(
-                                        color: leixing == 2
-                                            ? MyColors.roomTCWZ2
-                                            : MyColors.roomTCWZ3,
-                                        fontSize: leixing == 2
-                                            ? ScreenUtil().setSp(28)
-                                            : ScreenUtil().setSp(25))),
+                                child: Container(
+                                  color: Colors.transparent,
+                                  width: 80.h,
+                                  height: 40.h,
+                                  child: WidgetUtils.onlyTextCenter(
+                                      '背包',
+                                      StyleUtils.getCommonTextStyle(
+                                          color: leixing == 2
+                                              ? MyColors.roomTCWZ2
+                                              : MyColors.roomTCWZ3,
+                                          fontSize: leixing == 2
+                                              ? ScreenUtil().setSp(28)
+                                              : ScreenUtil().setSp(25))),
+                                ),
                               ),
                               const Expanded(child: Text('')),
                               leixing == 2

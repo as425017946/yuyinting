@@ -51,22 +51,25 @@ class _WalletMorePageState extends State<WalletMorePage> {
                         _controller.animateToPage(0, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                       });
                     }),
-                    child: Column(
-                      children: [
-                        Container(
-                          width: ScreenUtil().setHeight(50),
-                          height: ScreenUtil().setHeight(5),
-                          color: Colors.white,
-                        ),
-                        const Expanded(child: Text('')),
-                        WidgetUtils.onlyTextCenter('收入', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(33), fontWeight: _currentIndex == 0 ? FontWeight.w600 : FontWeight.w400)),
-                        const Expanded(child: Text('')),
-                        Container(
-                          width: ScreenUtil().setHeight(50),
-                          height: ScreenUtil().setHeight(5),
-                          color: _currentIndex == 0 ? MyColors.homeTopBG : Colors.white,
-                        )
-                      ],
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Column(
+                        children: [
+                          Container(
+                            width: ScreenUtil().setHeight(50),
+                            height: ScreenUtil().setHeight(5),
+                            color: Colors.white,
+                          ),
+                          const Expanded(child: Text('')),
+                          WidgetUtils.onlyTextCenter('收入', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(33), fontWeight: _currentIndex == 0 ? FontWeight.w600 : FontWeight.w400)),
+                          const Expanded(child: Text('')),
+                          Container(
+                            width: ScreenUtil().setHeight(50),
+                            height: ScreenUtil().setHeight(5),
+                            color: _currentIndex == 0 ? MyColors.homeTopBG : Colors.white,
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -78,22 +81,25 @@ class _WalletMorePageState extends State<WalletMorePage> {
                         _controller.animateToPage(1, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                       });
                     }),
-                    child: Column(
-                      children: [
-                        Container(
-                          width: ScreenUtil().setHeight(50),
-                          height: ScreenUtil().setHeight(5),
-                          color: Colors.white,
-                        ),
-                        const Expanded(child: Text('')),
-                        WidgetUtils.onlyTextCenter('支出', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(33), fontWeight: _currentIndex == 1 ? FontWeight.w600 : FontWeight.w400)),
-                        const Expanded(child: Text('')),
-                        Container(
-                          width: ScreenUtil().setHeight(50),
-                          height: ScreenUtil().setHeight(5),
-                          color: _currentIndex == 1 ? MyColors.homeTopBG : Colors.white,
-                        )
-                      ],
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Column(
+                        children: [
+                          Container(
+                            width: ScreenUtil().setHeight(50),
+                            height: ScreenUtil().setHeight(5),
+                            color: Colors.white,
+                          ),
+                          const Expanded(child: Text('')),
+                          WidgetUtils.onlyTextCenter('支出', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(33), fontWeight: _currentIndex == 1 ? FontWeight.w600 : FontWeight.w400)),
+                          const Expanded(child: Text('')),
+                          Container(
+                            width: ScreenUtil().setHeight(50),
+                            height: ScreenUtil().setHeight(5),
+                            color: _currentIndex == 1 ? MyColors.homeTopBG : Colors.white,
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 )

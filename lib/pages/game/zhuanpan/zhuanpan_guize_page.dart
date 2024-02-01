@@ -52,8 +52,14 @@ class _ZhuanPanGuiZePageState extends State<ZhuanPanGuiZePage> {
                       onTap: (() {
                         Navigator.pop(context);
                       }),
-                      child: WidgetUtils.showImages(
-                          'assets/images/back_white.png', 30.h, 20.h),
+                      child: Container(
+                        height: 50.h,
+                        width: 50.h,
+                        alignment: Alignment.centerLeft,
+                        color: Colors.transparent,
+                        child: WidgetUtils.showImages(
+                            'assets/images/back_white.png', 30.h, 20.h),
+                      ),
                     ),
                     const Spacer(),
                     WidgetUtils.showImages(

@@ -168,6 +168,7 @@ class _WalletMoreZhichuPageState extends State<WalletMoreZhichuPage> {
                     Row(
                       children: [
                         leixing == '打赏' ? WidgetUtils.onlyText('礼物：${list[i].name}', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(25))) : const Text(''),
+                        leixing == '打赏' ? WidgetUtils.onlyText('（x${list[i].number}）', StyleUtils.getCommonTextStyle(color: Colors.red, fontSize: ScreenUtil().setSp(25))) : const Text(''),
                         const Expanded(child: Text('')),
                         WidgetUtils.onlyText(list[i].curType == 1 ? 'V豆' : list[i].curType == 2 ? '钻石' : 'V币', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(25))),
                         WidgetUtils.commonSizedBox(0, 20),
@@ -178,7 +179,7 @@ class _WalletMoreZhichuPageState extends State<WalletMoreZhichuPage> {
                       children: [
                         WidgetUtils.onlyText('时间：${list[i].addTime!}', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(25))),
                         const Expanded(child: Text('')),
-                        WidgetUtils.onlyText('-${list[i].price!}', StyleUtils.getCommonTextStyle(color: MyColors.walletMingxi, fontSize: ScreenUtil().setSp(38), fontWeight: FontWeight.w600)),
+                        WidgetUtils.onlyText('-${list[i].price!}', StyleUtils.getCommonTextStyle(color: MyColors.walletMingxi, fontSize: ScreenUtil().setSp(32), fontWeight: FontWeight.w600)),
                         WidgetUtils.commonSizedBox(0, 20),
                       ],
                     ),
