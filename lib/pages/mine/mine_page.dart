@@ -98,7 +98,7 @@ class _MinePageState extends State<MinePage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const GonghuiHomePage(),
+                builder: (context) => GonghuiHomePage(kefuUid: kefuUid, kefuAvatar: kefuAvatar),
               ),
             ).then((value) {
               // doPostMyIfon();

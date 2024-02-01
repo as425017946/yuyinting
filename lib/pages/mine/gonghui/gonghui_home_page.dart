@@ -12,10 +12,13 @@ import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../utils/loading.dart';
 import '../../../utils/widget_utils.dart';
+import '../my_kefu_page.dart';
 import 'gonghui_more_page.dart';
 /// 公会中心
 class GonghuiHomePage extends StatefulWidget {
-  const GonghuiHomePage({Key? key}) : super(key: key);
+  String kefuUid;
+  String kefuAvatar;
+  GonghuiHomePage({Key? key, required this.kefuUid, required this.kefuAvatar}) : super(key: key);
 
   @override
   State<GonghuiHomePage> createState() => _GonghuiHomePageState();
@@ -31,7 +34,16 @@ class _GonghuiHomePageState extends State<GonghuiHomePage> {
     appBar = WidgetUtils.getAppBar('公会中心', true, context, true, 3);
     eventBus.on<SubmitButtonBack>().listen((event) {
       if(event.title == '创建公会'){
-        Navigator.pushNamed(context, 'KefuPage');
+        if (mounted) {
+          // Navigator.pushNamed(context, 'KefuPage');
+          Future.delayed(const Duration(seconds: 0), () {
+            Navigator.of(context).push(PageRouteBuilder(
+                opaque: false,
+                pageBuilder: (context, animation, secondaryAnimation) {
+                  return MyKeFuPage(kefuUid: widget.kefuUid, kefuAvatar: widget.kefuAvatar);
+                }));
+          });
+        }
       }
     });
   }

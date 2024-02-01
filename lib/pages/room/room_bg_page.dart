@@ -125,6 +125,8 @@ class _RoomBGPageState extends State<RoomBGPage> {
                       }),
                       child: Container(
                         width: ScreenUtil().setHeight(180),
+                        height: 50.h,
+                        color: Colors.transparent,
                         padding:
                             EdgeInsets.only(right: ScreenUtil().setHeight(40)),
                         alignment: Alignment.centerRight,

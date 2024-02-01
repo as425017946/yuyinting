@@ -81,7 +81,6 @@ var staticRoutes = {
   'DailiHomePage':(context) => const DailiHomePage(),// 全民代理
   'ShareTuiguangPage':(context) => const ShareTuiguangPage(),// 推广分享
   'KefuPage':(context) => const KefuPage(),// 客服中心
-  'GonghuiHomePage':(context) => const GonghuiHomePage(),// 公会中心
   'SettingGonghuiPage':(context) => const SettingGonghuiPage(),// 公会设置
   'GonghuiPeoplePage':(context) => const GonghuiPeoplePage(),// 公会成员
   'ShenhePage':(context) => const ShenhePage(),// 入驻审核
