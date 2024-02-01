@@ -984,7 +984,11 @@ class _ChatPageState extends State<ChatPage> {
                       const Spacer(),
                       GestureDetector(
                         onTap: (() {
-                          doPostBeforeJoin(roomId);
+                          if(sp.getString('roomID').toString() == roomId){
+                            MyToastUtils.showToastBottom('您已在本房间');
+                          }else{
+                            doPostBeforeJoin(roomId);
+                          }
                         }),
                         child: Container(
                           width: ScreenUtil().setHeight(130),

@@ -3550,10 +3550,13 @@ class RoomItems {
                           eventBus.fire(SubmitButtonBack(title: '表情'));
                         }
                       }),
-                      child: WidgetUtils.showImages(
-                          'assets/images/room_xiaolian.png',
-                          ScreenUtil().setHeight(50),
-                          ScreenUtil().setHeight(50)),
+                      child: Container(
+                        color: Colors.transparent,
+                        child: WidgetUtils.showImages(
+                            'assets/images/room_xiaolian.png',
+                            ScreenUtil().setHeight(50),
+                            ScreenUtil().setHeight(50)),
+                      ),
                     ),
                     WidgetUtils.commonSizedBox(0, 10),
                     GestureDetector(

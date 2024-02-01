@@ -812,22 +812,25 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                                 isTS = !isTS;
                                               });
                                             }),
-                                            child: Row(
-                                              children: [
-                                                const Expanded(child: Text('')),
-                                                WidgetUtils.onlyTextCenter(
-                                                    shuliang.toString(),
-                                                    StyleUtils.getCommonTextStyle(
-                                                        color: Colors.white,
-                                                        fontSize:
-                                                        ScreenUtil().setSp(25))),
-                                                WidgetUtils.commonSizedBox(0, 10),
-                                                WidgetUtils.showImages(
-                                                    'assets/images/room_liwu_shang.png',
-                                                    ScreenUtil().setHeight(16),
-                                                    ScreenUtil().setHeight(9)),
-                                                const Expanded(child: Text('')),
-                                              ],
+                                            child: Container(
+                                              color: Colors.transparent,
+                                              child: Row(
+                                                children: [
+                                                  const Expanded(child: Text('')),
+                                                  WidgetUtils.onlyTextCenter(
+                                                      shuliang.toString(),
+                                                      StyleUtils.getCommonTextStyle(
+                                                          color: Colors.white,
+                                                          fontSize:
+                                                          ScreenUtil().setSp(25))),
+                                                  WidgetUtils.commonSizedBox(0, 10),
+                                                  WidgetUtils.showImages(
+                                                      'assets/images/room_liwu_shang.png',
+                                                      ScreenUtil().setHeight(16),
+                                                      ScreenUtil().setHeight(9)),
+                                                  const Expanded(child: Text('')),
+                                                ],
+                                              ),
                                             ),
                                           )),
                                       Expanded(
@@ -913,6 +916,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                 height: 50.h,
                                 width: double.infinity,
                                 alignment: Alignment.center,
+                                color: Colors.transparent,
                                 child: Row(
                                   children: [
                                     SizedBox(
@@ -947,6 +951,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                 height: 50.h,
                                 width: double.infinity,
                                 alignment: Alignment.center,
+                                color: Colors.transparent,
                                 child: Row(
                                   children: [
                                     SizedBox(
@@ -981,6 +986,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                 height: 50.h,
                                 width: double.infinity,
                                 alignment: Alignment.center,
+                                color: Colors.transparent,
                                 child: Row(
                                   children: [
                                     SizedBox(
@@ -1015,6 +1021,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                 height: 50.h,
                                 width: double.infinity,
                                 alignment: Alignment.center,
+                                color: Colors.transparent,
                                 child: Row(
                                   children: [
                                     SizedBox(
@@ -1049,6 +1056,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                 height: 50.h,
                                 width: double.infinity,
                                 alignment: Alignment.center,
+                                color: Colors.transparent,
                                 child: Row(
                                   children: [
                                     SizedBox(
@@ -1083,6 +1091,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                 height: 50.h,
                                 width: double.infinity,
                                 alignment: Alignment.center,
+                                color: Colors.transparent,
                                 child: Row(
                                   children: [
                                     SizedBox(
@@ -1117,6 +1126,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                 height: 50.h,
                                 width: double.infinity,
                                 alignment: Alignment.center,
+                                color: Colors.transparent,
                                 child: Row(
                                   children: [
                                     SizedBox(
@@ -1151,6 +1161,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                 height: 50.h,
                                 width: double.infinity,
                                 alignment: Alignment.center,
+                                color: Colors.transparent,
                                 child: Row(
                                   children: [
                                     SizedBox(
@@ -1185,6 +1196,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                 height: 50.h,
                                 width: double.infinity,
                                 alignment: Alignment.center,
+                                color: Colors.transparent,
                                 child: Row(
                                   children: [
                                     SizedBox(

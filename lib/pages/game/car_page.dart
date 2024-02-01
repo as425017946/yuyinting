@@ -1,7 +1,6 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
-
-// import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,12 +13,9 @@ import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/my_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import 'package:yuyinting/widget/queren_page.dart';
-
-import '../../bean/Common_bean.dart';
 import '../../bean/balanceBean.dart';
 import '../../bean/carTimerBean.dart';
 import '../../bean/carYZBean.dart';
-import '../../bean/commonStringBean.dart';
 import '../../bean/luckUserBean.dart';
 import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
@@ -32,7 +28,6 @@ import 'car/car_guize_page.dart';
 import 'car/car_shop_page.dart';
 import 'car/lishi_page.dart';
 import 'car/zhongjian_page.dart';
-import 'package:intl/intl.dart';
 
 /// 赛车游戏
 class Carpage extends StatefulWidget {
@@ -352,7 +347,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                         StyleUtils.getCommonTextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w600,
-                            fontSize: 28.sp))),
+                            fontSize: isDevices == 'ios' ? 26.sp : 28.sp))),
                 WidgetUtils.commonSizedBox(0, 20.h),
               ],
             )
@@ -921,9 +916,19 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
   // 及时展示im使用
   var listenZDY;
   List<Map> listZDY = [];
-
+  // 设备是安卓还是ios
+  String isDevices = 'android';
   @override
   void initState() {
+    if (Platform.isAndroid) {
+      setState(() {
+        isDevices = 'android';
+      });
+    }else if (Platform.isIOS){
+      setState(() {
+        isDevices = 'ios';
+      });
+    }
     super.initState();
     // // 获取赛车倒计时
     doPostGetCarTimer();
