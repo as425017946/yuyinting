@@ -464,20 +464,27 @@ class _MinePageState extends State<MinePage> {
                       });
                     }
                   }),
-                  child: Row(
-                    children: [
-                      WidgetUtils.onlyText(
-                          '主页',
-                          StyleUtils.getCommonTextStyle(
-                              color: MyColors.mineGrey,
-                              fontWeight: FontWeight.w600,
-                              fontSize: ScreenUtil().setSp(25))),
-                      WidgetUtils.commonSizedBox(0, 5),
-                      WidgetUtils.showImages(
-                          'assets/images/mine_more.png',
-                          ScreenUtil().setHeight(22),
-                          ScreenUtil().setHeight(10))
-                    ],
+                  child: Container(
+                    color: Colors.transparent,
+                    height: 50.h,
+                    width: 80.h,
+                    alignment: Alignment.centerRight,
+                    child: Row(
+                      children: [
+                        const Spacer(),
+                        WidgetUtils.onlyText(
+                            '主页',
+                            StyleUtils.getCommonTextStyle(
+                                color: MyColors.mineGrey,
+                                fontWeight: FontWeight.w600,
+                                fontSize: ScreenUtil().setSp(25))),
+                        WidgetUtils.commonSizedBox(0, 5),
+                        WidgetUtils.showImages(
+                            'assets/images/mine_more.png',
+                            ScreenUtil().setHeight(22),
+                            ScreenUtil().setHeight(10))
+                      ],
+                    ),
                   ),
                 )
               ],

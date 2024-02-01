@@ -110,7 +110,8 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
             ),
           ),
           SizedBox(
-            height: sp.getString('role').toString() == 'user'
+            height: (sp.getString('role').toString() == 'user' ||
+                sp.getString('role').toString() == 'streamer')
                 ? ScreenUtil().setHeight(450)
                 : ScreenUtil().setHeight(530),
             width: double.infinity,
@@ -118,7 +119,8 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
               alignment: Alignment.topCenter,
               children: [
                 Container(
-                  height: sp.getString('role').toString() == 'user'
+                  height: (sp.getString('role').toString() == 'user' ||
+                      sp.getString('role').toString() == 'streamer')
                       ? ScreenUtil().setHeight(390)
                       : ScreenUtil().setHeight(470),
                   width: double.infinity,
@@ -151,10 +153,16 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                       Navigator.pop(context);
                                     }
                                   }),
-                                  child: WidgetUtils.showImages(
-                                      'assets/images/room_@ta.png',
-                                      ScreenUtil().setHeight(22),
-                                      ScreenUtil().setHeight(48)),
+                                  child: Container(
+                                    color: Colors.transparent,
+                                    width: 80.h,
+                                    height: 40.h,
+                                    alignment: Alignment.centerLeft,
+                                    child: WidgetUtils.showImages(
+                                        'assets/images/room_@ta.png',
+                                        ScreenUtil().setHeight(22),
+                                        ScreenUtil().setHeight(48)),
+                                  ),
                                 ),
                                 const Expanded(child: Text('')),
                                 GestureDetector(
@@ -164,12 +172,17 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                       jinyan = false;
                                     });
                                   }),
-                                  child: WidgetUtils.showImages(
-                                      'assets/images/room_head.png',
-                                      ScreenUtil().setHeight(33),
-                                      ScreenUtil().setHeight(33)),
+                                  child: Container(
+                                    color: Colors.red,
+                                    width: 43.h,
+                                    height: 40.h,
+                                    alignment: Alignment.centerLeft,
+                                    child: WidgetUtils.showImages(
+                                        'assets/images/room_head.png',
+                                        ScreenUtil().setHeight(33),
+                                        ScreenUtil().setHeight(33)),
+                                  ),
                                 ),
-                                WidgetUtils.commonSizedBox(0, 20),
                                 GestureDetector(
                                   onTap: (() {
                                     setState(() {
@@ -177,10 +190,16 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                       ren = false;
                                     });
                                   }),
-                                  child: WidgetUtils.showImages(
-                                      'assets/images/room_setting.png',
-                                      ScreenUtil().setHeight(33),
-                                      ScreenUtil().setHeight(33)),
+                                  child: Container(
+                                    color: Colors.transparent,
+                                    width: 43.h,
+                                    height: 40.h,
+                                    alignment: Alignment.centerLeft,
+                                    child: WidgetUtils.showImages(
+                                        'assets/images/room_setting.png',
+                                        ScreenUtil().setHeight(33),
+                                        ScreenUtil().setHeight(33)),
+                                  ),
                                 ),
                                 WidgetUtils.commonSizedBox(0, 20),
                               ],
@@ -213,10 +232,16 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                           jinyan = !jinyan;
                                         });
                                       }),
-                                      child: WidgetUtils.showImages(
-                                          'assets/images/room_setting.png',
-                                          ScreenUtil().setHeight(33),
-                                          ScreenUtil().setHeight(33)),
+                                      child: Container(
+                                        color: Colors.transparent,
+                                        width: 80.h,
+                                        height: 40.h,
+                                        alignment: Alignment.centerLeft,
+                                        child: WidgetUtils.showImages(
+                                            'assets/images/room_setting.png',
+                                            ScreenUtil().setHeight(33),
+                                            ScreenUtil().setHeight(33)),
+                                      ),
                                     ),
                                     WidgetUtils.commonSizedBox(0, 20),
                                   ],
@@ -235,10 +260,16 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                           Navigator.pop(context);
                                         }
                                       }),
-                                      child: WidgetUtils.showImages(
-                                          'assets/images/room_@ta.png',
-                                          ScreenUtil().setHeight(22),
-                                          ScreenUtil().setHeight(48)),
+                                      child: Container(
+                                        color: Colors.transparent,
+                                        width: 80.h,
+                                        height: 40.h,
+                                        alignment: Alignment.centerLeft,
+                                        child: WidgetUtils.showImages(
+                                            'assets/images/room_@ta.png',
+                                            ScreenUtil().setHeight(22),
+                                            ScreenUtil().setHeight(48)),
+                                      ),
                                     ),
                                     const Expanded(child: Text('')),
                                   ],

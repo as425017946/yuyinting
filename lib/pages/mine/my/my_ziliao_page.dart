@@ -194,7 +194,7 @@ class _MyZiliaoPageState extends State<MyZiliaoPage> {
                   }),
                   child: Container(
                     height: ScreenUtil().setHeight(44),
-                    color: Colors.red,
+                    color: Colors.transparent,
                     alignment: Alignment.center,
                     margin: const EdgeInsets.only(top: 10),
                     child: Row(

@@ -8,7 +8,6 @@ import 'package:yuyinting/utils/widget_utils.dart';
 
 import '../../bean/Common_bean.dart';
 import '../../colors/my_colors.dart';
-import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../utils/my_toast_utils.dart';
@@ -146,11 +145,11 @@ class _TrendsHiPageState extends State<TrendsHiPage> {
                     ),
                     WidgetUtils.commonSizedBox(10, 0),
                     GestureDetector(
-                      onTap: (() {
-                        setState(() {
-                          gz = !gz;
-                        });
-                      }),
+                      // onTap: (() {
+                      //   setState(() {
+                      //     gz = !gz;
+                      //   });
+                      // }),
                       child: Row(
                         children: [
                           const Expanded(child: Text('')),
