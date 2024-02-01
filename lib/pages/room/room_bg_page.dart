@@ -140,7 +140,6 @@ class _RoomBGPageState extends State<RoomBGPage> {
                     ),
                   ],
                 ),
-                WidgetUtils.commonSizedBox(20, 0),
                 Container(
                   margin: const EdgeInsets.only(left: 20, right: 20),
                   child: Row(
@@ -154,11 +153,12 @@ class _RoomBGPageState extends State<RoomBGPage> {
                           });
                         }),
                         child: Container(
-                          height: 60.h,
+                          height: 80.h,
                           width: 150.h,
                           color: Colors.red,
                           child: Column(
                             children: [
+                              WidgetUtils.commonSizedBox(20.h, 0),
                               Text(
                                 '默认背景',
                                 style: StyleUtils.getCommonTextStyle(
@@ -194,11 +194,12 @@ class _RoomBGPageState extends State<RoomBGPage> {
                           });
                         }),
                         child: Container(
-                          height: 60.h,
+                          height: 80.h,
                           width: 150.h,
                           color: Colors.blue,
                           child: Column(
                             children: [
+                              WidgetUtils.commonSizedBox(20.h, 0),
                               Text(
                                 '我的背景',
                                 style: StyleUtils.getCommonTextStyle(
