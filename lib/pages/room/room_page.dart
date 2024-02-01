@@ -2319,7 +2319,7 @@ class _RoomPageState extends State<RoomPage>
 
                       /// 聊天除使用
                       Positioned(
-                        bottom: isDevices == 'ios' ? 80.h : 100.h,
+                        bottom: isDevices == 'ios' ? 70.h : 100.h,
                         child:
                             /// 消息列表最外层
                             SizedBox(
