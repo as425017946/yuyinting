@@ -155,7 +155,7 @@ class _RoomBGPageState extends State<RoomBGPage> {
                         child: Container(
                           height: 80.h,
                           width: 150.h,
-                          color: Colors.red,
+                          color: Colors.transparent,
                           child: Column(
                             children: [
                               WidgetUtils.commonSizedBox(20.h, 0),
@@ -196,7 +196,7 @@ class _RoomBGPageState extends State<RoomBGPage> {
                         child: Container(
                           height: 80.h,
                           width: 150.h,
-                          color: Colors.blue,
+                          color: Colors.transparent,
                           child: Column(
                             children: [
                               WidgetUtils.commonSizedBox(20.h, 0),
