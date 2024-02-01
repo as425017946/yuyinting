@@ -801,16 +801,18 @@ class MyUtils {
                 break;
               case MessageType.VOICE:
                 LogE('语音发送成功');
+                eventBus.fire(SubmitButtonBack(title: '语音发送成功'));
                 break;
             }
             addLogToConsole("send message succeed");
           },
           onProgress: (msgId, progress) {
-            LogE('语音发送失败1');
+            LogE('语音发送进度');
             addLogToConsole("send message succeed");
           },
           onError: (msgId, msg, error) {
             LogE('语音发送失败2');
+            eventBus.fire(SubmitButtonBack(title: '语音发送失败'));
             addLogToConsole(
               "send message failed, code: ${error.code}, desc: ${error.description}",
             );

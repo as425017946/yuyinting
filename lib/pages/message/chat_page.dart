@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -72,7 +73,7 @@ class _ChatPageState extends State<ChatPage> {
   List<String> imgList = [];
   TextEditingController controller = TextEditingController();
   ScrollController _scrollController = ScrollController();
-  var listen, listenHB;
+  var listen, listenHB,listenYY;
 
   // 录音使用
   Codec _codec = Codec.aacADTS;
@@ -121,6 +122,8 @@ class _ChatPageState extends State<ChatPage> {
       setState(() {
         isDevices = 'ios';
       });
+      //获取权限
+      initAgora();
     }
     _initialize();
     super.initState();
@@ -136,10 +139,24 @@ class _ChatPageState extends State<ChatPage> {
       LogE('发送了===');
       saveHBinfo(event.info);
     });
+    listenYY = eventBus.on<SubmitButtonBack>().listen((event) {
+      if(event.title == '语音发送成功'){
+        successAudio();
+      }else if(event.title == '语音发送失败'){
+        MyToastUtils.showToastBottom('语音发送失败');
+      }
+    });
 
     _focusNode = FocusNode();
     _focusNode!.addListener(_onFocusChange);
   }
+
+  // 初始化应用
+  Future<void> initAgora() async {
+    // 获取权限
+    await [Permission.microphone].request();
+  }
+
 
   // 保存发红包的信息 type 1自己给别人发，2收到别人发的红包
   saveHBinfo(String info) async {
@@ -204,6 +221,7 @@ class _ChatPageState extends State<ChatPage> {
   void dispose() {
     listen.cancel();
     listenHB.cancel();
+    listenYY.cancel();
     _focusNode!.removeListener(_onFocusChange);
     _focusNode!.dispose();
     _scrollController.dispose(); // 释放ScrollController资源
@@ -1849,60 +1867,6 @@ class _ChatPageState extends State<ChatPage> {
         'weight': 50
       };
       EMClient.getInstance.chatManager.sendMessage(voiceMsg);
-
-      DatabaseHelper databaseHelper = DatabaseHelper();
-      Database? db = await databaseHelper.database;
-      String combineID = '';
-      if (int.parse(sp.getString('user_id').toString()) >
-          int.parse(widget.otherUid)) {
-        combineID = '${widget.otherUid}-${sp.getString('user_id').toString()}';
-      } else {
-        combineID = '${sp.getString('user_id').toString()}-${widget.otherUid}';
-      }
-      Map<String, dynamic> params = <String, dynamic>{
-        'uid': sp.getString('user_id').toString(),
-        'otherUid': widget.otherUid,
-        'whoUid': sp.getString('user_id').toString(),
-        'combineID': combineID,
-        'nickName': widget.nickName,
-        'content': _mPath,
-        'headNetImg': sp.getString('user_headimg').toString(),
-        'otherHeadNetImg': widget.otherImg,
-        'add_time': DateTime.now().millisecondsSinceEpoch,
-        'type': 3,
-        'number': audioNum,
-        'status': 0,
-        'readStatus': 1,
-        'liveStatus': 0,
-        'loginStatus': 0,
-        'weight': widget.otherUid.toString() == '1' ? 1 : 0,
-      };
-      // 插入数据
-      await databaseHelper.insertData('messageSLTable', params);
-      // 获取所有数据
-      List<Map<String, dynamic>> result = await db.query('messageSLTable',
-          columns: null,
-          whereArgs: [combineID, sp.getString('user_id')],
-          where: 'combineID = ? and uid = ?');
-
-      setState(() {
-        allData2 = result;
-        length = allData2.length;
-      });
-      WidgetsBinding.instance!.addPostFrameCallback((_) {
-        scrollToLastItem(); // 在widget构建完成后滚动到底部
-      });
-
-      //重新初始化音频信息
-      setState(() {
-        mediaRecord = true;
-        playRecord = false; //音频文件播放状态
-        hasRecord = false; //是否有音频文件可播放
-        isLuZhi = false;
-        isPlay = 0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
-        djNum = 60; // 录音时长
-        audioNum = 0; // 记录录了多久
-      });
     }else{
       MyToastUtils.showToastBottom('录音失败，请重新录制');
       //重新初始化音频信息
@@ -1916,6 +1880,63 @@ class _ChatPageState extends State<ChatPage> {
         audioNum = 0; // 记录录了多久
       });
     }
+  }
+
+  /// 发送成功音频记录到本地
+  successAudio() async{
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    Database? db = await databaseHelper.database;
+    String combineID = '';
+    if (int.parse(sp.getString('user_id').toString()) >
+        int.parse(widget.otherUid)) {
+      combineID = '${widget.otherUid}-${sp.getString('user_id').toString()}';
+    } else {
+      combineID = '${sp.getString('user_id').toString()}-${widget.otherUid}';
+    }
+    Map<String, dynamic> params = <String, dynamic>{
+      'uid': sp.getString('user_id').toString(),
+      'otherUid': widget.otherUid,
+      'whoUid': sp.getString('user_id').toString(),
+      'combineID': combineID,
+      'nickName': widget.nickName,
+      'content': _mPath,
+      'headNetImg': sp.getString('user_headimg').toString(),
+      'otherHeadNetImg': widget.otherImg,
+      'add_time': DateTime.now().millisecondsSinceEpoch,
+      'type': 3,
+      'number': audioNum,
+      'status': 0,
+      'readStatus': 1,
+      'liveStatus': 0,
+      'loginStatus': 0,
+      'weight': widget.otherUid.toString() == '1' ? 1 : 0,
+    };
+    // 插入数据
+    await databaseHelper.insertData('messageSLTable', params);
+    // 获取所有数据
+    List<Map<String, dynamic>> result = await db.query('messageSLTable',
+        columns: null,
+        whereArgs: [combineID, sp.getString('user_id')],
+        where: 'combineID = ? and uid = ?');
+
+    setState(() {
+      allData2 = result;
+      length = allData2.length;
+    });
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      scrollToLastItem(); // 在widget构建完成后滚动到底部
+    });
+
+    //重新初始化音频信息
+    setState(() {
+      mediaRecord = true;
+      playRecord = false; //音频文件播放状态
+      hasRecord = false; //是否有音频文件可播放
+      isLuZhi = false;
+      isPlay = 0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
+      djNum = 60; // 录音时长
+      audioNum = 0; // 记录录了多久
+    });
   }
 
   /// 加入房间前
