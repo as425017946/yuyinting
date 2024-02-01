@@ -1103,7 +1103,7 @@ class _ChatPageState extends State<ChatPage> {
                 ),
                 // 底部键盘
                 Container(
-                  height: ScreenUtil().setHeight(120),
+                  height: isDevices == 'ios' ? 140.h : 120.h,
                   color: Colors.white,
                   child: Row(
                     children: [
