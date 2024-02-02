@@ -450,13 +450,13 @@ class MyUtils {
         // sdk 连接成功;
         onConnected: (() {
           LogE('IM 登录成功');
-          // eventBus.fire(SubmitButtonBack(title: 'im重连'));
+          eventBus.fire(SubmitButtonBack(title: 'im重连'));
           MyToastUtils.showToastBottom('IM登录成功');
         }),
         // 由于网络问题导致的断开，sdk会尝试自动重连，连接成功后会回调 "onConnected";
         onDisconnected: (() {
           LogE('IM 断开连接');
-          // eventBus.fire(SubmitButtonBack(title: 'im断开链接'));
+          eventBus.fire(SubmitButtonBack(title: 'im断开链接'));
           MyToastUtils.showToastBottom('IM断开连接');
         }),
         // 用户 token 鉴权失败;

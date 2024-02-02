@@ -11,8 +11,8 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:yuyinting/colors/my_colors.dart';
-import 'package:yuyinting/pages/gongping/gp_hi_page.dart';
 import 'package:yuyinting/pages/home/paidui_page.dart';
 import 'package:yuyinting/pages/home/shoucang_page.dart';
 import 'package:yuyinting/pages/home/ts/ts_car_page.dart';
@@ -564,6 +564,12 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
               // } else {
               //   throw 'Could not launch $url';
               // }
+              // ignore: use_build_context_synchronously
+              showUpdateIOS(
+                  context,
+                  bean.data!.version!,
+                  bean.data!.downloadUrl!,
+                  bean.data!.summary!);
             }
           }
           break;
@@ -574,6 +580,34 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
     } catch (e) {
       // MyToastUtils.showToastBottom("网络异常");
     }
+  }
+
+  /// ios更新调整h5页面
+  Future<void> showUpdateIOS(
+      BuildContext context, String version, String url, String info) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, //设置为false，点击空白处弹窗不关
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: Text('检测到新版本 v$version'),
+          content: Text(
+            info,
+            style: const TextStyle(
+              fontSize: 15,
+            ),
+          ),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              child: Text('立即更新'),
+              onPressed: () async {
+                await launch(url, forceSafariVC: false);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   /// 显示更新内容
