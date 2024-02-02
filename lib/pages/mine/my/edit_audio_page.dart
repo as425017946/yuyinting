@@ -57,10 +57,20 @@ class _EditAudioPageState extends State<EditAudioPage> {
   int audioNum = 0; // 记录录了多久
   String recordText = '开始录音';
   String audioUrl = '';
-
+  // 设备是安卓还是ios
+  String isDevices = 'android';
   @override
   void initState() {
     // TODO: implement initState
+    if (Platform.isAndroid) {
+      setState(() {
+        isDevices = 'android';
+      });
+    }else if (Platform.isIOS){
+      setState(() {
+        isDevices = 'ios';
+      });
+    }
     _initialize();
     _mPlayer!.openPlayer().then((value) {
       setState(() {
@@ -163,23 +173,45 @@ class _EditAudioPageState extends State<EditAudioPage> {
         playRecord = false;
       });
     }
-    Directory tempDir = await getTemporaryDirectory();
-    var time = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-    String path = '${tempDir.path}/$time${ext[Codec.aacADTS.index]}';
-    _mRecorder!
-        .startRecorder(
-      toFile: path,
-      codec: _codec,
-      audioSource: AudioSource.microphone,
-    )
-        .then((value) {
-      setState(() {
-        audioUrl = '';
-        mediaRecord = false;
-        hasRecord = false;
-        _mPath = path;
+    if(isDevices == 'ios'){
+      var directory = await getApplicationDocumentsDirectory(); // iOS上的默认存储位置为App Documents目录
+      var time = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+      String path = '${directory.path}/$time${ext[Codec.aacADTS.index]}';
+      LogE('录音地址 == $path');
+      _mRecorder!
+          .startRecorder(
+        toFile: path,
+        codec: _codec,
+        audioSource: AudioSource.microphone,
+      )
+          .then((value) {
+        setState(() {
+          audioUrl = '';
+          mediaRecord = false;
+          hasRecord = false;
+          _mPath = path;
+        });
       });
-    });
+    }else{
+      Directory tempDir = await getTemporaryDirectory();
+      var time = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+      String path = '${tempDir.path}/$time${ext[Codec.aacADTS.index]}';
+      LogE('录音地址 == $path');
+      _mRecorder!
+          .startRecorder(
+        toFile: path,
+        codec: _codec,
+        audioSource: AudioSource.microphone,
+      )
+          .then((value) {
+        setState(() {
+          audioUrl = '';
+          mediaRecord = false;
+          hasRecord = false;
+          _mPath = path;
+        });
+      });
+    }
   }
 
 //停止录音
