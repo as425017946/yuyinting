@@ -3584,9 +3584,10 @@ class RoomItems {
           const Expanded(child: Text('')),
           Stack(
             children: [
-              SizedBox(
+              Container(
                 height: ScreenUtil().setHeight(60),
                 width: ScreenUtil().setHeight(60),
+                color: Colors.transparent,
                 child: const SVGASimpleImage(
                     assetsName: 'assets/svga/room_liwu.svga'),
               ),
@@ -3605,9 +3606,10 @@ class RoomItems {
           WidgetUtils.commonSizedBox(0, 5),
           Stack(
             children: [
-              SizedBox(
+              Container(
                 height: ScreenUtil().setHeight(50),
                 width: ScreenUtil().setHeight(50),
+                color: Colors.transparent,
                 child: const SVGASimpleImage(
                   assetsName: 'assets/svga/room_huodong.svga',),
               ),
@@ -3629,26 +3631,31 @@ class RoomItems {
             onTap: (() {
               MyUtils.goTransparentPage(context, const RoomMessagesPage());
             }),
-            child: Stack(
-              children: [
-                WidgetUtils.showImages('assets/images/room_message.png',
-                    ScreenUtil().setHeight(50), ScreenUtil().setHeight(50)),
-                isRed ? Positioned(
-                    top: 5.h,
-                    right: 5.w,
-                    child: Container(
-                      width: 15.h,
-                      height: 15.h,
-                      //边框设置
-                      decoration: const BoxDecoration(
-                        //背景
-                        color: Colors.red,
-                        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                        borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                      ),
-                      alignment: Alignment.center,
-                    )) : const Text(''),
-              ],
+            child: Container(
+              height: ScreenUtil().setHeight(50),
+              width: ScreenUtil().setHeight(50),
+              color: Colors.transparent,
+              child: Stack(
+                children: [
+                  WidgetUtils.showImages('assets/images/room_message.png',
+                      ScreenUtil().setHeight(50), ScreenUtil().setHeight(50)),
+                  isRed ? Positioned(
+                      top: 5.h,
+                      right: 5.w,
+                      child: Container(
+                        width: 15.h,
+                        height: 15.h,
+                        //边框设置
+                        decoration: const BoxDecoration(
+                          //背景
+                          color: Colors.red,
+                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                        ),
+                        alignment: Alignment.center,
+                      )) : const Text(''),
+                ],
+              ),
             ),
           ),
           WidgetUtils.commonSizedBox(0, 10),
@@ -3678,8 +3685,13 @@ class RoomItems {
                     mima: mima,
                   ));
             }),
-            child: WidgetUtils.showImages('assets/images/room_gongneng.png',
-                ScreenUtil().setHeight(50), ScreenUtil().setHeight(50)),
+            child: Container(
+              height: ScreenUtil().setHeight(50),
+              width: ScreenUtil().setHeight(50),
+              color: Colors.transparent,
+              child: WidgetUtils.showImages('assets/images/room_gongneng.png',
+                  ScreenUtil().setHeight(50), ScreenUtil().setHeight(50)),
+            ),
           ),
           WidgetUtils.commonSizedBox(0, 10),
           //闭麦
