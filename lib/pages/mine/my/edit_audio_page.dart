@@ -152,11 +152,8 @@ class _EditAudioPageState extends State<EditAudioPage> {
     record();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (isPlay == 2) {
-        setState(() {
-          isPlay = 2;
-        });
+        LogE('停止了==');
         timer.cancel();
-        stopRecorder();
       } else {
         setState(() {
           djNum--;

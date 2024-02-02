@@ -2081,17 +2081,17 @@ class _ChatPageState extends State<ChatPage> {
           }else if(type == 3){
             if(isSendYY == false) {
               if (isDevices != 'ios' && isQuanxian) {
-                // 开始录音
-                startRecord();
                 setState(() {
+                  // 开始录音
+                  startRecord();
                   audioNum = 0; // 记录录了多久
                   isLuZhi = true;
                 });
               }else{
                 /// ios
-                // 开始录音
-                startRecord();
                 setState(() {
+                  // 开始录音
+                  startRecord();
                   audioNum = 0; // 记录录了多久
                   isLuZhi = true;
                 });
