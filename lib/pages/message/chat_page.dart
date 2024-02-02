@@ -1867,6 +1867,7 @@ class _ChatPageState extends State<ChatPage> {
   /// 发送音频
   Future<void> doSendAudio() async {
     LogE('录音地址==  $_mPath');
+    LogE('录音地址==  $audioNum');
     File file = File(_mPath);
     if(await file.exists()){
       final voiceMsg = EMMessage.createVoiceSendMessage(
