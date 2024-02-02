@@ -72,7 +72,7 @@ dependencies:
   # 相机
   wechat_camera_picker: ^3.0.0
   # 文件路径
-  path_provider: ^2.0.15
+  path_provider: ^2.0.5
   # 虚线边框
   dotted_border: ^2.0.0+3
   # 查看SVGA

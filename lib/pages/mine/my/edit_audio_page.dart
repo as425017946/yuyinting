@@ -174,9 +174,9 @@ class _EditAudioPageState extends State<EditAudioPage> {
       });
     }
     if(isDevices == 'ios'){
-      var directory = await getApplicationDocumentsDirectory(); // iOS上的默认存储位置为App Documents目录
+      var directory = await getExternalCacheDirectories(); // iOS上的默认存储位置为App Documents目录
       var time = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-      String path = '${directory.path}/$time${ext[Codec.aacADTS.index]}';
+      String path = '${directory.toString()}/$time${ext[Codec.aacADTS.index]}';
       LogE('录音地址 ** $path');
       setState(() {
         _mPath = path;
