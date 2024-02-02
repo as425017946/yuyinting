@@ -26,11 +26,12 @@ void main() async{
     SystemUiOverlayStyle systemUiOverlayStyle = const SystemUiOverlayStyle(statusBarColor: Colors.transparent,statusBarIconBrightness: Brightness.dark,);
     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
   }
-  // // 强制竖屏
-  // SystemChrome.setPreferredOrientations([
-  //   DeviceOrientation.portraitUp,
-  //   DeviceOrientation.portraitDown
-  // ]);
+  // 强制竖屏
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown
+  ]);
+
   /// 如果是全屏就切换竖屏
   AutoOrientation.portraitAutoMode();
 

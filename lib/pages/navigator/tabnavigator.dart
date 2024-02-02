@@ -168,11 +168,13 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       if (event.title == '收起房间') {
         setState(() {
           isJoinRoom = true;
+          isFirstJoinRoom = false;
         });
       }else if(event.title == '加入其他房间'){
         // 判断加入过其他房间，并且现在是收起的状态
         if(isJoinRoom){
           setState(() {
+            isFirstJoinRoom = false;
             isJoinRoom = false;
             //取消订阅所有远端用户的音频流。
             _engine.muteAllRemoteAudioStreams(true);
@@ -188,6 +190,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       }else if(event.title == '账号已在其他设备登录'){
         if(isJoinRoom) {
           setState(() {
+            isFirstJoinRoom = false;
             isJoinRoom = false;
             //取消订阅所有远端用户的音频流。
             _engine.muteAllRemoteAudioStreams(true);
@@ -201,6 +204,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       }else if(event.title == '成功切换账号'){
        if(isJoinRoom){
          setState(() {
+           isFirstJoinRoom = false;
            isJoinRoom = false;
            //取消订阅所有远端用户的音频流。
            _engine.muteAllRemoteAudioStreams(true);
@@ -221,6 +225,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       }else if(event.title == '添加新账号'){
         if(isJoinRoom){
           setState(() {
+            isFirstJoinRoom = false;
             isJoinRoom = false;
             //取消订阅所有远端用户的音频流。
             _engine.muteAllRemoteAudioStreams(true);
@@ -235,6 +240,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       }else if(event.title == '账号退出登录'){
         if(isJoinRoom) {
           setState(() {
+            isFirstJoinRoom = false;
             isJoinRoom = false;
             //取消订阅所有远端用户的音频流。
             _engine.muteAllRemoteAudioStreams(true);
@@ -278,12 +284,15 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
             ));
       }else if(event.type == 'room_black'){
         //设置黑名单
-        if (event.map!['uid'].toString() != sp.getString('user_id').toString()) {
+        if (event.map!['uid'].toString() == sp.getString('user_id').toString()) {
           if(isJoinRoom){
             MyToastUtils.showToastBottom('你已被房间设置为黑名单用户！');
-            // 取消发布本地音频流
-            _engine.muteLocalAudioStream(true);
-            _engine.disableAudio();
+            setState(() {
+              isJoinRoom = false;
+              // 取消发布本地音频流
+              _engine.muteLocalAudioStream(true);
+              _engine.disableAudio();
+            });
             _dispose();
           }
         }
@@ -303,6 +312,9 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         // 这个状态是后台直接封禁了账号，然后直接踢掉app
         if(isJoinRoom) {
           MyUtils.signOut();
+          setState(() {
+            isJoinRoom = false;
+          });
           // 取消发布本地音频流
           _engine.muteLocalAudioStream(true);
           // 调用离开房间接口
@@ -643,7 +655,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
                   right: 20,
                   child: GestureDetector(
                     onTap: (() {
-                      if(MyUtils.checkClick() && isFirstJoinRoom == false){
+                      if(isFirstJoinRoom == false){
                         setState(() {
                           isFirstJoinRoom = true;
                         });
@@ -1004,7 +1016,6 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 

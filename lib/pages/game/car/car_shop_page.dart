@@ -220,10 +220,12 @@ class _CarShopPageState extends State<CarShopPage> {
             if(sp.getString('car_mogu2').toString().contains('w')){
               // 目的是先把 1w 转换成 10000
               String a = sp.getString('car_mogu2').toString().substring(0,sp.getString('car_mogu2').toString().length-1);
+              LogE('余额= $a');
               double b = sl/10000;
+              LogE('余额/ $b');
               double c = double.parse(a) - b;
-              LogE('余额 $c');
-              sp.setString('car_mogu2', '${c.toString()}w');
+              LogE('余额* $c');
+              sp.setString('car_mogu2', '${c.toStringAsFixed(2)}w');
             }else{
               mogubi = (double.parse(sp.getString('car_mogu2').toString()) - sl).toString();
               LogE('余额 $mogubi');

@@ -2292,6 +2292,7 @@ class _RoomPageState extends State<RoomPage>
                               isRed,
                               isMeUp,
                               mxIndex),
+                          isDevices == 'ios' ? WidgetUtils.commonSizedBox(20.h, 0) : WidgetUtils.commonSizedBox(0, 0)
                         ],
                       ),
 

@@ -60,7 +60,7 @@ class _MoFangPageState extends State<MoFangPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: widget.roomID == '0' ? Colors.black54 :Colors.transparent,
+      backgroundColor: Colors.transparent,
       body: Center(
         child: Stack(
           children: [
