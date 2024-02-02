@@ -178,6 +178,9 @@ class _EditAudioPageState extends State<EditAudioPage> {
       var time = DateTime.now().millisecondsSinceEpoch ~/ 1000;
       String path = '${directory.path}/$time${ext[Codec.aacADTS.index]}';
       LogE('录音地址 ** $path');
+      setState(() {
+        _mPath = path;
+      });
       _mRecorder!
           .startRecorder(
         toFile: path,
@@ -189,7 +192,6 @@ class _EditAudioPageState extends State<EditAudioPage> {
           audioUrl = '';
           mediaRecord = false;
           hasRecord = false;
-          _mPath = path;
           LogE('录音地址 **=== $path');
         });
       });
