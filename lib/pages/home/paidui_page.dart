@@ -111,7 +111,10 @@ class _PaiduiPageState extends State<PaiduiPage>
       children: [
         GestureDetector(
           onTap: (() {
-            if (MyUtils.checkClick()) {
+            if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
+              setState(() {
+                sp.setBool('joinRoom',true);
+              });
               if (index == 2) {
                 doPostBeforeJoin(list2[i].id.toString());
               } else if (index == 3) {
@@ -619,7 +622,10 @@ class _PaiduiPageState extends State<PaiduiPage>
                             children: [
                               GestureDetector(
                                 onTap: (() {
-                                  if (MyUtils.checkClick()) {
+                                  if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
+                                    setState(() {
+                                      sp.setBool('joinRoom',true);
+                                    });
                                     doPostBeforeJoin(list[0].id.toString());
                                   }
                                 }),
@@ -659,7 +665,10 @@ class _PaiduiPageState extends State<PaiduiPage>
                                 children: [
                                   GestureDetector(
                                     onTap: (() {
-                                      if (MyUtils.checkClick()) {
+                                      if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
+                                        setState(() {
+                                          sp.setBool('joinRoom',true);
+                                        });
                                         doPostBeforeJoin(list[1].id.toString());
                                       }
                                     }),
@@ -698,7 +707,10 @@ class _PaiduiPageState extends State<PaiduiPage>
                                   const Expanded(child: Text('')),
                                   GestureDetector(
                                     onTap: (() {
-                                      if (MyUtils.checkClick()) {
+                                      if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
+                                        setState(() {
+                                          sp.setBool('joinRoom',true);
+                                        });
                                         doPostBeforeJoin(list[3].id.toString());
                                       }
                                     }),
@@ -733,7 +745,10 @@ class _PaiduiPageState extends State<PaiduiPage>
                                 children: [
                                   GestureDetector(
                                     onTap: (() {
-                                      if (MyUtils.checkClick()) {
+                                      if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
+                                        setState(() {
+                                          sp.setBool('joinRoom',true);
+                                        });
                                         doPostBeforeJoin(list[2].id.toString());
                                       }
                                     }),
@@ -772,7 +787,10 @@ class _PaiduiPageState extends State<PaiduiPage>
                                   const Expanded(child: Text('')),
                                   GestureDetector(
                                     onTap: (() {
-                                      if (MyUtils.checkClick()) {
+                                      if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
+                                        setState(() {
+                                          sp.setBool('joinRoom',true);
+                                        });
                                         doPostBeforeJoin(list[4].id.toString());
                                       }
                                     }),
@@ -1094,11 +1112,17 @@ class _PaiduiPageState extends State<PaiduiPage>
           MyUtils.jumpLogin(context);
           break;
         default:
+          setState(() {
+            sp.setBool('joinRoom',false);
+          });
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
       Loading.dismiss();
     } catch (e) {
+      setState(() {
+        sp.setBool('joinRoom',false);
+      });
       Loading.dismiss();
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
@@ -1129,11 +1153,17 @@ class _PaiduiPageState extends State<PaiduiPage>
           MyUtils.jumpLogin(context);
           break;
         default:
+          setState(() {
+            sp.setBool('joinRoom',false);
+          });
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
       Loading.dismiss();
     } catch (e) {
+      setState(() {
+        sp.setBool('joinRoom',false);
+      });
       Loading.dismiss();
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }

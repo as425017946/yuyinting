@@ -399,10 +399,15 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                         live == 1
                             ? GestureDetector(
                                 onTap: (() {
-                                  if(sp.getString('roomID').toString() == roomID){
+                                  if(MyUtils.checkClick() && sp.getString('roomID').toString() == roomID){
                                     MyToastUtils.showToastBottom('您已在本房间');
                                   }else{
-                                    doPostBeforeJoin(roomID);
+                                    if(MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
+                                      setState(() {
+                                        sp.setBool('joinRoom',true);
+                                      });
+                                      doPostBeforeJoin(roomID);
+                                    }
                                   }
 
                                 }),
@@ -888,11 +893,17 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
           MyUtils.jumpLogin(context);
           break;
         default:
+          setState(() {
+            sp.setBool('joinRoom',false);
+          });
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
       Loading.dismiss();
     } catch (e) {
+      setState(() {
+        sp.setBool('joinRoom',false);
+      });
       Loading.dismiss();
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
@@ -923,11 +934,17 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
           MyUtils.jumpLogin(context);
           break;
         default:
+          setState(() {
+            sp.setBool('joinRoom',false);
+          });
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
       Loading.dismiss();
     } catch (e) {
+      setState(() {
+        sp.setBool('joinRoom',false);
+      });
       Loading.dismiss();
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }

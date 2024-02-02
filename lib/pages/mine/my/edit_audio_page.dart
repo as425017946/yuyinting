@@ -153,6 +153,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (isPlay == 2) {
         LogE('停止了==');
+        stopRecorder(); // 确保录音器停止并保存数据到文件
         timer.cancel();
       } else {
         setState(() {
@@ -447,7 +448,6 @@ class _EditAudioPageState extends State<EditAudioPage> {
                                     isPlay = 1;
                                   } else if (isPlay == 1) {
                                     isPlay = 2;
-                                    stopRecorder(); // 确保录音器停止并保存数据到文件
                                   }
                                 });
                               }

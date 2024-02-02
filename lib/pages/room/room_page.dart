@@ -325,9 +325,13 @@ class _RoomPageState extends State<RoomPage>
         onTap: (() {
           // eventBus.fire(SubmitButtonBack(title: '退出房间,${widget.roomID}'));
           // 点击的是不是当前房间，如果是关闭弹窗，不是跳转房间
-          if (MyUtils.checkClick()) {
+          if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
+            setState(() {
+              sp.setBool('joinRoom', true);
+            });
             if (sp.getString('roomID').toString() == listPH[i].id.toString()) {
               setState(() {
+                sp.setBool('joinRoom', false);
                 isBack = false;
               });
             } else {
@@ -376,6 +380,9 @@ class _RoomPageState extends State<RoomPage>
   void initState() {
     // TODO: implement initState
     super.initState();
+    setState(() {
+      sp.setBool('joinRoom', false);
+    });
     if (Platform.isAndroid) {
       setState(() {
         isDevices = 'android';
@@ -927,20 +934,20 @@ class _RoomPageState extends State<RoomPage>
               //判断被拉黑的人是不是自己
               if (event.map!['uid'].toString() ==
                   sp.getString('user_id').toString()) {
-                MyToastUtils.showToastBottom('你已被房间设置为黑名单用户！');
-                setState(() {
-                  isMeUp = false;
-                });
-                if (_timerHot != null) {
-                  _timerHot!.cancel();
-                }
-                // 取消发布本地音频流
-                _engine.muteLocalAudioStream(true);
-                // 调用离开房间接口
-                doPostLeave();
-                _engine.disableAudio();
-                _dispose();
-                Navigator.pop(context);
+                // MyToastUtils.showToastBottom('你已被房间设置为黑名单用户！');
+                // setState(() {
+                //   isMeUp = false;
+                // });
+                // if (_timerHot != null) {
+                //   _timerHot!.cancel();
+                // }
+                // // 取消发布本地音频流
+                // _engine.muteLocalAudioStream(true);
+                // // 调用离开房间接口
+                // doPostLeave();
+                // _engine.disableAudio();
+                // _dispose();
+                // Navigator.pop(context);
               } else {
                 // 别人被拉黑了，刷新一下麦上的人员信息
                 doPostRoomMikeInfo();
@@ -2675,7 +2682,7 @@ class _RoomPageState extends State<RoomPage>
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -2705,7 +2712,7 @@ class _RoomPageState extends State<RoomPage>
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -2740,7 +2747,7 @@ class _RoomPageState extends State<RoomPage>
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -2833,7 +2840,7 @@ class _RoomPageState extends State<RoomPage>
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -2912,7 +2919,7 @@ class _RoomPageState extends State<RoomPage>
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -2945,7 +2952,7 @@ class _RoomPageState extends State<RoomPage>
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -2991,7 +2998,7 @@ class _RoomPageState extends State<RoomPage>
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -3036,7 +3043,7 @@ class _RoomPageState extends State<RoomPage>
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -3067,7 +3074,7 @@ class _RoomPageState extends State<RoomPage>
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -3099,7 +3106,7 @@ class _RoomPageState extends State<RoomPage>
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -3128,7 +3135,7 @@ class _RoomPageState extends State<RoomPage>
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -3316,7 +3323,7 @@ class _RoomPageState extends State<RoomPage>
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -3353,14 +3360,14 @@ class _RoomPageState extends State<RoomPage>
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
   /// 加入房间前
   Future<void> doPostBeforeJoin(roomID) async {
     //判断房间id是否为空的
-    if (sp.getString('roomID') == null || sp.getString('').toString().isEmpty) {
+    if (sp.getString('roomID') == null || sp.getString('roomID').toString().isEmpty) {
     } else {
       // 不是空的，并且不是之前进入的房间
       if (sp.getString('roomID').toString() != roomID) {
@@ -3396,13 +3403,19 @@ class _RoomPageState extends State<RoomPage>
           MyUtils.jumpLogin(context);
           break;
         default:
+          setState(() {
+            sp.setBool('joinRoom', false);
+          });
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
       Loading.dismiss();
     } catch (e) {
+      setState(() {
+        sp.setBool('joinRoom', false);
+      });
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -3439,13 +3452,19 @@ class _RoomPageState extends State<RoomPage>
           MyUtils.jumpLogin(context);
           break;
         default:
+          setState(() {
+            sp.setBool('joinRoom', false);
+          });
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
       Loading.dismiss();
     } catch (e) {
+      setState(() {
+        sp.setBool('joinRoom', false);
+      });
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

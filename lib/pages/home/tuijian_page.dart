@@ -199,7 +199,10 @@ class _TuijianPageState extends State<TuijianPage> {
               ),
               GestureDetector(
                 onTap: (() {
-                  if (MyUtils.checkClick()) {
+                  if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
+                    setState(() {
+                      sp.setBool('joinRoom',true);
+                    });
                     doPostBeforeJoin(listAnchor[i].roomId.toString(),
                         listAnchor[i].uid.toString());
                   }
@@ -439,7 +442,10 @@ class _TuijianPageState extends State<TuijianPage> {
                                     duration: 2500,
                                     onIndexChanged: (index) {},
                                     onTap: (index) {
-                                      if (MyUtils.checkClick()) {
+                                      if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
+                                        setState(() {
+                                          sp.setBool('joinRoom',true);
+                                        });
                                         doPostBeforeJoin(listRoom[index].id.toString(), '');
                                       }
                                     },
@@ -517,7 +523,10 @@ class _TuijianPageState extends State<TuijianPage> {
                                         autoplayDelay: 4000,
                                         duration: 2000,
                                         onTap: (index) {
-                                          if (MyUtils.checkClick()) {
+                                          if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
+                                            setState(() {
+                                              sp.setBool('joinRoom',true);
+                                            });
                                             doPostBeforeJoin(listRoom2[index].id.toString(), '');
                                           }
                                         },
@@ -592,7 +601,10 @@ class _TuijianPageState extends State<TuijianPage> {
                                         autoplayDelay: 4000,
                                         duration: 2000,
                                         onTap: (index) {
-                                          if (MyUtils.checkClick()) {
+                                          if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
+                                            setState(() {
+                                              sp.setBool('joinRoom',true);
+                                            });
                                             doPostBeforeJoin(listRoom3[index].id.toString(), '');
                                           }
                                           // doPostBeforeJoin(listRoom3[index].id.toString());
@@ -720,11 +732,17 @@ class _TuijianPageState extends State<TuijianPage> {
           MyUtils.jumpLogin(context);
           break;
         default:
+          setState(() {
+            sp.setBool('joinRoom',false);
+          });
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
       Loading.dismiss();
     } catch (e) {
+      setState(() {
+        sp.setBool('joinRoom',false);
+      });
       Loading.dismiss();
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
@@ -757,11 +775,17 @@ class _TuijianPageState extends State<TuijianPage> {
           MyUtils.jumpLogin(context);
           break;
         default:
+          setState(() {
+            sp.setBool('joinRoom',false);
+          });
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
       Loading.dismiss();
     } catch (e) {
+      setState(() {
+        sp.setBool('joinRoom',false);
+      });
       Loading.dismiss();
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }

@@ -22,6 +22,8 @@ class _StarPageState extends State<StarPage> {
     // TODO: implement initState
     super.initState();
     Future.delayed(const Duration(milliseconds: 2000), ((){
+        sp.setBool('joinRoom', false);
+        sp.setString('roomID', '');
         Navigator.pop(context);
         LogE('用户token   ${sp.getString('user_token').toString()}');
         LogE('用户token   ${sp.getString('user_token').toString().isNotEmpty}');

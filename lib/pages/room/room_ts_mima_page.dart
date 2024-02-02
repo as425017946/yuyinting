@@ -11,6 +11,7 @@ import '../../bean/joinRoomBean.dart';
 import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
+import '../../main.dart';
 import '../../utils/loading.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
@@ -154,6 +155,9 @@ class _RoomTSMiMaPageState extends State<RoomTSMiMaPage> {
           break;
         default:
           setState(() {
+            sp.setBool('joinRoom',false);
+          });
+          setState(() {
             textEditingController.text = '';
           });
           MyToastUtils.showToastBottom(bean.msg!);
@@ -161,6 +165,9 @@ class _RoomTSMiMaPageState extends State<RoomTSMiMaPage> {
       }
       Loading.dismiss();
     } catch (e) {
+      setState(() {
+        sp.setBool('joinRoom',false);
+      });
       Loading.dismiss();
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
@@ -194,11 +201,17 @@ class _RoomTSMiMaPageState extends State<RoomTSMiMaPage> {
           MyUtils.jumpLogin(context);
           break;
         default:
+          setState(() {
+            sp.setBool('joinRoom',false);
+          });
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
       Loading.dismiss();
     } catch (e) {
+      setState(() {
+        sp.setBool('joinRoom',false);
+      });
       Loading.dismiss();
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }

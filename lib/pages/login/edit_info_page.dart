@@ -380,7 +380,6 @@ class _EditInfoPageState extends State<EditInfoPage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -417,7 +416,6 @@ class _EditInfoPageState extends State<EditInfoPage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

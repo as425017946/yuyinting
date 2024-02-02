@@ -47,6 +47,9 @@ class _LoginPageState extends State<LoginPage> {
   String IP = '', IMEI = '';
   @override
   void initState() {
+    setState(() {
+      sp.setBool('joinRoom', false);
+    });
     // TODO: implement initState
     super.initState();
     // doPostPdAddress();

@@ -72,7 +72,10 @@ class _ShoucangPageState extends State<ShoucangPage>
   Widget _initlistdata(context, index) {
     return GestureDetector(
       onTap: (() {
-        if (MyUtils.checkClick()) {
+        if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
+          setState(() {
+            sp.setBool('joinRoom',true);
+          });
           doPostBeforeJoin(_list[index].id.toString());
         }
       }),
@@ -122,7 +125,10 @@ class _ShoucangPageState extends State<ShoucangPage>
   Widget _initlistdata2(context, index) {
     return GestureDetector(
       onTap: (() {
-        if (MyUtils.checkClick()) {
+        if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
+          setState(() {
+            sp.setBool('joinRoom',true);
+          });
           doPostBeforeJoin(listTJ[index].id.toString());
         }
       }),
@@ -371,11 +377,17 @@ class _ShoucangPageState extends State<ShoucangPage>
           MyUtils.jumpLogin(context);
           break;
         default:
+          setState(() {
+            sp.setBool('joinRoom',false);
+          });
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
       Loading.dismiss();
     } catch (e) {
+      setState(() {
+        sp.setBool('joinRoom',false);
+      });
       Loading.dismiss();
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
@@ -406,11 +418,17 @@ class _ShoucangPageState extends State<ShoucangPage>
           MyUtils.jumpLogin(context);
           break;
         default:
+          setState(() {
+            sp.setBool('joinRoom',false);
+          });
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
       Loading.dismiss();
     } catch (e) {
+      setState(() {
+        sp.setBool('joinRoom',false);
+      });
       Loading.dismiss();
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }

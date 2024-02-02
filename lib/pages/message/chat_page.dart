@@ -984,10 +984,15 @@ class _ChatPageState extends State<ChatPage> {
                       const Spacer(),
                       GestureDetector(
                         onTap: (() {
-                          if(sp.getString('roomID').toString() == roomId){
+                          if(MyUtils.checkClick() && sp.getString('roomID').toString() == roomId){
                             MyToastUtils.showToastBottom('您已在本房间');
                           }else{
-                            doPostBeforeJoin(roomId);
+                            if(MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
+                              setState(() {
+                                sp.setBool('joinRoom',true);
+                              });
+                              doPostBeforeJoin(roomId);
+                            }
                           }
                         }),
                         child: Container(
@@ -1986,11 +1991,17 @@ class _ChatPageState extends State<ChatPage> {
           MyUtils.jumpLogin(context);
           break;
         default:
+          setState(() {
+            sp.setBool('joinRoom',false);
+          });
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
       Loading.dismiss();
     } catch (e) {
+      setState(() {
+        sp.setBool('joinRoom',false);
+      });
       Loading.dismiss();
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
@@ -2021,11 +2032,17 @@ class _ChatPageState extends State<ChatPage> {
           MyUtils.jumpLogin(context);
           break;
         default:
+          setState(() {
+            sp.setBool('joinRoom',false);
+          });
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
       Loading.dismiss();
     } catch (e) {
+      setState(() {
+        sp.setBool('joinRoom',false);
+      });
       Loading.dismiss();
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }

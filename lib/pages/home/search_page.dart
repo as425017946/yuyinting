@@ -51,7 +51,10 @@ class _SearchPageState extends State<SearchPage> {
     return GestureDetector(
       onTap: (() {
         if (type == 0) {
-          if (MyUtils.checkClick()) {
+          if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
+            setState(() {
+              sp.setBool('joinRoom',true);
+            });
             doPostBeforeJoin(listRoom[i].id.toString());
           }
         } else {
@@ -518,11 +521,17 @@ class _SearchPageState extends State<SearchPage> {
           MyUtils.jumpLogin(context);
           break;
         default:
+          setState(() {
+            sp.setBool('joinRoom',false);
+          });
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
       Loading.dismiss();
     } catch (e) {
+      setState(() {
+        sp.setBool('joinRoom',false);
+      });
       Loading.dismiss();
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
@@ -553,11 +562,17 @@ class _SearchPageState extends State<SearchPage> {
           MyUtils.jumpLogin(context);
           break;
         default:
+          setState(() {
+            sp.setBool('joinRoom',false);
+          });
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
       Loading.dismiss();
     } catch (e) {
+      setState(() {
+        sp.setBool('joinRoom',false);
+      });
       Loading.dismiss();
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }

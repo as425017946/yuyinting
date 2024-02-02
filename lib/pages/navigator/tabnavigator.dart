@@ -183,7 +183,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
             _engine.disableAudio();
             _dispose();
             // 调用离开房间接口
-            doPostLeave(sp.getString('roomIDJoinOther').toString());
+            // doPostLeave(sp.getString('roomIDJoinOther').toString());
           });
 
         }
@@ -234,7 +234,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
             _engine.disableAudio();
             _dispose();
             // 调用离开房间接口
-            doPostLeave(sp.getString('roomID').toString());
+            // doPostLeave(sp.getString('roomID').toString());
           });
         }
       }else if(event.title == '账号退出登录'){
@@ -284,18 +284,18 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
             ));
       }else if(event.type == 'room_black'){
         //设置黑名单
-        if (event.map!['uid'].toString() == sp.getString('user_id').toString()) {
-          if(isJoinRoom){
-            MyToastUtils.showToastBottom('你已被房间设置为黑名单用户！');
-            setState(() {
-              isJoinRoom = false;
-              // 取消发布本地音频流
-              _engine.muteLocalAudioStream(true);
-              _engine.disableAudio();
-            });
-            _dispose();
-          }
-        }
+        // if (event.map!['uid'].toString() == sp.getString('user_id').toString()) {
+        //   if(isJoinRoom){
+        //     MyToastUtils.showToastBottom('你已被房间设置为黑名单用户！');
+        //     setState(() {
+        //       isJoinRoom = false;
+        //       // 取消发布本地音频流
+        //       _engine.muteLocalAudioStream(true);
+        //       _engine.disableAudio();
+        //     });
+        //     _dispose();
+        //   }
+        // }
       }else if(event.type == 'down_mic'){
         if(isJoinRoom){
           //判断被被下麦的人是不是自己
@@ -318,7 +318,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           // 取消发布本地音频流
           _engine.muteLocalAudioStream(true);
           // 调用离开房间接口
-          doPostLeave(sp.getString('roomID').toString());
+          // doPostLeave(sp.getString('roomID').toString());
           _engine.disableAudio();
           _dispose();
           sp.setString('user_token', '');
@@ -339,12 +339,12 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       }else if(event.type == 'user_room_black'){
         if(isJoinRoom) {
           if (event.map!['uid'].toString() ==
-              sp.getString('user_id').toString()) {
+              sp.getString('user_id').toString() &&sp.getString('roomID').toString() == event.map!['room_id'].toString()) {
             MyToastUtils.showToastBottom('你已被房间设置为黑名单用户！');
             // 取消发布本地音频流
             _engine.muteLocalAudioStream(true);
             // 调用离开房间接口
-            doPostLeave(sp.getString('roomID').toString());
+            // doPostLeave(sp.getString('roomID').toString());
             _engine.disableAudio();
             _dispose();
           }
