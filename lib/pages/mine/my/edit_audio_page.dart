@@ -174,25 +174,33 @@ class _EditAudioPageState extends State<EditAudioPage> {
       });
     }
     if(isDevices == 'ios'){
-      var directory = await getTemporaryDirectory(); // iOS上的默认存储位置为App Documents目录
+      // 缓存目录
+      // Directory tempDir = await getTemporaryDirectory();
       var time = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-      String path = '${directory.path}/$time${ext[Codec.aacADTS.index]}';
-      LogE('录音地址 ** $path');
+      Directory appDir = await getApplicationDocumentsDirectory();
+      // 文件名称
+      String path = '${appDir.path}/$time${ext[Codec.aacADTS.index]}';
+      // // Directory folderDir = Directory('$appDir/$folderName');
+      // Directory folderDir = Directory(path);
+      // if (!folderDir.existsSync()) {
+      //   folderDir.createSync();
+      // }
       setState(() {
         _mPath = path;
       });
+      await _mRecorder!.openRecorder();
+      LogE('录音地址:$path');
       _mRecorder!
           .startRecorder(
         toFile: path,
-        codec: _codec,
+        codec:  _codec,
         audioSource: AudioSource.microphone,
       )
           .then((value) {
         setState(() {
-          audioUrl = '';
           mediaRecord = false;
           hasRecord = false;
-          LogE('录音地址 **=== $path');
+          _mPath = path;
         });
       });
     }else{
