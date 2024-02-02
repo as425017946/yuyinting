@@ -201,7 +201,6 @@ class _EditAudioPageState extends State<EditAudioPage> {
         audioSource: AudioSource.microphone,
       )
           .then((value) {
-        stopRecorder(); // 确保录音器停止并保存数据到文件
         setState(() {
           mediaRecord = false;
           hasRecord = false;
@@ -451,6 +450,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
                                     isPlay = 1;
                                   } else if (isPlay == 1) {
                                     isPlay = 2;
+                                    stopRecorder(); // 确保录音器停止并保存数据到文件
                                   }
                                 });
                               }
