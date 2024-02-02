@@ -190,6 +190,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
           mediaRecord = false;
           hasRecord = false;
           _mPath = path;
+          LogE('录音地址 **=== $path');
         });
       });
     }else{
