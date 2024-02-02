@@ -102,6 +102,15 @@ class _EditAudioPageState extends State<EditAudioPage> {
   }
 
   Future<void> openTheRecorder() async {
+    var status = await Permission.storage.request();
+    if (status.isGranted) {
+      // 用户已授予权限，可以访问文件
+      // 在这里执行打开文件等操作
+      LogE('权限同意');
+    } else {
+      // 用户拒绝了权限请求，需要处理此情况
+      LogE('权限拒绝');
+    }
     if (!kIsWeb) {
       var status = await Permission.microphone.request();
       if (status != PermissionStatus.granted) {
@@ -588,6 +597,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
 
   /// 获取文件url
   Future<void> doPostPostFileUpload(path) async {
+
     LogE('音频上传///$path');
     Loading.show("音频上传中...");
     var name = path.substring(path.lastIndexOf("/") + 1, path.length);
