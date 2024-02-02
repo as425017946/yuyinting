@@ -597,7 +597,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
 
   /// 获取文件url
   Future<void> doPostPostFileUpload(path) async {
-
+    var directory = await PathProviderPlatform.instance.getApplicationSupportPath();
     LogE('音频上传///$path');
     Loading.show("音频上传中...");
     var name = path.substring(path.lastIndexOf("/") + 1, path.length);

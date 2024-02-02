@@ -126,6 +126,8 @@ dependencies:
   webview_flutter: ^2.0.13
   # 跑马灯
   marquee: ^2.2.3
+  # 权限
+  path_provider_platform_interface: ^2.0.1
 
 
 dev_dependencies:
