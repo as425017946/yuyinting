@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -62,13 +63,12 @@ class _EditAudioPageState extends State<EditAudioPage> {
   @override
   void initState() {
     // TODO: implement initState
+    initAgora();
     if (Platform.isAndroid) {
       setState(() {
         isDevices = 'android';
       });
     }else if (Platform.isIOS){
-      //获取权限
-      initAgora();
       setState(() {
         isDevices = 'ios';
       });
@@ -86,10 +86,14 @@ class _EditAudioPageState extends State<EditAudioPage> {
       audioUrl = widget.audioUrl;
     });
   }
+  late RtcEngine _engine;
   // 初始化应用
   Future<void> initAgora() async {
     // 获取权限
     await [Permission.microphone].request();
+    // 创建 RtcEngine
+    _engine = await createAgoraRtcEngine();
+    _engine.enableAudio();
   }
 
   @override
