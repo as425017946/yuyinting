@@ -55,7 +55,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
   int isPlay = 0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
   int djNum = 15; // 录音时长
   int audioNum = 0; // 记录录了多久
-  String recordText = '开始录音';
+  String recordText = '点击录音';
   String audioUrl = '';
   // 设备是安卓还是ios
   String isDevices = 'android';
@@ -186,6 +186,8 @@ class _EditAudioPageState extends State<EditAudioPage> {
     var time = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     String path = '${tempDir.path}/$time${ext[Codec.aacADTS.index]}';
     LogE('录音地址 == $path');
+    File file = File(path);
+    file.openWrite();
     _mRecorder!
         .startRecorder(
       toFile: path,
