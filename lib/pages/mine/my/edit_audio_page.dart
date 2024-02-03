@@ -108,6 +108,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
         scenario: AudioScenarioType.audioScenarioGameStreaming);
     //默认订阅所有远端用户的音频流。
     _engine.muteAllRemoteAudioStreams(false);
+    _engine.enableLoopbackRecording(enabled: true);
   }
 
   @override
