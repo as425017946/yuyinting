@@ -619,6 +619,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                     RoomLiWuPage(
                                       listM: widget.listM,
                                       uid: widget.uid,
+                                      roomID: widget.roomID,
                                     ));
                               }
                             }),

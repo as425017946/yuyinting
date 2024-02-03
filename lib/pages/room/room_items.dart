@@ -3594,7 +3594,7 @@ class RoomItems {
               GestureDetector(
                 onTap: (() {
                   MyUtils.goTransparentPage(
-                      context, RoomLiWuPage(listM: listM, uid: '',));
+                      context, RoomLiWuPage(listM: listM, uid: '', roomID: roomID,));
                 }),
                 child: Container(
                     height: ScreenUtil().setHeight(60),

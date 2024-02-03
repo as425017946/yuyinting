@@ -27,7 +27,8 @@ import '../mine/qianbao/dou_pay_page.dart';
 class RoomLiWuPage extends StatefulWidget {
   List<MikeList> listM;
   String uid;
-  RoomLiWuPage({super.key, required this.listM, required this.uid});
+  String roomID;
+  RoomLiWuPage({super.key, required this.listM, required this.uid, required this.roomID});
 
   @override
   State<RoomLiWuPage> createState() => _RoomLiWuPageState();
@@ -1342,7 +1343,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
   /// 房间麦序在线用户
   Future<void> doPostOnlineRoomUser() async {
     Map<String, dynamic> params = <String, dynamic>{
-      'room_id': sp.getString('roomID').toString(),
+      'room_id': widget.roomID,
     };
     try {
     onlineRoomUserBean bean = await DataUtils.postOnlineRoomUser(params);
@@ -1441,7 +1442,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
       return;
     }
     Map<String, dynamic> params = <String, dynamic>{
-      'room_id': sp.getString('roomID').toString(),
+      'room_id': widget.roomID,
       'to_uids': toUids, //收礼物用户uid（多个用户,分割 2,26,32）
       'gift_id': giftId,
       'gift_number': shuliang.toString(),
@@ -1489,7 +1490,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
   /// 一键赠送背包礼物
   Future<void> doPostOneClickPackageGift() async {
     Map<String, dynamic> params = <String, dynamic>{
-      'room_id': sp.getString('roomID').toString(),
+      'room_id': widget.roomID,
       'to_uid': listUID[0], //收礼物用户uid
     };
     try {
