@@ -93,7 +93,19 @@ class _EditAudioPageState extends State<EditAudioPage> {
     await [Permission.microphone].request();
     // 创建 RtcEngine
     _engine = await createAgoraRtcEngine();
+
+    // 初始化 RtcEngine，设置频道场景为直播场景
+    await _engine.initialize(const RtcEngineContext(
+      appId: MyConfig.appId,
+      channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
+    ));
+
     _engine.enableAudio();
+    _engine.enableLocalAudio(true);
+    // 设置音质
+    _engine.setAudioProfile(
+        profile: AudioProfileType.audioProfileMusicHighQuality,
+        scenario: AudioScenarioType.audioScenarioGameStreaming);
   }
 
   @override
