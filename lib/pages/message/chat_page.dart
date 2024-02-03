@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -112,14 +113,13 @@ class _ChatPageState extends State<ChatPage> {
   @override
   void initState() {
     // TODO: implement initState
+    initAgora();
     if (Platform.isAndroid) {
       getPermissionStatus();
       setState(() {
         isDevices = 'android';
       });
     }else if (Platform.isIOS){
-      //获取权限
-      initAgora();
       setState(() {
         isDevices = 'ios';
       });
@@ -160,12 +160,15 @@ class _ChatPageState extends State<ChatPage> {
     _focusNode!.addListener(_onFocusChange);
   }
 
+  late RtcEngine _engine;
   // 初始化应用
   Future<void> initAgora() async {
     // 获取权限
     await [Permission.microphone].request();
+    // 创建 RtcEngine
+    _engine = await createAgoraRtcEngine();
+    _engine.enableAudio();
   }
-
 
   // 保存发红包的信息 type 1自己给别人发，2收到别人发的红包
   saveHBinfo(String info) async {
