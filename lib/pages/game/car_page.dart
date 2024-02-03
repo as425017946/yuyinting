@@ -347,7 +347,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
                         StyleUtils.getCommonTextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w600,
-                            fontSize: isDevices == 'ios' ? 26.sp : 28.sp))),
+                            fontSize: isDevices == 'ios' ? 26.sp : 26.sp))),
                 WidgetUtils.commonSizedBox(0, 20.h),
               ],
             )

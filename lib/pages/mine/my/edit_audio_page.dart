@@ -89,6 +89,8 @@ class _EditAudioPageState extends State<EditAudioPage> {
   void _initialize() async {
     await _mPlayer!.closePlayer();
     await _mPlayer!.openPlayer();
+    await _mRecorder!.closeRecorder();
+    await _mRecorder!.openRecorder();
   }
 
   @override
@@ -591,10 +593,10 @@ class _EditAudioPageState extends State<EditAudioPage> {
 
   /// 获取文件url
   Future<void> doPostPostFileUpload(path) async {
-    LogE('音频上传///$path');
-
     var name = path.substring(path.lastIndexOf("/") + 1, path.length);
     File f = File(path);
+    LogE('音频上传///$path');
+    LogE('音频上传大小///${f.length()}');
     if(await f.exists()){
       LogE('存在!');
     }else{

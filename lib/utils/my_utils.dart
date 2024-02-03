@@ -424,8 +424,9 @@ class MyUtils {
     //     autoLogin: false,
     //     debugModel: true,
     //     isAutoDownloadThumbnail: true);
+    // /// 正式环境
     // EMOptions options = EMOptions(
-    //     appKey: "1136231222154558#demo",
+    //     appKey: "1129240201157233#cc",
     //     autoLogin: false,
     //     debugModel: true,
     //     isAutoDownloadThumbnail: true);

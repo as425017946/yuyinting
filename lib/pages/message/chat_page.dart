@@ -804,9 +804,6 @@ class _ChatPageState extends State<ChatPage> {
       // if (!folderDir.existsSync()) {
       //   folderDir.createSync();
       // }
-      setState(() {
-        _mPath = path;
-      });
       await _mRecorder!.openRecorder();
       LogE('录音地址:$path');
       _mRecorder!
@@ -831,6 +828,7 @@ class _ChatPageState extends State<ChatPage> {
     await _mRecorder!.stopRecorder().then((value) {
       _timer.cancel();
       setState(() {
+        _mPath = value.toString();
         mediaRecord = true;
         hasRecord = true;
         djNum = 60;
