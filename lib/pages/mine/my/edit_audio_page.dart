@@ -184,7 +184,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
     }
     Directory tempDir = await getTemporaryDirectory();
     var time = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-    String path = '${tempDir.path}/$time${ext[Codec.aacMP4.index]}';
+    String path = '${tempDir.path}/$time${ext[Codec.aacADTS.index]}';
     LogE('录音地址 == $path');
     File file = File(path);
     file.openWrite();
