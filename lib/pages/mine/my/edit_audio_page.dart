@@ -71,7 +71,6 @@ class _EditAudioPageState extends State<EditAudioPage> {
         isDevices = 'ios';
       });
     }
-    _initialize();
     _mPlayer!.openPlayer().then((value) {
       setState(() {
         _mPlayerIsInited = true;
@@ -86,12 +85,6 @@ class _EditAudioPageState extends State<EditAudioPage> {
     });
   }
 
-  void _initialize() async {
-    await _mPlayer!.closePlayer();
-    await _mPlayer!.openPlayer();
-    await _mRecorder!.closeRecorder();
-    await _mRecorder!.openRecorder();
-  }
 
   @override
   void dispose() {
@@ -189,22 +182,20 @@ class _EditAudioPageState extends State<EditAudioPage> {
     File file = File(path);
     file.openWrite();
     await _mRecorder!.openRecorder();
-    if (_mRecorder!.isStopped) {
-      _mRecorder!
-          .startRecorder(
-        toFile: path,
-        codec: _codec,
-        audioSource: AudioSource.microphone,
-      )
-          .then((value) {
-        setState(() {
-          audioUrl = '';
-          mediaRecord = false;
-          hasRecord = false;
-          _mPath = path;
-        });
+    _mRecorder!
+        .startRecorder(
+      toFile: path,
+      codec: _codec,
+      audioSource: AudioSource.microphone,
+    )
+        .then((value) {
+      setState(() {
+        audioUrl = '';
+        mediaRecord = false;
+        hasRecord = false;
+        _mPath = path;
       });
-    }
+    });
   }
 
 //停止录音
