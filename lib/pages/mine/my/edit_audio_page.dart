@@ -44,7 +44,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
   List<bool> list_b = [];
   int length = 1;
 
-  Codec _codec = Codec.aacADTS;
+  Codec _codec = Codec.aacMP4;
   String _mPath = ''; //录音文件路径
   FlutterSoundPlayer? _mPlayer = FlutterSoundPlayer();
   FlutterSoundRecorder? _mRecorder = FlutterSoundRecorder();
@@ -207,10 +207,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
 //停止录音
   void stopRecorder() async {
     await _mRecorder!.stopRecorder().then((value) {
-      // LogE('停止录音== $value');
-      setState(() {
-        _mPath = value.toString();
-      });
+      LogE('停止录音== $value');
       _timer.cancel();
       setState(() {
         mediaRecord = true;
@@ -241,6 +238,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
     _mPlayer!
         .startPlayer(
             fromURI: _mPath == "" ? audioUrl : _mPath,
+            codec: _codec,
             whenFinished: () {
               setState(() {
                 playRecord = false;
