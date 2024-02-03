@@ -595,8 +595,10 @@ class _EditAudioPageState extends State<EditAudioPage> {
   Future<void> doPostPostFileUpload(path) async {
     var name = path.substring(path.lastIndexOf("/") + 1, path.length);
     File f = File(path);
-    LogE('音频上传///$path');
-    LogE('音频上传大小///${f.length()}');
+    int fileSizeInBytes = f.lengthSync();
+    double fileSizeInKB = fileSizeInBytes / 1024; // 文件大小转换为KB
+    LogE('音频上传///$fileSizeInBytes');
+    LogE('音频上传大小///$fileSizeInKB KB}');
     if(await f.exists()){
       LogE('存在!');
     }else{
