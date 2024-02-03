@@ -44,7 +44,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
   List<bool> list_b = [];
   int length = 1;
 
-  Codec _codec = Codec.aacADTS;
+  Codec _codec = Codec.mp3;
   String _mPath = ''; //录音文件路径
   FlutterSoundPlayer? _mPlayer = FlutterSoundPlayer();
   FlutterSoundRecorder? _mRecorder = FlutterSoundRecorder();
@@ -184,7 +184,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
     }
     Directory tempDir = await getTemporaryDirectory();
     var time = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-    String path = '${tempDir.path}/$time${ext[Codec.aacADTS.index]}';
+    String path = '${tempDir.path}/$time${ext[Codec.mp3.index]}';
     LogE('录音地址 == $path');
     File file = File(path);
     file.openWrite();
