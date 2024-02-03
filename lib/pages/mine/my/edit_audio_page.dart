@@ -187,9 +187,6 @@ class _EditAudioPageState extends State<EditAudioPage> {
       Directory appDir = await getApplicationDocumentsDirectory();
       // 文件名称
       String path = '${appDir.path}/$time${ext[Codec.aacADTS.index]}';
-      setState(() {
-        _mPath = path;
-      });
       await _mRecorder!.openRecorder();
       LogE('录音地址:$path');
       _mRecorder!
@@ -230,7 +227,10 @@ class _EditAudioPageState extends State<EditAudioPage> {
 //停止录音
   void stopRecorder() async {
     await _mRecorder!.stopRecorder().then((value) {
-      LogE('停止录音== $value');
+      // LogE('停止录音== $value');
+      setState(() {
+        _mPath = value.toString();
+      });
       _timer.cancel();
       setState(() {
         mediaRecord = true;
