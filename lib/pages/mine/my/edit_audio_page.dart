@@ -230,6 +230,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
 //停止录音
   void stopRecorder() async {
     await _mRecorder!.stopRecorder().then((value) {
+      LogE('停止录音== $value');
       _timer.cancel();
       setState(() {
         mediaRecord = true;
