@@ -351,7 +351,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
                     GestureDetector(
                       onTap: (() {
                         if (MyUtils.checkClick()) {
-                          play2();
+                          play();
                         }
                       }),
                       child: Container(
