@@ -215,8 +215,6 @@ class _ChatPageState extends State<ChatPage> {
 
 
   void _initialize() async {
-    await _mPlayer!.closePlayer();
-    await _mPlayer!.openPlayer();
     await _mRecorder!.openRecorder().then((value) {
       setState(() {
         _voiceRecorderIsInitialized = true;

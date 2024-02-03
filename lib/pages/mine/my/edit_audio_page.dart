@@ -67,6 +67,8 @@ class _EditAudioPageState extends State<EditAudioPage> {
         isDevices = 'android';
       });
     }else if (Platform.isIOS){
+      //获取权限
+      initAgora();
       setState(() {
         isDevices = 'ios';
       });
@@ -85,6 +87,11 @@ class _EditAudioPageState extends State<EditAudioPage> {
     });
   }
 
+  // 初始化应用
+  Future<void> initAgora() async {
+    // 获取权限
+    await [Permission.microphone].request();
+  }
 
   @override
   void dispose() {
