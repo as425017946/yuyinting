@@ -725,7 +725,7 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
       var respone = await dio.post(MyHttpConfig.editRoom, data: formdata);
       Map jsonResponse = json.decode(respone.data.toString());
 
-      if (respone.statusCode == 200) {
+      if (jsonResponse['code'] == 200) {
         sp.setString('roomImage', path);
         setState(() {
           ttImg = path;
@@ -733,7 +733,7 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
         eventBus.fire(RoomBack(title: '厅头修改', index: path));
         MyToastUtils.showToastBottom('上传成功');
         Loading.dismiss();
-      } else if (respone.statusCode == 401) {
+      } else if (jsonResponse['code'] == 401) {
         // ignore: use_build_context_synchronously
         MyUtils.jumpLogin(context);
       } else {

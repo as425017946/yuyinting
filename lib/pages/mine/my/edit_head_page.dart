@@ -246,7 +246,7 @@ class _EditHeadPageState extends State<EditHeadPage> {
           MyHttpConfig.fileUpload,
           data: formdata);
       Map jsonResponse = json.decode(respone.data.toString());
-      if (respone.statusCode == 200) {
+      if (jsonResponse['code'] == 200) {
         eventBus.fire(FileBack(info: path, id: jsonResponse['data'].toString(), type: 0));
         MyToastUtils.showToastBottom('头像上传成功');
         Loading.dismiss();

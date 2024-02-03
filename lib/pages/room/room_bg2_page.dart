@@ -337,11 +337,11 @@ class _RoomBG2PageState extends State<RoomBG2Page>
       var respone = await dio.post(MyHttpConfig.uploadBg, data: formdata);
       LogE('提示信息 == $respone');
       Map jsonResponse = json.decode(respone.data.toString());
-      if (respone.statusCode == 200) {
+      if (jsonResponse['code'] == 200) {
         MyToastUtils.showToastBottom('上传成功');
         doPostBgList();
         Loading.dismiss();
-      } else if (respone.statusCode == 401) {
+      } else if (jsonResponse['code'] == 401) {
         // ignore: use_build_context_synchronously
         MyUtils.jumpLogin(context);
       } else {

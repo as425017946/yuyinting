@@ -1426,6 +1426,20 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
         toUids = '$toUids,${listUID[i]}';
       }
     }
+    if(giftId.isEmpty){
+      setState(() {
+        isCheck = false;
+      });
+      MyToastUtils.showToastBottom('请选择要送的礼物');
+      return;
+    }
+    if(toUids.isEmpty){
+      setState(() {
+        isCheck = false;
+      });
+      MyToastUtils.showToastBottom('请选择要送的对象');
+      return;
+    }
     Map<String, dynamic> params = <String, dynamic>{
       'room_id': sp.getString('roomID').toString(),
       'to_uids': toUids, //收礼物用户uid（多个用户,分割 2,26,32）

@@ -229,13 +229,13 @@ class _EditPhotoPageState extends State<EditPhotoPage> {
           MyHttpConfig.fileUpload,
           data: formdata);
       Map jsonResponse = json.decode(respone.data.toString());
-      if (respone.statusCode == 200) {
+      if (jsonResponse['code'] == 200) {
         eventBus.fire(PhotoBack(selectAss: selectAss, id: jsonResponse['data'].toString()));
         MyToastUtils.showToastBottom('上传成功');
         Loading.dismiss();
         // ignore: use_build_context_synchronously
         Navigator.pop(context);
-      }else if(respone.statusCode == 401){
+      }else if(jsonResponse['code'] == 401){
         // ignore: use_build_context_synchronously
         MyUtils.jumpLogin(context);
       }else{
@@ -321,7 +321,7 @@ class _EditPhotoPageState extends State<EditPhotoPage> {
         Map jsonResponse = json.decode(respone.data.toString());
 
         LogE('上传id$id');
-        if (respone.statusCode == 200) {
+        if (jsonResponse['code'] == 200) {
           if(id.isEmpty){
             id = jsonResponse['data'].toString();
           }else{
@@ -335,7 +335,7 @@ class _EditPhotoPageState extends State<EditPhotoPage> {
             // ignore: use_build_context_synchronously
             Navigator.pop(context);
           }
-        } else if (respone.statusCode == 401) {
+        } else if (jsonResponse['code'] == 401) {
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
         } else {

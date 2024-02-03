@@ -211,13 +211,13 @@ class _EditGHHeadPageState extends State<EditGHHeadPage> {
           MyHttpConfig.fileUpload,
           data: formdata);
       Map jsonResponse = json.decode(respone.data.toString());
-      if (respone.statusCode == 200) {
+      if (jsonResponse['code'] == 200) {
         eventBus.fire(FileBack(info: path, id: jsonResponse['data'].toString(), type: 0));
         MyToastUtils.showToastBottom('头像上传成功');
         Loading.dismiss();
         // ignore: use_build_context_synchronously
         Navigator.pop(context);
-      }else if(respone.statusCode == 401){
+      }else if(jsonResponse['code'] == 401){
         // ignore: use_build_context_synchronously
         MyUtils.jumpLogin(context);
       }else{
