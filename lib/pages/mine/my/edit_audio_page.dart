@@ -593,6 +593,12 @@ class _EditAudioPageState extends State<EditAudioPage> {
     LogE('音频上传///$path');
     Loading.show("音频上传中...");
     var name = path.substring(path.lastIndexOf("/") + 1, path.length);
+    File f = File(path);
+    if(await f.exists()){
+      LogE('存在!');
+    }else{
+      LogE('不存在!');
+    }
     FormData formdata = FormData.fromMap(
       {
         'type': 'audio',
