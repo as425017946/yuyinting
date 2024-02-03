@@ -44,7 +44,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
   List<bool> list_b = [];
   int length = 1;
 
-  Codec _codec = Codec.aacMP4;
+  Codec _codec = Codec.aacADTS;
   String _mPath = ''; //录音文件路径
   FlutterSoundPlayer? _mPlayer = FlutterSoundPlayer();
   FlutterSoundRecorder? _mRecorder = FlutterSoundRecorder();
