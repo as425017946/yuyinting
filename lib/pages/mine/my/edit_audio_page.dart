@@ -106,6 +106,8 @@ class _EditAudioPageState extends State<EditAudioPage> {
     _engine.setAudioProfile(
         profile: AudioProfileType.audioProfileMusicHighQuality,
         scenario: AudioScenarioType.audioScenarioGameStreaming);
+    //默认订阅所有远端用户的音频流。
+    _engine.muteAllRemoteAudioStreams(false);
   }
 
   @override
