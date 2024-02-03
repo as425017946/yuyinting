@@ -59,7 +59,7 @@ class _MeiLiMonthPageState extends State<MeiLiMonthPage> {
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        WidgetUtils.CricleImagess(55, 55, _list[0].avatar!),
+                        WidgetUtils.CricleImagess(100.h, 100.h, _list[0].avatar!),
                         WidgetUtils.showImages(
                             'assets/images/py_two.png',
                             ScreenUtil().setHeight(154),
@@ -67,9 +67,7 @@ class _MeiLiMonthPageState extends State<MeiLiMonthPage> {
                         Positioned(
                             bottom: 70.h,
                             child: WidgetUtils.onlyTextCenter(
-                                _list[0].nickname!.length > 4
-                                    ? '${_list[0].nickname!.substring(0, 4)}...'
-                                    : _list[0].nickname!,
+                                _list[0].nickname!.length > 4 ? '${_list[0].nickname!.substring(0,4)}...' : _list[0].nickname!,
                                 StyleUtils.getCommonTextStyle(
                                     color: MyColors.homeTopBG,
                                     fontSize: 28.sp,
@@ -79,36 +77,33 @@ class _MeiLiMonthPageState extends State<MeiLiMonthPage> {
                             bottom: 10.h,
                             child: _list[0].liveStatus == 1
                                 ? Container(
-                                    margin: EdgeInsets.only(
-                                        top: ScreenUtil().setHeight(98)),
-                                    width: 150.w,
-                                    height: 50.h,
-                                    child: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        WidgetUtils.showImagesFill(
-                                            "assets/images/py_tishi.png",
-                                            35.h,
-                                            150.w),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            WidgetUtils.showImages(
-                                                'assets/images/zhibo2.webp',
-                                                ScreenUtil().setWidth(20),
-                                                ScreenUtil().setWidth(20)),
-                                            WidgetUtils.onlyText(
-                                                '在房间',
-                                                StyleUtils.getCommonTextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: ScreenUtil()
-                                                        .setSp(20))),
-                                          ],
-                                        )
-                                      ],
-                                    ) /* add child content here */,
+                              margin: EdgeInsets.only(
+                                  top: ScreenUtil().setHeight(98)),
+                              width: 150.w,
+                              height: 50.h,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  WidgetUtils.showImagesFill("assets/images/py_tishi.png", 35.h, 150.w),
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
+                                    children: [
+                                      WidgetUtils.showImages(
+                                          'assets/images/zhibo2.webp',
+                                          ScreenUtil().setWidth(20),
+                                          ScreenUtil().setWidth(20)),
+                                      WidgetUtils.onlyText(
+                                          '在房间',
+                                          StyleUtils.getCommonTextStyle(
+                                              color: Colors.white,
+                                              fontSize:
+                                              ScreenUtil().setSp(20))),
+                                    ],
                                   )
+                                ],
+                              ) /* add child content here */,
+                            )
                                 : const Text(''))
                       ],
                     ),
@@ -117,19 +112,13 @@ class _MeiLiMonthPageState extends State<MeiLiMonthPage> {
                 WidgetUtils.commonSizedBox(0, 4),
                 GestureDetector(
                   onTap: (() {
-                    if (MyUtils.checkClick()) {
+                    if(MyUtils.checkClick()){
                       // 如果点击的是自己，进入自己的主页
-                      if (sp.getString('user_id').toString() ==
-                          _list[0].uid.toString()) {
-                        MyUtils.goTransparentRFPage(
-                            context, const MyInfoPage());
-                      } else {
+                      if(sp.getString('user_id').toString() == _list[0].uid.toString()){
+                        MyUtils.goTransparentRFPage(context, const MyInfoPage());
+                      }else{
                         sp.setString('other_id', _list[0].uid.toString());
-                        MyUtils.goTransparentRFPage(
-                            context,
-                            PeopleInfoPage(
-                              otherId: _list[0].uid.toString(),
-                            ));
+                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[0].uid.toString(),));
                       }
                     }
                   }),
@@ -141,15 +130,14 @@ class _MeiLiMonthPageState extends State<MeiLiMonthPage> {
                       alignment: Alignment.center,
                       children: [
                         Positioned(
-                            top: 60.h,
-                            child: WidgetUtils.CricleImagess(
-                                90, 90, _list[0].avatar!)),
+                            top:50.h,
+                            child: WidgetUtils.CricleImagess(160.h, 160.h, _list[0].avatar!)),
                         Positioned(
-                          top: 10.h,
+                          top:10.h,
                           child: SizedBox(
                             height: ScreenUtil().setHeight(231),
                             width: ScreenUtil().setWidth(228),
-                            child: WidgetUtils.showImages(
+                            child:  WidgetUtils.showImages(
                                 'assets/images/py_one.png',
                                 ScreenUtil().setHeight(231),
                                 ScreenUtil().setWidth(228)),
@@ -159,43 +147,38 @@ class _MeiLiMonthPageState extends State<MeiLiMonthPage> {
                             bottom: 40.h,
                             child: _list[0].liveStatus == 1
                                 ? Container(
-                                    margin: EdgeInsets.only(
-                                        top: ScreenUtil().setHeight(98)),
-                                    width: 150.w,
-                                    height: 50.h,
-                                    child: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        WidgetUtils.showImagesFill(
-                                            "assets/images/py_tishi.png",
-                                            35.h,
-                                            150.w),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            WidgetUtils.showImages(
-                                                'assets/images/zhibo2.webp',
-                                                ScreenUtil().setWidth(20),
-                                                ScreenUtil().setWidth(20)),
-                                            WidgetUtils.onlyText(
-                                                '在房间',
-                                                StyleUtils.getCommonTextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: ScreenUtil()
-                                                        .setSp(20))),
-                                          ],
-                                        )
-                                      ],
-                                    ) /* add child content here */,
+                              margin: EdgeInsets.only(
+                                  top: ScreenUtil().setHeight(98)),
+                              width: 150.w,
+                              height: 50.h,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  WidgetUtils.showImagesFill("assets/images/py_tishi.png", 35.h, 150.w),
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
+                                    children: [
+                                      WidgetUtils.showImages(
+                                          'assets/images/zhibo2.webp',
+                                          ScreenUtil().setWidth(20),
+                                          ScreenUtil().setWidth(20)),
+                                      WidgetUtils.onlyText(
+                                          '在房间',
+                                          StyleUtils.getCommonTextStyle(
+                                              color: Colors.white,
+                                              fontSize:
+                                              ScreenUtil().setSp(20))),
+                                    ],
                                   )
+                                ],
+                              ) /* add child content here */,
+                            )
                                 : const Text('')),
                         Positioned(
                           bottom: 100.h,
                           child: WidgetUtils.onlyTextBottom(
-                              _list[0].nickname!.length > 8
-                                  ? '${_list[0].nickname!.substring(0, 8)}...'
-                                  : _list[0].nickname!,
+                              _list[0].nickname!.length > 8 ? '${_list[0].nickname!.substring(0,8)}...' : _list[0].nickname!,
                               StyleUtils.getCommonTextStyle(
                                   color: MyColors.homeTopBG,
                                   fontSize: ScreenUtil().setSp(30),
@@ -206,70 +189,62 @@ class _MeiLiMonthPageState extends State<MeiLiMonthPage> {
                   ),
                 ),
                 WidgetUtils.commonSizedBox(0, 4),
-                Opacity(
-                  opacity: 0,
-                  child: Container(
-                    margin: EdgeInsets.only(top: 20.h),
-                    height: ScreenUtil().setHeight(400),
-                    width: ScreenUtil().setWidth(180),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        WidgetUtils.CricleImagess(55, 55, _list[0].avatar!),
-                        WidgetUtils.showImages(
-                            'assets/images/py_three.png',
-                            ScreenUtil().setHeight(154),
-                            ScreenUtil().setWidth(146)),
-                        Positioned(
-                            bottom: 70.h,
-                            child: WidgetUtils.onlyTextCenter(
-                                _list[0].nickname!.length > 4
-                                    ? '${_list[0].nickname!.substring(0, 4)}...'
-                                    : _list[0].nickname!,
-                                StyleUtils.getCommonTextStyle(
-                                    color: MyColors.homeTopBG,
-                                    fontSize: 28.sp,
-                                    fontWeight: FontWeight.w600))),
-                        Positioned(
-                            right: 0.w,
-                            bottom: 10.h,
-                            child: _list[0].liveStatus == 0
-                                ? Container(
-                                    margin: EdgeInsets.only(
-                                        top: ScreenUtil().setHeight(98)),
-                                    width: 150.w,
-                                    height: 50.h,
-                                    child: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        WidgetUtils.showImagesFill(
-                                            "assets/images/py_tishi.png",
-                                            35.h,
-                                            150.w),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            WidgetUtils.showImages(
-                                                'assets/images/zhibo2.webp',
-                                                ScreenUtil().setWidth(20),
-                                                ScreenUtil().setWidth(20)),
-                                            WidgetUtils.onlyText(
-                                                '在房间',
-                                                StyleUtils.getCommonTextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: ScreenUtil()
-                                                        .setSp(20))),
-                                          ],
-                                        )
-                                      ],
-                                    ) /* add child content here */,
-                                  )
-                                : const Text(''))
-                      ],
-                    ),
+                Opacity(opacity: 0, child: Container(
+                  margin: EdgeInsets.only(top: 20.h),
+                  height: ScreenUtil().setHeight(400),
+                  width: ScreenUtil().setWidth(180),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      WidgetUtils.CricleImagess(100.h, 100.h, _list[0].avatar!),
+                      WidgetUtils.showImages(
+                          'assets/images/py_three.png',
+                          ScreenUtil().setHeight(154),
+                          ScreenUtil().setWidth(146)),
+                      Positioned(
+                          bottom: 70.h,
+                          child: WidgetUtils.onlyTextCenter(
+                              _list[0].nickname!.length > 4 ? '${_list[0].nickname!.substring(0,4)}...' : _list[0].nickname!,
+                              StyleUtils.getCommonTextStyle(
+                                  color: MyColors.homeTopBG,
+                                  fontSize: 28.sp,
+                                  fontWeight: FontWeight.w600))),
+                      Positioned(
+                          right: 0.w,
+                          bottom: 10.h,
+                          child: _list[0].liveStatus == 0
+                              ? Container(
+                            margin: EdgeInsets.only(
+                                top: ScreenUtil().setHeight(98)),
+                            width: 150.w,
+                            height: 50.h,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                WidgetUtils.showImagesFill("assets/images/py_tishi.png", 35.h, 150.w),
+                                Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.center,
+                                  children: [
+                                    WidgetUtils.showImages(
+                                        'assets/images/zhibo2.webp',
+                                        ScreenUtil().setWidth(20),
+                                        ScreenUtil().setWidth(20)),
+                                    WidgetUtils.onlyText(
+                                        '在房间',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: Colors.white,
+                                            fontSize:
+                                            ScreenUtil().setSp(20))),
+                                  ],
+                                )
+                              ],
+                            ) /* add child content here */,
+                          )
+                              : const Text(''))
+                    ],
                   ),
-                ),
+                ),),
                 const Expanded(child: Text('')),
               ],
             ),
@@ -282,19 +257,13 @@ class _MeiLiMonthPageState extends State<MeiLiMonthPage> {
                 const Expanded(child: Text('')),
                 GestureDetector(
                   onTap: (() {
-                    if (MyUtils.checkClick()) {
+                    if(MyUtils.checkClick()){
                       // 如果点击的是自己，进入自己的主页
-                      if (sp.getString('user_id').toString() ==
-                          _list[1].uid.toString()) {
-                        MyUtils.goTransparentRFPage(
-                            context, const MyInfoPage());
-                      } else {
+                      if(sp.getString('user_id').toString() == _list[1].uid.toString()){
+                        MyUtils.goTransparentRFPage(context, const MyInfoPage());
+                      }else{
                         sp.setString('other_id', _list[1].uid.toString());
-                        MyUtils.goTransparentRFPage(
-                            context,
-                            PeopleInfoPage(
-                              otherId: _list[1].uid.toString(),
-                            ));
+                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[1].uid.toString(),));
                       }
                     }
                   }),
@@ -305,7 +274,7 @@ class _MeiLiMonthPageState extends State<MeiLiMonthPage> {
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        WidgetUtils.CricleImagess(55, 55, _list[1].avatar!),
+                        WidgetUtils.CricleImagess(100.h, 100.h, _list[1].avatar!),
                         WidgetUtils.showImages(
                             'assets/images/py_two.png',
                             ScreenUtil().setHeight(154),
@@ -313,9 +282,7 @@ class _MeiLiMonthPageState extends State<MeiLiMonthPage> {
                         Positioned(
                             bottom: 70.h,
                             child: WidgetUtils.onlyTextCenter(
-                                _list[1].nickname!.length > 4
-                                    ? '${_list[1].nickname!.substring(0, 4)}...'
-                                    : _list[1].nickname!,
+                                _list[1].nickname!.length > 4 ? '${_list[1].nickname!.substring(0,4)}...' : _list[1].nickname!,
                                 StyleUtils.getCommonTextStyle(
                                     color: MyColors.homeTopBG,
                                     fontSize: 28.sp,
@@ -325,36 +292,33 @@ class _MeiLiMonthPageState extends State<MeiLiMonthPage> {
                             bottom: 10.h,
                             child: _list[1].liveStatus == 1
                                 ? Container(
-                                    margin: EdgeInsets.only(
-                                        top: ScreenUtil().setHeight(98)),
-                                    width: 150.w,
-                                    height: 50.h,
-                                    child: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        WidgetUtils.showImagesFill(
-                                            "assets/images/py_tishi.png",
-                                            35.h,
-                                            150.w),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            WidgetUtils.showImages(
-                                                'assets/images/zhibo2.webp',
-                                                ScreenUtil().setWidth(20),
-                                                ScreenUtil().setWidth(20)),
-                                            WidgetUtils.onlyText(
-                                                '在房间',
-                                                StyleUtils.getCommonTextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: ScreenUtil()
-                                                        .setSp(20))),
-                                          ],
-                                        )
-                                      ],
-                                    ) /* add child content here */,
+                              margin: EdgeInsets.only(
+                                  top: ScreenUtil().setHeight(98)),
+                              width: 150.w,
+                              height: 50.h,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  WidgetUtils.showImagesFill("assets/images/py_tishi.png", 35.h, 150.w),
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
+                                    children: [
+                                      WidgetUtils.showImages(
+                                          'assets/images/zhibo2.webp',
+                                          ScreenUtil().setWidth(20),
+                                          ScreenUtil().setWidth(20)),
+                                      WidgetUtils.onlyText(
+                                          '在房间',
+                                          StyleUtils.getCommonTextStyle(
+                                              color: Colors.white,
+                                              fontSize:
+                                              ScreenUtil().setSp(20))),
+                                    ],
                                   )
+                                ],
+                              ) /* add child content here */,
+                            )
                                 : const Text(''))
                       ],
                     ),
@@ -363,19 +327,13 @@ class _MeiLiMonthPageState extends State<MeiLiMonthPage> {
                 WidgetUtils.commonSizedBox(0, 4),
                 GestureDetector(
                   onTap: (() {
-                    if (MyUtils.checkClick()) {
+                    if(MyUtils.checkClick()){
                       // 如果点击的是自己，进入自己的主页
-                      if (sp.getString('user_id').toString() ==
-                          _list[0].uid.toString()) {
-                        MyUtils.goTransparentRFPage(
-                            context, const MyInfoPage());
-                      } else {
+                      if(sp.getString('user_id').toString() == _list[0].uid.toString()){
+                        MyUtils.goTransparentRFPage(context, const MyInfoPage());
+                      }else{
                         sp.setString('other_id', _list[0].uid.toString());
-                        MyUtils.goTransparentRFPage(
-                            context,
-                            PeopleInfoPage(
-                              otherId: _list[0].uid.toString(),
-                            ));
+                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[0].uid.toString(),));
                       }
                     }
                   }),
@@ -387,15 +345,14 @@ class _MeiLiMonthPageState extends State<MeiLiMonthPage> {
                       alignment: Alignment.center,
                       children: [
                         Positioned(
-                            top: 60.h,
-                            child: WidgetUtils.CricleImagess(
-                                90, 90, _list[0].avatar!)),
+                            top:50.h,
+                            child: WidgetUtils.CricleImagess(160.h, 160.h, _list[0].avatar!)),
                         Positioned(
-                          top: 10.h,
+                          top:10.h,
                           child: SizedBox(
                             height: ScreenUtil().setHeight(231),
                             width: ScreenUtil().setWidth(228),
-                            child: WidgetUtils.showImages(
+                            child:  WidgetUtils.showImages(
                                 'assets/images/py_one.png',
                                 ScreenUtil().setHeight(231),
                                 ScreenUtil().setWidth(228)),
@@ -405,43 +362,38 @@ class _MeiLiMonthPageState extends State<MeiLiMonthPage> {
                             bottom: 40.h,
                             child: _list[0].liveStatus == 1
                                 ? Container(
-                                    margin: EdgeInsets.only(
-                                        top: ScreenUtil().setHeight(98)),
-                                    width: 150.w,
-                                    height: 50.h,
-                                    child: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        WidgetUtils.showImagesFill(
-                                            "assets/images/py_tishi.png",
-                                            35.h,
-                                            150.w),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            WidgetUtils.showImages(
-                                                'assets/images/zhibo2.webp',
-                                                ScreenUtil().setWidth(20),
-                                                ScreenUtil().setWidth(20)),
-                                            WidgetUtils.onlyText(
-                                                '在房间',
-                                                StyleUtils.getCommonTextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: ScreenUtil()
-                                                        .setSp(20))),
-                                          ],
-                                        )
-                                      ],
-                                    ) /* add child content here */,
+                              margin: EdgeInsets.only(
+                                  top: ScreenUtil().setHeight(98)),
+                              width: 150.w,
+                              height: 50.h,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  WidgetUtils.showImagesFill("assets/images/py_tishi.png", 35.h, 150.w),
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
+                                    children: [
+                                      WidgetUtils.showImages(
+                                          'assets/images/zhibo2.webp',
+                                          ScreenUtil().setWidth(20),
+                                          ScreenUtil().setWidth(20)),
+                                      WidgetUtils.onlyText(
+                                          '在房间',
+                                          StyleUtils.getCommonTextStyle(
+                                              color: Colors.white,
+                                              fontSize:
+                                              ScreenUtil().setSp(20))),
+                                    ],
                                   )
+                                ],
+                              ) /* add child content here */,
+                            )
                                 : const Text('')),
                         Positioned(
                           bottom: 100.h,
                           child: WidgetUtils.onlyTextBottom(
-                              _list[0].nickname!.length > 8
-                                  ? '${_list[0].nickname!.substring(0, 8)}...'
-                                  : _list[0].nickname!,
+                              _list[0].nickname!.length > 8 ? '${_list[0].nickname!.substring(0,8)}...' : _list[0].nickname!,
                               StyleUtils.getCommonTextStyle(
                                   color: MyColors.homeTopBG,
                                   fontSize: ScreenUtil().setSp(30),
@@ -452,70 +404,62 @@ class _MeiLiMonthPageState extends State<MeiLiMonthPage> {
                   ),
                 ),
                 WidgetUtils.commonSizedBox(0, 4),
-                Opacity(
-                  opacity: 0,
-                  child: Container(
-                    margin: EdgeInsets.only(top: 20.h),
-                    height: ScreenUtil().setHeight(400),
-                    width: ScreenUtil().setWidth(180),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        WidgetUtils.CricleImagess(55, 55, _list[1].avatar!),
-                        WidgetUtils.showImages(
-                            'assets/images/py_three.png',
-                            ScreenUtil().setHeight(154),
-                            ScreenUtil().setWidth(146)),
-                        Positioned(
-                            bottom: 70.h,
-                            child: WidgetUtils.onlyTextCenter(
-                                _list[1].nickname!.length > 4
-                                    ? '${_list[1].nickname!.substring(0, 4)}...'
-                                    : _list[1].nickname!,
-                                StyleUtils.getCommonTextStyle(
-                                    color: MyColors.homeTopBG,
-                                    fontSize: 28.sp,
-                                    fontWeight: FontWeight.w600))),
-                        Positioned(
-                            right: 0.w,
-                            bottom: 10.h,
-                            child: _list[1].liveStatus == 0
-                                ? Container(
-                                    margin: EdgeInsets.only(
-                                        top: ScreenUtil().setHeight(98)),
-                                    width: 150.w,
-                                    height: 50.h,
-                                    child: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        WidgetUtils.showImagesFill(
-                                            "assets/images/py_tishi.png",
-                                            35.h,
-                                            150.w),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            WidgetUtils.showImages(
-                                                'assets/images/zhibo2.webp',
-                                                ScreenUtil().setWidth(20),
-                                                ScreenUtil().setWidth(20)),
-                                            WidgetUtils.onlyText(
-                                                '在房间',
-                                                StyleUtils.getCommonTextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: ScreenUtil()
-                                                        .setSp(20))),
-                                          ],
-                                        )
-                                      ],
-                                    ) /* add child content here */,
-                                  )
-                                : const Text(''))
-                      ],
-                    ),
+                Opacity(opacity: 0, child: Container(
+                  margin: EdgeInsets.only(top: 20.h),
+                  height: ScreenUtil().setHeight(400),
+                  width: ScreenUtil().setWidth(180),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      WidgetUtils.CricleImagess(100.h, 100.h, _list[1].avatar!),
+                      WidgetUtils.showImages(
+                          'assets/images/py_three.png',
+                          ScreenUtil().setHeight(154),
+                          ScreenUtil().setWidth(146)),
+                      Positioned(
+                          bottom: 70.h,
+                          child: WidgetUtils.onlyTextCenter(
+                              _list[1].nickname!.length > 4 ? '${_list[1].nickname!.substring(0,4)}...' : _list[1].nickname!,
+                              StyleUtils.getCommonTextStyle(
+                                  color: MyColors.homeTopBG,
+                                  fontSize: 28.sp,
+                                  fontWeight: FontWeight.w600))),
+                      Positioned(
+                          right: 0.w,
+                          bottom: 10.h,
+                          child: _list[1].liveStatus == 0
+                              ? Container(
+                            margin: EdgeInsets.only(
+                                top: ScreenUtil().setHeight(98)),
+                            width: 150.w,
+                            height: 50.h,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                WidgetUtils.showImagesFill("assets/images/py_tishi.png", 35.h, 150.w),
+                                Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.center,
+                                  children: [
+                                    WidgetUtils.showImages(
+                                        'assets/images/zhibo2.webp',
+                                        ScreenUtil().setWidth(20),
+                                        ScreenUtil().setWidth(20)),
+                                    WidgetUtils.onlyText(
+                                        '在房间',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: Colors.white,
+                                            fontSize:
+                                            ScreenUtil().setSp(20))),
+                                  ],
+                                )
+                              ],
+                            ) /* add child content here */,
+                          )
+                              : const Text(''))
+                    ],
                   ),
-                ),
+                ),),
                 const Expanded(child: Text('')),
               ],
             ),
@@ -528,19 +472,13 @@ class _MeiLiMonthPageState extends State<MeiLiMonthPage> {
                 const Expanded(child: Text('')),
                 GestureDetector(
                   onTap: (() {
-                    if (MyUtils.checkClick()) {
+                    if(MyUtils.checkClick()){
                       // 如果点击的是自己，进入自己的主页
-                      if (sp.getString('user_id').toString() ==
-                          _list[1].uid.toString()) {
-                        MyUtils.goTransparentRFPage(
-                            context, const MyInfoPage());
-                      } else {
+                      if(sp.getString('user_id').toString() == _list[1].uid.toString()){
+                        MyUtils.goTransparentRFPage(context, const MyInfoPage());
+                      }else{
                         sp.setString('other_id', _list[1].uid.toString());
-                        MyUtils.goTransparentRFPage(
-                            context,
-                            PeopleInfoPage(
-                              otherId: _list[1].uid.toString(),
-                            ));
+                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[1].uid.toString(),));
                       }
                     }
                   }),
@@ -551,7 +489,7 @@ class _MeiLiMonthPageState extends State<MeiLiMonthPage> {
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        WidgetUtils.CricleImagess(55, 55, _list[1].avatar!),
+                        WidgetUtils.CricleImagess(100.h, 100.h, _list[1].avatar!),
                         WidgetUtils.showImages(
                             'assets/images/py_two.png',
                             ScreenUtil().setHeight(154),
@@ -559,9 +497,7 @@ class _MeiLiMonthPageState extends State<MeiLiMonthPage> {
                         Positioned(
                             bottom: 70.h,
                             child: WidgetUtils.onlyTextCenter(
-                                _list[1].nickname!.length > 4
-                                    ? '${_list[1].nickname!.substring(0, 4)}...'
-                                    : _list[1].nickname!,
+                                _list[1].nickname!.length > 4 ? '${_list[1].nickname!.substring(0,4)}...' : _list[1].nickname!,
                                 StyleUtils.getCommonTextStyle(
                                     color: MyColors.homeTopBG,
                                     fontSize: 28.sp,
@@ -571,36 +507,33 @@ class _MeiLiMonthPageState extends State<MeiLiMonthPage> {
                             bottom: 10.h,
                             child: _list[1].liveStatus == 1
                                 ? Container(
-                                    margin: EdgeInsets.only(
-                                        top: ScreenUtil().setHeight(98)),
-                                    width: 150.w,
-                                    height: 50.h,
-                                    child: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        WidgetUtils.showImagesFill(
-                                            "assets/images/py_tishi.png",
-                                            35.h,
-                                            150.w),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            WidgetUtils.showImages(
-                                                'assets/images/zhibo2.webp',
-                                                ScreenUtil().setWidth(20),
-                                                ScreenUtil().setWidth(20)),
-                                            WidgetUtils.onlyText(
-                                                '在房间',
-                                                StyleUtils.getCommonTextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: ScreenUtil()
-                                                        .setSp(20))),
-                                          ],
-                                        )
-                                      ],
-                                    ) /* add child content here */,
+                              margin: EdgeInsets.only(
+                                  top: ScreenUtil().setHeight(98)),
+                              width: 150.w,
+                              height: 50.h,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  WidgetUtils.showImagesFill("assets/images/py_tishi.png", 35.h, 150.w),
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
+                                    children: [
+                                      WidgetUtils.showImages(
+                                          'assets/images/zhibo2.webp',
+                                          ScreenUtil().setWidth(20),
+                                          ScreenUtil().setWidth(20)),
+                                      WidgetUtils.onlyText(
+                                          '在房间',
+                                          StyleUtils.getCommonTextStyle(
+                                              color: Colors.white,
+                                              fontSize:
+                                              ScreenUtil().setSp(20))),
+                                    ],
                                   )
+                                ],
+                              ) /* add child content here */,
+                            )
                                 : const Text(''))
                       ],
                     ),
@@ -609,19 +542,13 @@ class _MeiLiMonthPageState extends State<MeiLiMonthPage> {
                 WidgetUtils.commonSizedBox(0, 4),
                 GestureDetector(
                   onTap: (() {
-                    if (MyUtils.checkClick()) {
+                    if(MyUtils.checkClick()){
                       // 如果点击的是自己，进入自己的主页
-                      if (sp.getString('user_id').toString() ==
-                          _list[0].uid.toString()) {
-                        MyUtils.goTransparentRFPage(
-                            context, const MyInfoPage());
-                      } else {
+                      if(sp.getString('user_id').toString() == _list[0].uid.toString()){
+                        MyUtils.goTransparentRFPage(context, const MyInfoPage());
+                      }else{
                         sp.setString('other_id', _list[0].uid.toString());
-                        MyUtils.goTransparentRFPage(
-                            context,
-                            PeopleInfoPage(
-                              otherId: _list[0].uid.toString(),
-                            ));
+                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[0].uid.toString(),));
                       }
                     }
                   }),
@@ -633,15 +560,14 @@ class _MeiLiMonthPageState extends State<MeiLiMonthPage> {
                       alignment: Alignment.center,
                       children: [
                         Positioned(
-                            top: 60.h,
-                            child: WidgetUtils.CricleImagess(
-                                90, 90, _list[0].avatar!)),
+                            top:50.h,
+                            child: WidgetUtils.CricleImagess(160.h, 160.h, _list[0].avatar!)),
                         Positioned(
-                          top: 10.h,
+                          top:10.h,
                           child: SizedBox(
                             height: ScreenUtil().setHeight(231),
                             width: ScreenUtil().setWidth(228),
-                            child: WidgetUtils.showImages(
+                            child:  WidgetUtils.showImages(
                                 'assets/images/py_one.png',
                                 ScreenUtil().setHeight(231),
                                 ScreenUtil().setWidth(228)),
@@ -651,43 +577,38 @@ class _MeiLiMonthPageState extends State<MeiLiMonthPage> {
                             bottom: 40.h,
                             child: _list[0].liveStatus == 1
                                 ? Container(
-                                    margin: EdgeInsets.only(
-                                        top: ScreenUtil().setHeight(98)),
-                                    width: 150.w,
-                                    height: 50.h,
-                                    child: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        WidgetUtils.showImagesFill(
-                                            "assets/images/py_tishi.png",
-                                            35.h,
-                                            150.w),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            WidgetUtils.showImages(
-                                                'assets/images/zhibo2.webp',
-                                                ScreenUtil().setWidth(20),
-                                                ScreenUtil().setWidth(20)),
-                                            WidgetUtils.onlyText(
-                                                '在房间',
-                                                StyleUtils.getCommonTextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: ScreenUtil()
-                                                        .setSp(20))),
-                                          ],
-                                        )
-                                      ],
-                                    ) /* add child content here */,
+                              margin: EdgeInsets.only(
+                                  top: ScreenUtil().setHeight(98)),
+                              width: 150.w,
+                              height: 50.h,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  WidgetUtils.showImagesFill("assets/images/py_tishi.png", 35.h, 150.w),
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
+                                    children: [
+                                      WidgetUtils.showImages(
+                                          'assets/images/zhibo2.webp',
+                                          ScreenUtil().setWidth(20),
+                                          ScreenUtil().setWidth(20)),
+                                      WidgetUtils.onlyText(
+                                          '在房间',
+                                          StyleUtils.getCommonTextStyle(
+                                              color: Colors.white,
+                                              fontSize:
+                                              ScreenUtil().setSp(20))),
+                                    ],
                                   )
+                                ],
+                              ) /* add child content here */,
+                            )
                                 : const Text('')),
                         Positioned(
                           bottom: 100.h,
                           child: WidgetUtils.onlyTextBottom(
-                              _list[0].nickname!.length > 8
-                                  ? '${_list[0].nickname!.substring(0, 8)}...'
-                                  : _list[0].nickname!,
+                              _list[0].nickname!.length > 8 ? '${_list[0].nickname!.substring(0,8)}...' : _list[0].nickname!,
                               StyleUtils.getCommonTextStyle(
                                   color: MyColors.homeTopBG,
                                   fontSize: ScreenUtil().setSp(30),
@@ -700,19 +621,13 @@ class _MeiLiMonthPageState extends State<MeiLiMonthPage> {
                 WidgetUtils.commonSizedBox(0, 4),
                 GestureDetector(
                   onTap: (() {
-                    if (MyUtils.checkClick()) {
+                    if(MyUtils.checkClick()){
                       // 如果点击的是自己，进入自己的主页
-                      if (sp.getString('user_id').toString() ==
-                          _list[2].uid.toString()) {
-                        MyUtils.goTransparentRFPage(
-                            context, const MyInfoPage());
-                      } else {
+                      if(sp.getString('user_id').toString() == _list[2].uid.toString()){
+                        MyUtils.goTransparentRFPage(context, const MyInfoPage());
+                      }else{
                         sp.setString('other_id', _list[2].uid.toString());
-                        MyUtils.goTransparentRFPage(
-                            context,
-                            PeopleInfoPage(
-                              otherId: _list[2].uid.toString(),
-                            ));
+                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[2].uid.toString(),));
                       }
                     }
                   }),
@@ -723,7 +638,7 @@ class _MeiLiMonthPageState extends State<MeiLiMonthPage> {
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        WidgetUtils.CricleImagess(55, 55, _list[2].avatar!),
+                        WidgetUtils.CricleImagess(100.h, 100.h, _list[2].avatar!),
                         WidgetUtils.showImages(
                             'assets/images/py_three.png',
                             ScreenUtil().setHeight(154),
@@ -731,9 +646,7 @@ class _MeiLiMonthPageState extends State<MeiLiMonthPage> {
                         Positioned(
                             bottom: 70.h,
                             child: WidgetUtils.onlyTextCenter(
-                                _list[2].nickname!.length > 4
-                                    ? '${_list[2].nickname!.substring(0, 4)}...'
-                                    : _list[2].nickname!,
+                                _list[2].nickname!.length > 4 ? '${_list[2].nickname!.substring(0,4)}...' : _list[2].nickname!,
                                 StyleUtils.getCommonTextStyle(
                                     color: MyColors.homeTopBG,
                                     fontSize: 28.sp,
@@ -743,36 +656,33 @@ class _MeiLiMonthPageState extends State<MeiLiMonthPage> {
                             bottom: 10.h,
                             child: _list[2].liveStatus == 1
                                 ? Container(
-                                    margin: EdgeInsets.only(
-                                        top: ScreenUtil().setHeight(98)),
-                                    width: 150.w,
-                                    height: 50.h,
-                                    child: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        WidgetUtils.showImagesFill(
-                                            "assets/images/py_tishi.png",
-                                            35.h,
-                                            150.w),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            WidgetUtils.showImages(
-                                                'assets/images/zhibo2.webp',
-                                                ScreenUtil().setWidth(20),
-                                                ScreenUtil().setWidth(20)),
-                                            WidgetUtils.onlyText(
-                                                '在房间',
-                                                StyleUtils.getCommonTextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: ScreenUtil()
-                                                        .setSp(20))),
-                                          ],
-                                        )
-                                      ],
-                                    ) /* add child content here */,
+                              margin: EdgeInsets.only(
+                                  top: ScreenUtil().setHeight(98)),
+                              width: 150.w,
+                              height: 50.h,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  WidgetUtils.showImagesFill("assets/images/py_tishi.png", 35.h, 150.w),
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.center,
+                                    children: [
+                                      WidgetUtils.showImages(
+                                          'assets/images/zhibo2.webp',
+                                          ScreenUtil().setWidth(20),
+                                          ScreenUtil().setWidth(20)),
+                                      WidgetUtils.onlyText(
+                                          '在房间',
+                                          StyleUtils.getCommonTextStyle(
+                                              color: Colors.white,
+                                              fontSize:
+                                              ScreenUtil().setSp(20))),
+                                    ],
                                   )
+                                ],
+                              ) /* add child content here */,
+                            )
                                 : const Text(''))
                       ],
                     ),

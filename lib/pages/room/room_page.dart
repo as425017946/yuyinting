@@ -107,13 +107,21 @@ class _RoomPageState extends State<RoomPage>
       } else {
         //网络图
         final videoItem = await _loadSVGA(m['svgaBool'], m['svgaUrl']);
-        videoItem.autorelease = false;
-        animationControllerSL?.videoItem = videoItem;
-        animationControllerSL
-            ?.forward() // Try to use .forward() .reverse()
-            .whenComplete(() => animationControllerSL?.videoItem = null);
-        // 监听动画
-        animationControllerSL?.addListener(_animListener);
+        if(videoItem != null){
+          videoItem.autorelease = false;
+          animationControllerSL?.videoItem = videoItem;
+          animationControllerSL
+              ?.forward() // Try to use .forward() .reverse()
+              .whenComplete(() => animationControllerSL?.videoItem = null);
+          // 监听动画
+          animationControllerSL?.addListener(_animListener);
+        }else{
+          setState(() {
+            listUrl.removeAt(0);
+          });
+          //礼物地址没有，直接返回，不进行后续操作
+          return;
+        }
       }
     }
   }
@@ -2327,11 +2335,11 @@ class _RoomPageState extends State<RoomPage>
 
                       /// 聊天除使用
                       Positioned(
-                        bottom: isDevices == 'ios' ? 70.h : 100.h,
+                        bottom: 100.h,
                         child:
                             /// 消息列表最外层
                             SizedBox(
-                          height: 590.h,
+                          height: isDevices == 'ios' ?  560.h : 590.h,
                           width: 420.h,
                           child: Column(
                             children: [

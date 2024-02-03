@@ -62,6 +62,9 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
   @override
   void initState() {
     super.initState();
+    setState(() {
+      sp.setBool('joinRoom',false);
+    });
     _currentIndex = 0;
     _controller = PageController(
       initialPage: 0,
@@ -402,7 +405,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                                   if(MyUtils.checkClick() && sp.getString('roomID').toString() == roomID){
                                     MyToastUtils.showToastBottom('您已在本房间');
                                   }else{
-                                    if(MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
+                                    if(sp.getBool('joinRoom') == false) {
                                       setState(() {
                                         sp.setBool('joinRoom',true);
                                       });

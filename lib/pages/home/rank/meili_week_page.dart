@@ -59,7 +59,7 @@ class _MeiLiWeekPageState extends State<MeiLiWeekPage> {
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        WidgetUtils.CricleImagess(55, 55, _list[0].avatar!),
+                        WidgetUtils.CricleImagess(100.h, 100.h, _list[0].avatar!),
                         WidgetUtils.showImages(
                             'assets/images/py_two.png',
                             ScreenUtil().setHeight(154),
@@ -130,8 +130,8 @@ class _MeiLiWeekPageState extends State<MeiLiWeekPage> {
                       alignment: Alignment.center,
                       children: [
                         Positioned(
-                            top:60.h,
-                            child: WidgetUtils.CricleImagess(90, 90, _list[0].avatar!)),
+                            top:50.h,
+                            child: WidgetUtils.CricleImagess(160.h, 160.h, _list[0].avatar!)),
                         Positioned(
                           top:10.h,
                           child: SizedBox(
@@ -196,7 +196,7 @@ class _MeiLiWeekPageState extends State<MeiLiWeekPage> {
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      WidgetUtils.CricleImagess(55, 55, _list[0].avatar!),
+                      WidgetUtils.CricleImagess(100.h, 100.h, _list[0].avatar!),
                       WidgetUtils.showImages(
                           'assets/images/py_three.png',
                           ScreenUtil().setHeight(154),
@@ -274,7 +274,7 @@ class _MeiLiWeekPageState extends State<MeiLiWeekPage> {
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        WidgetUtils.CricleImagess(55, 55, _list[1].avatar!),
+                        WidgetUtils.CricleImagess(100.h, 100.h, _list[1].avatar!),
                         WidgetUtils.showImages(
                             'assets/images/py_two.png',
                             ScreenUtil().setHeight(154),
@@ -345,8 +345,8 @@ class _MeiLiWeekPageState extends State<MeiLiWeekPage> {
                       alignment: Alignment.center,
                       children: [
                         Positioned(
-                            top:60.h,
-                            child: WidgetUtils.CricleImagess(90, 90, _list[0].avatar!)),
+                            top:50.h,
+                            child: WidgetUtils.CricleImagess(160.h, 160.h, _list[0].avatar!)),
                         Positioned(
                           top:10.h,
                           child: SizedBox(
@@ -411,7 +411,7 @@ class _MeiLiWeekPageState extends State<MeiLiWeekPage> {
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      WidgetUtils.CricleImagess(55, 55, _list[1].avatar!),
+                      WidgetUtils.CricleImagess(100.h, 100.h, _list[1].avatar!),
                       WidgetUtils.showImages(
                           'assets/images/py_three.png',
                           ScreenUtil().setHeight(154),
@@ -489,7 +489,7 @@ class _MeiLiWeekPageState extends State<MeiLiWeekPage> {
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        WidgetUtils.CricleImagess(55, 55, _list[1].avatar!),
+                        WidgetUtils.CricleImagess(100.h, 100.h, _list[1].avatar!),
                         WidgetUtils.showImages(
                             'assets/images/py_two.png',
                             ScreenUtil().setHeight(154),
@@ -560,8 +560,8 @@ class _MeiLiWeekPageState extends State<MeiLiWeekPage> {
                       alignment: Alignment.center,
                       children: [
                         Positioned(
-                            top:60.h,
-                            child: WidgetUtils.CricleImagess(90, 90, _list[0].avatar!)),
+                            top:50.h,
+                            child: WidgetUtils.CricleImagess(160.h, 160.h, _list[0].avatar!)),
                         Positioned(
                           top:10.h,
                           child: SizedBox(
@@ -638,7 +638,7 @@ class _MeiLiWeekPageState extends State<MeiLiWeekPage> {
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        WidgetUtils.CricleImagess(55, 55, _list[2].avatar!),
+                        WidgetUtils.CricleImagess(100.h, 100.h, _list[2].avatar!),
                         WidgetUtils.showImages(
                             'assets/images/py_three.png',
                             ScreenUtil().setHeight(154),

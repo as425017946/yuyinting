@@ -27,7 +27,7 @@ class _RoomSendInfoPageState extends State<RoomSendInfoPage> {
     super.initState();
     if(widget.info!.isNotEmpty){
       setState(() {
-        controller.text = '@${widget.info!} ';
+        controller.text = '@${widget.info!} Hi';
       });
     }
   }
