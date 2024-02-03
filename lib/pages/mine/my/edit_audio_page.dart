@@ -188,20 +188,23 @@ class _EditAudioPageState extends State<EditAudioPage> {
     LogE('录音地址 == $path');
     File file = File(path);
     file.openWrite();
-    _mRecorder!
-        .startRecorder(
-      toFile: path,
-      codec: _codec,
-      audioSource: AudioSource.microphone,
-    )
-        .then((value) {
-      setState(() {
-        audioUrl = '';
-        mediaRecord = false;
-        hasRecord = false;
-        _mPath = path;
+    await _mRecorder!.openRecorder();
+    if (_mRecorder!.isStopped) {
+      _mRecorder!
+          .startRecorder(
+        toFile: path,
+        codec: _codec,
+        audioSource: AudioSource.microphone,
+      )
+          .then((value) {
+        setState(() {
+          audioUrl = '';
+          mediaRecord = false;
+          hasRecord = false;
+          _mPath = path;
+        });
       });
-    });
+    }
   }
 
 //停止录音
