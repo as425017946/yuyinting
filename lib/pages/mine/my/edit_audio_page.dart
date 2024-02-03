@@ -182,48 +182,24 @@ class _EditAudioPageState extends State<EditAudioPage> {
         playRecord = false;
       });
     }
-    if(isDevices == 'ios'){
-      // 缓存目录
-      // Directory tempDir = await getTemporaryDirectory();
-      var time = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-      Directory appDir = await getApplicationDocumentsDirectory();
-      // 文件名称
-      String path = '${appDir.path}/$time${ext[Codec.aacADTS.index]}';
-      await _mRecorder!.openRecorder();
-      LogE('录音地址:$path');
-      _mRecorder!
-          .startRecorder(
-        toFile: path,
-        codec:  _codec,
-        audioSource: AudioSource.microphone,
-      )
-          .then((value) {
-        setState(() {
-          mediaRecord = false;
-          hasRecord = false;
-          _mPath = path;
-        });
+    Directory tempDir = await getTemporaryDirectory();
+    var time = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    String path = '${tempDir.path}/$time${ext[Codec.aacADTS.index]}';
+    LogE('录音地址 == $path');
+    _mRecorder!
+        .startRecorder(
+      toFile: path,
+      codec: _codec,
+      audioSource: AudioSource.microphone,
+    )
+        .then((value) {
+      setState(() {
+        audioUrl = '';
+        mediaRecord = false;
+        hasRecord = false;
+        _mPath = path;
       });
-    }else{
-      Directory tempDir = await getTemporaryDirectory();
-      var time = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-      String path = '${tempDir.path}/$time${ext[Codec.aacADTS.index]}';
-      LogE('录音地址 == $path');
-      _mRecorder!
-          .startRecorder(
-        toFile: path,
-        codec: _codec,
-        audioSource: AudioSource.microphone,
-      )
-          .then((value) {
-        setState(() {
-          audioUrl = '';
-          mediaRecord = false;
-          hasRecord = false;
-          _mPath = path;
-        });
-      });
-    }
+    });
   }
 
 //停止录音
