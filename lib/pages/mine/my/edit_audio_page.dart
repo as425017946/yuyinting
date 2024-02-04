@@ -79,12 +79,13 @@ class _EditAudioPageState extends State<EditAudioPage> {
   @override
   void initState() {
     // TODO: implement initState
-    init();
     if (Platform.isAndroid) {
+      getPermissionStatus();
       setState(() {
         isDevices = 'android';
       });
     }else if (Platform.isIOS){
+      init();
       setState(() {
         isDevices = 'ios';
       });
@@ -249,31 +250,13 @@ class _EditAudioPageState extends State<EditAudioPage> {
   }
 
 //播放录音
-  void play() {
+  void play() async{
     LogE('录音地址$_path');
     LogE('录音地址**$audioUrl');
-    assert(_mPlayerIsInited && hasRecord);
-    _mPlayer!
+    await _mPlayer!
         .startPlayer(
             fromURI: _path == "" ? audioUrl : _path,
             codec: _codec,
-            whenFinished: () {
-              setState(() {
-                playRecord = false;
-              });
-            })
-        .then((value) {
-      setState(() {
-        playRecord = true;
-      });
-    });
-  }
-
-  //播放录音
-  void play2() {
-    _mPlayer!
-        .startPlayer(
-            fromURI: audioUrl,
             whenFinished: () {
               setState(() {
                 playRecord = false;
