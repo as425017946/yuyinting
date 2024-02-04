@@ -53,7 +53,6 @@ class _EditAudioPageState extends State<EditAudioPage> {
   int length = 1;
 
   Codec _codec = Codec.aacADTS;
-  String _mPath = ''; //录音文件路径
   FlutterSoundPlayer? _mPlayer = FlutterSoundPlayer();
 
   bool _mPlayerIsInited = false;
@@ -251,12 +250,12 @@ class _EditAudioPageState extends State<EditAudioPage> {
 
 //播放录音
   void play() {
-    LogE('录音地址$_mPath');
+    LogE('录音地址$_path');
     LogE('录音地址**$audioUrl');
     assert(_mPlayerIsInited && hasRecord);
     _mPlayer!
         .startPlayer(
-            fromURI: _mPath == "" ? audioUrl : _mPath,
+            fromURI: _path == "" ? audioUrl : _path,
             codec: _codec,
             whenFinished: () {
               setState(() {
@@ -465,8 +464,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
                                       MyToastUtils.showToastBottom(
                                           '请先选择一个声音标签');
                                     } else {
-                                      doPostPostFileUpload(
-                                          _mPath == "" ? audioUrl : _mPath);
+                                      doPostPostFileUpload(_path);
                                     }
                                   }
                                 }),
