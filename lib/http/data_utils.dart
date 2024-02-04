@@ -85,7 +85,8 @@ class DataUtils{
 
   ///判断网络
   static Future<pdAddressBean> postPdAddress(Map<String,dynamic> params) async {
-    print("检查网络：$params");
+    print("检查网络参数：$params");
+    print("检查网络地址：${MyHttpConfig.pdAddress}");
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.pdAddress,
         {}, params);
     print("检查网络：${respons}");

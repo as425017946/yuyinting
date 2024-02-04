@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:auto_orientation/auto_orientation.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -707,36 +709,32 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
 
   /// 判断当前网络，然后给返回适配的网络地址
   Future<void> doPostPdAddress() async {
-    Map<String, dynamic> params = <String, dynamic>{
-      'type': 'go',
-    };
-    try {
-      pdAddressBean bean = await DataUtils.postPdAddress(params);
-      switch (bean.code) {
-        case MyHttpConfig.successCode:
-          MyToastUtils.showToastBottom(bean.nodes!);
-          if(bean.nodes!.isNotEmpty){
-            setState(() {
-              sp.setString('isDian', bean.nodes!);
-            });
-          }else{
-            MyToastUtils.showToastBottom(MyConfig.errorHttpTitle);
-            // 直接杀死app
-            SystemNavigator.pop();
-          }
-          break;
-        case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
-          MyUtils.jumpLogin(context);
-          break;
-        default:
-          MyToastUtils.showToastBottom(bean.msg!);
-          break;
+    FormData formdata = FormData.fromMap(
+      {
+        'type': 'go',
+      },
+    );
+    BaseOptions option = BaseOptions(
+        contentType: 'multipart/form-data', responseType: ResponseType.plain);
+    option.headers["Authorization"] = sp.getString('user_token') ?? '';
+    Dio dio = Dio(option);
+    var respone = await dio.post('http://aa986.com:8300/address', data: formdata);
+    Map jsonResponse = json.decode(respone.data.toString());
+    LogE('网络请求$jsonResponse');
+    if (jsonResponse['code'] == 200) {
+      if(jsonResponse['nodes'].toString().isNotEmpty){
+        setState(() {
+          sp.setString('isDian', jsonResponse['nodes'].toString());
+        });
+      }else{
+        MyToastUtils.showToastBottom(MyConfig.errorHttpTitle);
+        // 直接杀死app
+        SystemNavigator.pop();
       }
-      Loading.dismiss();
-    } catch (e) {
-      Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }  else {
+      MyToastUtils.showToastBottom(MyConfig.errorHttpTitle);
+      // 直接杀死app
+      SystemNavigator.pop();
     }
   }
 }
