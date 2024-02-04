@@ -75,7 +75,8 @@ class _EditAudioPageState extends State<EditAudioPage> {
   var _path = "";
   var _duration = 0.0;
   var _maxLength = 15.0;
-
+  // 是否有麦克风权限
+  bool isMAI = false;
   @override
   void initState() {
     // TODO: implement initState
@@ -118,6 +119,21 @@ class _EditAudioPageState extends State<EditAudioPage> {
     await [Permission.microphone].request();
     //开启录音
     await recorderModule.openRecorder();
+    var status = await Permission.storage.request();
+    if (status.isGranted) {
+      setState(() {
+        isMAI = true;
+      });
+      // 用户已授予权限，可以访问文件
+      // 在这里执行打开文件等操作
+      LogE('权限同意');
+    } else {
+      setState(() {
+        isMAI = false;
+      });
+      // 用户拒绝了权限请求，需要处理此情况
+      LogE('权限拒绝');
+    }
     //设置订阅计时器
     await recorderModule
         .setSubscriptionDuration(const Duration(milliseconds: 10));
@@ -151,6 +167,9 @@ class _EditAudioPageState extends State<EditAudioPage> {
     //granted 通过，denied 被拒绝，permanentlyDenied 拒绝且不在提示
     PermissionStatus status = await permission.status;
     if (status.isGranted) {
+      setState(() {
+        isMAI = true;
+      });
       return true;
     } else if (status.isDenied) {
       requestPermission(permission);
@@ -159,6 +178,9 @@ class _EditAudioPageState extends State<EditAudioPage> {
     } else if (status.isRestricted) {
       requestPermission(permission);
     } else {}
+    setState(() {
+      isMAI = false;
+    });
     return false;
   }
 
@@ -189,24 +211,26 @@ class _EditAudioPageState extends State<EditAudioPage> {
       /// 监听录音
       _recorderSubscription = recorderModule.onProgress!.listen((e) {
         if (e != null && e.duration != null) {
-          DateTime date = new DateTime.fromMillisecondsSinceEpoch(
+          DateTime date = DateTime.fromMillisecondsSinceEpoch(
               e.duration.inMilliseconds,
               isUtc: true);
 
           if (date.second >= _maxLength) {
             print('===>  到达时常停止录音');
             setState(() {
+              recordText = '已完成录制${date.second}s';
               isPlay = 2;
             });
             _stopRecorder();
           }
           setState(() {
+            recordText = '已录制${date.second}s';
             print("时间：${date.second}");
             print("当前振幅：${e.decibels}");
           });
         }
       });
-      this.setState(() {
+      setState(() {
         _state = RecordPlayState.recording;
         _path = path;
         print("path == $path");
@@ -415,17 +439,22 @@ class _EditAudioPageState extends State<EditAudioPage> {
                               if (isPlay == 2) {
                                 play();
                               } else {
-                                setState(() {
-                                  if (isPlay == 0) {
-                                    //开始录音
-                                    _startRecorder();
-                                    isPlay = 1;
-                                  } else if (isPlay == 1) {
-                                    //停止录音
-                                    _stopRecorder();
-                                    isPlay = 2;
-                                  }
-                                });
+                                //有录音权限
+                                if(isMAI) {
+                                  setState(() {
+                                    if (isPlay == 0) {
+                                      //开始录音
+                                      _startRecorder();
+                                      isPlay = 1;
+                                    } else if (isPlay == 1) {
+                                      //停止录音
+                                      _stopRecorder();
+                                      isPlay = 2;
+                                    }
+                                  });
+                                }else{
+                                  MyToastUtils.showToastBottom('请在设置里面开启录音权限！');
+                                }
                               }
                             }
                           }),
