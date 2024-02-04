@@ -410,7 +410,6 @@ class _EditAudioPageState extends State<EditAudioPage> {
                             ? GestureDetector(
                                 onTap: (() {
                                   if (MyUtils.checkClick()) {
-                                    stopPlayer();
                                     setState(() {
                                       audioNum = 0; // 记录录了多久
                                       recordText = '开始录音';
