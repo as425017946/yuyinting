@@ -873,7 +873,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  /// 判断当前网络是电信还是其他 1电信 0 其他
+  /// 判断当前网络，然后给返回适配的网络地址
   Future<void> doPostPdAddress() async {
     try {
       pdAddressBean bean = await DataUtils.postPdAddress();

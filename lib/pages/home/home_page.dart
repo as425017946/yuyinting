@@ -705,16 +705,22 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
     }
   }
 
-  /// 判断当前网络
+  /// 判断当前网络，然后给返回适配的网络地址
   Future<void> doPostPdAddress() async {
     try {
       pdAddressBean bean = await DataUtils.postPdAddress();
       switch (bean.code) {
         case MyHttpConfig.successCode:
           MyToastUtils.showToastBottom(bean.nodes!);
-          setState(() {
-            sp.setString('isDian', bean.nodes!);
-          });
+          if(bean.nodes!.isNotEmpty){
+            setState(() {
+              sp.setString('isDian', bean.nodes!);
+            });
+          }else{
+            MyToastUtils.showToastBottom(MyConfig.errorHttpTitle);
+            // 直接杀死app
+            SystemNavigator.pop();
+          }
           break;
         case MyHttpConfig.errorloginCode:
         // ignore: use_build_context_synchronously
