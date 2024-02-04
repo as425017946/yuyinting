@@ -226,11 +226,12 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                       onTap: (() {
                         doPostComment('delete', comList[i].id.toString(), i);
                       }),
-                      child: WidgetUtils.onlyText(
-                          '删除',
-                          StyleUtils.getCommonTextStyle(
-                              color: MyColors.g9,
-                              fontSize: ScreenUtil().setSp(25))),
+                      child: Container(
+                        height: 25.h,
+                        width: 25.h,
+                        color: Colors.transparent,
+                        child: WidgetUtils.showImages('assets/images/room_pl_delete.png', 25.h, 25.h),
+                      ),
                     )
                   : const Text('')
             ],

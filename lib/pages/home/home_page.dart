@@ -707,8 +707,11 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
 
   /// 判断当前网络，然后给返回适配的网络地址
   Future<void> doPostPdAddress() async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'type': 'go',
+    };
     try {
-      pdAddressBean bean = await DataUtils.postPdAddress();
+      pdAddressBean bean = await DataUtils.postPdAddress(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
           MyToastUtils.showToastBottom(bean.nodes!);

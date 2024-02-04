@@ -13,8 +13,11 @@ class MyHttpConfig{
   // static  String baseURL = "http://192.168.0.51/api";
   //赵增测试环境
   // static  String baseURL = "http://192.168.0.53/api";
+  //测试环境
+  static  String baseURL = "http://18.163.74.49:8080/api";
+
   //正式环境  16是电信网络服务器 18正常服务器
-  static  String baseURL = "http://${sp.getString('isDian').toString()}:8080/api";
+  // static  String baseURL = "http://${sp.getString('isDian').toString()}:8080/api";
   // 正式环境
   // static  String baseURL = "http://www.aa986.com:8080/api";
   /// 文件上传
@@ -22,7 +25,7 @@ class MyHttpConfig{
   static String fileUpload = '$baseURL/upload/fileUpload';
 
   //判断网络
-  static  String pdAddress = "http://18.163.189.36:8300/address";
+  static  String pdAddress = "http://aa986.com:8300/address";
   //预下载接口
   static  String svgaGiftList = "$baseURL/gift/svgaGiftList";
   //登录接口
