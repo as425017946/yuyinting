@@ -120,13 +120,13 @@ class _ChatPageState extends State<ChatPage> {
   var _maxLength = 60.0;
   // 是否有麦克风权限
   bool isMAI = false;
-
   // 设备是安卓还是ios
   String isDevices = 'android';
+  bool _mPlayerIsInited = false;
   @override
   void initState() {
     // TODO: implement initState
-    initAgora();
+    sp.setBool('joinRoom',false);
     if (Platform.isAndroid) {
       getPermissionStatus();
       setState(() {
@@ -138,6 +138,11 @@ class _ChatPageState extends State<ChatPage> {
         isDevices = 'ios';
       });
     }
+    _mPlayer!.openPlayer().then((value) {
+      setState(() {
+        _mPlayerIsInited = true;
+      });
+    });
     super.initState();
     eventBus.fire(SubmitButtonBack(title: '清空红点'));
     doPostChatUserInfo();
@@ -171,16 +176,6 @@ class _ChatPageState extends State<ChatPage> {
 
     _focusNode = FocusNode();
     _focusNode!.addListener(_onFocusChange);
-  }
-
-  late RtcEngine _engine;
-  // 初始化应用
-  Future<void> initAgora() async {
-    // 获取权限
-    await [Permission.microphone].request();
-    // 创建 RtcEngine
-    _engine = await createAgoraRtcEngine();
-    _engine.enableAudio();
   }
 
   // 保存发红包的信息 type 1自己给别人发，2收到别人发的红包
@@ -277,6 +272,81 @@ class _ChatPageState extends State<ChatPage> {
         .setSubscriptionDuration(const Duration(milliseconds: 10));
   }
 
+  Future<bool> getPermissionStatus() async {
+    Permission permission = Permission.microphone;
+    //granted 通过，denied 被拒绝，permanentlyDenied 拒绝且不在提示
+    PermissionStatus status = await permission.status;
+    if (status.isGranted) {
+      openTheRecorder();
+      setState(() {
+        isMAI = true;
+      });
+      return true;
+    } else if (status.isDenied) {
+      requestPermission(permission);
+    } else if (status.isPermanentlyDenied) {
+      openAppSettings();
+    } else if (status.isRestricted) {
+      requestPermission(permission);
+    } else {}
+    setState(() {
+      isMAI = false;
+    });
+    return false;
+  }
+
+  ///申请权限
+  void requestPermission(Permission permission) async {
+    PermissionStatus status = await permission.request();
+    if (status.isPermanentlyDenied) {
+      openAppSettings();
+    }
+  }
+  Future<void> openTheRecorder() async {
+    var status = await Permission.storage.request();
+    if (status.isGranted) {
+      // 用户已授予权限，可以访问文件
+      // 在这里执行打开文件等操作
+      LogE('权限同意');
+    } else {
+      // 用户拒绝了权限请求，需要处理此情况
+      LogE('权限拒绝');
+    }
+    if (!kIsWeb) {
+      var status = await Permission.microphone.request();
+      if (status != PermissionStatus.granted) {
+        throw RecordingPermissionException('Microphone permission not granted');
+      }
+    }
+    await recorderModule!.openRecorder();
+    if (!await recorderModule!.isEncoderSupported(_codec) && kIsWeb) {
+      _codec = Codec.opusWebM;
+      _path = 'tau_file.webm';
+      if (!await recorderModule!.isEncoderSupported(_codec) && kIsWeb) {
+        return;
+      }
+    }
+    final session = await AudioSession.instance;
+    await session.configure(AudioSessionConfiguration(
+      avAudioSessionCategory: AVAudioSessionCategory.playAndRecord,
+      avAudioSessionCategoryOptions:
+      AVAudioSessionCategoryOptions.allowBluetooth |
+      AVAudioSessionCategoryOptions.defaultToSpeaker,
+      avAudioSessionMode: AVAudioSessionMode.spokenAudio,
+      avAudioSessionRouteSharingPolicy:
+      AVAudioSessionRouteSharingPolicy.defaultPolicy,
+      avAudioSessionSetActiveOptions: AVAudioSessionSetActiveOptions.none,
+      androidAudioAttributes: const AndroidAudioAttributes(
+        contentType: AndroidAudioContentType.speech,
+        flags: AndroidAudioFlags.none,
+        usage: AndroidAudioUsage.voiceCommunication,
+      ),
+      androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
+      androidWillPauseWhenDucked: true,
+    ));
+  }
+  /// 开始录音
+  late Timer _timer;
   /// 开始录音
   _startRecorder() async {
     try {
@@ -293,30 +363,56 @@ class _ChatPageState extends State<ChatPage> {
           sampleRate: 8000,
           audioSource: AudioSource.microphone);
       print('===>  开始录音');
+      if(isDevices == 'ios'){
+        /// 监听录音
+        _recorderSubscription = recorderModule.onProgress!.listen((e) {
+          if (e != null && e.duration != null) {
+            DateTime date = DateTime.fromMillisecondsSinceEpoch(
+                e.duration.inMilliseconds,
+                isUtc: true);
 
-      /// 监听录音
-      _recorderSubscription = recorderModule.onProgress!.listen((e) {
-        if (e != null && e.duration != null) {
-          DateTime date = DateTime.fromMillisecondsSinceEpoch(
-              e.duration.inMilliseconds,
-              isUtc: true);
-
-          if (date.second >= _maxLength) {
-            print('===>  到达时常停止录音');
+            if (date.second >= _maxLength) {
+              print('===>  到达时常停止录音');
+              setState(() {
+                audioNum = 60;
+                isPlay = 2;
+              });
+              _stopRecorder();
+            }
             setState(() {
-              audioNum = 60;
+              audioNum = date.second;
+              print("录制声音：$audioNum");
+              print("时间：${date.second}");
+              print("当前振幅：${e.decibels}");
+            });
+          }
+        });
+        setState(() {
+          _state = RecordPlayState.recording;
+          _path = path;
+          print("path == $path");
+        });
+      }else{
+        _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+          if (isPlay == 2) {
+            LogE('停止了==');
+            _stopRecorder(); // 确保录音器停止并保存数据到文件
+            timer.cancel();
+          } else {
+            setState(() {
+              _maxLength--;
+              audioNum++;
+            });
+          }
+          if (_maxLength == 0) {
+            setState(() {
               isPlay = 2;
             });
+            timer.cancel();
             _stopRecorder();
           }
-          setState(() {
-            audioNum = date.second;
-            print("录制声音：$audioNum");
-            print("时间：${date.second}");
-            print("当前振幅：${e.decibels}");
-          });
-        }
-      });
+        });
+      }
       setState(() {
         _state = RecordPlayState.recording;
         _path = path;
@@ -823,36 +919,6 @@ class _ChatPageState extends State<ChatPage> {
           WidgetUtils.commonSizedBox(20.h, ScreenUtil().setHeight(10)),
         ],
       );
-    }
-  }
-
-  Future<bool> getPermissionStatus() async {
-    Permission permission = Permission.microphone;
-    //granted 通过，denied 被拒绝，permanentlyDenied 拒绝且不在提示
-    PermissionStatus status = await permission.status;
-    if (status.isGranted) {
-      setState(() {
-        isQuanxian = true;
-      });
-      return true;
-    } else if (status.isDenied) {
-      requestPermission(permission);
-    } else if (status.isPermanentlyDenied) {
-      openAppSettings();
-    } else if (status.isRestricted) {
-      requestPermission(permission);
-    } else {}
-    setState(() {
-      isQuanxian = false;
-    });
-    return false;
-  }
-
-  ///申请权限
-  void requestPermission(Permission permission) async {
-    PermissionStatus status = await permission.request();
-    if (status.isPermanentlyDenied) {
-      openAppSettings();
     }
   }
 

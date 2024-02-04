@@ -165,6 +165,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
     //granted 通过，denied 被拒绝，permanentlyDenied 拒绝且不在提示
     PermissionStatus status = await permission.status;
     if (status.isGranted) {
+      openTheRecorder();
       setState(() {
         isMAI = true;
       });
@@ -189,7 +190,52 @@ class _EditAudioPageState extends State<EditAudioPage> {
       openAppSettings();
     }
   }
+
+  Future<void> openTheRecorder() async {
+    var status = await Permission.storage.request();
+    if (status.isGranted) {
+      // 用户已授予权限，可以访问文件
+      // 在这里执行打开文件等操作
+      LogE('权限同意');
+    } else {
+      // 用户拒绝了权限请求，需要处理此情况
+      LogE('权限拒绝');
+    }
+    if (!kIsWeb) {
+      var status = await Permission.microphone.request();
+      if (status != PermissionStatus.granted) {
+        throw RecordingPermissionException('Microphone permission not granted');
+      }
+    }
+    await recorderModule!.openRecorder();
+    if (!await recorderModule!.isEncoderSupported(_codec) && kIsWeb) {
+      _codec = Codec.opusWebM;
+      _path = 'tau_file.webm';
+      if (!await recorderModule!.isEncoderSupported(_codec) && kIsWeb) {
+        return;
+      }
+    }
+    final session = await AudioSession.instance;
+    await session.configure(AudioSessionConfiguration(
+      avAudioSessionCategory: AVAudioSessionCategory.playAndRecord,
+      avAudioSessionCategoryOptions:
+      AVAudioSessionCategoryOptions.allowBluetooth |
+      AVAudioSessionCategoryOptions.defaultToSpeaker,
+      avAudioSessionMode: AVAudioSessionMode.spokenAudio,
+      avAudioSessionRouteSharingPolicy:
+      AVAudioSessionRouteSharingPolicy.defaultPolicy,
+      avAudioSessionSetActiveOptions: AVAudioSessionSetActiveOptions.none,
+      androidAudioAttributes: const AndroidAudioAttributes(
+        contentType: AndroidAudioContentType.speech,
+        flags: AndroidAudioFlags.none,
+        usage: AndroidAudioUsage.voiceCommunication,
+      ),
+      androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
+      androidWillPauseWhenDucked: true,
+    ));
+  }
   /// 开始录音
+  late Timer _timer;
   _startRecorder() async {
     try {
       Directory tempDir = await getTemporaryDirectory();
@@ -206,29 +252,57 @@ class _EditAudioPageState extends State<EditAudioPage> {
           audioSource: AudioSource.microphone);
       print('===>  开始录音');
 
-      /// 监听录音
-      _recorderSubscription = recorderModule.onProgress!.listen((e) {
-        if (e != null && e.duration != null) {
-          DateTime date = DateTime.fromMillisecondsSinceEpoch(
-              e.duration.inMilliseconds,
-              isUtc: true);
+      if(isDevices == 'ios'){
+        /// 监听录音
+        _recorderSubscription = recorderModule.onProgress!.listen((e) {
+          if (e != null && e.duration != null) {
+            DateTime date = DateTime.fromMillisecondsSinceEpoch(
+                e.duration.inMilliseconds,
+                isUtc: true);
 
-          if (date.second >= _maxLength) {
-            print('===>  到达时常停止录音');
+            if (date.second >= _maxLength) {
+              print('===>  到达时常停止录音');
+              setState(() {
+                recordText = '已完成录制${date.second}s';
+                isPlay = 2;
+              });
+              _stopRecorder();
+            }
             setState(() {
-              recordText = '已完成录制${date.second}s';
+              recordText = '录制中';
+              print("名称：$recordText");
+              print("时间：${date.second}");
+              print("当前振幅：${e.decibels}");
+            });
+          }
+        });
+        setState(() {
+          _state = RecordPlayState.recording;
+          _path = path;
+          print("path == $path");
+        });
+      }else{
+        _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+          if (isPlay == 2) {
+            LogE('停止了==');
+            _stopRecorder(); // 确保录音器停止并保存数据到文件
+            timer.cancel();
+          } else {
+            setState(() {
+              djNum--;
+              audioNum++;
+              recordText = '录制中';
+            });
+          }
+          if (djNum == 0) {
+            setState(() {
               isPlay = 2;
             });
+            timer.cancel();
             _stopRecorder();
           }
-          setState(() {
-            recordText = '录制中';
-            print("名称：$recordText");
-            print("时间：${date.second}");
-            print("当前振幅：${e.decibels}");
-          });
-        }
-      });
+        });
+      }
       setState(() {
         _state = RecordPlayState.recording;
         _path = path;

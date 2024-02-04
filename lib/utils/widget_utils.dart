@@ -655,7 +655,6 @@ class WidgetUtils {
   ///圆角图片 网络
   static Widget CircleImageNet(
       double height, double width, double radius, String url) {
-    LogE('测试--  $url');
     return Container(
       height: height,
       width: width,
