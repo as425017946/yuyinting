@@ -358,9 +358,7 @@ class _TuijianPageState extends State<TuijianPage> {
                               },
                               onTap: (index) {
                                 if(MyUtils.checkClick()){
-                                  // MyUtils.goTransparentPageCom(context, WebPage(url: listBanner[index].url!));
-
-                                  MyUtils.goTransparentPageCom(context, const CeshiAudioPage());
+                                  MyUtils.goTransparentPageCom(context, WebPage(url: listBanner[index].url!));
                                 }
                               },
                             ),
