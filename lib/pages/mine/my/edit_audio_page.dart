@@ -440,8 +440,9 @@ class _EditAudioPageState extends State<EditAudioPage> {
                               if (isPlay == 2) {
                                 play();
                               } else {
+                                LogE('录音权限  $isMAI');
                                 //有录音权限
-                                if(isMAI) {
+                                if(isMAI == true) {
                                   setState(() {
                                     if (isPlay == 0) {
                                       //开始录音
