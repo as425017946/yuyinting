@@ -225,6 +225,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
           }
           setState(() {
             recordText = '已录制${date.second}s';
+            print("名称：$recordText");
             print("时间：${date.second}");
             print("当前振幅：${e.decibels}");
           });
