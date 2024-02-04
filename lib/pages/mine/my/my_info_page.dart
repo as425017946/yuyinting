@@ -86,6 +86,16 @@ class _MyInfoPageState extends State<MyInfoPage> {
     });
   }
 
+//停止播放录音
+  void stopPlayer() {
+    _mPlayer!.stopPlayer().then((value) {
+      setState(() {
+        playRecord = false;
+      });
+    });
+  }
+
+
   void _initialize() async {
     await _mPlayer!.closePlayer();
     await _mPlayer!.openPlayer();
@@ -132,6 +142,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
                         icon: const Icon(Icons.arrow_back_ios),
                         color: Colors.white,
                         onPressed: (() {
+                          stopPlayer();
                           Navigator.of(context).pop();
                         }),
                       ),
@@ -140,6 +151,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
                     GestureDetector(
                       onTap: (() {
                         if (MyUtils.checkClick()) {
+                          stopPlayer();
                           Navigator.push(
                             context,
                             MaterialPageRoute(

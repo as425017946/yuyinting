@@ -402,8 +402,12 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                         live == 1
                             ? GestureDetector(
                                 onTap: (() {
-                                  if(MyUtils.checkClick() && sp.getString('roomID').toString() == roomID){
-                                    MyToastUtils.showToastBottom('您已在本房间');
+                                  if(sp.getString('roomID').toString() == roomID){
+                                    if(MyUtils.checkClick()) {
+                                      MyToastUtils.showToastBottom(
+                                          '您已在本房间');
+                                    }
+                                    return;
                                   }else{
                                     if(sp.getBool('joinRoom') == false) {
                                       setState(() {
@@ -412,7 +416,6 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                                       doPostBeforeJoin(roomID);
                                     }
                                   }
-
                                 }),
                                 child: Container(
                                   height: ScreenUtil().setHeight(40),

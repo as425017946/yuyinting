@@ -158,7 +158,9 @@ class RoomItems {
       return GestureDetector(
         onTap: (() {
           if (MyUtils.checkClick() &&
-              list[i]['uid'].toString() != sp.getString('user_id').toString()) {
+              list[i]['uid'].toString() != sp.getString('user_id').toString() &&
+              sp.getBool('joinRoom') == false) {
+            sp.setBool('joinRoom', true);
             MyUtils.goTransparentPage(
                 context,
                 RoomPeopleInfoPage(
@@ -425,7 +427,9 @@ class RoomItems {
                       child: sp.getString('role').toString() != 'user' &&
                           list[i]['isWelcome'] == '0' ? GestureDetector(
                         onTap: (() {
-                          if (MyUtils.checkClick()) {
+                          if (MyUtils.checkClick() &&
+                              sp.getBool('joinRoom') == false) {
+                            sp.setBool('joinRoom', true);
                             eventBus.fire(RoomBack(
                                 title: '欢迎', index: '${list[i]['uid']},$i'));
                           }
@@ -693,7 +697,9 @@ class RoomItems {
           GestureDetector(
             onTap: (() {
               if (MyUtils.checkClick() && list[i]['uid'].toString() !=
-                  sp.getString('user_id').toString()) {
+                  sp.getString('user_id').toString() &&
+                  sp.getBool('joinRoom') == false) {
+                sp.setBool('joinRoom', true);
                 MyUtils.goTransparentPage(
                     context,
                     RoomPeopleInfoPage(
@@ -763,7 +769,9 @@ class RoomItems {
           GestureDetector(
             onTap: (() {
               if (MyUtils.checkClick() && list[i]['uid'].toString() !=
-                  sp.getString('user_id').toString()) {
+                  sp.getString('user_id').toString() &&
+                  sp.getBool('joinRoom') == false) {
+                sp.setBool('joinRoom', true);
                 MyUtils.goTransparentPage(
                     context,
                     RoomPeopleInfoPage(
@@ -826,7 +834,9 @@ class RoomItems {
           GestureDetector(
             onTap: (() {
               if (MyUtils.checkClick() && list[i]['uid'].toString() !=
-                  sp.getString('user_id').toString()) {
+                  sp.getString('user_id').toString() &&
+                  sp.getBool('joinRoom') == false) {
+                sp.setBool('joinRoom', true);
                 MyUtils.goTransparentPage(
                     context,
                     RoomPeopleInfoPage(
@@ -883,7 +893,9 @@ class RoomItems {
       return GestureDetector(
         onTap: (() {
           if (MyUtils.checkClick() &&
-              list[i]['uid'].toString() != sp.getString('user_id').toString()) {
+              list[i]['uid'].toString() != sp.getString('user_id').toString() &&
+              sp.getBool('joinRoom') == false) {
+            sp.setBool('joinRoom', true);
             MyUtils.goTransparentPage(
                 context,
                 RoomPeopleInfoPage(
@@ -906,7 +918,9 @@ class RoomItems {
       return GestureDetector(
         onTap: (() {
           if (MyUtils.checkClick() &&
-              list[i]['uid'].toString() != sp.getString('user_id').toString()) {
+              list[i]['uid'].toString() != sp.getString('user_id').toString() &&
+              sp.getBool('joinRoom') == false) {
+            sp.setBool('joinRoom', true);
             MyUtils.goTransparentPage(
                 context,
                 RoomPeopleInfoPage(
@@ -1018,7 +1032,9 @@ class RoomItems {
             onTap: (() {
               if (MyUtils.checkClick() &&
                   list[i]['uid'].toString() !=
-                      sp.getString('user_id').toString()) {
+                      sp.getString('user_id').toString() &&
+                  sp.getBool('joinRoom') == false) {
+                sp.setBool('joinRoom', true);
                 MyUtils.goTransparentPage(
                     context,
                     RoomPeopleInfoPage(
@@ -1094,7 +1110,9 @@ class RoomItems {
       return GestureDetector(
         onTap: (() {
           if (MyUtils.checkClick() &&
-              list[i]['uid'].toString() != sp.getString('user_id').toString()) {
+              list[i]['uid'].toString() != sp.getString('user_id').toString() &&
+              sp.getBool('joinRoom') == false) {
+            sp.setBool('joinRoom', true);
             MyUtils.goTransparentPage(
                 context,
                 RoomPeopleInfoPage(
@@ -1468,15 +1486,18 @@ class RoomItems {
         WidgetUtils.commonSizedBox(0, 20),
         GestureDetector(
           onTap: (() {
-            MyUtils.goTransparentPage(
-                context,
-                RoomManagerPage(
-                  type: sp.getString('role').toString() == 'adminer' ||
-                      sp.getString('role').toString() == 'leader'
-                      ? 1
-                      : 0,
-                  roomID: roomID,
-                ));
+            if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
+              sp.setBool('joinRoom', true);
+              MyUtils.goTransparentPage(
+                  context,
+                  RoomManagerPage(
+                    type: sp.getString('role').toString() == 'adminer' ||
+                        sp.getString('role').toString() == 'leader'
+                        ? 1
+                        : 0,
+                    roomID: roomID,
+                  ));
+            }
           }),
           child: WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(55),
               ScreenUtil().setHeight(55), roomHeadImg),
@@ -1517,7 +1538,8 @@ class RoomItems {
         follow_status == '0'
             ? GestureDetector(
           onTap: (() {
-            if (MyUtils.checkClick()) {
+            if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
+              sp.setBool('joinRoom', true);
               eventBus.fire(RoomBack(title: '收藏', index: ''));
             }
           }),
@@ -1548,7 +1570,8 @@ class RoomItems {
         )
             : GestureDetector(
           onTap: (() {
-            if (MyUtils.checkClick()) {
+            if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
+              sp.setBool('joinRoom', true);
               eventBus.fire(RoomBack(title: '取消收藏', index: ''));
             }
           }),
@@ -1607,7 +1630,8 @@ class RoomItems {
                 )),
             GestureDetector(
               onTap: (() {
-                if (MyUtils.checkClick()) {
+                if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
+                  sp.setBool('joinRoom', true);
                   MyUtils.goTransparentPage(context, RoomReDuPage(
                     roomID: roomID,
                     listm: listm,
@@ -1653,7 +1677,10 @@ class RoomItems {
         /// 退出的点
         GestureDetector(
           onTap: (() {
-            eventBus.fire(RoomBack(title: '点击房间关闭', index: ''));
+            if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
+              sp.setBool('joinRoom', true);
+              eventBus.fire(RoomBack(title: '点击房间关闭', index: ''));
+            }
           }),
           child: SizedBox(
               height: ScreenUtil().setHeight(32),
@@ -1682,11 +1709,15 @@ class RoomItems {
                     children: [
                       GestureDetector(
                         onTap: (() {
-                          MyUtils.goTransparentPageCom(
-                              context,
-                              RoomTSGongGaoPage(
-                                notice: notice,
-                              ));
+                          if (MyUtils.checkClick() &&
+                              sp.getBool('joinRoom') == false) {
+                            sp.setBool('joinRoom', true);
+                            MyUtils.goTransparentPageCom(
+                                context,
+                                RoomTSGongGaoPage(
+                                  notice: notice,
+                                ));
+                          }
                         }),
                         child: Stack(
                           alignment: Alignment.center,
@@ -1741,34 +1772,37 @@ class RoomItems {
           offset: const Offset(0, -30),
           child: GestureDetector(
             onTap: (() {
-              if (listm[8].isLock == 0) {
-                if (m0 == true) {
-                  if (listm[8].uid.toString() ==
-                      sp.getString('user_id').toString()) {
-                    eventBus.fire(RoomBack(title: '自己', index: '8'));
-                  } else {
-                    if (MyUtils.checkClick() && listm[8].uid.toString() !=
+              if (sp.getBool('joinRoom') == false) {
+                sp.setBool('joinRoom', true);
+                if (listm[8].isLock == 0) {
+                  if (m0 == true) {
+                    if (listm[8].uid.toString() ==
                         sp.getString('user_id').toString()) {
-                      MyUtils.goTransparentPage(
-                          context,
-                          RoomPeopleInfoPage(
-                            uid: listm[8].uid.toString(),
-                            index: '8',
-                            roomID: roomID,
-                            isClose: listm[8].isClose.toString(),
-                            listM: listm,
-                          ));
+                      eventBus.fire(RoomBack(title: '自己', index: '8'));
+                    } else {
+                      if (MyUtils.checkClick() && listm[8].uid.toString() !=
+                          sp.getString('user_id').toString()) {
+                        MyUtils.goTransparentPage(
+                            context,
+                            RoomPeopleInfoPage(
+                              uid: listm[8].uid.toString(),
+                              index: '8',
+                              roomID: roomID,
+                              isClose: listm[8].isClose.toString(),
+                              listM: listm,
+                            ));
+                      }
                     }
+                  } else {
+                    eventBus.fire(RoomBack(title: '空位置', index: '8'));
                   }
                 } else {
-                  eventBus.fire(RoomBack(title: '空位置', index: '8'));
-                }
-              } else {
-                if (sp.getString('role').toString() == 'adminer' ||
-                    sp.getString('role').toString() == 'leader') {
-                  eventBus.fire(RoomBack(title: '空位置', index: '8'));
-                } else {
-                  MyToastUtils.showToastBottom('麦位已锁');
+                  if (sp.getString('role').toString() == 'adminer' ||
+                      sp.getString('role').toString() == 'leader') {
+                    eventBus.fire(RoomBack(title: '空位置', index: '8'));
+                  } else {
+                    MyToastUtils.showToastBottom('麦位已锁');
+                  }
                 }
               }
             }),
@@ -1923,33 +1957,36 @@ class RoomItems {
               WidgetUtils.commonSizedBox(0, 10),
               GestureDetector(
                 onTap: (() {
-                  if (listm[0].isLock == 0) {
-                    if (m1) {
-                      if (listm[0].uid.toString() ==
-                          sp.getString('user_id').toString()) {
-                        eventBus.fire(RoomBack(title: '自己', index: '0'));
-                      } else {
-                        if (MyUtils.checkClick() && listm[0].uid.toString() !=
+                  if (sp.getBool('joinRoom') == false) {
+                    sp.setBool('joinRoom', true);
+                    if (listm[0].isLock == 0) {
+                      if (m1) {
+                        if (listm[0].uid.toString() ==
                             sp.getString('user_id').toString()) {
-                          MyUtils.goTransparentPage(
-                              context,
-                              RoomPeopleInfoPage(
-                                uid: listm[0].uid.toString(),
-                                index: '0',
-                                roomID: roomID,
-                                isClose: listm[0].isClose.toString(),
-                                listM: listm,));
+                          eventBus.fire(RoomBack(title: '自己', index: '0'));
+                        } else {
+                          if (MyUtils.checkClick() && listm[0].uid.toString() !=
+                              sp.getString('user_id').toString()) {
+                            MyUtils.goTransparentPage(
+                                context,
+                                RoomPeopleInfoPage(
+                                  uid: listm[0].uid.toString(),
+                                  index: '0',
+                                  roomID: roomID,
+                                  isClose: listm[0].isClose.toString(),
+                                  listM: listm,));
+                          }
                         }
+                      } else {
+                        eventBus.fire(RoomBack(title: '空位置', index: '0'));
                       }
                     } else {
-                      eventBus.fire(RoomBack(title: '空位置', index: '0'));
-                    }
-                  } else {
-                    if (sp.getString('role').toString() == 'adminer' ||
-                        sp.getString('role').toString() == 'leader') {
-                      eventBus.fire(RoomBack(title: '空位置', index: '0'));
-                    } else {
-                      MyToastUtils.showToastBottom('麦位已锁');
+                      if (sp.getString('role').toString() == 'adminer' ||
+                          sp.getString('role').toString() == 'leader') {
+                        eventBus.fire(RoomBack(title: '空位置', index: '0'));
+                      } else {
+                        MyToastUtils.showToastBottom('麦位已锁');
+                      }
                     }
                   }
                 }),
@@ -2082,33 +2119,36 @@ class RoomItems {
               const Expanded(child: Text('')),
               GestureDetector(
                 onTap: (() {
-                  if (listm[1].isLock == 0) {
-                    if (m2) {
-                      if (listm[1].uid.toString() ==
-                          sp.getString('user_id').toString()) {
-                        eventBus.fire(RoomBack(title: '自己', index: '1'));
-                      } else {
-                        if (MyUtils.checkClick() && listm[1].uid.toString() !=
+                  if (sp.getBool('joinRoom') == false) {
+                    sp.setBool('joinRoom', true);
+                    if (listm[1].isLock == 0) {
+                      if (m2) {
+                        if (listm[1].uid.toString() ==
                             sp.getString('user_id').toString()) {
-                          MyUtils.goTransparentPage(
-                              context,
-                              RoomPeopleInfoPage(
-                                uid: listm[1].uid.toString(),
-                                index: '1',
-                                roomID: roomID,
-                                isClose: listm[1].isClose.toString(),
-                                listM: listm,));
+                          eventBus.fire(RoomBack(title: '自己', index: '1'));
+                        } else {
+                          if (MyUtils.checkClick() && listm[1].uid.toString() !=
+                              sp.getString('user_id').toString()) {
+                            MyUtils.goTransparentPage(
+                                context,
+                                RoomPeopleInfoPage(
+                                  uid: listm[1].uid.toString(),
+                                  index: '1',
+                                  roomID: roomID,
+                                  isClose: listm[1].isClose.toString(),
+                                  listM: listm,));
+                          }
                         }
+                      } else {
+                        eventBus.fire(RoomBack(title: '空位置', index: '1'));
                       }
                     } else {
-                      eventBus.fire(RoomBack(title: '空位置', index: '1'));
-                    }
-                  } else {
-                    if (sp.getString('role').toString() == 'adminer' ||
-                        sp.getString('role').toString() == 'leader') {
-                      eventBus.fire(RoomBack(title: '空位置', index: '1'));
-                    } else {
-                      MyToastUtils.showToastBottom('麦位已锁');
+                      if (sp.getString('role').toString() == 'adminer' ||
+                          sp.getString('role').toString() == 'leader') {
+                        eventBus.fire(RoomBack(title: '空位置', index: '1'));
+                      } else {
+                        MyToastUtils.showToastBottom('麦位已锁');
+                      }
                     }
                   }
                 }),
@@ -2241,33 +2281,36 @@ class RoomItems {
               const Expanded(child: Text('')),
               GestureDetector(
                 onTap: (() {
-                  if (listm[2].isLock == 0) {
-                    if (m3) {
-                      if (listm[2].uid.toString() ==
-                          sp.getString('user_id').toString()) {
-                        eventBus.fire(RoomBack(title: '自己', index: '2'));
-                      } else {
-                        if (MyUtils.checkClick() && listm[2].uid.toString() !=
+                  if (sp.getBool('joinRoom') == false) {
+                    sp.setBool('joinRoom', true);
+                    if (listm[2].isLock == 0) {
+                      if (m3) {
+                        if (listm[2].uid.toString() ==
                             sp.getString('user_id').toString()) {
-                          MyUtils.goTransparentPage(
-                              context,
-                              RoomPeopleInfoPage(
-                                uid: listm[2].uid.toString(),
-                                index: '2',
-                                roomID: roomID,
-                                isClose: listm[2].isClose.toString(),
-                                listM: listm,));
+                          eventBus.fire(RoomBack(title: '自己', index: '2'));
+                        } else {
+                          if (MyUtils.checkClick() && listm[2].uid.toString() !=
+                              sp.getString('user_id').toString()) {
+                            MyUtils.goTransparentPage(
+                                context,
+                                RoomPeopleInfoPage(
+                                  uid: listm[2].uid.toString(),
+                                  index: '2',
+                                  roomID: roomID,
+                                  isClose: listm[2].isClose.toString(),
+                                  listM: listm,));
+                          }
                         }
+                      } else {
+                        eventBus.fire(RoomBack(title: '空位置', index: '2'));
                       }
                     } else {
-                      eventBus.fire(RoomBack(title: '空位置', index: '2'));
-                    }
-                  } else {
-                    if (sp.getString('role').toString() == 'adminer' ||
-                        sp.getString('role').toString() == 'leader') {
-                      eventBus.fire(RoomBack(title: '空位置', index: '2'));
-                    } else {
-                      MyToastUtils.showToastBottom('麦位已锁');
+                      if (sp.getString('role').toString() == 'adminer' ||
+                          sp.getString('role').toString() == 'leader') {
+                        eventBus.fire(RoomBack(title: '空位置', index: '2'));
+                      } else {
+                        MyToastUtils.showToastBottom('麦位已锁');
+                      }
                     }
                   }
                 }),
@@ -2400,33 +2443,36 @@ class RoomItems {
               const Expanded(child: Text('')),
               GestureDetector(
                 onTap: (() {
-                  if (listm[3].isLock == 0) {
-                    if (m4) {
-                      if (listm[3].uid.toString() ==
-                          sp.getString('user_id').toString()) {
-                        eventBus.fire(RoomBack(title: '自己', index: '3'));
-                      } else {
-                        if (MyUtils.checkClick() && listm[3].uid.toString() !=
+                  if (sp.getBool('joinRoom') == false) {
+                    sp.setBool('joinRoom', true);
+                    if (listm[3].isLock == 0) {
+                      if (m4) {
+                        if (listm[3].uid.toString() ==
                             sp.getString('user_id').toString()) {
-                          MyUtils.goTransparentPage(
-                              context,
-                              RoomPeopleInfoPage(
-                                uid: listm[3].uid.toString(),
-                                index: '3',
-                                roomID: roomID,
-                                isClose: listm[3].isClose.toString(),
-                                listM: listm,));
+                          eventBus.fire(RoomBack(title: '自己', index: '3'));
+                        } else {
+                          if (MyUtils.checkClick() && listm[3].uid.toString() !=
+                              sp.getString('user_id').toString()) {
+                            MyUtils.goTransparentPage(
+                                context,
+                                RoomPeopleInfoPage(
+                                  uid: listm[3].uid.toString(),
+                                  index: '3',
+                                  roomID: roomID,
+                                  isClose: listm[3].isClose.toString(),
+                                  listM: listm,));
+                          }
                         }
+                      } else {
+                        eventBus.fire(RoomBack(title: '空位置', index: '3'));
                       }
                     } else {
-                      eventBus.fire(RoomBack(title: '空位置', index: '3'));
-                    }
-                  } else {
-                    if (sp.getString('role').toString() == 'adminer' ||
-                        sp.getString('role').toString() == 'leader') {
-                      eventBus.fire(RoomBack(title: '空位置', index: '3'));
-                    } else {
-                      MyToastUtils.showToastBottom('麦位已锁');
+                      if (sp.getString('role').toString() == 'adminer' ||
+                          sp.getString('role').toString() == 'leader') {
+                        eventBus.fire(RoomBack(title: '空位置', index: '3'));
+                      } else {
+                        MyToastUtils.showToastBottom('麦位已锁');
+                      }
                     }
                   }
                 }),
@@ -2568,33 +2614,37 @@ class RoomItems {
                 WidgetUtils.commonSizedBox(0, 10),
                 GestureDetector(
                   onTap: (() {
-                    if (listm[4].isLock == 0) {
-                      if (m5) {
-                        if (listm[4].uid.toString() ==
-                            sp.getString('user_id').toString()) {
-                          eventBus.fire(RoomBack(title: '自己', index: '4'));
-                        } else {
-                          if (MyUtils.checkClick() && listm[4].uid.toString() !=
+                    if (sp.getBool('joinRoom') == false) {
+                      sp.setBool('joinRoom', true);
+                      if (listm[4].isLock == 0) {
+                        if (m5) {
+                          if (listm[4].uid.toString() ==
                               sp.getString('user_id').toString()) {
-                            MyUtils.goTransparentPage(
-                                context,
-                                RoomPeopleInfoPage(
-                                  uid: listm[4].uid.toString(),
-                                  index: '4',
-                                  roomID: roomID,
-                                  isClose: listm[4].isClose.toString(),
-                                  listM: listm,));
+                            eventBus.fire(RoomBack(title: '自己', index: '4'));
+                          } else {
+                            if (MyUtils.checkClick() &&
+                                listm[4].uid.toString() !=
+                                    sp.getString('user_id').toString()) {
+                              MyUtils.goTransparentPage(
+                                  context,
+                                  RoomPeopleInfoPage(
+                                    uid: listm[4].uid.toString(),
+                                    index: '4',
+                                    roomID: roomID,
+                                    isClose: listm[4].isClose.toString(),
+                                    listM: listm,));
+                            }
                           }
+                        } else {
+                          eventBus.fire(RoomBack(title: '空位置', index: '4'));
                         }
                       } else {
-                        eventBus.fire(RoomBack(title: '空位置', index: '4'));
-                      }
-                    } else {
-                      if (sp.getString('role').toString() == 'adminer' ||
-                          sp.getString('role').toString() == 'leader') {
-                        eventBus.fire(RoomBack(title: '空位置', index: '4'));
-                      } else {
-                        MyToastUtils.showToastBottom('麦位已锁');
+                        if (sp.getString('role').toString() == 'adminer' ||
+                            sp.getString('role').toString() == 'leader') {
+                          eventBus.fire(RoomBack(title: '空位置', index: '4'));
+                        } else {
+                          MyToastUtils.showToastBottom('麦位已锁');
+                        }
                       }
                     }
                   }),
@@ -2729,33 +2779,37 @@ class RoomItems {
                 const Expanded(child: Text('')),
                 GestureDetector(
                   onTap: (() {
-                    if (listm[5].isLock == 0) {
-                      if (m6) {
-                        if (listm[5].uid.toString() ==
-                            sp.getString('user_id').toString()) {
-                          eventBus.fire(RoomBack(title: '自己', index: '5'));
-                        } else {
-                          if (MyUtils.checkClick() && listm[5].uid.toString() !=
+                    if (sp.getBool('joinRoom') == false) {
+                      sp.setBool('joinRoom', true);
+                      if (listm[5].isLock == 0) {
+                        if (m6) {
+                          if (listm[5].uid.toString() ==
                               sp.getString('user_id').toString()) {
-                            MyUtils.goTransparentPage(
-                                context,
-                                RoomPeopleInfoPage(
-                                  uid: listm[5].uid.toString(),
-                                  index: '5',
-                                  roomID: roomID,
-                                  isClose: listm[5].isClose.toString(),
-                                  listM: listm,));
+                            eventBus.fire(RoomBack(title: '自己', index: '5'));
+                          } else {
+                            if (MyUtils.checkClick() &&
+                                listm[5].uid.toString() !=
+                                    sp.getString('user_id').toString()) {
+                              MyUtils.goTransparentPage(
+                                  context,
+                                  RoomPeopleInfoPage(
+                                    uid: listm[5].uid.toString(),
+                                    index: '5',
+                                    roomID: roomID,
+                                    isClose: listm[5].isClose.toString(),
+                                    listM: listm,));
+                            }
                           }
+                        } else {
+                          eventBus.fire(RoomBack(title: '空位置', index: '5'));
                         }
                       } else {
-                        eventBus.fire(RoomBack(title: '空位置', index: '5'));
-                      }
-                    } else {
-                      if (sp.getString('role').toString() == 'adminer' ||
-                          sp.getString('role').toString() == 'leader') {
-                        eventBus.fire(RoomBack(title: '空位置', index: '5'));
-                      } else {
-                        MyToastUtils.showToastBottom('麦位已锁');
+                        if (sp.getString('role').toString() == 'adminer' ||
+                            sp.getString('role').toString() == 'leader') {
+                          eventBus.fire(RoomBack(title: '空位置', index: '5'));
+                        } else {
+                          MyToastUtils.showToastBottom('麦位已锁');
+                        }
                       }
                     }
                   }),
@@ -2890,33 +2944,37 @@ class RoomItems {
                 const Expanded(child: Text('')),
                 GestureDetector(
                   onTap: (() {
-                    if (listm[6].isLock == 0) {
-                      if (m7) {
-                        if (listm[6].uid.toString() ==
-                            sp.getString('user_id').toString()) {
-                          eventBus.fire(RoomBack(title: '自己', index: '6'));
-                        } else {
-                          if (MyUtils.checkClick() && listm[6].uid.toString() !=
+                    if (sp.getBool('joinRoom') == false) {
+                      sp.setBool('joinRoom', true);
+                      if (listm[6].isLock == 0) {
+                        if (m7) {
+                          if (listm[6].uid.toString() ==
                               sp.getString('user_id').toString()) {
-                            MyUtils.goTransparentPage(
-                                context,
-                                RoomPeopleInfoPage(
-                                  uid: listm[6].uid.toString(),
-                                  index: '6',
-                                  roomID: roomID,
-                                  isClose: listm[6].isClose.toString(),
-                                  listM: listm,));
+                            eventBus.fire(RoomBack(title: '自己', index: '6'));
+                          } else {
+                            if (MyUtils.checkClick() &&
+                                listm[6].uid.toString() !=
+                                    sp.getString('user_id').toString()) {
+                              MyUtils.goTransparentPage(
+                                  context,
+                                  RoomPeopleInfoPage(
+                                    uid: listm[6].uid.toString(),
+                                    index: '6',
+                                    roomID: roomID,
+                                    isClose: listm[6].isClose.toString(),
+                                    listM: listm,));
+                            }
                           }
+                        } else {
+                          eventBus.fire(RoomBack(title: '空位置', index: '6'));
                         }
                       } else {
-                        eventBus.fire(RoomBack(title: '空位置', index: '6'));
-                      }
-                    } else {
-                      if (sp.getString('role').toString() == 'adminer' ||
-                          sp.getString('role').toString() == 'leader') {
-                        eventBus.fire(RoomBack(title: '空位置', index: '6'));
-                      } else {
-                        MyToastUtils.showToastBottom('麦位已锁');
+                        if (sp.getString('role').toString() == 'adminer' ||
+                            sp.getString('role').toString() == 'leader') {
+                          eventBus.fire(RoomBack(title: '空位置', index: '6'));
+                        } else {
+                          MyToastUtils.showToastBottom('麦位已锁');
+                        }
                       }
                     }
                   }),
@@ -3052,34 +3110,38 @@ class RoomItems {
                 isBoss == true
                     ? GestureDetector(
                   onTap: (() {
-                    if (listm[7].isLock == 0) {
-                      if (m8) {
-                        if (listm[7].uid.toString() ==
-                            sp.getString('user_id').toString()) {
-                          eventBus
-                              .fire(RoomBack(title: '自己', index: '7'));
-                        } else {
-                          if (MyUtils.checkClick() && listm[7].uid.toString() !=
+                    if (sp.getBool('joinRoom') == false) {
+                      sp.setBool('joinRoom', true);
+                      if (listm[7].isLock == 0) {
+                        if (m8) {
+                          if (listm[7].uid.toString() ==
                               sp.getString('user_id').toString()) {
-                            MyUtils.goTransparentPage(
-                                context,
-                                RoomPeopleInfoPage(
-                                  uid: listm[7].uid.toString(),
-                                  index: '7',
-                                  roomID: roomID,
-                                  isClose: listm[7].isClose.toString(),
-                                  listM: listm,));
+                            eventBus
+                                .fire(RoomBack(title: '自己', index: '7'));
+                          } else {
+                            if (MyUtils.checkClick() &&
+                                listm[7].uid.toString() !=
+                                    sp.getString('user_id').toString()) {
+                              MyUtils.goTransparentPage(
+                                  context,
+                                  RoomPeopleInfoPage(
+                                    uid: listm[7].uid.toString(),
+                                    index: '7',
+                                    roomID: roomID,
+                                    isClose: listm[7].isClose.toString(),
+                                    listM: listm,));
+                            }
                           }
+                        } else {
+                          eventBus.fire(RoomBack(title: '空位置', index: '7'));
                         }
                       } else {
-                        eventBus.fire(RoomBack(title: '空位置', index: '7'));
-                      }
-                    } else {
-                      if (sp.getString('role').toString() == 'adminer' ||
-                          sp.getString('role').toString() == 'leader') {
-                        eventBus.fire(RoomBack(title: '空位置', index: '7'));
-                      } else {
-                        MyToastUtils.showToastBottom('麦位已锁');
+                        if (sp.getString('role').toString() == 'adminer' ||
+                            sp.getString('role').toString() == 'leader') {
+                          eventBus.fire(RoomBack(title: '空位置', index: '7'));
+                        } else {
+                          MyToastUtils.showToastBottom('麦位已锁');
+                        }
                       }
                     }
                   }),
@@ -3252,34 +3314,38 @@ class RoomItems {
                 )
                     : GestureDetector(
                   onTap: (() {
-                    if (listm[7].isLock == 0) {
-                      if (m8) {
-                        if (listm[7].uid.toString() ==
-                            sp.getString('user_id').toString()) {
-                          eventBus
-                              .fire(RoomBack(title: '自己', index: '7'));
-                        } else {
-                          if (MyUtils.checkClick() && listm[7].uid.toString() !=
+                    if (sp.getBool('joinRoom') == false) {
+                      sp.setBool('joinRoom', true);
+                      if (listm[7].isLock == 0) {
+                        if (m8) {
+                          if (listm[7].uid.toString() ==
                               sp.getString('user_id').toString()) {
-                            MyUtils.goTransparentPage(
-                                context,
-                                RoomPeopleInfoPage(
-                                  uid: listm[7].uid.toString(),
-                                  index: '7',
-                                  roomID: roomID,
-                                  isClose: listm[7].isClose.toString(),
-                                  listM: listm,));
+                            eventBus
+                                .fire(RoomBack(title: '自己', index: '7'));
+                          } else {
+                            if (MyUtils.checkClick() &&
+                                listm[7].uid.toString() !=
+                                    sp.getString('user_id').toString()) {
+                              MyUtils.goTransparentPage(
+                                  context,
+                                  RoomPeopleInfoPage(
+                                    uid: listm[7].uid.toString(),
+                                    index: '7',
+                                    roomID: roomID,
+                                    isClose: listm[7].isClose.toString(),
+                                    listM: listm,));
+                            }
                           }
+                        } else {
+                          eventBus.fire(RoomBack(title: '空位置', index: '7'));
                         }
                       } else {
-                        eventBus.fire(RoomBack(title: '空位置', index: '7'));
-                      }
-                    } else {
-                      if (sp.getString('role').toString() == 'adminer' ||
-                          sp.getString('role').toString() == 'leader') {
-                        eventBus.fire(RoomBack(title: '空位置', index: '7'));
-                      } else {
-                        MyToastUtils.showToastBottom('麦位已锁');
+                        if (sp.getString('role').toString() == 'adminer' ||
+                            sp.getString('role').toString() == 'leader') {
+                          eventBus.fire(RoomBack(title: '空位置', index: '7'));
+                        } else {
+                          MyToastUtils.showToastBottom('麦位已锁');
+                        }
                       }
                     }
                   }),
@@ -3452,10 +3518,12 @@ class RoomItems {
           },
           onTap: (index) {
             // LogE('用户点击引起下标改变调用');
-            if (index == 0) {
-              MyUtils.goTransparentPage(context, const Carpage());
-            } else if (index == 1) {
-              MyUtils.goTransparentPage(context, const ShouChongPage());
+            if (MyUtils.checkClick()) {
+              if (index == 0) {
+                MyUtils.goTransparentPage(context, const Carpage());
+              } else if (index == 1) {
+                MyUtils.goTransparentPage(context, const ShouChongPage());
+              }
             }
           },
         ),
@@ -3495,12 +3563,15 @@ class RoomItems {
           },
           onTap: (index) {
             // LogE('用户点击引起下标改变调用');
-            if (index == 0) {
-              // 转盘
-              MyUtils.goTransparentPage(context, ZhuanPanPage(roomId: roomid,));
-            } else if (index == 1) {
-              // 魔方
-              MyUtils.goTransparentPage(context, MoFangPage(roomID: roomid,));
+            if (MyUtils.checkClick()) {
+              if (index == 0) {
+                // 转盘
+                MyUtils.goTransparentPage(
+                    context, ZhuanPanPage(roomId: roomid,));
+              } else if (index == 1) {
+                // 魔方
+                MyUtils.goTransparentPage(context, MoFangPage(roomID: roomid,));
+              }
             }
           },
         ),
@@ -3546,7 +3617,9 @@ class RoomItems {
                   children: [
                     GestureDetector(
                       onTap: (() {
-                        if (MyUtils.checkClick()) {
+                        if (MyUtils.checkClick() &&
+                            sp.getBool('joinRoom') == false) {
+                          sp.setBool('joinRoom', true);
                           eventBus.fire(SubmitButtonBack(title: '表情'));
                         }
                       }),
@@ -3561,7 +3634,9 @@ class RoomItems {
                     WidgetUtils.commonSizedBox(0, 10),
                     GestureDetector(
                       onTap: (() {
-                        if (MyUtils.checkClick()) {
+                        if (MyUtils.checkClick() &&
+                            sp.getBool('joinRoom') == false) {
+                          sp.setBool('joinRoom', true);
                           eventBus.fire(SubmitButtonBack(title: '聊天'));
                         }
                       }),
@@ -3593,8 +3668,12 @@ class RoomItems {
               ),
               GestureDetector(
                 onTap: (() {
-                  MyUtils.goTransparentPage(
-                      context, RoomLiWuPage(listM: listM, uid: '', roomID: roomID,));
+                  if (sp.getBool('joinRoom') == false) {
+                    sp.setBool('joinRoom', true);
+                    MyUtils.goTransparentPage(
+                        context,
+                        RoomLiWuPage(listM: listM, uid: '', roomID: roomID,));
+                  }
                 }),
                 child: Container(
                     height: ScreenUtil().setHeight(60),
@@ -3615,8 +3694,11 @@ class RoomItems {
               ),
               GestureDetector(
                 onTap: (() {
-                  MyUtils.goTransparentPageCom(
-                      context, RoomYouXiPage(roomID: roomID));
+                  if (sp.getBool('joinRoom') == false) {
+                    sp.setBool('joinRoom', true);
+                    MyUtils.goTransparentPageCom(
+                        context, RoomYouXiPage(roomID: roomID));
+                  }
                 }),
                 child: Container(
                     height: ScreenUtil().setHeight(50),
@@ -3629,7 +3711,10 @@ class RoomItems {
           //消息
           GestureDetector(
             onTap: (() {
-              MyUtils.goTransparentPage(context, const RoomMessagesPage());
+              if (sp.getBool('joinRoom') == false) {
+                sp.setBool('joinRoom', true);
+                MyUtils.goTransparentPage(context, const RoomMessagesPage());
+              }
             }),
             child: Container(
               height: ScreenUtil().setHeight(50),
@@ -3662,28 +3747,31 @@ class RoomItems {
           //功能
           GestureDetector(
             onTap: (() {
-              MyUtils.goTransparentPage(
-                  context,
-                  (sp.getString('role').toString() == 'adminer' ||
-                      sp.getString('role').toString() == 'leader')
-                      ? RoomGongNeng(
-                    type: 1,
-                    roomID: roomID,
-                    isShow: isShow,
-                    isBoss: isBoss,
-                    roomDX: roomDX,
-                    roomSY: roomSY,
-                    mima: mima,
-                  )
-                      : RoomGongNeng(
-                    type: 0,
-                    roomID: roomID,
-                    isShow: isShow,
-                    isBoss: isBoss,
-                    roomDX: roomDX,
-                    roomSY: roomSY,
-                    mima: mima,
-                  ));
+              if (sp.getBool('joinRoom') == false) {
+                sp.setBool('joinRoom', true);
+                MyUtils.goTransparentPage(
+                    context,
+                    (sp.getString('role').toString() == 'adminer' ||
+                        sp.getString('role').toString() == 'leader')
+                        ? RoomGongNeng(
+                      type: 1,
+                      roomID: roomID,
+                      isShow: isShow,
+                      isBoss: isBoss,
+                      roomDX: roomDX,
+                      roomSY: roomSY,
+                      mima: mima,
+                    )
+                        : RoomGongNeng(
+                      type: 0,
+                      roomID: roomID,
+                      isShow: isShow,
+                      isBoss: isBoss,
+                      roomDX: roomDX,
+                      roomSY: roomSY,
+                      mima: mima,
+                    ));
+              }
             }),
             child: Container(
               height: ScreenUtil().setHeight(50),
@@ -3697,12 +3785,15 @@ class RoomItems {
           //闭麦
           GestureDetector(
             onTap: (() {
-              //如果上麦的人有自己
-              if (isMeUp) {
-                eventBus.fire(RoomBack(title: '关闭声音',
-                    index: (int.parse(mxIndex) - 1).toString()));
-              } else {
-                MyToastUtils.showToastBottom('不在麦序，无需开启');
+              if (sp.getBool('joinRoom') == false) {
+                sp.setBool('joinRoom', true);
+                //如果上麦的人有自己
+                if (isMeUp) {
+                  eventBus.fire(RoomBack(title: '关闭声音',
+                      index: (int.parse(mxIndex) - 1).toString()));
+                } else {
+                  MyToastUtils.showToastBottom('不在麦序，无需开启');
+                }
               }
             }),
             child: WidgetUtils.showImages(
@@ -3741,8 +3832,11 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      eventBus
-                          .fire(RoomBack(title: '上麦', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        eventBus
+                            .fire(RoomBack(title: '上麦', index: i.toString()));
+                      }
                     }),
                     child: Container(
                       height: double.infinity,
@@ -3766,12 +3860,17 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      if (listM[i].isLock == 0) {
-                        eventBus
-                            .fire(RoomBack(title: '锁麦', index: i.toString()));
-                      } else {
-                        eventBus
-                            .fire(RoomBack(title: '解锁', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        if (listM[i].isLock == 0) {
+                          eventBus
+                              .fire(RoomBack(title: '锁麦',
+                              index: i.toString()));
+                        } else {
+                          eventBus
+                              .fire(RoomBack(title: '解锁',
+                              index: i.toString()));
+                        }
                       }
                     }),
                     child: WidgetUtils.onlyTextCenter(
@@ -3808,8 +3907,11 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      eventBus
-                          .fire(RoomBack(title: '上麦', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        eventBus
+                            .fire(RoomBack(title: '上麦', index: i.toString()));
+                      }
                     }),
                     child: Container(
                       height: double.infinity,
@@ -3833,12 +3935,17 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      if (listM[i].isLock == 0) {
-                        eventBus
-                            .fire(RoomBack(title: '锁麦', index: i.toString()));
-                      } else {
-                        eventBus
-                            .fire(RoomBack(title: '解锁', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        if (listM[i].isLock == 0) {
+                          eventBus
+                              .fire(RoomBack(
+                              title: '锁麦', index: i.toString()));
+                        } else {
+                          eventBus
+                              .fire(RoomBack(
+                              title: '解锁', index: i.toString()));
+                        }
                       }
                     }),
                     child: WidgetUtils.onlyTextCenter(
@@ -3875,8 +3982,11 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      eventBus
-                          .fire(RoomBack(title: '上麦', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        eventBus
+                            .fire(RoomBack(title: '上麦', index: i.toString()));
+                      }
                     }),
                     child: Container(
                       height: double.infinity,
@@ -3900,12 +4010,17 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      if (listM[i].isLock == 0) {
-                        eventBus
-                            .fire(RoomBack(title: '锁麦', index: i.toString()));
-                      } else {
-                        eventBus
-                            .fire(RoomBack(title: '解锁', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        if (listM[i].isLock == 0) {
+                          eventBus
+                              .fire(RoomBack(
+                              title: '锁麦', index: i.toString()));
+                        } else {
+                          eventBus
+                              .fire(RoomBack(
+                              title: '解锁', index: i.toString()));
+                        }
                       }
                     }),
                     child: WidgetUtils.onlyTextCenter(
@@ -3942,8 +4057,11 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      eventBus
-                          .fire(RoomBack(title: '上麦', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        eventBus
+                            .fire(RoomBack(title: '上麦', index: i.toString()));
+                      }
                     }),
                     child: Container(
                       height: double.infinity,
@@ -3967,12 +4085,17 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      if (listM[i].isLock == 0) {
-                        eventBus
-                            .fire(RoomBack(title: '锁麦', index: i.toString()));
-                      } else {
-                        eventBus
-                            .fire(RoomBack(title: '解锁', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        if (listM[i].isLock == 0) {
+                          eventBus
+                              .fire(RoomBack(
+                              title: '锁麦', index: i.toString()));
+                        } else {
+                          eventBus
+                              .fire(RoomBack(
+                              title: '解锁', index: i.toString()));
+                        }
                       }
                     }),
                     child: WidgetUtils.onlyTextCenter(
@@ -4009,8 +4132,11 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      eventBus
-                          .fire(RoomBack(title: '上麦', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        eventBus
+                            .fire(RoomBack(title: '上麦', index: i.toString()));
+                      }
                     }),
                     child: Container(
                       height: double.infinity,
@@ -4034,12 +4160,17 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      if (listM[i].isLock == 0) {
-                        eventBus
-                            .fire(RoomBack(title: '锁麦', index: i.toString()));
-                      } else {
-                        eventBus
-                            .fire(RoomBack(title: '解锁', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        if (listM[i].isLock == 0) {
+                          eventBus
+                              .fire(
+                              RoomBack(title: '锁麦', index: i.toString()));
+                        } else {
+                          eventBus
+                              .fire(
+                              RoomBack(title: '解锁', index: i.toString()));
+                        }
                       }
                     }),
                     child: WidgetUtils.onlyTextCenter(
@@ -4076,8 +4207,11 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      eventBus
-                          .fire(RoomBack(title: '上麦', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        eventBus
+                            .fire(RoomBack(title: '上麦', index: i.toString()));
+                      }
                     }),
                     child: Container(
                       height: double.infinity,
@@ -4101,12 +4235,17 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      if (listM[i].isLock == 0) {
-                        eventBus
-                            .fire(RoomBack(title: '锁麦', index: i.toString()));
-                      } else {
-                        eventBus
-                            .fire(RoomBack(title: '解锁', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        if (listM[i].isLock == 0) {
+                          eventBus
+                              .fire(
+                              RoomBack(title: '锁麦', index: i.toString()));
+                        } else {
+                          eventBus
+                              .fire(
+                              RoomBack(title: '解锁', index: i.toString()));
+                        }
                       }
                     }),
                     child: WidgetUtils.onlyTextCenter(
@@ -4143,8 +4282,11 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      eventBus
-                          .fire(RoomBack(title: '上麦', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        eventBus
+                            .fire(RoomBack(title: '上麦', index: i.toString()));
+                      }
                     }),
                     child: Container(
                       height: double.infinity,
@@ -4168,12 +4310,17 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      if (listM[i].isLock == 0) {
-                        eventBus
-                            .fire(RoomBack(title: '锁麦', index: i.toString()));
-                      } else {
-                        eventBus
-                            .fire(RoomBack(title: '解锁', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        if (listM[i].isLock == 0) {
+                          eventBus
+                              .fire(
+                              RoomBack(title: '锁麦', index: i.toString()));
+                        } else {
+                          eventBus
+                              .fire(
+                              RoomBack(title: '解锁', index: i.toString()));
+                        }
                       }
                     }),
                     child: WidgetUtils.onlyTextCenter(
@@ -4210,8 +4357,11 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      eventBus
-                          .fire(RoomBack(title: '上麦', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        eventBus
+                            .fire(RoomBack(title: '上麦', index: i.toString()));
+                      }
                     }),
                     child: Container(
                       height: double.infinity,
@@ -4235,12 +4385,17 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      if (listM[i].isLock == 0) {
-                        eventBus
-                            .fire(RoomBack(title: '锁麦', index: i.toString()));
-                      } else {
-                        eventBus
-                            .fire(RoomBack(title: '解锁', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        if (listM[i].isLock == 0) {
+                          eventBus
+                              .fire(
+                              RoomBack(title: '锁麦', index: i.toString()));
+                        } else {
+                          eventBus
+                              .fire(
+                              RoomBack(title: '解锁', index: i.toString()));
+                        }
                       }
                     }),
                     child: WidgetUtils.onlyTextCenter(
@@ -4277,8 +4432,11 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      eventBus
-                          .fire(RoomBack(title: '上麦', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        eventBus
+                            .fire(RoomBack(title: '上麦', index: i.toString()));
+                      }
                     }),
                     child: Container(
                       height: double.infinity,
@@ -4302,12 +4460,17 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      if (listM[i].isLock == 0) {
-                        eventBus
-                            .fire(RoomBack(title: '锁麦', index: i.toString()));
-                      } else {
-                        eventBus
-                            .fire(RoomBack(title: '解锁', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        if (listM[i].isLock == 0) {
+                          eventBus
+                              .fire(
+                              RoomBack(title: '锁麦', index: i.toString()));
+                        } else {
+                          eventBus
+                              .fire(
+                              RoomBack(title: '解锁', index: i.toString()));
+                        }
                       }
                     }),
                     child: WidgetUtils.onlyTextCenter(
@@ -4346,8 +4509,11 @@ class RoomItems {
             Expanded(
                 child: GestureDetector(
                   onTap: (() {
-                    eventBus.fire(
-                        RoomBack(title: '上麦', index: index.toString()));
+                    if (sp.getBool('joinRoom') == false) {
+                      sp.setBool('joinRoom', true);
+                      eventBus.fire(
+                          RoomBack(title: '上麦', index: index.toString()));
+                    }
                   }),
                   child: Container(
                     height: double.infinity,
@@ -4388,8 +4554,11 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      eventBus
-                          .fire(RoomBack(title: '下麦', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        eventBus
+                            .fire(RoomBack(title: '下麦', index: i.toString()));
+                      }
                     }),
                     child: Container(
                       height: double.infinity,
@@ -4413,12 +4582,15 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      if (listm[i].isClose == 0) {
-                        eventBus.fire(
-                            RoomBack(title: '闭麦1', index: i.toString()));
-                      } else {
-                        eventBus.fire(
-                            RoomBack(title: '开麦1', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        if (listm[i].isClose == 0) {
+                          eventBus.fire(
+                              RoomBack(title: '闭麦1', index: i.toString()));
+                        } else {
+                          eventBus.fire(
+                              RoomBack(title: '开麦1', index: i.toString()));
+                        }
                       }
                     }),
                     child: Container(
@@ -4457,8 +4629,11 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      eventBus
-                          .fire(RoomBack(title: '下麦', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        eventBus
+                            .fire(RoomBack(title: '下麦', index: i.toString()));
+                      }
                     }),
                     child: Container(
                       height: double.infinity,
@@ -4482,12 +4657,15 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      if (listm[i].isClose == 0) {
-                        eventBus.fire(
-                            RoomBack(title: '闭麦1', index: i.toString()));
-                      } else {
-                        eventBus.fire(
-                            RoomBack(title: '开麦1', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        if (listm[i].isClose == 0) {
+                          eventBus.fire(
+                              RoomBack(title: '闭麦1', index: i.toString()));
+                        } else {
+                          eventBus.fire(
+                              RoomBack(title: '开麦1', index: i.toString()));
+                        }
                       }
                     }),
                     child: Container(
@@ -4526,8 +4704,11 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      eventBus
-                          .fire(RoomBack(title: '下麦', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        eventBus
+                            .fire(RoomBack(title: '下麦', index: i.toString()));
+                      }
                     }),
                     child: Container(
                       height: double.infinity,
@@ -4551,12 +4732,15 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      if (listm[i].isClose == 0) {
-                        eventBus.fire(
-                            RoomBack(title: '闭麦1', index: i.toString()));
-                      } else {
-                        eventBus.fire(
-                            RoomBack(title: '开麦1', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        if (listm[i].isClose == 0) {
+                          eventBus.fire(
+                              RoomBack(title: '闭麦1', index: i.toString()));
+                        } else {
+                          eventBus.fire(
+                              RoomBack(title: '开麦1', index: i.toString()));
+                        }
                       }
                     }),
                     child: Container(
@@ -4595,8 +4779,11 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      eventBus
-                          .fire(RoomBack(title: '下麦', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        eventBus
+                            .fire(RoomBack(title: '下麦', index: i.toString()));
+                      }
                     }),
                     child: Container(
                       height: double.infinity,
@@ -4620,12 +4807,15 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      if (listm[i].isClose == 0) {
-                        eventBus.fire(
-                            RoomBack(title: '闭麦1', index: i.toString()));
-                      } else {
-                        eventBus.fire(
-                            RoomBack(title: '开麦1', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        if (listm[i].isClose == 0) {
+                          eventBus.fire(
+                              RoomBack(title: '闭麦1', index: i.toString()));
+                        } else {
+                          eventBus.fire(
+                              RoomBack(title: '开麦1', index: i.toString()));
+                        }
                       }
                     }),
                     child: Container(
@@ -4664,8 +4854,11 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      eventBus
-                          .fire(RoomBack(title: '下麦', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        eventBus
+                            .fire(RoomBack(title: '下麦', index: i.toString()));
+                      }
                     }),
                     child: Container(
                       height: double.infinity,
@@ -4689,12 +4882,15 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      if (listm[i].isClose == 0) {
-                        eventBus.fire(
-                            RoomBack(title: '闭麦1', index: i.toString()));
-                      } else {
-                        eventBus.fire(
-                            RoomBack(title: '开麦1', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        if (listm[i].isClose == 0) {
+                          eventBus.fire(
+                              RoomBack(title: '闭麦1', index: i.toString()));
+                        } else {
+                          eventBus.fire(
+                              RoomBack(title: '开麦1', index: i.toString()));
+                        }
                       }
                     }),
                     child: Container(
@@ -4733,8 +4929,11 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      eventBus
-                          .fire(RoomBack(title: '下麦', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        eventBus
+                            .fire(RoomBack(title: '下麦', index: i.toString()));
+                      }
                     }),
                     child: Container(
                       height: double.infinity,
@@ -4758,12 +4957,15 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      if (listm[i].isClose == 0) {
-                        eventBus.fire(
-                            RoomBack(title: '闭麦1', index: i.toString()));
-                      } else {
-                        eventBus.fire(
-                            RoomBack(title: '开麦1', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        if (listm[i].isClose == 0) {
+                          eventBus.fire(
+                              RoomBack(title: '闭麦1', index: i.toString()));
+                        } else {
+                          eventBus.fire(
+                              RoomBack(title: '开麦1', index: i.toString()));
+                        }
                       }
                     }),
                     child: Container(
@@ -4802,8 +5004,11 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      eventBus
-                          .fire(RoomBack(title: '下麦', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        eventBus
+                            .fire(RoomBack(title: '下麦', index: i.toString()));
+                      }
                     }),
                     child: Container(
                       height: double.infinity,
@@ -4827,12 +5032,15 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      if (listm[i].isClose == 0) {
-                        eventBus.fire(
-                            RoomBack(title: '闭麦1', index: i.toString()));
-                      } else {
-                        eventBus.fire(
-                            RoomBack(title: '开麦1', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        if (listm[i].isClose == 0) {
+                          eventBus.fire(
+                              RoomBack(title: '闭麦1', index: i.toString()));
+                        } else {
+                          eventBus.fire(
+                              RoomBack(title: '开麦1', index: i.toString()));
+                        }
                       }
                     }),
                     child: Container(
@@ -4871,8 +5079,11 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      eventBus
-                          .fire(RoomBack(title: '下麦', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        eventBus
+                            .fire(RoomBack(title: '下麦', index: i.toString()));
+                      }
                     }),
                     child: Container(
                       height: double.infinity,
@@ -4896,12 +5107,15 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      if (listm[i].isClose == 0) {
-                        eventBus.fire(
-                            RoomBack(title: '闭麦1', index: i.toString()));
-                      } else {
-                        eventBus.fire(
-                            RoomBack(title: '开麦1', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        if (listm[i].isClose == 0) {
+                          eventBus.fire(
+                              RoomBack(title: '闭麦1', index: i.toString()));
+                        } else {
+                          eventBus.fire(
+                              RoomBack(title: '开麦1', index: i.toString()));
+                        }
                       }
                     }),
                     child: Container(
@@ -4940,8 +5154,11 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      eventBus
-                          .fire(RoomBack(title: '下麦', index: i.toString()));
+                      if (sp.getBool('joinRoom') == false) {
+                        sp.setBool('joinRoom', true);
+                        eventBus
+                            .fire(RoomBack(title: '下麦', index: i.toString()));
+                      }
                     }),
                     child: Container(
                       height: double.infinity,
@@ -4965,7 +5182,9 @@ class RoomItems {
               Expanded(
                   child: GestureDetector(
                     onTap: (() {
-                      if (listm[i].isClose == 0) {
+                      if (listm[i].isClose == 0 && sp.getBool('joinRoom') ==
+                          false) {
+                        sp.setBool('joinRoom', true);
                         eventBus.fire(
                             RoomBack(title: '闭麦1', index: i.toString()));
                       } else {

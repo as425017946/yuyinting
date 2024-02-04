@@ -14,7 +14,7 @@ class MyHttpConfig{
   //赵增测试环境
   // static  String baseURL = "http://192.168.0.53/api";
   //正式环境  16是电信网络服务器 18正常服务器
-  static  String baseURL = sp.getString('isDian').toString() == '1' ? "http://43.129.242.72:8080/api" : "http://18.163.74.49:8080/api";
+  static  String baseURL = sp.getString('isDian').toString().isNotEmpty ? "http://${sp.getString('isDian').toString()}:8080/api" : "http://18.163.74.49:8080/api";
   // 正式环境
   // static  String baseURL = "http://www.aa986.com:8080/api";
   /// 文件上传

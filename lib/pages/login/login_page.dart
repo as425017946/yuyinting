@@ -52,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
     });
     // TODO: implement initState
     super.initState();
-    // doPostPdAddress();
+    doPostPdAddress();
     getIPAddress();
     getDeviceIMEI();
     // 在登录页先设置所有游戏的音频开关默认开启，false为开始，true为关闭
@@ -176,7 +176,8 @@ class _LoginPageState extends State<LoginPage> {
     final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if (Platform.isAndroid) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      String imei = '${androidInfo.id}:${androidInfo.device}:${androidInfo.model}:${androidInfo.product}:${androidInfo.isPhysicalDevice}:${sp.getString('miyao')}'; // 获取 Android 设备的 IMEI
+      // String imei = '${androidInfo.id}:${androidInfo.device}:${androidInfo.model}:${androidInfo.product}:${androidInfo.isPhysicalDevice}:${sp.getString('miyao')}'; // 获取 Android 设备的 IMEI
+      String imei = androidInfo.id;
       setState(() {
         IMEI = imei;
       });
@@ -878,11 +879,9 @@ class _LoginPageState extends State<LoginPage> {
       pdAddressBean bean = await DataUtils.postPdAddress();
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          LogE('当前网络 ${bean.type!}');
-          String info = bean.type! == 0 ? '其他网络' : '电信网络';
-          MyToastUtils.showToastBottom(info);
+          MyToastUtils.showToastBottom(bean.nodes!);
           setState(() {
-            sp.setString('isDian', bean.type.toString());
+            sp.setString('isDian', bean.nodes!);
           });
           break;
         case MyHttpConfig.errorloginCode:

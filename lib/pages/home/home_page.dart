@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
   @override
   void initState() {
     // TODO: implement initState
-    // doPostPdAddress();
+    doPostPdAddress();
     doCheck();
     //更新身份
     setState(() {
@@ -705,17 +705,15 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
     }
   }
 
-  /// 判断当前网络是电信还是其他 1电信 0 其他
+  /// 判断当前网络
   Future<void> doPostPdAddress() async {
     try {
       pdAddressBean bean = await DataUtils.postPdAddress();
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          LogE('当前网络 ${bean.type!}');
-          String info = bean.type! == 0 ? '其他网络' : '电信网络';
-          MyToastUtils.showToastBottom(info);
+          MyToastUtils.showToastBottom(bean.nodes!);
           setState(() {
-            sp.setString('isDian', bean.type.toString());
+            sp.setString('isDian', bean.nodes!);
           });
           break;
         case MyHttpConfig.errorloginCode:

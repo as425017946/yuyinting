@@ -24,6 +24,7 @@ class _StarPageState extends State<StarPage> {
     Future.delayed(const Duration(milliseconds: 2000), ((){
         sp.setBool('joinRoom', false);
         sp.setString('roomID', '');
+        sp.setString('isDian', '');
         Navigator.pop(context);
         LogE('用户token   ${sp.getString('user_token').toString()}');
         LogE('用户token   ${sp.getString('user_token').toString().isNotEmpty}');

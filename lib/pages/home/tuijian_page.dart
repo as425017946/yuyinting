@@ -381,8 +381,7 @@ class _TuijianPageState extends State<TuijianPage> {
                                 SizedBox(
                                   height: ScreenUtil().setHeight(350),
                                   width: ScreenUtil().setWidth(450),
-                                  child: Swiper(
-                                    key: UniqueKey(),
+                                  child: listRoom.isNotEmpty ? Swiper(
                                     itemBuilder:
                                         (BuildContext context, int index) {
                                       // 配置图片地址
@@ -449,7 +448,7 @@ class _TuijianPageState extends State<TuijianPage> {
                                         doPostBeforeJoin(listRoom[index].id.toString(), '');
                                       }
                                     },
-                                  ),
+                                  ) : const Text(''),
                                 ),
                                 WidgetUtils.commonSizedBox(0, 10),
                                 Expanded(
@@ -461,7 +460,6 @@ class _TuijianPageState extends State<TuijianPage> {
                                       height: ScreenUtil().setHeight(170),
                                       width: double.infinity,
                                       child: Swiper(
-                                        key: UniqueKey(),
                                         itemBuilder:
                                             (BuildContext context, int index) {
                                           // 配置图片地址
@@ -539,7 +537,6 @@ class _TuijianPageState extends State<TuijianPage> {
                                         child: SizedBox(
                                       height: ScreenUtil().setHeight(170),
                                       child: Swiper(
-                                        key: UniqueKey(),
                                         itemBuilder:
                                             (BuildContext context, int index) {
                                           // 配置图片地址

@@ -91,24 +91,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
   Future<void> initAgora() async {
     // 获取权限
     await [Permission.microphone].request();
-    // 创建 RtcEngine
-    _engine = await createAgoraRtcEngine();
-
-    // 初始化 RtcEngine，设置频道场景为直播场景
-    await _engine.initialize(const RtcEngineContext(
-      appId: MyConfig.appId,
-      channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
-    ));
-
-    _engine.enableAudio();
-    _engine.enableLocalAudio(true);
-    // 设置音质
-    _engine.setAudioProfile(
-        profile: AudioProfileType.audioProfileMusicHighQuality,
-        scenario: AudioScenarioType.audioScenarioGameStreaming);
-    //默认订阅所有远端用户的音频流。
-    _engine.muteAllRemoteAudioStreams(false);
-    _engine.enableLoopbackRecording(enabled: true);
+    await _mRecorder!.openRecorder();
   }
 
   @override
@@ -206,7 +189,6 @@ class _EditAudioPageState extends State<EditAudioPage> {
     LogE('录音地址 == $path');
     File file = File(path);
     file.openWrite();
-    await _mRecorder!.openRecorder();
     _mRecorder!
         .startRecorder(
       toFile: path,
@@ -364,26 +346,21 @@ class _EditAudioPageState extends State<EditAudioPage> {
                           //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                           borderRadius: BorderRadius.all(Radius.circular(20.0)),
                         ),
-                        child: playRecord == false
-                            ? Row(
-                                children: [
-                                  const Expanded(
-                                      child: SVGASimpleImage(
-                                    assetsName:
-                                        'assets/svga/audio_xindiaotu.svga',
-                                  )),
-                                  WidgetUtils.commonSizedBox(0, 10.h),
-                                  WidgetUtils.showImages(
-                                      'assets/images/people_bofang.png',
-                                      ScreenUtil().setHeight(35),
-                                      ScreenUtil().setWidth(35)),
-                                  WidgetUtils.commonSizedBox(0, 10.h),
-                                ],
-                              )
-                            : const Expanded(
+                        child: Row(
+                          children: [
+                            const Expanded(
                                 child: SVGASimpleImage(
-                                assetsName: 'assets/svga/audio_bolang.svga',
-                              )),
+                                  assetsName:
+                                  'assets/svga/audio_xindiaotu.svga',
+                                )),
+                            WidgetUtils.commonSizedBox(0, 10.h),
+                            WidgetUtils.showImages(
+                                'assets/images/people_bofang.png',
+                                ScreenUtil().setHeight(35),
+                                ScreenUtil().setWidth(35)),
+                            WidgetUtils.commonSizedBox(0, 10.h),
+                          ],
+                        ),
                       ),
                     )
                   ],
