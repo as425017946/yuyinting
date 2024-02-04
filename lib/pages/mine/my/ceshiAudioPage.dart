@@ -1,12 +1,22 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:audio_session/audio_session.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_sound_platform_interface/flutter_sound_recorder_platform_interface.dart';
+import 'package:yuyinting/utils/widget_utils.dart';
+
+import '../../../http/my_http_config.dart';
+import '../../../main.dart';
+import '../../../utils/event_utils.dart';
+import '../../../utils/loading.dart';
+import '../../../utils/log_util.dart';
+import '../../../utils/my_toast_utils.dart';
 
 enum RecordPlayState {
   record,
@@ -258,6 +268,7 @@ class _CeshiAudioPageState extends State<CeshiAudioPage> {
     return Scaffold(
       body: Column(
         children: [
+          WidgetUtils.commonSizedBox(100, 0),
           GestureDetector(
             onTap: ((){
               _startRecorder();
@@ -283,9 +294,76 @@ class _CeshiAudioPageState extends State<CeshiAudioPage> {
                   '暂停'
               ),
             ),
+          ),
+          GestureDetector(
+            onTap: ((){
+              doPostPostFileUpload();
+            }),
+            child: Container(
+              height: 50.h,
+              width: 100.h,
+              color: Colors.red,
+              child: Text(
+                  '上传'
+              ),
+            ),
           )
         ],
       ),
     );
+  }
+
+
+  /// 获取文件url
+  Future<void> doPostPostFileUpload() async {
+    var name = _path.substring(_path.lastIndexOf("/") + 1, _path.length);
+    File f = File(_path);
+    int fileSizeInBytes = f.lengthSync();
+    double fileSizeInKB = fileSizeInBytes / 1024; // 文件大小转换为KB
+    LogE('音频上传///$fileSizeInBytes');
+    LogE('音频上传大小///$fileSizeInKB KB}');
+    if(await f.exists()){
+      LogE('存在!');
+    }else{
+      MyToastUtils.showToastBottom('文件不存在！');
+      return;
+    }
+    Loading.show("音频上传中...");
+    FormData formdata = FormData.fromMap(
+      {
+        'type': 'audio',
+        "file": await MultipartFile.fromFile(
+          _path,
+          filename: name,
+        )
+      },
+    );
+    LogE('音频上传**$formdata');
+    BaseOptions option = BaseOptions(
+        contentType: 'multipart/form-data', responseType: ResponseType.plain);
+    option.headers["Authorization"] = sp.getString('user_token') ?? '';
+    Dio dio = Dio(option);
+    //application/json
+    try {
+      var respone = await dio.post(MyHttpConfig.fileUpload, data: formdata);
+      Map jsonResponse = json.decode(respone.data.toString());
+      LogE('音频上传$jsonResponse');
+      if (jsonResponse['code'] == 200) {
+
+        MyToastUtils.showToastBottom('音频上传成功');
+        Loading.dismiss();
+        // ignore: use_build_context_synchronously
+        Navigator.pop(context);
+      } else if (jsonResponse['code'] == 401) {
+
+      } else {
+        MyToastUtils.showToastBottom(jsonResponse['msg']);
+      }
+
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
   }
 }
