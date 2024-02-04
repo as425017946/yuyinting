@@ -98,7 +98,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
     });
     super.initState();
     appBar = WidgetUtils.getAppBar('声音录制', true, context, false, 0);
-    doPostLabelList();
+    // doPostLabelList();
     setState(() {
       audioUrl = widget.audioUrl;
     });
@@ -115,11 +115,9 @@ class _EditAudioPageState extends State<EditAudioPage> {
   }
 
   Future<void> init() async {
-    // 获取权限
-    await [Permission.microphone].request();
     //开启录音
     await recorderModule.openRecorder();
-    var status = await Permission.storage.request();
+    var status = await Permission.microphone.request();
     if (status.isGranted) {
       setState(() {
         isMAI = true;
