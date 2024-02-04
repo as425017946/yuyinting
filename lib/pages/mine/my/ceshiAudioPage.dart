@@ -37,7 +37,7 @@ class _CeshiAudioPageState extends State<CeshiAudioPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getPermissionStatus();
+    // getPermissionStatus();
     init();
   }
 
@@ -49,6 +49,8 @@ class _CeshiAudioPageState extends State<CeshiAudioPage> {
   }
 
   Future<void> init() async {
+    // 获取权限
+    await [Permission.microphone].request();
     //开启录音
     await recorderModule.openRecorder();
     //设置订阅计时器
