@@ -195,6 +195,9 @@ class _EditAudioPageState extends State<EditAudioPage> {
 
           if (date.second >= _maxLength) {
             print('===>  到达时常停止录音');
+            setState(() {
+              isPlay = 2;
+            });
             _stopRecorder();
           }
           setState(() {
@@ -430,11 +433,14 @@ class _EditAudioPageState extends State<EditAudioPage> {
                               if (isPlay == 2) {
                                 play();
                               } else {
-                                _startRecorder();
                                 setState(() {
                                   if (isPlay == 0) {
+                                    //开始录音
+                                    _startRecorder();
                                     isPlay = 1;
                                   } else if (isPlay == 1) {
+                                    //停止录音
+                                    _stopRecorder();
                                     isPlay = 2;
                                   }
                                 });
