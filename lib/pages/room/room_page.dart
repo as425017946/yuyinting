@@ -23,7 +23,6 @@ import '../../bean/CommonMyIntBean.dart';
 import '../../bean/Common_bean.dart';
 import '../../bean/charmAllBean.dart';
 import '../../bean/hengFuBean.dart';
-import '../../bean/isFirstOrderBean.dart';
 import '../../bean/joinRoomBean.dart';
 import '../../bean/maiXuBean.dart';
 import '../../bean/roomInfoBean.dart';
@@ -49,9 +48,9 @@ class RoomPage extends StatefulWidget {
 
   RoomPage(
       {Key? key,
-      required this.roomId,
-      required this.beforeId,
-      required this.roomToken})
+        required this.roomId,
+        required this.beforeId,
+        required this.roomToken})
       : super(key: key);
 
   @override
@@ -91,7 +90,7 @@ class _RoomPageState extends State<RoomPage>
         File file = File(m['svgaUrl']);
         if (await file.exists()) {
           animationControllerSL?.videoItem =
-              await SVGAParser.shared.decodeFromBuffer(file.readAsBytesSync());
+          await SVGAParser.shared.decodeFromBuffer(file.readAsBytesSync());
           animationControllerSL
               ?.forward() // Try to use .forward() .reverse()
               .whenComplete(() => animationControllerSL?.videoItem = null);
@@ -262,34 +261,34 @@ class _RoomPageState extends State<RoomPage>
   void _startTimer() {
     _timer = Timer.periodic(
         const Duration(seconds: 1),
-        (Timer timer) => {
-              setState(() {
-                if (_timeCount <= 0) {
-                  _timer!.cancel();
-                  _timeCount = 5;
-                } else {
-                  _timeCount -= 1;
-                }
-              })
-            });
+            (Timer timer) => {
+          setState(() {
+            if (_timeCount <= 0) {
+              _timer!.cancel();
+              _timeCount = 5;
+            } else {
+              _timeCount -= 1;
+            }
+          })
+        });
   }
 
   void _startTimer2() {
     _timer2 = Timer.periodic(
         const Duration(seconds: 1),
-        (Timer timer) => {
+            (Timer timer) => {
+          setState(() {
+            if (_timeCount2 <= 0) {
+              _timer2!.cancel();
+              _timeCount2 = 10;
               setState(() {
-                if (_timeCount2 <= 0) {
-                  _timer2!.cancel();
-                  _timeCount2 = 10;
-                  setState(() {
-                    wherePeople = 0;
-                  });
-                } else {
-                  _timeCount2 -= 1;
-                }
-              })
-            });
+                wherePeople = 0;
+              });
+            } else {
+              _timeCount2 -= 1;
+            }
+          })
+        });
   }
 
   // 送礼选中了那个用户
@@ -428,7 +427,7 @@ class _RoomPageState extends State<RoomPage>
       setState(() {
         Map<String, String> map = {};
         map['info'] =
-            '官方倡导绿色聊天，对聊天内容24小时在线巡查，严禁未成年人充值消费，严禁宣传与政治、色情、敏感话题等相关内容，任何传播违法/违规/低俗/暴力等不良信息的行为会导致封禁账号。';
+        '官方倡导绿色聊天，对聊天内容24小时在线巡查，严禁未成年人充值消费，严禁宣传与政治、色情、敏感话题等相关内容，任何传播违法/违规/低俗/暴力等不良信息的行为会导致封禁账号。';
         map['type'] = '0';
         list.add(map);
       });
@@ -650,12 +649,11 @@ class _RoomPageState extends State<RoomPage>
                 upOrDown[i] = false;
                 isMy[i] = false;
               }
-              sp.setBool('joinRoom', false);
               upOrDown[int.parse(event.index!)] = true;
             });
             break;
           case '上麦':
-            //判断上麦或者换麦的时间间隔是否大于了2s
+          //判断上麦或者换麦的时间间隔是否大于了2s
             if (DateTime.now().millisecondsSinceEpoch - maiTime > 2000) {
               //设置成主播
               _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
@@ -668,9 +666,6 @@ class _RoomPageState extends State<RoomPage>
                 }
               });
             } else {
-              setState(() {
-                sp.setBool('joinRoom', false);
-              });
               MyToastUtils.showToastBottom('亲，跳麦需间隔2S以上哦~');
             }
             break;
@@ -701,17 +696,11 @@ class _RoomPageState extends State<RoomPage>
                 });
               }
             } else {
-              setState(() {
-                sp.setBool('joinRoom', false);
-              });
               MyToastUtils.showToastBottom('下麦太快了哦~');
             }
             break;
           case 'leave_room':
-            setState(() {
-              sp.setBool('joinRoom', false);
-            });
-            // 调用离开房间接口
+          // 调用离开房间接口
             doPostLeave();
             if (_timerHot != null) {
               _timerHot!.cancel();
@@ -722,7 +711,6 @@ class _RoomPageState extends State<RoomPage>
             break;
           case '闭麦':
             setState(() {
-              sp.setBool('joinRoom', false);
               // 取消发布本地音频流
               _engine.muteLocalAudioStream(true);
               listM[int.parse(event.index!)].isClose = 1;
@@ -734,7 +722,6 @@ class _RoomPageState extends State<RoomPage>
             break;
           case '开麦':
             setState(() {
-              sp.setBool('joinRoom', false);
               // 开启发布本地音频流
               _engine.muteLocalAudioStream(false);
               listM[int.parse(event.index!)].isClose = 0;
@@ -770,7 +757,6 @@ class _RoomPageState extends State<RoomPage>
             break;
           case '自己':
             setState(() {
-              sp.setBool('joinRoom', false);
               for (int i = 0; i < 9; i++) {
                 isMy[i] = false;
               }
@@ -782,12 +768,11 @@ class _RoomPageState extends State<RoomPage>
             break;
           case '修改了公告':
             setState(() {
-              sp.setBool('joinRoom', false);
               notice = event.index!;
             });
             break;
           case '欢迎':
-            // 用户id
+          // 用户id
             String uid = event.index!.split(',')[0];
             // 点击的list里面的第几个
             String index = event.index!.split(',')[1];
@@ -798,19 +783,16 @@ class _RoomPageState extends State<RoomPage>
             break;
           case '已播放完成':
             setState(() {
-              sp.setBool('joinRoom', false);
               list[int.parse(event.index!)]['isOK'] = 'true';
             });
             break;
           case '厅头修改':
             setState(() {
-              sp.setBool('joinRoom', false);
               roomHeadImg = event.index!;
             });
             break;
           case '点击房间关闭':
             setState(() {
-              sp.setBool('joinRoom', false);
               isBack = true;
             });
             break;
@@ -857,7 +839,7 @@ class _RoomPageState extends State<RoomPage>
               }
               break;
             case 'close_mic': //闭麦
-              // 上下麦操作不是本地才刷新
+            // 上下麦操作不是本地才刷新
               doPostRoomMikeInfo();
               if (event.map!['uid'].toString() != sp.getString('user_id')) {
               } else {
@@ -939,7 +921,7 @@ class _RoomPageState extends State<RoomPage>
               });
               break;
             case 'room_forbation': //禁言
-              //判断被禁言的人是不是自己
+            //判断被禁言的人是不是自己
               if (event.map!['uid'].toString() ==
                   sp.getString('user_id').toString()) {
                 setState(() {
@@ -948,7 +930,7 @@ class _RoomPageState extends State<RoomPage>
               }
               break;
             case 'cancel_room_forbation': //取消禁言
-              //判断被取消禁言的人是不是自己
+            //判断被取消禁言的人是不是自己
               if (event.map!['uid'].toString() ==
                   sp.getString('user_id').toString()) {
                 setState(() {
@@ -957,7 +939,7 @@ class _RoomPageState extends State<RoomPage>
               }
               break;
             case 'room_black': //设置黑名单
-              //判断被拉黑的人是不是自己
+            //判断被拉黑的人是不是自己
               if (event.map!['uid'].toString() ==
                   sp.getString('user_id').toString()) {
                 // MyToastUtils.showToastBottom('你已被房间设置为黑名单用户！');
@@ -980,7 +962,7 @@ class _RoomPageState extends State<RoomPage>
               }
               break;
             case 'user_room_black':
-              // 这个是针对，用户被拉黑前，用户断网使用，保证他会被踢出去
+            // 这个是针对，用户被拉黑前，用户断网使用，保证他会被踢出去
               if (event.map!['uid'].toString() ==
                   sp.getString('user_id').toString()) {
                 MyToastUtils.showToastBottom('你已被房间设置为黑名单用户！');
@@ -1000,7 +982,7 @@ class _RoomPageState extends State<RoomPage>
               }
               break;
             case 'room_admin': //设置管理员
-              //判断被设置管理员的人是不是自己
+            //判断被设置管理员的人是不是自己
               if (event.map!['uid'].toString() ==
                   sp.getString('user_id').toString()) {
                 MyToastUtils.showToastBottom('您已被提升为本房间的管理员身份！');
@@ -1009,7 +991,7 @@ class _RoomPageState extends State<RoomPage>
               }
               break;
             case 'cancel_room_admin': //取消管理员
-              //判断被取消管理员的人是不是自己
+            //判断被取消管理员的人是不是自己
               if (event.map!['uid'].toString() ==
                   sp.getString('user_id').toString()) {
                 MyToastUtils.showToastBottom('您已被取消本房间的管理员身份！');
@@ -2125,8 +2107,8 @@ class _RoomPageState extends State<RoomPage>
       token: widget.roomToken,
       channelId: widget.roomId,
       options: const ChannelMediaOptions(
-          // 设置用户角色为主播
-          // 如果要将用户角色设置为观众，则修改 clientRoleBroadcaster 为 clientRoleAudience
+        // 设置用户角色为主播
+        // 如果要将用户角色设置为观众，则修改 clientRoleBroadcaster 为 clientRoleAudience
           clientRoleType: ClientRoleType.clientRoleBroadcaster),
       uid: int.parse(sp.getString('user_id').toString()),
     );
@@ -2218,388 +2200,381 @@ class _RoomPageState extends State<RoomPage>
       body: WillPopScope(
         child: isOK
             ? GestureDetector(
-                onTap: (() {
-                  setState(() {
-                    for (int i = 0; i < 9; i++) {
-                      upOrDown[i] = false;
-                    }
-                    for (int i = 0; i < 9; i++) {
-                      isMy[i] = false;
-                    }
-                    sp.setBool('joinRoom', false);
-                  });
-                }),
-                child: Container(
+          onTap: (() {
+            setState(() {
+              for (int i = 0; i < 9; i++) {
+                upOrDown[i] = false;
+              }
+              for (int i = 0; i < 9; i++) {
+                isMy[i] = false;
+              }
+            });
+          }),
+          child: Container(
+            height: double.infinity,
+            width: double.infinity,
+            color: Colors.white,
+            child: Stack(
+              children: [
+                BgType == '1'
+                    ? SizedBox(
                   height: double.infinity,
                   width: double.infinity,
-                  color: Colors.white,
-                  child: Stack(
-                    children: [
-                      BgType == '1'
-                          ? SizedBox(
-                              height: double.infinity,
-                              width: double.infinity,
-                              child: WidgetUtils.showImagesNetRoom(
-                                  bgImage, double.infinity, double.infinity),
-                            )
-                          : BgType == '2'
-                              ? (bgSVGA.contains('gif') ||
-                                      bgSVGA.contains('GIF'))
-                                  ? SizedBox(
-                                      height: double.infinity,
-                                      width: double.infinity,
-                                      child: WidgetUtils.showImagesNetRoom(
-                                          bgSVGA,
-                                          double.infinity,
-                                          double.infinity),
-                                    )
-                                  : SizedBox(
-                                      height: double.infinity,
-                                      width: double.infinity,
-                                      child: SVGAImage(
-                                        animationControllerBG,
-                                        fit: BoxFit.fill,
-                                      ),
-                                    )
-                              : const Text(''),
-                      Column(
-                        children: [
-                          WidgetUtils.commonSizedBox(
-                              isDevices == 'ios' ? 80.h : 60.h, 0),
-                          // 头部
-                          RoomItems.roomTop(
-                              context,
-                              roomHeadImg,
-                              roomName,
-                              roomNumber,
-                              follow_status,
-                              hot_degree,
-                              widget.roomId,
-                              listM),
-                          WidgetUtils.commonSizedBox(10, 0),
+                  child: WidgetUtils.showImagesNetRoom(
+                      bgImage, double.infinity, double.infinity),
+                )
+                    : BgType == '2'
+                    ? (bgSVGA.contains('gif') ||
+                    bgSVGA.contains('GIF'))
+                    ? SizedBox(
+                  height: double.infinity,
+                  width: double.infinity,
+                  child: WidgetUtils.showImagesNetRoom(
+                      bgSVGA,
+                      double.infinity,
+                      double.infinity),
+                )
+                    : SizedBox(
+                  height: double.infinity,
+                  width: double.infinity,
+                  child: SVGAImage(
+                    animationControllerBG,
+                    fit: BoxFit.fill,
+                  ),
+                )
+                    : const Text(''),
+                Column(
+                  children: [
+                    WidgetUtils.commonSizedBox(
+                        isDevices == 'ios' ? 80.h : 60.h, 0),
+                    // 头部
+                    RoomItems.roomTop(
+                        context,
+                        roomHeadImg,
+                        roomName,
+                        roomNumber,
+                        follow_status,
+                        hot_degree,
+                        widget.roomId,
+                        listM),
+                    WidgetUtils.commonSizedBox(10, 0),
 
-                          /// 公告 和 厅主
-                          RoomItems.notices(context, m0, notice, listM,
-                              widget.roomId, wherePeople, listPeople),
+                    /// 公告 和 厅主
+                    RoomItems.notices(context, m0, notice, listM,
+                        widget.roomId, wherePeople, listPeople),
 
-                          /// 麦序位
-                          RoomItems.maixu(
-                              context,
-                              m1,
-                              m2,
-                              m3,
-                              m4,
-                              m5,
-                              m6,
-                              m7,
-                              m8,
-                              isBoss,
-                              listM,
-                              widget.roomId,
-                              wherePeople,
-                              listPeople),
-                          Expanded(
-                            child: Transform.translate(
-                              offset: Offset(0, -80.h),
-                              child: Stack(
-                                children: [
-                                  RoomItems.lunbotu1(context, sp.getString('scIsOk').toString() == '0' ? imgList : imgListCar),
-                                  RoomItems.lunbotu2(
-                                      context, imgList2, widget.roomId),
-                                ],
-                              ),
-                            ),
-                          ),
-
-                          /// 底部按钮信息
-                          RoomItems.footBtn(
-                              context,
-                              isJinyiin,
-                              isForbation,
-                              widget.roomId,
-                              isHomeShow,
-                              isRoomBoss,
-                              mima,
-                              listM,
-                              roomDX,
-                              roomSY,
-                              isRed,
-                              isMeUp,
-                              mxIndex),
-                          isDevices == 'ios' ? WidgetUtils.commonSizedBox(20.h, 0) : WidgetUtils.commonSizedBox(0, 0)
-                        ],
+                    /// 麦序位
+                    RoomItems.maixu(
+                        context,
+                        m1,
+                        m2,
+                        m3,
+                        m4,
+                        m5,
+                        m6,
+                        m7,
+                        m8,
+                        isBoss,
+                        listM,
+                        widget.roomId,
+                        wherePeople,
+                        listPeople),
+                    Expanded(
+                      child: Transform.translate(
+                        offset: Offset(0, -80.h),
+                        child: Stack(
+                          children: [
+                            RoomItems.lunbotu1(context, sp.getString('scIsOk').toString() == '0' ? imgList : imgListCar),
+                            RoomItems.lunbotu2(
+                                context, imgList2, widget.roomId),
+                          ],
+                        ),
                       ),
+                    ),
 
-                      /// 上麦下麦
-                      RoomItems.noPeople(upOrDown, 0, listM),
-                      RoomItems.noPeople(upOrDown, 1, listM),
-                      RoomItems.noPeople(upOrDown, 2, listM),
-                      RoomItems.noPeople(upOrDown, 3, listM),
-                      RoomItems.noPeople(upOrDown, 4, listM),
-                      RoomItems.noPeople(upOrDown, 5, listM),
-                      RoomItems.noPeople(upOrDown, 6, listM),
-                      RoomItems.noPeople(upOrDown, 7, listM),
-                      RoomItems.noPeople(upOrDown, 8, listM),
+                    /// 底部按钮信息
+                    RoomItems.footBtn(
+                        context,
+                        isJinyiin,
+                        isForbation,
+                        widget.roomId,
+                        isHomeShow,
+                        isRoomBoss,
+                        mima,
+                        listM,
+                        roomDX,
+                        roomSY,
+                        isRed,
+                        isMeUp,
+                        mxIndex),
+                    isDevices == 'ios' ? WidgetUtils.commonSizedBox(20.h, 0) : WidgetUtils.commonSizedBox(0, 0)
+                  ],
+                ),
 
-                      /// 点击自己使用
-                      RoomItems.isMe(0, listM, isMy[0]),
-                      RoomItems.isMe(1, listM, isMy[1]),
-                      RoomItems.isMe(2, listM, isMy[2]),
-                      RoomItems.isMe(3, listM, isMy[3]),
-                      RoomItems.isMe(4, listM, isMy[4]),
-                      RoomItems.isMe(5, listM, isMy[5]),
-                      RoomItems.isMe(6, listM, isMy[6]),
-                      RoomItems.isMe(7, listM, isMy[7]),
-                      RoomItems.isMe(8, listM, isMy[8]),
+                /// 上麦下麦
+                RoomItems.noPeople(upOrDown, 0, listM),
+                RoomItems.noPeople(upOrDown, 1, listM),
+                RoomItems.noPeople(upOrDown, 2, listM),
+                RoomItems.noPeople(upOrDown, 3, listM),
+                RoomItems.noPeople(upOrDown, 4, listM),
+                RoomItems.noPeople(upOrDown, 5, listM),
+                RoomItems.noPeople(upOrDown, 6, listM),
+                RoomItems.noPeople(upOrDown, 7, listM),
+                RoomItems.noPeople(upOrDown, 8, listM),
 
-                      /// 聊天除使用
-                      Positioned(
-                        bottom: 100.h,
-                        child:
-                            /// 消息列表最外层
-                            SizedBox(
-                          height: isDevices == 'ios' ?  560.h : 590.h,
-                          width: 420.h,
-                          child: Column(
+                /// 点击自己使用
+                RoomItems.isMe(0, listM, isMy[0]),
+                RoomItems.isMe(1, listM, isMy[1]),
+                RoomItems.isMe(2, listM, isMy[2]),
+                RoomItems.isMe(3, listM, isMy[3]),
+                RoomItems.isMe(4, listM, isMy[4]),
+                RoomItems.isMe(5, listM, isMy[5]),
+                RoomItems.isMe(6, listM, isMy[6]),
+                RoomItems.isMe(7, listM, isMy[7]),
+                RoomItems.isMe(8, listM, isMy[8]),
+
+                /// 聊天除使用
+                Positioned(
+                  bottom: 100.h,
+                  child:
+                  /// 消息列表最外层
+                  SizedBox(
+                    height: isDevices == 'ios' ?  560.h : 590.h,
+                    width: 420.h,
+                    child: Column(
+                      children: [
+                        //分类使用
+                        SizedBox(
+                          height: 50.h,
+                          child: Row(
                             children: [
-                              //分类使用
-                              SizedBox(
-                                height: 50.h,
-                                child: Row(
-                                  children: [
-                                    WidgetUtils.commonSizedBox(0, 20),
-                                    GestureDetector(
-                                      onTap: (() {
-                                        setState(() {
-                                          leixing = 0;
-                                        });
-                                      }),
-                                      child: WidgetUtils.showImages(
-                                          leixing == 0
-                                              ? 'assets/images/room_gp1.png'
-                                              : 'assets/images/room_gp2.png',
-                                          25.h,
-                                          60.h),
-                                    ),
-                                    WidgetUtils.commonSizedBox(0, 10),
-                                    Container(
-                                      height: ScreenUtil().setHeight(10),
-                                      width: ScreenUtil().setWidth(1),
-                                      color: MyColors.roomTCWZ3,
-                                    ),
-                                    WidgetUtils.commonSizedBox(0, 10),
-                                    GestureDetector(
-                                      onTap: (() {
-                                        setState(() {
-                                          leixing = 1;
-                                        });
-                                      }),
-                                      child: WidgetUtils.showImages(
-                                          leixing == 1
-                                              ? 'assets/images/room_lt1.png'
-                                              : 'assets/images/room_lt2.png',
-                                          25.h,
-                                          60.h),
-                                    ),
-                                    WidgetUtils.commonSizedBox(0, 10),
-                                  ],
-                                ),
+                              WidgetUtils.commonSizedBox(0, 20),
+                              GestureDetector(
+                                onTap: (() {
+                                  setState(() {
+                                    leixing = 0;
+                                  });
+                                }),
+                                child: WidgetUtils.showImages(
+                                    leixing == 0
+                                        ? 'assets/images/room_gp1.png'
+                                        : 'assets/images/room_gp2.png',
+                                    25.h,
+                                    60.h),
                               ),
-                              Expanded(
-                                  child: leixing == 0
-                                      ? ListView.builder(
-                                          padding: EdgeInsets.only(
-                                            left: 20.h,
-                                          ),
-                                          itemBuilder: itemMessages2,
-                                          controller: _scrollController2,
-                                          itemCount: list2.length,
-                                        )
-                                      : ListView.builder(
-                                          padding: EdgeInsets.only(
-                                            top: ScreenUtil().setHeight(10),
-                                            left: 20.h,
-                                          ),
-                                          itemBuilder: itemMessages,
-                                          controller: _scrollController,
-                                          itemCount: list.length,
-                                        ))
+                              WidgetUtils.commonSizedBox(0, 10),
+                              Container(
+                                height: ScreenUtil().setHeight(10),
+                                width: ScreenUtil().setWidth(1),
+                                color: MyColors.roomTCWZ3,
+                              ),
+                              WidgetUtils.commonSizedBox(0, 10),
+                              GestureDetector(
+                                onTap: (() {
+                                  setState(() {
+                                    leixing = 1;
+                                  });
+                                }),
+                                child: WidgetUtils.showImages(
+                                    leixing == 1
+                                        ? 'assets/images/room_lt1.png'
+                                        : 'assets/images/room_lt2.png',
+                                    25.h,
+                                    60.h),
+                              ),
+                              WidgetUtils.commonSizedBox(0, 10),
                             ],
                           ),
                         ),
-                      ),
-
-                      /// 公屏推送横幅使用
-                      isShowHF
-                          ? HomeItems.itemAnimation(
-                              path,
-                              slideAnimationController.controller,
-                              slideAnimationController.animation,
-                              name,
-                              listMP[0])
-                          : const Text(''),
-
-                      /// 爆出5w2的礼物横幅推送使用
-                      isBig
-                          ? HomeItems.itemBig(listMP[0], bigType)
-                          : const Text(''),
-
-                      /// 厅内送礼物显示动画使用
-                      (isShowSVGA == true && roomDX == true)
-                          ? IgnorePointer(
-                              ignoring: true,
-                              child: SizedBox(
-                                height: double.infinity,
-                                width: double.infinity,
-                                child: SVGAImage(
-                                  animationControllerSL,
-                                  fit: BoxFit.fitHeight,
-                                ),
+                        Expanded(
+                            child: leixing == 0
+                                ? ListView.builder(
+                              padding: EdgeInsets.only(
+                                left: 20.h,
                               ),
+                              itemBuilder: itemMessages2,
+                              controller: _scrollController2,
+                              itemCount: list2.length,
                             )
-                          : const Text(''),
-
-                      // /// 贵族进场动画
-                      // isGuZu
-                      //     ? IgnorePointer(
-                      //         ignoring: true,
-                      //         child: SizedBox(
-                      //           height: double.infinity,
-                      //           width: double.infinity,
-                      //           child: SVGASimpleImage6(
-                      //             resUrl: tequanzhuangban,
-                      //           ),
-                      //         ),
-                      //       )
-                      //     : const Text(''),
-
-                      /// 页面返回出现推荐房间
-                      isBack
-                          ? Row(
-                              children: [
-                                GestureDetector(
-                                  onTap: (() {
-                                    if(sp.getBool('joinRoom') == false) {
-                                      setState(() {
-                                        isBack = false;
-                                      });
-                                    }
-                                  }),
-                                  child: Container(
-                                    height: double.infinity,
-                                    width: 240.h,
-                                    color: Colors.transparent,
-                                  ),
-                                ),
-                                Expanded(
-                                    child: Container(
-                                  height: double.infinity,
-                                  color: Colors.black54,
-                                  child: Column(
-                                    children: [
-                                      WidgetUtils.commonSizedBox(35, 0),
-                                      Row(
-                                        children: [
-                                          const Expanded(child: Text('')),
-                                          GestureDetector(
-                                            onTap: (() {
-                                              setState(() {
-                                                sp.setBool('joinRoom', false);
-                                              });
-                                              if (MyUtils.checkClick()) {
-                                                sp.setString('roomID', '');
-                                                // 调用离开房间接口
-                                                doPostLeave();
-                                                if (_timerHot != null) {
-                                                  _timerHot!.cancel();
-                                                }
-                                                //离开频道并释放资源
-                                                _dispose();
-                                                eventBus.fire(SubmitButtonBack(
-                                                    title: '退出房间'));
-                                                Navigator.pop(context);
-                                              }
-                                            }),
-                                            child: Column(
-                                              children: [
-                                                WidgetUtils.showImages(
-                                                    'assets/images/room_exit.png',
-                                                    ScreenUtil().setHeight(60),
-                                                    ScreenUtil().setHeight(60)),
-                                                WidgetUtils.onlyTextCenter(
-                                                    '退出房间',
-                                                    StyleUtils
-                                                        .getCommonTextStyle(
-                                                            color: MyColors
-                                                                .roomTCWZ3,
-                                                            fontSize:
-                                                                ScreenUtil()
-                                                                    .setSp(
-                                                                        24))),
-                                              ],
-                                            ),
-                                          ),
-                                          WidgetUtils.commonSizedBox(0, 50),
-                                          GestureDetector(
-                                            onTap: (() {
-                                              setState(() {
-                                                sp.setBool('joinRoom', false);
-                                              });
-                                              if (MyUtils.checkClick()) {
-                                                if (_timerHot != null) {
-                                                  _timerHot!.cancel();
-                                                }
-                                                eventBus.fire(SubmitButtonBack(
-                                                    title: '收起房间'));
-                                                Navigator.pop(context);
-                                              }
-                                            }),
-                                            child: Column(
-                                              children: [
-                                                WidgetUtils.showImages(
-                                                    'assets/images/room_shouqi.png',
-                                                    ScreenUtil().setHeight(60),
-                                                    ScreenUtil().setHeight(60)),
-                                                WidgetUtils.onlyTextCenter(
-                                                    '收起房间',
-                                                    StyleUtils
-                                                        .getCommonTextStyle(
-                                                            color: MyColors
-                                                                .roomTCWZ3,
-                                                            fontSize:
-                                                                ScreenUtil()
-                                                                    .setSp(
-                                                                        24))),
-                                              ],
-                                            ),
-                                          ),
-                                          WidgetUtils.commonSizedBox(0, 40),
-                                        ],
-                                      ),
-                                      WidgetUtils.commonSizedBox(40, 0),
-                                      Expanded(
-                                        child: ListView.builder(
-                                          padding: EdgeInsets.only(
-                                              top: ScreenUtil().setHeight(5)),
-                                          itemBuilder: roomHouse,
-                                          itemCount: listPH.length,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ))
-                              ],
-                            )
-                          : const Text('')
-                    ],
+                                : ListView.builder(
+                              padding: EdgeInsets.only(
+                                top: ScreenUtil().setHeight(10),
+                                left: 20.h,
+                              ),
+                              itemBuilder: itemMessages,
+                              controller: _scrollController,
+                              itemCount: list.length,
+                            ))
+                      ],
+                    ),
                   ),
                 ),
-              )
+
+                /// 公屏推送横幅使用
+                isShowHF
+                    ? HomeItems.itemAnimation(
+                    path,
+                    slideAnimationController.controller,
+                    slideAnimationController.animation,
+                    name,
+                    listMP[0])
+                    : const Text(''),
+
+                /// 爆出5w2的礼物横幅推送使用
+                isBig
+                    ? HomeItems.itemBig(listMP[0], bigType)
+                    : const Text(''),
+
+                /// 厅内送礼物显示动画使用
+                (isShowSVGA == true && roomDX == true)
+                    ? IgnorePointer(
+                  ignoring: true,
+                  child: SizedBox(
+                    height: double.infinity,
+                    width: double.infinity,
+                    child: SVGAImage(
+                      animationControllerSL,
+                      fit: BoxFit.fitHeight,
+                    ),
+                  ),
+                )
+                    : const Text(''),
+
+                // /// 贵族进场动画
+                // isGuZu
+                //     ? IgnorePointer(
+                //         ignoring: true,
+                //         child: SizedBox(
+                //           height: double.infinity,
+                //           width: double.infinity,
+                //           child: SVGASimpleImage6(
+                //             resUrl: tequanzhuangban,
+                //           ),
+                //         ),
+                //       )
+                //     : const Text(''),
+
+                /// 页面返回出现推荐房间
+                isBack
+                    ? Row(
+                  children: [
+                    GestureDetector(
+                      onTap: (() {
+                        if(sp.getBool('joinRoom') == false){
+                          setState(() {
+                            isBack = false;
+                          });
+                        }
+                      }),
+                      child: Container(
+                        height: double.infinity,
+                        width: 240.h,
+                        color: Colors.transparent,
+                      ),
+                    ),
+                    Expanded(
+                        child: Container(
+                          height: double.infinity,
+                          color: Colors.black54,
+                          child: Column(
+                            children: [
+                              WidgetUtils.commonSizedBox(35, 0),
+                              Row(
+                                children: [
+                                  const Expanded(child: Text('')),
+                                  GestureDetector(
+                                    onTap: (() {
+                                      if (MyUtils.checkClick()) {
+                                        sp.setString('roomID', '');
+                                        // 调用离开房间接口
+                                        doPostLeave();
+                                        if (_timerHot != null) {
+                                          _timerHot!.cancel();
+                                        }
+                                        //离开频道并释放资源
+                                        _dispose();
+                                        eventBus.fire(SubmitButtonBack(
+                                            title: '退出房间'));
+                                        Navigator.pop(context);
+                                      }
+                                    }),
+                                    child: Column(
+                                      children: [
+                                        WidgetUtils.showImages(
+                                            'assets/images/room_exit.png',
+                                            ScreenUtil().setHeight(60),
+                                            ScreenUtil().setHeight(60)),
+                                        WidgetUtils.onlyTextCenter(
+                                            '退出房间',
+                                            StyleUtils
+                                                .getCommonTextStyle(
+                                                color: MyColors
+                                                    .roomTCWZ3,
+                                                fontSize:
+                                                ScreenUtil()
+                                                    .setSp(
+                                                    24))),
+                                      ],
+                                    ),
+                                  ),
+                                  WidgetUtils.commonSizedBox(0, 50),
+                                  GestureDetector(
+                                    onTap: (() {
+                                      if (MyUtils.checkClick()) {
+                                        if (_timerHot != null) {
+                                          _timerHot!.cancel();
+                                        }
+                                        eventBus.fire(SubmitButtonBack(
+                                            title: '收起房间'));
+                                        Navigator.pop(context);
+                                      }
+                                    }),
+                                    child: Column(
+                                      children: [
+                                        WidgetUtils.showImages(
+                                            'assets/images/room_shouqi.png',
+                                            ScreenUtil().setHeight(60),
+                                            ScreenUtil().setHeight(60)),
+                                        WidgetUtils.onlyTextCenter(
+                                            '收起房间',
+                                            StyleUtils
+                                                .getCommonTextStyle(
+                                                color: MyColors
+                                                    .roomTCWZ3,
+                                                fontSize:
+                                                ScreenUtil()
+                                                    .setSp(
+                                                    24))),
+                                      ],
+                                    ),
+                                  ),
+                                  WidgetUtils.commonSizedBox(0, 40),
+                                ],
+                              ),
+                              WidgetUtils.commonSizedBox(40, 0),
+                              Expanded(
+                                child: ListView.builder(
+                                  padding: EdgeInsets.only(
+                                      top: ScreenUtil().setHeight(5)),
+                                  itemBuilder: roomHouse,
+                                  itemCount: listPH.length,
+                                ),
+                              )
+                            ],
+                          ),
+                        ))
+                  ],
+                )
+                    : const Text('')
+              ],
+            ),
+          ),
+        )
             : Container(
-                height: double.infinity,
-                width: double.infinity,
-                color: Colors.black87,
-              ),
+          height: double.infinity,
+          width: double.infinity,
+          color: Colors.black87,
+        ),
         onWillPop: () async {
           //这里可以响应物理返回键
           setState(() {
@@ -2651,7 +2626,7 @@ class _RoomPageState extends State<RoomPage>
             roomNumber = bean.data!.roomInfo!.roomNumber.toString();
             roomHeadImg = bean.data!.roomInfo!.coverImgUrl!;
             isBoss =
-                bean.data!.roomInfo!.mikeList![7].isBoss == 0 ? false : true;
+            bean.data!.roomInfo!.mikeList![7].isBoss == 0 ? false : true;
             m1 = bean.data!.roomInfo!.mikeList![0].uid == 0 ? false : true;
             m2 = bean.data!.roomInfo!.mikeList![1].uid == 0 ? false : true;
             m3 = bean.data!.roomInfo!.mikeList![2].uid == 0 ? false : true;
@@ -2703,7 +2678,7 @@ class _RoomPageState extends State<RoomPage>
           });
           break;
         case MyHttpConfig.errorloginCode:
-          //取消订阅所有远端用户的音频流。
+        //取消订阅所有远端用户的音频流。
           _engine.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
           _engine.muteLocalAudioStream(true);
@@ -2716,13 +2691,7 @@ class _RoomPageState extends State<RoomPage>
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
-      setState(() {
-        sp.setBool('joinRoom', false);
-      });
     } catch (e) {
-      setState(() {
-        sp.setBool('joinRoom', false);
-      });
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
@@ -2739,7 +2708,7 @@ class _RoomPageState extends State<RoomPage>
           });
           break;
         case MyHttpConfig.errorloginCode:
-          //取消订阅所有远端用户的音频流。
+        //取消订阅所有远端用户的音频流。
           _engine.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
           _engine.muteLocalAudioStream(true);
@@ -2752,13 +2721,7 @@ class _RoomPageState extends State<RoomPage>
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
-      setState(() {
-        sp.setBool('joinRoom', false);
-      });
     } catch (e) {
-      setState(() {
-        sp.setBool('joinRoom', false);
-      });
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
@@ -2780,7 +2743,7 @@ class _RoomPageState extends State<RoomPage>
           });
           break;
         case MyHttpConfig.errorloginCode:
-          //取消订阅所有远端用户的音频流。
+        //取消订阅所有远端用户的音频流。
           _engine.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
           _engine.muteLocalAudioStream(true);
@@ -2793,13 +2756,7 @@ class _RoomPageState extends State<RoomPage>
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
-      setState(() {
-        sp.setBool('joinRoom', false);
-      });
     } catch (e) {
-      setState(() {
-        sp.setBool('joinRoom', false);
-      });
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
@@ -2879,7 +2836,7 @@ class _RoomPageState extends State<RoomPage>
           });
           break;
         case MyHttpConfig.errorloginCode:
-          //取消订阅所有远端用户的音频流。
+        //取消订阅所有远端用户的音频流。
           _engine.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
           _engine.muteLocalAudioStream(true);
@@ -2892,13 +2849,7 @@ class _RoomPageState extends State<RoomPage>
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
-      setState(() {
-        sp.setBool('joinRoom', false);
-      });
     } catch (e) {
-      setState(() {
-        sp.setBool('joinRoom', false);
-      });
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
@@ -2964,7 +2915,7 @@ class _RoomPageState extends State<RoomPage>
           });
           break;
         case MyHttpConfig.errorloginCode:
-          //取消订阅所有远端用户的音频流。
+        //取消订阅所有远端用户的音频流。
           _engine.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
           _engine.muteLocalAudioStream(true);
@@ -2977,13 +2928,7 @@ class _RoomPageState extends State<RoomPage>
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
-      setState(() {
-        sp.setBool('joinRoom', false);
-      });
     } catch (e) {
-      setState(() {
-        sp.setBool('joinRoom', false);
-      });
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
@@ -3003,7 +2948,7 @@ class _RoomPageState extends State<RoomPage>
           });
           break;
         case MyHttpConfig.errorloginCode:
-          //取消订阅所有远端用户的音频流。
+        //取消订阅所有远端用户的音频流。
           _engine.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
           _engine.muteLocalAudioStream(true);
@@ -3016,13 +2961,7 @@ class _RoomPageState extends State<RoomPage>
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
-      setState(() {
-        sp.setBool('joinRoom', false);
-      });
     } catch (e) {
-      setState(() {
-        sp.setBool('joinRoom', false);
-      });
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
@@ -3055,7 +2994,7 @@ class _RoomPageState extends State<RoomPage>
           }
           break;
         case MyHttpConfig.errorloginCode:
-          //取消订阅所有远端用户的音频流。
+        //取消订阅所有远端用户的音频流。
           _engine.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
           _engine.muteLocalAudioStream(true);
@@ -3068,13 +3007,7 @@ class _RoomPageState extends State<RoomPage>
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
-      setState(() {
-        sp.setBool('joinRoom', false);
-      });
     } catch (e) {
-      setState(() {
-        sp.setBool('joinRoom', false);
-      });
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
@@ -3106,7 +3039,7 @@ class _RoomPageState extends State<RoomPage>
           });
           break;
         case MyHttpConfig.errorloginCode:
-          //取消订阅所有远端用户的音频流。
+        //取消订阅所有远端用户的音频流。
           _engine.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
           _engine.muteLocalAudioStream(true);
@@ -3119,13 +3052,7 @@ class _RoomPageState extends State<RoomPage>
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
-      setState(() {
-        sp.setBool('joinRoom', false);
-      });
     } catch (e) {
-      setState(() {
-        sp.setBool('joinRoom', false);
-      });
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
@@ -3143,7 +3070,7 @@ class _RoomPageState extends State<RoomPage>
         case MyHttpConfig.successCode:
           break;
         case MyHttpConfig.errorloginCode:
-          //取消订阅所有远端用户的音频流。
+        //取消订阅所有远端用户的音频流。
           _engine.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
           _engine.muteLocalAudioStream(true);
@@ -3156,13 +3083,7 @@ class _RoomPageState extends State<RoomPage>
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
-      setState(() {
-        sp.setBool('joinRoom', false);
-      });
     } catch (e) {
-      setState(() {
-        sp.setBool('joinRoom', false);
-      });
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
@@ -3181,7 +3102,7 @@ class _RoomPageState extends State<RoomPage>
         case MyHttpConfig.successCode:
           break;
         case MyHttpConfig.errorloginCode:
-          //取消订阅所有远端用户的音频流。
+        //取消订阅所有远端用户的音频流。
           _engine.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
           _engine.muteLocalAudioStream(true);
@@ -3194,13 +3115,7 @@ class _RoomPageState extends State<RoomPage>
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
-      setState(() {
-        sp.setBool('joinRoom', false);
-      });
     } catch (e) {
-      setState(() {
-        sp.setBool('joinRoom', false);
-      });
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
@@ -3216,7 +3131,7 @@ class _RoomPageState extends State<RoomPage>
         case MyHttpConfig.successCode:
           break;
         case MyHttpConfig.errorloginCode:
-          //取消订阅所有远端用户的音频流。
+        //取消订阅所有远端用户的音频流。
           _engine.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
           _engine.muteLocalAudioStream(true);
@@ -3229,13 +3144,7 @@ class _RoomPageState extends State<RoomPage>
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
-      setState(() {
-        sp.setBool('joinRoom', false);
-      });
     } catch (e) {
-      setState(() {
-        sp.setBool('joinRoom', false);
-      });
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
@@ -3249,7 +3158,7 @@ class _RoomPageState extends State<RoomPage>
     Database? db = await databaseHelper.database;
 
     List<Map<String, dynamic>> allData =
-        await databaseHelper.getAllData('messageSLTable');
+    await databaseHelper.getAllData('messageSLTable');
     // 执行查询操作
     List<Map<String, dynamic>> result = await db.query(
       'messageSLTable',
@@ -3269,7 +3178,7 @@ class _RoomPageState extends State<RoomPage>
     }
     // 生成占位符字符串，例如: ?,?,?,?
     String placeholders =
-        List.generate(listId.length, (index) => '?').join(',');
+    List.generate(listId.length, (index) => '?').join(',');
     // 构建查询语句和参数
     String query =
         'SELECT * FROM messageSLTable WHERE id IN ($placeholders) and uid = ${sp.getString('user_id').toString()}  order by add_time desc';
@@ -3354,12 +3263,12 @@ class _RoomPageState extends State<RoomPage>
         if (infos.isEmpty) {
           setState(() {
             infos =
-                '${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber}';
+            '${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber}';
           });
         } else {
           setState(() {
             infos =
-                '$infos,${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber}';
+            '$infos,${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber}';
           });
         }
       }
@@ -3413,7 +3322,7 @@ class _RoomPageState extends State<RoomPage>
           await databaseHelper.insertData('messageSLTable', params);
           break;
         case MyHttpConfig.errorloginCode:
-          //取消订阅所有远端用户的音频流。
+        //取消订阅所有远端用户的音频流。
           _engine.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
           _engine.muteLocalAudioStream(true);
@@ -3423,13 +3332,7 @@ class _RoomPageState extends State<RoomPage>
           MyUtils.jumpLogin(context);
           break;
       }
-      setState(() {
-        sp.setBool('joinRoom', false);
-      });
     } catch (e) {
-      setState(() {
-        sp.setBool('joinRoom', false);
-      });
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
@@ -3451,7 +3354,7 @@ class _RoomPageState extends State<RoomPage>
           });
           break;
         case MyHttpConfig.errorloginCode:
-          //取消订阅所有远端用户的音频流。
+        //取消订阅所有远端用户的音频流。
           _engine.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
           _engine.muteLocalAudioStream(true);
@@ -3464,14 +3367,8 @@ class _RoomPageState extends State<RoomPage>
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
-      setState(() {
-        sp.setBool('joinRoom', false);
-      });
       Loading.dismiss();
     } catch (e) {
-      setState(() {
-        sp.setBool('joinRoom', false);
-      });
       Loading.dismiss();
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
@@ -3499,14 +3396,14 @@ class _RoomPageState extends State<RoomPage>
           doPostRoomJoin(roomID, '', bean.data!.rtc!);
           break;
         case MyHttpConfig.errorRoomCode: //需要密码
-          // ignore: use_build_context_synchronously
+        // ignore: use_build_context_synchronously
           MyUtils.goTransparentPageCom(
               context,
               RoomTSMiMaPage(
                   roomID: roomID, roomToken: bean.data!.rtc!, anchorUid: ''));
           break;
         case MyHttpConfig.errorloginCode:
-          //取消订阅所有远端用户的音频流。
+        //取消订阅所有远端用户的音频流。
           _engine.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
           _engine.muteLocalAudioStream(true);
@@ -3543,7 +3440,7 @@ class _RoomPageState extends State<RoomPage>
       CommonBean bean = await DataUtils.postRoomJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          // ignore: use_build_context_synchronously
+        // ignore: use_build_context_synchronously
           Navigator.pop(context);
           // ignore: use_build_context_synchronously
           MyUtils.goTransparentRFPage(
@@ -3555,7 +3452,7 @@ class _RoomPageState extends State<RoomPage>
               ));
           break;
         case MyHttpConfig.errorloginCode:
-          //取消订阅所有远端用户的音频流。
+        //取消订阅所有远端用户的音频流。
           _engine.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
           _engine.muteLocalAudioStream(true);
