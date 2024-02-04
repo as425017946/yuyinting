@@ -26,8 +26,15 @@ import '../../../utils/style_utils.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_sound_platform_interface/flutter_sound_recorder_platform_interface.dart';
-
 import '../../../widget/SVGASimpleImage.dart';
+
+enum RecordPlayState {
+  record,
+  recording,
+  play,
+  playing,
+}
+
 
 /// 声音录制
 class EditAudioPage extends StatefulWidget {
@@ -48,7 +55,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
   Codec _codec = Codec.aacADTS;
   String _mPath = ''; //录音文件路径
   FlutterSoundPlayer? _mPlayer = FlutterSoundPlayer();
-  FlutterSoundRecorder? _mRecorder = FlutterSoundRecorder();
+
   bool _mPlayerIsInited = false;
   bool mediaRecord = true;
   bool playRecord = false; //音频文件播放状态
@@ -60,10 +67,20 @@ class _EditAudioPageState extends State<EditAudioPage> {
   String audioUrl = '';
   // 设备是安卓还是ios
   String isDevices = 'android';
+
+  FlutterSoundRecorder recorderModule = FlutterSoundRecorder();
+  FlutterSoundPlayer playerModule = FlutterSoundPlayer();
+  late StreamSubscription _recorderSubscription;
+  late StreamSubscription _playerSubscription;
+  RecordPlayState _state = RecordPlayState.record;
+  var _path = "";
+  var _duration = 0.0;
+  var _maxLength = 15.0;
+
   @override
   void initState() {
     // TODO: implement initState
-    initAgora();
+    init();
     if (Platform.isAndroid) {
       setState(() {
         isDevices = 'android';
@@ -78,7 +95,6 @@ class _EditAudioPageState extends State<EditAudioPage> {
         _mPlayerIsInited = true;
       });
     });
-    openTheRecorder();
     super.initState();
     appBar = WidgetUtils.getAppBar('声音录制', true, context, false, 0);
     doPostLabelList();
@@ -86,57 +102,35 @@ class _EditAudioPageState extends State<EditAudioPage> {
       audioUrl = widget.audioUrl;
     });
   }
-  late RtcEngine _engine;
-  // 初始化应用
-  Future<void> initAgora() async {
-    // 获取权限
-    await [Permission.microphone].request();
-    await _mRecorder!.openRecorder();
-  }
+
 
   @override
   void dispose() {
     _mPlayer!.closePlayer();
     _mPlayer = null;
-    _mRecorder!.closeRecorder();
-    _mRecorder = null;
-    _timer.cancel();
+    _cancelRecorderSubscriptions();
+    _releaseFlauto();
     super.dispose();
   }
 
-  Future<void> openTheRecorder() async {
-    var status = await Permission.storage.request();
-    if (status.isGranted) {
-      // 用户已授予权限，可以访问文件
-      // 在这里执行打开文件等操作
-      LogE('权限同意');
-    } else {
-      // 用户拒绝了权限请求，需要处理此情况
-      LogE('权限拒绝');
-    }
-    if (!kIsWeb) {
-      var status = await Permission.microphone.request();
-      if (status != PermissionStatus.granted) {
-        throw RecordingPermissionException('Microphone permission not granted');
-      }
-    }
-    await _mRecorder!.openRecorder();
-    if (!await _mRecorder!.isEncoderSupported(_codec) && kIsWeb) {
-      _codec = Codec.opusWebM;
-      _mPath = 'tau_file.webm';
-      if (!await _mRecorder!.isEncoderSupported(_codec) && kIsWeb) {
-        return;
-      }
-    }
+  Future<void> init() async {
+    // 获取权限
+    await [Permission.microphone].request();
+    //开启录音
+    await recorderModule.openRecorder();
+    //设置订阅计时器
+    await recorderModule
+        .setSubscriptionDuration(const Duration(milliseconds: 10));
+    //设置音频
     final session = await AudioSession.instance;
     await session.configure(AudioSessionConfiguration(
       avAudioSessionCategory: AVAudioSessionCategory.playAndRecord,
       avAudioSessionCategoryOptions:
-          AVAudioSessionCategoryOptions.allowBluetooth |
-              AVAudioSessionCategoryOptions.defaultToSpeaker,
+      AVAudioSessionCategoryOptions.allowBluetooth |
+      AVAudioSessionCategoryOptions.defaultToSpeaker,
       avAudioSessionMode: AVAudioSessionMode.spokenAudio,
       avAudioSessionRouteSharingPolicy:
-          AVAudioSessionRouteSharingPolicy.defaultPolicy,
+      AVAudioSessionRouteSharingPolicy.defaultPolicy,
       avAudioSessionSetActiveOptions: AVAudioSessionSetActiveOptions.none,
       androidAudioAttributes: const AndroidAudioAttributes(
         contentType: AndroidAudioContentType.speech,
@@ -146,89 +140,112 @@ class _EditAudioPageState extends State<EditAudioPage> {
       androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
       androidWillPauseWhenDucked: true,
     ));
+    await playerModule.closePlayer();
+    await playerModule.openPlayer();
+    await playerModule
+        .setSubscriptionDuration(const Duration(milliseconds: 10));
   }
 
-  late Timer _timer;
-
-//点击开始录音
-  startRecord() {
-    record();
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (isPlay == 2) {
-        LogE('停止了==');
-        stopRecorder(); // 确保录音器停止并保存数据到文件
-        timer.cancel();
-      } else {
-        setState(() {
-          djNum--;
-          audioNum++;
-          recordText = '已录制${audioNum}s';
-        });
-      }
-      if (djNum == 0) {
-        setState(() {
-          isPlay = 2;
-        });
-        timer.cancel();
-        stopRecorder();
-      }
-    });
+  Future<bool> getPermissionStatus() async {
+    Permission permission = Permission.microphone;
+    //granted 通过，denied 被拒绝，permanentlyDenied 拒绝且不在提示
+    PermissionStatus status = await permission.status;
+    if (status.isGranted) {
+      return true;
+    } else if (status.isDenied) {
+      requestPermission(permission);
+    } else if (status.isPermanentlyDenied) {
+      openAppSettings();
+    } else if (status.isRestricted) {
+      requestPermission(permission);
+    } else {}
+    return false;
   }
 
-//开始录音
-  void record() async {
-    if (playRecord) {
-      stopPlayer();
+  ///申请权限
+  void requestPermission(Permission permission) async {
+    PermissionStatus status = await permission.request();
+    if (status.isPermanentlyDenied) {
+      openAppSettings();
+    }
+  }
+  /// 开始录音
+  _startRecorder() async {
+    try {
+      var status = await getPermissionStatus();
+
+      Directory tempDir = await getTemporaryDirectory();
+      var time = DateTime.now().millisecondsSinceEpoch;
+      String path =
+          '${tempDir.path}}-$time${ext[Codec.aacADTS.index]}' ;
+
+      print('===>  准备开始录音');
+      await recorderModule.startRecorder(
+          toFile: path,
+          codec: Codec.aacADTS,
+          bitRate: 8000,
+          sampleRate: 8000,
+          audioSource: AudioSource.microphone);
+      print('===>  开始录音');
+
+      /// 监听录音
+      _recorderSubscription = recorderModule.onProgress!.listen((e) {
+        if (e != null && e.duration != null) {
+          DateTime date = new DateTime.fromMillisecondsSinceEpoch(
+              e.duration.inMilliseconds,
+              isUtc: true);
+
+          if (date.second >= _maxLength) {
+            print('===>  到达时常停止录音');
+            _stopRecorder();
+          }
+          setState(() {
+            print("时间：${date.second}");
+            print("当前振幅：${e.decibels}");
+          });
+        }
+      });
+      this.setState(() {
+        _state = RecordPlayState.recording;
+        _path = path;
+        print("path == $path");
+      });
+    } catch (err) {
       setState(() {
-        playRecord = false;
+        print(err.toString());
+        _stopRecorder();
+        _state = RecordPlayState.record;
       });
     }
-    Directory tempDir = await getTemporaryDirectory();
-    var time = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-    String path = '${tempDir.path}/$time${ext[Codec.aacADTS.index]}';
-    LogE('录音地址 == $path');
-    File file = File(path);
-    file.openWrite();
-    _mRecorder!
-        .startRecorder(
-      toFile: path,
-      codec: _codec,
-      audioSource: AudioSource.microphone,
-    )
-        .then((value) {
-      setState(() {
-        audioUrl = '';
-        mediaRecord = false;
-        hasRecord = false;
-        _mPath = path;
-      });
-    });
   }
 
-//停止录音
-  void stopRecorder() async {
-    await _mRecorder!.stopRecorder().then((value) {
-      LogE('停止录音== $value');
-      _timer.cancel();
-      setState(() {
-        mediaRecord = true;
-        hasRecord = true;
-        djNum = 15;
-      });
-    });
-  }
-
-//删除录音
-  delRecorder() {
-    if (_mPath != '') {
-      var dir = Directory(_mPath);
-      dir.deleteSync(recursive: true);
+  /// 结束录音
+  _stopRecorder() async {
+    try {
+      await recorderModule.stopRecorder();
+      print('stopRecorder===> fliePath:$_path');
+      _cancelRecorderSubscriptions();
+    } catch (err) {
+      print('stopRecorder error: $err');
     }
     setState(() {
-      _mPath = '';
-      audioUrl = '';
-      hasRecord = false;
+      _state = RecordPlayState.play;
     });
+  }
+
+
+
+  /// 取消录音监听
+  void _cancelRecorderSubscriptions() {
+    if (_recorderSubscription != null) {
+      _recorderSubscription.cancel();
+    }
+  }
+  /// 释放录音
+  Future<void> _releaseFlauto() async {
+    try {
+      await recorderModule.closeRecorder();
+    } catch (e) {}
   }
 
 //播放录音
@@ -396,7 +413,6 @@ class _EditAudioPageState extends State<EditAudioPage> {
                                 onTap: (() {
                                   if (MyUtils.checkClick()) {
                                     stopPlayer();
-                                    delRecorder();
                                     setState(() {
                                       audioNum = 0; // 记录录了多久
                                       recordText = '开始录音';
@@ -417,7 +433,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
                               if (isPlay == 2) {
                                 play();
                               } else {
-                                startRecord();
+                                _startRecorder();
                                 setState(() {
                                   if (isPlay == 0) {
                                     isPlay = 1;
