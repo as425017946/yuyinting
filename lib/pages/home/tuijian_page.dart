@@ -27,6 +27,7 @@ import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../gongping/gp_quanxian_page.dart';
 import '../message/geren/people_info_page.dart';
+import '../mine/my/ceshiAudioPage.dart';
 import '../mine/my/my_info_page.dart';
 import '../room/room_page.dart';
 import '../room/room_ts_mima_page.dart';
@@ -267,7 +268,8 @@ class _TuijianPageState extends State<TuijianPage> {
               GestureDetector(
                 onTap: (() {
                   if (MyUtils.checkClick()) {
-                    MyUtils.goTransparentPageCom(context, const SearchPage());
+                    MyUtils.goTransparentPageCom(context, const CeshiAudioPage());
+                    // MyUtils.goTransparentPageCom(context, const SearchPage());
                   }
                 }),
                 child: Container(
