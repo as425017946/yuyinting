@@ -10,6 +10,7 @@ import 'package:yuyinting/utils/my_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 
 import '../../config/my_config.dart';
+import '../../http/my_http_config.dart';
 import '../../main.dart';
 import '../../utils/log_util.dart';
 import '../navigator/tabnavigator.dart';
@@ -83,16 +84,11 @@ class _StarPageState extends State<StarPage> {
 
   /// 判断当前网络，然后给返回适配的网络地址
   Future<void> doPostPdAddress() async {
-    FormData formdata = FormData.fromMap(
-      {
-        'type': 'go',
-      },
-    );
     BaseOptions option = BaseOptions(
         contentType: 'multipart/form-data', responseType: ResponseType.plain);
     option.headers["Authorization"] = sp.getString('user_token') ?? '';
     Dio dio = Dio(option);
-    var respone = await dio.post('http://aa986.com:8300/address', data: formdata);
+    var respone = await dio.get(MyHttpConfig.pdAddress);
     Map jsonResponse = json.decode(respone.data.toString());
     LogE('网络请求$jsonResponse');
     if (jsonResponse['code'] == 200) {

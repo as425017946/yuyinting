@@ -61,7 +61,6 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
   @override
   void initState() {
     // TODO: implement initState
-    doPostPdAddress();
     doCheck();
     //更新身份
     setState(() {
@@ -707,34 +706,4 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
     }
   }
 
-  /// 判断当前网络，然后给返回适配的网络地址
-  Future<void> doPostPdAddress() async {
-    FormData formdata = FormData.fromMap(
-      {
-        'type': 'go',
-      },
-    );
-    BaseOptions option = BaseOptions(
-        contentType: 'multipart/form-data', responseType: ResponseType.plain);
-    option.headers["Authorization"] = sp.getString('user_token') ?? '';
-    Dio dio = Dio(option);
-    var respone = await dio.post('http://aa986.com:8300/address', data: formdata);
-    Map jsonResponse = json.decode(respone.data.toString());
-    LogE('网络请求$jsonResponse');
-    if (jsonResponse['code'] == 200) {
-      if(jsonResponse['nodes'].toString().isNotEmpty){
-        setState(() {
-          sp.setString('isDian', jsonResponse['nodes'].toString());
-        });
-      }else{
-        MyToastUtils.showToastBottom(MyConfig.errorHttpTitle);
-        // 直接杀死app
-        SystemNavigator.pop();
-      }
-    }  else {
-      MyToastUtils.showToastBottom(MyConfig.errorHttpTitle);
-      // 直接杀死app
-      SystemNavigator.pop();
-    }
-  }
 }
