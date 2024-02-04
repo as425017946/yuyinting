@@ -172,8 +172,6 @@ class _EditAudioPageState extends State<EditAudioPage> {
   /// 开始录音
   _startRecorder() async {
     try {
-      var status = await getPermissionStatus();
-
       Directory tempDir = await getTemporaryDirectory();
       var time = DateTime.now().millisecondsSinceEpoch;
       String path =
