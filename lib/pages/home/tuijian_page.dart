@@ -268,8 +268,7 @@ class _TuijianPageState extends State<TuijianPage> {
               GestureDetector(
                 onTap: (() {
                   if (MyUtils.checkClick()) {
-                    MyUtils.goTransparentPageCom(context, const CeshiAudioPage());
-                    // MyUtils.goTransparentPageCom(context, const SearchPage());
+                    MyUtils.goTransparentPageCom(context, const SearchPage());
                   }
                 }),
                 child: Container(
@@ -359,7 +358,9 @@ class _TuijianPageState extends State<TuijianPage> {
                               },
                               onTap: (index) {
                                 if(MyUtils.checkClick()){
-                                  MyUtils.goTransparentPageCom(context, WebPage(url: listBanner[index].url!));
+                                  // MyUtils.goTransparentPageCom(context, WebPage(url: listBanner[index].url!));
+
+                                  MyUtils.goTransparentPageCom(context, const CeshiAudioPage());
                                 }
                               },
                             ),
