@@ -45,6 +45,12 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'hongbao_page.dart';
 
+enum RecordPlayState {
+  record,
+  recording,
+  play,
+  playing,
+}
 /// 聊天页面
 class ChatPage extends StatefulWidget {
   String nickName;
@@ -77,16 +83,13 @@ class _ChatPageState extends State<ChatPage> {
 
   // 录音使用
   Codec _codec = Codec.aacADTS;
-  String _mPath = ''; //录音文件路径
   FlutterSoundPlayer? _mPlayer = FlutterSoundPlayer();
-  FlutterSoundRecorder? _mRecorder = FlutterSoundRecorder();
   //录制权限
   bool _voiceRecorderIsInitialized = false;
   bool mediaRecord = true;
   bool playRecord = false; //音频文件播放状态
   bool hasRecord = false; //是否有音频文件可播放
   int isPlay = 0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
-  int djNum = 60; // 录音时长
   int audioNum = 0; // 记录录了多久
   bool isCancel = false, isLuZhi = false;
 
@@ -108,6 +111,16 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
+
+  FlutterSoundRecorder recorderModule = FlutterSoundRecorder();
+  FlutterSoundPlayer playerModule = FlutterSoundPlayer();
+  late StreamSubscription _recorderSubscription;
+  RecordPlayState _state = RecordPlayState.record;
+  var _path = "";
+  var _maxLength = 60.0;
+  // 是否有麦克风权限
+  bool isMAI = false;
+
   // 设备是安卓还是ios
   String isDevices = 'android';
   @override
@@ -120,11 +133,11 @@ class _ChatPageState extends State<ChatPage> {
         isDevices = 'android';
       });
     }else if (Platform.isIOS){
+      init();
       setState(() {
         isDevices = 'ios';
       });
     }
-    _initialize();
     super.initState();
     eventBus.fire(SubmitButtonBack(title: '清空红点'));
     doPostChatUserInfo();
@@ -149,7 +162,7 @@ class _ChatPageState extends State<ChatPage> {
           hasRecord = false; //是否有音频文件可播放
           isLuZhi = false;
           isPlay = 0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
-          djNum = 60; // 录音时长
+          _maxLength = 60.0; // 录音时长
           audioNum = 0; // 记录录了多久
         });
         MyToastUtils.showToastBottom('语音发送失败');
@@ -216,14 +229,135 @@ class _ChatPageState extends State<ChatPage> {
     });
   }
 
-
-  void _initialize() async {
-    await _mRecorder!.openRecorder().then((value) {
+  Future<void> init() async {
+    // 获取权限
+    await [Permission.microphone].request();
+    //开启录音
+    await recorderModule.openRecorder();
+    var status = await Permission.storage.request();
+    if (status.isGranted) {
       setState(() {
-        _voiceRecorderIsInitialized = true;
+        isMAI = true;
       });
+      // 用户已授予权限，可以访问文件
+      // 在这里执行打开文件等操作
+      LogE('权限同意');
+    } else {
+      setState(() {
+        isMAI = false;
+      });
+      // 用户拒绝了权限请求，需要处理此情况
+      LogE('权限拒绝');
+    }
+    //设置订阅计时器
+    await recorderModule
+        .setSubscriptionDuration(const Duration(milliseconds: 10));
+    //设置音频
+    final session = await AudioSession.instance;
+    await session.configure(AudioSessionConfiguration(
+      avAudioSessionCategory: AVAudioSessionCategory.playAndRecord,
+      avAudioSessionCategoryOptions:
+      AVAudioSessionCategoryOptions.allowBluetooth |
+      AVAudioSessionCategoryOptions.defaultToSpeaker,
+      avAudioSessionMode: AVAudioSessionMode.spokenAudio,
+      avAudioSessionRouteSharingPolicy:
+      AVAudioSessionRouteSharingPolicy.defaultPolicy,
+      avAudioSessionSetActiveOptions: AVAudioSessionSetActiveOptions.none,
+      androidAudioAttributes: const AndroidAudioAttributes(
+        contentType: AndroidAudioContentType.speech,
+        flags: AndroidAudioFlags.none,
+        usage: AndroidAudioUsage.voiceCommunication,
+      ),
+      androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
+      androidWillPauseWhenDucked: true,
+    ));
+    await playerModule.closePlayer();
+    await playerModule.openPlayer();
+    await playerModule
+        .setSubscriptionDuration(const Duration(milliseconds: 10));
+  }
+
+  /// 开始录音
+  _startRecorder() async {
+    try {
+      Directory tempDir = await getTemporaryDirectory();
+      var time = DateTime.now().millisecondsSinceEpoch;
+      String path =
+          '${tempDir.path}}-$time${ext[Codec.aacADTS.index]}' ;
+
+      print('===>  准备开始录音');
+      await recorderModule.startRecorder(
+          toFile: path,
+          codec: Codec.aacADTS,
+          bitRate: 8000,
+          sampleRate: 8000,
+          audioSource: AudioSource.microphone);
+      print('===>  开始录音');
+
+      /// 监听录音
+      _recorderSubscription = recorderModule.onProgress!.listen((e) {
+        if (e != null && e.duration != null) {
+          DateTime date = DateTime.fromMillisecondsSinceEpoch(
+              e.duration.inMilliseconds,
+              isUtc: true);
+
+          if (date.second >= _maxLength) {
+            print('===>  到达时常停止录音');
+            setState(() {
+              audioNum = 60;
+              isPlay = 2;
+            });
+            _stopRecorder();
+          }
+          setState(() {
+            audioNum = date.second;
+            print("录制声音：$audioNum");
+            print("时间：${date.second}");
+            print("当前振幅：${e.decibels}");
+          });
+        }
+      });
+      setState(() {
+        _state = RecordPlayState.recording;
+        _path = path;
+        print("path == $path");
+      });
+    } catch (err) {
+      setState(() {
+        print(err.toString());
+        _stopRecorder();
+        _state = RecordPlayState.record;
+      });
+    }
+  }
+
+  /// 结束录音
+  _stopRecorder() async {
+    try {
+      await recorderModule.stopRecorder();
+      print('stopRecorder===> fliePath:$_path');
+      _cancelRecorderSubscriptions();
+    } catch (err) {
+      print('stopRecorder error: $err');
+    }
+    setState(() {
+      _state = RecordPlayState.play;
     });
-    openTheRecorder();
+  }
+
+
+
+  /// 取消录音监听
+  void _cancelRecorderSubscriptions() {
+    if (_recorderSubscription != null) {
+      _recorderSubscription.cancel();
+    }
+  }
+  /// 释放录音
+  Future<void> _releaseFlauto() async {
+    try {
+      await recorderModule.closeRecorder();
+    } catch (e) {}
   }
 
 
@@ -237,11 +371,7 @@ class _ChatPageState extends State<ChatPage> {
     _scrollController.dispose(); // 释放ScrollController资源
     _mPlayer!.closePlayer();
     _mPlayer = null;
-    _mRecorder!.closeRecorder();
-    _mRecorder = null;
-    if (_timer != null && _timer.isActive) {
-      _timer.cancel();
-    }
+    _releaseFlauto();
     super.dispose();
   }
 
@@ -726,130 +856,6 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
-  late Timer _timer;
-
-//点击开始录音
-  startRecord() {
-    try{
-      record();
-      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-        setState(() {
-          djNum--;
-          audioNum++;
-        });
-        if (djNum == 0) {
-          timer.cancel();
-          stopRecorder();
-        }
-      });
-    }catch(e){
-      MyToastUtils.showToastBottom('录音出错 $e');
-    }
-  }
-
-  Future<void> openTheRecorder() async {
-    if (!kIsWeb) {
-      var status = await Permission.microphone.request();
-      if (status != PermissionStatus.granted) {
-        throw RecordingPermissionException('Microphone permission not granted');
-      }
-    }
-    await _mRecorder!.openRecorder();
-    if (!await _mRecorder!.isEncoderSupported(_codec) && kIsWeb) {
-      _codec = Codec.opusWebM;
-      _mPath = 'tau_file.webm';
-      if (!await _mRecorder!.isEncoderSupported(_codec) && kIsWeb) {
-        return;
-      }
-    }
-    final session = await AudioSession.instance;
-    await session.configure(AudioSessionConfiguration(
-      avAudioSessionCategory: AVAudioSessionCategory.playAndRecord,
-      avAudioSessionCategoryOptions:
-      AVAudioSessionCategoryOptions.allowBluetooth |
-      AVAudioSessionCategoryOptions.defaultToSpeaker,
-      avAudioSessionMode: AVAudioSessionMode.spokenAudio,
-      avAudioSessionRouteSharingPolicy:
-      AVAudioSessionRouteSharingPolicy.defaultPolicy,
-      avAudioSessionSetActiveOptions: AVAudioSessionSetActiveOptions.none,
-      androidAudioAttributes: const AndroidAudioAttributes(
-        contentType: AndroidAudioContentType.speech,
-        flags: AndroidAudioFlags.none,
-        usage: AndroidAudioUsage.voiceCommunication,
-      ),
-      androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
-      androidWillPauseWhenDucked: true,
-    ));
-  }
-//开始录音
-  void record() async {
-    try {
-      if(isDevices != 'ios' && !isQuanxian) {
-        return;
-      }
-
-      if (playRecord) {
-        stopPlayer();
-        setState(() {
-          playRecord = false;
-        });
-      }
-      // 缓存目录
-      // Directory tempDir = await getTemporaryDirectory();
-      var time = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-      Directory appDir = await getApplicationDocumentsDirectory();
-      // 文件名称
-      String path = '${appDir.path}/$time${ext[Codec.aacADTS.index]}';
-      // // Directory folderDir = Directory('$appDir/$folderName');
-      // Directory folderDir = Directory(path);
-      // if (!folderDir.existsSync()) {
-      //   folderDir.createSync();
-      // }
-      await _mRecorder!.openRecorder();
-      LogE('录音地址:$path');
-      _mRecorder!
-          .startRecorder(
-        toFile: path,
-        codec:  _codec,
-        audioSource: AudioSource.microphone,
-      )
-          .then((value) {
-        setState(() {
-          mediaRecord = false;
-          hasRecord = false;
-          _mPath = path;
-        });
-      });
-    } catch (err) {}
-  }
-
-//停止录音
-  void stopRecorder() async {
-    LogE('停止录音');
-    await _mRecorder!.stopRecorder().then((value) {
-      _timer.cancel();
-      setState(() {
-        _mPath = value.toString();
-        mediaRecord = true;
-        hasRecord = true;
-        djNum = 60;
-      });
-    });
-    await _mRecorder!.closeRecorder();
-  }
-
-//删除录音
-  delRecorder() {
-    if (_mPath != '') {
-      var dir = Directory(_mPath);
-      dir.deleteSync(recursive: true);
-    }
-    setState(() {
-      _mPath = '';
-      hasRecord = false;
-    });
-  }
-
 //播放录音
   void play(String audioUrls) {
     LogE('录音地址**$audioUrls');
@@ -1161,11 +1167,8 @@ class _ChatPageState extends State<ChatPage> {
                             if(isLuZhi) {
                               if (isDevices != 'ios' && isQuanxian) {
                                 if (details.delta.dy < -1) {
-                                  if (_timer.isActive) {
-                                    _timer.cancel();
-                                  }
                                   // 停止录音
-                                  stopRecorder();
+                                  _stopRecorder();
                                   setState(() {
                                     isCancel = true;
                                   });
@@ -1173,11 +1176,8 @@ class _ChatPageState extends State<ChatPage> {
                               }else{
                                 ///ios
                                 if (details.delta.dy < -1) {
-                                  if (_timer.isActive) {
-                                    _timer.cancel();
-                                  }
                                   // 停止录音
-                                  stopRecorder();
+                                  _stopRecorder();
                                   setState(() {
                                     isCancel = true;
                                   });
@@ -1189,7 +1189,7 @@ class _ChatPageState extends State<ChatPage> {
                             LogE('时间差 == ${(DateTime.now().millisecondsSinceEpoch - downTime)}');
                             if((DateTime.now().millisecondsSinceEpoch - downTime) >=1000){
                               // 停止录音
-                              stopRecorder();
+                              _stopRecorder();
                               if(isLuZhi) {
                                 if (isDevices != 'ios' && isQuanxian) {
                                   // 取消录音后抬起手指
@@ -1204,7 +1204,7 @@ class _ChatPageState extends State<ChatPage> {
                                       isLuZhi = false;
                                       isPlay =
                                       0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
-                                      djNum = 60; // 录音时长
+                                      _maxLength = 60; // 录音时长
                                       audioNum = 0; // 记录录了多久
                                     });
                                   }else{
@@ -1226,7 +1226,7 @@ class _ChatPageState extends State<ChatPage> {
                                       isLuZhi = false;
                                       isPlay =
                                       0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
-                                      djNum = 60; // 录音时长
+                                      _maxLength = 60; // 录音时长
                                       audioNum = 0; // 记录录了多久
                                     });
                                   }else{
@@ -1241,7 +1241,7 @@ class _ChatPageState extends State<ChatPage> {
                                 isSendYY = true;
                               });
                               // 停止录音
-                              stopRecorder();
+                              _stopRecorder();
                               MyToastUtils.showToastBottom(
                                   '录音时长过短！');
                               //重新初始化音频信息
@@ -1252,7 +1252,7 @@ class _ChatPageState extends State<ChatPage> {
                                 isLuZhi = false;
                                 isPlay =
                                 0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
-                                djNum = 60; // 录音时长
+                                _maxLength = 60; // 录音时长
                                 audioNum = 0; // 记录录了多久
                               });
                             }
@@ -1870,13 +1870,13 @@ class _ChatPageState extends State<ChatPage> {
 
   /// 发送音频
   Future<void> doSendAudio() async {
-    LogE('录音地址==  $_mPath');
+    LogE('录音地址==  $_path');
     LogE('录音地址==  $audioNum');
-    File file = File(_mPath);
+    File file = File(_path);
     if(await file.exists()){
       final voiceMsg = EMMessage.createVoiceSendMessage(
         targetId: widget.otherUid,
-        filePath: _mPath,
+        filePath: _path,
         duration: audioNum,
       );
       voiceMsg.attributes = {
@@ -1894,7 +1894,7 @@ class _ChatPageState extends State<ChatPage> {
         hasRecord = false; //是否有音频文件可播放
         isLuZhi = false;
         isPlay = 0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
-        djNum = 60; // 录音时长
+        _maxLength = 60; // 录音时长
         audioNum = 0; // 记录录了多久
       });
     }
@@ -1917,7 +1917,7 @@ class _ChatPageState extends State<ChatPage> {
       'whoUid': sp.getString('user_id').toString(),
       'combineID': combineID,
       'nickName': widget.nickName,
-      'content': _mPath,
+      'content': _path,
       'headNetImg': sp.getString('user_headimg').toString(),
       'otherHeadNetImg': widget.otherImg,
       'add_time': DateTime.now().millisecondsSinceEpoch,
@@ -1952,7 +1952,7 @@ class _ChatPageState extends State<ChatPage> {
       hasRecord = false; //是否有音频文件可播放
       isLuZhi = false;
       isPlay = 0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
-      djNum = 60; // 录音时长
+      _maxLength = 60; // 录音时长
       audioNum = 0; // 记录录了多久
     });
   }
@@ -2100,7 +2100,7 @@ class _ChatPageState extends State<ChatPage> {
               if (isDevices != 'ios' && isQuanxian) {
                 setState(() {
                   // 开始录音
-                  startRecord();
+                  _startRecorder();
                   audioNum = 0; // 记录录了多久
                   isLuZhi = true;
                 });
@@ -2108,7 +2108,7 @@ class _ChatPageState extends State<ChatPage> {
                 /// ios
                 setState(() {
                   // 开始录音
-                  startRecord();
+                  _startRecorder();
                   audioNum = 0; // 记录录了多久
                   isLuZhi = true;
                 });

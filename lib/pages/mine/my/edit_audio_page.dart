@@ -70,10 +70,8 @@ class _EditAudioPageState extends State<EditAudioPage> {
   FlutterSoundRecorder recorderModule = FlutterSoundRecorder();
   FlutterSoundPlayer playerModule = FlutterSoundPlayer();
   late StreamSubscription _recorderSubscription;
-  late StreamSubscription _playerSubscription;
   RecordPlayState _state = RecordPlayState.record;
   var _path = "";
-  var _duration = 0.0;
   var _maxLength = 15.0;
   // 是否有麦克风权限
   bool isMAI = false;
