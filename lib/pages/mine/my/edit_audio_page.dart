@@ -86,6 +86,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
         isDevices = 'android';
       });
     }else if (Platform.isIOS){
+      getPermissionStatus();
       init();
       setState(() {
         isDevices = 'ios';
@@ -117,21 +118,6 @@ class _EditAudioPageState extends State<EditAudioPage> {
   Future<void> init() async {
     //开启录音
     await recorderModule.openRecorder();
-    var status = await Permission.microphone.request();
-    if (status.isGranted) {
-      setState(() {
-        isMAI = true;
-      });
-      // 用户已授予权限，可以访问文件
-      // 在这里执行打开文件等操作
-      LogE('权限同意');
-    } else {
-      setState(() {
-        isMAI = false;
-      });
-      // 用户拒绝了权限请求，需要处理此情况
-      LogE('权限拒绝');
-    }
     //设置订阅计时器
     await recorderModule
         .setSubscriptionDuration(const Duration(milliseconds: 10));
