@@ -424,17 +424,17 @@ class MyUtils {
     //     autoLogin: false,
     //     debugModel: true,
     //     isAutoDownloadThumbnail: true);
-    // /// 正式环境
-    // EMOptions options = EMOptions(
-    //     appKey: "1129240201157233#cc",
-    //     autoLogin: false,
-    //     debugModel: true,
-    //     isAutoDownloadThumbnail: true);
+    /// 正式环境
     EMOptions options = EMOptions(
-        appKey: "1109240124169584#777",
+        appKey: "1129240201157233#cc",
         autoLogin: false,
         debugModel: true,
         isAutoDownloadThumbnail: true);
+    // EMOptions options = EMOptions(
+    //     appKey: "1109240124169584#777",
+    //     autoLogin: false,
+    //     debugModel: true,
+    //     isAutoDownloadThumbnail: true);
     await EMClient.getInstance.init(options);
     // 通知 SDK UI 已准备好。该方法执行后才会收到 `EMChatRoomEventHandler`、`EMContactEventHandler` 和 `EMGroupEventHandler` 回调。
     await EMClient.getInstance.startCallback();

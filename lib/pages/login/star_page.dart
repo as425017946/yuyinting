@@ -28,10 +28,14 @@ class _StarPageState extends State<StarPage> {
         Navigator.pop(context);
         LogE('用户token   ${sp.getString('user_token').toString()}');
         LogE('用户token   ${sp.getString('user_token').toString().isNotEmpty}');
-        if (sp.getString('user_token').toString() != 'null' &&
-            MyConfig.issAdd == false) {
+        if (sp.getString('user_token').toString() == 'null') {
+          //首次进入
+          MyUtils.goTransparentPageCom(context, const LoginPage());
+        }else if(MyConfig.issAdd == false && sp.getString('user_token').toString().isNotEmpty){
+          //不是首次进入，登录过
           doGo();
         }else{
+          //登录过，但是退出了登录
           MyUtils.goTransparentPageCom(context, const LoginPage());
         }
         if(sp.getString('miyao').toString() != 'null' || sp.getString('miyao').toString().isEmpty){

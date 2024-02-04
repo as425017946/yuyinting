@@ -23,6 +23,7 @@ import '../../bean/CommonMyIntBean.dart';
 import '../../bean/Common_bean.dart';
 import '../../bean/charmAllBean.dart';
 import '../../bean/hengFuBean.dart';
+import '../../bean/isFirstOrderBean.dart';
 import '../../bean/joinRoomBean.dart';
 import '../../bean/maiXuBean.dart';
 import '../../bean/roomInfoBean.dart';

@@ -57,6 +57,7 @@ class ListP {
   int? gender;
   int? id;
   int? liveStatus;
+  int? identity;
 
   ListP(
       {this.guildId,
@@ -66,7 +67,8 @@ class ListP {
         this.avatar,
         this.gender,
         this.id,
-        this.liveStatus});
+        this.liveStatus,
+        this.identity});
 
   ListP.fromJson(Map<String, dynamic> json) {
     guildId = json['guild_id'];
@@ -77,6 +79,7 @@ class ListP {
     gender = json['gender'];
     id = json['id'];
     liveStatus = json['live_status'];
+    identity = json['identity'];
   }
 
   Map<String, dynamic> toJson() {
@@ -89,6 +92,7 @@ class ListP {
     data['gender'] = this.gender;
     data['id'] = this.id;
     data['live_status'] = this.liveStatus;
+    data['identity'] = this.identity;
     return data;
   }
 }

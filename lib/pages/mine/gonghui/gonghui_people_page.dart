@@ -126,7 +126,7 @@ class _GonghuiPeoplePageState extends State<GonghuiPeoplePage> {
                     10),
               ) : const Text(''),
               const Expanded(child: Text('')),
-              sp.getString('my_identity').toString() == 'leader' ? GestureDetector(
+              list[i].identity != 10 ? GestureDetector(
                 onTap: ((){
                   isRemove(context, list[i].streamerUid.toString(),i);
                 }),

@@ -880,9 +880,15 @@ class _LoginPageState extends State<LoginPage> {
       switch (bean.code) {
         case MyHttpConfig.successCode:
           MyToastUtils.showToastBottom(bean.nodes!);
-          setState(() {
-            sp.setString('isDian', bean.nodes!);
-          });
+          if(bean.nodes!.isNotEmpty){
+            setState(() {
+              sp.setString('isDian', bean.nodes!);
+            });
+          }else{
+            MyToastUtils.showToastBottom(MyConfig.errorHttpTitle);
+            // 直接杀死app
+            SystemNavigator.pop();
+          }
           break;
         case MyHttpConfig.errorloginCode:
         // ignore: use_build_context_synchronously
