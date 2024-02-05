@@ -12,6 +12,7 @@ import 'package:yuyinting/widget/SVGASimpleImage.dart';
 import '../../bean/Common_bean.dart';
 import '../../bean/homeTJBean.dart';
 import '../../bean/joinRoomBean.dart';
+import '../../bean/pushStreamerBean.dart';
 import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
 import '../../db/DatabaseHelper.dart';
@@ -64,6 +65,7 @@ class _TuijianPageState extends State<TuijianPage> {
       });
     }
     doPostPushRoom();
+    doPostPushStreamer();
   }
 
   void _onLoading() async {
@@ -76,6 +78,7 @@ class _TuijianPageState extends State<TuijianPage> {
       });
     }
     doPostPushRoom();
+    doPostPushStreamer();
     _refreshController.loadComplete();
   }
 
@@ -85,9 +88,10 @@ class _TuijianPageState extends State<TuijianPage> {
     // TODO: implement initState
     super.initState();
     doPostPushRoom();
+    doPostPushStreamer();
     listen = eventBus.on<SubmitButtonBack>().listen((event) {
       if(event.title == '退出房间' || event.title == '收起房间'){
-        doPostPushRoom();
+        doPostPushStreamer();
       }
     });
   }
@@ -663,7 +667,6 @@ class _TuijianPageState extends State<TuijianPage> {
             listRoom.clear();
             listRoom2.clear();
             listRoom3.clear();
-            listAnchor.clear();
             if (bean.data!.bannerList!.isNotEmpty) {
               listBanner = bean.data!.bannerList!;
             }
@@ -675,9 +678,6 @@ class _TuijianPageState extends State<TuijianPage> {
             }
             if (bean.data!.roomList3!.isNotEmpty) {
               listRoom3 = bean.data!.roomList3!;
-            }
-            if (bean.data!.anchorList!.isNotEmpty) {
-              listAnchor = bean.data!.anchorList!;
             }
             // _refreshController.loadNoData();
           });
@@ -696,6 +696,36 @@ class _TuijianPageState extends State<TuijianPage> {
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
+
+  /// 推荐主播
+  Future<void> doPostPushStreamer() async {
+    LogE('token == ${sp.getString('user_token')}');
+    try {
+      Loading.show(MyConfig.successTitle);
+      pushStreamerBean bean = await DataUtils.postPushStreamer();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            if (bean.data!.anchorList!.isNotEmpty) {
+              listAnchor = bean.data!.anchorList!;
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
 
   /// 加入房间前
   Future<void> doPostBeforeJoin(roomID, String anchorUid) async {

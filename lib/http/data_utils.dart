@@ -51,6 +51,7 @@ import '../bean/orderPayBean.dart';
 import '../bean/pdAddressBean.dart';
 import '../bean/plBean.dart';
 import '../bean/playRouletteBean.dart';
+import '../bean/pushStreamerBean.dart';
 import '../bean/qiehuanBean.dart';
 import '../bean/quhao_bean.dart';
 import '../bean/quhao_searche_bean.dart';
@@ -496,12 +497,20 @@ class DataUtils{
     return CommonBean.fromJson(respons!);
   }
 
-  /// 首页 推荐房间/海报轮播/推荐主播
+  /// 首页 推荐房间/海报轮播
   static Future<homeTJBean> postPushRoom() async {
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.pushRoom, {}, {});
     print("首页推荐房间：$respons");
     return homeTJBean.fromJson(respons!);
   }
+
+  /// 推荐主播
+  static Future<pushStreamerBean> postPushStreamer() async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.pushStreamer, {}, {});
+    print("推荐主播：$respons");
+    return pushStreamerBean.fromJson(respons!);
+  }
+
 
   /// 收藏页4个推荐房间
   static Future<recommendRoomBean> postRecommendRoom() async {

@@ -27,14 +27,12 @@ class Data {
   List<RoomList1>? roomList1;
   List<RoomList2>? roomList2;
   List<RoomList3>? roomList3;
-  List<AnchorList>? anchorList;
 
   Data(
       {this.bannerList,
         this.roomList1,
         this.roomList2,
-        this.roomList3,
-        this.anchorList});
+        this.roomList3});
 
   Data.fromJson(Map<String, dynamic> json) {
     if (json['banner_list'] != null) {
@@ -61,12 +59,6 @@ class Data {
         roomList3!.add(new RoomList3.fromJson(v));
       });
     }
-    if (json['anchor_list'] != null) {
-      anchorList = <AnchorList>[];
-      json['anchor_list'].forEach((v) {
-        anchorList!.add(new AnchorList.fromJson(v));
-      });
-    }
   }
 
   Map<String, dynamic> toJson() {
@@ -82,9 +74,6 @@ class Data {
     }
     if (this.roomList3 != null) {
       data['room_list_3'] = this.roomList3!.map((v) => v.toJson()).toList();
-    }
-    if (this.anchorList != null) {
-      data['anchor_list'] = this.anchorList!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -195,58 +184,6 @@ class RoomList3 {
     data['room_name'] = this.roomName;
     data['cover_img'] = this.coverImg;
     data['hot_degree'] = this.hotDegree;
-    return data;
-  }
-}
-class AnchorList {
-  int? uid;
-  String? nickname;
-  int? gender;
-  int? birthday;
-  String? avatar;
-  String? description;
-  int? level;
-  int? age;
-  int? live;
-  int? roomId;
-
-  AnchorList(
-      {this.uid,
-        this.nickname,
-        this.gender,
-        this.birthday,
-        this.avatar,
-        this.description,
-        this.level,
-        this.age,
-        this.live,
-        this.roomId});
-
-  AnchorList.fromJson(Map<String, dynamic> json) {
-    uid = json['uid'];
-    nickname = json['nickname'];
-    gender = json['gender'];
-    birthday = json['birthday'];
-    avatar = json['avatar'];
-    description = json['description'];
-    level = json['level'];
-    age = json['age'];
-    live = json['live'];
-    roomId = json['room_id'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['uid'] = this.uid;
-    data['nickname'] = this.nickname;
-    data['gender'] = this.gender;
-    data['birthday'] = this.birthday;
-    data['avatar'] = this.avatar;
-    data['description'] = this.description;
-    data['level'] = this.level;
-    data['age'] = this.age;
-    data['live'] = this.live;
-    data['room_id'] = this.roomId;
     return data;
   }
 }

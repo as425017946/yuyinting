@@ -132,8 +132,10 @@ class MyHttpConfig{
   static  String delDT = "$baseURL/note/del";
 
   /// 首页
-  //推荐房间/海报轮播/推荐主播
+  //推荐房间/海报轮播
   static  String pushRoom = "$baseURL/room/pushRoom";
+  // 推荐主播
+  static  String pushStreamer = "$baseURL/room/pushStreamer";
   //收藏页4个推荐房间
   static  String recommendRoom = "$baseURL/mine/recommendRoom";
   //加入房间前
