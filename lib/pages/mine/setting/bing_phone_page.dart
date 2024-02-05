@@ -234,6 +234,7 @@ class _BingPhonePageState extends State<BingPhonePage> {
     Map<String, dynamic> params = <String, dynamic>{
       'phone': controllerPhone.text.trim(),
       'area_code': quhao,
+      'ip': sp.getString('userIP').toString()
     };
     try {
       CommonBean bean = await DataUtils.postLoginSms(params);

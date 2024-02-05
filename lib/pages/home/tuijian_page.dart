@@ -55,6 +55,9 @@ class _TuijianPageState extends State<TuijianPage> {
   int a = 0, b = 0, c = 0;
 
   void _onRefresh() async {
+    setState(() {
+      sp.setBool('joinRoom',false);
+    });
     // monitor network fetch
     await Future.delayed(const Duration(milliseconds: 1000));
     // if failed,use refreshFailed()
@@ -69,6 +72,9 @@ class _TuijianPageState extends State<TuijianPage> {
   }
 
   void _onLoading() async {
+    setState(() {
+      sp.setBool('joinRoom',false);
+    });
     // monitor network fetch
     await Future.delayed(const Duration(milliseconds: 1000));
     // if failed,use loadFailed(),if no data return,use LoadNodata()
@@ -196,7 +202,7 @@ class _TuijianPageState extends State<TuijianPage> {
                         style: StyleUtils.getCommonTextStyle(
                             color: Colors.grey,
                             fontWeight: FontWeight.w600,
-                            fontSize: 14),
+                            fontSize: 23.sp),
                       ),
                     )
                   ],
@@ -258,396 +264,399 @@ class _TuijianPageState extends State<TuijianPage> {
       onLoading: _onLoading,
       onRefresh: _onRefresh,
       child: SingleChildScrollView(
-        child: Container(
-          decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                  //渐变位置
-                  begin: Alignment.topCenter, //右上
-                  end: Alignment.bottomCenter, //左下
-                  stops: [0.0, 1.0], //[渐变起始点, 渐变结束点]
-                  //渐变颜色[始点颜色, 结束颜色]
-                  colors: [MyColors.homeTopBG, Colors.white])),
-          child: Column(
-            children: [
-              GestureDetector(
-                onTap: (() {
-                  if (MyUtils.checkClick()) {
-                    MyUtils.goTransparentPageCom(context, const SearchPage());
-                  }
-                }),
-                child: Container(
-                  height: ScreenUtil().setHeight(100),
-                  padding: const EdgeInsets.only(top: 10, bottom: 10),
-                  child: Container(
-                    margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                    height: ScreenUtil().setHeight(50),
-                    alignment: Alignment.centerLeft,
-                    width: double.infinity,
-                    //边框设置
-                    decoration: BoxDecoration(
-                      //背景
-                      color: MyColors.homeSoucuoBG,
-                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                      borderRadius:
+        child: Column(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    //渐变位置
+                      begin: Alignment.topCenter, //右上
+                      end: Alignment.bottomCenter, //左下
+                      stops: [0.0, 1.0], //[渐变起始点, 渐变结束点]
+                      //渐变颜色[始点颜色, 结束颜色]
+                      colors: [MyColors.homeTopBG, Colors.white])),
+              child: Column(
+                children: [
+                  GestureDetector(
+                    onTap: (() {
+                      if (MyUtils.checkClick()) {
+                        MyUtils.goTransparentPageCom(context, const SearchPage());
+                      }
+                    }),
+                    child: Container(
+                      height: ScreenUtil().setHeight(100),
+                      padding: const EdgeInsets.only(top: 10, bottom: 10),
+                      child: Container(
+                        margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                        height: ScreenUtil().setHeight(50),
+                        alignment: Alignment.centerLeft,
+                        width: double.infinity,
+                        //边框设置
+                        decoration: BoxDecoration(
+                          //背景
+                          color: MyColors.homeSoucuoBG,
+                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                          borderRadius:
                           const BorderRadius.all(Radius.circular(25.0)),
-                      //设置四周边框
-                      border:
+                          //设置四周边框
+                          border:
                           Border.all(width: 1, color: MyColors.homeSoucuoBG),
+                        ),
+                        child: Row(
+                          children: [
+                            WidgetUtils.commonSizedBox(0, 10),
+                            WidgetUtils.showImages(
+                                'assets/images/sousuo_hui.png', 25.h, 25.h),
+                            WidgetUtils.commonSizedBox(0, 10),
+                            Expanded(
+                                child: WidgetUtils.onlyText(
+                                    '搜索ID昵称房间名',
+                                    StyleUtils.getCommonTextStyle(
+                                        color: MyColors.black_1, fontSize: 26.sp))),
+                          ],
+                        ),
+                      ),
                     ),
-                    child: Row(
+                  ),
+                  Container(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    width: double.infinity,
+                    child: Column(
                       children: [
-                        WidgetUtils.commonSizedBox(0, 10),
-                        WidgetUtils.showImages(
-                            'assets/images/sousuo_hui.png', 25.h, 25.h),
-                        WidgetUtils.commonSizedBox(0, 10),
-                        Expanded(
-                            child: WidgetUtils.onlyText(
-                                '搜索ID昵称房间名',
-                                StyleUtils.getCommonTextStyle(
-                                    color: MyColors.black_1, fontSize: 26.sp))),
+                        ///轮播图
+                        Container(
+                          height: ScreenUtil().setHeight(140),
+                          //超出部分，可裁剪
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Swiper(
+                            key: UniqueKey(),
+                            itemBuilder: (BuildContext context, int index) {
+                              // 配置图片地址
+                              return CachedNetworkImage(
+                                imageUrl: listBanner[index].img!,
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) =>
+                                    WidgetUtils.CircleImageAss(
+                                      ScreenUtil().setHeight(140),
+                                      double.infinity,
+                                      ScreenUtil().setHeight(10),
+                                      'assets/images/img_placeholder.png',
+                                    ),
+                                errorWidget: (context, url, error) =>
+                                    WidgetUtils.CircleImageAss(
+                                      ScreenUtil().setHeight(140),
+                                      double.infinity,
+                                      ScreenUtil().setHeight(10),
+                                      'assets/images/img_placeholder.png',
+                                    ),
+                              );
+                            },
+                            // 配置图片数量
+                            itemCount: listBanner.length,
+                            // 无限循环
+                            loop: true,
+                            // 自动轮播
+                            autoplay: true,
+                            autoplayDelay: 5000,
+                            duration: 2000,
+                            onIndexChanged: (index) {
+                              // LogE('用户拖动或者自动播放引起下标改变调用');
+                            },
+                            onTap: (index) {
+                              if(MyUtils.checkClick()){
+                                MyUtils.goTransparentPageCom(context, WebPage(url: listBanner[index].url!));
+                              }
+                            },
+                          ),
+                        ),
+
+                        ///热门推荐
+                        WidgetUtils.commonSizedBox(10, 0),
+                        WidgetUtils.onlyText(
+                            '热门推荐',
+                            StyleUtils.getCommonTextStyle(
+                                color: Colors.black,
+                                fontSize: ScreenUtil().setSp(28),
+                                fontWeight: FontWeight.w600)),
+                        WidgetUtils.commonSizedBox(10, 0),
+                        SizedBox(
+                          width: double.infinity,
+                          height: ScreenUtil().setHeight(350),
+                          child: Row(
+                            children: [
+                              ///热门推荐第一个大的轮播图
+                              SizedBox(
+                                height: ScreenUtil().setHeight(350),
+                                width: ScreenUtil().setWidth(450),
+                                child: listRoom.isNotEmpty ? Swiper(
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    // 配置图片地址
+                                    return Stack(
+                                      children: [
+                                        Container(
+                                          height: ScreenUtil().setHeight(350),
+                                          width: ScreenUtil().setWidth(450),
+                                          //超出部分，可裁剪
+                                          clipBehavior: Clip.hardEdge,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                            BorderRadius.circular(5),
+                                          ),
+                                          child: FadeInImage.assetNetwork(
+                                            placeholder:
+                                            'assets/images/img_placeholder.png',
+                                            image: listRoom[index].coverImg!,
+                                            fit: BoxFit.cover,
+                                            imageErrorBuilder: (context, error, stackTrace) {
+                                              // TODO 图片加载错误后展示的 widget
+                                              // print("---图片加载错误---");
+                                              // 此处不能 setState
+                                              return WidgetUtils.showImages(
+                                                'assets/images/img_placeholder.png',
+                                                double.infinity,
+                                                double.infinity,
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                        Positioned(
+                                            bottom: 10.h,
+                                            left: 10.h,
+                                            child: WidgetUtils.onlyText(
+                                                listRoom[index]
+                                                    .roomName!
+                                                    .length >
+                                                    10
+                                                    ? '${listRoom[index].roomName!.substring(0, 10)}...'
+                                                    : listRoom[index]
+                                                    .roomName!,
+                                                StyleUtils.getCommonTextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 22.sp)))
+                                      ],
+                                    );
+                                  },
+                                  // 配置图片数量
+                                  itemCount:
+                                  listRoom.isEmpty ? 0 : listRoom.length,
+                                  // 无限循环
+                                  loop: true,
+                                  // 自动轮播
+                                  autoplay: true,
+                                  autoplayDelay: 4000,
+                                  duration: 2500,
+                                  onIndexChanged: (index) {},
+                                  onTap: (index) {
+                                    if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
+                                      setState(() {
+                                        sp.setBool('joinRoom',true);
+                                      });
+                                      doPostBeforeJoin(listRoom[index].id.toString(), '');
+                                    }
+                                  },
+                                ) : const Text(''),
+                              ),
+                              WidgetUtils.commonSizedBox(0, 10),
+                              Expanded(
+                                  child: Column(
+                                    children: [
+                                      ///热门推荐 小的轮播图1
+                                      Expanded(
+                                          child: SizedBox(
+                                            height: ScreenUtil().setHeight(170),
+                                            width: double.infinity,
+                                            child: listRoom2.isNotEmpty ?  Swiper(
+                                              key: UniqueKey(),
+                                              itemBuilder:
+                                                  (BuildContext context, int index) {
+                                                // 配置图片地址
+                                                return Stack(
+                                                  children: [
+                                                    Container(
+                                                      height:
+                                                      ScreenUtil().setHeight(170),
+                                                      width: double.infinity,
+                                                      //超出部分，可裁剪
+                                                      clipBehavior: Clip.hardEdge,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                        BorderRadius.circular(5),
+                                                      ),
+                                                      child: FadeInImage.assetNetwork(
+                                                        placeholder:
+                                                        'assets/images/img_placeholder.png',
+                                                        image: listRoom2[index]
+                                                            .coverImg!,
+                                                        fit: BoxFit.cover,
+                                                        imageErrorBuilder: (context, error, stackTrace) {
+                                                          // TODO 图片加载错误后展示的 widget
+                                                          // print("---图片加载错误---");
+                                                          // 此处不能 setState
+                                                          return WidgetUtils.showImages(
+                                                            'assets/images/img_placeholder.png',
+                                                            double.infinity,
+                                                            double.infinity,
+                                                          );
+                                                        },
+                                                      ),
+                                                    ),
+                                                    Positioned(
+                                                        bottom: 10.h,
+                                                        left: 10.h,
+                                                        child: WidgetUtils.onlyText(
+                                                            listRoom2[index]
+                                                                .roomName!
+                                                                .length >
+                                                                10
+                                                                ? '${listRoom2[index].roomName!.substring(0, 10)}...'
+                                                                : listRoom2[index]
+                                                                .roomName!,
+                                                            StyleUtils
+                                                                .getCommonTextStyle(
+                                                                color:
+                                                                Colors.white,
+                                                                fontSize: 22.sp)))
+                                                  ],
+                                                );
+                                              },
+                                              // 配置图片数量
+                                              itemCount: listRoom2.length,
+                                              // 无限循环
+                                              loop: true,
+                                              // 自动轮播
+                                              autoplay: true,
+                                              autoplayDelay: 4000,
+                                              duration: 2000,
+                                              onTap: (index) {
+                                                if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
+                                                  setState(() {
+                                                    sp.setBool('joinRoom',true);
+                                                  });
+                                                  doPostBeforeJoin(listRoom2[index].id.toString(), '');
+                                                }
+                                              },
+                                            ) : const Text(''),
+                                          )),
+                                      WidgetUtils.commonSizedBox(10, 0),
+
+                                      ///热门推荐 小的轮播图2
+                                      Expanded(
+                                          child: SizedBox(
+                                            height: ScreenUtil().setHeight(170),
+                                            child:listRoom3.isNotEmpty ?   Swiper(
+                                              key: UniqueKey(),
+                                              itemBuilder:
+                                                  (BuildContext context, int index) {
+                                                // 配置图片地址
+                                                return Stack(
+                                                  children: [
+                                                    Container(
+                                                      height:
+                                                      ScreenUtil().setHeight(170),
+                                                      width: double.infinity,
+                                                      //超出部分，可裁剪
+                                                      clipBehavior: Clip.hardEdge,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                        BorderRadius.circular(5),
+                                                      ),
+                                                      child: FadeInImage.assetNetwork(
+                                                        placeholder:
+                                                        'assets/images/img_placeholder.png',
+                                                        image: listRoom3[index]
+                                                            .coverImg!,
+                                                        fit: BoxFit.cover,
+                                                        imageErrorBuilder: (context, error, stackTrace) {
+                                                          // TODO 图片加载错误后展示的 widget
+                                                          // print("---图片加载错误---");
+                                                          // 此处不能 setState
+                                                          return WidgetUtils.showImages(
+                                                            'assets/images/img_placeholder.png',
+                                                            double.infinity,
+                                                            double.infinity,
+                                                          );
+                                                        },
+                                                      ),
+                                                    ),
+                                                    Positioned(
+                                                        bottom: 10.h,
+                                                        left: 10.h,
+                                                        child: WidgetUtils.onlyText(
+                                                            listRoom3[index]
+                                                                .roomName!
+                                                                .length >
+                                                                10
+                                                                ? '${listRoom3[index].roomName!.substring(0, 10)}...'
+                                                                : listRoom3[index]
+                                                                .roomName!,
+                                                            StyleUtils
+                                                                .getCommonTextStyle(
+                                                                color:
+                                                                Colors.white,
+                                                                fontSize: 22.sp)))
+                                                  ],
+                                                );
+                                              },
+                                              // 配置图片数量
+                                              itemCount: listRoom3.length,
+                                              // 无限循环
+                                              loop: true,
+                                              // 自动轮播
+                                              autoplay: true,
+                                              autoplayDelay: 4000,
+                                              duration: 2000,
+                                              onTap: (index) {
+                                                if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
+                                                  setState(() {
+                                                    sp.setBool('joinRoom',true);
+                                                  });
+                                                  doPostBeforeJoin(listRoom3[index].id.toString(), '');
+                                                }
+                                                // doPostBeforeJoin(listRoom3[index].id.toString());
+                                              },
+                                            ) : const Text(''),
+                                          )),
+                                    ],
+                                  ))
+                            ],
+                          ),
+                        )
                       ],
                     ),
                   ),
-                ),
+                ],
               ),
-              SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                      width: double.infinity,
-                      child: Column(
-                        children: [
-                          ///轮播图
-                          Container(
-                            height: ScreenUtil().setHeight(140),
-                            //超出部分，可裁剪
-                            clipBehavior: Clip.hardEdge,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Swiper(
-                              key: UniqueKey(),
-                              itemBuilder: (BuildContext context, int index) {
-                                // 配置图片地址
-                                return CachedNetworkImage(
-                                  imageUrl: listBanner[index].img!,
-                                  fit: BoxFit.cover,
-                                  placeholder: (context, url) =>
-                                      WidgetUtils.CircleImageAss(
-                                    ScreenUtil().setHeight(140),
-                                    double.infinity,
-                                    ScreenUtil().setHeight(10),
-                                    'assets/images/img_placeholder.png',
-                                  ),
-                                  errorWidget: (context, url, error) =>
-                                      WidgetUtils.CircleImageAss(
-                                        ScreenUtil().setHeight(140),
-                                        double.infinity,
-                                        ScreenUtil().setHeight(10),
-                                        'assets/images/img_placeholder.png',
-                                      ),
-                                );
-                              },
-                              // 配置图片数量
-                              itemCount: listBanner.length,
-                              // 无限循环
-                              loop: true,
-                              // 自动轮播
-                              autoplay: true,
-                              autoplayDelay: 5000,
-                              duration: 2000,
-                              onIndexChanged: (index) {
-                                // LogE('用户拖动或者自动播放引起下标改变调用');
-                              },
-                              onTap: (index) {
-                                if(MyUtils.checkClick()){
-                                  MyUtils.goTransparentPageCom(context, WebPage(url: listBanner[index].url!));
-                                }
-                              },
-                            ),
-                          ),
-
-                          ///热门推荐
-                          WidgetUtils.commonSizedBox(10, 0),
-                          WidgetUtils.onlyText(
-                              '热门推荐',
-                              StyleUtils.getCommonTextStyle(
-                                  color: Colors.black,
-                                  fontSize: ScreenUtil().setSp(28),
-                                  fontWeight: FontWeight.w600)),
-                          WidgetUtils.commonSizedBox(10, 0),
-                          SizedBox(
-                            width: double.infinity,
-                            height: ScreenUtil().setHeight(350),
-                            child: Row(
-                              children: [
-                                ///热门推荐第一个大的轮播图
-                                SizedBox(
-                                  height: ScreenUtil().setHeight(350),
-                                  width: ScreenUtil().setWidth(450),
-                                  child: listRoom.isNotEmpty ? Swiper(
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      // 配置图片地址
-                                      return Stack(
-                                        children: [
-                                          Container(
-                                            height: ScreenUtil().setHeight(350),
-                                            width: ScreenUtil().setWidth(450),
-                                            //超出部分，可裁剪
-                                            clipBehavior: Clip.hardEdge,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                            ),
-                                            child: FadeInImage.assetNetwork(
-                                              placeholder:
-                                                  'assets/images/img_placeholder.png',
-                                              image: listRoom[index].coverImg!,
-                                              fit: BoxFit.cover,
-                                              imageErrorBuilder: (context, error, stackTrace) {
-                                                // TODO 图片加载错误后展示的 widget
-                                                // print("---图片加载错误---");
-                                                // 此处不能 setState
-                                                return WidgetUtils.showImages(
-                                                  'assets/images/img_placeholder.png',
-                                                  double.infinity,
-                                                  double.infinity,
-                                                );
-                                              },
-                                            ),
-                                          ),
-                                          Positioned(
-                                              bottom: 10.h,
-                                              left: 10.h,
-                                              child: WidgetUtils.onlyText(
-                                                  listRoom[index]
-                                                              .roomName!
-                                                              .length >
-                                                          10
-                                                      ? '${listRoom[index].roomName!.substring(0, 10)}...'
-                                                      : listRoom[index]
-                                                          .roomName!,
-                                                  StyleUtils.getCommonTextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 22.sp)))
-                                        ],
-                                      );
-                                    },
-                                    // 配置图片数量
-                                    itemCount:
-                                        listRoom.isEmpty ? 0 : listRoom.length,
-                                    // 无限循环
-                                    loop: true,
-                                    // 自动轮播
-                                    autoplay: true,
-                                    autoplayDelay: 4000,
-                                    duration: 2500,
-                                    onIndexChanged: (index) {},
-                                    onTap: (index) {
-                                      if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
-                                        setState(() {
-                                          sp.setBool('joinRoom',true);
-                                        });
-                                        doPostBeforeJoin(listRoom[index].id.toString(), '');
-                                      }
-                                    },
-                                  ) : const Text(''),
-                                ),
-                                WidgetUtils.commonSizedBox(0, 10),
-                                Expanded(
-                                    child: Column(
-                                  children: [
-                                    ///热门推荐 小的轮播图1
-                                    Expanded(
-                                        child: SizedBox(
-                                      height: ScreenUtil().setHeight(170),
-                                      width: double.infinity,
-                                      child: listRoom2.isNotEmpty ?  Swiper(
-                                        key: UniqueKey(),
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          // 配置图片地址
-                                          return Stack(
-                                            children: [
-                                              Container(
-                                                height:
-                                                    ScreenUtil().setHeight(170),
-                                                width: double.infinity,
-                                                //超出部分，可裁剪
-                                                clipBehavior: Clip.hardEdge,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
-                                                ),
-                                                child: FadeInImage.assetNetwork(
-                                                  placeholder:
-                                                      'assets/images/img_placeholder.png',
-                                                  image: listRoom2[index]
-                                                      .coverImg!,
-                                                  fit: BoxFit.cover,
-                                                  imageErrorBuilder: (context, error, stackTrace) {
-                                                    // TODO 图片加载错误后展示的 widget
-                                                    // print("---图片加载错误---");
-                                                    // 此处不能 setState
-                                                    return WidgetUtils.showImages(
-                                                      'assets/images/img_placeholder.png',
-                                                      double.infinity,
-                                                      double.infinity,
-                                                    );
-                                                  },
-                                                ),
-                                              ),
-                                              Positioned(
-                                                  bottom: 10.h,
-                                                  left: 10.h,
-                                                  child: WidgetUtils.onlyText(
-                                                      listRoom2[index]
-                                                                  .roomName!
-                                                                  .length >
-                                                              10
-                                                          ? '${listRoom2[index].roomName!.substring(0, 10)}...'
-                                                          : listRoom2[index]
-                                                              .roomName!,
-                                                      StyleUtils
-                                                          .getCommonTextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize: 22.sp)))
-                                            ],
-                                          );
-                                        },
-                                        // 配置图片数量
-                                        itemCount: listRoom2.length,
-                                        // 无限循环
-                                        loop: true,
-                                        // 自动轮播
-                                        autoplay: true,
-                                        autoplayDelay: 4000,
-                                        duration: 2000,
-                                        onTap: (index) {
-                                          if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
-                                            setState(() {
-                                              sp.setBool('joinRoom',true);
-                                            });
-                                            doPostBeforeJoin(listRoom2[index].id.toString(), '');
-                                          }
-                                        },
-                                      ) : const Text(''),
-                                    )),
-                                    WidgetUtils.commonSizedBox(10, 0),
-
-                                    ///热门推荐 小的轮播图2
-                                    Expanded(
-                                        child: SizedBox(
-                                      height: ScreenUtil().setHeight(170),
-                                      child:listRoom3.isNotEmpty ?   Swiper(
-                                        key: UniqueKey(),
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          // 配置图片地址
-                                          return Stack(
-                                            children: [
-                                              Container(
-                                                height:
-                                                    ScreenUtil().setHeight(170),
-                                                width: double.infinity,
-                                                //超出部分，可裁剪
-                                                clipBehavior: Clip.hardEdge,
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
-                                                ),
-                                                child: FadeInImage.assetNetwork(
-                                                  placeholder:
-                                                      'assets/images/img_placeholder.png',
-                                                  image: listRoom3[index]
-                                                      .coverImg!,
-                                                  fit: BoxFit.cover,
-                                                  imageErrorBuilder: (context, error, stackTrace) {
-                                                    // TODO 图片加载错误后展示的 widget
-                                                    // print("---图片加载错误---");
-                                                    // 此处不能 setState
-                                                    return WidgetUtils.showImages(
-                                                      'assets/images/img_placeholder.png',
-                                                      double.infinity,
-                                                      double.infinity,
-                                                    );
-                                                  },
-                                                ),
-                                              ),
-                                              Positioned(
-                                                  bottom: 10.h,
-                                                  left: 10.h,
-                                                  child: WidgetUtils.onlyText(
-                                                      listRoom3[index]
-                                                                  .roomName!
-                                                                  .length >
-                                                              10
-                                                          ? '${listRoom3[index].roomName!.substring(0, 10)}...'
-                                                          : listRoom3[index]
-                                                              .roomName!,
-                                                      StyleUtils
-                                                          .getCommonTextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize: 22.sp)))
-                                            ],
-                                          );
-                                        },
-                                        // 配置图片数量
-                                        itemCount: listRoom3.length,
-                                        // 无限循环
-                                        loop: true,
-                                        // 自动轮播
-                                        autoplay: true,
-                                        autoplayDelay: 4000,
-                                        duration: 2000,
-                                        onTap: (index) {
-                                          if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
-                                            setState(() {
-                                              sp.setBool('joinRoom',true);
-                                            });
-                                            doPostBeforeJoin(listRoom3[index].id.toString(), '');
-                                          }
-                                          // doPostBeforeJoin(listRoom3[index].id.toString());
-                                        },
-                                      ) : const Text(''),
-                                    )),
-                                  ],
-                                ))
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-
-                    ///推荐主播
-                    WidgetUtils.commonSizedBox(20, 0),
-                    Container(
-                      margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                      child: WidgetUtils.onlyText(
-                          '推荐主播',
-                          StyleUtils.getCommonTextStyle(
-                              color: Colors.black,
-                              fontSize: ScreenUtil().setSp(28),
-                              fontWeight: FontWeight.w600)),
-                    ),
-                    ListView.builder(
-                      padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: tuijian,
-                      itemCount: listAnchor.length,
-                    ),
-                    WidgetUtils.commonSizedBox(20, 0),
-                  ],
-                ),
+            ),
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  ///推荐主播
+                  WidgetUtils.commonSizedBox(20, 0),
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    child: WidgetUtils.onlyText(
+                        '推荐主播',
+                        StyleUtils.getCommonTextStyle(
+                            color: Colors.black,
+                            fontSize: ScreenUtil().setSp(28),
+                            fontWeight: FontWeight.w600)),
+                  ),
+                  ListView.builder(
+                    padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: tuijian,
+                    itemCount: listAnchor.length,
+                  ),
+                  WidgetUtils.commonSizedBox(20, 0),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

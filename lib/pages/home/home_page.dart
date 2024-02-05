@@ -25,6 +25,7 @@ import 'package:yuyinting/pages/login/edit_info_page.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import '../../bean/CheckoutBean.dart';
+import '../../bean/addressIPBean.dart';
 import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
@@ -59,6 +60,7 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
   void initState() {
     // TODO: implement initState
     // doCheck();
+    doPostPdAddress();
     //更新身份
     setState(() {
       identity = sp.getString('user_identity').toString();
@@ -508,27 +510,33 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
 
   /// 判断当前网络，然后给返回适配的网络地址
   Future<void> doPostPdAddress() async {
-    // BaseOptions option = BaseOptions(
-    //     contentType: 'multipart/form-data', responseType: ResponseType.plain);
-    // option.headers["Authorization"] = sp.getString('user_token') ?? '';
-    Dio dio = Dio();
-    var respone = await dio.get(MyHttpConfig.pdAddress);
-    Map jsonResponse = json.decode(respone.data.toString());
-    LogE('网络请求$jsonResponse');
-    if (jsonResponse['code'] == 200) {
-      if(jsonResponse['nodes'].toString().isNotEmpty){
-        setState(() {
-          sp.setString('isDian', jsonResponse['nodes'].toString());
-        });
-        doCheck();
-      }else{
-        MyToastUtils.showToastBottom(MyConfig.errorHttpTitle);
-        // 直接杀死app
-        SystemNavigator.pop();
+    Map<String, dynamic> params = <String, dynamic>{
+      'type': 'go',
+    };
+    try {
+      addressIPBean bean = await DataUtils.postPdAddress(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          if(bean.nodes!.isNotEmpty){
+            setState(() {
+              sp.setString('isDian', bean.nodes!);
+            });
+          }else{
+            MyToastUtils.showToastBottom(MyConfig.errorHttpTitle);
+            // 直接杀死app
+            SystemNavigator.pop();
+          }
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
       }
-    }  else {
-      // 直接杀死app
-      SystemNavigator.pop();
+    } catch (e) {
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 

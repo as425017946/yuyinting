@@ -40,6 +40,9 @@ class _RoomTSMiMaPageState extends State<RoomTSMiMaPage> {
           children: [
             GestureDetector(
               onTap: (() {
+                setState(() {
+                  sp.setBool('joinRoom',false);
+                });
                 if (MyUtils.checkClick()) {
                   Navigator.pop(context);
                 }

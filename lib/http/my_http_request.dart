@@ -62,22 +62,23 @@ class MyHttpRequest {
       Loading.dismiss();
       switch (e.type) {
         case DioErrorType.connectTimeout:
-          MyToastUtils.showToastBottom('网络异常，请检查你的网络！');
+          // MyToastUtils.showToastBottom('网络异常，请检查你的网络！');
           break;
         case DioErrorType.sendTimeout:
-          MyToastUtils.showToastBottom('发送请求超时');
+          // MyToastUtils.showToastBottom('发送请求超时');
           break;
         case DioErrorType.receiveTimeout:
-          MyToastUtils.showToastBottom('网络异常，请检查你的网络！');
+          // MyToastUtils.showToastBottom('网络异常，请检查你的网络！');
           break;
         case DioErrorType.response:
-          MyToastUtils.showToastBottom('服务器异常！');
+          // MyToastUtils.showToastBottom('服务器异常！');
+          // MyToastUtils.showToastBottom('网络异常，请检查你的网络！');
           break;
         case DioErrorType.cancel:
-          MyToastUtils.showToastBottom('请求取消！');
+          // MyToastUtils.showToastBottom('请求取消！');
           break;
         case DioErrorType.other:
-          MyToastUtils.showToastBottom('网络异常，请检查你的网络！');
+          // MyToastUtils.showToastBottom('网络异常，请检查你的网络！');
           break;
       }
     }

@@ -12,6 +12,7 @@ import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/my_utils.dart';
 import '../../bean/Common_bean.dart';
+import '../../bean/addressIPBean.dart';
 import '../../bean/loginBean.dart';
 import '../../bean/pdAddressBean.dart';
 import '../../colors/my_colors.dart';
@@ -55,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
     // TODO: implement initState
     super.initState();
     doPostPdAddress();
-    getIPAddress();
+    // getIPAddress();
     getDeviceIMEI();
     // 在登录页先设置所有游戏的音频开关默认开启，false为开始，true为关闭
     sp.setBool('zp_xin', false);
@@ -162,18 +163,18 @@ class _LoginPageState extends State<LoginPage> {
             });
   }
 
-  void getIPAddress() async {
-    for (var interface in await NetworkInterface.list()) {
-      for (var addr in interface.addresses) {
-        if (addr.type == InternetAddressType.IPv4) {
-          setState(() {
-            IP = addr.address;
-          });
-          print('IP地址: ${addr.address}');
-        }
-      }
-    }
-  }
+  // void getIPAddress() async {
+  //   for (var interface in await NetworkInterface.list()) {
+  //     for (var addr in interface.addresses) {
+  //       if (addr.type == InternetAddressType.IPv4) {
+  //         setState(() {
+  //           IP = addr.address;
+  //         });
+  //         print('IP地址: ${addr.address}');
+  //       }
+  //     }
+  //   }
+  // }
   void getDeviceIMEI() async {
     final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if (Platform.isAndroid) {
@@ -609,7 +610,8 @@ class _LoginPageState extends State<LoginPage> {
         'password': passWord,
         'type': '1',
         'imei': IMEI,
-        'pid': RegExp(r'^-?[0-9.]+$').hasMatch(pid) ? pid : ''
+        'pid': RegExp(r'^-?[0-9.]+$').hasMatch(pid) ? pid : '',
+        'ip' : IP.isEmpty ? sp.getString('userIP').toString() : IP
       };
     } else {
       String type = '';
@@ -639,7 +641,8 @@ class _LoginPageState extends State<LoginPage> {
         'area_code': quhao,
         'code': userMsg,
         'imei': IMEI,
-        'pid': RegExp(r'^-?[0-9.]+$').hasMatch(pid) ? pid : ''
+        'pid': RegExp(r'^-?[0-9.]+$').hasMatch(pid) ? pid : '',
+        'ip' : IP.isEmpty ? sp.getString('userIP').toString() : IP
       };
     }
 
@@ -852,6 +855,7 @@ class _LoginPageState extends State<LoginPage> {
     Map<String, dynamic> params = <String, dynamic>{
       'phone': controllerPhone.text.trim(),
       'area_code': quhao,
+      'ip': IP.isEmpty ? sp.getString('userIP').toString() : IP
     };
     try {
       CommonBean bean = await DataUtils.postLoginSms(params);
@@ -877,59 +881,35 @@ class _LoginPageState extends State<LoginPage> {
 
   /// 判断当前网络，然后给返回适配的网络地址
   Future<void> doPostPdAddress() async {
-    // BaseOptions option = BaseOptions(
-    //     contentType: 'multipart/form-data', responseType: ResponseType.plain);
-    // option.headers["Authorization"] = sp.getString('user_token') ?? '';
-    Dio dio = Dio();
-    var respone = await dio.get(MyHttpConfig.pdAddress);
-    Map jsonResponse = json.decode(respone.data.toString());
-    LogE('网络请求$jsonResponse');
-    if (jsonResponse['code'] == 200) {
-        if(jsonResponse['nodes'].toString().isNotEmpty){
-          setState(() {
-            sp.setString('isDian', jsonResponse['nodes'].toString());
-          });
-        }else{
-          MyToastUtils.showToastBottom(MyConfig.errorHttpTitle);
-          // 直接杀死app
-          SystemNavigator.pop();
-        }
-    }  else {
-      MyToastUtils.showToastBottom(MyConfig.errorHttpTitle);
-      // 直接杀死app
-      SystemNavigator.pop();
+    Map<String, dynamic> params = <String, dynamic>{
+      'type': 'go',
+    };
+    try {
+      addressIPBean bean = await DataUtils.postPdAddress(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          if(bean.nodes!.isNotEmpty){
+            setState(() {
+              sp.setString('isDian', bean.nodes!);
+              sp.setString('userIP', bean.address!);
+              IP = bean.address!;
+            });
+          }else{
+            MyToastUtils.showToastBottom(MyConfig.errorHttpTitle);
+            // 直接杀死app
+            SystemNavigator.pop();
+          }
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
-    // Map<String, dynamic> params = <String, dynamic>{
-    //   'type': 'go',
-    //   'ip':'127.0.0.1'
-    // };
-    // try {
-    //   pdAddressBean bean = await DataUtils.postPdAddress(params);
-    //   switch (bean.code) {
-    //     case MyHttpConfig.successCode:
-    //       MyToastUtils.showToastBottom(bean.nodes!);
-    //       if(bean.nodes!.isNotEmpty){
-    //         setState(() {
-    //           sp.setString('isDian', bean.nodes!);
-    //         });
-    //       }else{
-    //         MyToastUtils.showToastBottom(MyConfig.errorHttpTitle);
-    //         // 直接杀死app
-    //         SystemNavigator.pop();
-    //       }
-    //       break;
-    //     case MyHttpConfig.errorloginCode:
-    //     // ignore: use_build_context_synchronously
-    //       MyUtils.jumpLogin(context);
-    //       break;
-    //     default:
-    //       MyToastUtils.showToastBottom(bean.msg!);
-    //       break;
-    //   }
-    //   Loading.dismiss();
-    // } catch (e) {
-    //   Loading.dismiss();
-    //   MyToastUtils.showToastBottom(MyConfig.errorTitle);
-    // }
   }
 }

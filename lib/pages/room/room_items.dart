@@ -1832,9 +1832,7 @@ class RoomItems {
                           const Expanded(child: Text('')),
                           WidgetUtils.commonSizedBox(0, 5),
                           WidgetUtils.onlyText(
-                              listm[8].nickname!.length > 6
-                                  ? '${listm[8].nickname!.substring(0, 6)}...'
-                                  : listm[8].nickname!,
+                              listm[8].nickname!,
                               StyleUtils.getCommonTextStyle(
                                   color: Colors.white,
                                   fontSize: ScreenUtil().setSp(21))),
@@ -2020,10 +2018,7 @@ class RoomItems {
                               const Expanded(child: Text('')),
                               WidgetUtils.commonSizedBox(0, 5),
                               WidgetUtils.onlyText(
-                                  listm[0].nickname!.length > 6
-                                      ? '${listm[0].nickname!.substring(
-                                      0, 6)}...'
-                                      : listm[0].nickname!,
+                                  listm[0].nickname!,
                                   StyleUtils.getCommonTextStyle(
                                       color: Colors.white,
                                       fontSize: ScreenUtil().setSp(21))),
@@ -2179,10 +2174,7 @@ class RoomItems {
                               const Expanded(child: Text('')),
                               WidgetUtils.commonSizedBox(0, 5),
                               WidgetUtils.onlyText(
-                                  listm[1].nickname!.length > 6
-                                      ? '${listm[1].nickname!.substring(
-                                      0, 6)}...'
-                                      : listm[1].nickname!,
+                                  listm[1].nickname!,
                                   StyleUtils.getCommonTextStyle(
                                       color: Colors.white,
                                       fontSize: ScreenUtil().setSp(21))),
@@ -2338,10 +2330,7 @@ class RoomItems {
                               const Expanded(child: Text('')),
                               WidgetUtils.commonSizedBox(0, 5),
                               WidgetUtils.onlyText(
-                                  listm[2].nickname!.length > 6
-                                      ? '${listm[2].nickname!.substring(
-                                      0, 6)}...'
-                                      : listm[2].nickname!,
+                                  listm[2].nickname!,
                                   StyleUtils.getCommonTextStyle(
                                       color: Colors.white,
                                       fontSize: ScreenUtil().setSp(21))),
@@ -2497,10 +2486,7 @@ class RoomItems {
                               const Expanded(child: Text('')),
                               WidgetUtils.commonSizedBox(0, 5),
                               WidgetUtils.onlyText(
-                                  listm[3].nickname!.length > 6
-                                      ? '${listm[3].nickname!.substring(
-                                      0, 6)}...'
-                                      : listm[3].nickname!,
+                                  listm[3].nickname!,
                                   StyleUtils.getCommonTextStyle(
                                       color: Colors.white,
                                       fontSize: ScreenUtil().setSp(21))),
@@ -2665,10 +2651,7 @@ class RoomItems {
                                 const Expanded(child: Text('')),
                                 WidgetUtils.commonSizedBox(0, 5),
                                 WidgetUtils.onlyText(
-                                    listm[4].nickname!.length > 6
-                                        ? '${listm[4].nickname!.substring(
-                                        0, 6)}...'
-                                        : listm[4].nickname!,
+                                    listm[4].nickname!,
                                     StyleUtils.getCommonTextStyle(
                                         color: Colors.white,
                                         fontSize:
@@ -2826,10 +2809,7 @@ class RoomItems {
                                 const Expanded(child: Text('')),
                                 WidgetUtils.commonSizedBox(0, 5),
                                 WidgetUtils.onlyText(
-                                    listm[5].nickname!.length > 6
-                                        ? '${listm[5].nickname!.substring(
-                                        0, 6)}...'
-                                        : listm[5].nickname!,
+                                    listm[5].nickname!,
                                     StyleUtils.getCommonTextStyle(
                                         color: Colors.white,
                                         fontSize:
@@ -2987,10 +2967,7 @@ class RoomItems {
                                 const Expanded(child: Text('')),
                                 WidgetUtils.commonSizedBox(0, 5),
                                 WidgetUtils.onlyText(
-                                    listm[6].nickname!.length > 6
-                                        ? '${listm[6].nickname!.substring(
-                                        0, 6)}...'
-                                        : listm[6].nickname!,
+                                    listm[6].nickname!,
                                     StyleUtils.getCommonTextStyle(
                                         color: Colors.white,
                                         fontSize:
@@ -3184,10 +3161,7 @@ class RoomItems {
                                   },
                                   blendMode: BlendMode.srcATop,
                                   child: Text(
-                                    listm[7].nickname!.length > 6
-                                        ? '${listm[7].nickname!.substring(
-                                        0, 6)}...'
-                                        : listm[7].nickname!,
+                                    listm[7].nickname!,
                                     style: TextStyle(
                                         fontSize:
                                         ScreenUtil().setSp(21),
@@ -3350,10 +3324,7 @@ class RoomItems {
                                 const Expanded(child: Text('')),
                                 WidgetUtils.commonSizedBox(0, 5),
                                 WidgetUtils.onlyText(
-                                    listm[7].nickname!.length > 6
-                                        ? '${listm[7].nickname!.substring(
-                                        0, 6)}...'
-                                        : listm[7].nickname!,
+                                    listm[7].nickname!,
                                     StyleUtils.getCommonTextStyle(
                                         color: Colors.white,
                                         fontSize: ScreenUtil()

@@ -48,6 +48,9 @@ class _PaiduiPageState extends State<PaiduiPage>
       RefreshController(initialRefresh: false);
 
   void _onRefresh() async {
+    setState(() {
+      sp.setBool('joinRoom',false);
+    });
     // monitor network fetch
     await Future.delayed(const Duration(milliseconds: 1000));
     // if failed,use refreshFailed()
@@ -62,6 +65,9 @@ class _PaiduiPageState extends State<PaiduiPage>
   }
 
   void _onLoading() async {
+    setState(() {
+      sp.setBool('joinRoom',false);
+    });
     // monitor network fetch
     await Future.delayed(const Duration(milliseconds: 1000));
     // if failed,use loadFailed(),if no data return,use LoadNodata()
@@ -113,7 +119,7 @@ class _PaiduiPageState extends State<PaiduiPage>
           onTap: (() {
             if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
               setState(() {
-                sp.setBool('joinRoom',true);
+                sp.setBool('joinRoom',false);
               });
               if (index == 2) {
                 doPostBeforeJoin(list2[i].id.toString());
@@ -1045,15 +1051,25 @@ class _PaiduiPageState extends State<PaiduiPage>
             }
             if (bean.data!.isNotEmpty) {
               if (type == "2") {
-                list2 = bean.data!;
+                for(int i = 0; i < bean.data!.length; i++){
+                  list2.add(bean.data![i]);
+                }
               } else if (type == "3") {
-                list3 = bean.data!;
+                for(int i = 0; i < bean.data!.length; i++){
+                  list3.add(bean.data![i]);
+                }
               } else if (type == "4") {
-                list4 = bean.data!;
+                for(int i = 0; i < bean.data!.length; i++){
+                  list4.add(bean.data![i]);
+                }
               } else if (type == "5") {
-                list5 = bean.data!;
+                for(int i = 0; i < bean.data!.length; i++){
+                  list5.add(bean.data![i]);
+                }
               } else if (type == "6") {
-                list6 = bean.data!;
+                for(int i = 0; i < bean.data!.length; i++){
+                  list6.add(bean.data![i]);
+                }
               }
             } else {
               if (page > 1) {

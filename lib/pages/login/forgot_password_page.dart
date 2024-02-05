@@ -9,6 +9,7 @@ import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
+import '../../main.dart';
 import '../../utils/loading.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
@@ -274,6 +275,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     Map<String, dynamic> params = <String, dynamic>{
       'phone': controllerPhone.text.trim(),
       'area_code': quhao,
+      'ip': sp.getString('userIP').toString()
     };
     try {
       CommonBean bean = await DataUtils.postSendSms(params);
