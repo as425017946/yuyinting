@@ -579,7 +579,7 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
       CheckoutBean bean = await DataUtils.checkVersion(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          if (int.parse(buildNumber) ==
+          if (int.parse(buildNumber) <
               int.parse(bean.data!.customUpdateNum!)) {
             if (Platform.isAndroid) {
               // ignore: use_build_context_synchronously
