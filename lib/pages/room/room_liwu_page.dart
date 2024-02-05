@@ -177,17 +177,17 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
           if(leixing == 0){
             //说明要送的人在麦序上
             if(isUpPeopleNum != 0){
-              isAll = true;
-              for(int i = 0; i < listMaiXu.length; i++){
-                listChoose[i] = true;
-                listPeople[listMaiXu[i].serialNumber! - 1] = true;
-                isChoosePeople = true;
-                listUID.clear();
-                for(int i =0; i < listMaiXu.length; i++){
-                  listUID.add(listMaiXu[i].uid.toString());
-                }
-              }
-              eventBus.fire(ChoosePeopleBack(listPeople: listPeople));
+              // isAll = true;
+              // for(int i = 0; i < listMaiXu.length; i++){
+              //   listChoose[i] = true;
+              //   listPeople[listMaiXu[i].serialNumber! - 1] = true;
+              //   isChoosePeople = true;
+              //   listUID.clear();
+              //   for(int i =0; i < listMaiXu.length; i++){
+              //     listUID.add(listMaiXu[i].uid.toString());
+              //   }
+              // }
+              // eventBus.fire(ChoosePeopleBack(listPeople: listPeople));
               giftId = listC[index].id.toString();
               for (int i = 0; i < listC.length; i++) {
                 listCBool[i] = false;

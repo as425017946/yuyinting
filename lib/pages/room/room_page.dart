@@ -463,7 +463,7 @@ class _RoomPageState extends State<RoomPage>
           _engine.muteLocalAudioStream(true);
           _engine.disableAudio();
           _dispose();
-          MyUtils.jumpLogin(context);
+          // MyUtils.jumpLogin(context);
         } else if (event.title == '老板位1') {
           setState(() {
             isBoss = true;

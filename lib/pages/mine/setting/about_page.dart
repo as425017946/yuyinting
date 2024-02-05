@@ -55,7 +55,7 @@ class _AboutPageState extends State<AboutPage> {
           Row(
             children: [
               const Expanded(child: Text('')),
-              WidgetUtils.onlyText('当前版本（1） ${sp.getString('myVersion1')}', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: 14)),
+              WidgetUtils.onlyText('当前版本（2） ${sp.getString('myVersion1')}', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: 14)),
               const Expanded(child: Text('')),
             ],
           ),

@@ -217,6 +217,7 @@ class MyUtils {
 
   ///跳转到登录页面
   static void jumpLogin(BuildContext context) {
+    eventBus.fire(SubmitButtonBack(title: 'im断开链接'));
     sp.setString('user_token', '');
     MyToastUtils.showToastBottom('登录超时，请重新登录！');
     Future.delayed(Duration.zero, () {

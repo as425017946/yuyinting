@@ -233,7 +233,6 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
               // 转盘
               Positioned(
                 top: ScreenUtil().setHeight(70),
-                left: ScreenUtil().setWidth(0),
                 width: ScreenUtil().setHeight(590),
                 height: ScreenUtil().setHeight(590),
                 child: Container(

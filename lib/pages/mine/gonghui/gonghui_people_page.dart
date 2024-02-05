@@ -126,12 +126,12 @@ class _GonghuiPeoplePageState extends State<GonghuiPeoplePage> {
                     10),
               ) : const Text(''),
               const Expanded(child: Text('')),
-              list[i].identity != 10 ? GestureDetector(
-                onTap: ((){
-                  isRemove(context, list[i].streamerUid.toString(),i);
-                }),
-                child: WidgetUtils.myContainer(ScreenUtil().setHeight(45), ScreenUtil().setHeight(100), Colors.white, MyColors.homeTopBG, '移出', ScreenUtil().setSp(25), MyColors.homeTopBG),
-              ) : const Text(''),
+             sp.getString('role').toString() == 'leader' ?  list[i].identity != 10 ? GestureDetector(
+               onTap: ((){
+                 isRemove(context, list[i].streamerUid.toString(),i);
+               }),
+               child: WidgetUtils.myContainer(ScreenUtil().setHeight(45), ScreenUtil().setHeight(100), Colors.white, MyColors.homeTopBG, '移出', ScreenUtil().setSp(25), MyColors.homeTopBG),
+             ) : const Text('') : const Text(''),
               WidgetUtils.commonSizedBox(0, 20),
 
             ],

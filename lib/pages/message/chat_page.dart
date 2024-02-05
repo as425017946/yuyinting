@@ -128,12 +128,12 @@ class _ChatPageState extends State<ChatPage> {
     // TODO: implement initState
     sp.setBool('joinRoom',false);
     if (Platform.isAndroid) {
-      getPermissionStatus();
+      // getPermissionStatus();
       setState(() {
         isDevices = 'android';
       });
     }else if (Platform.isIOS){
-      init();
+      // init();
       setState(() {
         isDevices = 'ios';
       });
@@ -682,8 +682,8 @@ class _ChatPageState extends State<ChatPage> {
                           : Colors.white,
                       //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                       borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(20.0),
-                          topRight: Radius.circular(0),
+                          topLeft: Radius.circular(0),
+                          topRight: Radius.circular(20.0),
                           bottomLeft: Radius.circular(20.0),
                           bottomRight: Radius.circular(20.0)),
                       boxShadow: allData2[i]['type'] == 2
@@ -719,30 +719,25 @@ class _ChatPageState extends State<ChatPage> {
                         minWidth: ScreenUtil().setHeight(60)),
                     padding: EdgeInsets.all(ScreenUtil().setHeight(20)),
                     //边框设置
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       //背景
-                      color: allData2[i]['type'] == 2
-                          ? Colors.transparent
-                          : Colors.white,
+                      color: Colors.transparent,
                       //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(20.0),
-                          topRight: Radius.circular(0),
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(0),
+                          topRight: Radius.circular(20.0),
                           bottomLeft: Radius.circular(20.0),
                           bottomRight: Radius.circular(20.0)),
-                      boxShadow: allData2[i]['type'] == 2
-                          ? []
-                          : [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.1),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset:
-                          const Offset(0, 1), // 阴影的偏移量，向右下方偏移3像素
-                        ),
-                      ],
+                      boxShadow: [],
                     ),
-                    child:  Image(
+                    child:   (allData2[i]['content']
+                        .toString()
+                        .contains(
+                        'com.leimu.yuyinting') ||
+                        allData2[i]['content']
+                            .toString()
+                            .contains('storage'))
+                        ? Image(
                       image: FileImage(
                           File(allData2[i]['content'])),
                       width: 160.h,
@@ -756,7 +751,11 @@ class _ChatPageState extends State<ChatPage> {
                             200.h,
                             160.h);
                       },
-                    ),
+                    )
+                        : WidgetUtils.showImagesNet(
+                        allData2[i]['content'].toString(),
+                        200.h,
+                        160.h),
                   ),
                 ) : allData2[i]['type'] == 3 ? GestureDetector(
                   onTap: (() {
@@ -779,8 +778,8 @@ class _ChatPageState extends State<ChatPage> {
                           : Colors.white,
                       //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                       borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(20.0),
-                          topRight: Radius.circular(0),
+                          topLeft: Radius.circular(0),
+                          topRight: Radius.circular(20.0),
                           bottomLeft: Radius.circular(20.0),
                           bottomRight: Radius.circular(20.0)),
                       boxShadow: allData2[i]['type'] == 2
@@ -911,28 +910,16 @@ class _ChatPageState extends State<ChatPage> {
                                 minWidth: ScreenUtil().setHeight(60)),
                             padding: EdgeInsets.all(ScreenUtil().setHeight(20)),
                             //边框设置
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               //背景
-                              color: allData2[i]['type'] == 2
-                                  ? Colors.transparent
-                                  : Colors.white,
+                              color: Colors.transparent,
                               //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                              borderRadius: const BorderRadius.only(
+                              borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(20.0),
                                   topRight: Radius.circular(0),
                                   bottomLeft: Radius.circular(20.0),
                                   bottomRight: Radius.circular(20.0)),
-                              boxShadow: allData2[i]['type'] == 2
-                                  ? []
-                                  : [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.1),
-                                  spreadRadius: 2,
-                                  blurRadius: 5,
-                                  offset:
-                                  const Offset(0, 1), // 阴影的偏移量，向右下方偏移3像素
-                                ),
-                              ],
+                              boxShadow: [],
                             ),
                             child:  Image(
                               image: FileImage(
@@ -1273,6 +1260,9 @@ class _ChatPageState extends State<ChatPage> {
                   child: length > 0
                       ? GestureDetector(
                     onTap: () {
+                      setState(() {
+                        _isEmojiPickerVisible = false;
+                      });
                       FocusScopeNode currentFocus = FocusScope.of(context);
                       if (!currentFocus.hasPrimaryFocus &&
                           currentFocus.focusedChild != null) {
@@ -1297,156 +1287,221 @@ class _ChatPageState extends State<ChatPage> {
                   child: Row(
                     children: [
                       WidgetUtils.commonSizedBox(0, 20),
-                      GestureDetector(
-                        onTap: (() {
-                          setState(() {
-                            isAudio = !isAudio;
-                          });
-                        }),
-                        child: isAudio
-                            ? WidgetUtils.showImages(
-                            'assets/images/chat_jianpan.png',
-                            ScreenUtil().setHeight(45),
-                            ScreenUtil().setHeight(45))
-                            : WidgetUtils.showImages(
-                            'assets/images/chat_huatong.png',
-                            ScreenUtil().setHeight(45),
-                            ScreenUtil().setHeight(45)),
-                      ),
-                      WidgetUtils.commonSizedBox(0, 10),
-                      // 发送音频
-                      isAudio
-                          ? Expanded(
-                        child: GestureDetector(
-                          onVerticalDragStart: (details) async {
-                            //判断发送音频
-                            if (MyUtils.checkClick()) {
-                              setState(() {
-                                downTime = DateTime.now().millisecondsSinceEpoch;
-                                isSendYY = false;
-                              });
-                              doPostCanSendUser(3);
-                            }
-                          },
-                          onVerticalDragUpdate: (details) async {
-                            LogE('上滑== ${details.delta.dy}');
-                            if(isLuZhi) {
-                              if (isDevices != 'ios' && isQuanxian) {
-                                if (details.delta.dy < -1) {
-                                  // 停止录音
-                                  _stopRecorder();
-                                  setState(() {
-                                    isCancel = true;
-                                  });
-                                }
-                              }else{
-                                ///ios
-                                if (details.delta.dy < -1) {
-                                  // 停止录音
-                                  _stopRecorder();
-                                  setState(() {
-                                    isCancel = true;
-                                  });
-                                }
-                              }
-                            }
-                          },
-                          onVerticalDragEnd: (details) async {
-                            LogE('时间差 == ${(DateTime.now().millisecondsSinceEpoch - downTime)}');
-                            if((DateTime.now().millisecondsSinceEpoch - downTime) >=1000){
-                              // 停止录音
-                              _stopRecorder();
-                              if(isLuZhi) {
-                                if (isDevices != 'ios' && isQuanxian) {
-                                  // 取消录音后抬起手指
-                                  if (isCancel) {
-                                    LogE('发送录音 1');
-                                    //重新初始化音频信息
-                                    setState(() {
-                                      isCancel = false;
-                                      mediaRecord = true;
-                                      playRecord = false; //音频文件播放状态
-                                      hasRecord = false; //是否有音频文件可播放
-                                      isLuZhi = false;
-                                      isPlay =
-                                      0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
-                                      _maxLength = 60; // 录音时长
-                                      audioNum = 0; // 记录录了多久
-                                    });
-                                  }else{
-                                    LogE('发送录音 2');
-                                    //发送录音
-                                    doSendAudio();
-                                  }
-                                }else{
-                                  /// ios
-                                  // 取消录音后抬起手指
-                                  if (isCancel) {
-                                    LogE('发送录音 1');
-                                    //重新初始化音频信息
-                                    setState(() {
-                                      isCancel = false;
-                                      mediaRecord = true;
-                                      playRecord = false; //音频文件播放状态
-                                      hasRecord = false; //是否有音频文件可播放
-                                      isLuZhi = false;
-                                      isPlay =
-                                      0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
-                                      _maxLength = 60; // 录音时长
-                                      audioNum = 0; // 记录录了多久
-                                    });
-                                  }else{
-                                    LogE('发送录音 2');
-                                    //发送录音
-                                    doSendAudio();
-                                  }
-                                }
-                              }
-                            }else{
-                              setState(() {
-                                isSendYY = true;
-                              });
-                              // 停止录音
-                              _stopRecorder();
-                              MyToastUtils.showToastBottom(
-                                  '录音时长过短！');
-                              //重新初始化音频信息
-                              setState(() {
-                                mediaRecord = true;
-                                playRecord = false; //音频文件播放状态
-                                hasRecord = false; //是否有音频文件可播放
-                                isLuZhi = false;
-                                isPlay =
-                                0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
-                                _maxLength = 60; // 录音时长
-                                audioNum = 0; // 记录录了多久
-                              });
-                            }
-                          },
-                          child: Container(
-                            width: double.infinity,
-                            height: ScreenUtil().setHeight(80),
-                            padding: const EdgeInsets.only(
-                                left: 10, right: 10),
-                            alignment: Alignment.center,
-                            //边框设置
-                            decoration: const BoxDecoration(
-                              //背景
-                              color: MyColors.f2,
-                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                              borderRadius:
-                              BorderRadius.all(Radius.circular(30.0)),
-                            ),
-                            child: WidgetUtils.onlyTextCenter(
-                                '按住 说话',
-                                StyleUtils.getCommonTextStyle(
-                                    color: MyColors.g6,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 25.sp)),
-                          ),
-                        ),
-                      )
-                          : Expanded(
+                      /// 音频模块先注释
+                      // GestureDetector(
+                      //   onTap: (() {
+                      //     setState(() {
+                      //       isAudio = !isAudio;
+                      //     });
+                      //   }),
+                      //   child: isAudio
+                      //       ? WidgetUtils.showImages(
+                      //       'assets/images/chat_jianpan.png',
+                      //       ScreenUtil().setHeight(45),
+                      //       ScreenUtil().setHeight(45))
+                      //       : WidgetUtils.showImages(
+                      //       'assets/images/chat_huatong.png',
+                      //       ScreenUtil().setHeight(45),
+                      //       ScreenUtil().setHeight(45)),
+                      // ),
+                      // WidgetUtils.commonSizedBox(0, 10),
+                      // // 发送音频
+                      // isAudio
+                      //     ? Expanded(
+                      //   child: GestureDetector(
+                      //     onVerticalDragStart: (details) async {
+                      //       //判断发送音频
+                      //       if (MyUtils.checkClick()) {
+                      //         setState(() {
+                      //           downTime = DateTime.now().millisecondsSinceEpoch;
+                      //           isSendYY = false;
+                      //         });
+                      //         doPostCanSendUser(3);
+                      //       }
+                      //     },
+                      //     onVerticalDragUpdate: (details) async {
+                      //       LogE('上滑== ${details.delta.dy}');
+                      //       if(isLuZhi) {
+                      //         if (isDevices != 'ios' && isQuanxian) {
+                      //           if (details.delta.dy < -1) {
+                      //             // 停止录音
+                      //             _stopRecorder();
+                      //             setState(() {
+                      //               isCancel = true;
+                      //             });
+                      //           }
+                      //         }else{
+                      //           ///ios
+                      //           if (details.delta.dy < -1) {
+                      //             // 停止录音
+                      //             _stopRecorder();
+                      //             setState(() {
+                      //               isCancel = true;
+                      //             });
+                      //           }
+                      //         }
+                      //       }
+                      //     },
+                      //     onVerticalDragEnd: (details) async {
+                      //       LogE('时间差 == ${(DateTime.now().millisecondsSinceEpoch - downTime)}');
+                      //       if((DateTime.now().millisecondsSinceEpoch - downTime) >=1000){
+                      //         // 停止录音
+                      //         _stopRecorder();
+                      //         if(isLuZhi) {
+                      //           if (isDevices != 'ios' && isQuanxian) {
+                      //             // 取消录音后抬起手指
+                      //             if (isCancel) {
+                      //               LogE('发送录音 1');
+                      //               //重新初始化音频信息
+                      //               setState(() {
+                      //                 isCancel = false;
+                      //                 mediaRecord = true;
+                      //                 playRecord = false; //音频文件播放状态
+                      //                 hasRecord = false; //是否有音频文件可播放
+                      //                 isLuZhi = false;
+                      //                 isPlay =
+                      //                 0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
+                      //                 _maxLength = 60; // 录音时长
+                      //                 audioNum = 0; // 记录录了多久
+                      //               });
+                      //             }else{
+                      //               LogE('发送录音 2');
+                      //               //发送录音
+                      //               doSendAudio();
+                      //             }
+                      //           }else{
+                      //             /// ios
+                      //             // 取消录音后抬起手指
+                      //             if (isCancel) {
+                      //               LogE('发送录音 1');
+                      //               //重新初始化音频信息
+                      //               setState(() {
+                      //                 isCancel = false;
+                      //                 mediaRecord = true;
+                      //                 playRecord = false; //音频文件播放状态
+                      //                 hasRecord = false; //是否有音频文件可播放
+                      //                 isLuZhi = false;
+                      //                 isPlay =
+                      //                 0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
+                      //                 _maxLength = 60; // 录音时长
+                      //                 audioNum = 0; // 记录录了多久
+                      //               });
+                      //             }else{
+                      //               LogE('发送录音 2');
+                      //               //发送录音
+                      //               doSendAudio();
+                      //             }
+                      //           }
+                      //         }
+                      //       }else{
+                      //         setState(() {
+                      //           isSendYY = true;
+                      //         });
+                      //         // 停止录音
+                      //         _stopRecorder();
+                      //         MyToastUtils.showToastBottom(
+                      //             '录音时长过短！');
+                      //         //重新初始化音频信息
+                      //         setState(() {
+                      //           mediaRecord = true;
+                      //           playRecord = false; //音频文件播放状态
+                      //           hasRecord = false; //是否有音频文件可播放
+                      //           isLuZhi = false;
+                      //           isPlay =
+                      //           0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
+                      //           _maxLength = 60; // 录音时长
+                      //           audioNum = 0; // 记录录了多久
+                      //         });
+                      //       }
+                      //     },
+                      //     child: Container(
+                      //       width: double.infinity,
+                      //       height: ScreenUtil().setHeight(80),
+                      //       padding: const EdgeInsets.only(
+                      //           left: 10, right: 10),
+                      //       alignment: Alignment.center,
+                      //       //边框设置
+                      //       decoration: const BoxDecoration(
+                      //         //背景
+                      //         color: MyColors.f2,
+                      //         //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                      //         borderRadius:
+                      //         BorderRadius.all(Radius.circular(30.0)),
+                      //       ),
+                      //       child: WidgetUtils.onlyTextCenter(
+                      //           '按住 说话',
+                      //           StyleUtils.getCommonTextStyle(
+                      //               color: MyColors.g6,
+                      //               fontWeight: FontWeight.w600,
+                      //               fontSize: 25.sp)),
+                      //     ),
+                      //   ),
+                      // )
+                      //     : Expanded(
+                      //   child: Container(
+                      //     width: double.infinity,
+                      //     height: ScreenUtil().setHeight(60),
+                      //     padding:
+                      //     const EdgeInsets.only(left: 10, right: 10),
+                      //     alignment: Alignment.center,
+                      //     //边框设置
+                      //     decoration: const BoxDecoration(
+                      //       //背景
+                      //       color: MyColors.f2,
+                      //       //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                      //       borderRadius:
+                      //       BorderRadius.all(Radius.circular(20.0)),
+                      //     ),
+                      //     child: TextField(
+                      //       focusNode: _focusNode,
+                      //       textInputAction: TextInputAction.send,
+                      //       // 设置为发送按钮
+                      //       controller: controller,
+                      //       inputFormatters: [
+                      //         RegexFormatter(
+                      //             regex: MyUtils.regexFirstNotNull),
+                      //         LengthLimitingTextInputFormatter(
+                      //             25) //限制输入长度
+                      //       ],
+                      //       style: StyleUtils.loginTextStyle,
+                      //       onSubmitted: (value) {
+                      //         MyUtils.sendMessage(widget.otherUid, value);
+                      //         doPostSendUserMsg(value);
+                      //       },
+                      //       decoration: InputDecoration(
+                      //         // border: InputBorder.none,
+                      //         // labelText: "请输入用户名",
+                      //         // icon: Icon(Icons.people), //前面的图标
+                      //         hintText: '请输入文字信息',
+                      //         hintStyle: StyleUtils.loginHintTextStyle,
+                      //
+                      //         contentPadding: const EdgeInsets.only(
+                      //             top: 0, bottom: 0),
+                      //         border: const OutlineInputBorder(
+                      //           borderSide:
+                      //           BorderSide(color: Colors.transparent),
+                      //         ),
+                      //         enabledBorder: const OutlineInputBorder(
+                      //           borderSide: BorderSide(
+                      //             color: Colors.transparent,
+                      //           ),
+                      //         ),
+                      //         disabledBorder: const OutlineInputBorder(
+                      //           borderSide: BorderSide(
+                      //             color: Colors.transparent,
+                      //           ),
+                      //         ),
+                      //         focusedBorder: const OutlineInputBorder(
+                      //           borderSide: BorderSide(
+                      //             color: Colors.transparent,
+                      //           ),
+                      //         ),
+                      //         // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                      Expanded(
                         child: Container(
                           width: double.infinity,
                           height: ScreenUtil().setHeight(60),
