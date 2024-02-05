@@ -587,7 +587,8 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
                   context,
                   bean.data!.version!,
                   bean.data!.downloadUrl!,
-                  bean.data!.summary!);
+                  bean.data!.summary!,
+                  bean.data!.forceUpdate!);
             } else {
               // const url =
               //     "https://itunes.apple.com/cn/app/id1380512641"; // id 后面的数字换成自己的应用 id 就行了
@@ -644,7 +645,7 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
 
   /// 显示更新内容
   Future<void> showUpdate(
-      BuildContext context, String version, String url, String info) async {
+      BuildContext context, String version, String url, String info,String forceUpdate) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, //设置为false，点击空白处弹窗不关
@@ -658,15 +659,15 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
             ),
           ),
           actions: <Widget>[
-            CupertinoDialogAction(
-              child: Text('下次在说'),
+            forceUpdate == '0' ? CupertinoDialogAction(
+              child: const Text('下次在说'),
               onPressed: () {
                 // 在这里放置取消操作的代码
                 Navigator.of(context).pop(); // 关闭对话框
               },
-            ),
+            ) : const Text(''),
             CupertinoDialogAction(
-              child: Text('立即更新'),
+              child: const Text('立即更新'),
               onPressed: () {
                 // 在这里放置确认操作的代码
                 doUpdate(context, version, url);
