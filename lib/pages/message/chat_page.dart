@@ -431,7 +431,9 @@ class _ChatPageState extends State<ChatPage> {
   _stopRecorder() async {
     try {
       await recorderModule.stopRecorder();
-      _timer.cancel();
+      if(isDevices != 'ios') {
+        _timer.cancel();
+      }
       print('stopRecorder===> fliePath:$_path');
       _cancelRecorderSubscriptions();
     } catch (err) {
