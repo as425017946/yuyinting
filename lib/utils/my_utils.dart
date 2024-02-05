@@ -488,14 +488,10 @@ class MyUtils {
         // 调用 `kickDevice` 方法将设备踢下线，被踢设备会收到该回调；
         onUserKickedByOtherDevice: (() {
           LogE('IM 登将设备踢下线');
-          eventBus.fire(SubmitButtonBack(title: '账号已在其他设备登录'));
-          MyToastUtils.showToastBottom('账号已在其他设备登录！');
         }),
         // 登录新设备时因达到了登录设备数量限制而导致当前设备被踢下线，被踢设备收到该回调；
         onUserDidLoginFromOtherDevice: ((String deviceName) {
           LogE('IM 登登录设备数量限制而导致当前设备被踢下线');
-          MyToastUtils.showToastBottom('账号已在其他设备登录！');
-          eventBus.fire(SubmitButtonBack(title: '账号已在其他设备登录'));
         }),
         // Token 过期;
         onTokenDidExpire: (() {
@@ -801,7 +797,7 @@ class MyUtils {
               case MessageType.VIDEO:
                 break;
               case MessageType.VOICE:
-                LogE('语音发送成功');
+                LogE('语音发送成功 $msg');
                 eventBus.fire(SubmitButtonBack(title: '语音发送成功'));
                 break;
             }

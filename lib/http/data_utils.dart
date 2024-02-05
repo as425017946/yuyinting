@@ -513,6 +513,7 @@ class DataUtils{
   /// 加入房间前
   static Future<joinRoomBean> postBeforeJoin(Map<String,dynamic> params) async {
     print("加入房间前：$params");
+    print("加入房间前：${MyHttpConfig.beforeJoin}");
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.beforeJoin, {}, params);
     print("加入房间前：$respons");
     return joinRoomBean.fromJson(respons!);
@@ -528,6 +529,7 @@ class DataUtils{
   /// 加入房间
   static Future<CommonBean> postRoomJoin(Map<String,dynamic> params) async {
     print("加入房间：$params");
+    print("加入房间前：${MyHttpConfig.roomJoin}");
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.roomJoin, {}, params);
     print("加入房间：$respons");
     return CommonBean.fromJson(respons!);

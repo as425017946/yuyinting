@@ -460,7 +460,8 @@ class _TuijianPageState extends State<TuijianPage> {
                                         child: SizedBox(
                                       height: ScreenUtil().setHeight(170),
                                       width: double.infinity,
-                                      child: Swiper(
+                                      child: listRoom2.isNotEmpty ?  Swiper(
+                                        key: UniqueKey(),
                                         itemBuilder:
                                             (BuildContext context, int index) {
                                           // 配置图片地址
@@ -529,7 +530,7 @@ class _TuijianPageState extends State<TuijianPage> {
                                             doPostBeforeJoin(listRoom2[index].id.toString(), '');
                                           }
                                         },
-                                      ),
+                                      ) : const Text(''),
                                     )),
                                     WidgetUtils.commonSizedBox(10, 0),
 
@@ -537,7 +538,8 @@ class _TuijianPageState extends State<TuijianPage> {
                                     Expanded(
                                         child: SizedBox(
                                       height: ScreenUtil().setHeight(170),
-                                      child: Swiper(
+                                      child:listRoom3.isNotEmpty ?   Swiper(
+                                        key: UniqueKey(),
                                         itemBuilder:
                                             (BuildContext context, int index) {
                                           // 配置图片地址
@@ -607,7 +609,7 @@ class _TuijianPageState extends State<TuijianPage> {
                                           }
                                           // doPostBeforeJoin(listRoom3[index].id.toString());
                                         },
-                                      ),
+                                      ) : const Text(''),
                                     )),
                                   ],
                                 ))
