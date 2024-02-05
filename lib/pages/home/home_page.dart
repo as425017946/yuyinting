@@ -25,17 +25,14 @@ import 'package:yuyinting/pages/login/edit_info_page.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import '../../bean/CheckoutBean.dart';
-import '../../bean/pdAddressBean.dart';
 import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
 import '../../utils/event_utils.dart';
-import '../../utils/loading.dart';
 import '../../utils/log_util.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
-import '../gongping/gp_dwon_page.dart';
 
 ///首页
 class HomePage extends StatefulWidget {
@@ -61,7 +58,7 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
   @override
   void initState() {
     // TODO: implement initState
-    doCheck();
+    // doCheck();
     //更新身份
     setState(() {
       identity = sp.getString('user_identity').toString();
@@ -508,6 +505,32 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
     );
   }
 
+
+  /// 判断当前网络，然后给返回适配的网络地址
+  Future<void> doPostPdAddress() async {
+    // BaseOptions option = BaseOptions(
+    //     contentType: 'multipart/form-data', responseType: ResponseType.plain);
+    // option.headers["Authorization"] = sp.getString('user_token') ?? '';
+    Dio dio = Dio();
+    var respone = await dio.get(MyHttpConfig.pdAddress);
+    Map jsonResponse = json.decode(respone.data.toString());
+    LogE('网络请求$jsonResponse');
+    if (jsonResponse['code'] == 200) {
+      if(jsonResponse['nodes'].toString().isNotEmpty){
+        setState(() {
+          sp.setString('isDian', jsonResponse['nodes'].toString());
+        });
+        doCheck();
+      }else{
+        MyToastUtils.showToastBottom(MyConfig.errorHttpTitle);
+        // 直接杀死app
+        SystemNavigator.pop();
+      }
+    }  else {
+      // 直接杀死app
+      SystemNavigator.pop();
+    }
+  }
 
   /// 检查更新
   //定义apk的名称，与下载进度dialog

@@ -84,10 +84,10 @@ class _StarPageState extends State<StarPage> {
 
   /// 判断当前网络，然后给返回适配的网络地址
   Future<void> doPostPdAddress() async {
-    BaseOptions option = BaseOptions(
-        contentType: 'multipart/form-data', responseType: ResponseType.plain);
-    option.headers["Authorization"] = sp.getString('user_token') ?? '';
-    Dio dio = Dio(option);
+    // BaseOptions option = BaseOptions(
+    //     contentType: 'multipart/form-data', responseType: ResponseType.plain);
+    // option.headers["Authorization"] = sp.getString('user_token') ?? '';
+    Dio dio = Dio();
     var respone = await dio.get(MyHttpConfig.pdAddress);
     Map jsonResponse = json.decode(respone.data.toString());
     LogE('网络请求$jsonResponse');
