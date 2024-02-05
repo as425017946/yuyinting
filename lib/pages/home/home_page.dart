@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
   @override
   void initState() {
     // TODO: implement initState
-    // doCheck();
+    doCheck();
     doPostPdAddress();
     //更新身份
     setState(() {
@@ -579,7 +579,7 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
       CheckoutBean bean = await DataUtils.checkVersion(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          if (int.parse(buildNumber) <
+          if (int.parse(buildNumber) ==
               int.parse(bean.data!.customUpdateNum!)) {
             if (Platform.isAndroid) {
               // ignore: use_build_context_synchronously
@@ -650,30 +650,44 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
       context: context,
       barrierDismissible: false, //设置为false，点击空白处弹窗不关
       builder: (BuildContext context) {
-        return CupertinoAlertDialog(
-          title: Text('检测到新版本 v$version'),
-          content: Text(
-            info,
-            style: const TextStyle(
-              fontSize: 15,
+        return WillPopScope(
+          onWillPop: () async {
+            // 返回键按下时的操作
+            return false; // 如果希望按下返回键时关闭弹窗，返回true；如果希望阻止关闭弹窗，返回false
+          },
+          child: CupertinoAlertDialog(
+            title: Text('检测到新版本 v$version'),
+            content: Text(
+              info,
+              style: const TextStyle(
+                fontSize: 15,
+              ),
             ),
+            actions: forceUpdate == '1' ? [
+              CupertinoDialogAction(
+                child: const Text('立即更新'),
+                onPressed: () {
+                  // 在这里放置确认操作的代码
+                  doUpdate(context, version, url);
+                },
+              ),
+            ] : [
+              CupertinoDialogAction(
+                child: const Text('下次在说'),
+                onPressed: () {
+                  // 在这里放置取消操作的代码
+                  Navigator.of(context).pop(); // 关闭对话框
+                },
+              ),
+              CupertinoDialogAction(
+                child: const Text('立即更新'),
+                onPressed: () {
+                  // 在这里放置确认操作的代码
+                  doUpdate(context, version, url);
+                },
+              ),
+            ],
           ),
-          actions: <Widget>[
-            forceUpdate == '0' ? CupertinoDialogAction(
-              child: const Text('下次在说'),
-              onPressed: () {
-                // 在这里放置取消操作的代码
-                Navigator.of(context).pop(); // 关闭对话框
-              },
-            ) : const Text(''),
-            CupertinoDialogAction(
-              child: const Text('立即更新'),
-              onPressed: () {
-                // 在这里放置确认操作的代码
-                doUpdate(context, version, url);
-              },
-            ),
-          ],
         );
       },
     );
