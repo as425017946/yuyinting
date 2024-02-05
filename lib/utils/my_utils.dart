@@ -453,38 +453,38 @@ class MyUtils {
         onConnected: (() {
           LogE('IM 登录成功');
           eventBus.fire(SubmitButtonBack(title: 'im重连'));
-          MyToastUtils.showToastBottom('IM登录成功');
+          // MyToastUtils.showToastBottom('IM登录成功');
         }),
         // 由于网络问题导致的断开，sdk会尝试自动重连，连接成功后会回调 "onConnected";
         onDisconnected: (() {
           LogE('IM 断开连接');
           eventBus.fire(SubmitButtonBack(title: 'im断开链接'));
-          MyToastUtils.showToastBottom('IM断开连接');
+          // MyToastUtils.showToastBottom('IM断开连接');
         }),
         // 用户 token 鉴权失败;
         onUserAuthenticationFailed: (() {
           LogE('IM 登鉴权失败');
-          MyToastUtils.showToastBottom('IM登鉴权失败');
+          // MyToastUtils.showToastBottom('IM登鉴权失败');
         }),
         // 由于密码变更被踢下线;
         onUserDidChangePassword: (() {
           LogE('IM 登由于密码变更被踢下线');
-          MyToastUtils.showToastBottom('IM登由于密码变更被踢下线');
+          // MyToastUtils.showToastBottom('IM登由于密码变更被踢下线');
         }),
         // 用户被连接被服务器禁止;
         onUserDidForbidByServer: (() {
           LogE('IM 登用户被连接被服务器禁止');
-          MyToastUtils.showToastBottom('IM登用户被连接被服务器禁止');
+          // MyToastUtils.showToastBottom('IM登用户被连接被服务器禁止');
         }),
         // 用户登录设备超出数量限制;
         onUserDidLoginTooManyDevice: (() {
           LogE('IM 登用户登录设备超出数量限制');
-          MyToastUtils.showToastBottom('IM登用户登录设备超出数量限制');
+          // MyToastUtils.showToastBottom('IM登用户登录设备超出数量限制');
         }),
         // 用户从服务器删除;
         onUserDidRemoveFromServer: (() {
           LogE('IM 登用户从服务器删除');
-          MyToastUtils.showToastBottom('IM登用户从服务器删除');
+          // MyToastUtils.showToastBottom('IM登用户从服务器删除');
         }),
         // 调用 `kickDevice` 方法将设备踢下线，被踢设备会收到该回调；
         onUserKickedByOtherDevice: (() {
@@ -497,12 +497,12 @@ class MyUtils {
         // Token 过期;
         onTokenDidExpire: (() {
           LogE('IM 登过期');
-          MyToastUtils.showToastBottom('IM登过期');
+          // MyToastUtils.showToastBottom('IM登过期');
         }),
         // Token 即将过期，需要调用 renewToken;
         onTokenWillExpire: (() {
           LogE('IM 登即将过期');
-          MyToastUtils.showToastBottom('IM登即将过期');
+          // MyToastUtils.showToastBottom('IM登即将过期');
         }),
       ),
     );

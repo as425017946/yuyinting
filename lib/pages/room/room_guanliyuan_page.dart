@@ -179,7 +179,7 @@ class _RoomGuanLiYuanPageState extends State<RoomGuanLiYuanPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -209,7 +209,7 @@ class _RoomGuanLiYuanPageState extends State<RoomGuanLiYuanPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

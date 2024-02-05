@@ -1015,7 +1015,7 @@ class _PaiduiPageState extends State<PaiduiPage>
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1075,7 +1075,7 @@ class _PaiduiPageState extends State<PaiduiPage>
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1124,7 +1124,7 @@ class _PaiduiPageState extends State<PaiduiPage>
         sp.setBool('joinRoom',false);
       });
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1165,7 +1165,7 @@ class _PaiduiPageState extends State<PaiduiPage>
         sp.setBool('joinRoom',false);
       });
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

@@ -151,7 +151,7 @@ class _RoomMorePageState extends State<RoomMorePage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -200,7 +200,7 @@ class _RoomMorePageState extends State<RoomMorePage> {
         sp.setBool('joinRoom',false);
       });
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -241,7 +241,7 @@ class _RoomMorePageState extends State<RoomMorePage> {
         sp.setBool('joinRoom',false);
       });
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

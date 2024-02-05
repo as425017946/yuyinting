@@ -180,7 +180,7 @@ class _YouxiPageState extends State<YouxiPage>  with AutomaticKeepAliveClientMix
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

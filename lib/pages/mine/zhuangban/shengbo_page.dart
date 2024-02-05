@@ -322,7 +322,7 @@ class _ShengboPageState extends State<ShengboPage>  with AutomaticKeepAliveClien
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -367,7 +367,7 @@ class _ShengboPageState extends State<ShengboPage>  with AutomaticKeepAliveClien
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

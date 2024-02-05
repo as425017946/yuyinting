@@ -316,7 +316,7 @@ class _ShoucangPageState extends State<ShoucangPage>
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -340,7 +340,7 @@ class _ShoucangPageState extends State<ShoucangPage>
       }
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -389,7 +389,7 @@ class _ShoucangPageState extends State<ShoucangPage>
         sp.setBool('joinRoom',false);
       });
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -430,7 +430,7 @@ class _ShoucangPageState extends State<ShoucangPage>
         sp.setBool('joinRoom',false);
       });
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

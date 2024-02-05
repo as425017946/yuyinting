@@ -333,7 +333,7 @@ class _ZuojiaPageState extends State<ZuojiaPage> with AutomaticKeepAliveClientMi
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -378,7 +378,7 @@ class _ZuojiaPageState extends State<ZuojiaPage> with AutomaticKeepAliveClientMi
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

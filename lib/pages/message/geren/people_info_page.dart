@@ -794,7 +794,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
     } catch (e) {
       Loading.dismiss();
       LogE('错误  ${e.toString()}');
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 

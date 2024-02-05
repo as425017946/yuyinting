@@ -322,7 +322,7 @@ class _HeadPageState extends State<HeadPage>  with AutomaticKeepAliveClientMixin
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -368,7 +368,7 @@ class _HeadPageState extends State<HeadPage>  with AutomaticKeepAliveClientMixin
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

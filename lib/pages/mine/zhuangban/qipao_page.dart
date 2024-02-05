@@ -320,7 +320,7 @@ class _QipaoPageState extends State<QipaoPage>  with AutomaticKeepAliveClientMix
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -366,7 +366,7 @@ class _QipaoPageState extends State<QipaoPage>  with AutomaticKeepAliveClientMix
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

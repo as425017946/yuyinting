@@ -284,7 +284,7 @@ class _LoginPageState extends State<LoginPage> {
                                     //设置键盘为数字
                                     style: StyleUtils.loginTextStyle,
                                     onChanged: (value) {
-                                      ceshi();
+
                                     },
                                     decoration: InputDecoration(
                                       border: InputBorder.none,
@@ -592,7 +592,7 @@ class _LoginPageState extends State<LoginPage> {
     FocusScope.of(context).requestFocus(FocusNode());
     Map<String, dynamic> params;
 
-    ceshi();
+    // ceshi();
 
 
     if (isClick) {
@@ -843,7 +843,7 @@ class _LoginPageState extends State<LoginPage> {
     } catch (e) {
       LogE('登录返回*${e.toString()}');
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -871,7 +871,7 @@ class _LoginPageState extends State<LoginPage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 

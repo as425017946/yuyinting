@@ -208,7 +208,7 @@ class _RoomPasswordPageState extends State<RoomPasswordPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

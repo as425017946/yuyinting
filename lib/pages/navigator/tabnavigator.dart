@@ -881,7 +881,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         isFirstJoinRoom = false;
       });
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -925,7 +925,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         isFirstJoinRoom = false;
       });
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 

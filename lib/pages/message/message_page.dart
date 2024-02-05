@@ -633,7 +633,7 @@ class _MessagePageState extends State<MessagePage> {
     } catch (e) {
       LogE('错误信息$e');
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 

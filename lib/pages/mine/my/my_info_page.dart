@@ -683,7 +683,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
     } catch (e) {
       LogE('错误信息 ${e.toString()}');
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

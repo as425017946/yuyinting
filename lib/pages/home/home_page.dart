@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
     );
 
     if(mla == 0){
-      MyToastUtils.showToastBottom('首次加载马里奥 $mla');
+      // MyToastUtils.showToastBottom('首次加载马里奥 $mla');
       setState(() {
         mla++;
       });
