@@ -256,7 +256,7 @@ class _EditHeadPageState extends State<EditHeadPage> {
         // ignore: use_build_context_synchronously
         MyUtils.jumpLogin(context);
       }else{
-        MyToastUtils.showToastBottom(MyConfig.errorTitleFile);
+        // MyToastUtils.showToastBottom(MyConfig.errorTitleFile);
       }
 
       Loading.dismiss();

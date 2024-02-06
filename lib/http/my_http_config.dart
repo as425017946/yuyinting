@@ -25,7 +25,7 @@ class MyHttpConfig{
   static String fileUpload = '$baseURL/upload/fileUpload';
 
   //判断网络
-  static  String pdAddress = "http://aa986.com:8300/address?type=go";
+  static  String pdAddress = "http://aa986.com:8300/address";
   //预下载接口
   static  String svgaGiftList = "$baseURL/gift/svgaGiftList";
   //登录接口

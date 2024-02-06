@@ -105,20 +105,24 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
         .whenComplete(() => animationController?.videoItem = null);
 
     // 监听动画
-    animationController?.addListener(() {
-      if (animationController!.currentFrame >= animationController!.frames - 1) {
-        LogE('播放完成');
-        // 动画播放到最后一帧时停止播放
-        animationController?.stop();
-        setState(() {
-          isShow = false;
-          isTiaoguoLW = false;
-          isXiazhu = true;
-        });
-      }
-    });
+    animationController?.addListener(_animListener);
   }
 
+  //网络动画
+  void _animListener() {
+    //TODO
+    if (animationController!.currentFrame >= animationController!.frames - 1) {
+      LogE('播放完成');
+      // 动画播放到最后一帧时停止播放
+      animationController?.stop();
+      animationController?.removeListener(_animListener);
+      setState(() {
+        isShow = false;
+        isTiaoguoLW = false;
+        isXiazhu = true;
+      });
+    }
+  }
 
   Future _loadSVGA(isUrl, svgaUrl) {
     Future Function(String) decoder;

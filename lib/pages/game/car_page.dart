@@ -1057,6 +1057,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
       // controllerZD.reset();
       //等1秒钟打开中奖页面
       // MyUtils.goTransparentPageCom(context, const ZhongJiangPage());
+      controller2.removeListener(_animListenerCar);
     }
   }
   //网络动画
@@ -1075,6 +1076,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
         animationController!.frames - 1) {
       // 动画播放到最后一帧时停止播放
       animationController?.stop();
+      animationController?.removeListener(_animListenerStar);
       if (mounted) {
         setState(() {
           isStar = false;

@@ -1124,7 +1124,7 @@ class _TrendsMorePageState extends State<TrendsMorePage>
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 

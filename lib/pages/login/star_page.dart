@@ -32,6 +32,9 @@ class _StarPageState extends State<StarPage> {
     Future.delayed(const Duration(milliseconds: 2000), ((){
         sp.setBool('joinRoom', false);
         sp.setString('roomID', '');
+        if (sp.getString('user_token').toString() == 'null') {
+          sp.setString('userIP', '');
+        }
         Navigator.pop(context);
         LogE('用户token   ${sp.getString('user_token').toString()}');
         LogE('用户token   ${sp.getString('user_token').toString().isNotEmpty}');
@@ -84,13 +87,17 @@ class _StarPageState extends State<StarPage> {
   }
 
   /// 判断当前网络，然后给返回适配的网络地址
-  /// 判断当前网络，然后给返回适配的网络地址
   Future<void> doPostPdAddress() async {
-    Map<String, dynamic> params = <String, dynamic>{
-      'type': 'go',
-    };
     try {
-      addressIPBean bean = await DataUtils.postPdAddress(params);
+      FormData formdata = FormData.fromMap(
+        {
+          'type': 'go',
+        },
+      );
+      Dio dio = Dio();
+      var respone = dio.post(MyHttpConfig.pdAddress, data: formdata);
+      Map<String, dynamic> map = json.decode(respone.toString());
+      addressIPBean bean = addressIPBean.fromJson(map);
       switch (bean.code) {
         case MyHttpConfig.successCode:
           if(bean.nodes!.isNotEmpty){
@@ -99,21 +106,15 @@ class _StarPageState extends State<StarPage> {
               sp.setString('userIP', bean.address!);
             });
           }else{
-            MyToastUtils.showToastBottom(MyConfig.errorHttpTitle);
-            // 直接杀死app
-            SystemNavigator.pop();
+            MyToastUtils.showToastBottom('IP为空');
           }
-          break;
-        case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
-          MyUtils.jumpLogin(context);
           break;
         default:
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      MyToastUtils.showToastBottom(MyConfig.errorHttpTitle);
     }
   }
 }

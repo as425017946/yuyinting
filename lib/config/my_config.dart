@@ -43,7 +43,9 @@ class MyConfig{
   /// 上传文件过大
   static const String errorTitleFile = '上传失败！，请更换上传10M以内的文件！';
   /// 加载失败的提示语
-  static const String errorHttpTitle = '网络错误，请稍后重试';
+  static const String errorHttpTitle = '网络连接超时，请切换网络重试';
+  /// 加载失败的提示语
+  static const String errorHttpTitle2 = '网络连接超时，请切换网络重试~';
 
 
 

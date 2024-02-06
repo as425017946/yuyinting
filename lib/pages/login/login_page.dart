@@ -41,6 +41,8 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController controllerSmg = TextEditingController();
   TextEditingController controllerAccount = TextEditingController();
   TextEditingController controllerPass = TextEditingController();
+  /// 判断点击的是哪个 0没有点击 1发送验证码 2立即登录
+  int type = 0;
   var zhanghao = '账号登录';
   String quhao = '+86';
   bool gz = true;
@@ -94,9 +96,9 @@ class _LoginPageState extends State<LoginPage> {
       doGo();
     }
 
-    if (sp.getString('myAgree').toString() == 'null' || sp.getString('myAgree').toString() == '0') {
-      MyUtils.goTransparentPageCom(context, const AgreeTSPage());
-    }
+    // if (sp.getString('myAgree').toString() == 'null' || sp.getString('myAgree').toString() == '0') {
+    //   MyUtils.goTransparentPageCom(context, const AgreeTSPage());
+    // }
     // 首次预下载使用
     if(sp.getString("isFirstDown").toString() == 'null'){
       sp.setString("isFirstDown",'1');
@@ -341,6 +343,9 @@ class _LoginPageState extends State<LoginPage> {
                                         GestureDetector(
                                           onTap: (() {
                                             if(MyUtils.checkClick()) {
+                                              setState(() {
+                                                type = 1;
+                                              });
                                               if (_autoCodeText == '发送验证码' ||
                                                   _autoCodeText == '重新获取') {
                                                 if (controllerPhone.text
@@ -352,7 +357,12 @@ class _LoginPageState extends State<LoginPage> {
                                                   MyToastUtils.showToastBottom(
                                                       '输入的手机号码格式错误');
                                                 } else {
-                                                  doPostLoginSms();
+                                                  //没有ip
+                                                  if(sp.getString('userIP').toString().isEmpty){
+                                                    doPostPdAddress();
+                                                  }else{
+                                                    doPostLoginSms();
+                                                  }
                                                 }
                                               }
                                             }
@@ -444,7 +454,15 @@ class _LoginPageState extends State<LoginPage> {
                   GestureDetector(
                     onTap: (() {
                       if (MyUtils.checkClick()) {
-                        doLogin();
+                        setState(() {
+                          type = 2;
+                        });
+                        //没有ip
+                        if(sp.getString('userIP').toString().isEmpty){
+                          doPostPdAddress();
+                        }else{
+                          doLogin();
+                        }
                       }
                     }),
                     child: Container(
@@ -850,6 +868,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+
   /// 发送短信验证码
   Future<void> doPostLoginSms() async {
     Map<String, dynamic> params = <String, dynamic>{
@@ -881,11 +900,16 @@ class _LoginPageState extends State<LoginPage> {
 
   /// 判断当前网络，然后给返回适配的网络地址
   Future<void> doPostPdAddress() async {
-    Map<String, dynamic> params = <String, dynamic>{
-      'type': 'go',
-    };
     try {
-      addressIPBean bean = await DataUtils.postPdAddress(params);
+      FormData formdata = FormData.fromMap(
+        {
+          'type': 'go',
+        },
+      );
+      Dio dio = Dio();
+      var respone = dio.post(MyHttpConfig.pdAddress, data: formdata);
+      Map<String, dynamic> map = json.decode(respone.toString());
+      addressIPBean bean = addressIPBean.fromJson(map);
       switch (bean.code) {
         case MyHttpConfig.successCode:
           if(bean.nodes!.isNotEmpty){
@@ -894,22 +918,21 @@ class _LoginPageState extends State<LoginPage> {
               sp.setString('userIP', bean.address!);
               IP = bean.address!;
             });
+            if(type ==1){
+              doPostLoginSms();
+            }else if(type == 2){
+              doLogin();
+            }
           }else{
-            MyToastUtils.showToastBottom(MyConfig.errorHttpTitle);
-            // 直接杀死app
-            SystemNavigator.pop();
+            MyToastUtils.showToastBottom('IP为空');
           }
-          break;
-        case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
-          MyUtils.jumpLogin(context);
           break;
         default:
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      MyToastUtils.showToastBottom(MyConfig.errorHttpTitle);
     }
   }
 }
