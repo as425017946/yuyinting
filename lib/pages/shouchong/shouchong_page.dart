@@ -704,7 +704,7 @@ class _ShouChongPageState extends State<ShouChongPage> {
         case MyHttpConfig.successCode:
           // // ignore: use_build_context_synchronously
           // MyUtils.goTransparentPageCom(context, WebPage(url: bean.data!.payUrl!));
-          if (await canLaunch(bean.data!.payUrl!)) {
+          if (bean.data!.payUrl!.isNotEmpty) {
             await launch(bean.data!.payUrl!, forceSafariVC: false);
           } else {
             throw 'Could not launch $bean.data!.payUrl!';

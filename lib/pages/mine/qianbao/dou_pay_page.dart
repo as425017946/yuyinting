@@ -36,7 +36,7 @@ class _DouPayPageState extends State<DouPayPage> {
   // 是否支持此支付方式 0支付宝 1云闪付 2银行卡 3微信
   bool isChoose0 = true, isChoose1 = true, isChoose2 = false, isChoose3 = false;
   // 想要充值多少钱 给多少豆子
-  String money = '', moneyDou = '';
+  String money = '12', moneyDou = '100';
   ///选择金额使用
   Widget _initlistdata(context, index) {
     return GestureDetector(
@@ -408,7 +408,7 @@ class _DouPayPageState extends State<DouPayPage> {
         case MyHttpConfig.successCode:
           // // ignore: use_build_context_synchronously
           // MyUtils.goTransparentPageCom(context, WebPage(url: bean.data!.payUrl!));
-          if (await canLaunch(bean.data!.payUrl!)) {
+          if (bean.data!.payUrl!.isNotEmpty) {
             await launch(bean.data!.payUrl!, forceSafariVC: false);
           } else {
             throw 'Could not launch $bean.data!.payUrl!';
