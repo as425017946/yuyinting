@@ -95,6 +95,14 @@ class DataUtils{
     return addressIPBean.fromJson(respons!);
   }
 
+  ///判断网络
+  static Future<addressIPBean> getPdAddress() async {
+    print("检查网络地址：${MyHttpConfig.pdAddressGet}");
+    Map<String, dynamic>? respons = await MyHttpRequest.get(MyHttpConfig.pdAddressGet,
+        {}, {});
+    print("检查网络：${respons}");
+    return addressIPBean.fromJson(respons!);
+  }
 
   ///更新app
   static Future<CheckoutBean> checkVersion(Map<String,dynamic> params) async {

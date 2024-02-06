@@ -511,15 +511,7 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
   /// 判断当前网络，然后给返回适配的网络地址
   Future<void> doPostPdAddress() async {
     try {
-      FormData formdata = FormData.fromMap(
-        {
-          'type': 'go',
-        },
-      );
-      Dio dio = Dio();
-      var respone = dio.post(MyHttpConfig.pdAddress, data: formdata);
-      Map<String, dynamic> map = json.decode(respone.toString());
-      addressIPBean bean = addressIPBean.fromJson(map);
+      addressIPBean bean = await DataUtils.getPdAddress();
       switch (bean.code) {
         case MyHttpConfig.successCode:
           if(bean.nodes!.isNotEmpty){
