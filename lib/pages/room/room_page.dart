@@ -27,6 +27,7 @@ import '../../bean/joinRoomBean.dart';
 import '../../bean/maiXuBean.dart';
 import '../../bean/roomInfoBean.dart';
 import '../../bean/roomTJBean.dart';
+import '../../bean/userMaiInfoBean.dart';
 import '../../bean/zjgpBean.dart';
 import '../../colors/my_colors.dart';
 import '../../db/DatabaseHelper.dart';
@@ -58,9 +59,11 @@ class RoomPage extends StatefulWidget {
 }
 
 class _RoomPageState extends State<RoomPage>
-    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin ,WidgetsBindingObserver{
   @override
   bool get wantKeepAlive => true;
+  // 是否第一次进入
+  int isFirst = 0;
 
   /// 播放svga动画使用
   late SVGAAnimationController animationControllerBG;
@@ -389,6 +392,11 @@ class _RoomPageState extends State<RoomPage>
     // TODO: implement initState
     super.initState();
     setState(() {
+      isFirst++;
+    });
+    //2.页面初始化的时候，添加一个状态的监听者
+    WidgetsBinding.instance?.addObserver(this);
+    setState(() {
       sp.setBool('joinRoom', false);
     });
     if (Platform.isAndroid) {
@@ -597,12 +605,12 @@ class _RoomPageState extends State<RoomPage>
             }
           });
         }else if(event.title == 'im断开链接'){
-          setState(() {
-            //取消订阅所有远端用户的音频流。
-            _engine.muteAllRemoteAudioStreams(true);
-            // 取消发布本地音频流
-            _engine.muteLocalAudioStream(true);
-          });
+          // setState(() {
+          //   //取消订阅所有远端用户的音频流。
+          //   _engine.muteAllRemoteAudioStreams(true);
+          //   // 取消发布本地音频流
+          //   _engine.muteLocalAudioStream(true);
+          // });
         }
       });
       // 厅内操作监听
@@ -1811,6 +1819,38 @@ class _RoomPageState extends State<RoomPage>
     });
   }
 
+  //监听程序进入前后台的状态改变的方法
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // TODO: implement didChangeAppLifecycleState
+    super.didChangeAppLifecycleState(state);
+    switch (state) {
+    //进入应用时候不会触发该状态 应用程序处于可见状态，并且可以响应用户的输入事件。它相当于 Android 中Activity的onResume
+      case AppLifecycleState.resumed:
+        print("应用进入前台======");
+        setState(() {
+          isFirst++;
+        });
+        if(isFirst > 0){
+          doPostRoomUserMikeInfo();
+        }
+        break;
+    //应用状态处于闲置状态，并且没有用户的输入事件，
+    // 注意：这个状态切换到 前后台 会触发，所以流程应该是先冻结窗口，然后停止UI
+      case AppLifecycleState.inactive:
+        print("应用处于闲置状态，这种状态的应用应该假设他们可能在任何时候暂停 切换到后台会触发======");
+        break;
+    //当前页面即将退出
+      case AppLifecycleState.detached:
+        print("当前页面即将退出======");
+        break;
+    // 应用程序处于不可见状态
+      case AppLifecycleState.paused:
+        print("应用处于不可见状态 后台======");
+        break;
+    }
+  }
+
   //拿到本地svga存储路径
   saveSVGAIMAGE(name) async {
     LogE('礼物名称 $name');
@@ -2056,6 +2096,8 @@ class _RoomPageState extends State<RoomPage>
 
   @override
   void dispose() {
+    //3. 页面销毁时，移出监听者
+    WidgetsBinding.instance?.removeObserver(this);
     listen.cancel();
     listenRoomback.cancel();
     listenCheckBG.cancel();
@@ -3370,6 +3412,55 @@ class _RoomPageState extends State<RoomPage>
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+  /// 切换至后台，然后重新回到这个前台页面使用
+  Future<void> doPostRoomUserMikeInfo() async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'room_id': widget.roomId,
+    };
+    try {
+      userMaiInfoBean bean = await DataUtils.postRoomUserMikeInfo(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            LogE('状态=== ${bean.data!.uid}');
+            if(bean.data!.uid != null){
+              if (sp.getString('user_id').toString() ==
+                  bean.data!.uid.toString()) {
+                isMeUp = true;
+                mxIndex =
+                    bean.data!.serialNumber.toString();
+                if (bean.data!.isClose == 0) {  //闭麦 0 否 1是
+                  isMeStatus = true;
+                  isJinyiin = false;
+                  //设置成主播
+                  _engine.setClientRole(
+                      role: ClientRoleType.clientRoleBroadcaster);
+                  // 发布本地音频流
+                  _engine.muteLocalAudioStream(false);
+                }
+              }
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        //取消订阅所有远端用户的音频流。
+          _engine.muteAllRemoteAudioStreams(true);
+          // 取消发布本地音频流
+          _engine.muteLocalAudioStream(true);
+          _engine.disableAudio();
+          _dispose();
+          // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }

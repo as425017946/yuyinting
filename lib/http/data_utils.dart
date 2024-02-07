@@ -29,6 +29,7 @@ import '../bean/ghPeopleBean.dart';
 import '../bean/ghRoomBean.dart';
 import '../bean/giftListBean.dart';
 import '../bean/homeTJBean.dart';
+import '../bean/hotRoomBean.dart';
 import '../bean/isFirstOrderBean.dart';
 import '../bean/isPayBean.dart';
 import '../bean/joinRoomBean.dart';
@@ -73,6 +74,7 @@ import '../bean/tgmBean.dart';
 import '../bean/tjRoomListBean.dart';
 import '../bean/userDTListBean.dart';
 import '../bean/userInfoBean.dart';
+import '../bean/userMaiInfoBean.dart';
 import '../bean/userOnlineBean.dart';
 import '../bean/userStatusBean.dart';
 import '../bean/walletListBean.dart';
@@ -514,8 +516,8 @@ class DataUtils{
   }
 
   /// 推荐主播
-  static Future<pushStreamerBean> postPushStreamer() async {
-    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.pushStreamer, {}, {});
+  static Future<pushStreamerBean> postPushStreamer(Map<String,dynamic> params) async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.pushStreamer, {}, params);
     print("推荐主播：$respons");
     return pushStreamerBean.fromJson(respons!);
   }
@@ -561,6 +563,13 @@ class DataUtils{
     return userOnlineBean.fromJson(respons!);
   }
 
+
+  /// 首页派对-前5名
+  static Future<hotRoomBean> postHotRoom() async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.hotRoom, {}, {});
+    print("前5名：$respons");
+    return hotRoomBean.fromJson(respons!);
+  }
 
   /// 首页派对-房间列表
   static Future<tjRoomListBean> postTJRoomList(Map<String,dynamic> params) async {
@@ -748,6 +757,15 @@ class DataUtils{
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.editRoom, {}, params);
     print("设置房间信息：$respons");
     return CommonBean.fromJson(respons!);
+  }
+
+
+  /// 房间单个用户麦序信息
+  static Future<userMaiInfoBean> postRoomUserMikeInfo(Map<String,dynamic> params) async {
+    print("房间单个用户麦序信息：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.roomUserMikeInfo, {}, params);
+    print("房间单个用户麦序信息：$respons");
+    return userMaiInfoBean.fromJson(respons!);
   }
 
   /// 房间管理员列表

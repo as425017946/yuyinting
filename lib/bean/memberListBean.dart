@@ -25,8 +25,9 @@ class memberListBean {
 class Data {
   List<ListOn>? list;
   String? isEnd;
+  String? total;
 
-  Data({this.list, this.isEnd});
+  Data({this.list, this.isEnd, this.total});
 
   Data.fromJson(Map<String, dynamic> json) {
     if (json['list'] != null) {
@@ -36,6 +37,7 @@ class Data {
       });
     }
     isEnd = json['is_end'];
+    total = json['total'];
   }
 
   Map<String, dynamic> toJson() {
@@ -44,6 +46,7 @@ class Data {
       data['list'] = this.list!.map((v) => v.toJson()).toList();
     }
     data['is_end'] = this.isEnd;
+    data['total'] = this.total;
     return data;
   }
 }

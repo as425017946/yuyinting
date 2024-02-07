@@ -484,6 +484,9 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
                     // 更新当前的索引值
                     _currentIndex = index;
                   });
+                  if(index == 1){
+                    eventBus.fire(SubmitButtonBack(title: '回到首页'));
+                  }
                 },
                 children: identity != 'user'
                     ? const [
@@ -528,7 +531,7 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorHttpTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorHttpTitle);
     }
   }
 
@@ -545,6 +548,8 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
     String version = packageInfo.version;
     String buildNumber = packageInfo.buildNumber;
     String deviceType = '';
+    sp.setString('myVersion2',version.toString());
+    sp.setString('buildNumber',buildNumber);
     // 应用名称
     print("appName:${appName}");
 // 包名称

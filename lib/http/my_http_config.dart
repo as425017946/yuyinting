@@ -13,11 +13,11 @@ class MyHttpConfig{
   // static  String baseURL = "http://192.168.0.51/api";
   //赵增测试环境
   // static  String baseURL = "http://192.168.0.53/api";
-  // //测试环境
+  // // //测试环境
   // static  String baseURL = "http://18.163.74.49:8080/api";
 
   //正式环境
-  static  String baseURL = "http://${sp.getString('isDian').toString()}:8080/api";
+  static  String baseURL = sp.getString('isDian').toString().isEmpty ? "http://43.198.138.251:8080/api" : "http://${sp.getString('isDian').toString()}:8080/api";
   // 正式环境
   // static  String baseURL = "http://www.aa986.com:8080/api";
   /// 文件上传
@@ -25,7 +25,7 @@ class MyHttpConfig{
   static String fileUpload = '$baseURL/upload/fileUpload';
 
   //判断网络
-  static  String pdAddress = "http://aa939.com:8300/address";
+  static  String pdAddress = "http://118.195.228.131:8300/address";
   //判断网络
   static  String pdAddressGet = "http://118.195.228.131:8300/address?type=go";
   //预下载接口
@@ -148,6 +148,8 @@ class MyHttpConfig{
   static  String roomJoin = "$baseURL/room/join";
   //在线用户
   static  String userOnline = "$baseURL/user/userOnline";
+  //首页派对房间列表 前5名
+  static  String hotRoom = "$baseURL/room/hotRoom";
   //首页派对房间列表
   static  String tjRoomList = "$baseURL/room/list";
   //首页榜单
@@ -193,6 +195,8 @@ class MyHttpConfig{
   static  String setBoss = "$baseURL/room/setBoss";
   //设置房间信息
   static  String editRoom = "$baseURL/room/editRoom";
+  //房间单个用户麦序信息
+  static  String roomUserMikeInfo = "$baseURL/room/roomUserMikeInfo";
   //房间管理员列表
   static  String adminList = "$baseURL/room/adminList";
   //房间禁言列表

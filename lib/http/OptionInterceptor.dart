@@ -10,6 +10,8 @@ class OptionInterceptor extends InterceptorsWrapper {
     ///请求的Content-Type，默认值是"application/json; charset=utf-8".
     ///如果你的headers是固定的你可以在BaseOption中设置,如果不固定可以在这里进行根据条件设置
     options.headers["Authorization"] = sp.getString('user_token')??'';
+    options.headers["os"] = sp.getString('myDevices')??'';
+    options.headers["version"] = sp.getString('myVersion2')??'';
 
     // if (options.queryParameters["hideLoading"] != true) {
     //   EasyLoading.show();

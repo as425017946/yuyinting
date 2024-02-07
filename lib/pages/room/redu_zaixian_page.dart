@@ -158,7 +158,7 @@ class _ReDuZaiXianPageState extends State<ReDuZaiXianPage> with AutomaticKeepAli
           children: [
             WidgetUtils.commonSizedBox(0, 20),
             WidgetUtils.onlyText(
-                '在线用户（${list.length}人）',
+                '在线用户（$peopleNum人）',
                 StyleUtils.getCommonTextStyle(
                     color: MyColors.roomTCWZ3,
                     fontSize: ScreenUtil().setSp(21))),
@@ -187,7 +187,8 @@ class _ReDuZaiXianPageState extends State<ReDuZaiXianPage> with AutomaticKeepAli
 
 
 
-  /// 关注用户或房间
+  /// 房间内在线列表
+  String peopleNum = '';
   Future<void> doPostMemberList() async {
     Loading.show();
     Map<String, dynamic> params = <String, dynamic>{
@@ -202,13 +203,20 @@ class _ReDuZaiXianPageState extends State<ReDuZaiXianPage> with AutomaticKeepAli
           setState(() {
             if (page == 1) {
               list.clear();
-            }
-            if (bean.data!.list!.isNotEmpty) {
-              list = bean.data!.list!;
+              peopleNum = bean.data!.total!;
+              if (bean.data!.list!.isNotEmpty) {
+                list = bean.data!.list!;
+              }
             }else{
-              if(page > 1){
-                if(bean.data!.list!.length < MyConfig.pageSize){
-                  _refreshController.loadNoData();
+              if (bean.data!.list!.isNotEmpty) {
+                for(int i = 0; i < bean.data!.list!.length; i++){
+                  list.add(bean.data!.list![i]);
+                }
+              }else{
+                if(page > 1){
+                  if(bean.data!.list!.length < MyConfig.pageSize){
+                    _refreshController.loadNoData();
+                  }
                 }
               }
             }

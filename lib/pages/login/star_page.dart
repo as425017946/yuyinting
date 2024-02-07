@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:yuyinting/pages/login/login_page.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/my_utils.dart';
@@ -28,6 +30,18 @@ class _StarPageState extends State<StarPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    setState(() {
+      sp.setInt('tjFirst', 0);
+    });
+    if (Platform.isAndroid) {
+      setState(() {
+        sp.setString('myDevices', 'android');
+      });
+    }else if (Platform.isIOS){
+      setState(() {
+        sp.setString('myDevices', 'ios');
+      });
+    }
     doPostPdAddress();
     Future.delayed(const Duration(milliseconds: 2000), ((){
         sp.setBool('joinRoom', false);
@@ -88,6 +102,11 @@ class _StarPageState extends State<StarPage> {
 
   /// 判断当前网络，然后给返回适配的网络地址
   Future<void> doPostPdAddress() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String version = packageInfo.version;
+    String buildNumber = packageInfo.buildNumber;
+    sp.setString('myVersion2',version.toString());
+    sp.setString('buildNumber',buildNumber);
     try {
       addressIPBean bean = await DataUtils.getPdAddress();
       switch (bean.code) {
@@ -106,7 +125,7 @@ class _StarPageState extends State<StarPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorHttpTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorHttpTitle);
     }
   }
 }

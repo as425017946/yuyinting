@@ -109,8 +109,8 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     MyUtils.addChatListener();
     //先退出然后在登录
     MyUtils.signOutLogin();
-    //保持屏幕常亮
-    saveLiang();
+    // //保持屏幕常亮
+    // saveLiang();
     doPostIsFirstOrder();
     super.initState();
     initE();
@@ -253,14 +253,14 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       }else if(event.title == 'im重连'){
         doPostCheckToken();
       }else if(event.title == 'im断开链接'){
-        if(isJoinRoom){
-          setState(() {
-            //取消订阅所有远端用户的音频流。
-            _engine.muteAllRemoteAudioStreams(true);
-            // 取消发布本地音频流
-            _engine.muteLocalAudioStream(true);
-          });
-        }
+        // if(isJoinRoom){
+        //   setState(() {
+        //     //取消订阅所有远端用户的音频流。
+        //     _engine.muteAllRemoteAudioStreams(true);
+        //     // 取消发布本地音频流
+        //     _engine.muteLocalAudioStream(true);
+        //   });
+        // }
       }
     });
 
@@ -603,6 +603,9 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
                   setState(() {
                     _currentIndex = index;
                   });
+                  if(index == 0){
+                    eventBus.fire(SubmitButtonBack(title: '回到首页'));
+                  }
                 },
                 type: BottomNavigationBarType.fixed,
                 items: [

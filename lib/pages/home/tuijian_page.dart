@@ -28,7 +28,6 @@ import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../gongping/gp_quanxian_page.dart';
 import '../message/geren/people_info_page.dart';
-import '../mine/my/ceshiAudioPage.dart';
 import '../mine/my/my_info_page.dart';
 import '../room/room_page.dart';
 import '../room/room_ts_mima_page.dart';
@@ -41,7 +40,9 @@ class TuijianPage extends StatefulWidget {
   State<TuijianPage> createState() => _TuijianPageState();
 }
 
-class _TuijianPageState extends State<TuijianPage> {
+class _TuijianPageState extends State<TuijianPage>  with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
 
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -93,10 +94,22 @@ class _TuijianPageState extends State<TuijianPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    doPostPushRoom();
-    doPostPushStreamer();
+    LogE('值 ==  ${sp.getInt('tjFirst')}');
+    if(sp.getInt('tjFirst') == 0){
+      doPostPushRoom();
+      doPostPushStreamer();
+      setState(() {
+        int zhi = int.parse(sp.getInt('tjFirst').toString())+1;
+        sp.setInt('tjFirst',zhi);
+      });
+    }
     listen = eventBus.on<SubmitButtonBack>().listen((event) {
-      if(event.title == '退出房间' || event.title == '收起房间'){
+      if(event.title == '退出房间' || event.title == '收起房间' || event.title == '回到首页'){
+        if (mounted) {
+          setState(() {
+            page = 1;
+          });
+        }
         doPostPushStreamer();
       }
     });
@@ -668,7 +681,7 @@ class _TuijianPageState extends State<TuijianPage> {
     DatabaseHelper databaseHelper = DatabaseHelper();
     Database? db = await databaseHelper.database;
     try {
-      Loading.show(MyConfig.successTitle);
+      // Loading.show(MyConfig.successTitle);
       homeTJBean bean = await DataUtils.postPushRoom();
       switch (bean.code) {
         case MyHttpConfig.successCode:
@@ -699,9 +712,9 @@ class _TuijianPageState extends State<TuijianPage> {
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
-      Loading.dismiss();
+      // Loading.dismiss();
     } catch (e) {
-      Loading.dismiss();
+      // Loading.dismiss();
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
@@ -710,13 +723,30 @@ class _TuijianPageState extends State<TuijianPage> {
   Future<void> doPostPushStreamer() async {
     LogE('token == ${sp.getString('user_token')}');
     try {
-      Loading.show(MyConfig.successTitle);
-      pushStreamerBean bean = await DataUtils.postPushStreamer();
+      Map<String, dynamic> params = <String, dynamic>{
+        'page': page,
+        'pageSize': page == 1 ? 4 : 6,
+      };
+      // Loading.show(MyConfig.successTitle);
+      pushStreamerBean bean = await DataUtils.postPushStreamer(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
-            if (bean.data!.anchorList!.isNotEmpty) {
-              listAnchor = bean.data!.anchorList!;
+            if(page == 1){
+              listAnchor.clear();
+              if (bean.data!.anchorList!.isNotEmpty) {
+                listAnchor = bean.data!.anchorList!;
+              }
+            }else{
+              if (bean.data!.anchorList!.isNotEmpty) {
+                for(int i = 0; i < bean.data!.anchorList!.length; i++){
+                  listAnchor.add(bean.data!.anchorList![i]);
+                }
+              }else{
+                if (bean.data!.anchorList!.length < 6) {
+                  _refreshController.refreshCompleted();
+                }
+              }
             }
           });
           break;
@@ -728,9 +758,9 @@ class _TuijianPageState extends State<TuijianPage> {
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
-      Loading.dismiss();
+      // Loading.dismiss();
     } catch (e) {
-      Loading.dismiss();
+      // Loading.dismiss();
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }

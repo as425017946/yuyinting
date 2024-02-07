@@ -36,106 +36,113 @@ class _RoomTSMiMaPageState extends State<RoomTSMiMaPage> {
     return Scaffold(
         backgroundColor: Colors.transparent,
         resizeToAvoidBottomInset: false, // 解决键盘顶起页面
-        body: Column(
-          children: [
-            GestureDetector(
-              onTap: (() {
-                setState(() {
-                  sp.setBool('joinRoom',false);
-                });
-                if (MyUtils.checkClick()) {
-                  Navigator.pop(context);
-                }
-              }),
-              child: Container(
-                height: 300.h,
-                width: double.infinity,
-                color: Colors.transparent,
-              ),
-            ),
-            Container(
-              width: ScreenUtil().setHeight(506),
-              height: ScreenUtil().setHeight(400),
-              decoration: const BoxDecoration(
-                //设置Container修饰
-                image: DecorationImage(
-                  //背景图片修饰
-                  image: AssetImage("assets/images/room_mima_bg.png"),
-                  fit: BoxFit.fill, //覆盖
-                ),
-              ),
-              child: Column(
-                children: [
-                  WidgetUtils.commonSizedBox(120, 0),
-                  WidgetUtils.onlyTextCenter(
-                      '请输入房间密码',
-                      StyleUtils.getCommonTextStyle(
-                          color: Colors.black87,
-                          fontSize: 32.sp,
-                          fontWeight: FontWeight.w600)),
-                  WidgetUtils.commonSizedBox(30, 0),
-                  Container(
-                    width: double.infinity,
-                    color: Colors.transparent,
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.only(
-                      left: ScreenUtil().setHeight(80),
-                      right: ScreenUtil().setHeight(80),
-                    ),
-                    child: PinCodeTextField(
-                      length: 4,
-                      inputFormatters: [
-                        // 表示只能输入字母大写小写都可以
-                        FilteringTextInputFormatter.allow(RegExp('[0-9]')),
-                      ],
-                      // animationDuration: const Duration(milliseconds: 300),
-                      controller: textEditingController,
-                      onChanged: (value) {
-                        // LogE('返回数据$value');
-                        if (value.length == 4) {
-                          doPostCheckPwd();
-                        }
-                      },
-                      textStyle: StyleUtils.getCommonTextStyle(
-                          color: MyColors.btn_a, fontSize: 38.sp),
-                      appContext: context,
-                      keyboardType: TextInputType.number,
-                      autoFocus: true,
-                      // enableActiveFill: true,
-                      pinTheme: PinTheme(
-                        shape: PinCodeFieldShape.box,
-                        borderRadius: BorderRadius.circular(2),
-                        fieldHeight: 70.h,
-                        fieldWidth: 55.h,
-                        activeFillColor: Colors.transparent,
-                        //填充背景色
-                        activeColor: MyColors.btn_a,
-                        //下划线颜色
-                        inactiveFillColor: Colors.white,
-                        inactiveColor: Colors.white,
-                        selectedColor: Colors.white,
-                        selectedFillColor: Colors.white,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            Expanded(
-              child: GestureDetector(
+        body: WillPopScope(
+          onWillPop: () async {
+            setState(() {
+              sp.setBool('joinRoom',false);
+            });
+            return true;
+          },
+          child: Column(
+            children: [
+              GestureDetector(
                 onTap: (() {
-                  if (MyUtils.checkClick()) {
-                    Navigator.pop(context);
-                  }
+                  setState(() {
+                    sp.setBool('joinRoom',false);
+                  });
+                  Navigator.pop(context);
                 }),
                 child: Container(
-                  height: double.infinity,
+                  height: 300.h,
                   width: double.infinity,
                   color: Colors.transparent,
                 ),
               ),
-            ),
-          ],
+              Container(
+                width: ScreenUtil().setHeight(506),
+                height: ScreenUtil().setHeight(400),
+                decoration: const BoxDecoration(
+                  //设置Container修饰
+                  image: DecorationImage(
+                    //背景图片修饰
+                    image: AssetImage("assets/images/room_mima_bg.png"),
+                    fit: BoxFit.fill, //覆盖
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    WidgetUtils.commonSizedBox(120, 0),
+                    WidgetUtils.onlyTextCenter(
+                        '请输入房间密码',
+                        StyleUtils.getCommonTextStyle(
+                            color: Colors.black87,
+                            fontSize: 32.sp,
+                            fontWeight: FontWeight.w600)),
+                    WidgetUtils.commonSizedBox(30, 0),
+                    Container(
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.only(
+                        left: ScreenUtil().setHeight(80),
+                        right: ScreenUtil().setHeight(80),
+                      ),
+                      child: PinCodeTextField(
+                        length: 4,
+                        inputFormatters: [
+                          // 表示只能输入字母大写小写都可以
+                          FilteringTextInputFormatter.allow(RegExp('[0-9]')),
+                        ],
+                        // animationDuration: const Duration(milliseconds: 300),
+                        controller: textEditingController,
+                        onChanged: (value) {
+                          // LogE('返回数据$value');
+                          if (value.length == 4) {
+                            doPostCheckPwd();
+                          }
+                        },
+                        textStyle: StyleUtils.getCommonTextStyle(
+                            color: MyColors.btn_a, fontSize: 38.sp),
+                        appContext: context,
+                        keyboardType: TextInputType.number,
+                        autoFocus: true,
+                        // enableActiveFill: true,
+                        pinTheme: PinTheme(
+                          shape: PinCodeFieldShape.box,
+                          borderRadius: BorderRadius.circular(2),
+                          fieldHeight: 70.h,
+                          fieldWidth: 55.h,
+                          activeFillColor: Colors.transparent,
+                          //填充背景色
+                          activeColor: MyColors.btn_a,
+                          //下划线颜色
+                          inactiveFillColor: Colors.white,
+                          inactiveColor: Colors.white,
+                          selectedColor: Colors.white,
+                          selectedFillColor: Colors.white,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Expanded(
+                child: GestureDetector(
+                  onTap: (() {
+                    setState(() {
+                      sp.setBool('joinRoom',false);
+                    });
+                    Navigator.pop(context);
+                  }),
+                  child: Container(
+                    height: double.infinity,
+                    width: double.infinity,
+                    color: Colors.transparent,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ));
   }
 

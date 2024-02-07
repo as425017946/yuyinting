@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -14,7 +12,6 @@ import 'package:yuyinting/utils/my_utils.dart';
 import '../../bean/Common_bean.dart';
 import '../../bean/addressIPBean.dart';
 import '../../bean/loginBean.dart';
-import '../../bean/pdAddressBean.dart';
 import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
@@ -26,7 +23,6 @@ import '../../utils/regex_formatter.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../../widget/SVGASimpleImage.dart';
-import '../home/agree_ts_page.dart';
 
 ///登录页面
 class LoginPage extends StatefulWidget {
@@ -52,7 +48,17 @@ class _LoginPageState extends State<LoginPage> {
   String IP = '', IMEI = '';
   @override
   void initState() {
+    if (Platform.isAndroid) {
+      setState(() {
+        sp.setString('myDevices', 'android');
+      });
+    }else if (Platform.isIOS){
+      setState(() {
+        sp.setString('myDevices', 'ios');
+      });
+    }
     setState(() {
+      sp.setInt('tjFirst', 0);
       sp.setBool('joinRoom', false);
     });
     // TODO: implement initState
@@ -358,11 +364,12 @@ class _LoginPageState extends State<LoginPage> {
                                                       '输入的手机号码格式错误');
                                                 } else {
                                                   //没有ip
-                                                  if(sp.getString('userIP').toString().isEmpty){
-                                                    doPostPdAddress();
-                                                  }else{
-                                                    doPostLoginSms();
-                                                  }
+                                                  // if(sp.getString('userIP').toString().isEmpty){
+                                                  //   doPostPdAddress();
+                                                  // }else{
+                                                  //   doPostLoginSms();
+                                                  // }
+                                                  doPostLoginSms();
                                                 }
                                               }
                                             }
@@ -458,11 +465,12 @@ class _LoginPageState extends State<LoginPage> {
                           type = 2;
                         });
                         //没有ip
-                        if(sp.getString('userIP').toString().isEmpty){
-                          doPostPdAddress();
-                        }else{
-                          doLogin();
-                        }
+                        // if(sp.getString('userIP').toString().isEmpty){
+                        //   doPostPdAddress();
+                        // }else{
+                        //   doLogin();
+                        // }
+                        doLogin();
                       }
                     }),
                     child: Container(
@@ -900,6 +908,11 @@ class _LoginPageState extends State<LoginPage> {
 
   /// 判断当前网络，然后给返回适配的网络地址
   Future<void> doPostPdAddress() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String version = packageInfo.version;
+    String buildNumber = packageInfo.buildNumber;
+    sp.setString('myVersion2',version.toString());
+    sp.setString('buildNumber',buildNumber);
     try {
       addressIPBean bean = await DataUtils.getPdAddress();
       switch (bean.code) {
@@ -910,11 +923,11 @@ class _LoginPageState extends State<LoginPage> {
               sp.setString('userIP', bean.address!);
               IP = bean.address!;
             });
-            if(type ==1){
-              doPostLoginSms();
-            }else if(type == 2){
-              doLogin();
-            }
+            // if(type ==1){
+            //   doPostLoginSms();
+            // }else if(type == 2){
+            //   doLogin();
+            // }
           }else{
             MyToastUtils.showToastBottom('IP为空');
           }
@@ -924,7 +937,7 @@ class _LoginPageState extends State<LoginPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorHttpTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorHttpTitle);
     }
   }
 }
