@@ -581,6 +581,9 @@ class _LoginPageState extends State<LoginPage> {
                                 fontSize: ScreenUtil().setSp(25))),
                       ),
                       const Expanded(child: Text('')),
+                      WidgetUtils.onlyText(sp.getString('myVersion2').toString(), StyleUtils.getCommonTextStyle(
+                          color: MyColors.homeTopBG,
+                          fontSize: ScreenUtil().setSp(25)))
                     ],
                   ),
                   WidgetUtils.commonSizedBox(20, 0),
