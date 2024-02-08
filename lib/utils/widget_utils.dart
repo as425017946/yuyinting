@@ -598,6 +598,7 @@ class WidgetUtils {
 
   /// 圆形图片
   static Widget CircleHeadImage(double height, double width, String imgUrl) {
+    LogE('头像地址 == $imgUrl');
     return Container(
       height: height,
       width: width,
