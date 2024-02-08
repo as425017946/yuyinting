@@ -335,6 +335,21 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           sp.setString("user_identity", '');
           // 直接杀死app
           SystemNavigator.pop();
+        }else{
+          sp.setString('user_token', '');
+          sp.setString("user_account", '');
+          sp.setString("user_id", '');
+          sp.setString("em_pwd", '');
+          sp.setString("em_token", '');
+          sp.setString("user_password", '');
+          sp.setString('user_phone', '');
+          sp.setString('nickname', '');
+          sp.setString("user_headimg", '');
+          sp.setString("user_headimg_id", '');
+          // 保存身份
+          sp.setString("user_identity", '');
+          // 直接杀死app
+          SystemNavigator.pop();
         }
       }else if(event.type == 'user_room_black'){
         if(isJoinRoom) {

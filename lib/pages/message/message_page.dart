@@ -506,7 +506,7 @@ class _MessagePageState extends State<MessagePage> {
   Future<void> doPostSystemMsgList() async {
     DatabaseHelper databaseHelper = DatabaseHelper();
     Database? db = await databaseHelper.database;
-    Loading.show();
+    // Loading.show();
     try {
       // xtListBean bean = await DataUtils.postSystemMsgList();
       // switch (bean.code) {

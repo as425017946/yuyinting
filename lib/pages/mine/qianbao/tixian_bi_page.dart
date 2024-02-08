@@ -336,7 +336,7 @@ class _TixianBiPageState extends State<TixianBiPage> {
                     ),
                     WidgetUtils.onlyText(
                         methodID == '2'
-                            ? '请填写卡号对应真实姓名，误填将导致提现失败'
+                            ? '(请填写卡号对应真实姓名，误填将导致提现失败)'
                             : '(请填写账号准确实名全称，误填将导致提现失败)',
                         StyleUtils.getCommonTextStyle(
                             color: Colors.red,
