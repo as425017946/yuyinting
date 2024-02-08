@@ -19,8 +19,6 @@ import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 
-
-
 /// 编辑头像显示
 class EditHeadPage extends StatefulWidget {
   const EditHeadPage({Key? key}) : super(key: key);
@@ -56,7 +54,7 @@ class _EditHeadPageState extends State<EditHeadPage> {
     // }
     final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-        print('选择照片路径:${image?.path}');
+    print('选择照片路径:${image?.path}');
 
     doPostPostFileUpload(image!.path);
   }
@@ -70,11 +68,8 @@ class _EditHeadPageState extends State<EditHeadPage> {
     if (imgFile == null) return;
     print('照片路径:${imgFile.path}');
 
-
-
     doPostPostFileUpload(imgFile.path);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -107,9 +102,9 @@ class _EditHeadPageState extends State<EditHeadPage> {
                   WidgetUtils.myLine(thickness: 10),
                   GestureDetector(
                     onTap: (() {
-    if(MyUtils.checkClick()) {
-      onTapPickFromCamera();
-    }
+                      if (MyUtils.checkClick()) {
+                        onTapPickFromCamera();
+                      }
                     }),
                     child: Container(
                       width: double.infinity,
@@ -129,7 +124,7 @@ class _EditHeadPageState extends State<EditHeadPage> {
                   GestureDetector(
                     onTap: (() {
                       // selectAssets();
-                      if(MyUtils.checkClick()) {
+                      if (MyUtils.checkClick()) {
                         onTapPickFromGallery();
                       }
                     }),
@@ -152,7 +147,7 @@ class _EditHeadPageState extends State<EditHeadPage> {
                   GestureDetector(
                     onTap: (() {
                       // selectAssets();
-                      if(MyUtils.checkClick()) {
+                      if (MyUtils.checkClick()) {
                         Navigator.pop(context);
                       }
                     }),
@@ -188,7 +183,7 @@ class _EditHeadPageState extends State<EditHeadPage> {
     } else if (path.toString().contains('.jpg') ||
         path.toString().contains('.GPG')) {
       targetPath =
-      "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
+          "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
       result = await FlutterImageCompress.compressAndGetFile(
         path, targetPath,
         quality: 50,
@@ -197,7 +192,7 @@ class _EditHeadPageState extends State<EditHeadPage> {
     } else if (path.toString().contains('.jpeg') ||
         path.toString().contains('.GPEG')) {
       targetPath =
-      "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpeg";
+          "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpeg";
       result = await FlutterImageCompress.compressAndGetFile(
         path, targetPath,
         quality: 50,
@@ -210,7 +205,7 @@ class _EditHeadPageState extends State<EditHeadPage> {
     } else if (path.toString().contains('.webp') ||
         path.toString().contains('.WEBP')) {
       targetPath =
-      "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.webp";
+          "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.webp";
       result = await FlutterImageCompress.compressAndGetFile(
         path, targetPath,
         quality: 50,
@@ -218,7 +213,7 @@ class _EditHeadPageState extends State<EditHeadPage> {
       );
     } else {
       targetPath =
-      "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.png";
+          "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.png";
       result = await FlutterImageCompress.compressAndGetFile(
         path, targetPath,
         quality: 50,
@@ -230,32 +225,33 @@ class _EditHeadPageState extends State<EditHeadPage> {
     FormData formdata = FormData.fromMap(
       {
         'type': 'image',
-        "file": await MultipartFile.fromFile(path.toString().contains('.gif') || path.toString().contains('.GIF')
-            ? targetPath
-            : result!.path,
-          filename: name,)
+        "file": await MultipartFile.fromFile(
+          path.toString().contains('.gif') || path.toString().contains('.GIF')
+              ? targetPath
+              : result!.path,
+          filename: name,
+        )
       },
     );
     BaseOptions option = BaseOptions(
         contentType: 'multipart/form-data', responseType: ResponseType.plain);
-    option.headers["Authorization"] = sp.getString('user_token')??'';
+    option.headers["Authorization"] = sp.getString('user_token') ?? '';
     Dio dio = Dio(option);
     //application/json
     try {
-      var respone = await dio.post(
-          MyHttpConfig.fileUpload,
-          data: formdata);
+      var respone = await dio.post(MyHttpConfig.fileUpload, data: formdata);
       Map jsonResponse = json.decode(respone.data.toString());
       if (jsonResponse['code'] == 200) {
-        eventBus.fire(FileBack(info: path, id: jsonResponse['data'].toString(), type: 0));
+        eventBus.fire(
+            FileBack(info: path, id: jsonResponse['data'].toString(), type: 0));
         MyToastUtils.showToastBottom('头像上传成功');
         Loading.dismiss();
         // ignore: use_build_context_synchronously
         Navigator.pop(context);
-      }else if(respone.statusCode == 401){
+      } else if (respone.statusCode == 401) {
         // ignore: use_build_context_synchronously
         MyUtils.jumpLogin(context);
-      }else{
+      } else {
         // MyToastUtils.showToastBottom(MyConfig.errorTitleFile);
       }
 
@@ -265,7 +261,5 @@ class _EditHeadPageState extends State<EditHeadPage> {
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
       // MyToastUtils.showToastBottom(MyConfig.errorTitleFile);
     }
-
   }
-
 }

@@ -52,7 +52,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
   List<String> list_pID = [];
   List<String> list_label = [];
   List<AssetEntity> lista = [];
-  List<String> listaID= [];
+  List<String> listaID = [];
 
   String headImg = '',
       headImgID = '',
@@ -78,10 +78,18 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
       birthday2 = '',
       voice_cardID2 = '';
 
+  // 设备是安卓还是ios
+  String isDevices = 'android';
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    if (Platform.isAndroid) {
+      isDevices = "android";
+    } else {
+      isDevices = "ios";
+    }
     // list_sex.add('男');
     // list_sex.add('女');
     doPostMyIfon();
@@ -107,25 +115,25 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
           list_label = sp.getString('label_name').toString().split(',');
           list_label.removeAt(list_label.length - 1);
         });
-      }else if(event.title == '编辑个人资料取消保存'){
+      } else if (event.title == '编辑个人资料取消保存') {
         MyUtils.hideKeyboard(context);
         Navigator.pop(context);
       }
     });
     listen3 = eventBus.on<PhotoBack>().listen((event) {
       setState(() {
-        if(lista.isEmpty){
+        if (lista.isEmpty) {
           lista = event.selectAss!;
-        }else{
-          for(int i = 0; i < event.selectAss!.length; i++){
+        } else {
+          for (int i = 0; i < event.selectAss!.length; i++) {
             lista.add(event.selectAss![i]);
           }
         }
-        if(listaID.isEmpty){
+        if (listaID.isEmpty) {
           listaID = event.id.split(',');
-        }else{
+        } else {
           List<String> listID = event.id.split(',');
-          for(int i = 0; i < listID.length; i++){
+          for (int i = 0; i < listID.length; i++) {
             listaID.add(listID[i]);
           }
         }
@@ -151,7 +159,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
             title: '是否保存本次修改？',
             enterTxt: '保存',
             callback: (res) {
-              if(MyUtils.checkClick()) {
+              if (MyUtils.checkClick()) {
                 doPostModifyUserInfo();
               }
             },
@@ -211,7 +219,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                 photo_id = '${list_pID[i]},';
               }
             }
-            for(int i = 0; i < listaID.length; i++){
+            for (int i = 0; i < listaID.length; i++) {
               if (photo_id.isNotEmpty) {
                 photo_id = '$photo_id${listaID[i]},';
               } else {
@@ -230,7 +238,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                 birthday != birthday2 ||
                 voice_cardID != voice_cardID2) {
               exitBianji(context);
-            }else{
+            } else {
               Navigator.of(context).pop();
               MyUtils.hideKeyboard(context);
             }
@@ -239,7 +247,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
         actions: [
           GestureDetector(
             onTap: (() {
-              if(MyUtils.checkClick()) {
+              if (MyUtils.checkClick()) {
                 doPostModifyUserInfo();
               }
             }),
@@ -280,7 +288,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
               photo_id = '${list_pID[i]},';
             }
           }
-          for(int i = 0; i < listaID.length; i++){
+          for (int i = 0; i < listaID.length; i++) {
             if (photo_id.isNotEmpty) {
               photo_id = '$photo_id${listaID[i]},';
             } else {
@@ -300,7 +308,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
               birthday != birthday2 ||
               voice_cardID != voice_cardID2) {
             exitBianji(context);
-          }else{
+          } else {
             Navigator.of(context).pop();
             MyUtils.hideKeyboard(context);
           }
@@ -326,7 +334,8 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                       Future.delayed(const Duration(seconds: 0), () {
                         Navigator.of(context).push(PageRouteBuilder(
                             opaque: false,
-                            pageBuilder: (context, animation, secondaryAnimation) {
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) {
                               return const EditHeadPage();
                             }));
                       });
@@ -344,11 +353,20 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                                 color: Colors.black,
                                 fontSize: ScreenUtil().setSp(28))),
                         const Expanded(child: Text('')),
-                        WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(90),
-                            ScreenUtil().setHeight(90), headImg),
+                        isDevices == 'ios'
+                            ? WidgetUtils.CircleHeadImageIOS(
+                                ScreenUtil().setHeight(90),
+                                ScreenUtil().setHeight(90),
+                                headImg)
+                            : WidgetUtils.CircleHeadImage(
+                                ScreenUtil().setHeight(90),
+                                ScreenUtil().setHeight(90),
+                                headImg),
                         WidgetUtils.commonSizedBox(0, 10),
-                        WidgetUtils.showImages('assets/images/mine_more2.png',
-                            ScreenUtil().setHeight(27), ScreenUtil().setHeight(16))
+                        WidgetUtils.showImages(
+                            'assets/images/mine_more2.png',
+                            ScreenUtil().setHeight(27),
+                            ScreenUtil().setHeight(16))
                       ],
                     ),
                   ),
@@ -377,7 +395,8 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                             LengthLimitingTextInputFormatter(8) //限制输入长度
                           ],
                           style: StyleUtils.getCommonTextStyle(
-                              color: MyColors.g3, fontSize: ScreenUtil().setSp(25)),
+                              color: MyColors.g3,
+                              fontSize: ScreenUtil().setSp(25)),
                           onChanged: (value) {
                             setState(() {
                               nickName = value;
@@ -386,9 +405,11 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                           decoration: InputDecoration(
                             hintText: '请输入昵称',
                             hintStyle: StyleUtils.getCommonTextStyle(
-                                color: MyColors.g9, fontSize: ScreenUtil().setSp(25)),
+                                color: MyColors.g9,
+                                fontSize: ScreenUtil().setSp(25)),
 
-                            contentPadding: const EdgeInsets.only(top: 0, bottom: 0),
+                            contentPadding:
+                                const EdgeInsets.only(top: 0, bottom: 0),
                             border: const OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.transparent),
                             ),
@@ -473,7 +494,8 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                             LengthLimitingTextInputFormatter(16) //限制输入长度
                           ],
                           style: StyleUtils.getCommonTextStyle(
-                              color: MyColors.g3, fontSize: ScreenUtil().setSp(25)),
+                              color: MyColors.g3,
+                              fontSize: ScreenUtil().setSp(25)),
                           onChanged: (value) {
                             setState(() {
                               description = value;
@@ -482,9 +504,11 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                           decoration: InputDecoration(
                             hintText: '输入签名，展示你的独特个性吧',
                             hintStyle: StyleUtils.getCommonTextStyle(
-                                color: MyColors.g9, fontSize: ScreenUtil().setSp(25)),
+                                color: MyColors.g9,
+                                fontSize: ScreenUtil().setSp(25)),
 
-                            contentPadding: const EdgeInsets.only(top: 0, bottom: 0),
+                            contentPadding:
+                                const EdgeInsets.only(top: 0, bottom: 0),
                             border: const OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.transparent),
                             ),
@@ -557,8 +581,10 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                                     fontSize: ScreenUtil().setSp(28))),
                           ],
                         )),
-                        WidgetUtils.showImages('assets/images/mine_more2.png',
-                            ScreenUtil().setHeight(27), ScreenUtil().setHeight(16))
+                        WidgetUtils.showImages(
+                            'assets/images/mine_more2.png',
+                            ScreenUtil().setHeight(27),
+                            ScreenUtil().setHeight(16))
                       ],
                     ),
                   ),
@@ -618,8 +644,10 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                                 color: MyColors.g6,
                                 fontSize: ScreenUtil().setSp(28))),
                         WidgetUtils.commonSizedBox(0, 10),
-                        WidgetUtils.showImages('assets/images/mine_more2.png',
-                            ScreenUtil().setHeight(27), ScreenUtil().setHeight(16))
+                        WidgetUtils.showImages(
+                            'assets/images/mine_more2.png',
+                            ScreenUtil().setHeight(27),
+                            ScreenUtil().setHeight(16))
                       ],
                     ),
                   ),
@@ -713,11 +741,8 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                                 width: 190.w,
                                 child: Stack(
                                   children: [
-                                    WidgetUtils.CircleImageNet(
-                                        150.h,
-                                        190.w,
-                                        ScreenUtil().setHeight(20),
-                                        list_p[i]),
+                                    WidgetUtils.CircleImageNet(150.h, 190.w,
+                                        ScreenUtil().setHeight(20), list_p[i]),
                                     Positioned(
                                       right: 0,
                                       top: 0,
@@ -731,7 +756,8 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                                         },
                                         child: ClipOval(
                                           child: Container(
-                                            color: Colors.white.withOpacity(0.7),
+                                            color:
+                                                Colors.white.withOpacity(0.7),
                                             width: 20,
                                             height: 20,
                                             child: const Icon(
@@ -795,12 +821,13 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                                 ? GestureDetector(
                                     onTap: (() {
                                       if (MyUtils.checkClick()) {
-                                        Future.delayed(const Duration(seconds: 0),
-                                            () {
+                                        Future.delayed(
+                                            const Duration(seconds: 0), () {
                                           Navigator.of(context).push(
                                               PageRouteBuilder(
                                                   opaque: false,
-                                                  pageBuilder: (context, animation,
+                                                  pageBuilder: (context,
+                                                      animation,
                                                       secondaryAnimation) {
                                                     return EditPhotoPage(
                                                       length: 3 -
@@ -872,8 +899,8 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
             if (bean.data!.photoId!.isNotEmpty) {
               photo_id2 = bean.data!.photoId!;
               List<String> listPid = bean.data!.photoId!.split(',');
-              for(int i = 0; i < listPid.length; i++){
-                if(listPid[i].isNotEmpty){
+              for (int i = 0; i < listPid.length; i++) {
+                if (listPid[i].isNotEmpty) {
                   list_pID.add(listPid[i]);
                 }
               }
@@ -928,19 +955,18 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
 
   /// 修改个人资料
   Future<void> doPostModifyUserInfo() async {
-
     photo_id = '';
     for (int i = 0; i < list_pID.length; i++) {
       if (photo_id.isNotEmpty && list_pID[i].isNotEmpty) {
         photo_id = '$photo_id${list_pID[i]},';
-      } else if (photo_id.isEmpty){
+      } else if (photo_id.isEmpty) {
         photo_id = '${list_pID[i]},';
       }
     }
-    for(int i = 0; i < listaID.length; i++){
+    for (int i = 0; i < listaID.length; i++) {
       if (photo_id.isNotEmpty && listaID[i].isNotEmpty) {
         photo_id = '$photo_id${listaID[i]},';
-      } else if (photo_id.isEmpty){
+      } else if (photo_id.isEmpty) {
         photo_id = '${listaID[i]},';
       }
     }
@@ -974,9 +1000,9 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
               headImgID != headImgID2 ||
               nickName != nickName2 ||
               description != description2 ||
-              photo_id != photo_id2 ) {
+              photo_id != photo_id2) {
             MyToastUtils.showToastBottom('资料提交成功，请耐心等待审核');
-          }else{
+          } else {
             MyToastUtils.showToastBottom('资料更新成功');
           }
           Navigator.pop(context);

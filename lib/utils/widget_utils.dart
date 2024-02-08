@@ -653,6 +653,62 @@ class WidgetUtils {
     );
   }
 
+  /// 圆形图片
+  static Widget CircleHeadImageIOS(double height, double width, String imgUrl) {
+    LogE('头像地址 == $imgUrl');
+    return Container(
+      height: height,
+      width: width,
+      //超出部分，可裁剪
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(height/2),
+      ),
+      child: imgUrl.isNotEmpty ? ClipOval(
+        child: !imgUrl.contains('http')
+            ? Image.file(
+          File(imgUrl),
+          fit: BoxFit.cover,
+          gaplessPlayback: true,
+        )
+            : imgUrl.isNotEmpty
+            ? CachedNetworkImage(
+          imageUrl: imgUrl,
+          fit: BoxFit.cover,
+          placeholder: (context, url) => CircleImageAss(
+            height,
+            width,
+            height / 2,
+            'assets/images/img_placeholder.png',
+          ),
+          errorWidget: (context, url, error) {
+            LogE('加载错误提示 $error');
+            // return const Icon(Icons.error);
+            return CircleImageAss(
+              height,
+              width,
+              height / 2,
+              'assets/images/img_placeholder.png',
+            );
+          },
+        )
+            : Image(
+          image:
+          const AssetImage('assets/images/img_placeholder.png'),
+          width: width,
+          height: height,
+          gaplessPlayback: true,
+        ),
+      ): Image(
+        image:
+        const AssetImage('assets/images/img_placeholder.png'),
+        width: width,
+        height: height,
+        gaplessPlayback: true,
+      ),
+    );
+  }
+
   ///圆角图片 网络
   static Widget CircleImageNet(
       double height, double width, double radius, String url) {
