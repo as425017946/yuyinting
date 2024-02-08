@@ -115,7 +115,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
       LogE('播放完成');
       // 动画播放到最后一帧时停止播放
       animationController?.stop();
-      animationController?.removeListener(_animListener);
+      // animationController?.removeListener(_animListener);
       setState(() {
         isShow = false;
         isTiaoguoLW = false;

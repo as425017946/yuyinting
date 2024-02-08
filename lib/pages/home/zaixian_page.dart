@@ -37,6 +37,8 @@ class _ZaixianPageState extends State<ZaixianPage>
       RefreshController(initialRefresh: false);
 
   void _onRefresh() async {
+    // 重新初始化
+    _refreshController.resetNoData();
     // monitor network fetch
     await Future.delayed(const Duration(milliseconds: 1000));
     // if failed,use refreshFailed()

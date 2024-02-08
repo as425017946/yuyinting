@@ -49,6 +49,8 @@ class _PaiduiPageState extends State<PaiduiPage>
       RefreshController(initialRefresh: false);
 
   void _onRefresh() async {
+    // 重新初始化
+    _refreshController.resetNoData();
     setState(() {
       sp.setBool('joinRoom',false);
     });
@@ -837,6 +839,8 @@ class _PaiduiPageState extends State<PaiduiPage>
                       GestureDetector(
                         onTap: (() {
                           if (MyUtils.checkClick()) {
+                            // 重新初始化
+                            _refreshController.resetNoData();
                             setState(() {
                               index = 2;
                               page = 1;
@@ -861,6 +865,8 @@ class _PaiduiPageState extends State<PaiduiPage>
                       GestureDetector(
                         onTap: (() {
                           if (MyUtils.checkClick()) {
+                            // 重新初始化
+                            _refreshController.resetNoData();
                             setState(() {
                               index = 3;
                               page = 1;
@@ -885,6 +891,8 @@ class _PaiduiPageState extends State<PaiduiPage>
                       GestureDetector(
                         onTap: (() {
                           if (MyUtils.checkClick()) {
+                            // 重新初始化
+                            _refreshController.resetNoData();
                             setState(() {
                               index = 6;
                               page = 1;
@@ -905,6 +913,8 @@ class _PaiduiPageState extends State<PaiduiPage>
                       GestureDetector(
                         onTap: (() {
                           if (MyUtils.checkClick()) {
+                            // 重新初始化
+                            _refreshController.resetNoData();
                             setState(() {
                               index = 4;
                               page = 1;
@@ -929,6 +939,8 @@ class _PaiduiPageState extends State<PaiduiPage>
                       GestureDetector(
                         onTap: (() {
                           if (MyUtils.checkClick()) {
+                            // 重新初始化
+                            _refreshController.resetNoData();
                             setState(() {
                               index = 5;
                               page = 1;
@@ -1065,9 +1077,9 @@ class _PaiduiPageState extends State<PaiduiPage>
               }
             } else {
               if (page > 1) {
-                // if (bean.data!.length < MyConfig.pageSize) {
-                //   _refreshController.loadNoData();
-                // }
+                if (bean.data!.length < MyConfig.pageSize) {
+                  _refreshController.loadNoData();
+                }
               }
             }
           });

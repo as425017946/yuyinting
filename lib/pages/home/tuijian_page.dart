@@ -56,6 +56,8 @@ class _TuijianPageState extends State<TuijianPage>  with AutomaticKeepAliveClien
   int a = 0, b = 0, c = 0;
 
   void _onRefresh() async {
+    // 重新初始化
+    _refreshController.resetNoData();
     setState(() {
       sp.setBool('joinRoom',false);
     });
@@ -744,7 +746,7 @@ class _TuijianPageState extends State<TuijianPage>  with AutomaticKeepAliveClien
                 }
               }else{
                 if (bean.data!.anchorList!.length < 6) {
-                  _refreshController.refreshCompleted();
+                  _refreshController.loadNoData();
                 }
               }
             }

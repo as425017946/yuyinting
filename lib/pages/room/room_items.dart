@@ -3745,11 +3745,16 @@ class RoomItems {
                             .fire(RoomBack(title: '解锁', index: i.toString()));
                       }
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        listM[i].isLock == 0 ? '锁麦' : '解锁',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listM[i].isLock == 0 ? '锁麦' : '解锁',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
             ],
           ),
@@ -3812,11 +3817,16 @@ class RoomItems {
                             .fire(RoomBack(title: '解锁', index: i.toString()));
                       }
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        listM[i].isLock == 0 ? '锁麦' : '解锁',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listM[i].isLock == 0 ? '锁麦' : '解锁',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
             ],
           ),
@@ -3879,11 +3889,16 @@ class RoomItems {
                             .fire(RoomBack(title: '解锁', index: i.toString()));
                       }
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        listM[i].isLock == 0 ? '锁麦' : '解锁',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listM[i].isLock == 0 ? '锁麦' : '解锁',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
             ],
           ),
@@ -3946,11 +3961,16 @@ class RoomItems {
                             .fire(RoomBack(title: '解锁', index: i.toString()));
                       }
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        listM[i].isLock == 0 ? '锁麦' : '解锁',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listM[i].isLock == 0 ? '锁麦' : '解锁',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
             ],
           ),
@@ -4013,11 +4033,16 @@ class RoomItems {
                             .fire(RoomBack(title: '解锁', index: i.toString()));
                       }
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        listM[i].isLock == 0 ? '锁麦' : '解锁',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listM[i].isLock == 0 ? '锁麦' : '解锁',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
             ],
           ),
@@ -4080,11 +4105,16 @@ class RoomItems {
                             .fire(RoomBack(title: '解锁', index: i.toString()));
                       }
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        listM[i].isLock == 0 ? '锁麦' : '解锁',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listM[i].isLock == 0 ? '锁麦' : '解锁',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
             ],
           ),
@@ -4147,11 +4177,16 @@ class RoomItems {
                             .fire(RoomBack(title: '解锁', index: i.toString()));
                       }
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        listM[i].isLock == 0 ? '锁麦' : '解锁',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listM[i].isLock == 0 ? '锁麦' : '解锁',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
             ],
           ),
@@ -4214,11 +4249,16 @@ class RoomItems {
                             .fire(RoomBack(title: '解锁', index: i.toString()));
                       }
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        listM[i].isLock == 0 ? '锁麦' : '解锁',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listM[i].isLock == 0 ? '锁麦' : '解锁',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
             ],
           ),
@@ -4281,11 +4321,16 @@ class RoomItems {
                             .fire(RoomBack(title: '解锁', index: i.toString()));
                       }
                     }),
-                    child: WidgetUtils.onlyTextCenter(
-                        listM[i].isLock == 0 ? '锁麦' : '解锁',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.roomTCWZ1,
-                            fontSize: ScreenUtil().setSp(21))),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listM[i].isLock == 0 ? '锁麦' : '解锁',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
                   )),
             ],
           ),

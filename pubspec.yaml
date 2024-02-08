@@ -128,6 +128,8 @@ dependencies:
   marquee: ^2.2.3
   # 权限
   path_provider_platform_interface: ^2.0.1
+  # 通话状态
+  telephony: ^0.2.0
 
 
 dev_dependencies:
