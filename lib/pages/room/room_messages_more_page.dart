@@ -219,101 +219,111 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                 ),
               )
                   : Flexible(
-                child: Container(
-                  constraints: BoxConstraints(
-                      minWidth: ScreenUtil().setHeight(60)),
-                  padding: EdgeInsets.all(ScreenUtil().setHeight(20)),
-                  //边框设置
-                  decoration: BoxDecoration(
-                    //背景
-                    color: allData2[i]['type'] == 2
-                        ? Colors.transparent
-                        : Colors.white,
-                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                    borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(0),
-                        topRight: Radius.circular(20.0),
-                        bottomLeft: Radius.circular(20.0),
-                        bottomRight: Radius.circular(20.0)),
-                    boxShadow: allData2[i]['type'] == 2
-                        ? []
-                        : [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.1),
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                        offset:
-                        const Offset(0, 1), // 阴影的偏移量，向右下方偏移3像素
-                      ),
-                    ],
-                  ),
-                  child: allData2[i]['type'] == 1
-                      ? Text(
-                    allData2[i]['content'],
-                    style: TextStyle(
-                      fontSize: 30.sp,
-                      color: Colors.black,
+                child: GestureDetector(
+                  onLongPress: ((){
+                    if(allData2[i]['type'] == 1){
+                      Clipboard.setData(ClipboardData(
+                        text: allData2[i]['content'],
+                      ));
+                      MyToastUtils.showToastBottom('成功复制文字');
+                    }
+                  }),
+                  child: Container(
+                    constraints: BoxConstraints(
+                        minWidth: ScreenUtil().setHeight(60)),
+                    padding: EdgeInsets.all(ScreenUtil().setHeight(20)),
+                    //边框设置
+                    decoration: BoxDecoration(
+                      //背景
+                      color: allData2[i]['type'] == 2
+                          ? Colors.transparent
+                          : Colors.white,
+                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                      borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(0),
+                          topRight: Radius.circular(20.0),
+                          bottomLeft: Radius.circular(20.0),
+                          bottomRight: Radius.circular(20.0)),
+                      boxShadow: allData2[i]['type'] == 2
+                          ? []
+                          : [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.1),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset:
+                          const Offset(0, 1), // 阴影的偏移量，向右下方偏移3像素
+                        ),
+                      ],
                     ),
-                  )
-                      : allData2[i]['type'] == 2
-                      ? GestureDetector(
-                    onTap: (() {
-                      setState(() {
-                        imgList.clear();
-                        imgList.add(allData2[i]['content']);
-                      });
-                      MyUtils.goTransparentPageCom(context,
-                          SwiperPage(imgList: imgList));
-                    }),
-                    child: (allData2[i]['content']
-                        .toString()
-                        .contains(
-                        'com.leimu.yuyinting') ||
-                        allData2[i]['content']
-                            .toString()
-                            .contains('storage'))
-                        ? Image(
-                      image: FileImage(
-                          File(allData2[i]['content'])),
-                      width: 160.h,
-                      height: 200.h,
-                      errorBuilder: (BuildContext context,
-                          Object error,
-                          StackTrace? stackTrace) {
-                        return WidgetUtils.showImages(
-                            'assets/images/img_placeholder.png',
-                            200.h,
-                            160.h);
-                      },
+                    child: allData2[i]['type'] == 1
+                        ? Text(
+                      allData2[i]['content'],
+                      style: TextStyle(
+                        fontSize: 30.sp,
+                        color: Colors.black,
+                      ),
                     )
-                        : WidgetUtils.showImagesNet(
-                        allData2[i]['content'].toString(),
-                        200.h,
-                        160.h),
-                  )
-                      : GestureDetector(
-                    onTap: (() {
-                      LogD('************');
-                      if (playRecord) {
-                        stopPlayer();
-                      } else {
-                        play(allData2[i]['content']);
-                      }
-                    }),
-                    child: Container(
-                      color: Colors.transparent,
-                      width: widthAudio,
-                      child: Row(
-                        children: [
-                          WidgetUtils.showImages(
-                              'assets/images/chat_huatong.png',
-                              20.h,
-                              20.h),
-                          WidgetUtils.onlyText(
-                              "${allData2[i]['number']}''",
-                              StyleUtils.textStyleb1),
-                          const Spacer(),
-                        ],
+                        : allData2[i]['type'] == 2
+                        ? GestureDetector(
+                      onTap: (() {
+                        setState(() {
+                          imgList.clear();
+                          imgList.add(allData2[i]['content']);
+                        });
+                        MyUtils.goTransparentPageCom(context,
+                            SwiperPage(imgList: imgList));
+                      }),
+                      child: (allData2[i]['content']
+                          .toString()
+                          .contains(
+                          'com.leimu.yuyinting') ||
+                          allData2[i]['content']
+                              .toString()
+                              .contains('storage'))
+                          ? Image(
+                        image: FileImage(
+                            File(allData2[i]['content'])),
+                        width: 160.h,
+                        height: 200.h,
+                        errorBuilder: (BuildContext context,
+                            Object error,
+                            StackTrace? stackTrace) {
+                          return WidgetUtils.showImages(
+                              'assets/images/img_placeholder.png',
+                              200.h,
+                              160.h);
+                        },
+                      )
+                          : WidgetUtils.showImagesNet(
+                          allData2[i]['content'].toString(),
+                          200.h,
+                          160.h),
+                    )
+                        : GestureDetector(
+                      onTap: (() {
+                        LogD('************');
+                        if (playRecord) {
+                          stopPlayer();
+                        } else {
+                          play(allData2[i]['content']);
+                        }
+                      }),
+                      child: Container(
+                        color: Colors.transparent,
+                        width: widthAudio,
+                        child: Row(
+                          children: [
+                            WidgetUtils.showImages(
+                                'assets/images/chat_huatong.png',
+                                20.h,
+                                20.h),
+                            WidgetUtils.onlyText(
+                                "${allData2[i]['number']}''",
+                                StyleUtils.textStyleb1),
+                            const Spacer(),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -367,95 +377,105 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                 ),
               )
                   : Flexible(
-                child: Container(
-                  constraints: BoxConstraints(
-                      minWidth: ScreenUtil().setHeight(60)),
-                  padding: EdgeInsets.all(ScreenUtil().setHeight(20)),
-                  //边框设置
-                  decoration: BoxDecoration(
-                    //背景
-                    color: allData2[i]['type'] == 2
-                        ? Colors.transparent
-                        : Colors.white,
-                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                    borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(20.0),
-                        topRight: Radius.circular(0),
-                        bottomLeft: Radius.circular(20.0),
-                        bottomRight: Radius.circular(20.0)),
-                    boxShadow: allData2[i]['type'] == 2
-                        ? []
-                        : [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.1),
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                        offset:
-                        const Offset(0, 1), // 阴影的偏移量，向右下方偏移3像素
+                child: GestureDetector(
+                  onLongPress: ((){
+                    if(allData2[i]['type'] == 1){
+                      Clipboard.setData(ClipboardData(
+                        text: allData2[i]['content'],
+                      ));
+                      MyToastUtils.showToastBottom('成功复制文字');
+                    }
+                  }),
+                  child: Container(
+                    constraints: BoxConstraints(
+                        minWidth: ScreenUtil().setHeight(60)),
+                    padding: EdgeInsets.all(ScreenUtil().setHeight(20)),
+                    //边框设置
+                    decoration: BoxDecoration(
+                      //背景
+                      color: allData2[i]['type'] == 2
+                          ? Colors.transparent
+                          : Colors.white,
+                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                      borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(20.0),
+                          topRight: Radius.circular(0),
+                          bottomLeft: Radius.circular(20.0),
+                          bottomRight: Radius.circular(20.0)),
+                      boxShadow: allData2[i]['type'] == 2
+                          ? []
+                          : [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.1),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset:
+                          const Offset(0, 1), // 阴影的偏移量，向右下方偏移3像素
+                        ),
+                      ],
+                    ),
+                    child: allData2[i]['type'] == 1
+                        ? Text(
+                      allData2[i]['content'],
+                      style: TextStyle(
+                        fontSize: 30.sp,
+                        color: Colors.black,
                       ),
-                    ],
+                    )
+                        : allData2[i]['type'] == 2
+                        ? GestureDetector(
+                      onTap: (() {
+                        setState(() {
+                          imgList.clear();
+                          imgList.add(allData2[i]['content']);
+                        });
+                        MyUtils.goTransparentPageCom(context,
+                            SwiperPage(imgList: imgList));
+                      }),
+                      child: Image(
+                        image: FileImage(
+                            File(allData2[i]['content'])),
+                        width: 160.h,
+                        height: 200.h,
+                        errorBuilder: (BuildContext context,
+                            Object error,
+                            StackTrace? stackTrace) {
+                          return WidgetUtils.showImages(
+                              'assets/images/img_placeholder.png',
+                              200.h,
+                              160.h);
+                        },
+                      ),
+                    )
+                        : allData2[i]['type'] == 3
+                        ? GestureDetector(
+                      onTap: (() {
+                        LogD('************');
+                        if (playRecord) {
+                          stopPlayer();
+                        } else {
+                          play(allData2[i]['content']);
+                        }
+                      }),
+                      child: Container(
+                        color: Colors.transparent,
+                        width: widthAudio,
+                        child: Row(
+                          children: [
+                            const Spacer(),
+                            WidgetUtils.onlyText(
+                                "${allData2[i]['number']}''",
+                                StyleUtils.textStyleb1),
+                            WidgetUtils.showImages(
+                                'assets/images/chat_huatong.png',
+                                20.h,
+                                20.h),
+                          ],
+                        ),
+                      ),
+                    )
+                        : const Text(''),
                   ),
-                  child: allData2[i]['type'] == 1
-                      ? Text(
-                    allData2[i]['content'],
-                    style: TextStyle(
-                      fontSize: 30.sp,
-                      color: Colors.black,
-                    ),
-                  )
-                      : allData2[i]['type'] == 2
-                      ? GestureDetector(
-                    onTap: (() {
-                      setState(() {
-                        imgList.clear();
-                        imgList.add(allData2[i]['content']);
-                      });
-                      MyUtils.goTransparentPageCom(context,
-                          SwiperPage(imgList: imgList));
-                    }),
-                    child: Image(
-                      image: FileImage(
-                          File(allData2[i]['content'])),
-                      width: 160.h,
-                      height: 200.h,
-                      errorBuilder: (BuildContext context,
-                          Object error,
-                          StackTrace? stackTrace) {
-                        return WidgetUtils.showImages(
-                            'assets/images/img_placeholder.png',
-                            200.h,
-                            160.h);
-                      },
-                    ),
-                  )
-                      : allData2[i]['type'] == 3
-                      ? GestureDetector(
-                    onTap: (() {
-                      LogD('************');
-                      if (playRecord) {
-                        stopPlayer();
-                      } else {
-                        play(allData2[i]['content']);
-                      }
-                    }),
-                    child: Container(
-                      color: Colors.transparent,
-                      width: widthAudio,
-                      child: Row(
-                        children: [
-                          const Spacer(),
-                          WidgetUtils.onlyText(
-                              "${allData2[i]['number']}''",
-                              StyleUtils.textStyleb1),
-                          WidgetUtils.showImages(
-                              'assets/images/chat_huatong.png',
-                              20.h,
-                              20.h),
-                        ],
-                      ),
-                    ),
-                  )
-                      : const Text(''),
                 ),
               ),
               WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(10)),

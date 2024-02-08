@@ -670,41 +670,49 @@ class _ChatPageState extends State<ChatPage> {
                       ),
                     )
                   : Flexible(
-                child: allData2[i]['type'] == 1 ? Container(
-                    constraints: BoxConstraints(
-                        minWidth: ScreenUtil().setHeight(60)),
-                    padding: EdgeInsets.all(ScreenUtil().setHeight(20)),
-                    //边框设置
-                    decoration: BoxDecoration(
-                      //背景
-                      color: allData2[i]['type'] == 2
-                          ? Colors.transparent
-                          : Colors.white,
-                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(0),
-                          topRight: Radius.circular(20.0),
-                          bottomLeft: Radius.circular(20.0),
-                          bottomRight: Radius.circular(20.0)),
-                      boxShadow: allData2[i]['type'] == 2
-                          ? []
-                          : [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.1),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset:
-                          const Offset(0, 1), // 阴影的偏移量，向右下方偏移3像素
-                        ),
-                      ],
-                    ),
-                    child: Text(
-                      allData2[i]['content'],
-                      style: TextStyle(
-                        fontSize: 30.sp,
-                        color: Colors.black,
+                child: allData2[i]['type'] == 1 ? GestureDetector(
+                  onLongPress: ((){
+                    Clipboard.setData(ClipboardData(
+                      text: allData2[i]['content'],
+                    ));
+                    MyToastUtils.showToastBottom('成功复制文字');
+                  }),
+                  child: Container(
+                      constraints: BoxConstraints(
+                          minWidth: ScreenUtil().setHeight(60)),
+                      padding: EdgeInsets.all(ScreenUtil().setHeight(20)),
+                      //边框设置
+                      decoration: BoxDecoration(
+                        //背景
+                        color: allData2[i]['type'] == 2
+                            ? Colors.transparent
+                            : Colors.white,
+                        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(0),
+                            topRight: Radius.circular(20.0),
+                            bottomLeft: Radius.circular(20.0),
+                            bottomRight: Radius.circular(20.0)),
+                        boxShadow: allData2[i]['type'] == 2
+                            ? []
+                            : [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.1),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset:
+                            const Offset(0, 1), // 阴影的偏移量，向右下方偏移3像素
+                          ),
+                        ],
                       ),
-                    )
+                      child: Text(
+                        allData2[i]['content'],
+                        style: TextStyle(
+                          fontSize: 30.sp,
+                          color: Colors.black,
+                        ),
+                      )
+                  ),
                 ) : allData2[i]['type'] == 2 ? GestureDetector(
                   onTap: (() {
                     setState(() {
@@ -861,41 +869,49 @@ class _ChatPageState extends State<ChatPage> {
                       ),
                     )
                   : Flexible(
-                      child: allData2[i]['type'] == 1 ? Container(
-                        constraints: BoxConstraints(
-                            minWidth: ScreenUtil().setHeight(60)),
-                        padding: EdgeInsets.all(ScreenUtil().setHeight(20)),
-                        //边框设置
-                        decoration: BoxDecoration(
-                          //背景
-                          color: allData2[i]['type'] == 2
-                              ? Colors.transparent
-                              : Colors.white,
-                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                          borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(20.0),
-                              topRight: Radius.circular(0),
-                              bottomLeft: Radius.circular(20.0),
-                              bottomRight: Radius.circular(20.0)),
-                          boxShadow: allData2[i]['type'] == 2
-                              ? []
-                              : [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.1),
-                                    spreadRadius: 2,
-                                    blurRadius: 5,
-                                    offset:
-                                        const Offset(0, 1), // 阴影的偏移量，向右下方偏移3像素
-                                  ),
-                                ],
-                        ),
-                        child: Text(
-                          allData2[i]['content'],
-                          style: TextStyle(
-                            fontSize: 30.sp,
-                            color: Colors.black,
+                      child: allData2[i]['type'] == 1 ? GestureDetector(
+                        onLongPress: ((){
+                          Clipboard.setData(ClipboardData(
+                            text: allData2[i]['content'],
+                          ));
+                          MyToastUtils.showToastBottom('成功复制文字');
+                        }),
+                        child: Container(
+                          constraints: BoxConstraints(
+                              minWidth: ScreenUtil().setHeight(60)),
+                          padding: EdgeInsets.all(ScreenUtil().setHeight(20)),
+                          //边框设置
+                          decoration: BoxDecoration(
+                            //背景
+                            color: allData2[i]['type'] == 2
+                                ? Colors.transparent
+                                : Colors.white,
+                            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                            borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(20.0),
+                                topRight: Radius.circular(0),
+                                bottomLeft: Radius.circular(20.0),
+                                bottomRight: Radius.circular(20.0)),
+                            boxShadow: allData2[i]['type'] == 2
+                                ? []
+                                : [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.1),
+                                      spreadRadius: 2,
+                                      blurRadius: 5,
+                                      offset:
+                                          const Offset(0, 1), // 阴影的偏移量，向右下方偏移3像素
+                                    ),
+                                  ],
                           ),
-                        )
+                          child: Text(
+                            allData2[i]['content'],
+                            style: TextStyle(
+                              fontSize: 30.sp,
+                              color: Colors.black,
+                            ),
+                          )
+                        ),
                       ) : allData2[i]['type'] == 2 ? GestureDetector(
                         onTap: (() {
                           setState(() {
