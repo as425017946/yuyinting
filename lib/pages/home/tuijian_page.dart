@@ -485,7 +485,6 @@ class _TuijianPageState extends State<TuijianPage>  with AutomaticKeepAliveClien
                                             height: ScreenUtil().setHeight(170),
                                             width: double.infinity,
                                             child: listRoom2.isNotEmpty ?  Swiper(
-                                              key: UniqueKey(),
                                               itemBuilder:
                                                   (BuildContext context, int index) {
                                                 // 配置图片地址
@@ -563,7 +562,6 @@ class _TuijianPageState extends State<TuijianPage>  with AutomaticKeepAliveClien
                                           child: SizedBox(
                                             height: ScreenUtil().setHeight(170),
                                             child:listRoom3.isNotEmpty ?   Swiper(
-                                              key: UniqueKey(),
                                               itemBuilder:
                                                   (BuildContext context, int index) {
                                                 // 配置图片地址
