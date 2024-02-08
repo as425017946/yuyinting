@@ -38,7 +38,7 @@ class WidgetUtils {
                 Loading.dismiss();
                 Navigator.of(context).pop();
                 MyUtils.hideKeyboard(context);
-                if(index == 1){
+                if (index == 1) {
                   eventBus.fire(SubmitButtonBack(title: '编辑信息离开'));
                 }
               }),
@@ -143,19 +143,21 @@ class WidgetUtils {
                                                         ScreenUtil().setSp(25)),
                                           ),
                                         )
-                                      :  index == 6 ? Container(
-                                          alignment: Alignment.center,
-                                          margin:
-                                              const EdgeInsets.only(right: 15),
-                                          child: Text(
-                                            '装扮商城',
-                                            style:
-                                                StyleUtils.getCommonTextStyle(
-                                                    color: Colors.black,
-                                                    fontSize:
-                                                        ScreenUtil().setSp(25)),
-                                          ),
-                                        ) : const Text('')
+                                      : index == 6
+                                          ? Container(
+                                              alignment: Alignment.center,
+                                              margin: const EdgeInsets.only(
+                                                  right: 15),
+                                              child: Text(
+                                                '装扮商城',
+                                                style: StyleUtils
+                                                    .getCommonTextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: ScreenUtil()
+                                                            .setSp(25)),
+                                              ),
+                                            )
+                                          : const Text('')
               : Text(''),
         )
       ],
@@ -530,7 +532,7 @@ class WidgetUtils {
           borderRadius: BorderRadius.all(Radius.circular(25)),
         ),
         onPressed: (() {
-          if(MyUtils.checkClick()) {
+          if (MyUtils.checkClick()) {
             eventBus.fire(SubmitButtonBack(title: title));
           }
         }),
@@ -605,51 +607,52 @@ class WidgetUtils {
       //超出部分，可裁剪
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(height/2),
+        borderRadius: BorderRadius.circular(height / 2),
       ),
-      child: imgUrl.isNotEmpty ? ClipOval(
-        child: imgUrl.contains('com.leimu.yuyinting') ||
-                imgUrl.contains('storage')
-            ? Image.file(
-                File(imgUrl),
-                fit: BoxFit.cover,
-                gaplessPlayback: true,
-              )
-            : imgUrl.isNotEmpty
-                ? CachedNetworkImage(
-                    imageUrl: imgUrl,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => CircleImageAss(
-                      height,
-                      width,
-                      height / 2,
-                      'assets/images/img_placeholder.png',
-                    ),
-                    errorWidget: (context, url, error) {
-                      LogE('加载错误提示 $error');
-                      // return const Icon(Icons.error);
-                      return CircleImageAss(
-                        height,
-                        width,
-                        height / 2,
-                        'assets/images/img_placeholder.png',
-                      );
-                    },
-                  )
-                : Image(
-                    image:
-                        const AssetImage('assets/images/img_placeholder.png'),
-                    width: width,
-                    height: height,
-                    gaplessPlayback: true,
-                  ),
-      ): Image(
-        image:
-        const AssetImage('assets/images/img_placeholder.png'),
-        width: width,
-        height: height,
-        gaplessPlayback: true,
-      ),
+      child: imgUrl.isNotEmpty
+          ? ClipOval(
+              child: imgUrl.contains('com.leimu.yuyinting') ||
+                      imgUrl.contains('storage')
+                  ? Image.file(
+                      File(imgUrl),
+                      fit: BoxFit.cover,
+                      gaplessPlayback: true,
+                    )
+                  : imgUrl.isNotEmpty
+                      ? CachedNetworkImage(
+                          imageUrl: imgUrl,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => CircleImageAss(
+                            height,
+                            width,
+                            height / 2,
+                            'assets/images/img_placeholder.png',
+                          ),
+                          errorWidget: (context, url, error) {
+                            LogE('加载错误提示 $error');
+                            // return const Icon(Icons.error);
+                            return CircleImageAss(
+                              height,
+                              width,
+                              height / 2,
+                              'assets/images/img_placeholder.png',
+                            );
+                          },
+                        )
+                      : Image(
+                          image: const AssetImage(
+                              'assets/images/img_placeholder.png'),
+                          width: width,
+                          height: height,
+                          gaplessPlayback: true,
+                        ),
+            )
+          : Image(
+              image: const AssetImage('assets/images/img_placeholder.png'),
+              width: width,
+              height: height,
+              gaplessPlayback: true,
+            ),
     );
   }
 
@@ -662,50 +665,51 @@ class WidgetUtils {
       //超出部分，可裁剪
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(height/2),
+        borderRadius: BorderRadius.circular(height / 2),
       ),
-      child: imgUrl.isNotEmpty ? ClipOval(
-        child: !imgUrl.contains('http')
-            ? Image.file(
-          File(imgUrl),
-          fit: BoxFit.cover,
-          gaplessPlayback: true,
-        )
-            : imgUrl.isNotEmpty
-            ? CachedNetworkImage(
-          imageUrl: imgUrl,
-          fit: BoxFit.cover,
-          placeholder: (context, url) => CircleImageAss(
-            height,
-            width,
-            height / 2,
-            'assets/images/img_placeholder.png',
-          ),
-          errorWidget: (context, url, error) {
-            LogE('加载错误提示 $error');
-            // return const Icon(Icons.error);
-            return CircleImageAss(
-              height,
-              width,
-              height / 2,
-              'assets/images/img_placeholder.png',
-            );
-          },
-        )
-            : Image(
-          image:
-          const AssetImage('assets/images/img_placeholder.png'),
-          width: width,
-          height: height,
-          gaplessPlayback: true,
-        ),
-      ): Image(
-        image:
-        const AssetImage('assets/images/img_placeholder.png'),
-        width: width,
-        height: height,
-        gaplessPlayback: true,
-      ),
+      child: imgUrl.isNotEmpty
+          ? ClipOval(
+              child: imgUrl.contains('http')
+                  ? CachedNetworkImage(
+                      imageUrl: imgUrl,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => CircleImageAss(
+                        height,
+                        width,
+                        height / 2,
+                        'assets/images/img_placeholder.png',
+                      ),
+                      errorWidget: (context, url, error) {
+                        LogE('加载错误提示 $error');
+                        // return const Icon(Icons.error);
+                        return CircleImageAss(
+                          height,
+                          width,
+                          height / 2,
+                          'assets/images/img_placeholder.png',
+                        );
+                      },
+                    )
+                  : imgUrl.isNotEmpty
+                      ? Image.file(
+                          File(imgUrl),
+                          fit: BoxFit.cover,
+                          gaplessPlayback: true,
+                        )
+                      : Image(
+                          image: const AssetImage(
+                              'assets/images/img_placeholder.png'),
+                          width: width,
+                          height: height,
+                          gaplessPlayback: true,
+                        ),
+            )
+          : Image(
+              image: const AssetImage('assets/images/img_placeholder.png'),
+              width: width,
+              height: height,
+              gaplessPlayback: true,
+            ),
     );
   }
 
@@ -1556,7 +1560,7 @@ class WidgetUtils {
 
   ///编辑个人
   static Widget bianjiTextField(
-      TextEditingController controller, String hintText,int length) {
+      TextEditingController controller, String hintText, int length) {
     return TextField(
       controller: controller,
       inputFormatters: [
