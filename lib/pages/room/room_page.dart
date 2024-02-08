@@ -40,7 +40,6 @@ import '../../utils/log_util.dart';
 import '../../utils/style_utils.dart';
 import '../home/home_items.dart';
 import 'room_items.dart';
-import 'package:telephony/telephony.dart';
 
 /// 厅内
 class RoomPage extends StatefulWidget {
@@ -387,7 +386,6 @@ class _RoomPageState extends State<RoomPage>
 
   // 设备是安卓还是ios
   String isDevices = 'android';
-  late Telephony telephony;
   @override
   void initState() {
     // TODO: implement initState
@@ -1819,7 +1817,7 @@ class _RoomPageState extends State<RoomPage>
       doPostShowRoomList();
     });
   }
-
+  
   //监听程序进入前后台的状态改变的方法
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {

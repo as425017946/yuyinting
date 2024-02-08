@@ -19,6 +19,7 @@ import 'package:yuyinting/pages/home/paidui_page.dart';
 import 'package:yuyinting/pages/home/shoucang_page.dart';
 import 'package:yuyinting/pages/home/ts/ts_car_page.dart';
 import 'package:yuyinting/pages/home/tuijian_page.dart';
+import 'package:yuyinting/pages/home/update_app_page.dart';
 import 'package:yuyinting/pages/home/youxi_page.dart';
 import 'package:yuyinting/pages/home/zaixian_page.dart';
 import 'package:yuyinting/pages/login/edit_info_page.dart';
@@ -43,7 +44,8 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin {
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -54,8 +56,10 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
 
   // 用户身份
   String identity = 'user';
+
   // 显示马里奥弹窗次数是否刷新
   int mla = 0;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -79,7 +83,7 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
       initialPage: 1,
     );
 
-    if(mla == 0){
+    if (mla == 0) {
       // MyToastUtils.showToastBottom('首次加载马里奥 $mla');
       setState(() {
         mla++;
@@ -87,7 +91,6 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
       // 马里奥
       MyUtils.goTransparentPageCom(context, const TSCarPage());
     }
-
 
     quanxian();
 
@@ -112,7 +115,6 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
     if (sp.getBool('isFirst') == true) {
       MyUtils.goTransparentPageCom(context, const EditInfoPage());
     }
-
   }
 
   Future<void> quanxian() async {
@@ -217,8 +219,8 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
                               });
                             }),
                             child: Container(
-                                width: double.infinity,
-                                color: Colors.transparent,
+                              width: double.infinity,
+                              color: Colors.transparent,
                               child: WidgetUtils.onlyTextBottom(
                                   '推荐',
                                   StyleUtils.getCommonTextStyle(
@@ -484,7 +486,7 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
                     // 更新当前的索引值
                     _currentIndex = index;
                   });
-                  if(index == 1){
+                  if (index == 1) {
                     eventBus.fire(SubmitButtonBack(title: '回到首页'));
                   }
                 },
@@ -510,19 +512,18 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
     );
   }
 
-
   /// 判断当前网络，然后给返回适配的网络地址
   Future<void> doPostPdAddress() async {
     try {
       addressIPBean bean = await DataUtils.getPdAddress();
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          if(bean.nodes!.isNotEmpty){
+          if (bean.nodes!.isNotEmpty) {
             setState(() {
               sp.setString('isDian', bean.nodes!);
               sp.setString('userIP', bean.address!);
             });
-          }else{
+          } else {
             MyToastUtils.showToastBottom('IP为空');
           }
           break;
@@ -548,8 +549,8 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
     String version = packageInfo.version;
     String buildNumber = packageInfo.buildNumber;
     String deviceType = '';
-    sp.setString('myVersion2',version.toString());
-    sp.setString('buildNumber',buildNumber);
+    sp.setString('myVersion2', version.toString());
+    sp.setString('buildNumber', buildNumber);
     // 应用名称
     print("appName:${appName}");
 // 包名称
@@ -576,30 +577,17 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
       CheckoutBean bean = await DataUtils.checkVersion(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          if (int.parse(buildNumber) <
-              int.parse(bean.data!.customUpdateNum!)) {
+          if (int.parse(buildNumber) < int.parse(bean.data!.customUpdateNum!)) {
             if (Platform.isAndroid) {
               // ignore: use_build_context_synchronously
-              showUpdate(
+              MyUtils.goTransparentPageCom(
                   context,
-                  bean.data!.version!,
-                  bean.data!.downloadUrl!,
-                  bean.data!.summary!,
-                  bean.data!.forceUpdate!);
+                  UpdateAppPage(
+                      version: bean.data!.version!,
+                      url: bean.data!.downloadUrl!,
+                      info: bean.data!.summary!,
+                      forceUpdate: bean.data!.forceUpdate!));
             } else {
-              // const url =
-              //     "https://itunes.apple.com/cn/app/id1380512641"; // id 后面的数字换成自己的应用 id 就行了
-              // if (await canLaunch(url)) {
-              //   await launch(url, forceSafariVC: false);
-              // } else {
-              //   throw 'Could not launch $url';
-              // }
-              // ignore: use_build_context_synchronously
-              showUpdateIOS(
-                  context,
-                  bean.data!.version!,
-                  bean.data!.downloadUrl!,
-                  bean.data!.summary!);
             }
           }
           break;
@@ -641,8 +629,8 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
   }
 
   /// 显示更新内容
-  Future<void> showUpdate(
-      BuildContext context, String version, String url, String info,String forceUpdate) async {
+  Future<void> showUpdate(BuildContext context, String version, String url,
+      String info, String forceUpdate) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, //设置为false，点击空白处弹窗不关
@@ -660,30 +648,32 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
                 fontSize: 15,
               ),
             ),
-            actions: forceUpdate == '1' ? [
-              CupertinoDialogAction(
-                child: const Text('立即更新'),
-                onPressed: () {
-                  // 在这里放置确认操作的代码
-                  doUpdate(context, version, url);
-                },
-              ),
-            ] : [
-              CupertinoDialogAction(
-                child: const Text('下次在说'),
-                onPressed: () {
-                  // 在这里放置取消操作的代码
-                  Navigator.of(context).pop(); // 关闭对话框
-                },
-              ),
-              CupertinoDialogAction(
-                child: const Text('立即更新'),
-                onPressed: () {
-                  // 在这里放置确认操作的代码
-                  doUpdate(context, version, url);
-                },
-              ),
-            ],
+            actions: forceUpdate == '1'
+                ? [
+                    CupertinoDialogAction(
+                      child: const Text('立即更新'),
+                      onPressed: () {
+                        // 在这里放置确认操作的代码
+                        doUpdate(context, version, url);
+                      },
+                    ),
+                  ]
+                : [
+                    CupertinoDialogAction(
+                      child: const Text('下次在说'),
+                      onPressed: () {
+                        // 在这里放置取消操作的代码
+                        Navigator.of(context).pop(); // 关闭对话框
+                      },
+                    ),
+                    CupertinoDialogAction(
+                      child: const Text('立即更新'),
+                      onPressed: () {
+                        // 在这里放置确认操作的代码
+                        doUpdate(context, version, url);
+                      },
+                    ),
+                  ],
           ),
         );
       },
@@ -715,7 +705,7 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
       String appDocPath = appDocDir.path;
       // destinationFilename 是对下载的apk进行重命名
       OtaUpdate().execute(url, destinationFilename: 'lmkj.apk').listen(
-            (OtaEvent event) {
+        (OtaEvent event) {
           print('status:${event.status},value:${event.value} }');
           switch (event.status) {
             case OtaStatus.DOWNLOADING: // 下载中
@@ -748,5 +738,4 @@ class _HomePageState extends State<HomePage>  with AutomaticKeepAliveClientMixin
       print('更新失败，请稍后再试');
     }
   }
-
 }

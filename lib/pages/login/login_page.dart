@@ -532,7 +532,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const Expanded(child: Text('')),
-                  WidgetUtils.commonSizedBox(15, 0),
                   Row(
                     children: [
                       const Expanded(child: Text('')),
@@ -581,12 +580,13 @@ class _LoginPageState extends State<LoginPage> {
                                 fontSize: ScreenUtil().setSp(25))),
                       ),
                       const Expanded(child: Text('')),
-                      WidgetUtils.onlyText(sp.getString('myVersion2').toString(), StyleUtils.getCommonTextStyle(
-                          color: MyColors.homeTopBG,
-                          fontSize: ScreenUtil().setSp(25)))
                     ],
                   ),
-                  WidgetUtils.commonSizedBox(20, 0),
+                  WidgetUtils.commonSizedBox(10.h, 0),
+                  WidgetUtils.onlyTextCenter('版本号:${sp.getString('myVersion2').toString()}', StyleUtils.getCommonTextStyle(
+                      color: MyColors.homeTopBG,
+                      fontSize: ScreenUtil().setSp(25))),
+                  WidgetUtils.commonSizedBox(20.h, 0),
                 ],
               ),
             ),
