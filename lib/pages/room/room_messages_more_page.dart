@@ -121,7 +121,9 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
     await databaseHelper.insertData('messageSLTable', params);
     // 获取所有数据
     List<Map<String, dynamic>> result = await db.query('messageSLTable',
-        columns: null, whereArgs: [combineID, sp.getString('user_id')], where: 'combineID = ? and uid = ?');
+        columns: null,
+        whereArgs: [combineID, sp.getString('user_id')],
+        where: 'combineID = ? and uid = ?');
     setState(() {
       allData2 = result;
       length = allData2.length;
@@ -196,141 +198,142 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
               // 6v豆红包
               allData2[i]['type'] == 6
                   ? SizedBox(
-                height: 130.h,
-                width: 300.h,
-                child: Stack(
-                  children: [
-                    WidgetUtils.showImages(
-                        'assets/images/chat_hongbao_bg.png',
-                        130.h,
-                        300.h),
-                    Positioned(
-                        top: 40.h,
-                        left: 60.w,
-                        child: Row(
-                          children: [
-                            WidgetUtils.commonSizedBox(0, 50.h),
-                            WidgetUtils.onlyText(
-                                allData2[i]['content'],
-                                StyleUtils.getCommonTextStyle(
-                                    color: Colors.white,
-                                    fontSize: 25.sp)),
-                          ],
-                        ))
-                  ],
-                ),
-              )
+                      height: 130.h,
+                      width: 300.h,
+                      child: Stack(
+                        children: [
+                          WidgetUtils.showImages(
+                              'assets/images/chat_hongbao_bg.png',
+                              130.h,
+                              300.h),
+                          Positioned(
+                              top: 40.h,
+                              left: 60.w,
+                              child: Row(
+                                children: [
+                                  WidgetUtils.commonSizedBox(0, 50.h),
+                                  WidgetUtils.onlyText(
+                                      allData2[i]['content'],
+                                      StyleUtils.getCommonTextStyle(
+                                          color: Colors.white,
+                                          fontSize: 25.sp)),
+                                ],
+                              ))
+                        ],
+                      ),
+                    )
                   : Flexible(
-                child: GestureDetector(
-                  onLongPress: ((){
-                    if(allData2[i]['type'] == 1){
-                      Clipboard.setData(ClipboardData(
-                        text: allData2[i]['content'],
-                      ));
-                      MyToastUtils.showToastBottom('成功复制文字');
-                    }
-                  }),
-                  child: Container(
-                    constraints: BoxConstraints(
-                        minWidth: ScreenUtil().setHeight(60)),
-                    padding: EdgeInsets.all(ScreenUtil().setHeight(20)),
-                    //边框设置
-                    decoration: BoxDecoration(
-                      //背景
-                      color: allData2[i]['type'] == 2
-                          ? Colors.transparent
-                          : Colors.white,
-                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(0),
-                          topRight: Radius.circular(20.0),
-                          bottomLeft: Radius.circular(20.0),
-                          bottomRight: Radius.circular(20.0)),
-                      boxShadow: allData2[i]['type'] == 2
-                          ? []
-                          : [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.1),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset:
-                          const Offset(0, 1), // 阴影的偏移量，向右下方偏移3像素
+                      child: GestureDetector(
+                        onLongPress: (() {
+                          if (allData2[i]['type'] == 1) {
+                            Clipboard.setData(ClipboardData(
+                              text: allData2[i]['content'],
+                            ));
+                            MyToastUtils.showToastBottom('成功复制文字');
+                          }
+                        }),
+                        child: Container(
+                          constraints: BoxConstraints(
+                              minWidth: ScreenUtil().setHeight(60)),
+                          padding: EdgeInsets.all(ScreenUtil().setHeight(20)),
+                          //边框设置
+                          decoration: BoxDecoration(
+                            //背景
+                            color: allData2[i]['type'] == 2
+                                ? Colors.transparent
+                                : Colors.white,
+                            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                            borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(0),
+                                topRight: Radius.circular(20.0),
+                                bottomLeft: Radius.circular(20.0),
+                                bottomRight: Radius.circular(20.0)),
+                            boxShadow: allData2[i]['type'] == 2
+                                ? []
+                                : [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.1),
+                                      spreadRadius: 2,
+                                      blurRadius: 5,
+                                      offset: const Offset(
+                                          0, 1), // 阴影的偏移量，向右下方偏移3像素
+                                    ),
+                                  ],
+                          ),
+                          child: allData2[i]['type'] == 1
+                              ? Text(
+                                  allData2[i]['content'],
+                                  style: TextStyle(
+                                    fontSize: 30.sp,
+                                    color: Colors.black,
+                                  ),
+                                )
+                              : allData2[i]['type'] == 2
+                                  ? GestureDetector(
+                                      onTap: (() {
+                                        setState(() {
+                                          imgList.clear();
+                                          imgList.add(allData2[i]['content']);
+                                        });
+                                        MyUtils.goTransparentPageCom(context,
+                                            SwiperPage(imgList: imgList));
+                                      }),
+                                      child: (allData2[i]['content']
+                                                  .toString()
+                                                  .contains(
+                                                      'com.leimu.yuyinting') ||
+                                              allData2[i]['content']
+                                                  .toString()
+                                                  .contains('storage'))
+                                          ? Image(
+                                              image: FileImage(
+                                                  File(allData2[i]['content'])),
+                                              width: 160.h,
+                                              height: 200.h,
+                                              errorBuilder:
+                                                  (BuildContext context,
+                                                      Object error,
+                                                      StackTrace? stackTrace) {
+                                                return WidgetUtils.showImages(
+                                                    'assets/images/img_placeholder.png',
+                                                    200.h,
+                                                    160.h);
+                                              },
+                                            )
+                                          : WidgetUtils.showImagesNet(
+                                              allData2[i]['content'].toString(),
+                                              200.h,
+                                              160.h),
+                                    )
+                                  : GestureDetector(
+                                      onTap: (() {
+                                        LogD('************');
+                                        if (playRecord) {
+                                          stopPlayer();
+                                        } else {
+                                          play(allData2[i]['content']);
+                                        }
+                                      }),
+                                      child: Container(
+                                        color: Colors.transparent,
+                                        width: widthAudio,
+                                        child: Row(
+                                          children: [
+                                            WidgetUtils.showImages(
+                                                'assets/images/chat_huatong.png',
+                                                20.h,
+                                                20.h),
+                                            WidgetUtils.onlyText(
+                                                "${allData2[i]['number']}''",
+                                                StyleUtils.textStyleb1),
+                                            const Spacer(),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
                         ),
-                      ],
-                    ),
-                    child: allData2[i]['type'] == 1
-                        ? Text(
-                      allData2[i]['content'],
-                      style: TextStyle(
-                        fontSize: 30.sp,
-                        color: Colors.black,
-                      ),
-                    )
-                        : allData2[i]['type'] == 2
-                        ? GestureDetector(
-                      onTap: (() {
-                        setState(() {
-                          imgList.clear();
-                          imgList.add(allData2[i]['content']);
-                        });
-                        MyUtils.goTransparentPageCom(context,
-                            SwiperPage(imgList: imgList));
-                      }),
-                      child: (allData2[i]['content']
-                          .toString()
-                          .contains(
-                          'com.leimu.yuyinting') ||
-                          allData2[i]['content']
-                              .toString()
-                              .contains('storage'))
-                          ? Image(
-                        image: FileImage(
-                            File(allData2[i]['content'])),
-                        width: 160.h,
-                        height: 200.h,
-                        errorBuilder: (BuildContext context,
-                            Object error,
-                            StackTrace? stackTrace) {
-                          return WidgetUtils.showImages(
-                              'assets/images/img_placeholder.png',
-                              200.h,
-                              160.h);
-                        },
-                      )
-                          : WidgetUtils.showImagesNet(
-                          allData2[i]['content'].toString(),
-                          200.h,
-                          160.h),
-                    )
-                        : GestureDetector(
-                      onTap: (() {
-                        LogD('************');
-                        if (playRecord) {
-                          stopPlayer();
-                        } else {
-                          play(allData2[i]['content']);
-                        }
-                      }),
-                      child: Container(
-                        color: Colors.transparent,
-                        width: widthAudio,
-                        child: Row(
-                          children: [
-                            WidgetUtils.showImages(
-                                'assets/images/chat_huatong.png',
-                                20.h,
-                                20.h),
-                            WidgetUtils.onlyText(
-                                "${allData2[i]['number']}''",
-                                StyleUtils.textStyleb1),
-                            const Spacer(),
-                          ],
-                        ),
                       ),
                     ),
-                  ),
-                ),
-              ),
             ],
           ),
           WidgetUtils.commonSizedBox(
@@ -354,138 +357,135 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
               // 6v豆红包
               allData2[i]['type'] == 6
                   ? SizedBox(
-                height: 130.h,
-                width: 300.h,
-                child: Stack(
-                  children: [
-                    WidgetUtils.showImages(
-                        'assets/images/chat_hongbao_bg.png',
-                        130.h,
-                        300.h),
-                    Positioned(
-                        top: 40.h,
-                        left: 60.w,
-                        child: Row(
-                          children: [
-                            WidgetUtils.commonSizedBox(0, 50.h),
-                            WidgetUtils.onlyText(
-                                allData2[i]['content'],
-                                StyleUtils.getCommonTextStyle(
-                                    color: Colors.white,
-                                    fontSize: 25.sp)),
-                          ],
-                        ))
-                  ],
-                ),
-              )
+                      height: 130.h,
+                      width: 300.h,
+                      child: Stack(
+                        children: [
+                          WidgetUtils.showImages(
+                              'assets/images/chat_hongbao_bg.png',
+                              130.h,
+                              300.h),
+                          Positioned(
+                              top: 40.h,
+                              left: 60.w,
+                              child: Row(
+                                children: [
+                                  WidgetUtils.commonSizedBox(0, 50.h),
+                                  WidgetUtils.onlyText(
+                                      allData2[i]['content'],
+                                      StyleUtils.getCommonTextStyle(
+                                          color: Colors.white,
+                                          fontSize: 25.sp)),
+                                ],
+                              ))
+                        ],
+                      ),
+                    )
                   : Flexible(
-                child: GestureDetector(
-                  onLongPress: ((){
-                    if(allData2[i]['type'] == 1){
-                      Clipboard.setData(ClipboardData(
-                        text: allData2[i]['content'],
-                      ));
-                      MyToastUtils.showToastBottom('成功复制文字');
-                    }
-                  }),
-                  child: Container(
-                    constraints: BoxConstraints(
-                        minWidth: ScreenUtil().setHeight(60)),
-                    padding: EdgeInsets.all(ScreenUtil().setHeight(20)),
-                    //边框设置
-                    decoration: BoxDecoration(
-                      //背景
-                      color: allData2[i]['type'] == 2
-                          ? Colors.transparent
-                          : Colors.white,
-                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(20.0),
-                          topRight: Radius.circular(0),
-                          bottomLeft: Radius.circular(20.0),
-                          bottomRight: Radius.circular(20.0)),
-                      boxShadow: allData2[i]['type'] == 2
-                          ? []
-                          : [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.1),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset:
-                          const Offset(0, 1), // 阴影的偏移量，向右下方偏移3像素
+                      child: GestureDetector(
+                        onLongPress: (() {
+                          if (allData2[i]['type'] == 1) {
+                            Clipboard.setData(ClipboardData(
+                              text: allData2[i]['content'],
+                            ));
+                            MyToastUtils.showToastBottom('成功复制文字');
+                          }
+                        }),
+                        child: Container(
+                          constraints: BoxConstraints(
+                              minWidth: ScreenUtil().setHeight(60)),
+                          padding: EdgeInsets.all(ScreenUtil().setHeight(20)),
+                          //边框设置
+                          decoration: BoxDecoration(
+                            //背景
+                            color: allData2[i]['type'] == 2
+                                ? Colors.transparent
+                                : Colors.white,
+                            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                            borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(20.0),
+                                topRight: Radius.circular(0),
+                                bottomLeft: Radius.circular(20.0),
+                                bottomRight: Radius.circular(20.0)),
+                            boxShadow: allData2[i]['type'] == 2
+                                ? []
+                                : [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.1),
+                                      spreadRadius: 2,
+                                      blurRadius: 5,
+                                      offset: const Offset(
+                                          0, 1), // 阴影的偏移量，向右下方偏移3像素
+                                    ),
+                                  ],
+                          ),
+                          child: allData2[i]['type'] == 1
+                              ? Text(
+                                  allData2[i]['content'],
+                                  style: TextStyle(
+                                    fontSize: 30.sp,
+                                    color: Colors.black,
+                                  ),
+                                )
+                              : allData2[i]['type'] == 2
+                                  ? GestureDetector(
+                                      onTap: (() {
+                                        setState(() {
+                                          imgList.clear();
+                                          imgList.add(allData2[i]['content']);
+                                        });
+                                        MyUtils.goTransparentPageCom(context,
+                                            SwiperPage(imgList: imgList));
+                                      }),
+                                      child: Image(
+                                        image: FileImage(
+                                            File(allData2[i]['content'])),
+                                        width: 160.h,
+                                        height: 200.h,
+                                        errorBuilder: (BuildContext context,
+                                            Object error,
+                                            StackTrace? stackTrace) {
+                                          return WidgetUtils.showImages(
+                                              'assets/images/img_placeholder.png',
+                                              200.h,
+                                              160.h);
+                                        },
+                                      ),
+                                    )
+                                  : allData2[i]['type'] == 3
+                                      ? GestureDetector(
+                                          onTap: (() {
+                                            LogD('************');
+                                            if (playRecord) {
+                                              stopPlayer();
+                                            } else {
+                                              play(allData2[i]['content']);
+                                            }
+                                          }),
+                                          child: Container(
+                                            color: Colors.transparent,
+                                            width: widthAudio,
+                                            child: Row(
+                                              children: [
+                                                const Spacer(),
+                                                WidgetUtils.onlyText(
+                                                    "${allData2[i]['number']}''",
+                                                    StyleUtils.textStyleb1),
+                                                WidgetUtils.showImages(
+                                                    'assets/images/chat_huatong.png',
+                                                    20.h,
+                                                    20.h),
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                      : const Text(''),
                         ),
-                      ],
+                      ),
                     ),
-                    child: allData2[i]['type'] == 1
-                        ? Text(
-                      allData2[i]['content'],
-                      style: TextStyle(
-                        fontSize: 30.sp,
-                        color: Colors.black,
-                      ),
-                    )
-                        : allData2[i]['type'] == 2
-                        ? GestureDetector(
-                      onTap: (() {
-                        setState(() {
-                          imgList.clear();
-                          imgList.add(allData2[i]['content']);
-                        });
-                        MyUtils.goTransparentPageCom(context,
-                            SwiperPage(imgList: imgList));
-                      }),
-                      child: Image(
-                        image: FileImage(
-                            File(allData2[i]['content'])),
-                        width: 160.h,
-                        height: 200.h,
-                        errorBuilder: (BuildContext context,
-                            Object error,
-                            StackTrace? stackTrace) {
-                          return WidgetUtils.showImages(
-                              'assets/images/img_placeholder.png',
-                              200.h,
-                              160.h);
-                        },
-                      ),
-                    )
-                        : allData2[i]['type'] == 3
-                        ? GestureDetector(
-                      onTap: (() {
-                        LogD('************');
-                        if (playRecord) {
-                          stopPlayer();
-                        } else {
-                          play(allData2[i]['content']);
-                        }
-                      }),
-                      child: Container(
-                        color: Colors.transparent,
-                        width: widthAudio,
-                        child: Row(
-                          children: [
-                            const Spacer(),
-                            WidgetUtils.onlyText(
-                                "${allData2[i]['number']}''",
-                                StyleUtils.textStyleb1),
-                            WidgetUtils.showImages(
-                                'assets/images/chat_huatong.png',
-                                20.h,
-                                20.h),
-                          ],
-                        ),
-                      ),
-                    )
-                        : const Text(''),
-                  ),
-                ),
-              ),
               WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(10)),
-              WidgetUtils.CircleImageNet(
-                  ScreenUtil().setHeight(80),
-                  ScreenUtil().setHeight(80),
-                  40.h,
-                  allData2[i]['headNetImg']),
+              WidgetUtils.CircleImageNet(ScreenUtil().setHeight(80),
+                  ScreenUtil().setHeight(80), 40.h, allData2[i]['headNetImg']),
               WidgetUtils.commonSizedBox(0, 15.w),
             ],
           ),
@@ -588,7 +588,8 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                                 onTap: (() {
                                   if (MyUtils.checkClick()) {
                                     //这里可以响应物理返回键
-                                    eventBus.fire(SubmitButtonBack(title: '厅内聊天返回'));
+                                    eventBus.fire(
+                                        SubmitButtonBack(title: '厅内聊天返回'));
                                     Navigator.of(context).pop();
                                   }
                                 }),
@@ -679,25 +680,31 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                                 //背景
                                 color: MyColors.roomXZ2,
                                 //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                borderRadius: BorderRadius.all(Radius.circular(38)),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(38)),
                               ),
                               child: TextField(
                                 textInputAction: TextInputAction.send,
                                 // 设置为发送按钮
                                 controller: controller,
                                 inputFormatters: [
-                                  RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                                  RegexFormatter(
+                                      regex: MyUtils.regexFirstNotNull),
                                   LengthLimitingTextInputFormatter(50) //限制输入长度
                                 ],
                                 style: StyleUtils.loginTextStyle,
                                 onSubmitted: (value) {
                                   //判断表情发送
                                   if (MyUtils.checkClick()) {
-                                    if(controller.text.length > 50){
-                                      MyToastUtils.showToastBottom('单条消息要小于50个字呦~');
-                                    }else{
-                                      MyUtils.sendMessage(widget.otherUid, value);
-                                      doPostSendUserMsg(value);
+                                    if (controller.text.length > 50) {
+                                      MyToastUtils.showToastBottom(
+                                          '单条消息要小于50个字呦~');
+                                    } else {
+                                      if(controller.text.trim().isEmpty){
+                                        MyToastUtils.showToastBottom('请输入要发送的信息');
+                                      }else{
+                                        doPostCanSendUser(1);
+                                      }
                                     }
                                   }
                                 },
@@ -785,16 +792,19 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
       combineID = '${sp.getString('user_id').toString()}-${widget.otherUid}';
     }
     List<Map<String, dynamic>> result = await db.query('messageSLTable',
-        columns: null, whereArgs: [combineID, sp.getString('user_id')], where: 'combineID = ? and uid = ?');
+        columns: null,
+        whereArgs: [combineID, sp.getString('user_id')],
+        where: 'combineID = ? and uid = ?');
 
     await db.update('messageSLTable', {'readStatus': 1},
-        whereArgs: [combineID, sp.getString('user_id')], where: 'combineID = ? and uid = ?');
+        whereArgs: [combineID, sp.getString('user_id')],
+        where: 'combineID = ? and uid = ?');
 
     setState(() {
       allData2 = result;
       length = allData2.length;
     });
-    for(int i =0; i < allData2.length; i++){
+    for (int i = 0; i < allData2.length; i++) {
       // 更新头像和昵称
       await db.update(
           'messageSLTable',
@@ -866,7 +876,9 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
       }
       // 获取所有数据
       List<Map<String, dynamic>> result = await db.query('messageSLTable',
-          columns: null, whereArgs: [combineID, sp.getString('user_id')], where: 'combineID = ? and uid = ?');
+          columns: null,
+          whereArgs: [combineID, sp.getString('user_id')],
+          where: 'combineID = ? and uid = ?');
       setState(() {
         allData2 = result;
         length = allData2.length;
@@ -983,14 +995,17 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
       switch (bean.code) {
         case MyHttpConfig.successCode:
           //可以发私聊跳转 type 1发表情 2图片 3录音 4红包
-          if(type == 2){
+          if (type == 1) {
+            MyUtils.sendMessage(widget.otherUid, controller.text.trim().toString());
+            doPostSendUserMsg(controller.text.trim().toString());
+          } else if (type == 2) {
             onTapPickFromGallery();
-          }else if(type == 4){
+          } else if (type == 4) {
             doPostPayPwd();
           }
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:

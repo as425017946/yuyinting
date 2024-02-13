@@ -1604,7 +1604,11 @@ class _ChatPageState extends State<ChatPage> {
                             if(controller.text.length > 50){
                               MyToastUtils.showToastBottom('单条消息要小于50个字呦~');
                             }else{
-                              doPostCanSendUser(1);
+                              if(controller.text.trim().isEmpty){
+                                MyToastUtils.showToastBottom('请输入要发送的信息');
+                              }else{
+                                doPostCanSendUser(1);
+                              }
                             }
                           }
                         }),
