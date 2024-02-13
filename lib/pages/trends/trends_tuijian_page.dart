@@ -58,6 +58,7 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
   int page = 1;
 
   void _onRefresh() async {
+    _refreshController.resetNoData();
     // monitor network fetch
     await Future.delayed(const Duration(milliseconds: 1000));
     // if failed,use refreshFailed()
@@ -802,7 +803,9 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
             if (bean.data!.list!.isNotEmpty) {
               for (int i = 0; i < bean.data!.list!.length; i++) {
                 _list.add(bean.data!.list![i]);
-                if(bean.data!.list![i].type == 2){
+              }
+              for(int i =0; i < _list.length; i++){
+                if(_list[i].type == 2){
                   _list[i].imgUrl!.add('');
                 }
               }

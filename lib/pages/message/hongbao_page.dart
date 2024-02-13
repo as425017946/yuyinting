@@ -35,6 +35,8 @@ class _HongBaoPageState extends State<HongBaoPage> {
   // 是否显示全的
   bool isShow = false;
   var listen;
+  // 记录按下的时间，如果不够1s，不发音频
+  int downTime =0;
 
   @override
   void initState() {
@@ -43,8 +45,21 @@ class _HongBaoPageState extends State<HongBaoPage> {
     doPostBalance();
     listen = eventBus.on<RoomBack>().listen((event) {
       if (event.title == '发红包已输入密码') {
-        doPostSendRedPacket(
-            int.parse(controllerDou.text).toString(), event.index!);
+        if(downTime == 0){
+          setState(() {
+            downTime = DateTime.now().millisecondsSinceEpoch;
+          });
+          doPostSendRedPacket(
+              int.parse(controllerDou.text).toString(), event.index!);
+        }else{
+          if((DateTime.now().millisecondsSinceEpoch - downTime) >=1500) {
+            doPostSendRedPacket(
+                int.parse(controllerDou.text).toString(), event.index!);
+          }else{
+            MyToastUtils.showToastBottom('发红包太频繁了呦~');
+          }
+        }
+
       }
     });
   }

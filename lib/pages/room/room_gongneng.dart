@@ -53,12 +53,7 @@ class _RoomGongNengState extends State<RoomGongNeng> {
       is_boss = widget.isBoss;
       roomDX = widget.roomDX;
       roomSY = widget.roomSY;
-      if (sp.getString('roomPass').toString() == 'null' ||
-          sp.getString('roomPass').toString().isEmpty) {
-        mima = false;
-      } else {
-        mima = true;
-      }
+      mima = widget.mima;
     });
   }
 

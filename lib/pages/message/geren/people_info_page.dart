@@ -20,6 +20,7 @@ import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
 import '../../../utils/widget_utils.dart';
 import '../../../widget/SVGASimpleImage.dart';
+import '../../../widget/SwiperPage.dart';
 import '../../room/room_page.dart';
 import '../../room/room_ts_mima_page.dart';
 import '../chat_page.dart';
@@ -55,6 +56,8 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
       avatarFrameGifImg = '';
   String isFollow = '', roomID = ''; //关注状态, 房间id
 
+  List<String> imageList = [];
+
   List<String> list_p = [];
   List<String> list_pID = [];
   List<String> list_label = [];
@@ -63,7 +66,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
   void initState() {
     super.initState();
     setState(() {
-      sp.setBool('joinRoom',false);
+      sp.setBool('joinRoom', false);
     });
     _currentIndex = 0;
     _controller = PageController(
@@ -97,14 +100,18 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    if(_mPlayer.isPlaying) {
+    if (_mPlayer.isPlaying) {
       _mPlayer.stopPlayer();
     }
   }
+
   void _initialize() async {
     await _mPlayer!.closePlayer();
     await _mPlayer!.openPlayer();
   }
+
+  bool isShow = false;
+  int isBlack = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -158,31 +165,42 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                     alignment: Alignment.centerLeft,
                     child: Row(
                       children: [
-                        Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            WidgetUtils.CircleHeadImage(
-                                ScreenUtil().setHeight(130),
-                                ScreenUtil().setHeight(130),
-                                headImg),
-                            // 头像框静态图
-                            avatarFrameImg.isNotEmpty
-                                ? WidgetUtils.CircleHeadImage(
-                                    ScreenUtil().setHeight(160),
-                                    ScreenUtil().setHeight(160),
-                                    avatarFrameImg)
-                                : const Text(''),
-                            // 头像框动态图
-                            avatarFrameGifImg.isEmpty
-                                ? SizedBox(
-                                    height: 160.h,
-                                    width: 160.h,
-                                    child: SVGASimpleImage(
-                                      resUrl: avatarFrameGifImg,
-                                    ),
-                                  )
-                                : const Text(''),
-                          ],
+                        GestureDetector(
+                          onTap: (() {
+                            if(MyUtils.checkClick()){
+                              Navigator.of(context).push(PageRouteBuilder(
+                                  opaque: false,
+                                  pageBuilder: (context, animation, secondaryAnimation) {
+                                    return SwiperPage(imgList: imageList);
+                                  }));
+                            }
+                          }),
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              WidgetUtils.CircleHeadImage(
+                                  ScreenUtil().setHeight(130),
+                                  ScreenUtil().setHeight(130),
+                                  headImg),
+                              // 头像框静态图
+                              avatarFrameImg.isNotEmpty
+                                  ? WidgetUtils.CircleHeadImage(
+                                      ScreenUtil().setHeight(160),
+                                      ScreenUtil().setHeight(160),
+                                      avatarFrameImg)
+                                  : const Text(''),
+                              // 头像框动态图
+                              avatarFrameGifImg.isEmpty
+                                  ? SizedBox(
+                                      height: 160.h,
+                                      width: 160.h,
+                                      child: SVGASimpleImage(
+                                        resUrl: avatarFrameGifImg,
+                                      ),
+                                    )
+                                  : const Text(''),
+                            ],
+                          ),
                         ),
                         WidgetUtils.commonSizedBox(0, 10),
 
@@ -229,9 +247,9 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                                   // 只有不是新贵或者新锐的时候展示萌新
                                   (isNew == 1 && isNewNoble == 0)
                                       ? WidgetUtils.showImages(
-                                      'assets/images/dj/room_role_common.png',
-                                      30.h,
-                                      50.h)
+                                          'assets/images/dj/room_role_common.png',
+                                          30.h,
+                                          50.h)
                                       : const Text(''),
                                   (isNew == 1 && isNewNoble == 0)
                                       ? WidgetUtils.commonSizedBox(0, 5)
@@ -239,24 +257,32 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                                   // 展示新贵或者新锐图标
                                   isNewNoble == 1
                                       ? WidgetUtils.showImages(
-                                      'assets/images/dj/room_rui.png', 30.h, 50.h)
+                                          'assets/images/dj/room_rui.png',
+                                          30.h,
+                                          50.h)
                                       : isNewNoble == 2
-                                      ? WidgetUtils.showImages(
-                                      'assets/images/dj/room_gui.png',
-                                      30.h,
-                                      50.h)
-                                      :  isNewNoble == 3 ? WidgetUtils.showImages(
-                                      'assets/images/dj/room_gui.png',
-                                      30.h,
-                                      50.h) : const Text(''),
+                                          ? WidgetUtils.showImages(
+                                              'assets/images/dj/room_gui.png',
+                                              30.h,
+                                              50.h)
+                                          : isNewNoble == 3
+                                              ? WidgetUtils.showImages(
+                                                  'assets/images/dj/room_gui.png',
+                                                  30.h,
+                                                  50.h)
+                                              : const Text(''),
                                   isNewNoble != 0
                                       ? WidgetUtils.commonSizedBox(0, 5)
                                       : const Text(''),
                                   isPretty == 1
                                       ? WidgetUtils.showImages(
-                                      'assets/images/dj/lianghao.png', 30.h, 30.h)
+                                          'assets/images/dj/lianghao.png',
+                                          30.h,
+                                          30.h)
                                       : const Text(''),
-                                  isPretty == 1 ? WidgetUtils.commonSizedBox(0, 10.h) : WidgetUtils.commonSizedBox(0, 0),
+                                  isPretty == 1
+                                      ? WidgetUtils.commonSizedBox(0, 10.h)
+                                      : WidgetUtils.commonSizedBox(0, 0),
                                   // 用户等级
                                   level != 0
                                       ? Stack(
@@ -402,16 +428,16 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                         live == 1
                             ? GestureDetector(
                                 onTap: (() {
-                                  if(sp.getString('roomID').toString() == roomID){
-                                    if(MyUtils.checkClick()) {
-                                      MyToastUtils.showToastBottom(
-                                          '您已在本房间');
+                                  if (sp.getString('roomID').toString() ==
+                                      roomID) {
+                                    if (MyUtils.checkClick()) {
+                                      MyToastUtils.showToastBottom('您已在本房间');
                                     }
                                     return;
-                                  }else{
-                                    if(sp.getBool('joinRoom') == false) {
+                                  } else {
+                                    if (sp.getBool('joinRoom') == false) {
                                       setState(() {
-                                        sp.setBool('joinRoom',true);
+                                        sp.setBool('joinRoom', true);
                                       });
                                       doPostBeforeJoin(roomID);
                                     }
@@ -461,7 +487,8 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                           children: [
                             GestureDetector(
                               onTap: (() {
-                                if (MyUtils.checkClick() && playRecord == false) {
+                                if (MyUtils.checkClick() &&
+                                    playRecord == false) {
                                   play();
                                 }
                               }),
@@ -482,9 +509,9 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                                   children: [
                                     const Expanded(
                                         child: SVGASimpleImage(
-                                          assetsName:
+                                      assetsName:
                                           'assets/svga/audio_xindiaotu.svga',
-                                        )),
+                                    )),
                                     WidgetUtils.commonSizedBox(0, 10.h),
                                     WidgetUtils.showImages(
                                         'assets/images/people_bofang.png',
@@ -653,22 +680,24 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                                       ScreenUtil().setHeight(68)),
                             ],
                           ),
-                          isOK ? Expanded(
-                            child: PageView(
-                              reverse: false,
-                              controller: _controller,
-                              onPageChanged: (index) {
-                                setState(() {
-                                  // 更新当前的索引值
-                                  _currentIndex = index;
-                                });
-                              },
-                              children: [
-                                ZiliaoPage(otherId: widget.otherId),
-                                DongtaiPage(otherId: widget.otherId),
-                              ],
-                            ),
-                          ) : const Text('')
+                          isOK
+                              ? Expanded(
+                                  child: PageView(
+                                    reverse: false,
+                                    controller: _controller,
+                                    onPageChanged: (index) {
+                                      setState(() {
+                                        // 更新当前的索引值
+                                        _currentIndex = index;
+                                      });
+                                    },
+                                    children: [
+                                      ZiliaoPage(otherId: widget.otherId),
+                                      DongtaiPage(otherId: widget.otherId),
+                                    ],
+                                  ),
+                                )
+                              : const Text('')
                         ],
                       ),
                     ),
@@ -712,7 +741,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                     const Expanded(child: Text('')),
                     GestureDetector(
                       onTap: (() {
-                        if(MyUtils.checkClick()) {
+                        if (MyUtils.checkClick()) {
                           // 先判断能否发私聊
                           doPostCanSendUser();
                         }
@@ -726,7 +755,86 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                   ],
                 ),
               ),
-            )
+            ),
+            Positioned(
+              right: 10.h,
+              top: 50.h,
+              child: GestureDetector(
+                onTap: (() {
+                  setState(() {
+                    isShow = true;
+                  });
+                }),
+                child: Container(
+                  width: ScreenUtil().setWidth(120),
+                  height: 60.h,
+                  color: Colors.transparent,
+                  alignment: Alignment.centerRight,
+                  child: WidgetUtils.showImages(
+                      'assets/images/chat_dian_white.png',
+                      ScreenUtil().setHeight(50),
+                      ScreenUtil().setHeight(80)),
+                ),
+              ),
+            ),
+            // 头部黑名单
+            isShow
+                ? GestureDetector(
+                    onTap: (() {
+                      setState(() {
+                        isShow = false;
+                      });
+                    }),
+                    child: Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      alignment: Alignment.topRight,
+                      color: Colors.transparent,
+                      child: Row(
+                        children: [
+                          const Spacer(),
+                          GestureDetector(
+                            onTap: (() {
+                              setState(() {
+                                isShow = false;
+                              });
+                              doPostUpdateBlack();
+                            }),
+                            child: Container(
+                              height: ScreenUtil().setHeight(80),
+                              width: ScreenUtil().setHeight(220),
+                              margin: EdgeInsets.only(
+                                  top: ScreenUtil().setHeight(100), right: 15),
+                              //边框设置
+                              decoration: const BoxDecoration(
+                                //背景
+                                color: Colors.white,
+                                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0)),
+                              ),
+                              child: Row(
+                                children: [
+                                  const Spacer(),
+                                  WidgetUtils.showImages(
+                                      'assets/images/chat_black_p.png',
+                                      ScreenUtil().setHeight(42),
+                                      ScreenUtil().setHeight(38)),
+                                  WidgetUtils.commonSizedBox(
+                                      0, ScreenUtil().setHeight(10)),
+                                  WidgetUtils.onlyText(
+                                      isBlack == 0 ? '加入黑名单' : '移除黑名单',
+                                      StyleUtils.loginHintTextStyle),
+                                  const Spacer(),
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+                : const Text(''),
           ],
         ));
   }
@@ -746,10 +854,12 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
       switch (bean.code) {
         case MyHttpConfig.successCode:
           list_p.clear();
+          imageList.clear();
           setState(() {
             isOK = true;
             sp.setString("label_id", bean.data!.labelId!);
             headImg = bean.data!.avatarUrl!;
+            imageList.add(headImg);
             headImgID = bean.data!.avatar.toString();
             sex = bean.data!.gender as int;
             nickName = bean.data!.nickname!;
@@ -869,10 +979,10 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
   /// 加入房间前
   Future<void> doPostBeforeJoin(roomID) async {
     //判断房间id是否为空的
-    if(sp.getString('roomID') == null || sp.getString('').toString().isEmpty){
-    }else{
+    if (sp.getString('roomID') == null || sp.getString('').toString().isEmpty) {
+    } else {
       // 不是空的，并且不是之前进入的房间
-      if(sp.getString('roomID').toString() != roomID){
+      if (sp.getString('roomID').toString() != roomID) {
         sp.setString('roomID', roomID);
         eventBus.fire(SubmitButtonBack(title: '加入其他房间'));
       }
@@ -900,7 +1010,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
           break;
         default:
           setState(() {
-            sp.setBool('joinRoom',false);
+            sp.setBool('joinRoom', false);
           });
           MyToastUtils.showToastBottom(bean.msg!);
           break;
@@ -908,7 +1018,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
       Loading.dismiss();
     } catch (e) {
       setState(() {
-        sp.setBool('joinRoom',false);
+        sp.setBool('joinRoom', false);
       });
       Loading.dismiss();
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
@@ -941,7 +1051,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
           break;
         default:
           setState(() {
-            sp.setBool('joinRoom',false);
+            sp.setBool('joinRoom', false);
           });
           MyToastUtils.showToastBottom(bean.msg!);
           break;
@@ -949,9 +1059,48 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
       Loading.dismiss();
     } catch (e) {
       setState(() {
-        sp.setBool('joinRoom',false);
+        sp.setBool('joinRoom', false);
       });
       Loading.dismiss();
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+  /// 加入/取消黑名单
+  Future<void> doPostUpdateBlack() async {
+    //0解除 1拉黑
+    Map<String, dynamic> params = <String, dynamic>{
+      'type': isBlack == 0 ? '1' : '0',
+      'black_uid': widget.otherId,
+    };
+    try {
+      CommonBean bean = await DataUtils.postUpdateBlack(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          if (isBlack == 0) {
+            setState(() {
+              isBlack = 1;
+            });
+          } else {
+            setState(() {
+              isBlack = 0;
+            });
+          }
+          if (isBlack == 0) {
+            MyToastUtils.showToastBottom("移除黑名单！");
+          } else {
+            MyToastUtils.showToastBottom("成功加入黑名单！");
+          }
+          break;
+        case MyHttpConfig.errorloginCode:
+          // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }

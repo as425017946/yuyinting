@@ -12,7 +12,9 @@ import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 
 class RoomSendInfoPage extends StatefulWidget {
-  String? info; ///@某人使用
+  String? info;
+
+  ///@某人使用
   RoomSendInfoPage({super.key, required this.info});
 
   @override
@@ -21,16 +23,18 @@ class RoomSendInfoPage extends StatefulWidget {
 
 class _RoomSendInfoPageState extends State<RoomSendInfoPage> {
   TextEditingController controller = TextEditingController();
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    if(widget.info!.isNotEmpty){
+    if (widget.info!.isNotEmpty) {
       setState(() {
         controller.text = '@${widget.info!} Hi';
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,9 +44,9 @@ class _RoomSendInfoPageState extends State<RoomSendInfoPage> {
           Expanded(
               child: GestureDetector(
             onTap: (() {
-      if(MyUtils.checkClick()) {
-        Navigator.pop(context);
-      }
+              if (MyUtils.checkClick()) {
+                Navigator.pop(context);
+              }
             }),
             child: Container(
               color: Colors.transparent,
@@ -75,15 +79,15 @@ class _RoomSendInfoPageState extends State<RoomSendInfoPage> {
                       controller: controller,
                       inputFormatters: [
                         RegexFormatter(regex: MyUtils.regexFirstNotNull),
-                        LengthLimitingTextInputFormatter(15)//限制输入长度
+                        LengthLimitingTextInputFormatter(30) //限制输入长度
                       ],
                       style: StyleUtils.loginTextStyle,
                       onSubmitted: (value) {
-                        if(value.isEmpty){
+                        if (value.isEmpty) {
                           MyToastUtils.showToastBottom('请输入要发送的信息');
                           return;
                         }
-                        if(MyUtils.checkClick()) {
+                        if (MyUtils.checkClick()) {
                           eventBus.fire(SendRoomInfoBack(info: value));
                         }
                         setState(() {
@@ -124,13 +128,14 @@ class _RoomSendInfoPageState extends State<RoomSendInfoPage> {
                 ),
                 WidgetUtils.commonSizedBox(0, 20.h),
                 GestureDetector(
-                  onTap: ((){
-    if(MyUtils.checkClick()) {
-      Navigator.pop(context);
-      MyUtils.goTransparentPage(context, const RoomBQPage());
-    }
+                  onTap: (() {
+                    if (MyUtils.checkClick()) {
+                      Navigator.pop(context);
+                      MyUtils.goTransparentPage(context, const RoomBQPage());
+                    }
                   }),
-                  child: WidgetUtils.showImages('assets/images/trends_biaoqing.png', 50.h, 50.h),
+                  child: WidgetUtils.showImages(
+                      'assets/images/trends_biaoqing.png', 50.h, 50.h),
                 ),
                 WidgetUtils.commonSizedBox(0, 20.h),
               ],

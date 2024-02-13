@@ -61,6 +61,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
   int page = 1;
 
   void _onRefresh() async {
+    _refreshController.resetNoData();
     // monitor network fetch
     await Future.delayed(const Duration(milliseconds: 1000));
     // if failed,use refreshFailed()

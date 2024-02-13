@@ -74,9 +74,12 @@ class _PayTSPageState extends State<PayTSPage> {
                       onChanged: (value) {
                         // LogE('返回数据$value');
                         if(value.length == 6){
-                          eventBus.fire(RoomBack(title: '发红包已输入密码', index: value));
-                          MyUtils.hideKeyboard(context);
-                          Navigator.pop(context);
+                          if(MyUtils.checkClick()) {
+                            eventBus.fire(RoomBack(
+                                title: '发红包已输入密码', index: value));
+                            MyUtils.hideKeyboard(context);
+                            Navigator.pop(context);
+                          }
                         }
                       },
                       textStyle: StyleUtils.getCommonTextStyle(

@@ -29,6 +29,7 @@ import '../../utils/style_utils.dart';
 import '../../widget/SwiperPage.dart';
 import '../message/chat_page.dart';
 import '../message/geren/people_info_page.dart';
+import '../mine/my/my_info_page.dart';
 import 'PagePreviewVideo.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter/foundation.dart' as foundation;
@@ -36,7 +37,9 @@ import 'package:flutter/foundation.dart' as foundation;
 class TrendsMorePage extends StatefulWidget {
   String note_id;
   int index;
-  TrendsMorePage({Key? key, required this.note_id, required this.index}) : super(key: key);
+
+  TrendsMorePage({Key? key, required this.note_id, required this.index})
+      : super(key: key);
 
   @override
   State<TrendsMorePage> createState() => _TrendsMorePageState();
@@ -60,13 +63,15 @@ class _TrendsMorePageState extends State<TrendsMorePage>
       isLike = 0,
       age = 0,
       type = 1;
+
   //查看详情是不是自己
   bool isMe = false;
   List<String> imgList = [];
   List<CommentList> comList = [];
   String action = 'create';
   double x = 0, y = 0;
-  var listen ;
+  var listen;
+
   bool _isEmojiPickerVisible = false;
 
   @override
@@ -164,32 +169,47 @@ class _TrendsMorePageState extends State<TrendsMorePage>
           height: ScreenUtil().setHeight(100),
           child: Row(
             children: [
-              Stack(
-                alignment: Alignment.bottomRight,
-                children: [
-                  WidgetUtils.CircleHeadImage(35, 35, comList[i].avatar!),
-                  comList[i].gender != 0 ? Container(
-                    height: ScreenUtil().setHeight(25),
-                    width: ScreenUtil().setWidth(30),
-                    alignment: Alignment.center,
-                    //边框设置
-                    decoration: BoxDecoration(
-                      //背景
-                      color: comList[i].gender == 1
-                          ? MyColors.dtBlue
-                          : MyColors.dtPink,
-                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(30.0)),
-                    ),
-                    child: WidgetUtils.showImages(
-                        comList[i].gender == 1
-                            ? 'assets/images/nan.png'
-                            : 'assets/images/nv.png',
-                        10,
-                        10),
-                  ) : const Text(''),
-                ],
+              GestureDetector(
+                onTap: (() {
+                  if(MyUtils.checkClick()){
+                    // 如果点击的是自己，进入自己的主页
+                    if(sp.getString('user_id').toString() == comList[i].uid.toString()){
+                      MyUtils.goTransparentRFPage(context, const MyInfoPage());
+                    }else{
+                      sp.setString('other_id', comList[i].uid.toString());
+                      MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: comList[i].uid.toString(),));
+                    }
+                  }
+                }),
+                child: Stack(
+                  alignment: Alignment.bottomRight,
+                  children: [
+                    WidgetUtils.CircleHeadImage(35, 35, comList[i].avatar!),
+                    comList[i].gender != 0
+                        ? Container(
+                            height: ScreenUtil().setHeight(25),
+                            width: ScreenUtil().setWidth(30),
+                            alignment: Alignment.center,
+                            //边框设置
+                            decoration: BoxDecoration(
+                              //背景
+                              color: comList[i].gender == 1
+                                  ? MyColors.dtBlue
+                                  : MyColors.dtPink,
+                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(30.0)),
+                            ),
+                            child: WidgetUtils.showImages(
+                                comList[i].gender == 1
+                                    ? 'assets/images/nan.png'
+                                    : 'assets/images/nv.png',
+                                10,
+                                10),
+                          )
+                        : const Text(''),
+                  ],
+                ),
               ),
               WidgetUtils.commonSizedBox(0, 10),
               Expanded(
@@ -230,7 +250,8 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                         height: 25.h,
                         width: 25.h,
                         color: Colors.transparent,
-                        child: WidgetUtils.showImages('assets/images/room_pl_delete.png', 25.h, 25.h),
+                        child: WidgetUtils.showImages(
+                            'assets/images/room_pl_delete.png', 25.h, 25.h),
                       ),
                     )
                   : const Text('')
@@ -608,13 +629,17 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                           child: Row(
                             children: [
                               GestureDetector(
-                                  onTap: ((){
-                                    if(MyUtils.checkClick()) {
-                                      MyUtils.goTransparentRFPage(context,
-                                          PeopleInfoPage(otherId: myUid,));
+                                  onTap: (() {
+                                    if (MyUtils.checkClick()) {
+                                      MyUtils.goTransparentRFPage(
+                                          context,
+                                          PeopleInfoPage(
+                                            otherId: myUid,
+                                          ));
                                     }
                                   }),
-                                  child: WidgetUtils.CircleHeadImage(40, 40, headImage)),
+                                  child: WidgetUtils.CircleHeadImage(
+                                      40, 40, headImage)),
                               WidgetUtils.commonSizedBox(0, 10),
                               Column(
                                 mainAxisSize: MainAxisSize.min,
@@ -805,7 +830,7 @@ class _TrendsMorePageState extends State<TrendsMorePage>
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
-                height:_isEmojiPickerVisible ? 560.h : 110.h,
+                height: _isEmojiPickerVisible ? 560.h : 110.h,
                 width: double.infinity,
                 alignment: Alignment.center,
                 decoration: const BoxDecoration(
@@ -836,7 +861,8 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                               //背景
                               color: MyColors.f2,
                               //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                              borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20.0)),
                             ),
                             child: TextField(
                               focusNode: _focusNode,
@@ -846,12 +872,11 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                               inputFormatters: [
                                 RegexFormatter(
                                     regex: MyUtils.regexFirstNotNull),
-                                LengthLimitingTextInputFormatter(
-                                    30) //限制输入长度
+                                LengthLimitingTextInputFormatter(30) //限制输入长度
                               ],
                               style: StyleUtils.loginTextStyle,
                               onSubmitted: (value) {
-                                if(controller.text.trim().isNotEmpty){
+                                if (controller.text.trim().isNotEmpty) {
                                   doPostComment('create', '', 0);
                                   MyUtils.hideKeyboard(context);
                                 }
@@ -863,11 +888,11 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                                 hintText: '对 TA 说点什么吧~',
                                 hintStyle: StyleUtils.loginHintTextStyle,
 
-                                contentPadding: const EdgeInsets.only(
-                                    top: 0, bottom: 0),
+                                contentPadding:
+                                    const EdgeInsets.only(top: 0, bottom: 0),
                                 border: const OutlineInputBorder(
                                   borderSide:
-                                  BorderSide(color: Colors.transparent),
+                                      BorderSide(color: Colors.transparent),
                                 ),
                                 enabledBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(
@@ -903,7 +928,8 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                         WidgetUtils.commonSizedBox(0, 10),
                         GestureDetector(
                           onTap: (() {
-                            if(controller.text.trim().isNotEmpty && MyUtils.checkClick()){
+                            if (controller.text.trim().isNotEmpty &&
+                                MyUtils.checkClick()) {
                               _isEmojiPickerVisible = false;
                               doPostComment('create', '', 0);
                               MyUtils.hideKeyboard(context);
@@ -918,7 +944,8 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                               //背景
                               color: MyColors.homeTopBG,
                               //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                              borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20.0)),
                             ),
                             child: WidgetUtils.onlyText(
                                 '发送',
@@ -931,56 +958,60 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                       ],
                     ),
                     const Spacer(),
-                    _isEmojiPickerVisible ? Visibility(
-                      visible: _isEmojiPickerVisible,
-                      child: SizedBox(
-                        height: 450.h,
-                        child: EmojiPicker(
-                          onEmojiSelected: (Category? category, Emoji emoji) {},
-                          onBackspacePressed: () {
-                            // Do something when the user taps the backspace button (optional)
-                            // Set it to null to hide the Backspace-Button
-                          },
-                          textEditingController: controller,
-                          // pass here the same [TextEditingController] that is connected to your input field, usually a [TextFormField]
-                          config: Config(
-                            columns: 7,
-                            emojiSizeMax: 32 *
-                                (foundation.defaultTargetPlatform ==
-                                    TargetPlatform.iOS
-                                    ? 1.30
-                                    : 1.0),
-                            // Issue: https://github.com/flutter/flutter/issues/28894
-                            verticalSpacing: 0,
-                            horizontalSpacing: 0,
-                            gridPadding: EdgeInsets.zero,
-                            initCategory: Category.RECENT,
-                            bgColor: const Color(0xFFF2F2F2),
-                            indicatorColor: Colors.blue,
-                            iconColor: Colors.grey,
-                            iconColorSelected: Colors.blue,
-                            backspaceColor: Colors.blue,
-                            skinToneDialogBgColor: Colors.white,
-                            skinToneIndicatorColor: Colors.grey,
-                            enableSkinTones: false,
-                            replaceEmojiOnLimitExceed: false,
-                            recentTabBehavior: RecentTabBehavior.RECENT,
-                            recentsLimit: 28,
-                            noRecents: const Text(
-                              'No Recents',
-                              style: TextStyle(fontSize: 20, color: Colors.black26),
-                              textAlign: TextAlign.center,
+                    _isEmojiPickerVisible
+                        ? Visibility(
+                            visible: _isEmojiPickerVisible,
+                            child: SizedBox(
+                              height: 450.h,
+                              child: EmojiPicker(
+                                onEmojiSelected:
+                                    (Category? category, Emoji emoji) {},
+                                onBackspacePressed: () {
+                                  // Do something when the user taps the backspace button (optional)
+                                  // Set it to null to hide the Backspace-Button
+                                },
+                                textEditingController: controller,
+                                // pass here the same [TextEditingController] that is connected to your input field, usually a [TextFormField]
+                                config: Config(
+                                  columns: 7,
+                                  emojiSizeMax: 32 *
+                                      (foundation.defaultTargetPlatform ==
+                                              TargetPlatform.iOS
+                                          ? 1.30
+                                          : 1.0),
+                                  // Issue: https://github.com/flutter/flutter/issues/28894
+                                  verticalSpacing: 0,
+                                  horizontalSpacing: 0,
+                                  gridPadding: EdgeInsets.zero,
+                                  initCategory: Category.RECENT,
+                                  bgColor: const Color(0xFFF2F2F2),
+                                  indicatorColor: Colors.blue,
+                                  iconColor: Colors.grey,
+                                  iconColorSelected: Colors.blue,
+                                  backspaceColor: Colors.blue,
+                                  skinToneDialogBgColor: Colors.white,
+                                  skinToneIndicatorColor: Colors.grey,
+                                  enableSkinTones: false,
+                                  replaceEmojiOnLimitExceed: false,
+                                  recentTabBehavior: RecentTabBehavior.RECENT,
+                                  recentsLimit: 28,
+                                  noRecents: const Text(
+                                    'No Recents',
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.black26),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  // Needs to be const Widget
+                                  loadingIndicator: const SizedBox.shrink(),
+                                  // Needs to be const Widget
+                                  tabIndicatorAnimDuration: kTabScrollDuration,
+                                  emojiSet: defaultEmojiSets,
+                                  buttonMode: ButtonMode.MATERIAL,
+                                ),
+                              ),
                             ),
-                            // Needs to be const Widget
-                            loadingIndicator: const SizedBox.shrink(),
-                            // Needs to be const Widget
-                            tabIndicatorAnimDuration: kTabScrollDuration,
-                            emojiSet: defaultEmojiSets,
-                            buttonMode: ButtonMode.MATERIAL,
-                          ),
-                        ),
-                      ),
-                    ) : WidgetUtils.commonSizedBox(0, 0),
+                          )
+                        : WidgetUtils.commonSizedBox(0, 0),
                   ],
                 ),
               ),
@@ -1029,9 +1060,10 @@ class _TrendsMorePageState extends State<TrendsMorePage>
             imgList = bean.data!.noteInfo!.imgUrl!;
             myUid = bean.data!.noteInfo!.uid.toString();
             comList = bean.data!.noteInfo!.commentList!;
-            if(bean.data!.noteInfo!.uid.toString() == sp.getString('user_id')){
+            if (bean.data!.noteInfo!.uid.toString() ==
+                sp.getString('user_id')) {
               isMe = true;
-            }else{
+            } else {
               isMe = false;
             }
           });

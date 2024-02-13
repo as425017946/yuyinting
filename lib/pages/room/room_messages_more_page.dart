@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sound/public/flutter_sound_player.dart';
+import 'package:im_flutter_sdk/im_flutter_sdk.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
@@ -642,7 +644,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                                 child: Container(
                                   height: double.infinity,
                                   color: MyColors.roomMessageBlackBG,
-                                  margin: EdgeInsets.only(bottom: 130.h),
+                                  margin: EdgeInsets.only(bottom: 140.h),
                                   child: ListView.builder(
                                     itemBuilder: chatWidget,
                                     controller: _scrollController,
@@ -685,12 +687,19 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                                 controller: controller,
                                 inputFormatters: [
                                   RegexFormatter(regex: MyUtils.regexFirstNotNull),
-                                  LengthLimitingTextInputFormatter(25) //限制输入长度
+                                  LengthLimitingTextInputFormatter(50) //限制输入长度
                                 ],
                                 style: StyleUtils.loginTextStyle,
                                 onSubmitted: (value) {
-                                  MyUtils.sendMessage(widget.otherUid, value);
-                                  doPostSendUserMsg(value);
+                                  //判断表情发送
+                                  if (MyUtils.checkClick()) {
+                                    if(controller.text.length > 50){
+                                      MyToastUtils.showToastBottom('单条消息要小于50个字呦~');
+                                    }else{
+                                      MyUtils.sendMessage(widget.otherUid, value);
+                                      doPostSendUserMsg(value);
+                                    }
+                                  }
                                 },
                                 decoration: InputDecoration(
                                   // border: InputBorder.none,
@@ -725,6 +734,19 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                               ),
                             ),
                           ),
+                          GestureDetector(
+                            onTap: (() {
+                              //判断图片发送
+                              if (MyUtils.checkClick()) {
+                                doPostCanSendUser(2);
+                              }
+                            }),
+                            child: WidgetUtils.showImages(
+                                'assets/images/chat_img.png',
+                                ScreenUtil().setHeight(45),
+                                ScreenUtil().setHeight(45)),
+                          ),
+                          WidgetUtils.commonSizedBox(0, 10.h),
                           GestureDetector(
                             onTap: (() {
                               if (MyUtils.checkClick()) {
@@ -960,8 +982,12 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
       CommonBean bean = await DataUtils.postCanSendUser(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-        //可以发私聊跳转 type 1发表情 2图片 3录音 4红包
-          doPostPayPwd();
+          //可以发私聊跳转 type 1发表情 2图片 3录音 4红包
+          if(type == 2){
+            onTapPickFromGallery();
+          }else if(type == 4){
+            doPostPayPwd();
+          }
           break;
         case MyHttpConfig.errorloginCode:
         // ignore: use_build_context_synchronously
@@ -974,5 +1000,72 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
     } catch (e) {
       MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
+  }
+
+  onTapPickFromGallery() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    print('选择照片路径:${image?.path}');
+    String? path = image?.path.toString();
+    if (path!.isNotEmpty) {
+      doSendFile(path);
+    }
+  }
+
+  /// 发送图片
+  Future<void> doSendFile(String filePath) async {
+    final imgMsg = EMMessage.createImageSendMessage(
+      targetId: widget.otherUid,
+      filePath: filePath,
+    );
+    imgMsg.attributes = {
+      'nickname': sp.getString('nickname'),
+      'avatar': sp.getString('user_headimg'),
+      'weight': 50
+    };
+    EMClient.getInstance.chatManager.sendMessage(imgMsg);
+
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    Database? db = await databaseHelper.database;
+    String combineID = '';
+    if (int.parse(sp.getString('user_id').toString()) >
+        int.parse(widget.otherUid)) {
+      combineID = '${widget.otherUid}-${sp.getString('user_id').toString()}';
+    } else {
+      combineID = '${sp.getString('user_id').toString()}-${widget.otherUid}';
+    }
+    Map<String, dynamic> params = <String, dynamic>{
+      'uid': sp.getString('user_id').toString(),
+      'otherUid': widget.otherUid,
+      'whoUid': sp.getString('user_id').toString(),
+      'combineID': combineID,
+      'nickName': widget.nickName,
+      'content': filePath,
+      'headNetImg': sp.getString('user_headimg').toString(),
+      'otherHeadNetImg': widget.otherImg,
+      'add_time': DateTime.now().millisecondsSinceEpoch,
+      'type': 2,
+      'number': 0,
+      'status': 0,
+      'readStatus': 1,
+      'liveStatus': 0,
+      'loginStatus': 0,
+      'weight': widget.otherUid.toString() == '1' ? 1 : 0,
+    };
+    // 插入数据
+    await databaseHelper.insertData('messageSLTable', params);
+    // 获取所有数据
+    List<Map<String, dynamic>> result = await db.query('messageSLTable',
+        columns: null,
+        whereArgs: [combineID, sp.getString('user_id')],
+        where: 'combineID = ? and uid = ?');
+
+    setState(() {
+      allData2 = result;
+      length = allData2.length;
+    });
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      scrollToLastItem(); // 在widget构建完成后滚动到底部
+    });
   }
 }

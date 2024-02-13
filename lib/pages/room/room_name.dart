@@ -15,6 +15,7 @@ import '../../utils/my_utils.dart';
 import '../../utils/regex_formatter.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
+
 /// 房间名称
 class RoomName extends StatefulWidget {
   const RoomName({super.key});
@@ -46,11 +47,13 @@ class _RoomNameState extends State<RoomName> {
           Expanded(
             child: GestureDetector(
               onTap: (() {
-    if(MyUtils.checkClick()) {
-      Navigator.pop(context);
-      MyUtils.goTransparentPageCom(context,
-          RoomManagerPage(type: 1, roomID: sp.getString('roomID').toString()));
-    }
+                if (MyUtils.checkClick()) {
+                  Navigator.pop(context);
+                  MyUtils.goTransparentPageCom(
+                      context,
+                      RoomManagerPage(
+                          type: 1, roomID: sp.getString('roomID').toString()));
+                }
               }),
               child: Container(
                 height: double.infinity,
@@ -84,22 +87,22 @@ class _RoomNameState extends State<RoomName> {
                             fontSize: ScreenUtil().setSp(32))),
                     const Expanded(child: Text('')),
                     GestureDetector(
-                      onTap: ((){
-    if(MyUtils.checkClick()) {
-      if (textEditingController.text
-          .trim()
-          .toString()
-          .isEmpty) {
-        MyToastUtils.showToastBottom('请输入房间名称');
-      } else {
-        doPostEditRoom();
-      }
-    }
+                      onTap: (() {
+                        if (MyUtils.checkClick()) {
+                          if (textEditingController.text
+                              .trim()
+                              .toString()
+                              .isEmpty) {
+                            MyToastUtils.showToastBottom('请输入房间名称');
+                          } else {
+                            doPostEditRoom();
+                          }
+                        }
                       }),
                       child: Container(
                         width: ScreenUtil().setWidth(180),
                         padding:
-                        EdgeInsets.only(right: ScreenUtil().setHeight(40)),
+                            EdgeInsets.only(right: ScreenUtil().setHeight(40)),
                         alignment: Alignment.centerRight,
                         child: Text(
                           '保存',
@@ -126,7 +129,8 @@ class _RoomNameState extends State<RoomName> {
                   ),
                   child: Row(
                     children: [
-                      Expanded(child: TextField(
+                      Expanded(
+                          child: TextField(
                         controller: textEditingController,
                         autofocus: true,
                         inputFormatters: [
@@ -134,7 +138,8 @@ class _RoomNameState extends State<RoomName> {
                           //设置只能输入12位
                           LengthLimitingTextInputFormatter(12),
                         ],
-                        style: StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 28.sp),
+                        style: StyleUtils.getCommonTextStyle(
+                            color: Colors.white, fontSize: 28.sp),
                         onChanged: (value) {
                           setState(() {
                             num = value.length;
@@ -145,7 +150,8 @@ class _RoomNameState extends State<RoomName> {
                           hintText: '请输入房间名称',
                           hintStyle: StyleUtils.loginHintTextStyle,
 
-                          contentPadding: const EdgeInsets.only(top: 0, bottom: 0),
+                          contentPadding:
+                              const EdgeInsets.only(top: 0, bottom: 0),
                           border: const OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.transparent),
                           ),
@@ -167,7 +173,10 @@ class _RoomNameState extends State<RoomName> {
                           // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
                         ),
                       )),
-                      WidgetUtils.onlyText('$num/12', StyleUtils.getCommonTextStyle(color: Colors.white,fontSize: 21.sp))
+                      WidgetUtils.onlyText(
+                          '$num/12',
+                          StyleUtils.getCommonTextStyle(
+                              color: Colors.white, fontSize: 21.sp))
                     ],
                   ),
                 )
@@ -191,12 +200,13 @@ class _RoomNameState extends State<RoomName> {
         case MyHttpConfig.successCode:
           MyToastUtils.showToastBottom('房间名称修改成功');
           eventBus.fire(SubmitButtonBack(title: '修改房间名称'));
-          sp.setString('roomName', textEditingController.text.trim().toString());
+          sp.setString(
+              'roomName', textEditingController.text.trim().toString());
           // ignore: use_build_context_synchronously
           Navigator.pop(context);
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:

@@ -29,6 +29,7 @@ import 'car/car_shop_page.dart';
 import 'car/lishi_page.dart';
 import 'car/zhongjian_page.dart';
 
+
 /// 赛车游戏
 class Carpage extends StatefulWidget {
   const Carpage({super.key});
@@ -359,14 +360,13 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
 
   /// 播放音频
   Soundpool soundpool = Soundpool(streamType: StreamType.notification);
-
   Future<void> playSound() async {
     int soundId = await rootBundle
         .load('assets/audio/car_jine.wav')
         .then(((ByteData soundDate) {
       return soundpool.load(soundDate);
     }));
-    // soundpool.setVolume(volume: 0.5);
+    soundpool.setVolume(volume: 0.2);
     await soundpool.play(soundId);
   }
 
@@ -376,6 +376,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
         .then(((ByteData soundDate) {
       return soundpool.load(soundDate);
     }));
+    soundpool.setVolume(volume: 0.2);
     await soundpool.play(soundId);
   }
 
@@ -385,6 +386,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
         .then(((ByteData soundDate) {
       return soundpool.load(soundDate);
     }));
+    soundpool.setVolume(volume: 0.2);
     await soundpool.play(soundId);
   }
 

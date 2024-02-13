@@ -63,6 +63,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
       avatarFrameImg = '',
       avatarFrameGifImg = '';
   List<String> list_p = [];
+  List<String> imageList = [];
   String zhuangtai = '闭麦';
   bool isMai = false; //判断麦上有没有这个人
 
@@ -847,8 +848,10 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
       switch (bean.code) {
         case MyHttpConfig.successCode:
           list_p.clear();
+          imageList.clear();
           setState(() {
             headImg = bean.data!.avatar!;
+            imageList.add(headImg);
             nickName = bean.data!.nickname!;
             userNumber = bean.data!.number.toString();
             city = bean.data!.city!;

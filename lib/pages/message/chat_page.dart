@@ -1541,7 +1541,7 @@ class _ChatPageState extends State<ChatPage> {
                               RegexFormatter(
                                   regex: MyUtils.regexFirstNotNull),
                               LengthLimitingTextInputFormatter(
-                                  25) //限制输入长度
+                                  50) //限制输入长度
                             ],
                             style: StyleUtils.loginTextStyle,
                             onSubmitted: (value) {
@@ -1601,8 +1601,8 @@ class _ChatPageState extends State<ChatPage> {
                         onTap: (() {
                           //判断表情发送
                           if (MyUtils.checkClick()) {
-                            if(controller.text.length > 25){
-                              MyToastUtils.showToastBottom('单条消息要小于25个字呦~');
+                            if(controller.text.length > 50){
+                              MyToastUtils.showToastBottom('单条消息要小于50个字呦~');
                             }else{
                               doPostCanSendUser(1);
                             }
