@@ -3,9 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/bean/kefuBean.dart';
 import 'package:yuyinting/bean/myGhBean.dart';
 import 'package:yuyinting/main.dart';
+import 'package:yuyinting/pages/mine/gonghui/room_liushui_page.dart';
 import 'package:yuyinting/pages/mine/gonghui/room_more_page.dart';
 import 'package:yuyinting/pages/mine/gonghui/setting_gonghui_page.dart';
 import 'package:yuyinting/pages/mine/gonghui/shenhe_page.dart';
+import 'package:yuyinting/pages/mine/gonghui/zhubo_liushui_page.dart';
 
 import '../../../bean/qyListBean.dart';
 import '../../../colors/my_colors.dart';
@@ -367,7 +369,7 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                               Colors.white),
                         ),
                       ),
-                      WidgetUtils.commonSizedBox(0, 20),
+                      WidgetUtils.commonSizedBox(0, 20.h),
                       Expanded(
                         child: GestureDetector(
                           onTap: (() {
@@ -403,18 +405,38 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                           ),
                         ),
                       ),
-                      WidgetUtils.commonSizedBox(0, 20),
+                      WidgetUtils.commonSizedBox(0, 20.h),
                       Expanded(
                         child: GestureDetector(
                           onTap: (() {
-                            Navigator.pushNamed(context, 'JiesuanPage');
+                            if(MyUtils.checkClick()){
+                              MyUtils.goTransparentPageCom(context, const RoomLiuShuiPage());
+                            }
                           }),
                           child: WidgetUtils.myContainer(
                               ScreenUtil().setHeight(70),
                               double.infinity,
                               MyColors.homeTopBG,
                               MyColors.homeTopBG,
-                              '结算账单',
+                              '房间流水',
+                              ScreenUtil().setSp(31),
+                              Colors.white),
+                        ),
+                      ),
+                      WidgetUtils.commonSizedBox(0, 20.h),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: (() {
+                            if(MyUtils.checkClick()){
+                              MyUtils.goTransparentPageCom(context, const ZhuBoLiuShuiPage());
+                            }
+                          }),
+                          child: WidgetUtils.myContainer(
+                              ScreenUtil().setHeight(70),
+                              double.infinity,
+                              MyColors.homeTopBG,
+                              MyColors.homeTopBG,
+                              '主播流水',
                               ScreenUtil().setSp(31),
                               Colors.white),
                         ),

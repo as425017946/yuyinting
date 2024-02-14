@@ -1420,6 +1420,9 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
   /// 送礼物
   Future<void> doPostSendGift() async {
     String toUids = '';
+    setState(() {
+      listUID = listUID.toSet().toList();
+    });
     for(int i = 0; i < listUID.length; i++){
       if(toUids.isEmpty){
         toUids = listUID[i];

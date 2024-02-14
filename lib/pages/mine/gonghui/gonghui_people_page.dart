@@ -17,6 +17,7 @@ import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 import '../../message/geren/people_info_page.dart';
 import '../my/my_info_page.dart';
+import 'fenrun_page.dart';
 /// 公会成员
 class GonghuiPeoplePage extends StatefulWidget {
   const GonghuiPeoplePage({Key? key}) : super(key: key);
@@ -38,6 +39,7 @@ class _GonghuiPeoplePageState extends State<GonghuiPeoplePage> {
   RefreshController(initialRefresh: false);
 
   void _onRefresh() async {
+    _refreshController.resetNoData();
     // monitor network fetch
     await Future.delayed(const Duration(milliseconds: 1000));
     // if failed,use refreshFailed()
@@ -104,29 +106,75 @@ class _GonghuiPeoplePageState extends State<GonghuiPeoplePage> {
                 ],
               ),
               WidgetUtils.commonSizedBox(0, 10),
-              WidgetUtils.onlyText(list[i].nickname!, StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: 14)),
-              WidgetUtils.commonSizedBox(0, 5),
-              list[i].gender != 0 ? Container(
-                height: ScreenUtil().setHeight(25),
-                width: ScreenUtil().setWidth(40),
-                alignment: Alignment.center,
-                //边框设置
-                decoration: BoxDecoration(
-                  //背景
-                  color: list[i].gender == 1 ? MyColors.dtBlue : MyColors.dtPink,
-                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                  borderRadius:
-                  const BorderRadius.all(Radius.circular(30.0)),
+              SizedBox(
+                height: 76.h,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Spacer(),
+                    Row(
+                      children: [
+                        WidgetUtils.onlyText(list[i].nickname!, StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: 14)),
+                        WidgetUtils.commonSizedBox(0, 5),
+                        list[i].gender != 0 ? Container(
+                          height: ScreenUtil().setHeight(25),
+                          width: ScreenUtil().setWidth(40),
+                          alignment: Alignment.center,
+                          //边框设置
+                          decoration: BoxDecoration(
+                            //背景
+                            color: list[i].gender == 1 ? MyColors.dtBlue : MyColors.dtPink,
+                            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                            borderRadius:
+                            const BorderRadius.all(Radius.circular(30.0)),
+                          ),
+                          child: WidgetUtils.showImages(
+                              list[i].gender == 1
+                                  ? 'assets/images/nan.png'
+                                  : 'assets/images/nv.png',
+                              10,
+                              10),
+                        ) : const Text(''),
+                      ],
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        WidgetUtils.onlyText('ID:${list[i].id.toString()}', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: 14)),
+                      ],
+                    ),
+                    const Spacer(),
+                  ],
                 ),
-                child: WidgetUtils.showImages(
-                    list[i].gender == 1
-                        ? 'assets/images/nan.png'
-                        : 'assets/images/nv.png',
-                    10,
-                    10),
-              ) : const Text(''),
+              ),
+              WidgetUtils.commonSizedBox(0, 10.h),
+              SizedBox(
+                height: 76.h,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Spacer(),
+                    WidgetUtils.onlyText('分润比例', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: 14)),
+                    WidgetUtils.commonSizedBox(0, 5),
+                    WidgetUtils.onlyText('10%', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: 14)),
+                    const Spacer(),
+                  ],
+                ),
+              ),
               const Expanded(child: Text('')),
-             sp.getString('role').toString() == 'leader' ?  list[i].identity != 10 ? GestureDetector(
+              sp.getString('user_identity').toString() == 'leader' ?  list[i].identity != 10 ? GestureDetector(
+                onTap: ((){
+                  if(MyUtils.checkClick()) {
+                    MyUtils.goTransparentPageCom(context, FenRunPage(name: list[i].nickname!, id: list[i].id.toString(),));
+                  }
+                }),
+                child: WidgetUtils.myContainer(ScreenUtil().setHeight(45), ScreenUtil().setHeight(130), Colors.white, MyColors.homeTopBG, '设置比例', ScreenUtil().setSp(25), MyColors.homeTopBG),
+              ) : const Text('') : const Text(''),
+             WidgetUtils.commonSizedBox(0, 10.h),
+             sp.getString('user_identity').toString() == 'leader' ?  list[i].identity != 10 ? GestureDetector(
                onTap: ((){
                  isRemove(context, list[i].streamerUid.toString(),i);
                }),
@@ -265,7 +313,9 @@ class _GonghuiPeoplePageState extends State<GonghuiPeoplePage> {
     try {
       Map<String, dynamic> params = <String, dynamic>{
         'guild_id': sp.getString('guild_id'),
-        'keyword': keyword
+        'keyword': keyword,
+        'page': page,
+        'pageSize': MyConfig.pageSize,
       };
       ghPeopleBean bean = await DataUtils.postSearchGuildStreamer(params);
       switch (bean.code) {

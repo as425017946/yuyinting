@@ -366,7 +366,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
         .then(((ByteData soundDate) {
       return soundpool.load(soundDate);
     }));
-    soundpool.setVolume(volume: 0.2);
+    // soundpool.setVolume(volume: 0.2);
     await soundpool.play(soundId);
   }
 
@@ -376,7 +376,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
         .then(((ByteData soundDate) {
       return soundpool.load(soundDate);
     }));
-    soundpool.setVolume(volume: 0.2);
+    // soundpool.setVolume(volume: 0.2);
     await soundpool.play(soundId);
   }
 
@@ -386,7 +386,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
         .then(((ByteData soundDate) {
       return soundpool.load(soundDate);
     }));
-    soundpool.setVolume(volume: 0.2);
+    // soundpool.setVolume(volume: 0.2);
     await soundpool.play(soundId);
   }
 
