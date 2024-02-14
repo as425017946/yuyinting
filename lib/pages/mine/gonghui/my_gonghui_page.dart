@@ -3,11 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/bean/kefuBean.dart';
 import 'package:yuyinting/bean/myGhBean.dart';
 import 'package:yuyinting/main.dart';
-import 'package:yuyinting/pages/mine/gonghui/room_liushui_page.dart';
 import 'package:yuyinting/pages/mine/gonghui/room_more_page.dart';
 import 'package:yuyinting/pages/mine/gonghui/setting_gonghui_page.dart';
 import 'package:yuyinting/pages/mine/gonghui/shenhe_page.dart';
-import 'package:yuyinting/pages/mine/gonghui/zhubo_liushui_page.dart';
 
 import '../../../bean/qyListBean.dart';
 import '../../../colors/my_colors.dart';
@@ -110,28 +108,28 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                       ),
                       identity == 'leader'
                           ? GestureDetector(
-                              onTap: (() {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                    const SettingGonghuiPage(),
-                                  ),
-                                ).then((value) {
-                                  doPostMyGh();
-                                });
-                              }),
-                              child: Container(
-                                height: 60.h,
-                                width: 60.h,
-                                color: Colors.transparent,
-                                alignment: Alignment.centerRight,
-                                child: WidgetUtils.showImages(
-                                    'assets/images/gonghui_bianji.png',
-                                    ScreenUtil().setHeight(38),
-                                    ScreenUtil().setHeight(38)),
-                              ),
-                            )
+                        onTap: (() {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                              const SettingGonghuiPage(),
+                            ),
+                          ).then((value) {
+                            doPostMyGh();
+                          });
+                        }),
+                        child: Container(
+                          height: 60.h,
+                          width: 60.h,
+                          color: Colors.transparent,
+                          alignment: Alignment.centerRight,
+                          child: WidgetUtils.showImages(
+                              'assets/images/gonghui_bianji.png',
+                              ScreenUtil().setHeight(38),
+                              ScreenUtil().setHeight(38)),
+                        ),
+                      )
                           : const Text(''),
                       WidgetUtils.commonSizedBox(20, 20),
                     ],
@@ -198,7 +196,7 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                                               StyleUtils.getCommonTextStyle(
                                                 color: MyColors.g6,
                                                 fontSize:
-                                                    ScreenUtil().setSp(21),
+                                                ScreenUtil().setSp(21),
                                               )),
                                         ],
                                       ),
@@ -218,7 +216,7 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                                               StyleUtils.getCommonTextStyle(
                                                 color: MyColors.g6,
                                                 fontSize:
-                                                    ScreenUtil().setSp(21),
+                                                ScreenUtil().setSp(21),
                                               )),
                                         ],
                                       ),
@@ -255,7 +253,7 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            const RoomMorePage(),
+                                        const RoomMorePage(),
                                       ),
                                     ).then((value) {
                                       doPostMyGh();
@@ -341,109 +339,89 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
           /// 应聘咨询按钮
           identity == 'leader'
               ? Container(
-                  height: ScreenUtil().setHeight(70),
-                  margin:
-                      const EdgeInsets.only(left: 20, right: 20, bottom: 20),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: (() {
-                            if (MyUtils.checkClick()) {
-                              MyUtils.goTransparentRFPage(
-                                  context,
-                                  ChatPage(
-                                    nickName: '维C客服',
-                                    otherUid: kefuUid,
-                                    otherImg: kefUavatar,
-                                  ));
-                            }
-                          }),
-                          child: WidgetUtils.myContainer(
-                              ScreenUtil().setHeight(70),
-                              double.infinity,
-                              MyColors.homeTopBG,
-                              MyColors.homeTopBG,
-                              '开设房间',
-                              ScreenUtil().setSp(31),
-                              Colors.white),
-                        ),
-                      ),
-                      WidgetUtils.commonSizedBox(0, 20.h),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: (() {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                const ShenhePage(),
-                              ),
-                            ).then((value) {
-                              doPostMyGh();
-                            });
-                          }),
-                          child: SizedBox(
-                            child: Stack(
-                              children: [
-                                WidgetUtils.myContainer(
-                                    ScreenUtil().setHeight(70),
-                                    double.infinity,
-                                    MyColors.homeTopBG,
-                                    MyColors.homeTopBG,
-                                    '入驻审核',
-                                    ScreenUtil().setSp(31),
-                                    Colors.white),
-                                qianyue != 0 ? Positioned(
-                                    right: ScreenUtil().setHeight(30),
-                                    top: ScreenUtil().setHeight(10),
-                                    child: CustomPaint(
-                                    painter: LinePainter2(colors: Colors.red),
-                                )) : const Text('')
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      WidgetUtils.commonSizedBox(0, 20.h),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: (() {
-                            if(MyUtils.checkClick()){
-                              MyUtils.goTransparentPageCom(context, const RoomLiuShuiPage());
-                            }
-                          }),
-                          child: WidgetUtils.myContainer(
-                              ScreenUtil().setHeight(70),
-                              double.infinity,
-                              MyColors.homeTopBG,
-                              MyColors.homeTopBG,
-                              '房间流水',
-                              ScreenUtil().setSp(31),
-                              Colors.white),
-                        ),
-                      ),
-                      WidgetUtils.commonSizedBox(0, 20.h),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: (() {
-                            if(MyUtils.checkClick()){
-                              MyUtils.goTransparentPageCom(context, const ZhuBoLiuShuiPage());
-                            }
-                          }),
-                          child: WidgetUtils.myContainer(
-                              ScreenUtil().setHeight(70),
-                              double.infinity,
-                              MyColors.homeTopBG,
-                              MyColors.homeTopBG,
-                              '主播流水',
-                              ScreenUtil().setSp(31),
-                              Colors.white),
-                        ),
-                      ),
-                    ],
+            height: ScreenUtil().setHeight(70),
+            margin:
+            const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+            child: Row(
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      if (MyUtils.checkClick()) {
+                        MyUtils.goTransparentRFPage(
+                            context,
+                            ChatPage(
+                              nickName: '维C客服',
+                              otherUid: kefuUid,
+                              otherImg: kefUavatar,
+                            ));
+                      }
+                    }),
+                    child: WidgetUtils.myContainer(
+                        ScreenUtil().setHeight(70),
+                        double.infinity,
+                        MyColors.homeTopBG,
+                        MyColors.homeTopBG,
+                        '开设房间',
+                        ScreenUtil().setSp(31),
+                        Colors.white),
                   ),
-                )
+                ),
+                WidgetUtils.commonSizedBox(0, 20),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                          const ShenhePage(),
+                        ),
+                      ).then((value) {
+                        doPostMyGh();
+                      });
+                    }),
+                    child: SizedBox(
+                      child: Stack(
+                        children: [
+                          WidgetUtils.myContainer(
+                              ScreenUtil().setHeight(70),
+                              double.infinity,
+                              MyColors.homeTopBG,
+                              MyColors.homeTopBG,
+                              '入驻审核',
+                              ScreenUtil().setSp(31),
+                              Colors.white),
+                          qianyue != 0 ? Positioned(
+                              right: ScreenUtil().setHeight(30),
+                              top: ScreenUtil().setHeight(10),
+                              child: CustomPaint(
+                                painter: LinePainter2(colors: Colors.red),
+                              )) : const Text('')
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                WidgetUtils.commonSizedBox(0, 20),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      Navigator.pushNamed(context, 'JiesuanPage');
+                    }),
+                    child: WidgetUtils.myContainer(
+                        ScreenUtil().setHeight(70),
+                        double.infinity,
+                        MyColors.homeTopBG,
+                        MyColors.homeTopBG,
+                        '结算账单',
+                        ScreenUtil().setSp(31),
+                        Colors.white),
+                  ),
+                ),
+              ],
+            ),
+          )
               : const Text('')
         ],
       ),
@@ -478,7 +456,7 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
           });
           break;
         case MyHttpConfig.errorloginCode:
-          // ignore: use_build_context_synchronously
+        // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -493,30 +471,30 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
   }
 
 
-  /// 签约列表
-  // Future<void> doPostApplySignList() async {
-  //   Map<String, dynamic> params = <String, dynamic>{
-  //     'guild_id': sp.getString('guild_id'),
-  //   };
-  //   try {
-  //     qyListBean bean = await DataUtils.postApplySignList(params);
-  //     switch (bean.code) {
-  //       case MyHttpConfig.successCode:
-  //         setState(() {
-  //           qianyue = bean.data!.length;
-  //         });
-  //         break;
-  //       case MyHttpConfig.errorloginCode:
-  //       // ignore: use_build_context_synchronously
-  //         MyUtils.jumpLogin(context);
-  //         break;
-  //       default:
-  //         MyToastUtils.showToastBottom(bean.msg!);
-  //         break;
-  //     }
-  //   } catch (e) {
-  //     MyToastUtils.showToastBottom(MyConfig.errorTitle);
-  //   }
-  // }
+/// 签约列表
+// Future<void> doPostApplySignList() async {
+//   Map<String, dynamic> params = <String, dynamic>{
+//     'guild_id': sp.getString('guild_id'),
+//   };
+//   try {
+//     qyListBean bean = await DataUtils.postApplySignList(params);
+//     switch (bean.code) {
+//       case MyHttpConfig.successCode:
+//         setState(() {
+//           qianyue = bean.data!.length;
+//         });
+//         break;
+//       case MyHttpConfig.errorloginCode:
+//       // ignore: use_build_context_synchronously
+//         MyUtils.jumpLogin(context);
+//         break;
+//       default:
+//         MyToastUtils.showToastBottom(bean.msg!);
+//         break;
+//     }
+//   } catch (e) {
+//     MyToastUtils.showToastBottom(MyConfig.errorTitle);
+//   }
+// }
 
 }
