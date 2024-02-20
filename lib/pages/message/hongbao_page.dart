@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:yuyinting/bean/Common_bean.dart';
+import 'package:yuyinting/pages/message/pay_hb_ts_page.dart';
 import 'package:yuyinting/pages/message/pay_ts_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/style_utils.dart';
@@ -43,24 +43,8 @@ class _HongBaoPageState extends State<HongBaoPage> {
     // TODO: implement initState
     super.initState();
     doPostBalance();
-    listen = eventBus.on<RoomBack>().listen((event) {
-      if (event.title == '发红包已输入密码') {
-        if(downTime == 0){
-          setState(() {
-            downTime = DateTime.now().millisecondsSinceEpoch;
-          });
-          doPostSendRedPacket(
-              int.parse(controllerDou.text).toString(), event.index!);
-        }else{
-          if((DateTime.now().millisecondsSinceEpoch - downTime) >=1500) {
-            doPostSendRedPacket(
-                int.parse(controllerDou.text).toString(), event.index!);
-          }else{
-            MyToastUtils.showToastBottom('发红包太频繁了呦~');
-          }
-        }
-
-      }
+    listen = eventBus.on<HongBaoBack>().listen((event) {
+      Navigator.pop(context);
     });
   }
 
@@ -344,7 +328,7 @@ class _HongBaoPageState extends State<HongBaoPage> {
                       MyToastUtils.showToastBottom('请输入要发送的V豆数量');
                     } else {
                       // 进入输入密码页面
-                      MyUtils.goTransparentPage(context, const PayTSPage());
+                      MyUtils.goTransparentPage(context, PayHBTSPage(uid: widget.uid, number: controllerDou.text.trim().toString()));
                     }
                   }
                 }),
@@ -411,39 +395,39 @@ class _HongBaoPageState extends State<HongBaoPage> {
     }
   }
 
-  /// 发红包
-  Future<void> doPostSendRedPacket(String shuliang, String mima) async {
-    Map<String, dynamic> params = <String, dynamic>{
-      'uid': widget.uid,
-      'amount': shuliang,
-      'amount_type': '1',
-      'pay_pwd': mima
-    };
-    try {
-      CommonBean bean = await DataUtils.postSendRedPacket(params);
-      switch (bean.code) {
-        case MyHttpConfig.successCode:
-          eventBus.fire(HongBaoBack(info: shuliang));
-          setState(() {
-            jinbi = (double.parse(jinbi) - double.parse(shuliang)).toString();
-          });
-          // ignore: use_build_context_synchronously
-          Navigator.pop(context);
-          break;
-        case MyHttpConfig.errorloginCode:
-          // ignore: use_build_context_synchronously
-          MyUtils.jumpLogin(context);
-          break;
-        default:
-          MyToastUtils.showToastBottom(bean.msg!);
-          setState(() {
-            controllerDou.text = '';
-          });
-
-          break;
-      }
-    } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
-    }
-  }
+  // /// 发红包
+  // Future<void> doPostSendRedPacket(String shuliang, String mima) async {
+  //   Map<String, dynamic> params = <String, dynamic>{
+  //     'uid': widget.uid,
+  //     'amount': shuliang,
+  //     'amount_type': '1',
+  //     'pay_pwd': mima
+  //   };
+  //   try {
+  //     CommonBean bean = await DataUtils.postSendRedPacket(params);
+  //     switch (bean.code) {
+  //       case MyHttpConfig.successCode:
+  //         eventBus.fire(HongBaoBack(info: shuliang));
+  //         setState(() {
+  //           jinbi = (double.parse(jinbi) - double.parse(shuliang)).toString();
+  //         });
+  //         // ignore: use_build_context_synchronously
+  //         Navigator.pop(context);
+  //         break;
+  //       case MyHttpConfig.errorloginCode:
+  //         // ignore: use_build_context_synchronously
+  //         MyUtils.jumpLogin(context);
+  //         break;
+  //       default:
+  //         MyToastUtils.showToastBottom(bean.msg!);
+  //         setState(() {
+  //           controllerDou.text = '';
+  //         });
+  //
+  //         break;
+  //     }
+  //   } catch (e) {
+  //     MyToastUtils.showToastBottom(MyConfig.errorTitle);
+  //   }
+  // }
 }

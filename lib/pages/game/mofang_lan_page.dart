@@ -112,7 +112,7 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
   }
 
   /// 播放音频
-  Soundpool soundpool = Soundpool(streamType: StreamType.notification);
+  Soundpool soundpool = Soundpool(streamType: StreamType.music);
   Future<void> playSound() async {
     int soundId = await rootBundle.load('assets/audio/mofang_lan.wav').then(((ByteData soundDate){
       return soundpool.load(soundDate);

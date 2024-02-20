@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:yuyinting/pages/gongping/web_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 
 import '../../../bean/balanceBean.dart';
 import '../../../bean/orderPayBean.dart';
+import '../../../bean/payLsitBean.dart';
 import '../../../colors/my_colors.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
@@ -28,12 +28,17 @@ class _DouPayPageState extends State<DouPayPage> {
   var appBar;
   TextEditingController controller = TextEditingController();
   var gz = false;
-  List<bool> isClick = [true,false,false,false,false,false,false,false,false];
-  List<String> listD = ['12','36','68','100','200','500','1000','3000','9000'];
-  List<String> listS = ['100','300','580','1000','2000','5000','10000','30000','90000'];
-  //支付类型 0 支付宝 1云闪付 2 银行卡 3微信
-  int type = 0;
-  // 是否支持此支付方式 0支付宝 1云闪付 2银行卡 3微信
+  // List<bool> isClick = [true,false,false,false,false,false,false,false,false];
+  // List<String> listD = ['12','36','68','100','200','500','1000','3000','9000'];
+  // List<String> listS = ['100','300','580','1000','2000','5000','10000','30000','90000'];
+  List<bool> isClick = [];
+  List<String> listD = [];
+  List<String> listS = [];
+  //支付方式 1支付宝 2云闪付 3微信 4银行卡 5QQ钱包 6 数字人民币 7抖音钱包
+  int type = 1;
+  //当前状态是什么
+  String presentType = '';
+  //支付方式 1支付宝 2云闪付 3微信 4银行卡 5QQ钱包 6 数字人民币 7抖音钱包
   bool isChoose0 = true, isChoose1 = true, isChoose2 = false, isChoose3 = false;
   // 想要充值多少钱 给多少豆子
   String money = '12', moneyDou = '100';
@@ -42,6 +47,7 @@ class _DouPayPageState extends State<DouPayPage> {
     return GestureDetector(
       onTap: ((){
         setState(() {
+          presentType = listInfo[index].payType!;
           //选择金额要判断显示的支付方式
           money = listD[index];
           moneyDou = listS[index];
@@ -116,6 +122,7 @@ class _DouPayPageState extends State<DouPayPage> {
     // TODO: implement initState
     super.initState();
     doPostBalance();
+    doPostGetPayment();
     appBar = WidgetUtils.getAppBar('充值V豆', true, context, false, 0);
     listen = eventBus.on<SubmitButtonBack>().listen((event) {
       if(event.title == '确认充值'){
@@ -204,7 +211,7 @@ class _DouPayPageState extends State<DouPayPage> {
                   WidgetUtils.commonSizedBox(20, 20),
                   WidgetUtils.onlyText('请选择充值金额', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(33), fontWeight: FontWeight.w600)),
                   WidgetUtils.commonSizedBox(15, 20),
-                  GridView.builder(
+                  listD.isNotEmpty ?  GridView.builder(
                       shrinkWrap: true,
                       itemCount: 9,
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -213,17 +220,17 @@ class _DouPayPageState extends State<DouPayPage> {
                         mainAxisSpacing: 20, //设置行间距
                         childAspectRatio: 16/9,
                       ),
-                      itemBuilder: _initlistdata),
+                      itemBuilder: _initlistdata) : const Text(''),
                   WidgetUtils.commonSizedBox(15, 20),
                   Container(
                     height: 1.h,
                     width: double.infinity,
                     color: MyColors.home_hx,
                   ),
-                  GestureDetector(
+                  presentType.contains('1') ? GestureDetector(
                     onTap: ((){
                       setState(() {
-                        type = 0;
+                        type = 1;
                       });
                     }),
                     child: Container(
@@ -237,20 +244,20 @@ class _DouPayPageState extends State<DouPayPage> {
                           WidgetUtils.commonSizedBox(0, 20.w),
                           WidgetUtils.onlyText('支付宝', StyleUtils.getCommonTextStyle(color: Colors.black,fontSize: 28.sp, fontWeight: FontWeight.w600)),
                           const Spacer(),
-                          type == 0 ? WidgetUtils.showImages('assets/images/wallet_dh.png', 35.h, 35.h) : const Text(''),
+                          type == 1 ? WidgetUtils.showImages('assets/images/wallet_dh.png', 35.h, 35.h) : const Text(''),
                         ],
                       ),
                     ),
-                  ),
-                  Container(
+                  ): WidgetUtils.commonSizedBox(0, 0),
+                  presentType.contains('1') ? Container(
                     height: 1.h,
                     width: double.infinity,
                     color: MyColors.home_hx,
-                  ),
-                  isChoose1 ? GestureDetector(
+                  ): WidgetUtils.commonSizedBox(0, 0),
+                  presentType.contains('2') ? GestureDetector(
                     onTap: ((){
                       setState(() {
-                        type = 1;
+                        type = 2;
                       });
                     }),
                     child: Container(
@@ -264,17 +271,17 @@ class _DouPayPageState extends State<DouPayPage> {
                           WidgetUtils.commonSizedBox(0, 20.w),
                           WidgetUtils.onlyText('云闪付', StyleUtils.getCommonTextStyle(color: Colors.black,fontSize: 28.sp, fontWeight: FontWeight.w600)),
                           const Spacer(),
-                          type == 1 ? WidgetUtils.showImages('assets/images/wallet_dh.png', 35.h, 35.h) : WidgetUtils.commonSizedBox(0, 0),
+                          type == 2 ? WidgetUtils.showImages('assets/images/wallet_dh.png', 35.h, 35.h) : const Text(''),
                         ],
                       ),
                     ),
-                  ) : WidgetUtils.commonSizedBox(0, 0),
-                  isChoose1 ? Container(
+                  ): WidgetUtils.commonSizedBox(0, 0),
+                  presentType.contains('2') ? Container(
                     height: 1.h,
                     width: double.infinity,
                     color: MyColors.home_hx,
                   ) : WidgetUtils.commonSizedBox(0, 0),
-                  isChoose3 ? GestureDetector(
+                  presentType.contains('3') ? GestureDetector(
                     onTap: ((){
                       setState(() {
                         type = 3;
@@ -291,20 +298,20 @@ class _DouPayPageState extends State<DouPayPage> {
                           WidgetUtils.commonSizedBox(0, 20.w),
                           WidgetUtils.onlyText('微信', StyleUtils.getCommonTextStyle(color: Colors.black,fontSize: 28.sp, fontWeight: FontWeight.w600)),
                           const Spacer(),
-                          type == 3 ? WidgetUtils.showImages('assets/images/wallet_dh.png', 35.h, 35.h) : WidgetUtils.commonSizedBox(0, 0),
+                          type == 3 ? WidgetUtils.showImages('assets/images/wallet_dh.png', 35.h, 35.h) : const Text(''),
                         ],
                       ),
                     ),
-                  ) : WidgetUtils.commonSizedBox(0, 0),
-                  isChoose3 ? Container(
+                  ): WidgetUtils.commonSizedBox(0, 0),
+                  presentType.contains('3') ? Container(
                     height: 1.h,
                     width: double.infinity,
                     color: MyColors.home_hx,
                   ) : WidgetUtils.commonSizedBox(0, 0),
-                  isChoose2 ? GestureDetector(
+                  presentType.contains('4') ? GestureDetector(
                     onTap: ((){
                       setState(() {
-                        type = 2;
+                        type = 4;
                       });
                     }),
                     child: Container(
@@ -318,12 +325,95 @@ class _DouPayPageState extends State<DouPayPage> {
                           WidgetUtils.commonSizedBox(0, 20.w),
                           WidgetUtils.onlyText('银行卡', StyleUtils.getCommonTextStyle(color: Colors.black,fontSize: 28.sp, fontWeight: FontWeight.w600)),
                           const Spacer(),
-                          type == 2 ? WidgetUtils.showImages('assets/images/wallet_dh.png', 35.h, 35.h) : const Text(''),
+                          type == 4 ? WidgetUtils.showImages('assets/images/wallet_dh.png', 35.h, 35.h) : const Text(''),
                         ],
                       ),
                     ),
+                  ): WidgetUtils.commonSizedBox(0, 0),
+                  presentType.contains('4') ? Container(
+                    height: 1.h,
+                    width: double.infinity,
+                    color: MyColors.home_hx,
                   ) : WidgetUtils.commonSizedBox(0, 0),
-                  isChoose2 ? Container(
+                  presentType.contains('5') ? GestureDetector(
+                    onTap: ((){
+                      setState(() {
+                        type = 5;
+                      });
+                    }),
+                    child: Container(
+                      height: 80.h,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        children: [
+                          WidgetUtils.showImages('assets/images/wallet_qq.png', 40.h, 40.h),
+                          WidgetUtils.commonSizedBox(0, 20.w),
+                          WidgetUtils.onlyText('QQ钱包', StyleUtils.getCommonTextStyle(color: Colors.black,fontSize: 28.sp, fontWeight: FontWeight.w600)),
+                          const Spacer(),
+                          type == 5 ? WidgetUtils.showImages('assets/images/wallet_dh.png', 35.h, 35.h) : const Text(''),
+                        ],
+                      ),
+                    ),
+                  ): WidgetUtils.commonSizedBox(0, 0),
+                  presentType.contains('5') ? Container(
+                    height: 1.h,
+                    width: double.infinity,
+                    color: MyColors.home_hx,
+                  ) : WidgetUtils.commonSizedBox(0, 0),
+
+                  presentType.contains('6') ? GestureDetector(
+                    onTap: ((){
+                      setState(() {
+                        type = 6;
+                      });
+                    }),
+                    child: Container(
+                      height: 80.h,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        children: [
+                          WidgetUtils.showImages('assets/images/wallet_szrmb.png', 40.h, 40.h),
+                          WidgetUtils.commonSizedBox(0, 20.w),
+                          WidgetUtils.onlyText('数字人民币', StyleUtils.getCommonTextStyle(color: Colors.black,fontSize: 28.sp, fontWeight: FontWeight.w600)),
+                          const Spacer(),
+                          type == 6 ? WidgetUtils.showImages('assets/images/wallet_dh.png', 35.h, 35.h) : const Text(''),
+                        ],
+                      ),
+                    ),
+                  ): WidgetUtils.commonSizedBox(0, 0),
+                  presentType.contains('6') ? Container(
+                    height: 1.h,
+                    width: double.infinity,
+                    color: MyColors.home_hx,
+                  ) : WidgetUtils.commonSizedBox(0, 0),
+
+                  presentType.contains('7') ? GestureDetector(
+                    onTap: ((){
+                      setState(() {
+                        type = 7;
+                      });
+                    }),
+                    child: Container(
+                      height: 80.h,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        children: [
+                          WidgetUtils.showImages('assets/images/wallet_dy.png', 40.h, 40.h),
+                          WidgetUtils.commonSizedBox(0, 20.w),
+                          WidgetUtils.onlyText('抖音钱包', StyleUtils.getCommonTextStyle(color: Colors.black,fontSize: 28.sp, fontWeight: FontWeight.w600)),
+                          const Spacer(),
+                          type == 7 ? WidgetUtils.showImages('assets/images/wallet_dh.png', 35.h, 35.h) : const Text(''),
+                        ],
+                      ),
+                    ),
+                  ): WidgetUtils.commonSizedBox(0, 0),
+                  presentType.contains('7') ? Container(
                     height: 1.h,
                     width: double.infinity,
                     color: MyColors.home_hx,
@@ -371,7 +461,8 @@ class _DouPayPageState extends State<DouPayPage> {
   }
 
   /// 充值接口
-  /// 支付方式 zfb(支付宝) wx(微信) yhk(银行卡) ysf(云闪付)
+  /// 支付方式 1支付宝 2云闪付 3微信 4银行卡 5QQ钱包 6 数字人民币 7抖音钱包
+  /// 支付方式 zfb(支付宝) wx(微信) yhk(银行卡) ysf(云闪付) qq(QQ钱包) rmb(数字人民币)  dy(抖音钱包)
   /// 充值金额
   /// 充值类型 1人民币 2u币
   /// 货币类型 1金豆 2钻石
@@ -379,17 +470,23 @@ class _DouPayPageState extends State<DouPayPage> {
   /// 充值订单用途 1游戏币 2购买贵族
   /// 是否首充 1是 0否
   Future<void> doPostOrderCreate() async {
-    //支付类型 0 支付宝 1云闪付 2 银行卡 3微信
+    //支付方式 1支付宝 2云闪付 3微信 4银行卡 5QQ钱包 6 数字人民币 7抖音钱包
     String payType = '';
     setState(() {
-      if(type == 0){
+      if(type == 1){
         payType = 'zfb';
-      }else if(type == 1){
-        payType = 'ysf';
       }else if(type == 2){
-        payType = 'yhk';
+        payType = 'ysf';
       }else if(type == 3){
         payType = 'wx';
+      }else if(type == 4){
+        payType = 'yhk';
+      }else if(type == 5){
+        payType = 'qq';
+      }else if(type == 6){
+        payType = 'rmb';
+      }else if(type == 7){
+        payType = 'dy';
       }
     });
     Map<String, dynamic> params = <String, dynamic>{
@@ -419,6 +516,9 @@ class _DouPayPageState extends State<DouPayPage> {
           MyUtils.jumpLogin(context);
           break;
         default:
+          if(bean.msg!.toString() == '当前支付金额已调整'){
+            doPostGetPayment();
+          }
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
@@ -433,7 +533,6 @@ class _DouPayPageState extends State<DouPayPage> {
   String jinbi = '', zuanshi = '', shouyi  = '';
   /// 钱包余额
   Future<void> doPostBalance() async {
-    Loading.show();
     try {
       balanceBean bean = await DataUtils.postBalance();
       switch (bean.code) {
@@ -442,6 +541,49 @@ class _DouPayPageState extends State<DouPayPage> {
             jinbi = bean.data!.goldBean!;
             // zuanshi = bean.data!.diamond!;
             shouyi = bean.data!.goldCoin!;
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+    }
+  }
+
+  /// 充值方式
+  List<DataCZ> listInfo = [];
+  Future<void> doPostGetPayment() async {
+    Loading.show();
+    try {
+      payLsitBean bean = await DataUtils.postGetPayment();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            listD.clear();
+            listS.clear();
+            isClick.clear();
+            listInfo.clear();
+            type = 1;
+            if(bean.data!.isNotEmpty){
+              presentType = bean.data![0].payType!;
+              money = bean.data![0].amount.toString();
+              moneyDou = bean.data![0].goldBean.toString();
+            }
+            for(int i = 0; i < bean.data!.length; i++){
+              listInfo.add(bean.data![i]);
+              listD.add(bean.data![i].amount.toString());
+              listS.add(bean.data![i].goldBean.toString());
+              if(i == 0){
+                isClick.add(true);
+              }else{
+                isClick.add(false);
+              }
+            }
           });
           break;
         case MyHttpConfig.errorloginCode:

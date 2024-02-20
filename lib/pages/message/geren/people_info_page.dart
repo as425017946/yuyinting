@@ -72,7 +72,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
     _controller = PageController(
       initialPage: 0,
     );
-    _initialize();
+    // _initialize();
     doPostUserInfo();
   }
 

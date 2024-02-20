@@ -50,6 +50,7 @@ import '../bean/myInfoBean.dart';
 import '../bean/myShopListBean.dart';
 import '../bean/onlineRoomUserBean.dart';
 import '../bean/orderPayBean.dart';
+import '../bean/payLsitBean.dart';
 import '../bean/pdAddressBean.dart';
 import '../bean/plBean.dart';
 import '../bean/playRouletteBean.dart';
@@ -897,6 +898,13 @@ class DataUtils{
     return CommonBean.fromJson(respons!);
   }
 
+  /// 厅内清除单个魅力
+  static Future<CommonBean> postCleanCharmSingle(Map<String,dynamic> params) async {
+    print("厅内清除单个魅力：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.cleanCharmSingle, {}, params);
+    print("厅内清除单个魅力：$respons");
+    return CommonBean.fromJson(respons!);
+  }
 
   /// 房间麦序在线用户
   static Future<onlineRoomUserBean> postOnlineRoomUser(Map<String,dynamic> params) async {
@@ -1161,5 +1169,19 @@ class DataUtils{
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.isFirstOrder, {}, {});
     print("首充：$respons");
     return isFirstOrderBean.fromJson(respons!);
+  }
+
+  /// 充值方式
+  static Future<payLsitBean> postGetPayment() async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.getPayment, {}, {});
+    print("充值方式：$respons");
+    return payLsitBean.fromJson(respons!);
+  }
+
+  /// 首充获取金额
+  static Future<payLsitBean> postGetFirstPayment() async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.getFirstPayment, {}, {});
+    print("首充获取金额：$respons");
+    return payLsitBean.fromJson(respons!);
   }
 }

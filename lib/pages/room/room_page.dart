@@ -412,6 +412,14 @@ class _RoomPageState extends State<RoomPage>
         isDevices = 'ios';
       });
     }
+    // 在页面中使用自定义时间和图片地址
+    slideAnimationController = SlideAnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 15), // 自定义时间
+    );
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      slideAnimationController.playAnimation();
+    });
     //页面渲染完成
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       // 进入房间后清空代理房间id
@@ -734,6 +742,8 @@ class _RoomPageState extends State<RoomPage>
             break;
           case '开麦':
             setState(() {
+              //重新开启本地音频功能，即开启本地音频采集（默认）
+              _engine.enableLocalAudio(true);
               // 开启发布本地音频流
               _engine.muteLocalAudioStream(false);
               listM[int.parse(event.index!)].isClose = 0;
@@ -757,6 +767,8 @@ class _RoomPageState extends State<RoomPage>
             break;
           case '开麦1':
             setState(() {
+              //重新开启本地音频功能，即开启本地音频采集（默认）
+              _engine.enableLocalAudio(true);
               // 开启发布本地音频流
               _engine.muteLocalAudioStream(false);
               listM[int.parse(event.index!)].isClose = 0;
@@ -843,6 +855,8 @@ class _RoomPageState extends State<RoomPage>
                 setState(() {
                   isJinyiin = false;
                 });
+                //重新开启本地音频功能，即开启本地音频采集（默认）
+                _engine.enableLocalAudio(true);
                 //设置成主播
                 _engine.setClientRole(
                     role: ClientRoleType.clientRoleBroadcaster);
@@ -1084,6 +1098,8 @@ class _RoomPageState extends State<RoomPage>
             setState(() {
               isJinyiin = false;
             });
+            //重新开启本地音频功能，即开启本地音频采集（默认）
+            _engine.enableLocalAudio(true);
             //设置成主播
             _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
             // 发布本地音频流
@@ -1140,6 +1156,31 @@ class _RoomPageState extends State<RoomPage>
                   listM[i].charm = 0;
                 }
               });
+            } else if (event.map!['type'] == 'clean_charm_single') {
+              if (event.map['uid'].toString().contains(',')) {
+                List<String> listId = event.map['uid'].toString().split(',');
+                // 清除单个魅力或多个
+                for (int i = 0; i < listM.length; i++) {
+                  for (int a = 0; a < listId.length; a++) {
+                    if (listId[a] == listM[i].uid.toString()) {
+                      setState(() {
+                        listM[i].charm = 0;
+                      });
+                      break;
+                    }
+                  }
+                }
+              } else {
+                // 清除单个魅力或多个
+                for (int i = 0; i < listM.length; i++) {
+                  if (event.map['uid'].toString() == listM[i].uid.toString()) {
+                    setState(() {
+                      listM[i].charm = 0;
+                    });
+                    break;
+                  }
+                }
+              }
             } else if (event.map!['type'] == 'clean_public_screen') {
               // 清除公屏
               setState(() {
@@ -1456,7 +1497,8 @@ class _RoomPageState extends State<RoomPage>
               // 发送的信息
               map['content'] = '${cb.nickName};在;${cb.gameName};中赢得;$info';
               setState(() {
-                list2.add(map);
+                list.add(map);
+                // list2.add(map);
               });
               WidgetsBinding.instance!.addPostFrameCallback((_) {
                 scrollToLastItem2(); // 在widget构建完成后滚动到底部
@@ -1574,7 +1616,8 @@ class _RoomPageState extends State<RoomPage>
               // 发送的信息
               map['content'] = '${cb.nickName};在;${cb.gameName};中赢得;$info';
               setState(() {
-                list2.add(map);
+                list.add(map);
+                // list2.add(map);
               });
 
               WidgetsBinding.instance!.addPostFrameCallback((_) {
@@ -1684,15 +1727,6 @@ class _RoomPageState extends State<RoomPage>
         setState(() {
           isBig = false;
         });
-      });
-
-      // 在页面中使用自定义时间和图片地址
-      slideAnimationController = SlideAnimationController(
-        vsync: this,
-        duration: const Duration(seconds: 15), // 自定义时间
-      );
-      WidgetsBinding.instance!.addPostFrameCallback((_) {
-        slideAnimationController.playAnimation();
       });
 
       // 接受播放礼物
@@ -1833,6 +1867,7 @@ class _RoomPageState extends State<RoomPage>
         print("应用进入前台======");
         setState(() {
           isFirst++;
+          _engine.enableLocalAudio(true);
         });
         if (isFirst > 0) {
           doPostRoomUserMikeInfo();
@@ -2177,16 +2212,21 @@ class _RoomPageState extends State<RoomPage>
       // 取消发布本地音频流
       _engine.muteLocalAudioStream(true);
     }
-
     _engine.registerEventHandler(
       RtcEngineEventHandler(
+        onAudioVolumeIndication: (RtcConnection connection,
+            List<AudioVolumeInfo> speakers,
+            int speakerNumber,
+            int totalVolume) {
+          LogE("用户音量： $speakers");
+          LogE("用户数量： $speakerNumber");
+          LogE("用户混音总音量： $totalVolume");
+        },
         //本地音频统计数据。
         onLocalAudioStats: (RtcConnection connection, LocalAudioStats stats) {},
         //本地音频状态发生改变回调。
-        onLocalAudioStateChanged: (RtcConnection connection, LocalAudioStreamState state,
-            LocalAudioStreamError error) {
-
-        },
+        onLocalAudioStateChanged: (RtcConnection connection,
+            LocalAudioStreamState state, LocalAudioStreamError error) {},
         onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
           LogE("用户加入频道： ${connection.localUid} joined");
           LogE("用户加入频道： ${connection.channelId} 频道id");
@@ -2264,7 +2304,15 @@ class _RoomPageState extends State<RoomPage>
                 child: Container(
                   height: double.infinity,
                   width: double.infinity,
-                  color: Colors.white,
+                  decoration: const BoxDecoration(
+                    //设置Container修饰
+                    image: DecorationImage(
+                      //背景图片修饰
+                      image:
+                          AssetImage("assets/images/img_placeholder_room.png"),
+                      fit: BoxFit.fill, //覆盖
+                    ),
+                  ),
                   child: Stack(
                     children: [
                       BgType == '1'
@@ -2285,9 +2333,18 @@ class _RoomPageState extends State<RoomPage>
                                           double.infinity,
                                           double.infinity),
                                     )
-                                  : SizedBox(
+                                  : Container(
                                       height: double.infinity,
                                       width: double.infinity,
+                                      decoration: const BoxDecoration(
+                                        //设置Container修饰
+                                        image: DecorationImage(
+                                          //背景图片修饰
+                                          image: AssetImage(
+                                              "assets/images/img_placeholder_room.png"),
+                                          fit: BoxFit.fill, //覆盖
+                                        ),
+                                      ),
                                       child: SVGAImage(
                                         animationControllerBG,
                                         fit: BoxFit.fill,
@@ -2401,68 +2458,78 @@ class _RoomPageState extends State<RoomPage>
                           width: 420.h,
                           child: Column(
                             children: [
-                              //分类使用
-                              SizedBox(
-                                height: 50.h,
-                                child: Row(
-                                  children: [
-                                    WidgetUtils.commonSizedBox(0, 20),
-                                    GestureDetector(
-                                      onTap: (() {
-                                        setState(() {
-                                          leixing = 0;
-                                        });
-                                      }),
-                                      child: WidgetUtils.showImages(
-                                          leixing == 0
-                                              ? 'assets/images/room_gp1.png'
-                                              : 'assets/images/room_gp2.png',
-                                          25.h,
-                                          60.h),
-                                    ),
-                                    WidgetUtils.commonSizedBox(0, 10),
-                                    Container(
-                                      height: ScreenUtil().setHeight(10),
-                                      width: ScreenUtil().setWidth(1),
-                                      color: MyColors.roomTCWZ3,
-                                    ),
-                                    WidgetUtils.commonSizedBox(0, 10),
-                                    GestureDetector(
-                                      onTap: (() {
-                                        setState(() {
-                                          leixing = 1;
-                                        });
-                                      }),
-                                      child: WidgetUtils.showImages(
-                                          leixing == 1
-                                              ? 'assets/images/room_lt1.png'
-                                              : 'assets/images/room_lt2.png',
-                                          25.h,
-                                          60.h),
-                                    ),
-                                    WidgetUtils.commonSizedBox(0, 10),
-                                  ],
-                                ),
-                              ),
+                              //分类使用 先把公屏和房间注释
+                              // SizedBox(
+                              //   height: 50.h,
+                              //   child: Row(
+                              //     children: [
+                              //       WidgetUtils.commonSizedBox(0, 20),
+                              //       GestureDetector(
+                              //         onTap: (() {
+                              //           setState(() {
+                              //             leixing = 0;
+                              //           });
+                              //         }),
+                              //         child: WidgetUtils.showImages(
+                              //             leixing == 0
+                              //                 ? 'assets/images/room_gp1.png'
+                              //                 : 'assets/images/room_gp2.png',
+                              //             25.h,
+                              //             60.h),
+                              //       ),
+                              //       WidgetUtils.commonSizedBox(0, 10),
+                              //       Container(
+                              //         height: ScreenUtil().setHeight(10),
+                              //         width: ScreenUtil().setWidth(1),
+                              //         color: MyColors.roomTCWZ3,
+                              //       ),
+                              //       WidgetUtils.commonSizedBox(0, 10),
+                              //       GestureDetector(
+                              //         onTap: (() {
+                              //           setState(() {
+                              //             leixing = 1;
+                              //           });
+                              //         }),
+                              //         child: WidgetUtils.showImages(
+                              //             leixing == 1
+                              //                 ? 'assets/images/room_lt1.png'
+                              //                 : 'assets/images/room_lt2.png',
+                              //             25.h,
+                              //             60.h),
+                              //       ),
+                              //       WidgetUtils.commonSizedBox(0, 10),
+                              //     ],
+                              //   ),
+                              // ),
+                              // Expanded(
+                              //     child: leixing == 0
+                              //         ? ListView.builder(
+                              //             padding: EdgeInsets.only(
+                              //               left: 20.h,
+                              //             ),
+                              //             itemBuilder: itemMessages2,
+                              //             controller: _scrollController2,
+                              //             itemCount: list2.length,
+                              //           )
+                              //         : ListView.builder(
+                              //             padding: EdgeInsets.only(
+                              //               top: ScreenUtil().setHeight(10),
+                              //               left: 20.h,
+                              //             ),
+                              //             itemBuilder: itemMessages,
+                              //             controller: _scrollController,
+                              //             itemCount: list.length,
+                              //           ))
                               Expanded(
-                                  child: leixing == 0
-                                      ? ListView.builder(
-                                          padding: EdgeInsets.only(
-                                            left: 20.h,
-                                          ),
-                                          itemBuilder: itemMessages2,
-                                          controller: _scrollController2,
-                                          itemCount: list2.length,
-                                        )
-                                      : ListView.builder(
-                                          padding: EdgeInsets.only(
-                                            top: ScreenUtil().setHeight(10),
-                                            left: 20.h,
-                                          ),
-                                          itemBuilder: itemMessages,
-                                          controller: _scrollController,
-                                          itemCount: list.length,
-                                        ))
+                                  child: ListView.builder(
+                                padding: EdgeInsets.only(
+                                  top: ScreenUtil().setHeight(10),
+                                  left: 20.h,
+                                ),
+                                itemBuilder: itemMessages,
+                                controller: _scrollController,
+                                itemCount: list.length,
+                              ))
                             ],
                           ),
                         ),
@@ -2674,6 +2741,7 @@ class _RoomPageState extends State<RoomPage>
             follow_status = bean.data!.roomInfo!.followStatus!;
             role = bean.data!.userInfo!.role!;
             sp.setString('role', bean.data!.userInfo!.role!);
+            sp.setString('user_identity', role);
             LogE('登录人的身份 ${bean.data!.userInfo!.role!}');
             // // 如果身份变了
             // if (sp.getString('user_identity').toString() != role) {

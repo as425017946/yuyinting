@@ -8,6 +8,7 @@ import 'package:yuyinting/pages/navigator/tabnavigator.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/log_util.dart';
+import 'package:yuyinting/utils/md5_util.dart';
 import 'package:yuyinting/utils/my_utils.dart';
 import '../../bean/Common_bean.dart';
 import '../../bean/addressIPBean.dart';
@@ -187,14 +188,15 @@ class _LoginPageState extends State<LoginPage> {
     final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if (Platform.isAndroid) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      // String imei = '${androidInfo.id}:${androidInfo.device}:${androidInfo.model}:${androidInfo.product}:${androidInfo.isPhysicalDevice}:${sp.getString('miyao')}'; // 获取 Android 设备的 IMEI
-      String imei = androidInfo.id;
+      String imei = '${androidInfo.id}:${androidInfo.device}:${androidInfo.model}:${androidInfo.product}:${androidInfo.isPhysicalDevice}:${sp.getString('miyao')}'; // 获取 Android 设备的 IMEI
+      // String imei = androidInfo.id;
       setState(() {
         IMEI = imei;
       });
     } else if (Platform.isIOS) {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      String identifierForVendor = iosInfo.identifierForVendor.toString(); // 获取 iOS 设备的 IMEI
+      String identifierForVendor = '${iosInfo.identifierForVendor.toString()}:${iosInfo.name}:${iosInfo.model}:${iosInfo.isPhysicalDevice}:${iosInfo.localizedModel}:${iosInfo.systemName}:${iosInfo.systemVersion}:${iosInfo.utsname}';
+      // String identifierForVendor = iosInfo.identifierForVendor.toString(); // 获取 iOS 设备的 IMEI
       setState(() {
         IMEI = identifierForVendor;
       });
@@ -638,7 +640,7 @@ class _LoginPageState extends State<LoginPage> {
         'username': userName,
         'password': passWord,
         'type': '1',
-        'imei': IMEI,
+        'imei': Md5Util.generateMD5(IMEI),
         'pid': RegExp(r'^-?[0-9.]+$').hasMatch(pid) ? pid : '',
         'ip' : IP.isEmpty ? sp.getString('userIP').toString() : IP
       };
@@ -669,7 +671,7 @@ class _LoginPageState extends State<LoginPage> {
         'type': type,
         'area_code': quhao,
         'code': userMsg,
-        'imei': IMEI,
+        'imei': Md5Util.generateMD5(IMEI),
         'pid': RegExp(r'^-?[0-9.]+$').hasMatch(pid) ? pid : '',
         'ip' : IP.isEmpty ? sp.getString('userIP').toString() : IP
       };

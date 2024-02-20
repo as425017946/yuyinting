@@ -481,6 +481,7 @@ class _HomePageState extends State<HomePage>
               offset: Offset(0, -2.h),
               child: PageView(
                 controller: _controller,
+                physics: const ClampingScrollPhysics(),
                 onPageChanged: (index) {
                   setState(() {
                     // 更新当前的索引值
@@ -588,6 +589,12 @@ class _HomePageState extends State<HomePage>
                       info: bean.data!.summary!,
                       forceUpdate: bean.data!.forceUpdate!));
             } else {
+              // ignore: use_build_context_synchronously
+              showUpdateIOS(
+                  context,
+                  bean.data!.version!,
+                  bean.data!.downloadUrl!,
+                  bean.data!.summary!);
             }
           }
           break;

@@ -425,7 +425,7 @@ class MyUtils {
     //     autoLogin: false,
     //     debugModel: true,
     //     isAutoDownloadThumbnail: true);
-    /// 正式环境
+    // 正式环境
     EMOptions options = EMOptions(
         appKey: "1129240201157233#cc",
         autoLogin: false,
@@ -545,7 +545,9 @@ class MyUtils {
                   LogE('接收文本信息$info');
                   if (body.content == '赛车押注') {
                     eventBus.fire(JoinRoomYBack(map: info, type: '赛车押注'));
-                  } else if (body.content == '离开房间') {
+                  }else if (body.content == '清除魅力值') {
+                    eventBus.fire(JoinRoomYBack(map: info, type: 'clean_charm_single'));
+                  }else if (body.content == '离开房间') {
                     eventBus.fire(
                         JoinRoomYBack(map: info, type: 'user_leave_room'));
                   } else if (body.content == '充值成功') {

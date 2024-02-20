@@ -347,77 +347,77 @@ class _MessagePageState extends State<MessagePage> {
             WidgetUtils.commonSizedBox(35, 0),
 
             /// 系统消息
-            // GestureDetector(
-            //   onTap: (() {
-            //     MyUtils.goTransparentRFPage(context, const XitongMorePage());
-            //   }),
-            //   child: Container(
-            //     height: ScreenUtil().setHeight(130),
-            //     width: double.infinity,
-            //     padding: const EdgeInsets.only(left: 20, right: 20),
-            //     child: Row(
-            //       children: [
-            //         Stack(
-            //           alignment: Alignment.topRight,
-            //           children: [
-            //             WidgetUtils.showImages(
-            //                 'assets/images/message_xt.webp',
-            //                 ScreenUtil().setHeight(100),
-            //                 ScreenUtil().setHeight(100)),
-            //             unRead > 1
-            //                 ? Positioned(
-            //                     top: ScreenUtil().setHeight(10),
-            //                     right: ScreenUtil().setHeight(20),
-            //                     child: CustomPaint(
-            //                       painter: LinePainter2(colors: Colors.red),
-            //                     ))
-            //                 : const Text('')
-            //           ],
-            //         ),
-            //         WidgetUtils.commonSizedBox(0, 10),
-            //         Expanded(
-            //           child: Column(
-            //             children: [
-            //               const Expanded(child: Text('')),
-            //               Container(
-            //                 alignment: Alignment.centerLeft,
-            //                 width: double.infinity,
-            //                 child: Row(
-            //                   children: [
-            //                     Text(
-            //                       '系统消息',
-            //                       style: StyleUtils.getCommonTextStyle(
-            //                           color: Colors.black,
-            //                           fontSize: ScreenUtil().setSp(32)),
-            //                     ),
-            //                     const Expanded(child: Text('')),
-            //                     Text(
-            //                       time,
-            //                       style: StyleUtils.getCommonTextStyle(
-            //                           color: MyColors.g9,
-            //                           fontSize: ScreenUtil().setSp(25)),
-            //                     ),
-            //                   ],
-            //                 ),
-            //               ),
-            //               Container(
-            //                 alignment: Alignment.centerLeft,
-            //                 width: double.infinity,
-            //                 child: Text(
-            //                   info,
-            //                   style: StyleUtils.getCommonTextStyle(
-            //                       color: MyColors.g9,
-            //                       fontSize: ScreenUtil().setSp(25)),
-            //                 ),
-            //               ),
-            //               const Expanded(child: Text('')),
-            //             ],
-            //           ),
-            //         )
-            //       ],
-            //     ),
-            //   ),
-            // ),
+            GestureDetector(
+              onTap: (() {
+                MyUtils.goTransparentRFPage(context, const XitongMorePage());
+              }),
+              child: Container(
+                height: ScreenUtil().setHeight(130),
+                width: double.infinity,
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                child: Row(
+                  children: [
+                    Stack(
+                      alignment: Alignment.topRight,
+                      children: [
+                        WidgetUtils.showImages(
+                            'assets/images/message_xt.webp',
+                            ScreenUtil().setHeight(100),
+                            ScreenUtil().setHeight(100)),
+                        unRead > 0
+                            ? Positioned(
+                                top: ScreenUtil().setHeight(10),
+                                right: ScreenUtil().setHeight(20),
+                                child: CustomPaint(
+                                  painter: LinePainter2(colors: Colors.red),
+                                ))
+                            : const Text('')
+                      ],
+                    ),
+                    WidgetUtils.commonSizedBox(0, 10),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          const Expanded(child: Text('')),
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            width: double.infinity,
+                            child: Row(
+                              children: [
+                                Text(
+                                  '系统消息',
+                                  style: StyleUtils.getCommonTextStyle(
+                                      color: Colors.black,
+                                      fontSize: ScreenUtil().setSp(32)),
+                                ),
+                                const Expanded(child: Text('')),
+                                Text(
+                                  time,
+                                  style: StyleUtils.getCommonTextStyle(
+                                      color: MyColors.g9,
+                                      fontSize: ScreenUtil().setSp(25)),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            width: double.infinity,
+                            child: Text(
+                              info,
+                              style: StyleUtils.getCommonTextStyle(
+                                  color: MyColors.g9,
+                                  fontSize: ScreenUtil().setSp(25)),
+                            ),
+                          ),
+                          const Expanded(child: Text('')),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
             listMessage.isNotEmpty
                 ? Expanded(
                     child: ListView.builder(
@@ -508,58 +508,58 @@ class _MessagePageState extends State<MessagePage> {
     Database? db = await databaseHelper.database;
     // Loading.show();
     try {
-      // xtListBean bean = await DataUtils.postSystemMsgList();
-      // switch (bean.code) {
-      //   case MyHttpConfig.successCode:
-      //     // if (bean.data!.list!.isNotEmpty) {
-      //     //   setState(() {
-      //     //     info = bean.data!.list![bean.data!.list!.length - 1].text!;
-      //     //     time = bean.data!.list![bean.data!.list!.length - 1].addTime!
-      //     //         .substring(0, 10);
-      //     //     unRead = bean.data!.list!.length;
-      //     //   });
-      //     //   for (int i = 0; i < bean.data!.list!.length; i++) {
-      //     //     Map<String, dynamic> params = <String, dynamic>{
-      //     //       'messageID': bean.data!.list![i].id as int,
-      //     //       'type': bean.data!.list![i].type,
-      //     //       'title': bean.data!.list![i].title,
-      //     //       'text': bean.data!.list![i].text,
-      //     //       'img': bean.data!.list![i].img,
-      //     //       'url': bean.data!.list![i].url,
-      //     //       'add_time': bean.data!.list![i].addTime,
-      //     //       'data_status': 0,
-      //     //       'img_url': bean.data!.list![i].imgUrl,
-      //     //     };
-      //     //     // 插入数据
-      //     //     await databaseHelper.insertData('messageXTTable', params);
-      //     //   }
-      //     // } else {
-      //     //   // 获取所有数据
-      //     //   List<Map<String, dynamic>> allData =
-      //     //       await databaseHelper.getAllData('messageXTTable');
-      //     //   if (allData.isNotEmpty) {
-      //     //     for (int i = 0; i < allData.length; i++) {
-      //     //       if (allData[i]['data_status'] == 0) {
-      //     //         setState(() {
-      //     //           unRead++;
-      //     //         });
-      //     //       }
-      //     //     }
-      //     //     setState(() {
-      //     //       info = allData[allData.length - 1]['text'];
-      //     //       time = allData[allData.length - 1]['add_time'].substring(0, 10);
-      //     //     });
-      //     //   }
-      //     // }
-      //     break;
-      //   case MyHttpConfig.errorloginCode:
-      //     // ignore: use_build_context_synchronously
-      //     MyUtils.jumpLogin(context);
-      //     break;
-      //   default:
-      //     MyToastUtils.showToastBottom(bean.msg!);
-      //     break;
-      // }
+      xtListBean bean = await DataUtils.postSystemMsgList();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          if (bean.data!.list!.isNotEmpty) {
+            setState(() {
+              info = bean.data!.list![bean.data!.list!.length - 1].text!;
+              time = bean.data!.list![bean.data!.list!.length - 1].addTime!
+                  .substring(0, 10);
+              unRead = bean.data!.list!.length;
+            });
+            for (int i = 0; i < bean.data!.list!.length; i++) {
+              Map<String, dynamic> params = <String, dynamic>{
+                'messageID': bean.data!.list![i].id as int,
+                'type': bean.data!.list![i].type,
+                'title': bean.data!.list![i].title,
+                'text': bean.data!.list![i].text,
+                'img': bean.data!.list![i].img,
+                'url': bean.data!.list![i].url,
+                'add_time': bean.data!.list![i].addTime,
+                'data_status': 0,
+                'img_url': bean.data!.list![i].imgUrl,
+              };
+              // 插入数据
+              await databaseHelper.insertData('messageXTTable', params);
+            }
+          } else {
+            // 获取所有数据
+            List<Map<String, dynamic>> allData =
+                await databaseHelper.getAllData('messageXTTable');
+            if (allData.isNotEmpty) {
+              for (int i = 0; i < allData.length; i++) {
+                if (allData[i]['data_status'] == 0) {
+                  setState(() {
+                    unRead++;
+                  });
+                }
+              }
+              setState(() {
+                info = allData[allData.length - 1]['text'];
+                time = allData[allData.length - 1]['add_time'].substring(0, 10);
+              });
+            }
+          }
+          break;
+        case MyHttpConfig.errorloginCode:
+          // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
       List<Map<String, dynamic>> allData =
           await databaseHelper.getAllData('messageSLTable');
       // 执行查询操作

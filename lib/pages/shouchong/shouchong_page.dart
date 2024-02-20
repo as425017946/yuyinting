@@ -5,6 +5,7 @@ import 'package:yuyinting/utils/widget_utils.dart';
 
 import '../../bean/isFirstOrderBean.dart';
 import '../../bean/orderPayBean.dart';
+import '../../bean/payLsitBean.dart';
 import '../../colors/my_colors.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
@@ -23,11 +24,12 @@ class ShouChongPage extends StatefulWidget {
 
 class _ShouChongPageState extends State<ShouChongPage> {
   int type = 0;
+  int payType = 1;//默认支付宝 支付方式 1支付宝 2云闪付 3微信 4银行卡 5QQ钱包 6 数字人民币 7抖音钱包
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    doPostIsFirstOrder();
+    doPostGetFirstPayment();
   }
   @override
   Widget build(BuildContext context) {
@@ -42,27 +44,87 @@ class _ShouChongPageState extends State<ShouChongPage> {
                   ? Container(
                       height: 400.h,
                       margin: EdgeInsets.only(left: 20.h, right: 20.h),
-                      child: WidgetUtils.showImages(
-                          'assets/images/shouchong_30.png',
-                          400.h,
-                          double.infinity),
+                      child: isGet ? Stack(
+                        children: [
+                          WidgetUtils.showImages(
+                              'assets/images/shouchong_30.png',
+                              400.h,
+                              double.infinity),
+                          Positioned(
+                              left: 140.w,
+                              top: 15.h,
+                              child: WidgetUtils.onlyText('${listMoney[0]}元', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 26.sp,fontWeight: FontWeight.w600))),
+                          Positioned(
+                              left: 275.w,
+                              top: 15.h,
+                              child: WidgetUtils.onlyText('${listMoney[1]}元', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: 26.sp))),
+                          Positioned(
+                              left: 420.w,
+                              top: 15.h,
+                              child: WidgetUtils.onlyText('${listMoney[2]}元', StyleUtils.getCommonTextStyle(color:  MyColors.g9, fontSize: 26.sp))),
+                          Positioned(
+                              left: 80.w,
+                              top: 345.h,
+                              child: WidgetUtils.onlyText('赠送${listDou[0]}V豆，限定礼物x1', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 26.sp,)))
+                        ],
+                      ) : WidgetUtils.commonSizedBox(0, 0),
                     )
                   : type == 1
                       ? Container(
                           height: 400.h,
                           margin: EdgeInsets.only(left: 20.h, right: 20.h),
-                          child: WidgetUtils.showImages(
-                              'assets/images/shouchong_68.png',
-                              400.h,
-                              double.infinity),
+                          child: isGet ? Stack(
+                            children: [
+                              WidgetUtils.showImages(
+                                  'assets/images/shouchong_68.png',
+                                  400.h,
+                                  double.infinity),
+                              Positioned(
+                                  left: 140.w,
+                                  top: 15.h,
+                                  child: WidgetUtils.onlyText('${listMoney[0]}元', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: 26.sp))),
+                              Positioned(
+                                  left: 275.w,
+                                  top: 15.h,
+                                  child: WidgetUtils.onlyText('${listMoney[1]}元', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 26.sp,fontWeight: FontWeight.w600))),
+                              Positioned(
+                                  left: 420.w,
+                                  top: 15.h,
+                                  child: WidgetUtils.onlyText('${listMoney[2]}元', StyleUtils.getCommonTextStyle(color:  MyColors.g9, fontSize: 26.sp))),
+                              Positioned(
+                                  left: 80.w,
+                                  top: 345.h,
+                                  child: WidgetUtils.onlyText('赠送${listDou[1]}V豆，限定礼物x2', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 26.sp,)))
+                            ],
+                          ) : WidgetUtils.commonSizedBox(0, 0),
                         )
                       : Container(
                           height: 400.h,
                           margin: EdgeInsets.only(left: 20.h, right: 20.h),
-                          child: WidgetUtils.showImages(
-                              'assets/images/shouchong_98.png',
-                              400.h,
-                              double.infinity),
+                          child: isGet ? Stack(
+                            children: [
+                              WidgetUtils.showImages(
+                                  'assets/images/shouchong_98.png',
+                                  400.h,
+                                  double.infinity),
+                              Positioned(
+                                  left: 140.w,
+                                  top: 15.h,
+                                  child: WidgetUtils.onlyText('${listMoney[0]}元', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: 26.sp))),
+                              Positioned(
+                                  left: 275.w,
+                                  top: 15.h,
+                                  child: WidgetUtils.onlyText('${listMoney[1]}元', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: 26.sp))),
+                              Positioned(
+                                  left: 420.w,
+                                  top: 15.h,
+                                  child: WidgetUtils.onlyText('${listMoney[2]}元', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 26.sp,fontWeight: FontWeight.w600))),
+                              Positioned(
+                                  left: 80.w,
+                                  top: 345.h,
+                                  child: WidgetUtils.onlyText('赠送${listDou[2]}V豆，限定礼物x3', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 26.sp,)))
+                            ],
+                          ) : WidgetUtils.commonSizedBox(0, 0),
                         ),
               // type == 0
               //     ? SizedBox(
@@ -579,6 +641,7 @@ class _ShouChongPageState extends State<ShouChongPage> {
                     onTap: (() {
                       setState(() {
                         type = 0;
+                        payType = int.parse(listInfo[0].payType.toString());
                       });
                     }),
                     child: Container(
@@ -591,6 +654,7 @@ class _ShouChongPageState extends State<ShouChongPage> {
                     onTap: (() {
                       setState(() {
                         type = 1;
+                        payType = int.parse(listInfo[1].payType.toString());
                       });
                     }),
                     child: Container(
@@ -603,6 +667,7 @@ class _ShouChongPageState extends State<ShouChongPage> {
                     onTap: (() {
                       setState(() {
                         type = 2;
+                        payType = int.parse(listInfo[2].payType.toString());
                       });
                     }),
                     child: Container(
@@ -675,21 +740,36 @@ class _ShouChongPageState extends State<ShouChongPage> {
   /// 充值订单用途 1游戏币 2购买贵族
   /// 是否首充 1是 0否
   Future<void> doPostOrderCreate() async {
-    String money = '', moneyDou = '';
+    String money = '', moneyDou = '', payTypes = '';
     setState(() {
+      if(payType == 1){
+        payTypes = 'zfb';
+      }else if(payType == 2){
+        payTypes = 'ysf';
+      }else if(payType == 3){
+        payTypes = 'wx';
+      }else if(payType == 4){
+        payTypes = 'yhk';
+      }else if(payType == 5){
+        payTypes = 'qq';
+      }else if(payType == 6){
+        payTypes = 'rmb';
+      }else if(payType == 7){
+        payTypes = 'dy';
+      }
       if (type == 0) {
-        money = '12';
-        moneyDou = '100';
+        money = listMoney[0];
+        moneyDou = listDou[0];
       } else if (type == 1) {
-        money = '100';
-        moneyDou = '1000';
+        money = listMoney[1];
+        moneyDou = listDou[01];
       } else if (type == 2) {
-        money = '266';
-        moneyDou = '2660';
+        money = listMoney[2];
+        moneyDou = listDou[2];
       }
     });
     Map<String, dynamic> params = <String, dynamic>{
-      'recharge_method': 'zfb',
+      'recharge_method': payTypes,
       'recharge_cur_amount': money,
       'recharge_cur_type': '1',
       'game_cur_type': '1',
@@ -715,6 +795,9 @@ class _ShouChongPageState extends State<ShouChongPage> {
           MyUtils.jumpLogin(context);
           break;
         default:
+          if(bean.msg!.toString() == '当前支付金额已调整'){
+            doPostGetFirstPayment();
+          }
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
@@ -752,5 +835,47 @@ class _ShouChongPageState extends State<ShouChongPage> {
           break;
       }
     } catch (e) {}
+  }
+
+  /// 充值方式
+  List<String> listMoney = [];
+  List<String> listDou = [];
+  List<DataCZ> listInfo = [];
+  bool isGet = false;
+  Future<void> doPostGetFirstPayment() async {
+    Loading.show();
+    try {
+      payLsitBean bean = await DataUtils.postGetFirstPayment();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            listMoney.clear();
+            listDou.clear();
+            listInfo.clear();
+            isGet = true;
+            isShow = true;
+            if(bean.data!.isNotEmpty){
+              payType = int.parse(bean.data![0].payType!);
+            }
+            for(int i = 0; i < bean.data!.length; i++){
+              listMoney.add(bean.data![i].amount.toString());
+              listDou.add(bean.data![i].goldBean.toString());
+              listInfo.add(bean.data![i]);
+            }
+          });
+          doPostIsFirstOrder();
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+    }
   }
 }

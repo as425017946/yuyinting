@@ -671,7 +671,7 @@ class _MinePageState extends State<MinePage> {
             /// 展示信息
             WidgetUtils.containerNo(
                 pad: 20,
-                height: 670.h,
+                height: identity == 'pe' ? 690.h : 670.h,
                 width: double.infinity,
                 color: Colors.white,
                 ra: 20,
@@ -777,6 +777,8 @@ class _MinePageState extends State<MinePage> {
                         'assets/images/mine_zhuangban.png', '我的装扮', false),
                     WidgetUtils.whiteKuang(
                         'assets/images/mine_gonghui.png', '公会中心', isShenHe),
+                    identity == 'pe' ? WidgetUtils.whiteKuang(
+                        'assets/images/mine_gonghui.png', '会长后台', isShenHe) : WidgetUtils.commonSizedBox(0, 0),
                     isAgent == 1
                         ? WidgetUtils.whiteKuang(
                             'assets/images/mine_quan.png', '全民代理', false)

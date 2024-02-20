@@ -936,9 +936,17 @@ class WidgetUtils {
 
   ///展示图片使用厅内使用，主要是用于加载不出来直接给一个默认的厅图
   static Widget showImagesNetRoom(String url, double height, double width) {
-    return SizedBox(
+    return Container(
       height: height,
       width: width,
+      decoration: const BoxDecoration(
+        //设置Container修饰
+        image: DecorationImage(
+          //背景图片修饰
+          image: AssetImage("assets/images/img_placeholder_room.png"),
+          fit: BoxFit.fill, //覆盖
+        ),
+      ),
       child: CachedNetworkImage(
         imageUrl: url,
         fit: BoxFit.cover,

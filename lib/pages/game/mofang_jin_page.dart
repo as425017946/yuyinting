@@ -88,7 +88,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
   }
 
   /// 播放音频
-  Soundpool soundpool = Soundpool(streamType: StreamType.notification);
+  Soundpool soundpool = Soundpool(streamType: StreamType.music);
   Future<void> playSound() async {
     int soundId = await rootBundle.load('assets/audio/mofang_jin.wav').then(((ByteData soundDate){
       return soundpool.load(soundDate);

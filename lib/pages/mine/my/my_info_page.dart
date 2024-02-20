@@ -20,6 +20,7 @@ import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
 import '../../../utils/widget_utils.dart';
 import '../../../widget/Marquee.dart';
+import '../../../widget/SwiperPage.dart';
 import 'edit_my_info_page.dart';
 import 'my_dongtai_page.dart';
 import 'my_ziliao_page.dart';
@@ -43,7 +44,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
       avatarFrameImg = '',
       avatarFrameGifImg = '';
   final TextEditingController _souSuoName = TextEditingController();
-
+  List<String> imageList = [];
   // 设备是安卓还是ios
   String isDevices = 'android';
   @override
@@ -62,7 +63,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
     _controller = PageController(
       initialPage: 0,
     );
-    _initialize();
+    // _initialize();
     doPostMyIfon();
   }
 
@@ -184,10 +185,21 @@ class _MyInfoPageState extends State<MyInfoPage> {
                 alignment: Alignment.centerLeft,
                 child: Row(
                   children: [
-                    WidgetUtils.CircleHeadImage(
-                        ScreenUtil().setHeight(150),
-                        ScreenUtil().setHeight(150),
-                        sp.getString('user_headimg').toString()),
+                    GestureDetector(
+                      onTap: ((){
+                        if(MyUtils.checkClick()){
+                          Navigator.of(context).push(PageRouteBuilder(
+                              opaque: false,
+                              pageBuilder: (context, animation, secondaryAnimation) {
+                                return SwiperPage(imgList: imageList);
+                              }));
+                        }
+                      }),
+                      child: WidgetUtils.CircleHeadImage(
+                          ScreenUtil().setHeight(150),
+                          ScreenUtil().setHeight(150),
+                          sp.getString('user_headimg').toString()),
+                    ),
                     WidgetUtils.commonSizedBox(0, 10),
 
                     ///昵称等信息
@@ -653,6 +665,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
+            imageList.clear();
             isOK = true;
             sp.setString("user_headimg", bean.data!.userInfo!.avatarUrl!);
             sp.setString("nickname", bean.data!.userInfo!.nickname!);
@@ -666,7 +679,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
             isNew = bean.data!.userInfo!.isNew as int;
             isPretty = bean.data!.userInfo!.isPretty as int;
             isNewNoble = bean.data!.userInfo!.newNoble as int;
-
+            imageList.add(bean.data!.userInfo!.avatarUrl!);
           });
           // 发送通知
           eventBus.fire(myInfoBack(userInfo: userInfo, giftList: giftList));

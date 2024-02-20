@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:yuyinting/main.dart';
 import 'package:yuyinting/pages/game/zhuanpan/zhuanpan_daoju_page.dart';
 import 'package:yuyinting/pages/game/zhuanpan/zhuanpan_guize_page.dart';
@@ -59,8 +60,9 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
   // 是否可以点击启动
   bool isXiazhu = true;
 
+  late final AudioPlayer _player;
   /// 播放音频
-  Soundpool soundpool = Soundpool(streamType: StreamType.notification);
+  Soundpool soundpool = Soundpool(streamType: StreamType.music);
   Future<void> playSound() async {
     int soundId = await rootBundle
         .load('assets/audio/zhuanpan_lan.MP3')

@@ -33,6 +33,7 @@ import '../../utils/my_utils.dart';
 import '../../utils/regex_formatter.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
+import '../mine/my/my_info_page.dart';
 import '../mine/setting/password_pay_page.dart';
 import '../room/room_page.dart';
 import '../room/room_ts_mima_page.dart';
@@ -43,6 +44,7 @@ import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/foundation.dart' show kIsWeb;
 
+import 'geren/people_info_page.dart';
 import 'hongbao_page.dart';
 
 enum RecordPlayState {
@@ -476,11 +478,12 @@ class _ChatPageState extends State<ChatPage> {
 
   // 在数据变化后将滚动位置设置为最后一个item的位置
   void scrollToLastItem() {
-    _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent,
-      duration: const Duration(milliseconds: 100),
-      curve: Curves.easeInOut,
-    );
+    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    // _scrollController.animateTo(
+    //   _scrollController.position.maxScrollExtent,
+    //   duration: const Duration(milliseconds: 100),
+    //   curve: Curves.easeInOut,
+    // );
   }
 
   Widget showImage() {
@@ -636,11 +639,24 @@ class _ChatPageState extends State<ChatPage> {
               ScreenUtil().setHeight(10), ScreenUtil().setHeight(10)),
           Row(
             children: [
-              WidgetUtils.CircleImageNet(
-                  ScreenUtil().setHeight(80),
-                  ScreenUtil().setHeight(80),
-                  40.h,
-                  allData2[i]['otherHeadNetImg']),
+              GestureDetector(
+                onTap: ((){
+                  if(MyUtils.checkClick()){
+                    // 如果点击的是自己，进入自己的主页
+                    if(allData2[i]['whoUid'] != sp.getString('user_id')){
+                      sp.setString('other_id', allData2[i]['otherUid'].toString());
+                      MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: allData2[i]['otherUid'].toString(),));
+                    }else{
+                      MyUtils.goTransparentRFPage(context, const MyInfoPage());
+                    }
+                  }
+                }),
+                child: WidgetUtils.CircleImageNet(
+                    ScreenUtil().setHeight(80),
+                    ScreenUtil().setHeight(80),
+                    40.h,
+                    allData2[i]['otherHeadNetImg']),
+              ),
               WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(10)),
               // 6v豆红包
               allData2[i]['type'] == 6
@@ -1010,11 +1026,24 @@ class _ChatPageState extends State<ChatPage> {
                       ) : const Text(''),
                     ),
               WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(10)),
-              WidgetUtils.CircleImageNet(
-                  ScreenUtil().setHeight(80),
-                  ScreenUtil().setHeight(80),
-                  40.h,
-                  allData2[i]['headNetImg']),
+              GestureDetector(
+                onTap: ((){
+                  if(MyUtils.checkClick()){
+                    // 如果点击的是自己，进入自己的主页
+                    if(allData2[i]['whoUid'] != sp.getString('user_id')){
+                      sp.setString('other_id', allData2[i]['otherUid'].toString());
+                      MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: allData2[i]['otherUid'].toString(),));
+                    }else{
+                      MyUtils.goTransparentRFPage(context, const MyInfoPage());
+                    }
+                  }
+                }),
+                child: WidgetUtils.CircleImageNet(
+                    ScreenUtil().setHeight(80),
+                    ScreenUtil().setHeight(80),
+                    40.h,
+                    allData2[i]['headNetImg']),
+              ),
             ],
           ),
           WidgetUtils.commonSizedBox(20.h, ScreenUtil().setHeight(10)),
@@ -2021,6 +2050,9 @@ class _ChatPageState extends State<ChatPage> {
           MyUtils.jumpLogin(context);
           break;
         default:
+          setState(() {
+            controller.text = '';
+          });
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }

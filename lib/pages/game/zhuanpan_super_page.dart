@@ -63,7 +63,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
   bool isXiazhu = true;
 
   /// 播放音频
-  Soundpool soundpool = Soundpool(streamType: StreamType.notification);
+  Soundpool soundpool = Soundpool(streamType: StreamType.music);
   Future<void> playSound() async {
     int soundId = await rootBundle.load('assets/audio/zhuanpan_jin.MP3').then(((ByteData soundDate){
       return soundpool.load(soundDate);

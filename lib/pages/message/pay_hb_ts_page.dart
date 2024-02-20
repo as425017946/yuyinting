@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:yuyinting/utils/event_utils.dart';
-import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/my_utils.dart';
 
 import '../../bean/Common_bean.dart';
@@ -14,15 +13,16 @@ import '../../utils/my_toast_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 /// 支付密码弹窗使用
-class PayTSPage extends StatefulWidget {
-
-  const PayTSPage({super.key});
+class PayHBTSPage extends StatefulWidget {
+  String uid;
+  String number;
+  PayHBTSPage({super.key, required this.uid,required this.number});
 
   @override
-  State<PayTSPage> createState() => _PayTSPageState();
+  State<PayHBTSPage> createState() => _PayHBTSPageState();
 }
 
-class _PayTSPageState extends State<PayTSPage> {
+class _PayHBTSPageState extends State<PayHBTSPage> {
   TextEditingController textEditingController = TextEditingController();
   // 密码够6位，设置为true，其他都是false
   bool isOK = false;
@@ -93,17 +93,14 @@ class _PayTSPageState extends State<PayTSPage> {
                           // LogE('返回数据$value');
                           if(value.length == 6 && isOK == false){
                             setState(() {
+                              mima = value;
                               isOK = true;
                             });
-                            if(value.length == 6){
-                              if(MyUtils.checkClick()) {
-                                eventBus.fire(RoomBack(
-                                    title: '发红包已输入密码', index: value));
-                                MyUtils.hideKeyboard(context);
-                                Navigator.pop(context);
-                              }
+                            if(MyUtils.checkClick()) {
+                              doPostSendRedPacket();
+                              MyUtils.hideKeyboard(context);
+                              Navigator.pop(context);
                             }
-
                           }
                         },
                         textStyle: StyleUtils.getCommonTextStyle(
@@ -150,5 +147,31 @@ class _PayTSPageState extends State<PayTSPage> {
             ],
           )),
     );
+  }
+
+  /// 发红包
+  Future<void> doPostSendRedPacket() async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'uid': widget.uid,
+      'amount': widget.number,
+      'amount_type': '1',
+      'pay_pwd': mima
+    };
+    try {
+      CommonBean bean = await DataUtils.postSendRedPacket(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          eventBus.fire(HongBaoBack(info: widget.number));
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+    }
   }
 }

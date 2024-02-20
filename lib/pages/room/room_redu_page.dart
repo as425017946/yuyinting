@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/pages/room/redu_caifu_page.dart';
 import 'package:yuyinting/pages/room/redu_meili_page.dart';
+import 'package:yuyinting/pages/room/redu_online_page.dart';
 import 'package:yuyinting/pages/room/redu_zaixian_page.dart';
 import '../../bean/roomInfoBean.dart';
 import '../../colors/my_colors.dart';
+import '../../main.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
@@ -22,11 +24,16 @@ class RoomReDuPage extends StatefulWidget {
 class _RoomReDuPageState extends State<RoomReDuPage> {
   int _currentIndex = 0;
   late final PageController _controller;
-
+  // 用户身份
+  String identity = 'user';
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    //更新身份
+    setState(() {
+      identity = sp.getString('user_identity').toString();
+    });
     _currentIndex = 0;
     _controller = PageController(
       initialPage: 0,
@@ -62,7 +69,7 @@ class _RoomReDuPageState extends State<RoomReDuPage> {
                 //设置Container修饰
                 image: DecorationImage(
                   //背景图片修饰
-                  image: AssetImage(_currentIndex == 0
+                  image: AssetImage((_currentIndex == 0 || _currentIndex == 3)
                       ? "assets/images/room_tc1.png"
                       : 'assets/images/room_ph_bg.png'),
                   fit: BoxFit.fill, //覆盖
@@ -88,7 +95,7 @@ class _RoomReDuPageState extends State<RoomReDuPage> {
                         child: Opacity(
                           opacity: _currentIndex == 0 ? 1 : 0.5,
                           child: WidgetUtils.onlyTextCenter(
-                              '在线列表',
+                              '房间在线',
                               StyleUtils.getCommonTextStyle(
                                   color: MyColors.roomTCWZ2,
                                   fontSize: ScreenUtil().setSp(32))),
@@ -128,6 +135,23 @@ class _RoomReDuPageState extends State<RoomReDuPage> {
                                   fontSize: ScreenUtil().setSp(32))),
                         ),
                       )),
+                      identity != 'user' ? Expanded(
+                          child: GestureDetector(
+                            onTap: (() {
+                              setState(() {
+                                _currentIndex = 3;
+                                _controller.jumpToPage(3);
+                              });
+                            }),
+                            child: Opacity(
+                              opacity: _currentIndex == 3 ? 1 : 0.5,
+                              child: WidgetUtils.onlyTextCenter(
+                                  '全服在线',
+                                  StyleUtils.getCommonTextStyle(
+                                      color: MyColors.roomTCWZ2,
+                                      fontSize: ScreenUtil().setSp(32))),
+                            ),
+                          )) : WidgetUtils.commonSizedBox(0, 0),
                       WidgetUtils.commonSizedBox(0, 20),
                     ],
                   ),
@@ -147,6 +171,7 @@ class _RoomReDuPageState extends State<RoomReDuPage> {
                         ReDuZaiXianPage(roomID: widget.roomID,listM:widget.listm),
                         ReDuCaiFuPage(roomID: widget.roomID),
                         ReDuMeiLiPage(roomID: widget.roomID),
+                        const ReDuOnLinePage(),
                       ],
                     ),
                   )

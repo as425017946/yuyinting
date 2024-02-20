@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:sqflite/sqflite.dart';
-
 import '../../colors/my_colors.dart';
 import '../../db/DatabaseHelper.dart';
 import '../../utils/event_utils.dart';

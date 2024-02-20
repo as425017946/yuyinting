@@ -32,6 +32,26 @@ class UpdateAppPage extends StatefulWidget {
 
 class _UpdateAppPageState extends State<UpdateAppPage> {
   bool isClick = false;
+  String info = '';
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+      if(widget.info.contains(';')){
+        List<String> listInfo = widget.info.split(';');
+        for(int i = 0; i < listInfo.length; i++){
+          if(info.isEmpty){
+            info = listInfo[i];
+          }else{
+            info = '$info\n${listInfo[i]}';
+          }
+        }
+      }else{
+        info = widget.info;
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,7 +113,7 @@ class _UpdateAppPageState extends State<UpdateAppPage> {
                   padding: EdgeInsets.only(left: 40.h, right: 40.h),
                   child: SingleChildScrollView(
                     child: Text(
-                        widget.info,
+                        info,
                         maxLines: 100,
                         style:  TextStyle(
                           color: MyColors.g6,

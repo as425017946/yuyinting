@@ -47,12 +47,14 @@ class _PaiduiPageState extends State<PaiduiPage>
   int page = 1;
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
-
+  bool isUp = true; //是否允许上拉
+  bool isDown = true; //是否允许下拉
   void _onRefresh() async {
     // 重新初始化
     _refreshController.resetNoData();
     setState(() {
       sp.setBool('joinRoom',false);
+      isUp = false;
     });
     // monitor network fetch
     await Future.delayed(const Duration(milliseconds: 1000));
@@ -70,6 +72,7 @@ class _PaiduiPageState extends State<PaiduiPage>
   void _onLoading() async {
     setState(() {
       sp.setBool('joinRoom',false);
+      isDown = false;
     });
     // monitor network fetch
     await Future.delayed(const Duration(milliseconds: 1000));
@@ -602,7 +605,8 @@ class _PaiduiPageState extends State<PaiduiPage>
       header: MyUtils.myHeader(),
       footer: MyUtils.myFotter(),
       controller: _refreshController,
-      enablePullUp: true,
+      enablePullUp: isUp, //是否允许上拉加载更多
+      enablePullDown: isDown, // 是否允许下拉刷新
       onLoading: _onLoading,
       onRefresh: _onRefresh,
       child: Wrap(

@@ -33,7 +33,13 @@ class MyGonghuiPage extends StatefulWidget {
 
 class _MyGonghuiPageState extends State<MyGonghuiPage> {
   var appBar;
-  String logo = '', ghName = '', ghId = '', ghAddTime = '', identity = '',kefUavatar = '', kefuUid = '';
+  String logo = '',
+      ghName = '',
+      ghId = '',
+      ghAddTime = '',
+      identity = '',
+      kefUavatar = '',
+      kefuUid = '';
   List<StreamerList> listPeople = [];
   List<RoomList> listRoom = [];
   int qianyue = 0;
@@ -103,33 +109,45 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                                   color: Colors.white,
                                   fontSize: ScreenUtil().setSp(25),
                                 )),
+                            WidgetUtils.commonSizedBox(10, 20),
+                            identity == 'leader'
+                                ? WidgetUtils.onlyText(
+                                    '厅分润: 10%',
+                                    StyleUtils.getCommonTextStyle(
+                                        color: Colors.white,
+                                        fontSize: ScreenUtil().setSp(25)))
+                                : WidgetUtils.onlyText(
+                                '主播分润: 10%',
+                                StyleUtils.getCommonTextStyle(
+                                    color: Colors.white,
+                                    fontSize: ScreenUtil().setSp(25))),
                           ],
                         ),
                       ),
                       identity == 'leader'
                           ? GestureDetector(
-                        onTap: (() {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                              const SettingGonghuiPage(),
-                            ),
-                          ).then((value) {
-                            doPostMyGh();
-                          });
-                        }),
-                        child: Container(
-                          height: 60.h,
-                          width: 60.h,
-                          color: Colors.transparent,
-                          alignment: Alignment.centerRight,
-                          child: WidgetUtils.showImages(
-                              'assets/images/gonghui_bianji.png',
-                              ScreenUtil().setHeight(38),
-                              ScreenUtil().setHeight(38)),
-                        ),
-                      )
+                              onTap: (() {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const SettingGonghuiPage(),
+                                  ),
+                                ).then((value) {
+                                  doPostMyGh();
+                                });
+                              }),
+                              child: Container(
+                                height: 60.h,
+                                width: 60.h,
+                                color: Colors.transparent,
+                                alignment: Alignment.centerRight,
+                                child: WidgetUtils.showImages(
+                                    'assets/images/gonghui_bianji.png',
+                                    ScreenUtil().setHeight(38),
+                                    ScreenUtil().setHeight(38)),
+                              ),
+                            )
                           : const Text(''),
                       WidgetUtils.commonSizedBox(20, 20),
                     ],
@@ -196,7 +214,7 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                                               StyleUtils.getCommonTextStyle(
                                                 color: MyColors.g6,
                                                 fontSize:
-                                                ScreenUtil().setSp(21),
+                                                    ScreenUtil().setSp(21),
                                               )),
                                         ],
                                       ),
@@ -216,7 +234,7 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                                               StyleUtils.getCommonTextStyle(
                                                 color: MyColors.g6,
                                                 fontSize:
-                                                ScreenUtil().setSp(21),
+                                                    ScreenUtil().setSp(21),
                                               )),
                                         ],
                                       ),
@@ -253,7 +271,7 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                        const RoomMorePage(),
+                                            const RoomMorePage(),
                                       ),
                                     ).then((value) {
                                       doPostMyGh();
@@ -308,7 +326,8 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                                             listRoom[i].roomName!,
                                             StyleUtils.getCommonTextStyle(
                                                 color: MyColors.g2,
-                                                fontSize: ScreenUtil().setSp(25),
+                                                fontSize:
+                                                    ScreenUtil().setSp(25),
                                                 fontWeight: FontWeight.w600)),
                                         const Spacer(),
                                         Container(
@@ -339,89 +358,91 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
           /// 应聘咨询按钮
           identity == 'leader'
               ? Container(
-            height: ScreenUtil().setHeight(70),
-            margin:
-            const EdgeInsets.only(left: 20, right: 20, bottom: 20),
-            child: Row(
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: (() {
-                      if (MyUtils.checkClick()) {
-                        MyUtils.goTransparentRFPage(
-                            context,
-                            ChatPage(
-                              nickName: '维C客服',
-                              otherUid: kefuUid,
-                              otherImg: kefUavatar,
-                            ));
-                      }
-                    }),
-                    child: WidgetUtils.myContainer(
-                        ScreenUtil().setHeight(70),
-                        double.infinity,
-                        MyColors.homeTopBG,
-                        MyColors.homeTopBG,
-                        '开设房间',
-                        ScreenUtil().setSp(31),
-                        Colors.white),
-                  ),
-                ),
-                WidgetUtils.commonSizedBox(0, 20),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: (() {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                          const ShenhePage(),
-                        ),
-                      ).then((value) {
-                        doPostMyGh();
-                      });
-                    }),
-                    child: SizedBox(
-                      child: Stack(
-                        children: [
-                          WidgetUtils.myContainer(
+                  height: ScreenUtil().setHeight(70),
+                  margin:
+                      const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: (() {
+                            if (MyUtils.checkClick()) {
+                              MyUtils.goTransparentRFPage(
+                                  context,
+                                  ChatPage(
+                                    nickName: '维C客服',
+                                    otherUid: kefuUid,
+                                    otherImg: kefUavatar,
+                                  ));
+                            }
+                          }),
+                          child: WidgetUtils.myContainer(
                               ScreenUtil().setHeight(70),
                               double.infinity,
                               MyColors.homeTopBG,
                               MyColors.homeTopBG,
-                              '入驻审核',
+                              '开设房间',
                               ScreenUtil().setSp(31),
                               Colors.white),
-                          qianyue != 0 ? Positioned(
-                              right: ScreenUtil().setHeight(30),
-                              top: ScreenUtil().setHeight(10),
-                              child: CustomPaint(
-                                painter: LinePainter2(colors: Colors.red),
-                              )) : const Text('')
-                        ],
+                        ),
                       ),
-                    ),
+                      WidgetUtils.commonSizedBox(0, 20),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: (() {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ShenhePage(),
+                              ),
+                            ).then((value) {
+                              doPostMyGh();
+                            });
+                          }),
+                          child: SizedBox(
+                            child: Stack(
+                              children: [
+                                WidgetUtils.myContainer(
+                                    ScreenUtil().setHeight(70),
+                                    double.infinity,
+                                    MyColors.homeTopBG,
+                                    MyColors.homeTopBG,
+                                    '入驻审核',
+                                    ScreenUtil().setSp(31),
+                                    Colors.white),
+                                qianyue != 0
+                                    ? Positioned(
+                                        right: ScreenUtil().setHeight(30),
+                                        top: ScreenUtil().setHeight(10),
+                                        child: CustomPaint(
+                                          painter:
+                                              LinePainter2(colors: Colors.red),
+                                        ))
+                                    : const Text('')
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      WidgetUtils.commonSizedBox(0, 20),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: (() {
+                            Navigator.pushNamed(context, 'JiesuanPage');
+                          }),
+                          child: WidgetUtils.myContainer(
+                              ScreenUtil().setHeight(70),
+                              double.infinity,
+                              MyColors.homeTopBG,
+                              MyColors.homeTopBG,
+                              '结算账单',
+                              ScreenUtil().setSp(31),
+                              Colors.white),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                WidgetUtils.commonSizedBox(0, 20),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: (() {
-                      Navigator.pushNamed(context, 'JiesuanPage');
-                    }),
-                    child: WidgetUtils.myContainer(
-                        ScreenUtil().setHeight(70),
-                        double.infinity,
-                        MyColors.homeTopBG,
-                        MyColors.homeTopBG,
-                        '结算账单',
-                        ScreenUtil().setSp(31),
-                        Colors.white),
-                  ),
-                ),
-              ],
-            ),
-          )
+                )
               : const Text('')
         ],
       ),
@@ -452,11 +473,12 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
             identity = bean.data!.identity!;
             qianyue = bean.data!.unauditNum as int;
             sp.setString('guild_id', bean.data!.guildInfo!.id.toString());
-            sp.setString('guild_notice', bean.data!.guildInfo!.notice.toString());
+            sp.setString(
+                'guild_notice', bean.data!.guildInfo!.notice.toString());
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -470,8 +492,7 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
     }
   }
 
-
-/// 签约列表
+  /// 签约列表
 // Future<void> doPostApplySignList() async {
 //   Map<String, dynamic> params = <String, dynamic>{
 //     'guild_id': sp.getString('guild_id'),
@@ -496,5 +517,4 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
 //     MyToastUtils.showToastBottom(MyConfig.errorTitle);
 //   }
 // }
-
 }

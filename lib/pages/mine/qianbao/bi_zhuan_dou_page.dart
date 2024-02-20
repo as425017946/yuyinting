@@ -253,7 +253,7 @@ class _BiZhuanDouPageState extends State<BiZhuanDouPage> {
           if(bean.data!.isSet == 1){
             // 进入输入密码页面
             // ignore: use_build_context_synchronously
-            MyUtils.goTransparentPage(context, const PayTSPage());
+            MyUtils.goTransparentPage(context, PayTSPage());
           }else{
             MyToastUtils.showToastBottom('请先设置支付密码！');
             // ignore: use_build_context_synchronously

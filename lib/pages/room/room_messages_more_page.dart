@@ -6,7 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sound/public/flutter_sound_player.dart';
 import 'package:im_flutter_sdk/im_flutter_sdk.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 
@@ -26,7 +25,9 @@ import '../../utils/my_utils.dart';
 import '../../utils/regex_formatter.dart';
 import '../../utils/style_utils.dart';
 import '../../widget/SwiperPage.dart';
+import '../message/geren/people_info_page.dart';
 import '../message/hongbao_page.dart';
+import '../mine/my/my_info_page.dart';
 import '../mine/setting/password_pay_page.dart';
 
 /// 厅内消息详情
@@ -81,11 +82,12 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
 
   // 在数据变化后将滚动位置设置为最后一个item的位置
   void scrollToLastItem() {
-    _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent,
-      duration: const Duration(milliseconds: 100),
-      curve: Curves.easeInOut,
-    );
+    // _scrollController.animateTo(
+    //   _scrollController.position.maxScrollExtent,
+    //   duration: const Duration(milliseconds: 100),
+    //   curve: Curves.easeInOut,
+    // );
+    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
   }
 
   // 保存发红包的信息 type 1自己给别人发，2收到别人发的红包
@@ -189,11 +191,24 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
           Row(
             children: [
               WidgetUtils.commonSizedBox(0, 15.w),
-              WidgetUtils.CircleImageNet(
-                  ScreenUtil().setHeight(80),
-                  ScreenUtil().setHeight(80),
-                  40.h,
-                  allData2[i]['otherHeadNetImg']),
+              GestureDetector(
+                onTap: ((){
+                  if(MyUtils.checkClick()){
+                    // 如果点击的是自己，进入自己的主页
+                    if(allData2[i]['whoUid'] != sp.getString('user_id')){
+                      sp.setString('other_id', allData2[i]['otherUid'].toString());
+                      MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: allData2[i]['otherUid'].toString(),));
+                    }else{
+                      MyUtils.goTransparentRFPage(context, const MyInfoPage());
+                    }
+                  }
+                }),
+                child: WidgetUtils.CircleImageNet(
+                    ScreenUtil().setHeight(80),
+                    ScreenUtil().setHeight(80),
+                    40.h,
+                    allData2[i]['otherHeadNetImg']),
+              ),
               WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(10)),
               // 6v豆红包
               allData2[i]['type'] == 6
@@ -484,8 +499,21 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                       ),
                     ),
               WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(10)),
-              WidgetUtils.CircleImageNet(ScreenUtil().setHeight(80),
-                  ScreenUtil().setHeight(80), 40.h, allData2[i]['headNetImg']),
+              GestureDetector(
+                onTap: ((){
+                  if(MyUtils.checkClick()){
+                    // 如果点击的是自己，进入自己的主页
+                    if(allData2[i]['whoUid'] != sp.getString('user_id')){
+                      sp.setString('other_id', allData2[i]['otherUid'].toString());
+                      MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: allData2[i]['otherUid'].toString(),));
+                    }else{
+                      MyUtils.goTransparentRFPage(context, const MyInfoPage());
+                    }
+                  }
+                }),
+                child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(80),
+                    ScreenUtil().setHeight(80), 40.h, allData2[i]['headNetImg']),
+              ),
               WidgetUtils.commonSizedBox(0, 15.w),
             ],
           ),
@@ -749,7 +777,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                               }
                             }),
                             child: WidgetUtils.showImages(
-                                'assets/images/chat_img.png',
+                                'assets/images/chat_img_white.png',
                                 ScreenUtil().setHeight(45),
                                 ScreenUtil().setHeight(45)),
                           ),

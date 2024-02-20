@@ -41,8 +41,14 @@ class _ShoucangPageState extends State<ShoucangPage>
   int page = 1;
   List<DataS> _list = [];
   List<DataTj> listTJ = [];
-
+  bool isUp = false; //是否允许上拉
+  bool isDown = true; //是否允许下拉
   void _onRefresh() async {
+    // 重新初始化
+    _refreshController.resetNoData();
+    setState(() {
+      isUp = false;
+    });
     // monitor network fetch
     await Future.delayed(const Duration(milliseconds: 1000));
     // if failed,use refreshFailed()
@@ -56,6 +62,9 @@ class _ShoucangPageState extends State<ShoucangPage>
   }
 
   void _onLoading() async {
+    setState(() {
+      isDown = false;
+    });
     // monitor network fetch
     await Future.delayed(const Duration(milliseconds: 1000));
     // if failed,use loadFailed(),if no data return,use LoadNodata()
@@ -191,7 +200,8 @@ class _ShoucangPageState extends State<ShoucangPage>
               header: MyUtils.myHeader(),
               footer: MyUtils.myFotter(),
               controller: _refreshController,
-              enablePullUp: true,
+              enablePullUp: isUp, //是否允许上拉加载更多
+              enablePullDown: isDown, // 是否允许下拉刷新
               onLoading: _onLoading,
               onRefresh: _onRefresh,
               child: SingleChildScrollView(

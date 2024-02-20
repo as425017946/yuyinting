@@ -14,7 +14,7 @@ class MyHttpConfig{
   //赵增测试环境
   // static  String baseURL = "http://192.168.0.53/api";
   // // //测试环境
-  // static  String baseURL = "http://18.163.74.49:8080/api";
+  // static  String baseURL = "http://18.162.113.63:8080/api";
 
   //正式环境
   static  String baseURL = sp.getString('isDian').toString().isEmpty ? "http://43.198.138.251:8080/api" : "http://${sp.getString('isDian').toString()}:8080/api";
@@ -229,6 +229,8 @@ class MyHttpConfig{
   static  String roomMessageSend = "$baseURL/room/roomMessageSend";
   //房间麦序在线用户
   static  String onlineRoomUser = "$baseURL/room/onlineRoomUser";
+  //房间清除单个麦序
+  static  String cleanCharmSingle = "$baseURL/room/cleanCharmSingle";
   //赛车押注
   static  String carBet = "$baseURL/game/carBet";
   //赛车中奖赛道
@@ -295,6 +297,10 @@ class MyHttpConfig{
   static  String orderCreate = "$baseURL/order/create";
   // 首充
   static  String isFirstOrder = "$baseURL/order/isFirstOrder";
+  // 充值方式
+  static  String getPayment = "$baseURL/order/getPayment";
+  // 首充获取金额
+  static  String getFirstPayment = "$baseURL/order/getFirstPayment";
 
 
 

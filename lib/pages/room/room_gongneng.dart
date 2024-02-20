@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yuyinting/pages/room/room_clean_meili_page.dart';
 import 'package:yuyinting/pages/room/room_manager_page.dart';
 import 'package:yuyinting/pages/room/room_password_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
@@ -238,9 +239,11 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                           GestureDetector(
                             onTap: (() {
                               // eventBus.fire(SubmitButtonBack(title: '清除魅力'));
-                              if (MyUtils.checkClick()) {
-                                doPostCleanCharm();
-                              }
+                              // if (MyUtils.checkClick()) {
+                              //   doPostCleanCharm();
+                              // }
+                              MyUtils.goTransparentPageCom(context, RoomCleanMeiLiPage(roomID: widget.roomID));
+                              Navigator.pop(context);
                             }),
                             child: Column(
                               children: [
