@@ -14,16 +14,20 @@ class MyHttpConfig{
   //赵增测试环境
   // static  String baseURL = "http://192.168.0.53/api";
   // // //测试环境
-  // static  String baseURL = "http://18.162.113.63:8080/api";
+  static  String baseURL = "http://18.162.113.63:8080/api";
 
   //正式环境
-  static  String baseURL = sp.getString('isDian').toString().isEmpty ? "http://43.198.138.251:8080/api" : "http://${sp.getString('isDian').toString()}:8080/api";
+  // static  String baseURL = sp.getString('isDian').toString().isEmpty ? "http://43.198.138.251:8080/api" : "http://${sp.getString('isDian').toString()}:8080/api";
   // 正式环境
   // static  String baseURL = "http://www.aa986.com:8080/api";
   /// 文件上传
   // file方式上传`
   static String fileUpload = '$baseURL/upload/fileUpload';
 
+  //上传用户声网日志
+  static  String filelog = "http://18.162.113.63:8080/api/upload/filelog";
+  //存一下没有获取到ip的用户
+  static  String ipLog = "http://118.195.228.131:8301/log";
   //判断网络
   static  String pdAddress = "http://118.195.228.131:8300/address";
   //判断网络

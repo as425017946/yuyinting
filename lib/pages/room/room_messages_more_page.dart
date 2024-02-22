@@ -197,7 +197,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                     // 如果点击的是自己，进入自己的主页
                     if(allData2[i]['whoUid'] != sp.getString('user_id')){
                       sp.setString('other_id', allData2[i]['otherUid'].toString());
-                      MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: allData2[i]['otherUid'].toString(),));
+                      MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: allData2[i]['otherUid'].toString(),title: '小主页',));
                     }else{
                       MyUtils.goTransparentRFPage(context, const MyInfoPage());
                     }
@@ -505,7 +505,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                     // 如果点击的是自己，进入自己的主页
                     if(allData2[i]['whoUid'] != sp.getString('user_id')){
                       sp.setString('other_id', allData2[i]['otherUid'].toString());
-                      MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: allData2[i]['otherUid'].toString(),));
+                      MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: allData2[i]['otherUid'].toString(),title: '小主页',));
                     }else{
                       MyUtils.goTransparentRFPage(context, const MyInfoPage());
                     }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 
 import '../../bean/Common_bean.dart';
 import '../../bean/onlineRoomUserBean.dart';
@@ -12,7 +13,6 @@ import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
-import '../../widget/SVGASimpleImage.dart';
 ///房间内清除魅力
 class RoomCleanMeiLiPage extends StatefulWidget {
   String roomID;

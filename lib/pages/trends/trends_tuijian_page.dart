@@ -132,7 +132,7 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
                       MyUtils.goTransparentRFPage(
                           context,
                           PeopleInfoPage(
-                            otherId: _list[i].uid.toString(),
+                            otherId: _list[i].uid.toString(),title: '其他',
                           ));
                     }
                   }

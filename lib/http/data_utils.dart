@@ -51,7 +51,6 @@ import '../bean/myShopListBean.dart';
 import '../bean/onlineRoomUserBean.dart';
 import '../bean/orderPayBean.dart';
 import '../bean/payLsitBean.dart';
-import '../bean/pdAddressBean.dart';
 import '../bean/plBean.dart';
 import '../bean/playRouletteBean.dart';
 import '../bean/pushStreamerBean.dart';
@@ -1184,4 +1183,13 @@ class DataUtils{
     print("首充获取金额：$respons");
     return payLsitBean.fromJson(respons!);
   }
+
+  /// 文件日志上传
+  static Future<CommonBean> postFilelog(Map<String,dynamic> params) async {
+    print("文件日志上传：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.filelog, {}, params);
+    print("文件日志上传：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
 }

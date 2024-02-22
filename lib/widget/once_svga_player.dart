@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:svgaplayer_flutter/parser.dart';
-import 'package:svgaplayer_flutter/player.dart';
+import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:svgaplayer_flutter/proto/svga.pb.dart';
 
 class OnceSvgAPlayer extends StatefulWidget {

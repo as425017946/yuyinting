@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
-import 'package:yuyinting/widget/SVGASimpleImage.dart';
-
 import '../../bean/rankListBean.dart';
 import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
@@ -38,6 +38,45 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>
   List<ListBD> _list2 = [];
 
   int showPage = 0;
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+  bool isUp = true; //是否允许上拉
+  bool isDown = true; //是否允许下拉
+  void _onRefresh() async {
+    // 重新初始化
+    _refreshController.resetNoData();
+    setState(() {
+      sp.setBool('joinRoom', false);
+      isUp = false;
+    });
+    // monitor network fetch
+    await Future.delayed(const Duration(milliseconds: 1000));
+    // if failed,use refreshFailed()
+    _refreshController.refreshCompleted();
+    if (mounted) {
+      setState(() {
+        page = 1;
+      });
+    }
+    doPostRankList();
+  }
+
+  void _onLoading() async {
+    setState(() {
+      sp.setBool('joinRoom', false);
+      isDown = false;
+    });
+    // monitor network fetch
+    await Future.delayed(const Duration(milliseconds: 1000));
+    // if failed,use loadFailed(),if no data return,use LoadNodata()
+    if (mounted) {
+      setState(() {
+        page++;
+      });
+    }
+    doPostRankList();
+    _refreshController.loadComplete();
+  }
 
   /// 在线用户推荐使用
   Widget _itemTuiJian(BuildContext context, int i) {
@@ -57,6 +96,7 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>
                     context,
                     PeopleInfoPage(
                       otherId: _list[i].uid.toString(),
+                      title: '其他',
                     ));
               }
             }
@@ -151,428 +191,240 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Wrap(
-        children: [
-          /// 日榜 周榜 月榜
-          Row(
-            children: [
-              const Expanded(child: Text('')),
-              Stack(
-                children: [
-                  Opacity(
-                    opacity: 0.2,
-                    child: Row(
-                      children: [
-                        Container(
-                          //边框设置
-                          decoration: const BoxDecoration(
-                            //背景
-                            color: Colors.grey,
-                            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                          ),
-                          child: WidgetUtils.commonSizedBox(
-                              ScreenUtil().setHeight(50),
-                              ScreenUtil().setHeight(270)),
-                        )
-                      ],
+    return SmartRefresher(
+      header: MyUtils.myHeader(),
+      footer: MyUtils.myFotter(),
+      controller: _refreshController,
+      enablePullUp: isUp, //是否允许上拉加载更多
+      enablePullDown: isDown, // 是否允许下拉刷新
+      onLoading: _onLoading,
+      onRefresh: _onRefresh,
+      child: SingleChildScrollView(
+        child: Wrap(
+          children: [
+            /// 日榜 周榜 月榜
+            Row(
+              children: [
+                const Expanded(child: Text('')),
+                Stack(
+                  children: [
+                    Opacity(
+                      opacity: 0.2,
+                      child: Row(
+                        children: [
+                          Container(
+                            //边框设置
+                            decoration: const BoxDecoration(
+                              //背景
+                              color: Colors.grey,
+                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                              borderRadius: BorderRadius.all(Radius.circular(20)),
+                            ),
+                            child: WidgetUtils.commonSizedBox(
+                                ScreenUtil().setHeight(50),
+                                ScreenUtil().setHeight(270)),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: ScreenUtil().setHeight(50),
-                    width: ScreenUtil().setHeight(270),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Stack(
-                            children: [
-                              Opacity(
-                                opacity: showPage == 0 ? 0.2 : 0,
-                                child: Container(
-                                  //边框设置
-                                  decoration: const BoxDecoration(
-                                    //背景
-                                    color: Colors.white,
-                                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20)),
+                    SizedBox(
+                      height: ScreenUtil().setHeight(50),
+                      width: ScreenUtil().setHeight(270),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Stack(
+                              children: [
+                                Opacity(
+                                  opacity: showPage == 0 ? 0.2 : 0,
+                                  child: Container(
+                                    //边框设置
+                                    decoration: const BoxDecoration(
+                                      //背景
+                                      color: Colors.white,
+                                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(20)),
+                                    ),
+                                    width: double.infinity,
+                                    height: double.infinity,
                                   ),
-                                  width: double.infinity,
-                                  height: double.infinity,
                                 ),
-                              ),
-                              GestureDetector(
-                                onTap: (() {
-                                  setState(() {
-                                    showPage = 0;
-                                    dateType = 'day';
-                                  });
-                                  if (dateType != oldDateType) {
+                                GestureDetector(
+                                  onTap: (() {
                                     setState(() {
-                                      _list.clear();
-                                      _list2.clear();
-                                      oldDateType = 'day';
+                                      showPage = 0;
+                                      dateType = 'day';
+                                      page = 1;
                                     });
-                                    doPostRankList();
-                                  }
-                                }),
-                                child: Container(
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                  color: Colors.transparent,
-                                  child: WidgetUtils.onlyTextCenter(
-                                      '日榜',
-                                      StyleUtils.getCommonTextStyle(
-                                          color: showPage == 0
-                                              ? MyColors.roomTCWZ2
-                                              : MyColors.roomTCWZ3,
-                                          fontSize: ScreenUtil().setSp(25))),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: Stack(
-                            children: [
-                              Opacity(
-                                opacity: showPage == 1 ? 0.2 : 0,
-                                child: Container(
-                                  //边框设置
-                                  decoration: const BoxDecoration(
-                                    //背景
-                                    color: Colors.white,
-                                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20)),
+                                    if (dateType != oldDateType) {
+                                      setState(() {
+                                        _list.clear();
+                                        _list2.clear();
+                                        oldDateType = 'day';
+                                      });
+                                      doPostRankList();
+                                    }
+                                  }),
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    color: Colors.transparent,
+                                    child: WidgetUtils.onlyTextCenter(
+                                        '日榜',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: showPage == 0
+                                                ? MyColors.roomTCWZ2
+                                                : MyColors.roomTCWZ3,
+                                            fontSize: ScreenUtil().setSp(25))),
                                   ),
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: (() {
-                                  setState(() {
-                                    showPage = 1;
-                                    dateType = 'week';
-                                  });
-                                  if (dateType != oldDateType) {
-                                    setState(() {
-                                      _list.clear();
-                                      _list2.clear();
-                                      oldDateType = 'week';
-                                    });
-                                    doPostRankList();
-                                  }
-                                }),
-                                child: Container(
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                  color: Colors.transparent,
-                                  child: WidgetUtils.onlyTextCenter(
-                                      '周榜',
-                                      StyleUtils.getCommonTextStyle(
-                                          color: showPage == 1
-                                              ? MyColors.roomTCWZ2
-                                              : MyColors.roomTCWZ3,
-                                          fontSize: ScreenUtil().setSp(25))),
-                                ),
-                              )
-                            ],
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                        Expanded(
-                          child: Stack(
-                            children: [
-                              Opacity(
-                                opacity: showPage == 2 ? 0.2 : 0,
-                                child: Container(
-                                  //边框设置
-                                  decoration: const BoxDecoration(
-                                    //背景
-                                    color: Colors.white,
-                                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20)),
+                          Expanded(
+                            child: Stack(
+                              children: [
+                                Opacity(
+                                  opacity: showPage == 1 ? 0.2 : 0,
+                                  child: Container(
+                                    //边框设置
+                                    decoration: const BoxDecoration(
+                                      //背景
+                                      color: Colors.white,
+                                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(20)),
+                                    ),
+                                    width: double.infinity,
+                                    height: double.infinity,
                                   ),
-                                  width: double.infinity,
-                                  height: double.infinity,
                                 ),
-                              ),
-                              GestureDetector(
-                                onTap: (() {
-                                  setState(() {
-                                    showPage = 2;
-                                    dateType = 'month';
-                                  });
-                                  if (dateType != oldDateType) {
+                                GestureDetector(
+                                  onTap: (() {
                                     setState(() {
-                                      _list.clear();
-                                      _list2.clear();
-                                      oldDateType = 'month';
+                                      showPage = 1;
+                                      dateType = 'week';
+                                      page = 1;
                                     });
-                                    doPostRankList();
-                                  }
-                                }),
-                                child: Container(
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                  color: Colors.transparent,
-                                  child: WidgetUtils.onlyTextCenter(
-                                      '月榜',
-                                      StyleUtils.getCommonTextStyle(
-                                          color: showPage == 2
-                                              ? MyColors.roomTCWZ2
-                                              : MyColors.roomTCWZ3,
-                                          fontSize: ScreenUtil().setSp(25))),
-                                ),
-                              )
-                            ],
+                                    if (dateType != oldDateType) {
+                                      setState(() {
+                                        _list.clear();
+                                        _list2.clear();
+                                        oldDateType = 'week';
+                                      });
+                                      doPostRankList();
+                                    }
+                                  }),
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    color: Colors.transparent,
+                                    child: WidgetUtils.onlyTextCenter(
+                                        '周榜',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: showPage == 1
+                                                ? MyColors.roomTCWZ2
+                                                : MyColors.roomTCWZ3,
+                                            fontSize: ScreenUtil().setSp(25))),
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                        )
-                      ],
+                          Expanded(
+                            child: Stack(
+                              children: [
+                                Opacity(
+                                  opacity: showPage == 2 ? 0.2 : 0,
+                                  child: Container(
+                                    //边框设置
+                                    decoration: const BoxDecoration(
+                                      //背景
+                                      color: Colors.white,
+                                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(20)),
+                                    ),
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: (() {
+                                    setState(() {
+                                      showPage = 2;
+                                      dateType = 'month';
+                                      page = 1;
+                                    });
+                                    if (dateType != oldDateType) {
+                                      setState(() {
+                                        _list.clear();
+                                        _list2.clear();
+                                        oldDateType = 'month';
+                                      });
+                                      doPostRankList();
+                                    }
+                                  }),
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    color: Colors.transparent,
+                                    child: WidgetUtils.onlyTextCenter(
+                                        '月榜',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: showPage == 2
+                                                ? MyColors.roomTCWZ2
+                                                : MyColors.roomTCWZ3,
+                                            fontSize: ScreenUtil().setSp(25))),
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              const Expanded(child: Text('')),
-            ],
-          ),
-          WidgetUtils.commonSizedBox(20.h, 20.h),
-          Row(
-            children: [
-              WidgetUtils.commonSizedBox(0, 20.h),
-              WidgetUtils.onlyText(
-                  '按照本房间财富值排序',
-                  StyleUtils.getCommonTextStyle(
-                      color: Colors.white,
-                      fontSize: 28.sp,
-                      fontWeight: FontWeight.w600)),
-              const Spacer(),
-              WidgetUtils.onlyText(
-                  '财富值',
-                  StyleUtils.getCommonTextStyle(
-                      color: Colors.white,
-                      fontSize: 28.sp,
-                      fontWeight: FontWeight.w600)),
-              WidgetUtils.commonSizedBox(0, 20.h),
-            ],
-          ),
-          WidgetUtils.commonSizedBox(10.h, 20.h),
-          // SizedBox(
-          //   height: ScreenUtil().setHeight(323),
-          //   width: double.infinity,
-          //   child: Row(
-          //     children: [
-          //       const Expanded(child: Text('')),
-          //       /// 第二名
-          //       GestureDetector(
-          //         onTap: ((){
-          //           if(MyUtils.checkClick()){
-          //             // 如果点击的是自己，进入自己的主页
-          //             if(sp.getString('user_id').toString() == _list[1].uid.toString()){
-          //               MyUtils.goTransparentRFPage(context, const MyInfoPage());
-          //             }else{
-          //               sp.setString('other_id', _list[1].uid.toString());
-          //               MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId:_list[1].uid.toString(),));
-          //             }
-          //           }
-          //         }),
-          //         child: Column(
-          //           children: [
-          //             const Expanded(child: Text('')),
-          //             _list.length > 1
-          //                 ? Stack(
-          //                     alignment: Alignment.center,
-          //                     children: [
-          //                       WidgetUtils.CircleHeadImage(
-          //                           ScreenUtil().setHeight(90),
-          //                           ScreenUtil().setHeight(90),
-          //                           _list[1].avatar!),
-          //                       SizedBox(
-          //                         height: 120.h,
-          //                         width: 120.h,
-          //                         child: const SVGASimpleImage(
-          //                           assetsName: 'assets/svga/ph_2.svga',
-          //                         ),
-          //                       )
-          //                     ],
-          //                   )
-          //                 : const Text(''),
-          //             Stack(
-          //               children: [
-          //                 WidgetUtils.commonSizedBox(100.h, 0),
-          //                 Container(
-          //                   width: ScreenUtil().setHeight(155),
-          //                   margin: const EdgeInsets.only(top: 5),
-          //                   alignment: Alignment.topCenter,
-          //                   child: WidgetUtils.onlyTextCenter(
-          //                       _list.length > 1 ? _list[1].nickname! : '',
-          //                       StyleUtils.getCommonTextStyle(
-          //                           color: Colors.white,
-          //                           fontSize: ScreenUtil().setSp(21),
-          //                           fontWeight: FontWeight.w600)),
-          //                 ),
-          //                 Container(
-          //                   width: ScreenUtil().setHeight(155),
-          //                   margin: EdgeInsets.only(top: 35.h),
-          //                   alignment: Alignment.topCenter,
-          //                   child: WidgetUtils.onlyTextCenter(
-          //                       _list.length > 1 ? _list[1].score.toString() : '',
-          //                       StyleUtils.getCommonTextStyle(
-          //                           color: Colors.white,
-          //                           fontSize: ScreenUtil().setSp(21),
-          //                           fontWeight: FontWeight.w600)),
-          //                 ),
-          //               ],
-          //             ),
-          //           ],
-          //         ),
-          //       ),
-          //       /// 第一名
-          //       GestureDetector(
-          //         onTap: ((){
-          //           if(MyUtils.checkClick()){
-          //             // 如果点击的是自己，进入自己的主页
-          //             if(sp.getString('user_id').toString() == _list[0].uid.toString()){
-          //               MyUtils.goTransparentRFPage(context, const MyInfoPage());
-          //             }else{
-          //               sp.setString('other_id', _list[0].uid.toString());
-          //               MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId:_list[0].uid.toString(),));
-          //             }
-          //           }
-          //         }),
-          //         child: Column(
-          //           children: [
-          //             const Expanded(child: Text('')),
-          //             _list.isNotEmpty
-          //                 ? Stack(
-          //                     alignment: Alignment.center,
-          //                     children: [
-          //                       WidgetUtils.CircleHeadImage(
-          //                           ScreenUtil().setHeight(110),
-          //                           ScreenUtil().setHeight(110),
-          //                           _list[0].avatar!),
-          //                       SizedBox(
-          //                         height: 140.h,
-          //                         width: 140.h,
-          //                         child: const SVGASimpleImage(
-          //                           assetsName: 'assets/svga/ph_1.svga',
-          //                         ),
-          //                       )
-          //                     ],
-          //                   )
-          //                 : const Text(''),
-          //             Stack(
-          //               children: [
-          //                 WidgetUtils.commonSizedBox(160.h, 0),
-          //                 Container(
-          //                   width: ScreenUtil().setHeight(192),
-          //                   alignment: Alignment.topCenter,
-          //                   child: WidgetUtils.onlyTextCenter(
-          //                       _list.isNotEmpty ? _list[0].nickname! : '',
-          //                       StyleUtils.getCommonTextStyle(
-          //                           color: Colors.white,
-          //                           fontSize: ScreenUtil().setSp(21),
-          //                           fontWeight: FontWeight.w600)),
-          //                 ),
-          //                 Container(
-          //                   width: ScreenUtil().setHeight(192),
-          //                   margin: EdgeInsets.only(top: 30.h),
-          //                   alignment: Alignment.topCenter,
-          //                   child: WidgetUtils.onlyTextCenter(
-          //                       _list.isNotEmpty ? _list[0].score.toString() : '',
-          //                       StyleUtils.getCommonTextStyle(
-          //                           color: Colors.white,
-          //                           fontSize: ScreenUtil().setSp(21),
-          //                           fontWeight: FontWeight.w600)),
-          //                 ),
-          //               ],
-          //             )
-          //           ],
-          //         ),
-          //       ),
-          //       /// 第三名
-          //       GestureDetector(
-          //         onTap: ((){
-          //           if(MyUtils.checkClick()){
-          //             // 如果点击的是自己，进入自己的主页
-          //             if(sp.getString('user_id').toString() == _list[2].uid.toString()){
-          //               MyUtils.goTransparentRFPage(context, const MyInfoPage());
-          //             }else{
-          //               sp.setString('other_id', _list[2].uid.toString());
-          //               MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId:_list[2].uid.toString(),));
-          //             }
-          //           }
-          //         }),
-          //         child: Column(
-          //           children: [
-          //             const Expanded(child: Text('')),
-          //             _list.length > 2
-          //                 ? Stack(
-          //                     alignment: Alignment.center,
-          //                     children: [
-          //                       WidgetUtils.CircleHeadImage(
-          //                           ScreenUtil().setHeight(90),
-          //                           ScreenUtil().setHeight(90),
-          //                           _list[2].avatar!),
-          //                       SizedBox(
-          //                         height: 120.h,
-          //                         width: 120.h,
-          //                         child: const SVGASimpleImage(
-          //                           assetsName: 'assets/svga/ph_3.svga',
-          //                         ),
-          //                       )
-          //                     ],
-          //                   )
-          //                 : const Text(''),
-          //             Stack(
-          //               children: [
-          //                 WidgetUtils.commonSizedBox(40.h, 0),
-          //                 Container(
-          //                   width: ScreenUtil().setHeight(155),
-          //                   alignment: Alignment.topCenter,
-          //                   child: WidgetUtils.onlyTextCenter(
-          //                       _list.length > 2 ? _list[2].nickname! : '',
-          //                       StyleUtils.getCommonTextStyle(
-          //                           color: Colors.white,
-          //                           fontSize: ScreenUtil().setSp(21),
-          //                           fontWeight: FontWeight.w600)),
-          //                 ),
-          //                 Container(
-          //                   width: ScreenUtil().setHeight(155),
-          //                   margin: EdgeInsets.only(top: 35.h),
-          //                   alignment: Alignment.topCenter,
-          //                   child: WidgetUtils.onlyTextCenter(
-          //                       _list.length > 2 ? _list[2].score.toString() : '',
-          //                       StyleUtils.getCommonTextStyle(
-          //                           color: Colors.white,
-          //                           fontSize: ScreenUtil().setSp(21),
-          //                           fontWeight: FontWeight.w600)),
-          //                 ),
-          //               ],
-          //             )
-          //           ],
-          //         ),
-          //       ),
-          //       const Expanded(child: Text('')),
-          //     ],
-          //   ),
-          // ),
+                  ],
+                ),
+                const Expanded(child: Text('')),
+              ],
+            ),
+            WidgetUtils.commonSizedBox(20.h, 20.h),
+            Row(
+              children: [
+                WidgetUtils.commonSizedBox(0, 20.h),
+                WidgetUtils.onlyText(
+                    '按照本房间财富值排序',
+                    StyleUtils.getCommonTextStyle(
+                        color: Colors.white,
+                        fontSize: 28.sp,
+                        fontWeight: FontWeight.w600)),
+                const Spacer(),
+                WidgetUtils.onlyText(
+                    '财富值',
+                    StyleUtils.getCommonTextStyle(
+                        color: Colors.white,
+                        fontSize: 28.sp,
+                        fontWeight: FontWeight.w600)),
+                WidgetUtils.commonSizedBox(0, 20.h),
+              ],
+            ),
+            WidgetUtils.commonSizedBox(10.h, 20.h),
 
-          /// 展示在线用户
-          _list.isNotEmpty
-              ? ListView.builder(
-                  padding: EdgeInsets.only(top: 0.h),
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: _itemTuiJian,
-                  itemCount: _list.length,
-                )
-              : const Text('')
-        ],
+            /// 展示在线用户
+            _list.isNotEmpty
+                ? ListView.builder(
+                    padding: EdgeInsets.only(top: 0.h),
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: _itemTuiJian,
+                    itemCount: _list.length,
+                  )
+                : const Text('')
+          ],
+        ),
       ),
     );
   }
@@ -585,13 +437,15 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>
       'date_type': dateType,
       'room_id': widget.roomID,
       'page': page,
-      'pageSize': '30'
+      'pageSize': MyConfig.pageSize,
     };
     try {
       rankListBean bean = await DataUtils.postRankList(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
+            isUp = true;
+            isDown = true;
             if (page == 1) {
               _list.clear();
             }
@@ -602,6 +456,12 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>
               if (bean.data!.list!.length > 3) {
                 for (int i = 3; i < bean.data!.list!.length; i++) {
                   _list2.add(bean.data!.list![i]);
+                }
+              }
+            } else {
+              if (page > 1) {
+                if (bean.data!.list!.length < MyConfig.pageSize) {
+                  _refreshController.loadNoData();
                 }
               }
             }

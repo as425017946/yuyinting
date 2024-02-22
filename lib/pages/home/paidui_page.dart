@@ -1046,6 +1046,8 @@ class _PaiduiPageState extends State<PaiduiPage>
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
+            isUp = true; //是否允许上拉
+            isDown = true; //是否允许下拉
             if (page == 1 && type == "2") {
               list2.clear();
             } else if (page == 1 && type == "3") {

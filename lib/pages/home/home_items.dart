@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:marquee/marquee.dart';
+import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:yuyinting/utils/log_util.dart';
-import 'package:yuyinting/widget/SVGASimpleImage3.dart';
 import '../../bean/hengFuBean.dart';
-import '../../widget/SVGASimpleImage.dart';
 
 class HomeItems {
   /// 公屏送礼推送
@@ -200,7 +199,7 @@ class HomeItems {
           width: double.infinity,
           child: Stack(
             children: [
-              SVGASimpleImage3(
+              SVGASimpleImage(
                 assetsName: type == 0 ? 'assets/svga/gp/gp_52hf.svga' : 'assets/svga/gp/gp_52.svga',
               ),
               GestureDetector(

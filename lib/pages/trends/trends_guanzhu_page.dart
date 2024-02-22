@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:svgaplayer_flutter/parser.dart';
-import 'package:svgaplayer_flutter/player.dart';
+import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:yuyinting/pages/trends/trends_hi_page.dart';
 import 'package:yuyinting/pages/trends/trends_more_page.dart';
@@ -183,7 +183,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
                       MyUtils.goTransparentRFPage(
                           context,
                           PeopleInfoPage(
-                            otherId: _list[i].uid.toString(),
+                            otherId: _list[i].uid.toString(),title: '其他',
                           ));
                     }
                   }
@@ -472,7 +472,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
                       MyUtils.goTransparentRFPage(
                           context,
                           PeopleInfoPage(
-                            otherId: _list_tj[i].uid.toString(),
+                            otherId: _list_tj[i].uid.toString(),title: '其他',
                           ));
                     }
                   }

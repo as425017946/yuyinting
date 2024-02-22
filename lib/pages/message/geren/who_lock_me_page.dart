@@ -67,7 +67,7 @@ class _WhoLockMePageState extends State<WhoLockMePage> {
           GestureDetector(
             onTap: ((){
               if(MyUtils.checkClick()){
-                MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[i].uid.toString(),));
+                MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[i].uid.toString(),title: '其他',));
               }
             }),
             child: Stack(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:svgaplayer_flutter/player.dart';
+import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import '../../widget/Marquee.dart';
 
 /// 公屏展示系统推送的信息

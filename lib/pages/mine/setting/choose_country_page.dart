@@ -250,7 +250,7 @@ class _ChooseCountryPageState extends State<ChooseCountryPage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom("111数据请求超时，请检查网络状况!");
+      // MyToastUtils.showToastBottom("数据请求超时，请检查网络状况!");
     }
   }
 

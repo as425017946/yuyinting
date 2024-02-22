@@ -742,8 +742,8 @@ class _RoomPageState extends State<RoomPage>
             break;
           case '开麦':
             setState(() {
-              //重新开启本地音频功能，即开启本地音频采集（默认）
-              _engine.enableLocalAudio(true);
+              // 启用音频模块
+              _engine.enableAudio();
               // 开启发布本地音频流
               _engine.muteLocalAudioStream(false);
               listM[int.parse(event.index!)].isClose = 0;
@@ -767,8 +767,8 @@ class _RoomPageState extends State<RoomPage>
             break;
           case '开麦1':
             setState(() {
-              //重新开启本地音频功能，即开启本地音频采集（默认）
-              _engine.enableLocalAudio(true);
+              // 启用音频模块
+              _engine.enableAudio();
               // 开启发布本地音频流
               _engine.muteLocalAudioStream(false);
               listM[int.parse(event.index!)].isClose = 0;
@@ -855,8 +855,8 @@ class _RoomPageState extends State<RoomPage>
                 setState(() {
                   isJinyiin = false;
                 });
-                //重新开启本地音频功能，即开启本地音频采集（默认）
-                _engine.enableLocalAudio(true);
+                // 启用音频模块
+                _engine.enableAudio();
                 //设置成主播
                 _engine.setClientRole(
                     role: ClientRoleType.clientRoleBroadcaster);
@@ -1098,8 +1098,8 @@ class _RoomPageState extends State<RoomPage>
             setState(() {
               isJinyiin = false;
             });
-            //重新开启本地音频功能，即开启本地音频采集（默认）
-            _engine.enableLocalAudio(true);
+            // 启用音频模块
+            _engine.enableAudio();
             //设置成主播
             _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
             // 发布本地音频流
@@ -2165,6 +2165,11 @@ class _RoomPageState extends State<RoomPage>
     await _engine.release(); // 释放资源
   }
 
+  // 离开频道
+  Future<void> _levave() async {
+    await _engine.leaveChannel(); // 离开频道
+  }
+
   // 初始化应用
   Future<void> initAgora() async {
     // 获取权限
@@ -2178,7 +2183,7 @@ class _RoomPageState extends State<RoomPage>
       appId: MyConfig.appId,
       channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
     ));
-
+    // 启用音频模块
     _engine.enableAudio();
     LogE('频道token ${widget.roomToken}');
     LogE('频道channelId ${widget.roomId}');
@@ -2204,6 +2209,9 @@ class _RoomPageState extends State<RoomPage>
     //     enabled: true, mode: AudioAinsMode.ainsModeUltralowlatency);
     //默认订阅所有远端用户的音频流。
     _engine.muteAllRemoteAudioStreams(false);
+    var isHave = _engine.enableAudioVolumeIndication(
+        interval: 50, smooth: 3, reportVad: true);
+    LogE('是否成功 ==  $isHave');
     LogE('本人上麦 ==  $isMeUp');
     if (isMeUp && isMeStatus) {
       // 发布本地音频流
@@ -2219,8 +2227,10 @@ class _RoomPageState extends State<RoomPage>
             int speakerNumber,
             int totalVolume) {
           LogE("用户音量： $speakers");
-          LogE("用户数量： $speakerNumber");
-          LogE("用户混音总音量： $totalVolume");
+          for(int i =0; i < speakers.length; i++){
+            LogE("用户音量： ${speakers[i].volume}");
+            LogE("用户id： ${speakers[i].uid}");
+          }
         },
         //本地音频统计数据。
         onLocalAudioStats: (RtcConnection connection, LocalAudioStats stats) {},
@@ -2243,6 +2253,23 @@ class _RoomPageState extends State<RoomPage>
             ConnectionStateType state, ConnectionChangedReasonType reason) {
           LogE("用户已经加入频道： ${connection.channelId} 频道id");
           LogE("用户已经加入频道： 状态 $state");
+          LogE("用户已经加入频道： 状态 $reason");
+          //如果加入频道失败等多项原因导致没声音，先移除频道，然后在重新走一遍加入频道流程
+          if (reason ==
+                  ConnectionChangedReasonType.connectionChangedJoinFailed ||
+              reason ==
+                  ConnectionChangedReasonType.connectionChangedSameUidLogin ||
+              reason ==
+                  ConnectionChangedReasonType
+                      .connectionChangedClientIpAddressChangedByUser ||
+              reason == ConnectionChangedReasonType.connectionChangedEchoTest ||
+              reason == ConnectionChangedReasonType.connectionChangedLost ||
+              reason ==
+                  ConnectionChangedReasonType
+                      .connectionChangedSettingProxyServer) {
+            _levave();
+            initAgora();
+          }
         },
         onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
           LogE("用户加入频道2 remote user $remoteUid joined");

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:yuyinting/main.dart';
 import 'package:yuyinting/pages/room/room_liwu_page.dart';
 import 'package:yuyinting/pages/room/room_messages_more_page.dart';
@@ -20,7 +21,6 @@ import '../../utils/event_utils.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/widget_utils.dart';
-import '../../widget/SVGASimpleImage.dart';
 import '../message/geren/people_info_page.dart';
 import '../mine/my/my_info_page.dart';
 
@@ -798,7 +798,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                         MyUtils.goTransparentRFPage(
                             context,
                             PeopleInfoPage(
-                              otherId: widget.uid,
+                              otherId: widget.uid,title: '小主页',
                             ));
                       }
                     }

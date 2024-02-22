@@ -3,14 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:yuyinting/utils/event_utils.dart';
-import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/my_utils.dart';
-
-import '../../bean/Common_bean.dart';
 import '../../colors/my_colors.dart';
-import '../../http/data_utils.dart';
-import '../../http/my_http_config.dart';
-import '../../utils/my_toast_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 /// 支付密码弹窗使用
@@ -57,7 +51,7 @@ class _PayTSPageState extends State<PayTSPage> {
               ),
               Container(
                 width: ScreenUtil().setHeight(506),
-                height: ScreenUtil().setHeight(400),
+                height: ScreenUtil().setHeight(520),
                 decoration: const BoxDecoration(
                   //设置Container修饰
                   image: DecorationImage(
@@ -73,14 +67,14 @@ class _PayTSPageState extends State<PayTSPage> {
                         '请输入支付密码',
                         StyleUtils.getCommonTextStyle(
                             color: Colors.black87,
-                            fontSize: 32.sp,
+                            fontSize: 36.sp,
                             fontWeight: FontWeight.w600)),
-                    WidgetUtils.commonSizedBox(30, 0),
+                    WidgetUtils.commonSizedBox(80.h, 0),
                     Container(
                       width: double.infinity,
                       color: Colors.transparent,
                       alignment: Alignment.center,
-                      margin: EdgeInsets.only(left: ScreenUtil().setHeight(80), right: ScreenUtil().setHeight(80),),
+                      margin: EdgeInsets.only(left: ScreenUtil().setHeight(40), right: ScreenUtil().setHeight(40),),
                       child: PinCodeTextField(
                         length: 6,
                         inputFormatters: [
@@ -108,7 +102,7 @@ class _PayTSPageState extends State<PayTSPage> {
                         },
                         textStyle: StyleUtils.getCommonTextStyle(
                             color: MyColors.btn_a,
-                            fontSize: 38.sp),
+                            fontSize: 50.sp),
                         appContext: context,
                         keyboardType: TextInputType.number,
                         autoFocus: true,
@@ -116,8 +110,8 @@ class _PayTSPageState extends State<PayTSPage> {
                         pinTheme: PinTheme(
                           shape: PinCodeFieldShape.box,
                           borderRadius: BorderRadius.circular(2),
-                          fieldHeight: 70.h,
-                          fieldWidth: 55.h,
+                          fieldHeight: 100.h,
+                          fieldWidth: 60.h,
                           activeFillColor: Colors.transparent,
                           //填充背景色
                           activeColor: MyColors.btn_a,

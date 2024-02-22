@@ -6,9 +6,9 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:yuyinting/pages/gongping/web_page.dart';
 import 'package:yuyinting/pages/home/search_page.dart';
-import 'package:yuyinting/widget/SVGASimpleImage.dart';
 import '../../bean/Common_bean.dart';
 import '../../bean/homeTJBean.dart';
 import '../../bean/joinRoomBean.dart';
@@ -147,7 +147,7 @@ class _TuijianPageState extends State<TuijianPage>  with AutomaticKeepAliveClien
                       MyUtils.goTransparentRFPage(context, const MyInfoPage());
                     }else{
                       sp.setString('other_id', listAnchor[i].uid.toString());
-                      MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: listAnchor[i].uid.toString(),));
+                      MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: listAnchor[i].uid.toString(),title: '其他',));
                     }
                   }
                 }),

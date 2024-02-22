@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/loading.dart';
 import 'package:yuyinting/utils/log_util.dart';
-import '../../config/my_config.dart';
-import '../../widget/SVGASimpleImage.dart';
-
 import '../../bean/roomBGBean.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
@@ -16,7 +14,6 @@ import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../../widget/OptionGridView.dart';
-import '../../widget/SVGASimpleImage4.dart';
 
 /// 默认背景
 class RoomBG1Page extends StatefulWidget {
@@ -70,7 +67,7 @@ class _RoomBG1PageState extends State<RoomBG1Page> with AutomaticKeepAliveClient
                         //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                         borderRadius: BorderRadius.all(Radius.circular(20.0)),
                       ),
-                      child: SVGASimpleImage4(
+                      child: SVGASimpleImage(
                         resUrl: list[index].img!,
 
                       ),

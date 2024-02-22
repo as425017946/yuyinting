@@ -120,10 +120,12 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
   void _animListener() {
     //TODO
     if (animationController.status == AnimationStatus.completed) {
-      setState(() {
-        isRunning = false;
-        isXiazhu = true;
-      });
+      if(mounted) {
+        setState(() {
+          isRunning = false;
+          isXiazhu = true;
+        });
+      }
       // 通知用户游戏结束，可以离开页面
       eventBus.fire(GameBack(isBack: false));
       // 打开礼物结果

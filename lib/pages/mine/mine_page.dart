@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:yuyinting/pages/message/care_home_page.dart';
 import 'package:yuyinting/pages/mine/setting/setting_page.dart';
 import 'package:yuyinting/pages/mine/tequan/tequan_page.dart';
@@ -10,12 +11,9 @@ import 'package:yuyinting/pages/mine/zhuangban/zhuangban_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/style_utils.dart';
-import 'package:yuyinting/widget/SVGASimpleImage.dart';
-
 import '../../bean/kefuBean.dart';
 import '../../bean/myInfoBean.dart';
 import '../../colors/my_colors.dart';
-import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
@@ -151,7 +149,7 @@ class _MinePageState extends State<MinePage> {
       }
     });
     doPostMyIfon();
-    doPostKefu();
+    // doPostKefu();
   }
 
   @override

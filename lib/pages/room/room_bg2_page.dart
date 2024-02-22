@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
@@ -21,7 +22,6 @@ import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../../widget/OptionGridView.dart';
-import '../../widget/SVGASimpleImage.dart';
 
 /// 我的背景
 class RoomBG2Page extends StatefulWidget {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:svgaplayer_flutter/player.dart';
+import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 /// 5万2特效
 class QPPage extends StatefulWidget {
   const QPPage({super.key});

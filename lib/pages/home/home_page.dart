@@ -26,8 +26,8 @@ import 'package:yuyinting/pages/login/edit_info_page.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import '../../bean/CheckoutBean.dart';
+import '../../bean/Common_bean.dart';
 import '../../bean/addressIPBean.dart';
-import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
@@ -35,6 +35,7 @@ import '../../utils/event_utils.dart';
 import '../../utils/log_util.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
 
 ///首页
 class HomePage extends StatefulWidget {
@@ -63,6 +64,8 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     // TODO: implement initState
+    doPostFilelog(1);
+    doPostFilelog(2);
     doCheck();
     doPostPdAddress();
     //更新身份
@@ -511,6 +514,76 @@ class _HomePageState extends State<HomePage>
         ],
       ),
     );
+  }
+
+  /// 上传声网日志
+  Future<void> doPostFilelog(int type) async {
+    File file;
+    String path = '';
+    if (Platform.isAndroid) {
+      if(type==1){
+        path = '/sdcard/Android/data/com.leimu.yuyinting/files/agorasdk.log';
+      }else{
+        path = '/sdcard/Android/data/com.leimu.yuyinting/files/agoraapi.log';
+      }
+      file = File(path);
+      if (file.existsSync()) {
+        FormData formdata = FormData.fromMap(
+          {
+            'uid': sp.getString('user_id'),
+            'type': type,
+            "file": await MultipartFile.fromFile(
+              path,
+              filename: type==1 ? 'agorasdk.log' : 'agoraapi.log',
+            )
+          },
+        );
+        BaseOptions option = BaseOptions(
+            contentType: 'multipart/form-data', responseType: ResponseType.plain);
+        option.headers["Authorization"] = sp.getString('user_token') ?? '';
+        Dio dio = Dio(option);
+        //application/json
+        var respone = await dio.post(MyHttpConfig.filelog, data: formdata);
+        Map jsonResponse = json.decode(respone.data.toString());
+        if (jsonResponse['code'] == 200) {
+          LogE('上传成功');
+        }
+      } else {
+        print('文件不存在');
+      }
+    }else if (Platform.isIOS){
+      var dir = await path_provider.getTemporaryDirectory();
+      if(type==1){
+        path = '$dir/files/agorasdk.log';
+      }else{
+        path = '$dir/files/agoraapi.log';
+      }
+      file = File(path);
+      if (file.existsSync()) {
+        FormData formdata = FormData.fromMap(
+          {
+            'uid': sp.getString('user_id'),
+            'type': type,
+            "file": await MultipartFile.fromFile(
+              path,
+              filename: type==1 ? 'agorasdk.log' : 'agoraapi.log',
+            )
+          },
+        );
+        BaseOptions option = BaseOptions(
+            contentType: 'multipart/form-data', responseType: ResponseType.plain);
+        option.headers["Authorization"] = sp.getString('user_token') ?? '';
+        Dio dio = Dio(option);
+        //application/json
+        var respone = await dio.post(MyHttpConfig.filelog, data: formdata);
+        Map jsonResponse = json.decode(respone.data.toString());
+        if (jsonResponse['code'] == 200) {
+          LogE('上传成功');
+        }
+      } else {
+        print('文件不存在');
+      }
+    }
   }
 
   /// 判断当前网络，然后给返回适配的网络地址

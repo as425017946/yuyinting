@@ -10,8 +10,6 @@ import 'package:yuyinting/pages/game/zhuanpan/zhuanpan_daoju_page.dart';
 import 'package:yuyinting/pages/game/zhuanpan/zhuanpan_guize_page.dart';
 import 'package:yuyinting/pages/game/zhuanpan/zhuanpan_jiangchi2_page.dart';
 import 'package:yuyinting/pages/game/zhuanpan/zhuanpan_jilu_page.dart';
-import 'package:yuyinting/widget/SVGASimpleImage.dart';
-
 import '../../bean/CommonIntBean.dart';
 import '../../bean/playRouletteBean.dart';
 import '../../config/my_config.dart';
@@ -129,10 +127,12 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
     //TODO
     if (animationController.status == AnimationStatus.completed) {
       LogE('停止了');
-      setState(() {
-        isRunning = false;
-        isXiazhu = true;
-      });
+      if(mounted) {
+        setState(() {
+          isRunning = false;
+          isXiazhu = true;
+        });
+      }
       // 通知用户游戏结束，可以离开页面
       eventBus.fire(GameBack(isBack: false));
       // 打开礼物结果

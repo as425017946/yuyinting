@@ -87,7 +87,7 @@ class _GonghuiPeoplePageState extends State<GonghuiPeoplePage> {
             MyUtils.goTransparentRFPage(context, const MyInfoPage());
           }else{
             sp.setString('other_id', list[i].streamerUid.toString());
-            MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: list[i].streamerUid.toString(),));
+            MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: list[i].streamerUid.toString(),title: '其他',));
           }
         }
       }),

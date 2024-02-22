@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:im_flutter_sdk/im_flutter_sdk.dart';
@@ -11,7 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:svgaplayer_flutter/player.dart';
+import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/main.dart';
 import 'package:yuyinting/utils/event_utils.dart';
@@ -43,7 +43,7 @@ import 'package:flutter_sound_platform_interface/flutter_sound_recorder_platform
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/foundation.dart' show kIsWeb;
-
+import 'package:path_provider/path_provider.dart' as path_provider;
 import 'geren/people_info_page.dart';
 import 'hongbao_page.dart';
 
@@ -156,7 +156,10 @@ class _ChatPageState extends State<ChatPage> {
     });
     listenHB = eventBus.on<HongBaoBack>().listen((event) {
       LogE('发送了===');
-      saveHBinfo(event.info);
+      if(event.info != '-1'){
+        // -1为发送失败
+        saveHBinfo(event.info);
+      }
     });
     listenYY = eventBus.on<SubmitButtonBack>().listen((event) {
       if(event.title == '语音发送成功'){
@@ -645,7 +648,7 @@ class _ChatPageState extends State<ChatPage> {
                     // 如果点击的是自己，进入自己的主页
                     if(allData2[i]['whoUid'] != sp.getString('user_id')){
                       sp.setString('other_id', allData2[i]['otherUid'].toString());
-                      MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: allData2[i]['otherUid'].toString(),));
+                      MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: allData2[i]['otherUid'].toString(),title: '其他',));
                     }else{
                       MyUtils.goTransparentRFPage(context, const MyInfoPage());
                     }
@@ -1032,7 +1035,7 @@ class _ChatPageState extends State<ChatPage> {
                     // 如果点击的是自己，进入自己的主页
                     if(allData2[i]['whoUid'] != sp.getString('user_id')){
                       sp.setString('other_id', allData2[i]['otherUid'].toString());
-                      MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: allData2[i]['otherUid'].toString(),));
+                      MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: allData2[i]['otherUid'].toString(),title: '其他',));
                     }else{
                       MyUtils.goTransparentRFPage(context, const MyInfoPage());
                     }
@@ -1574,8 +1577,8 @@ class _ChatPageState extends State<ChatPage> {
                             ],
                             style: StyleUtils.loginTextStyle,
                             onSubmitted: (value) {
-                              MyUtils.sendMessage(widget.otherUid, value);
-                              doPostSendUserMsg(value);
+                              // MyUtils.sendMessage(widget.otherUid, value);
+                              // doPostSendUserMsg(value);
                             },
                             decoration: InputDecoration(
                               // border: InputBorder.none,
@@ -2061,7 +2064,6 @@ class _ChatPageState extends State<ChatPage> {
           columns: null,
           whereArgs: [combineID, sp.getString('user_id')],
           where: 'combineID = ? and uid = ?');
-
       setState(() {
         allData2 = result;
         length = allData2.length;
@@ -2085,10 +2087,56 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   /// 发送图片
-  Future<void> doSendFile(String filePath) async {
+  Future<void> doSendFile(String path) async {
+    var dir = await path_provider.getTemporaryDirectory();
+    String targetPath = '';
+    var result;
+    if (path.toString().contains('.gif') || path.toString().contains('.GIF')) {
+      targetPath = path;
+    } else if (path.toString().contains('.jpg') ||
+        path.toString().contains('.GPG')) {
+      targetPath =
+      "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
+      result = await FlutterImageCompress.compressAndGetFile(
+        path, targetPath,
+        quality: 50,
+        rotate: 0, // 旋转角度
+      );
+    } else if (path.toString().contains('.jpeg') ||
+        path.toString().contains('.GPEG')) {
+      targetPath =
+      "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpeg";
+      result = await FlutterImageCompress.compressAndGetFile(
+        path, targetPath,
+        quality: 50,
+        rotate: 0, // 旋转角度
+      );
+    } else if (path.toString().contains('.svga') ||
+        path.toString().contains('.SVGA')) {
+      MyToastUtils.showToastBottom('不支持svga格式图片上传');
+      return;
+    } else if (path.toString().contains('.webp') ||
+        path.toString().contains('.WEBP')) {
+      targetPath =
+      "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.webp";
+      result = await FlutterImageCompress.compressAndGetFile(
+        path, targetPath,
+        quality: 50,
+        rotate: 0, // 旋转角度
+      );
+    } else {
+      targetPath =
+      "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.png";
+      result = await FlutterImageCompress.compressAndGetFile(
+        path, targetPath,
+        quality: 50,
+        rotate: 0, // 旋转角度
+      );
+    }
+
     final imgMsg = EMMessage.createImageSendMessage(
       targetId: widget.otherUid,
-      filePath: filePath,
+      filePath: result!.path.toString(),
     );
     imgMsg.attributes = {
       'nickname': sp.getString('nickname'),
@@ -2112,7 +2160,7 @@ class _ChatPageState extends State<ChatPage> {
       'whoUid': sp.getString('user_id').toString(),
       'combineID': combineID,
       'nickName': widget.nickName,
-      'content': filePath,
+      'content': result!.path.toString(),
       'headNetImg': sp.getString('user_headimg').toString(),
       'otherHeadNetImg': widget.otherImg,
       'add_time': DateTime.now().millisecondsSinceEpoch,
@@ -2127,13 +2175,13 @@ class _ChatPageState extends State<ChatPage> {
     // 插入数据
     await databaseHelper.insertData('messageSLTable', params);
     // 获取所有数据
-    List<Map<String, dynamic>> result = await db.query('messageSLTable',
+    List<Map<String, dynamic>> resultAll = await db.query('messageSLTable',
         columns: null,
         whereArgs: [combineID, sp.getString('user_id')],
         where: 'combineID = ? and uid = ?');
 
     setState(() {
-      allData2 = result;
+      allData2 = resultAll;
       length = allData2.length;
     });
     WidgetsBinding.instance!.addPostFrameCallback((_) {

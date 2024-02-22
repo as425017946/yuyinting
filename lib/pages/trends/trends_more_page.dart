@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:svgaplayer_flutter/parser.dart';
-import 'package:svgaplayer_flutter/player.dart';
+import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:yuyinting/pages/trends/trends_hi_page.dart';
 import 'package:yuyinting/utils/loading.dart';
 import 'package:yuyinting/utils/log_util.dart';
@@ -177,7 +177,7 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                       MyUtils.goTransparentRFPage(context, const MyInfoPage());
                     }else{
                       sp.setString('other_id', comList[i].uid.toString());
-                      MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: comList[i].uid.toString(),));
+                      MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: comList[i].uid.toString(),title: '其他',));
                     }
                   }
                 }),
@@ -634,7 +634,7 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                                       MyUtils.goTransparentRFPage(
                                           context,
                                           PeopleInfoPage(
-                                            otherId: myUid,
+                                            otherId: myUid,title: '其他',
                                           ));
                                     }
                                   }),

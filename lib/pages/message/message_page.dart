@@ -127,7 +127,7 @@ class _MessagePageState extends State<MessagePage> {
                 MyUtils.goTransparentRFPage(
                     context,
                     PeopleInfoPage(
-                      otherId: listMessage[i]['otherUid'],
+                      otherId: listMessage[i]['otherUid'],title: '其他',
                     ));
               }),
               child: Stack(

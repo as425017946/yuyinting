@@ -420,17 +420,17 @@ class MyUtils {
 
   //初始化sdk
   static void initSDK() async {
-    // EMOptions options = EMOptions(
-    //     appKey: "1199230605161000#demo",
-    //     autoLogin: false,
-    //     debugModel: true,
-    //     isAutoDownloadThumbnail: true);
-    // 正式环境
     EMOptions options = EMOptions(
-        appKey: "1129240201157233#cc",
+        appKey: "1199230605161000#demo",
         autoLogin: false,
         debugModel: true,
         isAutoDownloadThumbnail: true);
+    // // 正式环境
+    // EMOptions options = EMOptions(
+    //     appKey: "1129240201157233#cc",
+    //     autoLogin: false,
+    //     debugModel: true,
+    //     isAutoDownloadThumbnail: true);
     // EMOptions options = EMOptions(
     //     appKey: "1109240124169584#777",
     //     autoLogin: false,

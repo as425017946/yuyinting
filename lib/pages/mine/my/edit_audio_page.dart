@@ -9,6 +9,7 @@ import 'package:flutter_sound/flutter_sound.dart';
 import 'package:flutter_sound/public/flutter_sound_player.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 
 import '../../../bean/labelListBean.dart';
@@ -26,7 +27,6 @@ import '../../../utils/style_utils.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_sound_platform_interface/flutter_sound_recorder_platform_interface.dart';
-import '../../../widget/SVGASimpleImage.dart';
 
 enum RecordPlayState {
   record,

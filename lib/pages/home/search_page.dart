@@ -68,7 +68,7 @@ class _SearchPageState extends State<SearchPage> {
               MyUtils.goTransparentRFPage(
                   context,
                   PeopleInfoPage(
-                    otherId: listUser[i].uid.toString(),
+                    otherId: listUser[i].uid.toString(),title: '其他',
                   ));
             }
           }
@@ -407,7 +407,7 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  late List<Map<String, dynamic>> list_label;
+  List<Map<String, dynamic>> list_label = [];
 
   /// 保存搜索记录
   void saveInfo() async {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:yuyinting/pages/room/room_youxi_page.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/my_utils.dart';
@@ -12,7 +13,6 @@ import '../../utils/log_util.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../../widget/Marquee.dart';
-import '../../widget/SVGASimpleImage.dart';
 import '../../widget/SVGASimpleImage2.dart';
 import '../game/car_page.dart';
 import '../game/mofang_page.dart';
@@ -1830,7 +1830,6 @@ class RoomItems {
                           : Row(
                         children: [
                           const Expanded(child: Text('')),
-                          WidgetUtils.commonSizedBox(0, 5),
                           WidgetUtils.onlyText(
                               listm[8].nickname!,
                               StyleUtils.getCommonTextStyle(
@@ -2016,7 +2015,6 @@ class RoomItems {
                               ? Row(
                             children: [
                               const Expanded(child: Text('')),
-                              WidgetUtils.commonSizedBox(0, 5),
                               WidgetUtils.onlyText(
                                   listm[0].nickname!,
                                   StyleUtils.getCommonTextStyle(
@@ -2172,7 +2170,6 @@ class RoomItems {
                               ? Row(
                             children: [
                               const Expanded(child: Text('')),
-                              WidgetUtils.commonSizedBox(0, 5),
                               WidgetUtils.onlyText(
                                   listm[1].nickname!,
                                   StyleUtils.getCommonTextStyle(
@@ -2328,7 +2325,6 @@ class RoomItems {
                               ? Row(
                             children: [
                               const Expanded(child: Text('')),
-                              WidgetUtils.commonSizedBox(0, 5),
                               WidgetUtils.onlyText(
                                   listm[2].nickname!,
                                   StyleUtils.getCommonTextStyle(
@@ -2484,7 +2480,6 @@ class RoomItems {
                               ? Row(
                             children: [
                               const Expanded(child: Text('')),
-                              WidgetUtils.commonSizedBox(0, 5),
                               WidgetUtils.onlyText(
                                   listm[3].nickname!,
                                   StyleUtils.getCommonTextStyle(
@@ -2649,7 +2644,6 @@ class RoomItems {
                                 ? Row(
                               children: [
                                 const Expanded(child: Text('')),
-                                WidgetUtils.commonSizedBox(0, 5),
                                 WidgetUtils.onlyText(
                                     listm[4].nickname!,
                                     StyleUtils.getCommonTextStyle(
@@ -2807,7 +2801,6 @@ class RoomItems {
                                 ? Row(
                               children: [
                                 const Expanded(child: Text('')),
-                                WidgetUtils.commonSizedBox(0, 5),
                                 WidgetUtils.onlyText(
                                     listm[5].nickname!,
                                     StyleUtils.getCommonTextStyle(
@@ -2965,7 +2958,6 @@ class RoomItems {
                                 ? Row(
                               children: [
                                 const Expanded(child: Text('')),
-                                WidgetUtils.commonSizedBox(0, 5),
                                 WidgetUtils.onlyText(
                                     listm[6].nickname!,
                                     StyleUtils.getCommonTextStyle(
@@ -3146,7 +3138,6 @@ class RoomItems {
                                 ? Row(
                               children: [
                                 const Expanded(child: Text('')),
-                                WidgetUtils.commonSizedBox(0, 5),
                                 ShaderMask(
                                   shaderCallback: (Rect bounds) {
                                     return const LinearGradient(
@@ -3322,7 +3313,6 @@ class RoomItems {
                                 ? Row(
                               children: [
                                 const Expanded(child: Text('')),
-                                WidgetUtils.commonSizedBox(0, 5),
                                 WidgetUtils.onlyText(
                                     listm[7].nickname!,
                                     StyleUtils.getCommonTextStyle(

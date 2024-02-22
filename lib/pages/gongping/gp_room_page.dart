@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:yuyinting/widget/SVGASimpleImage.dart';
-
+import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import '../../colors/my_colors.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:yuyinting/bean/liwuBean.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/pages/room/room_show_liwu_page.dart';
@@ -8,7 +9,6 @@ import 'package:yuyinting/utils/loading.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
-import 'package:yuyinting/widget/SVGASimpleImage.dart';
 import '../../bean/Common_bean.dart';
 import '../../bean/balanceBean.dart';
 import '../../bean/beibaoBean.dart';
@@ -1289,7 +1289,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1334,7 +1334,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1413,7 +1413,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1487,7 +1487,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
       setState(() {
         isCheck = false;
       });
-      MyToastUtils.showToastBottom(e.toString());
+      // MyToastUtils.showToastBottom(e.toString());
     }
   }
   /// 一键赠送背包礼物
@@ -1528,7 +1528,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
       setState(() {
         isAllBeibao = false;
       });
-      MyToastUtils.showToastBottom(e.toString());
+      // MyToastUtils.showToastBottom(e.toString());
     }
   }
 
@@ -1570,7 +1570,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

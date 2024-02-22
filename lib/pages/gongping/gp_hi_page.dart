@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import '../../colors/my_colors.dart';
 import '../../utils/my_utils.dart';
-import '../../widget/SVGASimpleImage.dart';
 import '../message/chat_page.dart';
 
 /// 公屏打招呼使用

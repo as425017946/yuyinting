@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
-import 'package:yuyinting/widget/SVGASimpleImage.dart';
 
 import '../../../utils/my_utils.dart';
 import '../../shouchong/shouchong_page.dart';

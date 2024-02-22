@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soundpool/soundpool.dart';
 import 'package:svgaplayer_flutter/parser.dart';
-import 'package:svgaplayer_flutter/player.dart';
+import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:yuyinting/config/my_config.dart';
 
 import '../../bean/balanceBean.dart';
@@ -116,11 +116,13 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
       // 动画播放到最后一帧时停止播放
       animationController?.stop();
       // animationController?.removeListener(_animListener);
-      setState(() {
-        isShow = false;
-        isTiaoguoLW = false;
-        isXiazhu = true;
-      });
+      if(mounted) {
+        setState(() {
+          isShow = false;
+          isTiaoguoLW = false;
+          isXiazhu = true;
+        });
+      }
     }
   }
 

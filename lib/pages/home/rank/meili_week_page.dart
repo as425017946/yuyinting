@@ -118,7 +118,7 @@ class _MeiLiWeekPageState extends State<MeiLiWeekPage> {
                         MyUtils.goTransparentRFPage(context, const MyInfoPage());
                       }else{
                         sp.setString('other_id', _list[0].uid.toString());
-                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[0].uid.toString(),));
+                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[0].uid.toString(),title: '其他',));
                       }
                     }
                   }),
@@ -263,7 +263,7 @@ class _MeiLiWeekPageState extends State<MeiLiWeekPage> {
                         MyUtils.goTransparentRFPage(context, const MyInfoPage());
                       }else{
                         sp.setString('other_id', _list[1].uid.toString());
-                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[1].uid.toString(),));
+                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[1].uid.toString(),title: '其他',));
                       }
                     }
                   }),
@@ -333,7 +333,7 @@ class _MeiLiWeekPageState extends State<MeiLiWeekPage> {
                         MyUtils.goTransparentRFPage(context, const MyInfoPage());
                       }else{
                         sp.setString('other_id', _list[0].uid.toString());
-                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[0].uid.toString(),));
+                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[0].uid.toString(),title: '其他',));
                       }
                     }
                   }),
@@ -478,7 +478,7 @@ class _MeiLiWeekPageState extends State<MeiLiWeekPage> {
                         MyUtils.goTransparentRFPage(context, const MyInfoPage());
                       }else{
                         sp.setString('other_id', _list[1].uid.toString());
-                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[1].uid.toString(),));
+                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[1].uid.toString(),title: '其他',));
                       }
                     }
                   }),
@@ -548,7 +548,7 @@ class _MeiLiWeekPageState extends State<MeiLiWeekPage> {
                         MyUtils.goTransparentRFPage(context, const MyInfoPage());
                       }else{
                         sp.setString('other_id', _list[0].uid.toString());
-                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[0].uid.toString(),));
+                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[0].uid.toString(),title: '其他',));
                       }
                     }
                   }),
@@ -627,7 +627,7 @@ class _MeiLiWeekPageState extends State<MeiLiWeekPage> {
                         MyUtils.goTransparentRFPage(context, const MyInfoPage());
                       }else{
                         sp.setString('other_id', _list[2].uid.toString());
-                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[2].uid.toString(),));
+                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[2].uid.toString(),title: '其他',));
                       }
                     }
                   }),
@@ -706,7 +706,7 @@ class _MeiLiWeekPageState extends State<MeiLiWeekPage> {
                           MyUtils.goTransparentRFPage(context, const MyInfoPage());
                         }else{
                           sp.setString('other_id', _list2[i].uid.toString());
-                          MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list2[i].uid.toString(),));
+                          MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list2[i].uid.toString(),title: '其他',));
                         }
                       }
                     }),

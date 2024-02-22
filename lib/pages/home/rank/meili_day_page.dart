@@ -114,7 +114,7 @@ class _MeiLiDayPageState extends State<MeiLiDayPage> {
                         MyUtils.goTransparentRFPage(context, const MyInfoPage());
                       }else{
                         sp.setString('other_id', _list[0].uid.toString());
-                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[0].uid.toString(),));
+                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[0].uid.toString(), title: '其他',));
                       }
                     }
                   }),
@@ -259,7 +259,7 @@ class _MeiLiDayPageState extends State<MeiLiDayPage> {
                         MyUtils.goTransparentRFPage(context, const MyInfoPage());
                       }else{
                         sp.setString('other_id', _list[1].uid.toString());
-                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[1].uid.toString(),));
+                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[1].uid.toString(), title: '其他',));
                       }
                     }
                   }),
@@ -329,7 +329,7 @@ class _MeiLiDayPageState extends State<MeiLiDayPage> {
                         MyUtils.goTransparentRFPage(context, const MyInfoPage());
                       }else{
                         sp.setString('other_id', _list[0].uid.toString());
-                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[0].uid.toString(),));
+                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[0].uid.toString(), title: '其他',));
                       }
                     }
                   }),
@@ -474,7 +474,7 @@ class _MeiLiDayPageState extends State<MeiLiDayPage> {
                         MyUtils.goTransparentRFPage(context, const MyInfoPage());
                       }else{
                         sp.setString('other_id', _list[1].uid.toString());
-                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[1].uid.toString(),));
+                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[1].uid.toString(), title: '其他',));
                       }
                     }
                   }),
@@ -544,7 +544,7 @@ class _MeiLiDayPageState extends State<MeiLiDayPage> {
                         MyUtils.goTransparentRFPage(context, const MyInfoPage());
                       }else{
                         sp.setString('other_id', _list[0].uid.toString());
-                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[0].uid.toString(),));
+                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[0].uid.toString(), title: '其他',));
                       }
                     }
                   }),
@@ -623,7 +623,7 @@ class _MeiLiDayPageState extends State<MeiLiDayPage> {
                         MyUtils.goTransparentRFPage(context, const MyInfoPage());
                       }else{
                         sp.setString('other_id', _list[2].uid.toString());
-                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[2].uid.toString(),));
+                        MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list[2].uid.toString(), title: '其他',));
                       }
                     }
                   }),
@@ -702,7 +702,7 @@ class _MeiLiDayPageState extends State<MeiLiDayPage> {
                           MyUtils.goTransparentRFPage(context, const MyInfoPage());
                         }else{
                           sp.setString('other_id', _list2[i].uid.toString());
-                          MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list2[i].uid.toString(),));
+                          MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: _list2[i].uid.toString(), title: '其他',));
                         }
                       }
                     }),
@@ -791,7 +791,7 @@ class _MeiLiDayPageState extends State<MeiLiDayPage> {
       'category': widget.category,
       'date_type': date_type,
       'page': page,
-      'pageSize': MyConfig.pageSize
+      'pageSize': '30'
     };
     try {
       Loading.show(MyConfig.successTitle);

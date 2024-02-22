@@ -53,6 +53,7 @@ import '../pages/mine/tequan/tequan_page.dart';
 import '../pages/message/geren/who_lock_me_page.dart';
 import '../pages/mine/zhuangban/shop_page.dart';
 import '../pages/mine/zhuangban/zhuangban_page.dart';
+import '../pages/room/room_page.dart';
 import '../pages/room/room_people_info_page.dart';
 import '../pages/room/room_redu_page.dart';
 import '../pages/room/room_ts_gonggao_page.dart';
@@ -107,6 +108,7 @@ var staticRoutes = {
   'TequanPage':(context) => const TequanPage(),// 特权页面
   'DengjiPage':(context) => const DengjiPage(),// 测试等级描边
   'ChengJiuPage':(context) => const ChengJiuPage(),// 等级成就
+  'RoomPage':(context) => RoomPage(roomId: '', roomToken: '', beforeId: '',),
 
 
 };

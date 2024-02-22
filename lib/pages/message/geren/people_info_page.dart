@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sound/public/flutter_sound_player.dart';
+import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:yuyinting/pages/message/geren/ziliao_page.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 
@@ -19,7 +20,6 @@ import '../../../utils/log_util.dart';
 import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
 import '../../../utils/widget_utils.dart';
-import '../../../widget/SVGASimpleImage.dart';
 import '../../../widget/SwiperPage.dart';
 import '../../room/room_page.dart';
 import '../../room/room_ts_mima_page.dart';
@@ -29,8 +29,8 @@ import 'dongtai_page.dart';
 /// 他人主页
 class PeopleInfoPage extends StatefulWidget {
   String otherId;
-
-  PeopleInfoPage({Key? key, required this.otherId}) : super(key: key);
+  String title;
+  PeopleInfoPage({Key? key, required this.otherId, required this.title}) : super(key: key);
 
   @override
   State<PeopleInfoPage> createState() => _PeopleInfoPageState();
@@ -425,7 +425,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                             ],
                           ),
                         ),
-                        live == 1
+                        (live == 1 && widget.title != '小主页')
                             ? GestureDetector(
                                 onTap: (() {
                                   if (sp.getString('roomID').toString() ==

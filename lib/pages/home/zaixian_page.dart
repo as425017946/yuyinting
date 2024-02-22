@@ -101,7 +101,7 @@ class _ZaixianPageState extends State<ZaixianPage>
                       MyUtils.goTransparentRFPage(
                           context,
                           PeopleInfoPage(
-                            otherId: list[i].uid.toString(),
+                            otherId: list[i].uid.toString(),title: '其他',
                           ));
                     }
                   }),

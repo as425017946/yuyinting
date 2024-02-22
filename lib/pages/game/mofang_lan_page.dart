@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soundpool/soundpool.dart';
 import 'package:svgaplayer_flutter/parser.dart';
-import 'package:svgaplayer_flutter/player.dart';
+import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/log_util.dart';
@@ -103,11 +103,13 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
       // 动画播放到最后一帧时停止播放
       animationController?.stop();
       // animationController?.removeListener(_animListener);
-      setState(() {
-        isShow = false;
-        isTiaoguoLW = false;
-        isXiazhu = true;
-      });
+      if(mounted) {
+        setState(() {
+          isShow = false;
+          isTiaoguoLW = false;
+          isXiazhu = true;
+        });
+      }
     }
   }
 
