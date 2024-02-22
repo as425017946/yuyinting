@@ -558,6 +558,7 @@ class _HomePageState extends State<HomePage>
       }else{
         path = '$dir/files/agoraapi.log';
       }
+      LogE('ios文件地址 $path');
       file = File(path);
       if (file.existsSync()) {
         FormData formdata = FormData.fromMap(
