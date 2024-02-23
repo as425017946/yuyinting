@@ -554,9 +554,9 @@ class _HomePageState extends State<HomePage>
     }else if (Platform.isIOS){
       Directory tempDir = await getTemporaryDirectory();
       if(type==1){
-        path = '${tempDir.path}/files/agorasdk.log';
+        path = '${tempDir.path}/agorasdk.log';
       }else{
-        path = '${tempDir.path}/files/agoraapi.log';
+        path = '${tempDir.path}/agoraapi.log';
       }
       LogE('ios地址 ${tempDir.path}');
       LogE('ios文件地址 $path');
