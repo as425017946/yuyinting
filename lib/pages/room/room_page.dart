@@ -2247,60 +2247,59 @@ class _RoomPageState extends State<RoomPage>
             List<AudioVolumeInfo> speakers,
             int speakerNumber,
             int totalVolume) {
-          // for(int i =0; i < speakers.length; i++){
-          //   LogE("用户音量： ${speakers[i].volume}");
-          //   // LogE("用户id： ${speakers[i].uid}");
-          //   if(speakers[i].uid == 0){
-          //     for(int a =0; a < listM.length; a++){
-          //       if(sp.getString('user_id').toString() == listM[a].uid.toString()){
-          //         LogE("用户音量： ${sp.getString('user_id').toString() == listM[a].uid.toString()}");
-          //         // 并且发声了
-          //         if( speakers[i].volume! > 0){
-          //           setState(() {
-          //             listM[a].isAudio = true;
-          //           });
-          //         }else{
-          //           // 并且静音了
-          //           setState(() {
-          //             listM[a].isAudio = false;
-          //           });
-          //         }
-          //         break;
-          //       }
-          //     }
-          //   }else{
-          //     // for(int a =0; a < listM.length; a++){
-          //     //   // 发音用户不是本人
-          //     //   if(speakers[i].uid == listM[a].uid){
-          //     //     // 并且发声了
-          //     //     if( speakers[i].volume! > 0){
-          //     //       setState(() {
-          //     //         listM[a].isAudio = true;
-          //     //       });
-          //     //     }else{
-          //     //       // 并且静音了
-          //     //       setState(() {
-          //     //         listM[a].isAudio = false;
-          //     //       });
-          //     //     }
-          //     //   }else if(speakers[i].uid == 0){
-          //     //     if(sp.getString('user_id').toString() == listM[a].uid.toString()){
-          //     //       // 并且发声了
-          //     //       if( speakers[i].volume! > 0){
-          //     //         setState(() {
-          //     //           listM[a].isAudio = true;
-          //     //         });
-          //     //       }else{
-          //     //         // 并且静音了
-          //     //         setState(() {
-          //     //           listM[a].isAudio = false;
-          //     //         });
-          //     //       }
-          //     //     }
-          //     //   }
-          //     // }
-          //   }
-          // }
+          for(int i =0; i < speakers.length; i++){
+            LogE("用户音量： ${speakers[i].volume}");
+            // LogE("用户id： ${speakers[i].uid}");
+            /// 只采集声音大于75的用户
+            if(speakers[i].volume! > 75){
+              //是本人
+              if(speakers[i].uid == 0){
+                for(int a =0; a < listM.length; a++){
+                  if(sp.getString('user_id').toString() == listM[a].uid.toString()){
+                    setState(() {
+                      listM[a].isAudio = true;
+                    });
+                    break;
+                  }
+                }
+              }else{
+                //不是本人
+                for(int a =0; a < listM.length; a++){
+                  // 发音用户不是本人
+                  if(speakers[i].uid == listM[a].uid){
+                    // 并且发声了
+                    setState(() {
+                      listM[a].isAudio = true;
+                    });
+                  }
+                }
+              }
+            }else{
+              /// 声音小于75 不显示光波
+              //是本人
+              if(speakers[i].uid == 0){
+                for(int a =0; a < listM.length; a++){
+                  if(sp.getString('user_id').toString() == listM[a].uid.toString()){
+                    setState(() {
+                      listM[a].isAudio = false;
+                    });
+                    break;
+                  }
+                }
+              }else{
+                //不是本人
+                for(int a =0; a < listM.length; a++){
+                  // 发音用户不是本人
+                  if(speakers[i].uid == listM[a].uid){
+                    // 并且发声了
+                    setState(() {
+                      listM[a].isAudio = false;
+                    });
+                  }
+                }
+              }
+            }
+          }
         },
         //本地音频统计数据。
         onLocalAudioStats: (RtcConnection connection, LocalAudioStats stats) {},

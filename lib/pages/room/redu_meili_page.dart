@@ -418,6 +418,7 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage>  with AutomaticKeepAliveC
           setState(() {
             if (page == 1) {
               _list.clear();
+              _list2.clear();
             }
             if (bean.data!.list!.isNotEmpty) {
               for (int i = 0; i < bean.data!.list!.length; i++) {

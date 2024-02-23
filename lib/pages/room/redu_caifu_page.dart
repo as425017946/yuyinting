@@ -448,6 +448,7 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>
             isDown = true;
             if (page == 1) {
               _list.clear();
+              _list2.clear();
             }
             if (bean.data!.list!.isNotEmpty) {
               for (int i = 0; i < bean.data!.list!.length; i++) {

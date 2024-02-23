@@ -1578,7 +1578,7 @@ class _ChatPageState extends State<ChatPage> {
                             style: StyleUtils.loginTextStyle,
                             onSubmitted: (value) {
                               // MyUtils.sendMessage(widget.otherUid, value);
-                              // doPostSendUserMsg(value);
+                              doPostSendUserMsg(value);
                             },
                             decoration: InputDecoration(
                               // border: InputBorder.none,
