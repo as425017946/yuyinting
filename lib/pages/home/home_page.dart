@@ -64,8 +64,17 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     // TODO: implement initState
-    doPostFilelog(1);
-    doPostFilelog(2);
+    // 判断当前年月日是否为今天，如果不是，上传日志
+    DateTime now = DateTime.now();
+    int year = now.year;
+    int month = now.month;
+    int day = now.day;
+    String time = '$year-$month-$day';
+    if(sp.getString('sw_queren_time') == null || sp.getString('sw_queren_time') != time){
+      sp.setString('sw_queren_time', time);
+      doPostFilelog(1);
+      doPostFilelog(2);
+    }
     doCheck();
     doPostPdAddress();
     //更新身份

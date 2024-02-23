@@ -1806,7 +1806,7 @@ class RoomItems {
                       ScreenUtil().setHeight(110),
                       listm[0].avatarFrameImg!) : const Text(''),
                   // 头像框动态图
-                  listm[8].isClose == 0 ? SizedBox(
+                  listm[8].isClose == 0  ? SizedBox(
                     height: 140.h,
                     width: 140.h,
                     child: const SVGASimpleImage(

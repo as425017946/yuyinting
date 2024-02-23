@@ -733,6 +733,8 @@ class _RoomPageState extends State<RoomPage>
             setState(() {
               // 取消发布本地音频流
               _engine.muteLocalAudioStream(true);
+              // 适用只听声音，不发声音流
+              _engine.enableLocalAudio(false);
               listM[int.parse(event.index!)].isClose = 1;
               for (int i = 0; i < 9; i++) {
                 upOrDown[i] = false;
@@ -744,6 +746,8 @@ class _RoomPageState extends State<RoomPage>
             setState(() {
               // 启用音频模块
               _engine.enableAudio();
+              // 发声音发音频流
+              _engine.enableLocalAudio(true);
               // 开启发布本地音频流
               _engine.muteLocalAudioStream(false);
               listM[int.parse(event.index!)].isClose = 0;
@@ -757,6 +761,8 @@ class _RoomPageState extends State<RoomPage>
             setState(() {
               // 取消发布本地音频流
               _engine.muteLocalAudioStream(true);
+              // 适用只听声音，不发声音流
+              _engine.enableLocalAudio(false);
               listM[int.parse(event.index!)].isClose = 1;
               for (int i = 0; i < 9; i++) {
                 upOrDown[i] = false;
@@ -769,6 +775,8 @@ class _RoomPageState extends State<RoomPage>
             setState(() {
               // 启用音频模块
               _engine.enableAudio();
+              // 发声音发音频流
+              _engine.enableLocalAudio(true);
               // 开启发布本地音频流
               _engine.muteLocalAudioStream(false);
               listM[int.parse(event.index!)].isClose = 0;
@@ -857,6 +865,8 @@ class _RoomPageState extends State<RoomPage>
                 });
                 // 启用音频模块
                 _engine.enableAudio();
+                // 发声音发音频流
+                _engine.enableLocalAudio(true);
                 //设置成主播
                 _engine.setClientRole(
                     role: ClientRoleType.clientRoleBroadcaster);
@@ -876,6 +886,8 @@ class _RoomPageState extends State<RoomPage>
                 _engine.setClientRole(role: ClientRoleType.clientRoleAudience);
                 // 取消发布本地音频流
                 _engine.muteLocalAudioStream(true);
+                // 适用只听声音，不发声音流
+                _engine.enableLocalAudio(false);
               }
               break;
             case 'up_mic': //上麦
@@ -907,6 +919,8 @@ class _RoomPageState extends State<RoomPage>
                       role: ClientRoleType.clientRoleAudience);
                   // 取消发布本地音频流
                   _engine.muteLocalAudioStream(true);
+                  // 适用只听声音，不发声音流
+                  _engine.enableLocalAudio(false);
                   setState(() {
                     isMeUp = false;
                   });
@@ -1000,6 +1014,8 @@ class _RoomPageState extends State<RoomPage>
                 }
                 // 取消发布本地音频流
                 _engine.muteLocalAudioStream(true);
+                // 适用只听声音，不发声音流
+                _engine.enableLocalAudio(false);
                 // 调用离开房间接口
                 doPostLeave();
                 _engine.disableAudio();
@@ -2199,7 +2215,6 @@ class _RoomPageState extends State<RoomPage>
     );
     // // 通过此方法设置为观众
     // _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
-    _engine.enableLocalAudio(true);
     // 设置音质
     _engine.setAudioProfile(
         profile: AudioProfileType.audioProfileMusicHighQuality,
@@ -2216,21 +2231,76 @@ class _RoomPageState extends State<RoomPage>
     if (isMeUp && isMeStatus) {
       // 发布本地音频流
       _engine.muteLocalAudioStream(false);
+      // 发声音流
+      _engine.enableLocalAudio(true);
     } else {
       // 取消发布本地音频流
       _engine.muteLocalAudioStream(true);
+      // 适用只听声音，不发声音流
+      _engine.enableLocalAudio(false);
     }
+    _engine.setParameters('9');
+    _engine.enableAudioVolumeIndication(interval: 1000, smooth: 3, reportVad: true);
     _engine.registerEventHandler(
       RtcEngineEventHandler(
         onAudioVolumeIndication: (RtcConnection connection,
             List<AudioVolumeInfo> speakers,
             int speakerNumber,
             int totalVolume) {
-          LogE("用户音量： $speakers");
-          for(int i =0; i < speakers.length; i++){
-            LogE("用户音量： ${speakers[i].volume}");
-            LogE("用户id： ${speakers[i].uid}");
-          }
+          // for(int i =0; i < speakers.length; i++){
+          //   LogE("用户音量： ${speakers[i].volume}");
+          //   // LogE("用户id： ${speakers[i].uid}");
+          //   if(speakers[i].uid == 0){
+          //     for(int a =0; a < listM.length; a++){
+          //       if(sp.getString('user_id').toString() == listM[a].uid.toString()){
+          //         LogE("用户音量： ${sp.getString('user_id').toString() == listM[a].uid.toString()}");
+          //         // 并且发声了
+          //         if( speakers[i].volume! > 0){
+          //           setState(() {
+          //             listM[a].isAudio = true;
+          //           });
+          //         }else{
+          //           // 并且静音了
+          //           setState(() {
+          //             listM[a].isAudio = false;
+          //           });
+          //         }
+          //         break;
+          //       }
+          //     }
+          //   }else{
+          //     // for(int a =0; a < listM.length; a++){
+          //     //   // 发音用户不是本人
+          //     //   if(speakers[i].uid == listM[a].uid){
+          //     //     // 并且发声了
+          //     //     if( speakers[i].volume! > 0){
+          //     //       setState(() {
+          //     //         listM[a].isAudio = true;
+          //     //       });
+          //     //     }else{
+          //     //       // 并且静音了
+          //     //       setState(() {
+          //     //         listM[a].isAudio = false;
+          //     //       });
+          //     //     }
+          //     //   }else if(speakers[i].uid == 0){
+          //     //     if(sp.getString('user_id').toString() == listM[a].uid.toString()){
+          //     //       // 并且发声了
+          //     //       if( speakers[i].volume! > 0){
+          //     //         setState(() {
+          //     //           listM[a].isAudio = true;
+          //     //         });
+          //     //       }else{
+          //     //         // 并且静音了
+          //     //         setState(() {
+          //     //           listM[a].isAudio = false;
+          //     //         });
+          //     //       }
+          //     //     }
+          //     //   }
+          //     // }
+          //   }
+          // }
         },
         //本地音频统计数据。
         onLocalAudioStats: (RtcConnection connection, LocalAudioStats stats) {},
@@ -3064,6 +3134,8 @@ class _RoomPageState extends State<RoomPage>
               _engine.setClientRole(role: ClientRoleType.clientRoleAudience);
               // 取消发布本地音频流
               _engine.muteLocalAudioStream(true);
+              // 静音
+
             }
           });
           break;
