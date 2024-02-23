@@ -250,6 +250,8 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage>  with AutomaticKeepAliveC
                                       showPage = 0;
                                       dateType = 'day';
                                       page = 1;
+                                      isUp = true;
+                                      isDown = true;
                                     });
                                     if (dateType != oldDateType) {
                                       setState(() {
@@ -293,6 +295,8 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage>  with AutomaticKeepAliveC
                                       showPage = 1;
                                       dateType = 'week';
                                       page = 1;
+                                      isUp = true;
+                                      isDown = true;
                                     });
                                     if (dateType != oldDateType) {
                                       setState(() {
@@ -336,6 +340,8 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage>  with AutomaticKeepAliveC
                                       showPage = 2;
                                       dateType = 'month';
                                       page = 1;
+                                      isUp = true;
+                                      isDown = true;
                                     });
                                     if (dateType != oldDateType) {
                                       setState(() {

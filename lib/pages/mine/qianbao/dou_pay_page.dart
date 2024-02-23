@@ -41,12 +41,19 @@ class _DouPayPageState extends State<DouPayPage> {
   //支付方式 1支付宝 2云闪付 3微信 4银行卡 5QQ钱包 6 数字人民币 7抖音钱包
   bool isChoose0 = true, isChoose1 = true, isChoose2 = false, isChoose3 = false;
   // 想要充值多少钱 给多少豆子
-  String money = '12', moneyDou = '100';
+  String money = '0', moneyDou = '0';
   ///选择金额使用
   Widget _initlistdata(context, index) {
     return GestureDetector(
       onTap: ((){
         setState(() {
+          if(listInfo[index].payType!.contains(',')){
+            type = int.parse(listInfo[index].payType!.split(',')[0]);
+          }else{
+            if(listInfo[index].payType!.isNotEmpty){
+              type = int.parse(listInfo[index].payType!);
+            }
+          }
           presentType = listInfo[index].payType!;
           //选择金额要判断显示的支付方式
           money = listD[index];
