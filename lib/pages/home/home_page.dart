@@ -552,12 +552,13 @@ class _HomePageState extends State<HomePage>
         print('文件不存在');
       }
     }else if (Platform.isIOS){
-      var dir = await path_provider.getTemporaryDirectory();
+      Directory tempDir = await getTemporaryDirectory();
       if(type==1){
-        path = '$dir/files/agorasdk.log';
+        path = '${tempDir.path}/files/agorasdk.log';
       }else{
-        path = '$dir/files/agoraapi.log';
+        path = '${tempDir.path}/files/agoraapi.log';
       }
+      LogE('ios地址 ${tempDir.path}');
       LogE('ios文件地址 $path');
       file = File(path);
       if (file.existsSync()) {
