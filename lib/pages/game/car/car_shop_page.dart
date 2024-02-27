@@ -198,7 +198,7 @@ class _CarShopPageState extends State<CarShopPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 

@@ -19,6 +19,7 @@ import '../bean/careListBean.dart';
 import '../bean/chatUserInfoBean.dart';
 import '../bean/cityBean.dart';
 import '../bean/commonStringBean.dart';
+import '../bean/feilvBean.dart';
 import '../bean/fileUpdateBean.dart';
 import '../bean/gameListBean.dart';
 import '../bean/gameStoreBean.dart';
@@ -30,6 +31,10 @@ import '../bean/ghRoomBean.dart';
 import '../bean/giftListBean.dart';
 import '../bean/homeTJBean.dart';
 import '../bean/hotRoomBean.dart';
+import '../bean/hzRoomBean.dart';
+import '../bean/hzTingBean.dart';
+import '../bean/hzZhuBoBean.dart';
+import '../bean/hzghBean.dart';
 import '../bean/isFirstOrderBean.dart';
 import '../bean/isPayBean.dart';
 import '../bean/joinRoomBean.dart';
@@ -63,6 +68,7 @@ import '../bean/recommendRoomBean.dart';
 import '../bean/roomBGBean.dart';
 import '../bean/roomInfoBean.dart';
 import '../bean/roomInfoUserManagerBean.dart';
+import '../bean/roomLiuShuiBean.dart';
 import '../bean/roomTJBean.dart';
 import '../bean/roomUserInfoBean.dart';
 import '../bean/searchAllBean.dart';
@@ -81,6 +87,7 @@ import '../bean/walletListBean.dart';
 import '../bean/whoLockMe.dart';
 import '../bean/winListBean.dart';
 import '../bean/xtListBean.dart';
+import '../bean/zhuboLiuShuiBean.dart';
 import '../bean/zonglanBean.dart';
 import 'my_http_config.dart';
 import 'my_http_request.dart';
@@ -1192,4 +1199,92 @@ class DataUtils{
     return CommonBean.fromJson(respons!);
   }
 
+  /// 房间流水
+  static Future<roomLiuShuiBean> postRoomSpendingList(Map<String,dynamic> params) async {
+    print("房间流水：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.roomSpendingList, {}, params);
+    print("房间流水：$respons");
+    return roomLiuShuiBean.fromJson(respons!);
+  }
+
+
+  /// 主播流水
+  static Future<zhuboLiuShuiBean> postStreamerSpendingList(Map<String,dynamic> params) async {
+    print("主播流水：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.streamerSpendingList, {}, params);
+    print("主播流水：$respons");
+    return zhuboLiuShuiBean.fromJson(respons!);
+  }
+
+  /// 设置主播分润比例
+  static Future<CommonBean> postSetRatio(Map<String,dynamic> params) async {
+    print("设置主播分润比例：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.setRatio, {}, params);
+    print("设置主播分润比例：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 会长后台-我的公会
+  static Future<hzghBean> postHomepage() async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.homepage, {}, {});
+    print("会长后台-我的公会：$respons");
+    return hzghBean.fromJson(respons!);
+  }
+
+  /// 会长后台-搜索公会成员
+  static Future<hzZhuBoBean> postSearchConsortiaStreamer(Map<String,dynamic> params) async {
+    print("会长后台-搜索公会成员：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.searchConsortiaStreamer, {}, params);
+    print("会长后台-搜索公会成员：$respons");
+    return hzZhuBoBean.fromJson(respons!);
+  }
+
+
+  /// 会长后台-搜索公会厅
+  static Future<hzRoomBean> postSearchConsortiaGuild(Map<String,dynamic> params) async {
+    print("会长后台-搜索公会厅：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.searchConsortiaGuild, {}, params);
+    print("会长后台-搜索公会厅：$respons");
+    return hzRoomBean.fromJson(respons!);
+  }
+
+  /// 会长后台-设置厅分润比例
+  static Future<CommonBean> postConsortiaSetRatio(Map<String,dynamic> params) async {
+    print("会长后台-设置厅分润比例：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.consortiaSetRatio, {}, params);
+    print("会长后台-设置厅分润比例：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 会长后台-厅流水
+  static Future<hzTingBean> postGuildSpendingList(Map<String,dynamic> params) async {
+    print("会长后台-厅流水：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.guildSpendingList, {}, params);
+    print("会长后台-厅流水：$respons");
+    return hzTingBean.fromJson(respons!);
+  }
+
+  /// 会长后台-房间流水
+  static Future<roomLiuShuiBean> postCroomSpendingList(Map<String,dynamic> params) async {
+    print("会长后台-房间流水：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.croomSpendingList, {}, params);
+    print("会长后台-房间流水：$respons");
+    return roomLiuShuiBean.fromJson(respons!);
+  }
+
+  /// 会长后台-主播流水列表
+  static Future<zhuboLiuShuiBean> postCstreamerSpendingList(Map<String,dynamic> params) async {
+    print("会长后台-主播流水列表：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.cstreamerSpendingList, {}, params);
+    print("会长后台-主播流水列表：$respons");
+    return zhuboLiuShuiBean.fromJson(respons!);
+  }
+
+
+  /// 提现费率
+  static Future<feilvBean> postGetRate() async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.getRate, {}, {});
+    print("提现费率：$respons");
+    return feilvBean.fromJson(respons!);
+  }
 }

@@ -422,6 +422,8 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage>  with AutomaticKeepAliveC
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
+            isUp = true; //是否允许上拉
+            isDown = true; //是否允许下拉
             if (page == 1) {
               _list.clear();
               _list2.clear();

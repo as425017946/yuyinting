@@ -61,7 +61,7 @@ class _WalletMoreShouruPageState extends State<WalletMoreShouruPage> {
   }
 
   Widget _itemLiwu(BuildContext context, int i) {
-    //明细类型  1充值 2红包 3公会礼物即时分润 4公会礼物周返 5全民代理分润 6提现 7兑换 8 装扮 9个人礼物分润 10刷礼物
+    //明细类型  1充值 2红包 3厅主分润 4公会礼物周返 5全民代理分润 6提现 7兑换 8 装扮 9个人礼物分润 10刷礼物 12会长分润
     String leixing = '', showImg = '';
     switch (list[i].type!) {
       case 1:
@@ -77,7 +77,7 @@ class _WalletMoreShouruPageState extends State<WalletMoreShouruPage> {
         showImg = 'assets/images/wallet_jieshou.png';
         break;
       case 3:
-        leixing = '公会打赏分润';
+        leixing = '厅主分润';
         showImg = list[i].img!;
         break;
       case 4:
@@ -126,6 +126,10 @@ class _WalletMoreShouruPageState extends State<WalletMoreShouruPage> {
         leixing = '打赏收益';
         showImg = list[i].img!;
         break;
+      case 12:
+        leixing = '会长分润';
+        showImg = list[i].img!;
+        break;
     }
     return Column(
       children: [
@@ -152,7 +156,7 @@ class _WalletMoreShouruPageState extends State<WalletMoreShouruPage> {
           child: Row(
             children: [
               WidgetUtils.commonSizedBox(0, 20),
-              (leixing == '打赏收益' || leixing == '个人打赏分润' || leixing == '公会打赏分润')
+              (leixing == '打赏收益' || leixing == '个人打赏分润' || leixing == '厅主分润' || leixing == '会长分润')
                   ? WidgetUtils.showImagesNet(showImg,
                       ScreenUtil().setHeight(100), ScreenUtil().setHeight(100))
                   : WidgetUtils.showImages(showImg, ScreenUtil().setHeight(100),
@@ -164,12 +168,19 @@ class _WalletMoreShouruPageState extends State<WalletMoreShouruPage> {
                     const Expanded(child: Text('')),
                     Row(
                       children: [
-                        (leixing == '打赏收益' || leixing == '个人打赏分润' || leixing == '公会打赏分润')
+                        (leixing == '打赏收益' || leixing == '个人打赏分润' || leixing == '厅主分润' || leixing == '会长分润')
                             ? WidgetUtils.onlyText(
                                 '礼物：${list[i].name}',
                                 StyleUtils.getCommonTextStyle(
                                     color: Colors.black,
                                     fontSize: ScreenUtil().setSp(25)))
+                            : const Text(''),
+                        (leixing == '打赏收益' || leixing == '个人打赏分润' || leixing == '厅主分润' || leixing == '会长分润')
+                            ? WidgetUtils.onlyText(
+                            '（x${list[i].number}）',
+                            StyleUtils.getCommonTextStyle(
+                                color: Colors.red,
+                                fontSize: ScreenUtil().setSp(25)))
                             : const Text(''),
                         const Expanded(child: Text('')),
                         WidgetUtils.onlyText(

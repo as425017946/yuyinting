@@ -269,3 +269,16 @@ class GameBack {
   GameBack({required this.isBack});
 }
 
+///返回数据解析
+class BiLiBack {
+  int index;
+  String number;
+  BiLiBack({required this.index,required this.number});
+}
+
+
+/// 再来一次
+class AgainBack {
+  String title;
+  AgainBack({required this.title});
+}

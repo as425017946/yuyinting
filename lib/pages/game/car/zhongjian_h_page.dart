@@ -361,7 +361,7 @@ class _ZhongJiangHPageState extends State<ZhongJiangHPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

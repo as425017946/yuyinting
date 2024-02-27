@@ -933,7 +933,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -972,7 +972,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1021,7 +1021,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
         sp.setBool('joinRoom', false);
       });
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1062,7 +1062,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
         sp.setBool('joinRoom', false);
       });
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1101,7 +1101,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

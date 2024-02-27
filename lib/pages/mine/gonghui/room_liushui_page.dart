@@ -2,15 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
+import '../../../bean/roomLiuShuiBean.dart';
 import '../../../colors/my_colors.dart';
+import '../../../config/my_config.dart';
+import '../../../http/data_utils.dart';
+import '../../../http/my_http_config.dart';
 import '../../../utils/date_picker.dart';
+import '../../../utils/event_utils.dart';
+import '../../../utils/loading.dart';
+import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 
 ///房间流水 - 新增
 class RoomLiuShuiPage extends StatefulWidget {
-  const RoomLiuShuiPage({super.key});
+  String ghID;
+  RoomLiuShuiPage({super.key, required this.ghID});
 
   @override
   State<RoomLiuShuiPage> createState() => _RoomLiuShuiPageState();
@@ -18,10 +26,12 @@ class RoomLiuShuiPage extends StatefulWidget {
 
 class _RoomLiuShuiPageState extends State<RoomLiuShuiPage> {
   var appBar;
+  TextEditingController controller = TextEditingController();
   int page = 1;
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   String starTime = '', endTime = '', keyword = '';
+  var listen;
 
   void _onRefresh() async {
     _refreshController.resetNoData();
@@ -34,7 +44,7 @@ class _RoomLiuShuiPageState extends State<RoomLiuShuiPage> {
         page = 1;
       });
     }
-    // doPostSettleList();
+    doPostRoomSpendingList();
   }
 
   void _onLoading() async {
@@ -46,7 +56,7 @@ class _RoomLiuShuiPageState extends State<RoomLiuShuiPage> {
         page++;
       });
     }
-    // doPostSettleList();
+    doPostRoomSpendingList();
     _refreshController.loadComplete();
   }
 
@@ -59,13 +69,21 @@ class _RoomLiuShuiPageState extends State<RoomLiuShuiPage> {
     setState(() {
       starTime = now.toString().substring(0, 10);
       endTime = now.toString().substring(0, 10);
-      // doPostTeamReport();
+      doPostRoomSpendingList();
     });
-    // listen = eventBus.on<InfoBack>().listen((event) {
-    //   setState(() {
-    //     keyword = event.info;
-    //   });
-    // });
+
+    listen = eventBus.on<InfoBack>().listen((event) {
+      setState(() {
+        keyword = event.info;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    listen.cancel();
   }
 
   /// 账单
@@ -74,7 +92,7 @@ class _RoomLiuShuiPageState extends State<RoomLiuShuiPage> {
       onTap: (() {}),
       child: Container(
         width: double.infinity,
-        constraints: BoxConstraints(minHeight: 260.h),
+        constraints: BoxConstraints(minHeight: 200.h),
         padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
         margin: const EdgeInsets.only(bottom: 10),
         color: MyColors.dailiBaobiao,
@@ -83,20 +101,22 @@ class _RoomLiuShuiPageState extends State<RoomLiuShuiPage> {
             Row(
               children: [
                 WidgetUtils.onlyText(
-                    "list[i].beginTime!",
+                    '房间名称：',
                     StyleUtils.getCommonTextStyle(
                         color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
-                WidgetUtils.commonSizedBox(0, 5),
                 WidgetUtils.onlyText(
-                    '至',
+                    listInfo[i].roomName!,
                     StyleUtils.getCommonTextStyle(
-                        color: MyColors.g2, fontSize: ScreenUtil().setSp(28))),
-                WidgetUtils.commonSizedBox(0, 5),
+                        color: MyColors.g2, fontSize: ScreenUtil().setSp(25))),
+                const Spacer(),
                 WidgetUtils.onlyText(
-                    "list[i].endTime!",
+                    '房间ID：',
                     StyleUtils.getCommonTextStyle(
                         color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
-                const Expanded(child: Text('')),
+                WidgetUtils.onlyText(
+                    listInfo[i].roomNumber.toString(),
+                    StyleUtils.getCommonTextStyle(
+                        color: MyColors.g2, fontSize: ScreenUtil().setSp(25))),
                 // WidgetUtils.onlyText('已结算', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(25))),
               ],
             ),
@@ -104,11 +124,11 @@ class _RoomLiuShuiPageState extends State<RoomLiuShuiPage> {
             Row(
               children: [
                 WidgetUtils.onlyText(
-                    '当周总流水：',
+                    '总流水：',
                     StyleUtils.getCommonTextStyle(
                         color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
                 WidgetUtils.onlyText(
-                    "list[i].weekSp!",
+                    listInfo[i].beanSum!,
                     StyleUtils.getCommonTextStyle(
                         color: MyColors.g2,
                         fontSize: ScreenUtil().setSp(25),
@@ -126,7 +146,7 @@ class _RoomLiuShuiPageState extends State<RoomLiuShuiPage> {
                     StyleUtils.getCommonTextStyle(
                         color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
                 WidgetUtils.onlyText(
-                    "list[i].gbDirectSp!",
+                    listInfo[i].gbDirectSpend!,
                     StyleUtils.getCommonTextStyle(
                         color: MyColors.g2,
                         fontSize: ScreenUtil().setSp(25),
@@ -137,7 +157,7 @@ class _RoomLiuShuiPageState extends State<RoomLiuShuiPage> {
                     StyleUtils.getCommonTextStyle(
                         color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
                 WidgetUtils.onlyText(
-                    "list[i].packSp!",
+                    listInfo[i].packSpend!,
                     StyleUtils.getCommonTextStyle(
                         color: MyColors.g2,
                         fontSize: ScreenUtil().setSp(25),
@@ -163,85 +183,114 @@ class _RoomLiuShuiPageState extends State<RoomLiuShuiPage> {
           WidgetUtils.commonSizedBox(20.h, 20.h),
           Row(
             children: [
-              WidgetUtils.commonSizedBox(0, 20.h),
-              WidgetUtils.onlyText(
-                  '时间：',
-                  StyleUtils.getCommonTextStyle(
-                      color: MyColors.g6, fontSize: ScreenUtil().setSp(28))),
-              GestureDetector(
-                onTap: (() {
-                  if (MyUtils.checkClick()) {
-                    DateTime now = DateTime.now();
-                    int year = now.year;
-                    int month = now.month;
-                    int day = now.day;
+              const Expanded(child: Text('')),
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      WidgetUtils.onlyText(
+                          '账号：',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.g6,
+                              fontSize: ScreenUtil().setSp(28))),
+                      Container(
+                        color: MyColors.dailiTime,
+                        height: ScreenUtil().setHeight(40),
+                        width: ScreenUtil().setHeight(300),
+                        padding: const EdgeInsets.all(2),
+                        child:
+                        WidgetUtils.commonTextField(controller, '输入房间ID或名称'),
+                      ),
+                    ],
+                  ),
+                  WidgetUtils.commonSizedBox(20, 10),
+                  Row(
+                    children: [
+                      WidgetUtils.onlyText(
+                          '时间：',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.g6,
+                              fontSize: ScreenUtil().setSp(28))),
+                      GestureDetector(
+                        onTap: (() {
+                          if(MyUtils.checkClick()) {
+                            DateTime now = DateTime.now();
+                            int year = now.year;
+                            int month = now.month;
+                            int day = now.day;
 
-                    DatePicker.show(
-                      context,
-                      startDate: DateTime(1970, 1, 1),
-                      selectedDate: DateTime(year, month, day),
-                      endDate: DateTime(2024, 12, 31),
-                      onSelected: (date) {
-                        setState(() {
-                          starTime = date.toString().substring(0, 10);
-                        });
-                      },
-                    );
-                  }
-                }),
-                child: Container(
-                  color: MyColors.dailiTime,
-                  padding: const EdgeInsets.all(2),
-                  child: WidgetUtils.onlyText(
-                      starTime,
-                      StyleUtils.getCommonTextStyle(
-                          color: MyColors.g6,
-                          fontSize: ScreenUtil().setSp(28))),
-                ),
-              ),
-              Opacity(opacity: 1, child: WidgetUtils.commonSizedBox(0, 10)),
-              Opacity(
-                  opacity: 1,
-                  child: WidgetUtils.onlyText(
-                      '至',
-                      StyleUtils.getCommonTextStyle(
-                          color: MyColors.g6,
-                          fontSize: ScreenUtil().setSp(28)))),
-              Opacity(opacity: 1, child: WidgetUtils.commonSizedBox(0, 10)),
-              GestureDetector(
-                onTap: (() {
-                  DateTime now = DateTime.now();
-                  int year = now.year;
-                  int month = now.month;
-                  int day = now.day;
+                            DatePicker.show(
+                              context,
+                              startDate: DateTime(1970, 1, 1),
+                              selectedDate: DateTime(year, month, day),
+                              endDate: DateTime(2024, 12, 31),
+                              onSelected: (date) {
+                                setState(() {
+                                  starTime = date.toString().substring(0, 10);
+                                });
+                              },
+                            );
+                          }
+                        }),
+                        child: Container(
+                          color: MyColors.dailiTime,
+                          padding: const EdgeInsets.all(2),
+                          child: WidgetUtils.onlyText(
+                              starTime,
+                              StyleUtils.getCommonTextStyle(
+                                  color: MyColors.g6,
+                                  fontSize: ScreenUtil().setSp(28))),
+                        ),
+                      ),
+                      Opacity(
+                          opacity: 1, child: WidgetUtils.commonSizedBox(0, 10)),
+                      Opacity(
+                          opacity: 1,
+                          child: WidgetUtils.onlyText(
+                              '至',
+                              StyleUtils.getCommonTextStyle(
+                                  color: MyColors.g6,
+                                  fontSize: ScreenUtil().setSp(28)))),
+                      Opacity(
+                          opacity: 1, child: WidgetUtils.commonSizedBox(0, 10)),
+                      GestureDetector(
+                        onTap: (() {
+                          DateTime now = DateTime.now();
+                          int year = now.year;
+                          int month = now.month;
+                          int day = now.day;
 
-                  DatePicker.show(
-                    context,
-                    startDate: DateTime(1970, 1, 1),
-                    selectedDate: DateTime(year, month, day),
-                    endDate: DateTime(2024, 12, 31),
-                    onSelected: (date) {
-                      setState(() {
-                        endTime = date.toString().substring(0, 10);
-                      });
-                    },
-                  );
-                }),
-                child: Container(
-                  color: MyColors.dailiTime,
-                  padding: const EdgeInsets.all(2),
-                  child: WidgetUtils.onlyText(
-                      endTime,
-                      StyleUtils.getCommonTextStyle(
-                          color: MyColors.g6,
-                          fontSize: ScreenUtil().setSp(28))),
-                ),
+                          DatePicker.show(
+                            context,
+                            startDate: DateTime(1970, 1, 1),
+                            selectedDate: DateTime(year, month, day),
+                            endDate: DateTime(2024, 12, 31),
+                            onSelected: (date) {
+                              setState(() {
+                                endTime = date.toString().substring(0, 10);
+                              });
+                            },
+                          );
+                        }),
+                        child: Container(
+                          color: MyColors.dailiTime,
+                          padding: const EdgeInsets.all(2),
+                          child: WidgetUtils.onlyText(
+                              endTime,
+                              StyleUtils.getCommonTextStyle(
+                                  color: MyColors.g6,
+                                  fontSize: ScreenUtil().setSp(28))),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
               ),
               WidgetUtils.commonSizedBox(0, 10),
               GestureDetector(
                 onTap: (() {
                   MyUtils.hideKeyboard(context);
-                  // doPostTeamReport();
+                  doPostRoomSpendingList();
                 }),
                 child: WidgetUtils.myContainer(
                     ScreenUtil().setHeight(50),
@@ -266,7 +315,7 @@ class _RoomLiuShuiPageState extends State<RoomLiuShuiPage> {
               child: ListView.builder(
                 padding: EdgeInsets.only(bottom: 20.h, top: 20.h),
                 itemBuilder: _itemZhangdan,
-                itemCount: 0,
+                itemCount: listInfo.length,
               ),
             ),
           ),
@@ -274,4 +323,53 @@ class _RoomLiuShuiPageState extends State<RoomLiuShuiPage> {
       ),
     );
   }
+
+  /// 房间流水
+  List<Lists> listInfo = [];
+  Future<void> doPostRoomSpendingList() async {
+    Loading.show();
+    Map<String, dynamic> params = <String, dynamic>{
+      'start_time': starTime,
+      'end_time': endTime,
+      'keyword': controller.text.trim(),
+      'guild_id': widget.ghID,
+      'page': page,
+      'pageSize': MyConfig.pageSize,
+    };
+    try {
+      roomLiuShuiBean bean = await DataUtils.postRoomSpendingList(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            if (page == 1) {
+              listInfo.clear();
+            }
+            if (bean.data!.lists!.isNotEmpty) {
+              for (int i = 0; i < bean.data!.lists!.length; i++) {
+                listInfo.add(bean.data!.lists![i]);
+              }
+            } else {
+              if (page > 1) {
+                if (bean.data!.lists!.length < MyConfig.pageSize) {
+                  _refreshController.loadNoData();
+                }
+              }
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
 }

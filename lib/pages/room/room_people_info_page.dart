@@ -139,7 +139,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                       WidgetUtils.commonSizedBox(10, 0),
 
                       /// @某人
-                      sp.getString('role').toString() == 'leader'
+                      (sp.getString('role').toString() == 'leader' || sp.getString('role').toString() == 'president')
                           ? Row(
                               children: [
                                 WidgetUtils.commonSizedBox(0, 20),
@@ -362,7 +362,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                         ScreenUtil().setHeight(30),
                                         ScreenUtil().setHeight(85)),
                                     Positioned(
-                                        left: 45.w,
+                                        left: 42.w,
                                         child: Stack(
                                           alignment: Alignment.center,
                                           children: [
@@ -490,7 +490,8 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                       /// 上麦下麦
                       isMai
                           ? (sp.getString('role').toString() == 'leader' ||
-                                  sp.getString('role').toString() == 'adminer')
+                                  sp.getString('role').toString() == 'adminer' ||
+                          sp.getString('role').toString() == 'president')
                               ? Row(
                                   children: [
                                     WidgetUtils.commonSizedBox(0, 20),
@@ -873,7 +874,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -903,7 +904,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -941,7 +942,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -970,7 +971,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -999,7 +1000,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1028,7 +1029,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1073,7 +1074,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1103,7 +1104,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

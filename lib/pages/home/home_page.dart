@@ -553,6 +553,8 @@ class _HomePageState extends State<HomePage>
         Dio dio = Dio(option);
         //application/json
         var respone = await dio.post(MyHttpConfig.filelog, data: formdata);
+        LogE('上传返回== $formdata');
+        LogE('上传返回== $respone');
         Map jsonResponse = json.decode(respone.data.toString());
         if (jsonResponse['code'] == 200) {
           LogE('上传成功');
@@ -671,14 +673,18 @@ class _HomePageState extends State<HomePage>
                       version: bean.data!.version!,
                       url: bean.data!.downloadUrl!,
                       info: bean.data!.summary!,
-                      forceUpdate: bean.data!.forceUpdate!));
+                      forceUpdate: bean.data!.forceUpdate!,
+                      title: 'android',));
             } else {
               // ignore: use_build_context_synchronously
-              showUpdateIOS(
+              MyUtils.goTransparentPageCom(
                   context,
-                  bean.data!.version!,
-                  bean.data!.downloadUrl!,
-                  bean.data!.summary!);
+                  UpdateAppPage(
+                    version: bean.data!.version!,
+                    url: bean.data!.downloadUrl!,
+                    info: bean.data!.summary!,
+                    forceUpdate: bean.data!.forceUpdate!,
+                    title: 'ios',));
             }
           }
           break;

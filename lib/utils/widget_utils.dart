@@ -1000,6 +1000,9 @@ class WidgetUtils {
           case '联系客服':
             eventBus.fire(SubmitButtonBack(title: '联系客服'));
             break;
+          case '会长后台':
+            eventBus.fire(SubmitButtonBack(title: '会长后台'));
+            break;
         }
       }),
       child: Container(

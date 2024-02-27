@@ -219,7 +219,7 @@ class _MoFangBeiBaoPageState extends State<MoFangBeiBaoPage> {
     } catch (e) {
       LogE('错误信息提示$e');
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

@@ -32,6 +32,7 @@ class Data {
   int? unauditNum;
   int? kefuUid;
   String? kefUavatar;
+  String? ratio;
 
   Data(
       {this.identity,
@@ -42,7 +43,8 @@ class Data {
         this.roomList,
         this.unauditNum,
         this.kefuUid,
-        this.kefUavatar});
+        this.kefUavatar,
+        this.ratio});
 
   Data.fromJson(Map<String, dynamic> json) {
     identity = json['identity'];
@@ -66,6 +68,7 @@ class Data {
     unauditNum = json['unaudit_num'];
     kefuUid = json['kefu_uid'];
     kefUavatar = json['kefu_avatar'];
+    ratio = json['ratio'];
   }
 
   Map<String, dynamic> toJson() {
@@ -84,6 +87,7 @@ class Data {
       data['room_list'] = this.roomList!.map((v) => v.toJson()).toList();
     }
     data['unaudit_num'] = this.unauditNum;
+    data['ratio'] = this.ratio;
     return data;
   }
 }
@@ -112,7 +116,7 @@ class GuildInfo {
         this.notice,
         this.addTime,
         this.editTime,
-        this.dataStatus});
+        this.dataStatus,});
 
   GuildInfo.fromJson(Map<String, dynamic> json) {
     id = json['id'];

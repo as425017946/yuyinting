@@ -23,6 +23,7 @@ import '../../utils/widget_utils.dart';
 import '../../widget/Marquee.dart';
 import 'gonghui/gonghui_home_page.dart';
 import 'gonghui/my_gonghui_page.dart';
+import 'huizhang/my_huizhang_page.dart';
 import 'mine_smz_page.dart';
 import 'my/my_info_page.dart';
 import 'my_kefu_page.dart';
@@ -56,7 +57,7 @@ class _MinePageState extends State<MinePage> {
   // 是否有入住审核信息
   bool isShenHe = false;
   var listenSH;
-
+  bool isGet = false;
   // 设备是安卓还是ios
   String isDevices = 'android';
 
@@ -118,6 +119,20 @@ class _MinePageState extends State<MinePage> {
           }
         } else if (sp.getString('shimingzhi').toString() == '0') {
           MyToastUtils.showToastBottom('实名审核中，请耐心等待');
+        }
+      } else if (event.title == '会长后台') {
+        if (mounted) {
+          Future.delayed(const Duration(seconds: 0), () {
+            Navigator.of(context).push(PageRouteBuilder(
+                opaque: false,
+                pageBuilder: (context, animation, secondaryAnimation) {
+                  return MyHuiZhangPage(
+                    type: identity,
+                  );
+                }));
+          }).then((value) {
+            // doPostMyIfon();
+          });
         }
       } else if (event.title == '全民代理') {
         if (mounted) {
@@ -773,10 +788,10 @@ class _MinePageState extends State<MinePage> {
                     WidgetUtils.commonSizedBox(20, 0),
                     WidgetUtils.whiteKuang(
                         'assets/images/mine_zhuangban.png', '我的装扮', false),
-                    WidgetUtils.whiteKuang(
-                        'assets/images/mine_gonghui.png', '公会中心', isShenHe),
-                    identity == 'pe' ? WidgetUtils.whiteKuang(
-                        'assets/images/mine_gonghui.png', '会长后台', isShenHe) : WidgetUtils.commonSizedBox(0, 0),
+                    (identity != 'president' && isGet) ? WidgetUtils.whiteKuang(
+                        'assets/images/mine_gonghui.png', '公会中心', isShenHe) : WidgetUtils.commonSizedBox(0, 0),
+                    (identity == 'president' && isGet) ? WidgetUtils.whiteKuang(
+                        'assets/images/mine_huizhang.png', '会长后台', isShenHe) : WidgetUtils.commonSizedBox(0, 0),
                     isAgent == 1
                         ? WidgetUtils.whiteKuang(
                             'assets/images/mine_quan.png', '全民代理', false)
@@ -814,6 +829,7 @@ class _MinePageState extends State<MinePage> {
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
+            isGet = true;
             sp.setString('shimingzhi', bean.data!.auditStatus.toString());
             sp.setString("user_headimg", bean.data!.avatar!);
             sp.setInt("user_gender", bean.data!.gender!);

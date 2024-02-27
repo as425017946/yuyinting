@@ -359,7 +359,7 @@ class _QiehuanAccountPageState extends State<QiehuanAccountPage> {
         case MyHttpConfig.successCode:
           MyToastUtils.showToastBottom('成功切换');
           MyUtils.signOut();
-          Future.delayed(Duration(milliseconds: 1000),((){
+          Future.delayed(const Duration(milliseconds: 1000),((){
             setState(() {
               sp.setString('user_token', '');
               sp.setString("user_account", '');

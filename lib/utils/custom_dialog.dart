@@ -10,6 +10,7 @@ class CustomDialog extends Dialog {
   final String cancelTxt; // 取消按钮的文本
   final String enterTxt; // 确认按钮的文本
   final Function callback; // 修改之后的回掉函数
+  final int ziSize; // 文字大小
 
   CustomDialog({
     this.width: 270,
@@ -18,7 +19,8 @@ class CustomDialog extends Dialog {
     required this.content, // 根据content来，判断显示哪种类型
     this.cancelTxt: "取消",
     this.enterTxt: "确认",
-    required this.callback
+    required this.callback,
+    this.ziSize:34
   });
 
   @override
@@ -53,7 +55,7 @@ class CustomDialog extends Dialog {
                                           child: Text(
                                               "${this.title}",
                                               style: TextStyle(
-                                                  fontSize: ScreenUtil().setSp(34),
+                                                  fontSize: ScreenUtil().setSp(ziSize),
                                                   color: Color(0xff000000),
                                                   fontWeight: FontWeight.w600
                                               )

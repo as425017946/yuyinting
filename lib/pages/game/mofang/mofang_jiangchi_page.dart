@@ -153,7 +153,7 @@ class _MoFangJiangChiPageState extends State<MoFangJiangChiPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

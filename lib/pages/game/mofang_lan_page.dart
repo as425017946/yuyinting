@@ -71,6 +71,11 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
     listenXZ = eventBus.on<XZQuerenBack>().listen((event) {
       if(event.title == '水星魔方'){
         doPostPlayRoulette(event.cishu);
+      }else if(event.title == '蓝魔方'){
+        if(isShow == false && isXiazhu) {
+          eventBus.fire(GameBack(isBack: true));
+          doPostPlayRoulette(cishu.toString());
+        }
       }
     });
 
@@ -741,7 +746,7 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -862,7 +867,7 @@ class _MofangLanPageState extends State<MofangLanPage> with AutomaticKeepAliveCl
       setState(() {
         isXiazhu = true;
       });
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

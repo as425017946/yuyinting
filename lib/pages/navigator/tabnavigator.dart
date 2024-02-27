@@ -1010,7 +1010,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         }
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1142,6 +1142,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         case MyHttpConfig.successCode:
           break;
         case MyHttpConfig.errorloginCode:
+          eventBus.fire(RoomBack(title: '顶号', index: ''));
         // 取消发布本地音频流
           _engine.muteLocalAudioStream(true);
           // 调用离开房间接口

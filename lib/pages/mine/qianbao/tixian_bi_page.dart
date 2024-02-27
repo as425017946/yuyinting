@@ -5,9 +5,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 
 import '../../../bean/Common_bean.dart';
+import '../../../bean/feilvBean.dart';
 import '../../../bean/isPayBean.dart';
 import '../../../colors/my_colors.dart';
-import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../utils/event_utils.dart';
@@ -43,6 +43,7 @@ class _TixianBiPageState extends State<TixianBiPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    doPostGetRate();
     listTD.add('支付宝');
     listTD.add('银行卡');
     appBar = WidgetUtils.getAppBar('提现', true, context, false, 0);
@@ -64,7 +65,7 @@ class _TixianBiPageState extends State<TixianBiPage> {
           if (double.parse(controllerNumber.text.toString()) >= 1100) {
             setState(() {
               daozhang =
-                  (double.parse(controllerNumber.text.toString()) / 10 * 0.94)
+                  (double.parse(controllerNumber.text.toString()) / 10 * (1-double.parse(feilv)))
                       .toInt()
                       .toString();
             });
@@ -90,7 +91,7 @@ class _TixianBiPageState extends State<TixianBiPage> {
           if (double.parse(controllerNumber.text.toString()) >= 1100) {
             setState(() {
               daozhang =
-                  (double.parse(controllerNumber.text.toString()) / 10 * 0.94)
+                  (double.parse(controllerNumber.text.toString()) / 10 * (1-double.parse(feilv)))
                       .toInt()
                       .toString();
             });
@@ -115,7 +116,7 @@ class _TixianBiPageState extends State<TixianBiPage> {
         if (event.info.isEmpty) {
           daozhang = '0';
         } else {
-          daozhang = (double.parse(event.info) / 10 * 0.94).toInt().toString();
+          daozhang = (double.parse(event.info) / 10 * (1-double.parse(feilv))).toInt().toString();
         }
       });
     });
@@ -170,7 +171,7 @@ class _TixianBiPageState extends State<TixianBiPage> {
             FocusManager.instance.primaryFocus?.unfocus();
           }
         },
-        child: SingleChildScrollView(
+        child: isOk ? SingleChildScrollView(
             child: Container(
           padding: const EdgeInsets.all(20),
           child: Column(
@@ -529,7 +530,7 @@ class _TixianBiPageState extends State<TixianBiPage> {
                                 daozhang = (double.parse(
                                             controllerNumber.text.toString()) /
                                         10 *
-                                        0.94)
+                                    (1-double.parse(feilv)))
                                     .toInt()
                                     .toString();
                               });
@@ -582,7 +583,7 @@ class _TixianBiPageState extends State<TixianBiPage> {
                       color: MyColors.g6, fontSize: ScreenUtil().setSp(25))),
               WidgetUtils.commonSizedBox(5, 20),
               WidgetUtils.onlyText(
-                  '3.V币提现收取6%手续费',
+                  '3.V币提现收取${double.parse(feilv)*100}%手续费',
                   StyleUtils.getCommonTextStyle(
                       color: MyColors.g6, fontSize: ScreenUtil().setSp(25))),
               WidgetUtils.commonSizedBox(5, 20),
@@ -599,7 +600,7 @@ class _TixianBiPageState extends State<TixianBiPage> {
               WidgetUtils.commonSubmitButton2('申请提现', MyColors.walletWZBlue),
             ],
           ),
-        )),
+        )) : const Text(''),
       ),
     );
   }
@@ -670,4 +671,31 @@ class _TixianBiPageState extends State<TixianBiPage> {
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
+
+  String feilv = '';
+  bool isOk = false;
+  /// 提现费率
+  Future<void> doPostGetRate() async {
+    try {
+      feilvBean bean = await DataUtils.postGetRate();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            feilv = bean.data!.rate!;
+            isOk = true;
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
 }

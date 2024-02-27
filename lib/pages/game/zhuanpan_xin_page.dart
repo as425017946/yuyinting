@@ -72,7 +72,7 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
     await soundpool.play(soundId);
   }
 
-  var listen, listen2;
+  var listen, listen2, listen3;
 
   @override
   void initState() {
@@ -103,6 +103,11 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
     listen = eventBus.on<XZQuerenBack>().listen((event) {
       if(event.title == '心动转盘') {
         doPostPlayRoulette(event.cishu);
+      }else if(event.title == '小转盘'){
+        if(isRunning == false && isXiazhu) {
+          eventBus.fire(GameBack(isBack: true));
+          doPostPlayRoulette(cishu.toString());
+        }
       }
     });
 
@@ -115,6 +120,7 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
     if(sp.getString('zp1_queren_time') == null || sp.getString('zp1_queren_time') != time){
       sp.setBool('zp1_queren', false);
     }
+
   }
   //网络动画
   void _animListener() {
@@ -581,73 +587,85 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
           list.clear();
           list = bean.data!.gifts!;
           zonge = bean.data!.total as int;
-          setState(() {
-            switch(bean.data!.gifts![0].giftId){
-              case 41: // 心之钥
-                int randomNum = Random().nextInt(6);
-                luckyName = randomNum;
-                break;
-              case 9: // 梦回长安
-                int min = 7;
-                int max = 18; // 注意这里是 18 而不是 17，因为范围是左闭右开的
-                int randomNumber = Random().nextInt(max - min) + min;
-                luckyName = randomNumber;
-                break;
-              case 26: // 雪顶咖啡
-                int min = 19;
-                int max = 30;
-                int randomNumber = Random().nextInt(max - min) + min;
-                luckyName = randomNumber;
-                break;
-              case 8: // 御龙豪杰
-                int min = 31;
-                int max = 42;
-                int randomNumber = Random().nextInt(max - min) + min;
-                luckyName = randomNumber;
-                break;
-              case 36: // 钻石糖
-                int min = 43;
-                int max = 54;
-                int randomNumber = Random().nextInt(max - min) + min;
-                luckyName = randomNumber;
-                break;
-              case 10: // 速度与激情
-                int min = 55;
-                int max = 66;
-                int randomNumber = Random().nextInt(max - min) + min;
-                luckyName = randomNumber;
-                break;
-              case 5: // 电竞小柴
-                int min = 67;
-                int max = 78;
-                int randomNumber = Random().nextInt(max - min) + min;
-                luckyName = randomNumber;
-                break;
-              case 38: // 鹤仙
-                int min = 79;
-                int max = 90;
-                int randomNumber = Random().nextInt(max - min) + min;
-                luckyName = randomNumber;
-                break;
-              case 4: // 蝴蝶荷塘
-                int min = 91;
-                int max = 102;
-                int randomNumber = Random().nextInt(max - min) + min;
-                luckyName = randomNumber;
-                break;
-              case 17: // 霸下
-                int min = 103;
-                int max = 114;
-                int randomNumber = Random().nextInt(max - min) + min;
-                luckyName = randomNumber;
-                break;
+          if(isClose){
+            //关闭了动效，直接显示中奖信息
+            // ignore: use_build_context_synchronously
+            MyUtils.goTransparentPageCom(context, ZhuanPanDaoJuPage(list: list, zonge: zonge, title: '心动转盘',));
+            // 通知用户可以离开
+            eventBus.fire(GameBack(isBack: false));
+            setState(() {
+              isXiazhu = true;
+              isRunning = false;
+            });
+          }else{
+            setState(() {
+              switch(bean.data!.gifts![0].giftId){
+                case 41: // 心之钥
+                  int randomNum = Random().nextInt(6);
+                  luckyName = randomNum;
+                  break;
+                case 9: // 梦回长安
+                  int min = 7;
+                  int max = 18; // 注意这里是 18 而不是 17，因为范围是左闭右开的
+                  int randomNumber = Random().nextInt(max - min) + min;
+                  luckyName = randomNumber;
+                  break;
+                case 26: // 雪顶咖啡
+                  int min = 19;
+                  int max = 30;
+                  int randomNumber = Random().nextInt(max - min) + min;
+                  luckyName = randomNumber;
+                  break;
+                case 8: // 御龙豪杰
+                  int min = 31;
+                  int max = 42;
+                  int randomNumber = Random().nextInt(max - min) + min;
+                  luckyName = randomNumber;
+                  break;
+                case 36: // 钻石糖
+                  int min = 43;
+                  int max = 54;
+                  int randomNumber = Random().nextInt(max - min) + min;
+                  luckyName = randomNumber;
+                  break;
+                case 10: // 速度与激情
+                  int min = 55;
+                  int max = 66;
+                  int randomNumber = Random().nextInt(max - min) + min;
+                  luckyName = randomNumber;
+                  break;
+                case 5: // 电竞小柴
+                  int min = 67;
+                  int max = 78;
+                  int randomNumber = Random().nextInt(max - min) + min;
+                  luckyName = randomNumber;
+                  break;
+                case 38: // 鹤仙
+                  int min = 79;
+                  int max = 90;
+                  int randomNumber = Random().nextInt(max - min) + min;
+                  luckyName = randomNumber;
+                  break;
+                case 4: // 蝴蝶荷塘
+                  int min = 91;
+                  int max = 102;
+                  int randomNumber = Random().nextInt(max - min) + min;
+                  luckyName = randomNumber;
+                  break;
+                case 17: // 霸下
+                  int min = 103;
+                  int max = 114;
+                  int randomNumber = Random().nextInt(max - min) + min;
+                  luckyName = randomNumber;
+                  break;
+              }
+            });
+            LogE('中奖位置$luckyName');
+            if(isClose == false){
+              Vibrate.vibrate(); // 触发震动效果
             }
-          });
-          LogE('中奖位置$luckyName');
-          if(isClose == false){
-            Vibrate.vibrate(); // 触发震动效果
+            buttonOnClickStartRun();
           }
-          buttonOnClickStartRun();
           break;
         case MyHttpConfig.errorloginCode:
         // ignore: use_build_context_synchronously
@@ -666,7 +684,7 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
         isXiazhu = true;
       });
       eventBus.fire(GameBack(isBack: false));
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

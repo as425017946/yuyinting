@@ -295,7 +295,7 @@ class _ZhuanPanJiangChiPageState extends State<ZhuanPanJiangChiPage> {
     } catch (e) {
       Loading.dismiss();
       LogE('钥匙错误信息$e');
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 

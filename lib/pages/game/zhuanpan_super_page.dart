@@ -22,7 +22,6 @@ import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
-import '../../widget/CircleProgressView.dart';
 import '../../widget/xiazhu_queren_page.dart';
 /// 超级转盘
 class ZhuanPanSuperPage extends StatefulWidget {
@@ -99,6 +98,11 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
     listen = eventBus.on<XZQuerenBack>().listen((event) {
       if(event.title == '超级转盘') {
         doPostPlayRoulette(event.cishu);
+      }else if(event.title == '大转盘'){
+        if(isRunning == false && isXiazhu) {
+          eventBus.fire(GameBack(isBack: true));
+          doPostPlayRoulette(cishu.toString());
+        }
       }
     });
     // 判断当前年月日是否为今天，如果不是，下注还是要提示
@@ -612,72 +616,84 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
           list.clear();
           list = bean.data!.gifts!;
           zonge = bean.data!.total as int;
-          setState(() {
-            switch(bean.data!.gifts![0].giftId){
-              case 42: // 星之钥
-                int randomNum = Random().nextInt(6);
-                luckyName = randomNum;
-                break;
-              case 18: // 瑞麟
-                int min = 7;
-                int max = 18; // 注意这里是 18 而不是 17，因为范围是左闭右开的
-                int randomNumber = Random().nextInt(max - min) + min;
-                luckyName = randomNumber;
-                break;
-              case 7: // 云顶天空
-                int min = 19;
-                int max = 30;
-                int randomNumber = Random().nextInt(max - min) + min;
-                luckyName = randomNumber;
-                break;
-              case 32: // 雪山飞虎
-                int min = 31;
-                int max = 42;
-                int randomNumber = Random().nextInt(max - min) + min;
-                luckyName = randomNumber;
-                break;
-              case 8: // 御龙豪杰
-                int min = 43;
-                int max = 54;
-                int randomNumber = Random().nextInt(max - min) + min;
-                luckyName = randomNumber;
-                break;
-              case 31: // 童话岛
-                int min = 55;
-                int max = 66;
-                int randomNumber = Random().nextInt(max - min) + min;
-                luckyName = randomNumber;
-                break;
-              case 38: // 鹤仙
-                int min = 67;
-                int max = 78;
-                int randomNumber = Random().nextInt(max - min) + min;
-                luckyName = randomNumber;
-                break;
-              case 9: // 梦回长安
-                int min = 79;
-                int max = 90;
-                int randomNumber = Random().nextInt(max - min) + min;
-                luckyName = randomNumber;
-                break;
-              case 10: // 速度与激情
-                int min = 91;
-                int max = 102;
-                int randomNumber = Random().nextInt(max - min) + min;
-                luckyName = randomNumber;
-                break;
-              case 17: // 霸下
-                int min = 103;
-                int max = 114;
-                int randomNumber = Random().nextInt(max - min) + min;
-                luckyName = randomNumber;
-                break;
+          if(isClose){
+            //关闭了动效，直接显示中奖信息
+            // ignore: use_build_context_synchronously
+            MyUtils.goTransparentPageCom(context, ZhuanPanDaoJuPage(list: list, zonge: zonge, title: '超级转盘',));
+            // 通知用户可以离开
+            eventBus.fire(GameBack(isBack: false));
+            setState(() {
+              isXiazhu = true;
+              isRunning = false;
+            });
+          }else{
+            setState(() {
+              switch(bean.data!.gifts![0].giftId){
+                case 42: // 星之钥
+                  int randomNum = Random().nextInt(6);
+                  luckyName = randomNum;
+                  break;
+                case 18: // 瑞麟
+                  int min = 7;
+                  int max = 18; // 注意这里是 18 而不是 17，因为范围是左闭右开的
+                  int randomNumber = Random().nextInt(max - min) + min;
+                  luckyName = randomNumber;
+                  break;
+                case 7: // 云顶天空
+                  int min = 19;
+                  int max = 30;
+                  int randomNumber = Random().nextInt(max - min) + min;
+                  luckyName = randomNumber;
+                  break;
+                case 32: // 雪山飞虎
+                  int min = 31;
+                  int max = 42;
+                  int randomNumber = Random().nextInt(max - min) + min;
+                  luckyName = randomNumber;
+                  break;
+                case 8: // 御龙豪杰
+                  int min = 43;
+                  int max = 54;
+                  int randomNumber = Random().nextInt(max - min) + min;
+                  luckyName = randomNumber;
+                  break;
+                case 31: // 童话岛
+                  int min = 55;
+                  int max = 66;
+                  int randomNumber = Random().nextInt(max - min) + min;
+                  luckyName = randomNumber;
+                  break;
+                case 38: // 鹤仙
+                  int min = 67;
+                  int max = 78;
+                  int randomNumber = Random().nextInt(max - min) + min;
+                  luckyName = randomNumber;
+                  break;
+                case 9: // 梦回长安
+                  int min = 79;
+                  int max = 90;
+                  int randomNumber = Random().nextInt(max - min) + min;
+                  luckyName = randomNumber;
+                  break;
+                case 10: // 速度与激情
+                  int min = 91;
+                  int max = 102;
+                  int randomNumber = Random().nextInt(max - min) + min;
+                  luckyName = randomNumber;
+                  break;
+                case 17: // 霸下
+                  int min = 103;
+                  int max = 114;
+                  int randomNumber = Random().nextInt(max - min) + min;
+                  luckyName = randomNumber;
+                  break;
+              }
+            });
+            if(isClose == false){
+              Vibrate.vibrate(); // 触发震动效果
             }
-          });
-          if(isClose == false){
-            Vibrate.vibrate(); // 触发震动效果
+            buttonOnClickStartRun();
           }
-          buttonOnClickStartRun();
           break;
         case MyHttpConfig.errorloginCode:
         // ignore: use_build_context_synchronously
@@ -696,7 +712,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
       setState(() {
         isXiazhu = true;
       });
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -721,7 +737,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
       }
     } catch (e) {
       LogE('错误提示$e');
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

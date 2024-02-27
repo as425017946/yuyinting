@@ -6,6 +6,7 @@ import 'package:open_file/open_file.dart';
 import 'package:ota_update/ota_update.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/my_utils.dart';
@@ -18,13 +19,15 @@ class UpdateAppPage extends StatefulWidget {
   String url;
   String info;
   String forceUpdate;
+  String title;
 
   UpdateAppPage(
       {super.key,
       required this.version,
       required this.url,
       required this.info,
-      required this.forceUpdate});
+      required this.forceUpdate,
+      required this.title});
 
   @override
   State<UpdateAppPage> createState() => _UpdateAppPageState();
@@ -158,12 +161,16 @@ class _UpdateAppPageState extends State<UpdateAppPage> {
                 const Spacer(),
                 isClick == false ? GestureDetector(
                   onTap: ((){
-                    if(MyUtils.checkClick()) {
-                      setState(() {
-                        isClick = true;
-                      });
-                      // 在这里放置确认操作的代码
-                      doUpdate(context, widget.version, widget.url);
+                    if(widget.title == 'ios'){
+                      doUpdateIOS(widget.url);
+                    }else{
+                      if(MyUtils.checkClick()) {
+                        setState(() {
+                          isClick = true;
+                        });
+                        // 在这里放置确认操作的代码
+                        doUpdate(context, widget.version, widget.url);
+                      }
                     }
                   }),
                   child: Container(
@@ -259,5 +266,11 @@ class _UpdateAppPageState extends State<UpdateAppPage> {
     } catch (e) {
       print('更新失败，请稍后再试');
     }
+  }
+
+
+  //更新ios 直接跳转外部链接
+  void doUpdateIOS(String url) async{
+    await launch(url, forceSafariVC: false);
   }
 }

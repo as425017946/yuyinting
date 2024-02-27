@@ -5,6 +5,7 @@ import 'package:yuyinting/utils/widget_utils.dart';
 import '../../../bean/playRouletteBean.dart';
 import '../../../colors/my_colors.dart';
 import '../../../utils/event_utils.dart';
+import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../widget/OptionGridView.dart';
 /// 魔方获得道具
@@ -125,12 +126,28 @@ class _MoFangDaoJuPageState extends State<MoFangDaoJuPage> {
             ),
           ),
           WidgetUtils.commonSizedBox(20.h, 0),
-          GestureDetector(
-            onTap: ((){
-              eventBus.fire(ResidentBack(isBack: false));
-              Navigator.pop(context);
-            }),
-            child: WidgetUtils.showImages('assets/images/mofang_dj_lan_colse.png', 70.h, 70.h),
+          Row(
+            children: [
+              const Spacer(),
+              GestureDetector(
+                  onTap: (() {
+                    eventBus.fire(ResidentBack(isBack: false));
+                    Navigator.pop(context);
+                  }),
+                  child: WidgetUtils.showImagesFill(
+                      'assets/images/mofang_dj_close.png', 90.h, 200.h)),
+              WidgetUtils.commonSizedBox(0, 50.h),
+              GestureDetector(
+                  onTap: (() {
+                    if(MyUtils.checkClick()){
+                      Navigator.pop(context);
+                      eventBus.fire(XZQuerenBack(cishu: '', feiyong: '', title: widget.title == '水星魔方' ? '蓝魔方' : '金魔方'));
+                    }
+                  }),
+                  child: WidgetUtils.showImagesFill(
+                      'assets/images/mofang_dj_again.png', 90.h, 200.h)),
+              const Spacer(),
+            ],
           ),
           const Spacer(),
         ],

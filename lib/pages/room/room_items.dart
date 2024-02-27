@@ -200,9 +200,13 @@ class RoomItems {
                           : list[i]['identity'] == 'leader'
                           ? WidgetUtils.showImages(
                           'assets/images/dj/room_role_director.png', 30.h, 30.h)
+                          : list[i]['identity'] == 'president'
+                          ? WidgetUtils.showImages(
+                          'assets/images/dj/room_role_huizhang.png', 30.h, 30.h)
                           : WidgetUtils.showImages(
                           'assets/images/dj/room_role_manager.png', 30.h,
                           30.h)),
+                  WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
                   // 萌新/新贵/新锐 三选一
                   // 不是新锐新贵，并且是萌新直接显示萌新
                   WidgetSpan(
@@ -481,9 +485,13 @@ class RoomItems {
                       : list[i]['identity'] == 'leader'
                       ? WidgetUtils.showImages(
                       'assets/images/dj/room_role_director.png', 30.h, 30.h)
+                      : list[i]['identity'] == 'president'
+                      ? WidgetUtils.showImages(
+                      'assets/images/dj/room_role_huizhang.png', 30.h, 30.h)
                       : WidgetUtils.showImages(
                       'assets/images/dj/room_role_manager.png', 30.h,
                       30.h)),
+              WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
               // 萌新/新贵/新锐 三选一
               // 不是新锐新贵，并且是萌新直接显示萌新
               WidgetSpan(
@@ -1123,9 +1131,13 @@ class RoomItems {
                             ? WidgetUtils.showImages(
                             'assets/images/dj/room_role_director.png', 30.h,
                             30.h)
-                            : WidgetUtils.showImages(
+                            : list[i]['identity'] == 'president'
+                            ? WidgetUtils.showImages(
+                            'assets/images/dj/room_role_huizhang.png', 30.h,
+                            30.h) : WidgetUtils.showImages(
                             'assets/images/dj/room_role_manager.png', 30.h,
                             30.h)),
+                    WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
                     // 萌新/新贵/新锐 三选一
                     // 不是新锐新贵，并且是萌新直接显示萌新
                     WidgetSpan(
@@ -1765,7 +1777,8 @@ class RoomItems {
                 }
               } else {
                 if (sp.getString('role').toString() == 'adminer' ||
-                    sp.getString('role').toString() == 'leader') {
+                    sp.getString('role').toString() == 'leader' ||
+                    sp.getString('role').toString() == 'president') {
                   eventBus.fire(RoomBack(title: '空位置', index: '8'));
                 } else {
                   MyToastUtils.showToastBottom('麦位已锁');
@@ -1806,12 +1819,14 @@ class RoomItems {
                       ScreenUtil().setHeight(110),
                       listm[0].avatarFrameImg!) : const Text(''),
                   // 头像框动态图
-                  listm[8].isClose == 0  ? SizedBox(
+                  (listm[8].isClose == 0 && listm[8].isAudio! == true)
+                      ? SizedBox(
                     height: 140.h,
                     width: 140.h,
                     child: const SVGASimpleImage(
                       assetsName: 'assets/svga/room_shengbo.svga',),
-                  ) : const Text(''),
+                  )
+                      : const Text(''),
                   // listm[0].avatarFrameGifImg!.isNotEmpty ? SizedBox(
                   //   height: 110.h,
                   //   width: 110.h,
@@ -1911,6 +1926,8 @@ class RoomItems {
       String roomID,
       int wherePeople,
       List<bool> listPeople) {
+    // LogE('麦序 ${listm[2].isAudio! == true}');
+    // LogE('麦序 ${listm[2].isClose! == 0}');
     return Transform.translate(
       offset: const Offset(0, -40),
       child: Column(
@@ -1943,7 +1960,8 @@ class RoomItems {
                     }
                   } else {
                     if (sp.getString('role').toString() == 'adminer' ||
-                        sp.getString('role').toString() == 'leader') {
+                        sp.getString('role').toString() == 'leader' ||
+                        sp.getString('role').toString() == 'president') {
                       eventBus.fire(RoomBack(title: '空位置', index: '0'));
                     } else {
                       MyToastUtils.showToastBottom('麦位已锁');
@@ -1986,12 +2004,14 @@ class RoomItems {
                           ScreenUtil().setHeight(110),
                           listm[0].avatarFrameImg!) : const Text(''),
                       // 头像框动态图
-                      listm[0].isClose == 0 ? SizedBox(
+                      (listm[0].isClose == 0 && listm[0].isAudio! == true)
+                          ? SizedBox(
                         height: 140.h,
                         width: 140.h,
                         child: const SVGASimpleImage(
                           assetsName: 'assets/svga/room_shengbo.svga',),
-                      ) : const Text(''),
+                      )
+                          : const Text(''),
                       // listm[0].avatarFrameGifImg!.isNotEmpty ? SizedBox(
                       //   height: 110.h,
                       //   width: 110.h,
@@ -2098,7 +2118,8 @@ class RoomItems {
                     }
                   } else {
                     if (sp.getString('role').toString() == 'adminer' ||
-                        sp.getString('role').toString() == 'leader') {
+                        sp.getString('role').toString() == 'leader' ||
+                        sp.getString('role').toString() == 'president') {
                       eventBus.fire(RoomBack(title: '空位置', index: '1'));
                     } else {
                       MyToastUtils.showToastBottom('麦位已锁');
@@ -2141,12 +2162,14 @@ class RoomItems {
                           ScreenUtil().setHeight(110),
                           listm[1].avatarFrameImg!) : const Text(''),
                       // 头像框动态图
-                      listm[1].isClose == 0 ? SizedBox(
+                      (listm[1].isClose == 0 && listm[1].isAudio! == true)
+                          ? SizedBox(
                         height: 140.h,
                         width: 140.h,
                         child: const SVGASimpleImage(
                           assetsName: 'assets/svga/room_shengbo.svga',),
-                      ) : const Text(''),
+                      )
+                          : const Text(''),
                       // listm[1].avatarFrameGifImg!.isNotEmpty ? SizedBox(
                       //   height: 110.h,
                       //   width: 110.h,
@@ -2253,7 +2276,8 @@ class RoomItems {
                     }
                   } else {
                     if (sp.getString('role').toString() == 'adminer' ||
-                        sp.getString('role').toString() == 'leader') {
+                        sp.getString('role').toString() == 'leader' ||
+                        sp.getString('role').toString() == 'president') {
                       eventBus.fire(RoomBack(title: '空位置', index: '2'));
                     } else {
                       MyToastUtils.showToastBottom('麦位已锁');
@@ -2296,12 +2320,14 @@ class RoomItems {
                           ScreenUtil().setHeight(110),
                           listm[2].avatarFrameImg!) : const Text(''),
                       // 头像框动态图
-                      listm[2].isClose == 0 ? SizedBox(
+                      (listm[2].isClose == 0 && listm[2].isAudio! == true)
+                          ? SizedBox(
                         height: 140.h,
                         width: 140.h,
                         child: const SVGASimpleImage(
                           assetsName: 'assets/svga/room_shengbo.svga',),
-                      ) : const Text(''),
+                      )
+                          : const Text(''),
                       // listm[2].avatarFrameGifImg!.isNotEmpty ? SizedBox(
                       //   height: 110.h,
                       //   width: 110.h,
@@ -2408,7 +2434,8 @@ class RoomItems {
                     }
                   } else {
                     if (sp.getString('role').toString() == 'adminer' ||
-                        sp.getString('role').toString() == 'leader') {
+                        sp.getString('role').toString() == 'leader' ||
+                        sp.getString('role').toString() == 'president') {
                       eventBus.fire(RoomBack(title: '空位置', index: '3'));
                     } else {
                       MyToastUtils.showToastBottom('麦位已锁');
@@ -2451,12 +2478,14 @@ class RoomItems {
                           ScreenUtil().setHeight(110),
                           listm[3].avatarFrameImg!) : const Text(''),
                       // 头像框动态图
-                      listm[3].isClose == 0 ? SizedBox(
+                      (listm[3].isClose == 0 && listm[3].isAudio! == true)
+                          ? SizedBox(
                         height: 140.h,
                         width: 140.h,
                         child: const SVGASimpleImage(
                           assetsName: 'assets/svga/room_shengbo.svga',),
-                      ) : const Text(''),
+                      )
+                          : const Text(''),
                       // listm[3].avatarFrameGifImg!.isNotEmpty ? SizedBox(
                       //   height: 110.h,
                       //   width: 110.h,
@@ -2572,7 +2601,8 @@ class RoomItems {
                       }
                     } else {
                       if (sp.getString('role').toString() == 'adminer' ||
-                          sp.getString('role').toString() == 'leader') {
+                          sp.getString('role').toString() == 'leader' ||
+                          sp.getString('role').toString() == 'president') {
                         eventBus.fire(RoomBack(title: '空位置', index: '4'));
                       } else {
                         MyToastUtils.showToastBottom('麦位已锁');
@@ -2615,12 +2645,14 @@ class RoomItems {
                             ScreenUtil().setHeight(110),
                             listm[4].avatarFrameImg!) : const Text(''),
                         // 头像框动态图
-                        listm[4].isClose == 0 ? SizedBox(
+                        (listm[4].isClose == 0 && listm[4].isAudio! == true)
+                            ? SizedBox(
                           height: 140.h,
                           width: 140.h,
                           child: const SVGASimpleImage(
                             assetsName: 'assets/svga/room_shengbo.svga',),
-                        ) : const Text(''),
+                        )
+                            : const Text(''),
                         // listm[4].avatarFrameGifImg!.isNotEmpty ? SizedBox(
                         //   height: 110.h,
                         //   width: 110.h,
@@ -2729,7 +2761,8 @@ class RoomItems {
                       }
                     } else {
                       if (sp.getString('role').toString() == 'adminer' ||
-                          sp.getString('role').toString() == 'leader') {
+                          sp.getString('role').toString() == 'leader' ||
+                          sp.getString('role').toString() == 'president') {
                         eventBus.fire(RoomBack(title: '空位置', index: '5'));
                       } else {
                         MyToastUtils.showToastBottom('麦位已锁');
@@ -2772,12 +2805,14 @@ class RoomItems {
                             ScreenUtil().setHeight(110),
                             listm[5].avatarFrameImg!) : const Text(''),
                         // 头像框动态图
-                        listm[5].isClose == 0 ? SizedBox(
+                        (listm[5].isClose == 0 && listm[5].isAudio! == true)
+                            ? SizedBox(
                           height: 140.h,
                           width: 140.h,
                           child: const SVGASimpleImage(
                             assetsName: 'assets/svga/room_shengbo.svga',),
-                        ) : const Text(''),
+                        )
+                            : const Text(''),
                         // listm[5].avatarFrameGifImg!.isNotEmpty ? SizedBox(
                         //   height: 110.h,
                         //   width: 110.h,
@@ -2886,7 +2921,8 @@ class RoomItems {
                       }
                     } else {
                       if (sp.getString('role').toString() == 'adminer' ||
-                          sp.getString('role').toString() == 'leader') {
+                          sp.getString('role').toString() == 'leader' ||
+                          sp.getString('role').toString() == 'president') {
                         eventBus.fire(RoomBack(title: '空位置', index: '6'));
                       } else {
                         MyToastUtils.showToastBottom('麦位已锁');
@@ -2929,12 +2965,14 @@ class RoomItems {
                             ScreenUtil().setHeight(110),
                             listm[6].avatarFrameImg!) : const Text(''),
                         // 头像框动态图
-                        listm[6].isClose == 0 ? SizedBox(
+                        (listm[6].isClose == 0 && listm[6].isAudio! == true)
+                            ? SizedBox(
                           height: 140.h,
                           width: 140.h,
                           child: const SVGASimpleImage(
                             assetsName: 'assets/svga/room_shengbo.svga',),
-                        ) : const Text(''),
+                        )
+                            : const Text(''),
                         // listm[6].avatarFrameGifImg!.isNotEmpty ? SizedBox(
                         //   height: 110.h,
                         //   width: 110.h,
@@ -3045,7 +3083,8 @@ class RoomItems {
                       }
                     } else {
                       if (sp.getString('role').toString() == 'adminer' ||
-                          sp.getString('role').toString() == 'leader') {
+                          sp.getString('role').toString() == 'leader' ||
+                          sp.getString('role').toString() == 'president') {
                         eventBus.fire(RoomBack(title: '空位置', index: '7'));
                       } else {
                         MyToastUtils.showToastBottom('麦位已锁');
@@ -3091,12 +3130,14 @@ class RoomItems {
                             ScreenUtil().setHeight(110),
                             listm[7].avatarFrameImg!) : const Text(''),
                         // 头像框动态图
-                        listm[7].isClose == 0 ? SizedBox(
+                        (listm[7].isClose == 0 && listm[7].isAudio! == true)
+                            ? SizedBox(
                           height: 140.h,
                           width: 140.h,
                           child: const SVGASimpleImage(
                             assetsName: 'assets/svga/room_shengbo.svga',),
-                        ) : const Text(''),
+                        )
+                            : const Text(''),
                         // listm[7].avatarFrameGifImg!.isNotEmpty ? SizedBox(
                         //   height: 110.h,
                         //   width: 110.h,
@@ -3241,7 +3282,8 @@ class RoomItems {
                       }
                     } else {
                       if (sp.getString('role').toString() == 'adminer' ||
-                          sp.getString('role').toString() == 'leader') {
+                          sp.getString('role').toString() == 'leader' ||
+                          sp.getString('role').toString() == 'president') {
                         eventBus.fire(RoomBack(title: '空位置', index: '7'));
                       } else {
                         MyToastUtils.showToastBottom('麦位已锁');
@@ -3284,12 +3326,14 @@ class RoomItems {
                             ScreenUtil().setHeight(110),
                             listm[7].avatarFrameImg!) : const Text(''),
                         // 头像框动态图
-                        listm[7].isClose == 0 ? SizedBox(
+                        (listm[7].isClose == 0 && listm[7].isAudio! == true)
+                            ? SizedBox(
                           height: 140.h,
                           width: 140.h,
                           child: const SVGASimpleImage(
                             assetsName: 'assets/svga/room_shengbo.svga',),
-                        ) : const Text(''),
+                        )
+                            : const Text(''),
                         // listm[7].avatarFrameGifImg!.isNotEmpty ? SizedBox(
                         //   height: 110.h,
                         //   width: 110.h,
@@ -3555,7 +3599,8 @@ class RoomItems {
               GestureDetector(
                 onTap: (() {
                   MyUtils.goTransparentPage(
-                      context, RoomLiWuPage(listM: listM, uid: '', roomID: roomID,));
+                      context,
+                      RoomLiWuPage(listM: listM, uid: '', roomID: roomID,));
                 }),
                 child: Container(
                     height: ScreenUtil().setHeight(60),
@@ -3626,7 +3671,8 @@ class RoomItems {
               MyUtils.goTransparentPage(
                   context,
                   (sp.getString('role').toString() == 'adminer' ||
-                      sp.getString('role').toString() == 'leader')
+                      sp.getString('role').toString() == 'leader' ||
+                      sp.getString('role').toString() == 'president')
                       ? RoomGongNeng(
                     type: 1,
                     roomID: roomID,
@@ -3684,7 +3730,8 @@ class RoomItems {
     if (i == 8) {
       return upOrDown[i] == true &&
           (sp.getString('role').toString() == 'adminer' ||
-              sp.getString('role').toString() == 'leader')
+              sp.getString('role').toString() == 'leader' ||
+              sp.getString('role').toString() == 'president')
           ? Positioned(
         left: 300.w,
         top: 200.h,
@@ -3756,7 +3803,8 @@ class RoomItems {
           : const Text('');
     } else if (i == 0) {
       return upOrDown[i] && (sp.getString('role').toString() == 'adminer' ||
-          sp.getString('role').toString() == 'leader')
+          sp.getString('role').toString() == 'leader' ||
+          sp.getString('role').toString() == 'president')
           ? Positioned(
         left: 35.w,
         top: 400.h,
@@ -3828,7 +3876,8 @@ class RoomItems {
           : const Text('');
     } else if (i == 1) {
       return upOrDown[i] && (sp.getString('role').toString() == 'adminer' ||
-          sp.getString('role').toString() == 'leader')
+          sp.getString('role').toString() == 'leader' ||
+          sp.getString('role').toString() == 'president')
           ? Positioned(
         left: 215.w,
         top: 400.h,
@@ -3900,7 +3949,8 @@ class RoomItems {
           : const Text('');
     } else if (i == 2) {
       return upOrDown[i] && (sp.getString('role').toString() == 'adminer' ||
-          sp.getString('role').toString() == 'leader')
+          sp.getString('role').toString() == 'leader' ||
+          sp.getString('role').toString() == 'president')
           ? Positioned(
         left: 390.w,
         top: 400.h,
@@ -3972,7 +4022,8 @@ class RoomItems {
           : const Text('');
     } else if (i == 3) {
       return upOrDown[i] && (sp.getString('role').toString() == 'adminer' ||
-          sp.getString('role').toString() == 'leader')
+          sp.getString('role').toString() == 'leader' ||
+          sp.getString('role').toString() == 'president')
           ? Positioned(
         left: 570.w,
         top: 400.h,
@@ -4044,7 +4095,8 @@ class RoomItems {
           : const Text('');
     } else if (i == 4) {
       return upOrDown[i] && (sp.getString('role').toString() == 'adminer' ||
-          sp.getString('role').toString() == 'leader')
+          sp.getString('role').toString() == 'leader' ||
+          sp.getString('role').toString() == 'president')
           ? Positioned(
         left: 35.w,
         top: 560.h,
@@ -4116,7 +4168,8 @@ class RoomItems {
           : const Text('');
     } else if (i == 5) {
       return upOrDown[i] && (sp.getString('role').toString() == 'adminer' ||
-          sp.getString('role').toString() == 'leader')
+          sp.getString('role').toString() == 'leader' ||
+          sp.getString('role').toString() == 'president')
           ? Positioned(
         left: 215.w,
         top: 560.h,
@@ -4188,7 +4241,8 @@ class RoomItems {
           : const Text('');
     } else if (i == 6) {
       return upOrDown[i] && (sp.getString('role').toString() == 'adminer' ||
-          sp.getString('role').toString() == 'leader')
+          sp.getString('role').toString() == 'leader' ||
+          sp.getString('role').toString() == 'president')
           ? Positioned(
         left: 390.w,
         top: 560.h,
@@ -4260,7 +4314,8 @@ class RoomItems {
           : const Text('');
     } else {
       return upOrDown[i] && (sp.getString('role').toString() == 'adminer' ||
-          sp.getString('role').toString() == 'leader')
+          sp.getString('role').toString() == 'leader' ||
+          sp.getString('role').toString() == 'president')
           ? Positioned(
         left: 570.w,
         top: 560.h,

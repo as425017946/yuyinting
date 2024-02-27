@@ -292,7 +292,7 @@ class _ZhuanPanJiangChi2PageState extends State<ZhuanPanJiangChi2Page> {
     } catch (e) {
       Loading.dismiss();
       LogE('钥匙错误信息$e');
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -322,7 +322,7 @@ class _ZhuanPanJiangChi2PageState extends State<ZhuanPanJiangChi2Page> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

@@ -4,6 +4,7 @@ import 'package:marquee/marquee.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import '../../bean/hengFuBean.dart';
+import '../../utils/SVGASimpleImage3.dart';
 
 class HomeItems {
   /// 公屏送礼推送
@@ -124,7 +125,7 @@ class HomeItems {
           position: animation,
           child: Stack(
             children: [
-              SVGASimpleImage(
+              SVGASimpleImage3(
                 assetsName: url,
               ),
               GestureDetector(

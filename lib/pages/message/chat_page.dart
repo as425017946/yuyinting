@@ -1880,7 +1880,7 @@ class _ChatPageState extends State<ChatPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1919,7 +1919,7 @@ class _ChatPageState extends State<ChatPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1954,7 +1954,7 @@ class _ChatPageState extends State<ChatPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -2072,7 +2072,7 @@ class _ChatPageState extends State<ChatPage> {
         scrollToLastItem(); // 在widget构建完成后滚动到底部
       });
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -2323,7 +2323,7 @@ class _ChatPageState extends State<ChatPage> {
         sp.setBool('joinRoom',false);
       });
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -2364,7 +2364,7 @@ class _ChatPageState extends State<ChatPage> {
         sp.setBool('joinRoom',false);
       });
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -2397,7 +2397,7 @@ class _ChatPageState extends State<ChatPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -2448,7 +2448,7 @@ class _ChatPageState extends State<ChatPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 

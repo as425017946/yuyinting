@@ -3,9 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/bean/kefuBean.dart';
 import 'package:yuyinting/bean/myGhBean.dart';
 import 'package:yuyinting/main.dart';
+import 'package:yuyinting/pages/mine/gonghui/room_liushui_page.dart';
 import 'package:yuyinting/pages/mine/gonghui/room_more_page.dart';
 import 'package:yuyinting/pages/mine/gonghui/setting_gonghui_page.dart';
 import 'package:yuyinting/pages/mine/gonghui/shenhe_page.dart';
+import 'package:yuyinting/pages/mine/gonghui/zhubo_liushui_page.dart';
 
 import '../../../bean/qyListBean.dart';
 import '../../../colors/my_colors.dart';
@@ -33,13 +35,16 @@ class MyGonghuiPage extends StatefulWidget {
 
 class _MyGonghuiPageState extends State<MyGonghuiPage> {
   var appBar;
+  // ratio分润比例
   String logo = '',
       ghName = '',
       ghId = '',
       ghAddTime = '',
       identity = '',
       kefUavatar = '',
-      kefuUid = '';
+      kefuUid = '',
+      ratio = '',
+      guildID = '';
   List<StreamerList> listPeople = [];
   List<RoomList> listRoom = [];
   int qianyue = 0;
@@ -112,12 +117,12 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                             WidgetUtils.commonSizedBox(10, 20),
                             identity == 'leader'
                                 ? WidgetUtils.onlyText(
-                                    '厅分润: 10%',
+                                    '厅主分润: $ratio',
                                     StyleUtils.getCommonTextStyle(
                                         color: Colors.white,
                                         fontSize: ScreenUtil().setSp(25)))
                                 : WidgetUtils.onlyText(
-                                '主播分润: 10%',
+                                '主播分润: $ratio',
                                 StyleUtils.getCommonTextStyle(
                                     color: Colors.white,
                                     fontSize: ScreenUtil().setSp(25))),
@@ -382,22 +387,24 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                               MyColors.homeTopBG,
                               MyColors.homeTopBG,
                               '开设房间',
-                              ScreenUtil().setSp(31),
+                              ScreenUtil().setSp(28),
                               Colors.white),
                         ),
                       ),
-                      WidgetUtils.commonSizedBox(0, 20),
+                      WidgetUtils.commonSizedBox(0, 20.h),
                       Expanded(
                         child: GestureDetector(
                           onTap: (() {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const ShenhePage(),
-                              ),
-                            ).then((value) {
-                              doPostMyGh();
-                            });
+                            if(MyUtils.checkClick()){
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const ShenhePage(),
+                                ),
+                              ).then((value) {
+                                doPostMyGh();
+                              });
+                            }
                           }),
                           child: SizedBox(
                             child: Stack(
@@ -408,7 +415,7 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                                     MyColors.homeTopBG,
                                     MyColors.homeTopBG,
                                     '入驻审核',
-                                    ScreenUtil().setSp(31),
+                                    ScreenUtil().setSp(28),
                                     Colors.white),
                                 qianyue != 0
                                     ? Positioned(
@@ -424,19 +431,39 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                           ),
                         ),
                       ),
-                      WidgetUtils.commonSizedBox(0, 20),
+                      WidgetUtils.commonSizedBox(0, 20.h),
                       Expanded(
                         child: GestureDetector(
                           onTap: (() {
-                            Navigator.pushNamed(context, 'JiesuanPage');
+                            if(MyUtils.checkClick()){
+                              MyUtils.goTransparentPageCom(context, RoomLiuShuiPage(ghID: guildID,));
+                            }
                           }),
                           child: WidgetUtils.myContainer(
                               ScreenUtil().setHeight(70),
                               double.infinity,
                               MyColors.homeTopBG,
                               MyColors.homeTopBG,
-                              '结算账单',
-                              ScreenUtil().setSp(31),
+                              '房间流水',
+                              ScreenUtil().setSp(28),
+                              Colors.white),
+                        ),
+                      ),
+                      WidgetUtils.commonSizedBox(0, 20.h),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: (() {
+                            if(MyUtils.checkClick()){
+                              MyUtils.goTransparentPageCom(context, ZhuBoLiuShuiPage(ghID: guildID,));
+                            }
+                          }),
+                          child: WidgetUtils.myContainer(
+                              ScreenUtil().setHeight(70),
+                              double.infinity,
+                              MyColors.homeTopBG,
+                              MyColors.homeTopBG,
+                              '主播流水',
+                              ScreenUtil().setSp(28),
                               Colors.white),
                         ),
                       ),
@@ -457,6 +484,7 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
+            ratio = bean.data!.ratio.toString();
             logo = bean.data!.guildInfo!.logo!;
             sp.setString('guild_logo', bean.data!.guildInfo!.logo!);
             ghName = bean.data!.guildInfo!.title!;
@@ -472,6 +500,7 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
             kefuUid = bean.data!.kefuUid!.toString();
             identity = bean.data!.identity!;
             qianyue = bean.data!.unauditNum as int;
+            guildID = bean.data!.guildInfo!.id.toString();
             sp.setString('guild_id', bean.data!.guildInfo!.id.toString());
             sp.setString(
                 'guild_notice', bean.data!.guildInfo!.notice.toString());

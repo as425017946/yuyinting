@@ -833,7 +833,7 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 

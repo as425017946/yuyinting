@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/colors/my_colors.dart';
+import 'package:yuyinting/utils/event_utils.dart';
+import 'package:yuyinting/utils/my_utils.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 
 import '../../../bean/playRouletteBean.dart';
@@ -119,13 +121,29 @@ class _ZhuanPanDaoJuPageState extends State<ZhuanPanDaoJuPage> {
                           fontWeight: FontWeight.w600)),
                 )),
                 Positioned(
-                  bottom: 80.h,
-                  child: GestureDetector(
-                      onTap: (() {
-                        Navigator.pop(context);
-                      }),
-                      child: WidgetUtils.showImages(
-                          'assets/images/zhuanpan_dj_btn.png', 90.h, 300.h)),
+                  bottom: 70.h,
+                  child: Row(
+                    children: [
+                      // const Spacer(),
+                      GestureDetector(
+                          onTap: (() {
+                            Navigator.pop(context);
+                          }),
+                          child: WidgetUtils.showImagesFill(
+                              'assets/images/zhuanpan_dj_colse.png', 65.h, 200.h)),
+                      WidgetUtils.commonSizedBox(0, 50.h),
+                      GestureDetector(
+                          onTap: (() {
+                            if(MyUtils.checkClick()){
+                              Navigator.pop(context);
+                              eventBus.fire(XZQuerenBack(cishu: '', feiyong: '', title: widget.title == '心动转盘' ? '小转盘' : '大转盘'));
+                            }
+                          }),
+                          child: WidgetUtils.showImagesFill(
+                              'assets/images/zhuanpan_dj_again.png', 65.h, 200.h)),
+                      // const Spacer(),
+                    ],
+                  ),
                 ),
               ],
             ),

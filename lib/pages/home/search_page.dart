@@ -484,7 +484,7 @@ class _SearchPageState extends State<SearchPage> {
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -533,7 +533,7 @@ class _SearchPageState extends State<SearchPage> {
         sp.setBool('joinRoom',false);
       });
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -574,7 +574,7 @@ class _SearchPageState extends State<SearchPage> {
         sp.setBool('joinRoom',false);
       });
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

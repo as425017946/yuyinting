@@ -222,7 +222,7 @@ class _RoomBG2PageState extends State<RoomBG2Page>
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -260,7 +260,7 @@ class _RoomBG2PageState extends State<RoomBG2Page>
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -351,7 +351,7 @@ class _RoomBG2PageState extends State<RoomBG2Page>
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitleFile);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitleFile);
     }
   }
 }

@@ -5,6 +5,7 @@ import 'package:yuyinting/pages/mine/qianbao/bi_zhuan_dou_page.dart';
 import 'package:yuyinting/pages/mine/qianbao/dou_pay_page.dart';
 import 'package:yuyinting/pages/mine/qianbao/tixian_bi_page.dart';
 import 'package:yuyinting/pages/mine/qianbao/tixian_zuan_page.dart';
+import 'package:yuyinting/pages/mine/qianbao/wallet_more_page.dart';
 import 'package:yuyinting/pages/mine/qianbao/zuan_pay_page.dart';
 import 'package:yuyinting/utils/loading.dart';
 import 'package:yuyinting/utils/my_utils.dart';
@@ -36,7 +37,9 @@ class _WalletPageState extends State<WalletPage> {
     appBar = WidgetUtils.getAppBar('我的钱包', true, context, true, 2);
     eventBus.on<SubmitButtonBack>().listen((event) {
       if(MyUtils.compare(event.title, '账单明细') == 0){
-          Navigator.pushNamed(context, 'WalletMorePage');
+          if(MyUtils.checkClick()){
+            MyUtils.goTransparentPageCom(context, const WalletMorePage());
+          }
       }else if(event.title == '金币提现成功'){
         doPostBalance();
       }

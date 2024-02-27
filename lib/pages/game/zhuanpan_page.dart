@@ -435,7 +435,7 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

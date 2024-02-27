@@ -203,7 +203,6 @@ class _RoomPageState extends State<RoomPage>
       listenSend,
       listenSendImg,
       listenBig,
-      listenZdy,
       listenSGJ;
 
   // 是否展示礼物动效
@@ -729,6 +728,15 @@ class _RoomPageState extends State<RoomPage>
             _dispose();
             Navigator.pop(context);
             break;
+          case '顶号':
+          // 调用离开房间接口
+            doPostLeave();
+            if (_timerHot != null) {
+              _timerHot!.cancel();
+            }
+            //离开频道并释放资源
+            _dispose();
+            break;
           case '闭麦':
             setState(() {
               // 取消发布本地音频流
@@ -856,7 +864,7 @@ class _RoomPageState extends State<RoomPage>
         if (event.map!['room_id'].toString() == widget.roomId) {
           switch (event.type) {
             case 'un_close_mic': //开麦
-              doPostRoomMikeInfo();
+              doUpdateInfo(event.map,'开麦');
               // 上下麦操作不是本地才刷新
               if (event.map!['uid'].toString() != sp.getString('user_id')) {
               } else {
@@ -876,7 +884,7 @@ class _RoomPageState extends State<RoomPage>
               break;
             case 'close_mic': //闭麦
               // 上下麦操作不是本地才刷新
-              doPostRoomMikeInfo();
+              doUpdateInfo(event.map,'闭麦');
               if (event.map!['uid'].toString() != sp.getString('user_id')) {
               } else {
                 setState(() {
@@ -898,7 +906,8 @@ class _RoomPageState extends State<RoomPage>
               });
               // 上下麦操作不是本地才刷新
               if (event.map!['uid'].toString() != sp.getString('user_id')) {
-                doPostRoomMikeInfo();
+                LogE('他人上麦');
+                doUpdateInfo(event.map,'上麦');
               }
               break;
             case 'down_mic': //下麦
@@ -909,6 +918,7 @@ class _RoomPageState extends State<RoomPage>
                 for (int i = 0; i < 9; i++) {
                   upOrDown[i] = false;
                 }
+                doUpdateInfo(event.map,'下麦');
               });
               if (mounted) {
                 // 上下麦操作不是本地才刷新
@@ -924,9 +934,6 @@ class _RoomPageState extends State<RoomPage>
                   setState(() {
                     isMeUp = false;
                   });
-                  doPostRoomMikeInfo();
-                } else {
-                  doPostRoomMikeInfo();
                 }
               }
               break;
@@ -998,7 +1005,9 @@ class _RoomPageState extends State<RoomPage>
                 // Navigator.pop(context);
               } else {
                 // 别人被拉黑了，刷新一下麦上的人员信息
-                doPostRoomMikeInfo();
+                if(event.map!['old_serial_number'].toString() != '0'){
+                  doUpdateOtherInfo(event.map!['old_serial_number'].toString(),'拉黑');
+                }
               }
               break;
             case 'user_room_black':
@@ -1088,6 +1097,7 @@ class _RoomPageState extends State<RoomPage>
             for (int i = 0; i < 9; i++) {
               upOrDown[i] = false;
             }
+            doUpdateOtherInfo(event.map!['serial_number'],'下麦');
           });
           if (mounted) {
             // 上下麦操作不是本地才刷新
@@ -1100,14 +1110,11 @@ class _RoomPageState extends State<RoomPage>
               setState(() {
                 isMeUp = false;
               });
-              doPostRoomMikeInfo();
-            } else {
-              doPostRoomMikeInfo();
             }
           }
         } else if (event.map!['type'] == 'user_un_close_mic') {
           //通知用户开麦
-          doPostRoomMikeInfo();
+          doUpdateOtherInfo(event.map!['serial_number'],'开麦');
           // 上下麦操作不是本地才刷新
           if (event.map!['uid'].toString() != sp.getString('user_id')) {
           } else {
@@ -1123,8 +1130,7 @@ class _RoomPageState extends State<RoomPage>
           }
         } else if (event.map!['type'] == 'user_close_mic') {
           //通知用户闭麦
-          // 上下麦操作不是本地才刷新
-          doPostRoomMikeInfo();
+          doUpdateOtherInfo(event.map!['serial_number'],'闭麦');
           if (event.map!['uid'].toString() != sp.getString('user_id')) {
           } else {
             setState(() {
@@ -1872,6 +1878,208 @@ class _RoomPageState extends State<RoomPage>
     });
   }
 
+  //上下麦刷新更新本地状态使用
+  void doUpdateInfo(Map<String, String>? map,String status){
+    if(status == '下麦'){
+      for (int i = 0; i < listM.length; i++) {
+        setState(() {
+          //换麦了
+          if(map!['serial_number'].toString() == listM[i].serialNumber.toString()){
+            LogE('刷新了***$i');
+            listM[i].uid = 0;
+            listM[i].isBoss = 0;
+            listM[i].isLock = 0;
+            listM[i].isClose = 0;
+            listM[i].nickname = '';
+            listM[i].avatar = '';
+            listM[i].charm = 0;
+            listM[i].identity = '';
+            listM[i].waveImg = '';
+            listM[i].waveGifImg = '';
+            listM[i].avatarFrameImg = '';
+            listM[i].avatarFrameGifImg = '';
+            if (listM[i].serialNumber == 1) {
+              m1 = false;
+            } else if (listM[i].serialNumber == 2) {
+              m2 = false;
+            } else if (listM[i].serialNumber == 3) {
+              m3 = false;
+            } else if (listM[i].serialNumber == 4) {
+              m4 = false;
+            } else if (listM[i].serialNumber == 5) {
+              m5 = false;
+            } else if (listM[i].serialNumber == 6) {
+              m6 = false;
+            } else if (listM[i].serialNumber == 7) {
+              m7 = false;
+            } else if (listM[i].serialNumber == 8) {
+              m8 = false;
+            } else if (listM[i].serialNumber == 9) {
+              m0 = false;
+            }
+          }
+        });
+      }
+    }else if(status == '上麦'){
+      for (int i = 0; i < listM.length; i++) {
+        // 原来没有麦序位置
+        if(map!['old_serial_number'].toString() != '0'){
+          setState(() {
+            //换麦了
+            if(map!['old_serial_number'].toString() == listM[i].serialNumber.toString()){
+              LogE('刷新了***$i');
+              listM[i].uid = 0;
+              listM[i].isBoss = 0;
+              listM[i].isLock = 0;
+              listM[i].isClose = 0;
+              listM[i].nickname = '';
+              listM[i].avatar = '';
+              listM[i].charm = 0;
+              listM[i].identity = '';
+              listM[i].waveImg = '';
+              listM[i].waveGifImg = '';
+              listM[i].avatarFrameImg = '';
+              listM[i].avatarFrameGifImg = '';
+              if (listM[i].serialNumber == 1) {
+                m1 = false;
+              } else if (listM[i].serialNumber == 2) {
+                m2 = false;
+              } else if (listM[i].serialNumber == 3) {
+                m3 = false;
+              } else if (listM[i].serialNumber == 4) {
+                m4 = false;
+              } else if (listM[i].serialNumber == 5) {
+                m5 = false;
+              } else if (listM[i].serialNumber == 6) {
+                m6 = false;
+              } else if (listM[i].serialNumber == 7) {
+                m7 = false;
+              } else if (listM[i].serialNumber == 8) {
+                m8 = false;
+              } else if (listM[i].serialNumber == 9) {
+                m0 = false;
+              }
+            }
+          });
+        }
+        if(listM[i].serialNumber.toString() == map!['serial_number'].toString()) {
+          setState(() {
+            listM[i].uid = int.parse(map!['uid'].toString());
+            listM[i].roomId = int.parse(map!['room_id'].toString());
+            listM[i].serialNumber = int.parse(map!['serial_number'].toString());
+            listM[i].isBoss = int.parse(map!['is_boss'].toString());
+            listM[i].isLock = int.parse(map!['is_lock'].toString());
+            listM[i].isClose = int.parse(map!['is_close'].toString());
+            listM[i].nickname = map!['nickname'].toString();
+            listM[i].avatar = map!['avatar'].toString();
+            listM[i].charm = int.parse(map!['charm'].toString());
+            if (listM[i].serialNumber == 1) {
+              m1 = true;
+            } else if (listM[i].serialNumber == 2) {
+              m2 = true;
+            } else if (listM[i].serialNumber == 3) {
+              m3 = true;
+            } else if (listM[i].serialNumber == 4) {
+              m4 = true;
+            } else if (listM[i].serialNumber == 5) {
+              m5 = true;
+            } else if (listM[i].serialNumber == 6) {
+              m6 = true;
+            } else if (listM[i].serialNumber == 7) {
+              m7 = true;
+            } else if (listM[i].serialNumber == 8) {
+              m8 = true;
+            } else if (listM[i].serialNumber == 9) {
+              m0 = true;
+            }
+            isMeUp = true;
+            mxIndex = map!['serial_number'].toString();
+          });
+        }
+      }
+    }else if(status == '开麦'){
+      for (int i = 0; i < listM.length; i++) {
+        setState(() {
+          if(map!['serial_number'].toString() == listM[i].serialNumber.toString()){
+            LogE('开麦=== $i');
+            listM[i].isClose = 0;
+          }
+        });
+      }
+    }else if(status == '闭麦'){
+      for (int i = 0; i < listM.length; i++) {
+        setState(() {
+          if(map!['serial_number'].toString() == listM[i].serialNumber.toString()){
+            listM[i].isClose = 1;
+          }
+        });
+      }
+    }
+
+  }
+
+  //给别人开麦和下麦
+  void doUpdateOtherInfo(String serialNumber,String status){
+    if(status == '下麦' || status == '拉黑'){
+      for (int i = 0; i < listM.length; i++) {
+        setState(() {
+          //换麦了
+          if(serialNumber == listM[i].serialNumber.toString()){
+            LogE('刷新了***$i');
+            listM[i].uid = 0;
+            listM[i].isBoss = 0;
+            listM[i].isLock = 0;
+            listM[i].isClose = 0;
+            listM[i].nickname = '';
+            listM[i].avatar = '';
+            listM[i].charm = 0;
+            listM[i].identity = '';
+            listM[i].waveImg = '';
+            listM[i].waveGifImg = '';
+            listM[i].avatarFrameImg = '';
+            listM[i].avatarFrameGifImg = '';
+            if (listM[i].serialNumber == 1) {
+              m1 = false;
+            } else if (listM[i].serialNumber == 2) {
+              m2 = false;
+            } else if (listM[i].serialNumber == 3) {
+              m3 = false;
+            } else if (listM[i].serialNumber == 4) {
+              m4 = false;
+            } else if (listM[i].serialNumber == 5) {
+              m5 = false;
+            } else if (listM[i].serialNumber == 6) {
+              m6 = false;
+            } else if (listM[i].serialNumber == 7) {
+              m7 = false;
+            } else if (listM[i].serialNumber == 8) {
+              m8 = false;
+            } else if (listM[i].serialNumber == 9) {
+              m0 = false;
+            }
+          }
+        });
+      }
+    }else if(status == '开麦'){
+      for (int i = 0; i < listM.length; i++) {
+        setState(() {
+          if(serialNumber == listM[i].serialNumber.toString()){
+            LogE('开麦=== $i');
+            listM[i].isClose = 0;
+          }
+        });
+      }
+    }else if(status == '闭麦'){
+      for (int i = 0; i < listM.length; i++) {
+        setState(() {
+          if(serialNumber == listM[i].serialNumber.toString()){
+            listM[i].isClose = 1;
+          }
+        });
+      }
+    }
+  }
+
   //监听程序进入前后台的状态改变的方法
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -2163,7 +2371,6 @@ class _RoomPageState extends State<RoomPage>
     _scrollController2.dispose();
     listenPeople.cancel();
     listenBig.cancel();
-    listenZdy.cancel();
     listenSVGA.cancel();
     listenGZOK.cancel();
     listenMessage.cancel();
@@ -2248,10 +2455,10 @@ class _RoomPageState extends State<RoomPage>
             int speakerNumber,
             int totalVolume) {
           for(int i =0; i < speakers.length; i++){
-            LogE("用户音量： ${speakers[i].volume}");
+            // LogE("用户音量： ${speakers[i].volume}");
             // LogE("用户id： ${speakers[i].uid}");
             /// 只采集声音大于75的用户
-            if(speakers[i].volume! > 75){
+            if(speakers[i].volume! > 10){
               //是本人
               if(speakers[i].uid == 0){
                 for(int a =0; a < listM.length; a++){
@@ -2798,10 +3005,18 @@ class _RoomPageState extends State<RoomPage>
               ),
         onWillPop: () async {
           //这里可以响应物理返回键
-          setState(() {
-            isBack = true;
-          });
-          return false;
+          // setState(() {
+          //   isBack = true;
+          // });
+          if (MyUtils.checkClick()) {
+            if (_timerHot != null) {
+              _timerHot!.cancel();
+            }
+            eventBus.fire(SubmitButtonBack(
+                title: '收起房间'));
+            Navigator.pop(context);
+          }
+          return true;
         },
       ),
     );
@@ -3344,7 +3559,7 @@ class _RoomPageState extends State<RoomPage>
     }
   }
 
-  /// 厅内发消息
+  /// 离开房间
   Future<void> doPostLeave() async {
     Map<String, dynamic> params = <String, dynamic>{
       'room_id': widget.roomId,
@@ -3496,7 +3711,8 @@ class _RoomPageState extends State<RoomPage>
           });
         }
       }
-      String content = '我向你赠送了全部背包礼物：\n$infos\n总额为：${cb.amount!}V豆';
+      String zzMoney = (double.parse(cb.amount!)*0.8).toStringAsFixed(2);
+      String content = '我向你赠送了全部背包礼物：\n$infos\n总额为：${cb.amount!}*0.8=${zzMoney}V豆';
       //请求发消息的接口
       doPostSendUserMsg(content, cb);
     }

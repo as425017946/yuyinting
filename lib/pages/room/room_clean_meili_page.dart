@@ -265,7 +265,7 @@ class _RoomCleanMeiLiPageState extends State<RoomCleanMeiLiPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -304,7 +304,7 @@ class _RoomCleanMeiLiPageState extends State<RoomCleanMeiLiPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -329,7 +329,7 @@ class _RoomCleanMeiLiPageState extends State<RoomCleanMeiLiPage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

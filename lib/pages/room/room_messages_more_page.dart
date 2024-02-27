@@ -915,7 +915,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
         scrollToLastItem(); // 在widget构建完成后滚动到底部
       });
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 

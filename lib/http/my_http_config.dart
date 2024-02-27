@@ -14,18 +14,20 @@ class MyHttpConfig{
   //赵增测试环境
   // static  String baseURL = "http://192.168.0.53/api";
   // // //测试环境
-  // static  String baseURL = "http://18.162.113.63:8080/api";
+  static  String baseURL = "http://18.162.113.63:8080/api";
 
   //正式环境
-  static  String baseURL = sp.getString('isDian').toString().isEmpty ? "http://43.198.138.251:8080/api" : "http://${sp.getString('isDian').toString()}:8080/api";
+  // static  String baseURL = sp.getString('isDian').toString().isEmpty ? "http://43.198.138.251:8080/api" : "http://${sp.getString('isDian').toString()}:8080/api";
   // 正式环境
   // static  String baseURL = "http://www.aa986.com:8080/api";
   /// 文件上传
   // file方式上传`
   static String fileUpload = '$baseURL/upload/fileUpload';
 
-  //上传用户声网日志
+  //上传用户声网日志测试
   static  String filelog = "http://18.162.113.63:8080/api/upload/filelog";
+  // //上传用户声网日志正式
+  // static  String filelog = "http://18.163.115.213:8080/api/upload/filelog";
   //存一下没有获取到ip的用户
   static  String ipLog = "http://118.195.228.131:8301/log";
   //判断网络
@@ -116,6 +118,26 @@ class MyHttpConfig{
   static  String ghSave = "$baseURL/guild/save";
   //公会设置
   static  String kefu = "$baseURL/mine/kefu";
+  //房间流水
+  static  String roomSpendingList = "$baseURL/guild/roomSpendingList";
+  //主播流水
+  static  String streamerSpendingList = "$baseURL/guild/streamerSpendingList";
+  //设置主播分润比例
+  static  String setRatio = "$baseURL/guild/setRatio";
+  //会长后台-我的公会
+  static  String homepage = "$baseURL/consortia/homepage";
+  //会长后台-搜索公会成员
+  static  String searchConsortiaStreamer = "$baseURL/consortia/searchConsortiaStreamer";
+  //会长后台-搜索公会厅
+  static  String searchConsortiaGuild = "$baseURL/consortia/searchConsortiaGuild";
+  //会长后台-搜索公会厅
+  static  String consortiaSetRatio = "$baseURL/consortia/setRatio";
+  //会长后台-厅流水列表
+  static  String guildSpendingList = "$baseURL/consortia/guildSpendingList";
+  //会长后台-厅-房间流水列表
+  static  String croomSpendingList = "$baseURL/consortia/roomSpendingList";
+  //会长后台-主播流水列表
+  static  String cstreamerSpendingList = "$baseURL/consortia/streamerSpendingList";
 
   /// 动态模块
   //关注动态列表
@@ -305,7 +327,8 @@ class MyHttpConfig{
   static  String getPayment = "$baseURL/order/getPayment";
   // 首充获取金额
   static  String getFirstPayment = "$baseURL/order/getFirstPayment";
-
+  // 提现费率
+  static  String getRate = "$baseURL/user/getRate";
 
 
 }

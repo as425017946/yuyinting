@@ -2,14 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
+import '../../../bean/zhuboLiuShuiBean.dart';
 import '../../../colors/my_colors.dart';
+import '../../../config/my_config.dart';
+import '../../../http/data_utils.dart';
+import '../../../http/my_http_config.dart';
 import '../../../utils/date_picker.dart';
+import '../../../utils/event_utils.dart';
+import '../../../utils/loading.dart';
+import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 /// 主播流水
 class ZhuBoLiuShuiPage extends StatefulWidget {
-  const ZhuBoLiuShuiPage({super.key});
+  String ghID;
+  ZhuBoLiuShuiPage({super.key, required this.ghID});
 
   @override
   State<ZhuBoLiuShuiPage> createState() => _ZhuBoLiuShuiPageState();
@@ -22,6 +30,7 @@ class _ZhuBoLiuShuiPageState extends State<ZhuBoLiuShuiPage> {
   final RefreshController _refreshController =
   RefreshController(initialRefresh: false);
   String starTime = '', endTime = '', keyword = '';
+  var listen;
 
   void _onRefresh() async {
     _refreshController.resetNoData();
@@ -34,7 +43,7 @@ class _ZhuBoLiuShuiPageState extends State<ZhuBoLiuShuiPage> {
         page = 1;
       });
     }
-    // doPostSettleList();
+    doPostStreamerSpendingList();
   }
 
   void _onLoading() async {
@@ -46,7 +55,7 @@ class _ZhuBoLiuShuiPageState extends State<ZhuBoLiuShuiPage> {
         page++;
       });
     }
-    // doPostSettleList();
+    doPostStreamerSpendingList();
     _refreshController.loadComplete();
   }
 
@@ -59,14 +68,21 @@ class _ZhuBoLiuShuiPageState extends State<ZhuBoLiuShuiPage> {
     setState(() {
       starTime = now.toString().substring(0, 10);
       endTime = now.toString().substring(0, 10);
-      // doPostTeamReport();
+      doPostStreamerSpendingList();
     });
-    // listen = eventBus.on<InfoBack>().listen((event) {
-    //   setState(() {
-    //     keyword = event.info;
-    //   });
-    // });
+    listen = eventBus.on<InfoBack>().listen((event) {
+      setState(() {
+        keyword = event.info;
+      });
+    });
   }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    listen.cancel();
+  }
+
 
   /// 账单
   Widget _itemZhangdan(BuildContext context, int i) {
@@ -74,7 +90,7 @@ class _ZhuBoLiuShuiPageState extends State<ZhuBoLiuShuiPage> {
       onTap: (() {}),
       child: Container(
         width: double.infinity,
-        constraints: BoxConstraints(minHeight: 260.h),
+        constraints: BoxConstraints(minHeight: 200.h),
         padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
         margin: const EdgeInsets.only(bottom: 10),
         color: MyColors.dailiBaobiao,
@@ -83,20 +99,22 @@ class _ZhuBoLiuShuiPageState extends State<ZhuBoLiuShuiPage> {
             Row(
               children: [
                 WidgetUtils.onlyText(
-                    "list[i].beginTime!",
+                    '主播名称：',
                     StyleUtils.getCommonTextStyle(
                         color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
-                WidgetUtils.commonSizedBox(0, 5),
                 WidgetUtils.onlyText(
-                    '至',
+                    listInfo[i].nickname!,
                     StyleUtils.getCommonTextStyle(
-                        color: MyColors.g2, fontSize: ScreenUtil().setSp(28))),
-                WidgetUtils.commonSizedBox(0, 5),
+                        color: MyColors.g2, fontSize: ScreenUtil().setSp(25))),
+                const Spacer(),
                 WidgetUtils.onlyText(
-                    "list[i].endTime!",
+                    '主播ID：',
                     StyleUtils.getCommonTextStyle(
                         color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
-                const Expanded(child: Text('')),
+                WidgetUtils.onlyText(
+                    listInfo[i].streamerUid.toString(),
+                    StyleUtils.getCommonTextStyle(
+                        color: MyColors.g2, fontSize: ScreenUtil().setSp(25))),
                 // WidgetUtils.onlyText('已结算', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(25))),
               ],
             ),
@@ -104,11 +122,11 @@ class _ZhuBoLiuShuiPageState extends State<ZhuBoLiuShuiPage> {
             Row(
               children: [
                 WidgetUtils.onlyText(
-                    '当周总流水：',
+                    '总流水：',
                     StyleUtils.getCommonTextStyle(
                         color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
                 WidgetUtils.onlyText(
-                    "list[i].weekSp!",
+                    listInfo[i].beanSum!,
                     StyleUtils.getCommonTextStyle(
                         color: MyColors.g2,
                         fontSize: ScreenUtil().setSp(25),
@@ -126,7 +144,7 @@ class _ZhuBoLiuShuiPageState extends State<ZhuBoLiuShuiPage> {
                     StyleUtils.getCommonTextStyle(
                         color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
                 WidgetUtils.onlyText(
-                    "list[i].gbDirectSp!",
+                    listInfo[i].gbDirectSpend!,
                     StyleUtils.getCommonTextStyle(
                         color: MyColors.g2,
                         fontSize: ScreenUtil().setSp(25),
@@ -137,7 +155,7 @@ class _ZhuBoLiuShuiPageState extends State<ZhuBoLiuShuiPage> {
                     StyleUtils.getCommonTextStyle(
                         color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
                 WidgetUtils.onlyText(
-                    "list[i].packSp!",
+                    listInfo[i].packSpend!,
                     StyleUtils.getCommonTextStyle(
                         color: MyColors.g2,
                         fontSize: ScreenUtil().setSp(25),
@@ -270,7 +288,7 @@ class _ZhuBoLiuShuiPageState extends State<ZhuBoLiuShuiPage> {
               GestureDetector(
                 onTap: (() {
                   MyUtils.hideKeyboard(context);
-                  // doPostTeamReport();
+                  doPostStreamerSpendingList();
                 }),
                 child: WidgetUtils.myContainer(
                     ScreenUtil().setHeight(50),
@@ -295,12 +313,61 @@ class _ZhuBoLiuShuiPageState extends State<ZhuBoLiuShuiPage> {
               child: ListView.builder(
                 padding: EdgeInsets.only(bottom: 20.h, top: 20.h),
                 itemBuilder: _itemZhangdan,
-                itemCount: 0,
+                itemCount: listInfo.length,
               ),
             ),
           ),
         ],
       ),
     );
+  }
+
+
+  /// 房间流水
+  List<Lists> listInfo = [];
+  Future<void> doPostStreamerSpendingList() async {
+    Loading.show();
+    Map<String, dynamic> params = <String, dynamic>{
+      'start_time': starTime,
+      'end_time': endTime,
+      'keyword': controller.text.trim(),
+      'guild_id': widget.ghID,
+      'page': page,
+      'pageSize': MyConfig.pageSize,
+    };
+    try {
+      zhuboLiuShuiBean bean = await DataUtils.postStreamerSpendingList(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            if (page == 1) {
+              listInfo.clear();
+            }
+            if (bean.data!.lists!.isNotEmpty) {
+              for (int i = 0; i < bean.data!.lists!.length; i++) {
+                listInfo.add(bean.data!.lists![i]);
+              }
+            } else {
+              if (page > 1) {
+                if (bean.data!.lists!.length < MyConfig.pageSize) {
+                  _refreshController.loadNoData();
+                }
+              }
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
   }
 }

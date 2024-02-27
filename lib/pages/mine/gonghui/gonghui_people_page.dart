@@ -9,6 +9,7 @@ import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../main.dart';
 import '../../../utils/custom_dialog.dart';
+import '../../../utils/event_utils.dart';
 import '../../../utils/loading.dart';
 import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
@@ -17,6 +18,7 @@ import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 import '../../message/geren/people_info_page.dart';
 import '../my/my_info_page.dart';
+import 'fenrun_page.dart';
 /// 公会成员
 class GonghuiPeoplePage extends StatefulWidget {
   const GonghuiPeoplePage({Key? key}) : super(key: key);
@@ -64,80 +66,146 @@ class _GonghuiPeoplePageState extends State<GonghuiPeoplePage> {
     _refreshController.loadComplete();
   }
 
+  var listen;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     appBar = WidgetUtils.getAppBar('公会成员', true, context, false, 0);
     doPostSearchGuildStreamer('');
+    //设置完比例后返回显示
+    listen = eventBus.on<BiLiBack>().listen((event) {
+      setState(() {
+        list[event.index].ratio = '${event.number}%';
+      });
+    });
   }
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    listen.cancel();
   }
 
   /// 公会成员
   Widget _itemPeople(BuildContext context, int i) {
-    return GestureDetector(
-      onTap: ((){
-        if(MyUtils.checkClick()){
-          // 如果点击的是自己，进入自己的主页
-          if(sp.getString('user_id').toString() == list[i].streamerUid.toString()){
-            MyUtils.goTransparentRFPage(context, const MyInfoPage());
-          }else{
-            sp.setString('other_id', list[i].streamerUid.toString());
-            MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: list[i].streamerUid.toString(),title: '其他',));
-          }
-        }
-      }),
-      child: Container(
-        margin: const EdgeInsets.fromLTRB(20, 0, 0, 10),
-        width: double.infinity,
-        height: ScreenUtil().setHeight(120),
-        child: Row(
-          children: [
-            Stack(
-              alignment: Alignment.center,
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: ((){
+            if(MyUtils.checkClick()){
+              // 如果点击的是自己，进入自己的主页
+              if(sp.getString('user_id').toString() == list[i].streamerUid.toString()){
+                MyUtils.goTransparentRFPage(context, const MyInfoPage());
+              }else{
+                sp.setString('other_id', list[i].streamerUid.toString());
+                MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: list[i].streamerUid.toString(),title: '其他',));
+              }
+            }
+          }),
+          child: Container(
+            margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+            width: double.infinity,
+            height: ScreenUtil().setHeight(120),
+            child: Row(
               children: [
-                WidgetUtils.CircleImageNet(76.h, 76.h, 38.h, list[i].avatar!),
-                list[i].liveStatus == 1 ? WidgetUtils.showImages('assets/images/zhibozhong.webp', ScreenUtil().setHeight(100), ScreenUtil().setWidth(100),) : const Text(''),
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    WidgetUtils.CircleImageNet(76.h, 76.h, 38.h, list[i].avatar!),
+                    list[i].liveStatus == 1 ? WidgetUtils.showImages('assets/images/zhibozhong.webp', ScreenUtil().setHeight(100), ScreenUtil().setWidth(100),) : const Text(''),
+                  ],
+                ),
+                WidgetUtils.commonSizedBox(0, 10),
+                SizedBox(
+                  height: 76.h,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Spacer(),
+                      Row(
+                        children: [
+                          WidgetUtils.onlyText(list[i].nickname!, StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: 14)),
+                          WidgetUtils.commonSizedBox(0, 5),
+                          list[i].gender != 0 ? Container(
+                            height: ScreenUtil().setHeight(25),
+                            width: ScreenUtil().setWidth(40),
+                            alignment: Alignment.center,
+                            //边框设置
+                            decoration: BoxDecoration(
+                              //背景
+                              color: list[i].gender == 1 ? MyColors.dtBlue : MyColors.dtPink,
+                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                              borderRadius:
+                              const BorderRadius.all(Radius.circular(30.0)),
+                            ),
+                            child: WidgetUtils.showImages(
+                                list[i].gender == 1
+                                    ? 'assets/images/nan.png'
+                                    : 'assets/images/nv.png',
+                                10,
+                                10),
+                          ) : const Text(''),
+                        ],
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          WidgetUtils.onlyText('ID:${list[i].id.toString()}', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: 14)),
+                        ],
+                      ),
+                      const Spacer(),
+                    ],
+                  ),
+                ),
+                WidgetUtils.commonSizedBox(0, 10.h),
+                sp.getString('user_identity').toString() == 'leader' ? SizedBox(
+                  height: 76.h,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Spacer(),
+                      WidgetUtils.onlyText('分润比例', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: 14)),
+                      WidgetUtils.commonSizedBox(0, 5),
+                      WidgetUtils.onlyText(list[i].ratio!, StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: 14)),
+                      const Spacer(),
+                    ],
+                  ),
+                ) : const Text(''),
+                const Expanded(child: Text('')),
+                Column(
+                  children: [
+                    const Spacer(),
+                    sp.getString('user_identity').toString() == 'leader' ?  list[i].identity != 10 ? GestureDetector(
+                      onTap: ((){
+                        if(MyUtils.checkClick()) {
+                          MyUtils.goTransparentPageCom(context, FenRunPage(name: list[i].nickname!, id: list[i].streamerUid.toString(),ghID: sp.getString('guild_id').toString(), index: i, bili:list[i].ratio!));
+                        }
+                      }),
+                      child: WidgetUtils.myContainer(ScreenUtil().setHeight(45), ScreenUtil().setHeight(110), Colors.white, MyColors.homeTopBG, '设置比例', ScreenUtil().setSp(25), MyColors.homeTopBG),
+                    ) : const Text('') : const Text(''),
+                    WidgetUtils.commonSizedBox(10.h, 10.h),
+                    sp.getString('user_identity').toString() == 'leader' ?  list[i].identity != 10 ? GestureDetector(
+                      onTap: ((){
+                        isRemove(context, list[i].streamerUid.toString(),i);
+                      }),
+                      child: WidgetUtils.myContainer(ScreenUtil().setHeight(45), ScreenUtil().setHeight(100), Colors.white, MyColors.homeTopBG, '移出', ScreenUtil().setSp(25), MyColors.homeTopBG),
+                    ) : const Text('') : const Text(''),
+                    const Spacer(),
+                  ],
+                ),
+                WidgetUtils.commonSizedBox(0, 20),
+
               ],
             ),
-            WidgetUtils.commonSizedBox(0, 10),
-            WidgetUtils.onlyText(list[i].nickname!, StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: 14)),
-            WidgetUtils.commonSizedBox(0, 5),
-            list[i].gender != 0 ? Container(
-              height: ScreenUtil().setHeight(25),
-              width: ScreenUtil().setWidth(40),
-              alignment: Alignment.center,
-              //边框设置
-              decoration: BoxDecoration(
-                //背景
-                color: list[i].gender == 1 ? MyColors.dtBlue : MyColors.dtPink,
-                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                borderRadius:
-                const BorderRadius.all(Radius.circular(30.0)),
-              ),
-              child: WidgetUtils.showImages(
-                  list[i].gender == 1
-                      ? 'assets/images/nan.png'
-                      : 'assets/images/nv.png',
-                  10,
-                  10),
-            ) : const Text(''),
-            const Expanded(child: Text('')),
-            sp.getString('user_identity').toString() == 'leader' ?  list[i].identity != 10 ? GestureDetector(
-              onTap: ((){
-                isRemove(context, list[i].streamerUid.toString(),i);
-              }),
-              child: WidgetUtils.myContainer(ScreenUtil().setHeight(45), ScreenUtil().setHeight(100), Colors.white, MyColors.homeTopBG, '移出', ScreenUtil().setSp(25), MyColors.homeTopBG),
-            ) : const Text('') : const Text(''),
-            WidgetUtils.commonSizedBox(0, 20),
-
-          ],
+          ),
         ),
-      ),
+        WidgetUtils.myLine(indent: 20, endIndent: 20)
+      ],
     );
   }
 
