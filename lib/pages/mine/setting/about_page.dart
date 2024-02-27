@@ -235,8 +235,18 @@ class _AboutPageState extends State<AboutPage> {
                       version: bean.data!.version!,
                       url: bean.data!.downloadUrl!,
                       info: bean.data!.summary!,
-                      forceUpdate: bean.data!.forceUpdate!));
+                      forceUpdate: bean.data!.forceUpdate!,
+                      title: 'android',));
             } else {
+              // ignore: use_build_context_synchronously
+              MyUtils.goTransparentPageCom(
+                  context,
+                  UpdateAppPage(
+                    version: bean.data!.version!,
+                    url: bean.data!.downloadUrl!,
+                    info: bean.data!.summary!,
+                    forceUpdate: bean.data!.forceUpdate!,
+                    title: 'ios',));
             }
           }
           break;
