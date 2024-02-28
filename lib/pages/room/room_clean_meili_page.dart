@@ -202,10 +202,14 @@ class _RoomCleanMeiLiPageState extends State<RoomCleanMeiLiPage> {
                   onTap: (() {
                     eventBus.fire(SubmitButtonBack(title: '清除魅力'));
                     if (MyUtils.checkClick()) {
-                      if(isAll){
-                        doPostCleanCharm();
+                      if(listUID.isEmpty){
+                        MyToastUtils.showToastBottom('未选择麦位用户');
                       }else{
-                        doPostCleanCharmSingle();
+                        if(isAll){
+                          doPostCleanCharm();
+                        }else{
+                          doPostCleanCharmSingle();
+                        }
                       }
                     }
                     // doPostTeamReport();

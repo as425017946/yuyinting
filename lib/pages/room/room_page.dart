@@ -868,6 +868,8 @@ class _RoomPageState extends State<RoomPage>
               // 上下麦操作不是本地才刷新
               if (event.map!['uid'].toString() != sp.getString('user_id')) {
               } else {
+                isMeUp = true;
+                mxIndex = event.map!['serial_number'].toString();
                 setState(() {
                   isJinyiin = false;
                 });
@@ -908,6 +910,9 @@ class _RoomPageState extends State<RoomPage>
               if (event.map!['uid'].toString() != sp.getString('user_id')) {
                 LogE('他人上麦');
                 doUpdateInfo(event.map,'上麦');
+              }else{
+                isMeUp = true;
+                mxIndex = event.map!['serial_number'].toString();
               }
               break;
             case 'down_mic': //下麦
@@ -1097,7 +1102,7 @@ class _RoomPageState extends State<RoomPage>
             for (int i = 0; i < 9; i++) {
               upOrDown[i] = false;
             }
-            doUpdateOtherInfo(event.map!['serial_number'],'下麦');
+            doUpdateOtherInfo(event.map!['serial_number'].toString(),'下麦');
           });
           if (mounted) {
             // 上下麦操作不是本地才刷新
@@ -1114,7 +1119,7 @@ class _RoomPageState extends State<RoomPage>
           }
         } else if (event.map!['type'] == 'user_un_close_mic') {
           //通知用户开麦
-          doUpdateOtherInfo(event.map!['serial_number'],'开麦');
+          doUpdateOtherInfo(event.map!['serial_number'].toString(),'开麦');
           // 上下麦操作不是本地才刷新
           if (event.map!['uid'].toString() != sp.getString('user_id')) {
           } else {
@@ -1130,7 +1135,7 @@ class _RoomPageState extends State<RoomPage>
           }
         } else if (event.map!['type'] == 'user_close_mic') {
           //通知用户闭麦
-          doUpdateOtherInfo(event.map!['serial_number'],'闭麦');
+          doUpdateOtherInfo(event.map!['serial_number'].toString(),'闭麦');
           if (event.map!['uid'].toString() != sp.getString('user_id')) {
           } else {
             setState(() {
@@ -1889,7 +1894,7 @@ class _RoomPageState extends State<RoomPage>
             listM[i].uid = 0;
             listM[i].isBoss = 0;
             listM[i].isLock = 0;
-            listM[i].isClose = 0;
+            listM[i].isClose = 1;
             listM[i].nickname = '';
             listM[i].avatar = '';
             listM[i].charm = 0;
@@ -1898,6 +1903,7 @@ class _RoomPageState extends State<RoomPage>
             listM[i].waveGifImg = '';
             listM[i].avatarFrameImg = '';
             listM[i].avatarFrameGifImg = '';
+            listM[i].isAudio = false;
             if (listM[i].serialNumber == 1) {
               m1 = false;
             } else if (listM[i].serialNumber == 2) {
@@ -1931,7 +1937,7 @@ class _RoomPageState extends State<RoomPage>
               listM[i].uid = 0;
               listM[i].isBoss = 0;
               listM[i].isLock = 0;
-              listM[i].isClose = 0;
+              listM[i].isClose = 1;
               listM[i].nickname = '';
               listM[i].avatar = '';
               listM[i].charm = 0;
@@ -1940,6 +1946,7 @@ class _RoomPageState extends State<RoomPage>
               listM[i].waveGifImg = '';
               listM[i].avatarFrameImg = '';
               listM[i].avatarFrameGifImg = '';
+              listM[i].isAudio = false;
               if (listM[i].serialNumber == 1) {
                 m1 = false;
               } else if (listM[i].serialNumber == 2) {
@@ -1992,8 +1999,6 @@ class _RoomPageState extends State<RoomPage>
             } else if (listM[i].serialNumber == 9) {
               m0 = true;
             }
-            isMeUp = true;
-            mxIndex = map!['serial_number'].toString();
           });
         }
       }
@@ -2029,7 +2034,7 @@ class _RoomPageState extends State<RoomPage>
             listM[i].uid = 0;
             listM[i].isBoss = 0;
             listM[i].isLock = 0;
-            listM[i].isClose = 0;
+            listM[i].isClose = 1;
             listM[i].nickname = '';
             listM[i].avatar = '';
             listM[i].charm = 0;
@@ -2038,6 +2043,7 @@ class _RoomPageState extends State<RoomPage>
             listM[i].waveGifImg = '';
             listM[i].avatarFrameImg = '';
             listM[i].avatarFrameGifImg = '';
+            listM[i].isAudio = false;
             if (listM[i].serialNumber == 1) {
               m1 = false;
             } else if (listM[i].serialNumber == 2) {
@@ -2446,7 +2452,7 @@ class _RoomPageState extends State<RoomPage>
       // 适用只听声音，不发声音流
       _engine.enableLocalAudio(false);
     }
-    _engine.setParameters('9');
+    _engine.setParameters("{\"che.audio.max_mixed_participants\":9}");
     _engine.enableAudioVolumeIndication(interval: 1000, smooth: 3, reportVad: true);
     _engine.registerEventHandler(
       RtcEngineEventHandler(
@@ -2454,6 +2460,7 @@ class _RoomPageState extends State<RoomPage>
             List<AudioVolumeInfo> speakers,
             int speakerNumber,
             int totalVolume) {
+          LogE("用户数量： ${speakers.length}");
           for(int i =0; i < speakers.length; i++){
             // LogE("用户音量： ${speakers[i].volume}");
             // LogE("用户id： ${speakers[i].uid}");

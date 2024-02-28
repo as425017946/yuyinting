@@ -15,7 +15,6 @@ import 'package:yuyinting/pages/room/room_jinyan_page.dart';
 import 'package:yuyinting/pages/room/room_name.dart';
 import 'package:yuyinting/pages/room/room_password_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
-import 'package:yuyinting/utils/log_util.dart';
 import '../../bean/Common_bean.dart';
 import '../../bean/managerBean.dart';
 import '../../colors/my_colors.dart';
