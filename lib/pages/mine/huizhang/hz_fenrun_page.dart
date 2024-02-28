@@ -236,7 +236,7 @@ class _HZFenRunPageState extends State<HZFenRunPage> {
         context: context,
         builder: (context) {
           return CustomDialog(
-            title: '修改比例将导致该厅主旗下主播分润\n均充值为50%，请提前告知厅主',
+            title: '修改比例将导致该厅主旗下主播分润\n均重置为50%，请提前告知厅主',
             height: 240.h,
             ziSize: 30,
             callback: (res) {

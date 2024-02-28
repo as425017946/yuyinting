@@ -531,9 +531,9 @@ class _HomePageState extends State<HomePage>
     String path = '';
     if (Platform.isAndroid) {
       if(type==1){
-        path = '/sdcard/Android/data/com.leimu.yuyinting/files/agorasdk.log';
+        path = '/sdcard/Android/data/com.vc.yuyinting/files/agorasdk.log';
       }else{
-        path = '/sdcard/Android/data/com.leimu.yuyinting/files/agoraapi.log';
+        path = '/sdcard/Android/data/com.vc.yuyinting/files/agoraapi.log';
       }
       file = File(path);
       if (file.existsSync()) {

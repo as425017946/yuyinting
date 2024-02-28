@@ -259,7 +259,7 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                         ),
                         WidgetUtils.commonSizedBox(30, 20),
                         WidgetUtils.onlyText(
-                            '公会房间(${listRoom.length})',
+                            '厅房间(${listRoom.length})',
                             StyleUtils.getCommonTextStyle(
                               color: MyColors.g2,
                               fontSize: ScreenUtil().setSp(29),

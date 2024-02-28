@@ -1483,8 +1483,9 @@ class RoomItems {
             MyUtils.goTransparentPage(
                 context,
                 RoomManagerPage(
-                  type: sp.getString('role').toString() == 'adminer' ||
-                      sp.getString('role').toString() == 'leader'
+                  type: (sp.getString('role').toString() == 'adminer' ||
+                      sp.getString('role').toString() == 'leader'||
+                      sp.getString('role').toString() == 'president')
                       ? 1
                       : 0,
                   roomID: roomID,

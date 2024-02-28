@@ -36,8 +36,8 @@ class _WalletPageState extends State<WalletPage> {
     super.initState();
     appBar = WidgetUtils.getAppBar('我的钱包', true, context, true, 2);
     eventBus.on<SubmitButtonBack>().listen((event) {
-      if(MyUtils.compare(event.title, '账单明细') == 0){
-          if(MyUtils.checkClick()){
+      if(event.title == '账单明细'){
+          if(mounted){
             MyUtils.goTransparentPageCom(context, const WalletMorePage());
           }
       }else if(event.title == '金币提现成功'){
@@ -120,7 +120,7 @@ class _WalletPageState extends State<WalletPage> {
                           child: Container(
                             width: ScreenUtil().setHeight(115),
                             height: ScreenUtil().setHeight(50),
-                            margin: EdgeInsets.only(right: 15,bottom: 15),
+                            margin: const EdgeInsets.only(right: 15,bottom: 15),
                             alignment: Alignment.center,
                             //边框设置
                             decoration: const BoxDecoration(

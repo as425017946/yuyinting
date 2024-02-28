@@ -760,7 +760,7 @@ class _ChatPageState extends State<ChatPage> {
                     child:   (allData2[i]['content']
                         .toString()
                         .contains(
-                        'com.leimu.yuyinting') ||
+                        'com.vc.yuyinting') ||
                         allData2[i]['content']
                             .toString()
                             .contains('storage'))

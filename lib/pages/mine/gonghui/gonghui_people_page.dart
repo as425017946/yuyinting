@@ -72,7 +72,7 @@ class _GonghuiPeoplePageState extends State<GonghuiPeoplePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    appBar = WidgetUtils.getAppBar('公会成员', true, context, false, 0);
+    appBar = WidgetUtils.getAppBar('主播列表', true, context, false, 0);
     doPostSearchGuildStreamer('');
     //设置完比例后返回显示
     listen = eventBus.on<BiLiBack>().listen((event) {
@@ -154,7 +154,7 @@ class _GonghuiPeoplePageState extends State<GonghuiPeoplePage> {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          WidgetUtils.onlyText('ID:${list[i].id.toString()}', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: 14)),
+                          WidgetUtils.onlyText('ID:${list[i].number.toString()}', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: 14)),
                         ],
                       ),
                       const Spacer(),

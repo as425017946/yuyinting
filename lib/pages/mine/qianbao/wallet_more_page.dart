@@ -48,7 +48,8 @@ class _WalletMorePageState extends State<WalletMorePage> {
                     onTap: ((){
                       setState(() {
                         _currentIndex = 0;
-                        _controller.animateToPage(0, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                        _controller.jumpToPage(0);
+                        // _controller.animateToPage(0, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                       });
                     }),
                     child: Container(
@@ -78,7 +79,8 @@ class _WalletMorePageState extends State<WalletMorePage> {
                     onTap: ((){
                       setState(() {
                         _currentIndex = 1;
-                        _controller.animateToPage(1, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                        _controller.jumpToPage(1);
+                        // _controller.animateToPage(1, duration: const Duration(milliseconds: 500), curve: Curves.ease);
                       });
                     }),
                     child: Container(
