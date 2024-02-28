@@ -2121,7 +2121,7 @@ class _RoomPageState extends State<RoomPage>
     Directory? directory = await getExternalStorageDirectory();
     LogE('获取保存路径 $directory');
     String savePath =
-        "/sdcard/Android/data/com.vc.yuyinting/files/${lujing[lujing.length - 1]}";
+        "/sdcard/Android/data/com.leimu.yuyinting/files/${lujing[lujing.length - 1]}";
     LogE('礼物地址 $savePath');
     if (listUrl.isEmpty) {
       setState(() {

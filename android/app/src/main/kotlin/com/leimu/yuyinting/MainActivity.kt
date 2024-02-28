@@ -1,4 +1,4 @@
-package com.vc.yuyinting
+package com.leimu.yuyinting
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -611,7 +611,7 @@ class WidgetUtils {
       ),
       child: imgUrl.isNotEmpty
           ? ClipOval(
-              child: imgUrl.contains('com.vc.yuyinting') ||
+              child: imgUrl.contains('com.leimu.yuyinting') ||
                       imgUrl.contains('storage')
                   ? Image.file(
                       File(imgUrl),
@@ -724,7 +724,7 @@ class WidgetUtils {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(radius),
       ),
-      child: url.contains('com.vc.yuyinting') || url.contains('storage')
+      child: url.contains('com.leimu.yuyinting') || url.contains('storage')
           ? Image.file(
               File(url),
               fit: BoxFit.cover,
@@ -771,7 +771,7 @@ class WidgetUtils {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(radius),
       ),
-      child: (url.contains('com.vc.yuyinting') || url.contains('storage'))
+      child: (url.contains('com.leimu.yuyinting') || url.contains('storage'))
           ? Image.file(
               File(url),
               fit: BoxFit.fill,
@@ -800,7 +800,7 @@ class WidgetUtils {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(radius),
       ),
-      child: (url.contains('com.vc.yuyinting') || url.contains('storage'))
+      child: (url.contains('com.leimu.yuyinting') || url.contains('storage'))
           ? Image.file(
               File(url),
               fit: BoxFit.cover,
@@ -892,7 +892,7 @@ class WidgetUtils {
 
   ///展示图片使用
   static Widget showImages(String url, double height, double width) {
-    return url.contains('com.vc.yuyinting') || url.contains('storage')
+    return url.contains('com.leimu.yuyinting') || url.contains('storage')
         ? Image.file(
             File(url),
             fit: BoxFit.fill,
