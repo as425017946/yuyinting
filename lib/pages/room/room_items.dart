@@ -1682,7 +1682,8 @@ class RoomItems {
   /// 公告厅主
   static Widget notices(BuildContext context, bool m0, String notice,
       List<MikeList> listm, String roomID, int wherePeople,
-      List<bool> listPeople) {
+      List<bool> listPeople, bool audio9) {
+    LogE('主持位 == $audio9');
     return Row(
       children: [
         WidgetUtils.commonSizedBox(0, 20),
@@ -1820,7 +1821,7 @@ class RoomItems {
                       ScreenUtil().setHeight(110),
                       listm[0].avatarFrameImg!) : const Text(''),
                   // 头像框动态图
-                  (listm[8].isClose == 0 && listm[8].isAudio! == true)
+                  (listm[8].isClose == 0 && audio9 == true)
                       ? SizedBox(
                     height: 140.h,
                     width: 140.h,
@@ -1926,9 +1927,15 @@ class RoomItems {
       List<MikeList> listm,
       String roomID,
       int wherePeople,
-      List<bool> listPeople) {
-    // LogE('麦序 ${listm[2].isAudio! == true}');
-    // LogE('麦序 ${listm[2].isClose! == 0}');
+      List<bool> listPeople,
+      bool audio1,
+      bool audio2,
+      bool audio3,
+      bool audio4,
+      bool audio5,
+      bool audio6,
+      bool audio7,
+      bool audio8,) {
     return Transform.translate(
       offset: const Offset(0, -40),
       child: Column(
@@ -2005,7 +2012,7 @@ class RoomItems {
                           ScreenUtil().setHeight(110),
                           listm[0].avatarFrameImg!) : const Text(''),
                       // 头像框动态图
-                      (listm[0].isClose == 0 && listm[0].isAudio! == true)
+                      (listm[0].isClose == 0 && audio1 == true)
                           ? SizedBox(
                         height: 140.h,
                         width: 140.h,
@@ -2163,7 +2170,7 @@ class RoomItems {
                           ScreenUtil().setHeight(110),
                           listm[1].avatarFrameImg!) : const Text(''),
                       // 头像框动态图
-                      (listm[1].isClose == 0 && listm[1].isAudio! == true)
+                      (listm[1].isClose == 0 && audio2 == true)
                           ? SizedBox(
                         height: 140.h,
                         width: 140.h,
@@ -2321,7 +2328,7 @@ class RoomItems {
                           ScreenUtil().setHeight(110),
                           listm[2].avatarFrameImg!) : const Text(''),
                       // 头像框动态图
-                      (listm[2].isClose == 0 && listm[2].isAudio! == true)
+                      (listm[2].isClose == 0 && audio3 == true)
                           ? SizedBox(
                         height: 140.h,
                         width: 140.h,
@@ -2479,7 +2486,7 @@ class RoomItems {
                           ScreenUtil().setHeight(110),
                           listm[3].avatarFrameImg!) : const Text(''),
                       // 头像框动态图
-                      (listm[3].isClose == 0 && listm[3].isAudio! == true)
+                      (listm[3].isClose == 0 && audio4 == true)
                           ? SizedBox(
                         height: 140.h,
                         width: 140.h,
@@ -2646,7 +2653,7 @@ class RoomItems {
                             ScreenUtil().setHeight(110),
                             listm[4].avatarFrameImg!) : const Text(''),
                         // 头像框动态图
-                        (listm[4].isClose == 0 && listm[4].isAudio! == true)
+                        (listm[4].isClose == 0 && audio5 == true)
                             ? SizedBox(
                           height: 140.h,
                           width: 140.h,
@@ -2806,7 +2813,7 @@ class RoomItems {
                             ScreenUtil().setHeight(110),
                             listm[5].avatarFrameImg!) : const Text(''),
                         // 头像框动态图
-                        (listm[5].isClose == 0 && listm[5].isAudio! == true)
+                        (listm[5].isClose == 0 && audio6 == true)
                             ? SizedBox(
                           height: 140.h,
                           width: 140.h,
@@ -2966,7 +2973,7 @@ class RoomItems {
                             ScreenUtil().setHeight(110),
                             listm[6].avatarFrameImg!) : const Text(''),
                         // 头像框动态图
-                        (listm[6].isClose == 0 && listm[6].isAudio! == true)
+                        (listm[6].isClose == 0 && audio7 == true)
                             ? SizedBox(
                           height: 140.h,
                           width: 140.h,
@@ -3131,7 +3138,7 @@ class RoomItems {
                             ScreenUtil().setHeight(110),
                             listm[7].avatarFrameImg!) : const Text(''),
                         // 头像框动态图
-                        (listm[7].isClose == 0 && listm[7].isAudio! == true)
+                        (listm[7].isClose == 0 && audio8 == true)
                             ? SizedBox(
                           height: 140.h,
                           width: 140.h,
@@ -3327,7 +3334,7 @@ class RoomItems {
                             ScreenUtil().setHeight(110),
                             listm[7].avatarFrameImg!) : const Text(''),
                         // 头像框动态图
-                        (listm[7].isClose == 0 && listm[7].isAudio! == true)
+                        (listm[7].isClose == 0 && audio8 == true)
                             ? SizedBox(
                           height: 140.h,
                           width: 140.h,

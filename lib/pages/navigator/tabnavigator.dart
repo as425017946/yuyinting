@@ -21,7 +21,6 @@ import '../../bean/joinRoomBean.dart';
 import '../../bean/qiehuanBean.dart';
 import '../../bean/svgaAllBean.dart';
 import '../../colors/my_colors.dart';
-import '../../config/my_config.dart';
 import '../../db/DatabaseHelper.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';

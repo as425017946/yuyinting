@@ -34,6 +34,7 @@ class _StarPageState extends State<StarPage> {
       sp.setString('isDian', '');
       sp.setString('userIP', '');
       sp.setInt('tjFirst', 0);
+      sp.setString('isShouQi', '0');
     });
     if (Platform.isAndroid) {
       setState(() {

@@ -178,6 +178,17 @@ class _RoomPageState extends State<RoomPage>
       m6 = false,
       m7 = false,
       m8 = false;
+
+  //9个麦序是否正在开麦
+  bool audio1 = false,
+      audio2 = false,
+      audio3 = false,
+      audio4 = false,
+      audio5 = false,
+      audio6 = false,
+      audio7 = false,
+      audio8 = false,
+      audio9 = false;
   List<bool> upOrDown = [];
   List<bool> isMy = [];
 
@@ -420,9 +431,11 @@ class _RoomPageState extends State<RoomPage>
       slideAnimationController.playAnimation();
     });
     //页面渲染完成
+    //页面渲染完成
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      // 进入房间后清空代理房间id
+// 进入房间后清空代理房间id
       sp.setString('daili_roomid', '');
+      sp.setString('isShouQi', '0');
       LogE('用户id ${sp.getString('user_id').toString()}');
       LogE('用户token ${sp.getString('user_token').toString()}');
       //初始化声网的音频插件
@@ -729,7 +742,7 @@ class _RoomPageState extends State<RoomPage>
             Navigator.pop(context);
             break;
           case '顶号':
-          // 调用离开房间接口
+            // 调用离开房间接口
             doPostLeave();
             if (_timerHot != null) {
               _timerHot!.cancel();
@@ -864,7 +877,7 @@ class _RoomPageState extends State<RoomPage>
         if (event.map!['room_id'].toString() == widget.roomId) {
           switch (event.type) {
             case 'un_close_mic': //开麦
-              doUpdateInfo(event.map,'开麦');
+              doUpdateInfo(event.map, '开麦');
               // 上下麦操作不是本地才刷新
               if (event.map!['uid'].toString() != sp.getString('user_id')) {
               } else {
@@ -886,7 +899,7 @@ class _RoomPageState extends State<RoomPage>
               break;
             case 'close_mic': //闭麦
               // 上下麦操作不是本地才刷新
-              doUpdateInfo(event.map,'闭麦');
+              doUpdateInfo(event.map, '闭麦');
               if (event.map!['uid'].toString() != sp.getString('user_id')) {
               } else {
                 setState(() {
@@ -909,8 +922,8 @@ class _RoomPageState extends State<RoomPage>
               // 上下麦操作不是本地才刷新
               if (event.map!['uid'].toString() != sp.getString('user_id')) {
                 LogE('他人上麦');
-                doUpdateInfo(event.map,'上麦');
-              }else{
+                doUpdateInfo(event.map, '上麦');
+              } else {
                 isMeUp = true;
                 mxIndex = event.map!['serial_number'].toString();
               }
@@ -923,7 +936,7 @@ class _RoomPageState extends State<RoomPage>
                 for (int i = 0; i < 9; i++) {
                   upOrDown[i] = false;
                 }
-                doUpdateInfo(event.map,'下麦');
+                doUpdateInfo(event.map, '下麦');
               });
               if (mounted) {
                 // 上下麦操作不是本地才刷新
@@ -1010,8 +1023,9 @@ class _RoomPageState extends State<RoomPage>
                 // Navigator.pop(context);
               } else {
                 // 别人被拉黑了，刷新一下麦上的人员信息
-                if(event.map!['old_serial_number'].toString() != '0'){
-                  doUpdateOtherInfo(event.map!['old_serial_number'].toString(),'拉黑');
+                if (event.map!['old_serial_number'].toString() != '0') {
+                  doUpdateOtherInfo(
+                      event.map!['old_serial_number'].toString(), '拉黑');
                 }
               }
               break;
@@ -1102,7 +1116,7 @@ class _RoomPageState extends State<RoomPage>
             for (int i = 0; i < 9; i++) {
               upOrDown[i] = false;
             }
-            doUpdateOtherInfo(event.map!['serial_number'].toString(),'下麦');
+            doUpdateOtherInfo(event.map!['serial_number'].toString(), '下麦');
           });
           if (mounted) {
             // 上下麦操作不是本地才刷新
@@ -1119,7 +1133,7 @@ class _RoomPageState extends State<RoomPage>
           }
         } else if (event.map!['type'] == 'user_un_close_mic') {
           //通知用户开麦
-          doUpdateOtherInfo(event.map!['serial_number'].toString(),'开麦');
+          doUpdateOtherInfo(event.map!['serial_number'].toString(), '开麦');
           // 上下麦操作不是本地才刷新
           if (event.map!['uid'].toString() != sp.getString('user_id')) {
           } else {
@@ -1135,7 +1149,7 @@ class _RoomPageState extends State<RoomPage>
           }
         } else if (event.map!['type'] == 'user_close_mic') {
           //通知用户闭麦
-          doUpdateOtherInfo(event.map!['serial_number'].toString(),'闭麦');
+          doUpdateOtherInfo(event.map!['serial_number'].toString(), '闭麦');
           if (event.map!['uid'].toString() != sp.getString('user_id')) {
           } else {
             setState(() {
@@ -1884,12 +1898,13 @@ class _RoomPageState extends State<RoomPage>
   }
 
   //上下麦刷新更新本地状态使用
-  void doUpdateInfo(Map<String, String>? map,String status){
-    if(status == '下麦'){
+  void doUpdateInfo(Map<String, String>? map, String status) {
+    if (status == '下麦') {
       for (int i = 0; i < listM.length; i++) {
         setState(() {
           //换麦了
-          if(map!['serial_number'].toString() == listM[i].serialNumber.toString()){
+          if (map!['serial_number'].toString() ==
+              listM[i].serialNumber.toString()) {
             LogE('刷新了***$i');
             listM[i].uid = 0;
             listM[i].isBoss = 0;
@@ -1926,13 +1941,14 @@ class _RoomPageState extends State<RoomPage>
           }
         });
       }
-    }else if(status == '上麦'){
+    } else if (status == '上麦') {
       for (int i = 0; i < listM.length; i++) {
         // 原来没有麦序位置
-        if(map!['old_serial_number'].toString() != '0'){
+        if (map!['old_serial_number'].toString() != '0') {
           setState(() {
             //换麦了
-            if(map!['old_serial_number'].toString() == listM[i].serialNumber.toString()){
+            if (map!['old_serial_number'].toString() ==
+                listM[i].serialNumber.toString()) {
               LogE('刷新了***$i');
               listM[i].uid = 0;
               listM[i].isBoss = 0;
@@ -1969,7 +1985,8 @@ class _RoomPageState extends State<RoomPage>
             }
           });
         }
-        if(listM[i].serialNumber.toString() == map!['serial_number'].toString()) {
+        if (listM[i].serialNumber.toString() ==
+            map!['serial_number'].toString()) {
           setState(() {
             listM[i].uid = int.parse(map!['uid'].toString());
             listM[i].roomId = int.parse(map!['room_id'].toString());
@@ -2002,34 +2019,35 @@ class _RoomPageState extends State<RoomPage>
           });
         }
       }
-    }else if(status == '开麦'){
+    } else if (status == '开麦') {
       for (int i = 0; i < listM.length; i++) {
         setState(() {
-          if(map!['serial_number'].toString() == listM[i].serialNumber.toString()){
+          if (map!['serial_number'].toString() ==
+              listM[i].serialNumber.toString()) {
             LogE('开麦=== $i');
             listM[i].isClose = 0;
           }
         });
       }
-    }else if(status == '闭麦'){
+    } else if (status == '闭麦') {
       for (int i = 0; i < listM.length; i++) {
         setState(() {
-          if(map!['serial_number'].toString() == listM[i].serialNumber.toString()){
+          if (map!['serial_number'].toString() ==
+              listM[i].serialNumber.toString()) {
             listM[i].isClose = 1;
           }
         });
       }
     }
-
   }
 
   //给别人开麦和下麦
-  void doUpdateOtherInfo(String serialNumber,String status){
-    if(status == '下麦' || status == '拉黑'){
+  void doUpdateOtherInfo(String serialNumber, String status) {
+    if (status == '下麦' || status == '拉黑') {
       for (int i = 0; i < listM.length; i++) {
         setState(() {
           //换麦了
-          if(serialNumber == listM[i].serialNumber.toString()){
+          if (serialNumber == listM[i].serialNumber.toString()) {
             LogE('刷新了***$i');
             listM[i].uid = 0;
             listM[i].isBoss = 0;
@@ -2066,19 +2084,19 @@ class _RoomPageState extends State<RoomPage>
           }
         });
       }
-    }else if(status == '开麦'){
+    } else if (status == '开麦') {
       for (int i = 0; i < listM.length; i++) {
         setState(() {
-          if(serialNumber == listM[i].serialNumber.toString()){
+          if (serialNumber == listM[i].serialNumber.toString()) {
             LogE('开麦=== $i');
             listM[i].isClose = 0;
           }
         });
       }
-    }else if(status == '闭麦'){
+    } else if (status == '闭麦') {
       for (int i = 0; i < listM.length; i++) {
         setState(() {
-          if(serialNumber == listM[i].serialNumber.toString()){
+          if (serialNumber == listM[i].serialNumber.toString()) {
             listM[i].isClose = 1;
           }
         });
@@ -2366,6 +2384,8 @@ class _RoomPageState extends State<RoomPage>
   void dispose() {
     //3. 页面销毁时，移出监听者
     WidgetsBinding.instance?.removeObserver(this);
+    // 在页面销毁时，取消事件监听
+    _engine.unregisterEventHandler(_eventHandler);
     listen.cancel();
     listenRoomback.cancel();
     listenCheckBG.cancel();
@@ -2390,6 +2410,7 @@ class _RoomPageState extends State<RoomPage>
   }
 
   Future<void> _dispose() async {
+    LogE('====退出监听');
     await _engine.leaveChannel(); // 离开频道
     await _engine.release(); // 释放资源
   }
@@ -2399,8 +2420,11 @@ class _RoomPageState extends State<RoomPage>
     await _engine.leaveChannel(); // 离开频道
   }
 
+  late RtcEngineEventHandler _eventHandler;
+
   // 初始化应用
   Future<void> initAgora() async {
+    // _dispose();
     // 获取权限
     await [Permission.microphone].request();
 
@@ -2416,16 +2440,6 @@ class _RoomPageState extends State<RoomPage>
     _engine.enableAudio();
     LogE('频道token ${widget.roomToken}');
     LogE('频道channelId ${widget.roomId}');
-    // 加入频道，设置用户角色为主播
-    await _engine.joinChannel(
-      token: widget.roomToken,
-      channelId: widget.roomId,
-      options: const ChannelMediaOptions(
-          // 设置用户角色为主播
-          // 如果要将用户角色设置为观众，则修改 clientRoleBroadcaster 为 clientRoleAudience
-          clientRoleType: ClientRoleType.clientRoleBroadcaster),
-      uid: int.parse(sp.getString('user_id').toString()),
-    );
     // // 通过此方法设置为观众
     // _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
     // 设置音质
@@ -2453,128 +2467,204 @@ class _RoomPageState extends State<RoomPage>
       _engine.enableLocalAudio(false);
     }
     _engine.setParameters("{\"che.audio.max_mixed_participants\":9}");
-    _engine.enableAudioVolumeIndication(interval: 1000, smooth: 3, reportVad: true);
-    _engine.registerEventHandler(
-      RtcEngineEventHandler(
-        onAudioVolumeIndication: (RtcConnection connection,
-            List<AudioVolumeInfo> speakers,
-            int speakerNumber,
-            int totalVolume) {
-          LogE("用户数量： ${speakers.length}");
-          for(int i =0; i < speakers.length; i++){
-            // LogE("用户音量： ${speakers[i].volume}");
+    _engine.enableAudioVolumeIndication(
+        interval: 1000, smooth: 3, reportVad: true);
+    _eventHandler = RtcEngineEventHandler(
+      onAudioVolumeIndication: (RtcConnection connection,
+          List<AudioVolumeInfo> speakers, int speakerNumber, int totalVolume) {
+        LogE("用户数量： ${speakers.length}");
+        if (sp.getString('isShouQi').toString() == '0') {
+          for (int i = 0; i < speakers.length; i++) {
+            LogE("用户音量： ${speakers[i].volume}");
             // LogE("用户id： ${speakers[i].uid}");
             /// 只采集声音大于75的用户
-            if(speakers[i].volume! > 10){
+            if (speakers[i].volume! > 10) {
               //是本人
-              if(speakers[i].uid == 0){
-                for(int a =0; a < listM.length; a++){
-                  if(sp.getString('user_id').toString() == listM[a].uid.toString()){
-                    setState(() {
-                      listM[a].isAudio = true;
-                    });
-                    break;
+              if (speakers[i].uid == 0) {
+                for (int a = 0; a < listM.length; a++) {
+                  if (sp.getString('user_id').toString() ==
+                      listM[a].uid.toString()) {
+                    if (mounted) {
+                      upAudioStatus(listM[a].serialNumber.toString(), true);
+                    }
                   }
                 }
-              }else{
+              } else {
                 //不是本人
-                for(int a =0; a < listM.length; a++){
+                for (int a = 0; a < listM.length; a++) {
                   // 发音用户不是本人
-                  if(speakers[i].uid == listM[a].uid){
+                  if (speakers[i].uid == listM[a].uid) {
                     // 并且发声了
-                    setState(() {
-                      listM[a].isAudio = true;
-                    });
+                    if (mounted) {
+                      setState(() {
+                        upAudioStatus(listM[a].serialNumber.toString(), true);
+                      });
+                    }
                   }
                 }
               }
-            }else{
+            } else {
               /// 声音小于75 不显示光波
               //是本人
-              if(speakers[i].uid == 0){
-                for(int a =0; a < listM.length; a++){
-                  if(sp.getString('user_id').toString() == listM[a].uid.toString()){
-                    setState(() {
-                      listM[a].isAudio = false;
-                    });
-                    break;
+              if (speakers[i].uid == 0) {
+                for (int a = 0; a < listM.length; a++) {
+                  if (sp.getString('user_id').toString() ==
+                      listM[a].uid.toString()) {
+                    if (mounted) {
+                      setState(() {
+                        upAudioStatus(listM[a].serialNumber.toString(), false);
+                      });
+                    }
                   }
                 }
-              }else{
+              } else {
                 //不是本人
-                for(int a =0; a < listM.length; a++){
+                for (int a = 0; a < listM.length; a++) {
                   // 发音用户不是本人
-                  if(speakers[i].uid == listM[a].uid){
+                  if (speakers[i].uid == listM[a].uid) {
                     // 并且发声了
-                    setState(() {
-                      listM[a].isAudio = false;
-                    });
+                    if (mounted) {
+                      setState(() {
+                        upAudioStatus(listM[a].serialNumber.toString(), false);
+                      });
+                    }
                   }
                 }
               }
             }
           }
-        },
-        //本地音频统计数据。
-        onLocalAudioStats: (RtcConnection connection, LocalAudioStats stats) {},
-        //本地音频状态发生改变回调。
-        onLocalAudioStateChanged: (RtcConnection connection,
-            LocalAudioStreamState state, LocalAudioStreamError error) {},
-        onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
-          LogE("用户加入频道： ${connection.localUid} joined");
-          LogE("用户加入频道： ${connection.channelId} 频道id");
-          // 本地用户加入
+        }
+      },
+      //本地音频统计数据。
+      onLocalAudioStats: (RtcConnection connection, LocalAudioStats stats) {},
+      //本地音频状态发生改变回调。
+      onLocalAudioStateChanged: (RtcConnection connection,
+          LocalAudioStreamState state, LocalAudioStreamError error) {},
+      onJoinChannelSuccess: (RtcConnection connection, int elapsed) {
+        LogE("用户加入频道： ${connection.localUid} joined");
+        LogE("用户加入频道： ${connection.channelId} 频道id");
+        // 本地用户加入
+        if (mounted) {
           setState(() {
             _localUserJoined = true;
           });
-        },
-        onError: (ErrorCodeType err, String msg) {
-          LogE("用户加入频道错误信息： $err ");
-          LogE("用户加入频道错误信息：2 $msg ");
-        },
-        onConnectionStateChanged: (RtcConnection connection,
-            ConnectionStateType state, ConnectionChangedReasonType reason) {
-          LogE("用户已经加入频道： ${connection.channelId} 频道id");
-          LogE("用户已经加入频道： 状态 $state");
-          LogE("用户已经加入频道： 状态 $reason");
-          //如果加入频道失败等多项原因导致没声音，先移除频道，然后在重新走一遍加入频道流程
-          if (reason ==
-                  ConnectionChangedReasonType.connectionChangedJoinFailed ||
-              reason ==
-                  ConnectionChangedReasonType.connectionChangedSameUidLogin ||
-              reason ==
-                  ConnectionChangedReasonType
-                      .connectionChangedClientIpAddressChangedByUser ||
-              reason == ConnectionChangedReasonType.connectionChangedEchoTest ||
-              reason == ConnectionChangedReasonType.connectionChangedLost ||
-              reason ==
-                  ConnectionChangedReasonType
-                      .connectionChangedSettingProxyServer) {
-            _levave();
-            initAgora();
-          }
-        },
-        onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
-          LogE("用户加入频道2 remote user $remoteUid joined");
-          // 远程用户加入
+        }
+      },
+      onError: (ErrorCodeType err, String msg) {
+        LogE("用户加入频道错误信息： $err ");
+        LogE("用户加入频道错误信息：2 $msg ");
+      },
+      onConnectionStateChanged: (RtcConnection connection,
+          ConnectionStateType state, ConnectionChangedReasonType reason) {
+        LogE("用户已经加入频道： ${connection.channelId} 频道id");
+        LogE("用户已经加入频道： 状态 $state");
+        LogE("用户已经加入频道： 状态 $reason");
+        //如果加入频道失败等多项原因导致没声音，先移除频道，然后在重新走一遍加入频道流程
+        if (reason == ConnectionChangedReasonType.connectionChangedJoinFailed ||
+            reason ==
+                ConnectionChangedReasonType.connectionChangedSameUidLogin ||
+            reason ==
+                ConnectionChangedReasonType
+                    .connectionChangedClientIpAddressChangedByUser ||
+            reason == ConnectionChangedReasonType.connectionChangedEchoTest ||
+            reason == ConnectionChangedReasonType.connectionChangedLost ||
+            reason ==
+                ConnectionChangedReasonType
+                    .connectionChangedSettingProxyServer) {
+          _levave();
+          initAgora();
+        }
+      },
+      onUserJoined: (RtcConnection connection, int remoteUid, int elapsed) {
+        LogE("用户加入频道2 remote user $remoteUid joined");
+        // 远程用户加入
+        if (mounted) {
           setState(() {
             _remoteUid = remoteUid;
           });
-        },
-        onUserOffline: (RtcConnection connection, int remoteUid,
-            UserOfflineReasonType reason) {
-          LogE("用户加入频道3 remote user $remoteUid left channel");
-          // 用户离开房间
+        }
+      },
+      onUserOffline: (RtcConnection connection, int remoteUid,
+          UserOfflineReasonType reason) {
+        LogE("用户加入频道3 remote user $remoteUid left channel");
+        // 用户离开房间
+        if (mounted) {
           setState(() {
             _remoteUid = null;
           });
-        },
-        onLeaveChannel: (RtcConnection connection, RtcStats stats) {
-          //离开频道回调。
-          LogE("用户离开 ${connection.channelId} remote user $stats left channel");
-        },
-      ),
+        }
+      },
+      onLeaveChannel: (RtcConnection connection, RtcStats stats) {
+        //离开频道回调。
+        LogE("用户离开 ${connection.channelId} remote user $stats left channel");
+      },
     );
+    LogE('声网状态 ${_eventHandler != null}');
+    _engine.registerEventHandler(_eventHandler);
+    LogE('声网状态 ${_eventHandler != null}');
+    // 加入频道，设置用户角色为主播
+    await _engine.joinChannel(
+      token: widget.roomToken,
+      channelId: widget.roomId,
+      options: const ChannelMediaOptions(
+          // 设置用户角色为主播
+          // 如果要将用户角色设置为观众，则修改 clientRoleBroadcaster 为 clientRoleAudience
+          clientRoleType: ClientRoleType.clientRoleBroadcaster),
+      uid: int.parse(sp.getString('user_id').toString()),
+    );
+  }
+
+  ///更新9个麦序的开麦状态
+  void upAudioStatus(String ss, bool status) {
+    LogE('更新麦序  == $ss////$status');
+    switch (ss) {
+      case "1":
+        setState(() {
+          audio1 = status;
+        });
+        break;
+      case "2":
+        setState(() {
+          audio2 = status;
+        });
+        break;
+      case "3":
+        setState(() {
+          audio3 = status;
+        });
+        break;
+      case "4":
+        setState(() {
+          audio4 = status;
+        });
+        break;
+      case "5":
+        setState(() {
+          audio5 = status;
+        });
+        break;
+      case "6":
+        setState(() {
+          audio6 = status;
+        });
+        break;
+      case "7":
+        setState(() {
+          audio7 = status;
+        });
+        break;
+      case "8":
+        setState(() {
+          audio8 = status;
+        });
+        break;
+      case "9":
+        LogE('更新麦序*******$status');
+        setState(() {
+          audio9 = status;
+        });
+        break;
+    }
   }
 
   /// 开启声卡
@@ -2679,7 +2769,7 @@ class _RoomPageState extends State<RoomPage>
 
                           /// 公告 和 厅主
                           RoomItems.notices(context, m0, notice, listM,
-                              widget.roomId, wherePeople, listPeople),
+                              widget.roomId, wherePeople, listPeople, audio9),
 
                           /// 麦序位
                           RoomItems.maixu(
@@ -2696,7 +2786,15 @@ class _RoomPageState extends State<RoomPage>
                               listM,
                               widget.roomId,
                               wherePeople,
-                              listPeople),
+                              listPeople,
+                              audio1,
+                              audio2,
+                              audio3,
+                              audio4,
+                              audio5,
+                              audio6,
+                              audio7,
+                              audio8),
                           Expanded(
                             child: Transform.translate(
                               offset: Offset(0, -80.h),
@@ -2926,6 +3024,7 @@ class _RoomPageState extends State<RoomPage>
                                                 if (_timerHot != null) {
                                                   _timerHot!.cancel();
                                                 }
+                                                sp.setString('isShouQi', '0');
                                                 //离开频道并释放资源
                                                 _dispose();
                                                 eventBus.fire(SubmitButtonBack(
@@ -2959,6 +3058,7 @@ class _RoomPageState extends State<RoomPage>
                                                 if (_timerHot != null) {
                                                   _timerHot!.cancel();
                                                 }
+                                                sp.setString('isShouQi', '1');
                                                 eventBus.fire(SubmitButtonBack(
                                                     title: '收起房间'));
                                                 Navigator.pop(context);
@@ -3019,8 +3119,8 @@ class _RoomPageState extends State<RoomPage>
             if (_timerHot != null) {
               _timerHot!.cancel();
             }
-            eventBus.fire(SubmitButtonBack(
-                title: '收起房间'));
+            sp.setString('isShouQi', '1');
+            eventBus.fire(SubmitButtonBack(title: '收起房间'));
             Navigator.pop(context);
           }
           return true;
@@ -3040,6 +3140,7 @@ class _RoomPageState extends State<RoomPage>
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
+            listM.clear();
             isOK = true;
             sp.setString('roomName', bean.data!.roomInfo!.roomName!);
             sp.setString(
@@ -3101,6 +3202,8 @@ class _RoomPageState extends State<RoomPage>
                       role: ClientRoleType.clientRoleBroadcaster);
                   // 发布本地音频流
                   _engine.muteLocalAudioStream(false);
+                  // 发声音流
+                  _engine.enableLocalAudio(true);
                 }
                 break;
               }
@@ -3356,7 +3459,6 @@ class _RoomPageState extends State<RoomPage>
               // 取消发布本地音频流
               _engine.muteLocalAudioStream(true);
               // 静音
-
             }
           });
           break;
@@ -3718,8 +3820,9 @@ class _RoomPageState extends State<RoomPage>
           });
         }
       }
-      String zzMoney = (double.parse(cb.amount!)*0.8).toStringAsFixed(2);
-      String content = '我向你赠送了全部背包礼物：\n$infos\n总额为：${cb.amount!}*0.8=${zzMoney}V豆';
+      String zzMoney = (double.parse(cb.amount!) * 0.8).toStringAsFixed(2);
+      String content =
+          '我向你赠送了全部背包礼物：\n$infos\n总额为：${cb.amount!}*0.8=${zzMoney}V豆';
       //请求发消息的接口
       doPostSendUserMsg(content, cb);
     }

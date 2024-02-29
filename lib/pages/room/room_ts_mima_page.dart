@@ -179,7 +179,7 @@ class _RoomTSMiMaPageState extends State<RoomTSMiMaPage> {
         sp.setBool('joinRoom',false);
       });
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -223,7 +223,7 @@ class _RoomTSMiMaPageState extends State<RoomTSMiMaPage> {
         sp.setBool('joinRoom',false);
       });
       Loading.dismiss();
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }
