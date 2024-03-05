@@ -280,7 +280,9 @@ class _ZaixianPageState extends State<ZaixianPage>
               list.clear();
             }
             if (bean.data!.isNotEmpty) {
-              list = bean.data!;
+              for (int i = 0; i < bean.data!.length; i++) {
+                list.add(bean.data![i]);
+              }
             } else {
               if (page > 1) {
                 if (bean.data!.length < MyConfig.pageSize) {

@@ -14,6 +14,18 @@ class HomeItems {
     String info = '';
     double gd = 0, topHD = 0;
     switch (name) {
+      case '抽奖超级转盘':
+        gd = 120.h;
+        topHD = 130.h;
+        info =
+        '${hf.fromNickname}在${hf.roomName}获得价值${hf.giftInfo![0].giftPrice}${hf.giftInfo![0].giftName} x${hf.giftInfo![0].giftNumber}';
+        break;
+      case '抽奖心动转盘':
+        gd = 120.h;
+        topHD = 130.h;
+        info =
+        '${hf.fromNickname}在${hf.roomName}获得价值${hf.giftInfo![0].giftPrice}${hf.giftInfo![0].giftName} x${hf.giftInfo![0].giftNumber}';
+        break;
       case '超级转盘':
         gd = 120.h;
         topHD = 130.h;
@@ -71,6 +83,18 @@ class HomeItems {
         topHD = 130.h;
         info =
             '${hf.fromNickname}在${hf.roomName}向${hf.toNickname}送出价值${hf.giftInfo![0].giftPrice}${hf.giftInfo![0].giftName} x${hf.giftInfo![0].giftNumber}';
+        break;
+      case '抽奖蓝魔方':
+        gd = 130.h;
+        topHD = 130.h;
+        info =
+        '${hf.fromNickname}在${hf.roomName}获得价值${hf.giftInfo![0].giftPrice}${hf.giftInfo![0].giftName} x${hf.giftInfo![0].giftNumber}';
+        break;
+      case '抽奖金魔方':
+        gd = 130.h;
+        topHD = 130.h;
+        info =
+        '${hf.fromNickname}在${hf.roomName}获得价值${hf.giftInfo![0].giftPrice}${hf.giftInfo![0].giftName} x${hf.giftInfo![0].giftNumber}';
         break;
       case '1q直刷':
         gd = 20.h;
@@ -182,16 +206,16 @@ class HomeItems {
     );
   }
 
-  /// 爆出5w2的礼物
+  /// 爆出礼物
   static Widget itemBig(hengFuBean hf,int type) {
     // type 0爆出 1送出
     String info = '';
     if(type == 0) {
       info =
-          '${hf.fromNickname!}在${hf.roomName!}的超级转盘玩法中赢得价值388800的瑞麟*1';
+          '${hf.fromNickname!}在${hf.roomName!}的超级转盘玩法中赢得价值${hf.giftInfo![0].giftPrice}的瑞麟*${hf.giftInfo![0].giftNumber}';
     }else{
       info =
-      '神豪降临${hf.fromNickname!}在${hf.roomName!}送给了${hf.toNickname!}价值388800的瑞麟*1 快来围观吧！';
+      '神豪降临${hf.fromNickname!}在${hf.roomName!}送给了${hf.toNickname!}价值${hf.giftInfo![0].giftPrice}的瑞麟*${hf.giftInfo![0].giftNumber} 快来围观吧！';
     }
     return IgnorePointer(
         ignoring: true,

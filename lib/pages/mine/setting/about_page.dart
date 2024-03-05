@@ -50,7 +50,7 @@ class _AboutPageState extends State<AboutPage> {
             Row(
               children: [
                 const Expanded(child: Text('')),
-                WidgetUtils.showImagesFill( 'assets/images/people_bg.jpg', ScreenUtil().setHeight(150), ScreenUtil().setHeight(150), ),
+                WidgetUtils.showImagesFill( 'assets/images/ic_launcher.png', ScreenUtil().setHeight(150), ScreenUtil().setHeight(150), ),
                 const Expanded(child: Text('')),
               ],
             ),
@@ -58,7 +58,7 @@ class _AboutPageState extends State<AboutPage> {
           Row(
             children: [
               const Expanded(child: Text('')),
-              WidgetUtils.onlyText('当前版本（${sp.getString('buildNumber')}） ${sp.getString('myVersion2')}', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: 14)),
+              WidgetUtils.onlyText('当前版本${sp.getString('myVersion2')}（${sp.getString('buildNumber')}） ', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: 14)),
               const Expanded(child: Text('')),
             ],
           ),
@@ -133,15 +133,15 @@ class _AboutPageState extends State<AboutPage> {
           ),
           WidgetUtils.myLine(),
           const Expanded(child: Text('')),
-          Row(
-            children: [
-              const Expanded(child: Text('')),
-              WidgetUtils.onlyText('《用户协议》', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: 14)),
-              WidgetUtils.commonSizedBox(0, 20),
-              WidgetUtils.onlyText('《隐私协议》', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: 14)),
-              const Expanded(child: Text('')),
-            ],
-          ),
+          // Row(
+          //   children: [
+          //     const Expanded(child: Text('')),
+          //     WidgetUtils.onlyText('《用户协议》', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: 14)),
+          //     WidgetUtils.commonSizedBox(0, 20),
+          //     WidgetUtils.onlyText('《隐私协议》', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: 14)),
+          //     const Expanded(child: Text('')),
+          //   ],
+          // ),
           WidgetUtils.commonSizedBox(20, 10),
         ],
       ),

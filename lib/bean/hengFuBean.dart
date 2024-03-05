@@ -9,6 +9,7 @@ class hengFuBean {
   String? lv;
   String? type;
   String? title;
+  String? gameName;
   int? nobleId;
   List<GiftInfo>? giftInfo;
 
@@ -24,7 +25,8 @@ class hengFuBean {
       this.giftInfo,
       this.roomName,
       this.title,
-      this.nobleId});
+      this.nobleId,
+      this.gameName});
 
   hengFuBean.fromJson(Map<dynamic, dynamic> json) {
     roomId = json['room_id'];
@@ -43,6 +45,7 @@ class hengFuBean {
     toUids = json['to_uids'];
     lv = json['lv'];
     type = json['type'];
+    gameName = json['game_name'];
     if (json['gift_info'] != null) {
       giftInfo = <GiftInfo>[];
       json['gift_info'].forEach((v) {
@@ -66,6 +69,7 @@ class hengFuBean {
     data['to_uids'] = this.toUids;
     data['lv'] = this.lv;
     data['type'] = this.type;
+    data['game_name'] = this.gameName;
     if (this.giftInfo != null) {
       data['gift_info'] = this.giftInfo!.map((v) => v.toJson()).toList();
     }

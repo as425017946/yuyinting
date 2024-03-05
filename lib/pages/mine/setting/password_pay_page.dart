@@ -35,7 +35,7 @@ class _PasswordPayPageState extends State<PasswordPayPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    appBar = WidgetUtils.getAppBar('设置支付密码', true, context, false, 0);
+    appBar = WidgetUtils.getAppBar('设置支付密码', true, context, false, 7);
     listen = eventBus.on<InfoBack>().listen((event) {
       if (event.info.length >= 4) {
         setState(() {

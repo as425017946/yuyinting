@@ -244,6 +244,9 @@ class _JiesuanPageState extends State<JiesuanPage> {
             }
             name = bean.data!.guildName!;
             if (bean.data!.settle!.isNotEmpty) {
+              for (int i = 0; i < bean.data!.settle!.length; i++) {
+                list.add(bean.data!.settle![i]);
+              }
               list = bean.data!.settle!;
             }else{
               if(page > 1){

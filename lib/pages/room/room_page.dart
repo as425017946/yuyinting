@@ -926,6 +926,32 @@ class _RoomPageState extends State<RoomPage>
               } else {
                 isMeUp = true;
                 mxIndex = event.map!['serial_number'].toString();
+                LogE('开麦状态== ${event.map!['is_lock'].toString() == '0'}');
+                LogE('开麦状态== ${event.map!['is_lock'].toString()}');
+                if(event.map!['is_lock'].toString() == '0'){
+                  setState(() {
+                    isJinyiin = false;
+                  });
+                  // 启用音频模块
+                  _engine.enableAudio();
+                  // 发声音发音频流
+                  _engine.enableLocalAudio(true);
+                  //设置成主播
+                  _engine.setClientRole(
+                      role: ClientRoleType.clientRoleBroadcaster);
+                  // 发布本地音频流
+                  _engine.muteLocalAudioStream(false);
+                }else{
+                  setState(() {
+                    isJinyiin = true;
+                  });
+                  // 设置成观众
+                  _engine.setClientRole(role: ClientRoleType.clientRoleAudience);
+                  // 取消发布本地音频流
+                  _engine.muteLocalAudioStream(true);
+                  // 适用只听声音，不发声音流
+                  _engine.enableLocalAudio(false);
+                }
               }
               break;
             case 'down_mic': //下麦
@@ -1142,8 +1168,11 @@ class _RoomPageState extends State<RoomPage>
             });
             // 启用音频模块
             _engine.enableAudio();
+            // 发声音发音频流
+            _engine.enableLocalAudio(true);
             //设置成主播
-            _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
+            _engine.setClientRole(
+                role: ClientRoleType.clientRoleBroadcaster);
             // 发布本地音频流
             _engine.muteLocalAudioStream(false);
           }
@@ -2193,6 +2222,7 @@ class _RoomPageState extends State<RoomPage>
         });
         if (listMP.isEmpty) {
           setState(() {
+            isBig = false;
             isShowHF = false;
           });
           _timerhf!.cancel();
@@ -2252,6 +2282,27 @@ class _RoomPageState extends State<RoomPage>
           });
         }
         break;
+      case '抽奖超级转盘':
+        if(hf.giftInfo![0].giftName == '瑞麟'){
+          setState(() {
+            name = '388800转盘礼物';
+            isBig = true;
+            isShowHF = false;
+            bigType = 0;
+          });
+        }else{
+          setState(() {
+            name = '抽奖超级转盘';
+            path = 'assets/svga/gp/gp_zp2.svga';
+          });
+        }
+        break;
+      case '抽奖心动转盘':
+        setState(() {
+          name = '抽奖心动转盘';
+          path = 'assets/svga/gp/gp_zp1.svga';
+        });
+        break;
       case '超级转盘':
         setState(() {
           name = '超级转盘';
@@ -2285,6 +2336,18 @@ class _RoomPageState extends State<RoomPage>
       case '金魔方':
         setState(() {
           name = '金魔方';
+          path = 'assets/svga/gp/gp_jin.svga';
+        });
+        break;
+      case '抽奖水星魔方':
+        setState(() {
+          name = '抽奖蓝魔方';
+          path = 'assets/svga/gp/gp_lan.svga';
+        });
+        break;
+      case '抽奖金星魔方':
+        setState(() {
+          name = '抽奖金魔方';
           path = 'assets/svga/gp/gp_jin.svga';
         });
         break;
@@ -2472,10 +2535,10 @@ class _RoomPageState extends State<RoomPage>
     _eventHandler = RtcEngineEventHandler(
       onAudioVolumeIndication: (RtcConnection connection,
           List<AudioVolumeInfo> speakers, int speakerNumber, int totalVolume) {
-        LogE("用户数量： ${speakers.length}");
+        // LogE("用户数量： ${speakers.length}");
         if (sp.getString('isShouQi').toString() == '0') {
           for (int i = 0; i < speakers.length; i++) {
-            LogE("用户音量： ${speakers[i].volume}");
+            // LogE("用户音量： ${speakers[i].volume}");
             // LogE("用户id： ${speakers[i].uid}");
             /// 只采集声音大于75的用户
             if (speakers[i].volume! > 10) {
@@ -3197,13 +3260,15 @@ class _RoomPageState extends State<RoomPage>
                 if (bean.data!.roomInfo!.mikeList![i].isClose == 0) {
                   isMeStatus = true;
                   isJinyiin = false;
+                  // 启用音频模块
+                  _engine.enableAudio();
+                  // 发声音发音频流
+                  _engine.enableLocalAudio(true);
                   //设置成主播
                   _engine.setClientRole(
                       role: ClientRoleType.clientRoleBroadcaster);
                   // 发布本地音频流
                   _engine.muteLocalAudioStream(false);
-                  // 发声音流
-                  _engine.enableLocalAudio(true);
                 }
                 break;
               }
@@ -3323,11 +3388,13 @@ class _RoomPageState extends State<RoomPage>
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
-            isJinyiin = true;
             if (action == 'up') {
+              // 启用音频模块
+              _engine.enableAudio();
               //设置成主播
-              _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
-              // 取消发布本地音频流
+              _engine.setClientRole(
+                  role: ClientRoleType.clientRoleBroadcaster);
+              // 发布本地音频流
               _engine.muteLocalAudioStream(true);
             } else {
               // 下麦的人是自己
@@ -3376,6 +3443,17 @@ class _RoomPageState extends State<RoomPage>
               }
               if (sp.getString('user_id').toString() ==
                   bean.data![i].uid.toString()) {
+                if(bean.data![i].isClose == 0){
+                  // 启用音频模块
+                  _engine.enableAudio();
+                  // 发声音发音频流
+                  _engine.enableLocalAudio(true);
+                  //设置成主播
+                  _engine.setClientRole(
+                      role: ClientRoleType.clientRoleBroadcaster);
+                  // 发布本地音频流
+                  _engine.muteLocalAudioStream(false);
+                }
                 isMeUp = true;
                 mxIndex = bean.data![i].serialNumber.toString();
               }
@@ -3944,6 +4022,10 @@ class _RoomPageState extends State<RoomPage>
                   //闭麦 0 否 1是
                   isMeStatus = true;
                   isJinyiin = false;
+                  // 启用音频模块
+                  _engine.enableAudio();
+                  // 发声音发音频流
+                  _engine.enableLocalAudio(true);
                   //设置成主播
                   _engine.setClientRole(
                       role: ClientRoleType.clientRoleBroadcaster);

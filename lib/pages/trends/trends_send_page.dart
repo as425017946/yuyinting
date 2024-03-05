@@ -12,7 +12,6 @@ import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import '../../colors/my_colors.dart';
-import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';

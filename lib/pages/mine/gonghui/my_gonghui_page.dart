@@ -44,7 +44,8 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
       kefUavatar = '',
       kefuUid = '',
       ratio = '',
-      guildID = '';
+      guildID = '',
+      notice = '';
   List<StreamerList> listPeople = [];
   List<RoomList> listRoom = [];
   int qianyue = 0;
@@ -117,10 +118,10 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                             WidgetUtils.commonSizedBox(10, 20),
                             identity == 'leader'
                                 ? WidgetUtils.onlyText(
-                                    '厅主分润: $ratio',
-                                    StyleUtils.getCommonTextStyle(
-                                        color: Colors.white,
-                                        fontSize: ScreenUtil().setSp(25)))
+                                '厅主分润: $ratio',
+                                StyleUtils.getCommonTextStyle(
+                                    color: Colors.white,
+                                    fontSize: ScreenUtil().setSp(25)))
                                 : WidgetUtils.onlyText(
                                 '主播分润: $ratio',
                                 StyleUtils.getCommonTextStyle(
@@ -131,28 +132,28 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                       ),
                       identity == 'leader'
                           ? GestureDetector(
-                              onTap: (() {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const SettingGonghuiPage(),
-                                  ),
-                                ).then((value) {
-                                  doPostMyGh();
-                                });
-                              }),
-                              child: Container(
-                                height: 60.h,
-                                width: 60.h,
-                                color: Colors.transparent,
-                                alignment: Alignment.centerRight,
-                                child: WidgetUtils.showImages(
-                                    'assets/images/gonghui_bianji.png',
-                                    ScreenUtil().setHeight(38),
-                                    ScreenUtil().setHeight(38)),
-                              ),
-                            )
+                        onTap: (() {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                              const SettingGonghuiPage(),
+                            ),
+                          ).then((value) {
+                            doPostMyGh();
+                          });
+                        }),
+                        child: Container(
+                          height: 60.h,
+                          width: 60.h,
+                          color: Colors.transparent,
+                          alignment: Alignment.centerRight,
+                          child: WidgetUtils.showImages(
+                              'assets/images/gonghui_bianji.png',
+                              ScreenUtil().setHeight(38),
+                              ScreenUtil().setHeight(38)),
+                        ),
+                      )
                           : const Text(''),
                       WidgetUtils.commonSizedBox(20, 20),
                     ],
@@ -176,149 +177,131 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                         topRight: Radius.circular(20.0),
                       ),
                     ),
-                    child: Column(
-                      children: [
-                        WidgetUtils.commonSizedBox(20, 20),
-                        WidgetUtils.onlyText(
-                            '主播列表(${listPeople.length})',
-                            StyleUtils.getCommonTextStyle(
-                              color: MyColors.g2,
-                              fontSize: ScreenUtil().setSp(29),
-                            )),
-                        WidgetUtils.commonSizedBox(10, 20),
-                        GestureDetector(
-                          onTap: (() {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const GonghuiPeoplePage(),
-                              ),
-                            ).then((value) {
-                              doPostMyGh();
-                            });
-                          }),
-                          child: Container(
-                            height: ScreenUtil().setHeight(130),
-                            width: double.infinity,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          WidgetUtils.commonSizedBox(20, 20),
+                          WidgetUtils.onlyText(
+                              '公会公告',
+                              StyleUtils.getCommonTextStyle(
+                                color: MyColors.g2,
+                                fontSize: ScreenUtil().setSp(29),
+                              )),
+                          Container(
                             alignment: Alignment.centerLeft,
-                            child: Wrap(
-                              spacing: 10,
-                              children: [
-                                if (listPeople.length > 5)
-                                  for (int i = 0; i < 5; i++)
-                                    SizedBox(
-                                      width: ScreenUtil().setHeight(90),
-                                      child: Column(
-                                        children: [
-                                          WidgetUtils.CircleHeadImage(
-                                              ScreenUtil().setHeight(90),
-                                              ScreenUtil().setHeight(90),
-                                              listPeople[i].avatar!),
-                                          WidgetUtils.onlyTextCenter(
-                                              listPeople[i].nickname!,
-                                              StyleUtils.getCommonTextStyle(
-                                                color: MyColors.g6,
-                                                fontSize:
-                                                    ScreenUtil().setSp(21),
-                                              )),
-                                        ],
+                            margin: EdgeInsets.only(top: 10.h),
+                            child: Text(
+                              notice,
+                              maxLines: 20,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 22.sp,
+                              ),),
+                          ),
+                          WidgetUtils.commonSizedBox(20, 20),
+                          WidgetUtils.onlyText(
+                              '主播列表(${listPeople.length})',
+                              StyleUtils.getCommonTextStyle(
+                                color: MyColors.g2,
+                                fontSize: ScreenUtil().setSp(29),
+                              )),
+                          WidgetUtils.commonSizedBox(10, 20),
+                          GestureDetector(
+                            onTap: (() {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const GonghuiPeoplePage(),
+                                ),
+                              ).then((value) {
+                                doPostMyGh();
+                              });
+                            }),
+                            child: Container(
+                              height: ScreenUtil().setHeight(130),
+                              width: double.infinity,
+                              alignment: Alignment.centerLeft,
+                              child: Wrap(
+                                spacing: 10,
+                                children: [
+                                  if (listPeople.length > 5)
+                                    for (int i = 0; i < 5; i++)
+                                      SizedBox(
+                                        width: ScreenUtil().setHeight(90),
+                                        child: Column(
+                                          children: [
+                                            WidgetUtils.CircleHeadImage(
+                                                ScreenUtil().setHeight(90),
+                                                ScreenUtil().setHeight(90),
+                                                listPeople[i].avatar!),
+                                            WidgetUtils.onlyTextCenter(
+                                                listPeople[i].nickname!,
+                                                StyleUtils.getCommonTextStyle(
+                                                  color: MyColors.g6,
+                                                  fontSize:
+                                                  ScreenUtil().setSp(21),
+                                                )),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                if (listPeople.length <= 5)
-                                  for (int i = 0; i < listPeople.length; i++)
-                                    SizedBox(
-                                      width: ScreenUtil().setHeight(90),
-                                      child: Column(
-                                        children: [
-                                          WidgetUtils.CircleHeadImage(
-                                              ScreenUtil().setHeight(90),
-                                              ScreenUtil().setHeight(90),
-                                              listPeople[i].avatar!),
-                                          WidgetUtils.onlyTextCenter(
-                                              listPeople[i].nickname!,
-                                              StyleUtils.getCommonTextStyle(
-                                                color: MyColors.g6,
-                                                fontSize:
-                                                    ScreenUtil().setSp(21),
-                                              )),
-                                        ],
+                                  if (listPeople.length <= 5)
+                                    for (int i = 0; i < listPeople.length; i++)
+                                      SizedBox(
+                                        width: ScreenUtil().setHeight(90),
+                                        child: Column(
+                                          children: [
+                                            WidgetUtils.CircleHeadImage(
+                                                ScreenUtil().setHeight(90),
+                                                ScreenUtil().setHeight(90),
+                                                listPeople[i].avatar!),
+                                            WidgetUtils.onlyTextCenter(
+                                                listPeople[i].nickname!,
+                                                StyleUtils.getCommonTextStyle(
+                                                  color: MyColors.g6,
+                                                  fontSize:
+                                                  ScreenUtil().setSp(21),
+                                                )),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                Container(
-                                  alignment: Alignment.center,
-                                  height: 90.h,
-                                  width: 30.h,
-                                  child: WidgetUtils.showImages(
-                                      'assets/images/people_right.png',
-                                      ScreenUtil().setHeight(25),
-                                      ScreenUtil().setHeight(15)),
-                                )
-                              ],
+                                  Container(
+                                    alignment: Alignment.center,
+                                    height: 90.h,
+                                    width: 30.h,
+                                    child: WidgetUtils.showImages(
+                                        'assets/images/people_right.png',
+                                        ScreenUtil().setHeight(25),
+                                        ScreenUtil().setHeight(15)),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        WidgetUtils.commonSizedBox(30, 20),
-                        WidgetUtils.onlyText(
-                            '厅房间(${listRoom.length})',
-                            StyleUtils.getCommonTextStyle(
-                              color: MyColors.g2,
-                              fontSize: ScreenUtil().setSp(29),
-                            )),
-                        WidgetUtils.commonSizedBox(20, 20),
-                        Wrap(
-                          runSpacing: 20.h,
-                          children: [
-                            if (listRoom.length > 3)
-                              for (int i = 0; i < 3; i++)
-                                GestureDetector(
-                                  onTap: (() {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            const RoomMorePage(),
-                                      ),
-                                    ).then((value) {
-                                      doPostMyGh();
-                                    });
-                                  }),
-                                  child: Row(
-                                    children: [
-                                      WidgetUtils.CircleImageNet(
-                                          ScreenUtil().setHeight(110),
-                                          ScreenUtil().setHeight(110),
-                                          10,
-                                          listRoom[i].coverImg!),
-                                      WidgetUtils.commonSizedBox(10, 20),
-                                      WidgetUtils.onlyText(
-                                          listRoom[i].roomName!,
-                                          StyleUtils.getCommonTextStyle(
-                                              color: MyColors.g2,
-                                              fontSize: ScreenUtil().setSp(25),
-                                              fontWeight: FontWeight.w600)),
-                                      const Spacer(),
-                                      Container(
-                                        alignment: Alignment.center,
-                                        height: 110.h,
-                                        width: 30.h,
-                                        child: WidgetUtils.showImages(
-                                            'assets/images/people_right.png',
-                                            ScreenUtil().setHeight(25),
-                                            ScreenUtil().setHeight(15)),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                            WidgetUtils.myLine(color: MyColors.f4),
-                            if (listRoom.length <= 3)
-                              for (int i = 0; i < listRoom.length; i++)
-                                GestureDetector(
-                                  onTap: (() {
-                                    Navigator.pushNamed(
-                                        context, 'RoomMorePage');
-                                  }),
-                                  child: Container(
-                                    color: Colors.transparent,
+                          WidgetUtils.commonSizedBox(30, 20),
+                          WidgetUtils.onlyText(
+                              '厅房间(${listRoom.length})',
+                              StyleUtils.getCommonTextStyle(
+                                color: MyColors.g2,
+                                fontSize: ScreenUtil().setSp(29),
+                              )),
+                          WidgetUtils.commonSizedBox(20, 20),
+                          Wrap(
+                            runSpacing: 20.h,
+                            children: [
+                              if (listRoom.length > 3)
+                                for (int i = 0; i < 3; i++)
+                                  GestureDetector(
+                                    onTap: (() {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                          const RoomMorePage(),
+                                        ),
+                                      ).then((value) {
+                                        doPostMyGh();
+                                      });
+                                    }),
                                     child: Row(
                                       children: [
                                         WidgetUtils.CircleImageNet(
@@ -331,8 +314,7 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                                             listRoom[i].roomName!,
                                             StyleUtils.getCommonTextStyle(
                                                 color: MyColors.g2,
-                                                fontSize:
-                                                    ScreenUtil().setSp(25),
+                                                fontSize: ScreenUtil().setSp(25),
                                                 fontWeight: FontWeight.w600)),
                                         const Spacer(),
                                         Container(
@@ -347,19 +329,57 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                                       ],
                                     ),
                                   ),
-                                ),
-                            WidgetUtils.commonSizedBox(10, 20),
-                            WidgetUtils.myLine(color: MyColors.f4),
-                          ],
-                        )
-                      ],
+                              WidgetUtils.myLine(color: MyColors.f4),
+                              if (listRoom.length <= 3)
+                                for (int i = 0; i < listRoom.length; i++)
+                                  GestureDetector(
+                                    onTap: (() {
+                                      Navigator.pushNamed(
+                                          context, 'RoomMorePage');
+                                    }),
+                                    child: Container(
+                                      color: Colors.transparent,
+                                      child: Row(
+                                        children: [
+                                          WidgetUtils.CircleImageNet(
+                                              ScreenUtil().setHeight(110),
+                                              ScreenUtil().setHeight(110),
+                                              10,
+                                              listRoom[i].coverImg!),
+                                          WidgetUtils.commonSizedBox(10, 20),
+                                          WidgetUtils.onlyText(
+                                              listRoom[i].roomName!,
+                                              StyleUtils.getCommonTextStyle(
+                                                  color: MyColors.g2,
+                                                  fontSize:
+                                                  ScreenUtil().setSp(25),
+                                                  fontWeight: FontWeight.w600)),
+                                          const Spacer(),
+                                          Container(
+                                            alignment: Alignment.center,
+                                            height: 110.h,
+                                            width: 30.h,
+                                            child: WidgetUtils.showImages(
+                                                'assets/images/people_right.png',
+                                                ScreenUtil().setHeight(25),
+                                                ScreenUtil().setHeight(15)),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                              WidgetUtils.commonSizedBox(10, 20),
+                              WidgetUtils.myLine(color: MyColors.f4),
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
               )
             ],
           ),
-
           /// 应聘咨询按钮
           identity == 'leader'
               ? Container(
@@ -501,6 +521,7 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
             identity = bean.data!.identity!;
             qianyue = bean.data!.unauditNum as int;
             guildID = bean.data!.guildInfo!.id.toString();
+            notice = bean.data!.guildInfo!.notice!;
             sp.setString('guild_id', bean.data!.guildInfo!.id.toString());
             sp.setString(
                 'guild_notice', bean.data!.guildInfo!.notice.toString());

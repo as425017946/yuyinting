@@ -9,15 +9,21 @@ import 'package:image_picker/image_picker.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 import 'package:yuyinting/utils/event_utils.dart';
-import '../../../config/my_config.dart';
+import 'package:yuyinting/utils/log_util.dart';
+import '../../../bean/CommonMyIntBean.dart';
+import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../main.dart';
+import '../../../utils/Utils.dart';
 import '../../../utils/loading.dart';
 import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
+
+import '../../cos/upload_dio.dart';
+import '../../cos/upload_httpclient.dart';
 
 /// 编辑头像显示
 class EditHeadPage extends StatefulWidget {
@@ -28,6 +34,129 @@ class EditHeadPage extends StatefulWidget {
 }
 
 class _EditHeadPageState extends State<EditHeadPage> {
+  /// 压缩图片
+  void yasuo(String path) async {
+    var dir = await path_provider.getTemporaryDirectory();
+    String targetPath = '';
+    var result;
+    if (path.toString().contains('.gif') || path.toString().contains('.GIF')) {
+      targetPath = path;
+    } else if (path.toString().contains('.jpg') ||
+        path.toString().contains('.GPG')) {
+      targetPath =
+          "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
+      result = await FlutterImageCompress.compressAndGetFile(
+        path, targetPath,
+        quality: 50,
+        rotate: 0, // 旋转角度
+      );
+    } else if (path.toString().contains('.jpeg') ||
+        path.toString().contains('.GPEG')) {
+      targetPath =
+          "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpeg";
+      result = await FlutterImageCompress.compressAndGetFile(
+        path, targetPath,
+        quality: 50,
+        rotate: 0, // 旋转角度
+      );
+    } else if (path.toString().contains('.svga') ||
+        path.toString().contains('.SVGA')) {
+      MyToastUtils.showToastBottom('不支持svga格式图片上传');
+      return;
+    } else if (path.toString().contains('.webp') ||
+        path.toString().contains('.WEBP')) {
+      targetPath =
+          "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.webp";
+      result = await FlutterImageCompress.compressAndGetFile(
+        path, targetPath,
+        quality: 50,
+        rotate: 0, // 旋转角度
+      );
+    } else {
+      targetPath =
+          "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.png";
+      result = await FlutterImageCompress.compressAndGetFile(
+        path, targetPath,
+        quality: 50,
+        rotate: 0, // 旋转角度
+      );
+    }
+
+    _upload(path.toString().contains('.gif') || path.toString().contains('.GIF')
+        ? targetPath
+        : result!.path);
+  }
+
+  // 设置使用的网络库
+  static const String NETWORK_LIB = NETWORK_LIB_HTTP_CLIENT;
+
+  // dio网络库
+  static const String NETWORK_LIB_DIO = "dio";
+
+  // 原生自带http client网络库
+  static const String NETWORK_LIB_HTTP_CLIENT = "http_client";
+
+  // 当前进度
+  int? _complete;
+
+  // 进度总长度
+  int? _target;
+
+  /// 上传  String? _pickFilePath;选择的文件路径
+  void _upload(String pickFilePath) async {
+    sp.setString('local_path', pickFilePath);
+    if (pickFilePath == null) {
+      MyToastUtils.showToastBottom('请先选择需要上传的文件');
+      return;
+    }
+
+    try {
+      if (NETWORK_LIB == NETWORK_LIB_DIO) {
+        if (kDebugMode) {
+          print("使用dio库上传");
+        }
+        await UploadDio.upload(pickFilePath!, (count, total) {
+          if (mounted) {
+            setState(() {
+              _complete = count;
+              _target = total;
+            });
+          }
+        });
+      } else if (NETWORK_LIB == NETWORK_LIB_HTTP_CLIENT) {
+        if (kDebugMode) {
+          print("使用原生http client库上传");
+        }
+        await UploadHttpClient.upload(pickFilePath!, (count, total) {
+          if (mounted) {
+            setState(() {
+              _complete = count;
+              _target = total;
+            });
+          }
+        });
+      }
+    } catch (e) {
+      LogE('上传失败${e.toString()}');
+    }
+  }
+
+  /// 获取进度字符串
+  String _getProgressString() {
+    if (_complete == null || _target == null) {
+      return "";
+    }
+    return "${Utils.readableStorageSize(_complete!)}/${Utils.readableStorageSize(_target!)}";
+  }
+
+  /// 后去进度百分比
+  double _getProgress() {
+    if (_complete == null || _target == null) {
+      return 0;
+    }
+    return _complete! / _target!;
+  }
+
   List<File> imgArray = [];
   var imagesUrl, imagesType;
   String origin_path = '', origin_url = '';
@@ -56,6 +185,7 @@ class _EditHeadPageState extends State<EditHeadPage> {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     print('选择照片路径:${image?.path}');
 
+    // yasuo(image!.path);
     doPostPostFileUpload(image!.path);
   }
 
@@ -67,8 +197,27 @@ class _EditHeadPageState extends State<EditHeadPage> {
     File? imgFile = await entity.file;
     if (imgFile == null) return;
     print('照片路径:${imgFile.path}');
-
+    // yasuo(imgFile.path);
     doPostPostFileUpload(imgFile.path);
+  }
+
+  var  listen;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    /// 腾讯云上传成功回调
+    listen = eventBus.on<TencentBack>().listen((event) {
+      doPostRoomJoin(event.filePath);
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    listen.cancel();
   }
 
   @override
@@ -260,6 +409,90 @@ class _EditHeadPageState extends State<EditHeadPage> {
       Loading.dismiss();
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
       // MyToastUtils.showToastBottom(MyConfig.errorTitleFile);
+    }
+  }
+
+  /// 腾讯云id
+  Future<void> doPostRoomJoin(String filePath) async {
+    String fileType = '';
+    if (filePath.contains('.gif') ||
+        filePath.contains('.GIF') ||
+        filePath.contains('.jpg') ||
+        filePath.contains('.JPG') ||
+        filePath.contains('.jpeg') ||
+        filePath.contains('.GPEG') ||
+        filePath.contains('.webp') ||
+        filePath.contains('.WEBP') ||
+        filePath.contains('.png') ||
+        filePath.contains('.png')) {
+      fileType = 'image';
+    }else if(filePath.contains('.avi') ||
+        filePath.contains('.AVI') ||
+        filePath.contains('.wmv') ||
+        filePath.contains('.WMV') ||
+        filePath.contains('.mpeg') ||
+        filePath.contains('.MPEG') ||
+        filePath.contains('.mp4') ||
+        filePath.contains('.MP4') ||
+        filePath.contains('.m4v') ||
+        filePath.contains('.M4V')||
+        filePath.contains('.mov') ||
+        filePath.contains('.MOV') ||
+        filePath.contains('.asf') ||
+        filePath.contains('.ASF') ||
+        filePath.contains('.flv') ||
+        filePath.contains('.FLV') ||
+        filePath.contains('.f4v') ||
+        filePath.contains('.F4V')||
+        filePath.contains('.rmvb') ||
+        filePath.contains('.RMVB') ||
+        filePath.contains('.rm') ||
+        filePath.contains('.RM') ||
+        filePath.contains('.3gp')||
+        filePath.contains('.3GP') ||
+        filePath.contains('.vob') ||
+        filePath.contains('.VOB')){
+      fileType = 'video';
+    }else if(filePath.contains('.mp3') ||
+        filePath.contains('.MP3') ||
+        filePath.contains('.wma') ||
+        filePath.contains('.WMA') ||
+        filePath.contains('.wav') ||
+        filePath.contains('.WAV') ||
+        filePath.contains('.flac') ||
+        filePath.contains('.FLAC') ||
+        filePath.contains('.ogg') ||
+        filePath.contains('.OGG')||
+        filePath.contains('.aac') ||
+        filePath.contains('.AAC') ||
+        filePath.contains('.mp4') ||
+        filePath.contains('.MP4') ){
+      fileType = 'audio';
+    }
+    Map<String, dynamic> params = <String, dynamic>{
+      'file_type': fileType,
+      'file_path': filePath,
+    };
+    try {
+      CommonMyIntBean bean = await DataUtils.postTencentID(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          eventBus.fire(FileBack(
+              info: sp.getString('local_path').toString(),
+              id: bean.data.toString(),
+              type: 0));
+          MyToastUtils.showToastBottom('头像上传成功');
+          break;
+        case MyHttpConfig.errorloginCode:
+          // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

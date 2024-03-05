@@ -282,3 +282,9 @@ class AgainBack {
   String title;
   AgainBack({required this.title});
 }
+
+/// 腾讯云上传成功使用
+class TencentBack {
+  String filePath;
+  TencentBack({required this.filePath});
+}

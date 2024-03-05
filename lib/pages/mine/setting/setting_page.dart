@@ -5,7 +5,6 @@ import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/pages/login/login_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/line_painter.dart';
-import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 
 import '../../../config/config_screen_util.dart';
@@ -68,36 +67,6 @@ class _SettingPageState extends State<SettingPage> {
       body: Column(
         children: [
           WidgetUtils.commonSizedBox(10, 0),
-          Container(
-            width: double.infinity,
-            height: ScreenUtil().setHeight(90),
-            color: Colors.white,
-            padding: EdgeInsets.only(
-                left: ConfigScreenUtil.autoHeight20,
-                right: ConfigScreenUtil.autoHeight20),
-            child: Row(
-              children: [
-                WidgetUtils.onlyText(
-                    '消息通知',
-                    StyleUtils.getCommonTextStyle(
-                        color: Colors.black, fontSize: ScreenUtil().setSp(29))),
-                const Expanded(child: Text('')),
-                Transform.scale(
-                  scale: 0.8,
-                  child: CupertinoSwitch(
-                    value: _switchValue,
-                    onChanged: (value) {
-                      setState(() {
-                        _switchValue = value;
-                      });
-                    },
-                    activeColor: MyColors.homeTopBG,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          WidgetUtils.commonSizedBox(1, 0),
           GestureDetector(
             onTap: (() {
               Navigator.pushNamed(context, 'ZhanghaoShezhipage');

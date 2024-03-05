@@ -8,7 +8,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:yuyinting/bean/Common_bean.dart';
 import 'package:yuyinting/colors/my_colors.dart';
-import 'package:yuyinting/pages/mine/my/edit_audio_page.dart';
 import 'package:yuyinting/pages/mine/my/edit_photo_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/style_utils.dart';

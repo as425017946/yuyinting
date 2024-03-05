@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/main.dart';
 import 'package:yuyinting/utils/log_util.dart';
@@ -6,13 +7,13 @@ import 'package:yuyinting/utils/log_util.dart';
 import '../../bean/Common_bean.dart';
 import '../../bean/joinRoomBean.dart';
 import '../../colors/my_colors.dart';
-import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../utils/event_utils.dart';
 import '../../utils/loading.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
+import '../../utils/regex_formatter.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../mine/my/edit_head_page.dart';
@@ -29,6 +30,7 @@ class EditInfoPage extends StatefulWidget {
 
 class _EditInfoPageState extends State<EditInfoPage> {
   TextEditingController controller = TextEditingController();
+  TextEditingController controllerYQM = TextEditingController();
   var sex = 0;
   String avatar = '', avatarID = '', avatarID2 = '', nickName = '';
   var listen;
@@ -79,7 +81,7 @@ class _EditInfoPageState extends State<EditInfoPage> {
           },
           child: Column(
             children: [
-              WidgetUtils.commonSizedBox(ScreenUtil().setHeight(450), 0),
+              WidgetUtils.commonSizedBox(400.h, 0),
               Expanded(
                 child: Container(
                   width: double.infinity,
@@ -252,6 +254,58 @@ class _EditInfoPageState extends State<EditInfoPage> {
                           StyleUtils.getCommonTextStyle(
                               color: MyColors.g9,
                               fontSize: ScreenUtil().setSp(29))),
+                      WidgetUtils.commonSizedBox(10, 10),
+                      Container(
+                        height: ScreenUtil().setHeight(80),
+                        width: double.infinity,
+                        margin: const EdgeInsets.only(left: 40, right: 40),
+                        //边框设置
+                        decoration: const BoxDecoration(
+                          //背景
+                          color: MyColors.f2,
+                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                          borderRadius: BorderRadius.all(Radius.circular(17.0)),
+                        ),
+                        child: Row(
+                          children: [
+                            WidgetUtils.commonSizedBox(0, 20),
+                            Expanded(
+                                child: TextField(
+                                  controller: controllerYQM,
+                                  inputFormatters: [
+                                    RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                                    FilteringTextInputFormatter.digitsOnly
+                                  ],
+                                  keyboardType: TextInputType.number,
+                                  //设置键盘为数字
+                                  style: StyleUtils.loginTextStyle,
+                                  onChanged: (value) {
+
+                                  },
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    // labelText: "请输入用户名",
+                                    // icon: Icon(Icons.people), //前面的图标
+                                    hintText: '请填写邀请码（选填）',
+                                    hintStyle: StyleUtils.loginHintTextStyle,
+                                    // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
+                                  ),
+                                )),
+                            GestureDetector(
+                              onTap: (() {
+                                setState(() {
+                                  controllerYQM.text = '';
+                                });
+                              }),
+                              child: WidgetUtils.showImages(
+                                  'assets/images/login_colse.png',
+                                  ScreenUtil().setHeight(24),
+                                  ScreenUtil().setHeight(24)),
+                            ),
+                            WidgetUtils.commonSizedBox(0, 20),
+                          ],
+                        ),
+                      ),
                       const Expanded(child: Text('')),
                       GestureDetector(
                         onTap: (() {
@@ -304,6 +358,7 @@ class _EditInfoPageState extends State<EditInfoPage> {
       'avatar': sp.getString('user_headimg_id').toString(),
       'nickname': userNick,
       'gender': sex,
+      'promo_code': controllerYQM.text.trim()
     };
     try {
       Loading.show("提交中...");

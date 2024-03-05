@@ -104,7 +104,7 @@ class _ZhuanPanGuiZePageState extends State<ZhuanPanGuiZePage> {
                             StyleUtils.getCommonTextStyle(
                                 color: Colors.white, fontSize: 24.sp)),
                         Text(
-                          '当欢乐值达到30时将触发“欢乐时刻”，持续5分钟。此时超级转盘中价值最高的4件礼物“瑞麟、霸下、梦回长安、御龙豪杰”将提高至6倍爆率。',
+                          '当欢乐值达到30时将触发“欢乐时刻”，持续5分钟。此时超级转盘中价值最高的4件礼物“瑞麟、雪山飞虎、霸下、梦回长安”将提高至6倍爆率。',
                           maxLines: 3,
                           style: StyleUtils.getCommonTextStyle(
                               color: Colors.white, fontSize: 24.sp),

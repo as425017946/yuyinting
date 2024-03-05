@@ -409,6 +409,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         });
         if (listMP.isEmpty) {
           setState(() {
+            isBig = false;
             isShowHF = false;
           });
           _timer!.cancel();
@@ -425,6 +426,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
 
   // 接受到数据进行判断使用
   void showInfo(hengFuBean hf) {
+    LogE('===名称===  ${hf.title}');
     switch (hf.title) {
       case '贵族':
         if (hf.nobleId! > 1 && hf.nobleId! < 5) {
@@ -440,6 +442,27 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
             path = 'assets/svga/gp/gp_guizu_g.svga';
           });
         }
+        break;
+      case '抽奖超级转盘':
+        if(hf.giftInfo![0].giftName == '瑞麟'){
+          setState(() {
+            name = '388800转盘礼物';
+            isBig = true;
+            isShowHF = false;
+            bigType = 0;
+          });
+        }else{
+          setState(() {
+            name = '抽奖超级转盘';
+            path = 'assets/svga/gp/gp_zp2.svga';
+          });
+        }
+        break;
+      case '抽奖心动转盘':
+        setState(() {
+          name = '抽奖心动转盘';
+          path = 'assets/svga/gp/gp_zp1.svga';
+        });
         break;
       case '超级转盘':
         setState(() {
@@ -463,6 +486,18 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         setState(() {
           name = '白灵';
           path = 'assets/svga/gp/gp_gui.svga';
+        });
+        break;
+      case '抽奖水星魔方':
+        setState(() {
+          name = '抽奖蓝魔方';
+          path = 'assets/svga/gp/gp_lan.svga';
+        });
+        break;
+      case '抽奖金星魔方':
+        setState(() {
+          name = '抽奖金魔方';
+          path = 'assets/svga/gp/gp_jin.svga';
         });
         break;
       case '蓝魔方':

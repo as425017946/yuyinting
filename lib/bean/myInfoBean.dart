@@ -45,6 +45,7 @@ class Data {
   int? isNew;
   int? isPretty;
   int? newNoble;
+  int? isDisturb;
 
   Data(
       {this.nickname,
@@ -68,7 +69,8 @@ class Data {
         this.isAgent,
         this.isNew,
         this.isPretty,
-        this.newNoble});
+        this.newNoble,
+        this.isDisturb});
 
   Data.fromJson(Map<String, dynamic> json) {
     nickname = json['nickname'];
@@ -93,6 +95,7 @@ class Data {
     isNew = json['is_new'];
     isPretty = json['is_pretty'];
     newNoble = json['new_noble'];
+    isDisturb = json['is_disturb'];
   }
 
   Map<String, dynamic> toJson() {
@@ -119,6 +122,7 @@ class Data {
     data['is_new'] = this.isNew;
     data['is_pretty'] = this.isPretty;
     data['new_noble'] = this.newNoble;
+    data['is_disturb'] = this.isDisturb;
     return data;
   }
 }

@@ -15,7 +15,7 @@ import 'package:yuyinting/utils/log_util.dart';
 late SharedPreferences sp;
 void main() async{
 
-  //加入后可正常使用
+  // 确保初始化完成
   WidgetsFlutterBinding.ensureInitialized();
 
   //初始化存储

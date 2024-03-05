@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
-import '../../../bean/winListBean.dart';
-import '../../../colors/my_colors.dart';
-import '../../../config/my_config.dart';
-import '../../../http/data_utils.dart';
-import '../../../http/my_http_config.dart';
-import '../../../utils/loading.dart';
-import '../../../utils/my_toast_utils.dart';
-import '../../../utils/my_utils.dart';
-import '../../../utils/style_utils.dart';
-import '../../../utils/widget_utils.dart';
-/// 魔方的获奖记录
-class MoFangJiLuPage extends StatefulWidget {
-  int type;
-  MoFangJiLuPage({super.key, required this.type});
+
+import '../../bean/luckInfoBean.dart';
+import '../../colors/my_colors.dart';
+import '../../config/my_config.dart';
+import '../../http/data_utils.dart';
+import '../../http/my_http_config.dart';
+import '../../utils/loading.dart';
+import '../../utils/my_toast_utils.dart';
+import '../../utils/my_utils.dart';
+import '../../utils/style_utils.dart';
+import '../../utils/widget_utils.dart';
+/// 4个游戏公用一个榜单
+class RankPage extends StatefulWidget {
+  const RankPage({super.key});
 
   @override
-  State<MoFangJiLuPage> createState() => _MoFangJiLuPageState();
+  State<RankPage> createState() => _RankPageState();
 }
 
-class _MoFangJiLuPageState extends State<MoFangJiLuPage> {
+class _RankPageState extends State<RankPage> {
   int page = 1;
   final RefreshController _refreshController =
   RefreshController(initialRefresh: false);
@@ -29,9 +29,8 @@ class _MoFangJiLuPageState extends State<MoFangJiLuPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    doPostGetMineRouletteWinList();
+    doPostGameRanking();
   }
-
 
   void _onRefresh() async {
     // monitor network fetch
@@ -43,7 +42,7 @@ class _MoFangJiLuPageState extends State<MoFangJiLuPage> {
         page = 1;
       });
     }
-    doPostGetMineRouletteWinList();
+    doPostGameRanking();
   }
 
   void _onLoading() async {
@@ -55,9 +54,10 @@ class _MoFangJiLuPageState extends State<MoFangJiLuPage> {
         page++;
       });
     }
-    doPostGetMineRouletteWinList();
+    doPostGameRanking();
     _refreshController.loadComplete();
   }
+
 
   Widget Jilu(BuildContext context, int i) {
     return Column(
@@ -67,11 +67,26 @@ class _MoFangJiLuPageState extends State<MoFangJiLuPage> {
           child: Row(
             children: [
               WidgetUtils.commonSizedBox(0, 20.h),
+              WidgetUtils.CircleHeadImage(68.h, 68.h, list[i].avatar!),
+              WidgetUtils.commonSizedBox(0, 10.h),
+              WidgetUtils.onlyText(
+                  list[i].nickname!,
+                  StyleUtils.getCommonTextStyle(
+                      color: Colors.white, fontSize: 32.sp)),
+              const Spacer(),
+              WidgetUtils.onlyText(
+                  ('获得'),
+                  StyleUtils.getCommonTextStyle(
+                      color: MyColors.mineOrange, fontSize: 26.sp)),
+              const Spacer(),
               WidgetUtils.showImagesNet(
-                  list[i].giftImg!, 60.h, 60.h),
+                  list[i].giftImg!, 68.h, 68.h),
               WidgetUtils.commonSizedBox(0, 10.h),
               Expanded(
+                flex: 5,
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Spacer(),
                       WidgetUtils.onlyText(
@@ -80,14 +95,14 @@ class _MoFangJiLuPageState extends State<MoFangJiLuPage> {
                               color: Colors.white, fontSize: 28.sp)),
                       WidgetUtils.commonSizedBox(5.h, 0),
                       WidgetUtils.onlyText(
-                          list[i].addTime!,
+                          ('${list[i].giftPrice}V豆'),
                           StyleUtils.getCommonTextStyle(
-                              color: MyColors.zpJLYellow, fontSize: 24.sp)),
+                              color: MyColors.mineOrange, fontSize: 26.sp)),
                       const Spacer(),
                     ],
                   )),
               WidgetUtils.onlyText(
-                  'x${list[i].number!}',
+                  'x${list[i].number}',
                   StyleUtils.getCommonTextStyle(
                       color: MyColors.roomTCYellow, fontSize: 48.sp)),
               WidgetUtils.commonSizedBox(0, 20.h),
@@ -123,13 +138,13 @@ class _MoFangJiLuPageState extends State<MoFangJiLuPage> {
               child: Container(
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/images/room_tc1.png'),
-                    fit: BoxFit.fill,
+                    image: AssetImage('assets/images/zhuanpan_jl_bg.png'),
+                    fit: BoxFit.cover,
                   ),
                 ),
                 child: Column(
                   children: [
-                    WidgetUtils.commonSizedBox(20.h, 0),
+                    WidgetUtils.commonSizedBox(40.h, 0),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -138,13 +153,19 @@ class _MoFangJiLuPageState extends State<MoFangJiLuPage> {
                           onTap: (() {
                             Navigator.pop(context);
                           }),
-                          child: WidgetUtils.showImages(
-                              'assets/images/back_white.png', 30.h, 20.h),
+                          child: Container(
+                            height: 50.h,
+                            width: 80.h,
+                            color: Colors.transparent,
+                            alignment: Alignment.center,
+                            child: WidgetUtils.showImages(
+                                'assets/images/back_white.png', 30.h, 20.h),
+                          ),
                         ),
                         const Spacer(),
-                        WidgetUtils.onlyTextCenter('转动记录', StyleUtils.getCommonTextStyle(color: MyColors.loginBlue2, fontSize: 36.sp)),
+                        WidgetUtils.onlyTextCenter('幸运榜单', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 32.sp, fontWeight: FontWeight.w600)),
                         const Spacer(),
-                        WidgetUtils.commonSizedBox(0, 40.h),
+                        WidgetUtils.commonSizedBox(0, 80.h),
                       ],
                     ),
                     WidgetUtils.commonSizedBox(20.h, 0),
@@ -173,17 +194,15 @@ class _MoFangJiLuPageState extends State<MoFangJiLuPage> {
 
 
   List<Data> list = [];
-  /// 魔方转盘我的中奖记录
-  Future<void> doPostGetMineRouletteWinList() async {
+  /// 幸运榜单
+  Future<void> doPostGameRanking() async {
     Map<String, dynamic> params = <String, dynamic>{
-      'game_id': '1', // 1魔方2转盘
-      'price': widget.type == 0 ? '20' : '200',
       'page': page,
       'pageSize': MyConfig.pageSize,
     };
     Loading.show(MyConfig.successTitle);
     try {
-      winListBean bean = await DataUtils.postGetMineRouletteWinList(params);
+      luckInfoBean bean = await DataUtils.postGameRanking2(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {

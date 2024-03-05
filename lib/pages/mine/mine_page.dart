@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,9 +12,11 @@ import 'package:yuyinting/pages/mine/zhuangban/zhuangban_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/style_utils.dart';
+import '../../bean/Common_bean.dart';
 import '../../bean/kefuBean.dart';
 import '../../bean/myInfoBean.dart';
 import '../../colors/my_colors.dart';
+import '../../config/config_screen_util.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
@@ -53,7 +56,9 @@ class _MinePageState extends State<MinePage> {
       avatarFrameGifImg = '',
       kefuUid = '',
       kefuAvatar = '';
-
+  // 勿扰模式
+  bool _switchValue = false;
+  bool isWROk = false;
   // 是否有入住审核信息
   bool isShenHe = false;
   var listenSH;
@@ -684,7 +689,7 @@ class _MinePageState extends State<MinePage> {
             /// 展示信息
             WidgetUtils.containerNo(
                 pad: 20,
-                height: identity == 'pe' ? 690.h : 670.h,
+                height: identity == 'pe' ? 710.h : 670.h,
                 width: double.infinity,
                 color: Colors.white,
                 ra: 20,
@@ -800,6 +805,45 @@ class _MinePageState extends State<MinePage> {
                         'assets/images/mine_daili.png', '等级成就', false),
                     WidgetUtils.whiteKuang(
                         'assets/images/mine_kefu.png', '联系客服', false),
+                    Container(
+                      width: double.infinity,
+                      height: ScreenUtil().setHeight(90),
+                      color: Colors.white,
+                      child: Row(
+                        children: [
+                          Image(
+                            image: const AssetImage('assets/images/mine_wurao.jpg'),
+                            width: ConfigScreenUtil.autoHeight40,
+                            height: ConfigScreenUtil.autoHeight40,
+                          ),
+                          SizedBox(
+                            width: ConfigScreenUtil.autoHeight10,
+                          ),
+                          WidgetUtils.onlyText(
+                              '勿扰模式',
+                              StyleUtils.getCommonTextStyle(
+                                  color: Colors.black, fontSize: ScreenUtil().setSp(29))),
+                          const Expanded(child: Text('')),
+                          isWROk ? Transform.translate(offset: Offset(15.h,0),child: Transform.scale(
+                            scale: 0.8,
+                            child: CupertinoSwitch(
+                              value: _switchValue,
+                              onChanged: (value) {
+                                setState(() {
+                                  _switchValue = value;
+                                  if(value == false){
+                                    doPostSetDisturb('0');
+                                  }else{
+                                    doPostSetDisturb('1');
+                                  }
+                                });
+                              },
+                              activeColor: MyColors.homeTopBG,
+                            ),
+                          ),) : const Text(''),
+                        ],
+                      ),
+                    ),
                   ],
                 ))
           ],
@@ -819,11 +863,6 @@ class _MinePageState extends State<MinePage> {
     if (Platform.isIOS) {
       type = '1';
     }
-
-    // Map<String, dynamic> params = <String, dynamic>{
-    //   'system': type,
-    //   'version': sp.getString('myVersion1')
-    // };
     try {
       MyInfoBean bean = await DataUtils.postMyIfon();
       switch (bean.code) {
@@ -860,6 +899,12 @@ class _MinePageState extends State<MinePage> {
             }
             kefuUid = bean.data!.kefuUid.toString();
             kefuAvatar = bean.data!.kefuAvatar!;
+            if(bean.data!.isDisturb == 0){
+              _switchValue = false;
+            }else{
+              _switchValue = true;
+            }
+            isWROk = true;
           });
           break;
         case MyHttpConfig.errorloginCode:
@@ -912,6 +957,36 @@ class _MinePageState extends State<MinePage> {
           break;
         case MyHttpConfig.errorloginCode:
           // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+  /// 勿扰模式
+  Future<void> doPostSetDisturb(String isDisturb) async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'is_disturb': isDisturb,
+    };
+    try {
+      CommonBean bean = await DataUtils.postSetDisturb(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            if(isDisturb == "0"){
+              MyToastUtils.showToastBottom('勿扰模式已关闭');
+            }else{
+              MyToastUtils.showToastBottom('勿扰模式已开启，您现在只可收到互关用户消息');
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:

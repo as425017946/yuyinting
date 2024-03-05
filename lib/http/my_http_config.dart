@@ -13,11 +13,11 @@ class MyHttpConfig{
   // static  String baseURL = "http://192.168.0.51/api";
   //赵增测试环境
   // static  String baseURL = "http://192.168.0.53/api";
-  // // //测试环境
-  // static  String baseURL = "http://18.162.113.63:8080/api";
+  // //测试环境
+  static  String baseURL = "http://18.162.113.63:8080/api";
 
   //正式环境
-  static  String baseURL = sp.getString('isDian').toString().isEmpty ? "http://43.198.138.251:8080/api" : "http://${sp.getString('isDian').toString()}:8080/api";
+  // static  String baseURL = sp.getString('isDian').toString().isEmpty ? "http://43.198.138.251:8080/api" : "http://${sp.getString('isDian').toString()}:8080/api";
   // 正式环境
   // static  String baseURL = "http://www.aa986.com:8080/api";
   /// 文件上传
@@ -329,6 +329,12 @@ class MyHttpConfig{
   static  String getFirstPayment = "$baseURL/order/getFirstPayment";
   // 提现费率
   static  String getRate = "$baseURL/user/getRate";
+  // 游戏榜单
+  static  String gameRanking = "$baseURL/game/gameRanking";
+  // 设置勿扰模式
+  static  String setDisturb = "$baseURL/mine/setDisturb";
+  // 腾讯云查看文件id
+  static  String tencentID = "$baseURL/upload/save";
 
 
 }

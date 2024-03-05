@@ -72,6 +72,8 @@ class WidgetUtils {
               eventBus.fire(SubmitButtonBack(title: '管理'));
             } else if (index == 6) {
               eventBus.fire(SubmitButtonBack(title: '装扮商城'));
+            } else if (index == 7) {
+              eventBus.fire(SubmitButtonBack(title: '忘记密码'));
             }
           }),
           child: isCreate == true
@@ -157,7 +159,22 @@ class WidgetUtils {
                                                             .setSp(25)),
                                               ),
                                             )
-                                          : const Text('')
+                                          : index == 7
+                                              ? Container(
+                                                  alignment: Alignment.center,
+                                                  margin: const EdgeInsets.only(
+                                                      right: 15),
+                                                  child: Text(
+                                                    '忘记密码',
+                                                    style: StyleUtils
+                                                        .getCommonTextStyle(
+                                                            color: Colors.black,
+                                                            fontSize:
+                                                                ScreenUtil()
+                                                                    .setSp(25)),
+                                                  ),
+                                                )
+                                              : const Text('')
               : Text(''),
         )
       ],

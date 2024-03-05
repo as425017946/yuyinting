@@ -65,30 +65,30 @@ class _YouxiPageState extends State<YouxiPage>  with AutomaticKeepAliveClientMix
               alignment: Alignment.center,
               children: [
                 i == 0 ? WidgetUtils.CircleImageAss(ScreenUtil().setHeight(300), double.infinity, 10, 'assets/images/yx_zp.jpg') : i == 1 ? WidgetUtils.CircleImageAss(ScreenUtil().setHeight(300), double.infinity, 10, 'assets/images/yx_car.jpg') : WidgetUtils.CircleImageAss(ScreenUtil().setHeight(300), double.infinity, 10, 'assets/images/yx_mf.jpg'),
-                i == 0 ? Positioned(
-                    top: 0,
-                    child: SizedBox(
-                  height: 270.h,
-                  width: 270.h,
-                  child: const SVGASimpleImage(
-                      assetsName: 'assets/svga/zhuanpan_room.svga'),
-                )) : i == 1 ? Positioned(
-                    top: 0,
-                    right: 0,
-                    child: SizedBox(
-                      height: 280.h,
-                      width: 280.h,
-                      child: const SVGASimpleImage(
-                          assetsName: 'assets/svga/maliao_room.svga'),
-                    )) : Positioned(
-                    top: -20,
-                    right: 25,
-                    child: SizedBox(
-                      height: 260.h,
-                      width: 260.h,
-                      child: const SVGASimpleImage(
-                          assetsName: 'assets/svga/mofang_jin_room_show.svga'),
-                    )),
+                // i == 0 ? Positioned(
+                //     top: 0,
+                //     child: SizedBox(
+                //   height: 270.h,
+                //   width: 270.h,
+                //   child: const SVGASimpleImage(
+                //       assetsName: 'assets/svga/zhuanpan_room.svga'),
+                // )) : i == 1 ? Positioned(
+                //     top: 0,
+                //     right: 0,
+                //     child: SizedBox(
+                //       height: 280.h,
+                //       width: 280.h,
+                //       child: const SVGASimpleImage(
+                //           assetsName: 'assets/svga/maliao_room.svga'),
+                //     )) : Positioned(
+                //     top: -20,
+                //     right: 25,
+                //     child: SizedBox(
+                //       height: 260.h,
+                //       width: 260.h,
+                //       child: const SVGASimpleImage(
+                //           assetsName: 'assets/svga/mofang_jin_room_show.svga'),
+                //     )),
               ],
             ),
           ),

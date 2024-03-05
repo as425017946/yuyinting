@@ -5,7 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_vibrate/flutter_vibrate.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:marquee/marquee.dart';
 import 'package:yuyinting/main.dart';
+import 'package:yuyinting/pages/game/rank_page.dart';
 import 'package:yuyinting/pages/game/zhuanpan/zhuanpan_daoju_page.dart';
 import 'package:yuyinting/pages/game/zhuanpan/zhuanpan_guize_page.dart';
 import 'package:yuyinting/pages/game/zhuanpan/zhuanpan_jiangchi_page.dart';
@@ -13,9 +15,9 @@ import 'package:yuyinting/pages/game/zhuanpan/zhuanpan_jilu_page.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/my_utils.dart';
 
+import '../../bean/luckInfoBean.dart';
 import '../../bean/playRouletteBean.dart';
 import '../../colors/my_colors.dart';
-import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../utils/event_utils.dart';
@@ -81,6 +83,9 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
     setState(() {
       isClose = sp.getBool('zp_xin')!;
     });
+
+    doPostGameRanking();
+
     animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 8000),
@@ -226,6 +231,72 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
                         ScreenUtil().setHeight(72),
                         ScreenUtil().setHeight(89)),
                   )),
+              // 中奖信息
+              Positioned(
+                top: 40.h,
+                child: // 中奖信息滚动
+              luckInfo.isNotEmpty ? Stack(
+                children: [
+                  Opacity(
+                    opacity: 0.14,
+                    child: Container(
+                      margin: EdgeInsets.only(left: 40.h, right: 40.h),
+                      width: 300.h,
+                      height: ScreenUtil().setHeight(42),
+                      decoration: const BoxDecoration(
+                        //背景
+                        color: Colors.white,
+                        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                        borderRadius:
+                        BorderRadius.all(Radius.circular(21)),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 40.h, right: 40.h),
+                    padding: EdgeInsets.only(top: 10.h, left: 10.h, right: 10.h),
+                    width: 300.h,
+                    height: ScreenUtil().setHeight(42),
+                    alignment: Alignment.center,
+                    child: Marquee(
+                      // 文本
+                      text:  luckInfo,
+                      // 文本样式
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 21.sp,
+                        shadows: const [
+                          Shadow(
+                            color: Colors.black54,
+                            offset: Offset(2, 2),
+                            blurRadius: 3,
+                          ),
+                        ],
+                      ),
+                      // 滚动轴：水平或者竖直
+                      scrollAxis: Axis.horizontal,
+                      // 轴对齐方式start
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      // 空白间距
+                      blankSpace: 20.0,
+                      // 速度
+                      velocity: 30.0,
+                      // 暂停时长
+                      pauseAfterRound: Duration(seconds: 1),
+                      // startPadding
+                      startPadding: 10.0,
+                      // 加速时长
+                      accelerationDuration: Duration(seconds: 1),
+                      // 加速Curve
+                      accelerationCurve: Curves.linear,
+                      // 减速时长
+                      decelerationDuration: Duration(milliseconds: 500),
+                      // 减速Curve
+                      decelerationCurve: Curves.easeOut,
+                    ),
+                  ),
+                ],
+              ) :  WidgetUtils.commonSizedBox(0, 0),),
               // 转盘
               Positioned(
                 width: ScreenUtil().setHeight(590),
@@ -379,6 +450,20 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
                             fontWeight: FontWeight.w600),
                       ),
                     ),
+                  )),
+              // 榜单
+              Positioned(
+                  top: ScreenUtil().setHeight(120),
+                  left: ScreenUtil().setHeight(20),
+                  child: GestureDetector(
+                    onTap: (() {
+                      MyUtils.goTransparentPage(
+                          context, const RankPage());
+                    }),
+                    child: WidgetUtils.showImages(
+                        'assets/images/room_bd.png',
+                        ScreenUtil().setHeight(72),
+                        ScreenUtil().setHeight(89)),
                   )),
             ],
           ),
@@ -684,6 +769,39 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
         isXiazhu = true;
       });
       eventBus.fire(GameBack(isBack: false));
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+  String luckInfo = '';
+  /// 幸运榜单
+  Future<void> doPostGameRanking() async {
+    try {
+      luckInfoBean bean = await DataUtils.postGameRanking();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            if(bean.data!.isNotEmpty){
+              for(int i = 0 ; i < bean.data!.length; i++){
+                if(luckInfo.isEmpty){
+                  luckInfo = '恭喜${bean.data![i].nickname}获得${bean.data![i].giftName}          ';
+                }else{
+                  luckInfo = '$luckInfo恭喜${bean.data![i].nickname}获得${bean.data![i].giftName}          ';
+                }
+              }
+              LogE('记录=== $luckInfo');
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }

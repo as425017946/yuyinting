@@ -611,7 +611,6 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                           height: ScreenUtil().setHeight(80),
                           child: Row(
                             children: [
-                              WidgetUtils.commonSizedBox(0, 20),
                               GestureDetector(
                                 onTap: (() {
                                   if (MyUtils.checkClick()) {
@@ -621,12 +620,17 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                                     Navigator.of(context).pop();
                                   }
                                 }),
-                                child: WidgetUtils.showImages(
-                                    'assets/images/room_message_left.png',
-                                    ScreenUtil().setHeight(22),
-                                    ScreenUtil().setHeight(13)),
+                                child: Container(
+                                  width: 80.h,
+                                  height: 80.h,
+                                  color: Colors.transparent,
+                                  alignment: Alignment.center,
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/room_message_left.png',
+                                      ScreenUtil().setHeight(22),
+                                      ScreenUtil().setHeight(13)),
+                                ),
                               ),
-                              WidgetUtils.commonSizedBox(0, 20),
                               WidgetUtils.onlyText(
                                   widget.nickName,
                                   StyleUtils.getCommonTextStyle(

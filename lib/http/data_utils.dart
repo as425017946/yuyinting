@@ -43,6 +43,7 @@ import '../bean/labelListBean.dart';
 import '../bean/liwuBean.dart';
 import '../bean/liwuMoreBean.dart';
 import '../bean/loginBean.dart';
+import '../bean/luckInfoBean.dart';
 import '../bean/luckUserBean.dart';
 import '../bean/maiXuBean.dart';
 import '../bean/managerBean.dart';
@@ -1280,11 +1281,40 @@ class DataUtils{
     return zhuboLiuShuiBean.fromJson(respons!);
   }
 
-
   /// 提现费率
   static Future<feilvBean> postGetRate() async {
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.getRate, {}, {});
     print("提现费率：$respons");
     return feilvBean.fromJson(respons!);
+  }
+
+  /// 幸运榜单
+  static Future<luckInfoBean> postGameRanking() async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.gameRanking, {}, {});
+    print("幸运榜单：$respons");
+    return luckInfoBean.fromJson(respons!);
+  }
+
+  /// 幸运榜单
+  static Future<luckInfoBean> postGameRanking2(Map<String,dynamic> params) async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.gameRanking, {}, params);
+    print("幸运榜单：$respons");
+    return luckInfoBean.fromJson(respons!);
+  }
+
+  /// 设置勿扰模式
+  static Future<CommonBean> postSetDisturb(Map<String,dynamic> params) async {
+    print("设置勿扰模式：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.setDisturb, {}, params);
+    print("设置勿扰模式：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 腾讯云id
+  static Future<CommonMyIntBean> postTencentID(Map<String,dynamic> params) async {
+    print("腾讯云id：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.tencentID, {}, params);
+    print("腾讯云id：$respons");
+    return CommonMyIntBean.fromJson(respons!);
   }
 }

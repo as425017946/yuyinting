@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:marquee/marquee.dart';
 import 'package:soundpool/soundpool.dart';
 import 'package:svgaplayer_flutter/parser.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
-import 'package:yuyinting/config/my_config.dart';
-
+import 'package:yuyinting/pages/game/rank_page.dart';
 import '../../bean/balanceBean.dart';
+import '../../bean/luckInfoBean.dart';
 import '../../bean/playRouletteBean.dart';
 import '../../colors/my_colors.dart';
 import '../../http/data_utils.dart';
@@ -65,6 +66,8 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
     setState(() {
       isTiaoguo = sp.getBool('mf_jin')!;
     });
+
+    doPostGameRanking();
 
     animationController = SVGAAnimationController(vsync: this);
     loadAnimation();
@@ -204,7 +207,69 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                           ),
                         ],
                       ),
-                      WidgetUtils.commonSizedBox(40.h, 0),
+                      // 中奖信息滚动
+                      luckInfo.isNotEmpty ? Stack(
+                        children: [
+                          Opacity(
+                            opacity: 0.14,
+                            child: Container(
+                              margin: EdgeInsets.only(left: 40.h, right: 40.h),
+                              width: double.infinity,
+                              height: ScreenUtil().setHeight(42),
+                              decoration: const BoxDecoration(
+                                //背景
+                                color: Colors.white,
+                                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(21)),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(left: 40.h, right: 40.h),
+                            padding: EdgeInsets.only(top: 10.h, left: 10.h, right: 10.h),
+                            height: ScreenUtil().setHeight(42),
+                            alignment: Alignment.center,
+                            child: Marquee(
+                              // 文本
+                              text:  luckInfo,
+                              // 文本样式
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 21.sp,
+                                shadows: const [
+                                  Shadow(
+                                    color: Colors.black54,
+                                    offset: Offset(2, 2),
+                                    blurRadius: 3,
+                                  ),
+                                ],
+                              ),
+                              // 滚动轴：水平或者竖直
+                              scrollAxis: Axis.horizontal,
+                              // 轴对齐方式start
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              // 空白间距
+                              blankSpace: 20.0,
+                              // 速度
+                              velocity: 30.0,
+                              // 暂停时长
+                              pauseAfterRound: Duration(seconds: 1),
+                              // startPadding
+                              startPadding: 10.0,
+                              // 加速时长
+                              accelerationDuration: Duration(seconds: 1),
+                              // 加速Curve
+                              accelerationCurve: Curves.linear,
+                              // 减速时长
+                              decelerationDuration: Duration(milliseconds: 500),
+                              // 减速Curve
+                              decelerationCurve: Curves.easeOut,
+                            ),
+                          ),
+                        ],
+                      ) :  WidgetUtils.commonSizedBox(42.h, 0),
+                      // WidgetUtils.commonSizedBox(40.h, 0),
                       // 切换魔方svga图
                       Opacity(opacity: isShow == false ? 1 : 0 ,
                         child: Stack(
@@ -464,7 +529,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                   //奖池
                   Positioned(
                       right: ScreenUtil().setHeight(10),
-                      top: ScreenUtil().setHeight(150),
+                      top: ScreenUtil().setHeight(180),
                       child: GestureDetector(
                         onTap: ((){
                           MyUtils.goTransparentPage(context, MoFangJiangChiPage(type: '2',));
@@ -492,7 +557,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                   // 显示余额
                   Positioned(
                     left: ScreenUtil().setHeight(6),
-                    top: ScreenUtil().setHeight(140),
+                    top: ScreenUtil().setHeight(170),
                     child: GestureDetector(
                       onTap: ((){
                         MyUtils.goTransparentPageCom(context, DouPayPage(shuliang: sp.getString('mofangJB').toString(),));
@@ -553,7 +618,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                   // 跳过动画
                   Positioned(
                     left: ScreenUtil().setHeight(15),
-                    top: ScreenUtil().setHeight(210),
+                    top: ScreenUtil().setHeight(230),
                     child: GestureDetector(
                       onTap: ((){
                         setState(() {
@@ -588,7 +653,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                         Opacity(
                           opacity: 0.8,
                           child: Container(
-                            height: ScreenUtil().setHeight(156),
+                            height: ScreenUtil().setHeight(196),
                             width: ScreenUtil().setHeight(137),
                             //边框设置
                             decoration: const BoxDecoration(
@@ -601,7 +666,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                           ),
                         ),
                         Container(
-                          height: ScreenUtil().setHeight(156),
+                          height: ScreenUtil().setHeight(196),
                           width: ScreenUtil().setHeight(137),
                           color: Colors.transparent,
                           child: Column(
@@ -663,6 +728,30 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                                         StyleUtils.getCommonTextStyle(
                                             color: MyColors.roomTCWZ2,
                                             fontSize: ScreenUtil().setSp(21))),
+                                  )),
+                              Container(
+                                width: double.infinity,
+                                height: ScreenUtil().setHeight(1),
+                                margin: EdgeInsets.only(
+                                    left: ScreenUtil().setHeight(10),
+                                    right: ScreenUtil().setHeight(10)),
+                                color: MyColors.roomTCWZ1,
+                              ),
+                              Expanded(
+                                  child: GestureDetector(
+                                    onTap: (() {
+                                      MyUtils.goTransparentPage(
+                                          context, const RankPage());
+                                      setState(() {
+                                        isMore = false;
+                                      });
+                                    }),
+                                    child: WidgetUtils.onlyTextCenter(
+                                        '幸运榜单',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: MyColors.roomTCWZ2,
+                                            fontSize:
+                                            ScreenUtil().setSp(21))),
                                   )),
                             ],
                           ),
@@ -869,6 +958,39 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
       setState(() {
         isXiazhu = true;
       });
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+  String luckInfo = '';
+  /// 幸运榜单
+  Future<void> doPostGameRanking() async {
+    try {
+      luckInfoBean bean = await DataUtils.postGameRanking();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            if(bean.data!.isNotEmpty){
+              for(int i = 0 ; i < bean.data!.length; i++){
+                if(luckInfo.isEmpty){
+                  luckInfo = '恭喜${bean.data![i].nickname}获得${bean.data![i].giftName}          ';
+                }else{
+                  luckInfo = '$luckInfo恭喜${bean.data![i].nickname}获得${bean.data![i].giftName}          ';
+                }
+              }
+              LogE('记录=== $luckInfo');
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
