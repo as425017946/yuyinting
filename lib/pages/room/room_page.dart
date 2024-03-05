@@ -624,6 +624,13 @@ class _RoomPageState extends State<RoomPage>
             //订阅所有远端用户的音频流。
             _engine.muteAllRemoteAudioStreams(false);
             if (isJinyiin == false) {
+              // 启用音频模块
+              _engine.enableAudio();
+              // 发声音发音频流
+              _engine.enableLocalAudio(true);
+              //设置成主播
+              _engine.setClientRole(
+                  role: ClientRoleType.clientRoleBroadcaster);
               // 发布本地音频流
               _engine.muteLocalAudioStream(false);
             }
@@ -926,9 +933,9 @@ class _RoomPageState extends State<RoomPage>
               } else {
                 isMeUp = true;
                 mxIndex = event.map!['serial_number'].toString();
-                LogE('开麦状态== ${event.map!['is_lock'].toString() == '0'}');
-                LogE('开麦状态== ${event.map!['is_lock'].toString()}');
-                if(event.map!['is_lock'].toString() == '0'){
+                LogE('开麦状态== ${event.map!['is_close'].toString() == '0'}');
+                LogE('开麦状态== ${event.map!['is_close'].toString()}');
+                if(event.map!['is_close'].toString() == '0'){
                   setState(() {
                     isJinyiin = false;
                   });
@@ -1571,7 +1578,8 @@ class _RoomPageState extends State<RoomPage>
                 // list2.add(map);
               });
               WidgetsBinding.instance!.addPostFrameCallback((_) {
-                scrollToLastItem2(); // 在widget构建完成后滚动到底部
+                // scrollToLastItem2(); // 在widget构建完成后滚动到底部
+                scrollToLastItem();
               });
             } else if (event.map!['type'] == 'send_all_user') {
               // 是这个厅，并送了带横幅的礼物
@@ -1691,7 +1699,8 @@ class _RoomPageState extends State<RoomPage>
               });
 
               WidgetsBinding.instance!.addPostFrameCallback((_) {
-                scrollToLastItem2(); // 在widget构建完成后滚动到底部
+                // scrollToLastItem2(); // 在widget构建完成后滚动到底部
+                scrollToLastItem();
               });
             } else if (event.map!['type'] == 'send_screen_all') {
               // 厅内送礼
@@ -2174,7 +2183,7 @@ class _RoomPageState extends State<RoomPage>
     Directory? directory = await getExternalStorageDirectory();
     LogE('获取保存路径 $directory');
     String savePath =
-        "/sdcard/Android/data/com.leimu.yuyinting/files/${lujing[lujing.length - 1]}";
+        "/sdcard/Android/data/com.cv.gc.yyt/files/${lujing[lujing.length - 1]}";
     LogE('礼物地址 $savePath');
     if (listUrl.isEmpty) {
       setState(() {
@@ -2423,7 +2432,7 @@ class _RoomPageState extends State<RoomPage>
   }
 
   final ScrollController _scrollController = ScrollController();
-  final ScrollController _scrollController2 = ScrollController();
+  // final ScrollController _scrollController2 = ScrollController();
 
   // 在数据变化后将滚动位置设置为最后一个item的位置
   void scrollToLastItem() {
@@ -2434,14 +2443,14 @@ class _RoomPageState extends State<RoomPage>
     );
   }
 
-  // 在数据变化后将滚动位置设置为最后一个item的位置
-  void scrollToLastItem2() {
-    _scrollController2.animateTo(
-      _scrollController2.position.maxScrollExtent,
-      duration: const Duration(milliseconds: 100),
-      curve: Curves.easeInOut,
-    );
-  }
+  // // 在数据变化后将滚动位置设置为最后一个item的位置
+  // void scrollToLastItem2() {
+  //   _scrollController2.animateTo(
+  //     _scrollController2.position.maxScrollExtent,
+  //     duration: const Duration(milliseconds: 100),
+  //     curve: Curves.easeInOut,
+  //   );
+  // }
 
   @override
   void dispose() {
@@ -2457,7 +2466,7 @@ class _RoomPageState extends State<RoomPage>
     listenSend.cancel();
     listenSendImg.cancel();
     _scrollController.dispose();
-    _scrollController2.dispose();
+    // _scrollController2.dispose();
     listenPeople.cancel();
     listenBig.cancel();
     listenSVGA.cancel();

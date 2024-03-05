@@ -732,7 +732,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;
-                case 8: // 御龙豪杰
+                case 5: // 电竞小柴
                   int min = 43;
                   int max = 54;
                   int randomNumber = Random().nextInt(max - min) + min;
