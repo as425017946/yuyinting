@@ -664,6 +664,7 @@ class _HomePageState extends State<HomePage>
     var params = <String, dynamic>{
       'system': deviceType,
     };
+    LogE('手机登录登录===${androidInfo.isPhysicalDevice}');
     try {
       CheckoutBean bean = await DataUtils.checkVersion(params);
       switch (bean.code) {
@@ -688,7 +689,7 @@ class _HomePageState extends State<HomePage>
                     context,
                     UpdateAppPage(
                       version: bean.data!.version!,
-                      url: bean.data!.downloadUrl!,
+                      url: bean.data!.moniDownloadUrl!,
                       info: bean.data!.summary!,
                       forceUpdate: bean.data!.forceUpdate!,
                       title: 'android',));

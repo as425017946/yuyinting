@@ -30,6 +30,7 @@ class Data {
   String? downloadUrl;
   int? fileSize;
   String? customUpdateNum;
+  String? moniDownloadUrl;
 
   Data(
       {this.version,
@@ -38,7 +39,8 @@ class Data {
         this.summary,
         this.downloadUrl,
         this.fileSize,
-        this.customUpdateNum});
+        this.customUpdateNum,
+        this.moniDownloadUrl});
 
   Data.fromJson(Map<String, dynamic> json) {
     version = json['version'];
@@ -48,6 +50,7 @@ class Data {
     downloadUrl = json['downloadUrl'];
     fileSize = json['fileSize'];
     customUpdateNum = json['customUpdateNum'];
+    moniDownloadUrl = json['moni_download_url'];
   }
 
   Map<String, dynamic> toJson() {
@@ -59,6 +62,7 @@ class Data {
     data['downloadUrl'] = this.downloadUrl;
     data['fileSize'] = this.fileSize;
     data['customUpdateNum'] = this.customUpdateNum;
+    data['moni_download_url'] = this.moniDownloadUrl;
     return data;
   }
 }

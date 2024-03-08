@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:svgaplayer_flutter/parser.dart';
-import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 
 import '../../bean/gameListBean.dart';
 import '../../colors/my_colors.dart';
-import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../utils/loading.dart';
