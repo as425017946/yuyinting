@@ -1317,4 +1317,22 @@ class DataUtils{
     print("腾讯云id：$respons");
     return CommonMyIntBean.fromJson(respons!);
   }
+
+
+  /// 用户举报
+  static Future<CommonBean> postUserReport(Map<String,dynamic> params) async {
+    print("用户举报：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.userReport, {}, params);
+    print("用户举报：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 设置离线模式
+  static Future<CommonBean> postSetLockMic(Map<String,dynamic> params) async {
+    print("设置离线模式：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.setLockMic, {}, params);
+    print("设置离线模式：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
 }

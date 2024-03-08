@@ -106,6 +106,13 @@ class _MyHuiZhangPageState extends State<MyHuiZhangPage> {
                                   fontSize: ScreenUtil().setSp(25),
                                 )),
                             WidgetUtils.commonSizedBox(10, 20),
+                            WidgetUtils.onlyText(
+                                '公会分润: $ratio',
+                                StyleUtils.getCommonTextStyle(
+                                  color: Colors.white,
+                                  fontSize: ScreenUtil().setSp(25),
+                                )),
+                            WidgetUtils.commonSizedBox(10, 20),
                           ],
                         ),
                       ),
@@ -433,6 +440,7 @@ class _MyHuiZhangPageState extends State<MyHuiZhangPage> {
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
+            ratio = bean.data!.consortiaInfo!.ratio!;
             logo = bean.data!.consortiaInfo!.logo!;
             guildID = bean.data!.consortiaInfo!.id.toString();
             sp.setString('guild_logo', bean.data!.consortiaInfo!.logo!);

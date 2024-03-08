@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 ///跳转h5页面
 class WebPage extends StatefulWidget {
@@ -17,6 +18,7 @@ class _WebPageState extends State<WebPage> {
     // TODO: implement initState
     super.initState();
     appBar = WidgetUtils.getAppBar('', true, context, false, 99);
+    LogE('地址== ${widget.url}');
   }
 
   @override

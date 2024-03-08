@@ -50,12 +50,22 @@ class _BaobiaoPageState extends State<BaobiaoPage> {
                       fontSize: ScreenUtil().setSp(25),
                       fontWeight: FontWeight.w600)),
               const Expanded(child: Text('')),
+              // WidgetUtils.onlyText(
+              //     'V币/钻石分润:',
+              //     StyleUtils.getCommonTextStyle(
+              //         color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
+              // WidgetUtils.onlyText(
+              //     '${list[i].rebateGb}/${list[i].rebateD}',
+              //     StyleUtils.getCommonTextStyle(
+              //         color: MyColors.g2,
+              //         fontSize: ScreenUtil().setSp(25),
+              //         fontWeight: FontWeight.w600)),
               WidgetUtils.onlyText(
-                  'V币/钻石分润:',
+                  'V币:',
                   StyleUtils.getCommonTextStyle(
                       color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
               WidgetUtils.onlyText(
-                  '${list[i].rebateGb}/${list[i].rebateD}',
+                  '${list[i].rebateGb}',
                   StyleUtils.getCommonTextStyle(
                       color: MyColors.g2,
                       fontSize: ScreenUtil().setSp(25),

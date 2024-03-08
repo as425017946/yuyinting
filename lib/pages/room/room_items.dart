@@ -1683,7 +1683,7 @@ class RoomItems {
   static Widget notices(BuildContext context, bool m0, String notice,
       List<MikeList> listm, String roomID, int wherePeople,
       List<bool> listPeople, bool audio9) {
-    LogE('主持位 == $audio9');
+    // LogE('主持位 == $audio9');
     return Row(
       children: [
         WidgetUtils.commonSizedBox(0, 20),
@@ -3524,8 +3524,8 @@ class RoomItems {
   /// 厅内底部按钮
   static Widget footBtn(BuildContext context, bool isJinyiin, int isForbation,
       String roomID, int isShow, int isBoss, bool mima, List<MikeList> listM,
-      bool roomDX, bool roomSY, bool isRed, bool isMeUp, String mxIndex) {
-    LogE('*** 是否闭麦 $isJinyiin');
+      bool roomDX, bool roomSY, bool isRed, bool isMeUp, String mxIndex,int lixian) {
+    // LogE('*** 是否闭麦 $isJinyiin');
     return SizedBox(
       height: ScreenUtil().setHeight(90),
       child: Row(
@@ -3689,6 +3689,7 @@ class RoomItems {
                     roomDX: roomDX,
                     roomSY: roomSY,
                     mima: mima,
+                    isLiXian: lixian,
                   )
                       : RoomGongNeng(
                     type: 0,
@@ -3698,6 +3699,7 @@ class RoomItems {
                     roomDX: roomDX,
                     roomSY: roomSY,
                     mima: mima,
+                    isLiXian: 0,
                   ));
             }),
             child: Container(

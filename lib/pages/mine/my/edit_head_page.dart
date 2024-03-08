@@ -14,15 +14,12 @@ import '../../../bean/CommonMyIntBean.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../main.dart';
-import '../../../utils/Utils.dart';
 import '../../../utils/loading.dart';
 import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
-
-import '../../cos/upload_dio.dart';
 import '../../cos/upload_httpclient.dart';
 
 /// 编辑头像显示
@@ -74,7 +71,7 @@ class _EditHeadPageState extends State<EditHeadPage> {
       );
     } else {
       targetPath =
-          "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.png";
+          "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
       result = await FlutterImageCompress.compressAndGetFile(
         path, targetPath,
         quality: 50,
@@ -84,77 +81,23 @@ class _EditHeadPageState extends State<EditHeadPage> {
 
     _upload(path.toString().contains('.gif') || path.toString().contains('.GIF')
         ? targetPath
-        : result!.path);
+        : result!.path, 'image');
   }
 
-  // 设置使用的网络库
-  static const String NETWORK_LIB = NETWORK_LIB_HTTP_CLIENT;
-
-  // dio网络库
-  static const String NETWORK_LIB_DIO = "dio";
-
-  // 原生自带http client网络库
-  static const String NETWORK_LIB_HTTP_CLIENT = "http_client";
-
-  // 当前进度
-  int? _complete;
-
-  // 进度总长度
-  int? _target;
-
   /// 上传  String? _pickFilePath;选择的文件路径
-  void _upload(String pickFilePath) async {
+  void _upload(String pickFilePath,String type) async {
     sp.setString('local_path', pickFilePath);
     if (pickFilePath == null) {
       MyToastUtils.showToastBottom('请先选择需要上传的文件');
       return;
     }
-
     try {
-      if (NETWORK_LIB == NETWORK_LIB_DIO) {
-        if (kDebugMode) {
-          print("使用dio库上传");
-        }
-        await UploadDio.upload(pickFilePath!, (count, total) {
-          if (mounted) {
-            setState(() {
-              _complete = count;
-              _target = total;
-            });
-          }
-        });
-      } else if (NETWORK_LIB == NETWORK_LIB_HTTP_CLIENT) {
-        if (kDebugMode) {
-          print("使用原生http client库上传");
-        }
-        await UploadHttpClient.upload(pickFilePath!, (count, total) {
-          if (mounted) {
-            setState(() {
-              _complete = count;
-              _target = total;
-            });
-          }
-        });
-      }
+      print("使用原生http client库上传");
+      await UploadHttpClient.upload(pickFilePath!, type, (count, total) {
+      });
     } catch (e) {
       LogE('上传失败${e.toString()}');
     }
-  }
-
-  /// 获取进度字符串
-  String _getProgressString() {
-    if (_complete == null || _target == null) {
-      return "";
-    }
-    return "${Utils.readableStorageSize(_complete!)}/${Utils.readableStorageSize(_target!)}";
-  }
-
-  /// 后去进度百分比
-  double _getProgress() {
-    if (_complete == null || _target == null) {
-      return 0;
-    }
-    return _complete! / _target!;
   }
 
   List<File> imgArray = [];
@@ -185,8 +128,8 @@ class _EditHeadPageState extends State<EditHeadPage> {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     print('选择照片路径:${image?.path}');
 
-    // yasuo(image!.path);
-    doPostPostFileUpload(image!.path);
+    yasuo(image!.path);
+    // doPostPostFileUpload(image!.path);
   }
 
   onTapPickFromCamera() async {
@@ -197,8 +140,8 @@ class _EditHeadPageState extends State<EditHeadPage> {
     File? imgFile = await entity.file;
     if (imgFile == null) return;
     print('照片路径:${imgFile.path}');
-    // yasuo(imgFile.path);
-    doPostPostFileUpload(imgFile.path);
+    yasuo(imgFile.path);
+    // doPostPostFileUpload(imgFile.path);
   }
 
   var  listen;
@@ -209,6 +152,7 @@ class _EditHeadPageState extends State<EditHeadPage> {
 
     /// 腾讯云上传成功回调
     listen = eventBus.on<TencentBack>().listen((event) {
+      LogE('头像上传成功***** ${event.filePath}');
       doPostRoomJoin(event.filePath);
     });
   }
@@ -217,7 +161,7 @@ class _EditHeadPageState extends State<EditHeadPage> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    listen.cancel();
+    // listen.cancel();
   }
 
   @override
@@ -362,7 +306,7 @@ class _EditHeadPageState extends State<EditHeadPage> {
       );
     } else {
       targetPath =
-          "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.png";
+          "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
       result = await FlutterImageCompress.compressAndGetFile(
         path, targetPath,
         quality: 50,
@@ -414,6 +358,7 @@ class _EditHeadPageState extends State<EditHeadPage> {
 
   /// 腾讯云id
   Future<void> doPostRoomJoin(String filePath) async {
+    LogE('头像上传成功 $filePath');
     String fileType = '';
     if (filePath.contains('.gif') ||
         filePath.contains('.GIF') ||

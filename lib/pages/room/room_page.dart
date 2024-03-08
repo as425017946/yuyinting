@@ -246,6 +246,10 @@ class _RoomPageState extends State<RoomPage>
       roomHeadImg = '';
   List<MikeList> listM = [];
   int isHomeShow = 1, isRoomBoss = 1;
+  //离线模式
+  int roomLixian = 0;
+  // 是否抱麦
+  bool isBaoMic = false;
 
   ///大厅使用
   List<Map> imgList = [
@@ -642,6 +646,17 @@ class _RoomPageState extends State<RoomPage>
           //   // 取消发布本地音频流
           //   _engine.muteLocalAudioStream(true);
           // });
+        } else if (event.title == '离线模式') {
+          LogE('离线模式 == $roomLixian');
+          if(roomLixian == 0){
+            setState(() {
+              roomLixian = 1;
+            });
+          }else{
+            setState(() {
+              roomLixian = 0;
+            });
+          }
         }
       });
       // 厅内操作监听
@@ -697,7 +712,7 @@ class _RoomPageState extends State<RoomPage>
               //设置成主播
               _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
               doPostSetmai(
-                  event.index!, 'up', sp.getString('user_id').toString());
+                  event.index!, 'up', sp.getString('user_id').toString(),'0');
               setState(() {
                 maiTime = DateTime.now().millisecondsSinceEpoch;
                 for (int i = 0; i < 9; i++) {
@@ -721,10 +736,15 @@ class _RoomPageState extends State<RoomPage>
               });
               if (event.index!.contains(';')) {
                 doPostSetmai(event.index!.split(';')[0], 'down',
-                    event.index!.split(';')[1]);
+                    event.index!.split(';')[1],'0');
               } else {
+                if(roomLixian == 1){
+                  setState(() {
+                    roomLixian = 0;
+                  });
+                }
                 doPostSetmai(
-                    event.index!, 'down', sp.getString('user_id').toString());
+                    event.index!, 'down', sp.getString('user_id').toString(),'0');
                 setState(() {
                   for (int i = 0; i < 9; i++) {
                     isMy[i] = false;
@@ -856,6 +876,9 @@ class _RoomPageState extends State<RoomPage>
               isBack = true;
             });
             break;
+          case '抱麦':
+            doPostSetmai('', 'up', event.index!,'1');
+            break;
         }
       });
       // 更换背景图监听
@@ -975,6 +998,11 @@ class _RoomPageState extends State<RoomPage>
                 // 上下麦操作不是本地才刷新
                 if (event.map!['uid'].toString() ==
                     sp.getString('user_id').toString()) {
+                  if(roomLixian == 1){
+                    setState(() {
+                      roomLixian = 0;
+                    });
+                  }
                   // 设置成观众
                   _engine.setClientRole(
                       role: ClientRoleType.clientRoleAudience);
@@ -1140,7 +1168,25 @@ class _RoomPageState extends State<RoomPage>
           //离开频道并释放资源
           _dispose();
           Navigator.pop(context);
-        } else if (event.map!['type'] == 'user_down_mic') {
+        } else if (event.map!['type'] == 'bao_mic') {
+          // 通知用户被报上了麦序
+          setState(() {
+            for (int i = 0; i < 9; i++) {
+              isMy[i] = false;
+            }
+            for (int i = 0; i < 9; i++) {
+              upOrDown[i] = false;
+            }
+          });
+          if (mounted) {
+            // 上下麦操作不是本地才刷新
+            if (event.map!['uid'].toString() ==
+                sp.getString('user_id').toString()) {
+              MyToastUtils.showToastBottom(event.map!['text'].toString());
+              doPostRoomMikeInfo();
+            }
+          }
+        }  else if (event.map!['type'] == 'user_down_mic') {
           //通知用户下麦
           setState(() {
             for (int i = 0; i < 9; i++) {
@@ -2183,7 +2229,7 @@ class _RoomPageState extends State<RoomPage>
     Directory? directory = await getExternalStorageDirectory();
     LogE('获取保存路径 $directory');
     String savePath =
-        "/sdcard/Android/data/com.cv.gc.yyt/files/${lujing[lujing.length - 1]}";
+        "/sdcard/Android/data/com.leimu.yuyinting/files/${lujing[lujing.length - 1]}";
     LogE('礼物地址 $savePath');
     if (listUrl.isEmpty) {
       setState(() {
@@ -2898,7 +2944,8 @@ class _RoomPageState extends State<RoomPage>
                               roomSY,
                               isRed,
                               isMeUp,
-                              mxIndex),
+                              mxIndex,
+                              roomLixian),
                           isDevices == 'ios'
                               ? WidgetUtils.commonSizedBox(20.h, 0)
                               : WidgetUtils.commonSizedBox(0, 0)
@@ -3225,6 +3272,7 @@ class _RoomPageState extends State<RoomPage>
             if (bgSVGA!.isNotEmpty) {
               showStar2(bgSVGA);
             }
+            roomLixian = bean.data!.roomInfo!.lockMic as int;
             roomName = bean.data!.roomInfo!.roomName!;
             bgImage = bean.data!.roomInfo!.bgUrl!;
             notice = bean.data!.roomInfo!.notice!;
@@ -3384,13 +3432,15 @@ class _RoomPageState extends State<RoomPage>
 
   /// 上麦，下麦
   Future<void> doPostSetmai(
-      String serial_number, String action, String whoUid) async {
+      String serial_number, String action, String whoUid,String baoMic) async {
+    //baoMic  0否 1是
     Map<String, dynamic> params = <String, dynamic>{
       'room_id': widget.roomId,
-      'serial_number': int.parse(serial_number) + 1,
+      'serial_number': serial_number.isEmpty ? 0 : int.parse(serial_number) + 1,
       'uid': whoUid,
       'action': action,
-      'from_uid': sp.getString('user_id')
+      'from_uid': sp.getString('user_id'),
+      'is_bao_mic': baoMic
     };
     try {
       maiXuBean bean = await DataUtils.postSetmai(params);
@@ -3537,6 +3587,11 @@ class _RoomPageState extends State<RoomPage>
               if (sp.getString('user_id').toString() ==
                   bean.data![i].uid.toString()) {
                 isMeUp = true;
+                // 启用音频模块
+                _engine.enableAudio();
+                //设置成主播
+                _engine.setClientRole(
+                    role: ClientRoleType.clientRoleBroadcaster);
               }
             }
 
@@ -3668,7 +3723,14 @@ class _RoomPageState extends State<RoomPage>
             } else {
               isJinyiin = false;
               MyToastUtils.showToastBottom('已开麦');
-              // 开启发布本地音频流
+              // 启用音频模块
+              _engine.enableAudio();
+              // 发声音发音频流
+              _engine.enableLocalAudio(true);
+              //设置成主播
+              _engine.setClientRole(
+                  role: ClientRoleType.clientRoleBroadcaster);
+              // 发布本地音频流
               _engine.muteLocalAudioStream(false);
             }
           });

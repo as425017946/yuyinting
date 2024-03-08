@@ -335,6 +335,10 @@ class MyHttpConfig{
   static  String setDisturb = "$baseURL/mine/setDisturb";
   // 腾讯云查看文件id
   static  String tencentID = "$baseURL/upload/save";
+  // 举报用户
+  static  String userReport = "$baseURL/chat/userReport";
+  // 设置离线模式
+  static  String setLockMic = "$baseURL/room/setLockMic";
 
 
 }

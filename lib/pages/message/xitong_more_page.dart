@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yuyinting/pages/trends/trends_more_page.dart';
+import 'package:yuyinting/utils/my_utils.dart';
 import '../../colors/my_colors.dart';
 import '../../db/DatabaseHelper.dart';
 import '../../utils/event_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
+import '../gongping/web_page.dart';
 /// 系统消息
 class XitongMorePage extends StatefulWidget {
   const XitongMorePage({Key? key}) : super(key: key);
@@ -32,7 +35,7 @@ class _XitongMorePageState extends State<XitongMorePage> {
 
 
   Widget message(BuildContext context, int i) {
-    //类型 1纯文字 2纯图片 3图文
+    //类型 1纯文字 2纯图片 3图文 4动态
     if(allData2[i]['type'] == 1){
       return GestureDetector(
         onTap: (() {}),
@@ -85,7 +88,9 @@ class _XitongMorePageState extends State<XitongMorePage> {
     }else if(allData2[i]['type'] == 2){
       return GestureDetector(
         onTap: ((){
-
+          if(MyUtils.checkClick()){
+            MyUtils.goTransparentPageCom(context, WebPage(url: allData2[i]['url']));
+          }
         }),
         child: Column(
           children: [
@@ -105,10 +110,12 @@ class _XitongMorePageState extends State<XitongMorePage> {
           ],
         ),
       );
-    }else{
+    }else if(allData2[i]['type'] == 3){
       return GestureDetector(
         onTap: ((){
-
+          if(MyUtils.checkClick()){
+            MyUtils.goTransparentPageCom(context, WebPage(url: allData2[i]['url']));
+          }
         }),
         child: Column(
           children: [
@@ -154,6 +161,67 @@ class _XitongMorePageState extends State<XitongMorePage> {
               ),
             ),
           ],
+        ),
+      );
+    }else {
+      return GestureDetector(
+        onTap: (() {
+          if(MyUtils.checkClick()){
+            MyUtils.goTransparentPage(context, TrendsMorePage(note_id: allData2[i]['url'], index: 0));
+          }
+        }),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.only(left: 20, right: 20),
+          child: Column(
+            children: [
+              WidgetUtils.commonSizedBox(10, 10),
+              WidgetUtils.onlyTextCenter(
+                  allData2[i]['add_time'],
+                  StyleUtils.getCommonTextStyle(
+                      color: MyColors.g9,
+                      fontSize: ScreenUtil().setSp(25))),
+              Row(
+                children: [
+                  WidgetUtils.showImages(
+                      'assets/images/message_xt.webp',
+                      ScreenUtil().setHeight(80),
+                      ScreenUtil().setHeight(80)),
+                  WidgetUtils.commonSizedBox(0, 10),
+                  WidgetUtils.onlyTextCenter(
+                      '系统消息',
+                      StyleUtils.getCommonTextStyle(
+                          color: Colors.black,
+                          fontSize: ScreenUtil().setSp(29))),
+                ],
+              ),
+              Container(
+                width: double.infinity,
+                margin: const EdgeInsets.only(top: 10,),
+                padding: EdgeInsets.only(left: 20, right: 20, top: 10.h, bottom: 10.h),
+                constraints: BoxConstraints(
+                  minHeight: ScreenUtil().setHeight(110),
+                ),
+                //边框设置
+                decoration: const BoxDecoration(
+                  //背景
+                  color: MyColors.messagePurple,
+                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                  borderRadius: BorderRadius.all(Radius.circular(13.0)),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    WidgetUtils.onlyText(allData2[i]['text'], StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(29))),
+                    WidgetUtils.commonSizedBox(10.h, 0),
+                    WidgetUtils.onlyText('戳这里查看》', StyleUtils.getCommonTextStyle(color: MyColors.btn_d, fontSize: ScreenUtil().setSp(26)))
+                  ],
+                ),
+              ),
+              WidgetUtils.commonSizedBox(20, 0),
+            ],
+          ),
         ),
       );
     }

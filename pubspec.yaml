@@ -130,6 +130,8 @@ dependencies:
   path_provider_platform_interface: ^2.0.1
   # 媒体音
   just_audio: ^0.9.36
+  # ping
+  dart_ping: ^7.0.1
 
 
 dev_dependencies:

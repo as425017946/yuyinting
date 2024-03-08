@@ -11,31 +11,32 @@ import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
+import '../../utils/event_utils.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
-import '../message/geren/people_info_page.dart';
-import '../mine/my/my_info_page.dart';
+
 /// 热度-在线列表
 class ReDuZaiXianPage extends StatefulWidget {
   String roomID;
   List<MikeList> listM;
+
   ReDuZaiXianPage({super.key, required this.roomID, required this.listM});
 
   @override
   State<ReDuZaiXianPage> createState() => _ReDuZaiXianPageState();
 }
 
-class _ReDuZaiXianPageState extends State<ReDuZaiXianPage> with AutomaticKeepAliveClientMixin{
-
+class _ReDuZaiXianPageState extends State<ReDuZaiXianPage>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
   List<ListOn> list = [];
   int page = 1;
   final RefreshController _refreshController =
-  RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: false);
 
   void _onRefresh() async {
     // 重新初始化
@@ -78,11 +79,12 @@ class _ReDuZaiXianPageState extends State<ReDuZaiXianPage> with AutomaticKeepAli
       children: [
         GestureDetector(
           onTap: (() {
-            if(MyUtils.checkClick()){
+            if (MyUtils.checkClick()) {
               // 如果点击的是自己，进入自己的主页
-              if(sp.getString('user_id').toString() == list[i].uid.toString()){
+              if (sp.getString('user_id').toString() ==
+                  list[i].uid.toString()) {
                 // MyUtils.goTransparentRFPage(context, const MyInfoPage());
-              }else{
+              } else {
                 Navigator.pop(context);
                 sp.setString('other_id', list[i].uid.toString());
                 MyUtils.goTransparentPage(
@@ -103,46 +105,50 @@ class _ReDuZaiXianPageState extends State<ReDuZaiXianPage> with AutomaticKeepAli
             height: ScreenUtil().setHeight(130),
             child: Row(
               children: [
-                WidgetUtils.CircleHeadImage(
-                    ScreenUtil().setHeight(80),
-                    ScreenUtil().setHeight(80),
-                    list[i].avatar!),
+                WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(80),
+                    ScreenUtil().setHeight(80), list[i].avatar!),
                 WidgetUtils.commonSizedBox(0, 10),
                 Expanded(
-                  child: Column(
-                    children: [
-                      const Expanded(child: Text('')),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Row(
-                          children: [
-                            WidgetUtils.onlyText(
-                                list[i].nickname!,
-                                StyleUtils.getCommonTextStyle(
-                                    color: MyColors.roomTCWZ2,
-                                    fontSize: ScreenUtil().setSp(25))),
-                            WidgetUtils.commonSizedBox(0, 5),
-                            WidgetUtils.showImages(
-                                list[i].gender == 1 ? 'assets/images/room_nan.png' : 'assets/images/room_nv.png' ,
-                                ScreenUtil().setHeight(31),
-                                ScreenUtil().setHeight(29)),
-                          ],
-                        ),
-                      ),
-                      WidgetUtils.commonSizedBox(2, 0),
-                      // Row(
-                      //   children: [
-                      //     WidgetUtils.showImages(
-                      //         'assets/images/room_fangguan.png',
-                      //         ScreenUtil().setHeight(25),
-                      //         ScreenUtil().setHeight(25)),
-                      //     const Expanded(child: Text(''))
-                      //   ],
-                      // ),
-                      const Expanded(child: Text(''))
-                    ],
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      children: [
+                        WidgetUtils.onlyText(
+                            list[i].nickname!,
+                            StyleUtils.getCommonTextStyle(
+                                color: MyColors.roomTCWZ2,
+                                fontSize: ScreenUtil().setSp(25))),
+                        WidgetUtils.commonSizedBox(0, 5),
+                        WidgetUtils.showImages(
+                            list[i].gender == 1
+                                ? 'assets/images/room_nan.png'
+                                : 'assets/images/room_nv.png',
+                            ScreenUtil().setHeight(31),
+                            ScreenUtil().setHeight(29)),
+                      ],
+                    ),
                   ),
                 ),
+                ///邀请上麦
+                (sp.getString('user_identity').toString() != 'user' &&
+                        sp.getString('user_id').toString() !=
+                            list[i].uid.toString() && list[i].isOnMic == 0)
+                    ? GestureDetector(
+                        onTap: (() {
+                          if(MyUtils.checkClick()){
+                            eventBus
+                                .fire(RoomBack(title: '抱麦', index: list[i].uid.toString()));
+                            Navigator.pop(context);
+                          }
+                        }),
+                        child: SizedBox(
+                            height: 80.h,
+                            child: WidgetUtils.showImages(
+                                'assets/images/room_yq_upmic.png',
+                                50.h,
+                                100.h)))
+                    : const Text(''),
+                WidgetUtils.commonSizedBox(0, 40.h),
               ],
             ),
           ),
@@ -187,10 +193,9 @@ class _ReDuZaiXianPageState extends State<ReDuZaiXianPage> with AutomaticKeepAli
     );
   }
 
-
-
   /// 房间内在线列表
   String peopleNum = '';
+
   Future<void> doPostMemberList() async {
     Loading.show();
     Map<String, dynamic> params = <String, dynamic>{
@@ -209,14 +214,14 @@ class _ReDuZaiXianPageState extends State<ReDuZaiXianPage> with AutomaticKeepAli
               if (bean.data!.list!.isNotEmpty) {
                 list = bean.data!.list!;
               }
-            }else{
+            } else {
               if (bean.data!.list!.isNotEmpty) {
-                for(int i = 0; i < bean.data!.list!.length; i++){
+                for (int i = 0; i < bean.data!.list!.length; i++) {
                   list.add(bean.data!.list![i]);
                 }
-              }else{
-                if(page > 1){
-                  if(bean.data!.list!.length < MyConfig.pageSize){
+              } else {
+                if (page > 1) {
+                  if (bean.data!.list!.length < MyConfig.pageSize) {
                     _refreshController.loadNoData();
                   }
                 }
@@ -225,7 +230,7 @@ class _ReDuZaiXianPageState extends State<ReDuZaiXianPage> with AutomaticKeepAli
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:

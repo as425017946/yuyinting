@@ -37,6 +37,7 @@ class _TuiguangPageState extends State<TuiguangPage> {
       lsZSMoney = '',
       lqVMoney = '',
       lqZSMoney = '';
+
   // 是否显示领取按钮
   bool isShow = true;
 
@@ -162,10 +163,10 @@ class _TuiguangPageState extends State<TuiguangPage> {
                   Expanded(
                       child: GestureDetector(
                     onTap: (() {
-    if(MyUtils.checkClick()) {
-      MyUtils.goTransparentPageCom(
-          context, const FenRunTSPage());
-    }
+                      if (MyUtils.checkClick()) {
+                        MyUtils.goTransparentPageCom(
+                            context, const FenRunTSPage());
+                      }
                     }),
                     child: Row(
                       children: [
@@ -236,24 +237,24 @@ class _TuiguangPageState extends State<TuiguangPage> {
                             fontSize: ScreenUtil().setSp(28))),
                     WidgetUtils.commonSizedBox(15.h, 0),
                     WidgetUtils.onlyTextCenter(
-                         lsVMoney,
+                        lsVMoney,
                         StyleUtils.getCommonTextStyle(
                             color: Colors.black,
                             fontSize: ScreenUtil().setSp(33),
                             fontWeight: FontWeight.w600)),
-                    WidgetUtils.commonSizedBox(15.h, 0),
-                    WidgetUtils.onlyTextCenter(
-                        '历史总钻石分润',
-                        StyleUtils.getCommonTextStyle(
-                            color: Colors.black,
-                            fontSize: ScreenUtil().setSp(28))),
-                    WidgetUtils.commonSizedBox(15.h, 0),
-                    WidgetUtils.onlyTextCenter(
-                        lsZSMoney,
-                        StyleUtils.getCommonTextStyle(
-                            color: Colors.black,
-                            fontSize: ScreenUtil().setSp(33),
-                            fontWeight: FontWeight.w600)),
+                    // WidgetUtils.commonSizedBox(15.h, 0),
+                    // WidgetUtils.onlyTextCenter(
+                    //     '历史总钻石分润',
+                    //     StyleUtils.getCommonTextStyle(
+                    //         color: Colors.black,
+                    //         fontSize: ScreenUtil().setSp(28))),
+                    // WidgetUtils.commonSizedBox(15.h, 0),
+                    // WidgetUtils.onlyTextCenter(
+                    //     lsZSMoney,
+                    //     StyleUtils.getCommonTextStyle(
+                    //         color: Colors.black,
+                    //         fontSize: ScreenUtil().setSp(33),
+                    //         fontWeight: FontWeight.w600)),
                     const Expanded(child: Text('')),
                   ],
                 ),
@@ -290,37 +291,37 @@ class _TuiguangPageState extends State<TuiguangPage> {
                 ),
               ),
             ),
-            WidgetUtils.commonSizedBox(0, 20.h),
-            Expanded(
-              child: Container(
-                height: 220.h,
-                //边框设置
-                decoration: const BoxDecoration(
-                  //背景
-                  color: MyColors.dailiPurple,
-                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                ),
-                child: Column(
-                  children: [
-                    const Expanded(child: Text('')),
-                    WidgetUtils.onlyTextCenter(
-                        '可领取钻石',
-                        StyleUtils.getCommonTextStyle(
-                            color: Colors.black,
-                            fontSize: ScreenUtil().setSp(28))),
-                    WidgetUtils.commonSizedBox(15, 10),
-                    WidgetUtils.onlyTextCenter(
-                        lqZSMoney,
-                        StyleUtils.getCommonTextStyle(
-                            color: Colors.black,
-                            fontSize: ScreenUtil().setSp(33),
-                            fontWeight: FontWeight.w600)),
-                    const Expanded(child: Text('')),
-                  ],
-                ),
-              ),
-            ),
+            // WidgetUtils.commonSizedBox(0, 20.h),
+            // Expanded(
+            //   child: Container(
+            //     height: 220.h,
+            //     //边框设置
+            //     decoration: const BoxDecoration(
+            //       //背景
+            //       color: MyColors.dailiPurple,
+            //       //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+            //       borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            //     ),
+            //     child: Column(
+            //       children: [
+            //         const Expanded(child: Text('')),
+            //         WidgetUtils.onlyTextCenter(
+            //             '可领取钻石',
+            //             StyleUtils.getCommonTextStyle(
+            //                 color: Colors.black,
+            //                 fontSize: ScreenUtil().setSp(28))),
+            //         WidgetUtils.commonSizedBox(15, 10),
+            //         WidgetUtils.onlyTextCenter(
+            //             lqZSMoney,
+            //             StyleUtils.getCommonTextStyle(
+            //                 color: Colors.black,
+            //                 fontSize: ScreenUtil().setSp(33),
+            //                 fontWeight: FontWeight.w600)),
+            //         const Expanded(child: Text('')),
+            //       ],
+            //     ),
+            //   ),
+            // ),
             WidgetUtils.commonSizedBox(0, 20.h),
           ],
         ),
@@ -334,9 +335,9 @@ class _TuiguangPageState extends State<TuiguangPage> {
               Expanded(
                 child: GestureDetector(
                   onTap: (() {
-    if(MyUtils.checkClick()) {
-      Navigator.pushNamed(context, 'ShareTuiguangPage');
-    }
+                    if (MyUtils.checkClick()) {
+                      Navigator.pushNamed(context, 'ShareTuiguangPage');
+                    }
                   }),
                   child: WidgetUtils.myContainer(
                       ScreenUtil().setHeight(70),
@@ -349,41 +350,45 @@ class _TuiguangPageState extends State<TuiguangPage> {
                 ),
               ),
               isShow ? WidgetUtils.commonSizedBox(0, 20) : const Text(''),
-              isShow ? Expanded(
-                child: GestureDetector(
-                  onTap: (() {
-    if(MyUtils.checkClick()) {
-      doPostRoomUserInfo(1);
-    }
-                  }),
-                  child: WidgetUtils.myContainer(
-                      ScreenUtil().setHeight(70),
-                      double.infinity,
-                      MyColors.homeTopBG,
-                      MyColors.homeTopBG,
-                      '领取V币',
-                      ScreenUtil().setSp(28),
-                      Colors.white),
-                ),
-              ) : const Text(''),
+              isShow
+                  ? Expanded(
+                      child: GestureDetector(
+                        onTap: (() {
+                          if (MyUtils.checkClick()) {
+                            doPostRoomUserInfo(1);
+                          }
+                        }),
+                        child: WidgetUtils.myContainer(
+                            ScreenUtil().setHeight(70),
+                            double.infinity,
+                            MyColors.homeTopBG,
+                            MyColors.homeTopBG,
+                            '领取V币',
+                            ScreenUtil().setSp(28),
+                            Colors.white),
+                      ),
+                    )
+                  : const Text(''),
               isShow ? WidgetUtils.commonSizedBox(0, 20) : const Text(''),
-              isShow ? Expanded(
-                child: GestureDetector(
-                  onTap: (() {
-    if(MyUtils.checkClick()) {
-      doPostRoomUserInfo(2);
-    }
-                  }),
-                  child: WidgetUtils.myContainer(
-                      ScreenUtil().setHeight(70),
-                      double.infinity,
-                      MyColors.homeTopBG,
-                      MyColors.homeTopBG,
-                      '领取钻石',
-                      ScreenUtil().setSp(28),
-                      Colors.white),
-                ),
-              ) : const Text(''),
+              isShow
+                  ? Expanded(
+                      child: GestureDetector(
+                        onTap: (() {
+                          if (MyUtils.checkClick()) {
+                            doPostRoomUserInfo(2);
+                          }
+                        }),
+                        child: WidgetUtils.myContainer(
+                            ScreenUtil().setHeight(70),
+                            double.infinity,
+                            MyColors.homeTopBG,
+                            MyColors.homeTopBG,
+                            '领取钻石',
+                            ScreenUtil().setSp(28),
+                            Colors.white),
+                      ),
+                    )
+                  : const Text(''),
             ],
           ),
         )
@@ -410,9 +415,9 @@ class _TuiguangPageState extends State<TuiguangPage> {
             lsZSMoney = bean.data!.allRebateD!;
             lqVMoney = bean.data!.canRebateGb!;
             lqZSMoney = bean.data!.canRebateD!;
-            if(bean.data!.getSwtich == 1){
+            if (bean.data!.getSwtich == 1) {
               isShow = true;
-            }else{
+            } else {
               isShow = false;
             }
           });
@@ -444,16 +449,16 @@ class _TuiguangPageState extends State<TuiguangPage> {
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
-            if(type == 1){
+            if (type == 1) {
               lqVMoney = '0';
-            }else{
+            } else {
               lqZSMoney = '0';
             }
           });
           MyToastUtils.showToastBottom('领取成功！');
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:

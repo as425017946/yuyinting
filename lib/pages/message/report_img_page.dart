@@ -9,8 +9,6 @@ import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 import 'package:yuyinting/utils/log_util.dart';
 
-import '../../../bean/CommonMyIntBean.dart';
-import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../main.dart';
 import '../../../utils/event_utils.dart';
@@ -22,42 +20,41 @@ import '../../../utils/widget_utils.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:path/path.dart' as path;
-import '../../cos/upload_httpclient.dart';
 
-class EditPhotoPage extends StatefulWidget {
+import '../../bean/CommonMyIntBean.dart';
+import '../../http/data_utils.dart';
+import '../cos/upload_httpclient.dart';
+
+/// 举报图片上传
+class ReportIMGPage extends StatefulWidget {
   int length;
-
-  EditPhotoPage({super.key, required this.length});
+  ReportIMGPage({super.key, required this.length});
 
   @override
-  State<EditPhotoPage> createState() => _EditPhotoPageState();
+  State<ReportIMGPage> createState() => _ReportIMGPageState();
 }
 
-class _EditPhotoPageState extends State<EditPhotoPage> {
-  // 记录上传次数
-  int sum = 0;
-  // 记录本次上传多少
-  int imgLength = 0;
+class _ReportIMGPageState extends State<ReportIMGPage> {
   List<File> imgArray = [];
   var imagesUrl, imagesType;
   String origin_path = '', origin_url = '';
   List<AssetEntity> selectAss = [];
-
   onTapPickFromGallery() async {
     Navigator.pop(context);
-    final List<AssetEntity>? entitys = await AssetPicker.pickAssets(
-      context,
+    final List<AssetEntity>? entitys = await AssetPicker.pickAssets(context,
       pickerConfig: AssetPickerConfig(
-          maxAssets: widget.length,
-          requestType: RequestType.image,
-          selectedAssets: selectAss),
-    );
+          maxAssets: widget.length, requestType: RequestType.image,
+          selectedAssets: selectAss),);
 
     selectAss = entitys!;
 
     if (entitys == null) return;
     yasuo2(entitys);
     // doPostPostFileUpload2(entitys);
+    // final ImagePicker _picker = ImagePicker();
+    // final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    // print('选择照片路径:${image?.path}');
+
   }
 
   onTapPickFromCamera() async {
@@ -70,15 +67,8 @@ class _EditPhotoPageState extends State<EditPhotoPage> {
     print('照片路径:${imgFile.path}');
 
     selectAss.add(entity);
-
     yasuo(imgFile.path);
     // doPostPostFileUpload(imgFile.path);
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
   }
 
 
@@ -88,7 +78,16 @@ class _EditPhotoPageState extends State<EditPhotoPage> {
         backgroundColor: Colors.transparent,
         body: Column(
           children: [
-            const Expanded(child: Text('')),
+            Expanded(child: GestureDetector(
+              onTap: ((){
+                Navigator.pop(context);
+              }),
+              child: Container(
+                height: double.infinity,
+                width: double.infinity,
+                color: Colors.black54,
+              ),
+            )),
             Container(
               //边框设置
               decoration: const BoxDecoration(
@@ -101,16 +100,6 @@ class _EditPhotoPageState extends State<EditPhotoPage> {
               ),
               child: Column(
                 children: [
-                  Container(
-                    height: ScreenUtil().setHeight(540),
-                    padding: const EdgeInsets.only(left: 20, right: 20),
-                    alignment: Alignment.center,
-                    child: WidgetUtils.showImages(
-                        'assets/images/mine_head_shili.png',
-                        ScreenUtil().setHeight(520),
-                        double.infinity),
-                  ),
-                  WidgetUtils.myLine(thickness: 10),
                   GestureDetector(
                     onTap: (() {
                       onTapPickFromCamera();
@@ -188,7 +177,7 @@ class _EditPhotoPageState extends State<EditPhotoPage> {
     } else if (path.toString().contains('.jpg') ||
         path.toString().contains('.GPG')) {
       targetPath =
-          "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
+      "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
       result = await FlutterImageCompress.compressAndGetFile(
         path, targetPath,
         quality: 50,
@@ -197,7 +186,7 @@ class _EditPhotoPageState extends State<EditPhotoPage> {
     } else if (path.toString().contains('.jpeg') ||
         path.toString().contains('.GPEG')) {
       targetPath =
-          "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpeg";
+      "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpeg";
       result = await FlutterImageCompress.compressAndGetFile(
         path, targetPath,
         quality: 50,
@@ -210,7 +199,7 @@ class _EditPhotoPageState extends State<EditPhotoPage> {
     } else if (path.toString().contains('.webp') ||
         path.toString().contains('.WEBP')) {
       targetPath =
-          "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.webp";
+      "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.webp";
       result = await FlutterImageCompress.compressAndGetFile(
         path, targetPath,
         quality: 50,
@@ -218,7 +207,7 @@ class _EditPhotoPageState extends State<EditPhotoPage> {
       );
     } else {
       targetPath =
-          "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
+      "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
       result = await FlutterImageCompress.compressAndGetFile(
         path, targetPath,
         quality: 50,
@@ -230,33 +219,30 @@ class _EditPhotoPageState extends State<EditPhotoPage> {
     FormData formdata = FormData.fromMap(
       {
         'type': 'image',
-        "file": await MultipartFile.fromFile(
-          path.contains('.gif') || path.toString().contains('.GIF')
-              ? targetPath
-              : result!.path,
-          filename: name,
-        )
+        "file": await MultipartFile.fromFile(path.contains('.gif') || path.toString().contains('.GIF') ? targetPath : result!.path ,
+          filename: name,)
       },
     );
     BaseOptions option = BaseOptions(
         contentType: 'multipart/form-data', responseType: ResponseType.plain);
-    option.headers["Authorization"] = sp.getString('user_token') ?? '';
+    option.headers["Authorization"] = sp.getString('user_token')??'';
     Dio dio = Dio(option);
     //application/json
     try {
-      var respone = await dio.post(MyHttpConfig.fileUpload, data: formdata);
+      var respone = await dio.post(
+          MyHttpConfig.fileUpload,
+          data: formdata);
       Map jsonResponse = json.decode(respone.data.toString());
       if (jsonResponse['code'] == 200) {
-        eventBus.fire(PhotoBack(
-            selectAss: selectAss, id: jsonResponse['data'].toString()));
+        eventBus.fire(PhotoBack(selectAss: selectAss, id: jsonResponse['data'].toString()));
         MyToastUtils.showToastBottom('上传成功');
         Loading.dismiss();
         // ignore: use_build_context_synchronously
         Navigator.pop(context);
-      } else if (jsonResponse['code'] == 401) {
+      }else if(jsonResponse['code'] == 401){
         // ignore: use_build_context_synchronously
         MyUtils.jumpLogin(context);
-      } else {
+      }else{
         MyToastUtils.showToastBottom(jsonResponse['msg']);
       }
 
@@ -265,6 +251,7 @@ class _EditPhotoPageState extends State<EditPhotoPage> {
       Loading.dismiss();
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
+
   }
 
   /// 获取文件url
@@ -276,13 +263,12 @@ class _EditPhotoPageState extends State<EditPhotoPage> {
       var dir = await path_provider.getTemporaryDirectory();
       String targetPath = '';
       var result;
-      if (imgFile!.path.toString().contains('.gif') ||
-          imgFile!.path.toString().contains('.GIF')) {
+      if (imgFile!.path.toString().contains('.gif') || imgFile!.path.toString().contains('.GIF')) {
         targetPath = imgFile!.path;
       } else if (imgFile!.path.toString().contains('.jpg') ||
           imgFile!.path.toString().contains('.GPG')) {
         targetPath =
-            "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
+        "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
         result = await FlutterImageCompress.compressAndGetFile(
           imgFile!.path, targetPath,
           quality: 50,
@@ -291,7 +277,7 @@ class _EditPhotoPageState extends State<EditPhotoPage> {
       } else if (imgFile!.path.toString().contains('.jpeg') ||
           imgFile!.path.toString().contains('.GPEG')) {
         targetPath =
-            "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpeg";
+        "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpeg";
         result = await FlutterImageCompress.compressAndGetFile(
           imgFile!.path, targetPath,
           quality: 50,
@@ -304,7 +290,7 @@ class _EditPhotoPageState extends State<EditPhotoPage> {
       } else if (imgFile!.path.toString().contains('.webp') ||
           imgFile!.path.toString().contains('.WEBP')) {
         targetPath =
-            "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.webp";
+        "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.webp";
         result = await FlutterImageCompress.compressAndGetFile(
           imgFile!.path, targetPath,
           quality: 50,
@@ -312,25 +298,19 @@ class _EditPhotoPageState extends State<EditPhotoPage> {
         );
       } else {
         targetPath =
-            "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
+        "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
         result = await FlutterImageCompress.compressAndGetFile(
           imgFile!.path, targetPath,
           quality: 50,
           rotate: 0, // 旋转角度
         );
       }
-      var name = imgFile!.path
-          .substring(imgFile!.path.lastIndexOf("/") + 1, imgFile!.path.length);
+      var name = imgFile!.path.substring(imgFile!.path.lastIndexOf("/") + 1, imgFile!.path.length);
       FormData formdata = FormData.fromMap(
         {
           'type': 'image',
-          "file": await MultipartFile.fromFile(
-            imgFile!.path.toString().contains('.gif') ||
-                    imgFile!.path.toString().contains('.GIF')
-                ? targetPath
-                : result!.path,
-            filename: name,
-          )
+          "file": await MultipartFile.fromFile(result!.path,
+            filename: name,)
         },
       );
       BaseOptions option = BaseOptions(
@@ -339,18 +319,21 @@ class _EditPhotoPageState extends State<EditPhotoPage> {
       Dio dio = Dio(option);
       //application/json
       try {
-        var respone = await dio.post(MyHttpConfig.fileUpload, data: formdata);
+        var respone = await dio.post(
+            MyHttpConfig.fileUpload,
+            data: formdata);
         Map jsonResponse = json.decode(respone.data.toString());
 
         LogE('上传id$id');
         if (jsonResponse['code'] == 200) {
-          if (id.isEmpty) {
+          if(id.isEmpty){
             id = jsonResponse['data'].toString();
-          } else {
+          }else{
             id = '$id,${jsonResponse['data'].toString()}';
           }
-          if (i == lists.length - 1) {
-            eventBus.fire(PhotoBack(selectAss: lists, id: id));
+          if(i == lists.length - 1){
+            eventBus.fire(PhotoBack(
+                selectAss: lists, id: id));
             MyToastUtils.showToastBottom('上传成功');
             Loading.dismiss();
             // ignore: use_build_context_synchronously
@@ -367,7 +350,10 @@ class _EditPhotoPageState extends State<EditPhotoPage> {
         // MyToastUtils.showToastBottom(MyConfig.errorTitle);
       }
     }
+
   }
+
+
 
   /// 压缩图片
   void yasuo(String path) async {
@@ -485,6 +471,7 @@ class _EditPhotoPageState extends State<EditPhotoPage> {
       try {
         directTransferData = await _getStsDirectSign(ext);
       } catch (err) {
+        print(err);
         throw Exception("getStsDirectSign fail");
       }
       Loading.show('上传中...');
@@ -520,6 +507,7 @@ class _EditPhotoPageState extends State<EditPhotoPage> {
           LogE('上传状态 ${response.statusCode}');
           if (response.statusCode == 200) {
             doPostRoomJoin(cosKey,i);
+            print('上传成功');
           } else {
             Loading.dismiss();
             throw Exception("上传失败 $response");
@@ -527,6 +515,7 @@ class _EditPhotoPageState extends State<EditPhotoPage> {
         },
         onError: (error) {
           Loading.dismiss();
+          print('Error: $error');
           throw Exception("上传失败 ${error.toString()}");
         },
         cancelOnError: true,
@@ -535,7 +524,7 @@ class _EditPhotoPageState extends State<EditPhotoPage> {
   }
 
   /// 上传  String? _pickFilePath;选择的文件路径
-  void _upload(String pickFilePath, String type) async {
+  void _upload(String pickFilePath,String type) async {
     sp.setString('local_path', pickFilePath);
     if (pickFilePath == null) {
       MyToastUtils.showToastBottom('请先选择需要上传的文件');
@@ -543,7 +532,7 @@ class _EditPhotoPageState extends State<EditPhotoPage> {
     }
     try {
       print("使用原生http client库上传");
-      await UploadHttpClient.upload(pickFilePath!, type, (count, total) {
+      await UploadHttpClient.upload(pickFilePath!,type, (count, total) {
       });
     } catch (e) {
       LogE('上传失败${e.toString()}');

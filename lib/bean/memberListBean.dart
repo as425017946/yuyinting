@@ -57,6 +57,7 @@ class ListOn {
   String? nickname;
   int? gender;
   String? avatar;
+  int? isOnMic;
 
   ListOn({this.uid, this.number, this.nickname, this.gender, this.avatar});
 
@@ -66,6 +67,7 @@ class ListOn {
     nickname = json['nickname'];
     gender = json['gender'];
     avatar = json['avatar'];
+    isOnMic = json['isOnMic'];
   }
 
   Map<String, dynamic> toJson() {
@@ -75,6 +77,7 @@ class ListOn {
     data['nickname'] = this.nickname;
     data['gender'] = this.gender;
     data['avatar'] = this.avatar;
+    data['isOnMic'] = this.isOnMic;
     return data;
   }
 }

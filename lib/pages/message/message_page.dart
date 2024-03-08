@@ -11,7 +11,6 @@ import 'package:yuyinting/pages/message/xitong_more_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import '../../bean/xtListBean.dart';
-import '../../config/my_config.dart';
 import '../../db/DatabaseHelper.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';

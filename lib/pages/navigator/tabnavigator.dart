@@ -20,6 +20,7 @@ import '../../bean/isFirstOrderBean.dart';
 import '../../bean/joinRoomBean.dart';
 import '../../bean/qiehuanBean.dart';
 import '../../bean/svgaAllBean.dart';
+import '../../bean/xtListBean.dart';
 import '../../colors/my_colors.dart';
 import '../../db/DatabaseHelper.dart';
 import '../../http/data_utils.dart';
@@ -86,10 +87,12 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
   bool isBig = false;
   int bigType = 0; //大礼物默认是爆出 0爆出1送出
 
-  var listen, listenZdy, listenRoomBack, listenMessage, listenZDY,listenShouQi;
+  var listen, listenZdy, listenRoomBack, listenMessage, listenZDY, listenShouQi;
   bool isSDKInit = false;
+
   // 是否开始预下载
   bool isDown = false;
+
   // 设备是安卓还是ios
   String isDevices = 'android';
 
@@ -99,11 +102,12 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       setState(() {
         isDevices = 'android';
       });
-    }else if (Platform.isIOS){
+    } else if (Platform.isIOS) {
       setState(() {
         isDevices = 'ios';
       });
     }
+    doPostSystemMsgList();
     MyUtils.initSDK();
     MyUtils.addChatListener();
     //先退出然后在登录
@@ -169,9 +173,9 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           isJoinRoom = true;
           isFirstJoinRoom = false;
         });
-      }else if(event.title == '加入其他房间'){
+      } else if (event.title == '加入其他房间') {
         // 判断加入过其他房间，并且现在是收起的状态
-        if(isJoinRoom){
+        if (isJoinRoom) {
           setState(() {
             isFirstJoinRoom = false;
             isJoinRoom = false;
@@ -184,10 +188,9 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
             // 调用离开房间接口
             // doPostLeave(sp.getString('roomIDJoinOther').toString());
           });
-
         }
-      }else if(event.title == '账号已在其他设备登录'){
-        if(isJoinRoom) {
+      } else if (event.title == '账号已在其他设备登录') {
+        if (isJoinRoom) {
           setState(() {
             isFirstJoinRoom = false;
             isJoinRoom = false;
@@ -200,29 +203,29 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
             MyUtils.jumpLogin(context);
           });
         }
-      }else if(event.title == '成功切换账号'){
-       if(isJoinRoom){
-         setState(() {
-           isFirstJoinRoom = false;
-           isJoinRoom = false;
-           //取消订阅所有远端用户的音频流。
-           _engine.muteAllRemoteAudioStreams(true);
-           // 取消发布本地音频流
-           _engine.muteLocalAudioStream(true);
-           _engine.disableAudio();
-           _dispose();
-         });
-       }
-      }else if(event.title == '资源开始下载'){
-        if(isDown == false) {
+      } else if (event.title == '成功切换账号') {
+        if (isJoinRoom) {
+          setState(() {
+            isFirstJoinRoom = false;
+            isJoinRoom = false;
+            //取消订阅所有远端用户的音频流。
+            _engine.muteAllRemoteAudioStreams(true);
+            // 取消发布本地音频流
+            _engine.muteLocalAudioStream(true);
+            _engine.disableAudio();
+            _dispose();
+          });
+        }
+      } else if (event.title == '资源开始下载') {
+        if (isDown == false) {
           doPostSvgaGiftList();
         }
-      }else if(event.title == '去掉旋转'){
+      } else if (event.title == '去掉旋转') {
         setState(() {
           isJoinRoom = false;
         });
-      }else if(event.title == '添加新账号'){
-        if(isJoinRoom){
+      } else if (event.title == '添加新账号') {
+        if (isJoinRoom) {
           setState(() {
             isFirstJoinRoom = false;
             isJoinRoom = false;
@@ -236,8 +239,8 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
             // doPostLeave(sp.getString('roomID').toString());
           });
         }
-      }else if(event.title == '账号退出登录'){
-        if(isJoinRoom) {
+      } else if (event.title == '账号退出登录') {
+        if (isJoinRoom) {
           setState(() {
             isFirstJoinRoom = false;
             isJoinRoom = false;
@@ -249,9 +252,9 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
             _dispose();
           });
         }
-      }else if(event.title == 'im重连'){
+      } else if (event.title == 'im重连') {
         doPostCheckToken();
-      }else if(event.title == 'im断开链接'){
+      } else if (event.title == 'im断开链接') {
         // if(isJoinRoom){
         //   setState(() {
         //     //取消订阅所有远端用户的音频流。
@@ -281,7 +284,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
               avatar: event.map!['avatar'].toString(),
               gender: event.map!['gender'].toString(),
             ));
-      }else if(event.type == 'room_black'){
+      } else if (event.type == 'room_black') {
         //设置黑名单
         // if (event.map!['uid'].toString() == sp.getString('user_id').toString()) {
         //   if(isJoinRoom){
@@ -295,11 +298,13 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         //     _dispose();
         //   }
         // }
-      }else if(event.type == 'down_mic'){
-        if(isJoinRoom){
+      } else if (event.type == 'down_mic') {
+        if (isJoinRoom) {
           //判断被被下麦的人是不是自己
           if (event.map!['uid'].toString() ==
-              sp.getString('user_id').toString()) {
+                  sp.getString('user_id').toString() &&
+              event.map!['from_uid'].toString() !=
+                  sp.getString('user_id').toString()) {
             MyToastUtils.showToastBottom('你已被管理下掉了麦序！');
             // 取消发布本地音频流
             _engine.muteLocalAudioStream(true);
@@ -307,9 +312,9 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
             _dispose();
           }
         }
-      }else if(event.type == 'login_kick'){
+      } else if (event.type == 'login_kick') {
         // 这个状态是后台直接封禁了账号，然后直接踢掉app
-        if(isJoinRoom) {
+        if (isJoinRoom) {
           MyUtils.signOut();
           setState(() {
             isJoinRoom = false;
@@ -334,7 +339,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           sp.setString("user_identity", '');
           // 直接杀死app
           SystemNavigator.pop();
-        }else{
+        } else {
           sp.setString('user_token', '');
           sp.setString("user_account", '');
           sp.setString("user_id", '');
@@ -350,10 +355,12 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           // 直接杀死app
           SystemNavigator.pop();
         }
-      }else if(event.type == 'user_room_black'){
-        if(isJoinRoom) {
+      } else if (event.type == 'user_room_black') {
+        if (isJoinRoom) {
           if (event.map!['uid'].toString() ==
-              sp.getString('user_id').toString() &&sp.getString('roomID').toString() == event.map!['room_id'].toString()) {
+                  sp.getString('user_id').toString() &&
+              sp.getString('roomID').toString() ==
+                  event.map!['room_id'].toString()) {
             MyToastUtils.showToastBottom('你已被房间设置为黑名单用户！');
             // 取消发布本地音频流
             _engine.muteLocalAudioStream(true);
@@ -368,11 +375,12 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
 
     //收起房间后加入了其他房间
     listenShouQi = eventBus.on<shouqiRoomBack>().listen((event) {
-      if(event.title == '收起房间'){
+      if (event.title == '收起房间') {
         _engine = event.engine;
       }
     });
   }
+
   saveLiang() async {
     // 获取屏幕亮度:
     double brightness = await Screen.brightness;
@@ -385,8 +393,9 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
   }
 
   late RtcEngine _engine;
+
   //初始化
-  void initE() async{
+  void initE() async {
     // 创建 RtcEngine
     _engine = await createAgoraRtcEngine();
   }
@@ -395,7 +404,6 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     await _engine.leaveChannel(); // 离开频道
     await _engine.release(); // 释放资源
   }
-
 
   Timer? _timer;
 
@@ -444,14 +452,14 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         }
         break;
       case '抽奖超级转盘':
-        if(hf.giftInfo![0].giftName == '瑞麟'){
+        if (hf.giftInfo![0].giftName == '瑞麟') {
           setState(() {
             name = '388800转盘礼物';
             isBig = true;
             isShowHF = false;
             bigType = 0;
           });
-        }else{
+        } else {
           setState(() {
             name = '抽奖超级转盘';
             path = 'assets/svga/gp/gp_zp2.svga';
@@ -606,7 +614,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           return Future.value(false);
         } else {
           lastPopTime = DateTime.now();
-          if(isJoinRoom) {
+          if (isJoinRoom) {
             // 取消发布本地音频流
             _engine.muteLocalAudioStream(true);
             // 调用离开房间接口
@@ -652,7 +660,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
                   setState(() {
                     _currentIndex = index;
                   });
-                  if(index == 0){
+                  if (index == 0) {
                     eventBus.fire(SubmitButtonBack(title: '回到首页'));
                   }
                 },
@@ -707,7 +715,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
                   right: 20,
                   child: GestureDetector(
                     onTap: (() {
-                      if(isFirstJoinRoom == false){
+                      if (isFirstJoinRoom == false) {
                         setState(() {
                           isFirstJoinRoom = true;
                         });
@@ -891,10 +899,10 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
   /// 加入房间前
   Future<void> doPostBeforeJoin(roomID) async {
     //判断房间id是否为空的
-    if(sp.getString('roomID') == null || sp.getString('').toString().isEmpty){
-    }else{
+    if (sp.getString('roomID') == null || sp.getString('').toString().isEmpty) {
+    } else {
       // 不是空的，并且不是之前进入的房间
-      if(sp.getString('roomID').toString() != roomID){
+      if (sp.getString('roomID').toString() != roomID) {
         sp.setString('roomID', roomID);
         eventBus.fire(SubmitButtonBack(title: '加入其他房间'));
       }
@@ -989,6 +997,38 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     DatabaseHelper databaseHelper = DatabaseHelper();
     Database? db = await databaseHelper.database;
     try {
+      xtListBean bean = await DataUtils.postSystemMsgList();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          if (bean.data!.list!.isNotEmpty) {
+            setState(() {
+              isRed = true;
+            });
+            for (int i = 0; i < bean.data!.list!.length; i++) {
+              Map<String, dynamic> params = <String, dynamic>{
+                'messageID': bean.data!.list![i].id as int,
+                'type': bean.data!.list![i].type,
+                'title': bean.data!.list![i].title,
+                'text': bean.data!.list![i].text,
+                'img': bean.data!.list![i].img,
+                'url': bean.data!.list![i].url,
+                'add_time': bean.data!.list![i].addTime,
+                'data_status': 0,
+                'img_url': bean.data!.list![i].imgUrl,
+              };
+              // 插入数据
+              await databaseHelper.insertData('messageXTTable', params);
+            }
+          }
+          break;
+        case MyHttpConfig.errorloginCode:
+          // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
       List<Map<String, dynamic>> allData =
           await databaseHelper.getAllData('messageSLTable');
       // 执行查询操作
@@ -1048,7 +1088,6 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     }
   }
 
-
   /// 离开房间下麦
   Future<void> doPostLeave(String roomID) async {
     Map<String, dynamic> params = <String, dynamic>{
@@ -1060,39 +1099,40 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         case MyHttpConfig.successCode:
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
-    } catch (e) {
-    }
+    } catch (e) {}
   }
-
 
   double jindu = 0, jinduNum = 0;
   String jinduBaifeinbi = '';
+
   /// 下载礼物
   Future<void> doPostSvgaGiftList() async {
     setState(() {
       isDown = true;
     });
     Map<String, dynamic> params = <String, dynamic>{
-      'is_first': sp.getString('isFirstDown').toString() == 'null' ? '1' : sp.getString('isFirstDown').toString(),
+      'is_first': sp.getString('isFirstDown').toString() == 'null'
+          ? '1'
+          : sp.getString('isFirstDown').toString(),
     };
     try {
       svgaAllBean bean = await DataUtils.postSvgaGiftList(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-        // 存一下总数量
+          // 存一下总数量
           setState(() {
             sp.setInt('isFirstDownNum', bean.data!.total as int);
             LogE('需要下载数量 ${bean.data!.imgList!.length}');
-            jinduBaifeinbi = (1 / bean.data!.total! ).toStringAsFixed(2);
+            jinduBaifeinbi = (1 / bean.data!.total!).toStringAsFixed(2);
             LogE('百分比 $jinduBaifeinbi');
-            if(isDevices == 'android'){
+            if (isDevices == 'android') {
               downloadAllImages(bean);
             }
           });
@@ -1101,7 +1141,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           setState(() {
             isDown = false;
           });
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -1127,13 +1167,13 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         // 下载成功后的操作
         print('图片 $i 下载成功');
         setState(() {
-          jindu = double.parse(jinduBaifeinbi)*(i+1);
-          jinduNum = (jindu*100).truncateToDouble();
+          jindu = double.parse(jinduBaifeinbi) * (i + 1);
+          jinduNum = (jindu * 100).truncateToDouble();
           eventBus.fire(DownLoadingBack(jindu: jindu, jinduNum: jinduNum));
-          if(jindu == 1){
-           setState(() {
-             sp.setString('isFirstDown', '2');
-           });
+          if (jindu == 1) {
+            setState(() {
+              sp.setString('isFirstDown', '2');
+            });
           }
         });
       } else {
@@ -1148,7 +1188,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     var response = await http.get(Uri.parse(imgUrl));
     List<String> listName = imgUrl.split('/');
     // 生成新的文件名
-    String fileName = listName[listName.length-1];
+    String fileName = listName[listName.length - 1];
 
     // 获取保存路径
     Directory? directory = await getExternalStorageDirectory();
@@ -1165,6 +1205,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       return false;
     }
   }
+
   /// 切换用户
   Future<void> doPostCheckToken() async {
     try {
@@ -1177,22 +1218,22 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           break;
         case MyHttpConfig.errorloginCode:
           eventBus.fire(RoomBack(title: '顶号', index: ''));
-        // 取消发布本地音频流
+          // 取消发布本地音频流
           _engine.muteLocalAudioStream(true);
           // 调用离开房间接口
           doPostLeave(sp.getString('roomID').toString());
           _engine.disableAudio();
           _dispose();
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
           MyToastUtils.showToastBottom(commonBean.msg!);
           break;
       }
-    } catch (e) {
-    }
+    } catch (e) {}
   }
+
   /// 首充
   Future<void> doPostIsFirstOrder() async {
     try {
@@ -1200,15 +1241,17 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
-            if(bean.data!.twelve == 1 && bean.data!.oneHundred == 1 && bean.data!.twoSixSix == 1){
+            if (bean.data!.twelve == 1 &&
+                bean.data!.oneHundred == 1 &&
+                bean.data!.twoSixSix == 1) {
               sp.setString('scIsOk', '1');
-            }else{
+            } else {
               sp.setString('scIsOk', '0');
             }
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:

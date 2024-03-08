@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:dart_ping/dart_ping.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -49,6 +50,13 @@ class _LoginPageState extends State<LoginPage> {
   String IP = '', IMEI = '';
   @override
   void initState() {
+
+    final ping = Ping('43.198.138.251', count: 5);
+    ping.stream.listen((event) {
+      LogE('Running command: $event');
+    });
+
+
     if (Platform.isAndroid) {
       setState(() {
         sp.setString('myDevices', 'android');

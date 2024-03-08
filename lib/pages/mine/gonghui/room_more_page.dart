@@ -36,7 +36,7 @@ class _RoomMorePageState extends State<RoomMorePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    appBar = WidgetUtils.getAppBar('公会房间', true, context, false, 0);
+    appBar = WidgetUtils.getAppBar('厅房间', true, context, false, 0);
     doPostSearchGuildRoom();
   }
 

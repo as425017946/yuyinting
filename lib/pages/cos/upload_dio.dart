@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as path;
 
+import '../../http/my_http_config.dart';
 import '../../main.dart';
 
 class UploadDio {
@@ -16,9 +17,7 @@ class UploadDio {
     try {
       directTransferData = await _getStsDirectSign(ext);
     } catch (err) {
-      if (kDebugMode) {
-        print(err);
-      }
+      print(err);
       throw Exception("getStsDirectSign fail");
     }
     String cosHost = directTransferData['cosHost'];
@@ -43,22 +42,16 @@ class UploadDio {
           data: file.openRead(),
           options: options, onSendProgress: (int sent, int total) {
             double progress = sent / total;
-            if (kDebugMode) {
-              print('Progress: ${progress.toStringAsFixed(2)}');
-            }
+            print('Progress: ${progress.toStringAsFixed(2)}');
             progressCallback(sent, total);
           });
       if (response.statusCode == 200) {
-        if (kDebugMode) {
-          print('上传成功');
-        }
+        print('上传成功');
       } else {
         throw Exception("上传失败 ${response.statusMessage}");
       }
     } catch (error) {
-      if (kDebugMode) {
-        print('Error: $error');
-      }
+      print('Error: $error');
       throw Exception("上传失败 ${error.toString()}");
     }
   }
@@ -74,12 +67,10 @@ class UploadDio {
     //直传签名业务服务端url（正式环境 请替换成正式的直传签名业务url）
     //直传签名业务服务端代码示例可以参考：https://github.com/tencentyun/cos-demo/blob/main/server/direct-sign/nodejs/app.js
     //10.91.22.16为直传签名业务服务器的地址 例如上述node服务，总之就是访问到直传签名业务服务器的url
-    Response response = await dio.get('http://192.168.0.53/api/upload/uploadCos',
+    Response response = await dio.get('${MyHttpConfig.baseURL}/upload/uploadCos',
         queryParameters: {'ext': ext,'type': 'image'});
     if (response.statusCode == 200) {
-      if (kDebugMode) {
-        print(response.data);
-      }
+      print(response.data);
       if (response.data['code'] == 0) {
         return response.data['data'];
       } else {

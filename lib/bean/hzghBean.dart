@@ -91,6 +91,7 @@ class ConsortiaInfo {
   String? addTime;
   int? editTime;
   int? dataStatus;
+  String? ratio;
 
   ConsortiaInfo(
       {this.id,
@@ -100,7 +101,8 @@ class ConsortiaInfo {
         this.logo,
         this.addTime,
         this.editTime,
-        this.dataStatus});
+        this.dataStatus,
+        this.ratio});
 
   ConsortiaInfo.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -111,6 +113,7 @@ class ConsortiaInfo {
     addTime = json['add_time'];
     editTime = json['edit_time'];
     dataStatus = json['data_status'];
+    ratio = json['ratio'];
   }
 
   Map<String, dynamic> toJson() {
@@ -123,6 +126,7 @@ class ConsortiaInfo {
     data['add_time'] = this.addTime;
     data['edit_time'] = this.editTime;
     data['data_status'] = this.dataStatus;
+    data['ratio'] = this.ratio;
     return data;
   }
 }

@@ -689,7 +689,7 @@ class _MinePageState extends State<MinePage> {
             /// 展示信息
             WidgetUtils.containerNo(
                 pad: 20,
-                height: identity == 'pe' ? 710.h : 670.h,
+                height: identity == 'president' ? 770.h : 770.h,
                 width: double.infinity,
                 color: Colors.white,
                 ra: 20,
@@ -874,6 +874,7 @@ class _MinePageState extends State<MinePage> {
             sp.setInt("user_gender", bean.data!.gender!);
             sp.setString("nickname", bean.data!.nickname!);
             sp.setString('user_id', bean.data!.uid.toString());
+            sp.setString('user_phone', bean.data!.phone!);
             userNumber = bean.data!.number.toString();
             care = bean.data!.followNum.toString();
             beCare = bean.data!.isFollowNum.toString();

@@ -106,26 +106,26 @@ class _DailiHomePageState extends State<DailiHomePage> {
                       ScreenUtil().setSp(25),
                       _currentIndex == 2 ? Colors.white : Colors.black),
                 ),
-                WidgetUtils.commonSizedBox(0, 10),
-                GestureDetector(
-                  onTap: (() {
-                    setState(() {
-                      _currentIndex = 3;
-                      // _controller.animateToPage(3,
-                      //     duration: const Duration(milliseconds: 500),
-                      //     curve: Curves.ease);
-                      _controller.jumpToPage(3);
-                    });
-                  }),
-                  child: WidgetUtils.myContainer(
-                      ScreenUtil().setHeight(50),
-                      ScreenUtil().setHeight(120),
-                      _currentIndex == 3 ? MyColors.homeTopBG : Colors.white,
-                      _currentIndex == 3 ? MyColors.homeTopBG : Colors.white,
-                      '手工开户',
-                      ScreenUtil().setSp(25),
-                      _currentIndex == 3 ? Colors.white : Colors.black),
-                ),
+                // WidgetUtils.commonSizedBox(0, 10),
+                // GestureDetector(
+                //   onTap: (() {
+                //     setState(() {
+                //       _currentIndex = 3;
+                //       // _controller.animateToPage(3,
+                //       //     duration: const Duration(milliseconds: 500),
+                //       //     curve: Curves.ease);
+                //       _controller.jumpToPage(3);
+                //     });
+                //   }),
+                //   child: WidgetUtils.myContainer(
+                //       ScreenUtil().setHeight(50),
+                //       ScreenUtil().setHeight(120),
+                //       _currentIndex == 3 ? MyColors.homeTopBG : Colors.white,
+                //       _currentIndex == 3 ? MyColors.homeTopBG : Colors.white,
+                //       '手工开户',
+                //       ScreenUtil().setSp(25),
+                //       _currentIndex == 3 ? Colors.white : Colors.black),
+                // ),
                 const Expanded(child: Text('')),
               ],
             ),
@@ -145,7 +145,7 @@ class _DailiHomePageState extends State<DailiHomePage> {
                   TuiguangPage(),
                   ZonglanPage(),
                   BaobiaoPage(),
-                  KaihuiPage()
+                  // KaihuiPage()
                 ],
               ),
             ),

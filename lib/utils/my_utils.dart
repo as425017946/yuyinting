@@ -574,6 +574,9 @@ class MyUtils {
                   } else if (body.content == '闭麦') {
                     eventBus.fire(
                         JoinRoomYBack(map: info, type: 'user_close_mic'));
+                  } else if (body.content == '抱麦') {
+                    eventBus.fire(
+                        JoinRoomYBack(map: info, type: 'bao_mic'));
                   } else {
                     if (info['lv'] == '' || info['lv'] == null) {
                       if (info['type'] == 'clean_charm') {

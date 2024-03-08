@@ -11,12 +11,15 @@ import 'package:yuyinting/utils/event_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../main.dart';
 import '../../../utils/loading.dart';
+import '../../../utils/log_util.dart';
 import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
+
+import '../../cos/upload_httpclient.dart';
 
 
 
@@ -40,7 +43,9 @@ class _EditGHHeadPageState extends State<EditGHHeadPage> {
         print('选择照片路径:${image?.path}');
 
    print('压缩后路径 }');
-    doPostPostFileUpload(image!.path);
+
+    yasuo(image!.path);
+    // doPostPostFileUpload(image!.path);
   }
 
   onTapPickFromCamera() async {
@@ -52,8 +57,8 @@ class _EditGHHeadPageState extends State<EditGHHeadPage> {
     if (imgFile == null) return;
     print('照片路径:${imgFile.path}');
 
-
-    doPostPostFileUpload(imgFile.path);
+    yasuo(imgFile.path);
+    // doPostPostFileUpload(imgFile.path);
   }
 
 
@@ -185,7 +190,7 @@ class _EditGHHeadPageState extends State<EditGHHeadPage> {
       );
     } else {
       targetPath =
-      "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.png";
+      "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
       result = await FlutterImageCompress.compressAndGetFile(
         path, targetPath,
         quality: 50,
@@ -232,4 +237,74 @@ class _EditGHHeadPageState extends State<EditGHHeadPage> {
 
   }
 
+
+
+  /// 压缩图片
+  void yasuo(String path) async {
+    var dir = await path_provider.getTemporaryDirectory();
+    String targetPath = '';
+    var result;
+    if (path.toString().contains('.gif') || path.toString().contains('.GIF')) {
+      targetPath = path;
+    } else if (path.toString().contains('.jpg') ||
+        path.toString().contains('.GPG')) {
+      targetPath =
+      "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
+      result = await FlutterImageCompress.compressAndGetFile(
+        path, targetPath,
+        quality: 50,
+        rotate: 0, // 旋转角度
+      );
+    } else if (path.toString().contains('.jpeg') ||
+        path.toString().contains('.GPEG')) {
+      targetPath =
+      "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpeg";
+      result = await FlutterImageCompress.compressAndGetFile(
+        path, targetPath,
+        quality: 50,
+        rotate: 0, // 旋转角度
+      );
+    } else if (path.toString().contains('.svga') ||
+        path.toString().contains('.SVGA')) {
+      MyToastUtils.showToastBottom('不支持svga格式图片上传');
+      return;
+    } else if (path.toString().contains('.webp') ||
+        path.toString().contains('.WEBP')) {
+      targetPath =
+      "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.webp";
+      result = await FlutterImageCompress.compressAndGetFile(
+        path, targetPath,
+        quality: 50,
+        rotate: 0, // 旋转角度
+      );
+    } else {
+      targetPath =
+      "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
+      result = await FlutterImageCompress.compressAndGetFile(
+        path, targetPath,
+        quality: 50,
+        rotate: 0, // 旋转角度
+      );
+    }
+
+    _upload(path.toString().contains('.gif') || path.toString().contains('.GIF')
+        ? targetPath
+        : result!.path, 'image');
+  }
+
+  /// 上传  String? _pickFilePath;选择的文件路径
+  void _upload(String pickFilePath,String type) async {
+    sp.setString('local_path', pickFilePath);
+    if (pickFilePath == null) {
+      MyToastUtils.showToastBottom('请先选择需要上传的文件');
+      return;
+    }
+    try {
+      print("使用原生http client库上传");
+      await UploadHttpClient.upload(pickFilePath!, type, (count, total) {
+      });
+    } catch (e) {
+      LogE('上传失败${e.toString()}');
+    }
+  }
 }

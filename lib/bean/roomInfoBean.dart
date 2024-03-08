@@ -63,6 +63,7 @@ class RoomInfo {
   String? bgUrl;
   String? followStatus;
   int? isForbation;
+  int? lockMic;
   List<MikeList>? mikeList;
 
   RoomInfo(
@@ -79,7 +80,8 @@ class RoomInfo {
         this.bgUrl,
         this.followStatus,
         this.isForbation,
-        this.mikeList});
+        this.mikeList,
+        this.lockMic});
 
   RoomInfo.fromJson(Map<String, dynamic> json) {
     roomNumber = json['room_number'];
@@ -95,6 +97,7 @@ class RoomInfo {
     bgUrl = json['bg_url'];
     followStatus = json['follow_status'];
     isForbation = json['isForbation'];
+    lockMic = json['lock_mic'];
     if (json['mike_list'] != null) {
       mikeList = <MikeList>[];
       json['mike_list'].forEach((v) {
@@ -118,6 +121,7 @@ class RoomInfo {
     data['bg_url'] = this.bgUrl;
     data['follow_status'] = this.followStatus;
     data['isForbation'] = this.isForbation;
+    data['lock_mic'] = this.lockMic;
     if (this.mikeList != null) {
       data['mike_list'] = this.mikeList!.map((v) => v.toJson()).toList();
     }

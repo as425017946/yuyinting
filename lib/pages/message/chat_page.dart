@@ -14,6 +14,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/main.dart';
+import 'package:yuyinting/pages/message/report_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/widget/SwiperPage.dart';
@@ -140,11 +141,11 @@ class _ChatPageState extends State<ChatPage> {
         isDevices = 'ios';
       });
     }
-    _mPlayer!.openPlayer().then((value) {
-      setState(() {
-        _mPlayerIsInited = true;
-      });
-    });
+    // _mPlayer!.openPlayer().then((value) {
+    //   setState(() {
+    //     _mPlayerIsInited = true;
+    //   });
+    // });
     super.initState();
     eventBus.fire(SubmitButtonBack(title: '清空红点'));
     doPostChatUserInfo();
@@ -760,7 +761,7 @@ class _ChatPageState extends State<ChatPage> {
                     child:   (allData2[i]['content']
                         .toString()
                         .contains(
-                        'com.cv.gc.yyt') ||
+                        'com.leimu.yuyinting') ||
                         allData2[i]['content']
                             .toString()
                             .contains('storage'))
@@ -1764,47 +1765,95 @@ class _ChatPageState extends State<ChatPage> {
                 height: double.infinity,
                 alignment: Alignment.topRight,
                 color: Colors.transparent,
-                child: Row(
-                  children: [
-                    const Spacer(),
-                    GestureDetector(
-                      onTap: (() {
-                        setState(() {
-                          isShow = false;
-                        });
-                        doPostUpdateBlack();
-                      }),
-                      child: Container(
-                        height: ScreenUtil().setHeight(80),
-                        width: ScreenUtil().setHeight(220),
-                        margin: EdgeInsets.only(
-                            top: ScreenUtil().setHeight(100), right: 15),
-                        //边框设置
-                        decoration: const BoxDecoration(
-                          //背景
-                          color: Colors.white,
-                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(10.0)),
-                        ),
-                        child: Row(
-                          children: [
-                            const Spacer(),
-                            WidgetUtils.showImages(
-                                'assets/images/chat_black_p.png',
-                                ScreenUtil().setHeight(42),
-                                ScreenUtil().setHeight(38)),
-                            WidgetUtils.commonSizedBox(
-                                0, ScreenUtil().setHeight(10)),
-                            WidgetUtils.onlyText(
-                                isBlack == 0 ? '加入黑名单' : '移除黑名单',
-                                StyleUtils.loginHintTextStyle),
-                            const Spacer(),
-                          ],
-                        ),
+                child: Container(
+                  height: 161.h,
+                  width: ScreenUtil().setHeight(220),
+                  margin: EdgeInsets.only(
+                      top: ScreenUtil().setHeight(100), right: 15),
+                  //边框设置
+                  decoration: const BoxDecoration(
+                    //背景
+                    color: Colors.white,
+                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                    borderRadius:
+                    BorderRadius.all(Radius.circular(10.0)),
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          const Spacer(),
+                          GestureDetector(
+                            onTap: (() {
+                              setState(() {
+                                isShow = false;
+                              });
+                              doPostUpdateBlack();
+                            }),
+                            child: SizedBox(
+                              height: ScreenUtil().setHeight(80),
+                              width: ScreenUtil().setHeight(220),
+                              child: Row(
+                                children: [
+                                  const Spacer(),
+                                  WidgetUtils.showImages(
+                                      'assets/images/chat_black_p.png',
+                                      ScreenUtil().setHeight(42),
+                                      ScreenUtil().setHeight(38)),
+                                  WidgetUtils.commonSizedBox(
+                                      0, ScreenUtil().setHeight(10)),
+                                  WidgetUtils.onlyText(
+                                      isBlack == 0 ? '加入黑名单' : '移除黑名单',
+                                      StyleUtils.loginHintTextStyle),
+                                  const Spacer(),
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
                       ),
-                    )
-                  ],
+                      Container(
+                        width: double.infinity,
+                        height: 1.h,
+                        margin: EdgeInsets.only(
+                            left: ScreenUtil().setHeight(10),
+                            right: ScreenUtil().setHeight(10)),
+                        color: MyColors.roomTCWZ1,
+                      ),
+                      Row(
+                        children: [
+                          const Spacer(),
+                          GestureDetector(
+                            onTap: (() {
+                              setState(() {
+                                isShow = false;
+                              });
+                              MyUtils.goTransparentPage(context, ReportPage(otherUID: widget.otherUid,));
+                            }),
+                            child: SizedBox(
+                              height: ScreenUtil().setHeight(80),
+                              width: ScreenUtil().setHeight(220),
+                              child: Row(
+                                children: [
+                                  const Spacer(),
+                                  WidgetUtils.showImages(
+                                      'assets/images/chat_report.jpg',
+                                      ScreenUtil().setHeight(42),
+                                      ScreenUtil().setHeight(38)),
+                                  WidgetUtils.commonSizedBox(
+                                      0, ScreenUtil().setHeight(10)),
+                                  WidgetUtils.onlyText(
+                                      '举报该用户',
+                                      StyleUtils.loginHintTextStyle),
+                                  const Spacer(),
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
             )
@@ -2126,7 +2175,7 @@ class _ChatPageState extends State<ChatPage> {
       );
     } else {
       targetPath =
-      "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.png";
+      "${dir.absolute.path}/${DateTime.now().millisecondsSinceEpoch}.jpg";
       result = await FlutterImageCompress.compressAndGetFile(
         path, targetPath,
         quality: 50,

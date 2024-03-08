@@ -271,11 +271,14 @@ class _ZonglanPageState extends State<ZonglanPage> {
                               color: Colors.black,
                               fontSize: ScreenUtil().setSp(28)))),
                   Expanded(
-                      child: WidgetUtils.onlyTextCenter(
-                          '总V币/钻石分润',
-                          StyleUtils.getCommonTextStyle(
-                              color: Colors.black,
-                              fontSize: ScreenUtil().setSp(28)))),
+                      child: Opacity(
+                        opacity: 0,
+                        child: WidgetUtils.onlyTextCenter(
+                            '总V币/钻石分润',
+                            StyleUtils.getCommonTextStyle(
+                                color: Colors.black,
+                                fontSize: ScreenUtil().setSp(28))),
+                      )),
                 ],
               ),
               WidgetUtils.commonSizedBox(20, 10),
@@ -289,12 +292,15 @@ class _ZonglanPageState extends State<ZonglanPage> {
                               fontSize: ScreenUtil().setSp(28),
                               fontWeight: FontWeight.w600))),
                   Expanded(
-                      child: WidgetUtils.onlyTextCenter(
-                          zongfenrun,
-                          StyleUtils.getCommonTextStyle(
-                              color: Colors.black,
-                              fontSize: ScreenUtil().setSp(28),
-                              fontWeight: FontWeight.w600))),
+                      child: Opacity(
+                        opacity: 0,
+                        child: WidgetUtils.onlyTextCenter(
+                            zongfenrun,
+                            StyleUtils.getCommonTextStyle(
+                                color: Colors.black,
+                                fontSize: ScreenUtil().setSp(28),
+                                fontWeight: FontWeight.w600)),
+                      )),
                 ],
               ),
             ],

@@ -24,6 +24,7 @@ class RoomGongNeng extends StatefulWidget {
   bool roomDX;
   bool roomSY;
   bool mima;
+  int isLiXian; //0否 1是
 
   RoomGongNeng(
       {super.key,
@@ -33,7 +34,8 @@ class RoomGongNeng extends StatefulWidget {
       required this.isBoss,
       required this.roomDX,
       required this.roomSY,
-      required this.mima});
+      required this.mima,
+      required this.isLiXian});
 
   @override
   State<RoomGongNeng> createState() => _RoomGongNengState();
@@ -42,7 +44,7 @@ class RoomGongNeng extends StatefulWidget {
 class _RoomGongNengState extends State<RoomGongNeng> {
   var mima = false;
   var laobanwei = true;
-  int is_show = 1, is_boss = 1;
+  int is_show = 1, is_boss = 1, lixian = 0;
   bool roomDX = true, roomSY = true;
 
   @override
@@ -55,6 +57,7 @@ class _RoomGongNengState extends State<RoomGongNeng> {
       roomDX = widget.roomDX;
       roomSY = widget.roomSY;
       mima = widget.mima;
+      lixian = widget.isLiXian;
     });
   }
 
@@ -242,7 +245,8 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                               // if (MyUtils.checkClick()) {
                               //   doPostCleanCharm();
                               // }
-                              MyUtils.goTransparentPageCom(context, RoomCleanMeiLiPage(roomID: widget.roomID));
+                              MyUtils.goTransparentPageCom(context,
+                                  RoomCleanMeiLiPage(roomID: widget.roomID));
                               Navigator.pop(context);
                             }),
                             child: Column(
@@ -483,43 +487,55 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                           ),
                           const Expanded(child: Text('')),
                           Opacity(
-                            opacity: 0,
-                            child: Column(
-                              children: [
-                                Stack(
-                                  alignment: Alignment.bottomCenter,
-                                  children: [
-                                    WidgetUtils.showImages(
-                                        'assets/images/room_shouye.png',
-                                        ScreenUtil().setHeight(100),
-                                        ScreenUtil().setHeight(100)),
-                                    Container(
-                                      height: ScreenUtil().setHeight(25),
-                                      width: ScreenUtil().setHeight(70),
-                                      //边框设置
-                                      decoration: const BoxDecoration(
-                                        //背景
-                                        color: MyColors.roomBlue,
-                                        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20.0)),
-                                      ),
-                                      child: WidgetUtils.onlyTextCenter(
-                                          '已开启',
-                                          StyleUtils.getCommonTextStyle(
-                                              color: Colors.white,
-                                              fontSize:
-                                                  ScreenUtil().setSp(18))),
-                                    )
-                                  ],
-                                ),
-                                WidgetUtils.commonSizedBox(5, 0),
-                                WidgetUtils.onlyTextCenter(
-                                    '',
-                                    StyleUtils.getCommonTextStyle(
-                                        color: MyColors.roomTCWZ3,
-                                        fontSize: ScreenUtil().setSp(18))),
-                              ],
+                            opacity:
+                                (sp.getString('role').toString() == 'leader' ||
+                                        sp.getString('role').toString() ==
+                                            'president')
+                                    ? 1
+                                    : 0,
+                            child: GestureDetector(
+                              onTap: (() {
+                                if (MyUtils.checkClick()) {
+                                  doPostSetLockMic();
+                                }
+                              }),
+                              child: Column(
+                                children: [
+                                  Stack(
+                                    alignment: Alignment.bottomCenter,
+                                    children: [
+                                      WidgetUtils.showImages(
+                                          'assets/images/room_lixina.png',
+                                          ScreenUtil().setHeight(80),
+                                          ScreenUtil().setHeight(80)),
+                                      Container(
+                                        height: ScreenUtil().setHeight(25),
+                                        width: ScreenUtil().setHeight(70),
+                                        //边框设置
+                                        decoration: const BoxDecoration(
+                                          //背景
+                                          color: MyColors.roomBlue,
+                                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20.0)),
+                                        ),
+                                        child: WidgetUtils.onlyTextCenter(
+                                            lixian == 0 ? '已关闭' : '已开启',
+                                            StyleUtils.getCommonTextStyle(
+                                                color: Colors.white,
+                                                fontSize:
+                                                    ScreenUtil().setSp(18))),
+                                      )
+                                    ],
+                                  ),
+                                  WidgetUtils.commonSizedBox(5, 0),
+                                  WidgetUtils.onlyTextCenter(
+                                      '离线模式',
+                                      StyleUtils.getCommonTextStyle(
+                                          color: MyColors.roomTCWZ3,
+                                          fontSize: ScreenUtil().setSp(18))),
+                                ],
+                              ),
                             ),
                           ),
                           const Expanded(child: Text('')),
@@ -532,8 +548,8 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                                   children: [
                                     WidgetUtils.showImages(
                                         'assets/images/room_shouye.png',
-                                        ScreenUtil().setHeight(100),
-                                        ScreenUtil().setHeight(100)),
+                                        ScreenUtil().setHeight(80),
+                                        ScreenUtil().setHeight(80)),
                                     Container(
                                       height: ScreenUtil().setHeight(25),
                                       width: ScreenUtil().setHeight(70),
@@ -842,12 +858,10 @@ class _RoomGongNengState extends State<RoomGongNeng> {
           setState(() {
             if (is_show == 1) {
               MyToastUtils.showToastBottom('首页展示已开启');
-              eventBus
-                  .fire(SubmitButtonBack(title: '首页展示已开启'));
+              eventBus.fire(SubmitButtonBack(title: '首页展示已开启'));
             } else {
               MyToastUtils.showToastBottom('首页展示已关闭');
-              eventBus
-                  .fire(SubmitButtonBack(title: '首页展示已关闭'));
+              eventBus.fire(SubmitButtonBack(title: '首页展示已关闭'));
             }
           });
           break;
@@ -938,6 +952,39 @@ class _RoomGongNengState extends State<RoomGongNeng> {
             } else {
               MyToastUtils.showToastBottom('老板位已关闭');
             }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+          // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+  /// 离线模式
+  Future<void> doPostSetLockMic() async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'room_id': widget.roomID,
+      'lock_mic': lixian == 0 ? "1" : "0",
+    };
+    try {
+      CommonBean bean = await DataUtils.postSetLockMic(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            if (lixian == 0) {
+              MyToastUtils.showToastBottom('离线模式已开启，关闭APP将不会掉麦');
+            } else {
+              MyToastUtils.showToastBottom('离线模式已关闭');
+            }
+            eventBus.fire(SubmitButtonBack(title: '离线模式'));
+            Navigator.pop(context);
           });
           break;
         case MyHttpConfig.errorloginCode:
