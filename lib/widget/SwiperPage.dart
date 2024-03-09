@@ -39,7 +39,7 @@ class _SwiperPageState extends State<SwiperPage> {
           itemBuilder: (BuildContext context, int index) {
             return SizedBox(
                 width: double.infinity,
-                child: (widget.imgList[index].contains('com.leimu.yuyinting') ||
+                child: (widget.imgList[index].contains('com.cv.gc.yyt') ||
                         widget.imgList[index].contains('storage'))
                     ? Image.file(
                         File(widget.imgList[index].toString()),
