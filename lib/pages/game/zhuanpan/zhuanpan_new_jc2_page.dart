@@ -167,7 +167,7 @@ class _ZhuanPanNewJC2PageState extends State<ZhuanPanNewJC2Page> {
     Loading.show();
     Map<String, dynamic> params = <String, dynamic>{
       'game_id': '2',
-      'price_id': '1', //1小金额 2大金额
+      'price_id': '2', //1小金额 2大金额
     };
     try {
       mofangJCBean bean = await DataUtils.postRoulettePrizeList(params);
