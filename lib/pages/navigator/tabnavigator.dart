@@ -1171,9 +1171,11 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           jinduNum = (jindu * 100).truncateToDouble();
           eventBus.fire(DownLoadingBack(jindu: jindu, jinduNum: jinduNum));
           if (jindu == 1) {
+            print('下载完成 $jindu');
             setState(() {
-              sp.setString('isFirstDown', '2');
+              sp.setString('isFirstDown', int.parse(sp.getString('isFirstDown').toString()).toString());
             });
+            print('下载完成修改值 ${sp.getString('isFirstDown').toString()}');
           }
         });
       } else {

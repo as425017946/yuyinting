@@ -25,7 +25,7 @@ class _MoFangGuiZePageState extends State<MoFangGuiZePage> {
               Navigator.pop(context);
             }),
             child: Container(
-              height: 380.h,
+              height: 550.h,
               width: double.infinity,
               color: Colors.transparent,
             ),
@@ -94,28 +94,41 @@ class _MoFangGuiZePageState extends State<MoFangGuiZePage> {
                         child: RichText(
                           text: TextSpan(
                               text: '1.使用',
-                              style: StyleUtils.getCommonTextStyle(
-                                  color: Colors.white, fontSize: 24.sp),
+                              style: TextStyle(
+                                  height: 2,
+                                  color: Colors.white,
+                                  fontSize: 24.sp
+                              ),
                               children: [
                                 TextSpan(
                                     text: '20V豆',
-                                    style: StyleUtils.getCommonTextStyle(
+                                    style: TextStyle(
+                                        height: 2,
                                         color: MyColors.mfZGBlue,
-                                        fontSize: 24.sp)),
+                                        fontSize: 24.sp
+                                    )),
                                 TextSpan(
                                     text: '可进行1次水星魔方，使用',
-                                    style: StyleUtils.getCommonTextStyle(
-                                        color: Colors.white, fontSize: 24.sp)),
+                                    style: TextStyle(
+                                        height: 2,
+                                        color: Colors.white,
+                                        fontSize: 24.sp
+                                    )),
                                 TextSpan(
                                     text: '500V豆',
-                                    style: StyleUtils.getCommonTextStyle(
+                                    style: TextStyle(
+                                        height: 2,
                                         color: MyColors.mfZGBlue,
-                                        fontSize: 24.sp)),
+                                        fontSize: 24.sp
+                                    )),
                                 TextSpan(
                                     text:
                                         '可进行1次金星魔方，百分百获得礼物，奖励将放入背包中，可以随时赠送。',
-                                    style: StyleUtils.getCommonTextStyle(
-                                        color: Colors.white, fontSize: 24.sp)),
+                                    style: TextStyle(
+                                        height: 2,
+                                        color: Colors.white,
+                                        fontSize: 24.sp
+                                    )),
                               ]),
                         ),
                       ),
@@ -126,6 +139,7 @@ class _MoFangGuiZePageState extends State<MoFangGuiZePage> {
                       //       StyleUtils.getCommonTextStyle(
                       //           color: Colors.white, fontSize: 24.sp)),
                       // ),
+                      WidgetUtils.commonSizedBox(10.h, 0),
                       Padding(
                         padding: EdgeInsets.only(left: 20.h, right: 20.h),
                         child: WidgetUtils.onlyText(
@@ -134,79 +148,79 @@ class _MoFangGuiZePageState extends State<MoFangGuiZePage> {
                                 color: Colors.white, fontSize: 24.sp)),
                       ),
                       WidgetUtils.commonSizedBox(20.h, 0),
-                      Row(
-                        children: [
-                          Container(
-                            height: 54.h,
-                            width: 156.h,
-                            decoration: const BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage(
-                                    'assets/images/mofang_gz_btn1.png'),
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                            child: WidgetUtils.onlyTextCenter(
-                                '概率说明：',
-                                StyleUtils.getCommonTextStyle(
-                                    color: MyColors.mfZGBlue, fontSize: 24.sp)),
-                          ),
-                          const Spacer(),
-                        ],
-                      ),
-                      WidgetUtils.commonSizedBox(30.h, 0),
+                      // Row(
+                      //   children: [
+                      //     Container(
+                      //       height: 54.h,
+                      //       width: 156.h,
+                      //       decoration: const BoxDecoration(
+                      //         image: DecorationImage(
+                      //           image: AssetImage(
+                      //               'assets/images/mofang_gz_btn1.png'),
+                      //           fit: BoxFit.fill,
+                      //         ),
+                      //       ),
+                      //       child: WidgetUtils.onlyTextCenter(
+                      //           '概率说明：',
+                      //           StyleUtils.getCommonTextStyle(
+                      //               color: MyColors.mfZGBlue, fontSize: 24.sp)),
+                      //     ),
+                      //     const Spacer(),
+                      //   ],
+                      // ),
+                      // WidgetUtils.commonSizedBox(30.h, 0),
+                      // // Container(
+                      // //   height: 54.h,
+                      // //   width: 400.h,
+                      // //   decoration: const BoxDecoration(
+                      // //     image: DecorationImage(
+                      // //       image:
+                      // //           AssetImage('assets/images/mofang_gz_btn2.png'),
+                      // //       fit: BoxFit.fill,
+                      // //     ),
+                      // //   ),
+                      // //   child: WidgetUtils.onlyTextCenter(
+                      // //       '蓝色魔方（20V豆、钻石/次）奖励概率：',
+                      // //       StyleUtils.getCommonTextStyle(
+                      // //           color: Colors.white, fontSize: 24.sp)),
+                      // // ),
                       // Container(
-                      //   height: 54.h,
-                      //   width: 400.h,
+                      //   height: 580.h,
+                      //   margin: EdgeInsets.only(left: 20.h, right: 20.h),
                       //   decoration: const BoxDecoration(
                       //     image: DecorationImage(
                       //       image:
-                      //           AssetImage('assets/images/mofang_gz_btn2.png'),
-                      //       fit: BoxFit.fill,
+                      //           AssetImage('assets/images/mofang_jc_bg1.png'),
+                      //       fit: BoxFit.fitWidth,
                       //     ),
                       //   ),
-                      //   child: WidgetUtils.onlyTextCenter(
-                      //       '蓝色魔方（20V豆、钻石/次）奖励概率：',
-                      //       StyleUtils.getCommonTextStyle(
-                      //           color: Colors.white, fontSize: 24.sp)),
                       // ),
-                      Container(
-                        height: 580.h,
-                        margin: EdgeInsets.only(left: 20.h, right: 20.h),
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            image:
-                                AssetImage('assets/images/mofang_jc_bg1.png'),
-                            fit: BoxFit.fitWidth,
-                          ),
-                        ),
-                      ),
+                      // // Container(
+                      // //   height: 54.h,
+                      // //   width: 400.h,
+                      // //   decoration: const BoxDecoration(
+                      // //     image: DecorationImage(
+                      // //       image:
+                      // //           AssetImage('assets/images/mofang_gz_btn2.png'),
+                      // //       fit: BoxFit.fill,
+                      // //     ),
+                      // //   ),
+                      // //   child: WidgetUtils.onlyTextCenter(
+                      // //       '金色魔方（500V豆、钻石/次）奖励概率：',
+                      // //       StyleUtils.getCommonTextStyle(
+                      // //           color: Colors.white, fontSize: 24.sp)),
+                      // // ),
                       // Container(
-                      //   height: 54.h,
-                      //   width: 400.h,
+                      //   height: 600.h,
+                      //   margin: EdgeInsets.only(left: 20.h, right: 20.h),
                       //   decoration: const BoxDecoration(
                       //     image: DecorationImage(
                       //       image:
-                      //           AssetImage('assets/images/mofang_gz_btn2.png'),
-                      //       fit: BoxFit.fill,
+                      //       AssetImage('assets/images/mofang_jc_bg2.png'),
+                      //       fit: BoxFit.fitWidth,
                       //     ),
                       //   ),
-                      //   child: WidgetUtils.onlyTextCenter(
-                      //       '金色魔方（500V豆、钻石/次）奖励概率：',
-                      //       StyleUtils.getCommonTextStyle(
-                      //           color: Colors.white, fontSize: 24.sp)),
                       // ),
-                      Container(
-                        height: 600.h,
-                        margin: EdgeInsets.only(left: 20.h, right: 20.h),
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            image:
-                            AssetImage('assets/images/mofang_jc_bg2.png'),
-                            fit: BoxFit.fitWidth,
-                          ),
-                        ),
-                      ),
                       Padding(
                         padding: EdgeInsets.only(left: 20.h, right: 20.h),
                         child: WidgetUtils.onlyText(
@@ -222,8 +236,11 @@ class _MoFangGuiZePageState extends State<MoFangGuiZePage> {
                           '\n3.任何影响活动公平性的用户及利用平台进行违法违规活动的用户，官方有权取消其参与本活动的资格，并回收违规账号非法获得的奖励。情节严重者，平台有权追究相关法律责任；'
                           '\n4.消费中请注意保管好账号、密码、短信验证码等登录操作凭证，谨防上当受骗。',
                           maxLines: 10,
-                          style: StyleUtils.getCommonTextStyle(
-                              color: Colors.white, fontSize: 24.sp),
+                          style: TextStyle(
+                            height: 2,
+                            color: Colors.white,
+                            fontSize: 24.sp
+                          ),
                         ),
                       ),
                       WidgetUtils.commonSizedBox(20.h, 0),

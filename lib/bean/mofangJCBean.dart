@@ -32,13 +32,15 @@ class Data {
   String? name;
   String? price;
   String? img;
+  String? gl;
 
-  Data({this.name, this.price, this.img});
+  Data({this.name, this.price, this.img, this.gl});
 
   Data.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     price = json['price'];
     img = json['img'];
+    gl = json['gl'];
   }
 
   Map<String, dynamic> toJson() {
@@ -46,6 +48,7 @@ class Data {
     data['name'] = this.name;
     data['price'] = this.price;
     data['img'] = this.img;
+    data['gl'] = this.gl;
     return data;
   }
 }

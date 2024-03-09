@@ -1179,7 +1179,8 @@ class DataUtils{
   }
 
   /// 充值方式
-  static Future<payLsitBean> postGetPayment() async {
+  static Future<payLsitBean> postGetPayment(Map<String,dynamic> params) async {
+    print("充值方式：$params");
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.getPayment, {}, {});
     print("充值方式：$respons");
     return payLsitBean.fromJson(respons!);

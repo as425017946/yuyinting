@@ -78,7 +78,7 @@ class _ZhuanPanGuiZePageState extends State<ZhuanPanGuiZePage> {
                             StyleUtils.getCommonTextStyle(
                                 color: MyColors.zpGZYellow, fontSize: 24.sp)),
                         WidgetUtils.onlyText(
-                            '转盘游戏是独立的游戏玩法，仅在转盘页面可参与； 用户通过消耗金豆可打开转盘获得旋转得到的对应礼物奖励。',
+                            '转盘游戏是独立的游戏玩法，仅在转盘页面可参与； 用户通过消耗V豆可打开转盘获得旋转得到的对应礼物奖励。',
                             StyleUtils.getCommonTextStyle(
                                 color: Colors.white, fontSize: 24.sp)),
                         WidgetUtils.commonSizedBox(20.h, 0),
@@ -87,7 +87,7 @@ class _ZhuanPanGuiZePageState extends State<ZhuanPanGuiZePage> {
                             StyleUtils.getCommonTextStyle(
                                 color: MyColors.zpGZYellow, fontSize: 24.sp)),
                         WidgetUtils.onlyText(
-                            '消耗100金豆开启一次心动转盘， 消耗1000金豆开启一次超级转盘。',
+                            '消耗100V豆开启一次心动转盘， 消耗1000V豆开启一次超级转盘。',
                             StyleUtils.getCommonTextStyle(
                                 color: Colors.white, fontSize: 24.sp)),
                         // WidgetUtils.onlyText(
@@ -104,34 +104,34 @@ class _ZhuanPanGuiZePageState extends State<ZhuanPanGuiZePage> {
                             StyleUtils.getCommonTextStyle(
                                 color: Colors.white, fontSize: 24.sp)),
                         Text(
-                          '当欢乐值达到30时将触发“欢乐时刻”，持续5分钟。此时超级转盘中价值最高的4件礼物“瑞麟、雪山飞虎、霸下、梦回长安”将提高至6倍爆率。',
+                          '当欢乐值达到30时将触发“欢乐时刻”，持续5分钟。此时超级转盘中价值最高的4件礼物将提高至6倍爆率。',
                           maxLines: 3,
                           style: StyleUtils.getCommonTextStyle(
                               color: Colors.white, fontSize: 24.sp),
                         ),
-                        WidgetUtils.commonSizedBox(20.h, 0),
-                        WidgetUtils.onlyText(
-                            '转盘开启后获得奖品的概率',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.zpGZYellow, fontSize: 24.sp)),
-                        Container(
-                          height: 500.h,
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage('assets/images/zhuanpan_gz_sm1.png'),
-                              fit: BoxFit.fitWidth,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 500.h,
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage('assets/images/zhuanpan_gz_sm2.png'),
-                              fit: BoxFit.fitWidth,
-                            ),
-                          ),
-                        ),
+                        // WidgetUtils.commonSizedBox(20.h, 0),
+                        // WidgetUtils.onlyText(
+                        //     '转盘开启后获得奖品的概率',
+                        //     StyleUtils.getCommonTextStyle(
+                        //         color: MyColors.zpGZYellow, fontSize: 24.sp)),
+                        // Container(
+                        //   height: 500.h,
+                        //   decoration: const BoxDecoration(
+                        //     image: DecorationImage(
+                        //       image: AssetImage('assets/images/zhuanpan_gz_sm1.png'),
+                        //       fit: BoxFit.fitWidth,
+                        //     ),
+                        //   ),
+                        // ),
+                        // Container(
+                        //   height: 500.h,
+                        //   decoration: const BoxDecoration(
+                        //     image: DecorationImage(
+                        //       image: AssetImage('assets/images/zhuanpan_gz_sm2.png'),
+                        //       fit: BoxFit.fitWidth,
+                        //     ),
+                        //   ),
+                        // ),
                         WidgetUtils.commonSizedBox(20.h, 0),
                         WidgetUtils.onlyText(
                             '特别声明：',

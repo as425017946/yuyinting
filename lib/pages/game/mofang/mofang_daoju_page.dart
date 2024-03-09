@@ -93,7 +93,7 @@ class _MoFangDaoJuPageState extends State<MoFangDaoJuPage> {
         children: [
           const Spacer(),
           Container(
-            height: 480.h,
+            height: 550.h,
             margin: EdgeInsets.only(left: 40.h, right: 40.h),
             padding: EdgeInsets.only(top: 100.h, left: 30.h, right: 30.h , bottom: 40.h),
             decoration: const BoxDecoration(
@@ -104,6 +104,7 @@ class _MoFangDaoJuPageState extends State<MoFangDaoJuPage> {
             ),
             child: Column(
               children: [
+                WidgetUtils.commonSizedBox(20.h, 0),
                 WidgetUtils.onlyTextCenter(
                     '总价值：${widget.zonge}',
                     StyleUtils.getCommonTextStyle(

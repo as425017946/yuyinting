@@ -10,6 +10,7 @@ import 'package:yuyinting/pages/mine/setting/setting_page.dart';
 import 'package:yuyinting/pages/mine/tequan/tequan_page.dart';
 import 'package:yuyinting/pages/mine/zhuangban/zhuangban_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
+import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import '../../bean/Common_bean.dart';
@@ -689,7 +690,7 @@ class _MinePageState extends State<MinePage> {
             /// 展示信息
             WidgetUtils.containerNo(
                 pad: 20,
-                height: identity == 'president' ? 770.h : 770.h,
+                height: 770.h,
                 width: double.infinity,
                 color: Colors.white,
                 ra: 20,
@@ -869,6 +870,7 @@ class _MinePageState extends State<MinePage> {
         case MyHttpConfig.successCode:
           setState(() {
             isGet = true;
+            // LogE('我的身份 == ${(identity != 'president' && isGet)}');
             sp.setString('shimingzhi', bean.data!.auditStatus.toString());
             sp.setString("user_headimg", bean.data!.avatar!);
             sp.setInt("user_gender", bean.data!.gender!);

@@ -10,8 +10,8 @@ import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/pages/game/rank_page.dart';
 import 'package:yuyinting/pages/game/zhuanpan/zhuanpan_daoju_page.dart';
 import 'package:yuyinting/pages/game/zhuanpan/zhuanpan_guize_page.dart';
-import 'package:yuyinting/pages/game/zhuanpan/zhuanpan_jiangchi2_page.dart';
 import 'package:yuyinting/pages/game/zhuanpan/zhuanpan_jilu_page.dart';
+import 'package:yuyinting/pages/game/zhuanpan/zhuanpan_new_jc2_page.dart';
 import '../../bean/CommonIntBean.dart';
 import '../../bean/luckInfoBean.dart';
 import '../../bean/playRouletteBean.dart';
@@ -229,7 +229,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                   left: ScreenUtil().setHeight(20),
                   child: GestureDetector(
                     onTap: ((){
-                      MyUtils.goTransparentPage(context, const ZhuanPanJiangChi2Page());
+                      MyUtils.goTransparentPage(context, const ZhuanPanNewJC2Page());
                     }),
                     child: WidgetUtils.showImages(
                         'assets/images/zhuanpan_one_baoxiang.png',
@@ -544,7 +544,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                   Transform.translate(
                     offset: Offset(0, -2.h),
                     child: WidgetUtils.onlyTextCenter(
-                        '10000V豆',
+                        '5000V豆',
                         StyleUtils.getCommonTextStyle(
                             color: Colors.white,
                             fontSize: ScreenUtil().setSp(23),
@@ -574,7 +574,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                   Transform.translate(
                     offset: Offset(0, -2.h),
                     child: WidgetUtils.onlyTextCenter(
-                        '30000V豆',
+                        '10000V豆',
                         StyleUtils.getCommonTextStyle(
                             color: Colors.white,
                             fontSize: ScreenUtil().setSp(23),
@@ -620,6 +620,30 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
               onTap: (() {
                 setState(() {
                   isCheck = 2;
+                  cishu = 5;
+                  feiyong = 5000;
+                });
+              }),
+              child: Container(
+                height: ScreenUtil().setHeight(60),
+                width: ScreenUtil().setHeight(170),
+                decoration: BoxDecoration(
+                  //设置Container修饰
+                  image: DecorationImage(
+                    //背景图片修饰
+                    image: AssetImage(isCheck == 2
+                        ? "assets/images/zhuanpan_one_51.png"
+                        : 'assets/images/zhuanpan_one_5.png'),
+                    fit: BoxFit.fill, //覆盖
+                  ),
+                ),
+              ),
+            ),
+            const Spacer(),
+            GestureDetector(
+              onTap: (() {
+                setState(() {
+                  isCheck = 3;
                   cishu = 10;
                   feiyong = 10000;
                 });
@@ -631,33 +655,9 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                   //设置Container修饰
                   image: DecorationImage(
                     //背景图片修饰
-                    image: AssetImage(isCheck == 2
+                    image: AssetImage(isCheck == 3
                         ? "assets/images/zhuanpan_one_101.png"
                         : 'assets/images/zhuanpan_one_10.png'),
-                    fit: BoxFit.fill, //覆盖
-                  ),
-                ),
-              ),
-            ),
-            const Spacer(),
-            GestureDetector(
-              onTap: (() {
-                setState(() {
-                  isCheck = 3;
-                  cishu = 30;
-                  feiyong = 30000;
-                });
-              }),
-              child: Container(
-                height: ScreenUtil().setHeight(60),
-                width: ScreenUtil().setHeight(170),
-                decoration: BoxDecoration(
-                  //设置Container修饰
-                  image: DecorationImage(
-                    //背景图片修饰
-                    image: AssetImage(isCheck == 3
-                        ? "assets/images/zhuanpan_one_1001.png"
-                        : 'assets/images/zhuanpan_one_100.png'),
                     fit: BoxFit.fill, //覆盖
                   ),
                 ),
@@ -710,59 +710,59 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
           }else{
             setState(() {
               switch(bean.data!.gifts![0].giftId){
-                case 42: // 星之钥
+                case 1124: // 多彩伞
                   int randomNum = Random().nextInt(6);
                   luckyName = randomNum;
                   break;
-                case 18: // 瑞麟
+                case 1133: // 天行巨鲲
                   int min = 7;
                   int max = 18; // 注意这里是 18 而不是 17，因为范围是左闭右开的
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;
-                case 7: // 云顶天空
+                case 1125: // 天鹅梦
                   int min = 19;
                   int max = 30;
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;
-                case 32: // 雪山飞虎
+                case 1131: // 秒见财神
                   int min = 31;
                   int max = 42;
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;
-                case 5: // 电竞小柴
+                case 1128: // 紫霞仙子
                   int min = 43;
                   int max = 54;
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;
-                case 31: // 童话岛
+                case 1129: // 为爱启航  //1124,1133,1125,1131,1128,1129,1127,1130,1126,1135
                   int min = 55;
                   int max = 66;
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;
-                case 38: // 鹤仙
+                case 1127: // 至尊宝
                   int min = 67;
                   int max = 78;
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;
-                case 9: // 梦回长安
+                case 1130: // 情定埃菲尔
                   int min = 79;
                   int max = 90;
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;
-                case 10: // 速度与激情
+                case 1126: // 独角兽
                   int min = 91;
                   int max = 102;
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;
-                case 17: // 霸下
+                case 1135: // 瑞麟庇佑
                   int min = 103;
                   int max = 114;
                   int randomNumber = Random().nextInt(max - min) + min;

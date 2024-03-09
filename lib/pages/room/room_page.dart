@@ -1403,10 +1403,10 @@ class _RoomPageState extends State<RoomPage>
                     if (isDevices == 'android') {
                       // 这个是为了让别人也能看见自己送出的礼物
                       if (listUrl.isEmpty) {
-                        if (cb.giftInfo![0].giftName! == '霸下' ||
+                        if (cb.giftInfo![0].giftName! == '远古霸下（限定投放）' ||
                             cb.giftInfo![0].giftName! == '北欧天马' ||
                             cb.giftInfo![0].giftName! == '浮生若梦' ||
-                            cb.giftInfo![0].giftName! == '光之子' ||
+                            cb.giftInfo![0].giftName! == '圣光之子' ||
                             cb.giftInfo![0].giftName! == '环游世界' ||
                             cb.giftInfo![0].giftName! == '鲸遇心海' ||
                             cb.giftInfo![0].giftName! == '竞速时刻' ||
@@ -1414,16 +1414,30 @@ class _RoomPageState extends State<RoomPage>
                             cb.giftInfo![0].giftName! == '狂欢宇宙' ||
                             cb.giftInfo![0].giftName! == '恋爱摩天轮' ||
                             cb.giftInfo![0].giftName! == '玫瑰花海' ||
-                            cb.giftInfo![0].giftName! == '梦回长安' ||
+                            cb.giftInfo![0].giftName! == '梦游长安（限定投放）' ||
                             cb.giftInfo![0].giftName! == '魔幻泡泡' ||
                             cb.giftInfo![0].giftName! == '木马奇缘' ||
                             cb.giftInfo![0].giftName! == '奇幻游记' ||
                             cb.giftInfo![0].giftName! == '热气球' ||
-                            cb.giftInfo![0].giftName! == '瑞麟' ||
+                            cb.giftInfo![0].giftName! == '瑞麟庇佑' ||
                             cb.giftInfo![0].giftName! == '时光回想' ||
-                            cb.giftInfo![0].giftName! == '童话岛' ||
-                            cb.giftInfo![0].giftName! == '雪山飞虎' ||
-                            cb.giftInfo![0].giftName! == '御龙豪杰') {
+                            cb.giftInfo![0].giftName! == '梦想岛' ||
+                            cb.giftInfo![0].giftName! == '雪域飞虎' ||
+                            cb.giftInfo![0].giftName! == '御龙英豪' ||
+                            cb.giftInfo![0].giftName! == '龙之帝王' ||
+                            cb.giftInfo![0].giftName! == '秒见财神' ||
+                            cb.giftInfo![0].giftName! == '情定埃菲尔' ||
+                            cb.giftInfo![0].giftName! == '天行巨鲲' ||
+                            cb.giftInfo![0].giftName! == '超级嘉年华' ||
+                            cb.giftInfo![0].giftName! == '为爱启航' ||
+                            cb.giftInfo![0].giftName! == '宝象传说（限定投放）' ||
+                            cb.giftInfo![0].giftName! == '巅峰之证（限定投放）' ||
+                            cb.giftInfo![0].giftName! == '樱花快线' ||
+                            cb.giftInfo![0].giftName! == '摘星少女' ||
+                            cb.giftInfo![0].giftName! == '吞星之鲸' ||
+                            cb.giftInfo![0].giftName! == '浪漫灯塔' ||
+                            cb.giftInfo![0].giftName! == '兮之城堡' ||
+                            cb.giftInfo![0].giftName! == '星际战舰') {
                           saveSVGAIMAGE(cb.giftInfo![0].giftImg!);
                         } else {
                           Map<dynamic, dynamic> map = {};
@@ -1435,10 +1449,10 @@ class _RoomPageState extends State<RoomPage>
                           showStar(listUrl[0]);
                         }
                       } else {
-                        if (cb.giftInfo![0].giftName! == '霸下' ||
+                        if (cb.giftInfo![0].giftName! == '远古霸下（限定投放）' ||
                             cb.giftInfo![0].giftName! == '北欧天马' ||
                             cb.giftInfo![0].giftName! == '浮生若梦' ||
-                            cb.giftInfo![0].giftName! == '光之子' ||
+                            cb.giftInfo![0].giftName! == '圣光之子' ||
                             cb.giftInfo![0].giftName! == '环游世界' ||
                             cb.giftInfo![0].giftName! == '鲸遇心海' ||
                             cb.giftInfo![0].giftName! == '竞速时刻' ||
@@ -1446,16 +1460,30 @@ class _RoomPageState extends State<RoomPage>
                             cb.giftInfo![0].giftName! == '狂欢宇宙' ||
                             cb.giftInfo![0].giftName! == '恋爱摩天轮' ||
                             cb.giftInfo![0].giftName! == '玫瑰花海' ||
-                            cb.giftInfo![0].giftName! == '梦回长安' ||
+                            cb.giftInfo![0].giftName! == '梦游长安（限定投放）' ||
                             cb.giftInfo![0].giftName! == '魔幻泡泡' ||
                             cb.giftInfo![0].giftName! == '木马奇缘' ||
                             cb.giftInfo![0].giftName! == '奇幻游记' ||
                             cb.giftInfo![0].giftName! == '热气球' ||
-                            cb.giftInfo![0].giftName! == '瑞麟' ||
+                            cb.giftInfo![0].giftName! == '瑞麟庇佑' ||
                             cb.giftInfo![0].giftName! == '时光回想' ||
-                            cb.giftInfo![0].giftName! == '童话岛' ||
-                            cb.giftInfo![0].giftName! == '雪山飞虎' ||
-                            cb.giftInfo![0].giftName! == '御龙豪杰') {
+                            cb.giftInfo![0].giftName! == '梦想岛' ||
+                            cb.giftInfo![0].giftName! == '雪域飞虎' ||
+                            cb.giftInfo![0].giftName! == '御龙英豪' ||
+                            cb.giftInfo![0].giftName! == '龙之帝王' ||
+                            cb.giftInfo![0].giftName! == '秒见财神' ||
+                            cb.giftInfo![0].giftName! == '情定埃菲尔' ||
+                            cb.giftInfo![0].giftName! == '天行巨鲲' ||
+                            cb.giftInfo![0].giftName! == '超级嘉年华' ||
+                            cb.giftInfo![0].giftName! == '为爱启航' ||
+                            cb.giftInfo![0].giftName! == '宝象传说（限定投放）' ||
+                            cb.giftInfo![0].giftName! == '巅峰之证（限定投放）' ||
+                            cb.giftInfo![0].giftName! == '樱花快线' ||
+                            cb.giftInfo![0].giftName! == '摘星少女' ||
+                            cb.giftInfo![0].giftName! == '吞星之鲸' ||
+                            cb.giftInfo![0].giftName! == '浪漫灯塔' ||
+                            cb.giftInfo![0].giftName! == '兮之城堡' ||
+                            cb.giftInfo![0].giftName! == '星际战舰') {
                           saveSVGAIMAGE(cb.giftInfo![0].giftImg!);
                         } else {
                           // 直接用网络图地址
@@ -1862,10 +1890,10 @@ class _RoomPageState extends State<RoomPage>
           if (isDevices == 'android') {
             setState(() {
               if (listUrl.isEmpty) {
-                if (event.url.contains('霸下') ||
+                if (event.url.contains('远古霸下（限定投放）') ||
                     event.url.contains('北欧天马') ||
                     event.url.contains('浮生若梦') ||
-                    event.url.contains('光之子') ||
+                    event.url.contains('圣光之子') ||
                     event.url.contains('环游世界') ||
                     event.url.contains('鲸遇心海') ||
                     event.url.contains('竞速时刻') ||
@@ -1873,16 +1901,30 @@ class _RoomPageState extends State<RoomPage>
                     event.url.contains('狂欢宇宙') ||
                     event.url.contains('恋爱摩天轮') ||
                     event.url.contains('玫瑰花海') ||
-                    event.url.contains('梦回长安') ||
+                    event.url.contains('梦游长安（限定投放）') ||
                     event.url.contains('魔幻泡泡') ||
                     event.url.contains('木马奇缘') ||
                     event.url.contains('奇幻游记') ||
                     event.url.contains('热气球') ||
-                    event.url.contains('瑞麟') ||
+                    event.url.contains('瑞麟庇佑') ||
                     event.url.contains('时光回想') ||
-                    event.url.contains('童话岛') ||
-                    event.url.contains('雪山飞虎') ||
-                    event.url.contains('御龙豪杰')) {
+                    event.url.contains('梦想岛') ||
+                    event.url.contains('雪域飞虎') ||
+                    event.url.contains('御龙英豪') ||
+                    event.url.contains('龙之帝王') ||
+                    event.url.contains('秒见财神') ||
+                    event.url.contains('情定埃菲尔') ||
+                    event.url.contains('天行巨鲲') ||
+                    event.url.contains('超级嘉年华') ||
+                    event.url.contains('为爱启航') ||
+                    event.url.contains('宝象传说（限定投放）') ||
+                    event.url.contains('巅峰之证（限定投放）') ||
+                    event.url.contains('樱花快线') ||
+                    event.url.contains('摘星少女') ||
+                    event.url.contains('吞星之鲸') ||
+                    event.url.contains('浪漫灯塔') ||
+                    event.url.contains('兮之城堡') ||
+                    event.url.contains('星际战舰')) {
                   saveSVGAIMAGE(event.url);
                 } else {
                   // 直接用网络图地址
@@ -1895,10 +1937,10 @@ class _RoomPageState extends State<RoomPage>
                   showStar(listUrl[0]);
                 }
               } else {
-                if (event.url.contains('霸下') ||
+                if (event.url.contains('远古霸下（限定投放）') ||
                     event.url.contains('北欧天马') ||
                     event.url.contains('浮生若梦') ||
-                    event.url.contains('光之子') ||
+                    event.url.contains('圣光之子') ||
                     event.url.contains('环游世界') ||
                     event.url.contains('鲸遇心海') ||
                     event.url.contains('竞速时刻') ||
@@ -1906,16 +1948,30 @@ class _RoomPageState extends State<RoomPage>
                     event.url.contains('狂欢宇宙') ||
                     event.url.contains('恋爱摩天轮') ||
                     event.url.contains('玫瑰花海') ||
-                    event.url.contains('梦回长安') ||
+                    event.url.contains('梦游长安（限定投放）') ||
                     event.url.contains('魔幻泡泡') ||
                     event.url.contains('木马奇缘') ||
                     event.url.contains('奇幻游记') ||
                     event.url.contains('热气球') ||
-                    event.url.contains('瑞麟') ||
+                    event.url.contains('瑞麟庇佑') ||
                     event.url.contains('时光回想') ||
-                    event.url.contains('童话岛') ||
-                    event.url.contains('雪山飞虎') ||
-                    event.url.contains('御龙豪杰')) {
+                    event.url.contains('梦想岛') ||
+                    event.url.contains('雪域飞虎') ||
+                    event.url.contains('御龙英豪')||
+                    event.url.contains('龙之帝王') ||
+                    event.url.contains('秒见财神') ||
+                    event.url.contains('情定埃菲尔') ||
+                    event.url.contains('天行巨鲲') ||
+                    event.url.contains('超级嘉年华') ||
+                    event.url.contains('为爱启航') ||
+                    event.url.contains('宝象传说（限定投放）') ||
+                    event.url.contains('巅峰之证（限定投放）') ||
+                    event.url.contains('樱花快线') ||
+                    event.url.contains('摘星少女') ||
+                    event.url.contains('吞星之鲸') ||
+                    event.url.contains('浪漫灯塔') ||
+                    event.url.contains('兮之城堡') ||
+                    event.url.contains('星际战舰')) {
                   saveSVGAIMAGE(event.url);
                 } else {
                   // 直接用网络图地址
@@ -3127,7 +3183,7 @@ class _RoomPageState extends State<RoomPage>
                                 Expanded(
                                     child: Container(
                                   height: double.infinity,
-                                  color: Colors.black54,
+                                  color: Colors.black87,
                                   child: Column(
                                     children: [
                                       WidgetUtils.commonSizedBox(35, 0),

@@ -432,18 +432,18 @@ class MyUtils {
     //     autoLogin: false,
     //     debugModel: true,
     //     isAutoDownloadThumbnail: true);
-    // // 测试环境（公测）
-    // EMOptions options = EMOptions(
-    //     appKey: "1129240201157233#cccs",
-    //     autoLogin: false,
-    //     debugModel: true,
-    //     isAutoDownloadThumbnail: true);
-    // 正式环境
+    // 测试环境（公测）
     EMOptions options = EMOptions(
-        appKey: "1129240201157233#cc",
+        appKey: "1129240201157233#cccs",
         autoLogin: false,
         debugModel: true,
         isAutoDownloadThumbnail: true);
+    // // 正式环境
+    // EMOptions options = EMOptions(
+    //     appKey: "1129240201157233#cc",
+    //     autoLogin: false,
+    //     debugModel: true,
+    //     isAutoDownloadThumbnail: true);
     // EMOptions options = EMOptions(
     //     appKey: "1109240124169584#777",
     //     autoLogin: false,

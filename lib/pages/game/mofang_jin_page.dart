@@ -104,6 +104,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
     await soundpool.play(soundId);
   }
 
+
   void loadAnimation() async {
     final videoItem = await _loadSVGA(false, 'assets/svga/mofang_jin_baozha.svga');
     videoItem.autorelease = false;
@@ -425,7 +426,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                                 Transform.translate(
                                   offset: Offset(0, -2.h),
                                   child: WidgetUtils.onlyTextCenter(
-                                      '20000V豆',
+                                      '6000V豆',
                                       StyleUtils.getCommonTextStyle(
                                           color: Colors.white,
                                           fontSize: ScreenUtil().setSp(21),
@@ -499,8 +500,8 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                             onTap: (() {
                               setState(() {
                                 isCheck = 3;
-                                cishu = 100;
-                                feiyong = 20000;
+                                cishu = 30;
+                                feiyong = 6000;
                               });
                             }),
                             child: Container(
@@ -516,7 +517,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                                   fit: BoxFit.fill, //覆盖
                                 ),
                               ),
-                              child: WidgetUtils.onlyTextCenter('转100次', StyleUtils.getCommonTextStyle(
+                              child: WidgetUtils.onlyTextCenter('转30次', StyleUtils.getCommonTextStyle(
                                   color: Colors.white,
                                   fontSize: ScreenUtil().setSp(28))),
                             ),

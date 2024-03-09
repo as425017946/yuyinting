@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:marquee/marquee.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:yuyinting/utils/log_util.dart';
+import 'package:yuyinting/utils/my_toast_utils.dart';
 import '../../bean/hengFuBean.dart';
 import '../../utils/SVGASimpleImage3.dart';
 
@@ -140,7 +141,7 @@ class HomeItems {
         break;
     }
     return IgnorePointer(
-      ignoring: true,
+      ignoring: false,
       child: Container(
         height: 300.h,
         width: double.infinity,
@@ -155,6 +156,7 @@ class HomeItems {
               GestureDetector(
                 onTap: (() {
                   // controller.forward();
+                  // MyToastUtils.showToastBottom('////');
                 }),
                 child: Padding(
                   padding: EdgeInsets.only(top: topHD, left: gd, right: 50.h),
@@ -218,7 +220,7 @@ class HomeItems {
       '神豪降临${hf.fromNickname!}在${hf.roomName!}送给了${hf.toNickname!}价值${hf.giftInfo![0].giftPrice}的瑞麟*${hf.giftInfo![0].giftNumber} 快来围观吧！';
     }
     return IgnorePointer(
-        ignoring: true,
+        ignoring: false,
         child: SizedBox(
           height: 340.h,
           width: double.infinity,

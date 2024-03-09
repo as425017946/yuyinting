@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:yuyinting/pages/game/zhuanpan/zhuanpan_shuoming_page.dart';
+import 'package:yuyinting/utils/event_utils.dart';
+import 'package:yuyinting/utils/loading.dart';
 import '../../../bean/mofangJCBean.dart';
 import '../../../colors/my_colors.dart';
 import '../../../http/data_utils.dart';
@@ -11,51 +13,69 @@ import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 import '../../../widget/OptionGridView.dart';
 
-/// 魔方奖池
-class MoFangJiangChiPage extends StatefulWidget {
-  String type;
-  MoFangJiangChiPage({super.key, required this.type});
+/// 转盘的奖池
+class ZhuanPanNewJCPage extends StatefulWidget {
+  const ZhuanPanNewJCPage({super.key});
 
   @override
-  State<MoFangJiangChiPage> createState() => _MoFangJiangChiPageState();
+  State<ZhuanPanNewJCPage> createState() => _ZhuanPanNewJCPageState();
 }
 
-class _MoFangJiangChiPageState extends State<MoFangJiangChiPage> {
+class _ZhuanPanNewJCPageState extends State<ZhuanPanNewJCPage> {
+  // 钥匙数量
+  int nums = 0;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    doPostRoulettePrizeList();
+    doPostGameStore();
   }
-  Widget jiangChiWidget(BuildContext context, int i){
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  Widget jiangChiWidget(BuildContext context, int i) {
     return Container(
-      height: 266.h,
+      height: 240.h,
+      width: 161.h,
       decoration: const BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/images/mofang_jc_bg.png'),
+          image: AssetImage('assets/images/zhuanpan_jc_btn_bg.png'),
           fit: BoxFit.fill,
         ),
       ),
       child: Column(
         children: [
           const Spacer(),
-          WidgetUtils.showImagesNet(
-              list[i].img!, 100.h, 100.h),
+          SizedBox(
+            height: 120.h,
+            width: 161.h,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                WidgetUtils.showImagesNet(list[i].img!, 120.h, 120.h),
+              ],
+            ),
+          ),
           WidgetUtils.commonSizedBox(10.h, 0),
           WidgetUtils.onlyTextCenter(
               '${list[i].price!}V豆',
               StyleUtils.getCommonTextStyle(
-                  color: MyColors.loginBlue2, fontSize: 18.sp)),
+                  color: Colors.white, fontSize: 18.sp)),
           WidgetUtils.commonSizedBox(5.h, 0),
           WidgetUtils.onlyTextCenter(
               list[i].name!,
               StyleUtils.getCommonTextStyle(
                   color: MyColors.zpGZYellow, fontSize: 22.sp)),
-          WidgetUtils.commonSizedBox(5.h, 0),
+          WidgetUtils.commonSizedBox(10.h, 0),
           WidgetUtils.onlyTextCenter(
               list[i].gl!,
               StyleUtils.getCommonTextStyle(
-                  color: MyColors.zpGZYellow, fontSize: 18.sp)),
+                  color: Colors.white, fontSize: 18.sp)),
           const Spacer(),
         ],
       ),
@@ -68,21 +88,24 @@ class _MoFangJiangChiPageState extends State<MoFangJiangChiPage> {
       backgroundColor: Colors.black54,
       body: Column(
         children: [
-          GestureDetector(
-            onTap: (() {
-              Navigator.pop(context);
-            }),
-            child: Container(
-              height: 380.h,
-              width: double.infinity,
-              color: Colors.transparent,
+          Expanded(
+            child: GestureDetector(
+              onTap: (() {
+                Navigator.pop(context);
+              }),
+              child: Container(
+                height: double.infinity,
+                width: double.infinity,
+                color: Colors.transparent,
+              ),
             ),
           ),
-          Expanded(
-              child: Container(
+          Container(
+            height: 820.h,
+            padding: EdgeInsets.only(bottom: 30.h),
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/room_tc1.png'),
+                image: AssetImage('assets/images/zhuanpan_jc_bg1.png'),
                 fit: BoxFit.fill,
               ),
             ),
@@ -90,7 +113,8 @@ class _MoFangJiangChiPageState extends State<MoFangJiangChiPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                WidgetUtils.commonSizedBox(20.h, 0),
+                WidgetUtils.commonSizedBox(170.h, 0),
+                //标题
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -117,33 +141,35 @@ class _MoFangJiangChiPageState extends State<MoFangJiangChiPage> {
                     WidgetUtils.commonSizedBox(0, 80.h),
                   ],
                 ),
-                WidgetUtils.commonSizedBox(30.h, 0),
+                WidgetUtils.commonSizedBox(20.h, 0),
                 Expanded(
-                  child: SingleChildScrollView(
-                    child: OptionGridView(
-                      padding: EdgeInsets.only(left: 20.h, right: 20.h),
-                      itemCount: list.length,
-                      rowCount: 3,
-                      mainAxisSpacing: 10.h,
-                      // 上下间距
-                      crossAxisSpacing: 20.h,
-                      //左右间距
-                      itemBuilder: jiangChiWidget,
-                    ),
-                  ),
-                )
+                    child: SingleChildScrollView(
+                      child: OptionGridView(
+                        padding: EdgeInsets.only(left: 50.h, right: 50.h, bottom: 50.h),
+                        itemCount: list.length,
+                        rowCount: 3,
+                        mainAxisSpacing: 20.h,
+                        // 上下间距
+                        crossAxisSpacing: 20.h,
+                        //左右间距
+                        itemBuilder: jiangChiWidget,
+                      ),
+                    ))
               ],
             ),
-          ))
+          )
         ],
       ),
     );
   }
+
   List<Data> list = [];
-  /// 魔方奖池
-  Future<void> doPostRoulettePrizeList() async {
+  /// 游戏商店
+  Future<void> doPostGameStore() async {
+    Loading.show();
     Map<String, dynamic> params = <String, dynamic>{
-      'price_id': widget.type, //1小金额 2大金额
+      'game_id': '2',
+      'price_id': '1', //1小金额 2大金额
     };
     try {
       mofangJCBean bean = await DataUtils.postRoulettePrizeList(params);
@@ -162,7 +188,9 @@ class _MoFangJiangChiPageState extends State<MoFangJiangChiPage> {
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
+      Loading.dismiss();
     } catch (e) {
+      Loading.dismiss();
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }

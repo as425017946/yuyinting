@@ -10,8 +10,8 @@ import 'package:yuyinting/main.dart';
 import 'package:yuyinting/pages/game/rank_page.dart';
 import 'package:yuyinting/pages/game/zhuanpan/zhuanpan_daoju_page.dart';
 import 'package:yuyinting/pages/game/zhuanpan/zhuanpan_guize_page.dart';
-import 'package:yuyinting/pages/game/zhuanpan/zhuanpan_jiangchi_page.dart';
 import 'package:yuyinting/pages/game/zhuanpan/zhuanpan_jilu_page.dart';
+import 'package:yuyinting/pages/game/zhuanpan/zhuanpan_new_jc_page.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/my_utils.dart';
 
@@ -224,7 +224,7 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
                   child: GestureDetector(
                     onTap: (() {
                       MyUtils.goTransparentPage(
-                          context, const ZhuanPanJiangChiPage());
+                          context, const ZhuanPanNewJCPage());
                     }),
                     child: WidgetUtils.showImages(
                         'assets/images/zhuanpan_tow_baoxiang.png',
@@ -551,7 +551,7 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
                   Transform.translate(
                     offset: Offset(0, -2.h),
                     child: WidgetUtils.onlyTextCenter(
-                        '10000V豆',
+                        '5000V豆',
                         StyleUtils.getCommonTextStyle(
                             color: Colors.white,
                             fontSize: ScreenUtil().setSp(23),
@@ -621,8 +621,8 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
               onTap: (() {
                 setState(() {
                   isCheck = 3;
-                  cishu = 100;
-                  feiyong = 10000;
+                  cishu = 50;
+                  feiyong = 5000;
                 });
               }),
               child: Container(
@@ -685,59 +685,59 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
           }else{
             setState(() {
               switch(bean.data!.gifts![0].giftId){
-                case 41: // 心之钥
+                case 1112: // 甜甜圈
                   int randomNum = Random().nextInt(6);
                   luckyName = randomNum;
                   break;
-                case 9: // 梦回长安
+                case 1121: // 兮之城堡
                   int min = 7;
                   int max = 18; // 注意这里是 18 而不是 17，因为范围是左闭右开的
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;
-                case 26: // 雪顶咖啡
+                case 1114: // 魔法池
                   int min = 19;
                   int max = 30;
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;
-                case 8: // 御龙豪杰
+                case 1118: // 天府仙境
                   int min = 31;
                   int max = 42;
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;
-                case 36: // 钻石糖
+                case 1115: // 酷玩小柴
                   int min = 43;
                   int max = 54;
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;
-                case 10: // 速度与激情
+                case 1117: // 速度激情
                   int min = 55;
                   int max = 66;
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;
-                case 5: // 电竞小柴
+                case 1116: // 星际战舰
                   int min = 67;
                   int max = 78;
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;
-                case 38: // 鹤仙
+                case 1120: // 御龙英豪
                   int min = 79;
                   int max = 90;
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;
-                case 4: // 蝴蝶荷塘
+                case 1113: // 猫猫糖
                   int min = 91;
                   int max = 102;
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;
-                case 17: // 霸下
+                case 1123: // 樱花快线
                   int min = 103;
                   int max = 114;
                   int randomNumber = Random().nextInt(max - min) + min;
