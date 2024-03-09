@@ -715,26 +715,26 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                   luckyName = randomNum;
                   break;
                 case 1133: // 天行巨鲲
-                  int min = 7;
-                  int max = 18; // 注意这里是 18 而不是 17，因为范围是左闭右开的
+                  int min = 103;
+                  int max = 114; // 注意这里是 18 而不是 17，因为范围是左闭右开的
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;
                 case 1125: // 天鹅梦
-                  int min = 19;
-                  int max = 30;
+                  int min = 91;
+                  int max = 102;
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;
                 case 1131: // 秒见财神
-                  int min = 31;
-                  int max = 42;
+                  int min = 79;
+                  int max = 90;
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;
                 case 1128: // 紫霞仙子
-                  int min = 43;
-                  int max = 54;
+                  int min = 67;
+                  int max = 78;
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;
@@ -745,26 +745,26 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                   luckyName = randomNumber;
                   break;
                 case 1127: // 至尊宝
-                  int min = 67;
-                  int max = 78;
+                  int min = 43;
+                  int max = 54;
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;
                 case 1130: // 情定埃菲尔
-                  int min = 79;
-                  int max = 90;
+                  int min = 31;
+                  int max = 42;
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;
                 case 1126: // 独角兽
-                  int min = 91;
-                  int max = 102;
+                  int min = 19;
+                  int max = 30;
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;
                 case 1135: // 瑞麟庇佑
-                  int min = 103;
-                  int max = 114;
+                  int min = 7;
+                  int max = 18;
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;

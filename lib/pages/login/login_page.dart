@@ -51,10 +51,10 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
 
-    final ping = Ping('43.198.138.251', count: 5);
-    ping.stream.listen((event) {
-      LogE('Running command: $event');
-    });
+    // final ping = Ping('43.198.138.251', count: 5);
+    // ping.stream.listen((event) {
+    //   LogE('Running command: $event');
+    // });
 
 
     if (Platform.isAndroid) {
