@@ -1166,17 +1166,16 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       if (result) {
         // 下载成功后的操作
         print('图片 $i 下载成功');
+        if(i == bean.data!.imgList!.length-1){
+          setState(() {
+            sp.setString('isFirstDown', (int.parse(sp.getString('isFirstDown').toString())+1).toString());
+          });
+          print('下载完成修改值 ${sp.getString('isFirstDown').toString()}');
+        }
         setState(() {
           jindu = double.parse(jinduBaifeinbi) * (i + 1);
           jinduNum = (jindu * 100).truncateToDouble();
           eventBus.fire(DownLoadingBack(jindu: jindu, jinduNum: jinduNum));
-          if (jindu == 1) {
-            print('下载完成 $jindu');
-            setState(() {
-              sp.setString('isFirstDown', int.parse(sp.getString('isFirstDown').toString()).toString());
-            });
-            print('下载完成修改值 ${sp.getString('isFirstDown').toString()}');
-          }
         });
       } else {
         // 下载失败后的操作
