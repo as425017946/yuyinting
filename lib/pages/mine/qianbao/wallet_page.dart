@@ -110,7 +110,7 @@ class _WalletPageState extends State<WalletPage> {
                           children: [
                             const Spacer(),
                             /// 特权充值
-                            (sp.getString('user_identity').toString() != 'president' || sp.getString('user_identity').toString() != 'leader') ? GestureDetector(
+                            (sp.getString('user_identity').toString() == 'president' || sp.getString('user_identity').toString() == 'leader') ? GestureDetector(
                               onTap: ((){
                                 if (MyUtils.checkClick()) {
                                   Navigator.push(context,
