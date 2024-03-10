@@ -30,6 +30,7 @@ import 'gonghui/my_gonghui_page.dart';
 import 'huizhang/my_huizhang_page.dart';
 import 'mine_smz_page.dart';
 import 'my/my_info_page.dart';
+import 'my/yqyl_page.dart';
 import 'my_kefu_page.dart';
 
 ///我的
@@ -139,6 +140,12 @@ class _MinePageState extends State<MinePage> {
           }).then((value) {
             // doPostMyIfon();
           });
+        }
+      } else if (event.title == '邀请有礼') {
+        if (mounted) {
+          if(MyUtils.checkClick()){
+            MyUtils.goTransparentPage(context, YQYLPage(kefuUid: kefuUid, kefUavatar: kefuAvatar,));
+          }
         }
       } else if (event.title == '全民代理') {
         if (mounted) {
@@ -798,6 +805,9 @@ class _MinePageState extends State<MinePage> {
                         'assets/images/mine_gonghui.png', '公会中心', isShenHe) : WidgetUtils.commonSizedBox(0, 0),
                     (identity == 'president' && isGet) ? WidgetUtils.whiteKuang(
                         'assets/images/mine_huizhang.png', '会长后台', isShenHe) : WidgetUtils.commonSizedBox(0, 0),
+                    (isAgent != 1 && isGet)
+                        ? WidgetUtils.whiteKuang(
+                        'assets/images/mine_yaoqing.jpg', '邀请有礼', false) : WidgetUtils.commonSizedBox(0, 0),
                     isAgent == 1
                         ? WidgetUtils.whiteKuang(
                             'assets/images/mine_quan.png', '全民代理', false)

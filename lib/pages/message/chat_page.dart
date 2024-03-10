@@ -761,7 +761,7 @@ class _ChatPageState extends State<ChatPage> {
                     child:   (allData2[i]['content']
                         .toString()
                         .contains(
-                        'com.cv.gc.yyt') ||
+                        'com.leimu.yuyinting') ||
                         allData2[i]['content']
                             .toString()
                             .contains('storage'))

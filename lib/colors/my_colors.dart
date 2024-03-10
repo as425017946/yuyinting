@@ -141,6 +141,8 @@ class MyColors{
   static const Color roomXZ1 = Color(0xFF2D2F4E);
   static const Color roomXZ2 = Color(0xFF201E3B);
   static const Color zp1 = Color(0xFF8F4E58);
+  static const Color yzZi1 = Color(0xFF05184F);
+  static const Color yzZi2 = Color(0xFF3794B0);
 
 
 }

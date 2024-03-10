@@ -531,9 +531,9 @@ class _HomePageState extends State<HomePage>
     String path = '';
     if (Platform.isAndroid) {
       if(type==1){
-        path = '/sdcard/Android/data/com.cv.gc.yyt/files/agorasdk.log';
+        path = '/sdcard/Android/data/com.leimu.yuyinting/files/agorasdk.log';
       }else{
-        path = '/sdcard/Android/data/com.cv.gc.yyt/files/agoraapi.log';
+        path = '/sdcard/Android/data/com.leimu.yuyinting/files/agoraapi.log';
       }
       file = File(path);
       if (file.existsSync()) {
@@ -664,7 +664,7 @@ class _HomePageState extends State<HomePage>
     var params = <String, dynamic>{
       'system': deviceType,
     };
-    LogE('手机登录登录===${androidInfo.isPhysicalDevice}');
+    // LogE('手机登录登录===${androidInfo.isPhysicalDevice}');
     try {
       CheckoutBean bean = await DataUtils.checkVersion(params);
       switch (bean.code) {

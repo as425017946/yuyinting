@@ -135,8 +135,11 @@ class _MoFangDaoJuPageState extends State<MoFangDaoJuPage> {
                     eventBus.fire(ResidentBack(isBack: false));
                     Navigator.pop(context);
                   }),
-                  child: WidgetUtils.showImagesFill(
-                      'assets/images/mofang_dj_close.png', 90.h, 200.h)),
+                  child: Container(
+                    color: Colors.transparent,
+                    child: WidgetUtils.showImagesFill(
+                        'assets/images/mofang_dj_close.png', 90.h, 200.h),
+                  )),
               WidgetUtils.commonSizedBox(0, 50.h),
               GestureDetector(
                   onTap: (() {
@@ -145,8 +148,11 @@ class _MoFangDaoJuPageState extends State<MoFangDaoJuPage> {
                       eventBus.fire(XZQuerenBack(cishu: '', feiyong: '', title: widget.title == '水星魔方' ? '蓝魔方' : '金魔方'));
                     }
                   }),
-                  child: WidgetUtils.showImagesFill(
-                      'assets/images/mofang_dj_again.png', 90.h, 200.h)),
+                  child: Container(
+                    color: Colors.transparent,
+                    child: WidgetUtils.showImagesFill(
+                        'assets/images/mofang_dj_again.png', 90.h, 200.h),
+                  )),
               const Spacer(),
             ],
           ),

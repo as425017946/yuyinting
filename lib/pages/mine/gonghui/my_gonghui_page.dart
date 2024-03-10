@@ -434,7 +434,7 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                                     double.infinity,
                                     MyColors.homeTopBG,
                                     MyColors.homeTopBG,
-                                    '入驻审核',
+                                    '签约审核',
                                     ScreenUtil().setSp(28),
                                     Colors.white),
                                 qianyue != 0

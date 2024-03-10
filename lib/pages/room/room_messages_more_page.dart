@@ -296,7 +296,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                                       child: (allData2[i]['content']
                                                   .toString()
                                                   .contains(
-                                                      'com.cv.gc.yyt') ||
+                                                      'com.leimu.yuyinting') ||
                                               allData2[i]['content']
                                                   .toString()
                                                   .contains('storage'))

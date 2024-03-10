@@ -14,10 +14,10 @@ class MyHttpConfig{
   //赵增测试环境
   // static  String baseURL = "http://192.168.0.53/api";
   // //测试环境
-  static  String baseURL = "http://18.162.113.63:8080/api";
+  // static  String baseURL = "http://18.162.113.63:8080/api";
 
   //正式环境
-  // static  String baseURL = sp.getString('isDian').toString().isEmpty ? "http://43.198.138.251:8080/api" : "http://${sp.getString('isDian').toString()}:8080/api";
+  static  String baseURL = sp.getString('isDian').toString().isEmpty ? "http://43.198.138.251:8080/api" : "http://${sp.getString('isDian').toString()}:8080/api";
   // 正式环境
   // static  String baseURL = "http://www.aa986.com:8080/api";
   /// 文件上传
@@ -25,9 +25,9 @@ class MyHttpConfig{
   static String fileUpload = '$baseURL/upload/fileUpload';
 
   //上传用户声网日志测试
-  static  String filelog = "http://18.162.113.63:8080/api/upload/filelog";
+  // static  String filelog = "http://18.162.113.63:8080/api/upload/filelog";
   // //上传用户声网日志正式
-  // static  String filelog = "http://18.163.115.213:8080/api/upload/filelog";
+  static  String filelog = sp.getString('isDian').toString().isEmpty ? "http://43.198.138.251:8080/api/upload/filelog" : "http://${sp.getString('isDian').toString()}:8080/api/upload/filelog";
   //存一下没有获取到ip的用户
   static  String ipLog = "http://118.195.228.131:8301/log";
   //判断网络
@@ -339,6 +339,13 @@ class MyHttpConfig{
   static  String userReport = "$baseURL/chat/userReport";
   // 设置离线模式
   static  String setLockMic = "$baseURL/room/setLockMic";
+  // 邀请有礼-提交申请
+  static  String yqApply = "$baseURL/agent/apply";
+  // 邀请有礼-获取分享链接
+  static  String getShareUrl = "$baseURL/agent/getShareUrl";
+  // 全民代理-获取推广链接
+  static  String getPromoUrl = "$baseURL/agent/getPromoUrl";
+
 
 
 }

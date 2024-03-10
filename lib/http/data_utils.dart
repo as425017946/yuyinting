@@ -24,6 +24,7 @@ import '../bean/fileUpdateBean.dart';
 import '../bean/gameListBean.dart';
 import '../bean/gameStoreBean.dart';
 import '../bean/getHeadImageBean.dart';
+import '../bean/getShareBean.dart';
 import '../bean/ghJieSuanListBean.dart';
 import '../bean/ghJieSuanListMoreBean.dart';
 import '../bean/ghPeopleBean.dart';
@@ -77,6 +78,7 @@ import '../bean/searchGonghuiBean.dart';
 import '../bean/shopListBean.dart';
 import '../bean/shoucangBean.dart';
 import '../bean/svgaAllBean.dart';
+import '../bean/tgMyShareBean.dart';
 import '../bean/tgmBean.dart';
 import '../bean/tjRoomListBean.dart';
 import '../bean/userDTListBean.dart';
@@ -1334,6 +1336,30 @@ class DataUtils{
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.setLockMic, {}, params);
     print("设置离线模式：$respons");
     return CommonBean.fromJson(respons!);
+  }
+
+
+  /// 邀请有礼-提交申请
+  static Future<CommonBean> postYqApply(Map<String,dynamic> params) async {
+    print("邀请有礼-提交申请：$params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.yqApply, {}, params);
+    print("邀请有礼-提交申请：$respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+
+  /// 邀请有礼-获取分享链接
+  static Future<getShareBean> postGetShareUrl() async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.getShareUrl, {}, {});
+    print("邀请有礼-获取分享链接 $respons");
+    return getShareBean.fromJson(respons!);
+  }
+
+  /// 邀请有礼-获取分享链接
+  static Future<tgMyShareBean> postGetPromoUrl() async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.getPromoUrl, {}, {});
+    print("邀请有礼-获取分享链接 $respons");
+    return tgMyShareBean.fromJson(respons!);
   }
 
 }

@@ -32,7 +32,7 @@ class _ShenhePageState extends State<ShenhePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    appBar = WidgetUtils.getAppBar('入驻审核', true, context, false, 0);
+    appBar = WidgetUtils.getAppBar('签约审核', true, context, false, 0);
     doPostApplySignList();
   }
 
