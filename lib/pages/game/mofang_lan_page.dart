@@ -294,9 +294,10 @@ class _MofangLanPageState extends State<MofangLanPage>
                             SizedBox(
                               height: ScreenUtil().setHeight(500),
                               width: ScreenUtil().setHeight(500),
-                              child: const SVGASimpleImage(
-                                  assetsName:
-                                      'assets/svga/mofang_lan_show.svga'),
+                              // child: const SVGASimpleImage(
+                              //     assetsName:
+                              //         'assets/svga/mofang_lan_show.svga'),
+                              child: WidgetUtils.showImages('assets/images/mofang_lan_showbg.png', 500.h, 500.h),
                             ),
                             Opacity(
                               opacity: 0.4,
@@ -1080,7 +1081,7 @@ class _MofangLanPageState extends State<MofangLanPage>
                       '$luckInfo恭喜${bean.data![i].nickname}获得${bean.data![i].giftName}          ';
                 }
               }
-              LogE('记录=== $luckInfo');
+              // LogE('记录=== $luckInfo');
             }
           });
           break;

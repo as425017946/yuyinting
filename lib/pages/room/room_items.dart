@@ -9,7 +9,6 @@ import '../../bean/roomInfoBean.dart';
 import '../../colors/my_colors.dart';
 import '../../main.dart';
 import '../../utils/event_utils.dart';
-import '../../utils/log_util.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../../widget/Marquee.dart';
@@ -972,6 +971,9 @@ class RoomItems {
     } else if (list[i]['type'] == '9') {
       // 厅内用户抽奖
       List<String> infos = list[i]['content'].toString().split(';');
+      int startIndex = infos[4].indexOf('(') + 1;
+      int endIndex = infos[4].indexOf(')');
+      String jine = infos[4].substring(startIndex, endIndex);
       // 厅内送出礼物推送
       return Stack(
         children: [
@@ -1076,7 +1078,14 @@ class RoomItems {
                       TextSpan(
                           text: infos[4],
                           style: StyleUtils.getCommonTextStyle(
-                            color: MyColors.loginPink, fontSize: 24.sp,)),
+                            color: (int.parse(jine) >= 10 &&
+                                int.parse(jine) < 5001) ? MyColors.zjZ1 : (int
+                                .parse(jine) >= 5001 && int.parse(jine) < 30001)
+                                ? MyColors.zjZ2
+                                : (int.parse(jine) >= 30001 &&
+                                int.parse(jine) < 50001)
+                                ? MyColors.zjZ3
+                                : MyColors.zjZ4, fontSize: 24.sp,)),
                     ]),
               ),
               // child: Wrap(
@@ -1484,7 +1493,7 @@ class RoomItems {
                 context,
                 RoomManagerPage(
                   type: (sp.getString('role').toString() == 'adminer' ||
-                      sp.getString('role').toString() == 'leader'||
+                      sp.getString('role').toString() == 'leader' ||
                       sp.getString('role').toString() == 'president')
                       ? 1
                       : 0,
@@ -3524,7 +3533,8 @@ class RoomItems {
   /// 厅内底部按钮
   static Widget footBtn(BuildContext context, bool isJinyiin, int isForbation,
       String roomID, int isShow, int isBoss, bool mima, List<MikeList> listM,
-      bool roomDX, bool roomSY, bool isRed, bool isMeUp, String mxIndex,int lixian) {
+      bool roomDX, bool roomSY, bool isRed, bool isMeUp, String mxIndex,
+      int lixian) {
     // LogE('*** 是否闭麦 $isJinyiin');
     return SizedBox(
       height: ScreenUtil().setHeight(90),

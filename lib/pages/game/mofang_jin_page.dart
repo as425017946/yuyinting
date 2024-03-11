@@ -280,7 +280,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                               height: ScreenUtil().setHeight(500),
                               width: ScreenUtil().setHeight(500),
                               child: const SVGASimpleImage(
-                                  assetsName: 'assets/svga/mofang_jin_show.svga'),
+                                  assetsName: 'assets/svga/gp/l_mf.svga'),
                             ),
                             Opacity(
                               opacity: 0.4,

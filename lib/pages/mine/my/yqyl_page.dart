@@ -40,7 +40,7 @@ class _YQYLPageState extends State<YQYLPage> {
       appBar: appBar,
       body: Stack(
         children: [
-          WidgetUtils.showImagesFill('assets/images/mine_yq_bg1.png',
+          WidgetUtils.showImagesFill('assets/images/mine_yq_bg1.jpg',
               double.infinity, double.infinity),
           Column(
             children: [

@@ -47,7 +47,7 @@ class _YQYLSQPageState extends State<YQYLSQPage> {
       resizeToAvoidBottomInset: false, // 解决键盘顶起页面
       body: Stack(
         children: [
-          WidgetUtils.showImagesFill('assets/images/mine_yq_bg2.png',
+          WidgetUtils.showImagesFill('assets/images/mine_yq_bg2.jpg',
               double.infinity, double.infinity),
           Column(
             children: [
@@ -227,7 +227,7 @@ class _YQYLSQPageState extends State<YQYLSQPage> {
                 child: Row(
                   children: [
                     WidgetUtils.onlyText(
-                        '选      填：',
+                        '选       填：',
                         StyleUtils.getCommonTextStyle(
                           color: MyColors.yzZi1,
                           fontSize: 30.sp,

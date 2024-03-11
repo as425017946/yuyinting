@@ -3514,6 +3514,9 @@ class _RoomPageState extends State<RoomPage>
             } else {
               // 下麦的人是自己
               if (whoUid == sp.getString('user_id')) {
+                setState(() {
+                  isJinyiin = true;
+                });
                 // 设置成观众
                 _engine.setClientRole(role: ClientRoleType.clientRoleAudience);
                 // 取消发布本地音频流
@@ -3648,6 +3651,8 @@ class _RoomPageState extends State<RoomPage>
                 //设置成主播
                 _engine.setClientRole(
                     role: ClientRoleType.clientRoleBroadcaster);
+                // 取消发布本地音频流
+                _engine.muteLocalAudioStream(true);
               }
             }
 

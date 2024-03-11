@@ -141,7 +141,7 @@ class HomeItems {
         break;
     }
     return IgnorePointer(
-      ignoring: false,
+      ignoring: true,
       child: Container(
         height: 300.h,
         width: double.infinity,
@@ -220,7 +220,7 @@ class HomeItems {
       '神豪降临${hf.fromNickname!}在${hf.roomName!}送给了${hf.toNickname!}价值${hf.giftInfo![0].giftPrice}的瑞麟*${hf.giftInfo![0].giftNumber} 快来围观吧！';
     }
     return IgnorePointer(
-        ignoring: false,
+        ignoring: true,
         child: SizedBox(
           height: 340.h,
           width: double.infinity,

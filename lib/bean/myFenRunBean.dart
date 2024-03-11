@@ -36,6 +36,8 @@ class Data {
   String? canRebateGb;
   String? canRebateD;
   String? proportion;
+  String? directRatio;
+  String? gameRatio;
   int? getSwtich;
 
   Data(
@@ -52,7 +54,9 @@ class Data {
         this.canRebateGb,
         this.canRebateD,
         this.proportion,
-        this.getSwtich});
+        this.getSwtich,
+        this.directRatio,
+        this.gameRatio});
 
   Data.fromJson(Map<String, dynamic> json) {
     allPromotionNum = json['all_promotion_num'];
@@ -69,6 +73,8 @@ class Data {
     canRebateD = json['can_rebate_d'];
     proportion = json['proportion'];
     getSwtich = json['get_swtich'];
+    directRatio = json['direct_ratio'];
+    gameRatio = json['game_ratio'];
   }
 
   Map<String, dynamic> toJson() {
@@ -87,6 +93,8 @@ class Data {
     data['can_rebate_d'] = this.canRebateD;
     data['proportion'] = this.proportion;
     data['get_swtich'] = this.getSwtich;
+    data['direct_ratio'] = this.directRatio;
+    data['game_ratio'] = this.gameRatio;
     return data;
   }
 }

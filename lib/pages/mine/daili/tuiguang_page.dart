@@ -36,7 +36,9 @@ class _TuiguangPageState extends State<TuiguangPage> {
       lsVMoney = '',
       lsZSMoney = '',
       lqVMoney = '',
-      lqZSMoney = '';
+      lqZSMoney = '',
+      jdFenRun = '',
+      yxFenRun = '';
 
   // 是否显示领取按钮
   bool isShow = true;
@@ -206,7 +208,7 @@ class _TuiguangPageState extends State<TuiguangPage> {
               ),
               WidgetUtils.commonSizedBox(30, 10),
               WidgetUtils.onlyTextCenter(
-                  '分润比例：$fenRunBL%',
+                  '经典股份：$jdFenRun    /   游戏股份：$yxFenRun',
                   StyleUtils.getCommonTextStyle(
                       color: MyColors.g9, fontSize: ScreenUtil().setSp(21)))
             ],
@@ -415,6 +417,8 @@ class _TuiguangPageState extends State<TuiguangPage> {
             lsZSMoney = bean.data!.allRebateD!;
             lqVMoney = bean.data!.canRebateGb!;
             lqZSMoney = bean.data!.canRebateD!;
+            jdFenRun = bean.data!.directRatio!;
+            yxFenRun = bean.data!.gameRatio!;
             if (bean.data!.getSwtich == 1) {
               isShow = true;
             } else {

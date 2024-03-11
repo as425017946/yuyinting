@@ -143,6 +143,10 @@ class MyColors{
   static const Color zp1 = Color(0xFF8F4E58);
   static const Color yzZi1 = Color(0xFF05184F);
   static const Color yzZi2 = Color(0xFF3794B0);
-
+  /// 中奖公屏礼物颜色
+  static const Color zjZ1 = Color(0xFFE295FF);
+  static const Color zjZ2 = Color(0xFF9DFFBF);
+  static const Color zjZ3 = Color(0xFF96FBFF);
+  static const Color zjZ4 = Color(0xFFFFFB98);
 
 }
