@@ -70,11 +70,11 @@ class _HomePageState extends State<HomePage>
     int month = now.month;
     int day = now.day;
     String time = '$year-$month-$day';
-    if(sp.getString('sw_queren_time') == null || sp.getString('sw_queren_time') != time){
-      sp.setString('sw_queren_time', time);
-      doPostFilelog(1);
-      doPostFilelog(2);
-    }
+    // if(sp.getString('sw_queren_time') == null || sp.getString('sw_queren_time') != time){
+    //   sp.setString('sw_queren_time', time);
+    //   doPostFilelog(1);
+    //   doPostFilelog(2);
+    // }
     doCheck();
     doPostPdAddress();
     //更新身份
