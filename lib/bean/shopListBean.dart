@@ -1,7 +1,7 @@
 class shopListBean {
   int? code;
   String? msg;
-  List<Data>? data;
+  List<DataSC>? data;
 
   shopListBean({this.code, this.msg, this.data});
 
@@ -9,9 +9,9 @@ class shopListBean {
     code = json['code'];
     msg = json['msg'];
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <DataSC>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(new DataSC.fromJson(v));
       });
     }
   }
@@ -27,7 +27,7 @@ class shopListBean {
   }
 }
 
-class Data {
+class DataSC {
   int? gid;
   String? name;
   String? img;
@@ -36,7 +36,7 @@ class Data {
   int? status;
   int? useDay;
 
-  Data(
+  DataSC(
       {this.gid,
         this.name,
         this.img,
@@ -45,7 +45,7 @@ class Data {
         this.status,
         this.useDay});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  DataSC.fromJson(Map<String, dynamic> json) {
     gid = json['gid'];
     name = json['name'];
     img = json['img'];

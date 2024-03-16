@@ -41,21 +41,24 @@ class _ShimingzhiCardPageState extends State<ShimingzhiCardPage> {
     super.initState();
     appBar = WidgetUtils.getAppBar('实名认证', true, context, false, 0);
     listen = eventBus.on<FileBack>().listen((event) {
-      if(imageUrl == 0){
+      if(mounted){
+        if(imageUrl == 0){
           setState(() {
             identity_front = event.info;
             identity_frontID = event.id;
           });
-      }else{
-        setState(() {
-          identity_back = event.info;
-          identity_backID = event.id;
-        });
-      }
-      if(identity_frontID.isNotEmpty && identity_backID.isNotEmpty){
-        setState(() {
-          isShow = true;
-        });
+        }else{
+          setState(() {
+            identity_back = event.info;
+            identity_backID = event.id;
+          });
+        }
+
+        if(identity_frontID.isNotEmpty && identity_backID.isNotEmpty){
+          setState(() {
+            isShow = true;
+          });
+        }
       }
     });
   }

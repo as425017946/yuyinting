@@ -49,7 +49,9 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
     /// 腾讯云上传成功回调
     listen = eventBus.on<TencentBack>().listen((event) {
       LogE('头像上传成功***** ${event.filePath}');
-      doPostRoomJoin(event.filePath,0);
+      if(event.title == '发布动态页面') {
+        doPostRoomJoin(event.filePath, 0);
+      }
     });
   }
 
@@ -920,7 +922,7 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
     }
     try {
       print("使用原生http client库上传");
-      await UploadHttpClient.upload(pickFilePath!, type, (count, total) {
+      await UploadHttpClient.upload(pickFilePath!, type, '发布动态页面', (count, total) {
       });
     } catch (e) {
       LogE('上传失败${e.toString()}');

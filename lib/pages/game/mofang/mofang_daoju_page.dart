@@ -20,6 +20,26 @@ class MoFangDaoJuPage extends StatefulWidget {
 }
 
 class _MoFangDaoJuPageState extends State<MoFangDaoJuPage> {
+  bool isShow = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if(widget.title == '水星魔方'){
+      if(widget.list[0].price as int > 300){
+        setState(() {
+          isShow = true;
+        });
+      }
+    }else{
+      if(widget.list[0].price as int > 3000){
+        setState(() {
+          isShow = true;
+        });
+      }
+    }
+  }
+
   Widget DaoJu(BuildContext context, int i){
     return SizedBox(
       height: 180.h,
@@ -89,74 +109,120 @@ class _MoFangDaoJuPageState extends State<MoFangDaoJuPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black54,
-      body: Column(
+      body: Stack(
         children: [
-          const Spacer(),
-          Container(
-            height: 550.h,
-            margin: EdgeInsets.only(left: 40.h, right: 40.h),
-            padding: EdgeInsets.only(top: 100.h, left: 30.h, right: 30.h , bottom: 40.h),
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/mofang_dj_lan_bg.png'),
-                fit: BoxFit.fill,
-              ),
-            ),
-            child: Column(
-              children: [
-                WidgetUtils.commonSizedBox(20.h, 0),
-                WidgetUtils.onlyTextCenter(
-                    '总价值：${widget.zonge}',
-                    StyleUtils.getCommonTextStyle(
-                        color: MyColors.roomTCYellow,
-                        fontSize: 24.sp,
-                        fontWeight: FontWeight.w600)),
-                WidgetUtils.commonSizedBox(20.h, 0),
-                Expanded(child: SingleChildScrollView(
-                  child: OptionGridView(
-                    itemCount: widget.list.length,
-                    rowCount: 3,
-                    mainAxisSpacing: 0.h,
-                    // 上下间距
-                    crossAxisSpacing: 10.h,
-                    //左右间距
-                    itemBuilder: DaoJu,
-                  ),
-                ))
-              ],
-            ),
-          ),
-          WidgetUtils.commonSizedBox(20.h, 0),
-          Row(
+          Column(
             children: [
               const Spacer(),
-              GestureDetector(
-                  onTap: (() {
-                    eventBus.fire(ResidentBack(isBack: false));
-                    Navigator.pop(context);
-                  }),
-                  child: Container(
-                    color: Colors.transparent,
-                    child: WidgetUtils.showImagesFill(
-                        'assets/images/mofang_dj_close.png', 90.h, 200.h),
-                  )),
-              WidgetUtils.commonSizedBox(0, 50.h),
-              GestureDetector(
-                  onTap: (() {
-                    if(MyUtils.checkClick()){
-                      Navigator.pop(context);
-                      eventBus.fire(XZQuerenBack(cishu: '', feiyong: '', title: widget.title == '水星魔方' ? '蓝魔方' : '金魔方'));
-                    }
-                  }),
-                  child: Container(
-                    color: Colors.transparent,
-                    child: WidgetUtils.showImagesFill(
-                        'assets/images/mofang_dj_again.png', 90.h, 200.h),
-                  )),
+              Container(
+                height: 550.h,
+                margin: EdgeInsets.only(left: 40.h, right: 40.h),
+                padding: EdgeInsets.only(top: 100.h, left: 30.h, right: 30.h , bottom: 40.h),
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/mofang_dj_lan_bg.png'),
+                    fit: BoxFit.fill,
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    WidgetUtils.commonSizedBox(20.h, 0),
+                    WidgetUtils.onlyTextCenter(
+                        '总价值：${widget.zonge}',
+                        StyleUtils.getCommonTextStyle(
+                            color: MyColors.roomTCYellow,
+                            fontSize: 24.sp,
+                            fontWeight: FontWeight.w600)),
+                    WidgetUtils.commonSizedBox(20.h, 0),
+                    Expanded(child: SingleChildScrollView(
+                      child: OptionGridView(
+                        itemCount: widget.list.length,
+                        rowCount: 3,
+                        mainAxisSpacing: 0.h,
+                        // 上下间距
+                        crossAxisSpacing: 10.h,
+                        //左右间距
+                        itemBuilder: DaoJu,
+                      ),
+                    ))
+                  ],
+                ),
+              ),
+              WidgetUtils.commonSizedBox(20.h, 0),
+              Row(
+                children: [
+                  const Spacer(),
+                  GestureDetector(
+                      onTap: (() {
+                        eventBus.fire(ResidentBack(isBack: false));
+                        Navigator.pop(context);
+                      }),
+                      child: Container(
+                        color: Colors.transparent,
+                        child: WidgetUtils.showImagesFill(
+                            'assets/images/mofang_dj_close.png', 90.h, 200.h),
+                      )),
+                  WidgetUtils.commonSizedBox(0, 50.h),
+                  GestureDetector(
+                      onTap: (() {
+                        if(MyUtils.checkClick()){
+                          eventBus.fire(XZQuerenBack(cishu: '', feiyong: '', title: widget.title == '水星魔方' ? '蓝魔方' : '金魔方'));
+                          Navigator.pop(context);
+                        }
+                      }),
+                      child: Container(
+                        color: Colors.transparent,
+                        child: WidgetUtils.showImagesFill(
+                            'assets/images/mofang_dj_again.png', 90.h, 200.h),
+                      )),
+                  const Spacer(),
+                ],
+              ),
               const Spacer(),
             ],
           ),
-          const Spacer(),
+          isShow ? Column(
+            children: [
+              Expanded(
+                child: Container(
+                  height: double.infinity,
+                  color: Colors.black87,
+                ),
+              ),
+              Container(
+                height: 700.h,
+                color: Colors.black87,
+                alignment: Alignment.center,
+                child: Column(
+                  children: [
+                    WidgetUtils.showImages(
+                        'assets/images/game_title.png', 200.h, 500.h),
+                    Transform.translate(
+                        offset: Offset(0, -30.h),
+                        child: WidgetUtils.showImagesNet(
+                            widget.list[0].img!, 300.h, 300.h)),
+                    WidgetUtils.showImagesFill(
+                        'assets/images/game_zuo.png', 50.h, 350.h),
+                    WidgetUtils.commonSizedBox(30.h, 0),
+                    GestureDetector(
+                        onTap: (() {
+                          setState(() {
+                            isShow = false;
+                          });
+                        }),
+                        child: WidgetUtils.showImagesFill(
+                            'assets/images/game_btn.png', 65.h, 260.h)),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  height: double.infinity,
+                  color: Colors.black87,
+                ),
+              ),
+            ],
+          ) : const Text('')
         ],
       ),
     );

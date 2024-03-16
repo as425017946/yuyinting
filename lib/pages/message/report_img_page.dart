@@ -71,6 +71,17 @@ class _ReportIMGPageState extends State<ReportIMGPage> {
     // doPostPostFileUpload(imgFile.path);
   }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    /// 腾讯云上传成功回调
+    eventBus.on<TencentBack>().listen((event) {
+      if(event.title == '举报图片上传'){
+        doPostRoomJoin(event.filePath,0);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -532,7 +543,7 @@ class _ReportIMGPageState extends State<ReportIMGPage> {
     }
     try {
       print("使用原生http client库上传");
-      await UploadHttpClient.upload(pickFilePath!,type, (count, total) {
+      await UploadHttpClient.upload(pickFilePath!,type, '举报图片上传', (count, total) {
       });
     } catch (e) {
       LogE('上传失败${e.toString()}');

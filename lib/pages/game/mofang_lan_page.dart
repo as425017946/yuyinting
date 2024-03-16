@@ -982,6 +982,10 @@ class _MofangLanPageState extends State<MofangLanPage>
             animationController?.reset();
             animationController?.forward();
             Future.delayed(const Duration(milliseconds: 3000), () {
+              setState(() {
+                isShow = false;
+                isXiazhu = true;
+              });
               // 延迟执行的代码
               MyUtils.goTransparentPageCom(context,
                   MoFangDaoJuPage(list: list, zonge: zonge, title: '水星魔方'));

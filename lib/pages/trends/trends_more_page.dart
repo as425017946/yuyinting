@@ -82,56 +82,15 @@ class _TrendsMorePageState extends State<TrendsMorePage>
     doPostDtDetail(widget.note_id);
     doPostMyIfon();
 
-    /// 页面加载完成
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      animationController = SVGAAnimationController(vsync: this);
-      loadAnimation();
-    });
-
     _focusNode = FocusNode();
     _focusNode!.addListener(_onFocusChange);
   }
 
   @override
   void dispose() {
-    animationController?.stop(); // 停止动画播放
-    animationController?.dispose();
-    // 移除监听器
-    animationController?.removeListener(_animListener);
-    animationController = null;
     _focusNode!.removeListener(_onFocusChange);
     _focusNode!.dispose();
     super.dispose();
-  }
-
-  SVGAAnimationController? animationController;
-
-  //动画是否在播放
-  bool isShow = false;
-
-  void loadAnimation() async {
-    final videoItem = await _loadSVGA(false, 'assets/svga/dianzan_2.svga');
-    videoItem.autorelease = false;
-    animationController?.videoItem = videoItem;
-    animationController
-        ?.repeat() // Try to use .forward() .reverse()
-        .whenComplete(() => animationController?.videoItem = null);
-
-    // 监听动画
-    animationController?.addListener(_animListener);
-  }
-
-  void _animListener() {
-    //TODO
-    if (animationController!.currentFrame >= animationController!.frames - 1) {
-      // 动画播放到最后一帧时停止播放
-      animationController?.stop();
-      if (mounted) {
-        setState(() {
-          isShow = false;
-        });
-      }
-    }
   }
 
   Future _loadSVGA(isUrl, svgaUrl) {
@@ -758,13 +717,8 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                                     action = 'delete';
                                   } else {
                                     action = 'create';
-                                    isShow = true;
                                   }
                                 });
-                                if (isLike == 0) {
-                                  animationController?.reset();
-                                  animationController?.forward();
-                                }
                                 doPostLike();
                               }),
                               child: WidgetUtils.showImages(
@@ -1016,17 +970,6 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                 ),
               ),
             ),
-
-            ///点赞显示样式
-            isShow
-                ? Positioned(
-                    left: x - ScreenUtil().setHeight(50),
-                    top: y - ScreenUtil().setHeight(210),
-                    height: ScreenUtil().setHeight(100),
-                    width: ScreenUtil().setHeight(100),
-                    child: SVGAImage(animationController!),
-                  )
-                : const Text(''),
           ],
         ),
       ),

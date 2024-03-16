@@ -14,7 +14,6 @@ import '../../bean/roomInfoBean.dart';
 import '../../bean/roomInfoUserManagerBean.dart';
 import '../../bean/roomUserInfoBean.dart';
 import '../../colors/my_colors.dart';
-import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../utils/event_utils.dart';
@@ -810,14 +809,14 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                       WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(120),
                           ScreenUtil().setHeight(120), headImg),
                       // 头像框静态图
-                      avatarFrameImg.isNotEmpty
+                      (avatarFrameGifImg.isEmpty && avatarFrameImg.isNotEmpty)
                           ? WidgetUtils.CircleHeadImage(
                               ScreenUtil().setHeight(120),
                               ScreenUtil().setHeight(120),
                               avatarFrameImg)
                           : const Text(''),
                       // 头像框动态图
-                      avatarFrameGifImg.isEmpty
+                      avatarFrameGifImg.isNotEmpty
                           ? SizedBox(
                               height: 160.h,
                               width: 160.h,
@@ -863,6 +862,8 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
             isNew = bean.data!.isNew as int;
             isPretty = bean.data!.isPretty as int;
             isNewNoble = bean.data!.newNoble as int;
+            avatarFrameImg = bean.data!.avatarFrameImg!;
+            avatarFrameGifImg = bean.data!.avatarFrameGifImg!;
           });
           break;
         case MyHttpConfig.errorloginCode:

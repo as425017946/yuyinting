@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+import 'package:yuyinting/main.dart';
 
 import '../../../bean/Common_bean.dart';
 import '../../../bean/balanceBean.dart';
@@ -10,37 +11,38 @@ import '../../../colors/my_colors.dart';
 import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
-import '../../../main.dart';
 import '../../../utils/loading.dart';
+import '../../../utils/log_util.dart';
 import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 import '../../../widget/OptionGridView.dart';
 import '../qianbao/dou_pay_page.dart';
-/// 麦上声波
-class ShengboPage extends StatefulWidget {
-  const ShengboPage({Key? key}) : super(key: key);
+
+/// 座驾
+class ZuojiaBBPage extends StatefulWidget {
+  const ZuojiaBBPage({Key? key}) : super(key: key);
 
   @override
-  State<ShengboPage> createState() => _ShengboPageState();
+  State<ZuojiaBBPage> createState() => _ZuojiaBBPageState();
 }
 
-class _ShengboPageState extends State<ShengboPage> {
+class _ZuojiaBBPageState extends State<ZuojiaBBPage> with AutomaticKeepAliveClientMixin{
+  /// 刷新一次后不在刷新
+  @override
+  bool get wantKeepAlive => true;
 
   var length = 1;
   List<bool> listB = [];
-
-  List<DataSC> _list = [];
+  List<DataMy> _list2 = [];
   final RefreshController _refreshController =
   RefreshController(initialRefresh: false);
   int page = 1;
   /// 是否有选中的
   bool isChoose = false;
   int price=0;
-  // 装扮id
   String dressID = '';
-
 
   void _onRefresh() async {
     // 重新初始化
@@ -54,7 +56,7 @@ class _ShengboPageState extends State<ShengboPage> {
         page = 1;
       });
     }
-    doPostMyIfon();
+    doPostMyShopList();
   }
 
   void _onLoading() async {
@@ -66,7 +68,7 @@ class _ShengboPageState extends State<ShengboPage> {
         page++;
       });
     }
-    doPostMyIfon();
+    doPostMyShopList();
     _refreshController.loadComplete();
   }
 
@@ -75,8 +77,7 @@ class _ShengboPageState extends State<ShengboPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    doPostMyIfon();
-    doPostBalance();
+    doPostMyShopList();
   }
 
   Widget _itemLiwu(BuildContext context, int i) {
@@ -85,7 +86,7 @@ class _ShengboPageState extends State<ShengboPage> {
         setState(() {
           for (int a = 0; a < length; a++) {
             if (a == i) {
-              listB[a] = !listB[a];
+              listB[i] = true;
             } else {
               listB[a] = false;
             }
@@ -93,15 +94,15 @@ class _ShengboPageState extends State<ShengboPage> {
           for (int a = 0; a < length; a++) {
             if (listB[a]) {
               isChoose = true;
-              price = _list[a].price!;
-              dressID = _list[i].gid.toString();
+              dressID = _list2[i].dressId.toString();
+              // price = _list[a].price!;
               break;
-            } else {
-              isChoose = false;
-              dressID = '';
             }
           }
         });
+        if(isChoose){
+          doPostSetDress(_list2[i].dressId.toString(), '1');
+        }
       }),
       child: Container(
         width: ScreenUtil().setHeight(211),
@@ -121,17 +122,17 @@ class _ShengboPageState extends State<ShengboPage> {
           children: [
             WidgetUtils.commonSizedBox(20, 20),
             WidgetUtils.showImagesNet(
-                _list[i].img!,
+                _list2[i].img!,
                 ScreenUtil().setHeight(200),
                 ScreenUtil().setHeight(200)),
             WidgetUtils.commonSizedBox(10, 20),
             WidgetUtils.onlyTextCenter(
-                _list[i].name!,
+                _list2[i].name!,
                 StyleUtils.getCommonTextStyle(
                     color: Colors.white,
                     fontSize: ScreenUtil().setSp(25))),
             WidgetUtils.onlyTextCenter(
-                _list[i].status == 1 ? '有效时长：永久' : '有效时长：${_list[i].useDay}天',
+                _list2[i].isLong == 1 ? '有效时长：永久' : '到期：${_list2[i].expireTime}',
                 StyleUtils.getCommonTextStyle(
                     color: Colors.white,
                     fontSize: ScreenUtil().setSp(25))),
@@ -156,7 +157,7 @@ class _ShengboPageState extends State<ShengboPage> {
           onRefresh: _onRefresh,
           child: OptionGridView(
             padding: const EdgeInsets.all(20),
-            itemCount:  _list.length,
+            itemCount: _list2.length,
             rowCount: 2,
             mainAxisSpacing: 10,
             crossAxisSpacing: 10,
@@ -179,93 +180,74 @@ class _ShengboPageState extends State<ShengboPage> {
             ],
           ),
         ),),
-        isChoose ? Container(
-          height: ScreenUtil().setHeight(110),
-          width: double.infinity,
-          color: MyColors.zhuangbanBottomBG,
-          child: Row(
-            children: [
-              WidgetUtils.commonSizedBox(0, 20),
-              Expanded(
-                  child: Column(
-                    children: [
-                      const Expanded(child: Text('')),
-                      Row(
-                        children: [
-                          WidgetUtils.onlyText(
-                              price.toString(),
-                              StyleUtils.getCommonTextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: ScreenUtil().setSp(50))),
-                          WidgetUtils.commonSizedBox(0, 10),
-                          WidgetUtils.onlyText(
-                              '豆',
-                              StyleUtils.getCommonTextStyle(
-                                  color: Colors.white,
-                                  fontSize: ScreenUtil().setSp(25))),
-                        ],
-                      ),
-                      GestureDetector(
-                        onTap: ((){
-                          if(MyUtils.checkClick()) {
-                            MyUtils.goTransparentPageCom(context, DouPayPage(
-                              shuliang: jinbi,));
-                          }
-                        }),
-                        child: WidgetUtils.onlyText(
-                            '$jinbi V豆 | 充值 >',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.zhuangbanWZ,
-                                fontSize: ScreenUtil().setSp(25))),
-                      ),
-                      WidgetUtils.commonSizedBox(10, 0),
-                    ],
-                  )),
-              GestureDetector(
-                onTap: (() {
-                  if(MyUtils.checkClick()){
-                    doPostBuyDress(dressID);
-                  }
-                }),
-                child: WidgetUtils.myContainer(
-                    ScreenUtil().setHeight(70),
-                    ScreenUtil().setHeight(200),
-                    MyColors.homeTopBG,
-                    MyColors.homeTopBG,
-                    '立即购买',
-                    ScreenUtil().setSp(33),
-                    Colors.white),
+        isChoose ? GestureDetector(
+          onTap: ((){
+            if(MyUtils.checkClick()){
+              for (int a = 0; a < length; a++) {
+                setState(() {
+                  listB[a] = false;
+                  isChoose = false;
+                });
+              }
+              doPostSetDress(dressID, '0');
+            }
+          }),
+          child: Container(
+            height: ScreenUtil().setHeight(110),
+            width: double.infinity,
+            color: MyColors.zhuangbanBottomBG,
+            alignment: Alignment.center,
+            child: Container(
+              height: 70.h,
+              alignment: Alignment.center,
+              width: 200.h,
+              //边框设置
+              decoration: const BoxDecoration(
+                //背景
+                color: MyColors.loginBtnP,
+                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                borderRadius: BorderRadius.all(Radius.circular(25.0)),
               ),
-              WidgetUtils.commonSizedBox(0, 20),
-            ],
+              child: Text(
+                '卸下装扮',
+                style: TextStyle(
+                  fontSize: ScreenUtil().setSp(28),
+                  color: Colors.white,
+                ),
+              ),
+            ),
           ),
         ) : const Text('')
       ],
     );
   }
-  /// 头像框
-  Future<void> doPostMyIfon() async {
+
+  /// 背包座驾
+  Future<void> doPostMyShopList() async {
     Map<String, dynamic> params = <String, dynamic>{
-      'class_id': '4',
+      'class_id': '1',
       'page': page,
       'pageSize': MyConfig.pageSize2
     };
     try {
-      shopListBean bean = await DataUtils.postShopList(params);
+      myShopListBean bean = await DataUtils.postMyShopList(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
             if (page == 1) {
-              _list.clear();
               listB.clear();
+              _list2.clear();
             }
             if (bean.data!.isNotEmpty) {
               for(int i =0; i < bean.data!.length; i++){
-                _list.add(bean.data![i]);
-                listB.add(false);
+                _list2.add(bean.data![i]);
+                if(_list2[i].isWear == 1){
+                  listB.add(true);
+                }else{
+                  listB.add(false);
+                }
               }
-              length = _list.length;
+              length = _list2.length;
             }else{
               if (page == 1) {
                 length = 0;
@@ -293,64 +275,16 @@ class _ShengboPageState extends State<ShengboPage> {
     }
   }
 
-
-  // 金币 钻石
-  String jinbi = '', jinbi2 = '', zuanshi = '', zuanshi2 = '';
-  /// 钱包余额
-  Future<void> doPostBalance() async {
-    try {
-      balanceBean bean = await DataUtils.postBalance();
-      switch (bean.code) {
-        case MyHttpConfig.successCode:
-          setState(() {
-            if(double.parse(bean.data!.goldBean!) > 10000){
-              jinbi = '${(double.parse(bean.data!.goldBean!)/10000)}w';
-              List<String> a = jinbi.split('.');
-              jinbi2 = '${a[0]}.${a[1].substring(0,2)}w';
-            }else{
-              jinbi = bean.data!.goldBean!;
-              jinbi2 = bean.data!.goldBean!;
-            }
-            if(double.parse(bean.data!.diamond!) > 10000){
-              zuanshi = '${(double.parse(bean.data!.diamond!)/10000)}w';
-              List<String> a = zuanshi.split('.');
-              zuanshi2 = '${a[0]}.${a[1].substring(0,2)}w';
-            }else{
-              zuanshi = bean.data!.diamond!;
-              zuanshi2 = bean.data!.diamond!;
-            }
-          });
-          break;
-        case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
-          MyUtils.jumpLogin(context);
-          break;
-        default:
-          MyToastUtils.showToastBottom(bean.msg!);
-          break;
-      }
-    } catch (e) {
-      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
-    }
-  }
-
-  /// 购买装扮
-  Future<void> doPostBuyDress(String dressID) async {
+  /// 设置装扮
+  Future<void> doPostSetDress(String newID, String isWear) async {
     Map<String, dynamic> params = <String, dynamic>{
-      'dress_id': dressID, //装扮id
+      'new_dress_id': newID,
+      'is_wear': isWear,
     };
     try {
-      CommonBean bean = await DataUtils.postBuyDress(params);
+      CommonBean bean = await DataUtils.postSetDress(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          setState(() {
-            for (int a = 0; a < length; a++) {
-              listB[a] = false;
-            }
-            isChoose = false;
-            dressID = '';
-          });
-          MyToastUtils.showToastBottom(MyConfig.buySuccess);
           break;
         case MyHttpConfig.errorloginCode:
         // ignore: use_build_context_synchronously

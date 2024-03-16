@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,7 +13,6 @@ import 'package:yuyinting/config/my_config.dart';
 import 'package:yuyinting/pages/room/room_bq_page.dart';
 import 'package:yuyinting/pages/room/room_send_info_page.dart';
 import 'package:yuyinting/pages/room/room_show_liwu_page.dart';
-import 'package:yuyinting/pages/room/room_ts_mima_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/my_utils.dart';
@@ -68,13 +66,17 @@ class _RoomPageState extends State<RoomPage>
 
   // 是否第一次进入
   int isFirst = 0;
-
+  /// 存进入的座驾信息
+  List<String> listUrlZJ = [];
+  // 存是否展示座驾
+  bool isZJShow = false;
   /// 播放svga动画使用
   late SVGAAnimationController animationControllerBG;
   late SVGAAnimationController animationControllerSL;
+  late SVGAAnimationController animationControllerZJ;
 
   Future _loadSVGA(isUrl, svgaUrl) {
-    LogE('动画类型 $isUrl');
+    LogE('动画类型 $isUrl === $svgaUrl');
     Future Function(String) decoder;
     if (isUrl) {
       decoder = SVGAParser.shared.decodeFromURL;
@@ -157,14 +159,71 @@ class _RoomPageState extends State<RoomPage>
     }
   }
 
+  // 展示座驾
+  void showStarZJ(String url) async {
+    // 动画正在进行中不做处理
+    if (animationControllerZJ.isAnimating) {
+      LogE('进行中====');
+    } else {
+      //网络图
+      final videoItem = await _loadSVGA(true, url);
+      if (videoItem != null) {
+        videoItem.autorelease = false;
+        animationControllerZJ?.videoItem = videoItem;
+        animationControllerZJ
+            ?.forward() // Try to use .forward() .reverse()
+            .whenComplete(() => animationControllerZJ?.videoItem = null);
+        // 监听动画
+        animationControllerZJ?.addListener(_animListenerZJ);
+      } else {
+        setState(() {
+          listUrlZJ.removeAt(0);
+        });
+        //礼物地址没有，直接返回，不进行后续操作
+        return;
+      }
+    }
+  }
+  //网络动画
+  void _animListenerZJ() {
+    //TODO
+    if (animationControllerZJ.isCompleted) {
+      LogE('动画结束 ${DateTime.now()}');
+      setState(() {
+        // 动画播放到最后一帧时停止播放
+        animationControllerZJ?.stop();
+        animationControllerZJ.removeListener(_animListener);
+        if (listUrlZJ.isNotEmpty) {
+          listUrlZJ.removeAt(0);
+          if (listUrlZJ.isEmpty) {
+            setState(() {
+              isZJShow = false;
+            });
+            // 全部动画结束的处理逻辑
+            // ...
+          } else {
+            Future.delayed(const Duration(milliseconds: 1), () {
+              showStarZJ(listUrlZJ[0]); // 递归调用showStar方法播放下一个动画
+            });
+          }
+        }
+      });
+    }
+  }
+
   /// 背景图为svga的时候使用
   void showStar2(String bgSVGAa) async {
-    final videoItem = await _loadSVGA(true, bgSVGAa);
-    videoItem.autorelease = false;
-    animationControllerBG?.videoItem = videoItem;
-    animationControllerBG
-        ?.repeat() // Try to use .forward() .reverse()
-        .whenComplete(() => animationControllerBG?.videoItem = null);
+    try {
+      final videoItem = await _loadSVGA(true, bgSVGAa);
+      videoItem.autorelease = false;
+      animationControllerBG?.videoItem = videoItem;
+      animationControllerBG
+          ?.repeat() // Try to use .forward() .reverse()
+          .whenComplete(() => animationControllerBG?.videoItem = null);
+    } catch (e) {
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      LogE('加载背景图错误提示 ${e.toString()}');
+    }
   }
 
   // 点击的类型
@@ -246,8 +305,10 @@ class _RoomPageState extends State<RoomPage>
       roomHeadImg = '';
   List<MikeList> listM = [];
   int isHomeShow = 1, isRoomBoss = 1;
+
   //离线模式
   int roomLixian = 0;
+
   // 是否抱麦
   bool isBaoMic = false;
 
@@ -340,7 +401,7 @@ class _RoomPageState extends State<RoomPage>
 
   // 赠送礼物使用
   List<Map> listUrl = [];
-  var listenSVGA, listenGZOK, listenMessage;
+  var listenSVGA, listenGZOK, listenMessage,listenJoinHF;
 
   // 每2分钟请求一下热度接口
   Timer? _timerHot;
@@ -367,10 +428,14 @@ class _RoomPageState extends State<RoomPage>
               if (_timerHot != null) {
                 _timerHot!.cancel();
               }
+              //取消订阅所有远端用户的音频流。
+              _engine.muteAllRemoteAudioStreams(true);
               // 取消发布本地音频流
               _engine.muteLocalAudioStream(true);
               _engine.disableAudio();
               _dispose();
+              // 清空存储信息
+              deleteChatInfo();
               doPostBeforeJoin(listPH[i].id.toString());
             }
           }
@@ -414,9 +479,6 @@ class _RoomPageState extends State<RoomPage>
     });
     //2.页面初始化的时候，添加一个状态的监听者
     WidgetsBinding.instance?.addObserver(this);
-    setState(() {
-      sp.setBool('joinRoom', false);
-    });
     if (Platform.isAndroid) {
       setState(() {
         isDevices = 'android';
@@ -435,7 +497,6 @@ class _RoomPageState extends State<RoomPage>
       slideAnimationController.playAnimation();
     });
     //页面渲染完成
-    //页面渲染完成
     WidgetsBinding.instance!.addPostFrameCallback((_) {
 // 进入房间后清空代理房间id
       sp.setString('daili_roomid', '');
@@ -448,9 +509,11 @@ class _RoomPageState extends State<RoomPage>
       if (Platform.isWindows || Platform.isMacOS) {
         starSK();
       }
-
+      setState(() {
+        sp.setBool('joinRoom', false);
+      });
       animationControllerSL = SVGAAnimationController(vsync: this);
-
+      animationControllerZJ = SVGAAnimationController(vsync: this);
       animationControllerBG = SVGAAnimationController(vsync: this);
 
       //保存进入房间的id
@@ -499,6 +562,8 @@ class _RoomPageState extends State<RoomPage>
           _engine.muteLocalAudioStream(true);
           _engine.disableAudio();
           _dispose();
+          // 清空存储信息
+          deleteChatInfo();
           // MyUtils.jumpLogin(context);
         } else if (event.title == '老板位1') {
           setState(() {
@@ -623,6 +688,8 @@ class _RoomPageState extends State<RoomPage>
             _engine.disableAudio();
           });
           _dispose();
+          // 清空存储信息
+          deleteChatInfo();
         } else if (event.title == 'im重连') {
           setState(() {
             //订阅所有远端用户的音频流。
@@ -633,8 +700,7 @@ class _RoomPageState extends State<RoomPage>
               // 发声音发音频流
               _engine.enableLocalAudio(true);
               //设置成主播
-              _engine.setClientRole(
-                  role: ClientRoleType.clientRoleBroadcaster);
+              _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
               // 发布本地音频流
               _engine.muteLocalAudioStream(false);
             }
@@ -648,11 +714,11 @@ class _RoomPageState extends State<RoomPage>
           // });
         } else if (event.title == '离线模式') {
           LogE('离线模式 == $roomLixian');
-          if(roomLixian == 0){
+          if (roomLixian == 0) {
             setState(() {
               roomLixian = 1;
             });
-          }else{
+          } else {
             setState(() {
               roomLixian = 0;
             });
@@ -712,7 +778,7 @@ class _RoomPageState extends State<RoomPage>
               //设置成主播
               _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
               doPostSetmai(
-                  event.index!, 'up', sp.getString('user_id').toString(),'0');
+                  event.index!, 'up', sp.getString('user_id').toString(), '0');
               setState(() {
                 maiTime = DateTime.now().millisecondsSinceEpoch;
                 for (int i = 0; i < 9; i++) {
@@ -736,15 +802,15 @@ class _RoomPageState extends State<RoomPage>
               });
               if (event.index!.contains(';')) {
                 doPostSetmai(event.index!.split(';')[0], 'down',
-                    event.index!.split(';')[1],'0');
+                    event.index!.split(';')[1], '0');
               } else {
-                if(roomLixian == 1){
+                if (roomLixian == 1) {
                   setState(() {
                     roomLixian = 0;
                   });
                 }
-                doPostSetmai(
-                    event.index!, 'down', sp.getString('user_id').toString(),'0');
+                doPostSetmai(event.index!, 'down',
+                    sp.getString('user_id').toString(), '0');
                 setState(() {
                   for (int i = 0; i < 9; i++) {
                     isMy[i] = false;
@@ -761,19 +827,27 @@ class _RoomPageState extends State<RoomPage>
           case 'leave_room':
             // 调用离开房间接口
             doPostLeave();
+            // 清空存储信息
+            deleteChatInfo();
             if (_timerHot != null) {
               _timerHot!.cancel();
             }
             //离开频道并释放资源
             _dispose();
+            // 清空存储信息
+            deleteChatInfo();
             Navigator.pop(context);
             break;
           case '顶号':
             // 调用离开房间接口
             doPostLeave();
+            // 清空存储信息
+            deleteChatInfo();
             if (_timerHot != null) {
               _timerHot!.cancel();
             }
+            // 清空存储信息
+            deleteChatInfo();
             //离开频道并释放资源
             _dispose();
             break;
@@ -877,7 +951,7 @@ class _RoomPageState extends State<RoomPage>
             });
             break;
           case '抱麦':
-            doPostSetmai('', 'up', event.index!,'1');
+            doPostSetmai('', 'up', event.index!, '1');
             break;
         }
       });
@@ -958,7 +1032,7 @@ class _RoomPageState extends State<RoomPage>
                 mxIndex = event.map!['serial_number'].toString();
                 LogE('开麦状态== ${event.map!['is_close'].toString() == '0'}');
                 LogE('开麦状态== ${event.map!['is_close'].toString()}');
-                if(event.map!['is_close'].toString() == '0'){
+                if (event.map!['is_close'].toString() == '0') {
                   setState(() {
                     isJinyiin = false;
                   });
@@ -971,12 +1045,13 @@ class _RoomPageState extends State<RoomPage>
                       role: ClientRoleType.clientRoleBroadcaster);
                   // 发布本地音频流
                   _engine.muteLocalAudioStream(false);
-                }else{
+                } else {
                   setState(() {
                     isJinyiin = true;
                   });
                   // 设置成观众
-                  _engine.setClientRole(role: ClientRoleType.clientRoleAudience);
+                  _engine.setClientRole(
+                      role: ClientRoleType.clientRoleAudience);
                   // 取消发布本地音频流
                   _engine.muteLocalAudioStream(true);
                   // 适用只听声音，不发声音流
@@ -998,7 +1073,7 @@ class _RoomPageState extends State<RoomPage>
                 // 上下麦操作不是本地才刷新
                 if (event.map!['uid'].toString() ==
                     sp.getString('user_id').toString()) {
-                  if(roomLixian == 1){
+                  if (roomLixian == 1) {
                     setState(() {
                       roomLixian = 0;
                     });
@@ -1107,6 +1182,8 @@ class _RoomPageState extends State<RoomPage>
                 _engine.enableLocalAudio(false);
                 // 调用离开房间接口
                 doPostLeave();
+                // 清空存储信息
+                deleteChatInfo();
                 _engine.disableAudio();
                 _dispose();
                 Navigator.pop(context);
@@ -1141,6 +1218,8 @@ class _RoomPageState extends State<RoomPage>
             _dispose();
             // 调用离开房间接口
             doPostLeave();
+            // 清空存储信息
+            deleteChatInfo();
             sp.setString('user_token', '');
             sp.setString("user_account", '');
             sp.setString("user_id", '');
@@ -1165,6 +1244,8 @@ class _RoomPageState extends State<RoomPage>
           if (_timerHot != null) {
             _timerHot!.cancel();
           }
+          // 清空存储信息
+          deleteChatInfo();
           //离开频道并释放资源
           _dispose();
           Navigator.pop(context);
@@ -1186,7 +1267,7 @@ class _RoomPageState extends State<RoomPage>
               doPostRoomMikeInfo();
             }
           }
-        }  else if (event.map!['type'] == 'user_down_mic') {
+        } else if (event.map!['type'] == 'user_down_mic') {
           //通知用户下麦
           setState(() {
             for (int i = 0; i < 9; i++) {
@@ -1224,8 +1305,7 @@ class _RoomPageState extends State<RoomPage>
             // 发声音发音频流
             _engine.enableLocalAudio(true);
             //设置成主播
-            _engine.setClientRole(
-                role: ClientRoleType.clientRoleBroadcaster);
+            _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
             // 发布本地音频流
             _engine.muteLocalAudioStream(false);
           }
@@ -1270,6 +1350,8 @@ class _RoomPageState extends State<RoomPage>
               map['isWelcome'] = '0';
 
               setState(() {
+                saveChatInfo(event.map!, '3',event.map!['send_nickname'],
+                    '${event.map!['nickname']},${event.map!['content']}');
                 list.add(map);
               });
             } else if (event.map!['type'] == 'clean_charm') {
@@ -1338,6 +1420,7 @@ class _RoomPageState extends State<RoomPage>
               map['isOk'] = 'false';
 
               setState(() {
+                saveChatInfo(event.map!, '4',event.map!['nickname'], event.map!['content']);
                 list.add(map);
               });
             } else if (event.map!['type'] == 'send_gift') {
@@ -1376,6 +1459,9 @@ class _RoomPageState extends State<RoomPage>
               // 发送的信息
               map['content'] =
                   '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出${cb.giftInfo![0].giftName!}(${cb.giftInfo![0].giftPrice.toString()}); x${cb.giftInfo![0].giftNumber.toString()}';
+
+              saveChatInfo(event.map!, '5', event.map!['nickname'],
+                  '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出${cb.giftInfo![0].giftName!}(${cb.giftInfo![0].giftPrice.toString()}); x${cb.giftInfo![0].giftNumber.toString()}');
               if (cb.giftInfo![0].giftImg!.contains('png')) {
                 setState(() {
                   list.add(map);
@@ -1572,6 +1658,8 @@ class _RoomPageState extends State<RoomPage>
               map['content'] =
                   '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出;$infos';
               setState(() {
+                saveChatInfo(event.map!, '6',event.map!['from_nickname'],
+                    '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出;$infos');
                 list.add(map);
                 // 这个是为了让别人也能看见自己送出的礼物
               });
@@ -1699,10 +1787,12 @@ class _RoomPageState extends State<RoomPage>
               // 发送的信息
               map['content'] =
                   '${cb.fromNickname};向;${cb.toNickname};赠送了;$info';
+              saveChatInfo(event.map!, '9', cb.fromNickname!,
+                  '${cb.fromNickname};向;${cb.toNickname};赠送了;$info');
               setState(() {
                 list.add(map);
               });
-            } else {
+            } else{
               // 正常进入房间使用
               bool isHave = false;
               for (int i = 0; i < list.length; i++) {
@@ -1737,6 +1827,17 @@ class _RoomPageState extends State<RoomPage>
               // }
               // 是否点击了欢迎 0未欢迎 1已欢迎
               map['isWelcome'] = '0';
+              // 座驾名称
+              map['mount_name'] = event.map!['mount_name'];
+              LogE('装扮名称 ==  ${event.map!['mount_name']}');
+              /// 判断如果装扮了座驾，需要播放
+              if(event.map!['mount'].toString().isNotEmpty){
+                setState(() {
+                  listUrlZJ.add(event.map!['mount'].toString());
+                  isZJShow = true;
+                });
+                showStarZJ(listUrlZJ[0]);
+              }
               setState(() {
                 list.add(map);
               });
@@ -1859,12 +1960,17 @@ class _RoomPageState extends State<RoomPage>
       });
       // 发消息监听
       listenSend = eventBus.on<SendRoomInfoBack>().listen((event) {
-        _startTimer();
+        if(mounted){
+          _startTimer();
+        }
+
         doPostRoomMessageSend(event.info, 0);
       });
       // 发图片监听
       listenSendImg = eventBus.on<SendRoomImgBack>().listen((event) {
-        _startTimer();
+        if(mounted){
+          _startTimer();
+        }
         doPostRoomMessageSend(event.info, 1);
       });
       // 送礼选中了那个用户监听
@@ -1957,7 +2063,7 @@ class _RoomPageState extends State<RoomPage>
                     event.url.contains('时光回想') ||
                     event.url.contains('梦想岛') ||
                     event.url.contains('雪域飞虎') ||
-                    event.url.contains('御龙英豪')||
+                    event.url.contains('御龙英豪') ||
                     event.url.contains('龙之帝王') ||
                     event.url.contains('秒见财神') ||
                     event.url.contains('情定埃菲尔') ||
@@ -2019,7 +2125,6 @@ class _RoomPageState extends State<RoomPage>
       });
 
       // 水果机播放完成
-      // 水果机播放完成
       listenSGJ = eventBus.on<RoomSGJBack>().listen((event) {
         if (event.isOK) {
           setState(() {
@@ -2034,6 +2139,17 @@ class _RoomPageState extends State<RoomPage>
 
       // 侧滑推荐
       doPostShowRoomList();
+
+
+      listenJoinHF = eventBus.on<hfJoinBack>().listen((event) {
+        if(event.title == '厅内点击横幅'){
+          // 如果房间id不是0（0是大厅），没有收起房间，直接进入房间
+          if(event.roomID != '0' && sp.getString('roomID') != event.roomID){
+            doPostBeforeJoin(event.roomID);
+          }
+        }
+
+      });
     });
   }
 
@@ -2394,14 +2510,14 @@ class _RoomPageState extends State<RoomPage>
         }
         break;
       case '抽奖超级转盘':
-        if(hf.giftInfo![0].giftName == '瑞麟'){
+        if (hf.giftInfo![0].giftName == '瑞麟') {
           setState(() {
             name = '388800转盘礼物';
             isBig = true;
             isShowHF = false;
             bigType = 0;
           });
-        }else{
+        } else {
           setState(() {
             name = '抽奖超级转盘';
             path = 'assets/svga/gp/gp_zp2.svga';
@@ -2438,18 +2554,6 @@ class _RoomPageState extends State<RoomPage>
           path = 'assets/svga/gp/gp_gui.svga';
         });
         break;
-      case '蓝魔方':
-        setState(() {
-          name = '蓝魔方';
-          path = 'assets/svga/gp/gp_lan.svga';
-        });
-        break;
-      case '金魔方':
-        setState(() {
-          name = '金魔方';
-          path = 'assets/svga/gp/gp_jin.svga';
-        });
-        break;
       case '抽奖水星魔方':
         setState(() {
           name = '抽奖蓝魔方';
@@ -2459,6 +2563,18 @@ class _RoomPageState extends State<RoomPage>
       case '抽奖金星魔方':
         setState(() {
           name = '抽奖金魔方';
+          path = 'assets/svga/gp/gp_jin.svga';
+        });
+        break;
+      case '蓝魔方':
+        setState(() {
+          name = '蓝魔方';
+          path = 'assets/svga/gp/gp_lan.svga';
+        });
+        break;
+      case '金魔方':
+        setState(() {
+          name = '金魔方';
           path = 'assets/svga/gp/gp_jin.svga';
         });
         break;
@@ -2534,6 +2650,7 @@ class _RoomPageState extends State<RoomPage>
   }
 
   final ScrollController _scrollController = ScrollController();
+
   // final ScrollController _scrollController2 = ScrollController();
 
   // 在数据变化后将滚动位置设置为最后一个item的位置
@@ -2578,7 +2695,10 @@ class _RoomPageState extends State<RoomPage>
       _timerHot!.cancel();
     }
     listenSGJ.cancel();
+    listenJoinHF.cancel();
+    animationControllerBG.dispose();
     animationControllerSL.dispose();
+    animationControllerZJ.dispose();
     // TODO: implement dispose
     super.dispose();
   }
@@ -3125,12 +3245,12 @@ class _RoomPageState extends State<RoomPage>
                               slideAnimationController.controller,
                               slideAnimationController.animation,
                               name,
-                              listMP[0])
+                              listMP[0],'厅内点击横幅',widget.roomId)
                           : const Text(''),
 
                       /// 爆出5w2的礼物横幅推送使用
                       isBig
-                          ? HomeItems.itemBig(listMP[0], bigType)
+                          ? HomeItems.itemBig(listMP[0], bigType,'厅内点击横幅',widget.roomId)
                           : const Text(''),
 
                       /// 厅内送礼物显示动画使用
@@ -3146,6 +3266,21 @@ class _RoomPageState extends State<RoomPage>
                                 ),
                               ),
                             )
+                          : const Text(''),
+
+                      /// 装扮座驾进入房间
+                      (isZJShow == true)
+                          ? IgnorePointer(
+                        ignoring: true,
+                        child: SizedBox(
+                          height: double.infinity,
+                          width: double.infinity,
+                          child: SVGAImage(
+                            animationControllerZJ,
+                            fit: BoxFit.fitWidth,
+                          ),
+                        ),
+                      )
                           : const Text(''),
 
                       // /// 贵族进场动画
@@ -3196,6 +3331,8 @@ class _RoomPageState extends State<RoomPage>
                                                 sp.setString('roomID', '');
                                                 // 调用离开房间接口
                                                 doPostLeave();
+                                                // 清空存储信息
+                                                deleteChatInfo();
                                                 if (_timerHot != null) {
                                                   _timerHot!.cancel();
                                                 }
@@ -3234,6 +3371,7 @@ class _RoomPageState extends State<RoomPage>
                                                   _timerHot!.cancel();
                                                 }
                                                 sp.setString('isShouQi', '1');
+                                                sp.setString('sqRoomID', widget.roomId);
                                                 eventBus.fire(SubmitButtonBack(
                                                     title: '收起房间'));
                                                 Navigator.pop(context);
@@ -3362,7 +3500,7 @@ class _RoomPageState extends State<RoomPage>
             isHomeShow = bean.data!.roomInfo!.isShow as int;
             isRoomBoss = bean.data!.roomInfo!.mikeList![7].isBoss as int;
             mima = bean.data!.roomInfo!.secondPwd!.isNotEmpty ? true : false;
-
+            LogE('===--- ${bean.data!.roomInfo!.mikeList![8].avatar}');
             // 判断麦上有没有自己
             for (int i = 0; i < bean.data!.roomInfo!.mikeList!.length; i++) {
               if (sp.getString('user_id').toString() ==
@@ -3386,7 +3524,7 @@ class _RoomPageState extends State<RoomPage>
                 break;
               }
             }
-            // 判断有没有座驾
+            // 判断有没有贵族特权装扮
             if (bean.data!.userInfo!.carDressGifImg!.isNotEmpty) {
               isGuZu = true;
               tequanzhuangban = bean.data!.userInfo!.carDressGifImg!;
@@ -3400,6 +3538,8 @@ class _RoomPageState extends State<RoomPage>
             mapg['info'] = notice;
             mapg['type'] = '1';
             list.add(mapg);
+            // 查询本地存储信息
+            searchChatInfo();
           });
           break;
         case MyHttpConfig.errorloginCode:
@@ -3408,6 +3548,8 @@ class _RoomPageState extends State<RoomPage>
           // 取消发布本地音频流
           _engine.muteLocalAudioStream(true);
           _engine.disableAudio();
+          // 清空存储信息
+          deleteChatInfo();
           _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
@@ -3488,7 +3630,7 @@ class _RoomPageState extends State<RoomPage>
 
   /// 上麦，下麦
   Future<void> doPostSetmai(
-      String serial_number, String action, String whoUid,String baoMic) async {
+      String serial_number, String action, String whoUid, String baoMic) async {
     //baoMic  0否 1是
     Map<String, dynamic> params = <String, dynamic>{
       'room_id': widget.roomId,
@@ -3507,8 +3649,7 @@ class _RoomPageState extends State<RoomPage>
               // 启用音频模块
               _engine.enableAudio();
               //设置成主播
-              _engine.setClientRole(
-                  role: ClientRoleType.clientRoleBroadcaster);
+              _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
               // 发布本地音频流
               _engine.muteLocalAudioStream(true);
             } else {
@@ -3561,7 +3702,7 @@ class _RoomPageState extends State<RoomPage>
               }
               if (sp.getString('user_id').toString() ==
                   bean.data![i].uid.toString()) {
-                if(bean.data![i].isClose == 0){
+                if (bean.data![i].isClose == 0) {
                   // 启用音频模块
                   _engine.enableAudio();
                   // 发声音发音频流
@@ -3789,8 +3930,7 @@ class _RoomPageState extends State<RoomPage>
               // 发声音发音频流
               _engine.enableLocalAudio(true);
               //设置成主播
-              _engine.setClientRole(
-                  role: ClientRoleType.clientRoleBroadcaster);
+              _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
               // 发布本地音频流
               _engine.muteLocalAudioStream(false);
             }
@@ -4210,11 +4350,12 @@ class _RoomPageState extends State<RoomPage>
           doPostRoomJoin(roomID, '', bean.data!.rtc!);
           break;
         case MyHttpConfig.errorRoomCode: //需要密码
-          // ignore: use_build_context_synchronously
-          MyUtils.goTransparentPageCom(
-              context,
-              RoomTSMiMaPage(
-                  roomID: roomID, roomToken: bean.data!.rtc!, anchorUid: ''));
+          MyToastUtils.showToastBottom('此房间已被密码锁定');
+          // // ignore: use_build_context_synchronously
+          // MyUtils.goTransparentPageCom(
+          //     context,
+          //     RoomTSMiMaPage(
+          //         roomID: roomID, roomToken: bean.data!.rtc!, anchorUid: ''));
           break;
         case MyHttpConfig.errorloginCode:
           //取消订阅所有远端用户的音频流。
@@ -4254,6 +4395,16 @@ class _RoomPageState extends State<RoomPage>
       CommonBean bean = await DataUtils.postRoomJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
+          if (_timerHot != null) {
+            _timerHot!.cancel();
+          }
+          //取消订阅所有远端用户的音频流。
+          _engine.muteAllRemoteAudioStreams(true);
+          // 取消发布本地音频流
+          _engine.muteLocalAudioStream(true);
+          _engine.disableAudio();
+          // 清空存储信息
+          deleteChatInfo();
           // ignore: use_build_context_synchronously
           Navigator.pop(context);
           // ignore: use_build_context_synchronously
@@ -4289,6 +4440,69 @@ class _RoomPageState extends State<RoomPage>
       });
       Loading.dismiss();
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+  /// 保存本房间消息
+  Future<void> saveChatInfo(Map<dynamic, dynamic> map, String type,
+      String chatInfos, String contenInfo) async {
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    Database? db = await databaseHelper.database;
+    Map<String, dynamic> params = <String, dynamic>{
+      'roomID': widget.roomId,
+      'info': chatInfos,
+      'uid': map!['from_uid'],
+      'type': type,
+      'content': contenInfo,
+      'image': map!['image'],
+      'identity': map!['identity'],
+      'lv': type == '3' ? map!['send_level'] : map!['lv'],
+      'noble_id': map!['noble_id'],
+      'is_new': map!['is_new'],
+      'is_pretty': map!['is_pretty'],
+      'new_noble': map!['new_noble'],
+      'isWelcome': '1',
+      'isOk': 'true',
+      'newLv': '',
+      'by1': '',
+      'by2': '',
+      'by3': '',
+    };
+    // 插入数据
+    await databaseHelper.insertData('roomInfoTable', params);
+  }
+
+  /// 查询本房间消息本房间消息
+  Future<void> searchChatInfo() async {
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    Database? db = await databaseHelper.database;
+    // 获取所有数据
+    List<Map<String, dynamic>> allData =
+        await databaseHelper.getAllData('roomInfoTable');
+    if (allData.isNotEmpty) {
+      for (int i = 0; i < allData.length; i++) {
+        LogE('数据库存储id == ${allData[i]['roomID']}');
+        if(allData[i]['roomID'] == widget.roomId){
+          setState(() {
+            list.add(allData[i]);
+          });
+        }
+      }
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
+        scrollToLastItem();
+      });
+    }
+  }
+
+  /// 删除本房间消息本房间消息
+  Future<void> deleteChatInfo() async {
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    Database? db = await databaseHelper.database;
+    //删除
+    db.delete('roomInfoTable');
+    // 防止用户被顶号时没有清空表
+    if(sp.getString('sqRoomID').toString().isNotEmpty){
+      sp.setString('sqRoomID', '');
     }
   }
 }

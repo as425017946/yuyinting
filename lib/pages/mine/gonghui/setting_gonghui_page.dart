@@ -48,10 +48,12 @@ class _SettingGonghuiPageState extends State<SettingGonghuiPage> {
     /// 腾讯云上传成功回调
     eventBus.on<TencentBack>().listen((event) {
       // LogE('头像上传成功***** ${event.filePath}');
-      doPostRoomJoin(event.filePath);
-      setState(() {
-        imgPath = sp.getString('local_path').toString();
-      });
+      if(event.title == '编辑公会头像显示'){
+        doPostRoomJoin(event.filePath);
+        setState(() {
+          imgPath = sp.getString('local_path').toString();
+        });
+      }
     });
   }
 

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:yuyinting/pages/game/zhuanpan/zhuanpan_shuoming_page.dart';
-import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/loading.dart';
 import '../../../bean/mofangJCBean.dart';
 import '../../../colors/my_colors.dart';

@@ -286,5 +286,14 @@ class AgainBack {
 /// 腾讯云上传成功使用
 class TencentBack {
   String filePath;
-  TencentBack({required this.filePath});
+  String title;
+  TencentBack({required this.filePath,required this.title});
+}
+
+
+/// 点击横幅使用
+class hfJoinBack {
+  String roomID;
+  String title;
+  hfJoinBack({required this.roomID,required this.title});
 }

@@ -5,6 +5,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/pages/room/room_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
+import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import '../../bean/Common_bean.dart';
 import '../../bean/joinRoomBean.dart';
@@ -157,7 +158,24 @@ class _RoomTSMiMaPageState extends State<RoomTSMiMaPage> {
       joinRoomBean bean = await DataUtils.postCheckPwd(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          doPostRoomJoin(widget.roomID, textEditingController.text.trim(),bean.data!.rtc!);
+          // LogE('密码枷锁 == ${sp.getBool('sqRoom')}');
+          if(sp.getBool('sqRoom') == true){
+            setState(() {
+              sp.setBool('joinRoom',false);
+            });
+            // ignore: use_build_context_synchronously
+            Navigator.pop(context);
+            // ignore: use_build_context_synchronously
+            MyUtils.goTransparentRFPage(
+                context,
+                RoomPage(
+                  roomId: widget.roomID,
+                  beforeId: '',
+                  roomToken: bean.data!.rtc!,
+                ));
+          }else{
+            doPostRoomJoin(widget.roomID, textEditingController.text.trim(),bean.data!.rtc!);
+          }
           break;
         case MyHttpConfig.errorloginCode:
           // ignore: use_build_context_synchronously

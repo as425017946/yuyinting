@@ -95,7 +95,7 @@ class _ShimingzhiImagePageState extends State<ShimingzhiImagePage> {
     }
 
     try {
-      await UploadHttpClient.upload(pickFilePath!, type, (count, total) {
+      await UploadHttpClient.upload(pickFilePath!, type, '实名制上传图片使用', (count, total) {
       });
     } catch (e) {
       LogE('上传失败${e.toString()}');
@@ -136,8 +136,9 @@ class _ShimingzhiImagePageState extends State<ShimingzhiImagePage> {
 
     /// 腾讯云上传成功回调
     eventBus.on<TencentBack>().listen((event) {
-      LogE('头像上传成功***** ${event.filePath}');
-      doPostRoomJoin(event.filePath);
+      if(event.title == '实名制上传图片使用') {
+        doPostRoomJoin(event.filePath);
+      }
     });
   }
 

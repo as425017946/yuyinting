@@ -139,26 +139,26 @@ class _ZhuangbanPageState extends State<ZhuangbanPage> {
                               fontWeight: FontWeight.w600)),
                     ),
                     WidgetUtils.commonSizedBox(0, 10),
-                    GestureDetector(
-                      onTap: (() {
-                        setState(() {
-                          _currentIndex = 2;
-                          _controller.animateToPage(2, duration: const Duration(milliseconds: 500), curve: Curves.ease);
-                        });
-                      }),
-                      child: WidgetUtils.myContainerZhuangban(
-                          _currentIndex == 2
-                              ? MyColors.zhuangbanWZBg
-                              : MyColors.zhuangbanBg,
-                          '公屏气泡',
-                          StyleUtils.getCommonTextStyle(
-                              color: _currentIndex == 2
-                                  ? Colors.white
-                                  : MyColors.zhuangbanWZ,
-                              fontSize: ScreenUtil().setSp(29),
-                              fontWeight: FontWeight.w600)),
-                    ),
-                    WidgetUtils.commonSizedBox(0, 10),
+                    // GestureDetector(
+                    //   onTap: (() {
+                    //     setState(() {
+                    //       _currentIndex = 2;
+                    //       _controller.animateToPage(2, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                    //     });
+                    //   }),
+                    //   child: WidgetUtils.myContainerZhuangban(
+                    //       _currentIndex == 2
+                    //           ? MyColors.zhuangbanWZBg
+                    //           : MyColors.zhuangbanBg,
+                    //       '公屏气泡',
+                    //       StyleUtils.getCommonTextStyle(
+                    //           color: _currentIndex == 2
+                    //               ? Colors.white
+                    //               : MyColors.zhuangbanWZ,
+                    //           fontSize: ScreenUtil().setSp(29),
+                    //           fontWeight: FontWeight.w600)),
+                    // ),
+                    // WidgetUtils.commonSizedBox(0, 10),
                     GestureDetector(
                       onTap: (() {
                         setState(() {

@@ -23,7 +23,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:path/path.dart' as path;
 import '../../cos/upload_httpclient.dart';
-
+/// 照片墙
 class EditPhotoPage extends StatefulWidget {
   int length;
 
@@ -79,6 +79,13 @@ class _EditPhotoPageState extends State<EditPhotoPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    /// 腾讯云上传成功回调
+    eventBus.on<TencentBack>().listen((event) {
+      // LogE('头像上传成功***** ${event.filePath}');
+      if(event.title == '照片墙'){
+        doPostRoomJoin(event.filePath,0);
+      }
+    });
   }
 
 
@@ -543,7 +550,7 @@ class _EditPhotoPageState extends State<EditPhotoPage> {
     }
     try {
       print("使用原生http client库上传");
-      await UploadHttpClient.upload(pickFilePath!, type, (count, total) {
+      await UploadHttpClient.upload(pickFilePath!, type, '照片墙', (count, total) {
       });
     } catch (e) {
       LogE('上传失败${e.toString()}');

@@ -40,17 +40,28 @@ class _RoomBG2PageState extends State<RoomBG2Page>
   String chooseID = '';
   // 选中的下标
   int chooseIndes = 0;
+  var listen;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     doPostBgList();
     /// 腾讯云上传成功回调
-    eventBus.on<TencentBack>().listen((event) {
+    listen = eventBus.on<TencentBack>().listen((event) {
       // LogE('头像上传成功***** ${event.filePath}');
-      doPostRoomJoin(event.filePath);
+      if(event.title == '我的背景'){
+        doPostRoomJoin(event.filePath);
+      }
     });
   }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    listen.cancel();
+  }
+
 
   onTapPickFromGallery() async {
     final ImagePicker _picker = ImagePicker();
@@ -465,7 +476,7 @@ class _RoomBG2PageState extends State<RoomBG2Page>
     }
     try {
       print("使用原生http client库上传");
-      await UploadHttpClient.upload(pickFilePath!, type, (count, total) {
+      await UploadHttpClient.upload(pickFilePath!, type, '我的背景', (count, total) {
       });
     } catch (e) {
       LogE('上传失败${e.toString()}');

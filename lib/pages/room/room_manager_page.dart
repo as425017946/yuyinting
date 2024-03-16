@@ -59,9 +59,17 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
     });
     /// 腾讯云上传成功回调
     listen = eventBus.on<TencentBack>().listen((event) {
-      LogE('头像上传成功***** ${event.filePath}');
-      doPostRoomJoin(event.filePath);
+      if(event.title == '房间管理'){
+        doPostRoomJoin(event.filePath);
+      }
     });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    listen.cancel();
   }
 
   onTapPickFromGallery() async {
@@ -855,7 +863,7 @@ class _RoomManagerPageState extends State<RoomManagerPage> {
     }
     try {
       print("使用原生http client库上传");
-      await UploadHttpClient.upload(pickFilePath!, type, (count, total) {
+      await UploadHttpClient.upload(pickFilePath!, type, '房间管理', (count, total) {
       });
     } catch (e) {
       LogE('上传失败${e.toString()}');

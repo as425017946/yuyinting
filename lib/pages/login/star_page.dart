@@ -9,10 +9,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:yuyinting/pages/login/login_page.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/my_utils.dart';
-
-import '../../bean/addressIPBean.dart';
 import '../../config/my_config.dart';
-import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
 import '../../utils/log_util.dart';
@@ -31,7 +28,6 @@ class _StarPageState extends State<StarPage> {
     // TODO: implement initState
     super.initState();
     setState(() {
-      sp.setString('isDian', '');
       sp.setString('userIP', '');
       sp.setInt('tjFirst', 0);
       sp.setString('isShouQi', '0');
@@ -110,25 +106,34 @@ class _StarPageState extends State<StarPage> {
     String buildNumber = packageInfo.buildNumber;
     sp.setString('myVersion2',version.toString());
     sp.setString('buildNumber',buildNumber);
+    FormData formdata = FormData.fromMap(
+      {
+        'type': 'test',
+      },
+    );
+    BaseOptions option = BaseOptions(
+        contentType: 'application/x-www-form-urlencoded', responseType: ResponseType.plain);
+    Dio dio = Dio(option);
+    //application/json
     try {
-      addressIPBean bean = await DataUtils.getPdAddress();
-      switch (bean.code) {
-        case MyHttpConfig.successCode:
-          if(bean.nodes!.isNotEmpty){
-            setState(() {
-              sp.setString('isDian', bean.nodes!);
-              sp.setString('userIP', bean.address!);
-            });
-          }else{
-            MyToastUtils.showToastBottom('IP为空');
-          }
-          break;
-        default:
-          MyToastUtils.showToastBottom(bean.msg!);
-          break;
+      var respone = await dio.post(MyHttpConfig.pdAddress, data: formdata);
+      // LogE('请求地址 == ${MyHttpConfig.pdAddress}');
+      Map jsonResponse = json.decode(respone.data.toString());
+      LogE('返回结果 == $respone');
+      if (jsonResponse['code'] == 200) {
+        setState(() {
+          sp.setString('isDian', jsonResponse['nodes']);
+          sp.setString('userIP', jsonResponse['address']);
+        });
+      } else if (respone.statusCode == 401) {
+        // ignore: use_build_context_synchronously
+        MyUtils.jumpLogin(context);
+      } else {
+        MyToastUtils.showToastBottom('IP获取失败~');
       }
     } catch (e) {
-      // MyToastUtils.showToastBottom(MyConfig.errorHttpTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitleFile);
     }
   }
 }

@@ -541,9 +541,9 @@ class _MyDongtaiPageState extends State<MyDongtaiPage> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    if (_videoController != null) {
-      _videoController.dispose();
-    }
+    // if (_videoController != null) {
+    //   _videoController.dispose();
+    // }
   }
 
   @override

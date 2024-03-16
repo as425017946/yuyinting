@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 import '../../bean/Common_bean.dart';
+import '../../bean/fenleiBean.dart';
 import '../../bean/hotRoomBean.dart';
 import '../../bean/joinRoomBean.dart';
 import '../../bean/tjRoomListBean.dart';
@@ -35,7 +36,7 @@ class _PaiduiPageState extends State<PaiduiPage>
 
   final TextEditingController _souSuoName = TextEditingController();
 
-  //2女厅 3男厅 4新厅 5游戏厅 6交友
+  //2女厅 3男厅 4新厅 5游戏厅 6交友 7相亲 8点唱
   int index = 2;
   String roomType = '女神';
   List<DataHot> list = [];
@@ -44,16 +45,20 @@ class _PaiduiPageState extends State<PaiduiPage>
   List<DataPH> list4 = [];
   List<DataPH> list5 = [];
   List<DataPH> list6 = [];
+  List<DataPH> list7 = [];
+  List<DataPH> list8 = [];
   int page = 1;
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   bool isUp = true; //是否允许上拉
   bool isDown = true; //是否允许下拉
+  bool isOK = false;
+
   void _onRefresh() async {
     // 重新初始化
     _refreshController.resetNoData();
     setState(() {
-      sp.setBool('joinRoom',false);
+      sp.setBool('joinRoom', false);
       isUp = false;
     });
     // monitor network fetch
@@ -65,13 +70,14 @@ class _PaiduiPageState extends State<PaiduiPage>
         page = 1;
       });
     }
+    doPostRoomType();
     doPostHotRoom();
     doPostTJRoomList2('$index');
   }
 
   void _onLoading() async {
     setState(() {
-      sp.setBool('joinRoom',false);
+      sp.setBool('joinRoom', false);
       isDown = false;
     });
     // monitor network fetch
@@ -82,6 +88,7 @@ class _PaiduiPageState extends State<PaiduiPage>
         page++;
       });
     }
+    doPostRoomType();
     doPostHotRoom();
     doPostTJRoomList2('$index');
     _refreshController.loadComplete();
@@ -91,6 +98,7 @@ class _PaiduiPageState extends State<PaiduiPage>
   void initState() {
     // TODO: implement initState
     super.initState();
+    doPostRoomType();
     doPostHotRoom();
     // 2女厅 3男厅 4新厅 5游戏厅
     doPostTJRoomList2('2');
@@ -105,7 +113,11 @@ class _PaiduiPageState extends State<PaiduiPage>
                 ? list4[i].hotDegree as int
                 : index == 5
                     ? list5[i].hotDegree as int
-                    : list6[i].hotDegree as int;
+                    : index == 6
+                        ? list6[i].hotDegree as int
+                        : index == listFL[0].type as int
+                            ? list7[i].hotDegree as int
+                            : list8[i].hotDegree as int;
 
     //2女厅 3男厅 4新厅 5游戏厅
     if (index == 2) {
@@ -118,6 +130,10 @@ class _PaiduiPageState extends State<PaiduiPage>
       roomType = '游戏厅';
     } else if (index == 6) {
       roomType = '交友';
+    } else if (index == listFL[0].type as int) {
+      roomType = listFL[0].title!;
+    } else if (index == listFL[1].type as int) {
+      roomType = listFL[1].title!;
     }
     return Column(
       children: [
@@ -125,7 +141,7 @@ class _PaiduiPageState extends State<PaiduiPage>
           onTap: (() {
             if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
               setState(() {
-                sp.setBool('joinRoom',false);
+                sp.setBool('joinRoom', false);
               });
               if (index == 2) {
                 doPostBeforeJoin(list2[i].id.toString());
@@ -137,6 +153,10 @@ class _PaiduiPageState extends State<PaiduiPage>
                 doPostBeforeJoin(list5[i].id.toString());
               } else if (index == 6) {
                 doPostBeforeJoin(list6[i].id.toString());
+              } else if (index == listFL[0].type as int) {
+                doPostBeforeJoin(list7[i].id.toString());
+              } else if (index == listFL[1].type as int) {
+                doPostBeforeJoin(list8[i].id.toString());
               }
             }
           }),
@@ -173,7 +193,11 @@ class _PaiduiPageState extends State<PaiduiPage>
                                 ? list4[i].coverImg!
                                 : index == 5
                                     ? list5[i].coverImg!
-                                    : list6[i].coverImg!),
+                                    : index == 6
+                                        ? list6[i].coverImg!
+                                        : index == listFL[0].type as int
+                                            ? list7[i].coverImg!
+                                            : list8[i].coverImg!),
                 WidgetUtils.commonSizedBox(0, 10),
                 Expanded(
                   child: Column(
@@ -191,7 +215,13 @@ class _PaiduiPageState extends State<PaiduiPage>
                                               ? list4[i].roomName!
                                               : index == 5
                                                   ? list5[i].roomName!
-                                                  : list6[i].roomName!,
+                                                  : index == 6
+                                                      ? list6[i].roomName!
+                                                      : index ==
+                                                              listFL[0].type
+                                                                  as int
+                                                          ? list7[i].roomName!
+                                                          : list8[i].roomName!,
                                   StyleUtils.getCommonTextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.w600,
@@ -226,7 +256,12 @@ class _PaiduiPageState extends State<PaiduiPage>
                                           ? 'assets/images/paidui_xinting.png'
                                           : index == 5
                                               ? 'assets/images/paidui_youxi.png'
-                                              : 'assets/images/paidui_jiaoyou.png',
+                                              : index == 6
+                                                  ? 'assets/images/paidui_jiaoyou.png'
+                                                  : index ==
+                                                          listFL[0].type as int
+                                                      ? 'assets/images/paidui_xiangqin.png'
+                                                      : 'assets/images/paidui_dianchang.png',
                               index == 5
                                   ? ScreenUtil().setHeight(85)
                                   : ScreenUtil().setHeight(75)),
@@ -458,7 +493,7 @@ class _PaiduiPageState extends State<PaiduiPage>
           ),
         ],
       );
-    } else {
+    } else if (index == 6) {
       return Row(
         children: [
           list6[i].hostInfo!.isNotEmpty
@@ -480,6 +515,102 @@ class _PaiduiPageState extends State<PaiduiPage>
                 : const Text(''),
           ),
           showHead(list6[i].memberList!),
+          const Spacer(),
+
+          /// 热度
+          Row(
+            children: [
+              Text(
+                '热度值:',
+                style: TextStyle(
+                    fontSize: ScreenUtil().setSp(24),
+                    color: MyColors.g6,
+                    fontFamily: 'YOUSHEBIAOTIHEI'),
+              ),
+              // WidgetUtils.commonSizedBox(0, 5),
+              Text(
+                hotDegree > 9999
+                    ? '${(hotDegree / 10000).toStringAsFixed(0)}w'
+                    : hotDegree.toString(),
+                style: TextStyle(
+                    fontSize: ScreenUtil().setSp(24),
+                    color: MyColors.g6,
+                    fontFamily: 'YOUSHEBIAOTIHEI'),
+              ),
+            ],
+          ),
+        ],
+      );
+    } else if (index == 7) {
+      return Row(
+        children: [
+          list7[i].hostInfo!.isNotEmpty
+              ? WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(30),
+                  ScreenUtil().setHeight(30), list7[i].hostInfo![1])
+              : WidgetUtils.commonSizedBox(0, 0),
+          SizedBox(
+            width: ScreenUtil().setHeight(50),
+            child: list7[i].hostInfo!.isNotEmpty
+                ? Text(
+                    list7[i].hostInfo![0].length > 2
+                        ? '${list7[i].hostInfo![0].substring(0, 2)}...'
+                        : list7[i].hostInfo![0],
+                    style: TextStyle(
+                        fontSize: ScreenUtil().setSp(20),
+                        color: MyColors.mineGrey,
+                        overflow: TextOverflow.ellipsis),
+                  )
+                : const Text(''),
+          ),
+          showHead(list7[i].memberList!),
+          const Spacer(),
+
+          /// 热度
+          Row(
+            children: [
+              Text(
+                '热度值:',
+                style: TextStyle(
+                    fontSize: ScreenUtil().setSp(24),
+                    color: MyColors.g6,
+                    fontFamily: 'YOUSHEBIAOTIHEI'),
+              ),
+              // WidgetUtils.commonSizedBox(0, 5),
+              Text(
+                hotDegree > 9999
+                    ? '${(hotDegree / 10000).toStringAsFixed(0)}w'
+                    : hotDegree.toString(),
+                style: TextStyle(
+                    fontSize: ScreenUtil().setSp(24),
+                    color: MyColors.g6,
+                    fontFamily: 'YOUSHEBIAOTIHEI'),
+              ),
+            ],
+          ),
+        ],
+      );
+    } else {
+      return Row(
+        children: [
+          list8[i].hostInfo!.isNotEmpty
+              ? WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(30),
+                  ScreenUtil().setHeight(30), list8[i].hostInfo![1])
+              : WidgetUtils.commonSizedBox(0, 0),
+          SizedBox(
+            width: ScreenUtil().setHeight(50),
+            child: list8[i].hostInfo!.isNotEmpty
+                ? Text(
+                    list8[i].hostInfo![0].length > 2
+                        ? '${list8[i].hostInfo![0].substring(0, 2)}...'
+                        : list8[i].hostInfo![0],
+                    style: TextStyle(
+                        fontSize: ScreenUtil().setSp(20),
+                        color: MyColors.mineGrey,
+                        overflow: TextOverflow.ellipsis),
+                  )
+                : const Text(''),
+          ),
+          showHead(list8[i].memberList!),
           const Spacer(),
 
           /// 热度
@@ -605,8 +736,10 @@ class _PaiduiPageState extends State<PaiduiPage>
       header: MyUtils.myHeader(),
       footer: MyUtils.myFotter(),
       controller: _refreshController,
-      enablePullUp: isUp, //是否允许上拉加载更多
-      enablePullDown: isDown, // 是否允许下拉刷新
+      enablePullUp: isUp,
+      //是否允许上拉加载更多
+      enablePullDown: isDown,
+      // 是否允许下拉刷新
       onLoading: _onLoading,
       onRefresh: _onRefresh,
       child: Wrap(
@@ -616,385 +749,517 @@ class _PaiduiPageState extends State<PaiduiPage>
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  list.isNotEmpty ? Container(
-                    child: WidgetUtils.onlyText(
-                        '热门排行',
-                        StyleUtils.getCommonTextStyle(
-                            color: Colors.black,
-                            fontSize: ScreenUtil().setSp(28),
-                            fontWeight: FontWeight.w600)),
-                  ) : WidgetUtils.commonSizedBox(0, 0),
-                  list.isNotEmpty ? WidgetUtils.commonSizedBox(10, 0) : WidgetUtils.commonSizedBox(0, 0),
+                  list.isNotEmpty
+                      ? Container(
+                          child: WidgetUtils.onlyText(
+                              '热门排行',
+                              StyleUtils.getCommonTextStyle(
+                                  color: Colors.black,
+                                  fontSize: ScreenUtil().setSp(28),
+                                  fontWeight: FontWeight.w600)),
+                        )
+                      : WidgetUtils.commonSizedBox(0, 0),
+                  list.isNotEmpty
+                      ? WidgetUtils.commonSizedBox(10, 0)
+                      : WidgetUtils.commonSizedBox(0, 0),
 
                   ///顶部排行
-                  list.isNotEmpty ? SizedBox(
-                    width: double.infinity,
-                    height: ScreenUtil().setHeight(280),
-                    child: Row(
-                      children: [
-                        list.isNotEmpty ? GestureDetector(
-                          onTap: (() {
-                            if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
-                              setState(() {
-                                sp.setBool('joinRoom',true);
-                              });
-                              doPostBeforeJoin(list[0].id.toString());
-                            }
-                          }),
-                          child: Stack(
-                            alignment: Alignment.topRight,
+                  list.isNotEmpty
+                      ? SizedBox(
+                          width: double.infinity,
+                          height: ScreenUtil().setHeight(280),
+                          child: Row(
                             children: [
-                              WidgetUtils.CircleImageNet(
-                                  ScreenUtil().setHeight(280),
-                                  ScreenUtil().setHeight(280),
-                                  10,
-                                  list[0].coverImg!),
-                              Transform.translate(
-                                offset: const Offset(-5, -5),
-                                child: WidgetUtils.showImages(
-                                    'assets/images/paidui_one.png',
-                                    ScreenUtil().setHeight(84),
-                                    ScreenUtil().setWidth(79)),
-                              ),
-                              Positioned(
-                                  bottom: 10.h,
-                                  left: 10.h,
-                                  child: SizedBox(
-                                    width: 270.h,
-                                    child: Text(
-                                      list[0].roomName!,
-                                      style:
-                                      StyleUtils.getCommonTextStyle(
-                                          color: Colors.white,
-                                          fontSize: 30.sp),
+                              list.isNotEmpty
+                                  ? GestureDetector(
+                                      onTap: (() {
+                                        if (MyUtils.checkClick() &&
+                                            sp.getBool('joinRoom') == false) {
+                                          setState(() {
+                                            sp.setBool('joinRoom', true);
+                                          });
+                                          doPostBeforeJoin(
+                                              list[0].id.toString());
+                                        }
+                                      }),
+                                      child: Stack(
+                                        alignment: Alignment.topRight,
+                                        children: [
+                                          WidgetUtils.CircleImageNet(
+                                              ScreenUtil().setHeight(280),
+                                              ScreenUtil().setHeight(280),
+                                              10,
+                                              list[0].coverImg!),
+                                          Transform.translate(
+                                            offset: const Offset(-5, -5),
+                                            child: WidgetUtils.showImages(
+                                                'assets/images/paidui_one.png',
+                                                ScreenUtil().setHeight(84),
+                                                ScreenUtil().setWidth(79)),
+                                          ),
+                                          Positioned(
+                                              bottom: 10.h,
+                                              left: 10.h,
+                                              child: SizedBox(
+                                                width: 270.h,
+                                                child: Text(
+                                                  list[0].roomName!,
+                                                  style: StyleUtils
+                                                      .getCommonTextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 30.sp),
+                                                ),
+                                              ))
+                                        ],
+                                      ),
+                                    )
+                                  : SizedBox(
+                                      height: 280.h,
+                                      width: 280.h,
                                     ),
-                                  ))
+                              const Expanded(child: Text('')),
+                              Column(
+                                children: [
+                                  list.length > 1
+                                      ? GestureDetector(
+                                          onTap: (() {
+                                            if (MyUtils.checkClick() &&
+                                                sp.getBool('joinRoom') ==
+                                                    false) {
+                                              setState(() {
+                                                sp.setBool('joinRoom', true);
+                                              });
+                                              doPostBeforeJoin(
+                                                  list[1].id.toString());
+                                            }
+                                          }),
+                                          child: Stack(
+                                            alignment: Alignment.topRight,
+                                            children: [
+                                              WidgetUtils.CircleImageNet(
+                                                  ScreenUtil().setHeight(137.5),
+                                                  ScreenUtil().setHeight(137.5),
+                                                  10,
+                                                  list[1].coverImg!),
+                                              Transform.translate(
+                                                offset: const Offset(-5, -4),
+                                                child: WidgetUtils.showImages(
+                                                    'assets/images/paidui_two.png',
+                                                    ScreenUtil().setHeight(60),
+                                                    ScreenUtil().setWidth(55)),
+                                              ),
+                                              Positioned(
+                                                  bottom: 5.h,
+                                                  left: 5.h,
+                                                  child: SizedBox(
+                                                    width: 132.5.h,
+                                                    child: Text(
+                                                      list[1].roomName!,
+                                                      maxLines: 1,
+                                                      style: StyleUtils
+                                                          .getCommonTextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 21.sp),
+                                                    ),
+                                                  ))
+                                            ],
+                                          ),
+                                        )
+                                      : SizedBox(
+                                          height: 137.5.h,
+                                          width: 137.5.h,
+                                        ),
+                                  const Expanded(child: Text('')),
+                                  list.length > 3
+                                      ? GestureDetector(
+                                          onTap: (() {
+                                            if (MyUtils.checkClick() &&
+                                                sp.getBool('joinRoom') ==
+                                                    false) {
+                                              setState(() {
+                                                sp.setBool('joinRoom', true);
+                                              });
+                                              doPostBeforeJoin(
+                                                  list[3].id.toString());
+                                            }
+                                          }),
+                                          child: Stack(
+                                            children: [
+                                              WidgetUtils.CircleImageNet(
+                                                  ScreenUtil().setHeight(137.5),
+                                                  ScreenUtil().setHeight(137.5),
+                                                  10,
+                                                  list[3].coverImg!),
+                                              Positioned(
+                                                  bottom: 5.h,
+                                                  left: 5.h,
+                                                  child: SizedBox(
+                                                    width: 132.5.h,
+                                                    child: Text(
+                                                      list[3].roomName!,
+                                                      maxLines: 1,
+                                                      style: StyleUtils
+                                                          .getCommonTextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 21.sp),
+                                                    ),
+                                                  ))
+                                            ],
+                                          ),
+                                        )
+                                      : SizedBox(
+                                          height: 137.5.h,
+                                          width: 137.5.h,
+                                        ),
+                                ],
+                              ),
+                              const Expanded(child: Text('')),
+                              Column(
+                                children: [
+                                  list.length > 2
+                                      ? GestureDetector(
+                                          onTap: (() {
+                                            if (MyUtils.checkClick() &&
+                                                sp.getBool('joinRoom') ==
+                                                    false) {
+                                              setState(() {
+                                                sp.setBool('joinRoom', true);
+                                              });
+                                              doPostBeforeJoin(
+                                                  list[2].id.toString());
+                                            }
+                                          }),
+                                          child: Stack(
+                                            alignment: Alignment.topRight,
+                                            children: [
+                                              WidgetUtils.CircleImageNet(
+                                                  ScreenUtil().setHeight(137.5),
+                                                  ScreenUtil().setHeight(137.5),
+                                                  10,
+                                                  list[2].coverImg!),
+                                              Transform.translate(
+                                                offset: const Offset(-5, -3),
+                                                child: WidgetUtils.showImages(
+                                                    'assets/images/paidui_three.png',
+                                                    ScreenUtil().setHeight(60),
+                                                    ScreenUtil().setWidth(42)),
+                                              ),
+                                              Positioned(
+                                                  bottom: 5.h,
+                                                  left: 5.h,
+                                                  child: SizedBox(
+                                                    width: 132.5.h,
+                                                    child: Text(
+                                                      list[2].roomName!,
+                                                      maxLines: 1,
+                                                      style: StyleUtils
+                                                          .getCommonTextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 21.sp),
+                                                    ),
+                                                  ))
+                                            ],
+                                          ),
+                                        )
+                                      : SizedBox(
+                                          height: 137.5.h,
+                                          width: 137.5.h,
+                                        ),
+                                  const Expanded(child: Text('')),
+                                  list.length > 4
+                                      ? GestureDetector(
+                                          onTap: (() {
+                                            if (MyUtils.checkClick() &&
+                                                sp.getBool('joinRoom') ==
+                                                    false) {
+                                              setState(() {
+                                                sp.setBool('joinRoom', true);
+                                              });
+                                              doPostBeforeJoin(
+                                                  list[4].id.toString());
+                                            }
+                                          }),
+                                          child: Stack(
+                                            children: [
+                                              WidgetUtils.CircleImageNet(
+                                                  ScreenUtil().setHeight(137.5),
+                                                  ScreenUtil().setHeight(137.5),
+                                                  10,
+                                                  list[4].coverImg!),
+                                              Positioned(
+                                                  bottom: 5.h,
+                                                  left: 5.h,
+                                                  child: SizedBox(
+                                                    width: 132.5.h,
+                                                    child: Text(
+                                                      list[4].roomName!,
+                                                      maxLines: 1,
+                                                      style: StyleUtils
+                                                          .getCommonTextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 21.sp),
+                                                    ),
+                                                  ))
+                                            ],
+                                          ),
+                                        )
+                                      : SizedBox(
+                                          height: 137.5.h,
+                                          width: 137.5.h,
+                                        ),
+                                ],
+                              ),
                             ],
                           ),
-                        ) : SizedBox(height: 280.h, width: 280.h,),
-                        const Expanded(child: Text('')),
-                        Column(
-                          children: [
-                            list.length > 1 ? GestureDetector(
-                              onTap: (() {
-                                if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
-                                  setState(() {
-                                    sp.setBool('joinRoom',true);
-                                  });
-                                  doPostBeforeJoin(list[1].id.toString());
-                                }
-                              }),
-                              child: Stack(
-                                alignment: Alignment.topRight,
-                                children: [
-                                  WidgetUtils.CircleImageNet(
-                                      ScreenUtil().setHeight(137.5),
-                                      ScreenUtil().setHeight(137.5),
-                                      10,
-                                      list[1].coverImg!),
-                                  Transform.translate(
-                                    offset: const Offset(-5, -4),
-                                    child: WidgetUtils.showImages(
-                                        'assets/images/paidui_two.png',
-                                        ScreenUtil().setHeight(60),
-                                        ScreenUtil().setWidth(55)),
-                                  ),
-                                  Positioned(
-                                      bottom: 5.h,
-                                      left: 5.h,
-                                      child: SizedBox(
-                                        width: 132.5.h,
-                                        child: Text(
-                                          list[1].roomName!,
-                                          maxLines: 1,
-                                          style: StyleUtils
-                                              .getCommonTextStyle(
-                                              color: Colors.white,
-                                              fontSize: 21.sp),
-                                        ),
-                                      ))
-                                ],
-                              ),
-                            ) : SizedBox(height: 137.5.h, width: 137.5.h,),
-                            const Expanded(child: Text('')),
-                            list.length > 3 ? GestureDetector(
-                              onTap: (() {
-                                if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
-                                  setState(() {
-                                    sp.setBool('joinRoom',true);
-                                  });
-                                  doPostBeforeJoin(list[3].id.toString());
-                                }
-                              }),
-                              child: Stack(
-                                children: [
-                                  WidgetUtils.CircleImageNet(
-                                      ScreenUtil().setHeight(137.5),
-                                      ScreenUtil().setHeight(137.5),
-                                      10,
-                                      list[3].coverImg!),
-                                  Positioned(
-                                      bottom: 5.h,
-                                      left: 5.h,
-                                      child: SizedBox(
-                                        width: 132.5.h,
-                                        child: Text(
-                                          list[3].roomName!,
-                                          maxLines: 1,
-                                          style: StyleUtils
-                                              .getCommonTextStyle(
-                                              color: Colors.white,
-                                              fontSize: 21.sp),
-                                        ),
-                                      ))
-                                ],
-                              ),
-                            )  : SizedBox(height: 137.5.h, width: 137.5.h,),
-                          ],
-                        ),
-                        const Expanded(child: Text('')),
-                        Column(
-                          children: [
-                            list.length > 2 ? GestureDetector(
-                              onTap: (() {
-                                if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
-                                  setState(() {
-                                    sp.setBool('joinRoom',true);
-                                  });
-                                  doPostBeforeJoin(list[2].id.toString());
-                                }
-                              }),
-                              child: Stack(
-                                alignment: Alignment.topRight,
-                                children: [
-                                  WidgetUtils.CircleImageNet(
-                                      ScreenUtil().setHeight(137.5),
-                                      ScreenUtil().setHeight(137.5),
-                                      10,
-                                      list[2].coverImg!),
-                                  Transform.translate(
-                                    offset: const Offset(-5, -3),
-                                    child: WidgetUtils.showImages(
-                                        'assets/images/paidui_three.png',
-                                        ScreenUtil().setHeight(60),
-                                        ScreenUtil().setWidth(42)),
-                                  ),
-                                  Positioned(
-                                      bottom: 5.h,
-                                      left: 5.h,
-                                      child: SizedBox(
-                                        width: 132.5.h,
-                                        child: Text(
-                                          list[2].roomName!,
-                                          maxLines: 1,
-                                          style: StyleUtils
-                                              .getCommonTextStyle(
-                                              color: Colors.white,
-                                              fontSize: 21.sp),
-                                        ),
-                                      ))
-                                ],
-                              ),
-                            ) : SizedBox(height: 137.5.h, width: 137.5.h,),
-                            const Expanded(child: Text('')),
-                            list.length > 4 ? GestureDetector(
-                              onTap: (() {
-                                if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
-                                  setState(() {
-                                    sp.setBool('joinRoom',true);
-                                  });
-                                  doPostBeforeJoin(list[4].id.toString());
-                                }
-                              }),
-                              child: Stack(
-                                children: [
-                                  WidgetUtils.CircleImageNet(
-                                      ScreenUtil().setHeight(137.5),
-                                      ScreenUtil().setHeight(137.5),
-                                      10,
-                                      list[4].coverImg!),
-                                  Positioned(
-                                      bottom: 5.h,
-                                      left: 5.h,
-                                      child: SizedBox(
-                                        width: 132.5.h,
-                                        child: Text(
-                                          list[4].roomName!,
-                                          maxLines: 1,
-                                          style: StyleUtils
-                                              .getCommonTextStyle(
-                                              color: Colors.white,
-                                              fontSize: 21.sp),
-                                        ),
-                                      ))
-                                ],
-                              ),
-                            ) : SizedBox(height: 137.5.h, width: 137.5.h,),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ): WidgetUtils.commonSizedBox(0, 0),
-                  list.isNotEmpty ? WidgetUtils.commonSizedBox(10, 0): WidgetUtils.commonSizedBox(0, 0),
+                        )
+                      : WidgetUtils.commonSizedBox(0, 0),
+                  list.isNotEmpty
+                      ? WidgetUtils.commonSizedBox(10, 0)
+                      : WidgetUtils.commonSizedBox(0, 0),
 
                   /// 标题栏 、 导航栏
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: (() {
-                          if (MyUtils.checkClick()) {
-                            // 重新初始化
-                            _refreshController.resetNoData();
-                            setState(() {
-                              index = 2;
-                              page = 1;
-                              doPostTJRoomList2('2');
-                            });
-                          }
-                        }),
-                        child: WidgetUtils.myContainer(
-                            ScreenUtil().setHeight(40),
-                            ScreenUtil().setHeight(90),
-                            index == 2
-                                ? MyColors.paiduiRed
-                                : MyColors.homeBG,
-                            index == 2
-                                ? MyColors.paiduiRed
-                                : MyColors.homeBG,
-                            '女神',
-                            ScreenUtil().setSp(28),
-                            index == 2 ? Colors.white : MyColors.g6),
-                      ),
-                      const Spacer(),
-                      GestureDetector(
-                        onTap: (() {
-                          if (MyUtils.checkClick()) {
-                            // 重新初始化
-                            _refreshController.resetNoData();
-                            setState(() {
-                              index = 3;
-                              page = 1;
-                              doPostTJRoomList2('3');
-                            });
-                          }
-                        }),
-                        child: WidgetUtils.myContainer(
-                            ScreenUtil().setHeight(40),
-                            ScreenUtil().setHeight(90),
-                            index == 3
-                                ? MyColors.paiduiBlue
-                                : MyColors.homeBG,
-                            index == 3
-                                ? MyColors.paiduiBlue
-                                : MyColors.homeBG,
-                            '男神',
-                            ScreenUtil().setSp(28),
-                            index == 3 ? Colors.white : MyColors.g6),
-                      ),
-                      const Spacer(),
-                      GestureDetector(
-                        onTap: (() {
-                          if (MyUtils.checkClick()) {
-                            // 重新初始化
-                            _refreshController.resetNoData();
-                            setState(() {
-                              index = 6;
-                              page = 1;
-                              doPostTJRoomList2('6');
-                            });
-                          }
-                        }),
-                        child: WidgetUtils.myContainer(
-                            ScreenUtil().setHeight(40),
-                            ScreenUtil().setHeight(90),
-                            index == 6 ? MyColors.btn_d : MyColors.homeBG,
-                            index == 6 ? MyColors.btn_d : MyColors.homeBG,
-                            '交友',
-                            ScreenUtil().setSp(28),
-                            index == 6 ? Colors.white : MyColors.g6),
-                      ),
-                      const Spacer(),
-                      GestureDetector(
-                        onTap: (() {
-                          if (MyUtils.checkClick()) {
-                            // 重新初始化
-                            _refreshController.resetNoData();
-                            setState(() {
-                              index = 4;
-                              page = 1;
-                              doPostTJRoomList2('4');
-                            });
-                          }
-                        }),
-                        child: WidgetUtils.myContainer(
-                            ScreenUtil().setHeight(40),
-                            ScreenUtil().setHeight(90),
-                            index == 4
-                                ? MyColors.origin
-                                : MyColors.homeBG,
-                            index == 4
-                                ? MyColors.origin
-                                : MyColors.homeBG,
-                            '新厅',
-                            ScreenUtil().setSp(28),
-                            index == 4 ? Colors.white : MyColors.g6),
-                      ),
-                      const Spacer(),
-                      GestureDetector(
-                        onTap: (() {
-                          if (MyUtils.checkClick()) {
-                            // 重新初始化
-                            _refreshController.resetNoData();
-                            setState(() {
-                              index = 5;
-                              page = 1;
-                              doPostTJRoomList2('5');
-                            });
-                          }
-                        }),
-                        child: SizedBox(
-                          height: ScreenUtil().setHeight(40),
-                          width: ScreenUtil().setHeight(160),
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              index == 5
-                                  ? WidgetUtils.showImagesFill(
-                                  'assets/images/paidui_diantai_bg.png',
-                                  ScreenUtil().setHeight(56),
-                                  ScreenUtil().setHeight(160))
-                                  : const Text(''),
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                width: ScreenUtil().setHeight(160),
-                                padding: const EdgeInsets.only(left: 9),
-                                child: WidgetUtils.showImages(
-                                    'assets/images/paidui_diantai1.png',
-                                    ScreenUtil().setHeight(24),
-                                    ScreenUtil().setHeight(116)),
-                              ),
-                            ],
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: SizedBox(
+                      width: 800.h,
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: (() {
+                              if (MyUtils.checkClick()) {
+                                // 重新初始化
+                                _refreshController.resetNoData();
+                                setState(() {
+                                  isOK = false;
+                                  index = 2;
+                                  page = 1;
+                                  doPostTJRoomList2('2');
+                                });
+                              }
+                            }),
+                            child: WidgetUtils.myContainer(
+                                ScreenUtil().setHeight(40),
+                                ScreenUtil().setHeight(90),
+                                index == 2
+                                    ? MyColors.paiduiRed
+                                    : MyColors.homeBG,
+                                index == 2
+                                    ? MyColors.paiduiRed
+                                    : MyColors.homeBG,
+                                '女神',
+                                ScreenUtil().setSp(28),
+                                index == 2 ? Colors.white : MyColors.g6),
                           ),
-                        ),
+                          WidgetUtils.commonSizedBox(0, 15.h),
+                          GestureDetector(
+                            onTap: (() {
+                              if (MyUtils.checkClick()) {
+                                // 重新初始化
+                                _refreshController.resetNoData();
+                                setState(() {
+                                  isOK = false;
+                                  index = 3;
+                                  page = 1;
+                                  doPostTJRoomList2('3');
+                                });
+                              }
+                            }),
+                            child: WidgetUtils.myContainer(
+                                ScreenUtil().setHeight(40),
+                                ScreenUtil().setHeight(90),
+                                index == 3
+                                    ? MyColors.paiduiBlue
+                                    : MyColors.homeBG,
+                                index == 3
+                                    ? MyColors.paiduiBlue
+                                    : MyColors.homeBG,
+                                '男神',
+                                ScreenUtil().setSp(28),
+                                index == 3 ? Colors.white : MyColors.g6),
+                          ),
+                          WidgetUtils.commonSizedBox(0, 15.h),
+                          GestureDetector(
+                            onTap: (() {
+                              if (MyUtils.checkClick()) {
+                                // 重新初始化
+                                _refreshController.resetNoData();
+                                setState(() {
+                                  isOK = false;
+                                  index = 6;
+                                  page = 1;
+                                  doPostTJRoomList2('6');
+                                });
+                              }
+                            }),
+                            child: WidgetUtils.myContainer(
+                                ScreenUtil().setHeight(40),
+                                ScreenUtil().setHeight(90),
+                                index == 6 ? MyColors.btn_d : MyColors.homeBG,
+                                index == 6 ? MyColors.btn_d : MyColors.homeBG,
+                                '交友',
+                                ScreenUtil().setSp(28),
+                                index == 6 ? Colors.white : MyColors.g6),
+                          ),
+                          WidgetUtils.commonSizedBox(0, 15.h),
+                          listFL.isNotEmpty
+                              ? GestureDetector(
+                                  onTap: (() {
+                                    if (MyUtils.checkClick()) {
+                                      // 重新初始化
+                                      _refreshController.resetNoData();
+                                      setState(() {
+                                        isOK = false;
+                                        index = listFL[0].type as int;
+                                        page = 1;
+                                        doPostTJRoomList2(
+                                            listFL[0].type.toString());
+                                      });
+                                    }
+                                  }),
+                                  child: WidgetUtils.myContainer(
+                                      ScreenUtil().setHeight(40),
+                                      ScreenUtil().setHeight(90),
+                                      index == listFL[0].type as int
+                                          ? MyColors.paiduiRed
+                                          : MyColors.homeBG,
+                                      index == listFL[0].type as int
+                                          ? MyColors.paiduiRed
+                                          : MyColors.homeBG,
+                                      listFL[0].title!,
+                                      ScreenUtil().setSp(28),
+                                      index == listFL[0].type as int
+                                          ? Colors.white
+                                          : MyColors.g6),
+                                )
+                              : const Text(''),
+                          listFL.isNotEmpty
+                              ? WidgetUtils.commonSizedBox(0, 15.h)
+                              : const Text(''),
+                          listFL.length > 1
+                              ? GestureDetector(
+                                  onTap: (() {
+                                    if (MyUtils.checkClick()) {
+                                      // 重新初始化
+                                      _refreshController.resetNoData();
+                                      setState(() {
+                                        isOK = false;
+                                        index = listFL[1].type as int;
+                                        page = 1;
+                                        doPostTJRoomList2(
+                                            listFL[1].type.toString());
+                                      });
+                                    }
+                                  }),
+                                  child: WidgetUtils.myContainer(
+                                      ScreenUtil().setHeight(40),
+                                      ScreenUtil().setHeight(90),
+                                      index == listFL[1].type as int
+                                          ? MyColors.paiduiRed
+                                          : MyColors.homeBG,
+                                      index == listFL[1].type as int
+                                          ? MyColors.paiduiRed
+                                          : MyColors.homeBG,
+                                      listFL[1].title!,
+                                      ScreenUtil().setSp(28),
+                                      index == listFL[1].type as int
+                                          ? Colors.white
+                                          : MyColors.g6),
+                                )
+                              : const Text(''),
+                          listFL.length > 1
+                              ? WidgetUtils.commonSizedBox(0, 15.h)
+                              : const Text(''),
+                          GestureDetector(
+                            onTap: (() {
+                              if (MyUtils.checkClick()) {
+                                // 重新初始化
+                                _refreshController.resetNoData();
+                                setState(() {
+                                  isOK = false;
+                                  index = 4;
+                                  page = 1;
+                                  doPostTJRoomList2('4');
+                                });
+                              }
+                            }),
+                            child: WidgetUtils.myContainer(
+                                ScreenUtil().setHeight(40),
+                                ScreenUtil().setHeight(90),
+                                index == 4 ? MyColors.origin : MyColors.homeBG,
+                                index == 4 ? MyColors.origin : MyColors.homeBG,
+                                '新厅',
+                                ScreenUtil().setSp(28),
+                                index == 4 ? Colors.white : MyColors.g6),
+                          ),
+                          WidgetUtils.commonSizedBox(0, 15.h),
+                          GestureDetector(
+                            onTap: (() {
+                              if (MyUtils.checkClick()) {
+                                // 重新初始化
+                                _refreshController.resetNoData();
+                                setState(() {
+                                  isOK = false;
+                                  index = 5;
+                                  page = 1;
+                                  doPostTJRoomList2('5');
+                                });
+                              }
+                            }),
+                            child: SizedBox(
+                              height: ScreenUtil().setHeight(40),
+                              width: ScreenUtil().setHeight(160),
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  index == 5
+                                      ? WidgetUtils.showImagesFill(
+                                          'assets/images/paidui_diantai_bg.png',
+                                          ScreenUtil().setHeight(56),
+                                          ScreenUtil().setHeight(160))
+                                      : const Text(''),
+                                  Container(
+                                    alignment: Alignment.centerLeft,
+                                    width: ScreenUtil().setHeight(160),
+                                    padding: const EdgeInsets.only(left: 9),
+                                    child: WidgetUtils.showImages(
+                                        'assets/images/paidui_diantai1.png',
+                                        ScreenUtil().setHeight(24),
+                                        ScreenUtil().setHeight(116)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                  ListView.builder(
-                    padding:
-                    EdgeInsets.only(top: ScreenUtil().setHeight(20)),
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: _itemPaihang,
-                    itemCount: index == 2
-                        ? list2.length
-                        : index == 3
-                        ? list3.length
-                        : index == 4
-                        ? list4.length
-                        : index == 5
-                        ? list5.length
-                        : list6.length,
-                  ),
+                  isOK
+                      ? ListView.builder(
+                          padding:
+                              EdgeInsets.only(top: ScreenUtil().setHeight(20)),
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: _itemPaihang,
+                          itemCount: index == 2
+                              ? list2.length
+                              : index == 3
+                                  ? list3.length
+                                  : index == 4
+                                      ? list4.length
+                                      : index == 5
+                                          ? list5.length
+                                          : index == 6
+                                              ? list6.length
+                                              : index == listFL[0].type as int
+                                                  ? list7.length
+                                                  : list8.length,
+                        )
+                      : const Text(''),
                 ],
               ),
             ),
@@ -1002,6 +1267,36 @@ class _PaiduiPageState extends State<PaiduiPage>
         ],
       ),
     );
+  }
+
+  List<DataFL> listFL = [];
+
+  /// 获取分类
+  Future<void> doPostRoomType() async {
+    try {
+      fenleiBean bean = await DataUtils.postRoomType();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            listFL.clear();
+            if (bean.data!.isNotEmpty) {
+              for (int i = 0; i < bean.data!.length; i++) {
+                listFL.add(bean.data![i]);
+              }
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+          // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
   }
 
   /// 派对前5名排行
@@ -1046,6 +1341,7 @@ class _PaiduiPageState extends State<PaiduiPage>
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
+            isOK = true;
             isUp = true; //是否允许上拉
             isDown = true; //是否允许下拉
             if (page == 1 && type == "2") {
@@ -1058,27 +1354,39 @@ class _PaiduiPageState extends State<PaiduiPage>
               list5.clear();
             } else if (page == 1 && type == "6") {
               list6.clear();
+            } else if (page == 1 && type == listFL[0].type.toString()) {
+              list7.clear();
+            } else if (page == 1 && type == listFL[1].type.toString()) {
+              list8.clear();
             }
             if (bean.data!.isNotEmpty) {
               if (type == "2") {
-                for(int i = 0; i < bean.data!.length; i++){
+                for (int i = 0; i < bean.data!.length; i++) {
                   list2.add(bean.data![i]);
                 }
               } else if (type == "3") {
-                for(int i = 0; i < bean.data!.length; i++){
+                for (int i = 0; i < bean.data!.length; i++) {
                   list3.add(bean.data![i]);
                 }
               } else if (type == "4") {
-                for(int i = 0; i < bean.data!.length; i++){
+                for (int i = 0; i < bean.data!.length; i++) {
                   list4.add(bean.data![i]);
                 }
               } else if (type == "5") {
-                for(int i = 0; i < bean.data!.length; i++){
+                for (int i = 0; i < bean.data!.length; i++) {
                   list5.add(bean.data![i]);
                 }
               } else if (type == "6") {
-                for(int i = 0; i < bean.data!.length; i++){
+                for (int i = 0; i < bean.data!.length; i++) {
                   list6.add(bean.data![i]);
+                }
+              } else if (type == listFL[0].type.toString()) {
+                for (int i = 0; i < bean.data!.length; i++) {
+                  list7.add(bean.data![i]);
+                }
+              } else if (type == listFL[1].type.toString()) {
+                for (int i = 0; i < bean.data!.length; i++) {
+                  list8.add(bean.data![i]);
                 }
               }
             } else {
@@ -1139,7 +1447,7 @@ class _PaiduiPageState extends State<PaiduiPage>
           break;
         default:
           setState(() {
-            sp.setBool('joinRoom',false);
+            sp.setBool('joinRoom', false);
           });
           MyToastUtils.showToastBottom(bean.msg!);
           break;
@@ -1147,7 +1455,7 @@ class _PaiduiPageState extends State<PaiduiPage>
       Loading.dismiss();
     } catch (e) {
       setState(() {
-        sp.setBool('joinRoom',false);
+        sp.setBool('joinRoom', false);
       });
       Loading.dismiss();
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
@@ -1180,7 +1488,7 @@ class _PaiduiPageState extends State<PaiduiPage>
           break;
         default:
           setState(() {
-            sp.setBool('joinRoom',false);
+            sp.setBool('joinRoom', false);
           });
           MyToastUtils.showToastBottom(bean.msg!);
           break;
@@ -1188,7 +1496,7 @@ class _PaiduiPageState extends State<PaiduiPage>
       Loading.dismiss();
     } catch (e) {
       setState(() {
-        sp.setBool('joinRoom',false);
+        sp.setBool('joinRoom', false);
       });
       Loading.dismiss();
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);

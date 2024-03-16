@@ -301,7 +301,7 @@ class _EditGHHeadPageState extends State<EditGHHeadPage> {
     }
     try {
       print("使用原生http client库上传");
-      await UploadHttpClient.upload(pickFilePath!, type, (count, total) {
+      await UploadHttpClient.upload(pickFilePath!, type, '编辑公会头像显示', (count, total) {
       });
     } catch (e) {
       LogE('上传失败${e.toString()}');

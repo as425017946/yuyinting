@@ -183,14 +183,14 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                                   ScreenUtil().setHeight(130),
                                   headImg),
                               // 头像框静态图
-                              avatarFrameImg.isNotEmpty
+                              (avatarFrameGifImg.isEmpty && avatarFrameImg.isNotEmpty)
                                   ? WidgetUtils.CircleHeadImage(
                                       ScreenUtil().setHeight(160),
                                       ScreenUtil().setHeight(160),
                                       avatarFrameImg)
                                   : const Text(''),
                               // 头像框动态图
-                              avatarFrameGifImg.isEmpty
+                              avatarFrameGifImg.isNotEmpty
                                   ? SizedBox(
                                       height: 160.h,
                                       width: 160.h,
@@ -876,6 +876,8 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
             isNew = bean.data!.isNew as int;
             isPretty = bean.data!.isPretty as int;
             isNewNoble = bean.data!.newNoble as int;
+            avatarFrameImg = bean.data!.avatarFrameImg!;
+            avatarFrameGifImg = bean.data!.avatarFrameGifImg!;
             if (bean.data!.label!.isNotEmpty) {
               list_label = bean.data!.label!.split(',');
             }

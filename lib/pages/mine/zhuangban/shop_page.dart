@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:yuyinting/pages/mine/zhuangban/qipao_page.dart';
-import 'package:yuyinting/pages/mine/zhuangban/shengbo_page.dart';
-import 'package:yuyinting/pages/mine/zhuangban/zuojia_page.dart';
-
+import 'package:yuyinting/pages/mine/zhuangban/shengbo_bb_page.dart';
+import 'package:yuyinting/pages/mine/zhuangban/zuojia_bd_page.dart';
 import '../../../colors/my_colors.dart';
 import '../../../main.dart';
 import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
-import 'head_page.dart';
+import 'head_bb_page.dart';
 
 /// 背包
 class ShopPage extends StatefulWidget {
@@ -112,16 +110,16 @@ class _ShopPageState extends State<ShopPage> {
                   child: WidgetUtils.myContainerZhuangban(_currentIndex == 1 ? MyColors.zhuangbanWZBg : MyColors.zhuangbanBg, '头像框', StyleUtils.getCommonTextStyle(color: _currentIndex == 1 ? Colors.white : MyColors.zhuangbanWZ, fontSize: ScreenUtil().setSp(29), fontWeight: FontWeight.w600)),
                 ),
                 WidgetUtils.commonSizedBox(0, 10),
-                GestureDetector(
-                  onTap: ((){
-                    setState(() {
-                      _currentIndex = 2;
-                      _controller.animateToPage(2, duration: const Duration(milliseconds: 500), curve: Curves.ease);
-                    });
-                  }),
-                  child: WidgetUtils.myContainerZhuangban(_currentIndex == 2 ? MyColors.zhuangbanWZBg : MyColors.zhuangbanBg, '公屏气泡', StyleUtils.getCommonTextStyle(color: _currentIndex == 2 ? Colors.white : MyColors.zhuangbanWZ, fontSize: ScreenUtil().setSp(29), fontWeight: FontWeight.w600)),
-                ),
-                WidgetUtils.commonSizedBox(0, 10),
+                // GestureDetector(
+                //   onTap: ((){
+                //     setState(() {
+                //       _currentIndex = 2;
+                //       _controller.animateToPage(2, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                //     });
+                //   }),
+                //   child: WidgetUtils.myContainerZhuangban(_currentIndex == 2 ? MyColors.zhuangbanWZBg : MyColors.zhuangbanBg, '公屏气泡', StyleUtils.getCommonTextStyle(color: _currentIndex == 2 ? Colors.white : MyColors.zhuangbanWZ, fontSize: ScreenUtil().setSp(29), fontWeight: FontWeight.w600)),
+                // ),
+                // WidgetUtils.commonSizedBox(0, 10),
                 GestureDetector(
                   onTap: ((){
                     setState(() {
@@ -145,10 +143,10 @@ class _ShopPageState extends State<ShopPage> {
                 });
               },
               children: const [
-                ZuojiaPage(),
-                HeadPage(),
-                QipaoPage(),
-                ShengboPage()
+                ZuojiaBBPage(),
+                HeadBBPage(),
+                // QipaoPage(),
+                ShengBoBBPage()
               ],
             ),
           )

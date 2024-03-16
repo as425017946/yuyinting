@@ -31,7 +31,7 @@ class _QipaoPageState extends State<QipaoPage>  with AutomaticKeepAliveClientMix
   var length = 1;
   List<bool> listB = [];
 
-  List<Data> _list = [];
+  List<DataSC> _list = [];
   List<DataMy> _list2 = [];
   final RefreshController _refreshController =
   RefreshController(initialRefresh: false);

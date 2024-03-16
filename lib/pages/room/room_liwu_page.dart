@@ -14,7 +14,6 @@ import '../../bean/balanceBean.dart';
 import '../../bean/beibaoBean.dart';
 import '../../bean/onlineRoomUserBean.dart';
 import '../../bean/roomInfoBean.dart';
-import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';

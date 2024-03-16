@@ -20,6 +20,7 @@ import '../bean/chatUserInfoBean.dart';
 import '../bean/cityBean.dart';
 import '../bean/commonStringBean.dart';
 import '../bean/feilvBean.dart';
+import '../bean/fenleiBean.dart';
 import '../bean/fileUpdateBean.dart';
 import '../bean/gameListBean.dart';
 import '../bean/gameStoreBean.dart';
@@ -572,7 +573,12 @@ class DataUtils{
     print("在线用户：$respons");
     return userOnlineBean.fromJson(respons!);
   }
-
+  /// 首页派对-获取分类
+  static Future<fenleiBean> postRoomType() async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.roomType, {}, {});
+    print("获取分类：$respons");
+    return fenleiBean.fromJson(respons!);
+  }
 
   /// 首页派对-前5名
   static Future<hotRoomBean> postHotRoom() async {
@@ -1362,4 +1368,18 @@ class DataUtils{
     return tgMyShareBean.fromJson(respons!);
   }
 
+  /// 购买装扮
+  static Future<CommonBean> postBuyDress(Map<String,dynamic> params) async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.buyDress, {}, params);
+    print("购买装扮 $respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 设置装扮
+  static Future<CommonBean> postSetDress(Map<String,dynamic> params) async {
+    print("设置装扮 $params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.setDress, {}, params);
+    print("设置装扮 $respons");
+    return CommonBean.fromJson(respons!);
+  }
 }

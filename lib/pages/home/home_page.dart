@@ -601,25 +601,34 @@ class _HomePageState extends State<HomePage>
 
   /// 判断当前网络，然后给返回适配的网络地址
   Future<void> doPostPdAddress() async {
+    FormData formdata = FormData.fromMap(
+      {
+        'type': 'test',
+      },
+    );
+    BaseOptions option = BaseOptions(
+        contentType: 'application/x-www-form-urlencoded', responseType: ResponseType.plain);
+    Dio dio = Dio(option);
+    //application/json
     try {
-      addressIPBean bean = await DataUtils.getPdAddress();
-      switch (bean.code) {
-        case MyHttpConfig.successCode:
-          if (bean.nodes!.isNotEmpty) {
-            setState(() {
-              sp.setString('isDian', bean.nodes!);
-              sp.setString('userIP', bean.address!);
-            });
-          } else {
-            MyToastUtils.showToastBottom('IP为空');
-          }
-          break;
-        default:
-          MyToastUtils.showToastBottom(bean.msg!);
-          break;
+      var respone = await dio.post(MyHttpConfig.pdAddress, data: formdata);
+      // LogE('请求地址 == ${MyHttpConfig.pdAddress}');
+      Map jsonResponse = json.decode(respone.data.toString());
+      LogE('返回结果 == $respone');
+      if (jsonResponse['code'] == 200) {
+        setState(() {
+          sp.setString('isDian', jsonResponse['nodes']);
+          sp.setString('userIP', jsonResponse['address']);
+        });
+      } else if (respone.statusCode == 401) {
+        // ignore: use_build_context_synchronously
+        MyUtils.jumpLogin(context);
+      } else {
+        MyToastUtils.showToastBottom('IP获取失败~');
       }
+
     } catch (e) {
-      // MyToastUtils.showToastBottom(MyConfig.errorHttpTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitleFile);
     }
   }
 

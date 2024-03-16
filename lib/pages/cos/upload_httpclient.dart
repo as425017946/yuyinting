@@ -17,7 +17,7 @@ class UploadHttpClient {
   /// @param filePath 文件路径
   /// @param progressCallback 进度回调
   ///  image图片 audio音频 video视频
-  static Future<void> upload(String filePath, String type, ProgressCallback progressCallback) async {
+  static Future<void> upload(String filePath, String type, String title,ProgressCallback progressCallback) async {
     // 获取直传签名等信息
     String ext = path.extension(filePath).substring(1);
     Map<String, dynamic> directTransferData;
@@ -58,7 +58,7 @@ class UploadHttpClient {
         LogE('上传状态 ${response.statusCode}');
         if (response.statusCode == 200) {
           Loading.dismiss();
-          eventBus.fire(TencentBack(filePath: cosKey));
+          eventBus.fire(TencentBack(filePath: cosKey, title: title));
           print('上传成功');
         } else {
           Loading.dismiss();

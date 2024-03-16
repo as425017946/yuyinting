@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:marquee/marquee.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
+import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
+import 'package:yuyinting/utils/my_utils.dart';
 import '../../bean/hengFuBean.dart';
 import '../../utils/SVGASimpleImage3.dart';
 
 class HomeItems {
   /// 公屏送礼推送
   static Widget itemAnimation(String url, AnimationController controller,
-      Animation<Offset> animation, String name, hengFuBean hf) {
+      Animation<Offset> animation, String name, hengFuBean hf,String titleType,String roomID) {
     LogE('名称 == $name');
     String info = '';
     double gd = 0, topHD = 0;
@@ -141,7 +143,7 @@ class HomeItems {
         break;
     }
     return IgnorePointer(
-      ignoring: true,
+      ignoring: false,
       child: Container(
         height: 300.h,
         width: double.infinity,
@@ -155,8 +157,9 @@ class HomeItems {
               ),
               GestureDetector(
                 onTap: (() {
-                  // controller.forward();
-                  // MyToastUtils.showToastBottom('////');
+                  if(MyUtils.checkClick() && hf.roomId != roomID && hf.roomId != '0'){
+                    eventBus.fire(hfJoinBack(roomID: hf.roomId!, title: titleType));
+                  }
                 }),
                 child: Padding(
                   padding: EdgeInsets.only(top: topHD, left: gd, right: 50.h),
@@ -201,6 +204,16 @@ class HomeItems {
                   ),
                 ),
               ),
+              // GestureDetector(
+              //   onTap: ((){
+              //     MyToastUtils.showToastBottom('======');
+              //   }),
+              //   child: Container(
+              //     height: 50.h,
+              //     width: 50.h,
+              //     color: Colors.red,
+              //   ),
+              // ),
             ],
           ),
         ),
@@ -209,7 +222,7 @@ class HomeItems {
   }
 
   /// 爆出礼物
-  static Widget itemBig(hengFuBean hf,int type) {
+  static Widget itemBig(hengFuBean hf,int type, String titleType, String roomID) {
     // type 0爆出 1送出
     String info = '';
     if(type == 0) {
@@ -220,7 +233,7 @@ class HomeItems {
       '神豪降临${hf.fromNickname!}在${hf.roomName!}送给了${hf.toNickname!}价值${hf.giftInfo![0].giftPrice}的瑞麟*${hf.giftInfo![0].giftNumber} 快来围观吧！';
     }
     return IgnorePointer(
-        ignoring: true,
+        ignoring: false,
         child: SizedBox(
           height: 340.h,
           width: double.infinity,
@@ -230,7 +243,11 @@ class HomeItems {
                 assetsName: type == 0 ? 'assets/svga/gp/gp_52hf.svga' : 'assets/svga/gp/gp_52.svga',
               ),
               GestureDetector(
-                onTap: (() {}),
+                onTap: (() {
+                  if(MyUtils.checkClick() && hf.roomId != roomID && hf.roomId != '0'){
+                    eventBus.fire(hfJoinBack(roomID: hf.roomId!, title: titleType));
+                  }
+                }),
                 child: Padding(
                   padding: EdgeInsets.only(top: type == 0 ? 220.h : 185.h, left: 60.h, right: 50.h),
                   child: Marquee(

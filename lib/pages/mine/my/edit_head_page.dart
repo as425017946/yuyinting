@@ -93,7 +93,7 @@ class _EditHeadPageState extends State<EditHeadPage> {
     }
     try {
       print("使用原生http client库上传");
-      await UploadHttpClient.upload(pickFilePath!, type, (count, total) {
+      await UploadHttpClient.upload(pickFilePath!, type, '编辑头像显示',(count, total) {
       });
     } catch (e) {
       LogE('上传失败${e.toString()}');
@@ -153,7 +153,9 @@ class _EditHeadPageState extends State<EditHeadPage> {
     /// 腾讯云上传成功回调
     listen = eventBus.on<TencentBack>().listen((event) {
       LogE('头像上传成功***** ${event.filePath}');
-      doPostRoomJoin(event.filePath);
+      if(event.title == '编辑头像显示'){
+        doPostRoomJoin(event.filePath);
+      }
     });
   }
 

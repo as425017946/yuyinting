@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+import 'package:yuyinting/utils/log_util.dart';
 
+import '../../../bean/Common_bean.dart';
+import '../../../bean/balanceBean.dart';
 import '../../../bean/myShopListBean.dart';
 import '../../../bean/shopListBean.dart';
 import '../../../colors/my_colors.dart';
@@ -15,6 +18,7 @@ import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 import '../../../widget/OptionGridView.dart';
+import '../qianbao/dou_pay_page.dart';
 /// 头像框
 class HeadPage extends StatefulWidget {
   const HeadPage({Key? key}) : super(key: key);
@@ -23,26 +27,25 @@ class HeadPage extends StatefulWidget {
   State<HeadPage> createState() => _HeadPageState();
 }
 
-class _HeadPageState extends State<HeadPage>  with AutomaticKeepAliveClientMixin{
-  /// 刷新一次后不在刷新
-  @override
-  bool get wantKeepAlive => true;
+class _HeadPageState extends State<HeadPage>{
 
   var length = 1;
   List<bool> listB = [];
 
-  List<Data> _list = [];
-  List<DataMy> _list2 = [];
+  List<DataSC> _list = [];
   final RefreshController _refreshController =
   RefreshController(initialRefresh: false);
   int page = 1;
   /// 是否有选中的
   bool isChoose = false;
   int price=0;
-
+  // 装扮id
+  String dressID = '';
 
 
   void _onRefresh() async {
+    // 重新初始化
+    _refreshController.resetNoData();
     // monitor network fetch
     await Future.delayed(const Duration(milliseconds: 1000));
     // if failed,use refreshFailed()
@@ -52,11 +55,7 @@ class _HeadPageState extends State<HeadPage>  with AutomaticKeepAliveClientMixin
         page = 1;
       });
     }
-    if(sp.getString('isShop').toString() == '1') {
-      doPostMyIfon();
-    }else {
-      doPostMyShopList();
-    }
+    doPostMyIfon();
   }
 
   void _onLoading() async {
@@ -68,11 +67,7 @@ class _HeadPageState extends State<HeadPage>  with AutomaticKeepAliveClientMixin
         page++;
       });
     }
-    if(sp.getString('isShop').toString() == '1') {
-      doPostMyIfon();
-    }else {
-      doPostMyShopList();
-    }
+    doPostMyIfon();
     _refreshController.loadComplete();
   }
 
@@ -81,18 +76,15 @@ class _HeadPageState extends State<HeadPage>  with AutomaticKeepAliveClientMixin
   void initState() {
     // TODO: implement initState
     super.initState();
-    if(sp.getString('isShop').toString() == '1') {
-      doPostMyIfon();
-    }else {
-      doPostMyShopList();
-    }
+    doPostMyIfon();
+    doPostBalance();
   }
 
   Widget _itemLiwu(BuildContext context, int i) {
-    return sp.getString('isShop').toString() == '1'
-        ? GestureDetector(
+    return GestureDetector(
       onTap: (() {
         setState(() {
+          LogE('点击了 $i');
           for (int a = 0; a < length; a++) {
             if (a == i) {
               listB[a] = !listB[a];
@@ -104,9 +96,11 @@ class _HeadPageState extends State<HeadPage>  with AutomaticKeepAliveClientMixin
             if (listB[a]) {
               isChoose = true;
               price = _list[a].price!;
+              dressID = _list[i].gid.toString();
               break;
             } else {
               isChoose = false;
+              dressID = '';
             }
           }
         });
@@ -147,40 +141,6 @@ class _HeadPageState extends State<HeadPage>  with AutomaticKeepAliveClientMixin
           ],
         ),
       ),
-    )
-        : Container(
-      width: ScreenUtil().setHeight(211),
-      height: ScreenUtil().setHeight(325),
-      alignment: Alignment.center,
-      decoration: const BoxDecoration(
-        //设置Container修饰
-        image: DecorationImage(
-          //背景图片修饰
-          image: AssetImage("assets/images/zhuangban_bg1.png"),
-          fit: BoxFit.fill, //覆盖
-        ),
-      ),
-      child: Column(
-        children: [
-          WidgetUtils.commonSizedBox(20, 20),
-          WidgetUtils.showImagesNet(
-              _list2[i].img!,
-              ScreenUtil().setHeight(200),
-              ScreenUtil().setHeight(200)),
-          WidgetUtils.commonSizedBox(10, 20),
-          WidgetUtils.onlyTextCenter(
-              _list2[i].name!,
-              StyleUtils.getCommonTextStyle(
-                  color: Colors.white,
-                  fontSize: ScreenUtil().setSp(25))),
-          WidgetUtils.onlyTextCenter(
-              _list2[i].isLong == 1 ? '有效时长：永久' : '到期：${_list2[i].expireTime}',
-              StyleUtils.getCommonTextStyle(
-                  color: Colors.white,
-                  fontSize: ScreenUtil().setSp(25))),
-          WidgetUtils.commonSizedBox(10, 20),
-        ],
-      ),
     );
   }
 
@@ -198,7 +158,7 @@ class _HeadPageState extends State<HeadPage>  with AutomaticKeepAliveClientMixin
           onRefresh: _onRefresh,
           child: OptionGridView(
             padding: const EdgeInsets.all(20),
-            itemCount: sp.getString('isShop').toString() == '1' ?  _list.length : _list2.length,
+            itemCount:  _list.length,
             rowCount: 2,
             mainAxisSpacing: 10,
             crossAxisSpacing: 10,
@@ -242,7 +202,7 @@ class _HeadPageState extends State<HeadPage>  with AutomaticKeepAliveClientMixin
                                   fontSize: ScreenUtil().setSp(50))),
                           WidgetUtils.commonSizedBox(0, 10),
                           WidgetUtils.onlyText(
-                              '钻/豆',
+                              '豆',
                               StyleUtils.getCommonTextStyle(
                                   color: Colors.white,
                                   fontSize: ScreenUtil().setSp(25))),
@@ -250,10 +210,13 @@ class _HeadPageState extends State<HeadPage>  with AutomaticKeepAliveClientMixin
                       ),
                       GestureDetector(
                         onTap: ((){
-                          Navigator.pushNamed(context, 'DouPayPage');
+                          if(MyUtils.checkClick()) {
+                            MyUtils.goTransparentPageCom(context, DouPayPage(
+                              shuliang: jinbi,));
+                          }
                         }),
                         child: WidgetUtils.onlyText(
-                            '0 钻 | 充值 >',
+                            '$jinbi V豆 | 充值 >',
                             StyleUtils.getCommonTextStyle(
                                 color: MyColors.zhuangbanWZ,
                                 fontSize: ScreenUtil().setSp(25))),
@@ -262,7 +225,11 @@ class _HeadPageState extends State<HeadPage>  with AutomaticKeepAliveClientMixin
                     ],
                   )),
               GestureDetector(
-                onTap: (() {}),
+                onTap: (() {
+                  if(MyUtils.checkClick()){
+                    doPostBuyDress(dressID);
+                  }
+                }),
                 child: WidgetUtils.myContainer(
                     ScreenUtil().setHeight(70),
                     ScreenUtil().setHeight(200),
@@ -284,7 +251,7 @@ class _HeadPageState extends State<HeadPage>  with AutomaticKeepAliveClientMixin
     Map<String, dynamic> params = <String, dynamic>{
       'class_id': '2',
       'page': page,
-      'pageSize': MyConfig.pageSize
+      'pageSize': MyConfig.pageSize2
     };
     try {
       shopListBean bean = await DataUtils.postShopList(params);
@@ -300,15 +267,18 @@ class _HeadPageState extends State<HeadPage>  with AutomaticKeepAliveClientMixin
                 _list.add(bean.data![i]);
                 listB.add(false);
               }
-              length = bean.data!.length;
+              length = _list.length;
             }else{
               if (page == 1) {
                 length = 0;
               }
             }
             if(bean.data!.length < MyConfig.pageSize){
-              _refreshController.loadNoData();
+              if(page > 1) {
+                _refreshController.loadNoData();
+              }
             }
+            LogE('长度== ${listB.length}');
           });
           break;
         case MyHttpConfig.errorloginCode:
@@ -327,35 +297,63 @@ class _HeadPageState extends State<HeadPage>  with AutomaticKeepAliveClientMixin
   }
 
 
-  /// 背包座驾
-  Future<void> doPostMyShopList() async {
-    Map<String, dynamic> params = <String, dynamic>{
-      'class_id': '2',
-      'page': page,
-      'pageSize': MyConfig.pageSize
-    };
+  // 金币 钻石
+  String jinbi = '', jinbi2 = '', zuanshi = '', zuanshi2 = '';
+  /// 钱包余额
+  Future<void> doPostBalance() async {
     try {
-      myShopListBean bean = await DataUtils.postMyShopList(params);
+      balanceBean bean = await DataUtils.postBalance();
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
-            if (page == 1) {
-              _list2.clear();
-            }
-            if (bean.data!.isNotEmpty) {
-              for(int i =0; i < bean.data!.length; i++){
-                _list2.add(bean.data![i]);
-              }
-              length = _list2.length;
+            if(double.parse(bean.data!.goldBean!) > 10000){
+              jinbi = '${(double.parse(bean.data!.goldBean!)/10000)}w';
+              List<String> a = jinbi.split('.');
+              jinbi2 = '${a[0]}.${a[1].substring(0,2)}w';
             }else{
-              if (page == 1) {
-                length = 0;
-              }
+              jinbi = bean.data!.goldBean!;
+              jinbi2 = bean.data!.goldBean!;
             }
-            if(bean.data!.length < MyConfig.pageSize){
-              _refreshController.loadNoData();
+            if(double.parse(bean.data!.diamond!) > 10000){
+              zuanshi = '${(double.parse(bean.data!.diamond!)/10000)}w';
+              List<String> a = zuanshi.split('.');
+              zuanshi2 = '${a[0]}.${a[1].substring(0,2)}w';
+            }else{
+              zuanshi = bean.data!.diamond!;
+              zuanshi2 = bean.data!.diamond!;
             }
           });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+  /// 购买装扮
+  Future<void> doPostBuyDress(String dressID) async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'dress_id': dressID, //装扮id
+    };
+    try {
+      CommonBean bean = await DataUtils.postBuyDress(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            for (int a = 0; a < length; a++) {
+              listB[a] = false;
+            }
+            isChoose = false;
+            dressID = '';
+          });
+          MyToastUtils.showToastBottom(MyConfig.buySuccess);
           break;
         case MyHttpConfig.errorloginCode:
         // ignore: use_build_context_synchronously

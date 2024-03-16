@@ -179,7 +179,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
               WidgetUtils.commonSizedBox(10, 0),
               Container(
                 margin: const EdgeInsets.only(left: 20, right: 0),
-                height: ScreenUtil().setHeight(150),
+                height: ScreenUtil().setHeight(160),
                 width: double.infinity,
                 alignment: Alignment.centerLeft,
                 child: Row(
@@ -194,10 +194,36 @@ class _MyInfoPageState extends State<MyInfoPage> {
                               }));
                         }
                       }),
-                      child: WidgetUtils.CircleHeadImage(
-                          ScreenUtil().setHeight(150),
-                          ScreenUtil().setHeight(150),
-                          sp.getString('user_headimg').toString()),
+                      child: SizedBox(
+                        width: 160.h,
+                        height: 160.h,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            WidgetUtils.CircleHeadImage(
+                                ScreenUtil().setHeight(110),
+                                ScreenUtil().setHeight(110),
+                                sp.getString('user_headimg').toString()),
+                            // 头像框静态图
+                            (avatarFrameGifImg.isEmpty && avatarFrameImg.isNotEmpty)
+                                ? WidgetUtils.CircleHeadImage(
+                                ScreenUtil().setHeight(160),
+                                ScreenUtil().setHeight(160),
+                                avatarFrameImg)
+                                : const Text(''),
+                            // 头像框动态图
+                            avatarFrameGifImg.isNotEmpty
+                                ? SizedBox(
+                              height: 160.h,
+                              width: 160.h,
+                              child: SVGASimpleImage(
+                                resUrl: avatarFrameGifImg,
+                              ),
+                            )
+                                : const Text(''),
+                          ],
+                        ),
+                      ),
                     ),
                     WidgetUtils.commonSizedBox(0, 10),
 
@@ -679,6 +705,8 @@ class _MyInfoPageState extends State<MyInfoPage> {
             isPretty = bean.data!.userInfo!.isPretty as int;
             isNewNoble = bean.data!.userInfo!.newNoble as int;
             imageList.add(bean.data!.userInfo!.avatarUrl!);
+            avatarFrameImg =bean.data!.userInfo!.avatarFrameImg!;
+            avatarFrameGifImg = bean.data!.userInfo!.avatarFrameGifImg!;
           });
           // 发送通知
           eventBus.fire(myInfoBack(userInfo: userInfo, giftList: giftList));
