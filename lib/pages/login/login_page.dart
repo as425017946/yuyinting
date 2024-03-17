@@ -454,6 +454,8 @@ class _LoginPageState extends State<LoginPage> {
                             child: Container(
                               height: codeHeight,
                               // width: ScreenUtil().setHeight(150),
+                              constraints: BoxConstraints(
+                                  minWidth: ScreenUtil().setHeight(150)),
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 15),
                               //边框设置
