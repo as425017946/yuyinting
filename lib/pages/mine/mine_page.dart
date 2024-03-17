@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:flukit/flukit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:yuyinting/pages/message/care_home_page.dart';
 import 'package:yuyinting/pages/mine/setting/setting_page.dart';
@@ -104,7 +106,8 @@ class _MinePageState extends State<MinePage> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => GonghuiHomePage(kefuUid: kefuUid, kefuAvatar: kefuAvatar),
+                builder: (context) =>
+                    GonghuiHomePage(kefuUid: kefuUid, kefuAvatar: kefuAvatar),
               ),
             ).then((value) {
               // doPostMyIfon();
@@ -143,8 +146,13 @@ class _MinePageState extends State<MinePage> {
         }
       } else if (event.title == '邀请有礼') {
         if (mounted) {
-          if(MyUtils.checkClick()){
-            MyUtils.goTransparentPage(context, YQYLPage(kefuUid: kefuUid, kefUavatar: kefuAvatar,));
+          if (MyUtils.checkClick()) {
+            MyUtils.goTransparentPage(
+                context,
+                YQYLPage(
+                  kefuUid: kefuUid,
+                  kefUavatar: kefuAvatar,
+                ));
           }
         }
       } else if (event.title == '全民代理') {
@@ -221,8 +229,10 @@ class _MinePageState extends State<MinePage> {
                 child: Row(
                   children: [
                     const Expanded(child: Text('')),
-                    WidgetUtils.showImages('assets/images/mine_icon_setting.png',
-                        ScreenUtil().setHeight(40), ScreenUtil().setHeight(40)),
+                    WidgetUtils.showImages(
+                        'assets/images/mine_icon_setting.png',
+                        ScreenUtil().setHeight(40),
+                        ScreenUtil().setHeight(40)),
                   ],
                 ),
               ),
@@ -254,7 +264,8 @@ class _MinePageState extends State<MinePage> {
                               ScreenUtil().setHeight(90),
                               sp.getString('user_headimg').toString()),
                           // 头像框静态图
-                          (avatarFrameGifImg.isEmpty && avatarFrameImg.isNotEmpty)
+                          (avatarFrameGifImg.isEmpty &&
+                                  avatarFrameImg.isNotEmpty)
                               ? WidgetUtils.CircleHeadImage(
                                   ScreenUtil().setHeight(130),
                                   ScreenUtil().setHeight(130),
@@ -317,22 +328,28 @@ class _MinePageState extends State<MinePage> {
                               // 展示新贵或者新锐图标
                               isNewNoble == 1
                                   ? WidgetUtils.showImages(
-                                      'assets/images/dj/room_rui.png', 30.h, 50.h)
+                                      'assets/images/dj/room_rui.png',
+                                      30.h,
+                                      50.h)
                                   : isNewNoble == 2
                                       ? WidgetUtils.showImages(
                                           'assets/images/dj/room_gui.png',
                                           30.h,
                                           50.h)
-                                      : isNewNoble == 3 ? WidgetUtils.showImages(
-                                          'assets/images/dj/room_gui.png',
-                                          30.h,
-                                          50.h) : const Text(''),
+                                      : isNewNoble == 3
+                                          ? WidgetUtils.showImages(
+                                              'assets/images/dj/room_gui.png',
+                                              30.h,
+                                              50.h)
+                                          : const Text(''),
                               isNewNoble != 0
                                   ? WidgetUtils.commonSizedBox(0, 5)
                                   : const Text(''),
                               isPretty == 1
                                   ? WidgetUtils.showImages(
-                                      'assets/images/dj/lianghao.png', 30.h, 30.h)
+                                      'assets/images/dj/lianghao.png',
+                                      30.h,
+                                      30.h)
                                   : const Text(''),
                             ],
                           ),
@@ -351,15 +368,15 @@ class _MinePageState extends State<MinePage> {
                                     ? MyColors.dtBlue
                                     : MyColors.dtPink,
                                 //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(20.0)),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(20.0)),
                               ),
                               child: WidgetUtils.showImages(
                                   sp.getInt('user_gender') == 1
                                       ? 'assets/images/nan.png'
                                       : 'assets/images/nv.png',
-                                  12,
-                                  12),
+                                  ScreenUtil().setWidth(24), // 12,
+                                  ScreenUtil().setWidth(24)), // 12,
                             ),
                             WidgetUtils.commonSizedBox(0, 5),
                             // 用户等级
@@ -381,21 +398,21 @@ class _MinePageState extends State<MinePage> {
                                                                   level <= 30)
                                                               ? 'assets/images/dj/dj_c_26-30.png'
                                                               : (level >= 31 &&
-                                                                      level <= 35)
+                                                                      level <=
+                                                                          35)
                                                                   ? 'assets/images/dj/dj_c_31-35.png'
                                                                   : (level >= 36 &&
                                                                           level <=
                                                                               40)
                                                                       ? 'assets/images/dj/dj_c_36-40.png'
                                                                       : (level >= 41 &&
-                                                                              level <=
-                                                                                  45)
+                                                                              level <= 45)
                                                                           ? 'assets/images/dj/dj_c_41-45.png'
                                                                           : 'assets/images/dj/dj_c_46-50.png',
                                           ScreenUtil().setHeight(30),
                                           ScreenUtil().setHeight(85)),
                                       Positioned(
-                                          left: 45.w,
+                                          left: 35.h, //45.w,
                                           child: Stack(
                                             alignment: Alignment.center,
                                             children: [
@@ -417,7 +434,8 @@ class _MinePageState extends State<MinePage> {
                                                                   level <= 15)
                                                               ? MyColors.djTwoM
                                                               : (level >= 16 &&
-                                                                      level <= 20)
+                                                                      level <=
+                                                                          20)
                                                                   ? MyColors
                                                                       .djThreeM
                                                                   : (level >= 21 &&
@@ -430,8 +448,7 @@ class _MinePageState extends State<MinePage> {
                                                                                   30)
                                                                           ? MyColors
                                                                               .djFiveM
-                                                                          : (level >= 31 &&
-                                                                                  level <= 35)
+                                                                          : (level >= 31 && level <= 35)
                                                                               ? MyColors.djSixM
                                                                               : (level >= 36 && level <= 40)
                                                                                   ? MyColors.djSevenM
@@ -523,180 +540,7 @@ class _MinePageState extends State<MinePage> {
               WidgetUtils.commonSizedBox(18, 0),
 
               /// 升级贵族
-              SizedBox(
-                width: double.infinity,
-                height: ScreenUtil().setHeight(200),
-                child: Stack(
-                  children: [
-                    WidgetUtils.showImagesFill('assets/images/mine_gz_bg.png',
-                        ScreenUtil().setHeight(130), double.infinity),
-                    GestureDetector(
-                      onTap: (() {
-                        if (MyUtils.checkClick()) {
-                          MyUtils.goTransparentPageCom(
-                              context, const TequanPage());
-                        }
-                      }),
-                      child: Container(
-                        width: double.infinity,
-                        height: ScreenUtil().setHeight(100),
-                        padding: const EdgeInsets.only(right: 10),
-                        color: Colors.transparent,
-                        alignment: Alignment.centerRight,
-                        child: guizuType == 1
-                            ? WidgetUtils.myContainer(
-                                ScreenUtil().setHeight(45),
-                                ScreenUtil().setHeight(100),
-                                Colors.transparent,
-                                MyColors.mineOrange,
-                                '已开通',
-                                ScreenUtil().setSp(21),
-                                MyColors.mineOrange)
-                            : SizedBox(
-                                width: ScreenUtil().setHeight(116),
-                                height: ScreenUtil().setHeight(45),
-                                child: const SVGASimpleImage(
-                                  assetsName: 'assets/svga/guizu_kt.svga',
-                                )),
-                      ),
-                    ),
-                    Container(
-                        height: ScreenUtil().setHeight(150),
-                        margin: EdgeInsets.only(top: ScreenUtil().setHeight(100)),
-                        decoration: const BoxDecoration(
-                          //背景
-                          color: Colors.white,
-                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                          borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                        ),
-                        child:
-
-                            /// 关注
-                            Row(
-                          children: [
-                            const Expanded(child: Text('')),
-                            GestureDetector(
-                              onTap: (() {
-                                if (MyUtils.checkClick()) {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return CareHomePage(index: 0);
-                                  })).then((value) {
-                                    doPostMyIfon();
-                                  });
-                                }
-                              }),
-                              child: Column(
-                                children: [
-                                  // Container(
-                                  //   width: ScreenUtil().setHeight(80),
-                                  //   alignment: Alignment.topRight,
-                                  //   child: Text(
-                                  //       '+1',
-                                  //       style : StyleUtils.getCommonTextStyle(
-                                  //           color: MyColors.mineRed,
-                                  //           fontSize: ScreenUtil().setSp(25))),
-                                  // ),
-                                  const Expanded(child: Text('')),
-                                  WidgetUtils.onlyText(
-                                      care,
-                                      StyleUtils.getCommonTextStyle(
-                                          color: Colors.black,
-                                          fontSize: ScreenUtil().setSp(38),
-                                          fontWeight: FontWeight.w600)),
-                                  WidgetUtils.onlyText(
-                                      '关注',
-                                      StyleUtils.getCommonTextStyle(
-                                          color: MyColors.mineGrey,
-                                          fontSize: ScreenUtil().setSp(21))),
-                                  const Expanded(child: Text('')),
-                                ],
-                              ),
-                            ),
-                            const Expanded(flex: 2, child: Text('')),
-                            GestureDetector(
-                              onTap: (() {
-                                if (MyUtils.checkClick()) {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return CareHomePage(index: 1);
-                                  })).then((value) {
-                                    doPostMyIfon();
-                                  });
-                                }
-                              }),
-                              child: Column(
-                                children: [
-                                  // Container(
-                                  //   width: ScreenUtil().setHeight(80),
-                                  //   alignment: Alignment.topRight,
-                                  //   child: Text(
-                                  //       '+1',
-                                  //       style : StyleUtils.getCommonTextStyle(
-                                  //           color: MyColors.mineRed,
-                                  //           fontSize: ScreenUtil().setSp(25))),
-                                  // ),
-                                  const Expanded(child: Text('')),
-                                  WidgetUtils.onlyText(
-                                      beCare,
-                                      StyleUtils.getCommonTextStyle(
-                                          color: Colors.black,
-                                          fontSize: ScreenUtil().setSp(38),
-                                          fontWeight: FontWeight.w600)),
-                                  WidgetUtils.onlyText(
-                                      '被关注',
-                                      StyleUtils.getCommonTextStyle(
-                                          color: MyColors.mineGrey,
-                                          fontSize: ScreenUtil().setSp(21))),
-                                  const Expanded(child: Text('')),
-                                ],
-                              ),
-                            ),
-                            const Expanded(flex: 2, child: Text('')),
-                            GestureDetector(
-                              onTap: (() {
-                                if (MyUtils.checkClick()) {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return CareHomePage(index: 2);
-                                  })).then((value) {
-                                    doPostMyIfon();
-                                  });
-                                }
-                              }),
-                              child: Column(
-                                children: [
-                                  // Container(
-                                  //   width: ScreenUtil().setHeight(80),
-                                  //   alignment: Alignment.topRight,
-                                  //   child: Text(
-                                  //       '+1',
-                                  //       style : StyleUtils.getCommonTextStyle(
-                                  //           color: MyColors.mineRed,
-                                  //           fontSize: ScreenUtil().setSp(25))),
-                                  // ),
-                                  const Expanded(child: Text('')),
-                                  WidgetUtils.onlyText(
-                                      lookMe,
-                                      StyleUtils.getCommonTextStyle(
-                                          color: Colors.black,
-                                          fontSize: ScreenUtil().setSp(38),
-                                          fontWeight: FontWeight.w600)),
-                                  WidgetUtils.onlyText(
-                                      '看过我',
-                                      StyleUtils.getCommonTextStyle(
-                                          color: MyColors.mineGrey,
-                                          fontSize: ScreenUtil().setSp(21))),
-                                  const Expanded(child: Text('')),
-                                ],
-                              ),
-                            ),
-                            const Expanded(child: Text('')),
-                          ],
-                        ))
-                  ],
-                ),
-              ),
+              _nobleCard(),
               WidgetUtils.commonSizedBox(18, 0),
 
               /// 展示信息
@@ -781,13 +625,14 @@ class _MinePageState extends State<MinePage> {
                                                     color: Colors.black,
                                                     fontSize:
                                                         ScreenUtil().setSp(32),
-                                                    fontWeight: FontWeight.w600)),
+                                                    fontWeight:
+                                                        FontWeight.w600)),
                                             WidgetUtils.onlyText(
                                                 '收送礼物明细',
                                                 StyleUtils.getCommonTextStyle(
                                                     color: MyColors.mineGrey,
-                                                    fontSize:
-                                                        ScreenUtil().setSp(22))),
+                                                    fontSize: ScreenUtil()
+                                                        .setSp(22))),
                                             const Expanded(child: Text('')),
                                           ],
                                         ),
@@ -806,13 +651,22 @@ class _MinePageState extends State<MinePage> {
                       WidgetUtils.commonSizedBox(20, 0),
                       WidgetUtils.whiteKuang(
                           'assets/images/mine_zhuangban.png', '我的装扮', false),
-                      (identity != 'president' && isGet) ? WidgetUtils.whiteKuang(
-                          'assets/images/mine_gonghui.png', '公会中心', isShenHe) : WidgetUtils.commonSizedBox(0, 0),
-                      (identity == 'president' && isGet) ? WidgetUtils.whiteKuang(
-                          'assets/images/mine_huizhang.png', '会长后台', isShenHe) : WidgetUtils.commonSizedBox(0, 0),
+                      (identity != 'president' && isGet)
+                          ? WidgetUtils.whiteKuang(
+                              'assets/images/mine_gonghui.png',
+                              '公会中心',
+                              isShenHe)
+                          : WidgetUtils.commonSizedBox(0, 0),
+                      (identity == 'president' && isGet)
+                          ? WidgetUtils.whiteKuang(
+                              'assets/images/mine_huizhang.png',
+                              '会长后台',
+                              isShenHe)
+                          : WidgetUtils.commonSizedBox(0, 0),
                       (isAgent != 1 && isGet)
                           ? WidgetUtils.whiteKuang(
-                          'assets/images/mine_yaoqing.jpg', '邀请有礼', false) : WidgetUtils.commonSizedBox(0, 0),
+                              'assets/images/mine_yaoqing.jpg', '邀请有礼', false)
+                          : WidgetUtils.commonSizedBox(0, 0),
                       isAgent == 1
                           ? WidgetUtils.whiteKuang(
                               'assets/images/mine_quan.png', '全民代理', false)
@@ -828,7 +682,8 @@ class _MinePageState extends State<MinePage> {
                         child: Row(
                           children: [
                             Image(
-                              image: const AssetImage('assets/images/mine_wurao.jpg'),
+                              image: const AssetImage(
+                                  'assets/images/mine_wurao.jpg'),
                               width: ConfigScreenUtil.autoHeight40,
                               height: ConfigScreenUtil.autoHeight40,
                             ),
@@ -838,25 +693,31 @@ class _MinePageState extends State<MinePage> {
                             WidgetUtils.onlyText(
                                 '勿扰模式',
                                 StyleUtils.getCommonTextStyle(
-                                    color: Colors.black, fontSize: ScreenUtil().setSp(29))),
+                                    color: Colors.black,
+                                    fontSize: ScreenUtil().setSp(29))),
                             const Expanded(child: Text('')),
-                            isWROk ? Transform.translate(offset: Offset(15.h,0),child: Transform.scale(
-                              scale: 0.8,
-                              child: CupertinoSwitch(
-                                value: _switchValue,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _switchValue = value;
-                                    if(value == false){
-                                      doPostSetDisturb('0');
-                                    }else{
-                                      doPostSetDisturb('1');
-                                    }
-                                  });
-                                },
-                                activeColor: MyColors.homeTopBG,
-                              ),
-                            ),) : const Text(''),
+                            isWROk
+                                ? Transform.translate(
+                                    offset: Offset(15.h, 0),
+                                    child: Transform.scale(
+                                      scale: 0.8,
+                                      child: CupertinoSwitch(
+                                        value: _switchValue,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _switchValue = value;
+                                            if (value == false) {
+                                              doPostSetDisturb('0');
+                                            } else {
+                                              doPostSetDisturb('1');
+                                            }
+                                          });
+                                        },
+                                        activeColor: MyColors.homeTopBG,
+                                      ),
+                                    ),
+                                  )
+                                : const Text(''),
                           ],
                         ),
                       ),
@@ -867,6 +728,192 @@ class _MinePageState extends State<MinePage> {
         ) /* add child content here */,
       ),
     );
+  }
+
+  final _nobleHeight = ScreenUtil().setWidth(117).obs;
+
+  /// 升级贵族
+  Widget _nobleCard() {
+    Widget img = AfterLayout(
+      callback: (RenderAfterLayout ral) {
+        _nobleHeight.value = ral.size.height / 1.3;
+      },
+      child: const Image(
+        image: AssetImage('assets/images/mine_gz_bg.png'),
+        width: double.infinity,
+        fit: BoxFit.fitWidth,
+      ),
+    );
+    Widget num = Row(
+      children: [
+        const Expanded(child: Text('')),
+
+        /// 关注
+        GestureDetector(
+          onTap: (() {
+            if (MyUtils.checkClick()) {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return CareHomePage(index: 0);
+              })).then((value) {
+                doPostMyIfon();
+              });
+            }
+          }),
+          child: Column(
+            children: [
+              // Container(
+              //   width: ScreenUtil().setHeight(80),
+              //   alignment: Alignment.topRight,
+              //   child: Text(
+              //       '+1',
+              //       style : StyleUtils.getCommonTextStyle(
+              //           color: MyColors.mineRed,
+              //           fontSize: ScreenUtil().setSp(25))),
+              // ),
+              const Expanded(child: Text('')),
+              WidgetUtils.onlyText(
+                  care,
+                  StyleUtils.getCommonTextStyle(
+                      color: Colors.black,
+                      fontSize: ScreenUtil().setSp(38),
+                      fontWeight: FontWeight.w600)),
+              WidgetUtils.onlyText(
+                  '关注',
+                  StyleUtils.getCommonTextStyle(
+                      color: MyColors.mineGrey,
+                      fontSize: ScreenUtil().setSp(21))),
+              const Expanded(child: Text('')),
+            ],
+          ),
+        ),
+        const Expanded(flex: 2, child: Text('')),
+        GestureDetector(
+          onTap: (() {
+            if (MyUtils.checkClick()) {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return CareHomePage(index: 1);
+              })).then((value) {
+                doPostMyIfon();
+              });
+            }
+          }),
+          child: Column(
+            children: [
+              // Container(
+              //   width: ScreenUtil().setHeight(80),
+              //   alignment: Alignment.topRight,
+              //   child: Text(
+              //       '+1',
+              //       style : StyleUtils.getCommonTextStyle(
+              //           color: MyColors.mineRed,
+              //           fontSize: ScreenUtil().setSp(25))),
+              // ),
+              const Expanded(child: Text('')),
+              WidgetUtils.onlyText(
+                  beCare,
+                  StyleUtils.getCommonTextStyle(
+                      color: Colors.black,
+                      fontSize: ScreenUtil().setSp(38),
+                      fontWeight: FontWeight.w600)),
+              WidgetUtils.onlyText(
+                  '被关注',
+                  StyleUtils.getCommonTextStyle(
+                      color: MyColors.mineGrey,
+                      fontSize: ScreenUtil().setSp(21))),
+              const Expanded(child: Text('')),
+            ],
+          ),
+        ),
+        const Expanded(flex: 2, child: Text('')),
+        GestureDetector(
+          onTap: (() {
+            if (MyUtils.checkClick()) {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return CareHomePage(index: 2);
+              })).then((value) {
+                doPostMyIfon();
+              });
+            }
+          }),
+          child: Column(
+            children: [
+              // Container(
+              //   width: ScreenUtil().setHeight(80),
+              //   alignment: Alignment.topRight,
+              //   child: Text(
+              //       '+1',
+              //       style : StyleUtils.getCommonTextStyle(
+              //           color: MyColors.mineRed,
+              //           fontSize: ScreenUtil().setSp(25))),
+              // ),
+              const Expanded(child: Text('')),
+              WidgetUtils.onlyText(
+                  lookMe,
+                  StyleUtils.getCommonTextStyle(
+                      color: Colors.black,
+                      fontSize: ScreenUtil().setSp(38),
+                      fontWeight: FontWeight.w600)),
+              WidgetUtils.onlyText(
+                  '看过我',
+                  StyleUtils.getCommonTextStyle(
+                      color: MyColors.mineGrey,
+                      fontSize: ScreenUtil().setSp(21))),
+              const Expanded(child: Text('')),
+            ],
+          ),
+        ),
+        const Expanded(child: Text('')),
+      ],
+    );
+    return Obx(() => SizedBox(
+          width: double.infinity,
+          height: ScreenUtil().setWidth(120) + _nobleHeight.value,
+          child: Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              img,
+              GestureDetector(
+                onTap: (() {
+                  if (MyUtils.checkClick()) {
+                    MyUtils.goTransparentPageCom(context, const TequanPage());
+                  }
+                }),
+                child: Container(
+                  width: double.infinity,
+                  height: _nobleHeight.value,
+                  padding: EdgeInsets.only(right: 20.w),
+                  color: Colors.transparent,
+                  alignment: Alignment.centerRight,
+                  child: guizuType == 1
+                      ? WidgetUtils.myContainer(
+                          ScreenUtil().setWidth(45 * 1.3),
+                          ScreenUtil().setWidth(100 * 1.3),
+                          Colors.transparent,
+                          MyColors.mineOrange,
+                          '已开通',
+                          ScreenUtil().setSp(21),
+                          MyColors.mineOrange)
+                      : SizedBox(
+                          width: ScreenUtil().setWidth(116 * 1.3),
+                          height: ScreenUtil().setWidth(45 * 1.3),
+                          child: const SVGASimpleImage(
+                            assetsName: 'assets/svga/guizu_kt.svga',
+                          )),
+                ),
+              ),
+              Container(
+                  height: ScreenUtil().setWidth(120),
+                  margin: EdgeInsets.only(top: _nobleHeight.value),
+                  decoration: BoxDecoration(
+                    //背景
+                    color: Colors.white,
+                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                    borderRadius: BorderRadius.all(Radius.circular(30.w)),
+                  ),
+                  child: num)
+            ],
+          ),
+        ));
   }
 
   /// 我的详情
@@ -918,9 +965,9 @@ class _MinePageState extends State<MinePage> {
             }
             kefuUid = bean.data!.kefuUid.toString();
             kefuAvatar = bean.data!.kefuAvatar!;
-            if(bean.data!.isDisturb == 0){
+            if (bean.data!.isDisturb == 0) {
               _switchValue = false;
-            }else{
+            } else {
               _switchValue = true;
             }
             isWROk = true;
@@ -997,15 +1044,15 @@ class _MinePageState extends State<MinePage> {
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
-            if(isDisturb == "0"){
+            if (isDisturb == "0") {
               MyToastUtils.showToastBottom('勿扰模式已关闭');
-            }else{
+            } else {
               MyToastUtils.showToastBottom('勿扰模式已开启，您现在只可收到互关用户消息');
             }
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
