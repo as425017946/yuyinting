@@ -136,6 +136,8 @@ dependencies:
   get: ^4.6.5
   # 工具
   flukit: ^3.0.1
+  # 网络状态
+  connectivity_plus: ^4.0.2
 
 
 dev_dependencies:

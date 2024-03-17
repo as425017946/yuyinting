@@ -44,6 +44,7 @@ class Data {
   String? waveGifImg;
   String? avatarFrameImg;
   String? avatarFrameGifImg;
+  String? waveName;
 
   Data(
       {this.id,
@@ -61,7 +62,8 @@ class Data {
         this.waveImg,
         this.waveGifImg,
         this.avatarFrameImg,
-        this.avatarFrameGifImg});
+        this.avatarFrameGifImg,
+        this.waveName});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -80,6 +82,7 @@ class Data {
     waveGifImg = json['wave_gif_img'];
     avatarFrameImg = json['avatar_frame_img'];
     avatarFrameGifImg = json['avatar_frame_gif_img'];
+    waveName = json['wave_name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -100,6 +103,7 @@ class Data {
     data['wave_gif_img'] = this.waveGifImg;
     data['avatar_frame_img'] = this.avatarFrameImg;
     data['avatar_frame_gif_img'] = this.avatarFrameGifImg;
+    data['wave_name'] = this.waveName;
     return data;
   }
 }
