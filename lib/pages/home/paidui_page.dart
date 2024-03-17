@@ -246,7 +246,11 @@ class _PaiduiPageState extends State<PaiduiPage>
                                           ? MyColors.paiduiOrange
                                           : index == 5
                                               ? MyColors.paiduiPurple
-                                              : MyColors.btn_d,
+                                              : index == 6
+                                                  ? MyColors.paiduiXQ
+                                                  : index == 7
+                                                      ? MyColors.btn_d
+                                                      : MyColors.paiduiDC,
                               roomType,
                               index == 2
                                   ? 'assets/images/paidui_nvshen.png'
@@ -1098,8 +1102,8 @@ class _PaiduiPageState extends State<PaiduiPage>
                             child: WidgetUtils.myContainer(
                                 ScreenUtil().setHeight(40),
                                 ScreenUtil().setHeight(90),
-                                index == 6 ? MyColors.btn_d : MyColors.homeBG,
-                                index == 6 ? MyColors.btn_d : MyColors.homeBG,
+                                index == 6 ? MyColors.paiduiXQ : MyColors.homeBG,
+                                index == 6 ? MyColors.paiduiXQ : MyColors.homeBG,
                                 '交友',
                                 ScreenUtil().setSp(28),
                                 index == 6 ? Colors.white : MyColors.g6),
@@ -1124,10 +1128,10 @@ class _PaiduiPageState extends State<PaiduiPage>
                                       ScreenUtil().setHeight(40),
                                       ScreenUtil().setHeight(90),
                                       index == listFL[0].type as int
-                                          ? MyColors.paiduiRed
+                                          ? MyColors.btn_d
                                           : MyColors.homeBG,
                                       index == listFL[0].type as int
-                                          ? MyColors.paiduiRed
+                                          ? MyColors.btn_d
                                           : MyColors.homeBG,
                                       listFL[0].title!,
                                       ScreenUtil().setSp(28),
@@ -1158,10 +1162,10 @@ class _PaiduiPageState extends State<PaiduiPage>
                                       ScreenUtil().setHeight(40),
                                       ScreenUtil().setHeight(90),
                                       index == listFL[1].type as int
-                                          ? MyColors.paiduiRed
+                                          ? MyColors.paiduiDC
                                           : MyColors.homeBG,
                                       index == listFL[1].type as int
-                                          ? MyColors.paiduiRed
+                                          ? MyColors.paiduiDC
                                           : MyColors.homeBG,
                                       listFL[1].title!,
                                       ScreenUtil().setSp(28),
@@ -1189,8 +1193,8 @@ class _PaiduiPageState extends State<PaiduiPage>
                             child: WidgetUtils.myContainer(
                                 ScreenUtil().setHeight(40),
                                 ScreenUtil().setHeight(90),
-                                index == 4 ? MyColors.origin : MyColors.homeBG,
-                                index == 4 ? MyColors.origin : MyColors.homeBG,
+                                index == 4 ? MyColors.paiduiDC : MyColors.homeBG,
+                                index == 4 ? MyColors.paiduiDC : MyColors.homeBG,
                                 '新厅',
                                 ScreenUtil().setSp(28),
                                 index == 4 ? Colors.white : MyColors.g6),

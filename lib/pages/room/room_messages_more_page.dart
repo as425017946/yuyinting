@@ -7,6 +7,7 @@ import 'package:flutter_sound/public/flutter_sound_player.dart';
 import 'package:im_flutter_sdk/im_flutter_sdk.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:yuyinting/pages/room/room_send_info_sl_page.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 
 import '../../bean/Common_bean.dart';
@@ -22,7 +23,6 @@ import '../../utils/event_utils.dart';
 import '../../utils/log_util.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
-import '../../utils/regex_formatter.dart';
 import '../../utils/style_utils.dart';
 import '../../widget/SwiperPage.dart';
 import '../message/geren/people_info_page.dart';
@@ -47,12 +47,11 @@ class RoomMessagesMorePage extends StatefulWidget {
 }
 
 class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
-  TextEditingController controller = TextEditingController();
   ScrollController _scrollController = ScrollController();
   FlutterSoundPlayer? _mPlayer = FlutterSoundPlayer();
   bool playRecord = false; //音频文件播放状态
   List<String> imgList = [];
-  var listen, listenHB;
+  var listen, listenHB, listenSL;
   int length = 0;
   String isGZ = '0';
 
@@ -69,6 +68,22 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
     listenHB = eventBus.on<HongBaoBack>().listen((event) {
       LogE('发送了===');
       saveHBinfo(event.info);
+    });
+
+    listenSL = eventBus.on<siliaoBack>().listen((event) {
+      if(event.title == '私聊消息'){
+        //判断表情发送
+        if (event.info.trim().length > 50) {
+          MyToastUtils.showToastBottom(
+              '单条消息要小于50个字呦~');
+        } else {
+          if(event.info.trim().isEmpty){
+            MyToastUtils.showToastBottom('请输入要发送的信息');
+          }else{
+            doPostCanSendUser(1,event.info.trim());
+          }
+        }
+      }
     });
   }
 
@@ -192,13 +207,19 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
             children: [
               WidgetUtils.commonSizedBox(0, 15.w),
               GestureDetector(
-                onTap: ((){
-                  if(MyUtils.checkClick()){
+                onTap: (() {
+                  if (MyUtils.checkClick()) {
                     // 如果点击的是自己，进入自己的主页
-                    if(allData2[i]['whoUid'] != sp.getString('user_id')){
-                      sp.setString('other_id', allData2[i]['otherUid'].toString());
-                      MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: allData2[i]['otherUid'].toString(),title: '小主页',));
-                    }else{
+                    if (allData2[i]['whoUid'] != sp.getString('user_id')) {
+                      sp.setString(
+                          'other_id', allData2[i]['otherUid'].toString());
+                      MyUtils.goTransparentRFPage(
+                          context,
+                          PeopleInfoPage(
+                            otherId: allData2[i]['otherUid'].toString(),
+                            title: '小主页',
+                          ));
+                    } else {
                       MyUtils.goTransparentRFPage(context, const MyInfoPage());
                     }
                   }
@@ -500,19 +521,28 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                     ),
               WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(10)),
               GestureDetector(
-                onTap: ((){
-                  if(MyUtils.checkClick()){
+                onTap: (() {
+                  if (MyUtils.checkClick()) {
                     // 如果点击的是自己，进入自己的主页
-                    if(allData2[i]['whoUid'] != sp.getString('user_id')){
-                      sp.setString('other_id', allData2[i]['otherUid'].toString());
-                      MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: allData2[i]['otherUid'].toString(),title: '小主页',));
-                    }else{
+                    if (allData2[i]['whoUid'] != sp.getString('user_id')) {
+                      sp.setString(
+                          'other_id', allData2[i]['otherUid'].toString());
+                      MyUtils.goTransparentRFPage(
+                          context,
+                          PeopleInfoPage(
+                            otherId: allData2[i]['otherUid'].toString(),
+                            title: '小主页',
+                          ));
+                    } else {
                       MyUtils.goTransparentRFPage(context, const MyInfoPage());
                     }
                   }
                 }),
-                child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(80),
-                    ScreenUtil().setHeight(80), 40.h, allData2[i]['headNetImg']),
+                child: WidgetUtils.CircleImageNet(
+                    ScreenUtil().setHeight(80),
+                    ScreenUtil().setHeight(80),
+                    40.h,
+                    allData2[i]['headNetImg']),
               ),
               WidgetUtils.commonSizedBox(0, 15.w),
             ],
@@ -703,6 +733,13 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                       child: Row(
                         children: [
                           Expanded(
+                              child: GestureDetector(
+                            onTap: (() {
+                              if (MyUtils.checkClick()) {
+                                MyUtils.goTransparentPage(
+                                    context, const RoomSendInfoSLPage());
+                              }
+                            }),
                             child: Container(
                               height: 78.h,
                               width: double.infinity,
@@ -713,71 +750,20 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                                 color: MyColors.roomXZ2,
                                 //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(38)),
+                                BorderRadius.all(Radius.circular(38)),
                               ),
-                              child: TextField(
-                                textInputAction: TextInputAction.send,
-                                // 设置为发送按钮
-                                controller: controller,
-                                inputFormatters: [
-                                  RegexFormatter(
-                                      regex: MyUtils.regexFirstNotNull),
-                                  LengthLimitingTextInputFormatter(50) //限制输入长度
-                                ],
-                                style: StyleUtils.loginTextStyle,
-                                onSubmitted: (value) {
-                                  //判断表情发送
-                                  if (MyUtils.checkClick()) {
-                                    if (controller.text.length > 50) {
-                                      MyToastUtils.showToastBottom(
-                                          '单条消息要小于50个字呦~');
-                                    } else {
-                                      if(controller.text.trim().isEmpty){
-                                        MyToastUtils.showToastBottom('请输入要发送的信息');
-                                      }else{
-                                        doPostCanSendUser(1);
-                                      }
-                                    }
-                                  }
-                                },
-                                decoration: InputDecoration(
-                                  // border: InputBorder.none,
-                                  // labelText: "请输入用户名",
-                                  // icon: Icon(Icons.people), //前面的图标
-                                  hintText: '请输入信息...',
-                                  hintStyle: StyleUtils.loginHintTextStyle,
-
-                                  contentPadding:
-                                      const EdgeInsets.only(top: 0, bottom: 0),
-                                  border: const OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.transparent),
-                                  ),
-                                  enabledBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.transparent,
-                                    ),
-                                  ),
-                                  disabledBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.transparent,
-                                    ),
-                                  ),
-                                  focusedBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Colors.transparent,
-                                    ),
-                                  ),
-                                  // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
-                                ),
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                '请输入信息...',
+                                style: StyleUtils.loginHintTextStyle,
                               ),
                             ),
-                          ),
+                          )),
                           GestureDetector(
                             onTap: (() {
                               //判断图片发送
                               if (MyUtils.checkClick()) {
-                                doPostCanSendUser(2);
+                                doPostCanSendUser(2,'');
                               }
                             }),
                             child: WidgetUtils.showImages(
@@ -789,7 +775,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                           GestureDetector(
                             onTap: (() {
                               if (MyUtils.checkClick()) {
-                                doPostCanSendUser(4);
+                                doPostCanSendUser(4,'');
                               }
                             }),
                             child: WidgetUtils.showImages(
@@ -897,9 +883,6 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
           };
           // 插入数据
           await databaseHelper.insertData('messageSLTable', params);
-          setState(() {
-            controller.text = '';
-          });
           break;
         case MyHttpConfig.errorloginCode:
           // ignore: use_build_context_synchronously
@@ -1020,7 +1003,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
   }
 
   /// 能否发私聊
-  Future<void> doPostCanSendUser(int type) async {
+  Future<void> doPostCanSendUser(int type, String info) async {
     Map<String, dynamic> params = <String, dynamic>{'uid': widget.otherUid};
     try {
       CommonBean bean = await DataUtils.postCanSendUser(params);
@@ -1028,8 +1011,9 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
         case MyHttpConfig.successCode:
           //可以发私聊跳转 type 1发表情 2图片 3录音 4红包
           if (type == 1) {
-            MyUtils.sendMessage(widget.otherUid, controller.text.trim().toString());
-            doPostSendUserMsg(controller.text.trim().toString());
+            MyUtils.sendMessage(
+                widget.otherUid, info);
+            doPostSendUserMsg(info);
           } else if (type == 2) {
             onTapPickFromGallery();
           } else if (type == 4) {
@@ -1045,7 +1029,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -2152,6 +2153,47 @@ class _RoomPageState extends State<RoomPage>
       });
     });
   }
+// Connectivity 对象
+  final Connectivity _connectivity = Connectivity();
+
+  // 消息订阅
+  late StreamSubscription<ConnectivityResult> _subscription;
+
+  // 初始返回的网络状态
+  ConnectivityResult? _connectivityStatus;
+
+  // 初始化
+  Future<void> _init() async {
+    try {
+      //状态订阅
+      _subscription =
+          _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+    } on PlatformException catch (e) {
+      LogE('/*- $e');
+      LogE('/*- 连接网络出现了异常');
+    }
+  }
+
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    setState(() {
+      _connectivityStatus = result;
+    });
+    if(_engine == null){
+      initAgora();
+    }
+    LogE('/*- ${_connectivityStatus?.toString()}');
+    if (result == ConnectivityResult.mobile) {
+      LogE('/*- 成功连接移动网络');
+    } else if (result == ConnectivityResult.wifi) {
+      LogE('/*- 成功连接WIFI');
+    } else if (result == ConnectivityResult.ethernet) {
+      LogE('/*- 成功连接到以太网');
+    } else if (result == ConnectivityResult.vpn) {
+      LogE('/*- 成功连接vpn网络');
+    } else if (result == ConnectivityResult.none) {
+      LogE('/*- 没有连接到任何网络');
+    }
+  }
 
   //上下麦刷新更新本地状态使用
   void doUpdateInfo(Map<String, String>? map, String status) {
@@ -2253,6 +2295,10 @@ class _RoomPageState extends State<RoomPage>
             listM[i].nickname = map!['nickname'].toString();
             listM[i].avatar = map!['avatar'].toString();
             listM[i].charm = int.parse(map!['charm'].toString());
+            listM[i].avatarFrameImg = '';
+            listM[i].avatarFrameGifImg = map!['avatar_gif_img'].toString();
+            listM[i].waveGifImg = map!['wave_gif_img'].toString();
+            listM[i].waveName = map!['wave_name'].toString();
             if (listM[i].serialNumber == 1) {
               m1 = true;
             } else if (listM[i].serialNumber == 2) {
@@ -2699,6 +2745,7 @@ class _RoomPageState extends State<RoomPage>
     animationControllerBG.dispose();
     animationControllerSL.dispose();
     animationControllerZJ.dispose();
+    _subscription.cancel();
     // TODO: implement dispose
     super.dispose();
   }
@@ -2906,6 +2953,7 @@ class _RoomPageState extends State<RoomPage>
           clientRoleType: ClientRoleType.clientRoleBroadcaster),
       uid: int.parse(sp.getString('user_id').toString()),
     );
+    _init();
   }
 
   ///更新9个麦序的开麦状态
@@ -3681,6 +3729,7 @@ class _RoomPageState extends State<RoomPage>
               listM[i].waveGifImg = bean.data![i].waveGifImg;
               listM[i].avatarFrameImg = bean.data![i].avatarFrameImg;
               listM[i].avatarFrameGifImg = bean.data![i].avatarFrameGifImg;
+              listM[i].waveName = bean.data![i].waveName;
               if (i == 0) {
                 m1 = bean.data![0].uid == 0 ? false : true;
               } else if (i == 1) {

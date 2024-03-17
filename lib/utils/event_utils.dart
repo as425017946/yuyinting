@@ -297,3 +297,11 @@ class hfJoinBack {
   String title;
   hfJoinBack({required this.roomID,required this.title});
 }
+
+
+/// 厅内私聊发送信息
+class siliaoBack {
+  String info;
+  String title;
+  siliaoBack({required this.info,required this.title});
+}

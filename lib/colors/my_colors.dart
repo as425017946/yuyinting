@@ -55,6 +55,8 @@ class MyColors{
   static const Color paiduiBlue = Color(0xFF4A9DF0);
   static const Color paiduiRed = Color(0xFFf04aa8);
   static const Color paiduiPurple = Color(0xFF8D74F5);
+  static const Color paiduiDC = Color(0xFFf04a4a);
+  static const Color paiduiXQ = Color(0xFF40dfc9);
   static const Color mineGrey = Color(0xFF8D8FA2);
   static const Color mineOrange = Color(0xFFF3CF95);
   static const Color mineYellow = Color(0xFFFFF2D1);
