@@ -1315,7 +1315,7 @@ class WidgetUtils {
         //背景
         color: boxColors,
         //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-        borderRadius: const BorderRadius.all(Radius.circular(30.0)),
+        borderRadius: BorderRadius.all(Radius.circular(height / 2)),
         border: Border.all(width: 1, color: borderColors),
       ),
       child: Text(

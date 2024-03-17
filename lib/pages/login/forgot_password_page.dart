@@ -181,6 +181,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     }),
                     child: Container(
                       // width: ScreenUtil().setHeight(150),
+                      constraints:
+                          BoxConstraints(minWidth: ScreenUtil().setHeight(150)),
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: WidgetUtils.onlyText(
                           _autoCodeText,
