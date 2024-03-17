@@ -132,6 +132,10 @@ dependencies:
   just_audio: ^0.9.36
   # ping
   dart_ping: ^7.0.1
+  # 响应式框架
+  get: ^4.6.5
+  # 工具
+  flukit: ^3.0.1
 
 
 dev_dependencies:
