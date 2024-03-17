@@ -501,18 +501,20 @@ class WidgetUtils {
       alignment: Alignment.center,
       width: double.infinity,
       //边框设置
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         //背景
         color: MyColors.homeTopBG,
         //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-        borderRadius: BorderRadius.all(Radius.circular(25.0)),
+        borderRadius: BorderRadius.all(
+            Radius.circular(ConfigScreenUtil.autoHeight80 / 2)),
       ),
       child: MaterialButton(
         minWidth: double.infinity,
         height: ConfigScreenUtil.autoHeight90,
         splashColor: MyColors.blue,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(25)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+              Radius.circular(ConfigScreenUtil.autoHeight90 / 2)),
         ),
         onPressed: (() {
           if (MyUtils.checkClick()) {
@@ -539,14 +541,16 @@ class WidgetUtils {
         //背景
         color: color,
         //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-        borderRadius: const BorderRadius.all(Radius.circular(25.0)),
+        borderRadius: BorderRadius.all(
+            Radius.circular(ConfigScreenUtil.autoHeight80 / 2)),
       ),
       child: MaterialButton(
         minWidth: double.infinity,
         height: ConfigScreenUtil.autoHeight80,
         splashColor: MyColors.blue,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(25)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+              Radius.circular(ConfigScreenUtil.autoHeight80 / 2)),
         ),
         onPressed: (() {
           if (MyUtils.checkClick()) {
