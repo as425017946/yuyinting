@@ -83,7 +83,7 @@ class _ShoucangPageState extends State<ShoucangPage>
       onTap: (() {
         if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
           setState(() {
-            sp.setBool('joinRoom',true);
+            sp.setBool('joinRoom', true);
           });
           doPostBeforeJoin(_list[index].id.toString());
         }
@@ -132,11 +132,11 @@ class _ShoucangPageState extends State<ShoucangPage>
 
   ///没有收藏使用
   Widget _initlistdata2(context, index) {
-    return GestureDetector(
+    final view = GestureDetector(
       onTap: (() {
         if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
           setState(() {
-            sp.setBool('joinRoom',true);
+            sp.setBool('joinRoom', true);
           });
           doPostBeforeJoin(listTJ[index].id.toString());
         }
@@ -181,6 +181,7 @@ class _ShoucangPageState extends State<ShoucangPage>
         ),
       ),
     );
+    return FittedBox(child: view);
   }
 
   @override
@@ -265,9 +266,9 @@ class _ShoucangPageState extends State<ShoucangPage>
                       child: OptionGridView(
                         itemCount: listTJ.length,
                         rowCount: 2,
-                        mainAxisSpacing: 15,
+                        mainAxisSpacing: (15 * 2).w,
                         // 上下间距
-                        crossAxisSpacing: 30,
+                        crossAxisSpacing: (30 * 2).w,
                         //左右间距
                         itemBuilder: _initlistdata2,
                       ),
@@ -357,10 +358,10 @@ class _ShoucangPageState extends State<ShoucangPage>
   /// 加入房间前
   Future<void> doPostBeforeJoin(roomID) async {
     //判断房间id是否为空的
-    if(sp.getString('roomID') == null || sp.getString('').toString().isEmpty){
-    }else{
+    if (sp.getString('roomID') == null || sp.getString('').toString().isEmpty) {
+    } else {
       // 不是空的，并且不是之前进入的房间
-      if(sp.getString('roomID').toString() != roomID){
+      if (sp.getString('roomID').toString() != roomID) {
         sp.setString('roomID', roomID);
         eventBus.fire(SubmitButtonBack(title: '加入其他房间'));
       }
@@ -388,7 +389,7 @@ class _ShoucangPageState extends State<ShoucangPage>
           break;
         default:
           setState(() {
-            sp.setBool('joinRoom',false);
+            sp.setBool('joinRoom', false);
           });
           MyToastUtils.showToastBottom(bean.msg!);
           break;
@@ -396,7 +397,7 @@ class _ShoucangPageState extends State<ShoucangPage>
       Loading.dismiss();
     } catch (e) {
       setState(() {
-        sp.setBool('joinRoom',false);
+        sp.setBool('joinRoom', false);
       });
       Loading.dismiss();
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
@@ -429,7 +430,7 @@ class _ShoucangPageState extends State<ShoucangPage>
           break;
         default:
           setState(() {
-            sp.setBool('joinRoom',false);
+            sp.setBool('joinRoom', false);
           });
           MyToastUtils.showToastBottom(bean.msg!);
           break;
@@ -437,7 +438,7 @@ class _ShoucangPageState extends State<ShoucangPage>
       Loading.dismiss();
     } catch (e) {
       setState(() {
-        sp.setBool('joinRoom',false);
+        sp.setBool('joinRoom', false);
       });
       Loading.dismiss();
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);

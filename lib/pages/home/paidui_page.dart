@@ -225,7 +225,7 @@ class _PaiduiPageState extends State<PaiduiPage>
                                   StyleUtils.getCommonTextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.w600,
-                                      fontSize: 14))),
+                                      fontSize: (14 * 2).sp))),
                           index == 4
                               ? WidgetUtils.showImages(
                                   'assets/images/room_xinting_tj.png',
@@ -771,60 +771,14 @@ class _PaiduiPageState extends State<PaiduiPage>
                   list.isNotEmpty
                       ? SizedBox(
                           width: double.infinity,
-                          height: ScreenUtil().setHeight(280),
-                          child: Row(
-                            children: [
-                              list.isNotEmpty
-                                  ? GestureDetector(
-                                      onTap: (() {
-                                        if (MyUtils.checkClick() &&
-                                            sp.getBool('joinRoom') == false) {
-                                          setState(() {
-                                            sp.setBool('joinRoom', true);
-                                          });
-                                          doPostBeforeJoin(
-                                              list[0].id.toString());
-                                        }
-                                      }),
-                                      child: Stack(
-                                        alignment: Alignment.topRight,
-                                        children: [
-                                          WidgetUtils.CircleImageNet(
-                                              ScreenUtil().setHeight(280),
-                                              ScreenUtil().setHeight(280),
-                                              10,
-                                              list[0].coverImg!),
-                                          Transform.translate(
-                                            offset: const Offset(-5, -5),
-                                            child: WidgetUtils.showImages(
-                                                'assets/images/paidui_one.png',
-                                                ScreenUtil().setHeight(84),
-                                                ScreenUtil().setWidth(79)),
-                                          ),
-                                          Positioned(
-                                              bottom: 10.h,
-                                              left: 10.h,
-                                              child: SizedBox(
-                                                width: 270.h,
-                                                child: Text(
-                                                  list[0].roomName!,
-                                                  style: StyleUtils
-                                                      .getCommonTextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 30.sp),
-                                                ),
-                                              ))
-                                        ],
-                                      ),
-                                    )
-                                  : SizedBox(
-                                      height: 280.h,
-                                      width: 280.h,
-                                    ),
-                              const Expanded(child: Text('')),
-                              Column(
+                          child: FittedBox(
+                            child: SizedBox(
+                              width: ScreenUtil()
+                                  .setHeight(280 + 137.5 + 137.5 + 20),
+                              height: ScreenUtil().setHeight(280),
+                              child: Row(
                                 children: [
-                                  list.length > 1
+                                  list.isNotEmpty
                                       ? GestureDetector(
                                           onTap: (() {
                                             if (MyUtils.checkClick() &&
@@ -834,190 +788,266 @@ class _PaiduiPageState extends State<PaiduiPage>
                                                 sp.setBool('joinRoom', true);
                                               });
                                               doPostBeforeJoin(
-                                                  list[1].id.toString());
+                                                  list[0].id.toString());
                                             }
                                           }),
                                           child: Stack(
                                             alignment: Alignment.topRight,
                                             children: [
                                               WidgetUtils.CircleImageNet(
-                                                  ScreenUtil().setHeight(137.5),
-                                                  ScreenUtil().setHeight(137.5),
+                                                  ScreenUtil().setHeight(280),
+                                                  ScreenUtil().setHeight(280),
                                                   10,
-                                                  list[1].coverImg!),
+                                                  list[0].coverImg!),
                                               Transform.translate(
-                                                offset: const Offset(-5, -4),
+                                                offset: const Offset(-5, -5),
                                                 child: WidgetUtils.showImages(
-                                                    'assets/images/paidui_two.png',
-                                                    ScreenUtil().setHeight(60),
-                                                    ScreenUtil().setWidth(55)),
+                                                    'assets/images/paidui_one.png',
+                                                    ScreenUtil().setHeight(84),
+                                                    ScreenUtil().setWidth(79)),
                                               ),
                                               Positioned(
-                                                  bottom: 5.h,
-                                                  left: 5.h,
+                                                  bottom: 10.h,
+                                                  left: 10.h,
                                                   child: SizedBox(
-                                                    width: 132.5.h,
+                                                    width: 270.h,
                                                     child: Text(
-                                                      list[1].roomName!,
-                                                      maxLines: 1,
+                                                      list[0].roomName!,
                                                       style: StyleUtils
                                                           .getCommonTextStyle(
                                                               color:
                                                                   Colors.white,
-                                                              fontSize: 21.sp),
+                                                              fontSize: 30.sp),
                                                     ),
                                                   ))
                                             ],
                                           ),
                                         )
                                       : SizedBox(
-                                          height: 137.5.h,
-                                          width: 137.5.h,
+                                          height: 280.h,
+                                          width: 280.h,
                                         ),
                                   const Expanded(child: Text('')),
-                                  list.length > 3
-                                      ? GestureDetector(
-                                          onTap: (() {
-                                            if (MyUtils.checkClick() &&
-                                                sp.getBool('joinRoom') ==
-                                                    false) {
-                                              setState(() {
-                                                sp.setBool('joinRoom', true);
-                                              });
-                                              doPostBeforeJoin(
-                                                  list[3].id.toString());
-                                            }
-                                          }),
-                                          child: Stack(
-                                            children: [
-                                              WidgetUtils.CircleImageNet(
-                                                  ScreenUtil().setHeight(137.5),
-                                                  ScreenUtil().setHeight(137.5),
-                                                  10,
-                                                  list[3].coverImg!),
-                                              Positioned(
-                                                  bottom: 5.h,
-                                                  left: 5.h,
-                                                  child: SizedBox(
-                                                    width: 132.5.h,
-                                                    child: Text(
-                                                      list[3].roomName!,
-                                                      maxLines: 1,
-                                                      style: StyleUtils
-                                                          .getCommonTextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize: 21.sp),
-                                                    ),
-                                                  ))
-                                            ],
-                                          ),
-                                        )
-                                      : SizedBox(
-                                          height: 137.5.h,
-                                          width: 137.5.h,
-                                        ),
-                                ],
-                              ),
-                              const Expanded(child: Text('')),
-                              Column(
-                                children: [
-                                  list.length > 2
-                                      ? GestureDetector(
-                                          onTap: (() {
-                                            if (MyUtils.checkClick() &&
-                                                sp.getBool('joinRoom') ==
-                                                    false) {
-                                              setState(() {
-                                                sp.setBool('joinRoom', true);
-                                              });
-                                              doPostBeforeJoin(
-                                                  list[2].id.toString());
-                                            }
-                                          }),
-                                          child: Stack(
-                                            alignment: Alignment.topRight,
-                                            children: [
-                                              WidgetUtils.CircleImageNet(
-                                                  ScreenUtil().setHeight(137.5),
-                                                  ScreenUtil().setHeight(137.5),
-                                                  10,
-                                                  list[2].coverImg!),
-                                              Transform.translate(
-                                                offset: const Offset(-5, -3),
-                                                child: WidgetUtils.showImages(
-                                                    'assets/images/paidui_three.png',
-                                                    ScreenUtil().setHeight(60),
-                                                    ScreenUtil().setWidth(42)),
+                                  Column(
+                                    children: [
+                                      list.length > 1
+                                          ? GestureDetector(
+                                              onTap: (() {
+                                                if (MyUtils.checkClick() &&
+                                                    sp.getBool('joinRoom') ==
+                                                        false) {
+                                                  setState(() {
+                                                    sp.setBool(
+                                                        'joinRoom', true);
+                                                  });
+                                                  doPostBeforeJoin(
+                                                      list[1].id.toString());
+                                                }
+                                              }),
+                                              child: Stack(
+                                                alignment: Alignment.topRight,
+                                                children: [
+                                                  WidgetUtils.CircleImageNet(
+                                                      ScreenUtil()
+                                                          .setHeight(137.5),
+                                                      ScreenUtil()
+                                                          .setHeight(137.5),
+                                                      10,
+                                                      list[1].coverImg!),
+                                                  Transform.translate(
+                                                    offset:
+                                                        const Offset(-5, -4),
+                                                    child: WidgetUtils.showImages(
+                                                        'assets/images/paidui_two.png',
+                                                        ScreenUtil()
+                                                            .setHeight(60),
+                                                        ScreenUtil()
+                                                            .setWidth(55)),
+                                                  ),
+                                                  Positioned(
+                                                      bottom: 5.h,
+                                                      left: 5.h,
+                                                      child: SizedBox(
+                                                        width: 132.5.h,
+                                                        child: Text(
+                                                          list[1].roomName!,
+                                                          maxLines: 1,
+                                                          style: StyleUtils
+                                                              .getCommonTextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize:
+                                                                      21.sp),
+                                                        ),
+                                                      ))
+                                                ],
                                               ),
-                                              Positioned(
-                                                  bottom: 5.h,
-                                                  left: 5.h,
-                                                  child: SizedBox(
-                                                    width: 132.5.h,
-                                                    child: Text(
-                                                      list[2].roomName!,
-                                                      maxLines: 1,
-                                                      style: StyleUtils
-                                                          .getCommonTextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize: 21.sp),
-                                                    ),
-                                                  ))
-                                            ],
-                                          ),
-                                        )
-                                      : SizedBox(
-                                          height: 137.5.h,
-                                          width: 137.5.h,
-                                        ),
+                                            )
+                                          : SizedBox(
+                                              height: 137.5.h,
+                                              width: 137.5.h,
+                                            ),
+                                      const Expanded(child: Text('')),
+                                      list.length > 3
+                                          ? GestureDetector(
+                                              onTap: (() {
+                                                if (MyUtils.checkClick() &&
+                                                    sp.getBool('joinRoom') ==
+                                                        false) {
+                                                  setState(() {
+                                                    sp.setBool(
+                                                        'joinRoom', true);
+                                                  });
+                                                  doPostBeforeJoin(
+                                                      list[3].id.toString());
+                                                }
+                                              }),
+                                              child: Stack(
+                                                children: [
+                                                  WidgetUtils.CircleImageNet(
+                                                      ScreenUtil()
+                                                          .setHeight(137.5),
+                                                      ScreenUtil()
+                                                          .setHeight(137.5),
+                                                      10,
+                                                      list[3].coverImg!),
+                                                  Positioned(
+                                                      bottom: 5.h,
+                                                      left: 5.h,
+                                                      child: SizedBox(
+                                                        width: 132.5.h,
+                                                        child: Text(
+                                                          list[3].roomName!,
+                                                          maxLines: 1,
+                                                          style: StyleUtils
+                                                              .getCommonTextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize:
+                                                                      21.sp),
+                                                        ),
+                                                      ))
+                                                ],
+                                              ),
+                                            )
+                                          : SizedBox(
+                                              height: 137.5.h,
+                                              width: 137.5.h,
+                                            ),
+                                    ],
+                                  ),
                                   const Expanded(child: Text('')),
-                                  list.length > 4
-                                      ? GestureDetector(
-                                          onTap: (() {
-                                            if (MyUtils.checkClick() &&
-                                                sp.getBool('joinRoom') ==
-                                                    false) {
-                                              setState(() {
-                                                sp.setBool('joinRoom', true);
-                                              });
-                                              doPostBeforeJoin(
-                                                  list[4].id.toString());
-                                            }
-                                          }),
-                                          child: Stack(
-                                            children: [
-                                              WidgetUtils.CircleImageNet(
-                                                  ScreenUtil().setHeight(137.5),
-                                                  ScreenUtil().setHeight(137.5),
-                                                  10,
-                                                  list[4].coverImg!),
-                                              Positioned(
-                                                  bottom: 5.h,
-                                                  left: 5.h,
-                                                  child: SizedBox(
-                                                    width: 132.5.h,
-                                                    child: Text(
-                                                      list[4].roomName!,
-                                                      maxLines: 1,
-                                                      style: StyleUtils
-                                                          .getCommonTextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize: 21.sp),
-                                                    ),
-                                                  ))
-                                            ],
-                                          ),
-                                        )
-                                      : SizedBox(
-                                          height: 137.5.h,
-                                          width: 137.5.h,
-                                        ),
+                                  Column(
+                                    children: [
+                                      list.length > 2
+                                          ? GestureDetector(
+                                              onTap: (() {
+                                                if (MyUtils.checkClick() &&
+                                                    sp.getBool('joinRoom') ==
+                                                        false) {
+                                                  setState(() {
+                                                    sp.setBool(
+                                                        'joinRoom', true);
+                                                  });
+                                                  doPostBeforeJoin(
+                                                      list[2].id.toString());
+                                                }
+                                              }),
+                                              child: Stack(
+                                                alignment: Alignment.topRight,
+                                                children: [
+                                                  WidgetUtils.CircleImageNet(
+                                                      ScreenUtil()
+                                                          .setHeight(137.5),
+                                                      ScreenUtil()
+                                                          .setHeight(137.5),
+                                                      10,
+                                                      list[2].coverImg!),
+                                                  Transform.translate(
+                                                    offset:
+                                                        const Offset(-5, -3),
+                                                    child: WidgetUtils.showImages(
+                                                        'assets/images/paidui_three.png',
+                                                        ScreenUtil()
+                                                            .setHeight(60),
+                                                        ScreenUtil()
+                                                            .setWidth(42)),
+                                                  ),
+                                                  Positioned(
+                                                      bottom: 5.h,
+                                                      left: 5.h,
+                                                      child: SizedBox(
+                                                        width: 132.5.h,
+                                                        child: Text(
+                                                          list[2].roomName!,
+                                                          maxLines: 1,
+                                                          style: StyleUtils
+                                                              .getCommonTextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize:
+                                                                      21.sp),
+                                                        ),
+                                                      ))
+                                                ],
+                                              ),
+                                            )
+                                          : SizedBox(
+                                              height: 137.5.h,
+                                              width: 137.5.h,
+                                            ),
+                                      const Expanded(child: Text('')),
+                                      list.length > 4
+                                          ? GestureDetector(
+                                              onTap: (() {
+                                                if (MyUtils.checkClick() &&
+                                                    sp.getBool('joinRoom') ==
+                                                        false) {
+                                                  setState(() {
+                                                    sp.setBool(
+                                                        'joinRoom', true);
+                                                  });
+                                                  doPostBeforeJoin(
+                                                      list[4].id.toString());
+                                                }
+                                              }),
+                                              child: Stack(
+                                                children: [
+                                                  WidgetUtils.CircleImageNet(
+                                                      ScreenUtil()
+                                                          .setHeight(137.5),
+                                                      ScreenUtil()
+                                                          .setHeight(137.5),
+                                                      10,
+                                                      list[4].coverImg!),
+                                                  Positioned(
+                                                      bottom: 5.h,
+                                                      left: 5.h,
+                                                      child: SizedBox(
+                                                        width: 132.5.h,
+                                                        child: Text(
+                                                          list[4].roomName!,
+                                                          maxLines: 1,
+                                                          style: StyleUtils
+                                                              .getCommonTextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize:
+                                                                      21.sp),
+                                                        ),
+                                                      ))
+                                                ],
+                                              ),
+                                            )
+                                          : SizedBox(
+                                              height: 137.5.h,
+                                              width: 137.5.h,
+                                            ),
+                                    ],
+                                  ),
                                 ],
                               ),
-                            ],
+                            ),
                           ),
                         )
                       : WidgetUtils.commonSizedBox(0, 0),
@@ -1102,8 +1132,12 @@ class _PaiduiPageState extends State<PaiduiPage>
                             child: WidgetUtils.myContainer(
                                 ScreenUtil().setHeight(40),
                                 ScreenUtil().setHeight(90),
-                                index == 6 ? MyColors.paiduiXQ : MyColors.homeBG,
-                                index == 6 ? MyColors.paiduiXQ : MyColors.homeBG,
+                                index == 6
+                                    ? MyColors.paiduiXQ
+                                    : MyColors.homeBG,
+                                index == 6
+                                    ? MyColors.paiduiXQ
+                                    : MyColors.homeBG,
                                 '交友',
                                 ScreenUtil().setSp(28),
                                 index == 6 ? Colors.white : MyColors.g6),
@@ -1193,8 +1227,12 @@ class _PaiduiPageState extends State<PaiduiPage>
                             child: WidgetUtils.myContainer(
                                 ScreenUtil().setHeight(40),
                                 ScreenUtil().setHeight(90),
-                                index == 4 ? MyColors.paiduiDC : MyColors.homeBG,
-                                index == 4 ? MyColors.paiduiDC : MyColors.homeBG,
+                                index == 4
+                                    ? MyColors.paiduiDC
+                                    : MyColors.homeBG,
+                                index == 4
+                                    ? MyColors.paiduiDC
+                                    : MyColors.homeBG,
                                 '新厅',
                                 ScreenUtil().setSp(28),
                                 index == 4 ? Colors.white : MyColors.g6),
