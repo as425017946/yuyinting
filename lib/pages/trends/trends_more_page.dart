@@ -130,13 +130,19 @@ class _TrendsMorePageState extends State<TrendsMorePage>
             children: [
               GestureDetector(
                 onTap: (() {
-                  if(MyUtils.checkClick()){
+                  if (MyUtils.checkClick()) {
                     // 如果点击的是自己，进入自己的主页
-                    if(sp.getString('user_id').toString() == comList[i].uid.toString()){
+                    if (sp.getString('user_id').toString() ==
+                        comList[i].uid.toString()) {
                       MyUtils.goTransparentRFPage(context, const MyInfoPage());
-                    }else{
+                    } else {
                       sp.setString('other_id', comList[i].uid.toString());
-                      MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: comList[i].uid.toString(),title: '其他',));
+                      MyUtils.goTransparentRFPage(
+                          context,
+                          PeopleInfoPage(
+                            otherId: comList[i].uid.toString(),
+                            title: '其他',
+                          ));
                     }
                   }
                 }),
@@ -593,7 +599,8 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                                       MyUtils.goTransparentRFPage(
                                           context,
                                           PeopleInfoPage(
-                                            otherId: myUid,title: '其他',
+                                            otherId: myUid,
+                                            title: '其他',
                                           ));
                                     }
                                   }),
@@ -730,7 +737,7 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                             ),
                             WidgetUtils.commonSizedBox(0, 5),
                             SizedBox(
-                              width: ScreenUtil().setHeight(80),
+                              width: ScreenUtil().setWidth(80 * 1.3),
                               child: WidgetUtils.onlyText(
                                   like == 0 ? '抢首赞' : like.toString(),
                                   StyleUtils.getCommonTextStyle(

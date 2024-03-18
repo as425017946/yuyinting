@@ -17,11 +17,12 @@ import '../../../utils/my_utils.dart';
 import '../../../widget/SwiperPage.dart';
 import '../../trends/PagePreviewVideo.dart';
 import '../../trends/trends_more_page.dart';
+
 ///动态
 
 class DongtaiPage extends StatefulWidget {
   String otherId;
-  DongtaiPage({Key? key,required this.otherId}) : super(key: key);
+  DongtaiPage({Key? key, required this.otherId}) : super(key: key);
 
   @override
   State<DongtaiPage> createState() => _DongtaiPageState();
@@ -31,10 +32,9 @@ class _DongtaiPageState extends State<DongtaiPage> {
   List<ListDT> _list = [];
   var length = 1;
   final RefreshController _refreshController =
-  RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: false);
 
   int page = 1;
-
 
   void _onRefresh() async {
     // monitor network fetch
@@ -62,11 +62,11 @@ class _DongtaiPageState extends State<DongtaiPage> {
     _refreshController.loadComplete();
   }
 
-
   Widget _itemPeople(BuildContext context, int i) {
     return GestureDetector(
-      onTap: ((){
-        MyUtils.goTransparentRFPage(context, TrendsMorePage( note_id: _list[i].id.toString(),index: i));
+      onTap: (() {
+        MyUtils.goTransparentRFPage(
+            context, TrendsMorePage(note_id: _list[i].id.toString(), index: i));
       }),
       child: Container(
         width: double.infinity,
@@ -84,14 +84,21 @@ class _DongtaiPageState extends State<DongtaiPage> {
               ),
             ),
             WidgetUtils.commonSizedBox(10, 0),
-            _list[i].type == 2 ? showVideo(_list[i].imgUrl!) : showImag(_list[i].imgUrl!, i),
+            _list[i].type == 2
+                ? showVideo(_list[i].imgUrl!)
+                : showImag(_list[i].imgUrl!, i),
             WidgetUtils.commonSizedBox(10, 0),
             Row(
               children: [
-                WidgetUtils.showImages(_list[i].isLike == 0 ? 'assets/images/trends_zan1.png' : 'assets/images/trends_zan_2.png', 18, 18),
+                WidgetUtils.showImages(
+                    _list[i].isLike == 0
+                        ? 'assets/images/trends_zan1.png'
+                        : 'assets/images/trends_zan_2.png',
+                    18,
+                    18),
                 WidgetUtils.commonSizedBox(0, 5),
                 SizedBox(
-                  width: ScreenUtil().setHeight(80),
+                  width: ScreenUtil().setWidth(80 * 1.3),
                   child: WidgetUtils.onlyText(
                       _list[i].like == 0 ? '抢首赞' : _list[i].like.toString(),
                       StyleUtils.getCommonTextStyle(
@@ -118,11 +125,11 @@ class _DongtaiPageState extends State<DongtaiPage> {
     );
   }
 
-
   late VideoPlayerController _videoController;
   Widget showVideo(List<String> listImg) {
     String a = listImg[0];
-    _videoController = VideoPlayerController.network(a,
+    _videoController = VideoPlayerController.network(
+      a,
       videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
     );
     return Row(
@@ -149,7 +156,8 @@ class _DongtaiPageState extends State<DongtaiPage> {
               ),
               GestureDetector(
                 onTap: () {
-                  MyUtils.goTransparentRFPage(context, PagePreviewVideo(url: a));
+                  MyUtils.goTransparentRFPage(
+                      context, PagePreviewVideo(url: a));
                 },
                 child: const Icon(
                   Icons.play_circle_fill_outlined,
@@ -223,19 +231,22 @@ class _DongtaiPageState extends State<DongtaiPage> {
           height: ScreenUtil().setHeight(350),
           child: Row(
             children: [
-              WidgetUtils.CircleImageNet(ScreenUtil().setHeight(350),
-                  ScreenUtil().setHeight(350), ScreenUtil().setHeight(10), listImg[0]),
+              WidgetUtils.CircleImageNet(
+                  ScreenUtil().setHeight(350),
+                  ScreenUtil().setHeight(350),
+                  ScreenUtil().setHeight(10),
+                  listImg[0]),
               WidgetUtils.commonSizedBox(0, 10),
               Expanded(
                   child: Column(
-                    children: [
-                      WidgetUtils.CircleImageNet(ScreenUtil().setHeight(170),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[1]),
-                      const Spacer(),
-                      WidgetUtils.CircleImageNet(ScreenUtil().setHeight(170),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[2]),
-                    ],
-                  )),
+                children: [
+                  WidgetUtils.CircleImageNet(ScreenUtil().setHeight(170),
+                      double.infinity, ScreenUtil().setHeight(10), listImg[1]),
+                  const Spacer(),
+                  WidgetUtils.CircleImageNet(ScreenUtil().setHeight(170),
+                      double.infinity, ScreenUtil().setHeight(10), listImg[2]),
+                ],
+              )),
             ],
           ),
         ),
@@ -256,24 +267,36 @@ class _DongtaiPageState extends State<DongtaiPage> {
               Row(
                 children: [
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(240),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[0])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(240),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[0])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(240),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[1])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(240),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[1])),
                 ],
               ),
               WidgetUtils.commonSizedBox(ScreenUtil().setHeight(10), 10),
               Row(
                 children: [
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(240),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[2])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(240),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[2])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(240),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[3])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(240),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[3])),
                 ],
               )
             ],
@@ -296,35 +319,53 @@ class _DongtaiPageState extends State<DongtaiPage> {
               Row(
                 children: [
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[0])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[0])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[1])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[1])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[2])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[2])),
                 ],
               ),
               WidgetUtils.commonSizedBox(ScreenUtil().setHeight(10), 10),
               Row(
                 children: [
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[3])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[3])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[4])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[4])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
                       child: Opacity(
-                        opacity: 0,
-                        child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                            double.infinity, ScreenUtil().setHeight(10), listImg[0]),
-                      )),
+                    opacity: 0,
+                    child: WidgetUtils.CircleImageNet(
+                        ScreenUtil().setHeight(180),
+                        double.infinity,
+                        ScreenUtil().setHeight(10),
+                        listImg[0]),
+                  )),
                 ],
               )
             ],
@@ -347,32 +388,50 @@ class _DongtaiPageState extends State<DongtaiPage> {
               Row(
                 children: [
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[0])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[0])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[1])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[1])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[2])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[2])),
                 ],
               ),
               WidgetUtils.commonSizedBox(ScreenUtil().setHeight(10), 10),
               Row(
                 children: [
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[3])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[3])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[4])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[4])),
                   WidgetUtils.commonSizedBox(0, 10),
                   Expanded(
-                      child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(180),
-                          double.infinity, ScreenUtil().setHeight(10), listImg[5])),
+                      child: WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(180),
+                          double.infinity,
+                          ScreenUtil().setHeight(10),
+                          listImg[5])),
                 ],
               )
             ],
@@ -390,6 +449,7 @@ class _DongtaiPageState extends State<DongtaiPage> {
     super.initState();
     doPostUserList();
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -401,37 +461,35 @@ class _DongtaiPageState extends State<DongtaiPage> {
   Widget build(BuildContext context) {
     return length > 0
         ? SmartRefresher(
-      header: MyUtils.myHeader(),
-      footer: MyUtils.myFotter(),
-      controller: _refreshController,
-      enablePullUp: true,
-      onLoading: _onLoading,
-      onRefresh: _onRefresh,
-      child: ListView.builder(
-        padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
-        itemBuilder: _itemPeople,
-        itemCount: _list.length,
-      ),
-    )
+            header: MyUtils.myHeader(),
+            footer: MyUtils.myFotter(),
+            controller: _refreshController,
+            enablePullUp: true,
+            onLoading: _onLoading,
+            onRefresh: _onRefresh,
+            child: ListView.builder(
+              padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
+              itemBuilder: _itemPeople,
+              itemCount: _list.length,
+            ),
+          )
         : Container(
-      height: double.infinity,
-      alignment: Alignment.center,
-      child: Column(
-        children: [
-          const Expanded(child: Text('')),
-          WidgetUtils.showImages('assets/images/no_have.png', 100, 100),
-          WidgetUtils.commonSizedBox(10, 0),
-          WidgetUtils.onlyTextCenter(
-              '暂无动态信息',
-              StyleUtils.getCommonTextStyle(
-                  color: MyColors.g6,
-                  fontSize: ScreenUtil().setSp(26))),
-          const Expanded(child: Text('')),
-        ],
-      ),
-    );
+            height: double.infinity,
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                const Expanded(child: Text('')),
+                WidgetUtils.showImages('assets/images/no_have.png', 100, 100),
+                WidgetUtils.commonSizedBox(10, 0),
+                WidgetUtils.onlyTextCenter(
+                    '暂无动态信息',
+                    StyleUtils.getCommonTextStyle(
+                        color: MyColors.g6, fontSize: ScreenUtil().setSp(26))),
+                const Expanded(child: Text('')),
+              ],
+            ),
+          );
   }
-
 
   /// 用户动态
   Future<void> doPostUserList() async {
@@ -450,23 +508,23 @@ class _DongtaiPageState extends State<DongtaiPage> {
               _list.clear();
             }
             if (bean.data!.list!.isNotEmpty) {
-              for(int i =0; i < bean.data!.list!.length; i++){
+              for (int i = 0; i < bean.data!.list!.length; i++) {
                 _list.add(bean.data!.list![i]);
               }
 
               length = bean.data!.list!.length;
-            }else{
+            } else {
               if (page == 1) {
                 length = 0;
               }
             }
-            if(bean.data!.list!.length < MyConfig.pageSize){
+            if (bean.data!.list!.length < MyConfig.pageSize) {
               _refreshController.loadNoData();
             }
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:

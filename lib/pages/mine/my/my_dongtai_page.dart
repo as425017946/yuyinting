@@ -73,11 +73,8 @@ class _MyDongtaiPageState extends State<MyDongtaiPage> {
           GestureDetector(
             onTap: (() {
               if (MyUtils.checkClick()) {
-                MyUtils.goTransparentRFPage(
-                    context,
-                    TrendsMorePage(
-                      note_id: _list[i].id.toString(), index: i
-                    ));
+                MyUtils.goTransparentRFPage(context,
+                    TrendsMorePage(note_id: _list[i].id.toString(), index: i));
               }
             }),
             child: Text(
@@ -93,11 +90,8 @@ class _MyDongtaiPageState extends State<MyDongtaiPage> {
           GestureDetector(
             onTap: (() {
               if (MyUtils.checkClick()) {
-                MyUtils.goTransparentRFPage(
-                    context,
-                    TrendsMorePage(
-                      note_id: _list[i].id.toString(), index: i
-                    ));
+                MyUtils.goTransparentRFPage(context,
+                    TrendsMorePage(note_id: _list[i].id.toString(), index: i));
               }
             }),
             child: _list[i].type == 2
@@ -113,8 +107,7 @@ class _MyDongtaiPageState extends State<MyDongtaiPage> {
                     MyUtils.goTransparentRFPage(
                         context,
                         TrendsMorePage(
-                            note_id: _list[i].id.toString(), index: i
-                        ));
+                            note_id: _list[i].id.toString(), index: i));
                   }
                 }),
                 child: WidgetUtils.showImages(
@@ -131,12 +124,11 @@ class _MyDongtaiPageState extends State<MyDongtaiPage> {
                     MyUtils.goTransparentRFPage(
                         context,
                         TrendsMorePage(
-                            note_id: _list[i].id.toString(), index: i
-                        ));
+                            note_id: _list[i].id.toString(), index: i));
                   }
                 }),
                 child: SizedBox(
-                  width: ScreenUtil().setHeight(80),
+                  width: ScreenUtil().setWidth(80 * 1.3),
                   child: WidgetUtils.onlyText(
                       _list[i].like == 0 ? '抢首赞' : _list[i].like.toString(),
                       StyleUtils.getCommonTextStyle(
@@ -151,8 +143,7 @@ class _MyDongtaiPageState extends State<MyDongtaiPage> {
                     MyUtils.goTransparentRFPage(
                         context,
                         TrendsMorePage(
-                            note_id: _list[i].id.toString(), index: i
-                        ));
+                            note_id: _list[i].id.toString(), index: i));
                   }
                 }),
                 child: WidgetUtils.showImages(
@@ -165,8 +156,7 @@ class _MyDongtaiPageState extends State<MyDongtaiPage> {
                     MyUtils.goTransparentRFPage(
                         context,
                         TrendsMorePage(
-                            note_id: _list[i].id.toString(), index: i
-                        ));
+                            note_id: _list[i].id.toString(), index: i));
                   }
                 }),
                 child: WidgetUtils.onlyText(
@@ -178,8 +168,8 @@ class _MyDongtaiPageState extends State<MyDongtaiPage> {
               ),
               const Spacer(),
               GestureDetector(
-                onTap: ((){
-                  exitDEL(context,i,_list[i].id.toString());
+                onTap: (() {
+                  exitDEL(context, i, _list[i].id.toString());
                 }),
                 child: WidgetUtils.onlyText(
                     '删除',
@@ -581,15 +571,15 @@ class _MyDongtaiPageState extends State<MyDongtaiPage> {
   }
 
   /// 离开编辑页
-  Future<void> exitDEL(BuildContext context,int index, String noteID) async {
+  Future<void> exitDEL(BuildContext context, int index, String noteID) async {
     return showDialog(
         context: context,
         builder: (context) {
           return CustomDialog(
             title: '是否确认删除此动态？',
             callback: (res) {
-              if(MyUtils.checkClick()) {
-                doPostDelDT(index,noteID);
+              if (MyUtils.checkClick()) {
+                doPostDelDT(index, noteID);
               }
             },
             content: '',
@@ -645,7 +635,7 @@ class _MyDongtaiPageState extends State<MyDongtaiPage> {
   }
 
   /// 删除动态
-  Future<void> doPostDelDT(int index,String noteID) async {
+  Future<void> doPostDelDT(int index, String noteID) async {
     Map<String, dynamic> params = <String, dynamic>{
       'note_id': noteID,
     };
@@ -660,7 +650,7 @@ class _MyDongtaiPageState extends State<MyDongtaiPage> {
           MyToastUtils.showToastBottom('删除成功！');
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:

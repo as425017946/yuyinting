@@ -30,7 +30,8 @@ import 'dongtai_page.dart';
 class PeopleInfoPage extends StatefulWidget {
   String otherId;
   String title;
-  PeopleInfoPage({Key? key, required this.otherId, required this.title}) : super(key: key);
+  PeopleInfoPage({Key? key, required this.otherId, required this.title})
+      : super(key: key);
 
   @override
   State<PeopleInfoPage> createState() => _PeopleInfoPageState();
@@ -167,10 +168,11 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                       children: [
                         GestureDetector(
                           onTap: (() {
-                            if(MyUtils.checkClick()){
+                            if (MyUtils.checkClick()) {
                               Navigator.of(context).push(PageRouteBuilder(
                                   opaque: false,
-                                  pageBuilder: (context, animation, secondaryAnimation) {
+                                  pageBuilder:
+                                      (context, animation, secondaryAnimation) {
                                     return SwiperPage(imgList: imageList);
                                   }));
                             }
@@ -183,7 +185,8 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                                   ScreenUtil().setHeight(130),
                                   headImg),
                               // 头像框静态图
-                              (avatarFrameGifImg.isEmpty && avatarFrameImg.isNotEmpty)
+                              (avatarFrameGifImg.isEmpty &&
+                                      avatarFrameImg.isNotEmpty)
                                   ? WidgetUtils.CircleHeadImage(
                                       ScreenUtil().setHeight(160),
                                       ScreenUtil().setHeight(160),
@@ -231,16 +234,17 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                                                 ? MyColors.dtBlue
                                                 : MyColors.dtPink,
                                             //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(20.0)),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(
+                                                    ScreenUtil().setHeight(25) /
+                                                        2)),
                                           ),
                                           child: WidgetUtils.showImages(
                                               sex == 1
                                                   ? 'assets/images/nan.png'
                                                   : 'assets/images/nv.png',
-                                              12,
-                                              12),
+                                              (12 * 2).w,
+                                              (12 * 2).w),
                                         )
                                       : const Text(''),
                                   WidgetUtils.commonSizedBox(0, 10.h),
@@ -317,7 +321,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                                                 ScreenUtil().setHeight(30),
                                                 ScreenUtil().setHeight(85)),
                                             Positioned(
-                                                left: 45.w,
+                                                left: 35.h, //45.w,
                                                 child: Stack(
                                                   alignment: Alignment.center,
                                                   children: [
