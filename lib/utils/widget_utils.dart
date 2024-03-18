@@ -808,6 +808,30 @@ class WidgetUtils {
     );
   }
 
+  ///圆角图片 本地 自适应高度
+  static Widget CircleImageAssAuto(double width, double radius, String url) {
+    return Container(
+      width: width,
+      //超出部分，可裁剪
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(radius),
+      ),
+      child: (url.contains('com.leimu.yuyinting') || url.contains('storage'))
+          ? Image.file(
+              File(url),
+              fit: BoxFit.fitWidth,
+              gaplessPlayback: true,
+            )
+          : Image(
+              image: AssetImage(url),
+              width: width,
+              fit: BoxFit.fitWidth,
+              gaplessPlayback: true,
+            ),
+    );
+  }
+
   ///圆角图片 本地，加载失败展示网络图
   static Widget CircleImageAssNet(
       double height, double width, double radius, String url, String netUrl) {
@@ -946,6 +970,31 @@ class WidgetUtils {
           // return const Icon(Icons.error);
           return CircleImageAss(
             height,
+            width,
+            ScreenUtil().setHeight(10),
+            'assets/images/img_placeholder.png',
+          );
+        },
+      ),
+    );
+  }
+
+  ///展示图片使用 自适应高度
+  static Widget showImagesNetAuto(String url, double width) {
+    return SizedBox(
+      width: width,
+      child: CachedNetworkImage(
+        imageUrl: url,
+        fit: BoxFit.cover,
+        placeholder: (context, url) => CircleImageAssAuto(
+          width,
+          ScreenUtil().setHeight(10),
+          'assets/images/img_placeholder.png',
+        ),
+        errorWidget: (context, url, error) {
+          LogE('加载错误提示 $error');
+          // return const Icon(Icons.error);
+          return CircleImageAssAuto(
             width,
             ScreenUtil().setHeight(10),
             'assets/images/img_placeholder.png',
