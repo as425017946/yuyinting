@@ -546,108 +546,14 @@ class _MinePageState extends State<MinePage> {
               /// 展示信息
               WidgetUtils.containerNo(
                   pad: 20,
-                  height: 770.h,
+                  // height: 770.h,
                   width: double.infinity,
                   color: Colors.white,
                   ra: 20,
                   w: Column(
                     children: [
                       /// 钱包 礼物记录
-                      Row(
-                        children: [
-                          Expanded(
-                              child: GestureDetector(
-                            onTap: (() {
-                              if (MyUtils.checkClick()) {
-                                Navigator.pushNamed(context, 'WalletPage');
-                              }
-                            }),
-                            child: WidgetUtils.containerNo(
-                                height: ScreenUtil().setHeight(110),
-                                width: double.infinity,
-                                color: MyColors.mineYellow,
-                                ra: 10,
-                                w: Row(
-                                  children: [
-                                    WidgetUtils.commonSizedBox(0, 10),
-                                    Expanded(
-                                      child: Column(
-                                        children: [
-                                          const Expanded(child: Text('')),
-                                          WidgetUtils.onlyText(
-                                              '我的钱包',
-                                              StyleUtils.getCommonTextStyle(
-                                                  color: Colors.black,
-                                                  fontSize:
-                                                      ScreenUtil().setSp(32),
-                                                  fontWeight: FontWeight.w600)),
-                                          WidgetUtils.onlyText(
-                                              '充值、兑换',
-                                              StyleUtils.getCommonTextStyle(
-                                                  color: MyColors.mineGrey,
-                                                  fontSize:
-                                                      ScreenUtil().setSp(22))),
-                                          const Expanded(child: Text('')),
-                                        ],
-                                      ),
-                                    ),
-                                    WidgetUtils.showImages(
-                                        'assets/images/mine_qianbao.png',
-                                        ScreenUtil().setHeight(67),
-                                        ScreenUtil().setHeight(67)),
-                                    WidgetUtils.commonSizedBox(0, 10),
-                                  ],
-                                )),
-                          )),
-                          WidgetUtils.commonSizedBox(0, 10),
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: (() {
-                                if (MyUtils.checkClick()) {
-                                  Navigator.pushNamed(context, 'LiwuPage');
-                                }
-                              }),
-                              child: WidgetUtils.containerNo(
-                                  height: ScreenUtil().setHeight(110),
-                                  width: double.infinity,
-                                  color: MyColors.minePink,
-                                  ra: 10,
-                                  w: Row(
-                                    children: [
-                                      WidgetUtils.commonSizedBox(0, 10),
-                                      Expanded(
-                                        child: Column(
-                                          children: [
-                                            const Expanded(child: Text('')),
-                                            WidgetUtils.onlyText(
-                                                '礼物记录',
-                                                StyleUtils.getCommonTextStyle(
-                                                    color: Colors.black,
-                                                    fontSize:
-                                                        ScreenUtil().setSp(32),
-                                                    fontWeight:
-                                                        FontWeight.w600)),
-                                            WidgetUtils.onlyText(
-                                                '收送礼物明细',
-                                                StyleUtils.getCommonTextStyle(
-                                                    color: MyColors.mineGrey,
-                                                    fontSize: ScreenUtil()
-                                                        .setSp(22))),
-                                            const Expanded(child: Text('')),
-                                          ],
-                                        ),
-                                      ),
-                                      WidgetUtils.showImages(
-                                          'assets/images/mine_liwu.png',
-                                          ScreenUtil().setHeight(67),
-                                          ScreenUtil().setHeight(67)),
-                                      WidgetUtils.commonSizedBox(0, 10),
-                                    ],
-                                  )),
-                            ),
-                          ),
-                        ],
-                      ),
+                      _collection(),
                       WidgetUtils.commonSizedBox(20, 0),
                       WidgetUtils.whiteKuang(
                           'assets/images/mine_zhuangban.png', '我的装扮', false),
@@ -730,13 +636,12 @@ class _MinePageState extends State<MinePage> {
     );
   }
 
-  final _nobleHeight = ScreenUtil().setWidth(117).obs;
-
   /// 升级贵族
   Widget _nobleCard() {
+    final height = ScreenUtil().setWidth(117).obs;
     Widget img = AfterLayout(
       callback: (RenderAfterLayout ral) {
-        _nobleHeight.value = ral.size.height / 1.3;
+        height.value = ral.size.height / 1.3;
       },
       child: const Image(
         image: AssetImage('assets/images/mine_gz_bg.png'),
@@ -867,7 +772,7 @@ class _MinePageState extends State<MinePage> {
     );
     return Obx(() => SizedBox(
           width: double.infinity,
-          height: ScreenUtil().setWidth(120) + _nobleHeight.value,
+          height: ScreenUtil().setWidth(120) + height.value,
           child: Stack(
             alignment: Alignment.topCenter,
             children: [
@@ -880,7 +785,7 @@ class _MinePageState extends State<MinePage> {
                 }),
                 child: Container(
                   width: double.infinity,
-                  height: _nobleHeight.value,
+                  height: height.value,
                   padding: EdgeInsets.only(right: 20.w),
                   color: Colors.transparent,
                   alignment: Alignment.centerRight,
@@ -903,7 +808,7 @@ class _MinePageState extends State<MinePage> {
               ),
               Container(
                   height: ScreenUtil().setWidth(120),
-                  margin: EdgeInsets.only(top: _nobleHeight.value),
+                  margin: EdgeInsets.only(top: height.value),
                   decoration: BoxDecoration(
                     //背景
                     color: Colors.white,
@@ -916,6 +821,190 @@ class _MinePageState extends State<MinePage> {
         ));
   }
 
+  /// 钱包 礼物记录
+  Widget _collection() {
+    final Widget wallet = GestureDetector(
+      onTap: (() {
+        if (MyUtils.checkClick()) {
+          Navigator.pushNamed(context, 'WalletPage');
+        }
+      }),
+      child: _collectionItem(
+        '我的钱包',
+        '充值、兑换',
+        MyColors.mineYellow,
+        const Image(
+          image: AssetImage('assets/images/mine_qianbao.png'),
+          fit: BoxFit.contain,
+        ),
+      ),
+    );
+    final Widget liwu = GestureDetector(
+      onTap: (() {
+        if (MyUtils.checkClick()) {
+          Navigator.pushNamed(context, 'LiwuPage');
+        }
+      }),
+      child: _collectionItem(
+        '礼物记录',
+        '收送礼物明细',
+        MyColors.minePink,
+        const Image(
+          image: AssetImage('assets/images/mine_liwu.png'),
+          fit: BoxFit.contain,
+        ),
+      ),
+    );
+    return Row(
+      children: [
+        Expanded(child: wallet),
+        SizedBox(width: 20.w),
+        Expanded(child: liwu),
+      ],
+    );
+  }
+
+  Widget _collectionItem(
+      String title, String content, Color color, Widget child) {
+    return FittedBox(
+      fit: BoxFit.fitWidth,
+      child: Container(
+        width: 306,
+        height: 133,
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: const BorderRadius.all(Radius.circular(20)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: StyleUtils.getCommonTextStyle(
+                        color: Colors.black,
+                        fontSize: 33,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      content,
+                      style: StyleUtils.getCommonTextStyle(
+                        color: MyColors.mineGrey,
+                        fontSize: 25,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: 67,
+                height: 69,
+                child: child,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+/*
+  Widget _collection1() {
+    return Row(
+      children: [
+        Expanded(
+            child: GestureDetector(
+          onTap: (() {
+            if (MyUtils.checkClick()) {
+              Navigator.pushNamed(context, 'WalletPage');
+            }
+          }),
+          child: WidgetUtils.containerNo(
+              height: ScreenUtil().setHeight(110),
+              width: double.infinity,
+              color: MyColors.mineYellow,
+              ra: 10,
+              w: Row(
+                children: [
+                  WidgetUtils.commonSizedBox(0, 10),
+                  Expanded(
+                    child: Column(
+                      children: [
+                        const Expanded(child: Text('')),
+                        WidgetUtils.onlyText(
+                            '我的钱包',
+                            StyleUtils.getCommonTextStyle(
+                                color: Colors.black,
+                                fontSize: ScreenUtil().setSp(32),
+                                fontWeight: FontWeight.w600)),
+                        WidgetUtils.onlyText(
+                            '充值、兑换',
+                            StyleUtils.getCommonTextStyle(
+                                color: MyColors.mineGrey,
+                                fontSize: ScreenUtil().setSp(22))),
+                        const Expanded(child: Text('')),
+                      ],
+                    ),
+                  ),
+                  WidgetUtils.showImages('assets/images/mine_qianbao.png',
+                      ScreenUtil().setHeight(67), ScreenUtil().setHeight(67)),
+                  WidgetUtils.commonSizedBox(0, 10),
+                ],
+              )),
+        )),
+        WidgetUtils.commonSizedBox(0, 10),
+        Expanded(
+          child: GestureDetector(
+            onTap: (() {
+              if (MyUtils.checkClick()) {
+                Navigator.pushNamed(context, 'LiwuPage');
+              }
+            }),
+            child: WidgetUtils.containerNo(
+                height: ScreenUtil().setHeight(110),
+                width: double.infinity,
+                color: MyColors.minePink,
+                ra: 10,
+                w: Row(
+                  children: [
+                    WidgetUtils.commonSizedBox(0, 10),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          const Expanded(child: Text('')),
+                          WidgetUtils.onlyText(
+                              '礼物记录',
+                              StyleUtils.getCommonTextStyle(
+                                  color: Colors.black,
+                                  fontSize: ScreenUtil().setSp(32),
+                                  fontWeight: FontWeight.w600)),
+                          WidgetUtils.onlyText(
+                              '收送礼物明细',
+                              StyleUtils.getCommonTextStyle(
+                                  color: MyColors.mineGrey,
+                                  fontSize: ScreenUtil().setSp(22))),
+                          const Expanded(child: Text('')),
+                        ],
+                      ),
+                    ),
+                    WidgetUtils.showImages('assets/images/mine_liwu.png',
+                        ScreenUtil().setHeight(67), ScreenUtil().setHeight(67)),
+                    WidgetUtils.commonSizedBox(0, 10),
+                  ],
+                )),
+          ),
+        ),
+      ],
+    );
+  }
+*/
   /// 我的详情
   Future<void> doPostMyIfon() async {
     Loading.show();
