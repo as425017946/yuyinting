@@ -53,7 +53,7 @@ class _SearchPageState extends State<SearchPage> {
         if (type == 0) {
           if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
             setState(() {
-              sp.setBool('joinRoom',true);
+              sp.setBool('joinRoom', true);
             });
             doPostBeforeJoin(listRoom[i].id.toString());
           }
@@ -68,7 +68,8 @@ class _SearchPageState extends State<SearchPage> {
               MyUtils.goTransparentRFPage(
                   context,
                   PeopleInfoPage(
-                    otherId: listUser[i].uid.toString(),title: '其他',
+                    otherId: listUser[i].uid.toString(),
+                    title: '其他',
                   ));
             }
           }
@@ -148,8 +149,7 @@ class _SearchPageState extends State<SearchPage> {
                         //背景
                         color: MyColors.home_hx,
                         //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(25.0)),
+                        borderRadius: BorderRadius.all(Radius.circular(50.h)),
                         //设置四周边框
                         border: Border.all(width: 1, color: MyColors.home_hx),
                       ),
@@ -273,8 +273,8 @@ class _SearchPageState extends State<SearchPage> {
                                       //背景
                                       color: MyColors.homeTopBG,
                                       //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(10.0)),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10.0)),
                                     ),
                                   ),
                                 ),
@@ -326,8 +326,8 @@ class _SearchPageState extends State<SearchPage> {
                                       //背景
                                       color: MyColors.homeTopBG,
                                       //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(10.0)),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10.0)),
                                     ),
                                   ),
                                 ),
@@ -345,7 +345,8 @@ class _SearchPageState extends State<SearchPage> {
                             type == 0
                                 ? listRoom.isNotEmpty
                                     ? ListView.builder(
-                                        padding: const EdgeInsets.only(top: 2.5),
+                                        padding:
+                                            const EdgeInsets.only(top: 2.5),
                                         itemBuilder: jilu,
                                         itemCount: listRoom.length,
                                       )
@@ -364,15 +365,16 @@ class _SearchPageState extends State<SearchPage> {
                                                 '暂无搜索房间',
                                                 StyleUtils.getCommonTextStyle(
                                                     color: MyColors.g6,
-                                                    fontSize:
-                                                        ScreenUtil().setSp(26))),
+                                                    fontSize: ScreenUtil()
+                                                        .setSp(26))),
                                             const Expanded(child: Text('')),
                                           ],
                                         ),
                                       )
                                 : listUser.isNotEmpty
                                     ? ListView.builder(
-                                        padding: const EdgeInsets.only(top: 2.5),
+                                        padding:
+                                            const EdgeInsets.only(top: 2.5),
                                         itemBuilder: jilu,
                                         itemCount: listUser.length,
                                       )
@@ -391,8 +393,8 @@ class _SearchPageState extends State<SearchPage> {
                                                 '暂无搜索人员',
                                                 StyleUtils.getCommonTextStyle(
                                                     color: MyColors.g6,
-                                                    fontSize:
-                                                        ScreenUtil().setSp(26))),
+                                                    fontSize: ScreenUtil()
+                                                        .setSp(26))),
                                             const Expanded(child: Text('')),
                                           ],
                                         ),
@@ -491,10 +493,10 @@ class _SearchPageState extends State<SearchPage> {
   /// 加入房间前
   Future<void> doPostBeforeJoin(roomID) async {
     //判断房间id是否为空的
-    if(sp.getString('roomID') == null || sp.getString('').toString().isEmpty){
-    }else{
+    if (sp.getString('roomID') == null || sp.getString('').toString().isEmpty) {
+    } else {
       // 不是空的，并且不是之前进入的房间
-      if(sp.getString('roomID').toString() != roomID){
+      if (sp.getString('roomID').toString() != roomID) {
         sp.setString('roomID', roomID);
         eventBus.fire(SubmitButtonBack(title: '加入其他房间'));
       }
@@ -522,7 +524,7 @@ class _SearchPageState extends State<SearchPage> {
           break;
         default:
           setState(() {
-            sp.setBool('joinRoom',false);
+            sp.setBool('joinRoom', false);
           });
           MyToastUtils.showToastBottom(bean.msg!);
           break;
@@ -530,7 +532,7 @@ class _SearchPageState extends State<SearchPage> {
       Loading.dismiss();
     } catch (e) {
       setState(() {
-        sp.setBool('joinRoom',false);
+        sp.setBool('joinRoom', false);
       });
       Loading.dismiss();
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
@@ -563,7 +565,7 @@ class _SearchPageState extends State<SearchPage> {
           break;
         default:
           setState(() {
-            sp.setBool('joinRoom',false);
+            sp.setBool('joinRoom', false);
           });
           MyToastUtils.showToastBottom(bean.msg!);
           break;
@@ -571,7 +573,7 @@ class _SearchPageState extends State<SearchPage> {
       Loading.dismiss();
     } catch (e) {
       setState(() {
-        sp.setBool('joinRoom',false);
+        sp.setBool('joinRoom', false);
       });
       Loading.dismiss();
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);

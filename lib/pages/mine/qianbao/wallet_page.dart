@@ -492,8 +492,6 @@ class _WalletPageState extends State<WalletPage> {
       _WalletPageAction(
         title: '提现',
         action: () {
-          MyUtils.goTransparentPageCom(context, const MineSMZPage());
-          return;
           if (sp.getString('shimingzhi').toString() == '1') {
             if (MyUtils.checkClick()) {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
