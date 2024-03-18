@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+import 'package:get/get.dart';
 
 import '../../bean/Common_bean.dart';
 import '../../bean/fenleiBean.dart';
@@ -774,7 +775,7 @@ class _PaiduiPageState extends State<PaiduiPage>
                           child: FittedBox(
                             child: SizedBox(
                               width: ScreenUtil()
-                                  .setHeight(280 + 137.5 + 137.5 + 20),
+                                  .setHeight(280 + 137.5 + 137.5 + 10),
                               height: ScreenUtil().setHeight(280),
                               child: Row(
                                 children: [
@@ -800,11 +801,11 @@ class _PaiduiPageState extends State<PaiduiPage>
                                                   10,
                                                   list[0].coverImg!),
                                               Transform.translate(
-                                                offset: const Offset(-5, -5),
+                                                offset: const Offset(-5, 0),
                                                 child: WidgetUtils.showImages(
                                                     'assets/images/paidui_one.png',
                                                     ScreenUtil().setHeight(84),
-                                                    ScreenUtil().setWidth(79)),
+                                                    ScreenUtil().setHeight(79)),
                                               ),
                                               Positioned(
                                                   bottom: 10.h,
@@ -855,14 +856,13 @@ class _PaiduiPageState extends State<PaiduiPage>
                                                       10,
                                                       list[1].coverImg!),
                                                   Transform.translate(
-                                                    offset:
-                                                        const Offset(-5, -4),
+                                                    offset: const Offset(-5, 0),
                                                     child: WidgetUtils.showImages(
                                                         'assets/images/paidui_two.png',
                                                         ScreenUtil()
                                                             .setHeight(60),
                                                         ScreenUtil()
-                                                            .setWidth(55)),
+                                                            .setHeight(55)),
                                                   ),
                                                   Positioned(
                                                       bottom: 5.h,
@@ -964,14 +964,13 @@ class _PaiduiPageState extends State<PaiduiPage>
                                                       10,
                                                       list[2].coverImg!),
                                                   Transform.translate(
-                                                    offset:
-                                                        const Offset(-5, -3),
+                                                    offset: const Offset(-5, 0),
                                                     child: WidgetUtils.showImages(
                                                         'assets/images/paidui_three.png',
                                                         ScreenUtil()
                                                             .setHeight(60),
                                                         ScreenUtil()
-                                                            .setWidth(42)),
+                                                            .setHeight(42)),
                                                   ),
                                                   Positioned(
                                                       bottom: 5.h,
