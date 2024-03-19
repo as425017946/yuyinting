@@ -164,10 +164,12 @@ class _TuijianPageState extends State<TuijianPage>
                   alignment: Alignment.center,
                   children: [
                     WidgetUtils.CircleHeadImage(
-                        70.h, 70.h, listAnchor[i].avatar!),
+                        (70 * 1.3).w, (70 * 1.3).w, listAnchor[i].avatar!),
                     listAnchor[i].live == 1
                         ? WidgetUtils.showImages(
-                            'assets/images/zhibozhong.webp', 80.h, 80.h)
+                            'assets/images/zhibozhong.webp',
+                            (80 * 1.3).w,
+                            (80 * 1.3).w)
                         : const Text(''),
                   ],
                 ),
@@ -186,7 +188,7 @@ class _TuijianPageState extends State<TuijianPage>
                               StyleUtils.getCommonTextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.w600,
-                                  fontSize: 14)),
+                                  fontSize: 14 * 2.w)),
                           WidgetUtils.commonSizedBox(0, 5),
                           listAnchor[i].gender != 0
                               ? Stack(
@@ -195,23 +197,24 @@ class _TuijianPageState extends State<TuijianPage>
                                         listAnchor[i].gender == 1
                                             ? 'assets/images/avj.png'
                                             : 'assets/images/avk.png',
-                                        15,
-                                        45),
+                                        15 * 2.w,
+                                        45 * 2.w),
                                     Container(
                                       padding: EdgeInsets.only(
                                           right: int.parse(listAnchor[i]
                                                       .age
                                                       .toString()) >
                                                   9
-                                              ? 15.h
-                                              : 20.h),
-                                      width: 45,
-                                      height: 15,
+                                              ? 15 * 1.3.w
+                                              : 20 * 1.3.w),
+                                      width: 45 * 2.w,
+                                      height: 15 * 2.w,
                                       alignment: Alignment.centerRight,
                                       child: Text(
                                         listAnchor[i].age.toString(),
                                         style: StyleUtils.getCommonTextStyle(
-                                            color: Colors.white, fontSize: 12),
+                                            color: Colors.white,
+                                            fontSize: 12 * 2.w),
                                       ),
                                     ),
                                   ],
@@ -246,8 +249,8 @@ class _TuijianPageState extends State<TuijianPage>
                   }
                 }),
                 child: Container(
-                  height: 80.h,
-                  width: 120.h,
+                  height: 80 * 1.3.w,
+                  width: 120 * 1.3.w,
                   color: Colors.transparent,
                   child: const SVGASimpleImage(
                     assetsName: 'assets/svga/home_gensui.svga',

@@ -282,12 +282,12 @@ class _HomePageState extends State<HomePage>
                                 _currentIndex == 3
                                     ? WidgetUtils.showImages(
                                         'assets/images/home_yx2.png',
-                                        ScreenUtil().setHeight(40),
-                                        ScreenUtil().setHeight(75))
+                                        ScreenUtil().setWidth(40 * 1.3),
+                                        ScreenUtil().setWidth(75 * 1.3))
                                     : WidgetUtils.showImagesFill(
                                         'assets/images/home_yx1.png',
-                                        ScreenUtil().setHeight(25),
-                                        ScreenUtil().setHeight(62)),
+                                        ScreenUtil().setWidth(25 * 1.3),
+                                        ScreenUtil().setWidth(62 * 1.3)),
                                 _currentIndex != 3
                                     ? WidgetUtils.commonSizedBox(3, 0)
                                     : WidgetUtils.commonSizedBox(0, 0)
@@ -345,7 +345,7 @@ class _HomePageState extends State<HomePage>
                           Navigator.pushNamed(context, 'RankingPage');
                         }),
                         child: WidgetUtils.showImages(
-                            "assets/images/b7y.png", 26, 30),
+                            "assets/images/b7y.png", (26 * 2).w, (30 * 2).w),
                       ),
                     ),
                   ],
@@ -530,9 +530,9 @@ class _HomePageState extends State<HomePage>
     File file;
     String path = '';
     if (Platform.isAndroid) {
-      if(type==1){
+      if (type == 1) {
         path = '/sdcard/Android/data/com.leimu.yuyinting/files/agorasdk.log';
-      }else{
+      } else {
         path = '/sdcard/Android/data/com.leimu.yuyinting/files/agoraapi.log';
       }
       file = File(path);
@@ -543,12 +543,13 @@ class _HomePageState extends State<HomePage>
             'type': type,
             "file": await MultipartFile.fromFile(
               path,
-              filename: type==1 ? 'agorasdk.log' : 'agoraapi.log',
+              filename: type == 1 ? 'agorasdk.log' : 'agoraapi.log',
             )
           },
         );
         BaseOptions option = BaseOptions(
-            contentType: 'multipart/form-data', responseType: ResponseType.plain);
+            contentType: 'multipart/form-data',
+            responseType: ResponseType.plain);
         option.headers["Authorization"] = sp.getString('user_token') ?? '';
         Dio dio = Dio(option);
         //application/json
@@ -562,11 +563,11 @@ class _HomePageState extends State<HomePage>
       } else {
         print('文件不存在');
       }
-    }else if (Platform.isIOS){
+    } else if (Platform.isIOS) {
       Directory tempDir = await getTemporaryDirectory();
-      if(type==1){
+      if (type == 1) {
         path = '${tempDir.path}/agorasdk.log';
-      }else{
+      } else {
         path = '${tempDir.path}/agoraapi.log';
       }
       LogE('ios地址 ${tempDir.path}');
@@ -579,12 +580,13 @@ class _HomePageState extends State<HomePage>
             'type': type,
             "file": await MultipartFile.fromFile(
               path,
-              filename: type==1 ? 'agorasdk.log' : 'agoraapi.log',
+              filename: type == 1 ? 'agorasdk.log' : 'agoraapi.log',
             )
           },
         );
         BaseOptions option = BaseOptions(
-            contentType: 'multipart/form-data', responseType: ResponseType.plain);
+            contentType: 'multipart/form-data',
+            responseType: ResponseType.plain);
         option.headers["Authorization"] = sp.getString('user_token') ?? '';
         Dio dio = Dio(option);
         //application/json
@@ -607,7 +609,8 @@ class _HomePageState extends State<HomePage>
       },
     );
     BaseOptions option = BaseOptions(
-        contentType: 'application/x-www-form-urlencoded', responseType: ResponseType.plain);
+        contentType: 'application/x-www-form-urlencoded',
+        responseType: ResponseType.plain);
     Dio dio = Dio(option);
     //application/json
     try {
@@ -626,7 +629,6 @@ class _HomePageState extends State<HomePage>
       } else {
         MyToastUtils.showToastBottom('IP获取失败~');
       }
-
     } catch (e) {
       // MyToastUtils.showToastBottom(MyConfig.errorTitleFile);
     }
@@ -661,6 +663,7 @@ class _HomePageState extends State<HomePage>
     sp.setString('versionStatus', buildNumber);
 
     sp.setString('app_version', version);
+
     /// 检查是否为模拟登录
     final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
@@ -680,7 +683,7 @@ class _HomePageState extends State<HomePage>
         case MyHttpConfig.successCode:
           if (int.parse(buildNumber) < int.parse(bean.data!.customUpdateNum!)) {
             if (Platform.isAndroid) {
-              if(androidInfo.isPhysicalDevice){
+              if (androidInfo.isPhysicalDevice) {
                 /// 手机登录
                 // ignore: use_build_context_synchronously
                 MyUtils.goTransparentPageCom(
@@ -690,8 +693,9 @@ class _HomePageState extends State<HomePage>
                       url: bean.data!.downloadUrl!,
                       info: bean.data!.summary!,
                       forceUpdate: bean.data!.forceUpdate!,
-                      title: 'android',));
-              }else{
+                      title: 'android',
+                    ));
+              } else {
                 /// 模拟器登录
                 // ignore: use_build_context_synchronously
                 MyUtils.goTransparentPageCom(
@@ -701,7 +705,8 @@ class _HomePageState extends State<HomePage>
                       url: bean.data!.moniDownloadUrl!,
                       info: bean.data!.summary!,
                       forceUpdate: bean.data!.forceUpdate!,
-                      title: 'android',));
+                      title: 'android',
+                    ));
               }
             } else {
               // ignore: use_build_context_synchronously
@@ -712,7 +717,8 @@ class _HomePageState extends State<HomePage>
                     url: bean.data!.downloadUrl!,
                     info: bean.data!.summary!,
                     forceUpdate: bean.data!.forceUpdate!,
-                    title: 'ios',));
+                    title: 'ios',
+                  ));
             }
           }
           break;
