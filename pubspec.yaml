@@ -138,6 +138,8 @@ dependencies:
   flukit: ^3.0.1
   # 网络状态
   connectivity_plus: ^4.0.2
+  # 获取包名
+  android_package_manager: 0.5.0
 
 
 dev_dependencies:

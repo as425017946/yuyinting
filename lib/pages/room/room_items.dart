@@ -1844,12 +1844,12 @@ class RoomItems {
                   (listm[8].avatarFrameGifImg!.isEmpty &&
                       listm[8].avatarFrameImg!.isNotEmpty) ? WidgetUtils
                       .CircleHeadImage(
-                      ScreenUtil().setHeight(140),
-                      ScreenUtil().setHeight(140),
+                      ScreenUtil().setHeight(150),
+                      ScreenUtil().setHeight(150),
                       listm[0].avatarFrameImg!) : const Text(''),
                   listm[8].avatarFrameGifImg!.isNotEmpty ? SizedBox(
-                    height: 140.h,
-                    width: 140.h,
+                    height: 150.h,
+                    width: 150.h,
                     child: SVGASimpleImage(
                       resUrl: listm[8].avatarFrameGifImg!,),
                   ) : const Text(''),
@@ -1919,7 +1919,20 @@ class RoomItems {
                       child: const SVGASimpleImage(
                         assetsName: 'assets/svga/room_choose_people.svga',),
                     ),
-                  ) : const Text('')
+                  ) : const Text(''),
+                  // Positioned(
+                  //   child: Container(
+                  //     height: 180.h,
+                  //     width: 180.h,
+                  //     //超出部分，可裁剪
+                  //     clipBehavior: Clip.hardEdge,
+                  //     decoration: BoxDecoration(
+                  //       borderRadius: BorderRadius.circular(50.h),
+                  //     ),
+                  //     child: const SVGASimpleImage(
+                  //       assetsName: 'assets/svga/db.svga',),
+                  //   ),
+                  // )
                 ],
               ),
             ),
@@ -2030,13 +2043,13 @@ class RoomItems {
                       (listm[0].avatarFrameGifImg!.isEmpty &&
                           listm[0].avatarFrameImg!.isNotEmpty) ? WidgetUtils
                           .CircleHeadImage(
-                          ScreenUtil().setHeight(110),
-                          ScreenUtil().setHeight(110),
+                          ScreenUtil().setHeight(130),
+                          ScreenUtil().setHeight(130),
                           listm[0].avatarFrameImg!) : const Text(''),
                       // 头像框动态图
                       listm[0].avatarFrameGifImg!.isNotEmpty ? SizedBox(
-                        height: 110.h,
-                        width: 110.h,
+                        height: 130.h,
+                        width: 130.h,
                         child: SVGASimpleImage(
                           resUrl: listm[0].avatarFrameGifImg!,),
                       ) : const Text(''),
@@ -2184,13 +2197,13 @@ class RoomItems {
                       (listm[1].avatarFrameGifImg!.isEmpty &&
                           listm[1].avatarFrameImg!.isNotEmpty) ? WidgetUtils
                           .CircleHeadImage(
-                          ScreenUtil().setHeight(110),
-                          ScreenUtil().setHeight(110),
+                          ScreenUtil().setHeight(130),
+                          ScreenUtil().setHeight(130),
                           listm[1].avatarFrameImg!) : const Text(''),
                       // 头像框动态图
                       listm[1].avatarFrameGifImg!.isNotEmpty ? SizedBox(
-                        height: 110.h,
-                        width: 110.h,
+                        height: 130.h,
+                        width: 130.h,
                         child: SVGASimpleImage(
                           resUrl: listm[1].avatarFrameGifImg!,),
                       ) : const Text(''),
@@ -2338,13 +2351,13 @@ class RoomItems {
                       (listm[2].avatarFrameGifImg!.isEmpty &&
                           listm[2].avatarFrameImg!.isNotEmpty) ? WidgetUtils
                           .CircleHeadImage(
-                          ScreenUtil().setHeight(110),
-                          ScreenUtil().setHeight(110),
+                          ScreenUtil().setHeight(130),
+                          ScreenUtil().setHeight(130),
                           listm[2].avatarFrameImg!) : const Text(''),
                       // 头像框动态图
                       listm[2].avatarFrameGifImg!.isNotEmpty ? SizedBox(
-                        height: 110.h,
-                        width: 110.h,
+                        height: 130.h,
+                        width: 130.h,
                         child: SVGASimpleImage(
                           resUrl: listm[2].avatarFrameGifImg!,),
                       ) : const Text(''),
@@ -2493,13 +2506,13 @@ class RoomItems {
                       (listm[3].avatarFrameGifImg!.isEmpty &&
                           listm[3].avatarFrameImg!.isNotEmpty) ? WidgetUtils
                           .CircleHeadImage(
-                          ScreenUtil().setHeight(110),
-                          ScreenUtil().setHeight(110),
+                          ScreenUtil().setHeight(130),
+                          ScreenUtil().setHeight(130),
                           listm[3].avatarFrameImg!) : const Text(''),
                       // 头像框动态图
                       listm[3].avatarFrameGifImg!.isNotEmpty ? SizedBox(
-                        height: 110.h,
-                        width: 110.h,
+                        height: 130.h,
+                        width: 130.h,
                         child: SVGASimpleImage(
                           resUrl: listm[3].avatarFrameGifImg!,),
                       ) : const Text(''),
@@ -2657,13 +2670,13 @@ class RoomItems {
                         (listm[4].avatarFrameGifImg!.isEmpty &&
                             listm[4].avatarFrameImg!.isNotEmpty) ? WidgetUtils
                             .CircleHeadImage(
-                            ScreenUtil().setHeight(110),
-                            ScreenUtil().setHeight(110),
+                            ScreenUtil().setHeight(130),
+                            ScreenUtil().setHeight(130),
                             listm[4].avatarFrameImg!) : const Text(''),
                         // 头像框动态图
                         listm[4].avatarFrameGifImg!.isNotEmpty ? SizedBox(
-                          height: 110.h,
-                          width: 110.h,
+                          height: 130.h,
+                          width: 130.h,
                           child: SVGASimpleImage(
                             resUrl: listm[4].avatarFrameGifImg!,),
                         ) : const Text(''),
@@ -2814,13 +2827,13 @@ class RoomItems {
                         (listm[5].avatarFrameGifImg!.isEmpty &&
                             listm[5].avatarFrameImg!.isNotEmpty) ? WidgetUtils
                             .CircleHeadImage(
-                            ScreenUtil().setHeight(110),
-                            ScreenUtil().setHeight(110),
+                            ScreenUtil().setHeight(130),
+                            ScreenUtil().setHeight(130),
                             listm[5].avatarFrameImg!) : const Text(''),
                         // 头像框动态图
                         listm[5].avatarFrameGifImg!.isNotEmpty ? SizedBox(
-                          height: 110.h,
-                          width: 110.h,
+                          height: 130.h,
+                          width: 130.h,
                           child: SVGASimpleImage(
                             resUrl: listm[5].avatarFrameGifImg!,),
                         ) : const Text(''),
@@ -2970,13 +2983,13 @@ class RoomItems {
                         (listm[6].avatarFrameGifImg!.isEmpty &&
                             listm[6].avatarFrameImg!.isNotEmpty) ? WidgetUtils
                             .CircleHeadImage(
-                            ScreenUtil().setHeight(110),
-                            ScreenUtil().setHeight(110),
+                            ScreenUtil().setHeight(130),
+                            ScreenUtil().setHeight(130),
                             listm[6].avatarFrameImg!) : const Text(''),
                         // 头像框动态图
                         listm[6].avatarFrameGifImg!.isNotEmpty ? SizedBox(
-                          height: 110.h,
-                          width: 110.h,
+                          height: 130.h,
+                          width: 130.h,
                           child: SVGASimpleImage(
                             resUrl: listm[6].avatarFrameGifImg!,),
                         ) : const Text(''),
@@ -3131,13 +3144,13 @@ class RoomItems {
                         (listm[7].avatarFrameGifImg!.isEmpty &&
                             listm[7].avatarFrameImg!.isNotEmpty) ? WidgetUtils
                             .CircleHeadImage(
-                            ScreenUtil().setHeight(110),
-                            ScreenUtil().setHeight(110),
+                            ScreenUtil().setHeight(130),
+                            ScreenUtil().setHeight(130),
                             listm[7].avatarFrameImg!) : const Text(''),
                         // 头像框动态图
                         listm[7].avatarFrameGifImg!.isNotEmpty ? SizedBox(
-                          height: 110.h,
-                          width: 110.h,
+                          height: 130.h,
+                          width: 130.h,
                           child: SVGASimpleImage(
                             resUrl: listm[7].avatarFrameGifImg!,),
                         ) : const Text(''),
@@ -3322,13 +3335,13 @@ class RoomItems {
                         (listm[7].avatarFrameGifImg!.isEmpty &&
                             listm[7].avatarFrameImg!.isNotEmpty) ? WidgetUtils
                             .CircleHeadImage(
-                            ScreenUtil().setHeight(110),
-                            ScreenUtil().setHeight(110),
+                            ScreenUtil().setHeight(130),
+                            ScreenUtil().setHeight(130),
                             listm[7].avatarFrameImg!) : const Text(''),
                         // 头像框动态图
                         listm[7].avatarFrameGifImg!.isNotEmpty ? SizedBox(
-                          height: 110.h,
-                          width: 110.h,
+                          height: 130.h,
+                          width: 130.h,
                           child: SVGASimpleImage(
                             resUrl: listm[7].avatarFrameGifImg!,),
                         ) : const Text(''),

@@ -109,7 +109,7 @@ class _HeadBBPageState extends State<HeadBBPage>  with AutomaticKeepAliveClientM
           image: DecorationImage(
             //背景图片修饰
             image: AssetImage(listB[i] == true
-                ? "assets/images/zhuangban_bg2.png"
+                ? "assets/images/zhuangban_bg3.png"
                 : "assets/images/zhuangban_bg1.png"),
             fit: BoxFit.fill, //覆盖
           ),

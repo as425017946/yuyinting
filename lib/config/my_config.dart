@@ -53,7 +53,7 @@ class MyConfig{
   /// 加载失败的提示语
   static const String errorHttpTitle2 = '网络连接超时，请切换网络重试~';
   /// 购买成功
-  static const String buySuccess = '购买成功，请前往背包装扮';
+  static const String buySuccess = '装扮购买成功，已穿戴';
 
 
 

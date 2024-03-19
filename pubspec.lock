@@ -9,6 +9,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "6.2.0"
+  android_package_manager:
+    dependency: "direct main"
+    description:
+      name: android_package_manager
+      sha256: "5fcd7f1217d0442869da89b5606a0691946f71382d69a75db528f1bb3e6f2a76"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.5.0"
   archive:
     dependency: transitive
     description:
