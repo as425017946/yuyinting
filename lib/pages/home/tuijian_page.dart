@@ -413,7 +413,10 @@ class _TuijianPageState extends State<TuijianPage>
                                 fontSize: ScreenUtil().setSp(28),
                                 fontWeight: FontWeight.w600)),
                         WidgetUtils.commonSizedBox(10, 0),
-                        SizedBox(
+
+                        ///热门推荐
+                        _rmtj(),
+                        /*SizedBox(
                           width: double.infinity,
                           height: ScreenUtil().setHeight(350),
                           child: Row(
@@ -694,7 +697,7 @@ class _TuijianPageState extends State<TuijianPage>
                               ))
                             ],
                           ),
-                        )
+                        )*/
                       ],
                     ),
                   ),
@@ -730,6 +733,103 @@ class _TuijianPageState extends State<TuijianPage>
         ),
       ),
     );
+  }
+
+  ///热门推荐
+  Widget _rmtj() {
+    return SizedBox(
+      width: double.infinity,
+      child: FittedBox(
+        child: Row(
+          children: [
+            ///热门推荐第一个大的轮播图
+            _rmSwiper(450, listRoom),
+            const SizedBox(width: 16),
+            Column(
+              children: [
+                _rmSwiper(218, listRoom2),
+                const SizedBox(height: 14),
+                _rmSwiper(218, listRoom3),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _rmSwiper(double size, dynamic list) {
+    if (list.isEmpty) {
+      return SizedBox(
+        width: size,
+        height: size,
+      );
+    } else {
+      return Container(
+        width: size,
+        height: size,
+        clipBehavior: Clip.hardEdge,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(35),
+        ),
+        child: Swiper(
+          itemBuilder: (BuildContext context, int index) {
+            // 配置图片地址
+            final String roomName = list[index].roomName;
+            return Stack(
+              alignment: Alignment.bottomLeft,
+              children: [
+                FadeInImage.assetNetwork(
+                  width: size,
+                  height: size,
+                  placeholder: 'assets/images/img_placeholder.png',
+                  image: list[index].coverImg!,
+                  fit: BoxFit.cover,
+                  imageErrorBuilder: (context, error, stackTrace) {
+                    // 图片加载错误后展示的 widget
+                    // print("---图片加载错误---");
+                    // 此处不能 setState
+                    return const Image(
+                      image: AssetImage('assets/images/img_placeholder.png'),
+                      width: double.infinity,
+                      height: double.infinity,
+                      fit: BoxFit.contain,
+                    );
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Text(
+                    roomName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: StyleUtils.getCommonTextStyle(
+                        color: Colors.white, fontSize: 28),
+                  ),
+                ),
+              ],
+            );
+          },
+          // 配置图片数量
+          itemCount: list.length,
+          // 无限循环
+          loop: true,
+          // 自动轮播
+          autoplay: true,
+          autoplayDelay: 4000,
+          duration: 2500,
+          onIndexChanged: (index) {},
+          onTap: (index) {
+            if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
+              setState(() {
+                sp.setBool('joinRoom', true);
+              });
+              doPostBeforeJoin(list[index].id.toString(), '');
+            }
+          },
+        ),
+      );
+    }
   }
 
   /// 首页 推荐房间/海报轮播/推荐主播
