@@ -67,10 +67,12 @@ class _RoomPageState extends State<RoomPage>
 
   // 是否第一次进入
   int isFirst = 0;
+
   /// 存进入的座驾信息
   List<String> listUrlZJ = [];
   // 存是否展示座驾
   bool isZJShow = false;
+
   /// 播放svga动画使用
   late SVGAAnimationController animationControllerBG;
   late SVGAAnimationController animationControllerSL;
@@ -185,6 +187,7 @@ class _RoomPageState extends State<RoomPage>
       }
     }
   }
+
   //网络动画
   void _animListenerZJ() {
     //TODO
@@ -402,7 +405,7 @@ class _RoomPageState extends State<RoomPage>
 
   // 赠送礼物使用
   List<Map> listUrl = [];
-  var listenSVGA, listenGZOK, listenMessage,listenJoinHF;
+  var listenSVGA, listenGZOK, listenMessage, listenJoinHF;
 
   // 每2分钟请求一下热度接口
   Timer? _timerHot;
@@ -1351,7 +1354,7 @@ class _RoomPageState extends State<RoomPage>
               map['isWelcome'] = '0';
 
               setState(() {
-                saveChatInfo(event.map!, '3',event.map!['send_nickname'],
+                saveChatInfo(event.map!, '3', event.map!['send_nickname'],
                     '${event.map!['nickname']},${event.map!['content']}');
                 list.add(map);
               });
@@ -1421,7 +1424,8 @@ class _RoomPageState extends State<RoomPage>
               map['isOk'] = 'false';
 
               setState(() {
-                saveChatInfo(event.map!, '4',event.map!['nickname'], event.map!['content']);
+                saveChatInfo(event.map!, '4', event.map!['nickname'],
+                    event.map!['content']);
                 list.add(map);
               });
             } else if (event.map!['type'] == 'send_gift') {
@@ -1659,7 +1663,7 @@ class _RoomPageState extends State<RoomPage>
               map['content'] =
                   '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出;$infos';
               setState(() {
-                saveChatInfo(event.map!, '6',event.map!['from_nickname'],
+                saveChatInfo(event.map!, '6', event.map!['from_nickname'],
                     '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出;$infos');
                 list.add(map);
                 // 这个是为了让别人也能看见自己送出的礼物
@@ -1793,7 +1797,7 @@ class _RoomPageState extends State<RoomPage>
               setState(() {
                 list.add(map);
               });
-            } else{
+            } else {
               // 正常进入房间使用
               bool isHave = false;
               for (int i = 0; i < list.length; i++) {
@@ -1831,8 +1835,9 @@ class _RoomPageState extends State<RoomPage>
               // 座驾名称
               map['mount_name'] = event.map!['mount_name'];
               LogE('装扮名称 ==  ${event.map!['mount_name']}');
+
               /// 判断如果装扮了座驾，需要播放
-              if(event.map!['mount'].toString().isNotEmpty){
+              if (event.map!['mount'].toString().isNotEmpty) {
                 setState(() {
                   listUrlZJ.add(event.map!['mount'].toString());
                   isZJShow = true;
@@ -1961,7 +1966,7 @@ class _RoomPageState extends State<RoomPage>
       });
       // 发消息监听
       listenSend = eventBus.on<SendRoomInfoBack>().listen((event) {
-        if(mounted){
+        if (mounted) {
           _startTimer();
         }
 
@@ -1969,7 +1974,7 @@ class _RoomPageState extends State<RoomPage>
       });
       // 发图片监听
       listenSendImg = eventBus.on<SendRoomImgBack>().listen((event) {
-        if(mounted){
+        if (mounted) {
           _startTimer();
         }
         doPostRoomMessageSend(event.info, 1);
@@ -2141,18 +2146,17 @@ class _RoomPageState extends State<RoomPage>
       // 侧滑推荐
       doPostShowRoomList();
 
-
       listenJoinHF = eventBus.on<hfJoinBack>().listen((event) {
-        if(event.title == '厅内点击横幅'){
+        if (event.title == '厅内点击横幅') {
           // 如果房间id不是0（0是大厅），没有收起房间，直接进入房间
-          if(event.roomID != '0' && sp.getString('roomID') != event.roomID){
+          if (event.roomID != '0' && sp.getString('roomID') != event.roomID) {
             doPostBeforeJoin(event.roomID);
           }
         }
-
       });
     });
   }
+
 // Connectivity 对象
   final Connectivity _connectivity = Connectivity();
 
@@ -2178,7 +2182,7 @@ class _RoomPageState extends State<RoomPage>
     setState(() {
       _connectivityStatus = result;
     });
-    if(_engine == null){
+    if (_engine == null) {
       initAgora();
     }
     LogE('/*- ${_connectivityStatus?.toString()}');
@@ -3293,12 +3297,15 @@ class _RoomPageState extends State<RoomPage>
                               slideAnimationController.controller,
                               slideAnimationController.animation,
                               name,
-                              listMP[0],'厅内点击横幅',widget.roomId)
+                              listMP[0],
+                              '厅内点击横幅',
+                              widget.roomId)
                           : const Text(''),
 
                       /// 爆出5w2的礼物横幅推送使用
                       isBig
-                          ? HomeItems.itemBig(listMP[0], bigType,'厅内点击横幅',widget.roomId)
+                          ? HomeItems.itemBig(
+                              listMP[0], bigType, '厅内点击横幅', widget.roomId)
                           : const Text(''),
 
                       /// 厅内送礼物显示动画使用
@@ -3319,16 +3326,16 @@ class _RoomPageState extends State<RoomPage>
                       /// 装扮座驾进入房间
                       (isZJShow == true)
                           ? IgnorePointer(
-                        ignoring: true,
-                        child: SizedBox(
-                          height: double.infinity,
-                          width: double.infinity,
-                          child: SVGAImage(
-                            animationControllerZJ,
-                            fit: BoxFit.fitWidth,
-                          ),
-                        ),
-                      )
+                              ignoring: true,
+                              child: SizedBox(
+                                height: double.infinity,
+                                width: double.infinity,
+                                child: SVGAImage(
+                                  animationControllerZJ,
+                                  fit: BoxFit.fitWidth,
+                                ),
+                              ),
+                            )
                           : const Text(''),
 
                       // /// 贵族进场动画
@@ -3347,7 +3354,7 @@ class _RoomPageState extends State<RoomPage>
 
                       /// 页面返回出现推荐房间
                       isBack
-                          ? Row(
+                          ? /*Row(
                               children: [
                                 GestureDetector(
                                   onTap: (() {
@@ -3359,7 +3366,7 @@ class _RoomPageState extends State<RoomPage>
                                   }),
                                   child: Container(
                                     height: double.infinity,
-                                    width: 240.h,
+                                    width: (240 * 1.3).w,
                                     color: Colors.transparent,
                                   ),
                                 ),
@@ -3419,7 +3426,8 @@ class _RoomPageState extends State<RoomPage>
                                                   _timerHot!.cancel();
                                                 }
                                                 sp.setString('isShouQi', '1');
-                                                sp.setString('sqRoomID', widget.roomId);
+                                                sp.setString(
+                                                    'sqRoomID', widget.roomId);
                                                 eventBus.fire(SubmitButtonBack(
                                                     title: '收起房间'));
                                                 Navigator.pop(context);
@@ -3460,7 +3468,8 @@ class _RoomPageState extends State<RoomPage>
                                   ),
                                 ))
                               ],
-                            )
+                            )*/
+                          _backView()
                           : const Text('')
                     ],
                   ),
@@ -3487,6 +3496,110 @@ class _RoomPageState extends State<RoomPage>
           return true;
         },
       ),
+    );
+  }
+
+  Widget _backView() {
+    return Row(
+      children: [
+        Expanded(
+          child: GestureDetector(
+            onTap: (() {
+              if (sp.getBool('joinRoom') == false) {
+                setState(() {
+                  isBack = false;
+                });
+              }
+            }),
+            child: Container(
+              color: Colors.transparent,
+            ),
+          ),
+        ),
+        Expanded(
+            child: Container(
+          height: double.infinity,
+          color: Colors.black87,
+          child: Column(
+            children: [
+              WidgetUtils.commonSizedBox(35, 0),
+              Row(
+                children: [
+                  const Expanded(child: Text('')),
+                  GestureDetector(
+                    onTap: (() {
+                      if (MyUtils.checkClick()) {
+                        sp.setString('roomID', '');
+                        // 调用离开房间接口
+                        doPostLeave();
+                        // 清空存储信息
+                        deleteChatInfo();
+                        if (_timerHot != null) {
+                          _timerHot!.cancel();
+                        }
+                        sp.setString('isShouQi', '0');
+                        //离开频道并释放资源
+                        _dispose();
+                        eventBus.fire(SubmitButtonBack(title: '退出房间'));
+                        Navigator.pop(context);
+                      }
+                    }),
+                    child: Column(
+                      children: [
+                        WidgetUtils.showImages(
+                            'assets/images/room_exit.png',
+                            ScreenUtil().setHeight(60),
+                            ScreenUtil().setHeight(60)),
+                        WidgetUtils.onlyTextCenter(
+                            '退出房间',
+                            StyleUtils.getCommonTextStyle(
+                                color: MyColors.roomTCWZ3,
+                                fontSize: ScreenUtil().setSp(24))),
+                      ],
+                    ),
+                  ),
+                  WidgetUtils.commonSizedBox(0, 50),
+                  GestureDetector(
+                    onTap: (() {
+                      if (MyUtils.checkClick()) {
+                        if (_timerHot != null) {
+                          _timerHot!.cancel();
+                        }
+                        sp.setString('isShouQi', '1');
+                        sp.setString('sqRoomID', widget.roomId);
+                        eventBus.fire(SubmitButtonBack(title: '收起房间'));
+                        Navigator.pop(context);
+                      }
+                    }),
+                    child: Column(
+                      children: [
+                        WidgetUtils.showImages(
+                            'assets/images/room_shouqi.png',
+                            ScreenUtil().setHeight(60),
+                            ScreenUtil().setHeight(60)),
+                        WidgetUtils.onlyTextCenter(
+                            '收起房间',
+                            StyleUtils.getCommonTextStyle(
+                                color: MyColors.roomTCWZ3,
+                                fontSize: ScreenUtil().setSp(24))),
+                      ],
+                    ),
+                  ),
+                  WidgetUtils.commonSizedBox(0, 40),
+                ],
+              ),
+              WidgetUtils.commonSizedBox(40, 0),
+              Expanded(
+                child: ListView.builder(
+                  padding: EdgeInsets.only(top: ScreenUtil().setHeight(5)),
+                  itemBuilder: roomHouse,
+                  itemCount: listPH.length,
+                ),
+              )
+            ],
+          ),
+        ))
+      ],
     );
   }
 
@@ -4531,7 +4644,7 @@ class _RoomPageState extends State<RoomPage>
     if (allData.isNotEmpty) {
       for (int i = 0; i < allData.length; i++) {
         LogE('数据库存储id == ${allData[i]['roomID']}');
-        if(allData[i]['roomID'] == widget.roomId){
+        if (allData[i]['roomID'] == widget.roomId) {
           setState(() {
             list.add(allData[i]);
           });
@@ -4550,7 +4663,7 @@ class _RoomPageState extends State<RoomPage>
     //删除
     db.delete('roomInfoTable');
     // 防止用户被顶号时没有清空表
-    if(sp.getString('sqRoomID').toString().isNotEmpty){
+    if (sp.getString('sqRoomID').toString().isNotEmpty) {
       sp.setString('sqRoomID', '');
     }
   }

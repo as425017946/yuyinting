@@ -22,8 +22,8 @@ class _MineSMZPageState extends State<MineSMZPage> {
       backgroundColor: Colors.black54,
       body: Center(
         child: Container(
-          height: 340.h,
-          width: 460.h,
+          height: (340 * 1.1).w,
+          width: (460 * 1.3).w,
           decoration: const BoxDecoration(
             //背景
             color: Colors.white,
@@ -32,7 +32,7 @@ class _MineSMZPageState extends State<MineSMZPage> {
           ),
           child: Column(
             children: [
-              WidgetUtils.commonSizedBox(30.h, 0),
+              WidgetUtils.commonSizedBox((30 * 1.3).w, 0),
               WidgetUtils.onlyTextCenter(
                   '温馨提示',
                   StyleUtils.getCommonTextStyle(
@@ -40,7 +40,7 @@ class _MineSMZPageState extends State<MineSMZPage> {
                       fontSize: 38.sp,
                       fontWeight: FontWeight.w600)),
               Padding(
-                padding: EdgeInsets.all(25.h),
+                padding: EdgeInsets.all((25 * 1.3).w),
                 child: Text(
                   '为了保证您的资金安全，需要认证您的实名信息，点击同意开始实名认证',
                   maxLines: 5,
@@ -51,7 +51,7 @@ class _MineSMZPageState extends State<MineSMZPage> {
                       fontWeight: FontWeight.w400),
                 ),
               ),
-              WidgetUtils.commonSizedBox(40.h, 0),
+              WidgetUtils.commonSizedBox((40 * 1.0).w, 0),
               Row(
                 children: [
                   const Spacer(),
@@ -60,13 +60,14 @@ class _MineSMZPageState extends State<MineSMZPage> {
                       Navigator.pop(context);
                     }),
                     child: Container(
-                      height: 60.h,
-                      width: 160.h,
+                      height: (60 * 1.3).w,
+                      width: (160 * 1.3).w,
                       decoration: BoxDecoration(
                         //背景
                         color: Colors.white,
                         //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                        borderRadius: BorderRadius.all(Radius.circular(30.h)),
+                        borderRadius:
+                            BorderRadius.all(Radius.circular((30 * 1.3).w)),
                         border: Border.all(width: 1, color: MyColors.g9),
                       ),
                       child: WidgetUtils.onlyTextCenter(
@@ -75,7 +76,7 @@ class _MineSMZPageState extends State<MineSMZPage> {
                               color: Colors.black87, fontSize: 32.sp)),
                     ),
                   ),
-                  WidgetUtils.commonSizedBox(0, 40.h),
+                  WidgetUtils.commonSizedBox(0, (40 * 1.3).w),
                   GestureDetector(
                     onTap: (() {
                       Navigator.pop(context);
@@ -89,13 +90,14 @@ class _MineSMZPageState extends State<MineSMZPage> {
                       }
                     }),
                     child: Container(
-                      height: 60.h,
-                      width: 160.h,
+                      height: (60 * 1.3).w,
+                      width: (160 * 1.3).w,
                       decoration: BoxDecoration(
                         //背景
                         color: Colors.lightBlueAccent,
                         //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                        borderRadius: BorderRadius.all(Radius.circular(30.h)),
+                        borderRadius:
+                            BorderRadius.all(Radius.circular((30 * 1.3).w)),
                       ),
                       child: WidgetUtils.onlyTextCenter(
                           '同意',

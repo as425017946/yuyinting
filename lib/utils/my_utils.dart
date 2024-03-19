@@ -314,8 +314,10 @@ class MyUtils {
           headerBody = const Text('下拉刷新');
         } else if (mode == RefreshStatus.refreshing) {
           // headerBody = Text('刷新中...');
-          headerBody = WidgetUtils.showImagesFill('assets/images/a1.gif',
-              ScreenUtil().setHeight(100), ScreenUtil().setHeight(100));
+          // headerBody = WidgetUtils.showImagesFill('assets/images/a1.gif',
+          // ScreenUtil().setHeight(100), ScreenUtil().setHeight(100));
+          headerBody =
+              WidgetUtils.showImagesFill('assets/images/a1.gif', 50, 50);
         } else if (mode == RefreshStatus.failed) {
           headerBody = const Text('刷新失败');
         } else if (mode == RefreshStatus.completed) {
@@ -326,7 +328,8 @@ class MyUtils {
           headerBody = const Text("完成");
         }
         return SizedBox(
-          height: ScreenUtil().setHeight(100),
+          // height: ScreenUtil().setHeight(100),
+          height: 50,
           child: Center(child: headerBody),
         );
       },
@@ -552,25 +555,25 @@ class MyUtils {
                   LogE('接收文本信息$info');
                   if (body.content == '赛车押注') {
                     eventBus.fire(JoinRoomYBack(map: info, type: '赛车押注'));
-                  }else if (body.content == '清除魅力值') {
-                    eventBus.fire(JoinRoomYBack(map: info, type: 'clean_charm_single'));
-                  }else if (body.content == '离开房间') {
+                  } else if (body.content == '清除魅力值') {
+                    eventBus.fire(
+                        JoinRoomYBack(map: info, type: 'clean_charm_single'));
+                  } else if (body.content == '离开房间') {
                     eventBus.fire(
                         JoinRoomYBack(map: info, type: 'user_leave_room'));
                   } else if (body.content == '充值成功') {
                     eventBus.fire(SubmitButtonBack(title: '充值成功'));
                   } else if (body.content == '下麦') {
-                    eventBus.fire(
-                        JoinRoomYBack(map: info, type: 'user_down_mic'));
+                    eventBus
+                        .fire(JoinRoomYBack(map: info, type: 'user_down_mic'));
                   } else if (body.content == '开麦') {
                     eventBus.fire(
                         JoinRoomYBack(map: info, type: 'user_un_close_mic'));
                   } else if (body.content == '闭麦') {
-                    eventBus.fire(
-                        JoinRoomYBack(map: info, type: 'user_close_mic'));
+                    eventBus
+                        .fire(JoinRoomYBack(map: info, type: 'user_close_mic'));
                   } else if (body.content == '抱麦') {
-                    eventBus.fire(
-                        JoinRoomYBack(map: info, type: 'bao_mic'));
+                    eventBus.fire(JoinRoomYBack(map: info, type: 'bao_mic'));
                   } else {
                     if (info['lv'] == '' || info['lv'] == null) {
                       if (info['type'] == 'clean_charm') {

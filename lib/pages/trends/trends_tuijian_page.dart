@@ -30,7 +30,6 @@ import '../message/geren/people_info_page.dart';
 import '../mine/my/my_info_page.dart';
 import 'PagePreviewVideo.dart';
 
-
 /// 动态-推荐页面
 class TrendsTuiJianPage extends StatefulWidget {
   const TrendsTuiJianPage({super.key});
@@ -132,7 +131,8 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
                       MyUtils.goTransparentRFPage(
                           context,
                           PeopleInfoPage(
-                            otherId: _list[i].uid.toString(),title: '其他',
+                            otherId: _list[i].uid.toString(),
+                            title: '其他',
                           ));
                     }
                   }
@@ -255,7 +255,7 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
         ),
         WidgetUtils.commonSizedBox(10, 0),
         _list[i].type == 2
-            ? showVideo(_list[i].imgUrl!,i)
+            ? showVideo(_list[i].imgUrl!, i)
             : showImag(_list[i].imgUrl!, i),
         WidgetUtils.commonSizedBox(20, 0),
         Row(
@@ -296,7 +296,7 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
                         18),
                     WidgetUtils.commonSizedBox(0, 5),
                     SizedBox(
-                      width: ScreenUtil().setHeight(60),
+                      width: ScreenUtil().setWidth(60 * 1.3),
                       child: WidgetUtils.onlyText(
                           _list[i].like == 0 ? '抢首赞' : _list[i].like.toString(),
                           StyleUtils.getCommonTextStyle(
@@ -322,7 +322,9 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
                         'assets/images/trends_message.png', 18, 18),
                     WidgetUtils.commonSizedBox(0, 5),
                     WidgetUtils.onlyText(
-                        _list[i].comment == 0 ? '评论' : _list[i].comment.toString(),
+                        _list[i].comment == 0
+                            ? '评论'
+                            : _list[i].comment.toString(),
                         StyleUtils.getCommonTextStyle(
                           color: Colors.grey,
                           fontSize: ScreenUtil().setSp(21),
@@ -339,7 +341,7 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
     );
   }
 
-  _initializeVideoController(List<String> listImg,int i) async {
+  _initializeVideoController(List<String> listImg, int i) async {
     final fileName = await VideoThumbnail.thumbnailFile(
       video: listImg[0],
       thumbnailPath: (await getTemporaryDirectory()).path,
@@ -352,7 +354,7 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
   }
 
   Widget showVideo(List<String> listImg, int i) {
-    _initializeVideoController(listImg,i);
+    _initializeVideoController(listImg, i);
     return Row(
       children: [
         Container(
@@ -375,11 +377,13 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.h),
                 ),
-                child: _list[i].imgUrl![1].isNotEmpty ?Image.file(
-                  File(_list[i].imgUrl![1]),
-                  fit: BoxFit.cover,
-                  gaplessPlayback: true,
-                ) : const Text(''),
+                child: _list[i].imgUrl![1].isNotEmpty
+                    ? Image.file(
+                        File(_list[i].imgUrl![1]),
+                        fit: BoxFit.cover,
+                        gaplessPlayback: true,
+                      )
+                    : const Text(''),
               ),
               GestureDetector(
                 onTap: () {
@@ -696,7 +700,7 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
               imgList.isNotEmpty
                   ? Container(
                       padding: const EdgeInsets.only(left: 20, right: 20),
-                      height: ScreenUtil().setHeight(140),
+                      height: ScreenUtil().setWidth(140 * 1.3),
                       //超出部分，可裁剪
                       clipBehavior: Clip.hardEdge,
                       decoration: BoxDecoration(
@@ -707,17 +711,17 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
                           // 配置图片地址
                           return CachedNetworkImage(
                             imageUrl: imgList[index].img!,
-                            fit: BoxFit.cover,
+                            fit: BoxFit.fill,
                             placeholder: (context, url) =>
                                 WidgetUtils.CircleImageAss(
-                              ScreenUtil().setHeight(140),
+                              ScreenUtil().setWidth(140 * 1.3),
                               double.infinity,
                               ScreenUtil().setHeight(10),
                               'assets/images/img_placeholder.png',
                             ),
                             errorWidget: (context, url, error) =>
                                 WidgetUtils.CircleImageAss(
-                              ScreenUtil().setHeight(140),
+                              ScreenUtil().setWidth(140 * 1.3),
                               double.infinity,
                               ScreenUtil().setHeight(10),
                               'assets/images/img_placeholder.png',
@@ -804,8 +808,8 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
               for (int i = 0; i < bean.data!.list!.length; i++) {
                 _list.add(bean.data!.list![i]);
               }
-              for(int i =0; i < _list.length; i++){
-                if(_list[i].type == 2){
+              for (int i = 0; i < _list.length; i++) {
+                if (_list[i].type == 2) {
                   _list[i].imgUrl!.add('');
                 }
               }

@@ -10,11 +10,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yuyinting/pages/login/star_page.dart';
 import 'package:yuyinting/routes/routes.dart';
 import 'package:yuyinting/utils/log_util.dart';
+import 'package:get/get.dart';
 
 //定义一个全局的存储对象
 late SharedPreferences sp;
-void main() async{
-
+void main() async {
   // 确保初始化完成
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -23,14 +23,15 @@ void main() async{
 
   // 透明状态栏
   if (Platform.isAndroid) {
-    SystemUiOverlayStyle systemUiOverlayStyle = const SystemUiOverlayStyle(statusBarColor: Colors.transparent,statusBarIconBrightness: Brightness.dark,);
+    SystemUiOverlayStyle systemUiOverlayStyle = const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+    );
     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
   }
   // 强制竖屏
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown
-  ]);
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
   /// 如果是全屏就切换竖屏
   AutoOrientation.portraitAutoMode();
@@ -47,8 +48,8 @@ void main() async{
 
     runApp(const MyApp());
   });
-
 }
+
 MaterialColor my_green = const MaterialColor(
   0xFF5B46B9,
   <int, Color>{
@@ -70,7 +71,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: '语音厅',
       theme: ThemeData(
         primarySwatch: my_green,
@@ -93,4 +94,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

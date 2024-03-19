@@ -50,12 +50,12 @@ class _TrendsHiPageState extends State<TrendsHiPage> {
             alignment: Alignment.topCenter,
             children: [
               Container(
-                margin: const EdgeInsets.only(top: 20),
-                height: ScreenUtil().setHeight(600),
-                width: ScreenUtil().setHeight(520),
-                decoration: const BoxDecoration(
+                margin: EdgeInsets.only(top: (20 * 2).w),
+                height: ScreenUtil().setWidth(600 * 1.3),
+                width: ScreenUtil().setWidth(520 * 1.3),
+                decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  borderRadius: BorderRadius.all(Radius.circular((10 * 2).w)),
                 ),
                 child: Column(
                   children: [
@@ -68,63 +68,71 @@ class _TrendsHiPageState extends State<TrendsHiPage> {
                             Navigator.pop(context);
                           }),
                           child: Container(
-                            height: 100.h,
-                            width: 100.h,
+                            height: (100 * 1.3).w,
+                            width: (100 * 1.3).w,
                             color: Colors.transparent,
                             alignment: Alignment.center,
                             child: WidgetUtils.showImages(
-                                'assets/images/close.png', 15, 15),
+                                'assets/images/close.png',
+                                (15 * 2).w,
+                                (15 * 2).w),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 40,
+                    SizedBox(
+                      height: (40 * 2).w,
                     ),
-                    const Text(
+                    Text(
                       '给TA别致打招呼',
                       style: TextStyle(
-                          fontSize: 18,
+                          fontSize: (18 * 2).sp,
                           color: MyColors.black_3,
                           fontWeight: FontWeight.w600),
                     ),
-                    const SizedBox(
-                      height: 10,
+                    SizedBox(
+                      height: (10 * 2).w,
                     ),
                     Container(
                       width: double.infinity,
-                      margin: const EdgeInsets.only(left: 20, right: 20),
-                      height: ScreenUtil().setHeight(150),
-                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      margin:
+                          EdgeInsets.only(left: (20 * 2).w, right: (20 * 2).w),
+                      height: ScreenUtil().setWidth(150 * 1.3),
+                      padding:
+                          EdgeInsets.only(left: (10 * 2).w, right: (10 * 2).w),
                       alignment: Alignment.center,
                       //边框设置
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         //背景
                         color: MyColors.f2,
                         //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                        borderRadius:
+                            BorderRadius.all(Radius.circular((20.0 * 2).w)),
                       ),
                       child: WidgetUtils.onlyText(
                           "遇见你真好，我们交个朋友吧！", StyleUtils.textStyleG3),
                     ),
                     Container(
-                      margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                      height: 80.h,
+                      margin: EdgeInsets.fromLTRB(
+                          (20 * 2).w, (20 * 2).w, (20 * 2).w, 0),
+                      height: (80 * 1.3).w,
                       alignment: Alignment.center,
                       width: double.infinity,
                       //边框设置
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         //背景
                         color: MyColors.homeTopBG,
                         //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                        borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                        borderRadius:
+                            BorderRadius.all(Radius.circular((40 * 1.3).w)),
                       ),
                       child: MaterialButton(
                         minWidth: double.infinity,
-                        height: 90.h,
+                        height: (90 * 1.3).w,
                         splashColor: MyColors.blue,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(25)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular((25 * 2).w)),
                         ),
                         onPressed: (() {
                           if (MyUtils.checkClick() && isClick == false) {
@@ -143,7 +151,7 @@ class _TrendsHiPageState extends State<TrendsHiPage> {
                         ),
                       ),
                     ),
-                    WidgetUtils.commonSizedBox(10, 0),
+                    WidgetUtils.commonSizedBox((10 * 2).w, 0),
                     GestureDetector(
                       // onTap: (() {
                       //   setState(() {
@@ -157,13 +165,13 @@ class _TrendsHiPageState extends State<TrendsHiPage> {
                               gz == false
                                   ? 'assets/images/trends_r1.png'
                                   : 'assets/images/trends_r2.png',
-                              15,
-                              15),
-                          WidgetUtils.commonSizedBox(0, 10),
-                          const Text(
+                              (15 * 2).w,
+                              (15 * 2).w),
+                          WidgetUtils.commonSizedBox(0, (10 * 2).w),
+                          Text(
                             '关注TA，Ta的最新动态怎能错过~',
                             style: TextStyle(
-                              fontSize: 13,
+                              fontSize: (13 * 2).sp,
                               color: MyColors.g9,
                             ),
                           ),
@@ -174,7 +182,7 @@ class _TrendsHiPageState extends State<TrendsHiPage> {
                   ],
                 ),
               ),
-              WidgetUtils.CircleHeadImage(80, 80, widget.imgUrl)
+              WidgetUtils.CircleHeadImage((80 * 2).w, (80 * 2).w, widget.imgUrl)
             ],
           ),
         ),

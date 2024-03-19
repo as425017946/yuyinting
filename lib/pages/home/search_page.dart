@@ -149,8 +149,7 @@ class _SearchPageState extends State<SearchPage> {
                         //背景
                         color: MyColors.home_hx,
                         //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(25.0)),
+                        borderRadius: BorderRadius.all(Radius.circular(50.h)),
                         //设置四周边框
                         border: Border.all(width: 1, color: MyColors.home_hx),
                       ),
