@@ -136,7 +136,8 @@ class _YouxiPageState extends State<YouxiPage>
                     ],
                   ),
                 ),
-                WidgetUtils.showImages('assets/images/quliaojie.png', 25, 65),
+                WidgetUtils.showImages(
+                    'assets/images/quliaojie.png', 25 * 2.w, 65 * 2.w),
               ],
             ),
           ),
