@@ -9,7 +9,7 @@ import '../bigclient/bigclient_model.dart';
 
 class BigClientPage extends StatelessWidget {
   const BigClientPage({Key? key}) : super(key: key);
-  
+
   @override
   Widget build(BuildContext context) {
     Get.lazyPut<BigClientController>(() => BigClientController());
@@ -44,7 +44,7 @@ class BigClientPage extends StatelessWidget {
         child: Column(
           children: const [
             _BigClientPage_Top(),
-            _BigClientPage_Tab(),
+            Expanded(child: _BigClientPage_Tab()),
           ],
         ),
       ),
@@ -67,31 +67,30 @@ class _BigClientPage_Tab extends StatelessWidget {
     return const _BigClientPage_List_0();
   }
 }
+
 class _BigClientPage_List_0 extends StatelessWidget {
   const _BigClientPage_List_0({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     BigClientController c = Get.find();
-    return Container(
-      width: double.infinity,
-      child: FittedBox(
-        fit: BoxFit.fitWidth,
-        child: Column(
-          children: [
-            Obx(() => _item("日薪水", c.dayBean, c.dayExp)),
-            Obx(() => _item("周薪水", c.dayBean, c.dayExp)),
-            Obx(() => _item("月薪水", c.dayBean, c.dayExp)),
-          ],
-        ),
-      ),
+    return Column(
+      children: [
+        Obx(() => _item("日薪水", c.dayBean, c.dayExp)),
+        Obx(() => _item("周薪水", c.dayBean, c.dayExp)),
+        Obx(() => _item("月薪水", c.dayBean, c.dayExp)),
+      ],
     );
   }
 
   Widget _item(String title, int bean, int exp) {
-    return Stack(
-      children: [
-        Text(title),
-      ],
+    return SizedBox(
+      width: 750,
+      height: 167,
+      child: Stack(
+        children: [
+          Text("$title $bean $exp"),
+        ],
+      ),
     );
   }
 }
