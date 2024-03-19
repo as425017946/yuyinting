@@ -113,9 +113,9 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
   Widget _itemsTuijian(BuildContext context, int i) {
     return Column(
       children: [
-        WidgetUtils.commonSizedBox(10, 0),
+        WidgetUtils.commonSizedBox(10 * 2.w, 0),
         Container(
-          height: ScreenUtil().setHeight(100),
+          height: ScreenUtil().setWidth(100 * 1.3),
           alignment: Alignment.centerLeft,
           child: Row(
             children: [
@@ -137,15 +137,17 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
                     }
                   }
                 }),
-                child: WidgetUtils.CircleHeadImage(40, 40, _list[i].avatar!),
+                child: WidgetUtils.CircleHeadImage(
+                    40 * 2.w, 40 * 2.w, _list[i].avatar!),
               ),
-              WidgetUtils.commonSizedBox(0, 8),
+              WidgetUtils.commonSizedBox(0, 8 * 2.w),
               Column(
                 children: [
                   const Expanded(child: Text('')),
                   Container(
                     width: ScreenUtil().setWidth(300),
-                    padding: EdgeInsets.only(left: ScreenUtil().setHeight(8)),
+                    padding:
+                        EdgeInsets.only(left: ScreenUtil().setWidth(8 * 1.3)),
                     child: Text(
                       _list[i].nickname!,
                       style: StyleUtils.getCommonTextStyle(
@@ -155,14 +157,15 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
                     ),
                   ),
                   SizedBox(
-                    height: ScreenUtil().setHeight(30),
+                    height: ScreenUtil().setWidth(30 * 1.3),
                     width: ScreenUtil().setWidth(300),
                     child: Row(
                       children: [
                         Container(
-                          height: ScreenUtil().setHeight(25),
-                          padding: const EdgeInsets.only(left: 5, right: 5),
-                          margin: const EdgeInsets.only(top: 2),
+                          height: ScreenUtil().setWidth(25 * 1.3),
+                          padding:
+                              EdgeInsets.only(left: 5 * 2.w, right: 5 * 2.w),
+                          margin: EdgeInsets.only(top: 2 * 2.w),
                           alignment: Alignment.center,
                           //边框设置
                           decoration: BoxDecoration(
@@ -171,8 +174,8 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
                                 ? MyColors.dtBlue
                                 : MyColors.dtPink,
                             //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(15.0)),
+                            borderRadius: BorderRadius.all(Radius.circular(
+                                ScreenUtil().setWidth(25 * 1.3) / 2)),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -181,15 +184,16 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
                                   _list[i].gender == 1
                                       ? 'assets/images/nan.png'
                                       : 'assets/images/nv.png',
-                                  10,
-                                  10),
-                              WidgetUtils.commonSizedBox(0, 5),
+                                  10 * 2.w,
+                                  10 * 2.w),
+                              WidgetUtils.commonSizedBox(0, 5 * 2.w),
                               WidgetUtils.onlyText(
                                   _list[i].age == -1
                                       ? '0·${_list[i].constellation!}'
                                       : '${_list[i].age.toString()}·${_list[i].constellation!}',
                                   StyleUtils.getCommonTextStyle(
-                                      color: Colors.white, fontSize: 10)),
+                                      color: Colors.white,
+                                      fontSize: 10 * 2.sp)),
                             ],
                           ),
                         ),
@@ -214,7 +218,9 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
                                     index: i));
                           }),
                           child: WidgetUtils.showImages(
-                              'assets/images/trends_hi.png', 124, 59),
+                              'assets/images/trends_hi.png',
+                              124 * 2.w,
+                              59 * 2.w),
                         )
                       : GestureDetector(
                           onTap: (() {
@@ -226,8 +232,8 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
                                     otherImg: _list[i].avatar!));
                           }),
                           child: WidgetUtils.myContainer(
-                              ScreenUtil().setHeight(45),
-                              ScreenUtil().setHeight(100),
+                              ScreenUtil().setWidth(45 * 1.3),
+                              ScreenUtil().setWidth(100 * 1.3),
                               Colors.white,
                               MyColors.homeTopBG,
                               '私信',
@@ -237,7 +243,7 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
             ],
           ),
         ),
-        WidgetUtils.commonSizedBox(5, 0),
+        WidgetUtils.commonSizedBox(5 * 2.w, 0),
         GestureDetector(
           onTap: (() {
             MyUtils.goTransparentRFPage(context,
@@ -253,11 +259,11 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
                 )),
           ),
         ),
-        WidgetUtils.commonSizedBox(10, 0),
+        WidgetUtils.commonSizedBox(10 * 2.w, 0),
         _list[i].type == 2
             ? showVideo(_list[i].imgUrl!, i)
             : showImag(_list[i].imgUrl!, i),
-        WidgetUtils.commonSizedBox(20, 0),
+        WidgetUtils.commonSizedBox(20 * 2.w, 0),
         Row(
           children: [
             WidgetUtils.onlyText(
@@ -292,9 +298,9 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
                         _list[i].isLike == 0
                             ? 'assets/images/trends_zan1.png'
                             : 'assets/images/trends_zan_2.png',
-                        18,
-                        18),
-                    WidgetUtils.commonSizedBox(0, 5),
+                        18 * 2.w,
+                        18 * 2.w),
+                    WidgetUtils.commonSizedBox(0, 5 * 2.w),
                     SizedBox(
                       width: ScreenUtil().setWidth(60 * 1.3),
                       child: WidgetUtils.onlyText(
@@ -319,8 +325,8 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
                 child: Row(
                   children: [
                     WidgetUtils.showImages(
-                        'assets/images/trends_message.png', 18, 18),
-                    WidgetUtils.commonSizedBox(0, 5),
+                        'assets/images/trends_message.png', 18 * 2.w, 18 * 2.w),
+                    WidgetUtils.commonSizedBox(0, 5 * 2.w),
                     WidgetUtils.onlyText(
                         _list[i].comment == 0
                             ? '评论'
@@ -335,7 +341,7 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
             ),
           ],
         ),
-        WidgetUtils.commonSizedBox(10, 0),
+        WidgetUtils.commonSizedBox(10 * 2.w, 0),
         WidgetUtils.myLine()
       ],
     );
@@ -763,7 +769,7 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
                   onLoading: _onLoading,
                   onRefresh: _onRefresh,
                   child: ListView.builder(
-                    padding: const EdgeInsets.all(20),
+                    padding: EdgeInsets.all(20 * 2.w),
                     itemBuilder: _itemsTuijian,
                     itemCount: _list.length,
                   ),
