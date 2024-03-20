@@ -139,7 +139,7 @@ class _TuijianPageState extends State<TuijianPage>
         Container(
           margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
           width: double.infinity,
-          height: ScreenUtil().setHeight(80),
+          height: ScreenUtil().setWidth(80 * 1.25),
           child: Row(
             children: [
               GestureDetector(
