@@ -41,7 +41,7 @@ class _RoomPKPageState extends State<RoomPKPage> {
           Container(
             height: 450.h,
             width: double.infinity,
-            padding: EdgeInsets.only(left: 20.w,right: 20.w),
+            padding: EdgeInsets.only(left: 40.w,right: 40.w),
             decoration: const BoxDecoration(
               //设置Container修饰
               image: DecorationImage(
