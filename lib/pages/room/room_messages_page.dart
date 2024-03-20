@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:yuyinting/pages/room/room_messages_more_page.dart';
+import 'package:yuyinting/pages/room/room_search_page.dart';
 import '../../colors/my_colors.dart';
 import '../../db/DatabaseHelper.dart';
 import '../../main.dart';
@@ -21,14 +22,15 @@ class RoomMessagesPage extends StatefulWidget {
 class _RoomMessagesPageState extends State<RoomMessagesPage> {
   List<Map<String, dynamic>> listMessage = [];
   List<int> listRead = [];
-  var listen,listen2;
+  var listen, listen2;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     doPostSystemMsgList();
     listen = eventBus.on<SubmitButtonBack>().listen((event) {
-      if(event.title == '厅内聊天返回'){
+      if (event.title == '厅内聊天返回') {
         doPostSystemMsgList();
       }
     });
@@ -36,6 +38,7 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
       doPostSystemMsgList();
     });
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -72,10 +75,11 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
             child: Row(
               children: [
                 WidgetUtils.CircleImageNet(
-                    ScreenUtil().setHeight(90),
-                    ScreenUtil().setHeight(90),
-                    45.h,
-                    listMessage[i]['otherHeadNetImg'],),
+                  ScreenUtil().setHeight(90),
+                  ScreenUtil().setHeight(90),
+                  45.h,
+                  listMessage[i]['otherHeadNetImg'],
+                ),
                 WidgetUtils.commonSizedBox(0, 10),
                 Expanded(
                   child: Column(
@@ -97,23 +101,23 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
                             const Expanded(child: Text('')),
                             listMessage[i]['nickName'].toString() == '维C客服'
                                 ? Text(
-                              '官方客服',
-                              style: StyleUtils.getCommonTextStyle(
-                                  color: MyColors.homeTopBG,
-                                  fontSize: ScreenUtil().setSp(25)),
-                            )
+                                    '官方客服',
+                                    style: StyleUtils.getCommonTextStyle(
+                                        color: MyColors.homeTopBG,
+                                        fontSize: ScreenUtil().setSp(25)),
+                                  )
                                 : Text(
-                              DateTime.parse(
-                                  DateTime.fromMillisecondsSinceEpoch(
-                                      int.parse(listMessage[i]
-                                      ['add_time']))
-                                      .toString())
-                                  .toString()
-                                  .substring(0, 10),
-                              style: StyleUtils.getCommonTextStyle(
-                                  color: MyColors.roomTCWZ3,
-                                  fontSize: ScreenUtil().setSp(25)),
-                            ),
+                                    DateTime.parse(
+                                            DateTime.fromMillisecondsSinceEpoch(
+                                                    int.parse(listMessage[i]
+                                                        ['add_time']))
+                                                .toString())
+                                        .toString()
+                                        .substring(0, 10),
+                                    style: StyleUtils.getCommonTextStyle(
+                                        color: MyColors.roomTCWZ3,
+                                        fontSize: ScreenUtil().setSp(25)),
+                                  ),
                           ],
                         ),
                       ),
@@ -122,48 +126,60 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
                         children: [
                           listMessage[i]['type'] == 1
                               ? Text(
-                            listMessage[i]['content'].toString().length > 15 ? listMessage[i]['content'].toString().substring(0,15) : listMessage[i]['content'],
-                            overflow: TextOverflow.ellipsis,
-                            style: StyleUtils.getCommonTextStyle(
-                                color: MyColors.g9,
-                                fontSize: ScreenUtil().setSp(25)),
-                          )
-                              :  listMessage[i]['type'] == 2 ? Text(
-                            '[图片]',
-                            style: StyleUtils.getCommonTextStyle(
-                                color: MyColors.homeTopBG,
-                                fontSize: ScreenUtil().setSp(23)),
-                          ) : listMessage[i]['type'] == 3 ? Text(
-                            '[语音]',
-                            style: StyleUtils.getCommonTextStyle(
-                                color: MyColors.homeTopBG,
-                                fontSize: ScreenUtil().setSp(23)),
-                          ) : Text(
-                            '[红包]',
-                            style: StyleUtils.getCommonTextStyle(
-                                color: Colors.red,
-                                fontSize: ScreenUtil().setSp(23)),
-                          ),
+                                  listMessage[i]['content'].toString().length >
+                                          15
+                                      ? listMessage[i]['content']
+                                          .toString()
+                                          .substring(0, 15)
+                                      : listMessage[i]['content'],
+                                  overflow: TextOverflow.ellipsis,
+                                  style: StyleUtils.getCommonTextStyle(
+                                      color: MyColors.g9,
+                                      fontSize: ScreenUtil().setSp(25)),
+                                )
+                              : listMessage[i]['type'] == 2
+                                  ? Text(
+                                      '[图片]',
+                                      style: StyleUtils.getCommonTextStyle(
+                                          color: MyColors.homeTopBG,
+                                          fontSize: ScreenUtil().setSp(23)),
+                                    )
+                                  : listMessage[i]['type'] == 3
+                                      ? Text(
+                                          '[语音]',
+                                          style: StyleUtils.getCommonTextStyle(
+                                              color: MyColors.homeTopBG,
+                                              fontSize: ScreenUtil().setSp(23)),
+                                        )
+                                      : Text(
+                                          '[红包]',
+                                          style: StyleUtils.getCommonTextStyle(
+                                              color: Colors.red,
+                                              fontSize: ScreenUtil().setSp(23)),
+                                        ),
                           const Spacer(),
-                          listRead[i] > 0 ? Container(
-                            width: 30.h,
-                            height: 30.h,
-                            //边框设置
-                            decoration: const BoxDecoration(
-                              //背景
-                              color: Colors.red,
-                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                              borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                            ),
-                            alignment: Alignment.center,
-                            child: Text(
-                              listRead[i].toString(),
-                              style: StyleUtils.getCommonTextStyle(
-                                  color: Colors.white,
-                                  fontSize: ScreenUtil().setSp(22),
-                                  fontWeight: FontWeight.w600),
-                            ),
-                          ) : const Text('')
+                          listRead[i] > 0
+                              ? Container(
+                                  width: 30.h,
+                                  height: 30.h,
+                                  //边框设置
+                                  decoration: const BoxDecoration(
+                                    //背景
+                                    color: Colors.red,
+                                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(15.0)),
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    listRead[i].toString(),
+                                    style: StyleUtils.getCommonTextStyle(
+                                        color: Colors.white,
+                                        fontSize: ScreenUtil().setSp(22),
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                )
+                              : const Text('')
                         ],
                       )
                     ],
@@ -220,18 +236,55 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
               child: Column(
                 children: [
                   WidgetUtils.commonSizedBox(15, 0),
-                  WidgetUtils.onlyTextCenter(
-                      '消息列表',
-                      StyleUtils.getCommonTextStyle(
-                          color: MyColors.roomTCWZ2,
-                          fontSize: ScreenUtil().setSp(32))),
+                  Row(
+                    children: [
+                      SizedBox(
+                        height: 50.h,
+                        width: 120.w,
+                      ),
+                      const Spacer(),
+                      WidgetUtils.onlyTextCenter(
+                          '消息列表',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ2,
+                              fontSize: ScreenUtil().setSp(32))),
+                      const Spacer(),
+                      sp.getString('user_identity').toString() != 'user'
+                          ? GestureDetector(
+                              onTap: (() {
+                                if (MyUtils.checkClick()) {
+                                  MyUtils.goTransparentPage(
+                                      context, const RoomSearchPage());
+                                }
+                              }),
+                              child: Container(
+                                height: 50.h,
+                                width: 120.w,
+                                padding: EdgeInsets.only(left: 10.h),
+                                alignment: Alignment.centerLeft,
+                                color: Colors.transparent,
+                                child: Text(
+                                  '搜索',
+                                  style: TextStyle(
+                                      color: MyColors.roomTCWZ2,
+                                      fontSize: 28.sp),
+                                ),
+                              ),
+                            )
+                          : SizedBox(
+                              height: 50.h,
+                              width: 100.w,
+                            ),
+                    ],
+                  ),
+                  WidgetUtils.commonSizedBox(15, 0),
 
                   /// 展示在线用户
                   Expanded(
                     child: listMessage.isNotEmpty
                         ? ListView.builder(
-                            padding:
-                                EdgeInsets.only(top: ScreenUtil().setHeight(10)),
+                            padding: EdgeInsets.only(
+                                top: ScreenUtil().setHeight(10)),
                             itemBuilder: _itemTuiJian,
                             itemCount: listMessage.length,
                           )

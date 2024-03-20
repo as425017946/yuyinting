@@ -36,8 +36,8 @@ class MofangJinPage extends StatefulWidget {
   State<MofangJinPage> createState() => _MofangJinPageState();
 }
 
-class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveClientMixin,TickerProviderStateMixin{
-
+class _MofangJinPageState extends State<MofangJinPage>
+    with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -74,12 +74,12 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
     doPostBalance();
 
     listenXZ = eventBus.on<XZQuerenBack>().listen((event) {
-      if(event.title == '金星魔方') {
+      if (event.title == '金星魔方') {
         doPostPlayRoulette(event.cishu);
-      }else if(event.title == '金魔方'){
+      } else if (event.title == '金魔方') {
         LogE('再来一次== $isShow');
         LogE('再来一次== $isXiazhu');
-        if(isShow == false && isXiazhu) {
+        if (isShow == false && isXiazhu) {
           eventBus.fire(GameBack(isBack: true));
           doPostPlayRoulette(cishu.toString());
         }
@@ -92,7 +92,8 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
     int month = now.month;
     int day = now.day;
     String time = '$year-$month-$day';
-    if(sp.getString('mf2_queren_time') == null || sp.getString('mf2_queren_time') != time){
+    if (sp.getString('mf2_queren_time') == null ||
+        sp.getString('mf2_queren_time') != time) {
       sp.setBool('mf2_queren', false);
     }
   }
@@ -100,15 +101,17 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
   /// 播放音频
   Soundpool soundpool = Soundpool(streamType: StreamType.music);
   Future<void> playSound() async {
-    int soundId = await rootBundle.load('assets/audio/mofang_jin.wav').then(((ByteData soundDate){
+    int soundId = await rootBundle
+        .load('assets/audio/mofang_jin.wav')
+        .then(((ByteData soundDate) {
       return soundpool.load(soundDate);
     }));
     await soundpool.play(soundId);
   }
 
-
   void loadAnimation() async {
-    final videoItem = await _loadSVGA(false, 'assets/svga/mofang_jin_baozha.svga');
+    final videoItem =
+        await _loadSVGA(false, 'assets/svga/mofang_jin_baozha.svga');
     videoItem.autorelease = false;
     animationController?.videoItem = videoItem;
     animationController
@@ -127,7 +130,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
       // 动画播放到最后一帧时停止播放
       animationController?.stop();
       // animationController?.removeListener(_animListener);
-      if(mounted) {
+      if (mounted) {
         setState(() {
           isShow = false;
           isTiaoguoLW = false;
@@ -154,7 +157,6 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
     listenXZ.cancel();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -185,7 +187,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                           // 关闭
                           GestureDetector(
                             onTap: (() {
-                              if(isShow){
+                              if (isShow) {
                                 return;
                               }
                               Navigator.pop(context);
@@ -211,70 +213,78 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                         ],
                       ),
                       // 中奖信息滚动
-                      luckInfo.isNotEmpty ? Stack(
-                        children: [
-                          Opacity(
-                            opacity: 0.14,
-                            child: Container(
-                              margin: EdgeInsets.only(left: 40.h, right: 40.h),
-                              width: double.infinity,
-                              height: ScreenUtil().setHeight(42),
-                              decoration: const BoxDecoration(
-                                //背景
-                                color: Colors.white,
-                                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(21)),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(left: 40.h, right: 40.h),
-                            padding: EdgeInsets.only(top: 10.h, left: 10.h, right: 10.h),
-                            height: ScreenUtil().setHeight(42),
-                            alignment: Alignment.center,
-                            child: Marquee(
-                              // 文本
-                              text:  luckInfo,
-                              // 文本样式
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 21.sp,
-                                shadows: const [
-                                  Shadow(
-                                    color: Colors.black54,
-                                    offset: Offset(2, 2),
-                                    blurRadius: 3,
+                      luckInfo.isNotEmpty
+                          ? Stack(
+                              children: [
+                                Opacity(
+                                  opacity: 0.14,
+                                  child: Container(
+                                    margin: EdgeInsets.only(
+                                        left: 40.h, right: 40.h),
+                                    width: double.infinity,
+                                    height: ScreenUtil().setHeight(42),
+                                    decoration: const BoxDecoration(
+                                      //背景
+                                      color: Colors.white,
+                                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(21)),
+                                    ),
                                   ),
-                                ],
-                              ),
-                              // 滚动轴：水平或者竖直
-                              scrollAxis: Axis.horizontal,
-                              // 轴对齐方式start
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              // 空白间距
-                              blankSpace: 20.0,
-                              // 速度
-                              velocity: 30.0,
-                              // 暂停时长
-                              pauseAfterRound: Duration(seconds: 1),
-                              // startPadding
-                              startPadding: 10.0,
-                              // 加速时长
-                              accelerationDuration: Duration(seconds: 1),
-                              // 加速Curve
-                              accelerationCurve: Curves.linear,
-                              // 减速时长
-                              decelerationDuration: Duration(milliseconds: 500),
-                              // 减速Curve
-                              decelerationCurve: Curves.easeOut,
-                            ),
-                          ),
-                        ],
-                      ) :  WidgetUtils.commonSizedBox(42.h, 0),
+                                ),
+                                Container(
+                                  margin:
+                                      EdgeInsets.only(left: 40.h, right: 40.h),
+                                  padding: EdgeInsets.only(
+                                      top: 10.h, left: 10.h, right: 10.h),
+                                  height: ScreenUtil().setHeight(42),
+                                  alignment: Alignment.center,
+                                  child: Marquee(
+                                    // 文本
+                                    text: luckInfo,
+                                    // 文本样式
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 21.sp,
+                                      shadows: const [
+                                        Shadow(
+                                          color: Colors.black54,
+                                          offset: Offset(2, 2),
+                                          blurRadius: 3,
+                                        ),
+                                      ],
+                                    ),
+                                    // 滚动轴：水平或者竖直
+                                    scrollAxis: Axis.horizontal,
+                                    // 轴对齐方式start
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    // 空白间距
+                                    blankSpace: 20.0,
+                                    // 速度
+                                    velocity: 30.0,
+                                    // 暂停时长
+                                    pauseAfterRound: Duration(seconds: 1),
+                                    // startPadding
+                                    startPadding: 10.0,
+                                    // 加速时长
+                                    accelerationDuration: Duration(seconds: 1),
+                                    // 加速Curve
+                                    accelerationCurve: Curves.linear,
+                                    // 减速时长
+                                    decelerationDuration:
+                                        Duration(milliseconds: 500),
+                                    // 减速Curve
+                                    decelerationCurve: Curves.easeOut,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : WidgetUtils.commonSizedBox(42.h, 0),
                       // WidgetUtils.commonSizedBox(40.h, 0),
                       // 切换魔方svga图
-                      Opacity(opacity: isShow == false ? 1 : 0 ,
+                      Opacity(
+                        opacity: isShow == false ? 1 : 0,
                         child: Stack(
                           alignment: Alignment.center,
                           children: [
@@ -283,7 +293,10 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                               width: ScreenUtil().setHeight(500),
                               // child: const SVGASimpleImage(
                               //     assetsName: 'assets/svga/gp/l_mf.svga'),
-                              child: WidgetUtils.showImages('assets/images/mofang_jin_showbg.png', 500.h, 500.h),
+                              child: WidgetUtils.showImages(
+                                  'assets/images/mofang_jin_showbg.png',
+                                  500.h,
+                                  500.h),
                             ),
                             Opacity(
                               opacity: 0.4,
@@ -295,28 +308,49 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                                   color: Colors.black54,
                                   //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                                   borderRadius:
-                                  BorderRadius.all(Radius.circular(21)),
+                                      BorderRadius.all(Radius.circular(21)),
                                 ),
                               ),
                             ),
                             GestureDetector(
-                              onTap: ((){
-                                if(double.parse(sp.getString('mofangJBY').toString()) < 200 && cishu ==1 ){
+                              onTap: (() {
+                                if (double.parse(sp
+                                            .getString('mofangJBY')
+                                            .toString()) <
+                                        200 &&
+                                    cishu == 1) {
                                   MyToastUtils.showToastBottom('钱包余额不足');
                                   return;
                                 }
-                                if(double.parse(sp.getString('mofangJBY').toString()) < 2000 && cishu ==10 ){
+                                if (double.parse(sp
+                                            .getString('mofangJBY')
+                                            .toString()) <
+                                        2000 &&
+                                    cishu == 10) {
                                   MyToastUtils.showToastBottom('钱包余额不足');
                                   return;
                                 }
-                                if(double.parse(sp.getString('mofangJBY').toString()) < 20000 && cishu ==100 ){
+                                if (double.parse(sp
+                                            .getString('mofangJBY')
+                                            .toString()) <
+                                        20000 &&
+                                    cishu == 100) {
                                   MyToastUtils.showToastBottom('钱包余额不足');
                                   return;
                                 }
-                                if(sp.getBool('mf2_queren') == null || sp.getBool('mf2_queren') == false){
-                                  MyUtils.goTransparentPageCom(context, XiaZhuQueRenPage(cishu: cishu.toString(), feiyong: feiyong.toString(), title: '金星魔方',));
-                                }else{
-                                  if(MyUtils.checkClick() && isShow == false && isXiazhu) {
+                                if (sp.getBool('mf2_queren') == null ||
+                                    sp.getBool('mf2_queren') == false) {
+                                  MyUtils.goTransparentPageCom(
+                                      context,
+                                      XiaZhuQueRenPage(
+                                        cishu: cishu.toString(),
+                                        feiyong: feiyong.toString(),
+                                        title: '金星魔方',
+                                      ));
+                                } else {
+                                  if (MyUtils.checkClick() &&
+                                      isShow == false &&
+                                      isXiazhu) {
                                     eventBus.fire(GameBack(isBack: true));
                                     doPostPlayRoulette(cishu.toString());
                                   }
@@ -338,12 +372,15 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                       ),
                       // 蓝色魔方和金色魔方按钮切换
                       GestureDetector(
-                        onTap: ((){
-                          if(isXiazhu){
+                        onTap: (() {
+                          if (isXiazhu) {
                             eventBus.fire(MofangBack(info: 0));
                           }
                         }),
-                        child: WidgetUtils.showImages('assets/images/mofang_jin.png', ScreenUtil().setHeight(75), ScreenUtil().setHeight(316)),
+                        child: WidgetUtils.showImages(
+                            'assets/images/mofang_jin.png',
+                            ScreenUtil().setHeight(75),
+                            ScreenUtil().setHeight(316)),
                       ),
 
                       const Spacer(),
@@ -358,13 +395,16 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                               //背景
                               color: Colors.black38,
                               //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                              borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20.0)),
                             ),
                             child: Row(
                               children: [
                                 const Spacer(),
-                                WidgetUtils.showImages('assets/images/mine_wallet_dd.png',
-                                    ScreenUtil().setHeight(26), ScreenUtil().setHeight(24)),
+                                WidgetUtils.showImages(
+                                    'assets/images/mine_wallet_dd.png',
+                                    ScreenUtil().setHeight(26),
+                                    ScreenUtil().setHeight(24)),
                                 WidgetUtils.commonSizedBox(0, 5),
                                 Transform.translate(
                                   offset: Offset(0, -2.h),
@@ -388,13 +428,16 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                               //背景
                               color: Colors.black38,
                               //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                              borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20.0)),
                             ),
                             child: Row(
                               children: [
                                 const Spacer(),
-                                WidgetUtils.showImages('assets/images/mine_wallet_dd.png',
-                                    ScreenUtil().setHeight(26), ScreenUtil().setHeight(24)),
+                                WidgetUtils.showImages(
+                                    'assets/images/mine_wallet_dd.png',
+                                    ScreenUtil().setHeight(26),
+                                    ScreenUtil().setHeight(24)),
                                 WidgetUtils.commonSizedBox(0, 5),
                                 Transform.translate(
                                   offset: Offset(0, -2.h),
@@ -418,13 +461,16 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                               //背景
                               color: Colors.black38,
                               //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                              borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20.0)),
                             ),
                             child: Row(
                               children: [
                                 const Spacer(),
-                                WidgetUtils.showImages('assets/images/mine_wallet_dd.png',
-                                    ScreenUtil().setHeight(26), ScreenUtil().setHeight(24)),
+                                WidgetUtils.showImages(
+                                    'assets/images/mine_wallet_dd.png',
+                                    ScreenUtil().setHeight(26),
+                                    ScreenUtil().setHeight(24)),
                                 WidgetUtils.commonSizedBox(0, 5),
                                 Transform.translate(
                                   offset: Offset(0, -2.h),
@@ -466,9 +512,11 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                                   fit: BoxFit.fill, //覆盖
                                 ),
                               ),
-                              child: WidgetUtils.onlyTextCenter('转1次', StyleUtils.getCommonTextStyle(
-                                  color: Colors.white,
-                                  fontSize: ScreenUtil().setSp(28))),
+                              child: WidgetUtils.onlyTextCenter(
+                                  '转1次',
+                                  StyleUtils.getCommonTextStyle(
+                                      color: Colors.white,
+                                      fontSize: ScreenUtil().setSp(28))),
                             ),
                           ),
                           const Spacer(),
@@ -493,9 +541,11 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                                   fit: BoxFit.fill, //覆盖
                                 ),
                               ),
-                              child: WidgetUtils.onlyTextCenter('转10次', StyleUtils.getCommonTextStyle(
-                                  color: Colors.white,
-                                  fontSize: ScreenUtil().setSp(28))),
+                              child: WidgetUtils.onlyTextCenter(
+                                  '转10次',
+                                  StyleUtils.getCommonTextStyle(
+                                      color: Colors.white,
+                                      fontSize: ScreenUtil().setSp(28))),
                             ),
                           ),
                           const Spacer(),
@@ -520,9 +570,11 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                                   fit: BoxFit.fill, //覆盖
                                 ),
                               ),
-                              child: WidgetUtils.onlyTextCenter('转30次', StyleUtils.getCommonTextStyle(
-                                  color: Colors.white,
-                                  fontSize: ScreenUtil().setSp(28))),
+                              child: WidgetUtils.onlyTextCenter(
+                                  '转30次',
+                                  StyleUtils.getCommonTextStyle(
+                                      color: Colors.white,
+                                      fontSize: ScreenUtil().setSp(28))),
                             ),
                           ),
                         ],
@@ -535,8 +587,12 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                       right: ScreenUtil().setHeight(10),
                       top: ScreenUtil().setHeight(180),
                       child: GestureDetector(
-                        onTap: ((){
-                          MyUtils.goTransparentPage(context, MoFangJiangChiPage(type: '2',));
+                        onTap: (() {
+                          MyUtils.goTransparentPage(
+                              context,
+                              MoFangJiangChiPage(
+                                type: '2',
+                              ));
                         }),
                         child: Stack(
                           children: [
@@ -563,8 +619,12 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                     left: ScreenUtil().setHeight(6),
                     top: ScreenUtil().setHeight(170),
                     child: GestureDetector(
-                      onTap: ((){
-                        MyUtils.goTransparentPageCom(context, DouPayPage(shuliang: sp.getString('mofangJB').toString(),));
+                      onTap: (() {
+                        MyUtils.goTransparentPageCom(
+                            context,
+                            DouPayPage(
+                              shuliang: sp.getString('mofangJB').toString(),
+                            ));
                       }),
                       child: Container(
                         height: ScreenUtil().setHeight(45),
@@ -624,12 +684,12 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                     left: ScreenUtil().setHeight(15),
                     top: ScreenUtil().setHeight(230),
                     child: GestureDetector(
-                      onTap: ((){
+                      onTap: (() {
                         setState(() {
                           isTiaoguo = !isTiaoguo;
-                          if(isTiaoguo){
+                          if (isTiaoguo) {
                             sp.setBool('mf_jin', true);
-                          }else{
+                          } else {
                             sp.setBool('mf_jin', false);
                           }
                         });
@@ -640,151 +700,177 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                         color: Colors.transparent,
                         child: Row(
                           children: [
-                            WidgetUtils.showImages(isTiaoguo==false ? 'assets/images/mofang_tg_no.png' : 'assets/images/mofang_tg_yes.png', ScreenUtil().setHeight(24), ScreenUtil().setHeight(24)),
+                            WidgetUtils.showImages(
+                                isTiaoguo == false
+                                    ? 'assets/images/mofang_tg_no.png'
+                                    : 'assets/images/mofang_tg_yes.png',
+                                ScreenUtil().setHeight(24),
+                                ScreenUtil().setHeight(24)),
                             WidgetUtils.commonSizedBox(0, 5),
-                            WidgetUtils.onlyText('跳过动画', StyleUtils.getCommonTextStyle(color: MyColors.roomTCWZ2, fontSize: ScreenUtil().setSp(20)))
+                            WidgetUtils.onlyText(
+                                '跳过动画',
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.roomTCWZ2,
+                                    fontSize: ScreenUtil().setSp(20)))
                           ],
                         ),
                       ),
                     ),
                   ),
                   // 右上角功能
-                  isMore ? Positioned(
-                    top: ScreenUtil().setHeight(120),
-                    right: 0,
-                    child: Stack(
-                      children: [
-                        Opacity(
-                          opacity: 0.8,
-                          child: Container(
-                            height: ScreenUtil().setHeight(196),
-                            width: ScreenUtil().setHeight(137),
-                            //边框设置
-                            decoration: const BoxDecoration(
-                              //背景
-                              color: Colors.black,
-                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                              borderRadius:
-                              BorderRadius.all(Radius.circular(12.0)),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: ScreenUtil().setHeight(196),
-                          width: ScreenUtil().setHeight(137),
-                          color: Colors.transparent,
-                          child: Column(
+                  isMore
+                      ? Positioned(
+                          top: ScreenUtil().setHeight(120),
+                          right: 0,
+                          child: Stack(
                             children: [
-                              Expanded(
-                                  child: GestureDetector(
-                                    onTap: ((){
-                                      MyUtils.goTransparentPageCom(context, const MoFangGuiZePage());
-                                      setState(() {
-                                        isMore = false;
-                                      });
-                                    }),
-                                    child: WidgetUtils.onlyTextCenter(
-                                        '玩法规则',
-                                        StyleUtils.getCommonTextStyle(
-                                            color: MyColors.roomTCWZ2,
-                                            fontSize: ScreenUtil().setSp(21))),
-                                  )),
-                              Container(
-                                width: double.infinity,
-                                height: ScreenUtil().setHeight(1),
-                                margin: EdgeInsets.only(
-                                    left: ScreenUtil().setHeight(10),
-                                    right: ScreenUtil().setHeight(10)),
-                                color: MyColors.roomTCWZ1,
+                              Opacity(
+                                opacity: 0.8,
+                                child: Container(
+                                  height: ScreenUtil().setHeight(196),
+                                  width: ScreenUtil().setHeight(137),
+                                  //边框设置
+                                  decoration: const BoxDecoration(
+                                    //背景
+                                    color: Colors.black,
+                                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(12.0)),
+                                  ),
+                                ),
                               ),
-                              Expanded(
-                                  child: GestureDetector(
-                                    onTap: ((){
-                                      MyUtils.goTransparentPageCom(context, MoFangJiLuPage(type: 1,));
-                                      setState(() {
-                                        isMore = false;
-                                      });
-                                    }),
-                                    child: WidgetUtils.onlyTextCenter(
-                                        '我的记录',
-                                        StyleUtils.getCommonTextStyle(
-                                            color: MyColors.roomTCWZ2,
-                                            fontSize: ScreenUtil().setSp(21))),
-                                  )),
                               Container(
-                                width: double.infinity,
-                                height: ScreenUtil().setHeight(1),
-                                margin: EdgeInsets.only(
-                                    left: ScreenUtil().setHeight(10),
-                                    right: ScreenUtil().setHeight(10)),
-                                color: MyColors.roomTCWZ1,
-                              ),
-                              Expanded(
-                                  child: GestureDetector(
-                                    onTap: ((){
-                                      MyUtils.goTransparentPageCom(context, const MoFangBeiBaoPage());
-                                      setState(() {
-                                        isMore = false;
-                                      });
-                                    }),
-                                    child: WidgetUtils.onlyTextCenter(
-                                        '我的背包',
-                                        StyleUtils.getCommonTextStyle(
-                                            color: MyColors.roomTCWZ2,
-                                            fontSize: ScreenUtil().setSp(21))),
-                                  )),
-                              Container(
-                                width: double.infinity,
-                                height: ScreenUtil().setHeight(1),
-                                margin: EdgeInsets.only(
-                                    left: ScreenUtil().setHeight(10),
-                                    right: ScreenUtil().setHeight(10)),
-                                color: MyColors.roomTCWZ1,
-                              ),
-                              Expanded(
-                                  child: GestureDetector(
-                                    onTap: (() {
-                                      MyUtils.goTransparentPage(
-                                          context, const RankPage());
-                                      setState(() {
-                                        isMore = false;
-                                      });
-                                    }),
-                                    child: WidgetUtils.onlyTextCenter(
-                                        '幸运榜单',
-                                        StyleUtils.getCommonTextStyle(
-                                            color: MyColors.roomTCWZ2,
-                                            fontSize:
-                                            ScreenUtil().setSp(21))),
-                                  )),
+                                height: ScreenUtil().setHeight(196),
+                                width: ScreenUtil().setHeight(137),
+                                color: Colors.transparent,
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                        child: GestureDetector(
+                                      onTap: (() {
+                                        MyUtils.goTransparentPageCom(
+                                            context, const MoFangGuiZePage());
+                                        setState(() {
+                                          isMore = false;
+                                        });
+                                      }),
+                                      child: WidgetUtils.onlyTextCenter(
+                                          '玩法规则',
+                                          StyleUtils.getCommonTextStyle(
+                                              color: MyColors.roomTCWZ2,
+                                              fontSize:
+                                                  ScreenUtil().setSp(21))),
+                                    )),
+                                    Container(
+                                      width: double.infinity,
+                                      height: ScreenUtil().setHeight(1),
+                                      margin: EdgeInsets.only(
+                                          left: ScreenUtil().setHeight(10),
+                                          right: ScreenUtil().setHeight(10)),
+                                      color: MyColors.roomTCWZ1,
+                                    ),
+                                    Expanded(
+                                        child: GestureDetector(
+                                      onTap: (() {
+                                        MyUtils.goTransparentPageCom(
+                                            context,
+                                            MoFangJiLuPage(
+                                              type: 1,
+                                            ));
+                                        setState(() {
+                                          isMore = false;
+                                        });
+                                      }),
+                                      child: WidgetUtils.onlyTextCenter(
+                                          '我的记录',
+                                          StyleUtils.getCommonTextStyle(
+                                              color: MyColors.roomTCWZ2,
+                                              fontSize:
+                                                  ScreenUtil().setSp(21))),
+                                    )),
+                                    Container(
+                                      width: double.infinity,
+                                      height: ScreenUtil().setHeight(1),
+                                      margin: EdgeInsets.only(
+                                          left: ScreenUtil().setHeight(10),
+                                          right: ScreenUtil().setHeight(10)),
+                                      color: MyColors.roomTCWZ1,
+                                    ),
+                                    Expanded(
+                                        child: GestureDetector(
+                                      onTap: (() {
+                                        MyUtils.goTransparentPageCom(
+                                            context, const MoFangBeiBaoPage());
+                                        setState(() {
+                                          isMore = false;
+                                        });
+                                      }),
+                                      child: WidgetUtils.onlyTextCenter(
+                                          '我的背包',
+                                          StyleUtils.getCommonTextStyle(
+                                              color: MyColors.roomTCWZ2,
+                                              fontSize:
+                                                  ScreenUtil().setSp(21))),
+                                    )),
+                                    Container(
+                                      width: double.infinity,
+                                      height: ScreenUtil().setHeight(1),
+                                      margin: EdgeInsets.only(
+                                          left: ScreenUtil().setHeight(10),
+                                          right: ScreenUtil().setHeight(10)),
+                                      color: MyColors.roomTCWZ1,
+                                    ),
+                                    Expanded(
+                                        child: GestureDetector(
+                                      onTap: (() {
+                                        MyUtils.goTransparentPage(
+                                            context, const RankPage());
+                                        setState(() {
+                                          isMore = false;
+                                        });
+                                      }),
+                                      child: WidgetUtils.onlyTextCenter(
+                                          '幸运榜单',
+                                          StyleUtils.getCommonTextStyle(
+                                              color: MyColors.roomTCWZ2,
+                                              fontSize:
+                                                  ScreenUtil().setSp(21))),
+                                    )),
+                                  ],
+                                ),
+                              )
                             ],
                           ),
                         )
-                      ],
-                    ),
-                  ) : const Text(''),
+                      : const Text(''),
 
                   // 魔方爆炸效果
-                  isShow == true ? Container(
-                    height: ScreenUtil().setHeight(580),
-                    width: ScreenUtil().setHeight(580),
-                    margin: EdgeInsets.only(top: ScreenUtil().setHeight(140)),
-                    alignment: Alignment.center,
-                    child: SVGAImage(animationController!),
-                  ) : WidgetUtils.commonSizedBox(0, 0),
+                  isShow == true
+                      ? Container(
+                          height: ScreenUtil().setHeight(580),
+                          width: double.infinity, //ScreenUtil().setHeight(580),
+                          margin:
+                              EdgeInsets.only(top: ScreenUtil().setHeight(140)),
+                          alignment: Alignment.center,
+                          child: SVGAImage(animationController!),
+                        )
+                      : WidgetUtils.commonSizedBox(0, 0),
                   // 如果没有跳过动画，则直接显示图片
-                  isTiaoguoLW ? Center(
-                    child: SizedBox(
-                      height: 250.h,
-                      width: 250.h,
-                      child: Column(
-                        children: [
-                          WidgetUtils.commonSizedBox(30.h, 0),
-                          WidgetUtils.showImagesNet(list[0].img!, 180.h, 180.h),
-                        ],
-                      ),
-                    ),
-                  ) : const Text('')
+                  isTiaoguoLW
+                      ? Center(
+                          child: SizedBox(
+                            height: 250.h,
+                            width: 250.h,
+                            child: Column(
+                              children: [
+                                WidgetUtils.commonSizedBox(30.h, 0),
+                                WidgetUtils.showImagesNet(
+                                    list[0].img!, 180.h, 180.h),
+                              ],
+                            ),
+                          ),
+                        )
+                      : const Text('')
                 ],
               ),
             ),
@@ -796,6 +882,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
 
   // 金币 钻石
   String jinbi = '', jinbi2 = '', zuanshi = '', zuanshi2 = '';
+
   /// 钱包余额
   Future<void> doPostBalance() async {
     try {
@@ -804,27 +891,30 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
         case MyHttpConfig.successCode:
           setState(() {
             jinbi = bean.data!.goldBean!;
-            if(double.parse(bean.data!.goldBean!) > 10000){
+            if (double.parse(bean.data!.goldBean!) > 10000) {
               jinbi2 = '${(double.parse(bean.data!.goldBean!) / 10000)}';
-              if(jinbi2.split('.')[1].length >=2){
-                jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1].substring(0,2)}w';
-              }else{
+              if (jinbi2.split('.')[1].length >= 2) {
+                jinbi2 =
+                    '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1].substring(0, 2)}w';
+              } else {
                 jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1]}w';
               }
-            }else{
+            } else {
               jinbi2 = bean.data!.goldBean!;
             }
             sp.setString('mofangJBY', jinbi);
             sp.setString('mofangJB', jinbi2);
             zuanshi = bean.data!.diamond!;
-            if(double.parse(bean.data!.diamond!) > 10000){
+            if (double.parse(bean.data!.diamond!) > 10000) {
               zuanshi2 = '${(double.parse(bean.data!.diamond!) / 10000)}';
-              if(zuanshi2.split('.')[1].length >=2){
-                zuanshi2 = '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1].substring(0,2)}w';
-              }else{
-                zuanshi2 = '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1]}w';
+              if (zuanshi2.split('.')[1].length >= 2) {
+                zuanshi2 =
+                    '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1].substring(0, 2)}w';
+              } else {
+                zuanshi2 =
+                    '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1]}w';
               }
-            }else{
+            } else {
               zuanshi2 = bean.data!.diamond!;
             }
             sp.setString('mofangZSY', zuanshi);
@@ -832,7 +922,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -845,7 +935,8 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
   }
 
   List<Gifts> list = [];
-  int zonge =0;
+  int zonge = 0;
+
   /// 魔方转盘竞猜
   Future<void> doPostPlayRoulette(String number) async {
     setState(() {
@@ -862,22 +953,23 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
       switch (bean.code) {
         case MyHttpConfig.successCode:
           eventBus.fire(GameBack(isBack: false));
-        // 获取数据并赋值
+          // 获取数据并赋值
           list.clear();
           list = bean.data!.gifts!;
           zonge = bean.data!.total as int;
           // 如果是跳过动画，直接展示数据
-          if(isTiaoguo){
+          if (isTiaoguo) {
             // 把是否可以下注设置为可以
-              setState(() {
-                isXiazhu = true;
-              });
+            setState(() {
+              isXiazhu = true;
+            });
             setState(() {
               isTiaoguoLW = false;
             });
             // ignore: use_build_context_synchronously
-            MyUtils.goTransparentPageCom(context, MoFangDaoJuPage(list: list, zonge: zonge, title: '金星魔方'));
-          }else{
+            MyUtils.goTransparentPageCom(context,
+                MoFangDaoJuPage(list: list, zonge: zonge, title: '金星魔方'));
+          } else {
             Future.delayed(const Duration(milliseconds: 400), () {
               // 延迟执行的代码
               setState(() {
@@ -896,52 +988,58 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
                 isXiazhu = true;
               });
               // 延迟执行的代码
-              MyUtils.goTransparentPageCom(context, MoFangDaoJuPage(list: list, zonge: zonge, title: '金星魔方'));
+              MyUtils.goTransparentPageCom(context,
+                  MoFangDaoJuPage(list: list, zonge: zonge, title: '金星魔方'));
             });
           }
           // 更新余额
-          if(bean.data!.curType == 1){
-            if(double.parse(jinbi) > 10000){
+          if (bean.data!.curType == 1) {
+            if (double.parse(jinbi) > 10000) {
               jinbi = sp.getString('mofangJBY').toString();
               // 减去花费的V豆
-              jinbi = '${(double.parse(jinbi) - int.parse(number)*200)}';
-              if(double.parse(jinbi) > 10000){
+              jinbi = '${(double.parse(jinbi) - int.parse(number) * 200)}';
+              if (double.parse(jinbi) > 10000) {
                 //保留2位小数
                 jinbi2 = '${(double.parse(jinbi) / 10000)}';
-                if(jinbi2.split('.')[1].length >=2){
-                  jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1].substring(0,2)}w';
-                }else{
+                if (jinbi2.split('.')[1].length >= 2) {
+                  jinbi2 =
+                      '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1].substring(0, 2)}w';
+                } else {
                   jinbi2 = '${jinbi2.split('.')[0]}.${jinbi2.split('.')[1]}w';
                 }
-              }else{
+              } else {
                 jinbi2 = jinbi;
               }
-            }else{
+            } else {
               jinbi = sp.getString('mofangJBY').toString();
-              jinbi = (double.parse(jinbi) - int.parse(number)*200).toString();
+              jinbi =
+                  (double.parse(jinbi) - int.parse(number) * 200).toString();
               jinbi2 = jinbi;
             }
             sp.setString('mofangJBY', jinbi);
             sp.setString('mofangJB', jinbi2);
-          }else if(bean.data!.curType == 2){
-            if(double.parse(zuanshi) > 10000){
+          } else if (bean.data!.curType == 2) {
+            if (double.parse(zuanshi) > 10000) {
               zuanshi = sp.getString('mofangZSY').toString();
               // 减去花费的V豆
-              zuanshi = '${(double.parse(zuanshi) - int.parse(number)*200)}';
-              if(double.parse(zuanshi) > 10000){
+              zuanshi = '${(double.parse(zuanshi) - int.parse(number) * 200)}';
+              if (double.parse(zuanshi) > 10000) {
                 //保留2位小数
                 zuanshi2 = '${(double.parse(zuanshi) / 10000)}';
-                if(zuanshi2.split('.')[1].length >=2){
-                  zuanshi2 = '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1].substring(0,2)}w';
-                }else{
-                  zuanshi2 = '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1]}w';
+                if (zuanshi2.split('.')[1].length >= 2) {
+                  zuanshi2 =
+                      '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1].substring(0, 2)}w';
+                } else {
+                  zuanshi2 =
+                      '${zuanshi2.split('.')[0]}.${zuanshi2.split('.')[1]}w';
                 }
-              }else{
+              } else {
                 zuanshi2 = zuanshi;
               }
-            }else{
+            } else {
               zuanshi = sp.getString('mofangZSY').toString();
-              zuanshi = (double.parse(zuanshi) - int.parse(number)*200).toString();
+              zuanshi =
+                  (double.parse(zuanshi) - int.parse(number) * 200).toString();
               zuanshi2 = zuanshi;
             }
             sp.setString('mofangZSY', zuanshi);
@@ -950,7 +1048,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
 
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -971,6 +1069,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
   }
 
   String luckInfo = '';
+
   /// 幸运榜单
   Future<void> doPostGameRanking() async {
     try {
@@ -978,12 +1077,14 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
-            if(bean.data!.isNotEmpty){
-              for(int i = 0 ; i < bean.data!.length; i++){
-                if(luckInfo.isEmpty){
-                  luckInfo = '恭喜${bean.data![i].nickname}获得${bean.data![i].giftName}          ';
-                }else{
-                  luckInfo = '$luckInfo恭喜${bean.data![i].nickname}获得${bean.data![i].giftName}          ';
+            if (bean.data!.isNotEmpty) {
+              for (int i = 0; i < bean.data!.length; i++) {
+                if (luckInfo.isEmpty) {
+                  luckInfo =
+                      '恭喜${bean.data![i].nickname}获得${bean.data![i].giftName}          ';
+                } else {
+                  luckInfo =
+                      '$luckInfo恭喜${bean.data![i].nickname}获得${bean.data![i].giftName}          ';
                 }
               }
               LogE('记录=== $luckInfo');
@@ -991,7 +1092,7 @@ class _MofangJinPageState extends State<MofangJinPage> with AutomaticKeepAliveCl
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:

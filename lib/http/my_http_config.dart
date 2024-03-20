@@ -354,6 +354,10 @@ class MyHttpConfig{
   static  String buyDress = "$baseURL/shop/buyDress";
   // 设置装扮
   static  String setDress = "$baseURL/shop/setDress";
+  // 爆灯
+  static  String burstLight = "$baseURL/room/burstLight";
+  // 开启pk
+  static  String startPk = "$baseURL/pk/startPk";
 
 
 

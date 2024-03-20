@@ -88,7 +88,13 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
   bool isBig = false;
   int bigType = 0; //大礼物默认是爆出 0爆出1送出
 
-  var listen, listenZdy, listenRoomBack, listenMessage, listenZDY, listenShouQi,listenJoinHF;
+  var listen,
+      listenZdy,
+      listenRoomBack,
+      listenMessage,
+      listenZDY,
+      listenShouQi,
+      listenJoinHF;
   bool isSDKInit = false;
 
   // 是否开始预下载
@@ -167,9 +173,10 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           });
         }
       } else if (event.map!['type'] == 'chatroom_msg') {
-        saveChatInfo(event.map!, '4',event.map!['nickname'], event.map!['content']);
-      } else  if (event.map!['type'] == 'welcome_msg') {
-        saveChatInfo(event.map!, '3',event.map!['send_nickname'],
+        saveChatInfo(
+            event.map!, '4', event.map!['nickname'], event.map!['content']);
+      } else if (event.map!['type'] == 'welcome_msg') {
+        saveChatInfo(event.map!, '3', event.map!['send_nickname'],
             '${event.map!['nickname']},${event.map!['content']}');
       } else if (event.map!['type'] == 'send_gift') {
         //厅内发送的送礼物消息
@@ -183,16 +190,16 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           if (infos.isEmpty) {
             setState(() {
               infos =
-              '${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber}';
+                  '${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber}';
             });
           } else {
             setState(() {
               infos =
-              '$infos,${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber}';
+                  '$infos,${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice.toString()}) x${cb.giftInfo![i].giftNumber}';
             });
           }
         }
-        saveChatInfo(event.map!, '6',event.map!['from_nickname'],
+        saveChatInfo(event.map!, '6', event.map!['from_nickname'],
             '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出;$infos');
       } else if (event.map!['type'] == 'send_screen_all') {
         charmAllBean cb = charmAllBean.fromJson(event.map);
@@ -200,10 +207,10 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         for (int i = 0; i < cb.giftInfo!.length; i++) {
           if (info.isEmpty) {
             info =
-            '${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice!}) x${cb.giftInfo![i].giftNumber!}';
+                '${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice!}) x${cb.giftInfo![i].giftNumber!}';
           } else {
             info =
-            '$info ${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice!}) x${cb.giftInfo![i].giftNumber!}';
+                '$info ${cb.giftInfo![i].giftName!}(${cb.giftInfo![i].giftPrice!}) x${cb.giftInfo![i].giftNumber!}';
           }
         }
         saveChatInfo(event.map!, '9', cb.fromNickname!,
@@ -435,22 +442,21 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     });
 
     listenJoinHF = eventBus.on<hfJoinBack>().listen((event) {
-      if(event.title == '厅外点击横幅'){
+      if (event.title == '厅外点击横幅') {
         // 如果房间id不是0（0是大厅），没有收起房间，直接进入房间
-        if(event.roomID != '0' && isJoinRoom == false){
+        if (event.roomID != '0' && isJoinRoom == false) {
           doPostBeforeJoin2(event.roomID);
-        }else if(event.roomID != '0' && isJoinRoom == true){
+        } else if (event.roomID != '0' && isJoinRoom == true) {
           // 如果房间id不是0（0是大厅），收起了房间
-          if(sp.getString('roomID') == event.roomID){
+          if (sp.getString('roomID') == event.roomID) {
             // 点击的横幅是自己在的房间
             doPostBeforeJoin(event.roomID);
-          }else{
+          } else {
             // 点击的横幅不是自己在的房间
             doPostBeforeJoin2(event.roomID);
           }
         }
       }
-
     });
   }
 
@@ -752,11 +758,11 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
 
           isRed
               ? Positioned(
-                  bottom: isDevices == 'ios' ? 110.h : 70.h,
+                  bottom: (isDevices == 'ios' ? 110 : 70) * 1.3 / 2,
                   right: 295.w,
                   child: Container(
-                    width: 15.h,
-                    height: 15.h,
+                    width: 15 * 1.3 / 2,
+                    height: 15 * 1.3 / 2,
                     //边框设置
                     decoration: const BoxDecoration(
                       //背景
@@ -775,11 +781,16 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
                   slideAnimationController.controller,
                   slideAnimationController.animation,
                   name,
-                  listMP[0],'厅外点击横幅',sp.getString('roomID').toString())
+                  listMP[0],
+                  '厅外点击横幅',
+                  sp.getString('roomID').toString())
               : const Text(''),
 
           /// 爆出5w2的礼物推送使用
-          isBig ? HomeItems.itemBig(listMP[0], bigType,'厅外点击横幅',sp.getString('roomID').toString()) : const Text(''),
+          isBig
+              ? HomeItems.itemBig(listMP[0], bigType, '厅外点击横幅',
+                  sp.getString('roomID').toString())
+              : const Text(''),
 
           /// 房间图标转动
           isJoinRoom
@@ -1028,7 +1039,6 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     }
   }
 
-
   /// 加入房间前
   Future<void> doPostBeforeJoin2(roomID) async {
     //判断房间id是否为空的
@@ -1053,14 +1063,14 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           break;
         case MyHttpConfig.errorRoomCode: //需要密码
           MyToastUtils.showToastBottom('此房间已被密码锁定');
-        // // ignore: use_build_context_synchronously
-        //   MyUtils.goTransparentPageCom(
-        //       context,
-        //       RoomTSMiMaPage(
-        //           roomID: roomID, roomToken: bean.data!.rtc!, anchorUid: ''));
+          // // ignore: use_build_context_synchronously
+          //   MyUtils.goTransparentPageCom(
+          //       context,
+          //       RoomTSMiMaPage(
+          //           roomID: roomID, roomToken: bean.data!.rtc!, anchorUid: ''));
           break;
         case MyHttpConfig.errorloginCode:
-        //取消订阅所有远端用户的音频流。
+          //取消订阅所有远端用户的音频流。
           _engine.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
           _engine.muteLocalAudioStream(true);
@@ -1097,7 +1107,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       CommonBean bean = await DataUtils.postRoomJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-        // 如果收起了房间，先把音频停掉
+          // 如果收起了房间，先把音频停掉
           if (isJoinRoom) {
             setState(() {
               isFirstJoinRoom = false;
@@ -1120,7 +1130,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
               ));
           break;
         case MyHttpConfig.errorloginCode:
-        //取消订阅所有远端用户的音频流。
+          //取消订阅所有远端用户的音频流。
           _engine.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
           _engine.muteLocalAudioStream(true);
@@ -1323,9 +1333,12 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       if (result) {
         // 下载成功后的操作
         print('图片 $i 下载成功');
-        if(i == bean.data!.imgList!.length-1){
+        if (i == bean.data!.imgList!.length - 1) {
           setState(() {
-            sp.setString('isFirstDown', (int.parse(sp.getString('isFirstDown').toString())+1).toString());
+            sp.setString(
+                'isFirstDown',
+                (int.parse(sp.getString('isFirstDown').toString()) + 1)
+                    .toString());
           });
           print('下载完成修改值 ${sp.getString('isFirstDown').toString()}');
         }
@@ -1419,7 +1432,6 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     } catch (e) {}
   }
 
-
   /// 保存本房间消息
   Future<void> saveChatInfo(Map<dynamic, dynamic> map, String type,
       String chatInfos, String contenInfo) async {
@@ -1456,7 +1468,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     //删除
     db.delete('roomInfoTable');
     // 防止用户被顶号时没有清空表
-    if(sp.getString('sqRoomID').toString().isNotEmpty){
+    if (sp.getString('sqRoomID').toString().isNotEmpty) {
       sp.setString('sqRoomID', '');
     }
   }

@@ -297,7 +297,10 @@ class _MofangLanPageState extends State<MofangLanPage>
                               // child: const SVGASimpleImage(
                               //     assetsName:
                               //         'assets/svga/mofang_lan_show.svga'),
-                              child: WidgetUtils.showImages('assets/images/mofang_lan_showbg.png', 500.h, 500.h),
+                              child: WidgetUtils.showImages(
+                                  'assets/images/mofang_lan_showbg.png',
+                                  500.h,
+                                  500.h),
                             ),
                             Opacity(
                               opacity: 0.4,
@@ -848,7 +851,7 @@ class _MofangLanPageState extends State<MofangLanPage>
                   isShow == true
                       ? Container(
                           height: ScreenUtil().setHeight(580),
-                          width: ScreenUtil().setHeight(580),
+                          width: double.infinity, //ScreenUtil().setHeight(580),
                           margin:
                               EdgeInsets.only(top: ScreenUtil().setHeight(140)),
                           alignment: Alignment.center,

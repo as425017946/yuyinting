@@ -19,6 +19,7 @@ import '../../../utils/widget_utils.dart';
 import '../../message/geren/people_info_page.dart';
 import '../my/my_info_page.dart';
 import 'fenrun_page.dart';
+
 /// 公会成员
 class GonghuiPeoplePage extends StatefulWidget {
   const GonghuiPeoplePage({Key? key}) : super(key: key);
@@ -37,7 +38,7 @@ class _GonghuiPeoplePageState extends State<GonghuiPeoplePage> {
   /// 当前页码
   int page = 1;
   final RefreshController _refreshController =
-  RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: false);
 
   void _onRefresh() async {
     _refreshController.resetNoData();
@@ -81,6 +82,7 @@ class _GonghuiPeoplePageState extends State<GonghuiPeoplePage> {
       });
     });
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -93,33 +95,46 @@ class _GonghuiPeoplePageState extends State<GonghuiPeoplePage> {
     return Column(
       children: [
         GestureDetector(
-          onTap: ((){
-            if(MyUtils.checkClick()){
+          onTap: (() {
+            if (MyUtils.checkClick()) {
               // 如果点击的是自己，进入自己的主页
-              if(sp.getString('user_id').toString() == list[i].streamerUid.toString()){
+              if (sp.getString('user_id').toString() ==
+                  list[i].streamerUid.toString()) {
                 MyUtils.goTransparentRFPage(context, const MyInfoPage());
-              }else{
+              } else {
                 sp.setString('other_id', list[i].streamerUid.toString());
-                MyUtils.goTransparentRFPage(context, PeopleInfoPage(otherId: list[i].streamerUid.toString(),title: '其他',));
+                MyUtils.goTransparentRFPage(
+                    context,
+                    PeopleInfoPage(
+                      otherId: list[i].streamerUid.toString(),
+                      title: '其他',
+                    ));
               }
             }
           }),
           child: Container(
-            margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+            margin: EdgeInsets.fromLTRB(20 * 2.w, 0, 0, 0),
             width: double.infinity,
-            height: ScreenUtil().setHeight(120),
+            height: ScreenUtil().setWidth(120 * 1.3),
             child: Row(
               children: [
                 Stack(
                   alignment: Alignment.center,
                   children: [
-                    WidgetUtils.CircleImageNet(76.h, 76.h, 38.h, list[i].avatar!),
-                    list[i].liveStatus == 1 ? WidgetUtils.showImages('assets/images/zhibozhong.webp', ScreenUtil().setHeight(100), ScreenUtil().setWidth(100),) : const Text(''),
+                    WidgetUtils.CircleImageNet(
+                        76 * 1.3.w, 76 * 1.3.w, 38 * 1.3.w, list[i].avatar!),
+                    list[i].liveStatus == 1
+                        ? WidgetUtils.showImages(
+                            'assets/images/zhibozhong.webp',
+                            ScreenUtil().setHeight(100),
+                            ScreenUtil().setWidth(100),
+                          )
+                        : const Text(''),
                   ],
                 ),
-                WidgetUtils.commonSizedBox(0, 10),
+                WidgetUtils.commonSizedBox(0, 10 * 2.w),
                 SizedBox(
-                  height: 76.h,
+                  height: 76 * 1.3.w,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -127,79 +142,128 @@ class _GonghuiPeoplePageState extends State<GonghuiPeoplePage> {
                       const Spacer(),
                       Row(
                         children: [
-                          WidgetUtils.onlyText(list[i].nickname!, StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: 14)),
-                          WidgetUtils.commonSizedBox(0, 5),
-                          list[i].gender != 0 ? Container(
-                            height: ScreenUtil().setHeight(25),
-                            width: ScreenUtil().setWidth(40),
-                            alignment: Alignment.center,
-                            //边框设置
-                            decoration: BoxDecoration(
-                              //背景
-                              color: list[i].gender == 1 ? MyColors.dtBlue : MyColors.dtPink,
-                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                              borderRadius:
-                              const BorderRadius.all(Radius.circular(30.0)),
-                            ),
-                            child: WidgetUtils.showImages(
-                                list[i].gender == 1
-                                    ? 'assets/images/nan.png'
-                                    : 'assets/images/nv.png',
-                                10,
-                                10),
-                          ) : const Text(''),
+                          WidgetUtils.onlyText(
+                              list[i].nickname!,
+                              StyleUtils.getCommonTextStyle(
+                                  color: Colors.black, fontSize: 14 * 2.w)),
+                          WidgetUtils.commonSizedBox(0, 5 * 2.w),
+                          list[i].gender != 0
+                              ? Container(
+                                  height: ScreenUtil().setWidth(25 * 1.3),
+                                  width: ScreenUtil().setWidth(40),
+                                  alignment: Alignment.center,
+                                  //边框设置
+                                  decoration: BoxDecoration(
+                                    //背景
+                                    color: list[i].gender == 1
+                                        ? MyColors.dtBlue
+                                        : MyColors.dtPink,
+                                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(30.0)),
+                                  ),
+                                  child: WidgetUtils.showImages(
+                                      list[i].gender == 1
+                                          ? 'assets/images/nan.png'
+                                          : 'assets/images/nv.png',
+                                      10 * 2.w,
+                                      10 * 2.w),
+                                )
+                              : const Text(''),
                         ],
                       ),
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          WidgetUtils.onlyText('ID:${list[i].number.toString()}', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: 14)),
+                          WidgetUtils.onlyText(
+                              'ID:${list[i].number.toString()}',
+                              StyleUtils.getCommonTextStyle(
+                                  color: Colors.black, fontSize: 14 * 2.w)),
                         ],
                       ),
                       const Spacer(),
                     ],
                   ),
                 ),
-                WidgetUtils.commonSizedBox(0, 10.h),
-                sp.getString('user_identity').toString() == 'leader' ? SizedBox(
-                  height: 76.h,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Spacer(),
-                      WidgetUtils.onlyText('分润比例', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: 14)),
-                      WidgetUtils.commonSizedBox(0, 5),
-                      WidgetUtils.onlyText(list[i].ratio!, StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: 14)),
-                      const Spacer(),
-                    ],
-                  ),
-                ) : const Text(''),
+                WidgetUtils.commonSizedBox(0, 10 * 1.3.w),
+                sp.getString('user_identity').toString() == 'leader'
+                    ? SizedBox(
+                        height: 76.h,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Spacer(),
+                            WidgetUtils.onlyText(
+                                '分润比例',
+                                StyleUtils.getCommonTextStyle(
+                                    color: Colors.black, fontSize: 14 * 2.w)),
+                            WidgetUtils.commonSizedBox(0, 5 * 2.w),
+                            WidgetUtils.onlyText(
+                                list[i].ratio!,
+                                StyleUtils.getCommonTextStyle(
+                                    color: Colors.black, fontSize: 14 * 2.w)),
+                            const Spacer(),
+                          ],
+                        ),
+                      )
+                    : const Text(''),
                 const Expanded(child: Text('')),
                 Column(
                   children: [
                     const Spacer(),
-                    sp.getString('user_identity').toString() == 'leader' ?  list[i].identity != 10 ? GestureDetector(
-                      onTap: ((){
-                        if(MyUtils.checkClick()) {
-                          MyUtils.goTransparentPageCom(context, FenRunPage(name: list[i].nickname!, id: list[i].streamerUid.toString(),ghID: sp.getString('guild_id').toString(), index: i, bili:list[i].ratio!));
-                        }
-                      }),
-                      child: WidgetUtils.myContainer(ScreenUtil().setHeight(45), ScreenUtil().setHeight(110), Colors.white, MyColors.homeTopBG, '设置比例', ScreenUtil().setSp(25), MyColors.homeTopBG),
-                    ) : const Text('') : const Text(''),
-                    WidgetUtils.commonSizedBox(10.h, 10.h),
-                    sp.getString('user_identity').toString() == 'leader' ?  list[i].identity != 10 ? GestureDetector(
-                      onTap: ((){
-                        isRemove(context, list[i].streamerUid.toString(),i);
-                      }),
-                      child: WidgetUtils.myContainer(ScreenUtil().setHeight(45), ScreenUtil().setHeight(100), Colors.white, MyColors.homeTopBG, '移出', ScreenUtil().setSp(25), MyColors.homeTopBG),
-                    ) : const Text('') : const Text(''),
+                    sp.getString('user_identity').toString() == 'leader'
+                        ? list[i].identity != 10
+                            ? GestureDetector(
+                                onTap: (() {
+                                  if (MyUtils.checkClick()) {
+                                    MyUtils.goTransparentPageCom(
+                                        context,
+                                        FenRunPage(
+                                            name: list[i].nickname!,
+                                            id: list[i].streamerUid.toString(),
+                                            ghID: sp
+                                                .getString('guild_id')
+                                                .toString(),
+                                            index: i,
+                                            bili: list[i].ratio!));
+                                  }
+                                }),
+                                child: WidgetUtils.myContainer(
+                                    ScreenUtil().setWidth(45 * 1.3),
+                                    ScreenUtil().setWidth(110 * 1.3),
+                                    Colors.white,
+                                    MyColors.homeTopBG,
+                                    '设置比例',
+                                    ScreenUtil().setSp(25),
+                                    MyColors.homeTopBG),
+                              )
+                            : const Text('')
+                        : const Text(''),
+                    WidgetUtils.commonSizedBox(10 * 1.3.w, 10 * 1.3.w),
+                    sp.getString('user_identity').toString() == 'leader'
+                        ? list[i].identity != 10
+                            ? GestureDetector(
+                                onTap: (() {
+                                  isRemove(context,
+                                      list[i].streamerUid.toString(), i);
+                                }),
+                                child: WidgetUtils.myContainer(
+                                    ScreenUtil().setWidth(45 * 1.3),
+                                    ScreenUtil().setWidth(100 * 1.3),
+                                    Colors.white,
+                                    MyColors.homeTopBG,
+                                    '移出',
+                                    ScreenUtil().setSp(25),
+                                    MyColors.homeTopBG),
+                              )
+                            : const Text('')
+                        : const Text(''),
                     const Spacer(),
                   ],
                 ),
-                WidgetUtils.commonSizedBox(0, 20),
-
+                WidgetUtils.commonSizedBox(0, 20 * 2.w),
               ],
             ),
           ),
@@ -238,17 +302,21 @@ class _GonghuiPeoplePageState extends State<GonghuiPeoplePage> {
                     children: [
                       WidgetUtils.commonSizedBox(0, 10),
                       GestureDetector(
-                        onTap: ((){
-                          if(MyUtils.checkClick()){
+                        onTap: (() {
+                          if (MyUtils.checkClick()) {
                             MyUtils.hideKeyboard(context);
-                            doPostSearchGuildStreamer(_souSuoName.text.trim().toString());
+                            doPostSearchGuildStreamer(
+                                _souSuoName.text.trim().toString());
                           }
                         }),
-                        child:  WidgetUtils.showImages('assets/images/sousuo_hui.png',
-                            ScreenUtil().setHeight(30), ScreenUtil().setHeight(30)),
+                        child: WidgetUtils.showImages(
+                            'assets/images/sousuo_hui.png',
+                            ScreenUtil().setHeight(30),
+                            ScreenUtil().setHeight(30)),
                       ),
                       WidgetUtils.commonSizedBox(0, 10),
-                      Expanded(child: TextField(
+                      Expanded(
+                          child: TextField(
                         controller: _souSuoName,
                         inputFormatters: [
                           RegexFormatter(regex: MyUtils.regexFirstNotNull),
@@ -265,7 +333,8 @@ class _GonghuiPeoplePageState extends State<GonghuiPeoplePage> {
                           hintText: '请输入昵称或ID',
                           hintStyle: StyleUtils.loginHintTextStyle,
 
-                          contentPadding: const EdgeInsets.only(top: 0, bottom: 0),
+                          contentPadding:
+                              const EdgeInsets.only(top: 0, bottom: 0),
                           border: const OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.transparent),
                           ),
@@ -295,33 +364,38 @@ class _GonghuiPeoplePageState extends State<GonghuiPeoplePage> {
             ],
           ),
           Expanded(
-            child:  length > 0 ? SmartRefresher(
-              header: MyUtils.myHeader(),
-              footer: MyUtils.myFotter(),
-              controller: _refreshController,
-              enablePullUp: true,
-              onLoading: _onLoading,
-              onRefresh: _onRefresh,
-              child: ListView.builder(
-                padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
-                itemBuilder: _itemPeople,
-                itemCount: list.length,
-              ),
-            )
-                :
-            Container(
-              height: double.infinity,
-              alignment: Alignment.center,
-              child: Column(
-                children: [
-                  const Expanded(child: Text('')),
-                  WidgetUtils.showImages('assets/images/no_have.png', 100, 100),
-                  WidgetUtils.commonSizedBox(10, 0),
-                  WidgetUtils.onlyTextCenter('暂无公会成员', StyleUtils.getCommonTextStyle(color: MyColors.g6, fontSize: ScreenUtil().setSp(26))),
-                  const Expanded(child: Text('')),
-                ],
-              ),
-            ),
+            child: length > 0
+                ? SmartRefresher(
+                    header: MyUtils.myHeader(),
+                    footer: MyUtils.myFotter(),
+                    controller: _refreshController,
+                    enablePullUp: true,
+                    onLoading: _onLoading,
+                    onRefresh: _onRefresh,
+                    child: ListView.builder(
+                      padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
+                      itemBuilder: _itemPeople,
+                      itemCount: list.length,
+                    ),
+                  )
+                : Container(
+                    height: double.infinity,
+                    alignment: Alignment.center,
+                    child: Column(
+                      children: [
+                        const Expanded(child: Text('')),
+                        WidgetUtils.showImages(
+                            'assets/images/no_have.png', 100, 100),
+                        WidgetUtils.commonSizedBox(10, 0),
+                        WidgetUtils.onlyTextCenter(
+                            '暂无公会成员',
+                            StyleUtils.getCommonTextStyle(
+                                color: MyColors.g6,
+                                fontSize: ScreenUtil().setSp(26))),
+                        const Expanded(child: Text('')),
+                      ],
+                    ),
+                  ),
           )
         ],
       ),
@@ -345,26 +419,26 @@ class _GonghuiPeoplePageState extends State<GonghuiPeoplePage> {
             if (page == 1) {
               list.clear();
             }
-            if(bean.data!.list!.isNotEmpty){
-              for(int i =0; i < bean.data!.list!.length; i++){
+            if (bean.data!.list!.isNotEmpty) {
+              for (int i = 0; i < bean.data!.list!.length; i++) {
                 list.add(bean.data!.list![i]);
               }
-              if(bean.data!.list!.length < MyConfig.pageSize){
+              if (bean.data!.list!.length < MyConfig.pageSize) {
                 _refreshController.loadNoData();
               }
 
               length = bean.data!.list!.length;
-            }else{
+            } else {
               if (page == 1) {
                 length = 0;
-              }else{
+              } else {
                 _refreshController.loadNoData();
               }
             }
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -379,14 +453,14 @@ class _GonghuiPeoplePageState extends State<GonghuiPeoplePage> {
   }
 
   /// 是否移除
-  Future<void> isRemove(BuildContext context,streamer_uid,index) async {
+  Future<void> isRemove(BuildContext context, streamer_uid, index) async {
     return showDialog(
         context: context,
         builder: (context) {
           return CustomDialog(
             title: '',
             callback: (res) {
-              doPostKickOut(streamer_uid,index);
+              doPostKickOut(streamer_uid, index);
             },
             content: '是否确认移除该主播？',
           );
@@ -394,7 +468,7 @@ class _GonghuiPeoplePageState extends State<GonghuiPeoplePage> {
   }
 
   /// 踢出公会
-  Future<void> doPostKickOut(streamer_uid,index) async {
+  Future<void> doPostKickOut(streamer_uid, index) async {
     Loading.show();
     try {
       Map<String, dynamic> params = <String, dynamic>{
@@ -409,7 +483,7 @@ class _GonghuiPeoplePageState extends State<GonghuiPeoplePage> {
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:

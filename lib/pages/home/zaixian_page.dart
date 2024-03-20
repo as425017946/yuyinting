@@ -73,8 +73,8 @@ class _ZaixianPageState extends State<ZaixianPage>
       if (event.isBack) {
         setState(() {
           //目的是为了有打过招呼的这个人的hi都变成私信按钮
-          for(int i = 0 ; i < list.length; i++){
-            if(list[i].uid.toString() == event.index){
+          for (int i = 0; i < list.length; i++) {
+            if (list[i].uid.toString() == event.index) {
               list[i].isHi = 1;
             }
           }
@@ -92,7 +92,7 @@ class _ZaixianPageState extends State<ZaixianPage>
           child: Container(
             margin: const EdgeInsets.fromLTRB(20, 0, 0, 0),
             width: double.infinity,
-            height: ScreenUtil().setHeight(80),
+            height: ScreenUtil().setWidth(80 * 1.3),
             child: Row(
               children: [
                 GestureDetector(
@@ -101,22 +101,26 @@ class _ZaixianPageState extends State<ZaixianPage>
                       MyUtils.goTransparentRFPage(
                           context,
                           PeopleInfoPage(
-                            otherId: list[i].uid.toString(),title: '其他',
+                            otherId: list[i].uid.toString(),
+                            title: '其他',
                           ));
                     }
                   }),
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
-                      WidgetUtils.CircleHeadImage(78.h, 78.h, list[i].avatar!),
+                      WidgetUtils.CircleHeadImage(
+                          78 * 1.3.w, 78 * 1.3.w, list[i].avatar!),
                       list[i].live == 1
                           ? WidgetUtils.showImages(
-                              'assets/images/zhibozhong.webp', 80.h, 80.h)
+                              'assets/images/zhibozhong.webp',
+                              80 * 1.3.w,
+                              80 * 1.3.w)
                           : const Text(''),
                     ],
                   ),
                 ),
-                WidgetUtils.commonSizedBox(0, 10),
+                WidgetUtils.commonSizedBox(0, 10 * 2.w),
                 Expanded(
                   child: Column(
                     children: [
@@ -129,8 +133,8 @@ class _ZaixianPageState extends State<ZaixianPage>
                                 StyleUtils.getCommonTextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w600,
-                                    fontSize: 14)),
-                            WidgetUtils.commonSizedBox(0, 5),
+                                    fontSize: 14 * 2.sp)),
+                            WidgetUtils.commonSizedBox(0, 5 * 2.w),
                             Stack(
                               children: [
                                 list[i].gender != 0
@@ -138,45 +142,56 @@ class _ZaixianPageState extends State<ZaixianPage>
                                         list[i].gender == 1
                                             ? 'assets/images/avj.png'
                                             : 'assets/images/avk.png',
-                                        15,
-                                        45)
+                                        15 * 2.w,
+                                        45 * 2.w)
                                     : const Text(''),
                                 Container(
-                                  padding: EdgeInsets.only(right: int.parse(list[i].age.toString()) > 9 ? 15.h : 20.h),
-                                  width: 45,
-                                  height: 15,
+                                  padding: EdgeInsets.only(
+                                      right:
+                                          int.parse(list[i].age.toString()) > 9
+                                              ? 15 * 1.3.w
+                                              : 20 * 1.3.w),
+                                  width: 45 * 2.w,
+                                  height: 15 * 2.w,
                                   alignment: Alignment.centerRight,
                                   child: Text(
                                     list[i].age.toString(),
                                     style: StyleUtils.getCommonTextStyle(
-                                        color: Colors.white, fontSize: 12),
+                                        color: Colors.white,
+                                        fontSize: 12 * 2.sp),
                                   ),
                                 ),
                               ],
                             ),
                             // 只有不是新贵或者新锐的时候展示萌新
-                            (list[i].isNew.toString() == '1' && list[i].newNoble.toString() == '0')
+                            (list[i].isNew.toString() == '1' &&
+                                    list[i].newNoble.toString() == '0')
                                 ? WidgetUtils.showImages(
-                                'assets/images/dj/room_role_common.png',
-                                30.h,
-                                50.h)
+                                    'assets/images/dj/room_role_common.png',
+                                    30 * 1.3.w,
+                                    50 * 1.3.w)
                                 : const Text(''),
-                            (list[i].isNew.toString() == '1' && list[i].newNoble.toString() == '0')
+                            (list[i].isNew.toString() == '1' &&
+                                    list[i].newNoble.toString() == '0')
                                 ? WidgetUtils.commonSizedBox(0, 5)
                                 : const Text(''),
                             // 展示新贵或者新锐图标
                             list[i].newNoble.toString() == '1'
                                 ? WidgetUtils.showImages(
-                                'assets/images/dj/room_rui.png', 30.h, 50.h)
+                                    'assets/images/dj/room_rui.png',
+                                    30 * 1.3.w,
+                                    50 * 1.3.w)
                                 : list[i].newNoble.toString() == '2'
-                                ? WidgetUtils.showImages(
-                                'assets/images/dj/room_gui.png',
-                                30.h,
-                                50.h)
-                                :  list[i].newNoble.toString() == '3' ? WidgetUtils.showImages(
-                                'assets/images/dj/room_gui.png',
-                                30.h,
-                                50.h) : const Text(''),
+                                    ? WidgetUtils.showImages(
+                                        'assets/images/dj/room_gui.png',
+                                        30 * 1.3.w,
+                                        50 * 1.3.w)
+                                    : list[i].newNoble.toString() == '3'
+                                        ? WidgetUtils.showImages(
+                                            'assets/images/dj/room_gui.png',
+                                            30 * 1.3.w,
+                                            50 * 1.3.w)
+                                        : const Text(''),
                             list[i].newNoble.toString() != '0'
                                 ? WidgetUtils.commonSizedBox(0, 5)
                                 : const Text(''),
@@ -192,7 +207,7 @@ class _ZaixianPageState extends State<ZaixianPage>
                           style: StyleUtils.getCommonTextStyle(
                               color: Colors.grey,
                               fontWeight: FontWeight.w600,
-                              fontSize: 14),
+                              fontSize: 14 * 2.sp),
                         ),
                       )
                     ],
@@ -210,8 +225,10 @@ class _ZaixianPageState extends State<ZaixianPage>
                                 index: i));
                       }
                     }),
-                    child: WidgetUtils.showImages('assets/images/trends_hi.png',
-                        ScreenUtil().setHeight(40), ScreenUtil().setHeight(90)),
+                    child: WidgetUtils.showImages(
+                        'assets/images/trends_hi.png',
+                        ScreenUtil().setWidth(40 * 1.3),
+                        ScreenUtil().setWidth(90 * 1.3)),
                   )
                 else
                   GestureDetector(
@@ -227,15 +244,15 @@ class _ZaixianPageState extends State<ZaixianPage>
                       }
                     }),
                     child: WidgetUtils.myContainer(
-                        ScreenUtil().setHeight(40),
-                        ScreenUtil().setHeight(90),
+                        ScreenUtil().setWidth(40 * 1.3),
+                        ScreenUtil().setWidth(90 * 1.3),
                         Colors.white,
                         MyColors.homeTopBG,
                         '私信',
                         ScreenUtil().setSp(25),
                         MyColors.homeTopBG),
                   ),
-                WidgetUtils.commonSizedBox(0, 20),
+                WidgetUtils.commonSizedBox(0, 20 * 2.w),
               ],
             ),
           ),
@@ -256,7 +273,7 @@ class _ZaixianPageState extends State<ZaixianPage>
             onLoading: _onLoading,
             onRefresh: _onRefresh,
             child: ListView.builder(
-              padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
+              padding: EdgeInsets.only(top: ScreenUtil().setWidth(20 * 1.3)),
               itemBuilder: _itemTuiJian,
               itemCount: list.length,
             ),

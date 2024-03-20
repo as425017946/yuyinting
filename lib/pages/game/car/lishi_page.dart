@@ -21,7 +21,6 @@ class LiShiPage extends StatefulWidget {
 }
 
 class _LiShiPageState extends State<LiShiPage> {
-
   @override
   void initState() {
     // TODO: implement initState
@@ -29,7 +28,7 @@ class _LiShiPageState extends State<LiShiPage> {
     doPostGiftList();
   }
 
-  Widget jilu(BuildContext context, int i){
+  Widget jilu(BuildContext context, int i) {
     return Column(
       children: [
         Row(
@@ -47,45 +46,49 @@ class _LiShiPageState extends State<LiShiPage> {
                       //背景
                       color: Colors.transparent,
                       //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                      borderRadius: const BorderRadius.all(
-                          Radius.circular(13)),
+                      borderRadius: const BorderRadius.all(Radius.circular(13)),
                       //设置四周边框
                       border: Border.all(width: 1, color: MyColors.CarZJ),
                     ),
-                    child: WidgetUtils.onlyTextCenter('${(i+1)}', StyleUtils.getCommonTextStyle(color: MyColors.CarZJ, fontSize: 20.sp)),
+                    child: WidgetUtils.onlyTextCenter(
+                        '${(i + 1)}',
+                        StyleUtils.getCommonTextStyle(
+                            color: MyColors.CarZJ, fontSize: 20.sp)),
                   ),
                   WidgetUtils.commonSizedBox(0, 8.h),
                 ],
               ),
             ),
-            for(int a = 0; a < 7; a++)
-              a == (list[i].openSn! - 1) ? Container(
-                height: 28.h,
-                width: 68.h,
-                margin: EdgeInsets.only(right: 5.h),
-                decoration: BoxDecoration(
-                  //背景
-                  color: MyColors.CarZJ,
-                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                  borderRadius: const BorderRadius.all(
-                      Radius.circular(5)),
-                  //设置四周边框
-                  border: Border.all(width: 1, color: MyColors.CarZJ),
-                ),
-              ) : Container(
-                height: 28.h,
-                width: 68.h,
-                margin: EdgeInsets.only(right: 5.h),
-                decoration: BoxDecoration(
-                  //背景
-                  color: Colors.white,
-                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                  borderRadius: const BorderRadius.all(
-                      Radius.circular(5)),
-                  //设置四周边框
-                  border: Border.all(width: 1, color: MyColors.CarZJ),
-                ),
-              )
+            for (int a = 0; a < 7; a++)
+              a == (list[i].openSn! - 1)
+                  ? Container(
+                      height: 28.h,
+                      width: 68 * 1.25.w,
+                      margin: EdgeInsets.only(right: 5.h),
+                      decoration: BoxDecoration(
+                        //背景
+                        color: MyColors.CarZJ,
+                        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(5)),
+                        //设置四周边框
+                        border: Border.all(width: 1, color: MyColors.CarZJ),
+                      ),
+                    )
+                  : Container(
+                      height: 28.h,
+                      width: 68 * 1.25.w,
+                      margin: EdgeInsets.only(right: 5.h),
+                      decoration: BoxDecoration(
+                        //背景
+                        color: Colors.white,
+                        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(5)),
+                        //设置四周边框
+                        border: Border.all(width: 1, color: MyColors.CarZJ),
+                      ),
+                    )
           ],
         ),
         WidgetUtils.commonSizedBox(10.h, 0),
@@ -127,46 +130,46 @@ class _LiShiPageState extends State<LiShiPage> {
                   children: [
                     WidgetUtils.commonSizedBox(0, 50.h),
                     Container(
-                      width: 68.h,
+                      width: 68 * 1.25.w,
                       alignment: Alignment.center,
                       child: WidgetUtils.showImages(
                           'assets/images/car_jl_t1.png', 63.h, 58.h),
                     ),
                     Container(
-                      width: 68.h,
+                      width: 68 * 1.25.w,
                       alignment: Alignment.center,
                       child: WidgetUtils.showImages(
                           'assets/images/car_jl_t2.png', 63.h, 58.h),
                     ),
                     WidgetUtils.commonSizedBox(0, 10.h),
                     Container(
-                      width: 68.h,
+                      width: 68 * 1.25.w,
                       alignment: Alignment.center,
                       child: WidgetUtils.showImages(
                           'assets/images/car_jl_t3.png', 72.h, 65.h),
                     ),
                     Container(
-                      width: 68.h,
+                      width: 68 * 1.25.w,
                       alignment: Alignment.center,
                       child: WidgetUtils.showImages(
                           'assets/images/car_jl_t4.png', 60.h, 60.h),
                     ),
                     WidgetUtils.commonSizedBox(0, 10.h),
                     Container(
-                      width: 68.h,
+                      width: 68 * 1.25.w,
                       alignment: Alignment.center,
                       child: WidgetUtils.showImages(
                           'assets/images/car_jl_t5.png', 57.h, 76.h),
                     ),
                     WidgetUtils.commonSizedBox(0, 10.h),
                     Container(
-                      width: 68.h,
+                      width: 68 * 1.25.w,
                       alignment: Alignment.center,
                       child: WidgetUtils.showImages(
                           'assets/images/car_jl_t6.png', 66.h, 60.h),
                     ),
                     Container(
-                      width: 68.h,
+                      width: 68 * 1.25.w,
                       alignment: Alignment.center,
                       child: WidgetUtils.showImages(
                           'assets/images/car_jl_t7.png', 63.h, 58.h),
@@ -181,7 +184,10 @@ class _LiShiPageState extends State<LiShiPage> {
                   ),
                 ),
                 WidgetUtils.commonSizedBox(20.h, 0),
-                WidgetUtils.onlyTextCenter('以上为近期比赛的获胜赛道记录\n序号1为上轮比赛，依次往上顺延', StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: 20.sp)),
+                WidgetUtils.onlyTextCenter(
+                    '以上为近期比赛的获胜赛道记录\n序号1为上轮比赛，依次往上顺延',
+                    StyleUtils.getCommonTextStyle(
+                        color: MyColors.g3, fontSize: 20.sp)),
                 WidgetUtils.commonSizedBox(30.h, 0),
               ],
             ),
@@ -203,9 +209,9 @@ class _LiShiPageState extends State<LiShiPage> {
   }
 
   List<Data> list = [];
+
   /// 赛车中奖赛道列表历史
   Future<void> doPostGiftList() async {
-
     try {
       Loading.show();
       carZJLiShiBean bean = await DataUtils.postGetWinTrackList();
@@ -217,7 +223,7 @@ class _LiShiPageState extends State<LiShiPage> {
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:

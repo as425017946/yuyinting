@@ -183,7 +183,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
               WidgetUtils.commonSizedBox(10, 0),
               Container(
                 margin: const EdgeInsets.only(left: 20, right: 0),
-                height: ScreenUtil().setHeight(160),
+                height: ScreenUtil().setHeight(170),
                 width: double.infinity,
                 alignment: Alignment.centerLeft,
                 child: Row(
@@ -200,8 +200,8 @@ class _MyInfoPageState extends State<MyInfoPage> {
                         }
                       }),
                       child: SizedBox(
-                        width: 160.h,
-                        height: 160.h,
+                        width: 170.h,
+                        height: 170.h,
                         child: Stack(
                           alignment: Alignment.center,
                           children: [
@@ -213,15 +213,15 @@ class _MyInfoPageState extends State<MyInfoPage> {
                             (avatarFrameGifImg.isEmpty &&
                                     avatarFrameImg.isNotEmpty)
                                 ? WidgetUtils.CircleHeadImage(
-                                    ScreenUtil().setHeight(160),
-                                    ScreenUtil().setHeight(160),
+                                    ScreenUtil().setHeight(170),
+                                    ScreenUtil().setHeight(170),
                                     avatarFrameImg)
                                 : const Text(''),
                             // 头像框动态图
                             avatarFrameGifImg.isNotEmpty
                                 ? SizedBox(
-                                    height: 160.h,
-                                    width: 160.h,
+                                    height: 170.h,
+                                    width: 170.h,
                                     child: SVGASimpleImage(
                                       resUrl: avatarFrameGifImg,
                                     ),

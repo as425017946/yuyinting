@@ -113,7 +113,7 @@ class _ZuojiaBBPageState extends State<ZuojiaBBPage> with AutomaticKeepAliveClie
           image: DecorationImage(
             //背景图片修饰
             image: AssetImage(listB[i] == true
-                ? "assets/images/zhuangban_bg2.png"
+                ? "assets/images/zhuangban_bg3.png"
                 : "assets/images/zhuangban_bg1.png"),
             fit: BoxFit.fill, //覆盖
           ),

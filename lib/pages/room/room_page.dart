@@ -33,6 +33,7 @@ import '../../db/DatabaseHelper.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
+import '../../utils/SVGASimpleImage3.dart';
 import '../../utils/SlideAnimationController.dart';
 import '../../utils/loading.dart';
 import '../../utils/log_util.dart';
@@ -70,6 +71,7 @@ class _RoomPageState extends State<RoomPage>
 
   /// 存进入的座驾信息
   List<String> listUrlZJ = [];
+
   // 存是否展示座驾
   bool isZJShow = false;
 
@@ -348,14 +350,17 @@ class _RoomPageState extends State<RoomPage>
     _timer = Timer.periodic(
         const Duration(seconds: 1),
         (Timer timer) => {
-              setState(() {
-                if (_timeCount <= 0) {
-                  _timer!.cancel();
-                  _timeCount = 5;
-                } else {
-                  _timeCount -= 1;
+              if (mounted)
+                {
+                  setState(() {
+                    if (_timeCount <= 0) {
+                      _timer!.cancel();
+                      _timeCount = 5;
+                    } else {
+                      _timeCount -= 1;
+                    }
+                  })
                 }
-              })
             });
   }
 
@@ -363,17 +368,20 @@ class _RoomPageState extends State<RoomPage>
     _timer2 = Timer.periodic(
         const Duration(seconds: 1),
         (Timer timer) => {
-              setState(() {
-                if (_timeCount2 <= 0) {
-                  _timer2!.cancel();
-                  _timeCount2 = 10;
+              if (mounted)
+                {
                   setState(() {
-                    wherePeople = 0;
-                  });
-                } else {
-                  _timeCount2 -= 1;
+                    if (_timeCount2 <= 0) {
+                      _timer2!.cancel();
+                      _timeCount2 = 10;
+                      setState(() {
+                        wherePeople = 0;
+                      });
+                    } else {
+                      _timeCount2 -= 1;
+                    }
+                  })
                 }
-              })
             });
   }
 
@@ -674,6 +682,7 @@ class _RoomPageState extends State<RoomPage>
           }
           // 如果在麦上，就开启爆灯模式
           if (wherePeople != 0) {
+            doPostBurstLight(wherePeople.toString());
             _startTimer2();
           } else {
             MyToastUtils.showToastBottom('上麦后才可以使用哦~');
@@ -1325,6 +1334,14 @@ class _RoomPageState extends State<RoomPage>
             _engine.setClientRole(role: ClientRoleType.clientRoleAudience);
             // 取消发布本地音频流
             _engine.muteLocalAudioStream(true);
+          }
+        } else if (event.map!['type'] == 'burstlight') {
+          //通知用户开启了爆灯
+          if (event.map!['uid'].toString() != sp.getString('user_id')) {
+            setState(() {
+              wherePeople = int.parse(event.map!['serial_number'].toString());
+            });
+            _startTimer2();
           }
         } else {
           /// 这里是用户的其他正常操作
@@ -3117,30 +3134,111 @@ class _RoomPageState extends State<RoomPage>
                           RoomItems.notices(context, m0, notice, listM,
                               widget.roomId, wherePeople, listPeople, audio9),
 
-                          /// 麦序位
-                          RoomItems.maixu(
-                              context,
-                              m1,
-                              m2,
-                              m3,
-                              m4,
-                              m5,
-                              m6,
-                              m7,
-                              m8,
-                              isBoss,
-                              listM,
-                              widget.roomId,
-                              wherePeople,
-                              listPeople,
-                              audio1,
-                              audio2,
-                              audio3,
-                              audio4,
-                              audio5,
-                              audio6,
-                              audio7,
-                              audio8),
+                          /// 麦序
+                          Stack(
+                            children: [
+                              Transform.translate(
+                                offset: Offset(0, -50.h),
+                                child: Container(
+                                  height: 340.h,
+                                  width: double.infinity,
+                                  decoration: const BoxDecoration(
+                                    //设置Container修饰
+                                    image: DecorationImage(
+                                      //背景图片修饰
+                                      image: AssetImage(
+                                          "assets/images/room_pk_bg.png"),
+                                      fit: BoxFit.fill, //覆盖
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+                              /// 麦序位
+                              RoomItems.maixu(
+                                  context,
+                                  m1,
+                                  m2,
+                                  m3,
+                                  m4,
+                                  m5,
+                                  m6,
+                                  m7,
+                                  m8,
+                                  isBoss,
+                                  listM,
+                                  widget.roomId,
+                                  wherePeople,
+                                  listPeople,
+                                  audio1,
+                                  audio2,
+                                  audio3,
+                                  audio4,
+                                  audio5,
+                                  audio6,
+                                  audio7,
+                                  audio8),
+                            ],
+                          ),
+
+                          //pk
+                          Transform.translate(
+                            offset: Offset(0, -80.h),
+                            child: Container(
+                              height: 50.h,
+                              width: double.infinity,
+                              color: Colors.transparent,
+                              alignment: Alignment.center,
+                              child: Stack(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                          child: SizedBox(
+                                              height: 50.h,
+                                              child: const SVGASimpleImage3(
+                                                assetsName:
+                                                    'assets/svga/pk/room_pk_blue.svga',
+                                              ))),
+                                      Expanded(
+                                          child: SizedBox(
+                                              height: 50.h,
+                                              child: const SVGASimpleImage3(
+                                                assetsName:
+                                                    'assets/svga/pk/room_pk_red.svga',
+                                              ))),
+                                    ],
+                                  ),
+                                  Container(
+                                    width: double.infinity,
+                                    height: 50.h,
+                                    alignment: Alignment.center,
+                                    child: Row(
+                                      children: [
+                                        const Spacer(),
+                                        WidgetUtils.onlyText(
+                                            '10000000',
+                                            StyleUtils.getCommonTextStyle(
+                                                color: Colors.white,
+                                                fontSize: 22.sp)),
+                                        WidgetUtils.showImages(
+                                            'assets/images/room_pk_qj.png',
+                                            30.h,
+                                            60.h),
+                                        WidgetUtils.onlyText(
+                                            '10000000',
+                                            StyleUtils.getCommonTextStyle(
+                                                color: Colors.white,
+                                                fontSize: 22.sp)),
+                                        const Spacer(),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+
                           Expanded(
                             child: Transform.translate(
                               offset: Offset(0, -80.h),
@@ -3180,6 +3278,29 @@ class _RoomPageState extends State<RoomPage>
                         ],
                       ),
 
+                      //pk或惩罚时间
+                      Positioned(
+                        top: 290.h,
+                        child: Container(
+                          width: 300.w,
+                          height: 40.h,
+                          color: Colors.transparent,
+                          child: Row(
+                            children: [
+                              WidgetUtils.commonSizedBox(0, 20.w),
+                              Text(
+                                '惩罚时间: 59:00',
+                                style: TextStyle(
+                                    fontSize: ScreenUtil().setSp(26),
+                                    color: Colors.white,
+                                    fontFamily: 'YOUSHEBIAOTIHEI'),
+                              ),
+                              const Spacer(),
+                            ],
+                          ),
+                        ),
+                      ),
+
                       /// 上麦下麦
                       RoomItems.noPeople(upOrDown, 0, listM),
                       RoomItems.noPeople(upOrDown, 1, listM),
@@ -3204,12 +3325,12 @@ class _RoomPageState extends State<RoomPage>
 
                       /// 聊天除使用
                       Positioned(
-                        bottom: 100.h,
+                        bottom: 90.h,
                         child:
 
                             /// 消息列表最外层
                             SizedBox(
-                          height: isDevices == 'ios' ? 560.h : 590.h,
+                          height: isDevices == 'ios' ? 560.h : 500.h,
                           width: 420.h,
                           child: Column(
                             children: [
@@ -3525,7 +3646,7 @@ class _RoomPageState extends State<RoomPage>
               WidgetUtils.commonSizedBox(35, 0),
               Row(
                 children: [
-                  const Expanded(child: Text('')),
+                  const Spacer(),
                   GestureDetector(
                     onTap: (() {
                       if (MyUtils.checkClick()) {
@@ -3558,7 +3679,7 @@ class _RoomPageState extends State<RoomPage>
                       ],
                     ),
                   ),
-                  WidgetUtils.commonSizedBox(0, 50),
+                  WidgetUtils.commonSizedBox(0, 50.w),
                   GestureDetector(
                     onTap: (() {
                       if (MyUtils.checkClick()) {
@@ -3585,7 +3706,7 @@ class _RoomPageState extends State<RoomPage>
                       ],
                     ),
                   ),
-                  WidgetUtils.commonSizedBox(0, 40),
+                  const Spacer(),
                 ],
               ),
               WidgetUtils.commonSizedBox(40, 0),
@@ -4665,6 +4786,31 @@ class _RoomPageState extends State<RoomPage>
     // 防止用户被顶号时没有清空表
     if (sp.getString('sqRoomID').toString().isNotEmpty) {
       sp.setString('sqRoomID', '');
+    }
+  }
+
+  /// 爆灯
+  Future<void> doPostBurstLight(String serial_number) async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'room_id': widget.roomId,
+      'serial_number': serial_number,
+    };
+    try {
+      CommonBean bean = await DataUtils.postBurstLight(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {});
+          break;
+        case MyHttpConfig.errorloginCode:
+          // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

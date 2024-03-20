@@ -24,13 +24,14 @@ class ShouChongPage extends StatefulWidget {
 
 class _ShouChongPageState extends State<ShouChongPage> {
   int type = 0;
-  int payType = 1;//默认支付宝 支付方式 1支付宝 2云闪付 3微信 4银行卡 5QQ钱包 6 数字人民币 7抖音钱包
+  int payType = 1; //默认支付宝 支付方式 1支付宝 2云闪付 3微信 4银行卡 5QQ钱包 6 数字人民币 7抖音钱包
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     doPostGetFirstPayment();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,89 +43,152 @@ class _ShouChongPageState extends State<ShouChongPage> {
             children: [
               type == 0
                   ? Container(
-                      height: 400.h,
-                      margin: EdgeInsets.only(left: 20.h, right: 20.h),
-                      child: isGet ? Stack(
-                        children: [
-                          WidgetUtils.showImages(
-                              'assets/images/shouchong_30.png',
-                              400.h,
-                              double.infinity),
-                          Positioned(
-                              left: 140.w,
-                              top: 15.h,
-                              child: WidgetUtils.onlyText('${listMoney[0]}元', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 26.sp,fontWeight: FontWeight.w600))),
-                          Positioned(
-                              left: 275.w,
-                              top: 15.h,
-                              child: WidgetUtils.onlyText('${listMoney[1]}元', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: 26.sp))),
-                          Positioned(
-                              left: 420.w,
-                              top: 15.h,
-                              child: WidgetUtils.onlyText('${listMoney[2]}元', StyleUtils.getCommonTextStyle(color:  MyColors.g9, fontSize: 26.sp))),
-                          Positioned(
-                              left: 80.w,
-                              top: 345.h,
-                              child: WidgetUtils.onlyText('赠送${listDou[0]}V豆，限定礼物x1', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 26.sp,)))
-                        ],
-                      ) : WidgetUtils.commonSizedBox(0, 0),
+                      height: 400 * 1.25.w,
+                      margin: EdgeInsets.only(
+                          left: 20 * 1.25.w, right: 20 * 1.25.w),
+                      child: isGet
+                          ? Stack(
+                              children: [
+                                WidgetUtils.showImages(
+                                    'assets/images/shouchong_30.png',
+                                    400 * 1.25.w,
+                                    double.infinity),
+                                Positioned(
+                                    left: 135.w,
+                                    top: 15 * 1.25.w,
+                                    child: WidgetUtils.onlyText(
+                                        '${listMoney[0]}元',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: Colors.white,
+                                            fontSize: 26.sp,
+                                            fontWeight: FontWeight.w600))),
+                                Positioned(
+                                    left: 275.w,
+                                    top: 15 * 1.25.w,
+                                    child: WidgetUtils.onlyText(
+                                        '${listMoney[1]}元',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: MyColors.g9,
+                                            fontSize: 26.sp))),
+                                Positioned(
+                                    left: 400.w,
+                                    top: 15 * 1.25.w,
+                                    child: WidgetUtils.onlyText(
+                                        '${listMoney[2]}元',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: MyColors.g9,
+                                            fontSize: 26.sp))),
+                                Positioned(
+                                    left: 80.w,
+                                    top: 345 * 1.25.w,
+                                    child: WidgetUtils.onlyText(
+                                        '赠送${listDou[0]}V豆，限定礼物x1',
+                                        StyleUtils.getCommonTextStyle(
+                                          color: Colors.white,
+                                          fontSize: 26.sp,
+                                        )))
+                              ],
+                            )
+                          : WidgetUtils.commonSizedBox(0, 0),
                     )
                   : type == 1
                       ? Container(
-                          height: 400.h,
-                          margin: EdgeInsets.only(left: 20.h, right: 20.h),
-                          child: isGet ? Stack(
-                            children: [
-                              WidgetUtils.showImages(
-                                  'assets/images/shouchong_68.png',
-                                  400.h,
-                                  double.infinity),
-                              Positioned(
-                                  left: 140.w,
-                                  top: 15.h,
-                                  child: WidgetUtils.onlyText('${listMoney[0]}元', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: 26.sp))),
-                              Positioned(
-                                  left: 275.w,
-                                  top: 15.h,
-                                  child: WidgetUtils.onlyText('${listMoney[1]}元', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 26.sp,fontWeight: FontWeight.w600))),
-                              Positioned(
-                                  left: 420.w,
-                                  top: 15.h,
-                                  child: WidgetUtils.onlyText('${listMoney[2]}元', StyleUtils.getCommonTextStyle(color:  MyColors.g9, fontSize: 26.sp))),
-                              Positioned(
-                                  left: 80.w,
-                                  top: 345.h,
-                                  child: WidgetUtils.onlyText('赠送${listDou[1]}V豆，限定礼物x2', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 26.sp,)))
-                            ],
-                          ) : WidgetUtils.commonSizedBox(0, 0),
+                          height: 400 * 1.25.w,
+                          margin: EdgeInsets.only(
+                              left: 20 * 1.25.w, right: 20 * 1.25.w),
+                          child: isGet
+                              ? Stack(
+                                  children: [
+                                    WidgetUtils.showImages(
+                                        'assets/images/shouchong_68.png',
+                                        400 * 1.25.w,
+                                        double.infinity),
+                                    Positioned(
+                                        left: 135.w,
+                                        top: 15 * 1.25.w,
+                                        child: WidgetUtils.onlyText(
+                                            '${listMoney[0]}元',
+                                            StyleUtils.getCommonTextStyle(
+                                                color: MyColors.g9,
+                                                fontSize: 26.sp))),
+                                    Positioned(
+                                        left: 275.w,
+                                        top: 15 * 1.25.w,
+                                        child: WidgetUtils.onlyText(
+                                            '${listMoney[1]}元',
+                                            StyleUtils.getCommonTextStyle(
+                                                color: Colors.white,
+                                                fontSize: 26.sp,
+                                                fontWeight: FontWeight.w600))),
+                                    Positioned(
+                                        left: 400.w,
+                                        top: 15 * 1.25.w,
+                                        child: WidgetUtils.onlyText(
+                                            '${listMoney[2]}元',
+                                            StyleUtils.getCommonTextStyle(
+                                                color: MyColors.g9,
+                                                fontSize: 26.sp))),
+                                    Positioned(
+                                        left: 80.w,
+                                        top: 345 * 1.25.w,
+                                        child: WidgetUtils.onlyText(
+                                            '赠送${listDou[1]}V豆，限定礼物x2',
+                                            StyleUtils.getCommonTextStyle(
+                                              color: Colors.white,
+                                              fontSize: 26.sp,
+                                            )))
+                                  ],
+                                )
+                              : WidgetUtils.commonSizedBox(0, 0),
                         )
                       : Container(
-                          height: 400.h,
-                          margin: EdgeInsets.only(left: 20.h, right: 20.h),
-                          child: isGet ? Stack(
-                            children: [
-                              WidgetUtils.showImages(
-                                  'assets/images/shouchong_98.png',
-                                  400.h,
-                                  double.infinity),
-                              Positioned(
-                                  left: 140.w,
-                                  top: 15.h,
-                                  child: WidgetUtils.onlyText('${listMoney[0]}元', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: 26.sp))),
-                              Positioned(
-                                  left: 275.w,
-                                  top: 15.h,
-                                  child: WidgetUtils.onlyText('${listMoney[1]}元', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: 26.sp))),
-                              Positioned(
-                                  left: 420.w,
-                                  top: 15.h,
-                                  child: WidgetUtils.onlyText('${listMoney[2]}元', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 26.sp,fontWeight: FontWeight.w600))),
-                              Positioned(
-                                  left: 80.w,
-                                  top: 345.h,
-                                  child: WidgetUtils.onlyText('赠送${listDou[2]}V豆，限定礼物x3', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 26.sp,)))
-                            ],
-                          ) : WidgetUtils.commonSizedBox(0, 0),
+                          height: 400 * 1.25.w,
+                          margin: EdgeInsets.only(
+                              left: 20 * 1.25.w, right: 20 * 1.25.w),
+                          child: isGet
+                              ? Stack(
+                                  children: [
+                                    WidgetUtils.showImages(
+                                        'assets/images/shouchong_98.png',
+                                        400 * 1.25.w,
+                                        double.infinity),
+                                    Positioned(
+                                        left: 135.w,
+                                        top: 15 * 1.25.w,
+                                        child: WidgetUtils.onlyText(
+                                            '${listMoney[0]}元',
+                                            StyleUtils.getCommonTextStyle(
+                                                color: MyColors.g9,
+                                                fontSize: 26.sp))),
+                                    Positioned(
+                                        left: 275.w,
+                                        top: 15 * 1.25.w,
+                                        child: WidgetUtils.onlyText(
+                                            '${listMoney[1]}元',
+                                            StyleUtils.getCommonTextStyle(
+                                                color: MyColors.g9,
+                                                fontSize: 26.sp))),
+                                    Positioned(
+                                        left: 400.w,
+                                        top: 15 * 1.25.w,
+                                        child: WidgetUtils.onlyText(
+                                            '${listMoney[2]}元',
+                                            StyleUtils.getCommonTextStyle(
+                                                color: Colors.white,
+                                                fontSize: 26.sp,
+                                                fontWeight: FontWeight.w600))),
+                                    Positioned(
+                                        left: 80.w,
+                                        top: 345 * 1.25.w,
+                                        child: WidgetUtils.onlyText(
+                                            '赠送${listDou[2]}V豆，限定礼物x3',
+                                            StyleUtils.getCommonTextStyle(
+                                              color: Colors.white,
+                                              fontSize: 26.sp,
+                                            )))
+                                  ],
+                                )
+                              : WidgetUtils.commonSizedBox(0, 0),
                         ),
               // type == 0
               //     ? SizedBox(
@@ -636,7 +700,7 @@ class _ShouChongPageState extends State<ShouChongPage> {
               // ),
               Row(
                 children: [
-                  WidgetUtils.commonSizedBox(0, 100.h),
+                  WidgetUtils.commonSizedBox(0, 100 * 1.25.w),
                   GestureDetector(
                     onTap: (() {
                       setState(() {
@@ -645,8 +709,8 @@ class _ShouChongPageState extends State<ShouChongPage> {
                       });
                     }),
                     child: Container(
-                      height: 50.h,
-                      width: 120.h,
+                      height: 50 * 1.25.w,
+                      width: 120 * 1.25.w,
                       color: Colors.transparent,
                     ),
                   ),
@@ -658,8 +722,8 @@ class _ShouChongPageState extends State<ShouChongPage> {
                       });
                     }),
                     child: Container(
-                      height: 50.h,
-                      width: 120.h,
+                      height: 50 * 1.25.w,
+                      width: 120 * 1.25.w,
                       color: Colors.transparent,
                     ),
                   ),
@@ -671,23 +735,23 @@ class _ShouChongPageState extends State<ShouChongPage> {
                       });
                     }),
                     child: Container(
-                      height: 50.h,
-                      width: 120.h,
+                      height: 50 * 1.25.w,
+                      width: 120 * 1.25.w,
                       color: Colors.transparent,
                     ),
                   ),
                 ],
               ),
               Positioned(
-                  top: 30.h,
-                  right: 20.h,
+                  top: 30 * 1.25.w,
+                  right: 20 * 1.25.w,
                   child: GestureDetector(
                     onTap: (() {
                       Navigator.pop(context);
                     }),
                     child: Container(
-                      height: 50.h,
-                      width: 50.h,
+                      height: 50 * 1.25.w,
+                      width: 50 * 1.25.w,
                       color: Colors.transparent,
                     ),
                   )),
@@ -742,19 +806,19 @@ class _ShouChongPageState extends State<ShouChongPage> {
   Future<void> doPostOrderCreate() async {
     String money = '', moneyDou = '', payTypes = '';
     setState(() {
-      if(payType == 1){
+      if (payType == 1) {
         payTypes = 'zfb';
-      }else if(payType == 2){
+      } else if (payType == 2) {
         payTypes = 'ysf';
-      }else if(payType == 3){
+      } else if (payType == 3) {
         payTypes = 'wx';
-      }else if(payType == 4){
+      } else if (payType == 4) {
         payTypes = 'yhk';
-      }else if(payType == 5){
+      } else if (payType == 5) {
         payTypes = 'qq';
-      }else if(payType == 6){
+      } else if (payType == 6) {
         payTypes = 'rmb';
-      }else if(payType == 7){
+      } else if (payType == 7) {
         payTypes = 'dy';
       }
       if (type == 0) {
@@ -795,7 +859,7 @@ class _ShouChongPageState extends State<ShouChongPage> {
           MyUtils.jumpLogin(context);
           break;
         default:
-          if(bean.msg!.toString() == '当前支付金额已调整'){
+          if (bean.msg!.toString() == '当前支付金额已调整') {
             doPostGetFirstPayment();
           }
           MyToastUtils.showToastBottom(bean.msg!);
@@ -854,10 +918,10 @@ class _ShouChongPageState extends State<ShouChongPage> {
             listInfo.clear();
             isGet = true;
             isShow = true;
-            if(bean.data!.isNotEmpty){
+            if (bean.data!.isNotEmpty) {
               payType = int.parse(bean.data![0].payType!);
             }
-            for(int i = 0; i < bean.data!.length; i++){
+            for (int i = 0; i < bean.data!.length; i++) {
               listMoney.add(bean.data![i].amount.toString());
               listDou.add(bean.data![i].goldBean.toString());
               listInfo.add(bean.data![i]);
@@ -866,7 +930,7 @@ class _ShouChongPageState extends State<ShouChongPage> {
           doPostIsFirstOrder();
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:

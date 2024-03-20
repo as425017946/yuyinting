@@ -574,7 +574,9 @@ class MyUtils {
                         .fire(JoinRoomYBack(map: info, type: 'user_close_mic'));
                   } else if (body.content == '抱麦') {
                     eventBus.fire(JoinRoomYBack(map: info, type: 'bao_mic'));
-                  } else {
+                  } else if (body.content == '爆灯') {
+                    eventBus.fire(JoinRoomYBack(map: info, type: 'burstlight'));
+                  }  else {
                     if (info['lv'] == '' || info['lv'] == null) {
                       if (info['type'] == 'clean_charm') {
                         // 厅内清空魅力值
