@@ -803,29 +803,33 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                       }
                     }
                   }),
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(120),
-                          ScreenUtil().setHeight(120), headImg),
-                      // 头像框静态图
-                      (avatarFrameGifImg.isEmpty && avatarFrameImg.isNotEmpty)
-                          ? WidgetUtils.CircleHeadImage(
-                              ScreenUtil().setHeight(120),
-                              ScreenUtil().setHeight(120),
-                              avatarFrameImg)
-                          : const Text(''),
-                      // 头像框动态图
-                      avatarFrameGifImg.isNotEmpty
-                          ? SizedBox(
-                              height: 160.h,
-                              width: 160.h,
-                              child: SVGASimpleImage(
-                                resUrl: avatarFrameGifImg,
-                              ),
-                            )
-                          : const Text(''),
-                    ],
+                  child: SizedBox(
+                    width: 170.h,
+                    height: 170.h,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(110),
+                            ScreenUtil().setHeight(110), headImg),
+                        // 头像框静态图
+                        (avatarFrameGifImg.isEmpty && avatarFrameImg.isNotEmpty)
+                            ? WidgetUtils.CircleHeadImage(
+                                ScreenUtil().setHeight(170),
+                                ScreenUtil().setHeight(170),
+                                avatarFrameImg)
+                            : const Text(''),
+                        // 头像框动态图
+                        avatarFrameGifImg.isNotEmpty
+                            ? SizedBox(
+                                height: 170.h,
+                                width: 170.h,
+                                child: SVGASimpleImage(
+                                  resUrl: avatarFrameGifImg,
+                                ),
+                              )
+                            : const Text(''),
+                      ],
+                    ),
                   ),
                 ),
               ],

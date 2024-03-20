@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/pages/room/room_clean_meili_page.dart';
 import 'package:yuyinting/pages/room/room_manager_page.dart';
 import 'package:yuyinting/pages/room/room_password_page.dart';
+import 'package:yuyinting/pages/room/room_pk_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import '../../bean/Common_bean.dart';
 import '../../colors/my_colors.dart';
@@ -540,43 +541,50 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                           ),
                           const Expanded(child: Text('')),
                           Opacity(
-                            opacity: 0,
-                            child: Column(
-                              children: [
-                                Stack(
-                                  alignment: Alignment.bottomCenter,
-                                  children: [
-                                    WidgetUtils.showImages(
-                                        'assets/images/room_shouye.png',
-                                        ScreenUtil().setHeight(80),
-                                        ScreenUtil().setHeight(80)),
-                                    Container(
-                                      height: ScreenUtil().setHeight(25),
-                                      width: ScreenUtil().setHeight(70),
-                                      //边框设置
-                                      decoration: const BoxDecoration(
-                                        //背景
-                                        color: MyColors.roomBlue,
-                                        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20.0)),
-                                      ),
-                                      child: WidgetUtils.onlyTextCenter(
-                                          '已开启',
-                                          StyleUtils.getCommonTextStyle(
-                                              color: Colors.white,
-                                              fontSize:
-                                                  ScreenUtil().setSp(18))),
-                                    )
-                                  ],
-                                ),
-                                WidgetUtils.commonSizedBox(5, 0),
-                                WidgetUtils.onlyTextCenter(
-                                    '',
-                                    StyleUtils.getCommonTextStyle(
-                                        color: MyColors.roomTCWZ3,
-                                        fontSize: ScreenUtil().setSp(18))),
-                              ],
+                            opacity: 1,
+                            child: GestureDetector(
+                              onTap: ((){
+                                if (MyUtils.checkClick()) {
+                                  MyUtils.goTransparentPage(context, RoomPKPage(roomID: widget.roomID,));
+                                }
+                              }),
+                              child: Column(
+                                children: [
+                                  Stack(
+                                    alignment: Alignment.bottomCenter,
+                                    children: [
+                                      WidgetUtils.showImages(
+                                          'assets/images/room_shouye.png',
+                                          ScreenUtil().setHeight(80),
+                                          ScreenUtil().setHeight(80)),
+                                      // Container(
+                                      //   height: ScreenUtil().setHeight(25),
+                                      //   width: ScreenUtil().setHeight(70),
+                                      //   //边框设置
+                                      //   decoration: const BoxDecoration(
+                                      //     //背景
+                                      //     color: MyColors.roomBlue,
+                                      //     //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                      //     borderRadius: BorderRadius.all(
+                                      //         Radius.circular(20.0)),
+                                      //   ),
+                                      //   child: WidgetUtils.onlyTextCenter(
+                                      //       '已开启',
+                                      //       StyleUtils.getCommonTextStyle(
+                                      //           color: Colors.white,
+                                      //           fontSize:
+                                      //               ScreenUtil().setSp(18))),
+                                      // )
+                                    ],
+                                  ),
+                                  WidgetUtils.commonSizedBox(5, 0),
+                                  WidgetUtils.onlyTextCenter(
+                                      'PK模式',
+                                      StyleUtils.getCommonTextStyle(
+                                          color: MyColors.roomTCWZ3,
+                                          fontSize: ScreenUtil().setSp(18))),
+                                ],
+                              ),
                             ),
                           ),
                           WidgetUtils.commonSizedBox(0, 20),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:get/get.dart';
+import 'package:yuyinting/utils/SVGASimpleImage3.dart';
 
 import '../../bean/Common_bean.dart';
 import '../../bean/fenleiBean.dart';
@@ -182,23 +183,32 @@ class _PaiduiPageState extends State<PaiduiPage>
             child: Row(
               children: [
                 WidgetUtils.commonSizedBox(0, 10),
-                WidgetUtils.CircleImageNet(
-                    ScreenUtil().setHeight(140),
-                    ScreenUtil().setHeight(140),
-                    10,
-                    index == 2
-                        ? list2[i].coverImg!
-                        : index == 3
-                            ? list3[i].coverImg!
-                            : index == 4
-                                ? list4[i].coverImg!
-                                : index == 5
-                                    ? list5[i].coverImg!
-                                    : index == 6
-                                        ? list6[i].coverImg!
-                                        : index == listFL[0].type as int
-                                            ? list7[i].coverImg!
-                                            : list8[i].coverImg!),
+                Container(
+                  height: 140.h,
+                  width: 140.h,
+                  child: Stack(
+                    children: [
+                      WidgetUtils.CircleImageNet(
+                          ScreenUtil().setHeight(140),
+                          ScreenUtil().setHeight(140),
+                          10,
+                          index == 2
+                              ? list2[i].coverImg!
+                              : index == 3
+                              ? list3[i].coverImg!
+                              : index == 4
+                              ? list4[i].coverImg!
+                              : index == 5
+                              ? list5[i].coverImg!
+                              : index == 6
+                              ? list6[i].coverImg!
+                              : index == listFL[0].type as int
+                              ? list7[i].coverImg!
+                              : list8[i].coverImg!),
+                      SVGASimpleImage3(assetsName: 'assets/svga/pk/room_pk_qj.svga',),
+                    ],
+                  ),
+                ),
                 WidgetUtils.commonSizedBox(0, 10),
                 Expanded(
                   child: Column(

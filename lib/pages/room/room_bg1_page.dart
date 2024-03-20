@@ -9,6 +9,7 @@ import '../../bean/roomBGBean.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
+import '../../utils/SVGASimpleImage3.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
@@ -67,9 +68,8 @@ class _RoomBG1PageState extends State<RoomBG1Page> with AutomaticKeepAliveClient
                         //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                         borderRadius: BorderRadius.all(Radius.circular(20.0)),
                       ),
-                      child: SVGASimpleImage(
+                      child: SVGASimpleImage3(
                         resUrl: list[index].img!,
-
                       ),
                     ),
               list[index].type == 1

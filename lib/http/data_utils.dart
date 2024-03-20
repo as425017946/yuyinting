@@ -1382,4 +1382,12 @@ class DataUtils{
     print("设置装扮 $respons");
     return CommonBean.fromJson(respons!);
   }
+
+  /// 爆灯
+  static Future<CommonBean> postBurstLight(Map<String,dynamic> params) async {
+    print("爆灯 $params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.burstLight, {}, params);
+    print("爆灯 $respons");
+    return CommonBean.fromJson(respons!);
+  }
 }
