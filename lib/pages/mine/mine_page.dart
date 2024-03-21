@@ -544,8 +544,11 @@ class _MinePageState extends State<MinePage> {
               WidgetUtils.commonSizedBox(18, 0),
 
               /// 展示信息
+              // TODO:- 放开大客户系统
+              /*
               _pageShow1(),
               WidgetUtils.commonSizedBox(18, 0),
+              */
               _pageShow2(),
               /*WidgetUtils.containerNo(
                   pad: 20,
@@ -887,7 +890,9 @@ class _MinePageState extends State<MinePage> {
         w: Column(
           children: [
             /// 经典等级 VIP等级
-            _collection2(),
+            // TODO:- 放开大客户系统
+            _collection(),
+            /*_collection2(),*/
             WidgetUtils.commonSizedBox(20, 0),
             WidgetUtils.whiteKuang(
                 'assets/images/mine_zhuangban.png', '我的装扮', false),

@@ -1,10 +1,13 @@
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 class BigClientController extends GetxController {
-  int dayBean = 96006;
-  int dayExp = 996;
-  int weekBean = 96006;
-  int weekExp = 996;
-  int monthBean = 96006;
-  int monthExp = 996;
+  var dayBean = '96006'.obs;
+  var dayExp = '996'.obs;
+  var weekBean = '96006'.obs;
+  var weekExp = '996'.obs;
+  var monthBean = '96006'.obs;
+  var monthExp = '996'.obs;
+  PageController controller = PageController();
+  void onPageChanged(int value) {}
 }
