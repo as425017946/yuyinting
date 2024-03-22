@@ -544,7 +544,11 @@ class _MinePageState extends State<MinePage> {
               WidgetUtils.commonSizedBox(18, 0),
 
               /// 展示信息
-              WidgetUtils.containerNo(
+              // TODO:- 放开大客户系统
+              // _pageShow1(),
+              // WidgetUtils.commonSizedBox(18, 0),
+              _pageShow2(),
+              /*WidgetUtils.containerNo(
                   pad: 20,
                   // height: 770.h,
                   width: double.infinity,
@@ -628,7 +632,7 @@ class _MinePageState extends State<MinePage> {
                         ),
                       ),
                     ],
-                  ))
+                  ))*/
             ],
           ),
         ) /* add child content here */,
@@ -821,6 +825,16 @@ class _MinePageState extends State<MinePage> {
         ));
   }
 
+  Widget _pageShow1() {
+    return WidgetUtils.containerNo(
+      pad: 20,
+      width: double.infinity,
+      color: Colors.white,
+      ra: 20,
+      w: _collection(),
+    );
+  }
+
   /// 钱包 礼物记录
   Widget _collection() {
     final Widget wallet = GestureDetector(
@@ -860,6 +874,129 @@ class _MinePageState extends State<MinePage> {
         Expanded(child: wallet),
         SizedBox(width: 20.w),
         Expanded(child: liwu),
+      ],
+    );
+  }
+
+  Widget _pageShow2() {
+    return WidgetUtils.containerNo(
+        pad: 20,
+        // height: 770.h,
+        width: double.infinity,
+        color: Colors.white,
+        ra: 20,
+        w: Column(
+          children: [
+            /// 经典等级 VIP等级
+            // TODO:- 放开大客户系统
+            _collection(),
+            // _collection2(),
+            WidgetUtils.commonSizedBox(20, 0),
+            WidgetUtils.whiteKuang(
+                'assets/images/mine_zhuangban.png', '我的装扮', false),
+            (identity != 'president' && isGet)
+                ? WidgetUtils.whiteKuang(
+                    'assets/images/mine_gonghui.png', '公会中心', isShenHe)
+                : WidgetUtils.commonSizedBox(0, 0),
+            (identity == 'president' && isGet)
+                ? WidgetUtils.whiteKuang(
+                    'assets/images/mine_huizhang.png', '会长后台', isShenHe)
+                : WidgetUtils.commonSizedBox(0, 0),
+            (isAgent != 1 && isGet)
+                ? WidgetUtils.whiteKuang(
+                    'assets/images/mine_yaoqing.jpg', '邀请有礼', false)
+                : WidgetUtils.commonSizedBox(0, 0),
+            isAgent == 1
+                ? WidgetUtils.whiteKuang(
+                    'assets/images/mine_quan.png', '全民代理', false)
+                : WidgetUtils.commonSizedBox(0, 0),
+            WidgetUtils.whiteKuang(
+                'assets/images/mine_daili.png', '等级成就', false),
+            WidgetUtils.whiteKuang(
+                'assets/images/mine_kefu.png', '联系客服', false),
+            Container(
+              width: double.infinity,
+              height: ScreenUtil().setHeight(90),
+              color: Colors.white,
+              child: Row(
+                children: [
+                  Image(
+                    image: const AssetImage('assets/images/mine_wurao.jpg'),
+                    width: ConfigScreenUtil.autoHeight40,
+                    height: ConfigScreenUtil.autoHeight40,
+                  ),
+                  SizedBox(
+                    width: ConfigScreenUtil.autoHeight10,
+                  ),
+                  WidgetUtils.onlyText(
+                      '勿扰模式',
+                      StyleUtils.getCommonTextStyle(
+                          color: Colors.black,
+                          fontSize: ScreenUtil().setSp(29))),
+                  const Expanded(child: Text('')),
+                  isWROk
+                      ? Transform.translate(
+                          offset: Offset(15.h, 0),
+                          child: Transform.scale(
+                            scale: 0.8,
+                            child: CupertinoSwitch(
+                              value: _switchValue,
+                              onChanged: (value) {
+                                setState(() {
+                                  _switchValue = value;
+                                  if (value == false) {
+                                    doPostSetDisturb('0');
+                                  } else {
+                                    doPostSetDisturb('1');
+                                  }
+                                });
+                              },
+                              activeColor: MyColors.homeTopBG,
+                            ),
+                          ),
+                        )
+                      : const Text(''),
+                ],
+              ),
+            ),
+          ],
+        ));
+  }
+
+  /// 经典等级 VIP等级
+  Widget _collection2() {
+    final Widget normal = GestureDetector(
+      onTap: (() {
+        if (MyUtils.checkClick()) {
+          // Navigator.pushNamed(context, 'WalletPage');
+        }
+      }),
+      child: _collectionItem(
+        '经典等级',
+        '成长等级',
+        MyColors.mineGreen,
+        _normalLevelIcon(),
+      ),
+    );
+    final Widget vip = GestureDetector(
+      onTap: (() {
+        if (MyUtils.checkClick()) {
+          Navigator.pushNamed(context, 'BigClientPage',
+              arguments: [avatarFrameGifImg, avatarFrameImg, 'LV.$level']);
+        }
+      }),
+      child: _collectionItem(
+        'VIP 等级',
+        'VIP 专属',
+        MyColors.minePurple,
+        const Text(''),
+      ),
+    );
+    return Row(
+      children: [
+        Expanded(child: normal),
+        SizedBox(width: 20.w),
+        Expanded(child: vip),
       ],
     );
   }
@@ -913,6 +1050,94 @@ class _MinePageState extends State<MinePage> {
         ),
       ),
     );
+  }
+
+  Widget _normalLevelIcon() {
+    var children = <Widget>[
+      Image(
+          image: AssetImage(_normalDjIcon(level)),
+          width: 67,
+          height: 67,
+          fit: BoxFit.contain,
+          gaplessPlayback: true),
+    ];
+    if (level > 0) {
+      children.add(Positioned(
+          right: 0,
+          bottom: -3,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Text(
+                level.toString(),
+                style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.normal,
+                    fontFamily: 'Impact',
+                    foreground: Paint()
+                      ..style = PaintingStyle.stroke
+                      ..strokeWidth = 1
+                      ..color = _normalDjColor(level)),
+              ),
+              Text(
+                level.toString(),
+                style: const TextStyle(
+                    color: MyColors.djOne,
+                    fontSize: 24,
+                    fontWeight: FontWeight.normal,
+                    fontFamily: 'Impact'),
+              ),
+            ],
+          )));
+    }
+    return Stack(
+      alignment: Alignment.centerLeft,
+      children: children,
+    );
+  }
+
+  String _normalDjIcon(int level) {
+    if (level <= 10) {
+      return 'assets/images/dj/dj_1-10.png';
+    } else if (level <= 15) {
+      return 'assets/images/dj/dj_11-15.png';
+    } else if (level <= 20) {
+      return 'assets/images/dj/dj_16-20.png';
+    } else if (level <= 25) {
+      return 'assets/images/dj/dj_21-25.png';
+    } else if (level <= 30) {
+      return 'assets/images/dj/dj_26-30.png';
+    } else if (level <= 35) {
+      return 'assets/images/dj/dj_31-35.png';
+    } else if (level <= 40) {
+      return 'assets/images/dj/dj_36-40.png';
+    } else if (level <= 45) {
+      return 'assets/images/dj/dj_41-45.png';
+    } else {
+      return 'assets/images/dj/dj_46-50.png';
+    }
+  }
+
+  Color _normalDjColor(int level) {
+    if (level <= 10) {
+      return MyColors.djOneM;
+    } else if (level <= 15) {
+      return MyColors.djTwoM;
+    } else if (level <= 20) {
+      return MyColors.djThreeM;
+    } else if (level <= 25) {
+      return MyColors.djFourM;
+    } else if (level <= 30) {
+      return MyColors.djFiveM;
+    } else if (level <= 35) {
+      return MyColors.djSixM;
+    } else if (level <= 40) {
+      return MyColors.djSevenM;
+    } else if (level <= 45) {
+      return MyColors.djEightM;
+    } else {
+      return MyColors.djNineM;
+    }
   }
 
 /*

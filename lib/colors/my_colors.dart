@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-class MyColors{
+
+class MyColors {
   static const Color translucence = Color(0x80000000); //半透明
   static const Color b2 = Color(0x80B2B2B2); //半透明
   static const Color tBlack = Color(0xFF333333);
@@ -36,13 +37,13 @@ class MyColors{
   static const Color homeBG = Color(0xFFF6F7F8);
   static const Color homeSoucuoBG = Color(0xFF7D68C1);
   static const Color homeNoHave = Color(0xFFAFBACA);
-  static const Color riBangBg = Color(0xFFA073F5);//日榜
-  static const Color zhouBangBg = Color(0xFFBE99F7);//周榜
-  static const Color pyWenZiBlue = Color(0xFF3E3155);//排行榜文字颜色
-  static const Color pyWenZiPurple = Color(0xFF9171F6);//排行榜文字颜色
-  static const Color pyWenZiGrey = Color(0xFF8E8997);//排行榜文字颜色
-  static const Color dtPink = Color(0xFFFF6792);//动态 粉色
-  static const Color dtBlue = Color(0xFF4BB6FF);//动态 蓝色
+  static const Color riBangBg = Color(0xFFA073F5); //日榜
+  static const Color zhouBangBg = Color(0xFFBE99F7); //周榜
+  static const Color pyWenZiBlue = Color(0xFF3E3155); //排行榜文字颜色
+  static const Color pyWenZiPurple = Color(0xFF9171F6); //排行榜文字颜色
+  static const Color pyWenZiGrey = Color(0xFF8E8997); //排行榜文字颜色
+  static const Color dtPink = Color(0xFFFF6792); //动态 粉色
+  static const Color dtBlue = Color(0xFF4BB6FF); //动态 蓝色
   static const Color f2 = Color(0xFFF2F2F2);
   static const Color f6 = Color(0xFFF6F6F6);
   static const Color careBlue = Color(0xFF7050F3);
@@ -62,6 +63,8 @@ class MyColors{
   static const Color mineYellow = Color(0xFFFFF2D1);
   static const Color mineRed = Color(0xFFFA5353);
   static const Color minePink = Color(0xFFFFEBEF);
+  static const Color mineGreen = Color(0xFFDCFFDC);
+  static const Color minePurple = Color(0xFFE5E4FF);
   static const Color walletPurple = Color(0xFFC12CFF);
   static const Color walletPink = Color(0xFFff4daf);
   static const Color walletBlue = Color(0xFF4d82ff);
@@ -73,11 +76,11 @@ class MyColors{
   static const Color dailiBlue = Color(0xFFF2EFFF);
   static const Color dailiTime = Color(0xFFEEF4F4);
   static const Color dailiBaobiao = Color(0xFFF7F6F9);
-  static const Color dailiShare= Color(0xFFDEDEE0);
-  static const Color loginBlue= Color(0xFF6ABCF4);
-  static const Color loginBlue2= Color(0xFFDDF0FD);
-  static const Color loginPink= Color(0xFFFAACCE);
-  static const Color loginPink2= Color(0xFFF9D7E6);
+  static const Color dailiShare = Color(0xFFDEDEE0);
+  static const Color loginBlue = Color(0xFF6ABCF4);
+  static const Color loginBlue2 = Color(0xFFDDF0FD);
+  static const Color loginPink = Color(0xFFFAACCE);
+  static const Color loginPink2 = Color(0xFFF9D7E6);
   static const Color loginPurple = Color(0xFFD7D0FB);
   static const Color messagePurple = Color(0xFFEAE7F7);
   static const Color zhuangbanBg = Color(0xFF1F1531);
@@ -109,6 +112,7 @@ class MyColors{
   static const Color roomMessageLiaotian = Color(0xFF43456E);
   static const Color roomPassXian = Color(0xFF363657);
   static const Color roomCirle = Color(0xFF2F2876);
+
   /// 等级描边字体
   static const Color djOne = Color(0xFFFAFAFD);
   static const Color djOneM = Color(0xFF3D4C57);
@@ -120,9 +124,11 @@ class MyColors{
   static const Color djSevenM = Color(0xFFFF7262);
   static const Color djEightM = Color(0xFFFF67F8);
   static const Color djNineM = Color(0xFFE7900A);
+
   /// 老板位渐变色
   static const Color lbL = Color(0xFF6ffffd);
   static const Color lbR = Color(0xFFf8fec4);
+
   /// 转盘颜色
   static const Color zpBG = Color(0xFF100B43);
   static const Color zpBGJ1 = Color(0xFFF9F0BF);
@@ -145,10 +151,10 @@ class MyColors{
   static const Color zp1 = Color(0xFF8F4E58);
   static const Color yzZi1 = Color(0xFF05184F);
   static const Color yzZi2 = Color(0xFF3794B0);
+
   /// 中奖公屏礼物颜色
   static const Color zjZ1 = Color(0xFFE295FF);
   static const Color zjZ2 = Color(0xFF9DFFBF);
   static const Color zjZ3 = Color(0xFF96FBFF);
   static const Color zjZ4 = Color(0xFFFFFB98);
-
 }
