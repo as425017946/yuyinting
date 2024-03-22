@@ -545,10 +545,8 @@ class _MinePageState extends State<MinePage> {
 
               /// 展示信息
               // TODO:- 放开大客户系统
-              /*
-              _pageShow1(),
-              WidgetUtils.commonSizedBox(18, 0),
-              */
+              // _pageShow1(),
+              // WidgetUtils.commonSizedBox(18, 0),
               _pageShow2(),
               /*WidgetUtils.containerNo(
                   pad: 20,
@@ -892,7 +890,7 @@ class _MinePageState extends State<MinePage> {
             /// 经典等级 VIP等级
             // TODO:- 放开大客户系统
             _collection(),
-            /*_collection2(),*/
+            // _collection2(),
             WidgetUtils.commonSizedBox(20, 0),
             WidgetUtils.whiteKuang(
                 'assets/images/mine_zhuangban.png', '我的装扮', false),
@@ -983,7 +981,8 @@ class _MinePageState extends State<MinePage> {
     final Widget vip = GestureDetector(
       onTap: (() {
         if (MyUtils.checkClick()) {
-          Navigator.pushNamed(context, 'BigClientPage');
+          Navigator.pushNamed(context, 'BigClientPage',
+              arguments: [avatarFrameGifImg, avatarFrameImg, 'LV.$level']);
         }
       }),
       child: _collectionItem(
