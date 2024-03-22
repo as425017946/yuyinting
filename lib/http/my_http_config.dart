@@ -358,7 +358,10 @@ class MyHttpConfig{
   static  String burstLight = "$baseURL/room/burstLight";
   // 开启pk
   static  String startPk = "$baseURL/pk/startPk";
-
+  // 提前结束pk
+  static  String aheadOver = "$baseURL/pk/aheadOver";
+  // 提前结束惩罚
+  static  String aheadPunish = "$baseURL/pk/aheadPunish";
 
 
 }

@@ -34,6 +34,7 @@ class DataL {
   String? img;
   String? imgRendering;
   int? number;
+  int? isReduce;
 
   DataL(
       {this.id,
@@ -41,7 +42,8 @@ class DataL {
         this.price,
         this.img,
         this.imgRendering,
-        this.number});
+        this.number,
+        this.isReduce});
 
   DataL.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -50,6 +52,7 @@ class DataL {
     img = json['img'];
     imgRendering = json['img_rendering'];
     number = json['number'];
+    isReduce = json['is_reduce'];
   }
 
   Map<String, dynamic> toJson() {
@@ -60,6 +63,7 @@ class DataL {
     data['img'] = this.img;
     data['img_rendering'] = this.imgRendering;
     data['number'] = this.number;
+    data['is_reduce'] = this.isReduce;
     return data;
   }
 }

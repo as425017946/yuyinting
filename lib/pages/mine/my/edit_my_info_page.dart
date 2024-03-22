@@ -390,7 +390,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                         child: TextField(
                           controller: controller,
                           inputFormatters: [
-                            RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                            // RegexFormatter(regex: MyUtils.regexFirstNotNull),
                             LengthLimitingTextInputFormatter(8) //限制输入长度
                           ],
                           style: StyleUtils.getCommonTextStyle(
@@ -489,7 +489,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                         child: TextField(
                           controller: controllerGexing,
                           inputFormatters: [
-                            RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                            // RegexFormatter(regex: MyUtils.regexFirstNotNull),
                             LengthLimitingTextInputFormatter(16) //限制输入长度
                           ],
                           style: StyleUtils.getCommonTextStyle(

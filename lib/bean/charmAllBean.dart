@@ -11,6 +11,8 @@ class charmAllBean {
   String? lv;
   String? type;
   List<GiftInfo>? giftInfo;
+  String? blueScore;
+  String? redScore;
 
   charmAllBean(
       {
@@ -25,7 +27,9 @@ class charmAllBean {
         this.giftInfo,
         this.roomName,
         this.fromUid,
-        this.avatar});
+        this.avatar,
+        this.blueScore,
+        this.redScore});
 
   charmAllBean.fromJson(Map<dynamic, dynamic> json) {
     roomId = json['room_id'];
@@ -43,6 +47,8 @@ class charmAllBean {
     avatar = json['avatar'];
     lv = json['lv'];
     type = json['type'];
+    blueScore = json['blue_score'];
+    redScore = json['red_score'];
     if (json['gift_info'] != null) {
       giftInfo = <GiftInfo>[];
       json['gift_info'].forEach((v) {
@@ -66,6 +72,8 @@ class charmAllBean {
     data['avatar'] = this.avatar;
     data['lv'] = this.lv;
     data['type'] = this.type;
+    data['blue_score'] = this.blueScore;
+    data['red_score'] = this.redScore;
     if (this.giftInfo != null) {
       data['gift_info'] = this.giftInfo!.map((v) => v.toJson()).toList();
     }

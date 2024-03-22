@@ -72,13 +72,41 @@ class _RoomPageState extends State<RoomPage>
   /// 存进入的座驾信息
   List<String> listUrlZJ = [];
 
+  /// 存进入pk动画信息
+  List<String> listUrlPK = [];
+
+  /// 存进入pk动画信息
+  List<String> listUrlJL = [];
+
+  //蓝色方魅力值, 红色方魅力值
+  String blueScore = '0', redScore = '0';
+
+  // 房间pk时间
+  int pkTime = 0;
+
+  // pk文字
+  String pkTitle = 'PK时间：';
+
+  // 是否开启了房间pk 0已结束或未开启 1进行中 2惩罚中
+  int isPK = -1;
+
+  // 刚开始pk
+  bool isPKStar = false;
+
+  // 哪方胜利了
+  String whoWin = '';
+
   // 存是否展示座驾
   bool isZJShow = false;
+
+  String jianLiWu = '';
 
   /// 播放svga动画使用
   late SVGAAnimationController animationControllerBG;
   late SVGAAnimationController animationControllerSL;
   late SVGAAnimationController animationControllerZJ;
+  late SVGAAnimationController animationControllerPK;
+  late SVGAAnimationController animationControllerJL;
 
   Future _loadSVGA(isUrl, svgaUrl) {
     LogE('动画类型 $isUrl === $svgaUrl');
@@ -198,7 +226,7 @@ class _RoomPageState extends State<RoomPage>
       setState(() {
         // 动画播放到最后一帧时停止播放
         animationControllerZJ?.stop();
-        animationControllerZJ.removeListener(_animListener);
+        animationControllerZJ.removeListener(_animListenerZJ);
         if (listUrlZJ.isNotEmpty) {
           listUrlZJ.removeAt(0);
           if (listUrlZJ.isEmpty) {
@@ -210,6 +238,90 @@ class _RoomPageState extends State<RoomPage>
           } else {
             Future.delayed(const Duration(milliseconds: 1), () {
               showStarZJ(listUrlZJ[0]); // 递归调用showStar方法播放下一个动画
+            });
+          }
+        }
+      });
+    }
+  }
+
+  /// 展示pk动画
+  void showStarPK(String path) async {
+    // 动画正在进行中不做处理
+    if (animationControllerPK.isAnimating) {
+      LogE('进行中====');
+    } else {
+      //本地图
+      final videoItem = await _loadSVGA(false, path);
+      animationControllerPK?.videoItem = videoItem;
+      animationControllerPK
+          ?.forward() // Try to use .forward() .reverse()
+          .whenComplete(() => animationControllerPK?.videoItem = null);
+      // 监听动画
+      animationControllerPK?.addListener(_animListenerPK);
+    }
+  }
+
+  //网络动画
+  void _animListenerPK() {
+    //TODO
+    if (animationControllerPK.isCompleted) {
+      LogE('动画结束 ${DateTime.now()}');
+      setState(() {
+        // 动画播放到最后一帧时停止播放
+        animationControllerPK?.stop();
+        animationControllerPK.removeListener(_animListenerPK);
+        if (listUrlPK.isNotEmpty) {
+          listUrlPK.removeAt(0);
+          if (listUrlPK.isEmpty) {
+            // 全部动画结束的处理逻辑
+            // ...
+            isPKStar = false;
+          } else {
+            Future.delayed(const Duration(milliseconds: 1), () {
+              showStarPK(listUrlPK[0]); // 递归调用showStar方法播放下一个动画
+            });
+          }
+        }
+      });
+    }
+  }
+
+  /// 展示减礼物的动画
+  void showStarJL(String path) async {
+    // 动画正在进行中不做处理
+    if (animationControllerJL.isAnimating) {
+      LogE('进行中====');
+    } else {
+      // 网络图
+      final videoItem = await _loadSVGA(true, path);
+      animationControllerJL?.videoItem = videoItem;
+      animationControllerJL
+          ?.forward() // Try to use .forward() .reverse()
+          .whenComplete(() => animationControllerJL?.videoItem = null);
+      // 监听动画
+      animationControllerJL?.addListener(_animListenerJL);
+    }
+  }
+
+  //网络动画
+  void _animListenerJL() {
+    //TODO
+    if (animationControllerJL.isCompleted) {
+      LogE('动画结束 ${DateTime.now()}');
+      setState(() {
+        // 动画播放到最后一帧时停止播放
+        animationControllerJL?.stop();
+        animationControllerJL.removeListener(_animListenerJL);
+        if (listUrlJL.isNotEmpty) {
+          listUrlJL.removeAt(0);
+          if (listUrlJL.isEmpty) {
+            // 全部动画结束的处理逻辑
+            // ...
+            isPKStar = false;
+          } else {
+            Future.delayed(const Duration(milliseconds: 1), () {
+              showStarPK(listUrlJL[0]); // 递归调用showStar方法播放下一个动画
             });
           }
         }
@@ -229,6 +341,39 @@ class _RoomPageState extends State<RoomPage>
     } catch (e) {
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
       LogE('加载背景图错误提示 ${e.toString()}');
+    }
+  }
+
+  Timer? _timerPK;
+  void _startTimerPK() {
+    const oneSec = Duration(seconds: 1);
+    _timerPK = Timer.periodic(
+      oneSec,
+          (Timer timer) {
+        if (pkTime == 0) {
+          if(pkTitle == '惩罚时间'){
+           setState(() {
+             blueScore = '0';
+             redScore = '0';
+             whoWin = '';
+             isPK = 0;
+             isPKStar = false;
+           });
+            _cancelTimer();
+          }
+        } else {
+          setState(() {
+            pkTime--;
+          });
+        }
+      },
+    );
+  }
+
+  void _cancelTimer() {
+    if(_timerPK != null){
+      _timerPK?.cancel();
+      // 在倒计时结束后的逻辑处理
     }
   }
 
@@ -287,7 +432,7 @@ class _RoomPageState extends State<RoomPage>
   /// 声网使用
   int? _remoteUid;
   bool _localUserJoined = false;
-  late RtcEngine _engine;
+  RtcEngine? _engine;
   bool isShow = false;
   late final Gradient gradient;
   FocusNode? _focusNode;
@@ -441,10 +586,10 @@ class _RoomPageState extends State<RoomPage>
                 _timerHot!.cancel();
               }
               //取消订阅所有远端用户的音频流。
-              _engine.muteAllRemoteAudioStreams(true);
+              _engine?.muteAllRemoteAudioStreams(true);
               // 取消发布本地音频流
-              _engine.muteLocalAudioStream(true);
-              _engine.disableAudio();
+              _engine?.muteLocalAudioStream(true);
+              _engine?.disableAudio();
               _dispose();
               // 清空存储信息
               deleteChatInfo();
@@ -527,6 +672,8 @@ class _RoomPageState extends State<RoomPage>
       animationControllerSL = SVGAAnimationController(vsync: this);
       animationControllerZJ = SVGAAnimationController(vsync: this);
       animationControllerBG = SVGAAnimationController(vsync: this);
+      animationControllerPK = SVGAAnimationController(vsync: this);
+      animationControllerJL = SVGAAnimationController(vsync: this);
 
       //保存进入房间的id
       sp.setString('roomID', widget.roomId);
@@ -569,10 +716,10 @@ class _RoomPageState extends State<RoomPage>
         } else if (event.title == '账号已在其他设备登录') {
           LogE('账号已在其他设备登录');
           //取消订阅所有远端用户的音频流。
-          _engine.muteAllRemoteAudioStreams(true);
+          _engine?.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
-          _engine.muteLocalAudioStream(true);
-          _engine.disableAudio();
+          _engine?.muteLocalAudioStream(true);
+          _engine?.disableAudio();
           _dispose();
           // 清空存储信息
           deleteChatInfo();
@@ -602,14 +749,14 @@ class _RoomPageState extends State<RoomPage>
           setState(() {
             roomSY = true;
             //默认订阅所有远端用户的音频流。
-            _engine.muteAllRemoteAudioStreams(false);
+            _engine?.muteAllRemoteAudioStreams(false);
           });
         } else if (event.title == '房间声音已关闭') {
           LogE('房间声音已关闭');
           setState(() {
             roomSY = false;
             //取消订阅所有远端用户的音频流。
-            _engine.muteAllRemoteAudioStreams(true);
+            _engine?.muteAllRemoteAudioStreams(true);
           });
         } else if (event.title == '设置密码成功') {
           setState(() {
@@ -695,10 +842,10 @@ class _RoomPageState extends State<RoomPage>
         } else if (event.title == '成功切换账号') {
           setState(() {
             //取消订阅所有远端用户的音频流。
-            _engine.muteAllRemoteAudioStreams(true);
+            _engine?.muteAllRemoteAudioStreams(true);
             // 取消发布本地音频流
-            _engine.muteLocalAudioStream(true);
-            _engine.disableAudio();
+            _engine?.muteLocalAudioStream(true);
+            _engine?.disableAudio();
           });
           _dispose();
           // 清空存储信息
@@ -706,24 +853,24 @@ class _RoomPageState extends State<RoomPage>
         } else if (event.title == 'im重连') {
           setState(() {
             //订阅所有远端用户的音频流。
-            _engine.muteAllRemoteAudioStreams(false);
+            _engine?.muteAllRemoteAudioStreams(false);
             if (isJinyiin == false) {
               // 启用音频模块
-              _engine.enableAudio();
+              _engine?.enableAudio();
               // 发声音发音频流
-              _engine.enableLocalAudio(true);
+              _engine?.enableLocalAudio(true);
               //设置成主播
-              _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
+              _engine?.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
               // 发布本地音频流
-              _engine.muteLocalAudioStream(false);
+              _engine?.muteLocalAudioStream(false);
             }
           });
         } else if (event.title == 'im断开链接') {
           // setState(() {
           //   //取消订阅所有远端用户的音频流。
-          //   _engine.muteAllRemoteAudioStreams(true);
+          //   _engine?.muteAllRemoteAudioStreams(true);
           //   // 取消发布本地音频流
-          //   _engine.muteLocalAudioStream(true);
+          //   _engine?.muteLocalAudioStream(true);
           // });
         } else if (event.title == '离线模式') {
           LogE('离线模式 == $roomLixian');
@@ -750,7 +897,7 @@ class _RoomPageState extends State<RoomPage>
                 //点击了静音
                 if (isJinyiin == false) {
                   // 开启发布本地音频流
-                  _engine.muteLocalAudioStream(false);
+                  _engine?.muteLocalAudioStream(false);
                   listM[int.parse(event.index!)].isClose = 0;
                   for (int i = 0; i < 9; i++) {
                     upOrDown[i] = false;
@@ -759,7 +906,7 @@ class _RoomPageState extends State<RoomPage>
                   doPostSetClose(event.index!, 'yes');
                 } else {
                   // 取消发布本地音频流
-                  _engine.muteLocalAudioStream(true);
+                  _engine?.muteLocalAudioStream(true);
                   listM[int.parse(event.index!)].isClose = 1;
                   for (int i = 0; i < 9; i++) {
                     upOrDown[i] = false;
@@ -789,7 +936,7 @@ class _RoomPageState extends State<RoomPage>
             //判断上麦或者换麦的时间间隔是否大于了2s
             if (DateTime.now().millisecondsSinceEpoch - maiTime > 2000) {
               //设置成主播
-              _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
+              _engine?.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
               doPostSetmai(
                   event.index!, 'up', sp.getString('user_id').toString(), '0');
               setState(() {
@@ -867,9 +1014,9 @@ class _RoomPageState extends State<RoomPage>
           case '闭麦':
             setState(() {
               // 取消发布本地音频流
-              _engine.muteLocalAudioStream(true);
+              _engine?.muteLocalAudioStream(true);
               // 适用只听声音，不发声音流
-              _engine.enableLocalAudio(false);
+              _engine?.enableLocalAudio(false);
               listM[int.parse(event.index!)].isClose = 1;
               for (int i = 0; i < 9; i++) {
                 upOrDown[i] = false;
@@ -880,11 +1027,11 @@ class _RoomPageState extends State<RoomPage>
           case '开麦':
             setState(() {
               // 启用音频模块
-              _engine.enableAudio();
+              _engine?.enableAudio();
               // 发声音发音频流
-              _engine.enableLocalAudio(true);
+              _engine?.enableLocalAudio(true);
               // 开启发布本地音频流
-              _engine.muteLocalAudioStream(false);
+              _engine?.muteLocalAudioStream(false);
               listM[int.parse(event.index!)].isClose = 0;
               for (int i = 0; i < 9; i++) {
                 upOrDown[i] = false;
@@ -895,9 +1042,9 @@ class _RoomPageState extends State<RoomPage>
           case '闭麦1':
             setState(() {
               // 取消发布本地音频流
-              _engine.muteLocalAudioStream(true);
+              _engine?.muteLocalAudioStream(true);
               // 适用只听声音，不发声音流
-              _engine.enableLocalAudio(false);
+              _engine?.enableLocalAudio(false);
               listM[int.parse(event.index!)].isClose = 1;
               for (int i = 0; i < 9; i++) {
                 upOrDown[i] = false;
@@ -909,11 +1056,11 @@ class _RoomPageState extends State<RoomPage>
           case '开麦1':
             setState(() {
               // 启用音频模块
-              _engine.enableAudio();
+              _engine?.enableAudio();
               // 发声音发音频流
-              _engine.enableLocalAudio(true);
+              _engine?.enableLocalAudio(true);
               // 开启发布本地音频流
-              _engine.muteLocalAudioStream(false);
+              _engine?.muteLocalAudioStream(false);
               listM[int.parse(event.index!)].isClose = 0;
               for (int i = 0; i < 9; i++) {
                 upOrDown[i] = false;
@@ -1004,14 +1151,14 @@ class _RoomPageState extends State<RoomPage>
                   isJinyiin = false;
                 });
                 // 启用音频模块
-                _engine.enableAudio();
+                _engine?.enableAudio();
                 // 发声音发音频流
-                _engine.enableLocalAudio(true);
+                _engine?.enableLocalAudio(true);
                 //设置成主播
-                _engine.setClientRole(
+                _engine?.setClientRole(
                     role: ClientRoleType.clientRoleBroadcaster);
                 // 发布本地音频流
-                _engine.muteLocalAudioStream(false);
+                _engine?.muteLocalAudioStream(false);
               }
               break;
             case 'close_mic': //闭麦
@@ -1023,11 +1170,11 @@ class _RoomPageState extends State<RoomPage>
                   isJinyiin = true;
                 });
                 // 设置成观众
-                _engine.setClientRole(role: ClientRoleType.clientRoleAudience);
+                _engine?.setClientRole(role: ClientRoleType.clientRoleAudience);
                 // 取消发布本地音频流
-                _engine.muteLocalAudioStream(true);
+                _engine?.muteLocalAudioStream(true);
                 // 适用只听声音，不发声音流
-                _engine.enableLocalAudio(false);
+                _engine?.enableLocalAudio(false);
               }
               break;
             case 'up_mic': //上麦
@@ -1050,25 +1197,25 @@ class _RoomPageState extends State<RoomPage>
                     isJinyiin = false;
                   });
                   // 启用音频模块
-                  _engine.enableAudio();
+                  _engine?.enableAudio();
                   // 发声音发音频流
-                  _engine.enableLocalAudio(true);
+                  _engine?.enableLocalAudio(true);
                   //设置成主播
-                  _engine.setClientRole(
+                  _engine?.setClientRole(
                       role: ClientRoleType.clientRoleBroadcaster);
                   // 发布本地音频流
-                  _engine.muteLocalAudioStream(false);
+                  _engine?.muteLocalAudioStream(false);
                 } else {
                   setState(() {
                     isJinyiin = true;
                   });
                   // 设置成观众
-                  _engine.setClientRole(
+                  _engine?.setClientRole(
                       role: ClientRoleType.clientRoleAudience);
                   // 取消发布本地音频流
-                  _engine.muteLocalAudioStream(true);
+                  _engine?.muteLocalAudioStream(true);
                   // 适用只听声音，不发声音流
-                  _engine.enableLocalAudio(false);
+                  _engine?.enableLocalAudio(false);
                 }
               }
               break;
@@ -1092,12 +1239,12 @@ class _RoomPageState extends State<RoomPage>
                     });
                   }
                   // 设置成观众
-                  _engine.setClientRole(
+                  _engine?.setClientRole(
                       role: ClientRoleType.clientRoleAudience);
                   // 取消发布本地音频流
-                  _engine.muteLocalAudioStream(true);
+                  _engine?.muteLocalAudioStream(true);
                   // 适用只听声音，不发声音流
-                  _engine.enableLocalAudio(false);
+                  _engine?.enableLocalAudio(false);
                   setState(() {
                     isMeUp = false;
                   });
@@ -1164,10 +1311,10 @@ class _RoomPageState extends State<RoomPage>
                 //   _timerHot!.cancel();
                 // }
                 // // 取消发布本地音频流
-                // _engine.muteLocalAudioStream(true);
+                // _engine?.muteLocalAudioStream(true);
                 // // 调用离开房间接口
                 // doPostLeave();
-                // _engine.disableAudio();
+                // _engine?.disableAudio();
                 // _dispose();
                 // Navigator.pop(context);
               } else {
@@ -1190,14 +1337,14 @@ class _RoomPageState extends State<RoomPage>
                   _timerHot!.cancel();
                 }
                 // 取消发布本地音频流
-                _engine.muteLocalAudioStream(true);
+                _engine?.muteLocalAudioStream(true);
                 // 适用只听声音，不发声音流
-                _engine.enableLocalAudio(false);
+                _engine?.enableLocalAudio(false);
                 // 调用离开房间接口
                 doPostLeave();
                 // 清空存储信息
                 deleteChatInfo();
-                _engine.disableAudio();
+                _engine?.disableAudio();
                 _dispose();
                 Navigator.pop(context);
               }
@@ -1220,14 +1367,69 @@ class _RoomPageState extends State<RoomPage>
                 sp.setString('role', 'adminer');
               }
               break;
+            case 'room_pk_start':
+              _cancelTimer();
+              setState(() {
+                listUrlPK.add('assets/svga/pk/room_pk_star.svga');
+                isPKStar = true;
+                isPK = 1;
+                whoWin = '';
+                pkTime = int.parse(event.map!['seconds'].toString());
+                pkTitle = 'PK时间';
+              });
+              showStarPK(listUrlPK[0]);
+              //开启房间pk
+              _startTimerPK();
+              break;
+            case 'room_pk_result':
+              _cancelTimer();
+              setState(() {
+                if(event.map!['win'].toString() == 'red'){
+                  pkTitle = '惩罚时间';
+                  pkTime = 60;
+                  whoWin = 'red';
+                  listUrlPK.add('assets/svga/pk/room_pk_red_win.svga');
+                  isPK = 2;
+                }else if(event.map!['win'].toString() == 'blue'){
+                  pkTitle = '惩罚时间';
+                  pkTime = 60;
+                  whoWin = 'blue';
+                  listUrlPK.add('assets/svga/pk/room_pk_blue_win.svga');
+                  isPK = 2;
+                }else{
+                  pkTitle = 'PK时间';
+                  pkTime = 0;
+                  whoWin = 'draw';
+                  listUrlPK.add('assets/svga/pk/room_pk_pingjun.svga');
+                  isPK = 0;
+                }
+                isPKStar = true;
+              });
+              showStarPK(listUrlPK[0]);
+              //开启房间pk
+              _startTimerPK();
+              break;
+            case 'room_pk_ahead_punish':
+              //提前结束
+              if(pkTitle == '惩罚时间'){
+                setState(() {
+                  blueScore = '0';
+                  redScore = '0';
+                  whoWin = '';
+                  isPK = 0;
+                  isPKStar = false;
+                });
+                _cancelTimer();
+              }
+              break;
           }
         } else {
           if (event.type == 'login_kick') {
             // 这个状态是后台直接封禁了账号，然后直接踢掉app
             MyUtils.signOut();
             // 取消发布本地音频流
-            _engine.muteLocalAudioStream(true);
-            _engine.disableAudio();
+            _engine?.muteLocalAudioStream(true);
+            _engine?.disableAudio();
             _dispose();
             // 调用离开房间接口
             doPostLeave();
@@ -1296,9 +1498,9 @@ class _RoomPageState extends State<RoomPage>
             if (event.map!['uid'].toString() ==
                 sp.getString('user_id').toString()) {
               // 设置成观众
-              _engine.setClientRole(role: ClientRoleType.clientRoleAudience);
+              _engine?.setClientRole(role: ClientRoleType.clientRoleAudience);
               // 取消发布本地音频流
-              _engine.muteLocalAudioStream(true);
+              _engine?.muteLocalAudioStream(true);
               setState(() {
                 isMeUp = false;
               });
@@ -1314,13 +1516,13 @@ class _RoomPageState extends State<RoomPage>
               isJinyiin = false;
             });
             // 启用音频模块
-            _engine.enableAudio();
+            _engine?.enableAudio();
             // 发声音发音频流
-            _engine.enableLocalAudio(true);
+            _engine?.enableLocalAudio(true);
             //设置成主播
-            _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
+            _engine?.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
             // 发布本地音频流
-            _engine.muteLocalAudioStream(false);
+            _engine?.muteLocalAudioStream(false);
           }
         } else if (event.map!['type'] == 'user_close_mic') {
           //通知用户闭麦
@@ -1331,9 +1533,9 @@ class _RoomPageState extends State<RoomPage>
               isJinyiin = true;
             });
             // 设置成观众
-            _engine.setClientRole(role: ClientRoleType.clientRoleAudience);
+            _engine?.setClientRole(role: ClientRoleType.clientRoleAudience);
             // 取消发布本地音频流
-            _engine.muteLocalAudioStream(true);
+            _engine?.muteLocalAudioStream(true);
           }
         } else if (event.map!['type'] == 'burstlight') {
           //通知用户开启了爆灯
@@ -1446,6 +1648,8 @@ class _RoomPageState extends State<RoomPage>
                 list.add(map);
               });
             } else if (event.map!['type'] == 'send_gift') {
+              blueScore = (int.parse(blueScore) + int.parse(event.map!['blue_score'].toString())).toString();
+              redScore = (int.parse(redScore) + int.parse(event.map!['red_score'].toString())).toString();
               // 发png图会用到，其他的不使用
               List<bool> listPeoplepng = [];
               for (int i = 0; i < 10; i++) {
@@ -1625,6 +1829,13 @@ class _RoomPageState extends State<RoomPage>
                   }
                 });
               }
+            } else if (event.map!['type'] == 'send_reduce_gift') {
+              /// 收到送的减礼物的im
+              setState(() {
+                listUrlJL.add(event.map!['gift_info'][0]['gift_img']);
+                jianLiWu = event.map!['serial_number_list'];
+              });
+              showStarJL(listUrlJL[0]);
             } else if (event.map!['type'] == 'one_click_gift') {
               //赠送全部背包礼物
               String infos = ''; // 这个是拼接用户送的礼物信息使用
@@ -2016,7 +2227,7 @@ class _RoomPageState extends State<RoomPage>
         // 赠送了全部
         if (event.isAll) {
         } else {
-          if (isDevices == 'android') {
+          if (isDevices == 'android' && !event.isJian) {
             setState(() {
               if (listUrl.isEmpty) {
                 if (event.url.contains('远古霸下（限定投放）') ||
@@ -2112,7 +2323,7 @@ class _RoomPageState extends State<RoomPage>
                 }
               }
             });
-          } else {
+          } else if(isDevices == 'ios' && !event.isJian) {
             if (listUrl.isEmpty) {
               // 直接用网络图地址
               Map<dynamic, dynamic> map = {};
@@ -2438,7 +2649,7 @@ class _RoomPageState extends State<RoomPage>
         print("应用进入前台======");
         setState(() {
           isFirst++;
-          _engine.enableLocalAudio(true);
+          _engine?.enableLocalAudio(true);
         });
         if (isFirst > 0) {
           doPostRoomUserMikeInfo();
@@ -2743,7 +2954,7 @@ class _RoomPageState extends State<RoomPage>
     //3. 页面销毁时，移出监听者
     WidgetsBinding.instance?.removeObserver(this);
     // 在页面销毁时，取消事件监听
-    _engine.unregisterEventHandler(_eventHandler);
+    _engine?.unregisterEventHandler(_eventHandler);
     listen.cancel();
     listenRoomback.cancel();
     listenCheckBG.cancel();
@@ -2766,20 +2977,24 @@ class _RoomPageState extends State<RoomPage>
     animationControllerBG.dispose();
     animationControllerSL.dispose();
     animationControllerZJ.dispose();
+    animationControllerSL.dispose();
+    animationControllerPK.dispose();
+    animationControllerJL.dispose();
     _subscription.cancel();
+    _cancelTimer();
     // TODO: implement dispose
     super.dispose();
   }
 
   Future<void> _dispose() async {
     LogE('====退出监听');
-    await _engine.leaveChannel(); // 离开频道
-    await _engine.release(); // 释放资源
+    await _engine?.leaveChannel(); // 离开频道
+    await _engine?.release(); // 释放资源
   }
 
   // 离开频道
   Future<void> _levave() async {
-    await _engine.leaveChannel(); // 离开频道
+    await _engine?.leaveChannel(); // 离开频道
   }
 
   late RtcEngineEventHandler _eventHandler;
@@ -2794,42 +3009,42 @@ class _RoomPageState extends State<RoomPage>
     _engine = await createAgoraRtcEngine();
 
     // 初始化 RtcEngine，设置频道场景为直播场景
-    await _engine.initialize(const RtcEngineContext(
+    await _engine?.initialize(const RtcEngineContext(
       appId: MyConfig.appId,
       channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
     ));
     // 启用音频模块
-    _engine.enableAudio();
+    _engine?.enableAudio();
     LogE('频道token ${widget.roomToken}');
     LogE('频道channelId ${widget.roomId}');
     // // 通过此方法设置为观众
-    // _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
+    // _engine?.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
     // 设置音质
-    _engine.setAudioProfile(
+    _engine?.setAudioProfile(
         profile: AudioProfileType.audioProfileMusicHighQuality,
         scenario: AudioScenarioType.audioScenarioGameStreaming);
     // // 开启降噪
-    // _engine.setAINSMode(
+    // _engine?.setAINSMode(
     //     enabled: true, mode: AudioAinsMode.ainsModeUltralowlatency);
     //默认订阅所有远端用户的音频流。
-    _engine.muteAllRemoteAudioStreams(false);
-    var isHave = _engine.enableAudioVolumeIndication(
+    _engine?.muteAllRemoteAudioStreams(false);
+    var isHave = _engine?.enableAudioVolumeIndication(
         interval: 50, smooth: 3, reportVad: true);
     LogE('是否成功 ==  $isHave');
     LogE('本人上麦 ==  $isMeUp');
     if (isMeUp && isMeStatus) {
       // 发布本地音频流
-      _engine.muteLocalAudioStream(false);
+      _engine?.muteLocalAudioStream(false);
       // 发声音流
-      _engine.enableLocalAudio(true);
+      _engine?.enableLocalAudio(true);
     } else {
       // 取消发布本地音频流
-      _engine.muteLocalAudioStream(true);
+      _engine?.muteLocalAudioStream(true);
       // 适用只听声音，不发声音流
-      _engine.enableLocalAudio(false);
+      _engine?.enableLocalAudio(false);
     }
-    _engine.setParameters("{\"che.audio.max_mixed_participants\":9}");
-    _engine.enableAudioVolumeIndication(
+    _engine?.setParameters("{\"che.audio.max_mixed_participants\":9}");
+    _engine?.enableAudioVolumeIndication(
         interval: 1000, smooth: 3, reportVad: true);
     _eventHandler = RtcEngineEventHandler(
       onAudioVolumeIndication: (RtcConnection connection,
@@ -2962,10 +3177,10 @@ class _RoomPageState extends State<RoomPage>
       },
     );
     LogE('声网状态 ${_eventHandler != null}');
-    _engine.registerEventHandler(_eventHandler);
+    _engine?.registerEventHandler(_eventHandler);
     LogE('声网状态 ${_eventHandler != null}');
     // 加入频道，设置用户角色为主播
-    await _engine.joinChannel(
+    await _engine?.joinChannel(
       token: widget.roomToken,
       channelId: widget.roomId,
       options: const ChannelMediaOptions(
@@ -3032,7 +3247,7 @@ class _RoomPageState extends State<RoomPage>
 
   /// 开启声卡
   Future<void> starSK() async {
-    _engine.enableLoopbackRecording(enabled: true);
+    _engine?.enableLoopbackRecording(enabled: true);
   }
 
   /// 展示消息地方
@@ -3132,12 +3347,12 @@ class _RoomPageState extends State<RoomPage>
 
                           /// 公告 和 厅主
                           RoomItems.notices(context, m0, notice, listM,
-                              widget.roomId, wherePeople, listPeople, audio9),
+                              widget.roomId, wherePeople, listPeople, audio9,jianLiWu,animationControllerJL),
 
                           /// 麦序
                           Stack(
                             children: [
-                              Transform.translate(
+                              (whoWin != 'draw' && isPK != 0) ? Transform.translate(
                                 offset: Offset(0, -50.h),
                                 child: Container(
                                   height: 340.h,
@@ -3152,7 +3367,7 @@ class _RoomPageState extends State<RoomPage>
                                     ),
                                   ),
                                 ),
-                              ),
+                              ) : const Text(''),
 
                               /// 麦序位
                               RoomItems.maixu(
@@ -3177,13 +3392,14 @@ class _RoomPageState extends State<RoomPage>
                                   audio5,
                                   audio6,
                                   audio7,
-                                  audio8),
+                                  audio8,
+                                  whoWin,jianLiWu,animationControllerJL),
                             ],
                           ),
 
                           //pk
-                          Transform.translate(
-                            offset: Offset(0, -80.h),
+                          (whoWin != 'draw' && isPK != 0) ? Transform.translate(
+                            offset: Offset(0, -160.h),
                             child: Container(
                               height: 50.h,
                               width: double.infinity,
@@ -3217,7 +3433,7 @@ class _RoomPageState extends State<RoomPage>
                                       children: [
                                         const Spacer(),
                                         WidgetUtils.onlyText(
-                                            '10000000',
+                                            blueScore,
                                             StyleUtils.getCommonTextStyle(
                                                 color: Colors.white,
                                                 fontSize: 22.sp)),
@@ -3226,7 +3442,7 @@ class _RoomPageState extends State<RoomPage>
                                             30.h,
                                             60.h),
                                         WidgetUtils.onlyText(
-                                            '10000000',
+                                            redScore,
                                             StyleUtils.getCommonTextStyle(
                                                 color: Colors.white,
                                                 fontSize: 22.sp)),
@@ -3237,11 +3453,11 @@ class _RoomPageState extends State<RoomPage>
                                 ],
                               ),
                             ),
-                          ),
+                          ) : const Text(''),
 
                           Expanded(
                             child: Transform.translate(
-                              offset: Offset(0, -80.h),
+                              offset: Offset(0, -180.h),
                               child: Stack(
                                 children: [
                                   RoomItems.lunbotu1(
@@ -3279,27 +3495,63 @@ class _RoomPageState extends State<RoomPage>
                       ),
 
                       //pk或惩罚时间
-                      Positioned(
-                        top: 290.h,
-                        child: Container(
-                          width: 300.w,
-                          height: 40.h,
-                          color: Colors.transparent,
-                          child: Row(
-                            children: [
-                              WidgetUtils.commonSizedBox(0, 20.w),
-                              Text(
-                                '惩罚时间: 59:00',
-                                style: TextStyle(
-                                    fontSize: ScreenUtil().setSp(26),
-                                    color: Colors.white,
-                                    fontFamily: 'YOUSHEBIAOTIHEI'),
+                      (whoWin != 'draw' && isPK != 0)
+                          ? Positioned(
+                              top: 290.h,
+                              child: Container(
+                                width: 300.w,
+                                height: 40.h,
+                                color: Colors.transparent,
+                                child: Row(
+                                  children: [
+                                    WidgetUtils.commonSizedBox(0, 20.w),
+                                    Text(
+                                      '$pkTitle: ${((pkTime ~/ 60) % 60).toString().padLeft(2, '0')}:${(pkTime % 60).toString().padLeft(2, '0')}',
+                                      style: TextStyle(
+                                          fontSize: ScreenUtil().setSp(26),
+                                          color: Colors.white,
+                                          fontFamily: 'YOUSHEBIAOTIHEI'),
+                                    ),
+                                    const Spacer(),
+                                  ],
+                                ),
                               ),
-                              const Spacer(),
-                            ],
+                            )
+                          : const Text(''),
+
+                      //提前结束pk
+                      (whoWin != 'draw' && isPK != 0 && sp.getString('role').toString() != 'user' && sp.getString('role').toString() != 'streamer')
+                          ? Positioned(
+                        top: 270.h,
+                        right: 10.w,
+                        child: GestureDetector(
+                          onTap: ((){
+                            if(MyUtils.checkClick()){
+                              if(pkTitle == 'PK时间'){
+                                dopPostAheadOver();
+                              }else{
+                                doPostAheadPunish();
+                              }
+                            }
+                          }),
+                          child: Container(
+                            width: 160.w,
+                            height: 50.h,
+                            alignment: Alignment.centerRight,
+                            color: Colors.transparent,
+                            child: Stack(
+                              children: [
+                                WidgetUtils.showImages('assets/images/trends_fabu_btn.png', 50.h, 160.w),
+                                WidgetUtils.onlyTextCenter('提前结束', TextStyle(
+                                    fontSize: ScreenUtil().setSp(28),
+                                    color: Colors.white,
+                                    fontFamily: 'YOUSHEBIAOTIHEI'),)
+                              ],
+                            ),
                           ),
                         ),
-                      ),
+                      )
+                          : const Text(''),
 
                       /// 上麦下麦
                       RoomItems.noPeople(upOrDown, 0, listM),
@@ -3325,12 +3577,18 @@ class _RoomPageState extends State<RoomPage>
 
                       /// 聊天除使用
                       Positioned(
-                        bottom: 90.h,
+                        bottom: 80.h,
                         child:
 
                             /// 消息列表最外层
                             SizedBox(
-                          height: isDevices == 'ios' ? 560.h : 500.h,
+                          height: (isDevices == 'ios' && isPK == 0)
+                              ? 560.h
+                              : (isDevices == 'ios' && isPK != 0)
+                                  ? 490.h
+                                  : (isDevices == 'android' && isPK == 0)
+                                      ? 570.h
+                                      : 500.h,
                           width: 420.h,
                           child: Column(
                             children: [
@@ -3454,6 +3712,24 @@ class _RoomPageState extends State<RoomPage>
                                 child: SVGAImage(
                                   animationControllerZJ,
                                   fit: BoxFit.fitWidth,
+                                ),
+                              ),
+                            )
+                          : const Text(''),
+
+                      /// pk 动画展示
+                      (isPKStar == true)
+                          ? IgnorePointer(
+                              ignoring: true,
+                              child: Center(
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 300.h,
+                                  color: Colors.transparent,
+                                  child: SVGAImage(
+                                    animationControllerPK,
+                                    fit: BoxFit.fitWidth,
+                                  ),
                                 ),
                               ),
                             )
@@ -3658,6 +3934,7 @@ class _RoomPageState extends State<RoomPage>
                         if (_timerHot != null) {
                           _timerHot!.cancel();
                         }
+                        _cancelTimer();
                         sp.setString('isShouQi', '0');
                         //离开频道并释放资源
                         _dispose();
@@ -3686,6 +3963,7 @@ class _RoomPageState extends State<RoomPage>
                         if (_timerHot != null) {
                           _timerHot!.cancel();
                         }
+                        _cancelTimer();
                         sp.setString('isShouQi', '1');
                         sp.setString('sqRoomID', widget.roomId);
                         eventBus.fire(SubmitButtonBack(title: '收起房间'));
@@ -3736,7 +4014,6 @@ class _RoomPageState extends State<RoomPage>
         case MyHttpConfig.successCode:
           setState(() {
             listM.clear();
-            isOK = true;
             sp.setString('roomName', bean.data!.roomInfo!.roomName!);
             sp.setString(
                 'roomNumber', bean.data!.roomInfo!.roomNumber.toString());
@@ -3782,6 +4059,29 @@ class _RoomPageState extends State<RoomPage>
             isHomeShow = bean.data!.roomInfo!.isShow as int;
             isRoomBoss = bean.data!.roomInfo!.mikeList![7].isBoss as int;
             mima = bean.data!.roomInfo!.secondPwd!.isNotEmpty ? true : false;
+            pkTime = bean.data!.roomInfo!.syTime as int;
+            blueScore = bean.data!.roomInfo!.blueScore!;
+            redScore = bean.data!.roomInfo!.redScore!;
+            if(pkTime > 0){
+              _cancelTimer();
+              //开启房间pk
+              _startTimerPK();
+            }
+            isPK = bean.data!.roomInfo!.pkStatus as int;
+            if (isPK == 1){
+              isPKStar = true;
+              pkTitle = 'PK时间';
+            } else if(isPK == 2) {
+              LogE('结束=== ${bean.data!.roomInfo!.win! != 'draw'}');
+              if(bean.data!.roomInfo!.win! != 'draw'){
+                whoWin = bean.data!.roomInfo!.win!;
+                isPKStar = true;
+                pkTitle = '惩罚时间';
+              }
+            } else {
+              isPKStar = false;
+              pkTitle = 'PK时间';
+            }
             LogE('===--- ${bean.data!.roomInfo!.mikeList![8].avatar}');
             // 判断麦上有没有自己
             for (int i = 0; i < bean.data!.roomInfo!.mikeList!.length; i++) {
@@ -3794,14 +4094,14 @@ class _RoomPageState extends State<RoomPage>
                   isMeStatus = true;
                   isJinyiin = false;
                   // 启用音频模块
-                  _engine.enableAudio();
+                  _engine?.enableAudio();
                   // 发声音发音频流
-                  _engine.enableLocalAudio(true);
+                  _engine?.enableLocalAudio(true);
                   //设置成主播
-                  _engine.setClientRole(
+                  _engine?.setClientRole(
                       role: ClientRoleType.clientRoleBroadcaster);
                   // 发布本地音频流
-                  _engine.muteLocalAudioStream(false);
+                  _engine?.muteLocalAudioStream(false);
                 }
                 break;
               }
@@ -3822,14 +4122,16 @@ class _RoomPageState extends State<RoomPage>
             list.add(mapg);
             // 查询本地存储信息
             searchChatInfo();
+
+            isOK = true;
           });
           break;
         case MyHttpConfig.errorloginCode:
           //取消订阅所有远端用户的音频流。
-          _engine.muteAllRemoteAudioStreams(true);
+          _engine?.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
-          _engine.muteLocalAudioStream(true);
-          _engine.disableAudio();
+          _engine?.muteLocalAudioStream(true);
+          _engine?.disableAudio();
           // 清空存储信息
           deleteChatInfo();
           _dispose();
@@ -3858,10 +4160,10 @@ class _RoomPageState extends State<RoomPage>
           break;
         case MyHttpConfig.errorloginCode:
           //取消订阅所有远端用户的音频流。
-          _engine.muteAllRemoteAudioStreams(true);
+          _engine?.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
-          _engine.muteLocalAudioStream(true);
-          _engine.disableAudio();
+          _engine?.muteLocalAudioStream(true);
+          _engine?.disableAudio();
           _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
@@ -3893,10 +4195,10 @@ class _RoomPageState extends State<RoomPage>
           break;
         case MyHttpConfig.errorloginCode:
           //取消订阅所有远端用户的音频流。
-          _engine.muteAllRemoteAudioStreams(true);
+          _engine?.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
-          _engine.muteLocalAudioStream(true);
-          _engine.disableAudio();
+          _engine?.muteLocalAudioStream(true);
+          _engine?.disableAudio();
           _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
@@ -3929,11 +4231,11 @@ class _RoomPageState extends State<RoomPage>
           setState(() {
             if (action == 'up') {
               // 启用音频模块
-              _engine.enableAudio();
+              _engine?.enableAudio();
               //设置成主播
-              _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
+              _engine?.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
               // 发布本地音频流
-              _engine.muteLocalAudioStream(true);
+              _engine?.muteLocalAudioStream(true);
             } else {
               // 下麦的人是自己
               if (whoUid == sp.getString('user_id')) {
@@ -3941,9 +4243,9 @@ class _RoomPageState extends State<RoomPage>
                   isJinyiin = true;
                 });
                 // 设置成观众
-                _engine.setClientRole(role: ClientRoleType.clientRoleAudience);
+                _engine?.setClientRole(role: ClientRoleType.clientRoleAudience);
                 // 取消发布本地音频流
-                _engine.muteLocalAudioStream(true);
+                _engine?.muteLocalAudioStream(true);
               }
             }
             // 判断麦上有没有自己
@@ -3987,14 +4289,14 @@ class _RoomPageState extends State<RoomPage>
                   bean.data![i].uid.toString()) {
                 if (bean.data![i].isClose == 0) {
                   // 启用音频模块
-                  _engine.enableAudio();
+                  _engine?.enableAudio();
                   // 发声音发音频流
-                  _engine.enableLocalAudio(true);
+                  _engine?.enableLocalAudio(true);
                   //设置成主播
-                  _engine.setClientRole(
+                  _engine?.setClientRole(
                       role: ClientRoleType.clientRoleBroadcaster);
                   // 发布本地音频流
-                  _engine.muteLocalAudioStream(false);
+                  _engine?.muteLocalAudioStream(false);
                 }
                 isMeUp = true;
                 mxIndex = bean.data![i].serialNumber.toString();
@@ -4004,10 +4306,10 @@ class _RoomPageState extends State<RoomPage>
           break;
         case MyHttpConfig.errorloginCode:
           //取消订阅所有远端用户的音频流。
-          _engine.muteAllRemoteAudioStreams(true);
+          _engine?.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
-          _engine.muteLocalAudioStream(true);
-          _engine.disableAudio();
+          _engine?.muteLocalAudioStream(true);
+          _engine?.disableAudio();
           _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
@@ -4071,30 +4373,30 @@ class _RoomPageState extends State<RoomPage>
                   bean.data![i].uid.toString()) {
                 isMeUp = true;
                 // 启用音频模块
-                _engine.enableAudio();
+                _engine?.enableAudio();
                 //设置成主播
-                _engine.setClientRole(
+                _engine?.setClientRole(
                     role: ClientRoleType.clientRoleBroadcaster);
                 // 取消发布本地音频流
-                _engine.muteLocalAudioStream(true);
+                _engine?.muteLocalAudioStream(true);
               }
             }
 
             if (isMeUp == false) {
               // 设置成观众
-              _engine.setClientRole(role: ClientRoleType.clientRoleAudience);
+              _engine?.setClientRole(role: ClientRoleType.clientRoleAudience);
               // 取消发布本地音频流
-              _engine.muteLocalAudioStream(true);
+              _engine?.muteLocalAudioStream(true);
               // 静音
             }
           });
           break;
         case MyHttpConfig.errorloginCode:
           //取消订阅所有远端用户的音频流。
-          _engine.muteAllRemoteAudioStreams(true);
+          _engine?.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
-          _engine.muteLocalAudioStream(true);
-          _engine.disableAudio();
+          _engine?.muteLocalAudioStream(true);
+          _engine?.disableAudio();
           _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
@@ -4124,10 +4426,10 @@ class _RoomPageState extends State<RoomPage>
           break;
         case MyHttpConfig.errorloginCode:
           //取消订阅所有远端用户的音频流。
-          _engine.muteAllRemoteAudioStreams(true);
+          _engine?.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
-          _engine.muteLocalAudioStream(true);
-          _engine.disableAudio();
+          _engine?.muteLocalAudioStream(true);
+          _engine?.disableAudio();
           _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
@@ -4170,10 +4472,10 @@ class _RoomPageState extends State<RoomPage>
           break;
         case MyHttpConfig.errorloginCode:
           //取消订阅所有远端用户的音频流。
-          _engine.muteAllRemoteAudioStreams(true);
+          _engine?.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
-          _engine.muteLocalAudioStream(true);
-          _engine.disableAudio();
+          _engine?.muteLocalAudioStream(true);
+          _engine?.disableAudio();
           _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
@@ -4204,27 +4506,27 @@ class _RoomPageState extends State<RoomPage>
               isJinyiin = true;
               MyToastUtils.showToastBottom('已闭麦');
               // 取消发布本地音频流
-              _engine.muteLocalAudioStream(true);
+              _engine?.muteLocalAudioStream(true);
             } else {
               isJinyiin = false;
               MyToastUtils.showToastBottom('已开麦');
               // 启用音频模块
-              _engine.enableAudio();
+              _engine?.enableAudio();
               // 发声音发音频流
-              _engine.enableLocalAudio(true);
+              _engine?.enableLocalAudio(true);
               //设置成主播
-              _engine.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
+              _engine?.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
               // 发布本地音频流
-              _engine.muteLocalAudioStream(false);
+              _engine?.muteLocalAudioStream(false);
             }
           });
           break;
         case MyHttpConfig.errorloginCode:
           //取消订阅所有远端用户的音频流。
-          _engine.muteAllRemoteAudioStreams(true);
+          _engine?.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
-          _engine.muteLocalAudioStream(true);
-          _engine.disableAudio();
+          _engine?.muteLocalAudioStream(true);
+          _engine?.disableAudio();
           _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
@@ -4252,10 +4554,10 @@ class _RoomPageState extends State<RoomPage>
           break;
         case MyHttpConfig.errorloginCode:
           //取消订阅所有远端用户的音频流。
-          _engine.muteAllRemoteAudioStreams(true);
+          _engine?.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
-          _engine.muteLocalAudioStream(true);
-          _engine.disableAudio();
+          _engine?.muteLocalAudioStream(true);
+          _engine?.disableAudio();
           _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
@@ -4284,10 +4586,10 @@ class _RoomPageState extends State<RoomPage>
           break;
         case MyHttpConfig.errorloginCode:
           //取消订阅所有远端用户的音频流。
-          _engine.muteAllRemoteAudioStreams(true);
+          _engine?.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
-          _engine.muteLocalAudioStream(true);
-          _engine.disableAudio();
+          _engine?.muteLocalAudioStream(true);
+          _engine?.disableAudio();
           _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
@@ -4313,10 +4615,10 @@ class _RoomPageState extends State<RoomPage>
           break;
         case MyHttpConfig.errorloginCode:
           //取消订阅所有远端用户的音频流。
-          _engine.muteAllRemoteAudioStreams(true);
+          _engine?.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
-          _engine.muteLocalAudioStream(true);
-          _engine.disableAudio();
+          _engine?.muteLocalAudioStream(true);
+          _engine?.disableAudio();
           _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
@@ -4506,10 +4808,10 @@ class _RoomPageState extends State<RoomPage>
           break;
         case MyHttpConfig.errorloginCode:
           //取消订阅所有远端用户的音频流。
-          _engine.muteAllRemoteAudioStreams(true);
+          _engine?.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
-          _engine.muteLocalAudioStream(true);
-          _engine.disableAudio();
+          _engine?.muteLocalAudioStream(true);
+          _engine?.disableAudio();
           _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
@@ -4538,10 +4840,10 @@ class _RoomPageState extends State<RoomPage>
           break;
         case MyHttpConfig.errorloginCode:
           //取消订阅所有远端用户的音频流。
-          _engine.muteAllRemoteAudioStreams(true);
+          _engine?.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
-          _engine.muteLocalAudioStream(true);
-          _engine.disableAudio();
+          _engine?.muteLocalAudioStream(true);
+          _engine?.disableAudio();
           _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
@@ -4578,14 +4880,14 @@ class _RoomPageState extends State<RoomPage>
                   isMeStatus = true;
                   isJinyiin = false;
                   // 启用音频模块
-                  _engine.enableAudio();
+                  _engine?.enableAudio();
                   // 发声音发音频流
-                  _engine.enableLocalAudio(true);
+                  _engine?.enableLocalAudio(true);
                   //设置成主播
-                  _engine.setClientRole(
+                  _engine?.setClientRole(
                       role: ClientRoleType.clientRoleBroadcaster);
                   // 发布本地音频流
-                  _engine.muteLocalAudioStream(false);
+                  _engine?.muteLocalAudioStream(false);
                 }
               }
             }
@@ -4593,10 +4895,10 @@ class _RoomPageState extends State<RoomPage>
           break;
         case MyHttpConfig.errorloginCode:
           //取消订阅所有远端用户的音频流。
-          _engine.muteAllRemoteAudioStreams(true);
+          _engine?.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
-          _engine.muteLocalAudioStream(true);
-          _engine.disableAudio();
+          _engine?.muteLocalAudioStream(true);
+          _engine?.disableAudio();
           _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
@@ -4642,10 +4944,10 @@ class _RoomPageState extends State<RoomPage>
           break;
         case MyHttpConfig.errorloginCode:
           //取消订阅所有远端用户的音频流。
-          _engine.muteAllRemoteAudioStreams(true);
+          _engine?.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
-          _engine.muteLocalAudioStream(true);
-          _engine.disableAudio();
+          _engine?.muteLocalAudioStream(true);
+          _engine?.disableAudio();
           _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
@@ -4682,10 +4984,10 @@ class _RoomPageState extends State<RoomPage>
             _timerHot!.cancel();
           }
           //取消订阅所有远端用户的音频流。
-          _engine.muteAllRemoteAudioStreams(true);
+          _engine?.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
-          _engine.muteLocalAudioStream(true);
-          _engine.disableAudio();
+          _engine?.muteLocalAudioStream(true);
+          _engine?.disableAudio();
           // 清空存储信息
           deleteChatInfo();
           // ignore: use_build_context_synchronously
@@ -4701,10 +5003,10 @@ class _RoomPageState extends State<RoomPage>
           break;
         case MyHttpConfig.errorloginCode:
           //取消订阅所有远端用户的音频流。
-          _engine.muteAllRemoteAudioStreams(true);
+          _engine?.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
-          _engine.muteLocalAudioStream(true);
-          _engine.disableAudio();
+          _engine?.muteLocalAudioStream(true);
+          _engine?.disableAudio();
           _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
@@ -4813,4 +5115,60 @@ class _RoomPageState extends State<RoomPage>
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
+
+
+  /// 提前结束pk
+  Future<void> dopPostAheadOver() async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'room_id': widget.roomId,
+    };
+    try {
+      CommonBean bean = await DataUtils.postAheadOver(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+
+
+  /// 提前结束惩罚
+  Future<void> doPostAheadPunish() async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'room_id': widget.roomId,
+    };
+    try {
+      CommonBean bean = await DataUtils.postAheadPunish(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
 }

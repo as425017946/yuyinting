@@ -296,7 +296,7 @@ class _TixianBiPageState extends State<TixianBiPage> {
                           child: TextField(
                             controller: controllerName,
                             inputFormatters: [
-                              RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                              // RegexFormatter(regex: MyUtils.regexFirstNotNull),
                             ],
                             style: StyleUtils.loginTextStyle,
                             onChanged: (value) {},

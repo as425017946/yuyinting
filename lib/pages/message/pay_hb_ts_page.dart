@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/loading.dart';
 import 'package:yuyinting/utils/my_utils.dart';
@@ -9,8 +10,10 @@ import 'package:yuyinting/utils/my_utils.dart';
 import '../../bean/Common_bean.dart';
 import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
+import '../../db/DatabaseHelper.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
+import '../../main.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
@@ -18,7 +21,9 @@ import '../../utils/widget_utils.dart';
 class PayHBTSPage extends StatefulWidget {
   String uid;
   String number;
-  PayHBTSPage({super.key, required this.uid,required this.number});
+  String nickName;
+  String otherImg;
+  PayHBTSPage({super.key, required this.uid,required this.number, required this.nickName, required this.otherImg});
 
   @override
   State<PayHBTSPage> createState() => _PayHBTSPageState();
@@ -101,7 +106,6 @@ class _PayHBTSPageState extends State<PayHBTSPage> {
                             if(MyUtils.checkClick()) {
                               doPostSendRedPacket();
                               MyUtils.hideKeyboard(context);
-                              Navigator.pop(context);
                             }
                           }
                         },
@@ -164,8 +168,10 @@ class _PayHBTSPageState extends State<PayHBTSPage> {
       CommonBean bean = await DataUtils.postSendRedPacket(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
+          saveHBinfo(widget.number);
           eventBus.fire(HongBaoBack(info: widget.number));
           MyToastUtils.showToastBottom('红包发送成功');
+          Navigator.pop(context);
           break;
         case MyHttpConfig.errorloginCode:
         // ignore: use_build_context_synchronously
@@ -181,5 +187,37 @@ class _PayHBTSPageState extends State<PayHBTSPage> {
       MyToastUtils.showToastBottom(MyConfig.errorHttpTitle);
       Loading.dismiss();
     }
+  }
+  // 保存发红包的信息 type 1自己给别人发，2收到别人发的红包
+  saveHBinfo(String info) async {
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    Database? db = await databaseHelper.database;
+    String combineID = '';
+    if (int.parse(sp.getString('user_id').toString()) >
+        int.parse(widget.uid)) {
+      combineID = '${widget.uid}-${sp.getString('user_id').toString()}';
+    } else {
+      combineID = '${sp.getString('user_id').toString()}-${widget.uid}';
+    }
+    Map<String, dynamic> params = <String, dynamic>{
+      'uid': sp.getString('user_id').toString(),
+      'otherUid': widget.uid,
+      'whoUid': sp.getString('user_id').toString(),
+      'combineID': combineID,
+      'nickName': widget.nickName,
+      'content': '送出$info个V豆',
+      'headNetImg': sp.getString('user_headimg').toString(),
+      'otherHeadNetImg': widget.otherImg,
+      'add_time': DateTime.now().millisecondsSinceEpoch,
+      'type': 6,
+      'number': 0,
+      'status': 1,
+      'readStatus': 1,
+      'liveStatus': 0,
+      'loginStatus': 0,
+      'weight': widget.uid.toString() == '1' ? 1 : 0,
+    };
+    // 插入数据
+    await databaseHelper.insertData('messageSLTable', params);
   }
 }

@@ -229,7 +229,7 @@ class WidgetUtils {
                 obscureText: obscureText,
                 controller: content,
                 inputFormatters: [
-                  RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                  // RegexFormatter(regex: MyUtils.regexFirstNotNull),
                 ],
                 style: StyleUtils.loginTextStyle,
                 decoration: InputDecoration(
@@ -254,7 +254,7 @@ class WidgetUtils {
     return TextField(
       controller: controller,
       inputFormatters: [
-        RegexFormatter(regex: MyUtils.regexFirstNotNull),
+        // RegexFormatter(regex: MyUtils.regexFirstNotNull),
       ],
       style: StyleUtils.loginTextStyle,
       onChanged: (value) {
@@ -298,7 +298,7 @@ class WidgetUtils {
     return TextField(
       controller: controller,
       inputFormatters: [
-        RegexFormatter(regex: MyUtils.regexFirstNotNull),
+        // RegexFormatter(regex: MyUtils.regexFirstNotNull),
         //设置只能输入6位
         LengthLimitingTextInputFormatter(length),
       ],
@@ -345,7 +345,7 @@ class WidgetUtils {
       obscureText: obscureText,
       controller: controller,
       inputFormatters: [
-        RegexFormatter(regex: MyUtils.regexFirstNotNull),
+        // RegexFormatter(regex: MyUtils.regexFirstNotNull),
       ],
       style: StyleUtils.loginTextStyle,
       onChanged: (value) {
@@ -390,7 +390,7 @@ class WidgetUtils {
       maxLength: 30,
       maxLines: 8,
       inputFormatters: [
-        RegexFormatter(regex: MyUtils.regexFirstNotNull),
+        // RegexFormatter(regex: MyUtils.regexFirstNotNull),
       ],
       style: StyleUtils.loginTextStyle,
       onChanged: (value) {
@@ -439,7 +439,7 @@ class WidgetUtils {
       obscureText: obscureText!,
       controller: controller,
       inputFormatters: [
-        RegexFormatter(regex: MyUtils.regexFirstNotNull),
+        // RegexFormatter(regex: MyUtils.regexFirstNotNull),
         FilteringTextInputFormatter.digitsOnly
       ],
       keyboardType: TextInputType.number,
@@ -471,7 +471,7 @@ class WidgetUtils {
       obscureText: obscureText!,
       controller: controller,
       inputFormatters: [
-        RegexFormatter(regex: MyUtils.regexFirstNotNull),
+        // RegexFormatter(regex: MyUtils.regexFirstNotNull),
         FilteringTextInputFormatter.digitsOnly,
         //设置只能输入6位
         LengthLimitingTextInputFormatter(6),
@@ -1055,8 +1055,8 @@ class WidgetUtils {
     return GestureDetector(
       onTap: (() {
         switch (title) {
-          case '我的装扮':
-            eventBus.fire(SubmitButtonBack(title: '我的装扮'));
+          case '装扮商城':
+            eventBus.fire(SubmitButtonBack(title: '装扮商城'));
             break;
           case '公会中心':
             eventBus.fire(SubmitButtonBack(title: '公会中心'));
@@ -1566,7 +1566,7 @@ class WidgetUtils {
     return TextField(
       controller: controller,
       inputFormatters: [
-        RegexFormatter(regex: MyUtils.regexFirstNotNull),
+        // RegexFormatter(regex: MyUtils.regexFirstNotNull),
       ],
       style: StyleUtils.loginTextStyle,
       onChanged: (value) {
@@ -1648,7 +1648,7 @@ class WidgetUtils {
     return TextField(
       controller: controller,
       inputFormatters: [
-        RegexFormatter(regex: MyUtils.regexFirstNotNull),
+        // RegexFormatter(regex: MyUtils.regexFirstNotNull),
         LengthLimitingTextInputFormatter(length) //限制输入长度
       ],
       style: StyleUtils.getCommonTextStyle(
@@ -1738,7 +1738,7 @@ class WidgetUtils {
       controller: controller,
       textAlign: TextAlign.end,
       inputFormatters: [
-        RegexFormatter(regex: MyUtils.regexFirstNotNull),
+        // RegexFormatter(regex: MyUtils.regexFirstNotNull),
         FilteringTextInputFormatter.digitsOnly
       ],
       keyboardType: TextInputType.number,

@@ -3,12 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/utils/event_utils.dart';
+import 'package:yuyinting/utils/log_util.dart';
 
 import '../../../bean/Common_bean.dart';
-import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
-import '../../../main.dart';
 import '../../../utils/loading.dart';
 import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
@@ -93,7 +92,7 @@ class _FenRunPageState extends State<FenRunPage> {
                     Expanded(
                         child: Container(
                       height: 50.h,
-                      padding: EdgeInsets.only(top: 23.h, left: 10.h),
+                      padding: EdgeInsets.only( left: 10.h),
                       margin: EdgeInsets.only(right: 60.h),
                       alignment: Alignment.centerLeft,
                       //边框设置
@@ -106,23 +105,29 @@ class _FenRunPageState extends State<FenRunPage> {
                         //设置四周边框
                         border: Border.all(width: 1, color: MyColors.homeTopBG),
                       ),
-                      child: TextField(
-                        controller: controller,
-                        inputFormatters: [
-                          RegexFormatter(regex: MyUtils.regexFirstNotNull),
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
-                        keyboardType: TextInputType.number,
-                        //设置键盘为数字
-                        style: StyleUtils.loginTextStyle,
-                        onChanged: (value) {},
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          // labelText: "请输入用户名",
-                          // icon: Icon(Icons.people), //前面的图标
-                          hintText: '请填写50及以上的数字',
-                          hintStyle: StyleUtils.loginHintTextStyle,
-                          // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
+                      child: Transform.translate(
+                        offset: Offset(0,10.h),
+                        child: TextField(
+                          controller: controller,
+                          autofocus: true,
+                          inputFormatters: [
+                            // RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
+                          keyboardType: TextInputType.number,
+                          //设置键盘为数字
+                          style: StyleUtils.loginTextStyle,
+                          onChanged: (value) {
+                            LogE('返回值==  $value');
+                          },
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            // labelText: "请输入用户名",
+                            // icon: Icon(Icons.people), //前面的图标
+                            hintText: '请填写50及以上的数字',
+                            hintStyle: StyleUtils.loginHintTextStyle,
+                            // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
+                          ),
                         ),
                       ),
                     )),

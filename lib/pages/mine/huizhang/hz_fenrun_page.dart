@@ -109,7 +109,7 @@ class _HZFenRunPageState extends State<HZFenRunPage> {
                       child: TextField(
                         controller: controller,
                         inputFormatters: [
-                          RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                          // RegexFormatter(regex: MyUtils.regexFirstNotNull),
                           FilteringTextInputFormatter.digitsOnly
                         ],
                         keyboardType: TextInputType.number,

@@ -18,8 +18,9 @@ import '../../utils/regex_formatter.dart';
 /// 发红包页面
 class HongBaoPage extends StatefulWidget {
   String uid;
-
-  HongBaoPage({super.key, required this.uid});
+  String nickName;
+  String otherImg;
+  HongBaoPage({super.key, required this.uid, required this.nickName, required this.otherImg});
 
   @override
   State<HongBaoPage> createState() => _HongBaoPageState();
@@ -263,7 +264,7 @@ class _HongBaoPageState extends State<HongBaoPage> {
                           controller: controllerDou,
                           textAlign: TextAlign.end,
                           inputFormatters: [
-                            RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                            // RegexFormatter(regex: MyUtils.regexFirstNotNull),
                             FilteringTextInputFormatter.digitsOnly
                           ],
                           keyboardType: TextInputType.number,
@@ -327,7 +328,7 @@ class _HongBaoPageState extends State<HongBaoPage> {
                       MyToastUtils.showToastBottom('请输入要发送的V豆数量');
                     } else {
                       // 进入输入密码页面
-                      MyUtils.goTransparentPage(context, PayHBTSPage(uid: widget.uid, number: controllerDou.text.trim().toString()));
+                      MyUtils.goTransparentPage(context, PayHBTSPage(uid: widget.uid, number: controllerDou.text.trim().toString(), otherImg: widget.otherImg, nickName: widget.nickName,));
                     }
                   }
                 }),

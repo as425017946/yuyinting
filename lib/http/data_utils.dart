@@ -1390,4 +1390,29 @@ class DataUtils{
     print("爆灯 $respons");
     return CommonBean.fromJson(respons!);
   }
+
+  /// 开启pk
+  static Future<CommonBean> postStartPk(Map<String,dynamic> params) async {
+    print("开启pk $params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.startPk, {}, params);
+    print("开启pk $respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+
+  /// 提前结束pk
+  static Future<CommonBean> postAheadOver(Map<String,dynamic> params) async {
+    print("提前结束pk $params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.aheadOver, {}, params);
+    print("提前结束pk $respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 提前结束惩罚
+  static Future<CommonBean> postAheadPunish(Map<String,dynamic> params) async {
+    print("提前结束惩罚 $params");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.aheadPunish, {}, params);
+    print("提前结束惩罚 $respons");
+    return CommonBean.fromJson(respons!);
+  }
 }

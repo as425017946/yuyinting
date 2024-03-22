@@ -23,7 +23,6 @@ import '../../bean/Common_bean.dart';
 import '../../bean/chatUserInfoBean.dart';
 import '../../bean/isPayBean.dart';
 import '../../bean/joinRoomBean.dart';
-import '../../config/my_config.dart';
 import '../../config/smile_utils.dart';
 import '../../db/DatabaseHelper.dart';
 import '../../http/data_utils.dart';
@@ -195,26 +194,6 @@ class _ChatPageState extends State<ChatPage> {
     } else {
       combineID = '${sp.getString('user_id').toString()}-${widget.otherUid}';
     }
-    Map<String, dynamic> params = <String, dynamic>{
-      'uid': sp.getString('user_id').toString(),
-      'otherUid': widget.otherUid,
-      'whoUid': sp.getString('user_id').toString(),
-      'combineID': combineID,
-      'nickName': widget.nickName,
-      'content': '送出$info个V豆',
-      'headNetImg': sp.getString('user_headimg').toString(),
-      'otherHeadNetImg': widget.otherImg,
-      'add_time': DateTime.now().millisecondsSinceEpoch,
-      'type': 6,
-      'number': 0,
-      'status': 1,
-      'readStatus': 1,
-      'liveStatus': 0,
-      'loginStatus': 0,
-      'weight': widget.otherUid.toString() == '1' ? 1 : 0,
-    };
-    // 插入数据
-    await databaseHelper.insertData('messageSLTable', params);
     // 获取所有数据
     List<Map<String, dynamic>> result = await db.query('messageSLTable',
         columns: null,
@@ -2430,6 +2409,8 @@ class _ChatPageState extends State<ChatPage> {
                 context,
                 HongBaoPage(
                   uid: widget.otherUid,
+                  nickName: widget.nickName,
+                  otherImg: widget.otherImg,
                 ));
           } else {
             MyToastUtils.showToastBottom('请先设置支付密码！');

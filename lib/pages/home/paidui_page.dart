@@ -183,7 +183,7 @@ class _PaiduiPageState extends State<PaiduiPage>
             child: Row(
               children: [
                 WidgetUtils.commonSizedBox(0, 10),
-                Container(
+                SizedBox(
                   height: 140.h,
                   width: 140.h,
                   child: Stack(
@@ -195,17 +195,52 @@ class _PaiduiPageState extends State<PaiduiPage>
                           index == 2
                               ? list2[i].coverImg!
                               : index == 3
-                              ? list3[i].coverImg!
-                              : index == 4
-                              ? list4[i].coverImg!
-                              : index == 5
-                              ? list5[i].coverImg!
-                              : index == 6
-                              ? list6[i].coverImg!
-                              : index == listFL[0].type as int
-                              ? list7[i].coverImg!
-                              : list8[i].coverImg!),
-                      SVGASimpleImage3(assetsName: 'assets/svga/pk/room_pk_qj.svga',),
+                                  ? list3[i].coverImg!
+                                  : index == 4
+                                      ? list4[i].coverImg!
+                                      : index == 5
+                                          ? list5[i].coverImg!
+                                          : index == 6
+                                              ? list6[i].coverImg!
+                                              : index == listFL[0].type as int
+                                                  ? list7[i].coverImg!
+                                                  : list8[i].coverImg!),
+                      (index == 2 && list2[i].pkStatus == 1)
+                          ? const SVGASimpleImage3(
+                              assetsName: 'assets/svga/pk/room_pk_qj.svga',
+                            )
+                          : (index == 3 && list3[i].pkStatus == 1)
+                              ? const SVGASimpleImage3(
+                                  assetsName: 'assets/svga/pk/room_pk_qj.svga',
+                                )
+                              : (index == 4 && list4[i].pkStatus == 1)
+                                  ? const SVGASimpleImage3(
+                                      assetsName:
+                                          'assets/svga/pk/room_pk_qj.svga',
+                                    )
+                                  : (index == 5 && list5[i].pkStatus == 1)
+                                      ? const SVGASimpleImage3(
+                                          assetsName:
+                                              'assets/svga/pk/room_pk_qj.svga',
+                                        )
+                                      : (index == 6 && list6[i].pkStatus == 1)
+                                          ? const SVGASimpleImage3(
+                                              assetsName:
+                                                  'assets/svga/pk/room_pk_qj.svga',
+                                            )
+                                          : (index == 7 &&
+                                                  list7[i].pkStatus == 1)
+                                              ? const SVGASimpleImage3(
+                                                  assetsName:
+                                                      'assets/svga/pk/room_pk_qj.svga',
+                                                )
+                                              : (index == 8 &&
+                                                      list8[i].pkStatus == 1)
+                                                  ? const SVGASimpleImage3(
+                                                      assetsName:
+                                                          'assets/svga/pk/room_pk_qj.svga',
+                                                    )
+                                                  : const Text('')
                     ],
                   ),
                 ),
@@ -1460,7 +1495,7 @@ class _PaiduiPageState extends State<PaiduiPage>
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
-      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(e.toString());
     }
   }
 

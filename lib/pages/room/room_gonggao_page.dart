@@ -138,7 +138,7 @@ class _RoomGongGaoPageState extends State<RoomGongGaoPage> {
                         maxLength: 300,
                         maxLines: 10,
                         inputFormatters: [
-                          RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                          // RegexFormatter(regex: MyUtils.regexFirstNotNull),
                         ],
                         style: StyleUtils.loginTextStyle,
                         onChanged: (value) {

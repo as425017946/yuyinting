@@ -102,7 +102,7 @@ class _YQYLSQPageState extends State<YQYLSQPage> {
                       child: TextField(
                         controller: controllerPhone,
                         inputFormatters: [
-                          RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                          // RegexFormatter(regex: MyUtils.regexFirstNotNull),
                         ],
                         style: StyleUtils.loginTextStyle,
                         decoration: InputDecoration(
@@ -174,7 +174,7 @@ class _YQYLSQPageState extends State<YQYLSQPage> {
                       child: TextField(
                         controller: controllerWX,
                         inputFormatters: [
-                          RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                          // RegexFormatter(regex: MyUtils.regexFirstNotNull),
                         ],
                         style: StyleUtils.loginTextStyle,
                         decoration: InputDecoration(
@@ -248,7 +248,7 @@ class _YQYLSQPageState extends State<YQYLSQPage> {
                         maxLength: 150,
                         maxLines: 20,
                         inputFormatters: [
-                          RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                          // RegexFormatter(regex: MyUtils.regexFirstNotNull),
                         ],
                         style: StyleUtils.loginTextStyle,
                         decoration: InputDecoration(

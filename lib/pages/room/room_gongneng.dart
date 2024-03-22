@@ -545,6 +545,7 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                             child: GestureDetector(
                               onTap: ((){
                                 if (MyUtils.checkClick()) {
+                                  Navigator.pop(context);
                                   MyUtils.goTransparentPage(context, RoomPKPage(roomID: widget.roomID,));
                                 }
                               }),
@@ -554,7 +555,7 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                                     alignment: Alignment.bottomCenter,
                                     children: [
                                       WidgetUtils.showImages(
-                                          'assets/images/room_shouye.png',
+                                          'assets/images/room_pk_btn.png',
                                           ScreenUtil().setHeight(80),
                                           ScreenUtil().setHeight(80)),
                                       // Container(

@@ -10,6 +10,7 @@ import '../../../main.dart';
 import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
+
 /// 我的装扮
 class ZhuangbanPage extends StatefulWidget {
   const ZhuangbanPage({Key? key}) : super(key: key);
@@ -20,7 +21,8 @@ class ZhuangbanPage extends StatefulWidget {
 
 class _ZhuangbanPageState extends State<ZhuangbanPage> {
   int _currentIndex = 0;
-  late final PageController _controller ;
+  late final PageController _controller;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -29,6 +31,7 @@ class _ZhuangbanPageState extends State<ZhuangbanPage> {
     _controller = PageController(
       initialPage: 0,
     );
+
     /// 是不是点击装扮商城
     sp.setString('isShop', '1');
   }
@@ -65,12 +68,15 @@ class _ZhuangbanPageState extends State<ZhuangbanPage> {
                       ),
                     ),
                     const Expanded(child: Text('')),
-                    WidgetUtils.onlyTextCenter(
-                        '装扮商城',
-                        StyleUtils.getCommonTextStyle(
-                            color: Colors.white,
-                            fontSize: ScreenUtil().setSp(34),
-                            fontWeight: FontWeight.w600)),
+                    Transform.translate(
+                      offset: Offset(0, 10.h),
+                      child: WidgetUtils.onlyTextCenter(
+                          '装扮商城',
+                          TextStyle(
+                              fontSize: 40.sp,
+                              color: Colors.white,
+                              fontFamily: 'YOUSHEBIAOTIHEI')),
+                    ),
                     const Expanded(child: Text('')),
                     GestureDetector(
                       onTap: (() {
@@ -81,13 +87,10 @@ class _ZhuangbanPageState extends State<ZhuangbanPage> {
                         height: 60.h,
                         color: Colors.transparent,
                         alignment: Alignment.centerRight,
-                        child: Text(
-                          '背包',
-                          style: StyleUtils.getCommonTextStyle(
-                            color: Colors.white,
-                            fontSize: ScreenUtil().setSp(25),
-                          ),
-                        ),
+                        child: Transform.translate(
+                            offset: Offset(0, 10.h),
+                            child: WidgetUtils.showImages(
+                                'assets/images/shop_bb.png', 40.h, 120.w)),
                       ),
                     )
                   ],
@@ -103,7 +106,9 @@ class _ZhuangbanPageState extends State<ZhuangbanPage> {
                       onTap: (() {
                         setState(() {
                           _currentIndex = 0;
-                          _controller.animateToPage(0, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                          _controller.animateToPage(0,
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.ease);
                         });
                       }),
                       child: WidgetUtils.myContainerZhuangban(
@@ -123,7 +128,9 @@ class _ZhuangbanPageState extends State<ZhuangbanPage> {
                       onTap: (() {
                         setState(() {
                           _currentIndex = 1;
-                          _controller.animateToPage(1, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                          _controller.animateToPage(1,
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.ease);
                         });
                       }),
                       child: WidgetUtils.myContainerZhuangban(
@@ -163,7 +170,9 @@ class _ZhuangbanPageState extends State<ZhuangbanPage> {
                       onTap: (() {
                         setState(() {
                           _currentIndex = 3;
-                          _controller.animateToPage(3, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                          _controller.animateToPage(3,
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.ease);
                         });
                       }),
                       child: WidgetUtils.myContainerZhuangban(
@@ -201,7 +210,6 @@ class _ZhuangbanPageState extends State<ZhuangbanPage> {
               ),
             ],
           ),
-
         ],
       ),
     );

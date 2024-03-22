@@ -78,7 +78,7 @@ class _RoomSendInfoPageState extends State<RoomSendInfoPage> {
                       // 设置为发送按钮
                       controller: controller,
                       inputFormatters: [
-                        RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                        // RegexFormatter(regex: MyUtils.regexFirstNotNull),
                         LengthLimitingTextInputFormatter(30) //限制输入长度
                       ],
                       style: StyleUtils.loginTextStyle,

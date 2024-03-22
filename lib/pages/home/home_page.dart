@@ -26,8 +26,6 @@ import 'package:yuyinting/pages/login/edit_info_page.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import '../../bean/CheckoutBean.dart';
-import '../../bean/Common_bean.dart';
-import '../../bean/addressIPBean.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
@@ -35,7 +33,6 @@ import '../../utils/event_utils.dart';
 import '../../utils/log_util.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
-import 'package:path_provider/path_provider.dart' as path_provider;
 
 ///首页
 class HomePage extends StatefulWidget {

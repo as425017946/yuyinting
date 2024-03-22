@@ -105,7 +105,7 @@ class _ForgetPayPasswordPageState extends State<ForgetPayPasswordPage> {
                     obscureText: false,
                     controller: controllerPhone,
                     inputFormatters: [
-                      RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                      // RegexFormatter(regex: MyUtils.regexFirstNotNull),
                       FilteringTextInputFormatter.digitsOnly,
                       //设置只能输入6位
                       LengthLimitingTextInputFormatter(11),
@@ -192,7 +192,7 @@ class _ForgetPayPasswordPageState extends State<ForgetPayPasswordPage> {
                     obscureText: false,
                     controller: controllerCode,
                     inputFormatters: [
-                      RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                      // RegexFormatter(regex: MyUtils.regexFirstNotNull),
                       FilteringTextInputFormatter.digitsOnly,
                       //设置只能输入6位
                       LengthLimitingTextInputFormatter(6),
@@ -236,7 +236,7 @@ class _ForgetPayPasswordPageState extends State<ForgetPayPasswordPage> {
                     obscureText: false,
                     controller: controllerPas2,
                     inputFormatters: [
-                      RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                      // RegexFormatter(regex: MyUtils.regexFirstNotNull),
                       FilteringTextInputFormatter.digitsOnly,
                       //设置只能输入6位
                       LengthLimitingTextInputFormatter(6),
@@ -280,7 +280,7 @@ class _ForgetPayPasswordPageState extends State<ForgetPayPasswordPage> {
                     obscureText: false,
                     controller: controllerPas3,
                     inputFormatters: [
-                      RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                      // RegexFormatter(regex: MyUtils.regexFirstNotNull),
                       FilteringTextInputFormatter.digitsOnly,
                       //设置只能输入6位
                       LengthLimitingTextInputFormatter(6),

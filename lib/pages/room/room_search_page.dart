@@ -151,7 +151,7 @@ class _RoomSearchPageState extends State<RoomSearchPage> {
                             child: TextField(
                               controller: _souSuoName,
                               inputFormatters: [
-                                RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                                // RegexFormatter(regex: MyUtils.regexFirstNotNull),
                               ],
                               style: StyleUtils.loginTextStyle,
                               onChanged: (value) {

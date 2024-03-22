@@ -361,7 +361,7 @@ class _LoginPageState extends State<LoginPage> {
                       obscureText: false,
                       controller: controllerPhone,
                       inputFormatters: [
-                        RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                        // RegexFormatter(regex: MyUtils.regexFirstNotNull),
                         FilteringTextInputFormatter.digitsOnly,
                         //设置只能输入11位
                         LengthLimitingTextInputFormatter(11),
@@ -970,18 +970,18 @@ class _LoginPageState extends State<LoginPage> {
     String buildNumber = packageInfo.buildNumber;
     sp.setString('myVersion2', version.toString());
     sp.setString('buildNumber', buildNumber);
-    FormData formdata = FormData.fromMap(
-      {
-        'type': 'test',
-      },
-    );
+    // FormData formdata = FormData.fromMap(
+    //   {
+    //     'type': 'test',
+    //   },
+    // );
     BaseOptions option = BaseOptions(
         contentType: 'application/x-www-form-urlencoded',
         responseType: ResponseType.plain);
     Dio dio = Dio(option);
     //application/json
     try {
-      var respone = await dio.post(MyHttpConfig.pdAddress, data: formdata);
+      var respone = await dio.post(MyHttpConfig.pdAddress,);
       // LogE('请求地址 == ${MyHttpConfig.pdAddress}');
       Map jsonResponse = json.decode(respone.data.toString());
       LogE('返回结果 == $respone');

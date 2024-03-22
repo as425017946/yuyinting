@@ -169,7 +169,7 @@ class _ShimingzhiPageState extends State<ShimingzhiPage> {
                   TextField(
                     controller: controllerName,
                     inputFormatters: [
-                      RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                      // RegexFormatter(regex: MyUtils.regexFirstNotNull),
                     ],
                     style: StyleUtils.loginTextStyle,
                     onChanged: (value) {
@@ -222,7 +222,7 @@ class _ShimingzhiPageState extends State<ShimingzhiPage> {
                   TextField(
                     controller: controllerCard,
                     inputFormatters: [
-                      RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                      // RegexFormatter(regex: MyUtils.regexFirstNotNull),
                     ],
                     style: StyleUtils.loginTextStyle,
                     onChanged: (value) {

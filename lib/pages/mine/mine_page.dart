@@ -84,7 +84,7 @@ class _MinePageState extends State<MinePage> {
       });
     }
     listen = eventBus.on<SubmitButtonBack>().listen((event) {
-      if (event.title == '我的装扮') {
+      if (event.title == '装扮商城') {
         // Navigator.pushNamed(context, 'JiesuanPage');
 
         Navigator.push(
@@ -556,7 +556,7 @@ class _MinePageState extends State<MinePage> {
                       _collection(),
                       WidgetUtils.commonSizedBox(20, 0),
                       WidgetUtils.whiteKuang(
-                          'assets/images/mine_zhuangban.png', '我的装扮', false),
+                          'assets/images/mine_zhuangban.png', '装扮商城', false),
                       (identity != 'president' && isGet)
                           ? WidgetUtils.whiteKuang(
                               'assets/images/mine_gonghui.png',

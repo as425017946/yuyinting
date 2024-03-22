@@ -784,6 +784,15 @@ class MyUtils {
                     eventBus.fire(ZDYBack(map: body.params, type: body.event));
                   } else if (body.event == 'user_room_black') {
                     eventBus.fire(ZDYBack(map: body.params, type: body.event));
+                  } else if (body.event == 'room_pk_start') {
+                    // 开启房间pk
+                    eventBus.fire(ZDYBack(map: body.params, type: body.event));
+                  } else if (body.event == 'room_pk_result') {
+                    // 房间pk关闭了
+                    eventBus.fire(ZDYBack(map: body.params, type: body.event));
+                  } else if (body.event == 'room_pk_ahead_punish') {
+                    // 提前结束惩罚
+                    eventBus.fire(ZDYBack(map: body.params, type: body.event));
                   } else {
                     eventBus.fire(ZDYBack(map: body.params, type: body.event));
                   }

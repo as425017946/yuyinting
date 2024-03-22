@@ -86,7 +86,7 @@ class _PasswordPageState extends State<PasswordPage> {
                     obscureText: true,
                     controller: controllerPas1,
                     inputFormatters: [
-                      RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                      // RegexFormatter(regex: MyUtils.regexFirstNotNull),
                     ],
                     style: StyleUtils.loginTextStyle,
                     onChanged: (value) {
@@ -145,7 +145,7 @@ class _PasswordPageState extends State<PasswordPage> {
                     obscureText: true,
                     controller: controllerPas2,
                     inputFormatters: [
-                      RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                      // RegexFormatter(regex: MyUtils.regexFirstNotNull),
                     ],
                     style: StyleUtils.loginTextStyle,
                     onChanged: (value) {
@@ -204,7 +204,7 @@ class _PasswordPageState extends State<PasswordPage> {
                     obscureText: true,
                     controller: controllerPas3,
                     inputFormatters: [
-                      RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                      // RegexFormatter(regex: MyUtils.regexFirstNotNull),
                     ],
                     style: StyleUtils.loginTextStyle,
                     onChanged: (value) {

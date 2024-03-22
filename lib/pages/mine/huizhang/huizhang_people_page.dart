@@ -289,7 +289,7 @@ class _HuiZhangPeoplePageState extends State<HuiZhangPeoplePage> {
                           child: TextField(
                         controller: _souSuoName,
                         inputFormatters: [
-                          RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                          // RegexFormatter(regex: MyUtils.regexFirstNotNull),
                         ],
                         style: StyleUtils.loginTextStyle,
                         onSubmitted: (value) {

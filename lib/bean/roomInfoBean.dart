@@ -64,7 +64,13 @@ class RoomInfo {
   String? followStatus;
   int? isForbation;
   int? lockMic;
+  int? pkTime;
+  int? pkStatus;
+  int? syTime;
   List<MikeList>? mikeList;
+  String? blueScore;
+  String? redScore;
+  String? win;
 
   RoomInfo(
       {this.roomNumber,
@@ -81,7 +87,13 @@ class RoomInfo {
         this.followStatus,
         this.isForbation,
         this.mikeList,
-        this.lockMic});
+        this.lockMic,
+        this.pkTime,
+        this.pkStatus,
+        this.syTime,
+        this.blueScore,
+        this.redScore,
+        this.win});
 
   RoomInfo.fromJson(Map<String, dynamic> json) {
     roomNumber = json['room_number'];
@@ -98,6 +110,12 @@ class RoomInfo {
     followStatus = json['follow_status'];
     isForbation = json['isForbation'];
     lockMic = json['lock_mic'];
+    pkTime = json['pk_time'];
+    pkStatus = json['pk_status'];
+    syTime = json['sy_time'];
+    blueScore = json['blue_score'];
+    redScore = json['red_score'];
+    win = json['win'];
     if (json['mike_list'] != null) {
       mikeList = <MikeList>[];
       json['mike_list'].forEach((v) {
@@ -122,6 +140,12 @@ class RoomInfo {
     data['follow_status'] = this.followStatus;
     data['isForbation'] = this.isForbation;
     data['lock_mic'] = this.lockMic;
+    data['pk_time'] = this.pkTime;
+    data['pk_status'] = this.pkStatus;
+    data['sy_time'] = this.syTime;
+    data['blue_score'] = this.blueScore;
+    data['red_score'] = this.redScore;
+    data['win'] = this.win;
     if (this.mikeList != null) {
       data['mike_list'] = this.mikeList!.map((v) => v.toJson()).toList();
     }

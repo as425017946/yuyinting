@@ -100,7 +100,7 @@ class _PasswordPayPageState extends State<PasswordPayPage> {
                     obscureText: false,
                     controller: controllerPas1,
                     inputFormatters: [
-                      RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                      // RegexFormatter(regex: MyUtils.regexFirstNotNull),
                       FilteringTextInputFormatter.digitsOnly,
                       //设置只能输入6位
                       LengthLimitingTextInputFormatter(6),
@@ -144,7 +144,7 @@ class _PasswordPayPageState extends State<PasswordPayPage> {
                     obscureText: false,
                     controller: controllerPas2,
                     inputFormatters: [
-                      RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                      // RegexFormatter(regex: MyUtils.regexFirstNotNull),
                       FilteringTextInputFormatter.digitsOnly,
                       //设置只能输入6位
                       LengthLimitingTextInputFormatter(6),
@@ -188,7 +188,7 @@ class _PasswordPayPageState extends State<PasswordPayPage> {
                     obscureText: false,
                     controller: controllerPas3,
                     inputFormatters: [
-                      RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                      // RegexFormatter(regex: MyUtils.regexFirstNotNull),
                       FilteringTextInputFormatter.digitsOnly,
                       //设置只能输入6位
                       LengthLimitingTextInputFormatter(6),

@@ -319,7 +319,7 @@ class _GonghuiPeoplePageState extends State<GonghuiPeoplePage> {
                           child: TextField(
                         controller: _souSuoName,
                         inputFormatters: [
-                          RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                          // RegexFormatter(regex: MyUtils.regexFirstNotNull),
                         ],
                         style: StyleUtils.loginTextStyle,
                         onSubmitted: (value) {

@@ -98,7 +98,7 @@ class _ReportPageState extends State<ReportPage> {
                 maxLength: 150,
                 maxLines: 10,
                 inputFormatters: [
-                  RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                  // RegexFormatter(regex: MyUtils.regexFirstNotNull),
                 ],
                 style: StyleUtils.loginTextStyle,
                 decoration: InputDecoration(

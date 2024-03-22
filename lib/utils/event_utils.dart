@@ -222,7 +222,8 @@ class SVGABack {
   bool isAll; // 是否赠送全部
   String url; //svga地址
   List<String> listurl;
-  SVGABack({required this.isAll,required this.url,required this.listurl});
+  bool isJian;
+  SVGABack({required this.isAll,required this.url,required this.listurl,required this.isJian});
 }
 
 /// 厅内礼物播放完成

@@ -40,6 +40,7 @@ class DataPH {
   List<String>? hostInfo;
   List<MemberList>? memberList;
   int? isNew;
+  int? pkStatus;
 
   DataPH(
       {this.id,
@@ -53,7 +54,8 @@ class DataPH {
         this.addTime,
         this.hostInfo,
         this.memberList,
-        this.isNew});
+        this.isNew,
+        this.pkStatus});
 
   DataPH.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -66,6 +68,7 @@ class DataPH {
     emRoomId = json['em_room_id'];
     addTime = json['add_time'];
     hostInfo = json['host_info'].cast<String>();
+    pkStatus = json['pk_status'];
     if (json['member_list'] != null) {
       memberList = <MemberList>[];
       json['member_list'].forEach((v) {
@@ -87,6 +90,7 @@ class DataPH {
     data['em_room_id'] = this.emRoomId;
     data['add_time'] = this.addTime;
     data['host_info'] = this.hostInfo;
+    data['pk_status'] = this.pkStatus;
     if (this.memberList != null) {
       data['member_list'] = this.memberList!.map((v) => v.toJson()).toList();
     }

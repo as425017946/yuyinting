@@ -134,7 +134,7 @@ class _RoomNameState extends State<RoomName> {
                         controller: textEditingController,
                         autofocus: true,
                         inputFormatters: [
-                          RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                          // RegexFormatter(regex: MyUtils.regexFirstNotNull),
                           //设置只能输入12位
                           LengthLimitingTextInputFormatter(12),
                         ],

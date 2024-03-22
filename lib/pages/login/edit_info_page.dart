@@ -273,7 +273,7 @@ class _EditInfoPageState extends State<EditInfoPage> {
                                 child: TextField(
                                   controller: controllerYQM,
                                   inputFormatters: [
-                                    RegexFormatter(regex: MyUtils.regexFirstNotNull),
+                                    // RegexFormatter(regex: MyUtils.regexFirstNotNull),
                                     FilteringTextInputFormatter.digitsOnly
                                   ],
                                   keyboardType: TextInputType.number,

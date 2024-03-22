@@ -81,6 +81,8 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
   bool isCheck = false;
   // 是否点击了赠送全部背包礼物
   bool isAllBeibao = false;
+  // 是否正常礼物  1正常礼物 0减魅力礼物
+  bool isReduce = false;
 
   Widget _itemPeople(BuildContext context, int i) {
     return GestureDetector(
@@ -174,6 +176,11 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
       onTap: (() {
         setState(() {
           if(leixing == 0){
+            if(listC[index].isReduce == 1){
+              isReduce = true;
+            }else{
+              isReduce = false;
+            }
             //说明要送的人在麦序上
             if(isUpPeopleNum != 0){
               // isAll = true;
@@ -560,6 +567,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                               GestureDetector(
                                 onTap: (() {
                                   setState(() {
+                                    isReduce = false;
                                     url = '';
                                     svga = '';
                                     leixing = 0;
@@ -599,6 +607,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                               GestureDetector(
                                 onTap: (() {
                                   setState(() {
+                                    isReduce = false;
                                     url = '';
                                     svga = '';
                                     leixing = 1;
@@ -640,6 +649,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                               GestureDetector(
                                 onTap: (() {
                                   setState(() {
+                                    isReduce = false;
                                     url = '';
                                     svga = '';
                                     leixing = 2;
@@ -1467,7 +1477,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
               listPeople[i] = false;
             }
             eventBus.fire(ChoosePeopleBack(listPeople: listPeople));
-            eventBus.fire(SVGABack(isAll: false, url: svga, listurl: listurl));
+            eventBus.fire(SVGABack(isAll: false, url: svga, listurl: listurl, isJian: isReduce));
             LogE('赠送svga礼物  $svga');
           }
           break;
@@ -1510,7 +1520,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
           // ignore: use_build_context_synchronously
           Navigator.pop(context);
           // 赠送成功发通知
-          eventBus.fire(SVGABack(isAll: true, url: url, listurl: listurl));
+          eventBus.fire(SVGABack(isAll: true, url: url, listurl: listurl, isJian: false));
           break;
         case MyHttpConfig.errorloginCode:
         // ignore: use_build_context_synchronously

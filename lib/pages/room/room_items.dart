@@ -143,7 +143,9 @@ class RoomItems {
       );
     } else if (list[i]['type'] == '2') {
       String ZJName = '';
-      if (list[i]['mount_name'].toString().isNotEmpty &&
+      if (list[i]['mount_name']
+          .toString()
+          .isNotEmpty &&
           list[i]['mount_name'].toString() != null) {
         ZJName = '驾着${list[i]['mount_name'].toString()}';
       } else {
@@ -189,47 +191,47 @@ class RoomItems {
                   // 厅主或管理或主播
                   WidgetSpan(
                       child: (list[i]['identity'] == 'user' ||
-                              list[i]['identity'] == 'streamer')
+                          list[i]['identity'] == 'streamer')
                           ? const Text('')
                           : list[i]['identity'] == 'leader'
-                              ? WidgetUtils.showImages(
-                                  'assets/images/dj/room_role_director.png',
-                                  30.h,
-                                  30.h)
-                              : list[i]['identity'] == 'president'
-                                  ? WidgetUtils.showImages(
-                                      'assets/images/dj/room_role_huizhang.png',
-                                      30.h,
-                                      30.h)
-                                  : WidgetUtils.showImages(
-                                      'assets/images/dj/room_role_manager.png',
-                                      30.h,
-                                      30.h)),
+                          ? WidgetUtils.showImages(
+                          'assets/images/dj/room_role_director.png',
+                          30.h,
+                          30.h)
+                          : list[i]['identity'] == 'president'
+                          ? WidgetUtils.showImages(
+                          'assets/images/dj/room_role_huizhang.png',
+                          30.h,
+                          30.h)
+                          : WidgetUtils.showImages(
+                          'assets/images/dj/room_role_manager.png',
+                          30.h,
+                          30.h)),
                   WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
                   // 萌新/新贵/新锐 三选一
                   // 不是新锐新贵，并且是萌新直接显示萌新
                   WidgetSpan(
                       child: list[i]['new_noble'].toString() == '0' &&
-                              list[i]['is_new'].toString() == '1'
+                          list[i]['is_new'].toString() == '1'
                           ? WidgetUtils.showImages(
-                              'assets/images/dj/room_role_common.png',
-                              30.h,
-                              50.h)
+                          'assets/images/dj/room_role_common.png',
+                          30.h,
+                          50.h)
                           : const Text('')),
                   // 不管是不是萌新，只要是新锐或者新贵就优先展示
                   WidgetSpan(
                       child: list[i]['new_noble'].toString() == "1"
                           ? WidgetUtils.showImages(
-                              'assets/images/dj/room_rui.png', 30.h, 50.h)
+                          'assets/images/dj/room_rui.png', 30.h, 50.h)
                           : list[i]['new_noble'].toString() == "2"
-                              ? WidgetUtils.showImages(
-                                  'assets/images/dj/room_gui.png', 30.h, 50.h)
-                              : list[i]['new_noble'].toString() == "3"
-                                  ? WidgetUtils.showImages(
-                                      'assets/images/dj/room_gui.png',
-                                      30.h,
-                                      50.h)
-                                  : const Text('')),
+                          ? WidgetUtils.showImages(
+                          'assets/images/dj/room_gui.png', 30.h, 50.h)
+                          : list[i]['new_noble'].toString() == "3"
+                          ? WidgetUtils.showImages(
+                          'assets/images/dj/room_gui.png',
+                          30.h,
+                          50.h)
+                          : const Text('')),
                   WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
                   //等级
                   WidgetSpan(
@@ -239,43 +241,50 @@ class RoomItems {
                       child: Stack(
                         children: [
                           int.parse(list[i]['lv'].toString()) >= 1 &&
-                                  int.parse(list[i]['lv'].toString()) <= 10
+                              int.parse(list[i]['lv'].toString()) <= 10
                               ? WidgetUtils.showImages(
-                                  'assets/images/dj/dj_1-10.png', 28.h, 28.h)
+                              'assets/images/dj/dj_1-10.png', 28.h, 28.h)
                               : int.parse(list[i]['lv'].toString()) >= 11 &&
-                                      int.parse(list[i]['lv'].toString()) <= 15
-                                  ? WidgetUtils.showImages(
-                                      'assets/images/dj/dj_11-15.png',
-                                      28.h,
-                                      28.h)
-                                  : int.parse(list[i]['lv'].toString()) >= 16 &&
-                                          int.parse(list[i]['lv'].toString()) <=
-                                              20
-                                      ? WidgetUtils.showImages(
-                                          'assets/images/dj/dj_16-20.png',
-                                          28.h,
-                                          28.h)
-                                      : int.parse(list[i]['lv'].toString()) >= 21 &&
-                                              int.parse(list[i]['lv'].toString()) <=
-                                                  25
-                                          ? WidgetUtils.showImages(
-                                              'assets/images/dj/dj_21-25.png',
-                                              28.h,
-                                              28.h)
-                                          : int.parse(list[i]['lv'].toString()) >= 26 &&
-                                                  int.parse(list[i]['lv'].toString()) <=
-                                                      30
-                                              ? WidgetUtils.showImages(
-                                                  'assets/images/dj/dj_26-30.png',
-                                                  28.h,
-                                                  28.h)
-                                              : int.parse(list[i]['lv'].toString()) >= 31 && int.parse(list[i]['lv'].toString()) <= 35
-                                                  ? WidgetUtils.showImages('assets/images/dj/dj_31-35.png', 28.h, 28.h)
-                                                  : int.parse(list[i]['lv'].toString()) >= 36 && int.parse(list[i]['lv'].toString()) <= 40
-                                                      ? WidgetUtils.showImages('assets/images/dj/dj_36-40.png', 28.h, 28.h)
-                                                      : int.parse(list[i]['lv'].toString()) >= 41 && int.parse(list[i]['lv'].toString()) <= 45
-                                                          ? WidgetUtils.showImages('assets/images/dj/dj_41-45.png', 28.h, 28.h)
-                                                          : WidgetUtils.showImages('assets/images/dj/dj_46-50.png', 28.h, 28.h),
+                              int.parse(list[i]['lv'].toString()) <= 15
+                              ? WidgetUtils.showImages(
+                              'assets/images/dj/dj_11-15.png',
+                              28.h,
+                              28.h)
+                              : int.parse(list[i]['lv'].toString()) >= 16 &&
+                              int.parse(list[i]['lv'].toString()) <=
+                                  20
+                              ? WidgetUtils.showImages(
+                              'assets/images/dj/dj_16-20.png',
+                              28.h,
+                              28.h)
+                              : int.parse(list[i]['lv'].toString()) >= 21 &&
+                              int.parse(list[i]['lv'].toString()) <=
+                                  25
+                              ? WidgetUtils.showImages(
+                              'assets/images/dj/dj_21-25.png',
+                              28.h,
+                              28.h)
+                              : int.parse(list[i]['lv'].toString()) >= 26 &&
+                              int.parse(list[i]['lv'].toString()) <=
+                                  30
+                              ? WidgetUtils.showImages(
+                              'assets/images/dj/dj_26-30.png',
+                              28.h,
+                              28.h)
+                              : int.parse(list[i]['lv'].toString()) >= 31 &&
+                              int.parse(list[i]['lv'].toString()) <= 35
+                              ? WidgetUtils.showImages(
+                              'assets/images/dj/dj_31-35.png', 28.h, 28.h)
+                              : int.parse(list[i]['lv'].toString()) >= 36 &&
+                              int.parse(list[i]['lv'].toString()) <= 40
+                              ? WidgetUtils.showImages(
+                              'assets/images/dj/dj_36-40.png', 28.h, 28.h)
+                              : int.parse(list[i]['lv'].toString()) >= 41 &&
+                              int.parse(list[i]['lv'].toString()) <= 45
+                              ? WidgetUtils.showImages(
+                              'assets/images/dj/dj_41-45.png', 28.h, 28.h)
+                              : WidgetUtils.showImages(
+                              'assets/images/dj/dj_46-50.png', 28.h, 28.h),
                           Positioned(
                             bottom: 0,
                             right: 0,
@@ -291,38 +300,56 @@ class RoomItems {
                                       foreground: Paint()
                                         ..style = PaintingStyle.stroke
                                         ..strokeWidth = 2
-                                        ..color = (int.parse(list[i]['lv'].toString()) >= 1 &&
-                                                int.parse(list[i]['lv'].toString()) <=
-                                                    10)
+                                        ..color = (int.parse(
+                                            list[i]['lv'].toString()) >= 1 &&
+                                            int.parse(
+                                                list[i]['lv'].toString()) <=
+                                                10)
                                             ? MyColors.djOneM
-                                            : (int.parse(list[i]['lv'].toString()) >= 11 &&
-                                                    int.parse(list[i]['lv'].toString()) <=
-                                                        15)
-                                                ? MyColors.djTwoM
-                                                : (int.parse(list[i]['lv'].toString()) >=
-                                                            16 &&
-                                                        int.parse(list[i]['lv'].toString()) <=
-                                                            20)
-                                                    ? MyColors.djThreeM
-                                                    : (int.parse(list[i]['lv'].toString()) >=
-                                                                21 &&
-                                                            int.parse(list[i]['lv'].toString()) <=
-                                                                25)
-                                                        ? MyColors.djFourM
-                                                        : (int.parse(list[i]['lv'].toString()) >=
-                                                                    26 &&
-                                                                int.parse(list[i]['lv'].toString()) <=
-                                                                    30)
-                                                            ? MyColors.djFiveM
-                                                            : (int.parse(list[i]['lv'].toString()) >=
-                                                                        31 &&
-                                                                    int.parse(list[i]['lv'].toString()) <= 35)
-                                                                ? MyColors.djSixM
-                                                                : (int.parse(list[i]['lv'].toString()) >= 36 && int.parse(list[i]['lv'].toString()) <= 40)
-                                                                    ? MyColors.djSevenM
-                                                                    : (int.parse(list[i]['lv'].toString()) >= 41 && int.parse(list[i]['lv'].toString()) <= 45)
-                                                                        ? MyColors.djEightM
-                                                                        : MyColors.djNineM),
+                                            : (int.parse(
+                                            list[i]['lv'].toString()) >= 11 &&
+                                            int.parse(
+                                                list[i]['lv'].toString()) <=
+                                                15)
+                                            ? MyColors.djTwoM
+                                            : (int.parse(
+                                            list[i]['lv'].toString()) >=
+                                            16 &&
+                                            int.parse(
+                                                list[i]['lv'].toString()) <=
+                                                20)
+                                            ? MyColors.djThreeM
+                                            : (int.parse(
+                                            list[i]['lv'].toString()) >=
+                                            21 &&
+                                            int.parse(
+                                                list[i]['lv'].toString()) <=
+                                                25)
+                                            ? MyColors.djFourM
+                                            : (int.parse(
+                                            list[i]['lv'].toString()) >=
+                                            26 &&
+                                            int.parse(
+                                                list[i]['lv'].toString()) <=
+                                                30)
+                                            ? MyColors.djFiveM
+                                            : (int.parse(
+                                            list[i]['lv'].toString()) >=
+                                            31 &&
+                                            int.parse(
+                                                list[i]['lv'].toString()) <= 35)
+                                            ? MyColors.djSixM
+                                            : (int.parse(
+                                            list[i]['lv'].toString()) >= 36 &&
+                                            int.parse(
+                                                list[i]['lv'].toString()) <= 40)
+                                            ? MyColors.djSevenM
+                                            : (int.parse(
+                                            list[i]['lv'].toString()) >= 41 &&
+                                            int.parse(
+                                                list[i]['lv'].toString()) <= 45)
+                                            ? MyColors.djEightM
+                                            : MyColors.djNineM),
                                 ),
                                 Text(
                                   int.parse(list[i]['lv'].toString())
@@ -344,121 +371,121 @@ class RoomItems {
                   //贵族
                   WidgetSpan(
                       child: Transform.translate(
-                    offset: Offset(0, 5.h),
-                    child: list[i]['noble_id'].toString() == "1"
-                        ? WidgetUtils.showImages(
-                            'assets/images/tequan_yongshi.png', 38.h, 38.h)
-                        : list[i]['noble_id'].toString() == "2"
+                        offset: Offset(0, 5.h),
+                        child: list[i]['noble_id'].toString() == "1"
                             ? WidgetUtils.showImages(
-                                'assets/images/tequan_qishi.png', 38.h, 38.h)
+                            'assets/images/tequan_yongshi.png', 38.h, 38.h)
+                            : list[i]['noble_id'].toString() == "2"
+                            ? WidgetUtils.showImages(
+                            'assets/images/tequan_qishi.png', 38.h, 38.h)
                             : list[i]['noble_id'].toString() == "3"
-                                ? WidgetUtils.showImages(
-                                    'assets/images/tequan_bojue.png',
-                                    38.h,
-                                    38.h)
-                                : list[i]['noble_id'].toString() == "4"
-                                    ? WidgetUtils.showImages(
-                                        'assets/images/tequan_houjue.png',
-                                        38.h,
-                                        38.h)
-                                    : list[i]['noble_id'].toString() == "5"
-                                        ? WidgetUtils.showImages(
-                                            'assets/images/tequan_gongjue.png',
-                                            38.h,
-                                            38.h)
-                                        : list[i]['noble_id'].toString() == "6"
-                                            ? WidgetUtils.showImages(
-                                                'assets/images/tequan_guowang.png',
-                                                38.h,
-                                                38.h)
-                                            : list[i]['noble_id'].toString() ==
-                                                    "7"
-                                                ? WidgetUtils.showImages(
-                                                    'assets/images/tequan_diwang.png',
-                                                    38.h,
-                                                    38.h)
-                                                : const Text(''),
-                  )),
+                            ? WidgetUtils.showImages(
+                            'assets/images/tequan_bojue.png',
+                            38.h,
+                            38.h)
+                            : list[i]['noble_id'].toString() == "4"
+                            ? WidgetUtils.showImages(
+                            'assets/images/tequan_houjue.png',
+                            38.h,
+                            38.h)
+                            : list[i]['noble_id'].toString() == "5"
+                            ? WidgetUtils.showImages(
+                            'assets/images/tequan_gongjue.png',
+                            38.h,
+                            38.h)
+                            : list[i]['noble_id'].toString() == "6"
+                            ? WidgetUtils.showImages(
+                            'assets/images/tequan_guowang.png',
+                            38.h,
+                            38.h)
+                            : list[i]['noble_id'].toString() ==
+                            "7"
+                            ? WidgetUtils.showImages(
+                            'assets/images/tequan_diwang.png',
+                            38.h,
+                            38.h)
+                            : const Text(''),
+                      )),
                   WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
                   // 靓号
                   WidgetSpan(
                       child: Transform.translate(
-                    offset: Offset(0, 1.h),
-                    child: list[i]['is_pretty'].toString() == '0'
-                        ? const Text('')
-                        : WidgetUtils.showImages(
+                        offset: Offset(0, 1.h),
+                        child: list[i]['is_pretty'].toString() == '0'
+                            ? const Text('')
+                            : WidgetUtils.showImages(
                             'assets/images/dj/lianghao.png', 30.h, 30.h),
-                  )),
+                      )),
                   //用户昵称
                   WidgetSpan(
                       child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      WidgetUtils.commonSizedBox(28.h, 10.h),
-                      Text(' ${list[i]['info'].toString()} $ZJName',
-                          style: TextStyle(
-                            color: MyColors.roomMessageYellow2,
-                            fontSize: 24.sp,
-                            height: 2,
-                          ))
-                    ],
-                  )),
+                        alignment: Alignment.center,
+                        children: [
+                          WidgetUtils.commonSizedBox(28.h, 10.h),
+                          Text(' ${list[i]['info'].toString()} $ZJName',
+                              style: TextStyle(
+                                color: MyColors.roomMessageYellow2,
+                                fontSize: 24.sp,
+                                height: 2,
+                              ))
+                        ],
+                      )),
                   // 进入房间
                   WidgetSpan(
                       child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      WidgetUtils.commonSizedBox(28.h, 10.h),
-                      Text('进入房间',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24.sp,
-                            height: 2,
-                          ))
-                    ],
-                  )),
+                        alignment: Alignment.center,
+                        children: [
+                          WidgetUtils.commonSizedBox(28.h, 10.h),
+                          Text('进入房间',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24.sp,
+                                height: 2,
+                              ))
+                        ],
+                      )),
                   WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
                   WidgetSpan(
                       child: sp.getString('role').toString() != 'user' &&
-                              list[i]['isWelcome'] == '0'
+                          list[i]['isWelcome'] == '0'
                           ? GestureDetector(
-                              onTap: (() {
-                                if (MyUtils.checkClick()) {
-                                  eventBus.fire(RoomBack(
-                                      title: '欢迎',
-                                      index: '${list[i]['uid']},$i'));
-                                }
-                              }),
-                              child: Transform.translate(
-                                offset: Offset(0, 5.h),
-                                child: Container(
+                        onTap: (() {
+                          if (MyUtils.checkClick()) {
+                            eventBus.fire(RoomBack(
+                                title: '欢迎',
+                                index: '${list[i]['uid']},$i'));
+                          }
+                        }),
+                        child: Transform.translate(
+                          offset: Offset(0, 5.h),
+                          child: Container(
+                            width: ScreenUtil().setHeight(65),
+                            height: ScreenUtil().setHeight(30),
+                            margin:
+                            EdgeInsets.only(top: 5.h, bottom: 5.h),
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                WidgetUtils.showImagesFill(
+                                    'assets/images/room_huanyingta.png',
+                                    double.infinity,
+                                    double.infinity),
+                                Container(
                                   width: ScreenUtil().setHeight(65),
                                   height: ScreenUtil().setHeight(30),
-                                  margin:
-                                      EdgeInsets.only(top: 5.h, bottom: 5.h),
-                                  child: Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      WidgetUtils.showImagesFill(
-                                          'assets/images/room_huanyingta.png',
-                                          double.infinity,
-                                          double.infinity),
-                                      Container(
-                                        width: ScreenUtil().setHeight(65),
-                                        height: ScreenUtil().setHeight(30),
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          '欢迎',
-                                          style: StyleUtils.getCommonTextStyle(
-                                              color: Colors.white,
-                                              fontSize: ScreenUtil().setSp(20)),
-                                        ),
-                                      )
-                                    ],
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    '欢迎',
+                                    style: StyleUtils.getCommonTextStyle(
+                                        color: Colors.white,
+                                        fontSize: ScreenUtil().setSp(20)),
                                   ),
-                                ),
-                              ),
-                            )
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
                           : const Text(''))
                 ]),
               ),
@@ -477,43 +504,43 @@ class RoomItems {
               // 厅主或管理或主播
               WidgetSpan(
                   child: (list[i]['identity'] == 'user' ||
-                          list[i]['identity'] == 'streamer')
+                      list[i]['identity'] == 'streamer')
                       ? const Text('')
                       : list[i]['identity'] == 'leader'
-                          ? WidgetUtils.showImages(
-                              'assets/images/dj/room_role_director.png',
-                              30.h,
-                              30.h)
-                          : list[i]['identity'] == 'president'
-                              ? WidgetUtils.showImages(
-                                  'assets/images/dj/room_role_huizhang.png',
-                                  30.h,
-                                  30.h)
-                              : WidgetUtils.showImages(
-                                  'assets/images/dj/room_role_manager.png',
-                                  30.h,
-                                  30.h)),
+                      ? WidgetUtils.showImages(
+                      'assets/images/dj/room_role_director.png',
+                      30.h,
+                      30.h)
+                      : list[i]['identity'] == 'president'
+                      ? WidgetUtils.showImages(
+                      'assets/images/dj/room_role_huizhang.png',
+                      30.h,
+                      30.h)
+                      : WidgetUtils.showImages(
+                      'assets/images/dj/room_role_manager.png',
+                      30.h,
+                      30.h)),
               WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
               // 萌新/新贵/新锐 三选一
               // 不是新锐新贵，并且是萌新直接显示萌新
               WidgetSpan(
                   child: list[i]['new_noble'].toString() == '0' &&
-                          list[i]['is_new'].toString() == '1'
+                      list[i]['is_new'].toString() == '1'
                       ? WidgetUtils.showImages(
-                          'assets/images/dj/room_role_common.png', 30.h, 50.h)
+                      'assets/images/dj/room_role_common.png', 30.h, 50.h)
                       : const Text('')),
               // 不管是不是萌新，只要是新锐或者新贵就优先展示
               WidgetSpan(
                   child: list[i]['new_noble'].toString() == "1"
                       ? WidgetUtils.showImages(
-                          'assets/images/dj/room_rui.png', 30.h, 50.h)
+                      'assets/images/dj/room_rui.png', 30.h, 50.h)
                       : list[i]['new_noble'].toString() == "2"
-                          ? WidgetUtils.showImages(
-                              'assets/images/dj/room_gui.png', 30.h, 50.h)
-                          : list[i]['new_noble'].toString() == "3"
-                              ? WidgetUtils.showImages(
-                                  'assets/images/dj/room_gui.png', 30.h, 50.h)
-                              : const Text('')),
+                      ? WidgetUtils.showImages(
+                      'assets/images/dj/room_gui.png', 30.h, 50.h)
+                      : list[i]['new_noble'].toString() == "3"
+                      ? WidgetUtils.showImages(
+                      'assets/images/dj/room_gui.png', 30.h, 50.h)
+                      : const Text('')),
               WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
               //等级
               WidgetSpan(
@@ -523,43 +550,49 @@ class RoomItems {
                   child: Stack(
                     children: [
                       int.parse(list[i]['lv'].toString()) >= 1 &&
-                              int.parse(list[i]['lv'].toString()) <= 10
+                          int.parse(list[i]['lv'].toString()) <= 10
                           ? WidgetUtils.showImages(
-                              'assets/images/dj/dj_1-10.png', 28.h, 28.h)
+                          'assets/images/dj/dj_1-10.png', 28.h, 28.h)
                           : int.parse(list[i]['lv'].toString()) >= 11 &&
-                                  int.parse(list[i]['lv'].toString()) <= 15
-                              ? WidgetUtils.showImages(
-                                  'assets/images/dj/dj_11-15.png', 28.h, 28.h)
-                              : int.parse(list[i]['lv'].toString()) >= 16 &&
-                                      int.parse(list[i]['lv'].toString()) <= 20
-                                  ? WidgetUtils.showImages(
-                                      'assets/images/dj/dj_16-20.png',
-                                      28.h,
-                                      28.h)
-                                  : int.parse(list[i]['lv'].toString()) >= 21 &&
-                                          int.parse(list[i]['lv'].toString()) <=
-                                              25
-                                      ? WidgetUtils.showImages(
-                                          'assets/images/dj/dj_21-25.png',
-                                          28.h,
-                                          28.h)
-                                      : int.parse(list[i]['lv'].toString()) >=
-                                                  26 &&
-                                              int.parse(list[i]['lv'].toString()) <=
-                                                  30
-                                          ? WidgetUtils.showImages(
-                                              'assets/images/dj/dj_26-30.png',
-                                              28.h,
-                                              28.h)
-                                          : int.parse(list[i]['lv'].toString()) >=
-                                                      31 &&
-                                                  int.parse(list[i]['lv'].toString()) <= 35
-                                              ? WidgetUtils.showImages('assets/images/dj/dj_31-35.png', 28.h, 28.h)
-                                              : int.parse(list[i]['lv'].toString()) >= 36 && int.parse(list[i]['lv'].toString()) <= 40
-                                                  ? WidgetUtils.showImages('assets/images/dj/dj_36-40.png', 28.h, 28.h)
-                                                  : int.parse(list[i]['lv'].toString()) >= 41 && int.parse(list[i]['lv'].toString()) <= 45
-                                                      ? WidgetUtils.showImages('assets/images/dj/dj_41-45.png', 28.h, 28.h)
-                                                      : WidgetUtils.showImages('assets/images/dj/dj_46-50.png', 28.h, 28.h),
+                          int.parse(list[i]['lv'].toString()) <= 15
+                          ? WidgetUtils.showImages(
+                          'assets/images/dj/dj_11-15.png', 28.h, 28.h)
+                          : int.parse(list[i]['lv'].toString()) >= 16 &&
+                          int.parse(list[i]['lv'].toString()) <= 20
+                          ? WidgetUtils.showImages(
+                          'assets/images/dj/dj_16-20.png',
+                          28.h,
+                          28.h)
+                          : int.parse(list[i]['lv'].toString()) >= 21 &&
+                          int.parse(list[i]['lv'].toString()) <=
+                              25
+                          ? WidgetUtils.showImages(
+                          'assets/images/dj/dj_21-25.png',
+                          28.h,
+                          28.h)
+                          : int.parse(list[i]['lv'].toString()) >=
+                          26 &&
+                          int.parse(list[i]['lv'].toString()) <=
+                              30
+                          ? WidgetUtils.showImages(
+                          'assets/images/dj/dj_26-30.png',
+                          28.h,
+                          28.h)
+                          : int.parse(list[i]['lv'].toString()) >=
+                          31 &&
+                          int.parse(list[i]['lv'].toString()) <= 35
+                          ? WidgetUtils.showImages(
+                          'assets/images/dj/dj_31-35.png', 28.h, 28.h)
+                          : int.parse(list[i]['lv'].toString()) >= 36 &&
+                          int.parse(list[i]['lv'].toString()) <= 40
+                          ? WidgetUtils.showImages(
+                          'assets/images/dj/dj_36-40.png', 28.h, 28.h)
+                          : int.parse(list[i]['lv'].toString()) >= 41 &&
+                          int.parse(list[i]['lv'].toString()) <= 45
+                          ? WidgetUtils.showImages(
+                          'assets/images/dj/dj_41-45.png', 28.h, 28.h)
+                          : WidgetUtils.showImages(
+                          'assets/images/dj/dj_46-50.png', 28.h, 28.h),
                       Positioned(
                         bottom: 0,
                         right: 0,
@@ -574,38 +607,51 @@ class RoomItems {
                                   foreground: Paint()
                                     ..style = PaintingStyle.stroke
                                     ..strokeWidth = 2
-                                    ..color = (int.parse(list[i]['lv'].toString()) >= 1 &&
-                                            int.parse(list[i]['lv'].toString()) <=
-                                                10)
+                                    ..color = (int.parse(
+                                        list[i]['lv'].toString()) >= 1 &&
+                                        int.parse(list[i]['lv'].toString()) <=
+                                            10)
                                         ? MyColors.djOneM
-                                        : (int.parse(list[i]['lv'].toString()) >= 11 &&
-                                                int.parse(list[i]['lv'].toString()) <=
-                                                    15)
-                                            ? MyColors.djTwoM
-                                            : (int.parse(list[i]['lv'].toString()) >=
-                                                        16 &&
-                                                    int.parse(list[i]['lv'].toString()) <=
-                                                        20)
-                                                ? MyColors.djThreeM
-                                                : (int.parse(list[i]['lv'].toString()) >=
-                                                            21 &&
-                                                        int.parse(list[i]['lv'].toString()) <=
-                                                            25)
-                                                    ? MyColors.djFourM
-                                                    : (int.parse(list[i]['lv'].toString()) >=
-                                                                26 &&
-                                                            int.parse(list[i]['lv'].toString()) <=
-                                                                30)
-                                                        ? MyColors.djFiveM
-                                                        : (int.parse(list[i]['lv'].toString()) >=
-                                                                    31 &&
-                                                                int.parse(list[i]['lv'].toString()) <= 35)
-                                                            ? MyColors.djSixM
-                                                            : (int.parse(list[i]['lv'].toString()) >= 36 && int.parse(list[i]['lv'].toString()) <= 40)
-                                                                ? MyColors.djSevenM
-                                                                : (int.parse(list[i]['lv'].toString()) >= 41 && int.parse(list[i]['lv'].toString()) <= 45)
-                                                                    ? MyColors.djEightM
-                                                                    : MyColors.djNineM),
+                                        : (int.parse(
+                                        list[i]['lv'].toString()) >= 11 &&
+                                        int.parse(list[i]['lv'].toString()) <=
+                                            15)
+                                        ? MyColors.djTwoM
+                                        : (int.parse(
+                                        list[i]['lv'].toString()) >=
+                                        16 &&
+                                        int.parse(list[i]['lv'].toString()) <=
+                                            20)
+                                        ? MyColors.djThreeM
+                                        : (int.parse(
+                                        list[i]['lv'].toString()) >=
+                                        21 &&
+                                        int.parse(list[i]['lv'].toString()) <=
+                                            25)
+                                        ? MyColors.djFourM
+                                        : (int.parse(
+                                        list[i]['lv'].toString()) >=
+                                        26 &&
+                                        int.parse(list[i]['lv'].toString()) <=
+                                            30)
+                                        ? MyColors.djFiveM
+                                        : (int.parse(
+                                        list[i]['lv'].toString()) >=
+                                        31 &&
+                                        int.parse(list[i]['lv'].toString()) <=
+                                            35)
+                                        ? MyColors.djSixM
+                                        : (int.parse(
+                                        list[i]['lv'].toString()) >= 36 &&
+                                        int.parse(list[i]['lv'].toString()) <=
+                                            40)
+                                        ? MyColors.djSevenM
+                                        : (int.parse(
+                                        list[i]['lv'].toString()) >= 41 &&
+                                        int.parse(list[i]['lv'].toString()) <=
+                                            45)
+                                        ? MyColors.djEightM
+                                        : MyColors.djNineM),
                             ),
                             Text(
                               int.parse(list[i]['lv'].toString()).toString(),
@@ -626,62 +672,62 @@ class RoomItems {
               //贵族
               WidgetSpan(
                   child: Transform.translate(
-                offset: Offset(0, 5.h),
-                child: list[i]['noble_id'].toString() == "1"
-                    ? WidgetUtils.showImages(
-                        'assets/images/tequan_yongshi.png', 38.h, 38.h)
-                    : list[i]['noble_id'].toString() == "2"
+                    offset: Offset(0, 5.h),
+                    child: list[i]['noble_id'].toString() == "1"
                         ? WidgetUtils.showImages(
-                            'assets/images/tequan_qishi.png', 38.h, 38.h)
+                        'assets/images/tequan_yongshi.png', 38.h, 38.h)
+                        : list[i]['noble_id'].toString() == "2"
+                        ? WidgetUtils.showImages(
+                        'assets/images/tequan_qishi.png', 38.h, 38.h)
                         : list[i]['noble_id'].toString() == "3"
-                            ? WidgetUtils.showImages(
-                                'assets/images/tequan_bojue.png', 38.h, 38.h)
-                            : list[i]['noble_id'].toString() == "4"
-                                ? WidgetUtils.showImages(
-                                    'assets/images/tequan_houjue.png',
-                                    38.h,
-                                    38.h)
-                                : list[i]['noble_id'].toString() == "5"
-                                    ? WidgetUtils.showImages(
-                                        'assets/images/tequan_gongjue.png',
-                                        38.h,
-                                        38.h)
-                                    : list[i]['noble_id'].toString() == "6"
-                                        ? WidgetUtils.showImages(
-                                            'assets/images/tequan_guowang.png',
-                                            38.h,
-                                            38.h)
-                                        : list[i]['noble_id'].toString() == "7"
-                                            ? WidgetUtils.showImages(
-                                                'assets/images/tequan_diwang.png',
-                                                38.h,
-                                                38.h)
-                                            : const Text(''),
-              )),
+                        ? WidgetUtils.showImages(
+                        'assets/images/tequan_bojue.png', 38.h, 38.h)
+                        : list[i]['noble_id'].toString() == "4"
+                        ? WidgetUtils.showImages(
+                        'assets/images/tequan_houjue.png',
+                        38.h,
+                        38.h)
+                        : list[i]['noble_id'].toString() == "5"
+                        ? WidgetUtils.showImages(
+                        'assets/images/tequan_gongjue.png',
+                        38.h,
+                        38.h)
+                        : list[i]['noble_id'].toString() == "6"
+                        ? WidgetUtils.showImages(
+                        'assets/images/tequan_guowang.png',
+                        38.h,
+                        38.h)
+                        : list[i]['noble_id'].toString() == "7"
+                        ? WidgetUtils.showImages(
+                        'assets/images/tequan_diwang.png',
+                        38.h,
+                        38.h)
+                        : const Text(''),
+                  )),
               WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
               // 靓号
               WidgetSpan(
                   child: Transform.translate(
-                offset: Offset(0, 1.h),
-                child: list[i]['is_pretty'].toString() == '0'
-                    ? const Text('')
-                    : WidgetUtils.showImages(
+                    offset: Offset(0, 1.h),
+                    child: list[i]['is_pretty'].toString() == '0'
+                        ? const Text('')
+                        : WidgetUtils.showImages(
                         'assets/images/dj/lianghao.png', 30.h, 30.h),
-              )),
+                  )),
               //用户昵称
               WidgetSpan(
                   child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  WidgetUtils.commonSizedBox(28.h, 10.h),
-                  Text(' ${list[i]['info']}',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24.sp,
-                        height: 2,
-                      ))
-                ],
-              )),
+                    alignment: Alignment.center,
+                    children: [
+                      WidgetUtils.commonSizedBox(28.h, 10.h),
+                      Text(' ${list[i]['info']}',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24.sp,
+                            height: 2,
+                          ))
+                    ],
+                  )),
             ]),
           ),
           WidgetUtils.commonSizedBox(5.h, 0),
@@ -1110,15 +1156,15 @@ class RoomItems {
                           text: infos[4],
                           style: StyleUtils.getCommonTextStyle(
                             color: (int.parse(jine) >= 10 &&
-                                    int.parse(jine) < 5001)
+                                int.parse(jine) < 5001)
                                 ? MyColors.zjZ1
                                 : (int.parse(jine) >= 5001 &&
-                                        int.parse(jine) < 30001)
-                                    ? MyColors.zjZ2
-                                    : (int.parse(jine) >= 30001 &&
-                                            int.parse(jine) < 50001)
-                                        ? MyColors.zjZ3
-                                        : MyColors.zjZ4,
+                                int.parse(jine) < 30001)
+                                ? MyColors.zjZ2
+                                : (int.parse(jine) >= 30001 &&
+                                int.parse(jine) < 50001)
+                                ? MyColors.zjZ3
+                                : MyColors.zjZ4,
                             fontSize: 24.sp,
                           )),
                     ]),
@@ -1169,47 +1215,47 @@ class RoomItems {
                     // 厅主或管理或主播
                     WidgetSpan(
                         child: (list[i]['identity'] == 'user' ||
-                                list[i]['identity'] == 'streamer')
+                            list[i]['identity'] == 'streamer')
                             ? const Text('')
                             : list[i]['identity'] == 'leader'
-                                ? WidgetUtils.showImages(
-                                    'assets/images/dj/room_role_director.png',
-                                    30.h,
-                                    30.h)
-                                : list[i]['identity'] == 'president'
-                                    ? WidgetUtils.showImages(
-                                        'assets/images/dj/room_role_huizhang.png',
-                                        30.h,
-                                        30.h)
-                                    : WidgetUtils.showImages(
-                                        'assets/images/dj/room_role_manager.png',
-                                        30.h,
-                                        30.h)),
+                            ? WidgetUtils.showImages(
+                            'assets/images/dj/room_role_director.png',
+                            30.h,
+                            30.h)
+                            : list[i]['identity'] == 'president'
+                            ? WidgetUtils.showImages(
+                            'assets/images/dj/room_role_huizhang.png',
+                            30.h,
+                            30.h)
+                            : WidgetUtils.showImages(
+                            'assets/images/dj/room_role_manager.png',
+                            30.h,
+                            30.h)),
                     WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
                     // 萌新/新贵/新锐 三选一
                     // 不是新锐新贵，并且是萌新直接显示萌新
                     WidgetSpan(
                         child: list[i]['new_noble'].toString() == '0' &&
-                                list[i]['is_new'].toString() == '1'
+                            list[i]['is_new'].toString() == '1'
                             ? WidgetUtils.showImages(
-                                'assets/images/dj/room_role_common.png',
-                                30.h,
-                                50.h)
+                            'assets/images/dj/room_role_common.png',
+                            30.h,
+                            50.h)
                             : const Text('')),
                     // 不管是不是萌新，只要是新锐或者新贵就优先展示
                     WidgetSpan(
                         child: list[i]['new_noble'].toString() == "1"
                             ? WidgetUtils.showImages(
-                                'assets/images/dj/room_rui.png', 30.h, 50.h)
+                            'assets/images/dj/room_rui.png', 30.h, 50.h)
                             : list[i]['new_noble'].toString() == "2"
-                                ? WidgetUtils.showImages(
-                                    'assets/images/dj/room_gui.png', 30.h, 50.h)
-                                : list[i]['new_noble'].toString() == "3"
-                                    ? WidgetUtils.showImages(
-                                        'assets/images/dj/room_gui.png',
-                                        30.h,
-                                        50.h)
-                                    : const Text('')),
+                            ? WidgetUtils.showImages(
+                            'assets/images/dj/room_gui.png', 30.h, 50.h)
+                            : list[i]['new_noble'].toString() == "3"
+                            ? WidgetUtils.showImages(
+                            'assets/images/dj/room_gui.png',
+                            30.h,
+                            50.h)
+                            : const Text('')),
                     WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
                     //等级
                     WidgetSpan(
@@ -1219,42 +1265,50 @@ class RoomItems {
                         child: Stack(
                           children: [
                             int.parse(list[i]['lv'].toString()) >= 1 &&
-                                    int.parse(list[i]['lv'].toString()) <= 10
+                                int.parse(list[i]['lv'].toString()) <= 10
                                 ? WidgetUtils.showImages(
-                                    'assets/images/dj/dj_1-10.png', 28.h, 28.h)
+                                'assets/images/dj/dj_1-10.png', 28.h, 28.h)
                                 : int.parse(list[i]['lv'].toString()) >= 11 &&
-                                        int.parse(list[i]['lv'].toString()) <=
-                                            15
-                                    ? WidgetUtils.showImages(
-                                        'assets/images/dj/dj_11-15.png',
-                                        28.h,
-                                        28.h)
-                                    : int.parse(list[i]['lv'].toString()) >= 16 &&
-                                            int.parse(list[i]['lv'].toString()) <=
-                                                20
-                                        ? WidgetUtils.showImages(
-                                            'assets/images/dj/dj_16-20.png',
-                                            28.h,
-                                            28.h)
-                                        : int.parse(list[i]['lv'].toString()) >=
-                                                    21 &&
-                                                int.parse(list[i]['lv'].toString()) <=
-                                                    25
-                                            ? WidgetUtils.showImages(
-                                                'assets/images/dj/dj_21-25.png',
-                                                28.h,
-                                                28.h)
-                                            : int.parse(list[i]['lv'].toString()) >=
-                                                        26 &&
-                                                    int.parse(list[i]['lv'].toString()) <= 30
-                                                ? WidgetUtils.showImages('assets/images/dj/dj_26-30.png', 28.h, 28.h)
-                                                : int.parse(list[i]['lv'].toString()) >= 31 && int.parse(list[i]['lv'].toString()) <= 35
-                                                    ? WidgetUtils.showImages('assets/images/dj/dj_31-35.png', 28.h, 28.h)
-                                                    : int.parse(list[i]['lv'].toString()) >= 36 && int.parse(list[i]['lv'].toString()) <= 40
-                                                        ? WidgetUtils.showImages('assets/images/dj/dj_36-40.png', 28.h, 28.h)
-                                                        : int.parse(list[i]['lv'].toString()) >= 41 && int.parse(list[i]['lv'].toString()) <= 45
-                                                            ? WidgetUtils.showImages('assets/images/dj/dj_41-45.png', 28.h, 28.h)
-                                                            : WidgetUtils.showImages('assets/images/dj/dj_46-50.png', 28.h, 28.h),
+                                int.parse(list[i]['lv'].toString()) <=
+                                    15
+                                ? WidgetUtils.showImages(
+                                'assets/images/dj/dj_11-15.png',
+                                28.h,
+                                28.h)
+                                : int.parse(list[i]['lv'].toString()) >= 16 &&
+                                int.parse(list[i]['lv'].toString()) <=
+                                    20
+                                ? WidgetUtils.showImages(
+                                'assets/images/dj/dj_16-20.png',
+                                28.h,
+                                28.h)
+                                : int.parse(list[i]['lv'].toString()) >=
+                                21 &&
+                                int.parse(list[i]['lv'].toString()) <=
+                                    25
+                                ? WidgetUtils.showImages(
+                                'assets/images/dj/dj_21-25.png',
+                                28.h,
+                                28.h)
+                                : int.parse(list[i]['lv'].toString()) >=
+                                26 &&
+                                int.parse(list[i]['lv'].toString()) <= 30
+                                ? WidgetUtils.showImages(
+                                'assets/images/dj/dj_26-30.png', 28.h, 28.h)
+                                : int.parse(list[i]['lv'].toString()) >= 31 &&
+                                int.parse(list[i]['lv'].toString()) <= 35
+                                ? WidgetUtils.showImages(
+                                'assets/images/dj/dj_31-35.png', 28.h, 28.h)
+                                : int.parse(list[i]['lv'].toString()) >= 36 &&
+                                int.parse(list[i]['lv'].toString()) <= 40
+                                ? WidgetUtils.showImages(
+                                'assets/images/dj/dj_36-40.png', 28.h, 28.h)
+                                : int.parse(list[i]['lv'].toString()) >= 41 &&
+                                int.parse(list[i]['lv'].toString()) <= 45
+                                ? WidgetUtils.showImages(
+                                'assets/images/dj/dj_41-45.png', 28.h, 28.h)
+                                : WidgetUtils.showImages(
+                                'assets/images/dj/dj_46-50.png', 28.h, 28.h),
                             Positioned(
                               bottom: 0,
                               right: 0,
@@ -1270,37 +1324,58 @@ class RoomItems {
                                         foreground: Paint()
                                           ..style = PaintingStyle.stroke
                                           ..strokeWidth = 2
-                                          ..color = (int.parse(list[i]['lv'].toString()) >= 1 &&
-                                                  int.parse(list[i]['lv'].toString()) <=
-                                                      10)
+                                          ..color = (int.parse(
+                                              list[i]['lv'].toString()) >= 1 &&
+                                              int.parse(
+                                                  list[i]['lv'].toString()) <=
+                                                  10)
                                               ? MyColors.djOneM
-                                              : (int.parse(list[i]['lv'].toString()) >= 11 &&
-                                                      int.parse(list[i]['lv'].toString()) <=
-                                                          15)
-                                                  ? MyColors.djTwoM
-                                                  : (int.parse(list[i]['lv'].toString()) >= 16 &&
-                                                          int.parse(list[i]['lv'].toString()) <=
-                                                              20)
-                                                      ? MyColors.djThreeM
-                                                      : (int.parse(list[i]['lv'].toString()) >=
-                                                                  21 &&
-                                                              int.parse(list[i]['lv'].toString()) <=
-                                                                  25)
-                                                          ? MyColors.djFourM
-                                                          : (int.parse(list[i]['lv'].toString()) >=
-                                                                      26 &&
-                                                                  int.parse(list[i]['lv'].toString()) <=
-                                                                      30)
-                                                              ? MyColors.djFiveM
-                                                              : (int.parse(list[i]['lv'].toString()) >=
-                                                                          31 &&
-                                                                      int.parse(list[i]['lv'].toString()) <= 35)
-                                                                  ? MyColors.djSixM
-                                                                  : (int.parse(list[i]['lv'].toString()) >= 36 && int.parse(list[i]['lv'].toString()) <= 40)
-                                                                      ? MyColors.djSevenM
-                                                                      : (int.parse(list[i]['lv'].toString()) >= 41 && int.parse(list[i]['lv'].toString()) <= 45)
-                                                                          ? MyColors.djEightM
-                                                                          : MyColors.djNineM),
+                                              : (int.parse(
+                                              list[i]['lv'].toString()) >= 11 &&
+                                              int.parse(
+                                                  list[i]['lv'].toString()) <=
+                                                  15)
+                                              ? MyColors.djTwoM
+                                              : (int.parse(
+                                              list[i]['lv'].toString()) >= 16 &&
+                                              int.parse(
+                                                  list[i]['lv'].toString()) <=
+                                                  20)
+                                              ? MyColors.djThreeM
+                                              : (int.parse(
+                                              list[i]['lv'].toString()) >=
+                                              21 &&
+                                              int.parse(
+                                                  list[i]['lv'].toString()) <=
+                                                  25)
+                                              ? MyColors.djFourM
+                                              : (int.parse(
+                                              list[i]['lv'].toString()) >=
+                                              26 &&
+                                              int.parse(
+                                                  list[i]['lv'].toString()) <=
+                                                  30)
+                                              ? MyColors.djFiveM
+                                              : (int.parse(
+                                              list[i]['lv'].toString()) >=
+                                              31 &&
+                                              int.parse(
+                                                  list[i]['lv'].toString()) <=
+                                                  35)
+                                              ? MyColors.djSixM
+                                              : (int.parse(
+                                              list[i]['lv'].toString()) >= 36 &&
+                                              int.parse(
+                                                  list[i]['lv'].toString()) <=
+                                                  40)
+                                              ? MyColors.djSevenM
+                                              : (int.parse(
+                                              list[i]['lv'].toString()) >= 41 &&
+                                              int.parse(
+                                                  list[i]['lv'].toString()) <=
+                                                  45)
+                                              ? MyColors.djEightM
+                                              : MyColors.djNineM),
                                   ),
                                   Text(
                                     int.parse(list[i]['lv'].toString())
@@ -1322,67 +1397,67 @@ class RoomItems {
                     //贵族
                     WidgetSpan(
                         child: Transform.translate(
-                      offset: Offset(0, 5.h),
-                      child: list[i]['noble_id'].toString() == "1"
-                          ? WidgetUtils.showImages(
-                              'assets/images/tequan_yongshi.png', 38.h, 38.h)
-                          : list[i]['noble_id'].toString() == "2"
+                          offset: Offset(0, 5.h),
+                          child: list[i]['noble_id'].toString() == "1"
                               ? WidgetUtils.showImages(
-                                  'assets/images/tequan_qishi.png', 38.h, 38.h)
+                              'assets/images/tequan_yongshi.png', 38.h, 38.h)
+                              : list[i]['noble_id'].toString() == "2"
+                              ? WidgetUtils.showImages(
+                              'assets/images/tequan_qishi.png', 38.h, 38.h)
                               : list[i]['noble_id'].toString() == "3"
-                                  ? WidgetUtils.showImages(
-                                      'assets/images/tequan_bojue.png',
-                                      38.h,
-                                      38.h)
-                                  : list[i]['noble_id'].toString() == "4"
-                                      ? WidgetUtils.showImages(
-                                          'assets/images/tequan_houjue.png',
-                                          38.h,
-                                          38.h)
-                                      : list[i]['noble_id'].toString() == "5"
-                                          ? WidgetUtils.showImages(
-                                              'assets/images/tequan_gongjue.png',
-                                              38.h,
-                                              38.h)
-                                          : list[i]['noble_id'].toString() ==
-                                                  "6"
-                                              ? WidgetUtils.showImages(
-                                                  'assets/images/tequan_guowang.png',
-                                                  38.h,
-                                                  38.h)
-                                              : list[i]['noble_id']
-                                                          .toString() ==
-                                                      "7"
-                                                  ? WidgetUtils.showImages(
-                                                      'assets/images/tequan_diwang.png',
-                                                      38.h,
-                                                      38.h)
-                                                  : const Text(''),
-                    )),
+                              ? WidgetUtils.showImages(
+                              'assets/images/tequan_bojue.png',
+                              38.h,
+                              38.h)
+                              : list[i]['noble_id'].toString() == "4"
+                              ? WidgetUtils.showImages(
+                              'assets/images/tequan_houjue.png',
+                              38.h,
+                              38.h)
+                              : list[i]['noble_id'].toString() == "5"
+                              ? WidgetUtils.showImages(
+                              'assets/images/tequan_gongjue.png',
+                              38.h,
+                              38.h)
+                              : list[i]['noble_id'].toString() ==
+                              "6"
+                              ? WidgetUtils.showImages(
+                              'assets/images/tequan_guowang.png',
+                              38.h,
+                              38.h)
+                              : list[i]['noble_id']
+                              .toString() ==
+                              "7"
+                              ? WidgetUtils.showImages(
+                              'assets/images/tequan_diwang.png',
+                              38.h,
+                              38.h)
+                              : const Text(''),
+                        )),
                     WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
                     // 靓号
                     WidgetSpan(
                         child: Transform.translate(
-                      offset: Offset(0, 1.h),
-                      child: list[i]['is_pretty'].toString() == '0'
-                          ? const Text('')
-                          : WidgetUtils.showImages(
+                          offset: Offset(0, 1.h),
+                          child: list[i]['is_pretty'].toString() == '0'
+                              ? const Text('')
+                              : WidgetUtils.showImages(
                               'assets/images/dj/lianghao.png', 30.h, 30.h),
-                    )),
+                        )),
                     //用户昵称
                     WidgetSpan(
                         child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        WidgetUtils.commonSizedBox(28.h, 10.h),
-                        Text(' ${list[i]['info']}',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24.sp,
-                              height: 2,
-                            ))
-                      ],
-                    )),
+                          alignment: Alignment.center,
+                          children: [
+                            WidgetUtils.commonSizedBox(28.h, 10.h),
+                            Text(' ${list[i]['info']}',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24.sp,
+                                  height: 2,
+                                ))
+                          ],
+                        )),
                   ]),
                 )
               ],
@@ -1392,138 +1467,142 @@ class RoomItems {
             /// 如果有顿号说明是发的3个svga
             list[i]['image'].toString().contains('、')
                 ? Stack(
-                    children: [
-                      Row(
-                        children: [
-                          SizedBox(
-                            height: 100.h,
-                            width: 100.h,
-                            child: list[i]['isOk'] == 'true'
-                                ? WidgetUtils.showImages(
-                                    list[i]['image']
-                                        .toString()
-                                        .split(',')[1]
-                                        .split('、')[0],
-                                    double.infinity,
-                                    double.infinity)
-                                : SVGASimpleImage2(
-                                    assetsName: list[i]['image']
-                                        .toString()
-                                        .split(',')[0]
-                                        .split('、')[0],
-                                    isOk: list[i]['isOk'],
-                                    index: i),
-                          ),
-                          Transform.translate(
-                            offset: Offset(-20.h, 0.h),
-                            child: SizedBox(
-                              height: 100.h,
-                              width: 100.h,
-                              child: list[i]['isOk'] == 'true'
-                                  ? Transform.translate(
-                                      offset: Offset(2.h, 0.h),
-                                      child: WidgetUtils.showImages(
-                                          list[i]['image']
-                                              .toString()
-                                              .split(',')[1]
-                                              .split('、')[1],
-                                          double.infinity,
-                                          double.infinity),
-                                    )
-                                  : SVGASimpleImage2(
-                                      assetsName: list[i]['image']
-                                          .toString()
-                                          .split(',')[0]
-                                          .split('、')[1],
-                                      isOk: list[i]['isOk'],
-                                      index: i),
-                            ),
-                          ),
-                          Transform.translate(
-                            offset: Offset(-40.h, 0.h),
-                            child: SizedBox(
-                              height: 100.h,
-                              width: 100.h,
-                              child: list[i]['isOk'] == 'true'
-                                  ? Transform.translate(
-                                      offset: Offset(2.h, 0.h),
-                                      child: WidgetUtils.showImages(
-                                          list[i]['image']
-                                              .toString()
-                                              .split(',')[1]
-                                              .split('、')[2],
-                                          double.infinity,
-                                          double.infinity),
-                                    )
-                                  : SVGASimpleImage2(
-                                      assetsName: list[i]['image']
-                                          .toString()
-                                          .split(',')[0]
-                                          .split('、')[2],
-                                      isOk: list[i]['isOk'],
-                                      index: i),
-                            ),
-                          )
-                        ],
-                      ),
-                    ],
-                  )
-                : Container(
-                    margin: EdgeInsets.only(bottom: 10.h),
-                    padding: EdgeInsets.only(
-                        top: 5.h, bottom: 15.h, left: 10.h, right: 10.h),
-                    //边框设置
-                    decoration: BoxDecoration(
-                      //背景
-                      color: list[i]['content'].toString().isNotEmpty
-                          ? Colors.white10
-                          : Colors.transparent,
-                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(7),
-                          topRight: Radius.circular(15),
-                          bottomLeft: Radius.circular(15),
-                          bottomRight: Radius.circular(15)),
+              children: [
+                Row(
+                  children: [
+                    SizedBox(
+                      height: 100.h,
+                      width: 100.h,
+                      child: list[i]['isOk'] == 'true'
+                          ? WidgetUtils.showImages(
+                          list[i]['image']
+                              .toString()
+                              .split(',')[1]
+                              .split('、')[0],
+                          double.infinity,
+                          double.infinity)
+                          : SVGASimpleImage2(
+                          assetsName: list[i]['image']
+                              .toString()
+                              .split(',')[0]
+                              .split('、')[0],
+                          isOk: list[i]['isOk'],
+                          index: i),
                     ),
-                    child: list[i]['content'].toString().isNotEmpty
-                        ? RichText(
-                            text: TextSpan(
-                                text: list[i]['content'],
-                                style: StyleUtils.getCommonTextStyle(
-                                    color: Colors.white, fontSize: 24.sp)))
-                        : list[i]['image'].toString().contains('svga')
-                            ? SizedBox(
-                                height:
-                                    !list[i]['image'].toString().contains('vc')
-                                        ? 100.h
-                                        : 80.h,
-                                width:
-                                    !list[i]['image'].toString().contains('vc')
-                                        ? 100.h
-                                        : 80.h,
-                                child: list[i]['isOk'] == 'true'
-                                    ? Transform.translate(
-                                        offset: Offset(2.h, 0.h),
-                                        child: WidgetUtils.showImages(
-                                            list[i]['image']
-                                                .toString()
-                                                .split(',')[1],
-                                            double.infinity,
-                                            double.infinity),
-                                      )
-                                    : SVGASimpleImage2(
-                                        assetsName: list[i]['image']
-                                            .toString()
-                                            .split(',')[0],
-                                        isOk: list[i]['isOk'],
-                                        index: i),
-                              )
-                            : list[i]['image'].toString().contains('gif')
-                                ? WidgetUtils.showImages(
-                                    list[i]['image'], 80.h, 80.h)
-                                : WidgetUtils.showImages(
-                                    list[i]['image'], 50.h, 50.h),
-                  ),
+                    Transform.translate(
+                      offset: Offset(-20.h, 0.h),
+                      child: SizedBox(
+                        height: 100.h,
+                        width: 100.h,
+                        child: list[i]['isOk'] == 'true'
+                            ? Transform.translate(
+                          offset: Offset(2.h, 0.h),
+                          child: WidgetUtils.showImages(
+                              list[i]['image']
+                                  .toString()
+                                  .split(',')[1]
+                                  .split('、')[1],
+                              double.infinity,
+                              double.infinity),
+                        )
+                            : SVGASimpleImage2(
+                            assetsName: list[i]['image']
+                                .toString()
+                                .split(',')[0]
+                                .split('、')[1],
+                            isOk: list[i]['isOk'],
+                            index: i),
+                      ),
+                    ),
+                    Transform.translate(
+                      offset: Offset(-40.h, 0.h),
+                      child: SizedBox(
+                        height: 100.h,
+                        width: 100.h,
+                        child: list[i]['isOk'] == 'true'
+                            ? Transform.translate(
+                          offset: Offset(2.h, 0.h),
+                          child: WidgetUtils.showImages(
+                              list[i]['image']
+                                  .toString()
+                                  .split(',')[1]
+                                  .split('、')[2],
+                              double.infinity,
+                              double.infinity),
+                        )
+                            : SVGASimpleImage2(
+                            assetsName: list[i]['image']
+                                .toString()
+                                .split(',')[0]
+                                .split('、')[2],
+                            isOk: list[i]['isOk'],
+                            index: i),
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            )
+                : Container(
+              margin: EdgeInsets.only(bottom: 10.h),
+              padding: EdgeInsets.only(
+                  top: 5.h, bottom: 15.h, left: 10.h, right: 10.h),
+              //边框设置
+              decoration: BoxDecoration(
+                //背景
+                color: list[i]['content']
+                    .toString()
+                    .isNotEmpty
+                    ? Colors.white10
+                    : Colors.transparent,
+                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(7),
+                    topRight: Radius.circular(15),
+                    bottomLeft: Radius.circular(15),
+                    bottomRight: Radius.circular(15)),
+              ),
+              child: list[i]['content']
+                  .toString()
+                  .isNotEmpty
+                  ? RichText(
+                  text: TextSpan(
+                      text: list[i]['content'],
+                      style: StyleUtils.getCommonTextStyle(
+                          color: Colors.white, fontSize: 24.sp)))
+                  : list[i]['image'].toString().contains('svga')
+                  ? SizedBox(
+                height:
+                !list[i]['image'].toString().contains('vc')
+                    ? 100.h
+                    : 80.h,
+                width:
+                !list[i]['image'].toString().contains('vc')
+                    ? 100.h
+                    : 80.h,
+                child: list[i]['isOk'] == 'true'
+                    ? Transform.translate(
+                  offset: Offset(2.h, 0.h),
+                  child: WidgetUtils.showImages(
+                      list[i]['image']
+                          .toString()
+                          .split(',')[1],
+                      double.infinity,
+                      double.infinity),
+                )
+                    : SVGASimpleImage2(
+                    assetsName: list[i]['image']
+                        .toString()
+                        .split(',')[0],
+                    isOk: list[i]['isOk'],
+                    index: i),
+              )
+                  : list[i]['image'].toString().contains('gif')
+                  ? WidgetUtils.showImages(
+                  list[i]['image'], 80.h, 80.h)
+                  : WidgetUtils.showImages(
+                  list[i]['image'], 50.h, 50.h),
+            ),
             WidgetUtils.commonSizedBox(10.h, 0),
           ],
         ),
@@ -1532,8 +1611,7 @@ class RoomItems {
   }
 
   /// 头部信息
-  static Widget roomTop(
-      BuildContext context,
+  static Widget roomTop(BuildContext context,
       String roomHeadImg,
       String roomName,
       String roomNumber,
@@ -1550,8 +1628,8 @@ class RoomItems {
                 context,
                 RoomManagerPage(
                   type: (sp.getString('role').toString() == 'adminer' ||
-                          sp.getString('role').toString() == 'leader' ||
-                          sp.getString('role').toString() == 'president')
+                      sp.getString('role').toString() == 'leader' ||
+                      sp.getString('role').toString() == 'president')
                       ? 1
                       : 0,
                   roomID: roomID,
@@ -1567,20 +1645,20 @@ class RoomItems {
               width: ScreenUtil().setWidth(100 * 1.25),
               child: roomName.length <= 5
                   ? WidgetUtils.onlyText(
-                      roomName,
-                      StyleUtils.getCommonTextStyle(
-                          color: Colors.white,
-                          fontSize: ScreenUtil().setSp(21),
-                          fontWeight: FontWeight.w600))
+                  roomName,
+                  StyleUtils.getCommonTextStyle(
+                      color: Colors.white,
+                      fontSize: ScreenUtil().setSp(21),
+                      fontWeight: FontWeight.w600))
                   : Marquee(
-                      speed: 10,
-                      child: Text(
-                        roomName,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: ScreenUtil().setSp(21)),
-                      ),
-                    ),
+                speed: 10,
+                child: Text(
+                  roomName,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: ScreenUtil().setSp(21)),
+                ),
+              ),
             ),
             WidgetUtils.commonSizedBox(5 * 2.w, 0),
             SizedBox(
@@ -1595,77 +1673,77 @@ class RoomItems {
         ),
         follow_status == '0'
             ? GestureDetector(
-                onTap: (() {
-                  if (MyUtils.checkClick()) {
-                    eventBus.fire(RoomBack(title: '收藏', index: ''));
-                  }
-                }),
-                child: SizedBox(
+          onTap: (() {
+            if (MyUtils.checkClick()) {
+              eventBus.fire(RoomBack(title: '收藏', index: ''));
+            }
+          }),
+          child: SizedBox(
+            width: ScreenUtil().setWidth(80 * 1.25),
+            height: ScreenUtil().setWidth(38 * 1.25),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                WidgetUtils.showImagesFill(
+                    'assets/images/room_shoucang.png',
+                    double.infinity,
+                    double.infinity),
+                Container(
                   width: ScreenUtil().setWidth(80 * 1.25),
                   height: ScreenUtil().setWidth(38 * 1.25),
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      WidgetUtils.showImagesFill(
-                          'assets/images/room_shoucang.png',
-                          double.infinity,
-                          double.infinity),
-                      Container(
-                        width: ScreenUtil().setWidth(80 * 1.25),
-                        height: ScreenUtil().setWidth(38 * 1.25),
-                        alignment: Alignment.center,
-                        child: Text(
-                          '收藏',
-                          style: StyleUtils.getCommonTextStyle(
-                              color: Colors.white,
-                              fontSize: ScreenUtil().setSp(21)),
-                        ),
-                      )
-                    ],
+                  alignment: Alignment.center,
+                  child: Text(
+                    '收藏',
+                    style: StyleUtils.getCommonTextStyle(
+                        color: Colors.white,
+                        fontSize: ScreenUtil().setSp(21)),
                   ),
-                ),
-              )
+                )
+              ],
+            ),
+          ),
+        )
             : GestureDetector(
-                onTap: (() {
-                  if (MyUtils.checkClick()) {
-                    eventBus.fire(RoomBack(title: '取消收藏', index: ''));
-                  }
-                }),
-                child: Stack(
+          onTap: (() {
+            if (MyUtils.checkClick()) {
+              eventBus.fire(RoomBack(title: '取消收藏', index: ''));
+            }
+          }),
+          child: Stack(
+            children: [
+              Opacity(
+                  opacity: 0.3,
+                  child: Container(
+                    width: ScreenUtil().setWidth(80 * 1.25),
+                    height: ScreenUtil().setWidth(38 * 1.25),
+                    //边框设置
+                    decoration: BoxDecoration(
+                      //背景
+                      color: MyColors.roomMaiLiao,
+                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                      borderRadius: BorderRadius.all(Radius.circular(
+                          ScreenUtil().setWidth(38 * 1.25) / 2)),
+                    ),
+                  )),
+              Container(
+                width: ScreenUtil().setWidth(80 * 1.25),
+                height: ScreenUtil().setWidth(38 * 1.25),
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Opacity(
-                        opacity: 0.3,
-                        child: Container(
-                          width: ScreenUtil().setWidth(80 * 1.25),
-                          height: ScreenUtil().setWidth(38 * 1.25),
-                          //边框设置
-                          decoration: BoxDecoration(
-                            //背景
-                            color: MyColors.roomMaiLiao,
-                            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                            borderRadius: BorderRadius.all(Radius.circular(
-                                ScreenUtil().setWidth(38 * 1.25) / 2)),
-                          ),
-                        )),
-                    Container(
-                      width: ScreenUtil().setWidth(80 * 1.25),
-                      height: ScreenUtil().setWidth(38 * 1.25),
-                      alignment: Alignment.center,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '已收藏',
-                            style: StyleUtils.getCommonTextStyle(
-                                color: Colors.white,
-                                fontSize: ScreenUtil().setSp(21)),
-                          )
-                        ],
-                      ),
+                    Text(
+                      '已收藏',
+                      style: StyleUtils.getCommonTextStyle(
+                          color: Colors.white,
+                          fontSize: ScreenUtil().setSp(21)),
                     )
                   ],
                 ),
-              ),
+              )
+            ],
+          ),
+        ),
         const Expanded(child: Text('')),
 
         /// 热度
@@ -1718,7 +1796,8 @@ class RoomItems {
                     WidgetUtils.commonSizedBox(0, 2 * 2.w),
                     Text(
                       double.parse(hot_degree) > 9999
-                          ? '${(double.parse(hot_degree) / 10000).toStringAsFixed(2)}w'
+                          ? '${(double.parse(hot_degree) / 10000)
+                          .toStringAsFixed(2)}w'
                           : hot_degree,
                       style: TextStyle(
                           fontSize: ScreenUtil().setSp(22),
@@ -1757,82 +1836,79 @@ class RoomItems {
   }
 
   /// 公告厅主
-  static Widget notices(
-      BuildContext context,
+  static Widget notices(BuildContext context,
       bool m0,
       String notice,
       List<MikeList> listm,
       String roomID,
       int wherePeople,
       List<bool> listPeople,
-      bool audio9) {
-    LogE(
-        '名称 == ${listm[8].waveName.toString() == '电音点点' || listm[8].waveName.toString() == '蓝色电音'}');
+      bool audio9,String jianLiWu,SVGAAnimationController animationControllerJL) {
     return Row(
       children: [
         WidgetUtils.commonSizedBox(0, 20 * 2.w),
         Expanded(
             child: Row(
-          children: [
-            SizedBox(
-              height: ScreenUtil().setHeight(240),
-              child: Column(
-                children: [
-                  GestureDetector(
-                    onTap: (() {
-                      MyUtils.goTransparentPageCom(
-                          context,
-                          RoomTSGongGaoPage(
-                            notice: notice,
-                          ));
-                    }),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Opacity(
-                          opacity: 0.3,
-                          child: Container(
-                            width: ScreenUtil().setHeight(80),
-                            height: ScreenUtil().setHeight(30),
-                            //边框设置
-                            decoration: const BoxDecoration(
-                              //背景
-                              color: MyColors.roomMaiLiao,
-                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                              borderRadius:
+              children: [
+                SizedBox(
+                  height: ScreenUtil().setHeight(240),
+                  child: Column(
+                    children: [
+                      GestureDetector(
+                        onTap: (() {
+                          MyUtils.goTransparentPageCom(
+                              context,
+                              RoomTSGongGaoPage(
+                                notice: notice,
+                              ));
+                        }),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Opacity(
+                              opacity: 0.3,
+                              child: Container(
+                                width: ScreenUtil().setHeight(80),
+                                height: ScreenUtil().setHeight(30),
+                                //边框设置
+                                decoration: const BoxDecoration(
+                                  //背景
+                                  color: MyColors.roomMaiLiao,
+                                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                  borderRadius:
                                   BorderRadius.all(Radius.circular(30.0)),
+                                ),
+                              ),
                             ),
-                          ),
+                            SizedBox(
+                              width: ScreenUtil().setHeight(80),
+                              height: ScreenUtil().setHeight(30),
+                              child: Row(
+                                children: [
+                                  const Expanded(child: Text('')),
+                                  WidgetUtils.showImagesFill(
+                                      'assets/images/room_gonggao.png',
+                                      ScreenUtil().setHeight(30),
+                                      ScreenUtil().setHeight(30)),
+                                  WidgetUtils.onlyTextCenter(
+                                      '公告',
+                                      StyleUtils.getCommonTextStyle(
+                                          color: MyColors.roomID,
+                                          fontSize: ScreenUtil().setSp(21))),
+                                  const Expanded(child: Text('')),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(
-                          width: ScreenUtil().setHeight(80),
-                          height: ScreenUtil().setHeight(30),
-                          child: Row(
-                            children: [
-                              const Expanded(child: Text('')),
-                              WidgetUtils.showImagesFill(
-                                  'assets/images/room_gonggao.png',
-                                  ScreenUtil().setHeight(30),
-                                  ScreenUtil().setHeight(30)),
-                              WidgetUtils.onlyTextCenter(
-                                  '公告',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: MyColors.roomID,
-                                      fontSize: ScreenUtil().setSp(21))),
-                              const Expanded(child: Text('')),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                      const Expanded(child: Text('')),
+                    ],
                   ),
-                  const Expanded(child: Text('')),
-                ],
-              ),
-            ),
-            const Expanded(child: Text('')),
-          ],
-        )),
+                ),
+                const Expanded(child: Text('')),
+              ],
+            )),
 
         /// 厅主
         Transform.translate(
@@ -1880,120 +1956,138 @@ class RoomItems {
                 children: [
                   m0 == true
                       ? WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(95),
-                          ScreenUtil().setHeight(95), listm[8].avatar!)
+                      ScreenUtil().setHeight(95), listm[8].avatar!)
                       : listm[8].isLock == 0
-                          ? WidgetUtils.showImages(
-                              'assets/images/room_mai.png',
-                              ScreenUtil().setHeight(95),
-                              ScreenUtil().setHeight(95))
-                          : WidgetUtils.showImages(
-                              'assets/images/room_suo.png',
-                              ScreenUtil().setHeight(95),
-                              ScreenUtil().setHeight(95)),
+                      ? WidgetUtils.showImages(
+                      'assets/images/room_mai.png',
+                      ScreenUtil().setHeight(95),
+                      ScreenUtil().setHeight(95))
+                      : WidgetUtils.showImages(
+                      'assets/images/room_suo.png',
+                      ScreenUtil().setHeight(95),
+                      ScreenUtil().setHeight(95)),
                   // 声波
                   (listm[8].isClose == 0 && audio9 == true)
                       ? SizedBox(
-                          height: (listm[8].waveName.toString() == '电音点点' ||
-                                  listm[8].waveName.toString() == '蓝色电音')
-                              ? 200.h
-                              : 180.h,
-                          width: 180.h,
-                          child: listm[8].waveGifImg!.isNotEmpty
-                              ? SVGASimpleImage(
-                                  resUrl: listm[8].waveGifImg!,
-                                )
-                              : const SVGASimpleImage(
-                                  assetsName: 'assets/svga/room_shengbo.svga',
-                                ),
-                        )
+                    height: (listm[8].waveName.toString() == '电音点点' ||
+                        listm[8].waveName.toString() == '蓝色电音')
+                        ? 200.h
+                        : 180.h,
+                    width: 180.h,
+                    child: listm[8].waveGifImg!.isNotEmpty
+                        ? SVGASimpleImage(
+                      resUrl: listm[8].waveGifImg!,
+                    )
+                        : const SVGASimpleImage(
+                      assetsName: 'assets/svga/room_shengbo.svga',
+                    ),
+                  )
                       : const Text(''),
                   //头像框静态图
                   (listm[8].avatarFrameGifImg!.isEmpty &&
-                          listm[8].avatarFrameImg!.isNotEmpty)
+                      listm[8].avatarFrameImg!.isNotEmpty)
                       ? WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(150),
-                          ScreenUtil().setHeight(150), listm[0].avatarFrameImg!)
+                      ScreenUtil().setHeight(150), listm[0].avatarFrameImg!)
                       : const Text(''),
                   listm[8].avatarFrameGifImg!.isNotEmpty
                       ? SizedBox(
-                          height: 150.h,
-                          width: 150.h,
-                          child: SVGASimpleImage(
-                            resUrl: listm[8].avatarFrameGifImg!,
-                          ),
-                        )
+                    height: 150.h,
+                    width: 150.h,
+                    child: SVGASimpleImage(
+                      resUrl: listm[8].avatarFrameGifImg!,
+                    ),
+                  )
                       : const Text(''),
                   Column(
                     children: [
                       const Expanded(child: Text('')),
                       m0 == false
                           ? WidgetUtils.onlyTextCenter(
-                              '主持麦',
-                              StyleUtils.getCommonTextStyle(
-                                  color: MyColors.roomMaiWZ,
-                                  fontSize: ScreenUtil().setSp(21)))
+                          '主持麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomMaiWZ,
+                              fontSize: ScreenUtil().setSp(21)))
                           : Row(
-                              children: [
-                                const Expanded(child: Text('')),
-                                WidgetUtils.onlyText(
-                                    listm[8].nickname!,
-                                    StyleUtils.getCommonTextStyle(
-                                        color: Colors.white,
-                                        fontSize: ScreenUtil().setSp(21))),
-                                const Expanded(child: Text('')),
-                              ],
-                            ),
+                        children: [
+                          const Expanded(child: Text('')),
+                          WidgetUtils.onlyText(
+                              listm[8].nickname!,
+                              StyleUtils.getCommonTextStyle(
+                                  color: Colors.white,
+                                  fontSize: ScreenUtil().setSp(21))),
+                          const Expanded(child: Text('')),
+                        ],
+                      ),
                       m0
                           ? Row(
-                              children: [
-                                const Expanded(child: Text('')),
-                                WidgetUtils.showImages(
-                                    'assets/images/room_xin.png',
-                                    ScreenUtil().setHeight(17),
-                                    ScreenUtil().setHeight(15)),
-                                WidgetUtils.commonSizedBox(0, 5),
-                                WidgetUtils.onlyText(
-                                    listm[8].charm.toString(),
-                                    StyleUtils.getCommonTextStyle(
-                                        color: Colors.white,
-                                        fontSize: ScreenUtil().setSp(21))),
-                                const Expanded(child: Text('')),
-                              ],
-                            )
+                        children: [
+                          const Expanded(child: Text('')),
+                          WidgetUtils.showImages(
+                              'assets/images/room_xin.png',
+                              ScreenUtil().setHeight(17),
+                              ScreenUtil().setHeight(15)),
+                          WidgetUtils.commonSizedBox(0, 5),
+                          WidgetUtils.onlyText(
+                              listm[8].charm.toString(),
+                              StyleUtils.getCommonTextStyle(
+                                  color: Colors.white,
+                                  fontSize: ScreenUtil().setSp(21))),
+                          const Expanded(child: Text('')),
+                        ],
+                      )
                           : const Text('')
                     ],
                   ),
                   wherePeople == 9
                       ? Positioned(
-                          top: 70.h,
-                          child: Container(
-                            height: 100.h,
-                            width: 100.h,
-                            //超出部分，可裁剪
-                            clipBehavior: Clip.hardEdge,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50.h),
-                            ),
-                            child: const SVGASimpleImage(
-                              assetsName: 'assets/svga/baodeng.svga',
-                            ),
-                          ),
-                        )
+                    top: 70.h,
+                    child: Container(
+                      height: 100.h,
+                      width: 100.h,
+                      //超出部分，可裁剪
+                      clipBehavior: Clip.hardEdge,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50.h),
+                      ),
+                      child: const SVGASimpleImage(
+                        assetsName: 'assets/svga/baodeng.svga',
+                      ),
+                    ),
+                  )
                       : const Text(''),
                   listPeople[8]
                       ? Positioned(
-                          child: Container(
-                            height: 180.h,
-                            width: 180.h,
-                            //超出部分，可裁剪
-                            clipBehavior: Clip.hardEdge,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50.h),
-                            ),
-                            child: const SVGASimpleImage(
-                              assetsName: 'assets/svga/room_choose_people.svga',
-                            ),
-                          ),
-                        )
+                    child: Container(
+                      height: 180.h,
+                      width: 180.h,
+                      //超出部分，可裁剪
+                      clipBehavior: Clip.hardEdge,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50.h),
+                      ),
+                      child: const SVGASimpleImage(
+                        assetsName: 'assets/svga/room_choose_people.svga',
+                      ),
+                    ),
+                  )
+                      : const Text(''),
+                  jianLiWu.contains('9')
+                      ? Positioned(
+                    top: 70.h,
+                    child: Container(
+                      height: 100.h,
+                      width: 100.h,
+                      //超出部分，可裁剪
+                      clipBehavior: Clip.hardEdge,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50.h),
+                      ),
+                      child: SVGAImage(
+                        animationControllerJL,
+                        fit: BoxFit.fitWidth,
+                      ),
+                    ),
+                  )
                       : const Text(''),
                   // Positioned(
                   //   child: Container(
@@ -2020,32 +2114,30 @@ class RoomItems {
   }
 
   /// 麦序位置
-  static Widget maixu(
-    BuildContext context,
-    bool m1,
-    bool m2,
-    bool m3,
-    bool m4,
-    bool m5,
-    bool m6,
-    bool m7,
-    bool m8,
-    bool isBoss,
-    List<MikeList> listm,
-    String roomID,
-    int wherePeople,
-    List<bool> listPeople,
-    bool audio1,
-    bool audio2,
-    bool audio3,
-    bool audio4,
-    bool audio5,
-    bool audio6,
-    bool audio7,
-    bool audio8,
-  ) {
+  static Widget maixu(BuildContext context,
+      bool m1,
+      bool m2,
+      bool m3,
+      bool m4,
+      bool m5,
+      bool m6,
+      bool m7,
+      bool m8,
+      bool isBoss,
+      List<MikeList> listm,
+      String roomID,
+      int wherePeople,
+      List<bool> listPeople,
+      bool audio1,
+      bool audio2,
+      bool audio3,
+      bool audio4,
+      bool audio5,
+      bool audio6,
+      bool audio7,
+      bool audio8, String whoWin,String jianLiWu,SVGAAnimationController animationControllerJL) {
     return Transform.translate(
-      offset: Offset(0, (-40 * 2 / 1.25).h),
+      offset: Offset(0, (-60 * 2 / 1.25).h),
       child: Column(
         children: [
           Row(
@@ -2088,134 +2180,174 @@ class RoomItems {
                 }),
                 child: SizedBox(
                   width: ScreenUtil().setWidth(140 * 1.25),
-                  height: ScreenUtil().setHeight(190),
+                  height: ScreenUtil().setHeight(230),
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
                       m1 == true
                           ? WidgetUtils.CircleHeadImage(
-                              ScreenUtil().setHeight(80),
-                              ScreenUtil().setHeight(80),
-                              listm[0].avatar!)
+                          ScreenUtil().setHeight(80),
+                          ScreenUtil().setHeight(80),
+                          listm[0].avatar!)
                           : listm[0].isLock == 0
-                              ? WidgetUtils.showImages(
-                                  'assets/images/room_mai.png',
-                                  ScreenUtil().setHeight(80),
-                                  ScreenUtil().setHeight(80))
-                              : WidgetUtils.showImages(
-                                  'assets/images/room_suo.png',
-                                  ScreenUtil().setHeight(80),
-                                  ScreenUtil().setHeight(80)),
+                          ? WidgetUtils.showImages(
+                          'assets/images/room_mai.png',
+                          ScreenUtil().setHeight(80),
+                          ScreenUtil().setHeight(80))
+                          : WidgetUtils.showImages(
+                          'assets/images/room_suo.png',
+                          ScreenUtil().setHeight(80),
+                          ScreenUtil().setHeight(80)),
                       (listm[0].isClose == 0 && audio1 == true)
                           ? Container(
-                              height: 140.h,
-                              width: 140.h,
-                              alignment: Alignment.center,
-                              child: listm[0].waveGifImg!.isNotEmpty
-                                  ? SVGASimpleImage(
-                                      resUrl: listm[0].waveGifImg!,
-                                    )
-                                  : const SVGASimpleImage(
-                                      assetsName:
-                                          'assets/svga/room_shengbo.svga',
-                                    ),
-                            )
+                        height: 140.h,
+                        width: 140.h,
+                        alignment: Alignment.center,
+                        child: listm[0].waveGifImg!.isNotEmpty
+                            ? SVGASimpleImage(
+                          resUrl: listm[0].waveGifImg!,
+                        )
+                            : const SVGASimpleImage(
+                          assetsName:
+                          'assets/svga/room_shengbo.svga',
+                        ),
+                      )
                           : const Text(''),
                       // 头像框静态图
                       (listm[0].avatarFrameGifImg!.isEmpty &&
-                              listm[0].avatarFrameImg!.isNotEmpty)
+                          listm[0].avatarFrameImg!.isNotEmpty)
                           ? WidgetUtils.CircleHeadImage(
-                              ScreenUtil().setHeight(130),
-                              ScreenUtil().setHeight(130),
-                              listm[0].avatarFrameImg!)
+                          ScreenUtil().setHeight(130),
+                          ScreenUtil().setHeight(130),
+                          listm[0].avatarFrameImg!)
                           : const Text(''),
                       // 头像框动态图
                       listm[0].avatarFrameGifImg!.isNotEmpty
                           ? SizedBox(
-                              height: 130.h,
-                              width: 130.h,
-                              child: SVGASimpleImage(
-                                resUrl: listm[0].avatarFrameGifImg!,
-                              ),
-                            )
+                        height: 130.h,
+                        width: 130.h,
+                        child: SVGASimpleImage(
+                          resUrl: listm[0].avatarFrameGifImg!,
+                        ),
+                      )
                           : const Text(''),
                       Column(
                         children: [
-                          const Expanded(child: Text('')),
+                          m1 == false
+                              ? WidgetUtils.commonSizedBox(180.h, 0)
+                              : WidgetUtils.commonSizedBox(160.h, 0),
                           m1 == false
                               ? WidgetUtils.onlyTextCenter(
-                                  '1号麦',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: MyColors.roomMaiWZ,
-                                      fontSize: ScreenUtil().setSp(19)))
+                              '1号麦',
+                              StyleUtils.getCommonTextStyle(
+                                  color: MyColors.roomMaiWZ,
+                                  fontSize: ScreenUtil().setSp(19)))
                               : WidgetUtils.commonSizedBox(0, 0),
                           m1 == false
                               ? WidgetUtils.commonSizedBox(10, 0)
                               : WidgetUtils.commonSizedBox(0, 0),
                           m1 == true
                               ? Row(
-                                  children: [
-                                    const Expanded(child: Text('')),
-                                    WidgetUtils.onlyText(
-                                        listm[0].nickname!,
-                                        StyleUtils.getCommonTextStyle(
-                                            color: Colors.white,
-                                            fontSize: ScreenUtil().setSp(21))),
-                                    const Expanded(child: Text('')),
-                                  ],
-                                )
+                            children: [
+                              const Expanded(child: Text('')),
+                              WidgetUtils.onlyText(
+                                  listm[0].nickname!,
+                                  StyleUtils.getCommonTextStyle(
+                                      color: Colors.white,
+                                      fontSize: ScreenUtil().setSp(21))),
+                              const Expanded(child: Text('')),
+                            ],
+                          )
                               : WidgetUtils.commonSizedBox(0, 0),
                           m1 == true
-                              ? Row(
-                                  children: [
-                                    const Expanded(child: Text('')),
-                                    WidgetUtils.showImages(
-                                        'assets/images/room_xin.png',
-                                        ScreenUtil().setHeight(17),
-                                        ScreenUtil().setHeight(15)),
-                                    WidgetUtils.commonSizedBox(0, 5),
-                                    WidgetUtils.onlyText(
-                                        listm[0].charm.toString(),
-                                        StyleUtils.getCommonTextStyle(
-                                            color: Colors.white,
-                                            fontSize: ScreenUtil().setSp(21))),
-                                    const Expanded(child: Text('')),
-                                  ],
-                                )
+                              ? SizedBox(
+                            height: 20.h,
+                            child: Row(
+                              children: [
+                                const Expanded(child: Text('')),
+                                WidgetUtils.showImages(
+                                    'assets/images/room_xin.png',
+                                    ScreenUtil().setHeight(17),
+                                    ScreenUtil().setHeight(15)),
+                                WidgetUtils.commonSizedBox(0, 5),
+                                WidgetUtils.onlyText(
+                                    listm[0].charm.toString(),
+                                    StyleUtils.getCommonTextStyle(
+                                        color: Colors.white,
+                                        fontSize: ScreenUtil().setSp(21))),
+                                const Expanded(child: Text('')),
+                              ],
+                            ),
+                          )
                               : WidgetUtils.commonSizedBox(0, 0),
                         ],
                       ),
                       wherePeople == 1
                           ? Container(
-                              height: 80.h,
-                              width: 80.h,
-                              //超出部分，可裁剪
-                              clipBehavior: Clip.hardEdge,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50.h),
-                              ),
-                              child: const SVGASimpleImage(
-                                assetsName: 'assets/svga/baodeng.svga',
-                              ),
-                            )
+                        height: 80.h,
+                        width: 80.h,
+                        //超出部分，可裁剪
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50.h),
+                        ),
+                        child: const SVGASimpleImage(
+                          assetsName: 'assets/svga/baodeng.svga',
+                        ),
+                      )
                           : const Text(''),
                       listPeople[0]
                           ? Positioned(
-                              child: Container(
-                                height: 130.h,
-                                width: 130.h,
-                                //超出部分，可裁剪
-                                clipBehavior: Clip.hardEdge,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50.h),
-                                ),
-                                child: const SVGASimpleImage(
-                                  assetsName:
-                                      'assets/svga/room_choose_people.svga',
-                                ),
-                              ),
-                            )
-                          : const Text('')
+                        child: Container(
+                          height: 130.h,
+                          width: 130.h,
+                          //超出部分，可裁剪
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50.h),
+                          ),
+                          child: const SVGASimpleImage(
+                            assetsName:
+                            'assets/svga/room_choose_people.svga',
+                          ),
+                        ),
+                      )
+                          : const Text(''),
+                      //pk失败方显示猪头
+                      whoWin == 'red'
+                          ? Positioned(
+                        child: Container(
+                          height: 130.h,
+                          width: 130.h,
+                          //超出部分，可裁剪
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50.h),
+                          ),
+                          child: const SVGASimpleImage(
+                            assetsName:
+                            'assets/svga/pk/room_pk_loser.svga',
+                          ),
+                        ),
+                      )
+                          : const Text(''),
+                      jianLiWu.contains('1')
+                          ? Positioned(
+                        child: Container(
+                          height: 130.h,
+                          width: 130.h,
+                          //超出部分，可裁剪
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50.h),
+                          ),
+                          child: SVGAImage(
+                            animationControllerJL,
+                            fit: BoxFit.fitWidth,
+                          ),
+                        ),
+                      )
+                          : const Text(''),
                     ],
                   ),
                 ),
@@ -2258,134 +2390,174 @@ class RoomItems {
                 }),
                 child: SizedBox(
                   width: ScreenUtil().setWidth(140 * 1.25),
-                  height: ScreenUtil().setHeight(190),
+                  height: ScreenUtil().setHeight(230),
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
                       m2 == true
                           ? WidgetUtils.CircleHeadImage(
-                              ScreenUtil().setHeight(80),
-                              ScreenUtil().setHeight(80),
-                              listm[1].avatar!)
+                          ScreenUtil().setHeight(80),
+                          ScreenUtil().setHeight(80),
+                          listm[1].avatar!)
                           : listm[1].isLock == 0
-                              ? WidgetUtils.showImages(
-                                  'assets/images/room_mai.png',
-                                  ScreenUtil().setHeight(80),
-                                  ScreenUtil().setHeight(80))
-                              : WidgetUtils.showImages(
-                                  'assets/images/room_suo.png',
-                                  ScreenUtil().setHeight(80),
-                                  ScreenUtil().setHeight(80)),
+                          ? WidgetUtils.showImages(
+                          'assets/images/room_mai.png',
+                          ScreenUtil().setHeight(80),
+                          ScreenUtil().setHeight(80))
+                          : WidgetUtils.showImages(
+                          'assets/images/room_suo.png',
+                          ScreenUtil().setHeight(80),
+                          ScreenUtil().setHeight(80)),
                       (listm[1].isClose == 0 && audio2 == true)
                           ? Container(
-                              height: 140.h,
-                              width: 140.h,
-                              alignment: Alignment.center,
-                              child: listm[1].waveGifImg!.isNotEmpty
-                                  ? SVGASimpleImage(
-                                      resUrl: listm[1].waveGifImg!,
-                                    )
-                                  : const SVGASimpleImage(
-                                      assetsName:
-                                          'assets/svga/room_shengbo.svga',
-                                    ),
-                            )
+                        height: 140.h,
+                        width: 140.h,
+                        alignment: Alignment.center,
+                        child: listm[1].waveGifImg!.isNotEmpty
+                            ? SVGASimpleImage(
+                          resUrl: listm[1].waveGifImg!,
+                        )
+                            : const SVGASimpleImage(
+                          assetsName:
+                          'assets/svga/room_shengbo.svga',
+                        ),
+                      )
                           : const Text(''),
                       // 头像框静态图
                       (listm[1].avatarFrameGifImg!.isEmpty &&
-                              listm[1].avatarFrameImg!.isNotEmpty)
+                          listm[1].avatarFrameImg!.isNotEmpty)
                           ? WidgetUtils.CircleHeadImage(
-                              ScreenUtil().setHeight(130),
-                              ScreenUtil().setHeight(130),
-                              listm[1].avatarFrameImg!)
+                          ScreenUtil().setHeight(130),
+                          ScreenUtil().setHeight(130),
+                          listm[1].avatarFrameImg!)
                           : const Text(''),
                       // 头像框动态图
                       listm[1].avatarFrameGifImg!.isNotEmpty
                           ? SizedBox(
-                              height: 130.h,
-                              width: 130.h,
-                              child: SVGASimpleImage(
-                                resUrl: listm[1].avatarFrameGifImg!,
-                              ),
-                            )
+                        height: 130.h,
+                        width: 130.h,
+                        child: SVGASimpleImage(
+                          resUrl: listm[1].avatarFrameGifImg!,
+                        ),
+                      )
                           : const Text(''),
                       Column(
                         children: [
-                          const Expanded(child: Text('')),
+                          m2 == false
+                              ? WidgetUtils.commonSizedBox(180.h, 0)
+                              : WidgetUtils.commonSizedBox(160.h, 0),
                           m2 == false
                               ? WidgetUtils.onlyTextCenter(
-                                  '2号麦',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: MyColors.roomMaiWZ,
-                                      fontSize: ScreenUtil().setSp(19)))
+                              '2号麦',
+                              StyleUtils.getCommonTextStyle(
+                                  color: MyColors.roomMaiWZ,
+                                  fontSize: ScreenUtil().setSp(19)))
                               : WidgetUtils.commonSizedBox(0, 0),
                           m2 == false
                               ? WidgetUtils.commonSizedBox(10, 0)
                               : WidgetUtils.commonSizedBox(0, 0),
                           m2 == true
                               ? Row(
-                                  children: [
-                                    const Expanded(child: Text('')),
-                                    WidgetUtils.onlyText(
-                                        listm[1].nickname!,
-                                        StyleUtils.getCommonTextStyle(
-                                            color: Colors.white,
-                                            fontSize: ScreenUtil().setSp(21))),
-                                    const Expanded(child: Text('')),
-                                  ],
-                                )
+                            children: [
+                              const Expanded(child: Text('')),
+                              WidgetUtils.onlyText(
+                                  listm[1].nickname!,
+                                  StyleUtils.getCommonTextStyle(
+                                      color: Colors.white,
+                                      fontSize: ScreenUtil().setSp(21))),
+                              const Expanded(child: Text('')),
+                            ],
+                          )
                               : WidgetUtils.commonSizedBox(0, 0),
                           m2 == true
-                              ? Row(
-                                  children: [
-                                    const Expanded(child: Text('')),
-                                    WidgetUtils.showImages(
-                                        'assets/images/room_xin.png',
-                                        ScreenUtil().setHeight(17),
-                                        ScreenUtil().setHeight(15)),
-                                    WidgetUtils.commonSizedBox(0, 5),
-                                    WidgetUtils.onlyText(
-                                        listm[1].charm.toString(),
-                                        StyleUtils.getCommonTextStyle(
-                                            color: Colors.white,
-                                            fontSize: ScreenUtil().setSp(21))),
-                                    const Expanded(child: Text('')),
-                                  ],
-                                )
+                              ? SizedBox(
+                            height: 20.h,
+                            child: Row(
+                              children: [
+                                const Expanded(child: Text('')),
+                                WidgetUtils.showImages(
+                                    'assets/images/room_xin.png',
+                                    ScreenUtil().setHeight(17),
+                                    ScreenUtil().setHeight(15)),
+                                WidgetUtils.commonSizedBox(0, 5),
+                                WidgetUtils.onlyText(
+                                    listm[1].charm.toString(),
+                                    StyleUtils.getCommonTextStyle(
+                                        color: Colors.white,
+                                        fontSize: ScreenUtil().setSp(21))),
+                                const Expanded(child: Text('')),
+                              ],
+                            ),
+                          )
                               : WidgetUtils.commonSizedBox(0, 0),
                         ],
                       ),
                       wherePeople == 2
                           ? Container(
-                              height: 80.h,
-                              width: 80.h,
-                              //超出部分，可裁剪
-                              clipBehavior: Clip.hardEdge,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50.h),
-                              ),
-                              child: const SVGASimpleImage(
-                                assetsName: 'assets/svga/baodeng.svga',
-                              ),
-                            )
+                        height: 80.h,
+                        width: 80.h,
+                        //超出部分，可裁剪
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50.h),
+                        ),
+                        child: const SVGASimpleImage(
+                          assetsName: 'assets/svga/baodeng.svga',
+                        ),
+                      )
                           : const Text(''),
                       listPeople[1]
                           ? Positioned(
-                              child: Container(
-                                height: 130.h,
-                                width: 130.h,
-                                //超出部分，可裁剪
-                                clipBehavior: Clip.hardEdge,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50.h),
-                                ),
-                                child: const SVGASimpleImage(
-                                  assetsName:
-                                      'assets/svga/room_choose_people.svga',
-                                ),
-                              ),
-                            )
-                          : const Text('')
+                        child: Container(
+                          height: 130.h,
+                          width: 130.h,
+                          //超出部分，可裁剪
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50.h),
+                          ),
+                          child: const SVGASimpleImage(
+                            assetsName:
+                            'assets/svga/room_choose_people.svga',
+                          ),
+                        ),
+                      )
+                          : const Text(''),
+                      //pk失败方显示猪头
+                      whoWin == 'red'
+                          ? Positioned(
+                        child: Container(
+                          height: 130.h,
+                          width: 130.h,
+                          //超出部分，可裁剪
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50.h),
+                          ),
+                          child: const SVGASimpleImage(
+                            assetsName:
+                            'assets/svga/pk/room_pk_loser.svga',
+                          ),
+                        ),
+                      )
+                          : const Text(''),
+                      jianLiWu.contains('2')
+                          ? Positioned(
+                        child: Container(
+                          height: 130.h,
+                          width: 130.h,
+                          //超出部分，可裁剪
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50.h),
+                          ),
+                          child: SVGAImage(
+                            animationControllerJL,
+                            fit: BoxFit.fitWidth,
+                          ),
+                        ),
+                      )
+                          : const Text(''),
                     ],
                   ),
                 ),
@@ -2428,134 +2600,175 @@ class RoomItems {
                 }),
                 child: SizedBox(
                   width: ScreenUtil().setWidth(140 * 1.25),
-                  height: ScreenUtil().setHeight(190),
+                  height: ScreenUtil().setHeight(230),
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
                       m3 == true
                           ? WidgetUtils.CircleHeadImage(
-                              ScreenUtil().setHeight(80),
-                              ScreenUtil().setHeight(80),
-                              listm[2].avatar!)
+                          ScreenUtil().setHeight(80),
+                          ScreenUtil().setHeight(80),
+                          listm[2].avatar!)
                           : listm[2].isLock == 0
-                              ? WidgetUtils.showImages(
-                                  'assets/images/room_mai.png',
-                                  ScreenUtil().setHeight(80),
-                                  ScreenUtil().setHeight(80))
-                              : WidgetUtils.showImages(
-                                  'assets/images/room_suo.png',
-                                  ScreenUtil().setHeight(80),
-                                  ScreenUtil().setHeight(80)),
+                          ? WidgetUtils.showImages(
+                          'assets/images/room_mai.png',
+                          ScreenUtil().setHeight(80),
+                          ScreenUtil().setHeight(80))
+                          : WidgetUtils.showImages(
+                          'assets/images/room_suo.png',
+                          ScreenUtil().setHeight(80),
+                          ScreenUtil().setHeight(80)),
                       (listm[2].isClose == 0 && audio3 == true)
                           ? Container(
-                              height: 140.h,
-                              width: 140.h,
-                              alignment: Alignment.center,
-                              child: listm[2].waveGifImg!.isNotEmpty
-                                  ? SVGASimpleImage(
-                                      resUrl: listm[2].waveGifImg!,
-                                    )
-                                  : const SVGASimpleImage(
-                                      assetsName:
-                                          'assets/svga/room_shengbo.svga',
-                                    ),
-                            )
+                        height: 140.h,
+                        width: 140.h,
+                        alignment: Alignment.center,
+                        child: listm[2].waveGifImg!.isNotEmpty
+                            ? SVGASimpleImage(
+                          resUrl: listm[2].waveGifImg!,
+                        )
+                            : const SVGASimpleImage(
+                          assetsName:
+                          'assets/svga/room_shengbo.svga',
+                        ),
+                      )
                           : const Text(''),
                       // 头像框静态图
                       (listm[2].avatarFrameGifImg!.isEmpty &&
-                              listm[2].avatarFrameImg!.isNotEmpty)
+                          listm[2].avatarFrameImg!.isNotEmpty)
                           ? WidgetUtils.CircleHeadImage(
-                              ScreenUtil().setHeight(130),
-                              ScreenUtil().setHeight(130),
-                              listm[2].avatarFrameImg!)
+                          ScreenUtil().setHeight(130),
+                          ScreenUtil().setHeight(130),
+                          listm[2].avatarFrameImg!)
                           : const Text(''),
                       // 头像框动态图
                       listm[2].avatarFrameGifImg!.isNotEmpty
                           ? SizedBox(
-                              height: 130.h,
-                              width: 130.h,
-                              child: SVGASimpleImage(
-                                resUrl: listm[2].avatarFrameGifImg!,
-                              ),
-                            )
+                        height: 130.h,
+                        width: 130.h,
+                        child: SVGASimpleImage(
+                          resUrl: listm[2].avatarFrameGifImg!,
+                        ),
+                      )
                           : const Text(''),
                       Column(
                         children: [
-                          const Expanded(child: Text('')),
+                          m3 == false
+                              ? WidgetUtils.commonSizedBox(180.h, 0)
+                              : WidgetUtils.commonSizedBox(160.h, 0),
                           m3 == false
                               ? WidgetUtils.onlyTextCenter(
-                                  '3号麦',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: MyColors.roomMaiWZ,
-                                      fontSize: ScreenUtil().setSp(19)))
+                              '3号麦',
+                              StyleUtils.getCommonTextStyle(
+                                  color: MyColors.roomMaiWZ,
+                                  fontSize: ScreenUtil().setSp(19)))
                               : WidgetUtils.commonSizedBox(0, 0),
                           m3 == false
                               ? WidgetUtils.commonSizedBox(10, 0)
                               : WidgetUtils.commonSizedBox(0, 0),
                           m3 == true
                               ? Row(
-                                  children: [
-                                    const Expanded(child: Text('')),
-                                    WidgetUtils.onlyText(
-                                        listm[2].nickname!,
-                                        StyleUtils.getCommonTextStyle(
-                                            color: Colors.white,
-                                            fontSize: ScreenUtil().setSp(21))),
-                                    const Expanded(child: Text('')),
-                                  ],
-                                )
+                            children: [
+                              const Expanded(child: Text('')),
+                              WidgetUtils.onlyText(
+                                  listm[2].nickname!,
+                                  StyleUtils.getCommonTextStyle(
+                                      color: Colors.white,
+                                      fontSize: ScreenUtil().setSp(21))),
+                              const Expanded(child: Text('')),
+                            ],
+                          )
                               : WidgetUtils.commonSizedBox(0, 0),
                           m3 == true
-                              ? Row(
-                                  children: [
-                                    const Expanded(child: Text('')),
-                                    WidgetUtils.showImages(
-                                        'assets/images/room_xin.png',
-                                        ScreenUtil().setHeight(17),
-                                        ScreenUtil().setHeight(15)),
-                                    WidgetUtils.commonSizedBox(0, 5),
-                                    WidgetUtils.onlyText(
-                                        listm[2].charm.toString(),
-                                        StyleUtils.getCommonTextStyle(
-                                            color: Colors.white,
-                                            fontSize: ScreenUtil().setSp(21))),
-                                    const Expanded(child: Text('')),
-                                  ],
-                                )
+                              ? Container(
+                            height: 20.h,
+                            alignment: Alignment.center,
+                            child: Row(
+                              children: [
+                                const Expanded(child: Text('')),
+                                WidgetUtils.showImages(
+                                    'assets/images/room_xin.png',
+                                    ScreenUtil().setHeight(17),
+                                    ScreenUtil().setHeight(15)),
+                                WidgetUtils.commonSizedBox(0, 5),
+                                WidgetUtils.onlyText(
+                                    listm[2].charm.toString(),
+                                    StyleUtils.getCommonTextStyle(
+                                        color: Colors.white,
+                                        fontSize: ScreenUtil().setSp(21))),
+                                const Expanded(child: Text('')),
+                              ],
+                            ),
+                          )
                               : WidgetUtils.commonSizedBox(0, 0),
                         ],
                       ),
                       wherePeople == 3
                           ? Container(
-                              height: 80.h,
-                              width: 80.h,
-                              //超出部分，可裁剪
-                              clipBehavior: Clip.hardEdge,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50.h),
-                              ),
-                              child: const SVGASimpleImage(
-                                assetsName: 'assets/svga/baodeng.svga',
-                              ),
-                            )
+                        height: 80.h,
+                        width: 80.h,
+                        //超出部分，可裁剪
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50.h),
+                        ),
+                        child: const SVGASimpleImage(
+                          assetsName: 'assets/svga/baodeng.svga',
+                        ),
+                      )
                           : const Text(''),
                       listPeople[2]
                           ? Positioned(
-                              child: Container(
-                                height: 130.h,
-                                width: 130.h,
-                                //超出部分，可裁剪
-                                clipBehavior: Clip.hardEdge,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50.h),
-                                ),
-                                child: const SVGASimpleImage(
-                                  assetsName:
-                                      'assets/svga/room_choose_people.svga',
-                                ),
-                              ),
-                            )
-                          : const Text('')
+                        child: Container(
+                          height: 130.h,
+                          width: 130.h,
+                          //超出部分，可裁剪
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50.h),
+                          ),
+                          child: const SVGASimpleImage(
+                            assetsName:
+                            'assets/svga/room_choose_people.svga',
+                          ),
+                        ),
+                      )
+                          : const Text(''),
+                      //pk失败方显示猪头
+                      whoWin == 'blue'
+                          ? Positioned(
+                        child: Container(
+                          height: 130.h,
+                          width: 130.h,
+                          //超出部分，可裁剪
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50.h),
+                          ),
+                          child: const SVGASimpleImage(
+                            assetsName:
+                            'assets/svga/pk/room_pk_loser.svga',
+                          ),
+                        ),
+                      )
+                          : const Text(''),
+                      jianLiWu.contains('3')
+                          ? Positioned(
+                        child: Container(
+                          height: 130.h,
+                          width: 130.h,
+                          //超出部分，可裁剪
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50.h),
+                          ),
+                          child: SVGAImage(
+                            animationControllerJL,
+                            fit: BoxFit.fitWidth,
+                          ),
+                        ),
+                      )
+                          : const Text(''),
                     ],
                   ),
                 ),
@@ -2598,134 +2811,174 @@ class RoomItems {
                 }),
                 child: SizedBox(
                   width: ScreenUtil().setWidth(140 * 1.25),
-                  height: ScreenUtil().setHeight(190),
+                  height: ScreenUtil().setHeight(230),
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
                       m4 == true
                           ? WidgetUtils.CircleHeadImage(
-                              ScreenUtil().setHeight(80),
-                              ScreenUtil().setHeight(80),
-                              listm[3].avatar!)
+                          ScreenUtil().setHeight(80),
+                          ScreenUtil().setHeight(80),
+                          listm[3].avatar!)
                           : listm[3].isLock == 0
-                              ? WidgetUtils.showImages(
-                                  'assets/images/room_mai.png',
-                                  ScreenUtil().setHeight(80),
-                                  ScreenUtil().setHeight(80))
-                              : WidgetUtils.showImages(
-                                  'assets/images/room_suo.png',
-                                  ScreenUtil().setHeight(80),
-                                  ScreenUtil().setHeight(80)),
+                          ? WidgetUtils.showImages(
+                          'assets/images/room_mai.png',
+                          ScreenUtil().setHeight(80),
+                          ScreenUtil().setHeight(80))
+                          : WidgetUtils.showImages(
+                          'assets/images/room_suo.png',
+                          ScreenUtil().setHeight(80),
+                          ScreenUtil().setHeight(80)),
                       (listm[3].isClose == 0 && audio4 == true)
                           ? Container(
-                              height: 140.h,
-                              width: 140.h,
-                              alignment: Alignment.center,
-                              child: listm[3].waveGifImg!.isNotEmpty
-                                  ? SVGASimpleImage(
-                                      resUrl: listm[3].waveGifImg!,
-                                    )
-                                  : const SVGASimpleImage(
-                                      assetsName:
-                                          'assets/svga/room_shengbo.svga',
-                                    ),
-                            )
+                        height: 140.h,
+                        width: 140.h,
+                        alignment: Alignment.center,
+                        child: listm[3].waveGifImg!.isNotEmpty
+                            ? SVGASimpleImage(
+                          resUrl: listm[3].waveGifImg!,
+                        )
+                            : const SVGASimpleImage(
+                          assetsName:
+                          'assets/svga/room_shengbo.svga',
+                        ),
+                      )
                           : const Text(''),
                       // 头像框静态图
                       (listm[3].avatarFrameGifImg!.isEmpty &&
-                              listm[3].avatarFrameImg!.isNotEmpty)
+                          listm[3].avatarFrameImg!.isNotEmpty)
                           ? WidgetUtils.CircleHeadImage(
-                              ScreenUtil().setHeight(130),
-                              ScreenUtil().setHeight(130),
-                              listm[3].avatarFrameImg!)
+                          ScreenUtil().setHeight(130),
+                          ScreenUtil().setHeight(130),
+                          listm[3].avatarFrameImg!)
                           : const Text(''),
                       // 头像框动态图
                       listm[3].avatarFrameGifImg!.isNotEmpty
                           ? SizedBox(
-                              height: 130.h,
-                              width: 130.h,
-                              child: SVGASimpleImage(
-                                resUrl: listm[3].avatarFrameGifImg!,
-                              ),
-                            )
+                        height: 130.h,
+                        width: 130.h,
+                        child: SVGASimpleImage(
+                          resUrl: listm[3].avatarFrameGifImg!,
+                        ),
+                      )
                           : const Text(''),
                       Column(
                         children: [
-                          const Expanded(child: Text('')),
+                          m4 == false
+                              ? WidgetUtils.commonSizedBox(180.h, 0)
+                              : WidgetUtils.commonSizedBox(160.h, 0),
                           m4 == false
                               ? WidgetUtils.onlyTextCenter(
-                                  '4号麦',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: MyColors.roomMaiWZ,
-                                      fontSize: ScreenUtil().setSp(19)))
+                              '4号麦',
+                              StyleUtils.getCommonTextStyle(
+                                  color: MyColors.roomMaiWZ,
+                                  fontSize: ScreenUtil().setSp(19)))
                               : WidgetUtils.commonSizedBox(0, 0),
                           m4 == false
                               ? WidgetUtils.commonSizedBox(10, 0)
                               : WidgetUtils.commonSizedBox(0, 0),
                           m4 == true
                               ? Row(
-                                  children: [
-                                    const Expanded(child: Text('')),
-                                    WidgetUtils.onlyText(
-                                        listm[3].nickname!,
-                                        StyleUtils.getCommonTextStyle(
-                                            color: Colors.white,
-                                            fontSize: ScreenUtil().setSp(21))),
-                                    const Expanded(child: Text('')),
-                                  ],
-                                )
+                            children: [
+                              const Expanded(child: Text('')),
+                              WidgetUtils.onlyText(
+                                  listm[3].nickname!,
+                                  StyleUtils.getCommonTextStyle(
+                                      color: Colors.white,
+                                      fontSize: ScreenUtil().setSp(21))),
+                              const Expanded(child: Text('')),
+                            ],
+                          )
                               : WidgetUtils.commonSizedBox(0, 0),
                           m4 == true
-                              ? Row(
-                                  children: [
-                                    const Expanded(child: Text('')),
-                                    WidgetUtils.showImages(
-                                        'assets/images/room_xin.png',
-                                        ScreenUtil().setHeight(17),
-                                        ScreenUtil().setHeight(15)),
-                                    WidgetUtils.commonSizedBox(0, 5),
-                                    WidgetUtils.onlyText(
-                                        listm[3].charm.toString(),
-                                        StyleUtils.getCommonTextStyle(
-                                            color: Colors.white,
-                                            fontSize: ScreenUtil().setSp(21))),
-                                    const Expanded(child: Text('')),
-                                  ],
-                                )
+                              ? SizedBox(
+                            height: 20.h,
+                            child: Row(
+                              children: [
+                                const Expanded(child: Text('')),
+                                WidgetUtils.showImages(
+                                    'assets/images/room_xin.png',
+                                    ScreenUtil().setHeight(17),
+                                    ScreenUtil().setHeight(15)),
+                                WidgetUtils.commonSizedBox(0, 5),
+                                WidgetUtils.onlyText(
+                                    listm[3].charm.toString(),
+                                    StyleUtils.getCommonTextStyle(
+                                        color: Colors.white,
+                                        fontSize: ScreenUtil().setSp(21))),
+                                const Expanded(child: Text('')),
+                              ],
+                            ),
+                          )
                               : WidgetUtils.commonSizedBox(0, 0),
                         ],
                       ),
                       wherePeople == 4
                           ? Container(
-                              height: 80.h,
-                              width: 80.h,
-                              //超出部分，可裁剪
-                              clipBehavior: Clip.hardEdge,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50.h),
-                              ),
-                              child: const SVGASimpleImage(
-                                assetsName: 'assets/svga/baodeng.svga',
-                              ),
-                            )
+                        height: 80.h,
+                        width: 80.h,
+                        //超出部分，可裁剪
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50.h),
+                        ),
+                        child: const SVGASimpleImage(
+                          assetsName: 'assets/svga/baodeng.svga',
+                        ),
+                      )
                           : const Text(''),
                       listPeople[3]
                           ? Positioned(
-                              child: Container(
-                                height: 130.h,
-                                width: 130.h,
-                                //超出部分，可裁剪
-                                clipBehavior: Clip.hardEdge,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50.h),
-                                ),
-                                child: const SVGASimpleImage(
-                                  assetsName:
-                                      'assets/svga/room_choose_people.svga',
-                                ),
-                              ),
-                            )
-                          : const Text('')
+                        child: Container(
+                          height: 130.h,
+                          width: 130.h,
+                          //超出部分，可裁剪
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50.h),
+                          ),
+                          child: const SVGASimpleImage(
+                            assetsName:
+                            'assets/svga/room_choose_people.svga',
+                          ),
+                        ),
+                      )
+                          : const Text(''),
+                      //pk失败方显示猪头
+                      whoWin == 'blue'
+                          ? Positioned(
+                        child: Container(
+                          height: 130.h,
+                          width: 130.h,
+                          //超出部分，可裁剪
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50.h),
+                          ),
+                          child: const SVGASimpleImage(
+                            assetsName:
+                            'assets/svga/pk/room_pk_loser.svga',
+                          ),
+                        ),
+                      )
+                          : const Text(''),
+                      jianLiWu.contains('4')
+                          ? Positioned(
+                        child: Container(
+                          height: 130.h,
+                          width: 130.h,
+                          //超出部分，可裁剪
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50.h),
+                          ),
+                          child: SVGAImage(
+                            animationControllerJL,
+                            fit: BoxFit.fitWidth,
+                          ),
+                        ),
+                      )
+                          : const Text(''),
                     ],
                   ),
                 ),
@@ -2736,7 +2989,7 @@ class RoomItems {
 
           /// 第二排麦序
           Transform.translate(
-            offset: Offset(0, (-20 * 2 / 1.25).h),
+            offset: Offset(0, (-40 * 2 / 1.25).h),
             child: Row(
               children: [
                 WidgetUtils.commonSizedBox(0, 10 * 2.w),
@@ -2777,136 +3030,176 @@ class RoomItems {
                   }),
                   child: SizedBox(
                     width: ScreenUtil().setWidth(140 * 1.25),
-                    height: ScreenUtil().setHeight(190),
+                    height: ScreenUtil().setHeight(230),
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
                         m5 == true
                             ? WidgetUtils.CircleHeadImage(
-                                ScreenUtil().setHeight(80),
-                                ScreenUtil().setHeight(80),
-                                listm[4].avatar!)
+                            ScreenUtil().setHeight(80),
+                            ScreenUtil().setHeight(80),
+                            listm[4].avatar!)
                             : listm[4].isLock == 0
-                                ? WidgetUtils.showImages(
-                                    'assets/images/room_mai.png',
-                                    ScreenUtil().setHeight(80),
-                                    ScreenUtil().setHeight(80))
-                                : WidgetUtils.showImages(
-                                    'assets/images/room_suo.png',
-                                    ScreenUtil().setHeight(80),
-                                    ScreenUtil().setHeight(80)),
+                            ? WidgetUtils.showImages(
+                            'assets/images/room_mai.png',
+                            ScreenUtil().setHeight(80),
+                            ScreenUtil().setHeight(80))
+                            : WidgetUtils.showImages(
+                            'assets/images/room_suo.png',
+                            ScreenUtil().setHeight(80),
+                            ScreenUtil().setHeight(80)),
                         (listm[4].isClose == 0 && audio5 == true)
                             ? Container(
-                                height: 140.h,
-                                width: 140.h,
-                                alignment: Alignment.center,
-                                child: listm[4].waveGifImg!.isNotEmpty
-                                    ? SVGASimpleImage(
-                                        resUrl: listm[4].waveGifImg!,
-                                      )
-                                    : const SVGASimpleImage(
-                                        assetsName:
-                                            'assets/svga/room_shengbo.svga',
-                                      ),
-                              )
+                          height: 140.h,
+                          width: 140.h,
+                          alignment: Alignment.center,
+                          child: listm[4].waveGifImg!.isNotEmpty
+                              ? SVGASimpleImage(
+                            resUrl: listm[4].waveGifImg!,
+                          )
+                              : const SVGASimpleImage(
+                            assetsName:
+                            'assets/svga/room_shengbo.svga',
+                          ),
+                        )
                             : const Text(''),
                         // 头像框静态图
                         (listm[4].avatarFrameGifImg!.isEmpty &&
-                                listm[4].avatarFrameImg!.isNotEmpty)
+                            listm[4].avatarFrameImg!.isNotEmpty)
                             ? WidgetUtils.CircleHeadImage(
-                                ScreenUtil().setHeight(130),
-                                ScreenUtil().setHeight(130),
-                                listm[4].avatarFrameImg!)
+                            ScreenUtil().setHeight(130),
+                            ScreenUtil().setHeight(130),
+                            listm[4].avatarFrameImg!)
                             : const Text(''),
                         // 头像框动态图
                         listm[4].avatarFrameGifImg!.isNotEmpty
                             ? SizedBox(
-                                height: 130.h,
-                                width: 130.h,
-                                child: SVGASimpleImage(
-                                  resUrl: listm[4].avatarFrameGifImg!,
-                                ),
-                              )
+                          height: 130.h,
+                          width: 130.h,
+                          child: SVGASimpleImage(
+                            resUrl: listm[4].avatarFrameGifImg!,
+                          ),
+                        )
                             : const Text(''),
                         Column(
                           children: [
-                            const Expanded(child: Text('')),
+                            m5 == false
+                                ? WidgetUtils.commonSizedBox(180.h, 0)
+                                : WidgetUtils.commonSizedBox(160.h, 0),
                             m5 == false
                                 ? WidgetUtils.onlyTextCenter(
-                                    '5号麦',
-                                    StyleUtils.getCommonTextStyle(
-                                        color: MyColors.roomMaiWZ,
-                                        fontSize: ScreenUtil().setSp(19)))
+                                '5号麦',
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.roomMaiWZ,
+                                    fontSize: ScreenUtil().setSp(19)))
                                 : WidgetUtils.commonSizedBox(0, 0),
                             m5 == false
                                 ? WidgetUtils.commonSizedBox(10, 0)
                                 : WidgetUtils.commonSizedBox(0, 0),
                             m5 == true
                                 ? Row(
-                                    children: [
-                                      const Expanded(child: Text('')),
-                                      WidgetUtils.onlyText(
-                                          listm[4].nickname!,
-                                          StyleUtils.getCommonTextStyle(
-                                              color: Colors.white,
-                                              fontSize:
-                                                  ScreenUtil().setSp(21))),
-                                      const Expanded(child: Text('')),
-                                    ],
-                                  )
+                              children: [
+                                const Expanded(child: Text('')),
+                                WidgetUtils.onlyText(
+                                    listm[4].nickname!,
+                                    StyleUtils.getCommonTextStyle(
+                                        color: Colors.white,
+                                        fontSize:
+                                        ScreenUtil().setSp(21))),
+                                const Expanded(child: Text('')),
+                              ],
+                            )
                                 : WidgetUtils.commonSizedBox(0, 0),
                             m5 == true
-                                ? Row(
-                                    children: [
-                                      const Expanded(child: Text('')),
-                                      WidgetUtils.showImages(
-                                          'assets/images/room_xin.png',
-                                          ScreenUtil().setHeight(17),
-                                          ScreenUtil().setHeight(15)),
-                                      WidgetUtils.commonSizedBox(0, 5),
-                                      WidgetUtils.onlyText(
-                                          listm[4].charm.toString(),
-                                          StyleUtils.getCommonTextStyle(
-                                              color: Colors.white,
-                                              fontSize:
-                                                  ScreenUtil().setSp(21))),
-                                      const Expanded(child: Text('')),
-                                    ],
-                                  )
+                                ? SizedBox(
+                              height: 20.h,
+                              child: Row(
+                                children: [
+                                  const Expanded(child: Text('')),
+                                  WidgetUtils.showImages(
+                                      'assets/images/room_xin.png',
+                                      ScreenUtil().setHeight(17),
+                                      ScreenUtil().setHeight(15)),
+                                  WidgetUtils.commonSizedBox(0, 5),
+                                  WidgetUtils.onlyText(
+                                      listm[4].charm.toString(),
+                                      StyleUtils.getCommonTextStyle(
+                                          color: Colors.white,
+                                          fontSize:
+                                          ScreenUtil().setSp(21))),
+                                  const Expanded(child: Text('')),
+                                ],
+                              ),
+                            )
                                 : WidgetUtils.commonSizedBox(0, 0),
                           ],
                         ),
                         wherePeople == 5
                             ? Container(
-                                height: 80.h,
-                                width: 80.h,
-                                //超出部分，可裁剪
-                                clipBehavior: Clip.hardEdge,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50.h),
-                                ),
-                                child: const SVGASimpleImage(
-                                  assetsName: 'assets/svga/baodeng.svga',
-                                ),
-                              )
+                          height: 80.h,
+                          width: 80.h,
+                          //超出部分，可裁剪
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50.h),
+                          ),
+                          child: const SVGASimpleImage(
+                            assetsName: 'assets/svga/baodeng.svga',
+                          ),
+                        )
                             : const Text(''),
                         listPeople[4]
                             ? Positioned(
-                                child: Container(
-                                  height: 130.h,
-                                  width: 130.h,
-                                  //超出部分，可裁剪
-                                  clipBehavior: Clip.hardEdge,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(50.h),
-                                  ),
-                                  child: const SVGASimpleImage(
-                                    assetsName:
-                                        'assets/svga/room_choose_people.svga',
-                                  ),
-                                ),
-                              )
-                            : const Text('')
+                          child: Container(
+                            height: 130.h,
+                            width: 130.h,
+                            //超出部分，可裁剪
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50.h),
+                            ),
+                            child: const SVGASimpleImage(
+                              assetsName:
+                              'assets/svga/room_choose_people.svga',
+                            ),
+                          ),
+                        )
+                            : const Text(''),
+                        //pk失败方显示猪头
+                        whoWin == 'red'
+                            ? Positioned(
+                          child: Container(
+                            height: 130.h,
+                            width: 130.h,
+                            //超出部分，可裁剪
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50.h),
+                            ),
+                            child: const SVGASimpleImage(
+                              assetsName:
+                              'assets/svga/pk/room_pk_loser.svga',
+                            ),
+                          ),
+                        )
+                            : const Text(''),
+                        jianLiWu.contains('5')
+                            ? Positioned(
+                          child: Container(
+                            height: 130.h,
+                            width: 130.h,
+                            //超出部分，可裁剪
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50.h),
+                            ),
+                            child: SVGAImage(
+                              animationControllerJL,
+                              fit: BoxFit.fitWidth,
+                            ),
+                          ),
+                        )
+                            : const Text(''),
                       ],
                     ),
                   ),
@@ -2949,136 +3242,176 @@ class RoomItems {
                   }),
                   child: SizedBox(
                     width: ScreenUtil().setWidth(140 * 1.25),
-                    height: ScreenUtil().setHeight(190),
+                    height: ScreenUtil().setHeight(230),
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
                         m6 == true
                             ? WidgetUtils.CircleHeadImage(
-                                ScreenUtil().setHeight(80),
-                                ScreenUtil().setHeight(80),
-                                listm[5].avatar!)
+                            ScreenUtil().setHeight(80),
+                            ScreenUtil().setHeight(80),
+                            listm[5].avatar!)
                             : listm[5].isLock == 0
-                                ? WidgetUtils.showImages(
-                                    'assets/images/room_mai.png',
-                                    ScreenUtil().setHeight(80),
-                                    ScreenUtil().setHeight(80))
-                                : WidgetUtils.showImages(
-                                    'assets/images/room_suo.png',
-                                    ScreenUtil().setHeight(80),
-                                    ScreenUtil().setHeight(80)),
+                            ? WidgetUtils.showImages(
+                            'assets/images/room_mai.png',
+                            ScreenUtil().setHeight(80),
+                            ScreenUtil().setHeight(80))
+                            : WidgetUtils.showImages(
+                            'assets/images/room_suo.png',
+                            ScreenUtil().setHeight(80),
+                            ScreenUtil().setHeight(80)),
                         (listm[5].isClose == 0 && audio6 == true)
                             ? Container(
-                                height: 140.h,
-                                width: 140.h,
-                                alignment: Alignment.center,
-                                child: listm[5].waveGifImg!.isNotEmpty
-                                    ? SVGASimpleImage(
-                                        resUrl: listm[5].waveGifImg!,
-                                      )
-                                    : const SVGASimpleImage(
-                                        assetsName:
-                                            'assets/svga/room_shengbo.svga',
-                                      ),
-                              )
+                          height: 140.h,
+                          width: 140.h,
+                          alignment: Alignment.center,
+                          child: listm[5].waveGifImg!.isNotEmpty
+                              ? SVGASimpleImage(
+                            resUrl: listm[5].waveGifImg!,
+                          )
+                              : const SVGASimpleImage(
+                            assetsName:
+                            'assets/svga/room_shengbo.svga',
+                          ),
+                        )
                             : const Text(''),
                         // 头像框静态图
                         (listm[5].avatarFrameGifImg!.isEmpty &&
-                                listm[5].avatarFrameImg!.isNotEmpty)
+                            listm[5].avatarFrameImg!.isNotEmpty)
                             ? WidgetUtils.CircleHeadImage(
-                                ScreenUtil().setHeight(130),
-                                ScreenUtil().setHeight(130),
-                                listm[5].avatarFrameImg!)
+                            ScreenUtil().setHeight(130),
+                            ScreenUtil().setHeight(130),
+                            listm[5].avatarFrameImg!)
                             : const Text(''),
                         // 头像框动态图
                         listm[5].avatarFrameGifImg!.isNotEmpty
                             ? SizedBox(
-                                height: 130.h,
-                                width: 130.h,
-                                child: SVGASimpleImage(
-                                  resUrl: listm[5].avatarFrameGifImg!,
-                                ),
-                              )
+                          height: 130.h,
+                          width: 130.h,
+                          child: SVGASimpleImage(
+                            resUrl: listm[5].avatarFrameGifImg!,
+                          ),
+                        )
                             : const Text(''),
                         Column(
                           children: [
-                            const Expanded(child: Text('')),
+                            m6 == false
+                                ? WidgetUtils.commonSizedBox(180.h, 0)
+                                : WidgetUtils.commonSizedBox(160.h, 0),
                             m6 == false
                                 ? WidgetUtils.onlyTextCenter(
-                                    '6号麦',
-                                    StyleUtils.getCommonTextStyle(
-                                        color: MyColors.roomMaiWZ,
-                                        fontSize: ScreenUtil().setSp(19)))
+                                '6号麦',
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.roomMaiWZ,
+                                    fontSize: ScreenUtil().setSp(19)))
                                 : WidgetUtils.commonSizedBox(0, 0),
                             m6 == false
                                 ? WidgetUtils.commonSizedBox(10, 0)
                                 : WidgetUtils.commonSizedBox(0, 0),
                             m6 == true
                                 ? Row(
-                                    children: [
-                                      const Expanded(child: Text('')),
-                                      WidgetUtils.onlyText(
-                                          listm[5].nickname!,
-                                          StyleUtils.getCommonTextStyle(
-                                              color: Colors.white,
-                                              fontSize:
-                                                  ScreenUtil().setSp(21))),
-                                      const Expanded(child: Text('')),
-                                    ],
-                                  )
+                              children: [
+                                const Expanded(child: Text('')),
+                                WidgetUtils.onlyText(
+                                    listm[5].nickname!,
+                                    StyleUtils.getCommonTextStyle(
+                                        color: Colors.white,
+                                        fontSize:
+                                        ScreenUtil().setSp(21))),
+                                const Expanded(child: Text('')),
+                              ],
+                            )
                                 : WidgetUtils.commonSizedBox(0, 0),
                             m6 == true
-                                ? Row(
-                                    children: [
-                                      const Expanded(child: Text('')),
-                                      WidgetUtils.showImages(
-                                          'assets/images/room_xin.png',
-                                          ScreenUtil().setHeight(17),
-                                          ScreenUtil().setHeight(15)),
-                                      WidgetUtils.commonSizedBox(0, 5),
-                                      WidgetUtils.onlyText(
-                                          listm[5].charm.toString(),
-                                          StyleUtils.getCommonTextStyle(
-                                              color: Colors.white,
-                                              fontSize:
-                                                  ScreenUtil().setSp(21))),
-                                      const Expanded(child: Text('')),
-                                    ],
-                                  )
+                                ? SizedBox(
+                              height: 20.h,
+                              child: Row(
+                                children: [
+                                  const Expanded(child: Text('')),
+                                  WidgetUtils.showImages(
+                                      'assets/images/room_xin.png',
+                                      ScreenUtil().setHeight(17),
+                                      ScreenUtil().setHeight(15)),
+                                  WidgetUtils.commonSizedBox(0, 5),
+                                  WidgetUtils.onlyText(
+                                      listm[5].charm.toString(),
+                                      StyleUtils.getCommonTextStyle(
+                                          color: Colors.white,
+                                          fontSize:
+                                          ScreenUtil().setSp(21))),
+                                  const Expanded(child: Text('')),
+                                ],
+                              ),
+                            )
                                 : WidgetUtils.commonSizedBox(0, 0),
                           ],
                         ),
                         wherePeople == 6
                             ? Container(
-                                height: 80.h,
-                                width: 80.h,
-                                //超出部分，可裁剪
-                                clipBehavior: Clip.hardEdge,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50.h),
-                                ),
-                                child: const SVGASimpleImage(
-                                  assetsName: 'assets/svga/baodeng.svga',
-                                ),
-                              )
+                          height: 80.h,
+                          width: 80.h,
+                          //超出部分，可裁剪
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50.h),
+                          ),
+                          child: const SVGASimpleImage(
+                            assetsName: 'assets/svga/baodeng.svga',
+                          ),
+                        )
                             : const Text(''),
                         listPeople[5]
                             ? Positioned(
-                                child: Container(
-                                  height: 130.h,
-                                  width: 130.h,
-                                  //超出部分，可裁剪
-                                  clipBehavior: Clip.hardEdge,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(50.h),
-                                  ),
-                                  child: const SVGASimpleImage(
-                                    assetsName:
-                                        'assets/svga/room_choose_people.svga',
-                                  ),
-                                ),
-                              )
-                            : const Text('')
+                          child: Container(
+                            height: 130.h,
+                            width: 130.h,
+                            //超出部分，可裁剪
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50.h),
+                            ),
+                            child: const SVGASimpleImage(
+                              assetsName:
+                              'assets/svga/room_choose_people.svga',
+                            ),
+                          ),
+                        )
+                            : const Text(''),
+                        //pk失败方显示猪头
+                        whoWin == 'red'
+                            ? Positioned(
+                          child: Container(
+                            height: 130.h,
+                            width: 130.h,
+                            //超出部分，可裁剪
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50.h),
+                            ),
+                            child: const SVGASimpleImage(
+                              assetsName:
+                              'assets/svga/pk/room_pk_loser.svga',
+                            ),
+                          ),
+                        )
+                            : const Text(''),
+                        jianLiWu.contains('6')
+                            ? Positioned(
+                          child: Container(
+                            height: 130.h,
+                            width: 130.h,
+                            //超出部分，可裁剪
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50.h),
+                            ),
+                            child: SVGAImage(
+                              animationControllerJL,
+                              fit: BoxFit.fitWidth,
+                            ),
+                          ),
+                        )
+                            : const Text(''),
                       ],
                     ),
                   ),
@@ -3121,136 +3454,176 @@ class RoomItems {
                   }),
                   child: SizedBox(
                     width: ScreenUtil().setWidth(140 * 1.25),
-                    height: ScreenUtil().setHeight(190),
+                    height: ScreenUtil().setHeight(230),
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
                         m7 == true
                             ? WidgetUtils.CircleHeadImage(
-                                ScreenUtil().setHeight(80),
-                                ScreenUtil().setHeight(80),
-                                listm[6].avatar!)
+                            ScreenUtil().setHeight(80),
+                            ScreenUtil().setHeight(80),
+                            listm[6].avatar!)
                             : listm[6].isLock == 0
-                                ? WidgetUtils.showImages(
-                                    'assets/images/room_mai.png',
-                                    ScreenUtil().setHeight(80),
-                                    ScreenUtil().setHeight(80))
-                                : WidgetUtils.showImages(
-                                    'assets/images/room_suo.png',
-                                    ScreenUtil().setHeight(80),
-                                    ScreenUtil().setHeight(80)),
+                            ? WidgetUtils.showImages(
+                            'assets/images/room_mai.png',
+                            ScreenUtil().setHeight(80),
+                            ScreenUtil().setHeight(80))
+                            : WidgetUtils.showImages(
+                            'assets/images/room_suo.png',
+                            ScreenUtil().setHeight(80),
+                            ScreenUtil().setHeight(80)),
                         (listm[6].isClose == 0 && audio7 == true)
                             ? Container(
-                                height: 140.h,
-                                width: 140.h,
-                                alignment: Alignment.center,
-                                child: listm[6].waveGifImg!.isNotEmpty
-                                    ? SVGASimpleImage(
-                                        resUrl: listm[6].waveGifImg!,
-                                      )
-                                    : const SVGASimpleImage(
-                                        assetsName:
-                                            'assets/svga/room_shengbo.svga',
-                                      ),
-                              )
+                          height: 140.h,
+                          width: 140.h,
+                          alignment: Alignment.center,
+                          child: listm[6].waveGifImg!.isNotEmpty
+                              ? SVGASimpleImage(
+                            resUrl: listm[6].waveGifImg!,
+                          )
+                              : const SVGASimpleImage(
+                            assetsName:
+                            'assets/svga/room_shengbo.svga',
+                          ),
+                        )
                             : const Text(''),
                         // 头像框静态图
                         (listm[6].avatarFrameGifImg!.isEmpty &&
-                                listm[6].avatarFrameImg!.isNotEmpty)
+                            listm[6].avatarFrameImg!.isNotEmpty)
                             ? WidgetUtils.CircleHeadImage(
-                                ScreenUtil().setHeight(130),
-                                ScreenUtil().setHeight(130),
-                                listm[6].avatarFrameImg!)
+                            ScreenUtil().setHeight(130),
+                            ScreenUtil().setHeight(130),
+                            listm[6].avatarFrameImg!)
                             : const Text(''),
                         // 头像框动态图
                         listm[6].avatarFrameGifImg!.isNotEmpty
                             ? SizedBox(
-                                height: 130.h,
-                                width: 130.h,
-                                child: SVGASimpleImage(
-                                  resUrl: listm[6].avatarFrameGifImg!,
-                                ),
-                              )
+                          height: 130.h,
+                          width: 130.h,
+                          child: SVGASimpleImage(
+                            resUrl: listm[6].avatarFrameGifImg!,
+                          ),
+                        )
                             : const Text(''),
                         Column(
                           children: [
-                            const Expanded(child: Text('')),
+                            m7 == false
+                                ? WidgetUtils.commonSizedBox(180.h, 0)
+                                : WidgetUtils.commonSizedBox(160.h, 0),
                             m7 == false
                                 ? WidgetUtils.onlyTextCenter(
-                                    '7号麦',
-                                    StyleUtils.getCommonTextStyle(
-                                        color: MyColors.roomMaiWZ,
-                                        fontSize: ScreenUtil().setSp(19)))
+                                '7号麦',
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.roomMaiWZ,
+                                    fontSize: ScreenUtil().setSp(19)))
                                 : WidgetUtils.commonSizedBox(0, 0),
                             m7 == false
                                 ? WidgetUtils.commonSizedBox(10, 0)
-                                : WidgetUtils.commonSizedBox(10, 0),
-                            m7 == true
-                                ? Row(
-                                    children: [
-                                      const Expanded(child: Text('')),
-                                      WidgetUtils.onlyText(
-                                          listm[6].nickname!,
-                                          StyleUtils.getCommonTextStyle(
-                                              color: Colors.white,
-                                              fontSize:
-                                                  ScreenUtil().setSp(21))),
-                                      const Expanded(child: Text('')),
-                                    ],
-                                  )
                                 : WidgetUtils.commonSizedBox(0, 0),
                             m7 == true
                                 ? Row(
-                                    children: [
-                                      const Expanded(child: Text('')),
-                                      WidgetUtils.showImages(
-                                          'assets/images/room_xin.png',
-                                          ScreenUtil().setHeight(17),
-                                          ScreenUtil().setHeight(15)),
-                                      WidgetUtils.commonSizedBox(0, 5),
-                                      WidgetUtils.onlyText(
-                                          listm[6].charm.toString(),
-                                          StyleUtils.getCommonTextStyle(
-                                              color: Colors.white,
-                                              fontSize:
-                                                  ScreenUtil().setSp(21))),
-                                      const Expanded(child: Text('')),
-                                    ],
-                                  )
+                              children: [
+                                const Expanded(child: Text('')),
+                                WidgetUtils.onlyText(
+                                    listm[6].nickname!,
+                                    StyleUtils.getCommonTextStyle(
+                                        color: Colors.white,
+                                        fontSize:
+                                        ScreenUtil().setSp(21))),
+                                const Expanded(child: Text('')),
+                              ],
+                            )
+                                : WidgetUtils.commonSizedBox(0, 0),
+                            m7 == true
+                                ? SizedBox(
+                              height: 20.h,
+                              child: Row(
+                                children: [
+                                  const Expanded(child: Text('')),
+                                  WidgetUtils.showImages(
+                                      'assets/images/room_xin.png',
+                                      ScreenUtil().setHeight(17),
+                                      ScreenUtil().setHeight(15)),
+                                  WidgetUtils.commonSizedBox(0, 5),
+                                  WidgetUtils.onlyText(
+                                      listm[6].charm.toString(),
+                                      StyleUtils.getCommonTextStyle(
+                                          color: Colors.white,
+                                          fontSize:
+                                          ScreenUtil().setSp(21))),
+                                  const Expanded(child: Text('')),
+                                ],
+                              ),
+                            )
                                 : WidgetUtils.commonSizedBox(0, 0),
                           ],
                         ),
                         wherePeople == 7
                             ? Container(
-                                height: 80.h,
-                                width: 80.h,
-                                //超出部分，可裁剪
-                                clipBehavior: Clip.hardEdge,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50.h),
-                                ),
-                                child: const SVGASimpleImage(
-                                  assetsName: 'assets/svga/baodeng.svga',
-                                ),
-                              )
+                          height: 80.h,
+                          width: 80.h,
+                          //超出部分，可裁剪
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50.h),
+                          ),
+                          child: const SVGASimpleImage(
+                            assetsName: 'assets/svga/baodeng.svga',
+                          ),
+                        )
                             : const Text(''),
                         listPeople[6]
                             ? Positioned(
-                                child: Container(
-                                  height: 130.h,
-                                  width: 130.h,
-                                  //超出部分，可裁剪
-                                  clipBehavior: Clip.hardEdge,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(50.h),
-                                  ),
-                                  child: const SVGASimpleImage(
-                                    assetsName:
-                                        'assets/svga/room_choose_people.svga',
-                                  ),
-                                ),
-                              )
-                            : const Text('')
+                          child: Container(
+                            height: 130.h,
+                            width: 130.h,
+                            //超出部分，可裁剪
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50.h),
+                            ),
+                            child: const SVGASimpleImage(
+                              assetsName:
+                              'assets/svga/room_choose_people.svga',
+                            ),
+                          ),
+                        )
+                            : const Text(''),
+                        //pk失败方显示猪头
+                        whoWin == 'blue'
+                            ? Positioned(
+                          child: Container(
+                            height: 130.h,
+                            width: 130.h,
+                            //超出部分，可裁剪
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50.h),
+                            ),
+                            child: const SVGASimpleImage(
+                              assetsName:
+                              'assets/svga/pk/room_pk_loser.svga',
+                            ),
+                          ),
+                        )
+                            : const Text(''),
+                        jianLiWu.contains('7')
+                            ? Positioned(
+                          child: Container(
+                            height: 130.h,
+                            width: 130.h,
+                            //超出部分，可裁剪
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50.h),
+                            ),
+                            child: SVGAImage(
+                              animationControllerJL,
+                              fit: BoxFit.fitWidth,
+                            ),
+                          ),
+                        )
+                            : const Text(''),
                       ],
                     ),
                   ),
@@ -3258,394 +3631,474 @@ class RoomItems {
                 const Expanded(child: Text('')),
                 isBoss == true
                     ? GestureDetector(
-                        onTap: (() {
-                          if (listm[7].isLock == 0) {
-                            if (m8) {
-                              if (listm[7].uid.toString() ==
+                  onTap: (() {
+                    if (listm[7].isLock == 0) {
+                      if (m8) {
+                        if (listm[7].uid.toString() ==
+                            sp.getString('user_id').toString()) {
+                          eventBus
+                              .fire(RoomBack(title: '自己', index: '7'));
+                        } else {
+                          if (MyUtils.checkClick() &&
+                              listm[7].uid.toString() !=
                                   sp.getString('user_id').toString()) {
-                                eventBus
-                                    .fire(RoomBack(title: '自己', index: '7'));
-                              } else {
-                                if (MyUtils.checkClick() &&
-                                    listm[7].uid.toString() !=
-                                        sp.getString('user_id').toString()) {
-                                  MyUtils.goTransparentPage(
-                                      context,
-                                      RoomPeopleInfoPage(
-                                        uid: listm[7].uid.toString(),
-                                        index: '7',
-                                        roomID: roomID,
-                                        isClose: listm[7].isClose.toString(),
-                                        listM: listm,
-                                      ));
-                                }
-                              }
-                            } else {
-                              eventBus.fire(RoomBack(title: '空位置', index: '7'));
-                            }
-                          } else {
-                            if (sp.getString('role').toString() == 'adminer' ||
-                                sp.getString('role').toString() == 'leader' ||
-                                sp.getString('role').toString() ==
-                                    'president') {
-                              eventBus.fire(RoomBack(title: '空位置', index: '7'));
-                            } else {
-                              MyToastUtils.showToastBottom('麦位已锁');
-                            }
+                            MyUtils.goTransparentPage(
+                                context,
+                                RoomPeopleInfoPage(
+                                  uid: listm[7].uid.toString(),
+                                  index: '7',
+                                  roomID: roomID,
+                                  isClose: listm[7].isClose.toString(),
+                                  listM: listm,
+                                ));
                           }
-                        }),
-                        child: SizedBox(
-                          width: ScreenUtil().setWidth(140 * 1.25),
-                          height: ScreenUtil().setHeight(190),
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              m8 == true
-                                  ? WidgetUtils.CircleHeadImage(
-                                      ScreenUtil().setHeight(80),
-                                      ScreenUtil().setHeight(80),
-                                      listm[7].avatar!)
-                                  : listm[7].isLock == 1
-                                      ? WidgetUtils.showImages(
-                                          'assets/images/room_suo.png',
-                                          ScreenUtil().setHeight(80),
-                                          ScreenUtil().setHeight(80))
-                                      : Container(
-                                          height: ScreenUtil().setHeight(80),
-                                          width: ScreenUtil().setHeight(80),
-                                          color: Colors.transparent,
-                                          child: const SVGASimpleImage(
-                                              assetsName:
-                                                  'assets/svga/laobanwei.svga'),
-                                        ),
-                              (listm[7].isClose == 0 && audio8 == true)
-                                  ? Container(
-                                      height: 140.h,
-                                      width: 140.h,
-                                      alignment: Alignment.center,
-                                      child: listm[7].waveGifImg!.isNotEmpty
-                                          ? SVGASimpleImage(
-                                              resUrl: listm[7].waveGifImg!,
-                                            )
-                                          : const SVGASimpleImage(
-                                              assetsName:
-                                                  'assets/svga/room_shengbo.svga',
-                                            ),
-                                    )
-                                  : const Text(''),
-                              // 头像框静态图
-                              (listm[7].avatarFrameGifImg!.isEmpty &&
-                                      listm[7].avatarFrameImg!.isNotEmpty)
-                                  ? WidgetUtils.CircleHeadImage(
-                                      ScreenUtil().setHeight(130),
-                                      ScreenUtil().setHeight(130),
-                                      listm[7].avatarFrameImg!)
-                                  : const Text(''),
-                              // 头像框动态图
-                              listm[7].avatarFrameGifImg!.isNotEmpty
-                                  ? SizedBox(
-                                      height: 130.h,
-                                      width: 130.h,
-                                      child: SVGASimpleImage(
-                                        resUrl: listm[7].avatarFrameGifImg!,
-                                      ),
-                                    )
-                                  : const Text(''),
-                              Column(
+                        }
+                      } else {
+                        eventBus.fire(RoomBack(title: '空位置', index: '7'));
+                      }
+                    } else {
+                      if (sp.getString('role').toString() == 'adminer' ||
+                          sp.getString('role').toString() == 'leader' ||
+                          sp.getString('role').toString() ==
+                              'president') {
+                        eventBus.fire(RoomBack(title: '空位置', index: '7'));
+                      } else {
+                        MyToastUtils.showToastBottom('麦位已锁');
+                      }
+                    }
+                  }),
+                  child: SizedBox(
+                    width: ScreenUtil().setWidth(140 * 1.25),
+                    height: ScreenUtil().setHeight(230),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        m8 == true
+                            ? WidgetUtils.CircleHeadImage(
+                            ScreenUtil().setHeight(80),
+                            ScreenUtil().setHeight(80),
+                            listm[7].avatar!)
+                            : listm[7].isLock == 1
+                            ? WidgetUtils.showImages(
+                            'assets/images/room_suo.png',
+                            ScreenUtil().setHeight(80),
+                            ScreenUtil().setHeight(80))
+                            : Container(
+                          height: ScreenUtil().setHeight(80),
+                          width: ScreenUtil().setHeight(80),
+                          color: Colors.transparent,
+                          child: const SVGASimpleImage(
+                              assetsName:
+                              'assets/svga/laobanwei.svga'),
+                        ),
+                        (listm[7].isClose == 0 && audio8 == true)
+                            ? Container(
+                          height: 140.h,
+                          width: 140.h,
+                          alignment: Alignment.center,
+                          child: listm[7].waveGifImg!.isNotEmpty
+                              ? SVGASimpleImage(
+                            resUrl: listm[7].waveGifImg!,
+                          )
+                              : const SVGASimpleImage(
+                            assetsName:
+                            'assets/svga/room_shengbo.svga',
+                          ),
+                        )
+                            : const Text(''),
+                        // 头像框静态图
+                        (listm[7].avatarFrameGifImg!.isEmpty &&
+                            listm[7].avatarFrameImg!.isNotEmpty)
+                            ? WidgetUtils.CircleHeadImage(
+                            ScreenUtil().setHeight(130),
+                            ScreenUtil().setHeight(130),
+                            listm[7].avatarFrameImg!)
+                            : const Text(''),
+                        // 头像框动态图
+                        listm[7].avatarFrameGifImg!.isNotEmpty
+                            ? SizedBox(
+                          height: 130.h,
+                          width: 130.h,
+                          child: SVGASimpleImage(
+                            resUrl: listm[7].avatarFrameGifImg!,
+                          ),
+                        )
+                            : const Text(''),
+                        Column(
+                          children: [
+                            m8 == false
+                                ? WidgetUtils.commonSizedBox(180.h, 0)
+                                : WidgetUtils.commonSizedBox(160.h, 0),
+                            m8 == false
+                                ? ShaderMask(
+                              shaderCallback: (Rect bounds) {
+                                return const LinearGradient(
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                  colors: [
+                                    Color(0xFF6ffffd),
+                                    Color(0xFFf8fec4)
+                                  ],
+                                ).createShader(
+                                    Offset.zero & bounds.size);
+                              },
+                              blendMode: BlendMode.srcATop,
+                              child: Text(
+                                "老板位",
+                                style: TextStyle(
+                                    fontSize:
+                                    ScreenUtil().setSp(19),
+                                    color: const Color(0xffffffff),
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            )
+                                : WidgetUtils.commonSizedBox(0, 0),
+                            m8 == false
+                                ? WidgetUtils.commonSizedBox(10, 0)
+                                : WidgetUtils.commonSizedBox(0, 0),
+                            m8 == true
+                                ? Row(
+                              children: [
+                                const Expanded(child: Text('')),
+                                ShaderMask(
+                                  shaderCallback: (Rect bounds) {
+                                    return const LinearGradient(
+                                      begin: Alignment.centerLeft,
+                                      end: Alignment.centerRight,
+                                      colors: [
+                                        Color(0xFF6ffffd),
+                                        Color(0xFFf8fec4)
+                                      ],
+                                    ).createShader(
+                                        Offset.zero & bounds.size);
+                                  },
+                                  blendMode: BlendMode.srcATop,
+                                  child: Text(
+                                    listm[7].nickname!,
+                                    style: TextStyle(
+                                        fontSize:
+                                        ScreenUtil().setSp(21),
+                                        color:
+                                        const Color(0xffffffff),
+                                        fontWeight:
+                                        FontWeight.w700),
+                                  ),
+                                ),
+                                const Expanded(child: Text('')),
+                              ],
+                            )
+                                : WidgetUtils.commonSizedBox(0, 0),
+                            m8 == true
+                                ? SizedBox(
+                              height: 20.h,
+                              child: Row(
                                 children: [
                                   const Expanded(child: Text('')),
-                                  m8 == false
-                                      ? ShaderMask(
-                                          shaderCallback: (Rect bounds) {
-                                            return const LinearGradient(
-                                              begin: Alignment.centerLeft,
-                                              end: Alignment.centerRight,
-                                              colors: [
-                                                Color(0xFF6ffffd),
-                                                Color(0xFFf8fec4)
-                                              ],
-                                            ).createShader(
-                                                Offset.zero & bounds.size);
-                                          },
-                                          blendMode: BlendMode.srcATop,
-                                          child: Text(
-                                            "老板位",
-                                            style: TextStyle(
-                                                fontSize:
-                                                    ScreenUtil().setSp(19),
-                                                color: const Color(0xffffffff),
-                                                fontWeight: FontWeight.w700),
-                                          ),
-                                        )
-                                      : WidgetUtils.commonSizedBox(0, 0),
-                                  m8 == false
-                                      ? WidgetUtils.commonSizedBox(10, 0)
-                                      : WidgetUtils.commonSizedBox(0, 0),
-                                  m8 == true
-                                      ? Row(
-                                          children: [
-                                            const Expanded(child: Text('')),
-                                            ShaderMask(
-                                              shaderCallback: (Rect bounds) {
-                                                return const LinearGradient(
-                                                  begin: Alignment.centerLeft,
-                                                  end: Alignment.centerRight,
-                                                  colors: [
-                                                    Color(0xFF6ffffd),
-                                                    Color(0xFFf8fec4)
-                                                  ],
-                                                ).createShader(
-                                                    Offset.zero & bounds.size);
-                                              },
-                                              blendMode: BlendMode.srcATop,
-                                              child: Text(
-                                                listm[7].nickname!,
-                                                style: TextStyle(
-                                                    fontSize:
-                                                        ScreenUtil().setSp(21),
-                                                    color:
-                                                        const Color(0xffffffff),
-                                                    fontWeight:
-                                                        FontWeight.w700),
-                                              ),
-                                            ),
-                                            const Expanded(child: Text('')),
-                                          ],
-                                        )
-                                      : WidgetUtils.commonSizedBox(0, 0),
-                                  m8 == true
-                                      ? Row(
-                                          children: [
-                                            const Expanded(child: Text('')),
-                                            WidgetUtils.showImages(
-                                                'assets/images/room_xin.png',
-                                                ScreenUtil().setHeight(17),
-                                                ScreenUtil().setHeight(15)),
-                                            WidgetUtils.commonSizedBox(0, 5),
-                                            WidgetUtils.onlyText(
-                                                listm[7].charm.toString(),
-                                                StyleUtils.getCommonTextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: ScreenUtil()
-                                                        .setSp(21))),
-                                            const Expanded(child: Text('')),
-                                          ],
-                                        )
-                                      : WidgetUtils.commonSizedBox(0, 0),
+                                  WidgetUtils.showImages(
+                                      'assets/images/room_xin.png',
+                                      ScreenUtil().setHeight(17),
+                                      ScreenUtil().setHeight(15)),
+                                  WidgetUtils.commonSizedBox(0, 5),
+                                  WidgetUtils.onlyText(
+                                      listm[7].charm.toString(),
+                                      StyleUtils.getCommonTextStyle(
+                                          color: Colors.white,
+                                          fontSize: ScreenUtil()
+                                              .setSp(21))),
+                                  const Expanded(child: Text('')),
                                 ],
                               ),
-                              wherePeople == 8
-                                  ? Container(
-                                      height: 80.h,
-                                      width: 80.h,
-                                      //超出部分，可裁剪
-                                      clipBehavior: Clip.hardEdge,
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(50.h),
-                                      ),
-                                      child: const SVGASimpleImage(
-                                        assetsName: 'assets/svga/baodeng.svga',
-                                      ),
-                                    )
-                                  : const Text(''),
-                              listPeople[7]
-                                  ? Positioned(
-                                      child: Container(
-                                        height: 130.h,
-                                        width: 130.h,
-                                        //超出部分，可裁剪
-                                        clipBehavior: Clip.hardEdge,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(50.h),
-                                        ),
-                                        child: const SVGASimpleImage(
-                                          assetsName:
-                                              'assets/svga/room_choose_people.svga',
-                                        ),
-                                      ),
-                                    )
-                                  : const Text('')
-                            ],
-                          ),
+                            )
+                                : WidgetUtils.commonSizedBox(0, 0),
+                          ],
                         ),
-                      )
+                        wherePeople == 8
+                            ? Container(
+                          height: 80.h,
+                          width: 80.h,
+                          //超出部分，可裁剪
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            borderRadius:
+                            BorderRadius.circular(50.h),
+                          ),
+                          child: const SVGASimpleImage(
+                            assetsName: 'assets/svga/baodeng.svga',
+                          ),
+                        )
+                            : const Text(''),
+                        listPeople[7]
+                            ? Positioned(
+                          child: Container(
+                            height: 130.h,
+                            width: 130.h,
+                            //超出部分，可裁剪
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              borderRadius:
+                              BorderRadius.circular(50.h),
+                            ),
+                            child: const SVGASimpleImage(
+                              assetsName:
+                              'assets/svga/room_choose_people.svga',
+                            ),
+                          ),
+                        )
+                            : const Text(''),
+                        //pk失败方显示猪头
+                        whoWin == 'blue'
+                            ? Positioned(
+                          child: Container(
+                            height: 130.h,
+                            width: 130.h,
+                            //超出部分，可裁剪
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50.h),
+                            ),
+                            child: const SVGASimpleImage(
+                              assetsName:
+                              'assets/svga/pk/room_pk_loser.svga',
+                            ),
+                          ),
+                        )
+                            : const Text(''),
+                        jianLiWu.contains('8')
+                            ? Positioned(
+                          child: Container(
+                            height: 130.h,
+                            width: 130.h,
+                            //超出部分，可裁剪
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50.h),
+                            ),
+                            child: SVGAImage(
+                              animationControllerJL,
+                              fit: BoxFit.fitWidth,
+                            ),
+                          ),
+                        )
+                            : const Text(''),
+                      ],
+                    ),
+                  ),
+                )
                     : GestureDetector(
-                        onTap: (() {
-                          if (listm[7].isLock == 0) {
-                            if (m8) {
-                              if (listm[7].uid.toString() ==
+                  onTap: (() {
+                    if (listm[7].isLock == 0) {
+                      if (m8) {
+                        if (listm[7].uid.toString() ==
+                            sp.getString('user_id').toString()) {
+                          eventBus
+                              .fire(RoomBack(title: '自己', index: '7'));
+                        } else {
+                          if (MyUtils.checkClick() &&
+                              listm[7].uid.toString() !=
                                   sp.getString('user_id').toString()) {
-                                eventBus
-                                    .fire(RoomBack(title: '自己', index: '7'));
-                              } else {
-                                if (MyUtils.checkClick() &&
-                                    listm[7].uid.toString() !=
-                                        sp.getString('user_id').toString()) {
-                                  MyUtils.goTransparentPage(
-                                      context,
-                                      RoomPeopleInfoPage(
-                                        uid: listm[7].uid.toString(),
-                                        index: '7',
-                                        roomID: roomID,
-                                        isClose: listm[7].isClose.toString(),
-                                        listM: listm,
-                                      ));
-                                }
-                              }
-                            } else {
-                              eventBus.fire(RoomBack(title: '空位置', index: '7'));
-                            }
-                          } else {
-                            if (sp.getString('role').toString() == 'adminer' ||
-                                sp.getString('role').toString() == 'leader' ||
-                                sp.getString('role').toString() ==
-                                    'president') {
-                              eventBus.fire(RoomBack(title: '空位置', index: '7'));
-                            } else {
-                              MyToastUtils.showToastBottom('麦位已锁');
-                            }
+                            MyUtils.goTransparentPage(
+                                context,
+                                RoomPeopleInfoPage(
+                                  uid: listm[7].uid.toString(),
+                                  index: '7',
+                                  roomID: roomID,
+                                  isClose: listm[7].isClose.toString(),
+                                  listM: listm,
+                                ));
                           }
-                        }),
-                        child: SizedBox(
-                          width: ScreenUtil().setWidth(140 * 1.25),
-                          height: ScreenUtil().setHeight(190),
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              m8 == true
-                                  ? WidgetUtils.CircleHeadImage(
-                                      ScreenUtil().setHeight(80),
-                                      ScreenUtil().setHeight(80),
-                                      listm[7].avatar!)
-                                  : listm[7].isLock == 0
-                                      ? WidgetUtils.showImages(
-                                          'assets/images/room_mai.png',
-                                          ScreenUtil().setHeight(80),
-                                          ScreenUtil().setHeight(80))
-                                      : WidgetUtils.showImages(
-                                          'assets/images/room_suo.png',
-                                          ScreenUtil().setHeight(80),
-                                          ScreenUtil().setHeight(80)),
-                              (listm[7].isClose == 0 && audio8 == true)
-                                  ? Container(
-                                      height: 140.h,
-                                      width: 140.h,
-                                      alignment: Alignment.center,
-                                      child: listm[7].waveGifImg!.isNotEmpty
-                                          ? SVGASimpleImage(
-                                              resUrl: listm[7].waveGifImg!,
-                                            )
-                                          : const SVGASimpleImage(
-                                              assetsName:
-                                                  'assets/svga/room_shengbo.svga',
-                                            ),
-                                    )
-                                  : const Text(''),
-                              // 头像框静态图
-                              (listm[7].avatarFrameGifImg!.isEmpty &&
-                                      listm[7].avatarFrameImg!.isNotEmpty)
-                                  ? WidgetUtils.CircleHeadImage(
-                                      ScreenUtil().setHeight(130),
-                                      ScreenUtil().setHeight(130),
-                                      listm[7].avatarFrameImg!)
-                                  : const Text(''),
-                              // 头像框动态图
-                              listm[7].avatarFrameGifImg!.isNotEmpty
-                                  ? SizedBox(
-                                      height: 130.h,
-                                      width: 130.h,
-                                      child: SVGASimpleImage(
-                                        resUrl: listm[7].avatarFrameGifImg!,
-                                      ),
-                                    )
-                                  : const Text(''),
-                              Column(
+                        }
+                      } else {
+                        eventBus.fire(RoomBack(title: '空位置', index: '7'));
+                      }
+                    } else {
+                      if (sp.getString('role').toString() == 'adminer' ||
+                          sp.getString('role').toString() == 'leader' ||
+                          sp.getString('role').toString() ==
+                              'president') {
+                        eventBus.fire(RoomBack(title: '空位置', index: '7'));
+                      } else {
+                        MyToastUtils.showToastBottom('麦位已锁');
+                      }
+                    }
+                  }),
+                  child: SizedBox(
+                    width: ScreenUtil().setWidth(140 * 1.25),
+                    height: ScreenUtil().setHeight(230),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        m8 == true
+                            ? WidgetUtils.CircleHeadImage(
+                            ScreenUtil().setHeight(80),
+                            ScreenUtil().setHeight(80),
+                            listm[7].avatar!)
+                            : listm[7].isLock == 0
+                            ? WidgetUtils.showImages(
+                            'assets/images/room_mai.png',
+                            ScreenUtil().setHeight(80),
+                            ScreenUtil().setHeight(80))
+                            : WidgetUtils.showImages(
+                            'assets/images/room_suo.png',
+                            ScreenUtil().setHeight(80),
+                            ScreenUtil().setHeight(80)),
+                        (listm[7].isClose == 0 && audio8 == true)
+                            ? Container(
+                          height: 140.h,
+                          width: 140.h,
+                          alignment: Alignment.center,
+                          child: listm[7].waveGifImg!.isNotEmpty
+                              ? SVGASimpleImage(
+                            resUrl: listm[7].waveGifImg!,
+                          )
+                              : const SVGASimpleImage(
+                            assetsName:
+                            'assets/svga/room_shengbo.svga',
+                          ),
+                        )
+                            : const Text(''),
+                        // 头像框静态图
+                        (listm[7].avatarFrameGifImg!.isEmpty &&
+                            listm[7].avatarFrameImg!.isNotEmpty)
+                            ? WidgetUtils.CircleHeadImage(
+                            ScreenUtil().setHeight(130),
+                            ScreenUtil().setHeight(130),
+                            listm[7].avatarFrameImg!)
+                            : const Text(''),
+                        // 头像框动态图
+                        listm[7].avatarFrameGifImg!.isNotEmpty
+                            ? SizedBox(
+                          height: 130.h,
+                          width: 130.h,
+                          child: SVGASimpleImage(
+                            resUrl: listm[7].avatarFrameGifImg!,
+                          ),
+                        )
+                            : const Text(''),
+                        Column(
+                          children: [
+                            m8 == false
+                                ? WidgetUtils.commonSizedBox(180.h, 0)
+                                : WidgetUtils.commonSizedBox(160.h, 0),
+                            m8 == false
+                                ? WidgetUtils.onlyTextCenter(
+                                '8号麦',
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.roomMaiWZ,
+                                    fontSize: ScreenUtil().setSp(19)))
+                                : WidgetUtils.commonSizedBox(0, 0),
+                            m8 == false
+                                ? WidgetUtils.commonSizedBox(10, 0)
+                                : WidgetUtils.commonSizedBox(0, 0),
+                            m8 == true
+                                ? Row(
+                              children: [
+                                const Expanded(child: Text('')),
+                                WidgetUtils.onlyText(
+                                    listm[7].nickname!,
+                                    StyleUtils.getCommonTextStyle(
+                                        color: Colors.white,
+                                        fontSize: ScreenUtil()
+                                            .setSp(21))),
+                                const Expanded(child: Text('')),
+                              ],
+                            )
+                                : WidgetUtils.commonSizedBox(0, 0),
+                            m8 == true
+                                ? SizedBox(
+                              height: 20.h,
+                              child: Row(
                                 children: [
                                   const Expanded(child: Text('')),
-                                  m8 == false
-                                      ? WidgetUtils.onlyTextCenter(
-                                          '8号麦',
-                                          StyleUtils.getCommonTextStyle(
-                                              color: MyColors.roomMaiWZ,
-                                              fontSize: ScreenUtil().setSp(19)))
-                                      : WidgetUtils.commonSizedBox(0, 0),
-                                  m8 == false
-                                      ? WidgetUtils.commonSizedBox(10, 0)
-                                      : WidgetUtils.commonSizedBox(10, 0),
-                                  m8 == true
-                                      ? Row(
-                                          children: [
-                                            const Expanded(child: Text('')),
-                                            WidgetUtils.onlyText(
-                                                listm[7].nickname!,
-                                                StyleUtils.getCommonTextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: ScreenUtil()
-                                                        .setSp(21))),
-                                            const Expanded(child: Text('')),
-                                          ],
-                                        )
-                                      : WidgetUtils.commonSizedBox(0, 0),
-                                  m8 == true
-                                      ? Row(
-                                          children: [
-                                            const Expanded(child: Text('')),
-                                            WidgetUtils.showImages(
-                                                'assets/images/room_xin.png',
-                                                ScreenUtil().setHeight(17),
-                                                ScreenUtil().setHeight(15)),
-                                            WidgetUtils.commonSizedBox(0, 5),
-                                            WidgetUtils.onlyText(
-                                                listm[7].charm.toString(),
-                                                StyleUtils.getCommonTextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: ScreenUtil()
-                                                        .setSp(21))),
-                                            const Expanded(child: Text('')),
-                                          ],
-                                        )
-                                      : WidgetUtils.commonSizedBox(0, 0),
+                                  WidgetUtils.showImages(
+                                      'assets/images/room_xin.png',
+                                      ScreenUtil().setHeight(17),
+                                      ScreenUtil().setHeight(15)),
+                                  WidgetUtils.commonSizedBox(0, 5),
+                                  WidgetUtils.onlyText(
+                                      listm[7].charm.toString(),
+                                      StyleUtils.getCommonTextStyle(
+                                          color: Colors.white,
+                                          fontSize: ScreenUtil()
+                                              .setSp(21))),
+                                  const Expanded(child: Text('')),
                                 ],
                               ),
-                              wherePeople == 8
-                                  ? Container(
-                                      height: 80.h,
-                                      width: 80.h,
-                                      //超出部分，可裁剪
-                                      clipBehavior: Clip.hardEdge,
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(50.h),
-                                      ),
-                                      child: const SVGASimpleImage(
-                                        assetsName: 'assets/svga/baodeng.svga',
-                                      ),
-                                    )
-                                  : const Text(''),
-                              listPeople[7]
-                                  ? Positioned(
-                                      child: Container(
-                                        height: 130.h,
-                                        width: 130.h,
-                                        //超出部分，可裁剪
-                                        clipBehavior: Clip.hardEdge,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(50.h),
-                                        ),
-                                        child: const SVGASimpleImage(
-                                          assetsName:
-                                              'assets/svga/room_choose_people.svga',
-                                        ),
-                                      ),
-                                    )
-                                  : const Text('')
-                            ],
-                          ),
+                            )
+                                : WidgetUtils.commonSizedBox(0, 0),
+                          ],
                         ),
-                      ),
+                        wherePeople == 8
+                            ? Container(
+                          height: 80.h,
+                          width: 80.h,
+                          //超出部分，可裁剪
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            borderRadius:
+                            BorderRadius.circular(50.h),
+                          ),
+                          child: const SVGASimpleImage(
+                            assetsName: 'assets/svga/baodeng.svga',
+                          ),
+                        )
+                            : const Text(''),
+                        listPeople[7]
+                            ? Positioned(
+                          child: Container(
+                            height: 130.h,
+                            width: 130.h,
+                            //超出部分，可裁剪
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              borderRadius:
+                              BorderRadius.circular(50.h),
+                            ),
+                            child: const SVGASimpleImage(
+                              assetsName:
+                              'assets/svga/room_choose_people.svga',
+                            ),
+                          ),
+                        )
+                            : const Text(''),
+                        //pk失败方显示猪头
+                        whoWin == 'blue'
+                            ? Positioned(
+                          child: Container(
+                            height: 130.h,
+                            width: 130.h,
+                            //超出部分，可裁剪
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50.h),
+                            ),
+                            child: const SVGASimpleImage(
+                              assetsName:
+                              'assets/svga/pk/room_pk_loser.svga',
+                            ),
+                          ),
+                        )
+                            : const Text(''),
+                        jianLiWu.contains('8')
+                            ? Positioned(
+                          child: Container(
+                            height: 130.h,
+                            width: 130.h,
+                            //超出部分，可裁剪
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50.h),
+                            ),
+                            child: SVGAImage(
+                              animationControllerJL,
+                              fit: BoxFit.fitWidth,
+                            ),
+                          ),
+                        )
+                            : const Text(''),
+                      ],
+                    ),
+                  ),
+                ),
                 WidgetUtils.commonSizedBox(0, 10 * 2.w),
               ],
             ),
@@ -3656,10 +4109,8 @@ class RoomItems {
   }
 
   /// 轮播图
-  static Widget lunbotu1(
-    BuildContext context,
-    List<Map> imgList,
-  ) {
+  static Widget lunbotu1(BuildContext context,
+      List<Map> imgList,) {
     return Positioned(
       top: 10 * 2.w,
       right: 15 * 2.w,
@@ -3701,8 +4152,8 @@ class RoomItems {
   }
 
   /// 轮播图2
-  static Widget lunbotu2(
-      BuildContext context, List<Map> imgList2, String roomid) {
+  static Widget lunbotu2(BuildContext context, List<Map> imgList2,
+      String roomid) {
     return Positioned(
       top: 110 * 2.w,
       right: 15 * 2.w,
@@ -3754,8 +4205,7 @@ class RoomItems {
   }
 
   /// 厅内底部按钮
-  static Widget footBtn(
-      BuildContext context,
+  static Widget footBtn(BuildContext context,
       bool isJinyiin,
       int isForbation,
       String roomID,
@@ -3904,21 +4354,21 @@ class RoomItems {
                       ScreenUtil().setHeight(50), ScreenUtil().setHeight(50)),
                   isRed
                       ? Positioned(
-                          top: 5.h,
-                          right: 5.w,
-                          child: Container(
-                            width: 15.h,
-                            height: 15.h,
-                            //边框设置
-                            decoration: const BoxDecoration(
-                              //背景
-                              color: Colors.red,
-                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15.0)),
-                            ),
-                            alignment: Alignment.center,
-                          ))
+                      top: 5.h,
+                      right: 5.w,
+                      child: Container(
+                        width: 15.h,
+                        height: 15.h,
+                        //边框设置
+                        decoration: const BoxDecoration(
+                          //背景
+                          color: Colors.red,
+                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(15.0)),
+                        ),
+                        alignment: Alignment.center,
+                      ))
                       : const Text(''),
                 ],
               ),
@@ -3931,28 +4381,28 @@ class RoomItems {
               MyUtils.goTransparentPage(
                   context,
                   (sp.getString('role').toString() == 'adminer' ||
-                          sp.getString('role').toString() == 'leader' ||
-                          sp.getString('role').toString() == 'president')
+                      sp.getString('role').toString() == 'leader' ||
+                      sp.getString('role').toString() == 'president')
                       ? RoomGongNeng(
-                          type: 1,
-                          roomID: roomID,
-                          isShow: isShow,
-                          isBoss: isBoss,
-                          roomDX: roomDX,
-                          roomSY: roomSY,
-                          mima: mima,
-                          isLiXian: lixian,
-                        )
+                    type: 1,
+                    roomID: roomID,
+                    isShow: isShow,
+                    isBoss: isBoss,
+                    roomDX: roomDX,
+                    roomSY: roomSY,
+                    mima: mima,
+                    isLiXian: lixian,
+                  )
                       : RoomGongNeng(
-                          type: 0,
-                          roomID: roomID,
-                          isShow: isShow,
-                          isBoss: isBoss,
-                          roomDX: roomDX,
-                          roomSY: roomSY,
-                          mima: mima,
-                          isLiXian: 0,
-                        ));
+                    type: 0,
+                    roomID: roomID,
+                    isShow: isShow,
+                    isBoss: isBoss,
+                    roomDX: roomDX,
+                    roomSY: roomSY,
+                    mima: mima,
+                    isLiXian: 0,
+                  ));
             }),
             child: Container(
               height: ScreenUtil().setHeight(50),
@@ -3969,7 +4419,8 @@ class RoomItems {
               //如果上麦的人有自己
               if (isMeUp) {
                 eventBus.fire(RoomBack(
-                    title: '关闭声音', index: (int.parse(mxIndex) - 1).toString()));
+                    title: '关闭声音',
+                    index: (int.parse(mxIndex) - 1).toString()));
               } else {
                 MyToastUtils.showToastBottom('不在麦序，无需开启');
               }
@@ -3991,679 +4442,679 @@ class RoomItems {
   static Widget noPeople(List<bool> upOrDown, int i, List<MikeList> listM) {
     if (i == 8) {
       return upOrDown[i] == true &&
-              (sp.getString('role').toString() == 'adminer' ||
-                  sp.getString('role').toString() == 'leader' ||
-                  sp.getString('role').toString() == 'president')
+          (sp.getString('role').toString() == 'adminer' ||
+              sp.getString('role').toString() == 'leader' ||
+              sp.getString('role').toString() == 'president')
           ? Positioned(
-              left: 300.w,
-              top: 200.h,
-              child: Container(
-                height: ScreenUtil().setHeight(104),
-                width: ScreenUtil().setHeight(117),
-                decoration: const BoxDecoration(
-                  //背景
-                  color: Colors.black87,
-                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                  borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                ),
-                child: Column(
-                  children: [
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        eventBus
-                            .fire(RoomBack(title: '上麦', index: i.toString()));
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            '上麦',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                    Container(
+        left: 300.w,
+        top: 200.h,
+        child: Container(
+          height: ScreenUtil().setHeight(104),
+          width: ScreenUtil().setHeight(117),
+          decoration: const BoxDecoration(
+            //背景
+            color: Colors.black87,
+            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+            borderRadius: BorderRadius.all(Radius.circular(12.0)),
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      eventBus
+                          .fire(RoomBack(title: '上麦', index: i.toString()));
+                    }),
+                    child: Container(
+                      height: double.infinity,
                       width: double.infinity,
-                      height: ScreenUtil().setHeight(1),
-                      margin: EdgeInsets.only(
-                          left: ScreenUtil().setHeight(10),
-                          right: ScreenUtil().setHeight(10)),
-                      color: MyColors.roomTCWZ1,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '上麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
                     ),
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        if (listM[i].isLock == 0) {
-                          eventBus
-                              .fire(RoomBack(title: '锁麦', index: i.toString()));
-                        } else {
-                          eventBus
-                              .fire(RoomBack(title: '解锁', index: i.toString()));
-                        }
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            listM[i].isLock == 0 ? '锁麦' : '解锁',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                  ],
-                ),
+                  )),
+              Container(
+                width: double.infinity,
+                height: ScreenUtil().setHeight(1),
+                margin: EdgeInsets.only(
+                    left: ScreenUtil().setHeight(10),
+                    right: ScreenUtil().setHeight(10)),
+                color: MyColors.roomTCWZ1,
               ),
-            )
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      if (listM[i].isLock == 0) {
+                        eventBus
+                            .fire(RoomBack(title: '锁麦', index: i.toString()));
+                      } else {
+                        eventBus
+                            .fire(RoomBack(title: '解锁', index: i.toString()));
+                      }
+                    }),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listM[i].isLock == 0 ? '锁麦' : '解锁',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
+                  )),
+            ],
+          ),
+        ),
+      )
           : upOrDown[i] &&
-                  (sp.getString('role').toString() == 'user' ||
-                      sp.getString('role').toString() == 'streamer')
-              ? shangmai(300.w, 200.h, i)
-              : const Text('');
+          (sp.getString('role').toString() == 'user' ||
+              sp.getString('role').toString() == 'streamer')
+          ? shangmai(300.w, 200.h, i)
+          : const Text('');
     } else if (i == 0) {
       return upOrDown[i] &&
-              (sp.getString('role').toString() == 'adminer' ||
-                  sp.getString('role').toString() == 'leader' ||
-                  sp.getString('role').toString() == 'president')
+          (sp.getString('role').toString() == 'adminer' ||
+              sp.getString('role').toString() == 'leader' ||
+              sp.getString('role').toString() == 'president')
           ? Positioned(
-              left: 35.w,
-              top: 400.h,
-              child: Container(
-                height: ScreenUtil().setHeight(104),
-                width: ScreenUtil().setHeight(117),
-                decoration: const BoxDecoration(
-                  //背景
-                  color: Colors.black87,
-                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                  borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                ),
-                child: Column(
-                  children: [
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        eventBus
-                            .fire(RoomBack(title: '上麦', index: i.toString()));
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            '上麦',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                    Container(
+        left: 35.w,
+        top: 400.h,
+        child: Container(
+          height: ScreenUtil().setHeight(104),
+          width: ScreenUtil().setHeight(117),
+          decoration: const BoxDecoration(
+            //背景
+            color: Colors.black87,
+            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+            borderRadius: BorderRadius.all(Radius.circular(12.0)),
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      eventBus
+                          .fire(RoomBack(title: '上麦', index: i.toString()));
+                    }),
+                    child: Container(
+                      height: double.infinity,
                       width: double.infinity,
-                      height: ScreenUtil().setHeight(1),
-                      margin: EdgeInsets.only(
-                          left: ScreenUtil().setHeight(10),
-                          right: ScreenUtil().setHeight(10)),
-                      color: MyColors.roomTCWZ1,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '上麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
                     ),
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        if (listM[i].isLock == 0) {
-                          eventBus
-                              .fire(RoomBack(title: '锁麦', index: i.toString()));
-                        } else {
-                          eventBus
-                              .fire(RoomBack(title: '解锁', index: i.toString()));
-                        }
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            listM[i].isLock == 0 ? '锁麦' : '解锁',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                  ],
-                ),
+                  )),
+              Container(
+                width: double.infinity,
+                height: ScreenUtil().setHeight(1),
+                margin: EdgeInsets.only(
+                    left: ScreenUtil().setHeight(10),
+                    right: ScreenUtil().setHeight(10)),
+                color: MyColors.roomTCWZ1,
               ),
-            )
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      if (listM[i].isLock == 0) {
+                        eventBus
+                            .fire(RoomBack(title: '锁麦', index: i.toString()));
+                      } else {
+                        eventBus
+                            .fire(RoomBack(title: '解锁', index: i.toString()));
+                      }
+                    }),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listM[i].isLock == 0 ? '锁麦' : '解锁',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
+                  )),
+            ],
+          ),
+        ),
+      )
           : upOrDown[i] &&
-                  (sp.getString('role').toString() == 'user' ||
-                      sp.getString('role').toString() == 'streamer')
-              ? shangmai(35.w, 400.h, i)
-              : const Text('');
+          (sp.getString('role').toString() == 'user' ||
+              sp.getString('role').toString() == 'streamer')
+          ? shangmai(35.w, 400.h, i)
+          : const Text('');
     } else if (i == 1) {
       return upOrDown[i] &&
-              (sp.getString('role').toString() == 'adminer' ||
-                  sp.getString('role').toString() == 'leader' ||
-                  sp.getString('role').toString() == 'president')
+          (sp.getString('role').toString() == 'adminer' ||
+              sp.getString('role').toString() == 'leader' ||
+              sp.getString('role').toString() == 'president')
           ? Positioned(
-              left: 215.w,
-              top: 400.h,
-              child: Container(
-                height: ScreenUtil().setHeight(104),
-                width: ScreenUtil().setHeight(117),
-                decoration: const BoxDecoration(
-                  //背景
-                  color: Colors.black87,
-                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                  borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                ),
-                child: Column(
-                  children: [
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        eventBus
-                            .fire(RoomBack(title: '上麦', index: i.toString()));
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            '上麦',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                    Container(
+        left: 215.w,
+        top: 400.h,
+        child: Container(
+          height: ScreenUtil().setHeight(104),
+          width: ScreenUtil().setHeight(117),
+          decoration: const BoxDecoration(
+            //背景
+            color: Colors.black87,
+            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+            borderRadius: BorderRadius.all(Radius.circular(12.0)),
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      eventBus
+                          .fire(RoomBack(title: '上麦', index: i.toString()));
+                    }),
+                    child: Container(
+                      height: double.infinity,
                       width: double.infinity,
-                      height: ScreenUtil().setHeight(1),
-                      margin: EdgeInsets.only(
-                          left: ScreenUtil().setHeight(10),
-                          right: ScreenUtil().setHeight(10)),
-                      color: MyColors.roomTCWZ1,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '上麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
                     ),
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        if (listM[i].isLock == 0) {
-                          eventBus
-                              .fire(RoomBack(title: '锁麦', index: i.toString()));
-                        } else {
-                          eventBus
-                              .fire(RoomBack(title: '解锁', index: i.toString()));
-                        }
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            listM[i].isLock == 0 ? '锁麦' : '解锁',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                  ],
-                ),
+                  )),
+              Container(
+                width: double.infinity,
+                height: ScreenUtil().setHeight(1),
+                margin: EdgeInsets.only(
+                    left: ScreenUtil().setHeight(10),
+                    right: ScreenUtil().setHeight(10)),
+                color: MyColors.roomTCWZ1,
               ),
-            )
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      if (listM[i].isLock == 0) {
+                        eventBus
+                            .fire(RoomBack(title: '锁麦', index: i.toString()));
+                      } else {
+                        eventBus
+                            .fire(RoomBack(title: '解锁', index: i.toString()));
+                      }
+                    }),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listM[i].isLock == 0 ? '锁麦' : '解锁',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
+                  )),
+            ],
+          ),
+        ),
+      )
           : upOrDown[i] &&
-                  (sp.getString('role').toString() == 'user' ||
-                      sp.getString('role').toString() == 'streamer')
-              ? shangmai(215.w, 400.h, i)
-              : const Text('');
+          (sp.getString('role').toString() == 'user' ||
+              sp.getString('role').toString() == 'streamer')
+          ? shangmai(215.w, 400.h, i)
+          : const Text('');
     } else if (i == 2) {
       return upOrDown[i] &&
-              (sp.getString('role').toString() == 'adminer' ||
-                  sp.getString('role').toString() == 'leader' ||
-                  sp.getString('role').toString() == 'president')
+          (sp.getString('role').toString() == 'adminer' ||
+              sp.getString('role').toString() == 'leader' ||
+              sp.getString('role').toString() == 'president')
           ? Positioned(
-              left: 390.w,
-              top: 400.h,
-              child: Container(
-                height: ScreenUtil().setHeight(104),
-                width: ScreenUtil().setHeight(117),
-                decoration: const BoxDecoration(
-                  //背景
-                  color: Colors.black87,
-                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                  borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                ),
-                child: Column(
-                  children: [
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        eventBus
-                            .fire(RoomBack(title: '上麦', index: i.toString()));
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            '上麦',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                    Container(
+        left: 390.w,
+        top: 400.h,
+        child: Container(
+          height: ScreenUtil().setHeight(104),
+          width: ScreenUtil().setHeight(117),
+          decoration: const BoxDecoration(
+            //背景
+            color: Colors.black87,
+            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+            borderRadius: BorderRadius.all(Radius.circular(12.0)),
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      eventBus
+                          .fire(RoomBack(title: '上麦', index: i.toString()));
+                    }),
+                    child: Container(
+                      height: double.infinity,
                       width: double.infinity,
-                      height: ScreenUtil().setHeight(1),
-                      margin: EdgeInsets.only(
-                          left: ScreenUtil().setHeight(10),
-                          right: ScreenUtil().setHeight(10)),
-                      color: MyColors.roomTCWZ1,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '上麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
                     ),
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        if (listM[i].isLock == 0) {
-                          eventBus
-                              .fire(RoomBack(title: '锁麦', index: i.toString()));
-                        } else {
-                          eventBus
-                              .fire(RoomBack(title: '解锁', index: i.toString()));
-                        }
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            listM[i].isLock == 0 ? '锁麦' : '解锁',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                  ],
-                ),
+                  )),
+              Container(
+                width: double.infinity,
+                height: ScreenUtil().setHeight(1),
+                margin: EdgeInsets.only(
+                    left: ScreenUtil().setHeight(10),
+                    right: ScreenUtil().setHeight(10)),
+                color: MyColors.roomTCWZ1,
               ),
-            )
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      if (listM[i].isLock == 0) {
+                        eventBus
+                            .fire(RoomBack(title: '锁麦', index: i.toString()));
+                      } else {
+                        eventBus
+                            .fire(RoomBack(title: '解锁', index: i.toString()));
+                      }
+                    }),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listM[i].isLock == 0 ? '锁麦' : '解锁',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
+                  )),
+            ],
+          ),
+        ),
+      )
           : upOrDown[i] &&
-                  (sp.getString('role').toString() == 'user' ||
-                      sp.getString('role').toString() == 'streamer')
-              ? shangmai(390.w, 400.h, i)
-              : const Text('');
+          (sp.getString('role').toString() == 'user' ||
+              sp.getString('role').toString() == 'streamer')
+          ? shangmai(390.w, 400.h, i)
+          : const Text('');
     } else if (i == 3) {
       return upOrDown[i] &&
-              (sp.getString('role').toString() == 'adminer' ||
-                  sp.getString('role').toString() == 'leader' ||
-                  sp.getString('role').toString() == 'president')
+          (sp.getString('role').toString() == 'adminer' ||
+              sp.getString('role').toString() == 'leader' ||
+              sp.getString('role').toString() == 'president')
           ? Positioned(
-              left: 570.w,
-              top: 400.h,
-              child: Container(
-                height: ScreenUtil().setHeight(104),
-                width: ScreenUtil().setHeight(117),
-                decoration: const BoxDecoration(
-                  //背景
-                  color: Colors.black87,
-                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                  borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                ),
-                child: Column(
-                  children: [
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        eventBus
-                            .fire(RoomBack(title: '上麦', index: i.toString()));
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            '上麦',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                    Container(
+        left: 570.w,
+        top: 400.h,
+        child: Container(
+          height: ScreenUtil().setHeight(104),
+          width: ScreenUtil().setHeight(117),
+          decoration: const BoxDecoration(
+            //背景
+            color: Colors.black87,
+            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+            borderRadius: BorderRadius.all(Radius.circular(12.0)),
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      eventBus
+                          .fire(RoomBack(title: '上麦', index: i.toString()));
+                    }),
+                    child: Container(
+                      height: double.infinity,
                       width: double.infinity,
-                      height: ScreenUtil().setHeight(1),
-                      margin: EdgeInsets.only(
-                          left: ScreenUtil().setHeight(10),
-                          right: ScreenUtil().setHeight(10)),
-                      color: MyColors.roomTCWZ1,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '上麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
                     ),
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        if (listM[i].isLock == 0) {
-                          eventBus
-                              .fire(RoomBack(title: '锁麦', index: i.toString()));
-                        } else {
-                          eventBus
-                              .fire(RoomBack(title: '解锁', index: i.toString()));
-                        }
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            listM[i].isLock == 0 ? '锁麦' : '解锁',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                  ],
-                ),
+                  )),
+              Container(
+                width: double.infinity,
+                height: ScreenUtil().setHeight(1),
+                margin: EdgeInsets.only(
+                    left: ScreenUtil().setHeight(10),
+                    right: ScreenUtil().setHeight(10)),
+                color: MyColors.roomTCWZ1,
               ),
-            )
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      if (listM[i].isLock == 0) {
+                        eventBus
+                            .fire(RoomBack(title: '锁麦', index: i.toString()));
+                      } else {
+                        eventBus
+                            .fire(RoomBack(title: '解锁', index: i.toString()));
+                      }
+                    }),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listM[i].isLock == 0 ? '锁麦' : '解锁',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
+                  )),
+            ],
+          ),
+        ),
+      )
           : upOrDown[i] &&
-                  (sp.getString('role').toString() == 'user' ||
-                      sp.getString('role').toString() == 'streamer')
-              ? shangmai(570.w, 400.h, i)
-              : const Text('');
+          (sp.getString('role').toString() == 'user' ||
+              sp.getString('role').toString() == 'streamer')
+          ? shangmai(570.w, 400.h, i)
+          : const Text('');
     } else if (i == 4) {
       return upOrDown[i] &&
-              (sp.getString('role').toString() == 'adminer' ||
-                  sp.getString('role').toString() == 'leader' ||
-                  sp.getString('role').toString() == 'president')
+          (sp.getString('role').toString() == 'adminer' ||
+              sp.getString('role').toString() == 'leader' ||
+              sp.getString('role').toString() == 'president')
           ? Positioned(
-              left: 35.w,
-              top: 560.h,
-              child: Container(
-                height: ScreenUtil().setHeight(104),
-                width: ScreenUtil().setHeight(117),
-                decoration: const BoxDecoration(
-                  //背景
-                  color: Colors.black87,
-                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                  borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                ),
-                child: Column(
-                  children: [
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        eventBus
-                            .fire(RoomBack(title: '上麦', index: i.toString()));
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            '上麦',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                    Container(
+        left: 35.w,
+        top: 560.h,
+        child: Container(
+          height: ScreenUtil().setHeight(104),
+          width: ScreenUtil().setHeight(117),
+          decoration: const BoxDecoration(
+            //背景
+            color: Colors.black87,
+            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+            borderRadius: BorderRadius.all(Radius.circular(12.0)),
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      eventBus
+                          .fire(RoomBack(title: '上麦', index: i.toString()));
+                    }),
+                    child: Container(
+                      height: double.infinity,
                       width: double.infinity,
-                      height: ScreenUtil().setHeight(1),
-                      margin: EdgeInsets.only(
-                          left: ScreenUtil().setHeight(10),
-                          right: ScreenUtil().setHeight(10)),
-                      color: MyColors.roomTCWZ1,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '上麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
                     ),
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        if (listM[i].isLock == 0) {
-                          eventBus
-                              .fire(RoomBack(title: '锁麦', index: i.toString()));
-                        } else {
-                          eventBus
-                              .fire(RoomBack(title: '解锁', index: i.toString()));
-                        }
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            listM[i].isLock == 0 ? '锁麦' : '解锁',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                  ],
-                ),
+                  )),
+              Container(
+                width: double.infinity,
+                height: ScreenUtil().setHeight(1),
+                margin: EdgeInsets.only(
+                    left: ScreenUtil().setHeight(10),
+                    right: ScreenUtil().setHeight(10)),
+                color: MyColors.roomTCWZ1,
               ),
-            )
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      if (listM[i].isLock == 0) {
+                        eventBus
+                            .fire(RoomBack(title: '锁麦', index: i.toString()));
+                      } else {
+                        eventBus
+                            .fire(RoomBack(title: '解锁', index: i.toString()));
+                      }
+                    }),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listM[i].isLock == 0 ? '锁麦' : '解锁',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
+                  )),
+            ],
+          ),
+        ),
+      )
           : upOrDown[i] &&
-                  (sp.getString('role').toString() == 'user' ||
-                      sp.getString('role').toString() == 'streamer')
-              ? shangmai(35.w, 560.h, i)
-              : const Text('');
+          (sp.getString('role').toString() == 'user' ||
+              sp.getString('role').toString() == 'streamer')
+          ? shangmai(35.w, 560.h, i)
+          : const Text('');
     } else if (i == 5) {
       return upOrDown[i] &&
-              (sp.getString('role').toString() == 'adminer' ||
-                  sp.getString('role').toString() == 'leader' ||
-                  sp.getString('role').toString() == 'president')
+          (sp.getString('role').toString() == 'adminer' ||
+              sp.getString('role').toString() == 'leader' ||
+              sp.getString('role').toString() == 'president')
           ? Positioned(
-              left: 215.w,
-              top: 560.h,
-              child: Container(
-                height: ScreenUtil().setHeight(104),
-                width: ScreenUtil().setHeight(117),
-                decoration: const BoxDecoration(
-                  //背景
-                  color: Colors.black87,
-                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                  borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                ),
-                child: Column(
-                  children: [
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        eventBus
-                            .fire(RoomBack(title: '上麦', index: i.toString()));
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            '上麦',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                    Container(
+        left: 215.w,
+        top: 560.h,
+        child: Container(
+          height: ScreenUtil().setHeight(104),
+          width: ScreenUtil().setHeight(117),
+          decoration: const BoxDecoration(
+            //背景
+            color: Colors.black87,
+            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+            borderRadius: BorderRadius.all(Radius.circular(12.0)),
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      eventBus
+                          .fire(RoomBack(title: '上麦', index: i.toString()));
+                    }),
+                    child: Container(
+                      height: double.infinity,
                       width: double.infinity,
-                      height: ScreenUtil().setHeight(1),
-                      margin: EdgeInsets.only(
-                          left: ScreenUtil().setHeight(10),
-                          right: ScreenUtil().setHeight(10)),
-                      color: MyColors.roomTCWZ1,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '上麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
                     ),
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        if (listM[i].isLock == 0) {
-                          eventBus
-                              .fire(RoomBack(title: '锁麦', index: i.toString()));
-                        } else {
-                          eventBus
-                              .fire(RoomBack(title: '解锁', index: i.toString()));
-                        }
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            listM[i].isLock == 0 ? '锁麦' : '解锁',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                  ],
-                ),
+                  )),
+              Container(
+                width: double.infinity,
+                height: ScreenUtil().setHeight(1),
+                margin: EdgeInsets.only(
+                    left: ScreenUtil().setHeight(10),
+                    right: ScreenUtil().setHeight(10)),
+                color: MyColors.roomTCWZ1,
               ),
-            )
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      if (listM[i].isLock == 0) {
+                        eventBus
+                            .fire(RoomBack(title: '锁麦', index: i.toString()));
+                      } else {
+                        eventBus
+                            .fire(RoomBack(title: '解锁', index: i.toString()));
+                      }
+                    }),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listM[i].isLock == 0 ? '锁麦' : '解锁',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
+                  )),
+            ],
+          ),
+        ),
+      )
           : upOrDown[i] &&
-                  (sp.getString('role').toString() == 'user' ||
-                      sp.getString('role').toString() == 'streamer')
-              ? shangmai(215.w, 560.h, i)
-              : const Text('');
+          (sp.getString('role').toString() == 'user' ||
+              sp.getString('role').toString() == 'streamer')
+          ? shangmai(215.w, 560.h, i)
+          : const Text('');
     } else if (i == 6) {
       return upOrDown[i] &&
-              (sp.getString('role').toString() == 'adminer' ||
-                  sp.getString('role').toString() == 'leader' ||
-                  sp.getString('role').toString() == 'president')
+          (sp.getString('role').toString() == 'adminer' ||
+              sp.getString('role').toString() == 'leader' ||
+              sp.getString('role').toString() == 'president')
           ? Positioned(
-              left: 390.w,
-              top: 560.h,
-              child: Container(
-                height: ScreenUtil().setHeight(104),
-                width: ScreenUtil().setHeight(117),
-                decoration: const BoxDecoration(
-                  //背景
-                  color: Colors.black87,
-                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                  borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                ),
-                child: Column(
-                  children: [
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        eventBus
-                            .fire(RoomBack(title: '上麦', index: i.toString()));
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            '上麦',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                    Container(
+        left: 390.w,
+        top: 560.h,
+        child: Container(
+          height: ScreenUtil().setHeight(104),
+          width: ScreenUtil().setHeight(117),
+          decoration: const BoxDecoration(
+            //背景
+            color: Colors.black87,
+            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+            borderRadius: BorderRadius.all(Radius.circular(12.0)),
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      eventBus
+                          .fire(RoomBack(title: '上麦', index: i.toString()));
+                    }),
+                    child: Container(
+                      height: double.infinity,
                       width: double.infinity,
-                      height: ScreenUtil().setHeight(1),
-                      margin: EdgeInsets.only(
-                          left: ScreenUtil().setHeight(10),
-                          right: ScreenUtil().setHeight(10)),
-                      color: MyColors.roomTCWZ1,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '上麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
                     ),
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        if (listM[i].isLock == 0) {
-                          eventBus
-                              .fire(RoomBack(title: '锁麦', index: i.toString()));
-                        } else {
-                          eventBus
-                              .fire(RoomBack(title: '解锁', index: i.toString()));
-                        }
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            listM[i].isLock == 0 ? '锁麦' : '解锁',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                  ],
-                ),
+                  )),
+              Container(
+                width: double.infinity,
+                height: ScreenUtil().setHeight(1),
+                margin: EdgeInsets.only(
+                    left: ScreenUtil().setHeight(10),
+                    right: ScreenUtil().setHeight(10)),
+                color: MyColors.roomTCWZ1,
               ),
-            )
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      if (listM[i].isLock == 0) {
+                        eventBus
+                            .fire(RoomBack(title: '锁麦', index: i.toString()));
+                      } else {
+                        eventBus
+                            .fire(RoomBack(title: '解锁', index: i.toString()));
+                      }
+                    }),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listM[i].isLock == 0 ? '锁麦' : '解锁',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
+                  )),
+            ],
+          ),
+        ),
+      )
           : upOrDown[i] &&
-                  (sp.getString('role').toString() == 'user' ||
-                      sp.getString('role').toString() == 'streamer')
-              ? shangmai(390.w, 560.h, i)
-              : const Text('');
+          (sp.getString('role').toString() == 'user' ||
+              sp.getString('role').toString() == 'streamer')
+          ? shangmai(390.w, 560.h, i)
+          : const Text('');
     } else {
       return upOrDown[i] &&
-              (sp.getString('role').toString() == 'adminer' ||
-                  sp.getString('role').toString() == 'leader' ||
-                  sp.getString('role').toString() == 'president')
+          (sp.getString('role').toString() == 'adminer' ||
+              sp.getString('role').toString() == 'leader' ||
+              sp.getString('role').toString() == 'president')
           ? Positioned(
-              left: 570.w,
-              top: 560.h,
-              child: Container(
-                height: ScreenUtil().setHeight(104),
-                width: ScreenUtil().setHeight(117),
-                decoration: const BoxDecoration(
-                  //背景
-                  color: Colors.black87,
-                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                  borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                ),
-                child: Column(
-                  children: [
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        eventBus
-                            .fire(RoomBack(title: '上麦', index: i.toString()));
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            '上麦',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                    Container(
+        left: 570.w,
+        top: 560.h,
+        child: Container(
+          height: ScreenUtil().setHeight(104),
+          width: ScreenUtil().setHeight(117),
+          decoration: const BoxDecoration(
+            //背景
+            color: Colors.black87,
+            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+            borderRadius: BorderRadius.all(Radius.circular(12.0)),
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      eventBus
+                          .fire(RoomBack(title: '上麦', index: i.toString()));
+                    }),
+                    child: Container(
+                      height: double.infinity,
                       width: double.infinity,
-                      height: ScreenUtil().setHeight(1),
-                      margin: EdgeInsets.only(
-                          left: ScreenUtil().setHeight(10),
-                          right: ScreenUtil().setHeight(10)),
-                      color: MyColors.roomTCWZ1,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '上麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
                     ),
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        if (listM[i].isLock == 0) {
-                          eventBus
-                              .fire(RoomBack(title: '锁麦', index: i.toString()));
-                        } else {
-                          eventBus
-                              .fire(RoomBack(title: '解锁', index: i.toString()));
-                        }
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            listM[i].isLock == 0 ? '锁麦' : '解锁',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                  ],
-                ),
+                  )),
+              Container(
+                width: double.infinity,
+                height: ScreenUtil().setHeight(1),
+                margin: EdgeInsets.only(
+                    left: ScreenUtil().setHeight(10),
+                    right: ScreenUtil().setHeight(10)),
+                color: MyColors.roomTCWZ1,
               ),
-            )
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      if (listM[i].isLock == 0) {
+                        eventBus
+                            .fire(RoomBack(title: '锁麦', index: i.toString()));
+                      } else {
+                        eventBus
+                            .fire(RoomBack(title: '解锁', index: i.toString()));
+                      }
+                    }),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listM[i].isLock == 0 ? '锁麦' : '解锁',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
+                  )),
+            ],
+          ),
+        ),
+      )
           : upOrDown[i] &&
-                  (sp.getString('role').toString() == 'user' ||
-                      sp.getString('role').toString() == 'streamer')
-              ? shangmai(570.w, 560.h, i)
-              : const Text('');
+          (sp.getString('role').toString() == 'user' ||
+              sp.getString('role').toString() == 'streamer')
+          ? shangmai(570.w, 560.h, i)
+          : const Text('');
     }
   }
 
@@ -4685,20 +5136,21 @@ class RoomItems {
           children: [
             Expanded(
                 child: GestureDetector(
-              onTap: (() {
-                eventBus.fire(RoomBack(title: '上麦', index: index.toString()));
-              }),
-              child: Container(
-                height: double.infinity,
-                width: double.infinity,
-                color: Colors.transparent,
-                child: WidgetUtils.onlyTextCenter(
-                    '上麦',
-                    StyleUtils.getCommonTextStyle(
-                        color: MyColors.roomTCWZ1,
-                        fontSize: ScreenUtil().setSp(21))),
-              ),
-            )),
+                  onTap: (() {
+                    eventBus.fire(
+                        RoomBack(title: '上麦', index: index.toString()));
+                  }),
+                  child: Container(
+                    height: double.infinity,
+                    width: double.infinity,
+                    color: Colors.transparent,
+                    child: WidgetUtils.onlyTextCenter(
+                        '上麦',
+                        StyleUtils.getCommonTextStyle(
+                            color: MyColors.roomTCWZ1,
+                            fontSize: ScreenUtil().setSp(21))),
+                  ),
+                )),
           ],
         ),
       ),
@@ -4709,624 +5161,624 @@ class RoomItems {
   static Widget isMe(int i, List<MikeList> listm, bool isShow) {
     if (i == 8) {
       return (listm[i].uid.toString() == sp.getString('user_id').toString() &&
-              isShow)
+          isShow)
           ? Positioned(
-              left: 300.w,
-              top: 200.h,
-              child: Container(
-                height: ScreenUtil().setHeight(104),
-                width: ScreenUtil().setHeight(117),
-                decoration: const BoxDecoration(
-                  //背景
-                  color: Colors.black87,
-                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                  borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                ),
-                child: Column(
-                  children: [
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        eventBus
-                            .fire(RoomBack(title: '下麦', index: i.toString()));
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            '下麦',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                    Container(
+        left: 300.w,
+        top: 200.h,
+        child: Container(
+          height: ScreenUtil().setHeight(104),
+          width: ScreenUtil().setHeight(117),
+          decoration: const BoxDecoration(
+            //背景
+            color: Colors.black87,
+            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+            borderRadius: BorderRadius.all(Radius.circular(12.0)),
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      eventBus
+                          .fire(RoomBack(title: '下麦', index: i.toString()));
+                    }),
+                    child: Container(
+                      height: double.infinity,
                       width: double.infinity,
-                      height: ScreenUtil().setHeight(1),
-                      margin: EdgeInsets.only(
-                          left: ScreenUtil().setHeight(10),
-                          right: ScreenUtil().setHeight(10)),
-                      color: MyColors.roomTCWZ1,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '下麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
                     ),
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        if (listm[i].isClose == 0) {
-                          eventBus.fire(
-                              RoomBack(title: '闭麦1', index: i.toString()));
-                        } else {
-                          eventBus.fire(
-                              RoomBack(title: '开麦1', index: i.toString()));
-                        }
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            listm[i].isClose == 0 ? '闭麦' : '开麦',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                  ],
-                ),
+                  )),
+              Container(
+                width: double.infinity,
+                height: ScreenUtil().setHeight(1),
+                margin: EdgeInsets.only(
+                    left: ScreenUtil().setHeight(10),
+                    right: ScreenUtil().setHeight(10)),
+                color: MyColors.roomTCWZ1,
               ),
-            )
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      if (listm[i].isClose == 0) {
+                        eventBus.fire(
+                            RoomBack(title: '闭麦1', index: i.toString()));
+                      } else {
+                        eventBus.fire(
+                            RoomBack(title: '开麦1', index: i.toString()));
+                      }
+                    }),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listm[i].isClose == 0 ? '闭麦' : '开麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
+                  )),
+            ],
+          ),
+        ),
+      )
           : const Text('');
     } else if (i == 0) {
       return (listm[i].uid.toString() == sp.getString('user_id').toString() &&
-              isShow)
+          isShow)
           ? Positioned(
-              left: 35.w,
-              top: 400.h,
-              child: Container(
-                height: ScreenUtil().setHeight(104),
-                width: ScreenUtil().setHeight(117),
-                decoration: const BoxDecoration(
-                  //背景
-                  color: Colors.black87,
-                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                  borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                ),
-                child: Column(
-                  children: [
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        eventBus
-                            .fire(RoomBack(title: '下麦', index: i.toString()));
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            '下麦',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                    Container(
+        left: 35.w,
+        top: 400.h,
+        child: Container(
+          height: ScreenUtil().setHeight(104),
+          width: ScreenUtil().setHeight(117),
+          decoration: const BoxDecoration(
+            //背景
+            color: Colors.black87,
+            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+            borderRadius: BorderRadius.all(Radius.circular(12.0)),
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      eventBus
+                          .fire(RoomBack(title: '下麦', index: i.toString()));
+                    }),
+                    child: Container(
+                      height: double.infinity,
                       width: double.infinity,
-                      height: ScreenUtil().setHeight(1),
-                      margin: EdgeInsets.only(
-                          left: ScreenUtil().setHeight(10),
-                          right: ScreenUtil().setHeight(10)),
-                      color: MyColors.roomTCWZ1,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '下麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
                     ),
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        if (listm[i].isClose == 0) {
-                          eventBus.fire(
-                              RoomBack(title: '闭麦1', index: i.toString()));
-                        } else {
-                          eventBus.fire(
-                              RoomBack(title: '开麦1', index: i.toString()));
-                        }
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            listm[i].isClose == 0 ? '闭麦' : '开麦',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                  ],
-                ),
+                  )),
+              Container(
+                width: double.infinity,
+                height: ScreenUtil().setHeight(1),
+                margin: EdgeInsets.only(
+                    left: ScreenUtil().setHeight(10),
+                    right: ScreenUtil().setHeight(10)),
+                color: MyColors.roomTCWZ1,
               ),
-            )
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      if (listm[i].isClose == 0) {
+                        eventBus.fire(
+                            RoomBack(title: '闭麦1', index: i.toString()));
+                      } else {
+                        eventBus.fire(
+                            RoomBack(title: '开麦1', index: i.toString()));
+                      }
+                    }),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listm[i].isClose == 0 ? '闭麦' : '开麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
+                  )),
+            ],
+          ),
+        ),
+      )
           : const Text('');
     } else if (i == 1) {
       return (listm[i].uid.toString() == sp.getString('user_id').toString() &&
-              isShow)
+          isShow)
           ? Positioned(
-              left: 215.w,
-              top: 400.h,
-              child: Container(
-                height: ScreenUtil().setHeight(104),
-                width: ScreenUtil().setHeight(117),
-                decoration: const BoxDecoration(
-                  //背景
-                  color: Colors.black87,
-                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                  borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                ),
-                child: Column(
-                  children: [
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        eventBus
-                            .fire(RoomBack(title: '下麦', index: i.toString()));
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            '下麦',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                    Container(
+        left: 215.w,
+        top: 400.h,
+        child: Container(
+          height: ScreenUtil().setHeight(104),
+          width: ScreenUtil().setHeight(117),
+          decoration: const BoxDecoration(
+            //背景
+            color: Colors.black87,
+            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+            borderRadius: BorderRadius.all(Radius.circular(12.0)),
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      eventBus
+                          .fire(RoomBack(title: '下麦', index: i.toString()));
+                    }),
+                    child: Container(
+                      height: double.infinity,
                       width: double.infinity,
-                      height: ScreenUtil().setHeight(1),
-                      margin: EdgeInsets.only(
-                          left: ScreenUtil().setHeight(10),
-                          right: ScreenUtil().setHeight(10)),
-                      color: MyColors.roomTCWZ1,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '下麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
                     ),
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        if (listm[i].isClose == 0) {
-                          eventBus.fire(
-                              RoomBack(title: '闭麦1', index: i.toString()));
-                        } else {
-                          eventBus.fire(
-                              RoomBack(title: '开麦1', index: i.toString()));
-                        }
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            listm[i].isClose == 0 ? '闭麦' : '开麦',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                  ],
-                ),
+                  )),
+              Container(
+                width: double.infinity,
+                height: ScreenUtil().setHeight(1),
+                margin: EdgeInsets.only(
+                    left: ScreenUtil().setHeight(10),
+                    right: ScreenUtil().setHeight(10)),
+                color: MyColors.roomTCWZ1,
               ),
-            )
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      if (listm[i].isClose == 0) {
+                        eventBus.fire(
+                            RoomBack(title: '闭麦1', index: i.toString()));
+                      } else {
+                        eventBus.fire(
+                            RoomBack(title: '开麦1', index: i.toString()));
+                      }
+                    }),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listm[i].isClose == 0 ? '闭麦' : '开麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
+                  )),
+            ],
+          ),
+        ),
+      )
           : const Text('');
     } else if (i == 2) {
       return (listm[i].uid.toString() == sp.getString('user_id').toString() &&
-              isShow)
+          isShow)
           ? Positioned(
-              left: 390.w,
-              top: 400.h,
-              child: Container(
-                height: ScreenUtil().setHeight(104),
-                width: ScreenUtil().setHeight(117),
-                decoration: const BoxDecoration(
-                  //背景
-                  color: Colors.black87,
-                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                  borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                ),
-                child: Column(
-                  children: [
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        eventBus
-                            .fire(RoomBack(title: '下麦', index: i.toString()));
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            '下麦',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                    Container(
+        left: 390.w,
+        top: 400.h,
+        child: Container(
+          height: ScreenUtil().setHeight(104),
+          width: ScreenUtil().setHeight(117),
+          decoration: const BoxDecoration(
+            //背景
+            color: Colors.black87,
+            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+            borderRadius: BorderRadius.all(Radius.circular(12.0)),
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      eventBus
+                          .fire(RoomBack(title: '下麦', index: i.toString()));
+                    }),
+                    child: Container(
+                      height: double.infinity,
                       width: double.infinity,
-                      height: ScreenUtil().setHeight(1),
-                      margin: EdgeInsets.only(
-                          left: ScreenUtil().setHeight(10),
-                          right: ScreenUtil().setHeight(10)),
-                      color: MyColors.roomTCWZ1,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '下麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
                     ),
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        if (listm[i].isClose == 0) {
-                          eventBus.fire(
-                              RoomBack(title: '闭麦1', index: i.toString()));
-                        } else {
-                          eventBus.fire(
-                              RoomBack(title: '开麦1', index: i.toString()));
-                        }
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            listm[i].isClose == 0 ? '闭麦' : '开麦',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                  ],
-                ),
+                  )),
+              Container(
+                width: double.infinity,
+                height: ScreenUtil().setHeight(1),
+                margin: EdgeInsets.only(
+                    left: ScreenUtil().setHeight(10),
+                    right: ScreenUtil().setHeight(10)),
+                color: MyColors.roomTCWZ1,
               ),
-            )
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      if (listm[i].isClose == 0) {
+                        eventBus.fire(
+                            RoomBack(title: '闭麦1', index: i.toString()));
+                      } else {
+                        eventBus.fire(
+                            RoomBack(title: '开麦1', index: i.toString()));
+                      }
+                    }),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listm[i].isClose == 0 ? '闭麦' : '开麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
+                  )),
+            ],
+          ),
+        ),
+      )
           : const Text('');
     } else if (i == 3) {
       return (listm[i].uid.toString() == sp.getString('user_id').toString() &&
-              isShow)
+          isShow)
           ? Positioned(
-              left: 570.w,
-              top: 400.h,
-              child: Container(
-                height: ScreenUtil().setHeight(104),
-                width: ScreenUtil().setHeight(117),
-                decoration: const BoxDecoration(
-                  //背景
-                  color: Colors.black87,
-                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                  borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                ),
-                child: Column(
-                  children: [
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        eventBus
-                            .fire(RoomBack(title: '下麦', index: i.toString()));
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            '下麦',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                    Container(
+        left: 570.w,
+        top: 400.h,
+        child: Container(
+          height: ScreenUtil().setHeight(104),
+          width: ScreenUtil().setHeight(117),
+          decoration: const BoxDecoration(
+            //背景
+            color: Colors.black87,
+            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+            borderRadius: BorderRadius.all(Radius.circular(12.0)),
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      eventBus
+                          .fire(RoomBack(title: '下麦', index: i.toString()));
+                    }),
+                    child: Container(
+                      height: double.infinity,
                       width: double.infinity,
-                      height: ScreenUtil().setHeight(1),
-                      margin: EdgeInsets.only(
-                          left: ScreenUtil().setHeight(10),
-                          right: ScreenUtil().setHeight(10)),
-                      color: MyColors.roomTCWZ1,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '下麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
                     ),
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        if (listm[i].isClose == 0) {
-                          eventBus.fire(
-                              RoomBack(title: '闭麦1', index: i.toString()));
-                        } else {
-                          eventBus.fire(
-                              RoomBack(title: '开麦1', index: i.toString()));
-                        }
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            listm[i].isClose == 0 ? '闭麦' : '开麦',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                  ],
-                ),
+                  )),
+              Container(
+                width: double.infinity,
+                height: ScreenUtil().setHeight(1),
+                margin: EdgeInsets.only(
+                    left: ScreenUtil().setHeight(10),
+                    right: ScreenUtil().setHeight(10)),
+                color: MyColors.roomTCWZ1,
               ),
-            )
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      if (listm[i].isClose == 0) {
+                        eventBus.fire(
+                            RoomBack(title: '闭麦1', index: i.toString()));
+                      } else {
+                        eventBus.fire(
+                            RoomBack(title: '开麦1', index: i.toString()));
+                      }
+                    }),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listm[i].isClose == 0 ? '闭麦' : '开麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
+                  )),
+            ],
+          ),
+        ),
+      )
           : const Text('');
     } else if (i == 4) {
       return (listm[i].uid.toString() == sp.getString('user_id').toString() &&
-              isShow)
+          isShow)
           ? Positioned(
-              left: 35.w,
-              top: 560.h,
-              child: Container(
-                height: ScreenUtil().setHeight(104),
-                width: ScreenUtil().setHeight(117),
-                decoration: const BoxDecoration(
-                  //背景
-                  color: Colors.black87,
-                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                  borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                ),
-                child: Column(
-                  children: [
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        eventBus
-                            .fire(RoomBack(title: '下麦', index: i.toString()));
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            '下麦',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                    Container(
+        left: 35.w,
+        top: 560.h,
+        child: Container(
+          height: ScreenUtil().setHeight(104),
+          width: ScreenUtil().setHeight(117),
+          decoration: const BoxDecoration(
+            //背景
+            color: Colors.black87,
+            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+            borderRadius: BorderRadius.all(Radius.circular(12.0)),
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      eventBus
+                          .fire(RoomBack(title: '下麦', index: i.toString()));
+                    }),
+                    child: Container(
+                      height: double.infinity,
                       width: double.infinity,
-                      height: ScreenUtil().setHeight(1),
-                      margin: EdgeInsets.only(
-                          left: ScreenUtil().setHeight(10),
-                          right: ScreenUtil().setHeight(10)),
-                      color: MyColors.roomTCWZ1,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '下麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
                     ),
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        if (listm[i].isClose == 0) {
-                          eventBus.fire(
-                              RoomBack(title: '闭麦1', index: i.toString()));
-                        } else {
-                          eventBus.fire(
-                              RoomBack(title: '开麦1', index: i.toString()));
-                        }
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            listm[i].isClose == 0 ? '闭麦' : '开麦',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                  ],
-                ),
+                  )),
+              Container(
+                width: double.infinity,
+                height: ScreenUtil().setHeight(1),
+                margin: EdgeInsets.only(
+                    left: ScreenUtil().setHeight(10),
+                    right: ScreenUtil().setHeight(10)),
+                color: MyColors.roomTCWZ1,
               ),
-            )
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      if (listm[i].isClose == 0) {
+                        eventBus.fire(
+                            RoomBack(title: '闭麦1', index: i.toString()));
+                      } else {
+                        eventBus.fire(
+                            RoomBack(title: '开麦1', index: i.toString()));
+                      }
+                    }),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listm[i].isClose == 0 ? '闭麦' : '开麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
+                  )),
+            ],
+          ),
+        ),
+      )
           : const Text('');
     } else if (i == 5) {
       return (listm[i].uid.toString() == sp.getString('user_id').toString() &&
-              isShow)
+          isShow)
           ? Positioned(
-              left: 215.w,
-              top: 560.h,
-              child: Container(
-                height: ScreenUtil().setHeight(104),
-                width: ScreenUtil().setHeight(117),
-                decoration: const BoxDecoration(
-                  //背景
-                  color: Colors.black87,
-                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                  borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                ),
-                child: Column(
-                  children: [
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        eventBus
-                            .fire(RoomBack(title: '下麦', index: i.toString()));
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            '下麦',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                    Container(
+        left: 215.w,
+        top: 560.h,
+        child: Container(
+          height: ScreenUtil().setHeight(104),
+          width: ScreenUtil().setHeight(117),
+          decoration: const BoxDecoration(
+            //背景
+            color: Colors.black87,
+            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+            borderRadius: BorderRadius.all(Radius.circular(12.0)),
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      eventBus
+                          .fire(RoomBack(title: '下麦', index: i.toString()));
+                    }),
+                    child: Container(
+                      height: double.infinity,
                       width: double.infinity,
-                      height: ScreenUtil().setHeight(1),
-                      margin: EdgeInsets.only(
-                          left: ScreenUtil().setHeight(10),
-                          right: ScreenUtil().setHeight(10)),
-                      color: MyColors.roomTCWZ1,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '下麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
                     ),
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        if (listm[i].isClose == 0) {
-                          eventBus.fire(
-                              RoomBack(title: '闭麦1', index: i.toString()));
-                        } else {
-                          eventBus.fire(
-                              RoomBack(title: '开麦1', index: i.toString()));
-                        }
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            listm[i].isClose == 0 ? '闭麦' : '开麦',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                  ],
-                ),
+                  )),
+              Container(
+                width: double.infinity,
+                height: ScreenUtil().setHeight(1),
+                margin: EdgeInsets.only(
+                    left: ScreenUtil().setHeight(10),
+                    right: ScreenUtil().setHeight(10)),
+                color: MyColors.roomTCWZ1,
               ),
-            )
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      if (listm[i].isClose == 0) {
+                        eventBus.fire(
+                            RoomBack(title: '闭麦1', index: i.toString()));
+                      } else {
+                        eventBus.fire(
+                            RoomBack(title: '开麦1', index: i.toString()));
+                      }
+                    }),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listm[i].isClose == 0 ? '闭麦' : '开麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
+                  )),
+            ],
+          ),
+        ),
+      )
           : const Text('');
     } else if (i == 6) {
       return (listm[i].uid.toString() == sp.getString('user_id').toString() &&
-              isShow)
+          isShow)
           ? Positioned(
-              left: 390.w,
-              top: 560.h,
-              child: Container(
-                height: ScreenUtil().setHeight(104),
-                width: ScreenUtil().setHeight(117),
-                decoration: const BoxDecoration(
-                  //背景
-                  color: Colors.black87,
-                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                  borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                ),
-                child: Column(
-                  children: [
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        eventBus
-                            .fire(RoomBack(title: '下麦', index: i.toString()));
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            '下麦',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                    Container(
+        left: 390.w,
+        top: 560.h,
+        child: Container(
+          height: ScreenUtil().setHeight(104),
+          width: ScreenUtil().setHeight(117),
+          decoration: const BoxDecoration(
+            //背景
+            color: Colors.black87,
+            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+            borderRadius: BorderRadius.all(Radius.circular(12.0)),
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      eventBus
+                          .fire(RoomBack(title: '下麦', index: i.toString()));
+                    }),
+                    child: Container(
+                      height: double.infinity,
                       width: double.infinity,
-                      height: ScreenUtil().setHeight(1),
-                      margin: EdgeInsets.only(
-                          left: ScreenUtil().setHeight(10),
-                          right: ScreenUtil().setHeight(10)),
-                      color: MyColors.roomTCWZ1,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '下麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
                     ),
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        if (listm[i].isClose == 0) {
-                          eventBus.fire(
-                              RoomBack(title: '闭麦1', index: i.toString()));
-                        } else {
-                          eventBus.fire(
-                              RoomBack(title: '开麦1', index: i.toString()));
-                        }
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            listm[i].isClose == 0 ? '闭麦' : '开麦',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                  ],
-                ),
+                  )),
+              Container(
+                width: double.infinity,
+                height: ScreenUtil().setHeight(1),
+                margin: EdgeInsets.only(
+                    left: ScreenUtil().setHeight(10),
+                    right: ScreenUtil().setHeight(10)),
+                color: MyColors.roomTCWZ1,
               ),
-            )
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      if (listm[i].isClose == 0) {
+                        eventBus.fire(
+                            RoomBack(title: '闭麦1', index: i.toString()));
+                      } else {
+                        eventBus.fire(
+                            RoomBack(title: '开麦1', index: i.toString()));
+                      }
+                    }),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listm[i].isClose == 0 ? '闭麦' : '开麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
+                  )),
+            ],
+          ),
+        ),
+      )
           : const Text('');
     } else {
       return (listm[i].uid.toString() == sp.getString('user_id').toString() &&
-              isShow)
+          isShow)
           ? Positioned(
-              left: 570.w,
-              top: 560.h,
-              child: Container(
-                height: ScreenUtil().setHeight(104),
-                width: ScreenUtil().setHeight(117),
-                decoration: const BoxDecoration(
-                  //背景
-                  color: Colors.black87,
-                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                  borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                ),
-                child: Column(
-                  children: [
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        eventBus
-                            .fire(RoomBack(title: '下麦', index: i.toString()));
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            '下麦',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                    Container(
+        left: 570.w,
+        top: 560.h,
+        child: Container(
+          height: ScreenUtil().setHeight(104),
+          width: ScreenUtil().setHeight(117),
+          decoration: const BoxDecoration(
+            //背景
+            color: Colors.black87,
+            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+            borderRadius: BorderRadius.all(Radius.circular(12.0)),
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      eventBus
+                          .fire(RoomBack(title: '下麦', index: i.toString()));
+                    }),
+                    child: Container(
+                      height: double.infinity,
                       width: double.infinity,
-                      height: ScreenUtil().setHeight(1),
-                      margin: EdgeInsets.only(
-                          left: ScreenUtil().setHeight(10),
-                          right: ScreenUtil().setHeight(10)),
-                      color: MyColors.roomTCWZ1,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          '下麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
                     ),
-                    Expanded(
-                        child: GestureDetector(
-                      onTap: (() {
-                        if (listm[i].isClose == 0) {
-                          eventBus.fire(
-                              RoomBack(title: '闭麦1', index: i.toString()));
-                        } else {
-                          eventBus.fire(
-                              RoomBack(title: '开麦1', index: i.toString()));
-                        }
-                      }),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: Colors.transparent,
-                        child: WidgetUtils.onlyTextCenter(
-                            listm[i].isClose == 0 ? '闭麦' : '开麦',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.roomTCWZ1,
-                                fontSize: ScreenUtil().setSp(21))),
-                      ),
-                    )),
-                  ],
-                ),
+                  )),
+              Container(
+                width: double.infinity,
+                height: ScreenUtil().setHeight(1),
+                margin: EdgeInsets.only(
+                    left: ScreenUtil().setHeight(10),
+                    right: ScreenUtil().setHeight(10)),
+                color: MyColors.roomTCWZ1,
               ),
-            )
+              Expanded(
+                  child: GestureDetector(
+                    onTap: (() {
+                      if (listm[i].isClose == 0) {
+                        eventBus.fire(
+                            RoomBack(title: '闭麦1', index: i.toString()));
+                      } else {
+                        eventBus.fire(
+                            RoomBack(title: '开麦1', index: i.toString()));
+                      }
+                    }),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.transparent,
+                      child: WidgetUtils.onlyTextCenter(
+                          listm[i].isClose == 0 ? '闭麦' : '开麦',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.roomTCWZ1,
+                              fontSize: ScreenUtil().setSp(21))),
+                    ),
+                  )),
+            ],
+          ),
+        ),
+      )
           : const Text('');
     }
   }
