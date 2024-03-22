@@ -1830,6 +1830,17 @@ class _RoomPageState extends State<RoomPage>
                 });
               }
             } else if (event.map!['type'] == 'send_reduce_gift') {
+              //厅内发送的送礼物消息
+              charmAllBean cb = charmAllBean.fromJson(event.map);
+              for (int i = 0; i < listM.length; i++) {
+                for (int a = 0; a < cb.charm!.length; a++) {
+                  if (listM[i].uid.toString() == cb.charm![a].uid) {
+                    setState(() {
+                      listM[i].charm = int.parse(cb.charm![a].charm.toString());
+                    });
+                  }
+                }
+              }
               /// 收到送的减礼物的im
               setState(() {
                 listUrlJL.add(event.map!['gift_info'][0]['gift_img']);

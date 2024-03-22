@@ -4,7 +4,6 @@ import 'package:marquee/marquee.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/log_util.dart';
-import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/my_utils.dart';
 import '../../bean/hengFuBean.dart';
 import '../../utils/SVGASimpleImage3.dart';
@@ -151,9 +150,58 @@ class HomeItems {
         child: SlideTransition(
           position: animation,
           child: Stack(
+            alignment: Alignment.centerLeft,
             children: [
-              SVGASimpleImage3(
-                assetsName: url,
+              IgnorePointer(
+                ignoring: true,
+                child: SVGASimpleImage3(
+                  assetsName: url,
+                ),
+              ),
+              IgnorePointer(
+                ignoring: true,
+                child: Padding(
+                  padding: EdgeInsets.only(top: topHD, left: gd, right: 50.h),
+                  child: Marquee(
+                    // 文本
+                    text:  name == '低贵族' ||
+                        name == '高贵族' ||
+                        name == '马里奥' ||
+                        name == '白鬼' ? '恭喜$info' : info,
+                    // 文本样式
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 30.sp,
+                      shadows: const [
+                        Shadow(
+                          color: Colors.black54,
+                          offset: Offset(2, 2),
+                          blurRadius: 3,
+                        ),
+                      ],
+                    ),
+                    // 滚动轴：水平或者竖直
+                    scrollAxis: Axis.horizontal,
+                    // 轴对齐方式start
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    // 空白间距
+                    blankSpace: 20.0,
+                    // 速度
+                    velocity: 100.0,
+                    // 暂停时长
+                    pauseAfterRound: Duration(seconds: 1),
+                    // startPadding
+                    startPadding: 10.0,
+                    // 加速时长
+                    accelerationDuration: Duration(seconds: 1),
+                    // 加速Curve
+                    accelerationCurve: Curves.linear,
+                    // 减速时长
+                    decelerationDuration: Duration(milliseconds: 500),
+                    // 减速Curve
+                    decelerationCurve: Curves.easeOut,
+                  ),
+                ),
               ),
               GestureDetector(
                 onTap: (() {
@@ -161,48 +209,11 @@ class HomeItems {
                     eventBus.fire(hfJoinBack(roomID: hf.roomId!, title: titleType));
                   }
                 }),
-                child: Padding(
-                  padding: EdgeInsets.only(top: topHD, left: gd, right: 50.h),
-                  child: Marquee(
-                      // 文本
-                      text:  name == '低贵族' ||
-                          name == '高贵族' ||
-                          name == '马里奥' ||
-                          name == '白鬼' ? '恭喜$info' : info,
-                      // 文本样式
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 30.sp,
-                        shadows: const [
-                          Shadow(
-                            color: Colors.black54,
-                            offset: Offset(2, 2),
-                            blurRadius: 3,
-                          ),
-                        ],
-                      ),
-                      // 滚动轴：水平或者竖直
-                      scrollAxis: Axis.horizontal,
-                      // 轴对齐方式start
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      // 空白间距
-                      blankSpace: 20.0,
-                      // 速度
-                      velocity: 100.0,
-                      // 暂停时长
-                      pauseAfterRound: Duration(seconds: 1),
-                      // startPadding
-                      startPadding: 10.0,
-                      // 加速时长
-                      accelerationDuration: Duration(seconds: 1),
-                      // 加速Curve
-                      accelerationCurve: Curves.linear,
-                      // 减速时长
-                      decelerationDuration: Duration(milliseconds: 500),
-                      // 减速Curve
-                      decelerationCurve: Curves.easeOut,
-                  ),
-                ),
+                child: Container(
+                  height: 50.h,
+                  width: double.infinity,
+                  color: Colors.transparent,
+                )
               ),
               // GestureDetector(
               //   onTap: ((){
@@ -239,15 +250,14 @@ class HomeItems {
           width: double.infinity,
           child: Stack(
             children: [
-              SVGASimpleImage(
-                assetsName: type == 0 ? 'assets/svga/gp/gp_52hf.svga' : 'assets/svga/gp/gp_52.svga',
+              IgnorePointer(
+                ignoring: true,
+                child: SVGASimpleImage(
+                  assetsName: type == 0 ? 'assets/svga/gp/gp_52hf.svga' : 'assets/svga/gp/gp_52.svga',
+                ),
               ),
-              GestureDetector(
-                onTap: (() {
-                  if(MyUtils.checkClick() && hf.roomId != roomID && hf.roomId != '0'){
-                    eventBus.fire(hfJoinBack(roomID: hf.roomId!, title: titleType));
-                  }
-                }),
+              IgnorePointer(
+                ignoring: true,
                 child: Padding(
                   padding: EdgeInsets.only(top: type == 0 ? 220.h : 185.h, left: 60.h, right: 50.h),
                   child: Marquee(
@@ -287,6 +297,18 @@ class HomeItems {
                     decelerationCurve: Curves.easeOut,
                   ),
                 ),
+              ),
+              GestureDetector(
+                onTap: (() {
+                  if(MyUtils.checkClick() && hf.roomId != roomID && hf.roomId != '0'){
+                    eventBus.fire(hfJoinBack(roomID: hf.roomId!, title: titleType));
+                  }
+                }),
+                child: Container(
+                  height: 50.h,
+                  width: double.infinity,
+                  color: Colors.transparent,
+                )
               ),
             ],
           ),
