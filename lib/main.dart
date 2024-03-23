@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:auto_orientation/auto_orientation.dart';
+import 'package:dart_ping_ios/dart_ping_ios.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
@@ -28,6 +29,9 @@ void main() async {
       statusBarIconBrightness: Brightness.dark,
     );
     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+  } else {
+    // ios 注册Ping
+    DartPingIOS.register();
   }
   // 强制竖屏
   SystemChrome.setPreferredOrientations(

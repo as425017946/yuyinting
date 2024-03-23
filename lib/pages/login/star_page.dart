@@ -15,7 +15,9 @@ import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
 import '../../utils/log_util.dart';
+import '../../utils/my_ping.dart';
 import '../navigator/tabnavigator.dart';
+
 /// 启动页后展示的页面
 class StarPage extends StatefulWidget {
   const StarPage({super.key});
@@ -38,37 +40,40 @@ class _StarPageState extends State<StarPage> {
       setState(() {
         sp.setString('myDevices', 'android');
       });
-    }else if (Platform.isIOS){
+    } else if (Platform.isIOS) {
       setState(() {
         sp.setString('myDevices', 'ios');
       });
     }
     doPostAheadPunish();
     doPostPdAddress();
-    Future.delayed(const Duration(milliseconds: 2000), ((){
-        sp.setBool('joinRoom', false);
-        sp.setString('roomID', '');
-        if (sp.getString('user_token').toString() == 'null') {
-          sp.setString('userIP', '');
-        }
-        Navigator.pop(context);
-        LogE('用户token   ${sp.getString('user_token').toString()}');
-        LogE('用户token   ${sp.getString('user_token').toString().isNotEmpty}');
-        if (sp.getString('user_token').toString() == 'null') {
-          //首次进入
-          MyUtils.goTransparentPageCom(context, const LoginPage());
-        }else if(MyConfig.issAdd == false && sp.getString('user_token').toString().isNotEmpty){
-          //不是首次进入，登录过
-          doGo();
-        }else{
-          //登录过，但是退出了登录
-          MyUtils.goTransparentPageCom(context, const LoginPage());
-        }
-        if(sp.getString('miyao').toString() != 'null' || sp.getString('miyao').toString().isEmpty){
-          sp.setString('miyao',DateTime.now().millisecondsSinceEpoch.toString());
-        }
+    Future.delayed(const Duration(milliseconds: 2000), (() {
+      sp.setBool('joinRoom', false);
+      sp.setString('roomID', '');
+      if (sp.getString('user_token').toString() == 'null') {
+        sp.setString('userIP', '');
+      }
+      Navigator.pop(context);
+      LogE('用户token   ${sp.getString('user_token').toString()}');
+      LogE('用户token   ${sp.getString('user_token').toString().isNotEmpty}');
+      if (sp.getString('user_token').toString() == 'null') {
+        //首次进入
+        MyUtils.goTransparentPageCom(context, const LoginPage());
+      } else if (MyConfig.issAdd == false &&
+          sp.getString('user_token').toString().isNotEmpty) {
+        //不是首次进入，登录过
+        doGo();
+      } else {
+        //登录过，但是退出了登录
+        MyUtils.goTransparentPageCom(context, const LoginPage());
+      }
+      if (sp.getString('miyao').toString() != 'null' ||
+          sp.getString('miyao').toString().isEmpty) {
+        sp.setString('miyao', DateTime.now().millisecondsSinceEpoch.toString());
+      }
     }));
   }
+
   @override
   Widget build(BuildContext context) {
     //设置字体大小根据系统的“字体大小”辅助选项来进行缩放,默认为false : 字体随着系统的“字体大小”辅助选项来进行缩放
@@ -89,6 +94,7 @@ class _StarPageState extends State<StarPage> {
       ),
     );
   }
+
   Future<void> doGo() async {
     Future.delayed(const Duration(microseconds: 10), () {
       //跳转并关闭当前页面
@@ -97,7 +103,7 @@ class _StarPageState extends State<StarPage> {
         context,
         MaterialPageRoute(builder: (context) => const Tab_Navigator()),
         // ignore: unnecessary_null_comparison
-            (route) => route == null,
+        (route) => route == null,
       );
     });
   }
@@ -107,28 +113,27 @@ class _StarPageState extends State<StarPage> {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String version = packageInfo.version;
     String buildNumber = packageInfo.buildNumber;
-    sp.setString('myVersion2',version.toString());
-    sp.setString('buildNumber',buildNumber);
-    FormData formdata = FormData.fromMap(
-      {
-        'type': 'test',
-      },
-    );
-    BaseOptions option = BaseOptions(
-        contentType: 'application/x-www-form-urlencoded', responseType: ResponseType.plain);
-    Dio dio = Dio(option);
-    //application/json
+    sp.setString('myVersion2', version.toString());
+    sp.setString('buildNumber', buildNumber);
     try {
-      var respone = await dio.post(MyHttpConfig.pdAddress, data: formdata);
-      // LogE('请求地址 == ${MyHttpConfig.pdAddress}');
-      Map jsonResponse = json.decode(respone.data.toString());
-      LogE('返回结果 == $respone');
-      if (jsonResponse['code'] == 200) {
+      Map<String, dynamic> params = <String, dynamic>{'type': 'test'};
+      var respons = await DataUtils.postPdAddress(params);
+      if (respons.code == 200) {
         setState(() {
-          sp.setString('isDian', jsonResponse['nodes']);
-          sp.setString('userIP', jsonResponse['address']);
+          sp.setString('userIP', respons.address);
         });
-      } else if (respone.statusCode == 401) {
+        MyPing.checkIp(
+          respons.ips,
+          (ip) {
+            setState(() {
+              sp.setString('isDian', ip);
+              LogE('Ping 设置: ${sp.getString('isDian')}');
+              MyHttpConfig.baseURL =
+                  "http://${sp.getString('isDian').toString()}:8081/api";
+            });
+          },
+        );
+      } else if (respons.code == 401) {
         // ignore: use_build_context_synchronously
         MyUtils.jumpLogin(context);
       } else {
@@ -148,7 +153,7 @@ class _StarPageState extends State<StarPage> {
         case MyHttpConfig.successCode:
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:

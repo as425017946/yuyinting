@@ -4,7 +4,6 @@ import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 import '../bean/myHomeBean.dart';
 
-
 EventBus eventBus = new EventBus();
 
 ///返回数据解析
@@ -13,6 +12,7 @@ class ResidentBack {
 
   ResidentBack({required this.isBack});
 }
+
 ///提交类的按钮
 class SubmitButtonBack {
   String title;
@@ -55,13 +55,11 @@ class PhotoBack {
   PhotoBack({required this.selectAss, required this.id});
 }
 
-
 ///切换魔方
 class MofangBack {
   int info;
   MofangBack({required this.info});
 }
-
 
 ///实名认证
 class RenzhengBack {
@@ -89,7 +87,6 @@ class SendMessageBack {
   SendMessageBack({required this.type, required this.msgID});
 }
 
-
 ///登录弹窗使用
 class LoginBack {
   bool isBack;
@@ -109,16 +106,19 @@ class DHQuerenBack {
   String goodsId;
   String goodsType;
   int exchangeCost;
-  DHQuerenBack({required this.goodsId, required this.goodsType, required this.exchangeCost});
+  DHQuerenBack(
+      {required this.goodsId,
+      required this.goodsType,
+      required this.exchangeCost});
 }
-
 
 /// 魔方或转盘二次确认弹窗使用
 class XZQuerenBack {
   String cishu;
   String feiyong;
   String title;
-  XZQuerenBack({required this.cishu, required this.feiyong, required this.title});
+  XZQuerenBack(
+      {required this.cishu, required this.feiyong, required this.title});
 }
 
 /// 厅内使用
@@ -134,7 +134,11 @@ class RoomBGBack {
   String bgType;
   String bgImagUrl;
   bool delete;
-  RoomBGBack({required this.bgID, required this.bgType, required this.bgImagUrl, required this.delete});
+  RoomBGBack(
+      {required this.bgID,
+      required this.bgType,
+      required this.bgImagUrl,
+      required this.delete});
 }
 
 /// 房间背景
@@ -150,19 +154,19 @@ class ZDYBack {
   String type;
   ZDYBack({required this.map, required this.type});
 }
+
 /// 自定义消息 横幅
 class ZDYHFBack {
   Map<String, String>? map;
   String type;
   ZDYHFBack({required this.map, required this.type});
 }
+
 /// 自定义消息 红包
 class ZDYHBBack {
   Map<String, String>? map;
   ZDYHBBack({required this.map});
 }
-
-
 
 /// im进入房间
 class JoinRoomYBack {
@@ -170,7 +174,6 @@ class JoinRoomYBack {
   String type;
   JoinRoomYBack({required this.map, required this.type});
 }
-
 
 /// 礼物显示效果使用
 class LiWuShowBack {
@@ -180,7 +183,8 @@ class LiWuShowBack {
   List<String> listPeople;
   // 赠送数量
   String numbers;
-  LiWuShowBack({required this.url, required this.listPeople, required this.numbers});
+  LiWuShowBack(
+      {required this.url, required this.listPeople, required this.numbers});
 }
 
 /// 选中送谁的时候使用
@@ -189,7 +193,6 @@ class ChoosePeopleBack {
   List<bool> listPeople;
   ChoosePeopleBack({required this.listPeople});
 }
-
 
 /// 厅内聊天发消息
 class SendRoomInfoBack {
@@ -206,10 +209,9 @@ class SendRoomImgBack {
 /// 魔方转盘下注
 class XiaZhuBack {
   int jine;
-  int type;//要减那个金额 cur_type 1金豆 2钻石 3蘑菇
+  int type; //要减那个金额 cur_type 1金豆 2钻石 3蘑菇
   XiaZhuBack({required this.jine, required this.type});
 }
-
 
 /// 发送包使用
 class HongBaoBack {
@@ -223,7 +225,11 @@ class SVGABack {
   String url; //svga地址
   List<String> listurl;
   bool isJian;
-  SVGABack({required this.isAll,required this.url,required this.listurl,required this.isJian});
+  SVGABack(
+      {required this.isAll,
+      required this.url,
+      required this.listurl,
+      required this.isJian});
 }
 
 /// 厅内礼物播放完成
@@ -231,11 +237,13 @@ class RoomSVGABack {
   bool isOK;
   RoomSVGABack({required this.isOK});
 }
+
 /// 厅内贵族播放完成
 class RoomGZSVGABack {
   bool isOK;
   RoomGZSVGABack({required this.isOK});
 }
+
 /// 厅内水果机播放完成
 class RoomSGJBack {
   bool isOK;
@@ -274,9 +282,8 @@ class GameBack {
 class BiLiBack {
   int index;
   String number;
-  BiLiBack({required this.index,required this.number});
+  BiLiBack({required this.index, required this.number});
 }
-
 
 /// 再来一次
 class AgainBack {
@@ -288,21 +295,19 @@ class AgainBack {
 class TencentBack {
   String filePath;
   String title;
-  TencentBack({required this.filePath,required this.title});
+  TencentBack({required this.filePath, required this.title});
 }
-
 
 /// 点击横幅使用
 class hfJoinBack {
   String roomID;
   String title;
-  hfJoinBack({required this.roomID,required this.title});
+  hfJoinBack({required this.roomID, required this.title});
 }
-
 
 /// 厅内私聊发送信息
 class siliaoBack {
   String info;
   String title;
-  siliaoBack({required this.info,required this.title});
+  siliaoBack({required this.info, required this.title});
 }

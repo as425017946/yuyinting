@@ -23,6 +23,7 @@ import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
 import '../../utils/loading.dart';
+import '../../utils/my_ping.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/regex_formatter.dart';
 import '../../utils/style_utils.dart';
@@ -119,9 +120,6 @@ class _LoginPageState extends State<LoginPage> {
     // 首次预下载使用
     if (sp.getString("isFirstDown").toString() == 'null') {
       sp.setString("isFirstDown", '1');
-    }
-    if (sp.getString("isFirstDownZB").toString() == 'null') {
-      sp.setString("isFirstDownZB", '1');
     }
     ceshi();
   }
@@ -973,28 +971,25 @@ class _LoginPageState extends State<LoginPage> {
     String buildNumber = packageInfo.buildNumber;
     sp.setString('myVersion2', version.toString());
     sp.setString('buildNumber', buildNumber);
-    // FormData formdata = FormData.fromMap(
-    //   {
-    //     'type': 'test',
-    //   },
-    // );
-    BaseOptions option = BaseOptions(
-        contentType: 'application/x-www-form-urlencoded',
-        responseType: ResponseType.plain);
-    Dio dio = Dio(option);
-    //application/json
     try {
-      var respone = await dio.post(MyHttpConfig.pdAddress,);
-      // LogE('请求地址 == ${MyHttpConfig.pdAddress}');
-      Map jsonResponse = json.decode(respone.data.toString());
-      LogE('返回结果 == $respone');
-      if (jsonResponse['code'] == 200) {
+      Map<String, dynamic> params = <String, dynamic>{'type': 'test'};
+      var respons = await DataUtils.postPdAddress(params);
+      if (respons.code == 200) {
         setState(() {
-          sp.setString('isDian', jsonResponse['nodes']);
-          sp.setString('userIP', jsonResponse['address']);
-          IP = jsonResponse['address'];
+          sp.setString('userIP', respons.address);
         });
-      } else if (respone.statusCode == 401) {
+        MyPing.checkIp(
+          respons.ips,
+          (ip) {
+            setState(() {
+              sp.setString('isDian', ip);
+              LogE('Ping 设置: ${sp.getString('isDian')}');
+              MyHttpConfig.baseURL =
+                  "http://${sp.getString('isDian').toString()}:8081/api";
+            });
+          },
+        );
+      } else if (respons.code == 401) {
         // ignore: use_build_context_synchronously
         MyUtils.jumpLogin(context);
       } else {
