@@ -814,15 +814,15 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                         // 头像框静态图
                         (avatarFrameGifImg.isEmpty && avatarFrameImg.isNotEmpty)
                             ? WidgetUtils.CircleHeadImage(
-                                ScreenUtil().setHeight(170),
-                                ScreenUtil().setHeight(170),
+                                ScreenUtil().setHeight(150),
+                                ScreenUtil().setHeight(150),
                                 avatarFrameImg)
                             : const Text(''),
                         // 头像框动态图
                         avatarFrameGifImg.isNotEmpty
                             ? SizedBox(
-                                height: 170.h,
-                                width: 170.h,
+                                height: 150.h,
+                                width: 150.h,
                                 child: SVGASimpleImage(
                                   resUrl: avatarFrameGifImg,
                                 ),

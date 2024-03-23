@@ -1470,7 +1470,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           MyUtils.jumpLogin(context);
           break;
         default:
-          MyToastUtils.showToastBottom(commonBean.msg!);
+          // MyToastUtils.showToastBottom(commonBean.msg!);
           break;
       }
     } catch (e) {}

@@ -254,8 +254,8 @@ class _MinePageState extends State<MinePage> {
                       }
                     }),
                     child: SizedBox(
-                      height: 140.h,
-                      width: 140.h,
+                      height: 120.h,
+                      width: 120.h,
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
@@ -267,15 +267,15 @@ class _MinePageState extends State<MinePage> {
                           (avatarFrameGifImg.isEmpty &&
                                   avatarFrameImg.isNotEmpty)
                               ? WidgetUtils.CircleHeadImage(
-                                  ScreenUtil().setHeight(140),
-                                  ScreenUtil().setHeight(140),
+                                  ScreenUtil().setHeight(120),
+                                  ScreenUtil().setHeight(120),
                                   avatarFrameImg)
                               : const Text(''),
                           // 头像框动态图
                           avatarFrameGifImg.isNotEmpty
                               ? SizedBox(
-                                  height: 140.h,
-                                  width: 140.h,
+                                  height: 120.h,
+                                  width: 120.h,
                                   child: SVGASimpleImage(
                                     resUrl: avatarFrameGifImg,
                                   ),

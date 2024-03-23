@@ -40,7 +40,7 @@ class MyConfig{
   /// 每页显示多少条
   static const int pageSize = 10;
   /// 每页显示多少条
-  static const int pageSize2 = 20;
+  static const int pageSize2 = 200;
 
   /// 默认加载中的提示语
   static const String successTitle = '加载中...';

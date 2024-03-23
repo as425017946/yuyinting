@@ -151,7 +151,7 @@ class _ShengboPageState extends State<ShengboPage> {
           header: MyUtils.myHeader(),
           footer: MyUtils.myFotter(),
           controller: _refreshController,
-          enablePullUp: true,
+          enablePullUp: false,
           onLoading: _onLoading,
           onRefresh: _onRefresh,
           child: OptionGridView(

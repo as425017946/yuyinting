@@ -99,11 +99,10 @@ import 'my_http_request.dart';
 class DataUtils{
 
   ///判断网络
-  static Future<addressIPBean> postPdAddress(Map<String,dynamic> params) async {
-    print("检查网络参数：$params");
+  static Future<addressIPBean> postPdAddress() async {
     print("检查网络地址：${MyHttpConfig.pdAddress}");
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.pdAddress,
-        {}, params);
+        {}, {});
     print("检查网络：${respons}");
     return addressIPBean.fromJson(respons!);
   }

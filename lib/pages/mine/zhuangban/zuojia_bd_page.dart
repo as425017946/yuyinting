@@ -1,24 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
-import 'package:yuyinting/main.dart';
-
 import '../../../bean/Common_bean.dart';
-import '../../../bean/balanceBean.dart';
 import '../../../bean/myShopListBean.dart';
-import '../../../bean/shopListBean.dart';
 import '../../../colors/my_colors.dart';
 import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../utils/loading.dart';
-import '../../../utils/log_util.dart';
 import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 import '../../../widget/OptionGridView.dart';
-import '../qianbao/dou_pay_page.dart';
 
 /// 座驾
 class ZuojiaBBPage extends StatefulWidget {
@@ -152,7 +146,7 @@ class _ZuojiaBBPageState extends State<ZuojiaBBPage> with AutomaticKeepAliveClie
           header: MyUtils.myHeader(),
           footer: MyUtils.myFotter(),
           controller: _refreshController,
-          enablePullUp: true,
+          enablePullUp: false,
           onLoading: _onLoading,
           onRefresh: _onRefresh,
           child: OptionGridView(

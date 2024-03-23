@@ -4,12 +4,10 @@ import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 import '../../../bean/Common_bean.dart';
 import '../../../bean/myShopListBean.dart';
-import '../../../bean/shopListBean.dart';
 import '../../../colors/my_colors.dart';
 import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
-import '../../../main.dart';
 import '../../../utils/loading.dart';
 import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
@@ -148,7 +146,7 @@ class _ShengBoBBPageState extends State<ShengBoBBPage>  with AutomaticKeepAliveC
           header: MyUtils.myHeader(),
           footer: MyUtils.myFotter(),
           controller: _refreshController,
-          enablePullUp: true,
+          enablePullUp: false,
           onLoading: _onLoading,
           onRefresh: _onRefresh,
           child: OptionGridView(

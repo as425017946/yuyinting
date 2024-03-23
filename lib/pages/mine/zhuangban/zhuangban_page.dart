@@ -90,7 +90,7 @@ class _ZhuangbanPageState extends State<ZhuangbanPage> {
                         child: Transform.translate(
                             offset: Offset(0, 10.h),
                             child: WidgetUtils.showImages(
-                                'assets/images/shop_bb.png', 40.h, 120.w)),
+                                'assets/images/shop_bb.png', 50.h, 140.w)),
                       ),
                     )
                   ],

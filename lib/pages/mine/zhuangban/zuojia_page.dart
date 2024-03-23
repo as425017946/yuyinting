@@ -152,7 +152,7 @@ class _ZuojiaPageState extends State<ZuojiaPage>{
           header: MyUtils.myHeader(),
           footer: MyUtils.myFotter(),
           controller: _refreshController,
-          enablePullUp: true,
+          enablePullUp: false,
           onLoading: _onLoading,
           onRefresh: _onRefresh,
           child: OptionGridView(
