@@ -132,6 +132,7 @@ dependencies:
   just_audio: ^0.9.36
   # ping
   dart_ping: ^7.0.1
+  dart_ping_ios: ^2.0.1
   # 响应式框架
   get: ^4.6.5
   # 工具
@@ -140,6 +141,7 @@ dependencies:
   connectivity_plus: ^4.0.2
   # 获取包名
   android_package_manager: 0.5.0
+  
 
 
 dev_dependencies:

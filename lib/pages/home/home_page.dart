@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:auto_orientation/auto_orientation.dart';
+import 'package:dart_ping/dart_ping.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,6 +32,7 @@ import '../../http/my_http_config.dart';
 import '../../main.dart';
 import '../../utils/event_utils.dart';
 import '../../utils/log_util.dart';
+import '../../utils/my_ping.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 
@@ -603,27 +605,25 @@ class _HomePageState extends State<HomePage>
 
   /// 判断当前网络，然后给返回适配的网络地址
   Future<void> doPostPdAddress() async {
-    FormData formdata = FormData.fromMap(
-      {
-        'type': 'test',
-      },
-    );
-    BaseOptions option = BaseOptions(
-        contentType: 'application/x-www-form-urlencoded',
-        responseType: ResponseType.plain);
-    Dio dio = Dio(option);
-    //application/json
     try {
-      var respone = await dio.post(MyHttpConfig.pdAddress, data: formdata);
-      // LogE('请求地址 == ${MyHttpConfig.pdAddress}');
-      Map jsonResponse = json.decode(respone.data.toString());
-      LogE('返回结果 == $respone');
-      if (jsonResponse['code'] == 200) {
+      Map<String, dynamic> params = <String, dynamic>{'type': 'test'};
+      var respons = await DataUtils.postPdAddress(params);
+      if (respons.code == 200) {
         setState(() {
-          sp.setString('isDian', jsonResponse['nodes']);
-          sp.setString('userIP', jsonResponse['address']);
+          sp.setString('userIP', respons.address);
         });
-      } else if (respone.statusCode == 401) {
+        MyPing.checkIp(
+          respons.ips,
+          (ip) {
+            setState(() {
+              sp.setString('isDian', ip);
+              LogE('Ping 设置: ${sp.getString('isDian')}');
+              MyHttpConfig.baseURL =
+                  "http://${sp.getString('isDian').toString()}:8081/api";
+            });
+          },
+        );
+      } else if (respons.code == 401) {
         // ignore: use_build_context_synchronously
         MyUtils.jumpLogin(context);
       } else {
