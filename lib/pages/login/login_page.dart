@@ -120,6 +120,9 @@ class _LoginPageState extends State<LoginPage> {
     if (sp.getString("isFirstDown").toString() == 'null') {
       sp.setString("isFirstDown", '1');
     }
+    if (sp.getString("isFirstDownZB").toString() == 'null') {
+      sp.setString("isFirstDownZB", '1');
+    }
     ceshi();
   }
 

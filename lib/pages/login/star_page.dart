@@ -9,7 +9,9 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:yuyinting/pages/login/login_page.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/my_utils.dart';
+import '../../bean/Common_bean.dart';
 import '../../config/my_config.dart';
+import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
 import '../../utils/log_util.dart';
@@ -41,6 +43,7 @@ class _StarPageState extends State<StarPage> {
         sp.setString('myDevices', 'ios');
       });
     }
+    doPostAheadPunish();
     doPostPdAddress();
     Future.delayed(const Duration(milliseconds: 2000), ((){
         sp.setBool('joinRoom', false);
@@ -134,6 +137,26 @@ class _StarPageState extends State<StarPage> {
     } catch (e) {
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
       // MyToastUtils.showToastBottom(MyConfig.errorTitleFile);
+    }
+  }
+
+  /// 打开app
+  Future<void> doPostAheadPunish() async {
+    try {
+      CommonBean bean = await DataUtils.postAppOpen();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 }

@@ -70,7 +70,7 @@ class _RoomPageState extends State<RoomPage>
   int isFirst = 0;
 
   /// 存进入的座驾信息
-  List<String> listUrlZJ = [];
+  List<Map> listUrlZJ = [];
 
   /// 存进入pk动画信息
   List<String> listUrlPK = [];
@@ -193,27 +193,48 @@ class _RoomPageState extends State<RoomPage>
   }
 
   // 展示座驾
-  void showStarZJ(String url) async {
+  void showStarZJ(Map m) async {
     // 动画正在进行中不做处理
     if (animationControllerZJ.isAnimating) {
       LogE('进行中====');
     } else {
-      //网络图
-      final videoItem = await _loadSVGA(true, url);
-      if (videoItem != null) {
-        videoItem.autorelease = false;
-        animationControllerZJ?.videoItem = videoItem;
-        animationControllerZJ
-            ?.forward() // Try to use .forward() .reverse()
-            .whenComplete(() => animationControllerZJ?.videoItem = null);
-        // 监听动画
-        animationControllerZJ?.addListener(_animListenerZJ);
+      //本地图
+      if (m['svgaBool'] == false) {
+        File file = File(m['svgaUrl']);
+        if (await file.exists()) {
+          animationControllerZJ?.videoItem =
+          await SVGAParser.shared.decodeFromBuffer(file.readAsBytesSync());
+          animationControllerZJ
+              ?.forward() // Try to use .forward() .reverse()
+              .whenComplete(() => animationControllerZJ?.videoItem = null);
+          // 监听动画
+          animationControllerZJ?.addListener(_animListener);
+        } else {
+          LogE('礼物不存在');
+          setState(() {
+            listUrlZJ.removeAt(0);
+          });
+          //礼物地址没有，直接返回，不进行后续操作
+          return;
+        }
       } else {
-        setState(() {
-          listUrlZJ.removeAt(0);
-        });
-        //礼物地址没有，直接返回，不进行后续操作
-        return;
+        //网络图
+        final videoItem = await _loadSVGA(true, m['svgaUrl']);
+        if (videoItem != null) {
+          videoItem.autorelease = false;
+          animationControllerZJ?.videoItem = videoItem;
+          animationControllerZJ
+              ?.forward() // Try to use .forward() .reverse()
+              .whenComplete(() => animationControllerZJ?.videoItem = null);
+          // 监听动画
+          animationControllerZJ?.addListener(_animListenerZJ);
+        } else {
+          setState(() {
+            listUrlZJ.removeAt(0);
+          });
+          //礼物地址没有，直接返回，不进行后续操作
+          return;
+        }
       }
     }
   }
@@ -318,10 +339,9 @@ class _RoomPageState extends State<RoomPage>
           if (listUrlJL.isEmpty) {
             // 全部动画结束的处理逻辑
             // ...
-            isPKStar = false;
           } else {
             Future.delayed(const Duration(milliseconds: 1), () {
-              showStarPK(listUrlJL[0]); // 递归调用showStar方法播放下一个动画
+              showStarJL(listUrlJL[0]); // 递归调用showStar方法播放下一个动画
             });
           }
         }
@@ -1370,6 +1390,8 @@ class _RoomPageState extends State<RoomPage>
             case 'room_pk_start':
               _cancelTimer();
               setState(() {
+                blueScore = '0';
+                redScore = '0';
                 listUrlPK.add('assets/svga/pk/room_pk_star.svga');
                 isPKStar = true;
                 isPK = 1;
@@ -1397,6 +1419,8 @@ class _RoomPageState extends State<RoomPage>
                   listUrlPK.add('assets/svga/pk/room_pk_blue_win.svga');
                   isPK = 2;
                 }else{
+                  blueScore = '0';
+                  redScore = '0';
                   pkTitle = 'PK时间';
                   pkTime = 0;
                   whoWin = 'draw';
@@ -1841,8 +1865,23 @@ class _RoomPageState extends State<RoomPage>
                   }
                 }
               }
+
+              Map<dynamic, dynamic> map = {};
+              map['info'] = event.map!['nickname'];
+              map['uid'] = event.map!['from_uid'];
+              map['type'] = '5';
+              // 发送的信息
+              map['content'] =
+              '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出${cb.giftInfo![0].giftName!}(${cb.giftInfo![0].giftPrice.toString()}); x${cb.giftInfo![0].giftNumber.toString()}';
+
+              saveChatInfo(event.map!, '5', event.map!['nickname'],
+                  '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出${cb.giftInfo![0].giftName!}(${cb.giftInfo![0].giftPrice.toString()}); x${cb.giftInfo![0].giftNumber.toString()}');
+
               /// 收到送的减礼物的im
               setState(() {
+                list.add(map);
+                blueScore = (int.parse(blueScore) + int.parse(event.map!['blue_score'].toString())).toString();
+                redScore = (int.parse(redScore) + int.parse(event.map!['red_score'].toString())).toString();
                 listUrlJL.add(event.map!['gift_info'][0]['gift_img']);
                 jianLiWu = event.map!['serial_number_list'];
               });
@@ -2077,11 +2116,75 @@ class _RoomPageState extends State<RoomPage>
 
               /// 判断如果装扮了座驾，需要播放
               if (event.map!['mount'].toString().isNotEmpty) {
-                setState(() {
-                  listUrlZJ.add(event.map!['mount'].toString());
-                  isZJShow = true;
-                });
-                showStarZJ(listUrlZJ[0]);
+                if (isDevices == 'android') {
+                  // 这个是为了让别人也能看见自己送出的礼物
+                  if (listUrlZJ.isEmpty) {
+                    if (event.map!['mount_name'].toString() == '白虎守护' ||
+                        event.map!['mount_name'].toString() == '飞鹰' ||
+                        event.map!['mount_name'].toString() == '飞鱼' ||
+                        event.map!['mount_name'].toString() == '凤凰涅槃' ||
+                        event.map!['mount_name'].toString() == '金龙降临' ||
+                        event.map!['mount_name'].toString() == '鲸鱼' ||
+                        event.map!['mount_name'].toString() == '旷世神龙' ||
+                        event.map!['mount_name'].toString() == '兰博基尼' ||
+                        event.map!['mount_name'].toString() == '青龙守护' ||
+                        event.map!['mount_name'].toString() == '星空战机') {
+                      saveSVGAIMAGEZJ(event.map!['mount'].toString());
+                    } else {
+                      setState(() {
+                        Map<dynamic, dynamic> map = {};
+                        map['svgaUrl'] = event.map!['mount'].toString();
+                        map['svgaBool'] = true;
+                        listUrlZJ.add(map);
+                        isZJShow = true;
+                      });
+                      showStarZJ(listUrlZJ[0]);
+                    }
+                  } else {
+                    if (event.map!['mount_name'].toString() == '白虎守护' ||
+                        event.map!['mount_name'].toString() == '飞鹰' ||
+                        event.map!['mount_name'].toString() == '飞鱼' ||
+                        event.map!['mount_name'].toString() == '凤凰涅槃' ||
+                        event.map!['mount_name'].toString() == '金龙降临' ||
+                        event.map!['mount_name'].toString() == '鲸鱼' ||
+                        event.map!['mount_name'].toString() == '旷世神龙' ||
+                        event.map!['mount_name'].toString() == '兰博基尼' ||
+                        event.map!['mount_name'].toString() == '青龙守护' ||
+                        event.map!['mount_name'].toString() == '星空战机') {
+                      saveSVGAIMAGEZJ(event.map!['mount'].toString());
+                    } else {
+                      setState(() {
+                        Map<dynamic, dynamic> map = {};
+                        map['svgaUrl'] = event.map!['mount'].toString();
+                        map['svgaBool'] = true;
+                        listUrlZJ.add(map);
+                        isZJShow = true;
+                      });
+                      showStarZJ(listUrlZJ[0]);
+                    }
+                  }
+                } else {
+                  // ios
+                  if (listUrlZJ.isEmpty) {
+                    setState(() {
+                      Map<dynamic, dynamic> map = {};
+                      map['svgaUrl'] = event.map!['mount'].toString();
+                      map['svgaBool'] = true;
+                      listUrlZJ.add(map);
+                      isZJShow = true;
+                    });
+                    showStarZJ(listUrlZJ[0]);
+                  } else {
+                    // 直接用网络图地址
+                    setState(() {
+                      Map<dynamic, dynamic> map = {};
+                      map['svgaUrl'] = event.map!['mount'].toString();
+                      map['svgaBool'] = true;
+                      listUrlZJ.add(map);
+                      isZJShow = true;
+                    });
+                  }
+                }
               }
               setState(() {
                 list.add(map);
@@ -2711,6 +2814,37 @@ class _RoomPageState extends State<RoomPage>
         map['svgaBool'] = false;
         // 直接用网络图地址
         listUrl.add(map);
+      });
+    }
+  }
+
+  //拿到本地svga存储路径
+  saveSVGAIMAGEZJ(name) async {
+    LogE('礼物名称 $name');
+    List<String> lujing = name.toString().split('/');
+    // 获取保存路径
+    Directory? directory = await getExternalStorageDirectory();
+    LogE('获取保存路径 $directory');
+    String savePath =
+        "/sdcard/Android/data/com.leimu.yuyinting/files/${lujing[lujing.length - 1]}";
+    LogE('礼物地址 $savePath');
+    if (listUrlZJ.isEmpty) {
+      setState(() {
+        Map<dynamic, dynamic> map = {};
+        map['svgaUrl'] = savePath;
+        map['svgaBool'] = false;
+        // 直接用本地图
+        listUrlZJ.add(map);
+      });
+      isZJShow = true;
+      showStarZJ(listUrlZJ[0]);
+    } else {
+      setState(() {
+        Map<dynamic, dynamic> map = {};
+        map['svgaUrl'] = savePath;
+        map['svgaBool'] = false;
+        // 直接用本地图
+        listUrlZJ.add(map);
       });
     }
   }
@@ -4083,13 +4217,13 @@ class _RoomPageState extends State<RoomPage>
               isPKStar = true;
               pkTitle = 'PK时间';
             } else if(isPK == 2) {
+              whoWin = bean.data!.roomInfo!.win!;
               LogE('结束=== ${bean.data!.roomInfo!.win! != 'draw'}');
               if(bean.data!.roomInfo!.win! != 'draw'){
-                whoWin = bean.data!.roomInfo!.win!;
                 isPKStar = true;
                 pkTitle = '惩罚时间';
               }
-            } else {
+            } else if(isPK == 0)  {
               isPKStar = false;
               pkTitle = 'PK时间';
             }

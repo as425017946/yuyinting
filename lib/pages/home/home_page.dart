@@ -117,6 +117,9 @@ class _HomePageState extends State<HomePage>
     // }else{
     //   eventBus.fire(SubmitButtonBack(title: '资源开始下载'));
     // }
+    if (sp.getString("isFirstDownZB").toString() == 'null') {
+      sp.setString("isFirstDownZB", '1');
+    }
     //直接不显示弹窗了，直接下载
     eventBus.fire(SubmitButtonBack(title: '资源开始下载'));
 

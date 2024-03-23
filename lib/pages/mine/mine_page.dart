@@ -893,7 +893,7 @@ class _MinePageState extends State<MinePage> {
             // _collection2(),
             WidgetUtils.commonSizedBox(20, 0),
             WidgetUtils.whiteKuang(
-                'assets/images/mine_zhuangban.png', '我的装扮', false),
+                'assets/images/mine_zhuangban.png', '装扮商城', false),
             (identity != 'president' && isGet)
                 ? WidgetUtils.whiteKuang(
                     'assets/images/mine_gonghui.png', '公会中心', isShenHe)

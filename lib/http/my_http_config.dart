@@ -362,6 +362,10 @@ class MyHttpConfig{
   static  String aheadOver = "$baseURL/pk/aheadOver";
   // 提前结束惩罚
   static  String aheadPunish = "$baseURL/pk/aheadPunish";
+  // 打开app
+  static  String appOpen = "$baseURL/user/AppOpen";
+  // 装扮预下载
+  static  String svgaDressList = "$baseURL/shop/svgaDressList";
 
 
 }

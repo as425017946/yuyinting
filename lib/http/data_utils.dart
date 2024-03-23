@@ -135,6 +135,14 @@ class DataUtils{
     return svgaAllBean.fromJson(respons!);
   }
 
+  /// 登录app后装扮预下载
+  static Future<svgaAllBean> postSvgaDressList(Map<String,dynamic> params) async {
+    print("登录app后装扮预下载${params}");
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.svgaDressList, {}, params);
+    print("登录app后装扮预下载：${respons}");
+    return svgaAllBean.fromJson(respons!);
+  }
+
 
   /// 登录接口
   static Future<LoginBean> login(Map<String,dynamic> params) async {
@@ -1413,6 +1421,13 @@ class DataUtils{
     print("提前结束惩罚 $params");
     Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.aheadPunish, {}, params);
     print("提前结束惩罚 $respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 打开app
+  static Future<CommonBean> postAppOpen() async {
+    Map<String, dynamic>? respons = await MyHttpRequest.post(MyHttpConfig.appOpen, {}, {});
+    print("打开app $respons");
     return CommonBean.fromJson(respons!);
   }
 }

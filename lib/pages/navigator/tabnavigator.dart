@@ -274,6 +274,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       } else if (event.title == '资源开始下载') {
         if (isDown == false) {
           doPostSvgaGiftList();
+          doPostSvgaDressList();
         }
       } else if (event.title == '去掉旋转') {
         sp.setBool('sqRoom', false);
@@ -1326,6 +1327,49 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     }
   }
 
+  /// 装扮预下载下载
+  Future<void> doPostSvgaDressList() async {
+    setState(() {
+      isDown = true;
+    });
+    Map<String, dynamic> params = <String, dynamic>{
+      'is_first': sp.getString('isFirstDownZB').toString() == 'null'
+          ? '1'
+          : sp.getString('isFirstDownZB').toString(),
+    };
+    try {
+      svgaAllBean bean = await DataUtils.postSvgaDressList(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          // 存一下总数量
+          setState(() {
+            if (isDevices == 'android') {
+              downloadAllImages2(bean);
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+          setState(() {
+            isDown = false;
+          });
+          // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          setState(() {
+            isDown = false;
+          });
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      setState(() {
+        isDown = false;
+      });
+      Loading.dismiss();
+    }
+  }
+
   //调用 downloadAllImages 方法来开始下载所有图片
   void downloadAllImages(svgaAllBean bean) async {
     for (int i = 0; i < bean.data!.imgList!.length; i++) {
@@ -1337,8 +1381,10 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           setState(() {
             sp.setString(
                 'isFirstDown',
-                (int.parse(sp.getString('isFirstDown').toString()) + 1)
-                    .toString());
+                sp.getString('isFirstDown').toString() == 'null'
+                    ? '1'
+                    : (int.parse(sp.getString('isFirstDown').toString()) + 1)
+                        .toString());
           });
           print('下载完成修改值 ${sp.getString('isFirstDown').toString()}');
         }
@@ -1350,6 +1396,31 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       } else {
         // 下载失败后的操作
         print('图片 $i 下载失败');
+      }
+    }
+  }
+
+  //调用 downloadAllImages 方法来开始下载所有图片
+  void downloadAllImages2(svgaAllBean bean) async {
+    for (int i = 0; i < bean.data!.imgList!.length; i++) {
+      bool result = await saveSVGAImgTemp(bean.data!.imgList![i].path!);
+      if (result) {
+        // 下载成功后的操作
+        print('装扮图片 $i 下载成功');
+        if (i == bean.data!.imgList!.length - 1) {
+          setState(() {
+            sp.setString(
+                'isFirstDownZB',
+                sp.getString('isFirstDownZB').toString() == 'null'
+                    ? '1'
+                    : (int.parse(sp.getString('isFirstDownZB').toString()) + 1)
+                    .toString());
+          });
+          print('装扮下载完成修改值 ${sp.getString('isFirstDownZB').toString()}');
+        }
+      } else {
+        // 下载失败后的操作
+        print('装扮图片 $i 下载失败');
       }
     }
   }

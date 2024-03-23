@@ -580,7 +580,7 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                                   ),
                                   WidgetUtils.commonSizedBox(5, 0),
                                   WidgetUtils.onlyTextCenter(
-                                      'PK模式',
+                                      '房内PK',
                                       StyleUtils.getCommonTextStyle(
                                           color: MyColors.roomTCWZ3,
                                           fontSize: ScreenUtil().setSp(18))),
