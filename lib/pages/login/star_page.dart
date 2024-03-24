@@ -126,14 +126,16 @@ class _StarPageState extends State<StarPage> {
         MyPing.checkIp(
           respons.ips,
               (ip) {
-            setState(() {
-              sp.setString('isDian', ip);
-              LogE('Ping 设置: ${sp.getString('isDian')}');
-              // MyHttpConfig.baseURL =
-              // "http://${sp.getString('isDian').toString()}:8081/api";
-              MyHttpConfig.baseURL =
-              "http://${sp.getString('isDian').toString()}:8080/api";
-            });
+            if(mounted){
+              setState(() {
+                sp.setString('isDian', ip);
+                LogE('Ping 设置: ${sp.getString('isDian')}');
+                // MyHttpConfig.baseURL =
+                // "http://${sp.getString('isDian').toString()}:8081/api";
+                MyHttpConfig.baseURL =
+                "http://${sp.getString('isDian').toString()}:8080/api";
+              });
+            }
           },
         );
       } else if (respons.code == 401) {

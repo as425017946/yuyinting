@@ -19,7 +19,7 @@ class MyHttpConfig{
   // static  String baseURL = "http://${sp.getString('isDian').toString()}:8081/api";
 
   //正式环境
-  static  String baseURL = "http://${sp.getString('isDian').toString()}:8080/api";
+  static  String baseURL = sp.getString('isDian').toString().isEmpty ? "http://119.45.157.111:8080/api" : "http://${sp.getString('isDian').toString()}:8080/api";
 
   // 正式环境
   // static  String baseURL = "http://www.aa986.com:8080/api";
@@ -32,7 +32,7 @@ class MyHttpConfig{
   // //上传用户声网日志正式
   static  String filelog = sp.getString('isDian').toString().isEmpty ? "http://43.198.138.251:8080/api/upload/filelog" : "http://${sp.getString('isDian').toString()}:8080/api/upload/filelog";
   //存一下没有获取到ip的用户
-  static  String ipLog = "http://118.195.228.131:8301/log";
+  static  String ipLog = "http://82.156.76.203:8301/log";
   //判断网络 测试
   static  String pdAddress = "http://119.45.157.111:8300/address";
   //判断网络

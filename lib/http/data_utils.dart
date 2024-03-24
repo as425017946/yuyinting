@@ -1638,4 +1638,14 @@ class DataUtils {
     print("打开app $respons");
     return CommonBean.fromJson(respons!);
   }
+
+  /// 获取不到ip上传日志
+  static Future<CommonBean> postIpLog(Map<String, dynamic> params) async {
+    print("获取不到ip上传日志 $params");
+    print("获取不到ip上传日志地址 ${MyHttpConfig.ipLog}");
+    Map<String, dynamic>? respons =
+    await MyHttpRequest.post(MyHttpConfig.ipLog, {}, params);
+    print("获取不到ip上传日志 $respons");
+    return CommonBean.fromJson(respons!);
+  }
 }

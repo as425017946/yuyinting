@@ -488,59 +488,6 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                           ),
                           const Expanded(child: Text('')),
                           Opacity(
-                            opacity:
-                                (sp.getString('role').toString() == 'leader' ||
-                                        sp.getString('role').toString() ==
-                                            'president')
-                                    ? 1
-                                    : 0,
-                            child: GestureDetector(
-                              onTap: (() {
-                                if (MyUtils.checkClick()) {
-                                  doPostSetLockMic();
-                                }
-                              }),
-                              child: Column(
-                                children: [
-                                  Stack(
-                                    alignment: Alignment.bottomCenter,
-                                    children: [
-                                      WidgetUtils.showImages(
-                                          'assets/images/room_lixina.png',
-                                          ScreenUtil().setHeight(80),
-                                          ScreenUtil().setHeight(80)),
-                                      Container(
-                                        height: ScreenUtil().setHeight(25),
-                                        width: ScreenUtil().setHeight(70),
-                                        //边框设置
-                                        decoration: const BoxDecoration(
-                                          //背景
-                                          color: MyColors.roomBlue,
-                                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20.0)),
-                                        ),
-                                        child: WidgetUtils.onlyTextCenter(
-                                            lixian == 0 ? '已关闭' : '已开启',
-                                            StyleUtils.getCommonTextStyle(
-                                                color: Colors.white,
-                                                fontSize:
-                                                    ScreenUtil().setSp(18))),
-                                      )
-                                    ],
-                                  ),
-                                  WidgetUtils.commonSizedBox(5, 0),
-                                  WidgetUtils.onlyTextCenter(
-                                      '离线模式',
-                                      StyleUtils.getCommonTextStyle(
-                                          color: MyColors.roomTCWZ3,
-                                          fontSize: ScreenUtil().setSp(18))),
-                                ],
-                              ),
-                            ),
-                          ),
-                          const Expanded(child: Text('')),
-                          Opacity(
                             opacity: 1,
                             child: GestureDetector(
                               onTap: ((){
@@ -581,6 +528,59 @@ class _RoomGongNengState extends State<RoomGongNeng> {
                                   WidgetUtils.commonSizedBox(5, 0),
                                   WidgetUtils.onlyTextCenter(
                                       '房内PK',
+                                      StyleUtils.getCommonTextStyle(
+                                          color: MyColors.roomTCWZ3,
+                                          fontSize: ScreenUtil().setSp(18))),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const Expanded(child: Text('')),
+                          Opacity(
+                            opacity:
+                            (sp.getString('role').toString() == 'leader' ||
+                                sp.getString('role').toString() ==
+                                    'president')
+                                ? 1
+                                : 0,
+                            child: GestureDetector(
+                              onTap: (() {
+                                if (MyUtils.checkClick()) {
+                                  doPostSetLockMic();
+                                }
+                              }),
+                              child: Column(
+                                children: [
+                                  Stack(
+                                    alignment: Alignment.bottomCenter,
+                                    children: [
+                                      WidgetUtils.showImages(
+                                          'assets/images/room_lixina.png',
+                                          ScreenUtil().setHeight(80),
+                                          ScreenUtil().setHeight(80)),
+                                      Container(
+                                        height: ScreenUtil().setHeight(25),
+                                        width: ScreenUtil().setHeight(70),
+                                        //边框设置
+                                        decoration: const BoxDecoration(
+                                          //背景
+                                          color: MyColors.roomBlue,
+                                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20.0)),
+                                        ),
+                                        child: WidgetUtils.onlyTextCenter(
+                                            lixian == 0 ? '已关闭' : '已开启',
+                                            StyleUtils.getCommonTextStyle(
+                                                color: Colors.white,
+                                                fontSize:
+                                                ScreenUtil().setSp(18))),
+                                      )
+                                    ],
+                                  ),
+                                  WidgetUtils.commonSizedBox(5, 0),
+                                  WidgetUtils.onlyTextCenter(
+                                      '离线模式',
                                       StyleUtils.getCommonTextStyle(
                                           color: MyColors.roomTCWZ3,
                                           fontSize: ScreenUtil().setSp(18))),

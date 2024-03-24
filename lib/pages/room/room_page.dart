@@ -507,9 +507,9 @@ class _RoomPageState extends State<RoomPage>
   int _timeCount = 5;
 
   // 发送爆灯使用 wherePeople在哪个麦序上，0不在麦上  _timer2和_timeCount2是爆灯的倒计时
-  int wherePeople = 0;
-  Timer? _timer2;
-  int _timeCount2 = 10;
+  List<String> wherePeopleList = ["0","0","0","0","0","0","0","0","0"];
+  Timer? _timerm1,_timerm2,_timerm3,_timerm4,_timerm5,_timerm6,_timerm7,_timerm8,_timerm9;
+  int _timeCount1 = 10, _timeCount2 = 10, _timeCount3 = 10, _timeCount4 = 10, _timeCount5 = 10, _timeCount6 = 10, _timeCount7 = 10, _timeCount8 = 10, _timeCount9 = 10;
 
   void _startTimer() {
     _timer = Timer.periodic(
@@ -529,25 +529,171 @@ class _RoomPageState extends State<RoomPage>
             });
   }
 
-  void _startTimer2() {
-    _timer2 = Timer.periodic(
-        const Duration(seconds: 1),
-        (Timer timer) => {
+  void _startTimer2(String maixu) {
+    switch(maixu){
+      case "1":
+        _timerm1 = Timer.periodic(
+            const Duration(seconds: 1),
+                (Timer timer) => {
+              if (mounted)
+                {
+                  setState(() {
+                    if (_timeCount1 <= 0) {
+                      _timerm1!.cancel();
+                      _timeCount1 = 10;
+                      wherePeopleList[0] = "0";
+                    } else {
+                      _timeCount1 -= 1;
+                    }
+                  })
+                }
+            });
+        break;
+      case "2":
+        _timerm2 = Timer.periodic(
+            const Duration(seconds: 1),
+                (Timer timer) => {
               if (mounted)
                 {
                   setState(() {
                     if (_timeCount2 <= 0) {
-                      _timer2!.cancel();
+                      _timerm2!.cancel();
                       _timeCount2 = 10;
-                      setState(() {
-                        wherePeople = 0;
-                      });
+                      wherePeopleList[1] = "0";
                     } else {
                       _timeCount2 -= 1;
                     }
                   })
                 }
             });
+        break;
+      case "3":
+        _timerm3 = Timer.periodic(
+            const Duration(seconds: 1),
+                (Timer timer) => {
+              if (mounted)
+                {
+                  setState(() {
+                    if (_timeCount3 <= 0) {
+                      _timerm3!.cancel();
+                      _timeCount3 = 10;
+                      wherePeopleList[2] = "0";
+                    } else {
+                      _timeCount3 -= 1;
+                    }
+                  })
+                }
+            });
+        break;
+      case "4":
+        _timerm4 = Timer.periodic(
+            const Duration(seconds: 1),
+                (Timer timer) => {
+              if (mounted)
+                {
+                  setState(() {
+                    if (_timeCount4 <= 0) {
+                      _timerm4!.cancel();
+                      _timeCount4 = 10;
+                      wherePeopleList[3] = "0";
+                    } else {
+                      _timeCount4 -= 1;
+                    }
+                  })
+                }
+            });
+        break;
+      case "5":
+        _timerm5 = Timer.periodic(
+            const Duration(seconds: 1),
+                (Timer timer) => {
+              if (mounted)
+                {
+                  setState(() {
+                    if (_timeCount5 <= 0) {
+                      _timerm5!.cancel();
+                      _timeCount5 = 10;
+                      wherePeopleList[4] = "0";
+                    } else {
+                      _timeCount5 -= 1;
+                    }
+                  })
+                }
+            });
+        break;
+      case "6":
+        _timerm6 = Timer.periodic(
+            const Duration(seconds: 1),
+                (Timer timer) => {
+              if (mounted)
+                {
+                  setState(() {
+                    if (_timeCount6 <= 0) {
+                      _timerm6!.cancel();
+                      _timeCount6 = 10;
+                      wherePeopleList[5] = "0";
+                    } else {
+                      _timeCount6 -= 1;
+                    }
+                  })
+                }
+            });
+        break;
+      case "7":
+        _timerm7 = Timer.periodic(
+            const Duration(seconds: 1),
+                (Timer timer) => {
+              if (mounted)
+                {
+                  setState(() {
+                    if (_timeCount7 <= 0) {
+                      _timerm7!.cancel();
+                      _timeCount7 = 10;
+                      wherePeopleList[6] = "0";
+                    } else {
+                      _timeCount7 -= 1;
+                    }
+                  })
+                }
+            });
+        break;
+      case "8":
+        _timerm8 = Timer.periodic(
+            const Duration(seconds: 1),
+                (Timer timer) => {
+              if (mounted)
+                {
+                  setState(() {
+                    if (_timeCount8 <= 0) {
+                      _timerm8!.cancel();
+                      _timeCount8 = 10;
+                      wherePeopleList[7] = "0";
+                    } else {
+                      _timeCount8 -= 1;
+                    }
+                  })
+                }
+            });
+        break;
+      case "9":
+        _timerm9 = Timer.periodic(
+            const Duration(seconds: 1),
+                (Timer timer) => {
+              if (mounted)
+                {
+                  setState(() {
+                    if (_timeCount9 <= 0) {
+                      _timerm9!.cancel();
+                      _timeCount9 = 10;
+                      wherePeopleList[8] = "0";
+                    } else {
+                      _timeCount9 -= 1;
+                    }
+                  })
+                }
+            });
+        break;
+    }
   }
 
   // 送礼选中了那个用户
@@ -840,17 +986,17 @@ class _RoomPageState extends State<RoomPage>
             }
           }
         } else if (event.title == '爆灯') {
+          String wherePeople = '';
           for (int i = 0; i < listM.length; i++) {
             if (sp.getString('user_id').toString() == listM[i].uid.toString()) {
-              setState(() {
-                wherePeople = i + 1;
-              });
+              wherePeople = (i + 1).toString();
+              wherePeopleList[i] = (i + 1).toString();
             }
           }
           // 如果在麦上，就开启爆灯模式
-          if (wherePeople != 0) {
-            doPostBurstLight(wherePeople.toString());
-            _startTimer2();
+          if (isMeUp) {
+            _startTimer2(wherePeople);
+            doPostBurstLight(wherePeople);
           } else {
             MyToastUtils.showToastBottom('上麦后才可以使用哦~');
           }
@@ -1565,9 +1711,9 @@ class _RoomPageState extends State<RoomPage>
           //通知用户开启了爆灯
           if (event.map!['uid'].toString() != sp.getString('user_id')) {
             setState(() {
-              wherePeople = int.parse(event.map!['serial_number'].toString());
+              wherePeopleList[int.parse(event.map!['serial_number'].toString())-1] = event.map!['serial_number'].toString();
             });
-            _startTimer2();
+            _startTimer2(event.map!['serial_number'].toString());
           }
         } else {
           /// 这里是用户的其他正常操作
@@ -3117,6 +3263,33 @@ class _RoomPageState extends State<RoomPage>
     if (_timerHot != null) {
       _timerHot!.cancel();
     }
+    if (_timerm1 != null) {
+      _timerm1!.cancel();
+    }
+    if (_timerm2 != null) {
+      _timerm2!.cancel();
+    }
+    if (_timerm3 != null) {
+      _timerm3!.cancel();
+    }
+    if (_timerm4 != null) {
+      _timerm4!.cancel();
+    }
+    if (_timerm5 != null) {
+      _timerm5!.cancel();
+    }
+    if (_timerm6 != null) {
+      _timerm6!.cancel();
+    }
+    if (_timerm7 != null) {
+      _timerm7!.cancel();
+    }
+    if (_timerm8 != null) {
+      _timerm8!.cancel();
+    }
+    if (_timerm9 != null) {
+      _timerm9!.cancel();
+    }
     listenSGJ.cancel();
     listenJoinHF.cancel();
     animationControllerBG.dispose();
@@ -3492,7 +3665,7 @@ class _RoomPageState extends State<RoomPage>
 
                           /// 公告 和 厅主
                           RoomItems.notices(context, m0, notice, listM,
-                              widget.roomId, wherePeople, listPeople, audio9,jianLiWu,animationControllerJL),
+                              widget.roomId, wherePeopleList[8], listPeople, audio9,jianLiWu,animationControllerJL),
 
                           /// 麦序
                           Stack(
@@ -3528,7 +3701,7 @@ class _RoomPageState extends State<RoomPage>
                                   isBoss,
                                   listM,
                                   widget.roomId,
-                                  wherePeople,
+                                  wherePeopleList,
                                   listPeople,
                                   audio1,
                                   audio2,

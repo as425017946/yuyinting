@@ -997,6 +997,11 @@ class _LoginPageState extends State<LoginPage> {
         MyUtils.jumpLogin(context);
       } else {
         MyToastUtils.showToastBottom('IP获取失败~');
+        Map<String, dynamic> paramsa = <String, dynamic>{
+          'title': '获取IP',
+          'msg': 'ip获取失败',
+        };
+        CommonBean bean = await DataUtils.postIpLog(paramsa);
       }
     } catch (e) {
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);

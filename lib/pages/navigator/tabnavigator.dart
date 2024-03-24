@@ -366,7 +366,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           if (event.map!['uid'].toString() ==
                   sp.getString('user_id').toString() &&
               event.map!['from_uid'].toString() !=
-                  sp.getString('user_id').toString()) {
+                  sp.getString('user_id').toString() && event.map!['from_uid'].toString().isNotEmpty) {
             MyToastUtils.showToastBottom('你已被管理下掉了麦序！');
             // 取消发布本地音频流
             _engine.muteLocalAudioStream(true);

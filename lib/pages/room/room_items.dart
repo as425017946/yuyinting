@@ -1841,7 +1841,7 @@ class RoomItems {
       String notice,
       List<MikeList> listm,
       String roomID,
-      int wherePeople,
+      String wherePeople,
       List<bool> listPeople,
       bool audio9,String jianLiWu,SVGAAnimationController animationControllerJL) {
     return Row(
@@ -2038,7 +2038,7 @@ class RoomItems {
                           : const Text('')
                     ],
                   ),
-                  wherePeople == 9
+                  wherePeople == "9"
                       ? Positioned(
                     top: 70.h,
                     child: Container(
@@ -2126,7 +2126,7 @@ class RoomItems {
       bool isBoss,
       List<MikeList> listm,
       String roomID,
-      int wherePeople,
+      List<String> wherePeople,
       List<bool> listPeople,
       bool audio1,
       bool audio2,
@@ -2282,7 +2282,7 @@ class RoomItems {
                               : WidgetUtils.commonSizedBox(0, 0),
                         ],
                       ),
-                      wherePeople == 1
+                      wherePeople[0] == "1"
                           ? Container(
                         height: 80.h,
                         width: 80.h,
@@ -2492,7 +2492,7 @@ class RoomItems {
                               : WidgetUtils.commonSizedBox(0, 0),
                         ],
                       ),
-                      wherePeople == 2
+                      wherePeople[1] == "2"
                           ? Container(
                         height: 80.h,
                         width: 80.h,
@@ -2703,7 +2703,7 @@ class RoomItems {
                               : WidgetUtils.commonSizedBox(0, 0),
                         ],
                       ),
-                      wherePeople == 3
+                      wherePeople[2] == "3"
                           ? Container(
                         height: 80.h,
                         width: 80.h,
@@ -2913,7 +2913,7 @@ class RoomItems {
                               : WidgetUtils.commonSizedBox(0, 0),
                         ],
                       ),
-                      wherePeople == 4
+                      wherePeople[3] == "4"
                           ? Container(
                         height: 80.h,
                         width: 80.h,
@@ -3134,7 +3134,7 @@ class RoomItems {
                                 : WidgetUtils.commonSizedBox(0, 0),
                           ],
                         ),
-                        wherePeople == 5
+                        wherePeople[4] == "5"
                             ? Container(
                           height: 80.h,
                           width: 80.h,
@@ -3346,7 +3346,7 @@ class RoomItems {
                                 : WidgetUtils.commonSizedBox(0, 0),
                           ],
                         ),
-                        wherePeople == 6
+                        wherePeople[5] == "6"
                             ? Container(
                           height: 80.h,
                           width: 80.h,
@@ -3558,7 +3558,7 @@ class RoomItems {
                                 : WidgetUtils.commonSizedBox(0, 0),
                           ],
                         ),
-                        wherePeople == 7
+                        wherePeople[6] == "7"
                             ? Container(
                           height: 80.h,
                           width: 80.h,
@@ -3812,7 +3812,7 @@ class RoomItems {
                                 : WidgetUtils.commonSizedBox(0, 0),
                           ],
                         ),
-                        wherePeople == 8
+                        wherePeople[7] == "8"
                             ? Container(
                           height: 80.h,
                           width: 80.h,
@@ -4027,7 +4027,7 @@ class RoomItems {
                                 : WidgetUtils.commonSizedBox(0, 0),
                           ],
                         ),
-                        wherePeople == 8
+                        wherePeople[7] == "8"
                             ? Container(
                           height: 80.h,
                           width: 80.h,

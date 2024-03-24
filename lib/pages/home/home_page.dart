@@ -27,6 +27,7 @@ import 'package:yuyinting/pages/login/edit_info_page.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import '../../bean/CheckoutBean.dart';
+import '../../bean/Common_bean.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
@@ -631,6 +632,11 @@ class _HomePageState extends State<HomePage>
         MyUtils.jumpLogin(context);
       } else {
         MyToastUtils.showToastBottom('IP获取失败~');
+        Map<String, dynamic> paramsa = <String, dynamic>{
+          'title': '获取IP',
+          'msg': 'ip获取失败',
+        };
+        CommonBean bean = await DataUtils.postIpLog(paramsa);
       }
     } catch (e) {
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
