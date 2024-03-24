@@ -199,7 +199,7 @@ class _LoginPageState extends State<LoginPage> {
     if (Platform.isAndroid) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
       String imei =
-          '${androidInfo.id}:${androidInfo.device}:${androidInfo.model}:${androidInfo.product}:${androidInfo.isPhysicalDevice}:${sp.getString('miyao')}'; // 获取 Android 设备的 IMEI
+          '${androidInfo.id}:${androidInfo.bootloader}:${androidInfo.brand}:${androidInfo.fingerprint}:${androidInfo.device}:${androidInfo.model}:${androidInfo.product}:${androidInfo.isPhysicalDevice}:${sp.getString('miyao')}'; // 获取 Android 设备的 IMEI
       // String imei = androidInfo.id;
       setState(() {
         IMEI = imei;
@@ -207,7 +207,7 @@ class _LoginPageState extends State<LoginPage> {
     } else if (Platform.isIOS) {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
       String identifierForVendor =
-          '${iosInfo.identifierForVendor.toString()}:${iosInfo.name}:${iosInfo.model}:${iosInfo.isPhysicalDevice}:${iosInfo.localizedModel}:${iosInfo.systemName}:${iosInfo.systemVersion}:${iosInfo.utsname}';
+          '${iosInfo.identifierForVendor.toString()}:${iosInfo.name}:${iosInfo.model}:${iosInfo.isPhysicalDevice}:${iosInfo.localizedModel}:${iosInfo.systemName}:${iosInfo.systemVersion}:${iosInfo.utsname}:${sp.getString('miyao')}';
       // String identifierForVendor = iosInfo.identifierForVendor.toString(); // 获取 iOS 设备的 IMEI
       setState(() {
         IMEI = identifierForVendor;
@@ -972,7 +972,8 @@ class _LoginPageState extends State<LoginPage> {
     sp.setString('myVersion2', version.toString());
     sp.setString('buildNumber', buildNumber);
     try {
-      Map<String, dynamic> params = <String, dynamic>{'type': 'test'};
+      // Map<String, dynamic> params = <String, dynamic>{'type': 'test'};
+      Map<String, dynamic> params = <String, dynamic>{'type': 'go'};
       var respons = await DataUtils.postPdAddress(params);
       if (respons.code == 200) {
         setState(() {
@@ -984,8 +985,10 @@ class _LoginPageState extends State<LoginPage> {
             setState(() {
               sp.setString('isDian', ip);
               LogE('Ping 设置: ${sp.getString('isDian')}');
+              // MyHttpConfig.baseURL =
+              //     "http://${sp.getString('isDian').toString()}:8081/api";
               MyHttpConfig.baseURL =
-                  "http://${sp.getString('isDian').toString()}:8081/api";
+              "http://${sp.getString('isDian').toString()}:8080/api";
             });
           },
         );

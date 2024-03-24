@@ -208,7 +208,7 @@ class _RoomPageState extends State<RoomPage>
               ?.forward() // Try to use .forward() .reverse()
               .whenComplete(() => animationControllerZJ?.videoItem = null);
           // 监听动画
-          animationControllerZJ?.addListener(_animListener);
+          animationControllerZJ?.addListener(_animListenerZJ);
         } else {
           LogE('礼物不存在');
           setState(() {

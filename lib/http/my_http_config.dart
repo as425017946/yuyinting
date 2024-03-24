@@ -16,10 +16,10 @@ class MyHttpConfig{
   // //测试环境
   // static  String baseURL = "http://18.162.113.63:8080/api";
   // 修改后的测试环境
-  static  String baseURL = "http://${sp.getString('isDian').toString()}:8081/api";
+  // static  String baseURL = "http://${sp.getString('isDian').toString()}:8081/api";
 
   //正式环境
-  // static  String baseURL = sp.getString('isDian').toString().isEmpty ? "http://43.198.138.251:8080/api" : "http://${sp.getString('isDian').toString()}:8080/api";
+  static  String baseURL = "http://${sp.getString('isDian').toString()}:8080/api";
 
   // 正式环境
   // static  String baseURL = "http://www.aa986.com:8080/api";

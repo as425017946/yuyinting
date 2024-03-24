@@ -606,7 +606,8 @@ class _HomePageState extends State<HomePage>
   /// 判断当前网络，然后给返回适配的网络地址
   Future<void> doPostPdAddress() async {
     try {
-      Map<String, dynamic> params = <String, dynamic>{'type': 'test'};
+      // Map<String, dynamic> params = <String, dynamic>{'type': 'test'};
+      Map<String, dynamic> params = <String, dynamic>{'type': 'go'};
       var respons = await DataUtils.postPdAddress(params);
       if (respons.code == 200) {
         setState(() {
@@ -614,12 +615,14 @@ class _HomePageState extends State<HomePage>
         });
         MyPing.checkIp(
           respons.ips,
-          (ip) {
+              (ip) {
             setState(() {
               sp.setString('isDian', ip);
               LogE('Ping 设置: ${sp.getString('isDian')}');
+              // MyHttpConfig.baseURL =
+              // "http://${sp.getString('isDian').toString()}:8081/api";
               MyHttpConfig.baseURL =
-                  "http://${sp.getString('isDian').toString()}:8081/api";
+              "http://${sp.getString('isDian').toString()}:8080/api";
             });
           },
         );
@@ -630,6 +633,7 @@ class _HomePageState extends State<HomePage>
         MyToastUtils.showToastBottom('IP获取失败~');
       }
     } catch (e) {
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
       // MyToastUtils.showToastBottom(MyConfig.errorTitleFile);
     }
   }

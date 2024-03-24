@@ -26,9 +26,9 @@ class MyConfig{
   // 定义声网 App ID、Token（生成的临时token，声网这个是有效时间24小时） 和 Channel（创建的频道名）
   // static const appId = "6d4c7c47c5c040a2a51829ed564a2697";
   // // 测试声网appid
-  static const appId = "e43bd522a51c4db09f5fd48e6fb46396";
+  // static const appId = "e43bd522a51c4db09f5fd48e6fb46396";
   // 正式声网appid
-  // static const appId = "bd33b13cda0648ef9a8d1caefccc64bc";
+  static const appId = "bd33b13cda0648ef9a8d1caefccc64bc";
 
   // static const token = "007eJxTYJgsP3eVBhsvl43Yy6oXQbeFhTpaTTM+iPn7TmGdLrVW4IkCg1mKSbJ5sol5smmygYlBolGiqaGFkWVqiqmZSaKRmaX5q1P9qQ2BjAwc714zMzJAIIjPxpBbGZSfn8vAAACIUx3F";
   // static const channel = "myRoom";

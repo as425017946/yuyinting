@@ -67,7 +67,7 @@ class _StarPageState extends State<StarPage> {
         //登录过，但是退出了登录
         MyUtils.goTransparentPageCom(context, const LoginPage());
       }
-      if (sp.getString('miyao').toString() != 'null' ||
+      if (sp.getString('miyao').toString() == 'null' ||
           sp.getString('miyao').toString().isEmpty) {
         sp.setString('miyao', DateTime.now().millisecondsSinceEpoch.toString());
       }
@@ -116,7 +116,8 @@ class _StarPageState extends State<StarPage> {
     sp.setString('myVersion2', version.toString());
     sp.setString('buildNumber', buildNumber);
     try {
-      Map<String, dynamic> params = <String, dynamic>{'type': 'test'};
+      // Map<String, dynamic> params = <String, dynamic>{'type': 'test'};
+      Map<String, dynamic> params = <String, dynamic>{'type': 'go'};
       var respons = await DataUtils.postPdAddress(params);
       if (respons.code == 200) {
         setState(() {
@@ -124,12 +125,14 @@ class _StarPageState extends State<StarPage> {
         });
         MyPing.checkIp(
           respons.ips,
-          (ip) {
+              (ip) {
             setState(() {
               sp.setString('isDian', ip);
               LogE('Ping 设置: ${sp.getString('isDian')}');
+              // MyHttpConfig.baseURL =
+              // "http://${sp.getString('isDian').toString()}:8081/api";
               MyHttpConfig.baseURL =
-                  "http://${sp.getString('isDian').toString()}:8081/api";
+              "http://${sp.getString('isDian').toString()}:8080/api";
             });
           },
         );
