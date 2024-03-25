@@ -93,6 +93,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
     super.dispose();
     listen.cancel();
     listenHB.cancel();
+    listenSL.cancel();
   }
 
   // 在数据变化后将滚动位置设置为最后一个item的位置

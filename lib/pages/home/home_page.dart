@@ -435,31 +435,31 @@ class _HomePageState extends State<HomePage>
                               ),
                             ))
                           : const Expanded(child: Text('')),
-                      _currentIndex == 3
-                          ? Expanded(
-                              child: SizedBox(
-                              width: ScreenUtil().setHeight(68),
-                              height: ScreenUtil().setHeight(10),
-                              child: Row(
-                                children: [
-                                  const Expanded(child: Text('')),
-                                  Container(
-                                    width: ScreenUtil().setHeight(20),
-                                    height: ScreenUtil().setHeight(4),
-                                    //边框设置
-                                    decoration: const BoxDecoration(
-                                      //背景
-                                      color: Colors.white,
-                                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10.0)),
-                                    ),
-                                  ),
-                                  const Expanded(child: Text('')),
-                                ],
-                              ),
-                            ))
-                          : const Expanded(child: Text('')),
+                      // _currentIndex == 3
+                      //     ? Expanded(
+                      //         child: SizedBox(
+                      //         width: ScreenUtil().setHeight(68),
+                      //         height: ScreenUtil().setHeight(10),
+                      //         child: Row(
+                      //           children: [
+                      //             const Expanded(child: Text('')),
+                      //             Container(
+                      //               width: ScreenUtil().setHeight(20),
+                      //               height: ScreenUtil().setHeight(4),
+                      //               //边框设置
+                      //               decoration: const BoxDecoration(
+                      //                 //背景
+                      //                 color: Colors.white,
+                      //                 //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                      //                 borderRadius: BorderRadius.all(
+                      //                     Radius.circular(10.0)),
+                      //               ),
+                      //             ),
+                      //             const Expanded(child: Text('')),
+                      //           ],
+                      //         ),
+                      //       ))
+                      //     : const Expanded(child: Text('')),
                       (_currentIndex == 4 && identity != 'user')
                           ? Expanded(
                               child: SizedBox(

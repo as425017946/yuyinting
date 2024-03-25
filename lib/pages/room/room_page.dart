@@ -4204,7 +4204,9 @@ class _RoomPageState extends State<RoomPage>
             if (_timerHot != null) {
               _timerHot!.cancel();
             }
+            _cancelTimer();
             sp.setString('isShouQi', '1');
+            sp.setString('sqRoomID', widget.roomId);
             eventBus.fire(SubmitButtonBack(title: '收起房间'));
             Navigator.pop(context);
           }
