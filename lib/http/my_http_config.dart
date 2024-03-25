@@ -1,3 +1,4 @@
+import '../config/online_config.dart';
 import '../main.dart';
 
 class MyHttpConfig{
@@ -19,7 +20,8 @@ class MyHttpConfig{
   // static  String baseURL = "http://${sp.getString('isDian').toString()}:8081/api";
 
   //正式环境
-  static  String baseURL = sp.getString('isDian').toString().isEmpty ? "http://119.45.157.111:8080/api" : "http://${sp.getString('isDian').toString()}:8080/api";
+  // static  String baseURL = sp.getString('isDian').toString().isEmpty ? "http://119.45.157.111:8080/api" : "http://${sp.getString('isDian').toString()}:8080/api";
+  static  String baseURL = OnlineConfig.getBaseURL();
 
   // 正式环境
   // static  String baseURL = "http://www.aa986.com:8080/api";
@@ -30,7 +32,8 @@ class MyHttpConfig{
   //上传用户声网日志测试
   // static  String filelog = "http://18.162.113.63:8080/api/upload/filelog";
   // //上传用户声网日志正式
-  static  String filelog = sp.getString('isDian').toString().isEmpty ? "http://43.198.138.251:8080/api/upload/filelog" : "http://${sp.getString('isDian').toString()}:8080/api/upload/filelog";
+  // static  String filelog = sp.getString('isDian').toString().isEmpty ? "http://43.198.138.251:8080/api/upload/filelog" : "http://${sp.getString('isDian').toString()}:8080/api/upload/filelog";
+  static  String filelog = OnlineConfig.getFilelog();
   //存一下没有获取到ip的用户
   static  String ipLog = "http://82.156.76.203:8301/log";
   //判断网络 测试

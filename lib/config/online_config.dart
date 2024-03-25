@@ -2,6 +2,7 @@ import 'package:im_flutter_sdk/im_flutter_sdk.dart';
 
 import '../http/my_http_config.dart';
 import '../main.dart';
+import '../utils/log_util.dart';
 import 'online_config_private.dart';
 
 enum OnlineConfigType { online, test, zhaozeng, pengfei }
@@ -16,6 +17,7 @@ class OnlineConfig {
     sp.setString('isDian', ip);
     MyHttpConfig.baseURL = getBaseURL();
     MyHttpConfig.filelog = getFilelog();
+    LogE('Ping 设置: $ip');
   }
 
   /// Api

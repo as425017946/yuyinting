@@ -12,6 +12,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
+import '../config/online_config.dart';
 import '../db/DatabaseHelper.dart';
 import '../main.dart';
 import '../pages/login/login_page.dart';
@@ -436,16 +437,17 @@ class MyUtils {
     //     debugModel: true,
     //     isAutoDownloadThumbnail: true);
     // 正式环境
-    EMOptions options = EMOptions(
-        appKey: "1129240201157233#cc",
-        autoLogin: false,
-        debugModel: true,
-        isAutoDownloadThumbnail: true);
+    // EMOptions options = EMOptions(
+    //     appKey: "1129240201157233#cc",
+    //     autoLogin: false,
+    //     debugModel: true,
+    //     isAutoDownloadThumbnail: true);
     // EMOptions options = EMOptions(
     //     appKey: "1109240124169584#777",
     //     autoLogin: false,
     //     debugModel: true,
     //     isAutoDownloadThumbnail: true);
+    EMOptions options = OnlineConfig.getEMOptions();
     await EMClient.getInstance.init(options);
     // 通知 SDK UI 已准备好。该方法执行后才会收到 `EMChatRoomEventHandler`、`EMContactEventHandler` 和 `EMGroupEventHandler` 回调。
     await EMClient.getInstance.startCallback();
@@ -576,7 +578,7 @@ class MyUtils {
                     eventBus.fire(JoinRoomYBack(map: info, type: 'bao_mic'));
                   } else if (body.content == '爆灯') {
                     eventBus.fire(JoinRoomYBack(map: info, type: 'burstlight'));
-                  }  else {
+                  } else {
                     if (info['lv'] == '' || info['lv'] == null) {
                       if (info['type'] == 'clean_charm') {
                         // 厅内清空魅力值
