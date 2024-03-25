@@ -50,8 +50,8 @@ class _PayTSPageState extends State<PayTSPage> {
                 ),
               ),
               Container(
-                width: ScreenUtil().setHeight(506),
-                height: ScreenUtil().setHeight(520),
+                width: ScreenUtil().setWidth(506*1.25),
+                height: ScreenUtil().setWidth(520*1.25),
                 decoration: const BoxDecoration(
                   //设置Container修饰
                   image: DecorationImage(
@@ -62,19 +62,19 @@ class _PayTSPageState extends State<PayTSPage> {
                 ),
                 child: Column(
                   children: [
-                    WidgetUtils.commonSizedBox(120, 0),
+                    WidgetUtils.commonSizedBox(120*2.w, 0),
                     WidgetUtils.onlyTextCenter(
                         '请输入支付密码',
                         StyleUtils.getCommonTextStyle(
                             color: Colors.black87,
                             fontSize: 36.sp,
                             fontWeight: FontWeight.w600)),
-                    WidgetUtils.commonSizedBox(80.h, 0),
+                    WidgetUtils.commonSizedBox(80*1.25.w, 0),
                     Container(
                       width: double.infinity,
                       color: Colors.transparent,
                       alignment: Alignment.center,
-                      margin: EdgeInsets.only(left: ScreenUtil().setHeight(40), right: ScreenUtil().setHeight(40),),
+                      margin: EdgeInsets.only(left: ScreenUtil().setWidth(40*1.25), right: ScreenUtil().setWidth(40*1.25),),
                       child: PinCodeTextField(
                         length: 6,
                         inputFormatters: [
@@ -110,8 +110,8 @@ class _PayTSPageState extends State<PayTSPage> {
                         pinTheme: PinTheme(
                           shape: PinCodeFieldShape.box,
                           borderRadius: BorderRadius.circular(2),
-                          fieldHeight: 100.h,
-                          fieldWidth: 60.h,
+                          fieldHeight: 100*1.25.w,
+                          fieldWidth: 60*1.25.w,
                           activeFillColor: Colors.transparent,
                           //填充背景色
                           activeColor: MyColors.btn_a,

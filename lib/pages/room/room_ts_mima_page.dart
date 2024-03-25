@@ -60,8 +60,8 @@ class _RoomTSMiMaPageState extends State<RoomTSMiMaPage> {
                 ),
               ),
               Container(
-                width: ScreenUtil().setHeight(506),
-                height: ScreenUtil().setHeight(400),
+                width: ScreenUtil().setWidth(506*1.25),
+                height: ScreenUtil().setWidth(400*1.25),
                 decoration: const BoxDecoration(
                   //设置Container修饰
                   image: DecorationImage(
@@ -72,21 +72,21 @@ class _RoomTSMiMaPageState extends State<RoomTSMiMaPage> {
                 ),
                 child: Column(
                   children: [
-                    WidgetUtils.commonSizedBox(120, 0),
+                    WidgetUtils.commonSizedBox(120*2.w, 0),
                     WidgetUtils.onlyTextCenter(
                         '请输入房间密码',
                         StyleUtils.getCommonTextStyle(
                             color: Colors.black87,
                             fontSize: 32.sp,
                             fontWeight: FontWeight.w600)),
-                    WidgetUtils.commonSizedBox(30, 0),
+                    WidgetUtils.commonSizedBox(30*2.w, 0),
                     Container(
                       width: double.infinity,
                       color: Colors.transparent,
                       alignment: Alignment.center,
                       margin: EdgeInsets.only(
-                        left: ScreenUtil().setHeight(80),
-                        right: ScreenUtil().setHeight(80),
+                        left: ScreenUtil().setWidth(80*1.25),
+                        right: ScreenUtil().setWidth(80*1.25),
                       ),
                       child: PinCodeTextField(
                         length: 4,
@@ -111,8 +111,8 @@ class _RoomTSMiMaPageState extends State<RoomTSMiMaPage> {
                         pinTheme: PinTheme(
                           shape: PinCodeFieldShape.box,
                           borderRadius: BorderRadius.circular(2),
-                          fieldHeight: 70.h,
-                          fieldWidth: 55.h,
+                          fieldHeight: 70*1.25.w,
+                          fieldWidth: 55*1.25.w,
                           activeFillColor: Colors.transparent,
                           //填充背景色
                           activeColor: MyColors.btn_a,
