@@ -610,7 +610,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
     }
 
     if (allData2[i]['whoUid'] != sp.getString('user_id')) {
-      // MyUtils.didMsgRead(allData2[i]);
+      MyUtils.didMsgRead(allData2[i]);
       // 左侧显示
       return Column(
         children: [
@@ -840,13 +840,13 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(100)),
-              // Container(
-              //   width: ScreenUtil().setHeight(90),
-              //   alignment: Alignment.bottomRight,
-              //   padding: EdgeInsets.only(right: 10.h),
-              //   child: msgReadText(allData2[i]['msgRead']),
-              // ),
+              // WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(100)),
+              Container(
+                width: ScreenUtil().setHeight(90),
+                alignment: Alignment.bottomRight,
+                padding: EdgeInsets.only(right: 10.h),
+                child: msgReadText(allData2[i]['msgRead']),
+              ),
               // 6v豆红包
               allData2[i]['type'] == 6
                   ? SizedBox(
@@ -2207,8 +2207,8 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
       'liveStatus': 0,
       'loginStatus': 0,
       'weight': widget.otherUid.toString() == '1' ? 1 : 0,
-      // 'msgId': imgMsg.attributes?['msgId'],
-      // 'msgRead': 2,
+      'msgId': imgMsg.attributes?['msgId'],
+      'msgRead': 2,
     };
     // 插入数据
     await databaseHelper.insertData('messageSLTable', params);
