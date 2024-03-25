@@ -67,6 +67,7 @@ class OnlineConfig {
             appKey: "1129240201157233#cc",
             autoLogin: false,
             debugModel: true,
+            requireAck: true, //已读回执
             isAutoDownloadThumbnail: true);
       // return EMOptions(
       //     appKey: "1109240124169584#777",
@@ -75,17 +76,18 @@ class OnlineConfig {
       //     isAutoDownloadThumbnail: true);
       default:
         // 本地测试环境
+        // return EMOptions(
+        //     appKey: "1199230605161000#demo",
+        //     autoLogin: false,
+        //     debugModel: true,
+        //     isAutoDownloadThumbnail: true);
+        // 测试环境
         return EMOptions(
-            appKey: "1199230605161000#demo",
+            appKey: "1129240201157233#demo",
             autoLogin: false,
             debugModel: true,
+            requireAck: true, //已读回执
             isAutoDownloadThumbnail: true);
-      // 测试环境
-      // return EMOptions(
-      //     appKey: "1129240201157233#demo",
-      //     autoLogin: false,
-      //     debugModel: true,
-      //     isAutoDownloadThumbnail: true);
     }
   }
 }

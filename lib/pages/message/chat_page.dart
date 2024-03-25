@@ -69,7 +69,7 @@ class ChatPage extends StatefulWidget {
   State<ChatPage> createState() => _ChatPageState();
 }
 
-class _ChatPageState extends State<ChatPage> {
+class _ChatPageState extends State<ChatPage> with MsgReadText {
   bool isShow = false, isRoomShow = false, isAudio = false;
   // 记录按下的时间，如果不够1s，不发音频
   int downTime =0;
@@ -610,6 +610,7 @@ class _ChatPageState extends State<ChatPage> {
     }
 
     if (allData2[i]['whoUid'] != sp.getString('user_id')) {
+      // MyUtils.didMsgRead(allData2[i]);
       // 左侧显示
       return Column(
         children: [
@@ -840,6 +841,12 @@ class _ChatPageState extends State<ChatPage> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(100)),
+              // Container(
+              //   width: ScreenUtil().setHeight(90),
+              //   alignment: Alignment.bottomRight,
+              //   padding: EdgeInsets.only(right: 10.h),
+              //   child: msgReadText(allData2[i]['msgRead']),
+              // ),
               // 6v豆红包
               allData2[i]['type'] == 6
                   ? SizedBox(
@@ -2169,7 +2176,8 @@ class _ChatPageState extends State<ChatPage> {
     imgMsg.attributes = {
       'nickname': sp.getString('nickname'),
       'avatar': sp.getString('user_headimg'),
-      'weight': 50
+      'weight': 50,
+      'msgId': 'Local_${imgMsg.msgId}',
     };
     EMClient.getInstance.chatManager.sendMessage(imgMsg);
 
@@ -2199,6 +2207,8 @@ class _ChatPageState extends State<ChatPage> {
       'liveStatus': 0,
       'loginStatus': 0,
       'weight': widget.otherUid.toString() == '1' ? 1 : 0,
+      // 'msgId': imgMsg.attributes?['msgId'],
+      // 'msgRead': 2,
     };
     // 插入数据
     await databaseHelper.insertData('messageSLTable', params);
@@ -2482,4 +2492,29 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
+}
+
+mixin MsgReadText {
+  Widget msgReadText(int msgRead) {
+    switch (msgRead) {
+      case 1:
+        return Text(
+          '已读',
+          style: TextStyle(
+            color: Colors.green,
+            fontSize: ScreenUtil().setSp(20),
+          ),
+        );
+      case 2:
+        return Text(
+          '未读',
+          style: TextStyle(
+            color: Colors.grey,
+            fontSize: ScreenUtil().setSp(20),
+          ),
+        );
+      default:
+        return const Text('');
+    }
+  }
 }

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -10,6 +11,7 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import '../config/online_config.dart';
@@ -620,10 +622,12 @@ class MyUtils {
                           'liveStatus': 0,
                           'loginStatus': 0,
                           'weight': msg.from.toString() == '1' ? 1 : 0,
+                          'msgId': msg.msgId,
+                          'msgRead': 2,
+                          'msgJson': jsonEncode(msg.toJson()),
                         };
                         // 插入数据
-                        await databaseHelper.insertData(
-                            'messageSLTable', params);
+                        await databaseHelper.insertData('messageSLTable', params);
                         eventBus.fire(SendMessageBack(type: 1, msgID: '0'));
                       }
                     } else {
@@ -670,6 +674,9 @@ class MyUtils {
                     'liveStatus': 0,
                     'loginStatus': 0,
                     'weight': msg.from.toString() == '1' ? 1 : 0,
+                    'msgId': msg.msgId,
+                    'msgRead': 2,
+                    'msgJson': jsonEncode(msg.toJson()),
                   };
                   // 插入数据
                   await databaseHelper.insertData('messageSLTable', params);
@@ -726,6 +733,9 @@ class MyUtils {
                     'liveStatus': 0,
                     'loginStatus': 0,
                     'weight': msg.from.toString() == '1' ? 1 : 0,
+                    'msgId': msg.msgId,
+                    'msgRead': 2,
+                    'msgJson': jsonEncode(msg.toJson()),
                   };
                   // 插入数据
                   await databaseHelper.insertData('messageSLTable', params);
@@ -778,6 +788,9 @@ class MyUtils {
                       'liveStatus': 0,
                       'loginStatus': 0,
                       'weight': msg.from.toString() == '1' ? 1 : 0,
+                      'msgId': msg.msgId,
+                      'msgRead': 2,
+                      'msgJson': jsonEncode(msg.toJson()),
                     };
                     // 插入数据
                     await databaseHelper.insertData('messageSLTable', params);
@@ -808,6 +821,20 @@ class MyUtils {
                 break;
             }
           }
+        },
+        onMessagesRead: (messages) async {
+          Database? db = await databaseHelper.database;
+          for (EMMessage msg in messages) {
+            int count = await db.update(
+              'messageSLTable',
+              {'msgRead': (msg.hasReadAck ? 1 : 2)},
+              whereArgs: [msg.attributes?['msgId']],
+              where: 'msgId = ?',
+            );
+            // eventBus.fire(SendMessageBack(type: 1, msgID: msg.msgId));
+            LogE('消息已读回执: from = ${msg.from}, msgId = ${msg.msgId}, db = $count');
+          }
+          eventBus.fire(SendMessageBack(type: 1, msgID: '0'));
         },
       ),
     );
@@ -904,4 +931,32 @@ class MyUtils {
   }
 
   static void addLogToConsole(String log) {}
+
+  // 消息已读回执
+  static void didMsgRead(params) async {
+    if (params['msgRead'] == 2) {
+      try {
+        String json = params['msgJson'];
+        final msg = EMMessage.fromJson(jsonDecode(json));
+        LogE("消息已读回执: to = ${msg.from}, msgId = ${msg.msgId}");
+        if (await EMClient.getInstance.chatManager.sendMessageReadAck(msg)) {
+          // params['msgRead'] = 1;
+          DatabaseHelper databaseHelper = DatabaseHelper();
+          await databaseHelper.database;
+          Database? db = await databaseHelper.database;
+          await db.update(
+            'messageSLTable',
+            {'msgRead': 1},
+            whereArgs: [params['msgId']],
+            where: 'msgId = ?',
+          );
+          eventBus.fire(SendMessageBack(type: 1, msgID: msg.msgId));
+        }
+      } on EMError catch (e) {
+        LogE(e.description);
+      } catch (e) {
+        LogE(e.toString());
+      }
+    }
+  }
 }
