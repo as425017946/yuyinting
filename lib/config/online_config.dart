@@ -1,9 +1,9 @@
 import 'package:im_flutter_sdk/im_flutter_sdk.dart';
+import 'package:yuyinting/config/private/online_config_private.dart';
 
 import '../http/my_http_config.dart';
 import '../main.dart';
 import '../utils/log_util.dart';
-import 'online_config_private.dart';
 
 enum OnlineConfigType { online, test, zhaozeng, pengfei }
 
