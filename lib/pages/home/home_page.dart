@@ -674,10 +674,6 @@ class _HomePageState extends State<HomePage>
 
     sp.setString('app_version', version);
 
-    /// 检查是否为模拟登录
-    final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-
     if (Platform.isAndroid) {
       deviceType = "Android";
     } else {
@@ -693,31 +689,17 @@ class _HomePageState extends State<HomePage>
         case MyHttpConfig.successCode:
           if (int.parse(buildNumber) < int.parse(bean.data!.customUpdateNum!)) {
             if (Platform.isAndroid) {
-              if (androidInfo.isPhysicalDevice) {
-                /// 手机登录
-                // ignore: use_build_context_synchronously
-                MyUtils.goTransparentPageCom(
-                    context,
-                    UpdateAppPage(
-                      version: bean.data!.version!,
-                      url: bean.data!.downloadUrl!,
-                      info: bean.data!.summary!,
-                      forceUpdate: bean.data!.forceUpdate!,
-                      title: 'android',
-                    ));
-              } else {
-                /// 模拟器登录
-                // ignore: use_build_context_synchronously
-                MyUtils.goTransparentPageCom(
-                    context,
-                    UpdateAppPage(
-                      version: bean.data!.version!,
-                      url: bean.data!.moniDownloadUrl!,
-                      info: bean.data!.summary!,
-                      forceUpdate: bean.data!.forceUpdate!,
-                      title: 'android',
-                    ));
-              }
+              /// 手机登录
+              // ignore: use_build_context_synchronously
+              MyUtils.goTransparentPageCom(
+                  context,
+                  UpdateAppPage(
+                    version: bean.data!.version!,
+                    url: bean.data!.downloadUrl!,
+                    info: bean.data!.summary!,
+                    forceUpdate: bean.data!.forceUpdate!,
+                    title: 'android',
+                  ));
             } else {
               // ignore: use_build_context_synchronously
               MyUtils.goTransparentPageCom(
