@@ -640,15 +640,19 @@ class _WalletPageState extends State<WalletPage> {
             Positioned(
               right: 35,
               top: 50,
-              child: Container(
-                constraints: const BoxConstraints(maxWidth: 420),
+              child: SizedBox(
+                width: 420,
                 child: FittedBox(
-                  child: Text(
-                    money,
-                    style: StyleUtils.getCommonTextStyle(
-                      color: Colors.white,
-                      fontSize: 56,
-                      fontWeight: FontWeight.w600,
+                  child: Container(
+                    alignment: Alignment.centerRight,
+                    constraints: const BoxConstraints(minWidth: 420),
+                    child: Text(
+                      money,
+                      style: StyleUtils.getCommonTextStyle(
+                        color: Colors.white,
+                        fontSize: 56,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),
