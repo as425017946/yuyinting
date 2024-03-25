@@ -1,7 +1,5 @@
 import 'package:dart_ping/dart_ping.dart';
 
-import '../main.dart';
-import 'event_utils.dart';
 import 'log_util.dart';
 
 class MyPing {
@@ -18,8 +16,6 @@ class MyPing {
             if (time == null || time! > s) {
               time = s;
               callBack(ip);
-              // ignore: unnecessary_brace_in_string_interps
-              LogE("设置IP: ${ip}");
             }
           }
           LogE('Running command: $event');

@@ -28,6 +28,7 @@ import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import '../../bean/CheckoutBean.dart';
 import '../../bean/Common_bean.dart';
+import '../../config/online_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
@@ -608,8 +609,8 @@ class _HomePageState extends State<HomePage>
   Future<void> doPostPdAddress() async {
     try {
       // Map<String, dynamic> params = <String, dynamic>{'type': 'test'};
-      Map<String, dynamic> params = <String, dynamic>{'type': 'go'};
-      var respons = await DataUtils.postPdAddress(params);
+      // Map<String, dynamic> params = <String, dynamic>{'type': 'go'};
+      var respons = await DataUtils.postPdAddress(OnlineConfig.pingParams);
       if (respons.code == 200) {
         setState(() {
           sp.setString('userIP', respons.address);
@@ -618,12 +619,13 @@ class _HomePageState extends State<HomePage>
           respons.ips,
               (ip) {
             setState(() {
-              sp.setString('isDian', ip);
-              LogE('Ping 设置: ${sp.getString('isDian')}');
+              // sp.setString('isDian', ip);
+              // LogE('Ping 设置: ${sp.getString('isDian')}');
+              // // MyHttpConfig.baseURL =
+              // // "http://${sp.getString('isDian').toString()}:8081/api";
               // MyHttpConfig.baseURL =
-              // "http://${sp.getString('isDian').toString()}:8081/api";
-              MyHttpConfig.baseURL =
-              "http://${sp.getString('isDian').toString()}:8080/api";
+              // "http://${sp.getString('isDian').toString()}:8080/api";
+              OnlineConfig.updateIp(ip);
             });
           },
         );

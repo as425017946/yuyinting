@@ -19,6 +19,7 @@ import '../../bean/addressIPBean.dart';
 import '../../bean/loginBean.dart';
 import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
+import '../../config/online_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
@@ -973,8 +974,8 @@ class _LoginPageState extends State<LoginPage> {
     sp.setString('buildNumber', buildNumber);
     try {
       // Map<String, dynamic> params = <String, dynamic>{'type': 'test'};
-      Map<String, dynamic> params = <String, dynamic>{'type': 'go'};
-      var respons = await DataUtils.postPdAddress(params);
+      // Map<String, dynamic> params = <String, dynamic>{'type': 'go'};
+      var respons = await DataUtils.postPdAddress(OnlineConfig.pingParams);
       if (respons.code == 200) {
         setState(() {
           sp.setString('userIP', respons.address);
@@ -983,12 +984,13 @@ class _LoginPageState extends State<LoginPage> {
           respons.ips,
           (ip) {
             setState(() {
-              sp.setString('isDian', ip);
-              LogE('Ping 设置: ${sp.getString('isDian')}');
+              // sp.setString('isDian', ip);
+              // LogE('Ping 设置: ${sp.getString('isDian')}');
+              // // MyHttpConfig.baseURL =
+              // //     "http://${sp.getString('isDian').toString()}:8081/api";
               // MyHttpConfig.baseURL =
-              //     "http://${sp.getString('isDian').toString()}:8081/api";
-              MyHttpConfig.baseURL =
-              "http://${sp.getString('isDian').toString()}:8080/api";
+              // "http://${sp.getString('isDian').toString()}:8080/api";
+              OnlineConfig.updateIp(ip);
             });
           },
         );
