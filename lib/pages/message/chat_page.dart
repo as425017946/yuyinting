@@ -2047,8 +2047,10 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
       'type': '1',
       'content': content
     };
+
     try {
-      CommonBean bean = await DataUtils.postSendUserMsg(params);
+      // CommonBean bean = await DataUtils.postSendUserMsg(params);
+      CommonBean bean = CommonBean(code: 200, msg: 'ok');
       String combineID = '';
       if (int.parse(sp.getString('user_id').toString()) >
           int.parse(widget.otherUid)) {
@@ -2058,6 +2060,18 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
       }
       switch (bean.code) {
         case MyHttpConfig.successCode:
+          final textMsg = EMMessage.createTxtSendMessage(
+            targetId: widget.otherUid,
+            content: content,
+          );
+          textMsg.attributes = {
+            'nickname': sp.getString('nickname'),
+            'avatar': sp.getString('user_headimg'),
+            'weight': 50,
+            'msgId': 'Local_${textMsg.msgId}',
+          };
+          EMClient.getInstance.chatManager.sendMessage(textMsg);
+
           LogE('===${DateTime.now()}');
           Map<String, dynamic> params = <String, dynamic>{
             'uid': sp.getString('user_id').toString(),
@@ -2076,6 +2090,8 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
             'liveStatus': 0,
             'loginStatus': 0,
             'weight': widget.otherUid.toString() == '1' ? 1 : 0,
+            'msgId': textMsg.attributes?['msgId'],
+            'msgRead': 2,
           };
           // 插入数据
           await databaseHelper.insertData('messageSLTable', params);

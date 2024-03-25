@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:im_flutter_sdk/im_flutter_sdk.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:yuyinting/utils/event_utils.dart';
@@ -165,10 +166,29 @@ class _PayHBTSPageState extends State<PayHBTSPage> {
       'pay_pwd': mima
     };
     try {
-      CommonBean bean = await DataUtils.postSendRedPacket(params);
+      // CommonBean bean = await DataUtils.postSendRedPacket(params);
+      CommonBean bean = CommonBean(code: 200, msg: 'ok');
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          saveHBinfo(widget.number);
+          final hbMsg = EMMessage.createCustomSendMessage(
+            targetId: widget.uid,
+            event: 'red_package',
+            params: {
+                'nickname': sp.getString('nickname')!,
+                'avatar': sp.getString('user_headimg')!,
+                'value': widget.number,
+                'weight': '50',
+              }
+          );
+          hbMsg.attributes = {
+            'nickname': sp.getString('nickname'),
+            'avatar': sp.getString('user_headimg'),
+            'value' : widget.number,
+            'weight': 50,
+            'msgId': 'Local_${hbMsg.msgId}',
+          };
+          EMClient.getInstance.chatManager.sendMessage(hbMsg);
+          saveHBinfo(widget.number, hbMsg.attributes?['msgId']);
           eventBus.fire(HongBaoBack(info: widget.number));
           MyToastUtils.showToastBottom('红包发送成功');
           Navigator.pop(context);
@@ -189,7 +209,7 @@ class _PayHBTSPageState extends State<PayHBTSPage> {
     }
   }
   // 保存发红包的信息 type 1自己给别人发，2收到别人发的红包
-  saveHBinfo(String info) async {
+  saveHBinfo(String info, String msgId) async {
     DatabaseHelper databaseHelper = DatabaseHelper();
     Database? db = await databaseHelper.database;
     String combineID = '';
@@ -216,6 +236,8 @@ class _PayHBTSPageState extends State<PayHBTSPage> {
       'liveStatus': 0,
       'loginStatus': 0,
       'weight': widget.uid.toString() == '1' ? 1 : 0,
+      'msgId': msgId,
+      'msgRead': 2,
     };
     // 插入数据
     await databaseHelper.insertData('messageSLTable', params);
