@@ -25,6 +25,7 @@ import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../widget/SwiperPage.dart';
+import '../message/chat_recall_page.dart';
 import '../message/geren/people_info_page.dart';
 import '../message/hongbao_page.dart';
 import '../mine/my/my_info_page.dart';
@@ -46,7 +47,7 @@ class RoomMessagesMorePage extends StatefulWidget {
   State<RoomMessagesMorePage> createState() => _RoomMessagesMorePageState();
 }
 
-class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
+class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> with MsgReadText {
   ScrollController _scrollController = ScrollController();
   FlutterSoundPlayer? _mPlayer = FlutterSoundPlayer();
   bool playRecord = false; //音频文件播放状态
@@ -174,6 +175,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
     }
 
     if (allData2[i]['whoUid'] != sp.getString('user_id')) {
+      MyUtils.didMsgRead(allData2[i]);
       // 左侧显示
       return Column(
         children: [
@@ -370,7 +372,13 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(100)),
+              // WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(100)),
+              Container(
+                width: ScreenUtil().setHeight(90),
+                alignment: Alignment.bottomRight,
+                padding: EdgeInsets.only(right: 10.h),
+                child: msgReadText(allData2[i]['msgRead']),
+              ),
               // 6v豆红包
               allData2[i]['type'] == 6
                   ? SizedBox(
@@ -454,6 +462,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
                                         MyUtils.goTransparentPageCom(context,
                                             SwiperPage(imgList: imgList));
                                       }),
+                                      onLongPress: onImgLongPress(context, allData2[i]),
                                       child: Image(
                                         image: FileImage(
                                             File(allData2[i]['content'])),
@@ -834,7 +843,8 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
       'content': content
     };
     try {
-      CommonBean bean = await DataUtils.postSendUserMsg(params);
+      // CommonBean bean = await DataUtils.postSendUserMsg(params);
+      CommonBean bean = await DataUtils.postCanSendUser(params);
       String combineID = '';
       if (int.parse(sp.getString('user_id').toString()) >
           int.parse(widget.otherUid)) {
@@ -844,6 +854,17 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
       }
       switch (bean.code) {
         case MyHttpConfig.successCode:
+        final textMsg = EMMessage.createTxtSendMessage(
+            targetId: widget.otherUid,
+            content: content,
+          );
+          textMsg.attributes = {
+            'nickname': sp.getString('nickname'),
+            'avatar': sp.getString('user_headimg'),
+            'weight': 50,
+          };
+          EMClient.getInstance.chatManager.sendMessage(textMsg);
+
           Map<String, dynamic> params = <String, dynamic>{
             'uid': sp.getString('user_id').toString(),
             'otherUid': widget.otherUid,
@@ -861,6 +882,9 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
             'liveStatus': 0,
             'loginStatus': 0,
             'weight': widget.otherUid.toString() == '1' ? 1 : 0,
+            'msgId': '',
+            'msgRead': 2,
+            'msgJson': textMsg.msgId,
           };
           // 插入数据
           await databaseHelper.insertData('messageSLTable', params);
@@ -1065,6 +1089,9 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> {
       'liveStatus': 0,
       'loginStatus': 0,
       'weight': widget.otherUid.toString() == '1' ? 1 : 0,
+      'msgId': '',
+      'msgRead': 2,
+      'msgJson': imgMsg.msgId,
     };
     // 插入数据
     await databaseHelper.insertData('messageSLTable', params);
