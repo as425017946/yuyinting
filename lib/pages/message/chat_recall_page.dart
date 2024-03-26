@@ -67,7 +67,11 @@ class ChatRecallPage extends StatelessWidget {
               MyUtils.recallMessage(params);
               Navigator.pop(context);
             }),
-            WidgetUtils.myLine(thickness: 20.w),
+            Container(
+              width: double.infinity,
+              height: 20.w,
+              color: const Color(0xFFF5F5F5),
+            ),
             _btn('取  消', () {
               Navigator.pop(context);
             }),
