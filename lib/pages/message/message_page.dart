@@ -137,13 +137,13 @@ class _MessagePageState extends State<MessagePage> {
                       100.h,
                       50.h,
                       listMessage[i]['otherHeadNetImg']),
-                  listMessage[i]['liveStatus'] == 1
+                  listU[i].liveStatus == 1
                       ? WidgetUtils.showImages(
                           'assets/images/zhibozhong.webp',
                           110.h,
                           110.h,
                         )
-                      : listMessage[i]['loginStatus'] == 1
+                      :listU[i].loginStatus == 1
                           ? Container(
                               height: 60.h,
                               width: 60.h,
@@ -399,6 +399,7 @@ class _MessagePageState extends State<MessagePage> {
                               ],
                             ),
                           ),
+                          WidgetUtils.commonSizedBox(10.h, 0),
                           Container(
                             alignment: Alignment.centerLeft,
                             width: double.infinity,
@@ -417,7 +418,7 @@ class _MessagePageState extends State<MessagePage> {
                 ),
               ),
             ),
-            listMessage.isNotEmpty
+            (listMessage.isNotEmpty && listU.isNotEmpty)
                 ? Expanded(
                     child: ListView.builder(
                       padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
@@ -638,7 +639,6 @@ class _MessagePageState extends State<MessagePage> {
 
   /// 用户开播、在线状态
   List<DataU> listU = [];
-
   Future<void> doPostSendUserMsg(String uids) async {
     Map<String, dynamic> params = <String, dynamic>{
       'uids': uids,
@@ -648,13 +648,13 @@ class _MessagePageState extends State<MessagePage> {
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
+            listU.clear();
             if (bean.data!.isNotEmpty) {
-              for (int i = 0; i < bean.data!.length; i++) {
-                setState(() {
-                  listMessage[i]['liveStatus'] = bean.data![i].liveStatus;
-                  listMessage[i]['loginStatus'] = bean.data![i].loginStatus;
-                });
-              }
+              listU = bean.data!;
+              // for (int i = 0; i < bean.data!.length; i++) {
+              //   listMessage[i]['liveStatus'] = bean.data![i].liveStatus;
+              //   listMessage[i]['loginStatus'] = bean.data![i].loginStatus;
+              // }
             }
           });
           break;
@@ -667,6 +667,7 @@ class _MessagePageState extends State<MessagePage> {
           break;
       }
     } catch (e) {
+      LogE('错误信息== ${e.toString()}');
     }
   }
 

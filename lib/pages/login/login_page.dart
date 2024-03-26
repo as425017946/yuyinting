@@ -26,7 +26,6 @@ import '../../main.dart';
 import '../../utils/loading.dart';
 import '../../utils/my_ping.dart';
 import '../../utils/my_toast_utils.dart';
-import '../../utils/regex_formatter.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 

@@ -1,11 +1,8 @@
-import 'dart:convert';
 import 'dart:io';
-
-import 'package:dio/dio.dart';
+import 'package:android_package_manager/android_package_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:yuyinting/pages/login/login_page.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/my_utils.dart';
@@ -28,6 +25,8 @@ class StarPage extends StatefulWidget {
 }
 
 class _StarPageState extends State<StarPage> {
+
+  List<ApplicationInfo>? _applicationInfoList;
   @override
   void initState() {
     // TODO: implement initState
@@ -38,6 +37,23 @@ class _StarPageState extends State<StarPage> {
       sp.setString('isShouQi', '0');
     });
     if (Platform.isAndroid) {
+      setState(() {
+        sp.setString('isEmulation', '0');
+      });
+      AndroidPackageManager().getInstalledApplications().then((value){
+        setState(() {
+          _applicationInfoList = value;
+        });
+        for(int i = 0; i < _applicationInfoList!.length; i++){
+          if(_applicationInfoList![i].packageName!.contains('emulation')){
+            setState(() {
+              sp.setString('isEmulation', '1');
+            });
+            LogE('模拟器运行');
+            break;
+          }
+        }
+      });
       setState(() {
         sp.setString('myDevices', 'android');
       });
@@ -55,18 +71,17 @@ class _StarPageState extends State<StarPage> {
         sp.setString('userIP', '');
       }
       Navigator.pop(context);
-      LogE('用户token   ${sp.getString('user_token').toString()}');
-      LogE('用户token   ${sp.getString('user_token').toString().isNotEmpty}');
       if (sp.getString('user_token').toString() == 'null') {
         //首次进入
-        MyUtils.goTransparentPageCom(context, const LoginPage());
+        Navigator.pushNamed(context, 'LoginPage');
       } else if (MyConfig.issAdd == false &&
           sp.getString('user_token').toString().isNotEmpty) {
         //不是首次进入，登录过
         doGo();
       } else {
+        LogE('用户token   ${sp.getString('user_token').toString()}');
         //登录过，但是退出了登录
-        MyUtils.goTransparentPageCom(context, const LoginPage());
+        Navigator.pushNamed(context, 'LoginPage');
       }
       if (sp.getString('miyao').toString() == 'null' ||
           sp.getString('miyao').toString().isEmpty) {
@@ -111,11 +126,6 @@ class _StarPageState extends State<StarPage> {
 
   /// 判断当前网络，然后给返回适配的网络地址
   Future<void> doPostPdAddress() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    String version = packageInfo.version;
-    String buildNumber = packageInfo.buildNumber;
-    sp.setString('myVersion2', version.toString());
-    sp.setString('buildNumber', buildNumber);
     try {
       // Map<String, dynamic> params = <String, dynamic>{'type': 'test'};
       // Map<String, dynamic> params = <String, dynamic>{'type': 'go'};

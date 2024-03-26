@@ -254,16 +254,31 @@ class _AboutPageState extends State<AboutPage> {
         case MyHttpConfig.successCode:
           if (int.parse(buildNumber) < int.parse(bean.data!.customUpdateNum!)) {
             if (Platform.isAndroid) {
-              // ignore: use_build_context_synchronously
-              MyUtils.goTransparentPageCom(
-                  context,
-                  UpdateAppPage(
-                    version: bean.data!.version!,
-                    url: bean.data!.downloadUrl!,
-                    info: bean.data!.summary!,
-                    forceUpdate: bean.data!.forceUpdate!,
-                    title: 'android',
-                  ));
+              if(sp.getString('isEmulation') == '0'){
+                /// 手机登录
+                // ignore: use_build_context_synchronously
+                MyUtils.goTransparentPageCom(
+                    context,
+                    UpdateAppPage(
+                      version: bean.data!.version!,
+                      url: bean.data!.downloadUrl!,
+                      info: bean.data!.summary!,
+                      forceUpdate: bean.data!.forceUpdate!,
+                      title: 'android',
+                    ));
+              }else{
+                /// 模拟器登录
+                // ignore: use_build_context_synchronously
+                MyUtils.goTransparentPageCom(
+                    context,
+                    UpdateAppPage(
+                      version: bean.data!.version!,
+                      url: bean.data!.moniDownloadUrl!,
+                      info: bean.data!.summary!,
+                      forceUpdate: bean.data!.forceUpdate!,
+                      title: 'android',
+                    ));
+              }
             } else {
               // ignore: use_build_context_synchronously
               MyUtils.goTransparentPageCom(
