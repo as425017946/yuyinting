@@ -545,107 +545,220 @@ class MyUtils {
     EMClient.getInstance.chatManager.addEventHandler(
       // EMChatEventHandler 对应的 key。
       "UNIQUE_HANDLER_ID",
-      EMChatEventHandler(
-        onMessagesReceived: (messages) async {
-          for (var msg in messages) {
-            LogE('接收数据${msg.body.type}');
-            switch (msg.body.type) {
-              case MessageType.TXT:
-                {
-                  EMTextMessageBody body = msg.body as EMTextMessageBody;
-                  LogE('接收文本信息$msg');
-                  Map info = msg.attributes!;
-                  LogE('接收文本信息类型 ${info['type']}');
-                  LogE('接收文本信息$info');
-                  if (body.content == '赛车押注') {
-                    eventBus.fire(JoinRoomYBack(map: info, type: '赛车押注'));
-                  } else if (body.content == '清除魅力值') {
-                    eventBus.fire(
-                        JoinRoomYBack(map: info, type: 'clean_charm_single'));
-                  } else if (body.content == '离开房间') {
-                    eventBus.fire(
-                        JoinRoomYBack(map: info, type: 'user_leave_room'));
-                  } else if (body.content == '充值成功') {
-                    eventBus.fire(SubmitButtonBack(title: '充值成功'));
-                  } else if (body.content == '下麦') {
-                    eventBus
-                        .fire(JoinRoomYBack(map: info, type: 'user_down_mic'));
-                  } else if (body.content == '开麦') {
-                    eventBus.fire(
-                        JoinRoomYBack(map: info, type: 'user_un_close_mic'));
-                  } else if (body.content == '闭麦') {
-                    eventBus
-                        .fire(JoinRoomYBack(map: info, type: 'user_close_mic'));
-                  } else if (body.content == '抱麦') {
-                    eventBus.fire(JoinRoomYBack(map: info, type: 'bao_mic'));
-                  } else if (body.content == '爆灯') {
-                    eventBus.fire(JoinRoomYBack(map: info, type: 'burstlight'));
-                  } else {
-                    if (info['lv'] == '' || info['lv'] == null) {
-                      if (info['type'] == 'clean_charm') {
-                        // 厅内清空魅力值
-                        eventBus.fire(JoinRoomYBack(map: info, type: '0'));
-                      } else if (info['type'] == 'clean_public_screen') {
-                        // 清除公屏
-                        eventBus.fire(JoinRoomYBack(map: info, type: '0'));
-                      } else if (info['type'] == 'one_click_gift') {
-                        eventBus.fire(JoinRoomYBack(map: info, type: '0'));
-                      } else {
-                        String nickName = info['nickname'];
-                        String headImg = info['avatar'];
-                        String combineID = '';
-                        if (int.parse(sp.getString('user_id').toString()) >
-                            int.parse(msg.from!)) {
-                          combineID =
-                              '${msg.from}-${sp.getString('user_id').toString()}';
-                        } else {
-                          combineID =
-                              '${sp.getString('user_id').toString()}-${msg.from}';
-                        }
-
-                        // 接收别人发来的消息
-                        Map<String, dynamic> params = <String, dynamic>{
-                          'uid': sp.getString('user_id').toString(),
-                          'otherUid': msg.from,
-                          'whoUid': msg.from,
-                          'combineID': combineID,
-                          'nickName': nickName,
-                          'content': body.content,
-                          'bigImg': '',
-                          'headNetImg': sp.getString('user_headimg').toString(),
-                          'otherHeadNetImg': headImg,
-                          'add_time': msg.serverTime,
-                          'type': 1,
-                          'number': 0,
-                          'status': 1,
-                          'readStatus': 0,
-                          'liveStatus': 0,
-                          'loginStatus': 0,
-                          'weight': msg.from.toString() == '1' ? 1 : 0,
-                          'msgId': msg.msgId,
-                          'msgRead': 2,
-                          'msgJson': jsonEncode(msg.toJson()),
-                        };
-                        // 插入数据
-                        await databaseHelper.insertData('messageSLTable', params);
-                        eventBus.fire(SendMessageBack(type: 1, msgID: '0'));
-                      }
-                    } else {
+      EMChatEventHandler(onMessagesReceived: (messages) async {
+        for (var msg in messages) {
+          LogE('接收数据${msg.body.type}');
+          switch (msg.body.type) {
+            case MessageType.TXT:
+              {
+                EMTextMessageBody body = msg.body as EMTextMessageBody;
+                LogE('接收文本信息$msg');
+                Map info = msg.attributes!;
+                LogE('接收文本信息类型 ${info['type']}');
+                LogE('接收文本信息$info');
+                if (body.content == '赛车押注') {
+                  eventBus.fire(JoinRoomYBack(map: info, type: '赛车押注'));
+                } else if (body.content == '清除魅力值') {
+                  eventBus.fire(
+                      JoinRoomYBack(map: info, type: 'clean_charm_single'));
+                } else if (body.content == '离开房间') {
+                  eventBus
+                      .fire(JoinRoomYBack(map: info, type: 'user_leave_room'));
+                } else if (body.content == '充值成功') {
+                  eventBus.fire(SubmitButtonBack(title: '充值成功'));
+                } else if (body.content == '下麦') {
+                  eventBus
+                      .fire(JoinRoomYBack(map: info, type: 'user_down_mic'));
+                } else if (body.content == '开麦') {
+                  eventBus.fire(
+                      JoinRoomYBack(map: info, type: 'user_un_close_mic'));
+                } else if (body.content == '闭麦') {
+                  eventBus
+                      .fire(JoinRoomYBack(map: info, type: 'user_close_mic'));
+                } else if (body.content == '抱麦') {
+                  eventBus.fire(JoinRoomYBack(map: info, type: 'bao_mic'));
+                } else if (body.content == '爆灯') {
+                  eventBus.fire(JoinRoomYBack(map: info, type: 'burstlight'));
+                } else {
+                  if (info['lv'] == '' || info['lv'] == null) {
+                    if (info['type'] == 'clean_charm') {
+                      // 厅内清空魅力值
                       eventBus.fire(JoinRoomYBack(map: info, type: '0'));
+                    } else if (info['type'] == 'clean_public_screen') {
+                      // 清除公屏
+                      eventBus.fire(JoinRoomYBack(map: info, type: '0'));
+                    } else if (info['type'] == 'one_click_gift') {
+                      eventBus.fire(JoinRoomYBack(map: info, type: '0'));
+                    } else {
+                      String nickName = info['nickname'];
+                      String headImg = info['avatar'];
+                      String combineID = '';
+                      if (int.parse(sp.getString('user_id').toString()) >
+                          int.parse(msg.from!)) {
+                        combineID =
+                            '${msg.from}-${sp.getString('user_id').toString()}';
+                      } else {
+                        combineID =
+                            '${sp.getString('user_id').toString()}-${msg.from}';
+                      }
+
+                      // 接收别人发来的消息
+                      Map<String, dynamic> params = <String, dynamic>{
+                        'uid': sp.getString('user_id').toString(),
+                        'otherUid': msg.from,
+                        'whoUid': msg.from,
+                        'combineID': combineID,
+                        'nickName': nickName,
+                        'content': body.content,
+                        'bigImg': '',
+                        'headNetImg': sp.getString('user_headimg').toString(),
+                        'otherHeadNetImg': headImg,
+                        'add_time': msg.serverTime,
+                        'type': 1,
+                        'number': 0,
+                        'status': 1,
+                        'readStatus': 0,
+                        'liveStatus': 0,
+                        'loginStatus': 0,
+                        'weight': msg.from.toString() == '1' ? 1 : 0,
+                        'msgId': msg.msgId,
+                        'msgRead': 2,
+                        'msgJson': jsonEncode(msg.toJson()),
+                      };
+                      // 插入数据
+                      await databaseHelper.insertData('messageSLTable', params);
+                      eventBus.fire(SendMessageBack(type: 1, msgID: '0'));
                     }
+                  } else {
+                    eventBus.fire(JoinRoomYBack(map: info, type: '0'));
                   }
                 }
-                break;
-              case MessageType.IMAGE:
-                {
-                  // 下载附件
-                  EMClient.getInstance.chatManager.downloadAttachment(msg);
-                  EMImageMessageBody body = msg.body as EMImageMessageBody;
-                  LogE('接受图片信息==$body');
-                  LogE('接受图片信息**${msg.attributes}');
-                  Map? info = msg.attributes;
-                  String nickName = info!['nickname'];
-                  String headImg = info!['avatar'];
+              }
+              break;
+            case MessageType.IMAGE:
+              {
+                // 下载附件
+                EMClient.getInstance.chatManager.downloadAttachment(msg);
+                EMImageMessageBody body = msg.body as EMImageMessageBody;
+                LogE('接受图片信息==$body');
+                LogE('接受图片信息**${msg.attributes}');
+                Map? info = msg.attributes;
+                String nickName = info!['nickname'];
+                String headImg = info!['avatar'];
+                String combineID = '';
+                if (int.parse(sp.getString('user_id').toString()) >
+                    int.parse(msg.from!)) {
+                  combineID =
+                      '${msg.from}-${sp.getString('user_id').toString()}';
+                } else {
+                  combineID =
+                      '${sp.getString('user_id').toString()}-${msg.from}';
+                }
+
+                Map<String, dynamic> params = <String, dynamic>{
+                  'uid': sp.getString('user_id').toString(),
+                  'otherUid': msg.from,
+                  'whoUid': msg.from,
+                  'combineID': combineID,
+                  'nickName': nickName,
+                  'content': body.remotePath,
+                  'bigImg': body.remotePath,
+                  'headNetImg': sp.getString('user_headimg').toString(),
+                  'otherHeadNetImg': headImg,
+                  'add_time': msg.serverTime,
+                  'type': 2,
+                  'number': 0,
+                  'status': 1,
+                  'readStatus': 0,
+                  'liveStatus': 0,
+                  'loginStatus': 0,
+                  'weight': msg.from.toString() == '1' ? 1 : 0,
+                  'msgId': msg.msgId,
+                  'msgRead': 2,
+                  'msgJson': jsonEncode(msg.toJson()),
+                };
+                // 插入数据
+                await databaseHelper.insertData('messageSLTable', params);
+                eventBus.fire(SendMessageBack(type: 2, msgID: '2'));
+              }
+              break;
+            case MessageType.VIDEO:
+              {
+                LogE('VIDEO消息${msg.from}');
+                // addLogToConsole(
+                //   "receive video message, from: ${msg.from}",
+                // );
+              }
+              break;
+            case MessageType.LOCATION:
+              {
+                LogE('LOCATION消息${msg.from}');
+                addLogToConsole(
+                  "receive location message, from: ${msg.from}",
+                );
+              }
+              break;
+            case MessageType.VOICE:
+              {
+                LogE('VOICE消息${msg}');
+                EMVoiceMessageBody body = msg.body as EMVoiceMessageBody;
+                Map? info = msg.attributes;
+                String nickName = info!['nickname'];
+                String headImg = info!['avatar'];
+                String combineID = '';
+                if (int.parse(sp.getString('user_id').toString()) >
+                    int.parse(msg.from!)) {
+                  combineID =
+                      '${msg.from}-${sp.getString('user_id').toString()}';
+                } else {
+                  combineID =
+                      '${sp.getString('user_id').toString()}-${msg.from}';
+                }
+                Map<String, dynamic> params = <String, dynamic>{
+                  'uid': sp.getString('user_id').toString(),
+                  'otherUid': msg.from,
+                  'whoUid': msg.from,
+                  'combineID': combineID,
+                  'nickName': nickName,
+                  'content': body.remotePath,
+                  'bigImg': body.remotePath,
+                  'headNetImg': sp.getString('user_headimg').toString(),
+                  'otherHeadNetImg': headImg,
+                  'add_time': msg.serverTime,
+                  'type': 3,
+                  'number': body.duration,
+                  'status': 1,
+                  'readStatus': 0,
+                  'liveStatus': 0,
+                  'loginStatus': 0,
+                  'weight': msg.from.toString() == '1' ? 1 : 0,
+                  'msgId': msg.msgId,
+                  'msgRead': 2,
+                  'msgJson': jsonEncode(msg.toJson()),
+                };
+                // 插入数据
+                await databaseHelper.insertData('messageSLTable', params);
+
+                eventBus.fire(SendMessageBack(type: 3, msgID: '3'));
+              }
+              break;
+            case MessageType.FILE:
+              {
+                LogE('FILE消息${msg.from}');
+                addLogToConsole(
+                  "receive image message, from: ${msg.from}",
+                );
+              }
+              break;
+            case MessageType.CUSTOM: //自定义消息
+              {
+                LogE('CUSTOM消息****${msg}');
+                EMCustomMessageBody body = msg.body as EMCustomMessageBody;
+                if (body.event == 'red_package') {
+                  //接受到红包
+                  Map info = body.params!;
+                  String nickName = info['nickname'];
+                  String headImg = info['avatar'];
                   String combineID = '';
                   if (int.parse(sp.getString('user_id').toString()) >
                       int.parse(msg.from!)) {
@@ -662,12 +775,12 @@ class MyUtils {
                     'whoUid': msg.from,
                     'combineID': combineID,
                     'nickName': nickName,
-                    'content': body.remotePath,
-                    'bigImg': body.remotePath,
+                    'content': '收到${info['value']}个V豆',
+                    'bigImg': '',
                     'headNetImg': sp.getString('user_headimg').toString(),
                     'otherHeadNetImg': headImg,
                     'add_time': msg.serverTime,
-                    'type': 2,
+                    'type': 6,
                     'number': 0,
                     'status': 1,
                     'readStatus': 0,
@@ -680,170 +793,65 @@ class MyUtils {
                   };
                   // 插入数据
                   await databaseHelper.insertData('messageSLTable', params);
-                  eventBus.fire(SendMessageBack(type: 2, msgID: '2'));
+                  eventBus.fire(SendMessageBack(type: 1, msgID: '0'));
+                } else if (body.event == 'game_turntable_luck') {
+                  eventBus.fire(ZDYBack(map: body.params, type: body.event));
+                } else if (body.event == 'user_room_black') {
+                  eventBus.fire(ZDYBack(map: body.params, type: body.event));
+                } else if (body.event == 'room_pk_start') {
+                  // 开启房间pk
+                  eventBus.fire(ZDYBack(map: body.params, type: body.event));
+                } else if (body.event == 'room_pk_result') {
+                  // 房间pk关闭了
+                  eventBus.fire(ZDYBack(map: body.params, type: body.event));
+                } else if (body.event == 'room_pk_ahead_punish') {
+                  // 提前结束惩罚
+                  eventBus.fire(ZDYBack(map: body.params, type: body.event));
+                } else {
+                  eventBus.fire(ZDYBack(map: body.params, type: body.event));
                 }
-                break;
-              case MessageType.VIDEO:
-                {
-                  LogE('VIDEO消息${msg.from}');
-                  // addLogToConsole(
-                  //   "receive video message, from: ${msg.from}",
-                  // );
-                }
-                break;
-              case MessageType.LOCATION:
-                {
-                  LogE('LOCATION消息${msg.from}');
-                  addLogToConsole(
-                    "receive location message, from: ${msg.from}",
-                  );
-                }
-                break;
-              case MessageType.VOICE:
-                {
-                  LogE('VOICE消息${msg}');
-                  EMVoiceMessageBody body = msg.body as EMVoiceMessageBody;
-                  Map? info = msg.attributes;
-                  String nickName = info!['nickname'];
-                  String headImg = info!['avatar'];
-                  String combineID = '';
-                  if (int.parse(sp.getString('user_id').toString()) >
-                      int.parse(msg.from!)) {
-                    combineID =
-                        '${msg.from}-${sp.getString('user_id').toString()}';
-                  } else {
-                    combineID =
-                        '${sp.getString('user_id').toString()}-${msg.from}';
-                  }
-                  Map<String, dynamic> params = <String, dynamic>{
-                    'uid': sp.getString('user_id').toString(),
-                    'otherUid': msg.from,
-                    'whoUid': msg.from,
-                    'combineID': combineID,
-                    'nickName': nickName,
-                    'content': body.remotePath,
-                    'bigImg': body.remotePath,
-                    'headNetImg': sp.getString('user_headimg').toString(),
-                    'otherHeadNetImg': headImg,
-                    'add_time': msg.serverTime,
-                    'type': 3,
-                    'number': body.duration,
-                    'status': 1,
-                    'readStatus': 0,
-                    'liveStatus': 0,
-                    'loginStatus': 0,
-                    'weight': msg.from.toString() == '1' ? 1 : 0,
-                    'msgId': msg.msgId,
-                    'msgRead': 2,
-                    'msgJson': jsonEncode(msg.toJson()),
-                  };
-                  // 插入数据
-                  await databaseHelper.insertData('messageSLTable', params);
-
-                  eventBus.fire(SendMessageBack(type: 3, msgID: '3'));
-                }
-                break;
-              case MessageType.FILE:
-                {
-                  LogE('FILE消息${msg.from}');
-                  addLogToConsole(
-                    "receive image message, from: ${msg.from}",
-                  );
-                }
-                break;
-              case MessageType.CUSTOM: //自定义消息
-                {
-                  LogE('CUSTOM消息****${msg}');
-                  EMCustomMessageBody body = msg.body as EMCustomMessageBody;
-                  if (body.event == 'red_package') {
-                    //接受到红包
-                    Map info = body.params!;
-                    String nickName = info['nickname'];
-                    String headImg = info['avatar'];
-                    String combineID = '';
-                    if (int.parse(sp.getString('user_id').toString()) >
-                        int.parse(msg.from!)) {
-                      combineID =
-                          '${msg.from}-${sp.getString('user_id').toString()}';
-                    } else {
-                      combineID =
-                          '${sp.getString('user_id').toString()}-${msg.from}';
-                    }
-
-                    Map<String, dynamic> params = <String, dynamic>{
-                      'uid': sp.getString('user_id').toString(),
-                      'otherUid': msg.from,
-                      'whoUid': msg.from,
-                      'combineID': combineID,
-                      'nickName': nickName,
-                      'content': '收到${info['value']}个V豆',
-                      'bigImg': '',
-                      'headNetImg': sp.getString('user_headimg').toString(),
-                      'otherHeadNetImg': headImg,
-                      'add_time': msg.serverTime,
-                      'type': 6,
-                      'number': 0,
-                      'status': 1,
-                      'readStatus': 0,
-                      'liveStatus': 0,
-                      'loginStatus': 0,
-                      'weight': msg.from.toString() == '1' ? 1 : 0,
-                      'msgId': msg.msgId,
-                      'msgRead': 2,
-                      'msgJson': jsonEncode(msg.toJson()),
-                    };
-                    // 插入数据
-                    await databaseHelper.insertData('messageSLTable', params);
-                    eventBus.fire(SendMessageBack(type: 1, msgID: '0'));
-                  } else if (body.event == 'game_turntable_luck') {
-                    eventBus.fire(ZDYBack(map: body.params, type: body.event));
-                  } else if (body.event == 'user_room_black') {
-                    eventBus.fire(ZDYBack(map: body.params, type: body.event));
-                  } else if (body.event == 'room_pk_start') {
-                    // 开启房间pk
-                    eventBus.fire(ZDYBack(map: body.params, type: body.event));
-                  } else if (body.event == 'room_pk_result') {
-                    // 房间pk关闭了
-                    eventBus.fire(ZDYBack(map: body.params, type: body.event));
-                  } else if (body.event == 'room_pk_ahead_punish') {
-                    // 提前结束惩罚
-                    eventBus.fire(ZDYBack(map: body.params, type: body.event));
-                  } else {
-                    eventBus.fire(ZDYBack(map: body.params, type: body.event));
-                  }
-                }
-                break;
-              case MessageType.CMD:
-                {
-                  LogE('文本消息cmd');
-                  // 当前回调中不会有 CMD 类型消息，CMD 类型消息通过 `EMChatEventHandler#onCmdMessagesReceived` 回调接收
-                }
-                break;
-            }
+              }
+              break;
+            case MessageType.CMD:
+              {
+                LogE('文本消息cmd');
+                // 当前回调中不会有 CMD 类型消息，CMD 类型消息通过 `EMChatEventHandler#onCmdMessagesReceived` 回调接收
+              }
+              break;
           }
-        },
-        onMessagesRead: (messages) async {
-          Database? db = await databaseHelper.database;
-          for (EMMessage msg in messages) {
-            int count = await db.update(
-              'messageSLTable',
-              {'msgRead': (msg.hasReadAck ? 1 : 2)},
-              whereArgs: [msg.attributes?['msgId']],
-              where: 'msgId = ?',
-            );
-            // eventBus.fire(SendMessageBack(type: 1, msgID: msg.msgId));
-            LogE('消息已读回执: from = ${msg.from}, msgId = ${msg.msgId}, db = $count');
-          }
-          eventBus.fire(SendMessageBack(type: 1, msgID: '0'));
-        },
-      ),
+        }
+      }, onMessagesRead: (messages) async {
+        Database? db = await databaseHelper.database;
+        for (EMMessage msg in messages) {
+          int count = await db.update(
+            'messageSLTable',
+            {'msgRead': (msg.hasReadAck ? 1 : 2)},
+            whereArgs: [msg.attributes?['msgId']],
+            where: 'msgId = ?',
+          );
+          // eventBus.fire(SendMessageBack(type: 1, msgID: msg.msgId));
+          LogE('消息已读回执: from = ${msg.from}, msgId = ${msg.msgId}, db = $count');
+        }
+        eventBus.fire(SendMessageBack(type: 1, msgID: '0'));
+      }, onMessagesRecalled: (messages) async {
+        Database? db = await databaseHelper.database;
+        for (EMMessage msg in messages) {
+          int count = await db.delete(
+            'messageSLTable',
+            whereArgs: [msg.msgId],
+            where: 'msgId = ?',
+          );
+          LogE('消息撤回: from = ${msg.from}, msgId = ${msg.msgId}, db = $count');
+        }
+        eventBus.fire(SendMessageBack(type: 1, msgID: '0'));
+      }),
     );
     // 添加消息状态变更监听
     EMClient.getInstance.chatManager.addMessageEvent(
         // ChatMessageEvent 对应的 key。
         "UNIQUE_HANDLER_ID",
         ChatMessageEvent(
-          onSuccess: (msgId, msg) {
+          onSuccess: (msgId, msg) async {
             switch (msg.body.type) {
               case MessageType.TXT:
                 break;
@@ -858,6 +866,15 @@ class MyUtils {
                 break;
             }
             addLogToConsole("send message succeed");
+            
+          Database? db = await databaseHelper.database;
+          await db.update(
+            'messageSLTable',
+            {'msgId': msg.msgId},
+            whereArgs: [msgId],
+            where: 'msgId = ?',
+          );
+          eventBus.fire(SendMessageBack(type: 1, msgID: msgId));
           },
           onProgress: (msgId, progress) {
             LogE('语音发送进度');
@@ -957,6 +974,32 @@ class MyUtils {
       } catch (e) {
         LogE(e.toString());
       }
+    }
+  }
+
+  static void recallMessage(params) async {
+    try {
+      String msgId = params['msgId'];
+      final real = msgId.startsWith('Local_') ? msgId.substring('Local_'.length) : msgId;
+      await EMClient.getInstance.chatManager.recallMessage(real);
+
+      DatabaseHelper databaseHelper = DatabaseHelper();
+      await databaseHelper.database;
+      Database? db = await databaseHelper.database;
+      await db.delete(
+        'messageSLTable',
+        where: 'msgId = ?',
+        whereArgs: [msgId],
+      );
+      LogE('消息撤回: to = ${params['otherUid']}, msgId = $msgId');
+      eventBus.fire(SendMessageBack(type: 1, msgID: msgId));
+    } on EMError catch (e) {
+      if (e.code == 504) {
+        // 消息撤回超时错误：消息撤回超过时间限制时会提示该错误。
+        MyToastUtils.showToastBottom(e.description);
+      }
+    } catch (e) {
+      LogE(e.toString());
     }
   }
 }

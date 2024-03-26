@@ -927,6 +927,20 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
                           MyUtils.goTransparentPageCom(context,
                               SwiperPage(imgList: imgList));
                         }),
+                        onLongPress: (() {
+                                    Future.delayed(const Duration(seconds: 0),
+                                        () {
+                                      Navigator.of(context).push(
+                                          PageRouteBuilder(
+                                              opaque: false,
+                                              pageBuilder: (context, animation,
+                                                  secondaryAnimation) {
+                                                MyUtils.recallMessage(
+                                                    allData2[i]);
+                                                return Text('1234');
+                                              }));
+                                    });
+                                  }),
                         child: Container(
                             constraints: BoxConstraints(
                                 minWidth: ScreenUtil().setHeight(60)),
@@ -2177,7 +2191,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
       'nickname': sp.getString('nickname'),
       'avatar': sp.getString('user_headimg'),
       'weight': 50,
-      'msgId': 'Local_${imgMsg.msgId}',
+      // 'msgId': 'Local_${imgMsg.msgId}',
     };
     EMClient.getInstance.chatManager.sendMessage(imgMsg);
 
@@ -2207,7 +2221,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
       'liveStatus': 0,
       'loginStatus': 0,
       'weight': widget.otherUid.toString() == '1' ? 1 : 0,
-      // 'msgId': imgMsg.attributes?['msgId'],
+      'msgId': imgMsg.msgId,//imgMsg.attributes?['msgId'],
       // 'msgRead': 2,
     };
     // 插入数据
