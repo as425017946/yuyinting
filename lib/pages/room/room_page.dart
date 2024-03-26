@@ -5,6 +5,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:im_flutter_sdk/im_flutter_sdk.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:screen/screen.dart';
@@ -5094,7 +5095,8 @@ class _RoomPageState extends State<RoomPage>
       'content': content
     };
     try {
-      CommonBean bean = await DataUtils.postSendUserMsg(params);
+      // CommonBean bean = await DataUtils.postSendUserMsg(params);
+      CommonBean bean = await DataUtils.postCanSendUser(params);
       String combineID = '';
       if (int.parse(sp.getString('user_id').toString()) >
           int.parse(cb.toUids!)) {
@@ -5104,6 +5106,17 @@ class _RoomPageState extends State<RoomPage>
       }
       switch (bean.code) {
         case MyHttpConfig.successCode:
+          final textMsg = EMMessage.createTxtSendMessage(
+            targetId: cb.toUids!,
+            content: content,
+          );
+          textMsg.attributes = {
+            'nickname': sp.getString('nickname'),
+            'avatar': sp.getString('user_headimg'),
+            'weight': 50,
+          };
+          EMClient.getInstance.chatManager.sendMessage(textMsg);
+          
           LogE('发送时间===${DateTime.now()}');
           Map<String, dynamic> params = <String, dynamic>{
             'uid': sp.getString('user_id').toString(),
@@ -5122,6 +5135,9 @@ class _RoomPageState extends State<RoomPage>
             'liveStatus': 0,
             'loginStatus': 0,
             'weight': cb.toUids!.toString() == '1' ? 1 : 0,
+            'msgId': '',
+            'msgRead': 2,
+            'msgJson': textMsg.msgId,
           };
           // 插入数据
           await databaseHelper.insertData('messageSLTable', params);

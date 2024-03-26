@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:im_flutter_sdk/im_flutter_sdk.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:yuyinting/utils/event_utils.dart';
@@ -216,6 +217,9 @@ class _PayHBTSPageState extends State<PayHBTSPage> {
       'liveStatus': 0,
       'loginStatus': 0,
       'weight': widget.uid.toString() == '1' ? 1 : 0,
+      'msgId': '',
+      'msgRead': 0,
+      'msgJson': '',
     };
     // 插入数据
     await databaseHelper.insertData('messageSLTable', params);

@@ -788,7 +788,7 @@ class MyUtils {
                     'loginStatus': 0,
                     'weight': msg.from.toString() == '1' ? 1 : 0,
                     'msgId': msg.msgId,
-                    'msgRead': 2,
+                    'msgRead': 0,
                     'msgJson': jsonEncode(msg.toJson()),
                   };
                   // 插入数据
@@ -826,7 +826,7 @@ class MyUtils {
           int count = await db.update(
             'messageSLTable',
             {'msgRead': (msg.hasReadAck ? 1 : 2)},
-            whereArgs: [msg.attributes?['msgId']],
+            whereArgs: [msg.msgId],
             where: 'msgId = ?',
           );
           // eventBus.fire(SendMessageBack(type: 1, msgID: msg.msgId));
@@ -852,6 +852,13 @@ class MyUtils {
         "UNIQUE_HANDLER_ID",
         ChatMessageEvent(
           onSuccess: (msgId, msg) async {
+            Database? db = await databaseHelper.database;
+            await db.update(
+              'messageSLTable',
+              {'msgId': msg.msgId, 'msgJson': jsonEncode(msg.toJson())},
+              whereArgs: [msgId],
+              where: 'msgJson = ?',
+            );
             switch (msg.body.type) {
               case MessageType.TXT:
                 break;
@@ -866,15 +873,6 @@ class MyUtils {
                 break;
             }
             addLogToConsole("send message succeed");
-            
-          Database? db = await databaseHelper.database;
-          await db.update(
-            'messageSLTable',
-            {'msgId': msg.msgId},
-            whereArgs: [msgId],
-            where: 'msgId = ?',
-          );
-          eventBus.fire(SendMessageBack(type: 1, msgID: msgId));
           },
           onProgress: (msgId, progress) {
             LogE('语音发送进度');
@@ -967,7 +965,8 @@ class MyUtils {
             whereArgs: [params['msgId']],
             where: 'msgId = ?',
           );
-          eventBus.fire(SendMessageBack(type: 1, msgID: msg.msgId));
+          eventBus
+              .fire(SendMessageBack(type: params['type'], msgID: msg.msgId));
         }
       } on EMError catch (e) {
         LogE(e.description);
@@ -980,8 +979,10 @@ class MyUtils {
   static void recallMessage(params) async {
     try {
       String msgId = params['msgId'];
-      final real = msgId.startsWith('Local_') ? msgId.substring('Local_'.length) : msgId;
-      await EMClient.getInstance.chatManager.recallMessage(real);
+      if (msgId.isEmpty) {
+        return;
+      }
+      await EMClient.getInstance.chatManager.recallMessage(msgId);
 
       DatabaseHelper databaseHelper = DatabaseHelper();
       await databaseHelper.database;
@@ -992,11 +993,11 @@ class MyUtils {
         whereArgs: [msgId],
       );
       LogE('消息撤回: to = ${params['otherUid']}, msgId = $msgId');
-      eventBus.fire(SendMessageBack(type: 1, msgID: msgId));
+      eventBus.fire(SendMessageBack(type: 2, msgID: msgId));
     } on EMError catch (e) {
       if (e.code == 504) {
         // 消息撤回超时错误：消息撤回超过时间限制时会提示该错误。
-        MyToastUtils.showToastBottom(e.description);
+        MyToastUtils.showToastBottom('撤回超过时间限制');
       }
     } catch (e) {
       LogE(e.toString());
