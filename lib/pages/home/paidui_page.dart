@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:get/get.dart';
+import 'package:yuyinting/pages/home/paidui_list_page.dart';
 import 'package:yuyinting/utils/SVGASimpleImage3.dart';
 
 import '../../bean/Common_bean.dart';
@@ -55,6 +56,7 @@ class _PaiduiPageState extends State<PaiduiPage>
   bool isUp = true; //是否允许上拉
   bool isDown = true; //是否允许下拉
   bool isOK = false;
+  bool isList = sp.getBool('paidui_list_type') ?? true;
 
   void _onRefresh() async {
     // 重新初始化
@@ -1100,232 +1102,261 @@ class _PaiduiPageState extends State<PaiduiPage>
                       : WidgetUtils.commonSizedBox(0, 0),
 
                   /// 标题栏 、 导航栏
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: SizedBox(
-                      width: 800.h,
-                      child: Row(
-                        children: [
-                          GestureDetector(
-                            onTap: (() {
-                              if (MyUtils.checkClick()) {
-                                // 重新初始化
-                                _refreshController.resetNoData();
-                                setState(() {
-                                  isOK = false;
-                                  index = 2;
-                                  page = 1;
-                                  doPostTJRoomList2('2');
-                                });
-                              }
-                            }),
-                            child: WidgetUtils.myContainer(
-                                ScreenUtil().setHeight(40),
-                                ScreenUtil().setHeight(90),
-                                index == 2
-                                    ? MyColors.paiduiRed
-                                    : MyColors.homeBG,
-                                index == 2
-                                    ? MyColors.paiduiRed
-                                    : MyColors.homeBG,
-                                '女神',
-                                ScreenUtil().setSp(28),
-                                index == 2 ? Colors.white : MyColors.g6),
-                          ),
-                          WidgetUtils.commonSizedBox(0, 15.h),
-                          GestureDetector(
-                            onTap: (() {
-                              if (MyUtils.checkClick()) {
-                                // 重新初始化
-                                _refreshController.resetNoData();
-                                setState(() {
-                                  isOK = false;
-                                  index = 3;
-                                  page = 1;
-                                  doPostTJRoomList2('3');
-                                });
-                              }
-                            }),
-                            child: WidgetUtils.myContainer(
-                                ScreenUtil().setHeight(40),
-                                ScreenUtil().setHeight(90),
-                                index == 3
-                                    ? MyColors.paiduiBlue
-                                    : MyColors.homeBG,
-                                index == 3
-                                    ? MyColors.paiduiBlue
-                                    : MyColors.homeBG,
-                                '男神',
-                                ScreenUtil().setSp(28),
-                                index == 3 ? Colors.white : MyColors.g6),
-                          ),
-                          WidgetUtils.commonSizedBox(0, 15.h),
-                          GestureDetector(
-                            onTap: (() {
-                              if (MyUtils.checkClick()) {
-                                // 重新初始化
-                                _refreshController.resetNoData();
-                                setState(() {
-                                  isOK = false;
-                                  index = 6;
-                                  page = 1;
-                                  doPostTJRoomList2('6');
-                                });
-                              }
-                            }),
-                            child: WidgetUtils.myContainer(
-                                ScreenUtil().setHeight(40),
-                                ScreenUtil().setHeight(90),
-                                index == 6
-                                    ? MyColors.paiduiXQ
-                                    : MyColors.homeBG,
-                                index == 6
-                                    ? MyColors.paiduiXQ
-                                    : MyColors.homeBG,
-                                '交友',
-                                ScreenUtil().setSp(28),
-                                index == 6 ? Colors.white : MyColors.g6),
-                          ),
-                          WidgetUtils.commonSizedBox(0, 15.h),
-                          listFL.isNotEmpty
-                              ? GestureDetector(
+                  Row(
+                    children: [
+                      Expanded(
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: SizedBox(
+                            width: 800.h,
+                            child: Row(
+                              children: [
+                                GestureDetector(
                                   onTap: (() {
                                     if (MyUtils.checkClick()) {
                                       // 重新初始化
                                       _refreshController.resetNoData();
                                       setState(() {
                                         isOK = false;
-                                        index = listFL[0].type as int;
+                                        index = 2;
                                         page = 1;
-                                        doPostTJRoomList2(
-                                            listFL[0].type.toString());
+                                        doPostTJRoomList2('2');
                                       });
                                     }
                                   }),
                                   child: WidgetUtils.myContainer(
                                       ScreenUtil().setHeight(40),
                                       ScreenUtil().setHeight(90),
-                                      index == listFL[0].type as int
-                                          ? MyColors.btn_d
+                                      index == 2
+                                          ? MyColors.paiduiRed
                                           : MyColors.homeBG,
-                                      index == listFL[0].type as int
-                                          ? MyColors.btn_d
+                                      index == 2
+                                          ? MyColors.paiduiRed
                                           : MyColors.homeBG,
-                                      listFL[0].title!,
+                                      '女神',
                                       ScreenUtil().setSp(28),
-                                      index == listFL[0].type as int
-                                          ? Colors.white
-                                          : MyColors.g6),
-                                )
-                              : const Text(''),
-                          listFL.isNotEmpty
-                              ? WidgetUtils.commonSizedBox(0, 15.h)
-                              : const Text(''),
-                          listFL.length > 1
-                              ? GestureDetector(
+                                      index == 2 ? Colors.white : MyColors.g6),
+                                ),
+                                WidgetUtils.commonSizedBox(0, 15.h),
+                                GestureDetector(
                                   onTap: (() {
                                     if (MyUtils.checkClick()) {
                                       // 重新初始化
                                       _refreshController.resetNoData();
                                       setState(() {
                                         isOK = false;
-                                        index = listFL[1].type as int;
+                                        index = 3;
                                         page = 1;
-                                        doPostTJRoomList2(
-                                            listFL[1].type.toString());
+                                        doPostTJRoomList2('3');
                                       });
                                     }
                                   }),
                                   child: WidgetUtils.myContainer(
                                       ScreenUtil().setHeight(40),
                                       ScreenUtil().setHeight(90),
-                                      index == listFL[1].type as int
-                                          ? MyColors.paiduiDC
+                                      index == 3
+                                          ? MyColors.paiduiBlue
                                           : MyColors.homeBG,
-                                      index == listFL[1].type as int
-                                          ? MyColors.paiduiDC
+                                      index == 3
+                                          ? MyColors.paiduiBlue
                                           : MyColors.homeBG,
-                                      listFL[1].title!,
+                                      '男神',
                                       ScreenUtil().setSp(28),
-                                      index == listFL[1].type as int
-                                          ? Colors.white
-                                          : MyColors.g6),
-                                )
-                              : const Text(''),
-                          listFL.length > 1
-                              ? WidgetUtils.commonSizedBox(0, 15.h)
-                              : const Text(''),
-                          GestureDetector(
-                            onTap: (() {
-                              if (MyUtils.checkClick()) {
-                                // 重新初始化
-                                _refreshController.resetNoData();
-                                setState(() {
-                                  isOK = false;
-                                  index = 4;
-                                  page = 1;
-                                  doPostTJRoomList2('4');
-                                });
-                              }
-                            }),
-                            child: WidgetUtils.myContainer(
-                                ScreenUtil().setHeight(40),
-                                ScreenUtil().setHeight(90),
-                                index == 4
-                                    ? MyColors.paiduiDC
-                                    : MyColors.homeBG,
-                                index == 4
-                                    ? MyColors.paiduiDC
-                                    : MyColors.homeBG,
-                                '新厅',
-                                ScreenUtil().setSp(28),
-                                index == 4 ? Colors.white : MyColors.g6),
-                          ),
-                          WidgetUtils.commonSizedBox(0, 15.h),
-                          GestureDetector(
-                            onTap: (() {
-                              if (MyUtils.checkClick()) {
-                                // 重新初始化
-                                _refreshController.resetNoData();
-                                setState(() {
-                                  isOK = false;
-                                  index = 5;
-                                  page = 1;
-                                  doPostTJRoomList2('5');
-                                });
-                              }
-                            }),
-                            child: SizedBox(
-                              height: ScreenUtil().setHeight(40),
-                              width: ScreenUtil().setHeight(160),
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  index == 5
-                                      ? WidgetUtils.showImagesFill(
-                                          'assets/images/paidui_diantai_bg.png',
-                                          ScreenUtil().setHeight(56),
-                                          ScreenUtil().setHeight(160))
-                                      : const Text(''),
-                                  Container(
-                                    alignment: Alignment.centerLeft,
+                                      index == 3 ? Colors.white : MyColors.g6),
+                                ),
+                                WidgetUtils.commonSizedBox(0, 15.h),
+                                GestureDetector(
+                                  onTap: (() {
+                                    if (MyUtils.checkClick()) {
+                                      // 重新初始化
+                                      _refreshController.resetNoData();
+                                      setState(() {
+                                        isOK = false;
+                                        index = 6;
+                                        page = 1;
+                                        doPostTJRoomList2('6');
+                                      });
+                                    }
+                                  }),
+                                  child: WidgetUtils.myContainer(
+                                      ScreenUtil().setHeight(40),
+                                      ScreenUtil().setHeight(90),
+                                      index == 6
+                                          ? MyColors.paiduiXQ
+                                          : MyColors.homeBG,
+                                      index == 6
+                                          ? MyColors.paiduiXQ
+                                          : MyColors.homeBG,
+                                      '交友',
+                                      ScreenUtil().setSp(28),
+                                      index == 6 ? Colors.white : MyColors.g6),
+                                ),
+                                WidgetUtils.commonSizedBox(0, 15.h),
+                                listFL.isNotEmpty
+                                    ? GestureDetector(
+                                        onTap: (() {
+                                          if (MyUtils.checkClick()) {
+                                            // 重新初始化
+                                            _refreshController.resetNoData();
+                                            setState(() {
+                                              isOK = false;
+                                              index = listFL[0].type as int;
+                                              page = 1;
+                                              doPostTJRoomList2(
+                                                  listFL[0].type.toString());
+                                            });
+                                          }
+                                        }),
+                                        child: WidgetUtils.myContainer(
+                                            ScreenUtil().setHeight(40),
+                                            ScreenUtil().setHeight(90),
+                                            index == listFL[0].type as int
+                                                ? MyColors.btn_d
+                                                : MyColors.homeBG,
+                                            index == listFL[0].type as int
+                                                ? MyColors.btn_d
+                                                : MyColors.homeBG,
+                                            listFL[0].title!,
+                                            ScreenUtil().setSp(28),
+                                            index == listFL[0].type as int
+                                                ? Colors.white
+                                                : MyColors.g6),
+                                      )
+                                    : const Text(''),
+                                listFL.isNotEmpty
+                                    ? WidgetUtils.commonSizedBox(0, 15.h)
+                                    : const Text(''),
+                                listFL.length > 1
+                                    ? GestureDetector(
+                                        onTap: (() {
+                                          if (MyUtils.checkClick()) {
+                                            // 重新初始化
+                                            _refreshController.resetNoData();
+                                            setState(() {
+                                              isOK = false;
+                                              index = listFL[1].type as int;
+                                              page = 1;
+                                              doPostTJRoomList2(
+                                                  listFL[1].type.toString());
+                                            });
+                                          }
+                                        }),
+                                        child: WidgetUtils.myContainer(
+                                            ScreenUtil().setHeight(40),
+                                            ScreenUtil().setHeight(90),
+                                            index == listFL[1].type as int
+                                                ? MyColors.paiduiDC
+                                                : MyColors.homeBG,
+                                            index == listFL[1].type as int
+                                                ? MyColors.paiduiDC
+                                                : MyColors.homeBG,
+                                            listFL[1].title!,
+                                            ScreenUtil().setSp(28),
+                                            index == listFL[1].type as int
+                                                ? Colors.white
+                                                : MyColors.g6),
+                                      )
+                                    : const Text(''),
+                                listFL.length > 1
+                                    ? WidgetUtils.commonSizedBox(0, 15.h)
+                                    : const Text(''),
+                                GestureDetector(
+                                  onTap: (() {
+                                    if (MyUtils.checkClick()) {
+                                      // 重新初始化
+                                      _refreshController.resetNoData();
+                                      setState(() {
+                                        isOK = false;
+                                        index = 4;
+                                        page = 1;
+                                        doPostTJRoomList2('4');
+                                      });
+                                    }
+                                  }),
+                                  child: WidgetUtils.myContainer(
+                                      ScreenUtil().setHeight(40),
+                                      ScreenUtil().setHeight(90),
+                                      index == 4
+                                          ? MyColors.paiduiDC
+                                          : MyColors.homeBG,
+                                      index == 4
+                                          ? MyColors.paiduiDC
+                                          : MyColors.homeBG,
+                                      '新厅',
+                                      ScreenUtil().setSp(28),
+                                      index == 4 ? Colors.white : MyColors.g6),
+                                ),
+                                WidgetUtils.commonSizedBox(0, 15.h),
+                                GestureDetector(
+                                  onTap: (() {
+                                    if (MyUtils.checkClick()) {
+                                      // 重新初始化
+                                      _refreshController.resetNoData();
+                                      setState(() {
+                                        isOK = false;
+                                        index = 5;
+                                        page = 1;
+                                        doPostTJRoomList2('5');
+                                      });
+                                    }
+                                  }),
+                                  child: SizedBox(
+                                    height: ScreenUtil().setHeight(40),
                                     width: ScreenUtil().setHeight(160),
-                                    padding: const EdgeInsets.only(left: 9),
-                                    child: WidgetUtils.showImages(
-                                        'assets/images/paidui_diantai1.png',
-                                        ScreenUtil().setHeight(24),
-                                        ScreenUtil().setHeight(116)),
+                                    child: Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        index == 5
+                                            ? WidgetUtils.showImagesFill(
+                                                'assets/images/paidui_diantai_bg.png',
+                                                ScreenUtil().setHeight(56),
+                                                ScreenUtil().setHeight(160))
+                                            : const Text(''),
+                                        Container(
+                                          alignment: Alignment.centerLeft,
+                                          width: ScreenUtil().setHeight(160),
+                                          padding:
+                                              const EdgeInsets.only(left: 9),
+                                          child: WidgetUtils.showImages(
+                                              'assets/images/paidui_diantai1.png',
+                                              ScreenUtil().setHeight(24),
+                                              ScreenUtil().setHeight(116)),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
+                        ),
                       ),
-                    ),
+                      SizedBox(width: 20.w),
+                      Padding(
+                        padding: EdgeInsets.all(5.h),
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isList = !isList;
+                              sp.setBool('paidui_list_type', isList);
+                            });
+                          },
+                          child: SizedBox(
+                            width: 30.h,
+                            height: 30.h,
+                            child: Image(
+                              image: AssetImage(isList
+                                  ? 'assets/images/paidui_list_table.png'
+                                  : 'assets/images/paidui_list_collect.png'),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
+
                   isOK
-                      ? ListView.builder(
+                      ? /*ListView.builder(
                           padding:
                               EdgeInsets.only(top: ScreenUtil().setHeight(20)),
                           shrinkWrap: true,
@@ -1344,7 +1375,51 @@ class _PaiduiPageState extends State<PaiduiPage>
                                               : index == listFL[0].type as int
                                                   ? list7.length
                                                   : list8.length,
-                        )
+                        )*/
+                      Builder(builder: (BuildContext context) {
+                          final List<DataPH> list;
+                          switch (index) {
+                            case 2: list = list2; break;
+                            case 3: list = list3; break;
+                            case 4: list = list4; break;
+                            case 5: list = list5; break;
+                            case 6: list = list6; break;
+                            default: list = index == (listFL[0].type as int) ? list7 : list8;
+                          }
+
+                          //2女厅 3男厅 4新厅 5游戏厅
+                          if (index == 2) {
+                            roomType = '女神';
+                          } else if (index == 3) {
+                            roomType = '男神';
+                          } else if (index == 4) {
+                            roomType = '新厅';
+                          } else if (index == 5) {
+                            roomType = '游戏厅';
+                          } else if (index == 6) {
+                            roomType = '交友';
+                          } else if (index == listFL[0].type as int) {
+                            roomType = listFL[0].title!;
+                          } else if (index == listFL[1].type as int) {
+                            roomType = listFL[1].title!;
+                          }
+                          return PaiduiListPage(
+                            isList: isList,
+                            index: index,
+                            roomType: roomType,
+                            list: list,
+                            listFL: listFL,
+                            action: (id) {
+                              if (MyUtils.checkClick() &&
+                                  sp.getBool('joinRoom') == false) {
+                                setState(() {
+                                  sp.setBool('joinRoom', false);
+                                });
+                                doPostBeforeJoin(id.toString());
+                              }
+                            },
+                          );
+                        })
                       : const Text(''),
                 ],
               ),

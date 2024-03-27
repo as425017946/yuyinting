@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../utils/my_utils.dart';
-import '../../utils/widget_utils.dart';
 
 mixin MsgReadText {
   Widget msgReadText(int msgRead) {
@@ -43,8 +42,8 @@ mixin MsgReadText {
 }
 
 class ChatRecallPage extends StatelessWidget {
-  dynamic params;
-  ChatRecallPage({super.key, required this.params});
+  final dynamic params;
+  const ChatRecallPage({super.key, required this.params});
 
   @override
   Widget build(BuildContext context) {
