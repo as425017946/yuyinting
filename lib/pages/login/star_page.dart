@@ -62,6 +62,12 @@ class _StarPageState extends State<StarPage> {
         sp.setString('myDevices', 'ios');
       });
     }
+
+    if (sp.getString('miyao').toString() == 'null' ||
+        sp.getString('miyao').toString().isEmpty) {
+      sp.setString('miyao', DateTime.now().millisecondsSinceEpoch.toString());
+    }
+
     doPostAheadPunish();
     doPostPdAddress();
     Future.delayed(const Duration(milliseconds: 2000), (() {
@@ -83,10 +89,7 @@ class _StarPageState extends State<StarPage> {
         //登录过，但是退出了登录
         Navigator.pushNamed(context, 'LoginPage');
       }
-      if (sp.getString('miyao').toString() == 'null' ||
-          sp.getString('miyao').toString().isEmpty) {
-        sp.setString('miyao', DateTime.now().millisecondsSinceEpoch.toString());
-      }
+
     }));
   }
 

@@ -398,6 +398,38 @@ class _RoomPageState extends State<RoomPage>
     }
   }
 
+  void _cancelTimerAll(){
+    if (_timerm1 != null) {
+      _timerm1!.cancel();
+    }
+    if (_timerm2 != null) {
+      _timerm2!.cancel();
+    }
+    if (_timerm3 != null) {
+      _timerm3!.cancel();
+    }
+    if (_timerm4 != null) {
+      _timerm4!.cancel();
+    }
+    if (_timerm5 != null) {
+      _timerm5!.cancel();
+    }
+    if (_timerm6 != null) {
+      _timerm6!.cancel();
+    }
+    if (_timerm7 != null) {
+      _timerm7!.cancel();
+    }
+    if (_timerm8 != null) {
+      _timerm8!.cancel();
+    }
+    if (_timerm9 != null) {
+      _timerm9!.cancel();
+    }
+    listenSend.cancel();
+    listenSendImg.cancel();
+  }
+
   // 点击的类型
   int leixing = 1;
   bool m0 = false,
@@ -513,19 +545,22 @@ class _RoomPageState extends State<RoomPage>
   int _timeCount1 = 10, _timeCount2 = 10, _timeCount3 = 10, _timeCount4 = 10, _timeCount5 = 10, _timeCount6 = 10, _timeCount7 = 10, _timeCount8 = 10, _timeCount9 = 10;
 
   void _startTimer() {
+    LogE('测试==========');
     _timer = Timer.periodic(
         const Duration(seconds: 1),
         (Timer timer) => {
               if (mounted)
                 {
-                  setState(() {
-                    if (_timeCount <= 0) {
-                      _timer!.cancel();
-                      _timeCount = 5;
-                    } else {
-                      _timeCount -= 1;
-                    }
-                  })
+                  if(_timer != null){
+                    setState(() {
+                      if (_timeCount <= 0) {
+                        _timer!.cancel();
+                        _timeCount = 5;
+                      } else {
+                        _timeCount -= 1;
+                      }
+                    })
+                  }
                 }
             });
   }
@@ -844,6 +879,7 @@ class _RoomPageState extends State<RoomPage>
 
       //保存进入房间的id
       sp.setString('roomID', widget.roomId);
+      sp.setString('sqRoomID', '');
       //保持屏幕常亮
       saveLiang();
       //把外面首页旋转的图去掉
@@ -3264,33 +3300,7 @@ class _RoomPageState extends State<RoomPage>
     if (_timerHot != null) {
       _timerHot!.cancel();
     }
-    if (_timerm1 != null) {
-      _timerm1!.cancel();
-    }
-    if (_timerm2 != null) {
-      _timerm2!.cancel();
-    }
-    if (_timerm3 != null) {
-      _timerm3!.cancel();
-    }
-    if (_timerm4 != null) {
-      _timerm4!.cancel();
-    }
-    if (_timerm5 != null) {
-      _timerm5!.cancel();
-    }
-    if (_timerm6 != null) {
-      _timerm6!.cancel();
-    }
-    if (_timerm7 != null) {
-      _timerm7!.cancel();
-    }
-    if (_timerm8 != null) {
-      _timerm8!.cancel();
-    }
-    if (_timerm9 != null) {
-      _timerm9!.cancel();
-    }
+    _cancelTimerAll();
     listenSGJ.cancel();
     listenJoinHF.cancel();
     animationControllerBG.dispose();
@@ -4205,7 +4215,12 @@ class _RoomPageState extends State<RoomPage>
             if (_timerHot != null) {
               _timerHot!.cancel();
             }
+            if(_timer != null){
+              _timer!.cancel();
+              _timer = null;
+            }
             _cancelTimer();
+            _cancelTimerAll();
             sp.setString('isShouQi', '1');
             sp.setString('sqRoomID', widget.roomId);
             eventBus.fire(SubmitButtonBack(title: '收起房间'));
@@ -4284,7 +4299,12 @@ class _RoomPageState extends State<RoomPage>
                         if (_timerHot != null) {
                           _timerHot!.cancel();
                         }
+                        if(_timer != null){
+                          _timer!.cancel();
+                          _timer = null;
+                        }
                         _cancelTimer();
+                        _cancelTimerAll();
                         sp.setString('isShouQi', '1');
                         sp.setString('sqRoomID', widget.roomId);
                         eventBus.fire(SubmitButtonBack(title: '收起房间'));
@@ -5253,6 +5273,8 @@ class _RoomPageState extends State<RoomPage>
     //判断房间id是否为空的
     if (sp.getString('roomID') == null ||
         sp.getString('roomID').toString().isEmpty) {
+      return;
+      return;
     } else {
       // 不是空的，并且不是之前进入的房间
       if (sp.getString('roomID').toString() != roomID) {
@@ -5324,6 +5346,7 @@ class _RoomPageState extends State<RoomPage>
           // 取消发布本地音频流
           _engine?.muteLocalAudioStream(true);
           _engine?.disableAudio();
+          _dispose();
           // 清空存储信息
           deleteChatInfo();
           // ignore: use_build_context_synchronously

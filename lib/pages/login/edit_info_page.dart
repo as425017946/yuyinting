@@ -13,7 +13,6 @@ import '../../utils/event_utils.dart';
 import '../../utils/loading.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
-import '../../utils/regex_formatter.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../mine/my/edit_head_page.dart';
@@ -398,6 +397,8 @@ class _EditInfoPageState extends State<EditInfoPage> {
   Future<void> doPostBeforeJoin(roomID, String anchorUid) async {
     //判断房间id是否为空的
     if(sp.getString('roomID') == null || sp.getString('').toString().isEmpty){
+      return;
+      return;
     }else{
       // 不是空的，并且不是之前进入的房间
       if(sp.getString('roomID').toString() != roomID){

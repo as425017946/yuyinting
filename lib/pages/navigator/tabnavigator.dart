@@ -151,6 +151,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     });
     // 接受自定义消息
     listenZdy = eventBus.on<JoinRoomYBack>().listen((event) {
+      LogE('聊天室消息  ${sp.getString('sqRoomID').toString() == event.map!['room_id'].toString()}');
       if (event.map!['type'] == 'send_all_user') {
         LogE('前面有没有横幅  ${listMP.length}');
         if (listMP.isEmpty) {
@@ -172,18 +173,18 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
             listMP.add(hf);
           });
         }
-      } else if (event.map!['type'] == 'chatroom_msg') {
+      } else if (event.map!['type'] == 'chatroom_msg' && sp.getString('sqRoomID').toString() == event.map!['room_id'].toString()) {
         saveChatInfo(
             event.map!, '4', event.map!['nickname'], event.map!['content']);
-      } else if (event.map!['type'] == 'welcome_msg') {
+      } else if (event.map!['type'] == 'welcome_msg' && sp.getString('sqRoomID').toString() == event.map!['room_id'].toString()) {
         saveChatInfo(event.map!, '3', event.map!['send_nickname'],
             '${event.map!['nickname']},${event.map!['content']}');
-      } else if (event.map!['type'] == 'send_gift') {
+      } else if (event.map!['type'] == 'send_gift' && sp.getString('sqRoomID').toString() == event.map!['room_id'].toString()) {
         //厅内发送的送礼物消息
         charmAllBean cb = charmAllBean.fromJson(event.map);
         saveChatInfo(event.map!, '5', event.map!['nickname'],
             '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出${cb.giftInfo![0].giftName!}(${cb.giftInfo![0].giftPrice.toString()}); x${cb.giftInfo![0].giftNumber.toString()}');
-      } else if (event.map!['type'] == 'one_click_gift') {
+      } else if (event.map!['type'] == 'one_click_gift' && sp.getString('sqRoomID').toString() == event.map!['room_id'].toString()) {
         charmAllBean cb = charmAllBean.fromJson(event.map);
         String infos = ''; // 这个是拼接用户送的礼物信息使用
         for (int i = 0; i < cb.giftInfo!.length; i++) {
@@ -201,7 +202,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         }
         saveChatInfo(event.map!, '6', event.map!['from_nickname'],
             '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出;$infos');
-      } else if (event.map!['type'] == 'send_screen_all') {
+      } else if (event.map!['type'] == 'send_screen_all' && sp.getString('sqRoomID').toString() == event.map!['room_id'].toString()) {
         charmAllBean cb = charmAllBean.fromJson(event.map);
         String info = '';
         for (int i = 0; i < cb.giftInfo!.length; i++) {
@@ -277,9 +278,10 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           doPostSvgaDressList();
         }
       } else if (event.title == '去掉旋转') {
-        sp.setBool('sqRoom', false);
         // 防止用户被顶号时没有清空表
         setState(() {
+          sp.setBool('sqRoom', false);
+          sp.setString('sqRoomID', '');
           isJoinRoom = false;
         });
       } else if (event.title == '添加新账号') {
@@ -985,6 +987,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
   Future<void> doPostBeforeJoin(roomID) async {
     //判断房间id是否为空的
     if (sp.getString('roomID') == null || sp.getString('').toString().isEmpty) {
+      return;
     } else {
       // 不是空的，并且不是之前进入的房间
       if (sp.getString('roomID').toString() != roomID) {
@@ -1045,6 +1048,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     //判断房间id是否为空的
     if (sp.getString('roomID') == null ||
         sp.getString('roomID').toString().isEmpty) {
+      return;
     } else {
       // 不是空的，并且不是之前进入的房间
       if (sp.getString('roomID').toString() != roomID) {

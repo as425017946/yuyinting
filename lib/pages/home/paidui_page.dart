@@ -1503,6 +1503,7 @@ class _PaiduiPageState extends State<PaiduiPage>
   Future<void> doPostBeforeJoin(roomID) async {
     //判断房间id是否为空的
     if (sp.getString('roomID') == null || sp.getString('').toString().isEmpty) {
+      return;
     } else {
       // 不是空的，并且不是之前进入的房间
       if (sp.getString('roomID').toString() != roomID) {
