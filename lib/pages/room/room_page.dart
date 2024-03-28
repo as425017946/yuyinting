@@ -839,6 +839,7 @@ class _RoomPageState extends State<RoomPage>
     //2.页面初始化的时候，添加一个状态的监听者
     WidgetsBinding.instance?.addObserver(this);
     if (Platform.isAndroid) {
+      _init();
       setState(() {
         isDevices = 'android';
       });
@@ -3523,7 +3524,6 @@ class _RoomPageState extends State<RoomPage>
           clientRoleType: ClientRoleType.clientRoleBroadcaster),
       uid: int.parse(sp.getString('user_id').toString()),
     );
-    _init();
   }
 
   ///更新9个麦序的开麦状态
