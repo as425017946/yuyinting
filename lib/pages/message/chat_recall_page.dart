@@ -6,38 +6,39 @@ import '../../utils/my_utils.dart';
 mixin MsgReadText {
   Widget msgReadText(int msgRead) {
     switch (msgRead) {
-      case 1:
-        return Text(
-          '已读',
-          style: TextStyle(
-            color: Colors.green,
-            fontSize: ScreenUtil().setSp(20),
-          ),
-        );
-      case 2:
-        return Text(
-          '未读',
-          style: TextStyle(
-            color: Colors.grey,
-            fontSize: ScreenUtil().setSp(20),
-          ),
-        );
+      // case 1:
+      //   return Text(
+      //     '已读',
+      //     style: TextStyle(
+      //       color: Colors.green,
+      //       fontSize: ScreenUtil().setSp(20),
+      //     ),
+      //   );
+      // case 2:
+      //   return Text(
+      //     '未读',
+      //     style: TextStyle(
+      //       color: Colors.grey,
+      //       fontSize: ScreenUtil().setSp(20),
+      //     ),
+      //   );
       default:
         return const Text('');
     }
   }
 
-  void Function() onImgLongPress(BuildContext context, params) {
-    return (() {
-      // MyUtils.recallMessage(params);
-      Future.delayed(const Duration(seconds: 0), () {
-        Navigator.of(context).push(PageRouteBuilder(
-            opaque: false,
-            pageBuilder: (context, animation, secondaryAnimation) {
-              return ChatRecallPage(params: params);
-            }));
-      });
-    });
+  void Function()? onImgLongPress(BuildContext context, params) {
+    return null;
+    // return (() {
+    //   // MyUtils.recallMessage(params);
+    //   Future.delayed(const Duration(seconds: 0), () {
+    //     Navigator.of(context).push(PageRouteBuilder(
+    //         opaque: false,
+    //         pageBuilder: (context, animation, secondaryAnimation) {
+    //           return ChatRecallPage(params: params);
+    //         }));
+    //   });
+    // });
   }
 }
 
