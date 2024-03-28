@@ -1668,6 +1668,11 @@ class _RoomPageState extends State<RoomPage>
           }
           // 清空存储信息
           deleteChatInfo();
+          //取消订阅所有远端用户的音频流。
+          _engine?.muteAllRemoteAudioStreams(true);
+          // 取消发布本地音频流
+          _engine?.muteLocalAudioStream(true);
+          _engine?.disableAudio();
           //离开频道并释放资源
           _dispose();
           Navigator.pop(context);

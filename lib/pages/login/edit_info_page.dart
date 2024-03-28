@@ -370,12 +370,13 @@ class _EditInfoPageState extends State<EditInfoPage> {
           if(avatarID != avatarID2 || nickName != controller.text.trim().toString()) {
             MyToastUtils.showToastBottom('资料提交成功，请耐心等待审核');
           }
-          // ignore: use_build_context_synchronously
-          Navigator.pop(context);
           //判断有无代理房间
           if(sp.getString('daili_roomid').toString() != 'null' && sp.getString('daili_roomid').toString().isNotEmpty){
             //有房间直接进入
             doPostBeforeJoin(sp.getString('daili_roomid').toString(),'');
+          }else{
+            // ignore: use_build_context_synchronously
+            Navigator.pop(context);
           }
           break;
         case MyHttpConfig.errorloginCode:
@@ -397,7 +398,6 @@ class _EditInfoPageState extends State<EditInfoPage> {
   Future<void> doPostBeforeJoin(roomID, String anchorUid) async {
     //判断房间id是否为空的
     if(sp.getString('roomID') == null || sp.getString('').toString().isEmpty){
-      return;
       return;
     }else{
       // 不是空的，并且不是之前进入的房间
@@ -452,6 +452,8 @@ class _EditInfoPageState extends State<EditInfoPage> {
       CommonBean bean = await DataUtils.postRoomJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
+        // ignore: use_build_context_synchronously
+          Navigator.pop(context);
         // ignore: use_build_context_synchronously
           MyUtils.goTransparentRFPage(
               context,
