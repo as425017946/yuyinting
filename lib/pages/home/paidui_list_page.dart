@@ -139,13 +139,18 @@ class PaiduiListPage extends StatelessWidget {
             left: 5.w,
             child: _tag(),
           ),
+          // Positioned(
+          //   top: 0,
+          //   right: 0,
+          //   child: index == 4
+          //       ? WidgetUtils.showImages(
+          //           'assets/images/room_xinting_tj.png', 30.w, 100.w)
+          //       : const Text(''),
+          // ),
           Positioned(
-            top: 0,
-            right: 0,
-            child: index == 4
-                ? WidgetUtils.showImages(
-                    'assets/images/room_xinting_tj.png', 30.w, 100.w)
-                : const Text(''),
+            top: 5.w,
+            right: 10.w,
+            child: _hotDegree(item),
           ),
           Padding(
             padding: EdgeInsets.all(10.w),
@@ -153,22 +158,15 @@ class PaiduiListPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    index == 5
-                        ? WidgetUtils.onlyText(
-                            item.notice!,
-                            StyleUtils.getCommonTextStyle(
-                              color: MyColors.paiduiPurple,
-                              fontWeight: FontWeight.w600,
-                              fontSize: ScreenUtil().setSp(18),
-                            ),
-                          )
-                        : const Text(''),
-                    const Spacer(),
-                    _hotDegree(item),
-                  ],
-                ),
+                if (index == 5)
+                  WidgetUtils.onlyText(
+                    item.notice!,
+                    StyleUtils.getCommonTextStyle(
+                      color: MyColors.paiduiPurple,
+                      fontWeight: FontWeight.w600,
+                      fontSize: ScreenUtil().setSp(18),
+                    ),
+                  ),
                 Text(
                   item.roomName!,
                   maxLines: 1,
@@ -274,13 +272,33 @@ class PaiduiListPage extends StatelessWidget {
     final String text = hotDegree > 9999
         ? '${(hotDegree / 10000).toStringAsFixed(0)}w'
         : hotDegree.toString();
-    return Text(
-      '热度值:$text',
-      style: TextStyle(
-          fontSize: ScreenUtil().setSp(24),
-          color: MyColors.g6,
-          fontFamily: 'YOUSHEBIAOTIHEI'),
-    );
+    if (isList) {
+      return Text(
+        '热度值:$text',
+        style: TextStyle(
+            fontSize: ScreenUtil().setSp(24),
+            color: MyColors.g6,
+            fontFamily: 'YOUSHEBIAOTIHEI'),
+      );
+    } else {
+      return Row(
+        children: [
+          Image(
+            width: 20.w,
+            height: 20.w,
+            image: const AssetImage('assets/images/paidui_list_fire.png'),
+          ),
+          SizedBox(width: 5.w),
+          Text(
+            text,
+            style: TextStyle(
+                fontSize: ScreenUtil().setSp(24),
+                color: Colors.white,
+                fontFamily: 'YOUSHEBIAOTIHEI'),
+          ),
+        ],
+      );
+    }
   }
 
   Widget _head(String img) {
