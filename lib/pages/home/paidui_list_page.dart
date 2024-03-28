@@ -32,7 +32,7 @@ class PaiduiListPage extends StatelessWidget {
       return const Text('');
     }
     return GridView.builder(
-      padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 20.w),
+      padding: EdgeInsets.symmetric(horizontal: 28.w - 10, vertical: 20.w),
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
