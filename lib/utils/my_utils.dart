@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:im_flutter_sdk/im_flutter_sdk.dart';
@@ -18,6 +19,7 @@ import '../config/online_config.dart';
 import '../db/DatabaseHelper.dart';
 import '../main.dart';
 import '../pages/login/login_page.dart';
+import 'loading.dart';
 import 'log_util.dart';
 import 'my_toast_utils.dart';
 import 'package:http/http.dart' as http;
@@ -390,11 +392,29 @@ class MyUtils {
 
   // 保存网络图片到相册额
   static void saveNetworkImageToGallery(String imageUrl) async {
-    var response = await http.get(Uri.parse(imageUrl));
-    final result = await ImageGallerySaver.saveImage(
-        Uint8List.fromList(response.bodyBytes));
-    MyToastUtils.showToastBottom("下载成功");
-    print("保存路径：$result");
+    Loading.show('保存中...');
+    try {
+      var response = await http.get(Uri.parse(imageUrl));
+      final result = await ImageGallerySaver.saveImage(
+          Uint8List.fromList(response.bodyBytes));
+      MyToastUtils.showToastBottom("保存成功");
+      print("保存路径：$result");
+    } finally {
+      Loading.dismiss();
+    }
+  }
+
+  static void saveLocalImageToGallery(String imageUrl) async {
+    Loading.show('保存中...');
+    try {
+      final file = File(imageUrl);
+      final Uint8List imgBytes = await file.readAsBytes();
+      final result = await ImageGallerySaver.saveImage(imgBytes);
+      MyToastUtils.showToastBottom("保存成功");
+      print("保存路径：$result");
+    } finally {
+      Loading.dismiss();
+    }
   }
 
   // 保存网络图片到缓存目录
