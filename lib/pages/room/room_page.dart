@@ -2952,7 +2952,7 @@ class _RoomPageState extends State<RoomPage>
         print("应用进入前台======");
         setState(() {
           isFirst++;
-          _engine?.enableLocalAudio(true);
+          _engine?.enableAudio();
         });
         if (isFirst > 0) {
           doPostRoomUserMikeInfo();
@@ -5245,10 +5245,18 @@ class _RoomPageState extends State<RoomPage>
                   // 发声音发音频流
                   _engine?.enableLocalAudio(true);
                   //设置成主播
-                  _engine?.setClientRole(
-                      role: ClientRoleType.clientRoleBroadcaster);
+                  _engine?.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
                   // 发布本地音频流
                   _engine?.muteLocalAudioStream(false);
+                } else {
+                  // 启用音频模块
+                  _engine?.enableAudio();
+                  // 设置成观众
+                  _engine?.setClientRole(role: ClientRoleType.clientRoleAudience);
+                  // 取消发布本地音频流
+                  _engine?.muteLocalAudioStream(true);
+                  // 适用只听声音，不发声音流
+                  _engine?.enableLocalAudio(false);
                 }
               }
             }
