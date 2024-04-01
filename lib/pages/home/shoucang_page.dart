@@ -195,7 +195,7 @@ class _ShoucangPageState extends State<ShoucangPage>
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: MyColors.homeBG,
+      color: Colors.transparent,
       child: length != 0
           ? SmartRefresher(
               header: MyUtils.myHeader(),

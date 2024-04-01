@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
@@ -24,7 +25,6 @@ import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../../widget/SwiperPage.dart';
-import '../gongping/web_page.dart';
 import '../message/chat_page.dart';
 import '../message/geren/people_info_page.dart';
 import '../mine/my/my_info_page.dart';
@@ -686,6 +686,34 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
     }
   }
 
+  Widget waterCard(BuildContext context, int index){
+    return Container(
+      decoration: BoxDecoration(
+          border:Border.all(color:Colors.yellow,width:1),
+          color: Colors.white,
+      ),
+      child: Column(
+        children: [
+          WidgetUtils.CircleImageNetTop(350.h, 350.w, 30.h,'http://image.nbd.com.cn/uploads/articles/images/673466/500352700_banner.jpg'),
+          WidgetUtils.onlyText('可可爱爱。可可爱爱。可可爱爱。可可爱爱。', StyleUtils.getCommonTextStyle(color: MyColors.newHomeBlack, fontSize: 30.sp, fontWeight: FontWeight.w600)),
+          WidgetUtils.commonSizedBox(10.h, 0),
+          Row(
+            children: [
+              WidgetUtils.commonSizedBox(0, 10.w),
+              WidgetUtils.CircleHeadImage(
+                  25 * 2.w, 25 * 2.w, 'http://image.nbd.com.cn/uploads/articles/images/673466/500352700_banner.jpg'),
+              WidgetUtils.commonSizedBox(0, 10.w),
+              WidgetUtils.onlyText('昵称', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: 24.sp,)),
+              const Spacer(),
+              WidgetUtils.showImages('assets/images/dt_dianzan1.png', 56.h, 115.w),
+              WidgetUtils.commonSizedBox(0, 10.w),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -701,65 +729,6 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
           Column(
             children: [
               WidgetUtils.commonSizedBox(20, 0),
-
-              ///轮播图
-              imgList.isNotEmpty
-                  ? Container(
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      height: ScreenUtil().setWidth(140 * 1.3),
-                      //超出部分，可裁剪
-                      clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Swiper(
-                        itemBuilder: (BuildContext context, int index) {
-                          // 配置图片地址
-                          return CachedNetworkImage(
-                            imageUrl: imgList[index].img!,
-                            fit: BoxFit.fill,
-                            placeholder: (context, url) =>
-                                WidgetUtils.CircleImageAss(
-                              ScreenUtil().setWidth(140 * 1.3),
-                              double.infinity,
-                              ScreenUtil().setHeight(10),
-                              'assets/images/img_placeholder.png',
-                            ),
-                            errorWidget: (context, url, error) =>
-                                WidgetUtils.CircleImageAss(
-                              ScreenUtil().setWidth(140 * 1.3),
-                              double.infinity,
-                              ScreenUtil().setHeight(10),
-                              'assets/images/img_placeholder.png',
-                            ),
-                          );
-                        },
-                        // 配置图片数量
-                        itemCount: imgList.length,
-                        // 无限循环
-                        loop: true,
-                        // 自动轮播
-                        autoplay: true,
-                        autoplayDelay: 5000,
-                        duration: 2000,
-                        onTap: (index) {
-                          // LogE('用户点击引起下标改变调用');
-                          if (MyUtils.checkClick()) {
-                            MyUtils.goTransparentPageCom(
-                                context, WebPage(url: imgList[index].url!));
-                          }
-                        },
-                      ),
-                    )
-                  : Container(
-                      padding: const EdgeInsets.only(left: 20, right: 20),
-                      height: ScreenUtil().setHeight(140),
-                      //超出部分，可裁剪
-                      clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
               Expanded(
                 child: SmartRefresher(
                   header: MyUtils.myHeader(),
@@ -768,10 +737,25 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
                   enablePullUp: true,
                   onLoading: _onLoading,
                   onRefresh: _onRefresh,
-                  child: ListView.builder(
-                    padding: EdgeInsets.all(20 * 2.w),
-                    itemBuilder: _itemsTuijian,
-                    itemCount: _list.length,
+                  child: SingleChildScrollView(
+                      child: Container(
+                        padding: EdgeInsets.all(10),
+                        child: MasonryGridView.count(
+                          // 展示几列
+                          crossAxisCount: 2,
+                          // 元素总个数
+                          itemCount: 7,
+                          // 单个子元素
+                          itemBuilder: waterCard,
+                          // 纵向元素间距
+                          mainAxisSpacing: 10,
+                          // 横向元素间距
+                          crossAxisSpacing: 10,
+                          //本身不滚动，让外面的singlescrollview来滚动
+                          physics:const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true, //收缩，让元素宽度自适应
+                        ),
+                      ),
                   ),
                 ),
               )

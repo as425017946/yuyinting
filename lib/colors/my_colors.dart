@@ -157,4 +157,13 @@ class MyColors {
   static const Color zjZ2 = Color(0xFF9DFFBF);
   static const Color zjZ3 = Color(0xFF96FBFF);
   static const Color zjZ4 = Color(0xFFFFFB98);
+
+  /// 新增颜色值
+  static const Color newLoginblue1 = Color(0xFF89cde2);
+  static const Color newLoginblue2 = Color(0xFF61dcde);
+  static const Color newHomeBlack = Color(0xFF212121);
+  static const Color newY1 = Color(0xFFF1F9FD);
+  static const Color newY2 = Color(0xFFFDF5F9);
+  static const Color newY3 = Color(0xFFFDFCF1);
+  static const Color newY4 = Color(0xFFe0e5ff);
 }

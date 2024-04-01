@@ -6,7 +6,6 @@ import 'package:yuyinting/utils/event_utils.dart';
 
 import '../../bean/Common_bean.dart';
 import '../../colors/my_colors.dart';
-import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
@@ -187,8 +186,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       child: WidgetUtils.onlyText(
                           _autoCodeText,
                           StyleUtils.getCommonTextStyle(
-                              color: MyColors.homeTopBG,
-                              fontSize: ScreenUtil().setSp(33))),
+                              color: MyColors.newLoginblue2,
+                              fontSize: ScreenUtil().setSp(28))),
                     ),
                   ),
                   WidgetUtils.commonSizedBox(0, 40),

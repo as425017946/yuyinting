@@ -369,6 +369,8 @@ class MyHttpConfig{
   static  String appOpen = "$baseURL/user/AppOpen";
   // 装扮预下载
   static  String svgaDressList = "$baseURL/shop/svgaDressList";
+  // 盲盒礼物-业务
+  static  String playBlindBox = "$baseURL/play/playBlindBox";
 
 
 }

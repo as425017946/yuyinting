@@ -1,9 +1,6 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
-import 'package:dart_ping/dart_ping.dart';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -15,7 +12,6 @@ import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/md5_util.dart';
 import 'package:yuyinting/utils/my_utils.dart';
 import '../../bean/Common_bean.dart';
-import '../../bean/addressIPBean.dart';
 import '../../bean/loginBean.dart';
 import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
@@ -28,6 +24,7 @@ import '../../utils/my_ping.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
+import '../../widget/SVGASimpleImage2.dart';
 
 ///登录页面
 class LoginPage extends StatefulWidget {
@@ -37,7 +34,7 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
   TextEditingController controllerPhone = TextEditingController();
   TextEditingController controllerSmg = TextEditingController();
   TextEditingController controllerAccount = TextEditingController();
@@ -52,13 +49,18 @@ class _LoginPageState extends State<LoginPage> {
   bool isMiMa = false;
   var listen, listen2;
   String IP = '', IMEI = '';
+  /// 播放svga动画使用
+  late SVGAAnimationController animationControllerBG;
+
+
   @override
   void initState() {
     // final ping = Ping('43.198.138.251', count: 5);
     // ping.stream.listen((event) {
     //   LogE('Running command: $event');
     // });
-
+    animationControllerBG = SVGAAnimationController(vsync: this);
+    showStar('assets/svga/login_bg_2.svga');
     if (Platform.isAndroid) {
       setState(() {
         sp.setString('myDevices', 'android');
@@ -124,6 +126,34 @@ class _LoginPageState extends State<LoginPage> {
     ceshi();
   }
 
+  /// 背景图为svga的时候使用
+  void showStar(String bgSVGAa) async {
+    try {
+      final videoItem = await _loadSVGA(false, bgSVGAa);
+      videoItem.autorelease = false;
+      animationControllerBG?.videoItem = videoItem;
+      animationControllerBG
+          ?.repeat() // Try to use .forward() .reverse()
+          .whenComplete(() => animationControllerBG?.videoItem = null);
+    } catch (e) {
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      LogE('加载背景图错误提示 ${e.toString()}');
+    }
+  }
+
+
+  Future _loadSVGA(isUrl, svgaUrl) {
+    LogE('动画类型 $isUrl === $svgaUrl');
+    Future Function(String) decoder;
+    if (isUrl) {
+      decoder = SVGAParser.shared.decodeFromURL;
+    } else {
+      decoder = SVGAParser.shared.decodeFromAssets;
+    }
+    return decoder(svgaUrl);
+  }
+
+
   String pid = '';
   void ceshi() async {
     List<String> uirlInfo = [];
@@ -158,6 +188,7 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
     listen.cancel();
     listen2.cancel();
+    animationControllerBG.dispose();
   }
 
   Timer? _timer;
@@ -229,57 +260,97 @@ class _LoginPageState extends State<LoginPage> {
             FocusManager.instance.primaryFocus?.unfocus();
           }
         },
-        child: Stack(
-          children: [
-            Container(
-              width: double.infinity,
-              height: double.infinity,
-              color: MyColors.loginBG,
-              child: Column(
-                children: [
-                  GestureDetector(
-                    onTap: (() {
-                      MyUtils.hideKeyboard(context);
-                    }),
-                    child: Container(
-                      height: 630.h,
-                      width: double.infinity,
-                      color: Colors.transparent,
-                      child: const SVGASimpleImage(
-                        assetsName: 'assets/svga/login.svga',
+        child: SizedBox(
+          height: double.infinity,
+          width: double.infinity,
+          child: Stack(
+            children: [
+              Container(
+                height: 800.h,
+                decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      //渐变位置
+                        begin: Alignment.topCenter, //右上
+                        end: Alignment.bottomCenter, //左下
+                        stops: [0.0, 1.0], //[渐变起始点, 渐变结束点]
+                        //渐变颜色[始点颜色, 结束颜色]
+                        colors: [MyColors.loginBlue, Colors.white])),
+                child: Column(
+                  children: [
+                    GestureDetector(
+                      onTap: (() {
+                        MyUtils.hideKeyboard(context);
+                      }),
+                      child: Container(
+                        height: 550.h,
+                        width: double.infinity,
+                        color: Colors.transparent,
+                        child: SVGAImage(
+                          animationControllerBG,
+                          fit: BoxFit.fitWidth,
+                          allowDrawingOverflow: false,
+                        ),
                       ),
                     ),
+                  ],
+                ),
+              ),
+              Container(
+                height: double.infinity,
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  //设置Container修饰
+                  image: DecorationImage(
+                    //背景图片修饰
+                    image: AssetImage("assets/images/login_bg2.png"),
+                    fit: BoxFit.fill, //覆盖
                   ),
-                  _phone(),
-                  _password(),
-                  WidgetUtils.commonSizedBox(30, 0),
-                  _loginBtn(),
-                  WidgetUtils.commonSizedBox(20, 0),
-                  Container(
-                    margin: const EdgeInsets.only(left: 40, right: 40),
-                    child: Row(
+                ),
+              ),
+
+              Container(
+                width: double.infinity,
+                height: double.infinity,
+                color: Colors.transparent,
+                child: Stack(
+                  children: [
+
+                    Column(
                       children: [
-                        // const Expanded(child: Text('')),
-                        GestureDetector(
-                          onTap: (() {
-                            setState(() {
-                              isClick = !isClick;
-                              if (zhanghao == '账号登录') {
-                                zhanghao = '手机号登录';
-                              } else {
-                                zhanghao = '账号登录';
-                              }
-                            });
-                          }),
-                          child: WidgetUtils.onlyText(
-                              zhanghao,
-                              StyleUtils.getCommonTextStyle(
-                                  color: MyColors.homeTopBG,
-                                  fontSize: ScreenUtil().setSp(28))),
+                        SizedBox(
+                          height: 550.h,
+                          width: double.infinity,
                         ),
-                        const Expanded(child: Text('')),
-                        zhanghao == '账号登录'
-                            ? GestureDetector(
+                        _phone(),
+                        _password(),
+                        WidgetUtils.commonSizedBox(30, 0),
+                        _loginBtn(),
+                        WidgetUtils.commonSizedBox(20, 0),
+                        Container(
+                          margin: const EdgeInsets.only(left: 40, right: 40),
+                          child: Row(
+                            children: [
+                              // const Expanded(child: Text('')),
+                              GestureDetector(
+                                onTap: (() {
+                                  setState(() {
+                                    isClick = !isClick;
+                                    if (zhanghao == '账号登录') {
+                                      zhanghao = '手机号登录';
+                                    } else {
+                                      zhanghao = '账号登录';
+                                    }
+                                  });
+                                }),
+                                child: WidgetUtils.onlyText(
+                                    zhanghao,
+                                    StyleUtils.getCommonTextStyle(
+                                        color: MyColors.newLoginblue2,
+                                        fontSize: ScreenUtil().setSp(28))),
+                              ),
+                              const Expanded(child: Text('')),
+                              zhanghao == '账号登录'
+                                  ? GestureDetector(
                                 onTap: (() {
                                   Navigator.pushNamed(
                                       context, 'ForgotPasswordPage');
@@ -290,23 +361,26 @@ class _LoginPageState extends State<LoginPage> {
                                         color: MyColors.g6,
                                         fontSize: ScreenUtil().setSp(28))),
                               )
-                            : const Text(''),
+                                  : const Text(''),
+                            ],
+                          ),
+                        ),
+                        const Expanded(child: Text('')),
+                        _agree(),
+                        WidgetUtils.commonSizedBox(10.h, 0),
+                        WidgetUtils.onlyTextCenter(
+                            '版本号:${sp.getString('myVersion2').toString()}',
+                            StyleUtils.getCommonTextStyle(
+                                color: MyColors.homeTopBG,
+                                fontSize: ScreenUtil().setSp(25))),
+                        WidgetUtils.commonSizedBox(20.h, 0),
                       ],
-                    ),
-                  ),
-                  const Expanded(child: Text('')),
-                  _agree(),
-                  WidgetUtils.commonSizedBox(10.h, 0),
-                  WidgetUtils.onlyTextCenter(
-                      '版本号:${sp.getString('myVersion2').toString()}',
-                      StyleUtils.getCommonTextStyle(
-                          color: MyColors.homeTopBG,
-                          fontSize: ScreenUtil().setSp(25))),
-                  WidgetUtils.commonSizedBox(20.h, 0),
-                ],
+                    )
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -470,7 +544,7 @@ class _LoginPageState extends State<LoginPage> {
                               child: WidgetUtils.onlyTextCenter(
                                   _autoCodeText,
                                   StyleUtils.getCommonTextStyle(
-                                      color: MyColors.homeTopBG,
+                                      color: MyColors.newLoginblue2,
                                       fontSize: 26.sp)),
                             ),
                           ),
@@ -492,7 +566,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: WidgetUtils.onlyText(
                           '密码登录',
                           StyleUtils.getCommonTextStyle(
-                              color: MyColors.homeTopBG,
+                              color: MyColors.newLoginblue2,
                               fontSize: 26.sp,
                               fontWeight: FontWeight.w600)),
                     )
@@ -543,7 +617,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: WidgetUtils.onlyText(
                               isMiMa ? '验证码登录' : '密码',
                               StyleUtils.getCommonTextStyle(
-                                  color: MyColors.homeTopBG,
+                                  color: MyColors.newLoginblue2,
                                   fontSize: 26.sp,
                                   fontWeight: FontWeight.w600)),
                         ),
@@ -579,7 +653,7 @@ class _LoginPageState extends State<LoginPage> {
         //边框设置
         decoration: BoxDecoration(
           //背景
-          color: MyColors.loginBtnP,
+          color: MyColors.newLoginblue1,
           //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
           borderRadius: BorderRadius.all(Radius.circular(height / 2)),
         ),

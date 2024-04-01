@@ -5,7 +5,7 @@ import '../main.dart';
 import '../utils/log_util.dart';
 
 enum OnlineConfigType { online, test, zhaozeng, pengfei }
-const onlineType = OnlineConfigType.online;
+const onlineType = OnlineConfigType.test;
 
 class OnlineConfig {
   /// Ping
@@ -74,6 +74,14 @@ class OnlineConfig {
       //     autoLogin: false,
       //     debugModel: true,
       //     isAutoDownloadThumbnail: true);
+      case OnlineConfigType.zhaozeng:
+      // 本地环境
+        return EMOptions(
+            appKey: "1199230605161000#demo",
+            autoLogin: false,
+            debugModel: true,
+            requireAck: true, //已读回执
+            isAutoDownloadThumbnail: true);
       default:
         // 本地测试环境
         // return EMOptions(

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
-import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 
 class SVGASimpleImage2 extends StatefulWidget {

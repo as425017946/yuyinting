@@ -579,6 +579,8 @@ class MyUtils {
                   eventBus.fire(JoinRoomYBack(map: info, type: 'bao_mic'));
                 } else if (body.content == '爆灯') {
                   eventBus.fire(JoinRoomYBack(map: info, type: 'burstlight'));
+                } else if (body.content == '盲盒礼物') {
+                  eventBus.fire(JoinRoomYBack(map: info, type: 'blind_box'));
                 } else {
                   if (info['lv'] == '' || info['lv'] == null) {
                     if (info['type'] == 'clean_charm') {

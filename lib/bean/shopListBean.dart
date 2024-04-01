@@ -35,6 +35,7 @@ class DataSC {
   int? price;
   int? status;
   int? useDay;
+  List<StepPriceDay>? stepPriceDay;
 
   DataSC(
       {this.gid,
@@ -43,7 +44,8 @@ class DataSC {
         this.gifImg,
         this.price,
         this.status,
-        this.useDay});
+        this.useDay,
+        this.stepPriceDay});
 
   DataSC.fromJson(Map<String, dynamic> json) {
     gid = json['gid'];
@@ -53,6 +55,12 @@ class DataSC {
     price = json['price'];
     status = json['status'];
     useDay = json['use_day'];
+    if (json['step_price_day'] != null) {
+      stepPriceDay = <StepPriceDay>[];
+      json['step_price_day'].forEach((v) {
+        stepPriceDay!.add(new StepPriceDay.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -64,6 +72,47 @@ class DataSC {
     data['price'] = this.price;
     data['status'] = this.status;
     data['use_day'] = this.useDay;
+    if (this.stepPriceDay != null) {
+      data['step_price_day'] =
+          this.stepPriceDay!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class StepPriceDay {
+  String? price1;
+  String? useDay1;
+  String? price2;
+  String? useDay2;
+  String? price3;
+  String? useDay3;
+
+  StepPriceDay(
+      {this.price1,
+        this.useDay1,
+        this.price2,
+        this.useDay2,
+        this.price3,
+        this.useDay3});
+
+  StepPriceDay.fromJson(Map<String, dynamic> json) {
+    price1 = json['price1'];
+    useDay1 = json['use_day1'];
+    price2 = json['price2'];
+    useDay2 = json['use_day2'];
+    price3 = json['price3'];
+    useDay3 = json['use_day3'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['price1'] = this.price1;
+    data['use_day1'] = this.useDay1;
+    data['price2'] = this.price2;
+    data['use_day2'] = this.useDay2;
+    data['price3'] = this.price3;
+    data['use_day3'] = this.useDay3;
     return data;
   }
 }

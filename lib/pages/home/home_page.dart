@@ -16,6 +16,7 @@ import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/pages/home/paidui_page.dart';
+import 'package:yuyinting/pages/home/search_page.dart';
 import 'package:yuyinting/pages/home/shoucang_page.dart';
 import 'package:yuyinting/pages/home/ts/ts_car_page.dart';
 import 'package:yuyinting/pages/home/tuijian_page.dart';
@@ -192,136 +193,166 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          ///头部
-          Container(
-            color: MyColors.homeTopBG,
-            height: ScreenUtil().setHeight(152),
-            width: double.infinity,
-            child: Column(
-              children: [
-                WidgetUtils.commonSizedBox(35, 0),
-                Row(
-                  children: [
-                    WidgetUtils.commonSizedBox(0, 20),
-                    Expanded(
-                        child: Container(
-                      width: double.infinity,
-                      height: ScreenUtil().setHeight(67),
-                      alignment: Alignment.bottomLeft,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Expanded(
-                              child: GestureDetector(
-                            onTap: (() {
-                              setState(() {
-                                _currentIndex = 0;
-                                _controller.jumpToPage(0);
-                              });
-                            }),
-                            child: Container(
-                              width: double.infinity,
-                              color: Colors.transparent,
-                              child: WidgetUtils.onlyTextBottom(
-                                  '收藏',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: Colors.white,
-                                      fontSize: _currentIndex == 0
-                                          ? ScreenUtil().setSp(38)
-                                          : ScreenUtil().setSp(32),
-                                      fontWeight: _currentIndex == 0
-                                          ? FontWeight.w600
-                                          : FontWeight.normal)),
-                            ),
-                          )),
-                          Expanded(
-                              child: GestureDetector(
-                            onTap: (() {
-                              setState(() {
-                                _currentIndex = 1;
-                                _controller.jumpToPage(1);
-                              });
-                            }),
-                            child: Container(
-                              width: double.infinity,
-                              color: Colors.transparent,
-                              child: WidgetUtils.onlyTextBottom(
-                                  '推荐',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: Colors.white,
-                                      fontSize: _currentIndex == 1
-                                          ? ScreenUtil().setSp(38)
-                                          : ScreenUtil().setSp(32),
-                                      fontWeight: _currentIndex == 1
-                                          ? FontWeight.w600
-                                          : FontWeight.normal)),
-                            ),
-                          )),
-                          Expanded(
-                              child: GestureDetector(
-                            onTap: (() {
-                              setState(() {
-                                _currentIndex = 2;
-                                _controller.jumpToPage(2);
-                              });
-                            }),
-                            child: Container(
-                              width: double.infinity,
-                              color: Colors.transparent,
-                              child: WidgetUtils.onlyTextBottom(
-                                  '派对',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: Colors.white,
-                                      fontSize: _currentIndex == 2
-                                          ? ScreenUtil().setSp(38)
-                                          : ScreenUtil().setSp(32),
-                                      fontWeight: _currentIndex == 2
-                                          ? FontWeight.w600
-                                          : FontWeight.normal)),
-                            ),
-                          )),
-                          Expanded(
-                              child: GestureDetector(
-                            onTap: (() {
-                              setState(() {
-                                _currentIndex = 3;
-                                _controller.jumpToPage(3);
-                              });
-                            }),
-                            child: Column(
-                              children: [
-                                const Spacer(),
-                                _currentIndex == 3
-                                    ? WidgetUtils.showImages(
-                                        'assets/images/home_yx2.png',
-                                        ScreenUtil().setWidth(40 * 1.3),
-                                        ScreenUtil().setWidth(75 * 1.3))
-                                    : WidgetUtils.showImagesFill(
-                                        'assets/images/home_yx1.png',
-                                        ScreenUtil().setWidth(25 * 1.3),
-                                        ScreenUtil().setWidth(62 * 1.3)),
-                                _currentIndex != 3
-                                    ? WidgetUtils.commonSizedBox(3, 0)
-                                    : WidgetUtils.commonSizedBox(0, 0)
-                              ],
-                            ),
-                          )),
-                          identity != 'user'
-                              ? Expanded(
-                                  child: GestureDetector(
-                                  onTap: (() {
-                                    setState(() {
-                                      _currentIndex = 4;
-                                      _controller.jumpToPage(4);
-                                    });
-                                  }),
-                                  child: Container(
-                                    width: double.infinity,
-                                    color: Colors.transparent,
-                                    child: WidgetUtils.onlyTextBottom(
+      backgroundColor: Colors.transparent,
+      body: Container(
+        height: double.infinity,
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          //设置Container修饰
+          image: DecorationImage(
+            //背景图片修饰
+            image: AssetImage("assets/images/all_bg.png"),
+            fit: BoxFit.fill, //覆盖
+          ),
+        ),
+        child: Column(
+          children: [
+            ///头部
+            Container(
+              color: Colors.transparent,
+              height: ScreenUtil().setHeight(152),
+              width: double.infinity,
+              child: Column(
+                children: [
+                  WidgetUtils.commonSizedBox(35, 0),
+                  Row(
+                    children: [
+                      WidgetUtils.commonSizedBox(0, 20),
+                      Expanded(
+                          child: Container(
+                        width: double.infinity,
+                        height: ScreenUtil().setHeight(75),
+                        alignment: Alignment.center,
+                        color: Colors.transparent,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                                child: GestureDetector(
+                              onTap: (() {
+                                setState(() {
+                                  _currentIndex = 0;
+                                  _controller.jumpToPage(0);
+                                });
+                              }),
+                              child: Container(
+                                width: double.infinity,
+                                color: Colors.transparent,
+                                alignment: Alignment.center,
+                                child: WidgetUtils.onlyTextCenter(
+                                    '收藏',
+                                    StyleUtils.getCommonTextStyle(
+                                        color: MyColors.newHomeBlack,
+                                        fontSize: _currentIndex == 0
+                                            ? ScreenUtil().setSp(38)
+                                            : ScreenUtil().setSp(32),
+                                        fontWeight: _currentIndex == 0
+                                            ? FontWeight.w600
+                                            : FontWeight.normal)),
+                              ),
+                            )),
+                            Expanded(
+                                child: GestureDetector(
+                              onTap: (() {
+                                setState(() {
+                                  _currentIndex = 1;
+                                  _controller.jumpToPage(1);
+                                });
+                              }),
+                              child: Container(
+                                width: double.infinity,
+                                color: Colors.transparent,
+                                child: WidgetUtils.onlyTextCenter(
+                                    '推荐',
+                                    StyleUtils.getCommonTextStyle(
+                                        color: MyColors.newHomeBlack,
+                                        fontSize: _currentIndex == 1
+                                            ? ScreenUtil().setSp(38)
+                                            : ScreenUtil().setSp(32),
+                                        fontWeight: _currentIndex == 1
+                                            ? FontWeight.w600
+                                            : FontWeight.normal)),
+                              ),
+                            )),
+                            Expanded(
+                                child: GestureDetector(
+                              onTap: (() {
+                                setState(() {
+                                  _currentIndex = 2;
+                                  _controller.jumpToPage(2);
+                                });
+                              }),
+                              child: Container(
+                                width: double.infinity,
+                                color: Colors.transparent,
+                                child: WidgetUtils.onlyTextCenter(
+                                    '派对',
+                                    StyleUtils.getCommonTextStyle(
+                                        color: MyColors.newHomeBlack,
+                                        fontSize: _currentIndex == 2
+                                            ? ScreenUtil().setSp(38)
+                                            : ScreenUtil().setSp(32),
+                                        fontWeight: _currentIndex == 2
+                                            ? FontWeight.w600
+                                            : FontWeight.normal)),
+                              ),
+                            )),
+                            Expanded(
+                                child: GestureDetector(
+                              onTap: (() {
+                                setState(() {
+                                  _currentIndex = 3;
+                                  _controller.jumpToPage(3);
+                                });
+                              }),
+                              child: Column(
+                                children: [
+                                  const Spacer(),
+                                  _currentIndex == 3
+                                      ? WidgetUtils.showImages(
+                                          'assets/images/home_yx2.png',
+                                          ScreenUtil().setWidth(40 * 1.3),
+                                          ScreenUtil().setWidth(75 * 1.3))
+                                      : WidgetUtils.showImagesFill(
+                                          'assets/images/home_yx1.png',
+                                          ScreenUtil().setWidth(25 * 1.3),
+                                          ScreenUtil().setWidth(62 * 1.3)),
+                                  _currentIndex != 3
+                                      ? WidgetUtils.commonSizedBox(3, 0)
+                                      : WidgetUtils.commonSizedBox(0, 0),
+                                  const Spacer(),
+                                ],
+                              ),
+                            )),
+                            identity != 'user'
+                                ? Expanded(
+                                    child: GestureDetector(
+                                    onTap: (() {
+                                      setState(() {
+                                        _currentIndex = 4;
+                                        _controller.jumpToPage(4);
+                                      });
+                                    }),
+                                    child: Container(
+                                      width: double.infinity,
+                                      color: Colors.transparent,
+                                      child: WidgetUtils.onlyTextCenter(
+                                          '在线',
+                                          StyleUtils.getCommonTextStyle(
+                                              color: MyColors.newHomeBlack,
+                                              fontSize: _currentIndex == 4
+                                                  ? ScreenUtil().setSp(38)
+                                                  : ScreenUtil().setSp(32),
+                                              fontWeight: _currentIndex == 4
+                                                  ? FontWeight.w600
+                                                  : FontWeight.normal)),
+                                    ),
+                                  ))
+                                : Expanded(
+                                    child: Opacity(
+                                    opacity: 0,
+                                    child: WidgetUtils.onlyTextCenter(
                                         '在线',
                                         StyleUtils.getCommonTextStyle(
                                             color: Colors.white,
@@ -331,211 +362,215 @@ class _HomePageState extends State<HomePage>
                                             fontWeight: _currentIndex == 4
                                                 ? FontWeight.w600
                                                 : FontWeight.normal)),
-                                  ),
-                                ))
-                              : Expanded(
-                                  child: Opacity(
-                                  opacity: 0,
-                                  child: WidgetUtils.onlyTextBottom(
-                                      '在线',
-                                      StyleUtils.getCommonTextStyle(
-                                          color: Colors.white,
-                                          fontSize: _currentIndex == 4
-                                              ? ScreenUtil().setSp(38)
-                                              : ScreenUtil().setSp(32),
-                                          fontWeight: _currentIndex == 4
-                                              ? FontWeight.w600
-                                              : FontWeight.normal)),
-                                )),
-                        ],
+                                  )),
+                          ],
+                        ),
+                      )),
+                      Container(
+                        width: ScreenUtil().setHeight(160),
+                        height: ScreenUtil().setHeight(75),
+                        color: Colors.transparent,
+                        alignment: Alignment.bottomRight,
+                        child: Row(
+                          children: [
+                            WidgetUtils.commonSizedBox(0, 10.h),
+                            GestureDetector(
+                              onTap: (() {
+                                if (MyUtils.checkClick()) {
+                                  MyUtils.goTransparentPageCom(
+                                      context, const SearchPage());
+                                }
+                              }),
+                              child: WidgetUtils.showImages(
+                                  "assets/images/home_search.png", 40.h, 40.h),
+                            ),
+                            WidgetUtils.commonSizedBox(0, 15.h),
+                            GestureDetector(
+                              onTap: (() {
+                                if (MyUtils.checkClick()) {
+                                  Navigator.pushNamed(context, 'RankingPage');
+                                }
+                              }),
+                              child: WidgetUtils.showImages(
+                                  "assets/images/b7y.png", 80.h, 80.h),
+                            ),
+                          ],
+                        ),
                       ),
-                    )),
-                    Container(
-                      width: ScreenUtil().setHeight(140),
-                      height: ScreenUtil().setHeight(67),
-                      padding: const EdgeInsets.only(right: 20),
-                      alignment: Alignment.bottomRight,
-                      child: GestureDetector(
-                        onTap: (() {
-                          Navigator.pushNamed(context, 'RankingPage');
-                        }),
-                        child: WidgetUtils.showImages(
-                            "assets/images/b7y.png", (26 * 2).w, (30 * 2).w),
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  width: double.infinity,
-                  height: ScreenUtil().setHeight(5),
-                  margin: EdgeInsets.only(
-                      left: 20, right: ScreenUtil().setHeight(140)),
-                  child: Row(
-                    children: [
-                      _currentIndex == 0
-                          ? Expanded(
-                              child: SizedBox(
-                              width: ScreenUtil().setHeight(68),
-                              height: ScreenUtil().setHeight(10),
-                              child: Row(
-                                children: [
-                                  const Expanded(child: Text('')),
-                                  Container(
-                                    width: ScreenUtil().setHeight(20),
-                                    height: ScreenUtil().setHeight(4),
-                                    //边框设置
-                                    decoration: const BoxDecoration(
-                                      //背景
-                                      color: Colors.white,
-                                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10.0)),
-                                    ),
-                                  ),
-                                  const Expanded(child: Text('')),
-                                ],
-                              ),
-                            ))
-                          : const Expanded(child: Text('')),
-                      _currentIndex == 1
-                          ? Expanded(
-                              child: SizedBox(
-                              width: ScreenUtil().setHeight(68),
-                              height: ScreenUtil().setHeight(10),
-                              child: Row(
-                                children: [
-                                  const Expanded(child: Text('')),
-                                  Container(
-                                    width: ScreenUtil().setHeight(20),
-                                    height: ScreenUtil().setHeight(4),
-                                    //边框设置
-                                    decoration: const BoxDecoration(
-                                      //背景
-                                      color: Colors.white,
-                                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10.0)),
-                                    ),
-                                  ),
-                                  const Expanded(child: Text('')),
-                                ],
-                              ),
-                            ))
-                          : const Expanded(child: Text('')),
-                      _currentIndex == 2
-                          ? Expanded(
-                              child: SizedBox(
-                              width: ScreenUtil().setHeight(68),
-                              height: ScreenUtil().setHeight(10),
-                              child: Row(
-                                children: [
-                                  const Expanded(child: Text('')),
-                                  Container(
-                                    width: ScreenUtil().setHeight(20),
-                                    height: ScreenUtil().setHeight(4),
-                                    //边框设置
-                                    decoration: const BoxDecoration(
-                                      //背景
-                                      color: Colors.white,
-                                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10.0)),
-                                    ),
-                                  ),
-                                  const Expanded(child: Text('')),
-                                ],
-                              ),
-                            ))
-                          : const Expanded(child: Text('')),
-                      _currentIndex == 3
-                          ? Expanded(
-                              child: SizedBox(
-                              width: ScreenUtil().setHeight(68),
-                              height: ScreenUtil().setHeight(10),
-                              child: Row(
-                                children: [
-                                  const Expanded(child: Text('')),
-                                  Container(
-                                    width: ScreenUtil().setHeight(20),
-                                    height: ScreenUtil().setHeight(4),
-                                    //边框设置
-                                    decoration: const BoxDecoration(
-                                      //背景
-                                      color: Colors.white,
-                                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10.0)),
-                                    ),
-                                  ),
-                                  const Expanded(child: Text('')),
-                                ],
-                              ),
-                            ))
-                          : const Expanded(child: Text('')),
-                      (_currentIndex == 4 && identity != 'user')
-                          ? Expanded(
-                              child: SizedBox(
-                              width: ScreenUtil().setHeight(68),
-                              height: ScreenUtil().setHeight(10),
-                              child: Row(
-                                children: [
-                                  const Expanded(child: Text('')),
-                                  Container(
-                                    width: ScreenUtil().setHeight(20),
-                                    height: ScreenUtil().setHeight(4),
-                                    //边框设置
-                                    decoration: const BoxDecoration(
-                                      //背景
-                                      color: Colors.white,
-                                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10.0)),
-                                    ),
-                                  ),
-                                  const Expanded(child: Text('')),
-                                ],
-                              ),
-                            ))
-                          : const Expanded(child: Text('')),
                     ],
                   ),
-                )
-              ],
-            ),
-          ),
-          Expanded(
-            child: Transform.translate(
-              offset: Offset(0, -2.h),
-              child: PageView(
-                controller: _controller,
-                physics: const ClampingScrollPhysics(),
-                onPageChanged: (index) {
-                  setState(() {
-                    // 更新当前的索引值
-                    _currentIndex = index;
-                  });
-                  if (index == 1) {
-                    eventBus.fire(SubmitButtonBack(title: '回到首页'));
-                  }
-                },
-                children: identity != 'user'
-                    ? const [
-                        ShoucangPage(),
-                        TuijianPage(),
-                        PaiduiPage(),
-                        YouxiPage(),
-                        ZaixianPage()
-                      ]
-                    : const [
-                        ShoucangPage(),
-                        TuijianPage(),
-                        PaiduiPage(),
-                        YouxiPage(),
-                      ],
+                  // Container(
+                  //   width: double.infinity,
+                  //   height: ScreenUtil().setHeight(5),
+                  //   margin: EdgeInsets.only(
+                  //       left: 20, right: ScreenUtil().setHeight(140)),
+                  //   child: Row(
+                  //     children: [
+                  //       _currentIndex == 0
+                  //           ? Expanded(
+                  //               child: SizedBox(
+                  //               width: ScreenUtil().setHeight(68),
+                  //               height: ScreenUtil().setHeight(10),
+                  //               child: Row(
+                  //                 children: [
+                  //                   const Expanded(child: Text('')),
+                  //                   Container(
+                  //                     width: ScreenUtil().setHeight(20),
+                  //                     height: ScreenUtil().setHeight(4),
+                  //                     //边框设置
+                  //                     decoration: const BoxDecoration(
+                  //                       //背景
+                  //                       color: Colors.white,
+                  //                       //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                  //                       borderRadius: BorderRadius.all(
+                  //                           Radius.circular(10.0)),
+                  //                     ),
+                  //                   ),
+                  //                   const Expanded(child: Text('')),
+                  //                 ],
+                  //               ),
+                  //             ))
+                  //           : const Expanded(child: Text('')),
+                  //       _currentIndex == 1
+                  //           ? Expanded(
+                  //               child: SizedBox(
+                  //               width: ScreenUtil().setHeight(68),
+                  //               height: ScreenUtil().setHeight(10),
+                  //               child: Row(
+                  //                 children: [
+                  //                   const Expanded(child: Text('')),
+                  //                   Container(
+                  //                     width: ScreenUtil().setHeight(20),
+                  //                     height: ScreenUtil().setHeight(4),
+                  //                     //边框设置
+                  //                     decoration: const BoxDecoration(
+                  //                       //背景
+                  //                       color: Colors.white,
+                  //                       //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                  //                       borderRadius: BorderRadius.all(
+                  //                           Radius.circular(10.0)),
+                  //                     ),
+                  //                   ),
+                  //                   const Expanded(child: Text('')),
+                  //                 ],
+                  //               ),
+                  //             ))
+                  //           : const Expanded(child: Text('')),
+                  //       _currentIndex == 2
+                  //           ? Expanded(
+                  //               child: SizedBox(
+                  //               width: ScreenUtil().setHeight(68),
+                  //               height: ScreenUtil().setHeight(10),
+                  //               child: Row(
+                  //                 children: [
+                  //                   const Expanded(child: Text('')),
+                  //                   Container(
+                  //                     width: ScreenUtil().setHeight(20),
+                  //                     height: ScreenUtil().setHeight(4),
+                  //                     //边框设置
+                  //                     decoration: const BoxDecoration(
+                  //                       //背景
+                  //                       color: Colors.white,
+                  //                       //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                  //                       borderRadius: BorderRadius.all(
+                  //                           Radius.circular(10.0)),
+                  //                     ),
+                  //                   ),
+                  //                   const Expanded(child: Text('')),
+                  //                 ],
+                  //               ),
+                  //             ))
+                  //           : const Expanded(child: Text('')),
+                  //       _currentIndex == 3
+                  //           ? Expanded(
+                  //               child: SizedBox(
+                  //               width: ScreenUtil().setHeight(68),
+                  //               height: ScreenUtil().setHeight(10),
+                  //               child: Row(
+                  //                 children: [
+                  //                   const Expanded(child: Text('')),
+                  //                   Container(
+                  //                     width: ScreenUtil().setHeight(20),
+                  //                     height: ScreenUtil().setHeight(4),
+                  //                     //边框设置
+                  //                     decoration: const BoxDecoration(
+                  //                       //背景
+                  //                       color: Colors.white,
+                  //                       //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                  //                       borderRadius: BorderRadius.all(
+                  //                           Radius.circular(10.0)),
+                  //                     ),
+                  //                   ),
+                  //                   const Expanded(child: Text('')),
+                  //                 ],
+                  //               ),
+                  //             ))
+                  //           : const Expanded(child: Text('')),
+                  //       (_currentIndex == 4 && identity != 'user')
+                  //           ? Expanded(
+                  //               child: SizedBox(
+                  //               width: ScreenUtil().setHeight(68),
+                  //               height: ScreenUtil().setHeight(10),
+                  //               child: Row(
+                  //                 children: [
+                  //                   const Expanded(child: Text('')),
+                  //                   Container(
+                  //                     width: ScreenUtil().setHeight(20),
+                  //                     height: ScreenUtil().setHeight(4),
+                  //                     //边框设置
+                  //                     decoration: const BoxDecoration(
+                  //                       //背景
+                  //                       color: Colors.white,
+                  //                       //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                  //                       borderRadius: BorderRadius.all(
+                  //                           Radius.circular(10.0)),
+                  //                     ),
+                  //                   ),
+                  //                   const Expanded(child: Text('')),
+                  //                 ],
+                  //               ),
+                  //             ))
+                  //           : const Expanded(child: Text('')),
+                  //     ],
+                  //   ),
+                  // )
+                ],
               ),
             ),
-          )
-        ],
+            Expanded(
+              child: Transform.translate(
+                offset: Offset(0, -2.h),
+                child: PageView(
+                  controller: _controller,
+                  physics: const ClampingScrollPhysics(),
+                  onPageChanged: (index) {
+                    setState(() {
+                      // 更新当前的索引值
+                      _currentIndex = index;
+                    });
+                    if (index == 1) {
+                      eventBus.fire(SubmitButtonBack(title: '回到首页'));
+                    }
+                  },
+                  children: identity != 'user'
+                      ? const [
+                          ShoucangPage(),
+                          TuijianPage(),
+                          PaiduiPage(),
+                          YouxiPage(),
+                          ZaixianPage()
+                        ]
+                      : const [
+                          ShoucangPage(),
+                          TuijianPage(),
+                          PaiduiPage(),
+                          YouxiPage(),
+                        ],
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -628,7 +663,7 @@ class _HomePageState extends State<HomePage>
         });
         MyPing.checkIp(
           respons.ips,
-              (ip) {
+          (ip) {
             setState(() {
               // sp.setString('isDian', ip);
               // LogE('Ping 设置: ${sp.getString('isDian')}');
@@ -702,7 +737,7 @@ class _HomePageState extends State<HomePage>
         case MyHttpConfig.successCode:
           if (int.parse(buildNumber) < int.parse(bean.data!.customUpdateNum!)) {
             if (Platform.isAndroid) {
-              if(sp.getString('isEmulation') == '0'){
+              if (sp.getString('isEmulation') == '0') {
                 /// 手机登录
                 // ignore: use_build_context_synchronously
                 MyUtils.goTransparentPageCom(
@@ -714,7 +749,7 @@ class _HomePageState extends State<HomePage>
                       forceUpdate: bean.data!.forceUpdate!,
                       title: 'android',
                     ));
-              }else{
+              } else {
                 /// 模拟器登录
                 // ignore: use_build_context_synchronously
                 MyUtils.goTransparentPageCom(
@@ -892,11 +927,11 @@ class _HomePageState extends State<HomePage>
   /// 加入房间前
   Future<void> doPostBeforeJoin(roomID, String anchorUid) async {
     //判断房间id是否为空的
-    if(sp.getString('roomID') == null || sp.getString('').toString().isEmpty){
+    if (sp.getString('roomID') == null || sp.getString('').toString().isEmpty) {
       return;
-    }else{
+    } else {
       // 不是空的，并且不是之前进入的房间
-      if(sp.getString('roomID').toString() != roomID){
+      if (sp.getString('roomID').toString() != roomID) {
         sp.setString('roomID', roomID);
         eventBus.fire(SubmitButtonBack(title: '加入其他房间'));
       }
@@ -912,7 +947,7 @@ class _HomePageState extends State<HomePage>
           doPostRoomJoin(roomID, '', anchorUid, bean.data!.rtc!);
           break;
         case MyHttpConfig.errorRoomCode: //需要密码
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.goTransparentPageCom(
               context,
               RoomTSMiMaPage(
@@ -921,7 +956,7 @@ class _HomePageState extends State<HomePage>
                   anchorUid: anchorUid));
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -947,7 +982,7 @@ class _HomePageState extends State<HomePage>
       CommonBean bean = await DataUtils.postRoomJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.goTransparentRFPage(
               context,
               RoomPage(
@@ -957,7 +992,7 @@ class _HomePageState extends State<HomePage>
               ));
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:

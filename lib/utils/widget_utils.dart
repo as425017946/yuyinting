@@ -503,7 +503,7 @@ class WidgetUtils {
       //边框设置
       decoration: BoxDecoration(
         //背景
-        color: MyColors.homeTopBG,
+        color: MyColors.newLoginblue1,
         //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
         borderRadius: BorderRadius.all(
             Radius.circular(ConfigScreenUtil.autoHeight80 / 2)),
@@ -778,6 +778,53 @@ class WidgetUtils {
                   height: height,
                   gaplessPlayback: true,
                 ),
+    );
+  }
+
+  ///上面圆角图片 网络
+  static Widget CircleImageNetTop(
+      double height, double width, double radius, String url) {
+    return Container(
+      height: height,
+      width: width,
+      //超出部分，可裁剪
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(topRight:  Radius.circular(radius), topLeft:  Radius.circular(radius)),
+      ),
+      child: url.contains('com.leimu.yuyinting') || url.contains('storage')
+          ? Image.file(
+        File(url),
+        fit: BoxFit.cover,
+        gaplessPlayback: true,
+      )
+          : url.isNotEmpty
+          ? CachedNetworkImage(
+        imageUrl: url,
+        fit: BoxFit.cover,
+        placeholder: (context, url) => CircleImageAss(
+          height,
+          width,
+          ScreenUtil().setHeight(10),
+          'assets/images/img_placeholder.png',
+        ),
+        errorWidget: (context, url, error) {
+          LogE('加载错误提示 $error');
+          // return const Icon(Icons.error);
+          return CircleImageAss(
+            height,
+            width,
+            ScreenUtil().setHeight(10),
+            'assets/images/img_placeholder.png',
+          );
+        },
+      )
+          : Image(
+        image: const AssetImage('assets/images/img_placeholder.png'),
+        width: width,
+        height: height,
+        gaplessPlayback: true,
+      ),
     );
   }
 
@@ -1448,6 +1495,30 @@ class WidgetUtils {
           ),
         )
       ],
+    );
+  }
+
+  /// 派对类型使用
+  static Widget myContainerPD(double height, double width, String title,
+      double size, Color txtColors, bool isShow) {
+    return SizedBox(
+      width: width,
+      height: height,
+      child: Stack(
+        children: [
+          isShow
+              ? Positioned(
+              bottom: 0,
+              child: SizedBox(
+                width: 90.h,
+                height: 20.h,
+                child: WidgetUtils.showImages(
+                    'assets/images/paidui_title_bg.png', 20.h, 90.h),
+              ))
+              : const Text(''),
+          WidgetUtils.onlyTextCenter(title, StyleUtils.getCommonTextStyle(color: txtColors, fontSize: size)),
+        ],
+      ),
     );
   }
 

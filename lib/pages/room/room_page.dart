@@ -22,6 +22,7 @@ import 'package:yuyinting/utils/widget_utils.dart';
 import '../../bean/CommonMyIntBean.dart';
 import '../../bean/Common_bean.dart';
 import '../../bean/charmAllBean.dart';
+import '../../bean/charmMHBean.dart';
 import '../../bean/hengFuBean.dart';
 import '../../bean/joinRoomBean.dart';
 import '../../bean/maiXuBean.dart';
@@ -1758,7 +1759,113 @@ class _RoomPageState extends State<RoomPage>
             });
             _startTimer2(event.map!['serial_number'].toString());
           }
-        } else {
+        }  else if (event.map!['type'] == 'blind_box') {
+          // 盲盒礼物
+          //厅内发送的送礼物消息
+          charmMHBean cb = charmMHBean.fromJson(event.map);
+          for (int i = 0; i < listM.length; i++) {
+            for (int a = 0; a < cb.charm!.length; a++) {
+              if (listM[i].uid.toString() == cb.charm![a].uid) {
+                setState(() {
+                  listM[i].charm = int.parse(cb.charm![a].charm.toString());
+                });
+              }
+            }
+          }
+          // 送出的盲盒
+          for (int i = 0; i < cb.giftInfo!.length; i++) {
+            Map<dynamic, dynamic> map = {};
+            map['info'] = cb.giftInfo![i].nickName!;
+            map['uid'] = event.map!['from_uid'];
+            map['type'] = '6';
+            String giftInfos = '';
+            String mhType = '';
+            if(cb.boxId == '1'){
+              mhType = '青铜礼盒(22)x${cb.number!}';
+            }else if(cb.boxId == '2'){
+              mhType = '白银礼盒(99)x${cb.number!}';
+            }else if(cb.boxId == '3'){
+              mhType = '黄金礼盒(500)x${cb.number!}';
+            }
+            for (int a = 0; a < cb.giftInfo![i].giftList!.length; a++) {
+              if(giftInfos.isEmpty){
+                giftInfos = ' 爆出${cb.giftInfo![i].giftList![a].giftName!}(${cb.giftInfo![i].giftList![a].giftPrice.toString()}) x${cb.giftInfo![i].giftList![a].giftNumber.toString()}';
+              }else{
+                giftInfos = '$giftInfos,爆出${cb.giftInfo![i].giftList![a].giftName!}(${cb.giftInfo![i].giftList![a].giftPrice.toString()}) x${cb.giftInfo![i].giftList![a].giftNumber.toString()}';
+              }
+              setState(() {
+                // 加入播放队列
+                if (isDevices == 'android') {
+                  // 这个是为了让别人也能看见自己送出的礼物
+                  if (listUrl.isEmpty) {
+                    if (cb.giftInfo![i].giftList![a].giftName! == '黄金宫殿' ||
+                        cb.giftInfo![i].giftList![a].giftName! == '糖果木马' ||
+                        cb.giftInfo![i].giftList![a].giftName! == '机械时代' ||
+                        cb.giftInfo![i].giftList![a].giftName! == '书中仙' ||
+                        cb.giftInfo![i].giftList![a].giftName! == '星光宝盒') {
+                      saveSVGAIMAGE(cb.giftInfo![i].giftList![a].giftImg!);
+                    } else {
+                      LogE('盲盒礼物== ${cb.giftInfo![i].giftList![a].giftImg!}');
+                      Map<dynamic, dynamic> map = {};
+                      map['svgaUrl'] = cb.giftInfo![i].giftList![a].giftImg!;
+                      map['svgaBool'] = true;
+                      // 直接用网络图地址
+                      listUrl.add(map);
+                      isShowSVGA = true;
+                      showStar(listUrl[0]);
+                    }
+                  } else {
+                    LogE('盲盒礼物==** ${cb.giftInfo![i].giftList![a].giftImg!}');
+                    if (cb.giftInfo![i].giftList![a].giftName! == '黄金宫殿' ||
+                        cb.giftInfo![i].giftList![a].giftName! == '糖果木马' ||
+                        cb.giftInfo![i].giftList![a].giftName! == '机械时代' ||
+                        cb.giftInfo![i].giftList![a].giftName! == '书中仙' ||
+                        cb.giftInfo![i].giftList![a].giftName! == '星光宝盒') {
+                      saveSVGAIMAGE(cb.giftInfo![i].giftList![a].giftImg!);
+                    } else {
+                      // 直接用网络图地址
+                      Map<dynamic, dynamic> map = {};
+                      map['svgaUrl'] = cb.giftInfo![i].giftList![a].giftImg!;
+                      map['svgaBool'] = true;
+                      // 直接用网络图地址
+                      listUrl.add(map);
+                    }
+                  }
+                } else {
+                  // ios
+                  // 这个是为了让别人也能看见自己送出的礼物
+                  if (listUrl.isEmpty) {
+                    Map<dynamic, dynamic> map = {};
+                    map['svgaUrl'] = cb.giftInfo![i].giftList![a].giftImg!;
+                    map['svgaBool'] = true;
+                    // 直接用网络图地址
+                    listUrl.add(map);
+                    isShowSVGA = true;
+                    showStar(listUrl[0]);
+                  } else {
+                    // 直接用网络图地址
+                    Map<dynamic, dynamic> map = {};
+                    map['svgaUrl'] = cb.giftInfo![i].giftList![a].giftImg!;
+                    map['svgaBool'] = true;
+                    // 直接用网络图地址
+                    listUrl.add(map);
+                  }
+                }
+              });
+            }
+            // 发送的信息
+            map['content'] = '${event.map!['from_nickname']};向;${cb.giftInfo![i].nickName!};送出$mhType;$giftInfos';
+            saveChatInfo(event.map!, '6', event.map!['from_nickname'],
+                '${event.map!['from_nickname']};向;${cb.giftInfo![i].nickName!};送出$mhType;$giftInfos');
+            setState(() {
+              list.add(map);
+            });
+          }
+          WidgetsBinding.instance!.addPostFrameCallback((_) {
+            // scrollToLastItem2(); // 在widget构建完成后滚动到底部
+            scrollToLastItem();
+          });
+        }else {
           /// 这里是用户的其他正常操作
           if (event.map!['room_id'].toString() == widget.roomId) {
             // 判断是不是点击了欢迎某某人
@@ -3528,7 +3635,7 @@ class _RoomPageState extends State<RoomPage>
 
   ///更新9个麦序的开麦状态
   void upAudioStatus(String ss, bool status) {
-    LogE('更新麦序  == $ss////$status');
+    // LogE('更新麦序  == $ss////$status');
     switch (ss) {
       case "1":
         setState(() {
@@ -3571,7 +3678,7 @@ class _RoomPageState extends State<RoomPage>
         });
         break;
       case "9":
-        LogE('更新麦序*******$status');
+        // LogE('更新麦序*******$status');
         setState(() {
           audio9 = status;
         });

@@ -1580,6 +1580,7 @@ class DataUtils {
 
   /// 购买装扮
   static Future<CommonBean> postBuyDress(Map<String, dynamic> params) async {
+    print("购买装扮 $params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.buyDress, {}, params);
     print("购买装扮 $respons");
@@ -1646,6 +1647,16 @@ class DataUtils {
     Map<String, dynamic>? respons =
     await MyHttpRequest.post(MyHttpConfig.ipLog, {}, params);
     print("获取不到ip上传日志 $respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+
+  /// 盲盒礼物
+  static Future<CommonBean> postPlayBlindBox(Map<String, dynamic> params) async {
+    print("盲盒礼物 $params");
+    Map<String, dynamic>? respons =
+    await MyHttpRequest.post(MyHttpConfig.playBlindBox, {}, params);
+    print("盲盒礼物 $respons");
     return CommonBean.fromJson(respons!);
   }
 }

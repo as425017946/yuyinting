@@ -42,6 +42,7 @@ class _ZuojiaPageState extends State<ZuojiaPage>{
   int price=0;
   // 装扮id
   String dressID = '';
+  String useDayLW = '2', priceLW = '100';
 
   void _onRefresh() async {
     // monitor network fetch
@@ -352,6 +353,8 @@ class _ZuojiaPageState extends State<ZuojiaPage>{
   Future<void> doPostBuyDress(String dressID) async {
     Map<String, dynamic> params = <String, dynamic>{
       'dress_id': dressID, //装扮id
+      'use_day': useDayLW,
+      'price': priceLW
     };
     try {
       CommonBean bean = await DataUtils.postBuyDress(params);

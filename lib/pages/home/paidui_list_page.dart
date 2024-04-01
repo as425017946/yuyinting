@@ -50,16 +50,16 @@ class PaiduiListPage extends StatelessWidget {
     final item = list[index];
     return GestureDetector(
       onTap: () => action(item.id),
-      child: isList ? _tableItem(item) : _collectItem(item),
+      child: isList ? _tableItem(item, index) : _collectItem(item),
     );
   }
 
-  Widget _tableItem(DataPH item) {
+  Widget _tableItem(DataPH item, int i) {
     return Container(
       width: double.infinity,
       height: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: i % 4 == 0 ? MyColors.newY1 : i % 4 == 1 ? MyColors.newY2 : i % 4 == 2 ? MyColors.newY3 : MyColors.newY4,
         borderRadius: BorderRadius.all(Radius.circular(20.w)),
         boxShadow: [
           BoxShadow(
@@ -92,10 +92,10 @@ class PaiduiListPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    index == 4
-                        ? WidgetUtils.showImages(
-                            'assets/images/room_xinting_tj.png', 30.w, 100.w)
-                        : const Text('')
+                    // index == 4
+                    //     ? WidgetUtils.showImages(
+                    //         'assets/images/room_xinting_tj.png', 30.w, 100.w)
+                    //     : const Text('')
                   ],
                 ),
                 const Expanded(child: Text('')),
@@ -231,39 +231,49 @@ class PaiduiListPage extends StatelessWidget {
         color = MyColors.paiduiXQ;
         img = 'assets/images/paidui_jiaoyou.png';
         break;
+      case 7:
+        color = MyColors.paiduiXQ;
+        img = 'assets/images/paidui_xiangqin.png';
+        break;
+      case 8:
+        color = MyColors.paiduiXQ;
+        img = 'assets/images/paidui_dianchang.png';
+        break;
       default:
-        color = index == 7 ? MyColors.btn_d : MyColors.paiduiDC;
-        img = index == (listFL[0].type as int)
-            ? 'assets/images/paidui_xiangqin.png'
-            : 'assets/images/paidui_dianchang.png';
+        img = 'assets/images/paidui_dianchang.png';
     }
     double width = index == 5 ? 105.w : 94.w;
 
     return Stack(
       alignment: Alignment.centerLeft,
       children: [
-        Container(
-          width: width,
-          height: 30.w,
-          alignment: Alignment.center,
-          margin: EdgeInsets.only(left: 8.w),
-          padding: EdgeInsets.only(left: 14.w),
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.all(Radius.circular(15.w)),
+        // Container(
+        //   width: width,
+        //   height: 30.w,
+        //   alignment: Alignment.center,
+        //   margin: EdgeInsets.only(left: 8.w),
+        //   padding: EdgeInsets.only(left: 14.w),
+        //   decoration: BoxDecoration(
+        //     color: color,
+        //     borderRadius: BorderRadius.all(Radius.circular(15.w)),
+        //   ),
+        //   child: Text(
+        //     roomType,
+        //     style: StyleUtils.getCommonTextStyle(
+        //         color: Colors.white,
+        //         fontSize: ScreenUtil().setSp(18),
+        //         fontWeight: FontWeight.w600),
+        //   ),
+        // ),
+        SizedBox(
+          width: 72.w,
+          height: 30.h,
+          child: Image(
+            fit: BoxFit.fill,
+            image: AssetImage(img),
+            width: 72.w,
+            height: 30.h
           ),
-          child: Text(
-            roomType,
-            style: StyleUtils.getCommonTextStyle(
-                color: Colors.white,
-                fontSize: ScreenUtil().setSp(18),
-                fontWeight: FontWeight.w600),
-          ),
-        ),
-        Image(
-          image: AssetImage(img),
-          width: 36.w,
-          height: 36.w,
         ),
       ],
     );
