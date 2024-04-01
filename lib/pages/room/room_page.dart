@@ -2954,9 +2954,6 @@ class _RoomPageState extends State<RoomPage>
           isFirst++;
           _engine?.enableAudio();
         });
-        Future.delayed(const Duration(seconds: 2), () {
-          _engine?.enableAudio();
-        });
         if (isFirst > 0) {
           doPostRoomUserMikeInfo();
         }
@@ -5278,12 +5275,15 @@ class _RoomPageState extends State<RoomPage>
                   // 启用音频模块
                   _engine?.enableAudio();
                   // 发声音发音频流
+                  _engine?.enableLocalAudio(false);
                   _engine?.enableLocalAudio(true);
                   //设置成主播
                   _engine?.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
                   // 发布本地音频流
                   _engine?.muteLocalAudioStream(false);
                 } else {
+                  isMeStatus = false;
+                  isJinyiin = true;
                   // 启用音频模块
                   _engine?.enableAudio();
                   // 设置成观众
@@ -5291,6 +5291,7 @@ class _RoomPageState extends State<RoomPage>
                   // 取消发布本地音频流
                   _engine?.muteLocalAudioStream(true);
                   // 适用只听声音，不发声音流
+                  _engine?.enableLocalAudio(true);
                   _engine?.enableLocalAudio(false);
                 }
               }
