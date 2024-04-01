@@ -2954,6 +2954,9 @@ class _RoomPageState extends State<RoomPage>
           isFirst++;
           _engine?.enableAudio();
         });
+        Future.delayed(const Duration(seconds: 2), () {
+          _engine?.enableAudio();
+        });
         if (isFirst > 0) {
           doPostRoomUserMikeInfo();
         }
