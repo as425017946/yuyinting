@@ -3059,7 +3059,7 @@ class _RoomPageState extends State<RoomPage>
         print("应用进入前台======");
         setState(() {
           isFirst++;
-          _engine?.enableLocalAudio(true);
+          _engine?.enableAudio();
         });
         if (isFirst > 0) {
           doPostRoomUserMikeInfo();
@@ -3441,6 +3441,33 @@ class _RoomPageState extends State<RoomPage>
 
   late RtcEngineEventHandler _eventHandler;
 
+  Future<void> _initEngine(RtcEngineContext context, {int time = 0}) async {
+    if (_engine == null) {
+      MyToastUtils.showToastBottom('启动失败, 请重新进入房间!');
+      return;
+    }
+    try {
+      await _engine!.initialize(context);
+      return;
+    } on AgoraRtcException catch (e) {
+      LogE('声网初始化失败: ${e.message}');
+      switch (e.code) {
+        case -101: case -7: case -2: // -101：App ID无效。-7：SDK 未初始化。-2：参数无效。
+          MyToastUtils.showToastBottom('启动失败, 请重新进入房间!');
+          return;
+        default: // -1：一般错误（未指定原因）。-22： 资源请求失败。 您的应用消耗系统资源过多或系统资源不足，导致SDK分配资源失败。
+          break;
+      }
+    } catch (e) { 
+      LogE('声网初始化失败: ${e.toString()}');
+    }
+    if (time > 2000) {
+      MyToastUtils.showToastBottom('启动失败, 请重新进入房间!');
+      return;
+    }
+    await Future.delayed(Duration(milliseconds: time));
+    await _initEngine(context, time: time + 250);
+  }
   // 初始化应用
   Future<void> initAgora() async {
     // _dispose();
@@ -3451,10 +3478,15 @@ class _RoomPageState extends State<RoomPage>
     _engine = await createAgoraRtcEngine();
 
     // 初始化 RtcEngine，设置频道场景为直播场景
-    await _engine?.initialize(const RtcEngineContext(
+    // await _engine?.initialize(const RtcEngineContext(
+    //   appId: MyConfig.appId,
+    //   channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
+    // ));
+    await _initEngine(const RtcEngineContext(
       appId: MyConfig.appId,
       channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
     ));
+
     // 启用音频模块
     _engine?.enableAudio();
     LogE('频道token ${widget.roomToken}');
@@ -5350,12 +5382,24 @@ class _RoomPageState extends State<RoomPage>
                   // 启用音频模块
                   _engine?.enableAudio();
                   // 发声音发音频流
+                  _engine?.enableLocalAudio(false);
                   _engine?.enableLocalAudio(true);
                   //设置成主播
-                  _engine?.setClientRole(
-                      role: ClientRoleType.clientRoleBroadcaster);
+                  _engine?.setClientRole(role: ClientRoleType.clientRoleBroadcaster);
                   // 发布本地音频流
                   _engine?.muteLocalAudioStream(false);
+                } else {
+                  isMeStatus = false;
+                  isJinyiin = true;
+                  // 启用音频模块
+                  _engine?.enableAudio();
+                  // 设置成观众
+                  _engine?.setClientRole(role: ClientRoleType.clientRoleAudience);
+                  // 取消发布本地音频流
+                  _engine?.muteLocalAudioStream(true);
+                  // 适用只听声音，不发声音流
+                  _engine?.enableLocalAudio(true);
+                  _engine?.enableLocalAudio(false);
                 }
               }
             }

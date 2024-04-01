@@ -374,7 +374,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> with MsgRea
             children: [
               // WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(100)),
               Container(
-                width: ScreenUtil().setHeight(90),
+                width: ScreenUtil().setHeight(100),
                 alignment: Alignment.bottomRight,
                 padding: EdgeInsets.only(right: 10.h),
                 child: msgReadText(allData2[i]['msgRead']),
