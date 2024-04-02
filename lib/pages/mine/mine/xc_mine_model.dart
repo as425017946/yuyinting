@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:yuyinting/utils/log_util.dart';
 
 import '../../../bean/Common_bean.dart';
@@ -13,6 +14,7 @@ import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
 
 class XCMineController extends GetxController {
+  final controller = RefreshController();
   /// 头像
   final userHeadImg = sp.getString('user_headimg').toString().obs;
   /// 昵称
@@ -116,6 +118,7 @@ class XCMineController extends GetxController {
       if (isLoading) {
         Loading.dismiss();
       }
+      controller.refreshCompleted();
     }
   }
 

@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:focus_detector/focus_detector.dart';
 import 'package:get/get.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:svgaplayer_flutter/player.dart';
 import 'package:yuyinting/pages/mine/mine/xc_mine_model.dart';
 
@@ -57,8 +58,17 @@ class _MinePageState extends State<MinePage> {
             fit: BoxFit.fill,
           ),
         ),
-        child: SingleChildScrollView(
-          child: _MinePageContent(),
+        child: SmartRefresher(
+          controller: c.controller,
+          header: MyUtils.myHeader(),
+          enablePullUp: false,
+          enablePullDown: true,
+          onRefresh: () {
+            c.doPostMyIfon(context);
+          },
+          child: SingleChildScrollView(
+            child: _MinePageContent(),
+          ),
         ),
       ),
     );
@@ -416,7 +426,7 @@ class _MinePageContent extends StatelessWidget {
   Widget _more(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-      padding: const EdgeInsets.symmetric(horizontal: 37, vertical: 32),
+      padding: const EdgeInsets.only(left: 37, right: 37, top: 32),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -439,103 +449,79 @@ class _MinePageContent extends StatelessWidget {
                 childAspectRatio: 0.8,
               ),
               children: [
-                GestureDetector(
-                  onTap: () {
-                    if (MyUtils.checkClick()) {
-                      Get.toNamed('ZhuangbanPage');
-                    }
-                  },
-                  child: Text('装扮商城'),
-                ),
+                _moreItem('装扮商城', 'zhuangban', () {
+                  Get.toNamed('ZhuangbanPage');
+                }),
                 if (c.userNumber.value.isNotEmpty)
                   c.identity == 'president'
-                      ? GestureDetector(
-                          onTap: () {
-                            if (MyUtils.checkClick()) {
-                              Get.to(MyHuiZhangPage(type: c.identity.value));
-                            }
-                          },
-                          child: Text('会长后台'),
-                        )
-                      : GestureDetector(
-                          onTap: () {
-                            if (MyUtils.checkClick()) {
-                              switch (sp.getString('shimingzhi').toString()) {
-                                case '2':
-                                case '3':
-                                  MyUtils.goTransparentPageCom(
-                                      context, const MineSMZPage());
-                                  break;
-                                case '1': //身份 user普通用户，未加入公会 streamer主播 leader会长
-                                  if (c.identity.value == 'user') {
-                                    Get.to(GonghuiHomePage(kefuUid: c.kefuUid, kefuAvatar: c.kefuAvatar));
-                                  } else {
-                                    Get.to(MyGonghuiPage(type: c.identity.value));
-                                  }
-                                  break;
-                                case '0':
-                                  MyToastUtils.showToastBottom('实名审核中，请耐心等待');
-                                  break;
-                                default:
+                      ? _moreItem('会长后台', 'huizhang', () { 
+                        Get.to(MyHuiZhangPage(type: c.identity.value));
+                      })
+                      : _moreItem('公会中心', 'gonghui', () {
+                          switch (sp.getString('shimingzhi').toString()) {
+                            case '2':
+                            case '3':
+                              MyUtils.goTransparentPageCom(context, const MineSMZPage());
+                              break;
+                            case '1': //身份 user普通用户，未加入公会 streamer主播 leader会长
+                              if (c.identity.value == 'user') {
+                                Get.to(GonghuiHomePage(kefuUid: c.kefuUid, kefuAvatar: c.kefuAvatar));
+                              } else {
+                                Get.to(MyGonghuiPage(type: c.identity.value));
                               }
-                            }
-                          },
-                          child: Row(
-                            children: [
-                              Text('公会中心'),
-                              if (c.isShenHe.value)
-                                Transform.translate(
-                                  offset: Offset(0, -5.h),
-                                  child: CustomPaint(
-                                    painter: LinePainter2(colors: Colors.red),
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ),
+                              break;
+                            case '0':
+                              MyToastUtils.showToastBottom('实名审核中，请耐心等待');
+                              break;
+                            default:
+                          }
+                        }),
+                      
+                      // GestureDetector(
+                      //     onTap: () {
+                      //       if (MyUtils.checkClick()) {
+                              
+                      //       }
+                      //     },
+                      //     child: Row(
+                      //       children: [
+                      //         Text('公会中心'),
+                      //         if (c.isShenHe.value)
+                      //           Transform.translate(
+                      //             offset: Offset(0, -5.h),
+                      //             child: CustomPaint(
+                      //               painter: LinePainter2(colors: Colors.red),
+                      //             ),
+                      //           ),
+                      //       ],
+                      //     ),
+                      //   ),
                 if (c.userNumber.value.isNotEmpty)
                   c.isAgent.value
-                    ? GestureDetector(
-                          onTap: () {
-                            if (MyUtils.checkClick()) {
-                              Get.toNamed('DailiHomePage');
-                            }
-                          },
-                          child: Text('全民代理'),
-                        )
-                    : GestureDetector(
-                          onTap: () {
-                            if (MyUtils.checkClick()) {
-                              Get.to(YQYLPage(kefuUid: c.kefuUid, kefUavatar: c.kefuAvatar));
-                            }
-                          },
-                          child: Text('邀请有礼'),
-                    ),
-                GestureDetector(
-                  onTap: () {
-                    if (MyUtils.checkClick()) {
-                      Get.toNamed('ChengJiuPage');
-                    }
-                  },
-                  child: Text('等级成就'),
-                ),
-                if (c.userNumber.value.isNotEmpty)
-                  Column(
-                    children: [
-                      CupertinoSwitch(
-                              value: c.switchValue.value,
-                              onChanged: (value) {
-                                c.onSwitch(value, context);
-                              },
-                              activeColor: const Color(0xFF5b46b9),
-                            ),
-                      Text('勿扰模式'),
-                    ],
-                  ),
-                GestureDetector(
-                  onTap: () {
-                    if (MyUtils.checkClick()) {
-                      Future.delayed(
+                    ? _moreItem('全民代理', 'quanmin', () { 
+                      Get.toNamed('DailiHomePage');
+                    })
+                    : _moreItem('邀请有礼', 'yaoqing', () { 
+                      Get.to(YQYLPage(kefuUid: c.kefuUid, kefUavatar: c.kefuAvatar));
+                    }),
+                _moreItem('等级成就', 'dengji', () { 
+                  Get.toNamed('ChengJiuPage');
+                }),
+                // if (c.userNumber.value.isNotEmpty)
+                //   Column(
+                //     children: [
+                //       CupertinoSwitch(
+                //               value: c.switchValue.value,
+                //               onChanged: (value) {
+                //                 c.onSwitch(value, context);
+                //               },
+                //               activeColor: const Color(0xFF5b46b9),
+                //             ),
+                //       Text('勿扰模式'),
+                //     ],
+                //   ),
+                _moreItem('联系客服', 'kefu', () { 
+                  Future.delayed(
                         const Duration(seconds: 0),
                         () {
                           Navigator.of(context).push(
@@ -549,15 +535,43 @@ class _MinePageContent extends StatelessWidget {
                           );
                         },
                       );
-                    }
-                  },
-                  child: Text('联系客服'),
-                ),
+                }),
               ],
             ),
           ),
         ],
       ),
     );
+  }
+
+  Widget _moreItem(String title, String img, void Function() action) {
+    return GestureDetector(
+        onTap: () {
+          if (MyUtils.checkClick()) {
+            action();
+          }
+        },
+        child: Container(
+          color: Colors.white,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image(
+                width: 96,
+                height: 99,
+                image: AssetImage('assets/images/mine_icon_$img.png'),
+              ),
+              const SizedBox(height: 15),
+              Text(
+                title,
+                style: const TextStyle(
+                  color: Color(0xFF999999),
+                  fontSize: 26,
+                  fontWeight: FontWeight.w400,
+                ),
+              )
+            ],
+          ),
+        ));
   }
 }
