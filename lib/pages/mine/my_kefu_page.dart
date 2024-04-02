@@ -62,7 +62,7 @@ class _MyKeFuPageState extends State<MyKeFuPage> {
                       MyUtils.goTransparentRFPage(
                           context,
                           ChatPage(
-                              nickName: '维C客服',
+                              nickName: '小柴客服',
                               otherUid: widget.kefuUid,
                               otherImg:  widget.kefuAvatar));
                       Navigator.pop(context);

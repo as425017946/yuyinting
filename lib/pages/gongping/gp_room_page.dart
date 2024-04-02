@@ -1,13 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
+import '../../bean/Common_bean.dart';
+import '../../bean/joinRoomBean.dart';
 import '../../colors/my_colors.dart';
+import '../../http/data_utils.dart';
+import '../../http/my_http_config.dart';
+import '../../main.dart';
+import '../../utils/event_utils.dart';
+import '../../utils/loading.dart';
+import '../../utils/my_toast_utils.dart';
+import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
+import '../room/room_page.dart';
+import '../room/room_ts_mima_page.dart';
 
 /// 公屏 邀请进入房间使用
 class GPRoomPage extends StatefulWidget {
-  const GPRoomPage({super.key});
+  String roomID;
+  String roomUrl;
+  String roomName;
+  GPRoomPage({super.key, required this.roomID, required this.roomUrl, required this.roomName});
 
   @override
   State<GPRoomPage> createState() => _GPRoomPageState();
@@ -61,10 +75,10 @@ class _GPRoomPageState extends State<GPRoomPage> {
                             children: [
                               WidgetUtils.commonSizedBox(60.h, 0),
                               WidgetUtils.CircleImageNet(180.h, 180.h, 10.0,
-                                  'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2F650136a8-b170-43a0-ad8f-54b51c8f311b%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1702799471&t=c8b6986836edef6a1ab22f885d0c388a'),
+                                  widget.roomUrl),
                               WidgetUtils.commonSizedBox(10.h, 0),
                               WidgetUtils.onlyTextCenter(
-                                  '房间名称',
+                                  widget.roomName,
                                   StyleUtils.getCommonTextStyle(
                                       color: MyColors.a5,
                                       fontSize: 24.sp,
@@ -84,7 +98,9 @@ class _GPRoomPageState extends State<GPRoomPage> {
                 right: 20.h,
                 child: GestureDetector(
                     onTap: (() {
-                      Navigator.pop(context);
+                      if(MyUtils.checkClick()){
+                        Navigator.pop(context);
+                      }
                     }),
                     child: WidgetUtils.showImages(
                         'assets/images/login_colse.png', 30.h, 30.h)),
@@ -94,7 +110,9 @@ class _GPRoomPageState extends State<GPRoomPage> {
                 bottom: 50.h,
                 child: GestureDetector(
                   onTap: (() {
-                    // MyUtils.goTransparentRFPage(context, ChatPage(nickName: list[i].nickname!, otherUid: list[i].uid.toString(), otherImg: list[i].avatar!,));
+                    if(MyUtils.checkClick()){
+                      doPostBeforeJoin(widget.roomID);
+                    }
                   }),
                   child: Container(
                     height: 65.h,
@@ -121,5 +139,104 @@ class _GPRoomPageState extends State<GPRoomPage> {
         ),
       ),
     );
+  }
+
+
+  /// 加入房间前
+  Future<void> doPostBeforeJoin(roomID) async {
+    //判断房间id是否为空的
+    if (roomID == null || roomID.isEmpty) {
+      return;
+    } else {
+      // 不是空的，并且不是之前进入的房间
+      if (sp.getString('roomID').toString() != roomID) {
+        sp.setString('roomID', roomID);
+        eventBus.fire(SubmitButtonBack(title: '加入其他房间'));
+      }
+    }
+    Map<String, dynamic> params = <String, dynamic>{
+      'room_id': roomID,
+    };
+    try {
+      Loading.show();
+      joinRoomBean bean = await DataUtils.postBeforeJoin(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          doPostRoomJoin(roomID, '', '', bean.data!.rtc!);
+          break;
+        case MyHttpConfig.errorRoomCode: //需要密码
+        MyToastUtils.showToastBottom('此房间需要密码~');
+        // // ignore: use_build_context_synchronously
+        //   MyUtils.goTransparentPageCom(
+        //       context,
+        //       RoomTSMiMaPage(
+        //           roomID: roomID,
+        //           roomToken: bean.data!.rtc!,
+        //           anchorUid: ''));
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          setState(() {
+            sp.setBool('joinRoom', false);
+          });
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      setState(() {
+        sp.setBool('joinRoom', false);
+      });
+      Loading.dismiss();
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+  /// 加入房间
+  Future<void> doPostRoomJoin(
+      roomID, password, String anchorUid, roomToken) async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'room_id': roomID,
+      'password': password,
+      'anchor_uid': anchorUid
+    };
+    try {
+      Loading.show();
+      CommonBean bean = await DataUtils.postRoomJoin(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.goTransparentRFPage(
+              context,
+              RoomPage(
+                roomId: roomID,
+                beforeId: '',
+                roomToken: roomToken,
+              ));
+          // ignore: use_build_context_synchronously
+          Navigator.pop(context);
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          setState(() {
+            sp.setBool('joinRoom', false);
+          });
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      setState(() {
+        sp.setBool('joinRoom', false);
+      });
+      Loading.dismiss();
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
   }
 }

@@ -18,7 +18,6 @@ import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/pages/home/paidui_page.dart';
 import 'package:yuyinting/pages/home/search_page.dart';
 import 'package:yuyinting/pages/home/shoucang_page.dart';
-import 'package:yuyinting/pages/home/ts/ts_car_page.dart';
 import 'package:yuyinting/pages/home/tuijian_page.dart';
 import 'package:yuyinting/pages/home/update_app_page.dart';
 import 'package:yuyinting/pages/home/youxi_page.dart';
@@ -39,6 +38,7 @@ import '../../utils/log_util.dart';
 import '../../utils/my_ping.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
+import '../gongping/gp_room_page.dart';
 import '../room/room_page.dart';
 import '../room/room_ts_mima_page.dart';
 
@@ -69,17 +69,6 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     // TODO: implement initState
-    // 判断当前年月日是否为今天，如果不是，上传日志
-    DateTime now = DateTime.now();
-    int year = now.year;
-    int month = now.month;
-    int day = now.day;
-    String time = '$year-$month-$day';
-    // if(sp.getString('sw_queren_time') == null || sp.getString('sw_queren_time') != time){
-    //   sp.setString('sw_queren_time', time);
-    //   doPostFilelog(1);
-    //   doPostFilelog(2);
-    // }
     doCheck();
     doPostPdAddress();
     //更新身份
@@ -105,8 +94,8 @@ class _HomePageState extends State<HomePage>
       setState(() {
         mla++;
       });
-      // 马里奥
-      MyUtils.goTransparentPageCom(context, const TSCarPage());
+      // // // 马里奥
+      // MyUtils.goTransparentPageCom(context, const TSCarPage());
     }
 
     quanxian();

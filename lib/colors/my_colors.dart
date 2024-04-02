@@ -32,8 +32,8 @@ class MyColors {
   static const Color origin = Color(0xFFFF9601);
   static const Color btn_d = Color(0xFF8061FF);
   static const Color btn_a = Color(0xFF5b46b9);
-  static const Color loginBtnP = Color(0xFF7F61FF);
-  static const Color homeTopBG = Color(0xFF5b46b9);
+  static const Color loginBtnP = Color(0xFF61dcde);
+  static const Color homeTopBG = Color(0xFF61dcde);
   static const Color homeBG = Color(0xFFF6F7F8);
   static const Color homeSoucuoBG = Color(0xFF7D68C1);
   static const Color homeNoHave = Color(0xFFAFBACA);
@@ -51,7 +51,7 @@ class MyColors {
   static const Color peopleYellow = Color(0xFFF4E13F);
   static const Color peopleLiwu = Color(0xFFF4F2FF);
   static const Color peopleRed = Color(0xFFFF6161);
-  static const Color peopleBlue2 = Color(0xFF8061FF);
+  static const Color peopleBlue2 = Color(0xFF40dfc9);
   static const Color paiduiOrange = Color(0xFFEE7A4D);
   static const Color paiduiBlue = Color(0xFF4A9DF0);
   static const Color paiduiRed = Color(0xFFf04aa8);
@@ -68,9 +68,9 @@ class MyColors {
   static const Color walletPurple = Color(0xFFC12CFF);
   static const Color walletPink = Color(0xFFff4daf);
   static const Color walletBlue = Color(0xFF4d82ff);
-  static const Color walletWZBlue = Color(0xFF974CF9);
+  static const Color walletWZBlue = Color(0xFF61dcde);
   static const Color walletGrayBG = Color(0xFFFBFAFF);
-  static const Color walletMingxi = Color(0xFF8061FF);
+  static const Color walletMingxi = Color(0xFF61dcde);
   static const Color dailiPurple = Color(0xFFEBD9EB);
   static const Color dailiPink = Color(0xFFEBD9D9);
   static const Color dailiBlue = Color(0xFFF2EFFF);
@@ -162,6 +162,7 @@ class MyColors {
   static const Color newLoginblue1 = Color(0xFF89cde2);
   static const Color newLoginblue2 = Color(0xFF61dcde);
   static const Color newHomeBlack = Color(0xFF212121);
+  static const Color newHomeBlack2 = Color(0xFF454545);
   static const Color newY1 = Color(0xFFF1F9FD);
   static const Color newY2 = Color(0xFFFDF5F9);
   static const Color newY3 = Color(0xFFFDFCF1);

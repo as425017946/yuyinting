@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:svgaplayer_flutter/parser.dart';
@@ -1042,96 +1043,155 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: ((details) {
-        final tapPosition = details.globalPosition;
-        setState(() {
-          x = tapPosition.dx;
-          y = tapPosition.dy;
-        });
-      }),
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: Stack(
-          children: [
-            length == 0
-                ? SmartRefresher(
-                    header: MyUtils.myHeader(),
-                    footer: MyUtils.myFotter(),
-                    controller: _refreshController,
-                    enablePullUp: true,
-                    onLoading: _onLoading,
-                    onRefresh: _onRefresh,
-                    child: SingleChildScrollView(
-                      child: Wrap(
-                        alignment: WrapAlignment.center,
-                        children: [
-                          WidgetUtils.showImages(
-                              'assets/images/trends_no.jpg',
-                              ScreenUtil().setHeight(242),
-                              ScreenUtil().setWidth(221)),
-                          WidgetUtils.onlyTextBottom(
-                              '您还没有关注的人',
-                              StyleUtils.getCommonTextStyle(
-                                  color: MyColors.homeNoHave,
-                                  fontSize: ScreenUtil().setSp(32))),
-                          WidgetUtils.commonSizedBox(50, 0),
-                          Row(
-                            children: [
-                              Expanded(child: WidgetUtils.myLine()),
-                              WidgetUtils.commonSizedBox(0, 10),
-                              WidgetUtils.onlyTextBottom(
-                                  '为您推荐一些有趣的内容',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: MyColors.homeNoHave,
-                                      fontSize: ScreenUtil().setSp(25))),
-                              WidgetUtils.commonSizedBox(0, 10),
-                              Expanded(child: WidgetUtils.myLine()),
-                            ],
-                          ),
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            padding: const EdgeInsets.all(20),
-                            itemBuilder: _itemsTuijian2,
-                            itemCount: _list_tj.length,
-                          )
-                        ],
-                      ),
-                    ),
-                  )
-                : SmartRefresher(
-                    header: MyUtils.myHeader(),
-                    footer: MyUtils.myFotter(),
-                    controller: _refreshController,
-                    enablePullUp: true,
-                    onLoading: _onLoading,
-                    onRefresh: _onRefresh,
-                    child: ListView.builder(
-                      padding: EdgeInsets.all(20 * 2.w),
-                      itemBuilder: _itemsTuijian,
-                      itemCount: _list.length,
-                    ),
-                  ),
 
-            ///点赞显示样式
-            isShow
-                ? Positioned(
-                    left: x - ScreenUtil().setHeight(50),
-                    top: y - ScreenUtil().setHeight(175),
-                    height: ScreenUtil().setHeight(100),
-                    width: ScreenUtil().setHeight(100),
-                    child: SVGAImage(animationController!),
-                  )
-                : const Text('')
+  Widget waterCard(BuildContext context, int index){
+    return GestureDetector(
+      onTap: ((){
+        if(MyUtils.checkClick()){
+          MyUtils.goTransparentRFPage(context,
+              TrendsMorePage(note_id: _list[index].id.toString(), index: index));
+        }
+      }),
+      child: Container(
+        margin: EdgeInsets.only(bottom: 15.h),
+        decoration: const BoxDecoration(
+          //背景
+          color: MyColors.f7,
+          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+        ),
+        child: Column(
+          children: [
+            WidgetUtils.CircleImageNetTop(350.h, 350.w, 30.h,_list[index].imgUrl![0]),
+            Container(
+              padding: EdgeInsets.only(left: 10.w, right: 10.w),
+              alignment: Alignment.topLeft,
+              child: Text(
+                _list[index].text!,
+                maxLines: 3,
+                style: TextStyle(
+                  color: MyColors.newHomeBlack,
+                  fontSize: 30.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            WidgetUtils.commonSizedBox(10.h, 0),
+            Row(
+              children: [
+                WidgetUtils.commonSizedBox(0, 10.w),
+                WidgetUtils.CircleHeadImage(
+                    25 * 2.w, 25 * 2.w, _list[index].avatar!),
+                WidgetUtils.commonSizedBox(0, 10.w),
+                WidgetUtils.onlyText(_list[index].nickname!, StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: 24.sp,)),
+                const Spacer(),
+                GestureDetector(
+                    onTap:((){
+                      doPostLike(_list[index].id.toString(), index);
+                    }),
+                    child: WidgetUtils.showImages(_list[index].isLike == 0 ? 'assets/images/dt_dianzan1.png' : 'assets/images/dt_dianzan2.png', 56.h, 115.w)),
+                WidgetUtils.commonSizedBox(0, 10.w),
+              ],
+            ),
+            WidgetUtils.commonSizedBox(10.h, 0),
           ],
         ),
       ),
     );
   }
 
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Transform.translate(
+        offset: Offset(0, -40.h),
+        child: Stack(
+          children: [
+            (isOk == true && length == 0)
+                ? SmartRefresher(
+              header: MyUtils.myHeader(),
+              footer: MyUtils.myFotter(),
+              controller: _refreshController,
+              enablePullUp: true,
+              onLoading: _onLoading,
+              onRefresh: _onRefresh,
+              child: SingleChildScrollView(
+                child: Wrap(
+                  alignment: WrapAlignment.center,
+                  children: [
+                    WidgetUtils.showImages(
+                        'assets/images/trends_no.jpg',
+                        ScreenUtil().setHeight(242),
+                        ScreenUtil().setWidth(221)),
+                    WidgetUtils.onlyTextBottom(
+                        '您还没有关注的人',
+                        StyleUtils.getCommonTextStyle(
+                            color: MyColors.homeNoHave,
+                            fontSize: ScreenUtil().setSp(32))),
+                    WidgetUtils.commonSizedBox(50, 0),
+                    Row(
+                      children: [
+                        Expanded(child: WidgetUtils.myLine()),
+                        WidgetUtils.commonSizedBox(0, 10),
+                        WidgetUtils.onlyTextBottom(
+                            '为您推荐一些有趣的内容',
+                            StyleUtils.getCommonTextStyle(
+                                color: MyColors.homeNoHave,
+                                fontSize: ScreenUtil().setSp(25))),
+                        WidgetUtils.commonSizedBox(0, 10),
+                        Expanded(child: WidgetUtils.myLine()),
+                      ],
+                    ),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      padding: const EdgeInsets.all(20),
+                      itemBuilder: _itemsTuijian2,
+                      itemCount: _list_tj.length,
+                    )
+                  ],
+                ),
+              ),
+            )
+                : SmartRefresher(
+              header: MyUtils.myHeader(),
+              footer: MyUtils.myFotter(),
+              controller: _refreshController,
+              enablePullUp: true,
+              onLoading: _onLoading,
+              onRefresh: _onRefresh,
+              child: SingleChildScrollView(
+                child: Container(
+                  color: Colors.transparent,
+                  padding: const EdgeInsets.all(10),
+                  child: MasonryGridView.count(
+                    // 展示几列
+                    crossAxisCount: 2,
+                    // 元素总个数
+                    itemCount: _list.length,
+                    // 单个子元素
+                    itemBuilder: waterCard,
+                    // 纵向元素间距
+                    mainAxisSpacing: 15.h,
+                    // 横向元素间距
+                    crossAxisSpacing: 10,
+                    //本身不滚动，让外面的singlescrollview来滚动
+                    physics:const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true, //收缩，让元素宽度自适应
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+
+  bool isOk = false;
   /// 关注列表
   Future<void> doPostGZFollowList() async {
     Map<String, dynamic> params = <String, dynamic>{
@@ -1144,6 +1204,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
+            isOk = true;
             if (page == 1) {
               _list.clear();
             }

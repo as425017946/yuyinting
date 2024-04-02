@@ -12,7 +12,6 @@ import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
-import '../../utils/regex_formatter.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 

@@ -7,11 +7,6 @@ import 'package:yuyinting/pages/room/room_send_info_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
-
-import '../../bean/Common_bean.dart';
-import '../../http/data_utils.dart';
-import '../../http/my_http_config.dart';
-import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 
 class RoomBQPage extends StatefulWidget {
@@ -240,64 +235,234 @@ class _APageState extends State<RoomBQPage> {
   ];
   List<Map> list3 = [
     {
-      'name': '开心',
-      "url1": "assets/images/cy/cy_1.png",
-      "url2": "assets/images/cy/cy_1.gif",
+      'name': 'GO',
+      "url1": "assets/images/cy/GO.png",
+      "url2": "assets/images/cy/GO.gif",
     },
     {
-      'name': '我哭',
-      "url1": "assets/images/cy/cy_2.png",
-      "url2": "assets/images/cy/cy_2.gif",
+      'name': 'NONO',
+      "url1": "assets/images/cy/NONO.png",
+      "url2": "assets/images/cy/NONO.gif",
     },
     {
       'name': 'OK',
-      "url1": "assets/images/cy/cy_3.png",
-      "url2": "assets/images/cy/cy_3.gif",
+      "url1": "assets/images/cy/OK.png",
+      "url2": "assets/images/cy/OK.gif",
     },
     {
-      'name': '泪目',
-      "url1": "assets/images/cy/cy_4.png",
-      "url2": "assets/images/cy/cy_4.gif",
+      'name': '一起睡',
+      "url1": "assets/images/cy/一起睡.png",
+      "url2": "assets/images/cy/一起睡.gif",
     },
     {
-      'name': 'cpdd',
-      "url1": "assets/images/cy/cy_5.png",
-      "url2": "assets/images/cy/cy_5.gif",
+      'name': '不是吧',
+      "url1": "assets/images/cy/不是吧.png",
+      "url2": "assets/images/cy/不是吧.gif",
     },
     {
-      'name': '笑哭',
-      "url1": "assets/images/cy/cy_6.png",
-      "url2": "assets/images/cy/cy_6.gif",
+      'name': '不活啦',
+      "url1": "assets/images/cy/不活啦.png",
+      "url2": "assets/images/cy/不活啦.gif",
     },
     {
-      'name': '困了',
-      "url1": "assets/images/cy/cy_7.png",
-      "url2": "assets/images/cy/cy_7.gif",
+      'name': '不知道鸭',
+      "url1": "assets/images/cy/不知道鸭.png",
+      "url2": "assets/images/cy/不知道鸭.gif",
     },
     {
-      'name': '无语',
-      "url1": "assets/images/cy/cy_8.png",
-      "url2": "assets/images/cy/cy_8.gif",
+      'name': '什么事',
+      "url1": "assets/images/cy/什么事.png",
+      "url2": "assets/images/cy/什么事.gif",
     },
     {
-      'name': '听音乐',
-      "url1": "assets/images/cy/cy_9.png",
-      "url2": "assets/images/cy/cy_9.gif",
+      'name': '加油哦',
+      "url1": "assets/images/cy/加油哦.png",
+      "url2": "assets/images/cy/加油哦.gif",
     },
     {
-      'name': '思索',
-      "url1": "assets/images/cy/cy_10.png",
-      "url2": "assets/images/cy/cy_10.gif",
+      'name': '吃狗粮',
+      "url1": "assets/images/cy/吃狗粮.png",
+      "url2": "assets/images/cy/吃狗粮.gif",
     },
     {
-      'name': '打游戏',
-      "url1": "assets/images/cy/cy_11.png",
-      "url2": "assets/images/cy/cy_11.gif",
+      'name': '吃瓜',
+      "url1": "assets/images/cy/吃瓜.png",
+      "url2": "assets/images/cy/吃瓜.gif",
     },
     {
-      'name': '可爱',
-      "url1": "assets/images/cy/cy_12.png",
-      "url2": "assets/images/cy/cy_12.gif",
+      'name': '吐血',
+      "url1": "assets/images/cy/吐血.png",
+      "url2": "assets/images/cy/吐血.gif",
+    },
+    {
+      'name': '吹刘海',
+      "url1": "assets/images/cy/吹刘海.png",
+      "url2": "assets/images/cy/吹刘海.gif",
+    },
+    {
+      'name': '哈哈哈哈',
+      "url1": "assets/images/cy/哈哈哈哈.png",
+      "url2": "assets/images/cy/哈哈哈哈.gif",
+    },
+    {
+      'name': '哦',
+      "url1": "assets/images/cy/哦.png",
+      "url2": "assets/images/cy/哦.gif",
+    },
+    {
+      'name': '哼',
+      "url1": "assets/images/cy/哼.png",
+      "url2": "assets/images/cy/哼.gif",
+    },
+    {
+      'name': '嗯嗯',
+      "url1": "assets/images/cy/嗯嗯.png",
+      "url2": "assets/images/cy/嗯嗯.gif",
+    },
+    {
+      'name': '嘚瑟',
+      "url1": "assets/images/cy/嘚瑟.png",
+      "url2": "assets/images/cy/嘚瑟.gif",
+    },
+    {
+      'name': '在吗',
+      "url1": "assets/images/cy/在吗.png",
+      "url2": "assets/images/cy/在吗.gif",
+    },
+    {
+      'name': '大佬喝阔乐',
+      "url1": "assets/images/cy/大佬喝阔乐.png",
+      "url2": "assets/images/cy/大佬喝阔乐.gif",
+    },
+    {
+      'name': '心里苦',
+      "url1": "assets/images/cy/心里苦.png",
+      "url2": "assets/images/cy/心里苦.gif",
+    },
+    {
+      'name': '我好美',
+      "url1": "assets/images/cy/我好美.png",
+      "url2": "assets/images/cy/我好美.gif",
+    },
+    {
+      'name': '我郁闷',
+      "url1": "assets/images/cy/我郁闷.png",
+      "url2": "assets/images/cy/我郁闷.gif",
+    },
+    {
+      'name': '扎心了',
+      "url1": "assets/images/cy/扎心了.png",
+      "url2": "assets/images/cy/扎心了.gif",
+    },
+    {
+      'name': '抱大腿',
+      "url1": "assets/images/cy/抱大腿.png",
+      "url2": "assets/images/cy/抱大腿.gif",
+    },
+    {
+      'name': '拍你屁屁',
+      "url1": "assets/images/cy/拍你屁屁.png",
+      "url2": "assets/images/cy/拍你屁屁.gif",
+    },
+    {
+      'name': '拒绝狗粮',
+      "url1": "assets/images/cy/拒绝狗粮.png",
+      "url2": "assets/images/cy/拒绝狗粮.gif",
+    },
+    {
+      'name': '拜拜',
+      "url1": "assets/images/cy/拜拜.png",
+      "url2": "assets/images/cy/拜拜.gif",
+    },
+    {
+      'name': '揪揪',
+      "url1": "assets/images/cy/揪揪.png",
+      "url2": "assets/images/cy/揪揪.gif",
+    },
+    {
+      'name': '撒花',
+      "url1": "assets/images/cy/撒花.png",
+      "url2": "assets/images/cy/撒花.gif",
+    },
+    {
+      'name': '晚安',
+      "url1": "assets/images/cy/晚安.png",
+      "url2": "assets/images/cy/晚安.gif",
+    },
+    {
+      'name': '暗中观察',
+      "url1": "assets/images/cy/暗中观察.png",
+      "url2": "assets/images/cy/暗中观察.gif",
+    },
+    {
+      'name': '暗中观察',
+      "url1": "assets/images/cy/暗中观察.png",
+      "url2": "assets/images/cy/暗中观察.gif",
+    },
+    {
+      'name': '来呀~',
+      "url1": "assets/images/cy/来呀~.png",
+      "url2": "assets/images/cy/来呀~.gif",
+    },
+    {
+      'name': '棒棒哒',
+      "url1": "assets/images/cy/棒棒哒.png",
+      "url2": "assets/images/cy/棒棒哒.gif",
+    },
+    {
+      'name': '滚粗去',
+      "url1": "assets/images/cy/滚粗去.png",
+      "url2": "assets/images/cy/滚粗去.gif",
+    },
+    {
+      'name': '爱你呦',
+      "url1": "assets/images/cy/爱你呦.png",
+      "url2": "assets/images/cy/爱你呦.gif",
+    },
+    {
+      'name': '爱心飞吻',
+      "url1": "assets/images/cy/爱心飞吻.png",
+      "url2": "assets/images/cy/爱心飞吻.gif",
+    },
+    {
+      'name': '猛灌可乐',
+      "url1": "assets/images/cy/猛灌可乐.png",
+      "url2": "assets/images/cy/猛灌可乐.gif",
+    },
+    {
+      'name': '要你何用',
+      "url1": "assets/images/cy/要你何用.png",
+      "url2": "assets/images/cy/要你何用.gif",
+    },
+    {
+      'name': '请收下',
+      "url1": "assets/images/cy/请收下.png",
+      "url2": "assets/images/cy/请收下.gif",
+    },
+    {
+      'name': '谢谢老板',
+      "url1": "assets/images/cy/谢谢老板.png",
+      "url2": "assets/images/cy/谢谢老板.gif",
+    },
+    {
+      'name': '赚钱中',
+      "url1": "assets/images/cy/赚钱中.png",
+      "url2": "assets/images/cy/赚钱中.gif",
+    },
+    {
+      'name': '走你',
+      "url1": "assets/images/cy/走你.png",
+      "url2": "assets/images/cy/走你.gif",
+    },
+    {
+      'name': '难受',
+      "url1": "assets/images/cy/难受.png",
+      "url2": "assets/images/cy/难受.gif",
+    },
+    {
+      'name': '鸭梨山大',
+      "url1": "assets/images/cy/鸭梨山大.png",
+      "url2": "assets/images/cy/鸭梨山大.gif",
     },
   ];
 
@@ -406,7 +571,7 @@ class _APageState extends State<RoomBQPage> {
                                 ),
                               ),
                               WidgetUtils.showImages(
-                                  'assets/images/cy/cy_first.png', 40.h, 40.h)
+                                  'assets/images/cy/嘚瑟.png', 40.h, 40.h)
                             ],
                           ),
                         ),

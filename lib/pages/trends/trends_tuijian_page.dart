@@ -110,645 +110,93 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
     listen.cancel();
   }
 
-  Widget _itemsTuijian(BuildContext context, int i) {
-    return Column(
-      children: [
-        WidgetUtils.commonSizedBox(10 * 2.w, 0),
-        Container(
-          height: ScreenUtil().setWidth(100 * 1.3),
-          alignment: Alignment.centerLeft,
-          child: Row(
-            children: [
-              GestureDetector(
-                onTap: (() {
-                  if (MyUtils.checkClick()) {
-                    // 如果点击的是自己，进入自己的主页
-                    if (sp.getString('user_id').toString() ==
-                        _list[i].uid.toString()) {
-                      MyUtils.goTransparentRFPage(context, const MyInfoPage());
-                    } else {
-                      sp.setString('other_id', _list[i].uid.toString());
-                      MyUtils.goTransparentRFPage(
-                          context,
-                          PeopleInfoPage(
-                            otherId: _list[i].uid.toString(),
-                            title: '其他',
-                          ));
-                    }
-                  }
-                }),
-                child: WidgetUtils.CircleHeadImage(
-                    40 * 2.w, 40 * 2.w, _list[i].avatar!),
-              ),
-              WidgetUtils.commonSizedBox(0, 8 * 2.w),
-              Column(
-                children: [
-                  const Expanded(child: Text('')),
-                  Container(
-                    width: ScreenUtil().setWidth(300),
-                    padding:
-                        EdgeInsets.only(left: ScreenUtil().setWidth(8 * 1.3)),
-                    child: Text(
-                      _list[i].nickname!,
-                      style: StyleUtils.getCommonTextStyle(
-                          color: Colors.black,
-                          fontSize: ScreenUtil().setSp(30),
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                  SizedBox(
-                    height: ScreenUtil().setWidth(30 * 1.3),
-                    width: ScreenUtil().setWidth(300),
-                    child: Row(
-                      children: [
-                        Container(
-                          height: ScreenUtil().setWidth(25 * 1.3),
-                          padding:
-                              EdgeInsets.only(left: 5 * 2.w, right: 5 * 2.w),
-                          margin: EdgeInsets.only(top: 2 * 2.w),
-                          alignment: Alignment.center,
-                          //边框设置
-                          decoration: BoxDecoration(
-                            //背景
-                            color: _list[i].gender == 1
-                                ? MyColors.dtBlue
-                                : MyColors.dtPink,
-                            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                            borderRadius: BorderRadius.all(Radius.circular(
-                                ScreenUtil().setWidth(25 * 1.3) / 2)),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              WidgetUtils.showImages(
-                                  _list[i].gender == 1
-                                      ? 'assets/images/nan.png'
-                                      : 'assets/images/nv.png',
-                                  10 * 2.w,
-                                  10 * 2.w),
-                              WidgetUtils.commonSizedBox(0, 5 * 2.w),
-                              WidgetUtils.onlyText(
-                                  _list[i].age == -1
-                                      ? '0·${_list[i].constellation!}'
-                                      : '${_list[i].age.toString()}·${_list[i].constellation!}',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: Colors.white,
-                                      fontSize: 10 * 2.sp)),
-                            ],
-                          ),
-                        ),
-                        const Spacer(),
-                      ],
-                    ),
-                  ),
-                  const Expanded(child: Text('')),
-                ],
-              ),
-              const Expanded(child: Text('')),
-              _list[i].uid.toString() == sp.getString('user_id')
-                  ? const Text('')
-                  : _list[i].isHi == 0
-                      ? GestureDetector(
-                          onTap: (() {
-                            MyUtils.goTransparentPageCom(
-                                context,
-                                TrendsHiPage(
-                                    imgUrl: _list[i].avatar!,
-                                    uid: _list[i].uid.toString(),
-                                    index: i));
-                          }),
-                          child: WidgetUtils.showImages(
-                              'assets/images/trends_hi.png',
-                              124 * 2.w,
-                              59 * 2.w),
-                        )
-                      : GestureDetector(
-                          onTap: (() {
-                            MyUtils.goTransparentRFPage(
-                                context,
-                                ChatPage(
-                                    nickName: _list[i].nickname!,
-                                    otherUid: _list[i].uid.toString(),
-                                    otherImg: _list[i].avatar!));
-                          }),
-                          child: WidgetUtils.myContainer(
-                              ScreenUtil().setWidth(45 * 1.3),
-                              ScreenUtil().setWidth(100 * 1.3),
-                              Colors.white,
-                              MyColors.homeTopBG,
-                              '私信',
-                              ScreenUtil().setSp(25),
-                              MyColors.homeTopBG),
-                        ),
-            ],
-          ),
+  Widget waterCard(BuildContext context, int index){
+    return GestureDetector(
+      onTap: ((){
+        if(MyUtils.checkClick()){
+          MyUtils.goTransparentRFPage(context,
+              TrendsMorePage(note_id: _list[index].id.toString(), index: index));
+        }
+      }),
+      child: Container(
+        margin: EdgeInsets.only(bottom: 15.h),
+        decoration: const BoxDecoration(
+          //背景
+          color: MyColors.f7,
+          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+          borderRadius: BorderRadius.all(Radius.circular(10.0)),
         ),
-        WidgetUtils.commonSizedBox(5 * 2.w, 0),
-        GestureDetector(
-          onTap: (() {
-            MyUtils.goTransparentRFPage(context,
-                TrendsMorePage(note_id: _list[i].id.toString(), index: i));
-          }),
-          child: Container(
-            color: Colors.transparent,
-            child: WidgetUtils.onlyText(
-                _list[i].text!,
-                StyleUtils.getCommonTextStyle(
-                  color: Colors.black,
-                  fontSize: ScreenUtil().setSp(28),
-                )),
-          ),
-        ),
-        WidgetUtils.commonSizedBox(10 * 2.w, 0),
-        _list[i].type == 2
-            ? showVideo(_list[i].imgUrl!, i)
-            : showImag(_list[i].imgUrl!, i),
-        WidgetUtils.commonSizedBox(20 * 2.w, 0),
-        Row(
+        child: Column(
           children: [
-            WidgetUtils.onlyText(
-                '${_list[i].addTime}·来自：${_list[i].city}',
-                StyleUtils.getCommonTextStyle(
-                  color: Colors.grey,
-                  fontSize: ScreenUtil().setSp(21),
-                )),
-            const Expanded(child: Text('')),
-            GestureDetector(
-              onTap: (() {
-                setState(() {
-                  if (_list[i].isLike == 1) {
-                    action = 'delete';
-                  } else {
-                    action = 'create';
-                    // isShow = false;
-                  }
-                });
-                if (_list[i].isLike == 0) {
-                  // animationController?.reset();
-                  // animationController?.forward();
-                }
-                doPostLike(_list[i].id.toString(), i);
-              }),
-              child: Container(
-                color: Colors.transparent,
-                padding: EdgeInsets.only(left: 20.w),
-                child: Row(
-                  children: [
-                    WidgetUtils.showImages(
-                        _list[i].isLike == 0
-                            ? 'assets/images/trends_zan1.png'
-                            : 'assets/images/trends_zan_2.png',
-                        18 * 2.w,
-                        18 * 2.w),
-                    WidgetUtils.commonSizedBox(0, 5 * 2.w),
-                    SizedBox(
-                      width: ScreenUtil().setWidth(60 * 1.3),
-                      child: WidgetUtils.onlyText(
-                          _list[i].like == 0 ? '抢首赞' : _list[i].like.toString(),
-                          StyleUtils.getCommonTextStyle(
-                            color: Colors.grey,
-                            fontSize: ScreenUtil().setSp(21),
-                          )),
-                    ),
-                  ],
+            WidgetUtils.CircleImageNetTop(350.h, 350.w, 30.h,_list[index].imgUrl![0]),
+            Container(
+              padding: EdgeInsets.only(left: 10.w, right: 10.w),
+              alignment: Alignment.topLeft,
+              child: Text(
+                _list[index].text!,
+                maxLines: 3,
+                style: TextStyle(
+                  color: MyColors.newHomeBlack,
+                  fontSize: 30.sp,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),
-            GestureDetector(
-              onTap: (() {
-                MyUtils.goTransparentRFPage(context,
-                    TrendsMorePage(note_id: _list[i].id.toString(), index: i));
-              }),
-              child: Container(
-                color: Colors.transparent,
-                padding: EdgeInsets.only(left: 20.w),
-                child: Row(
-                  children: [
-                    WidgetUtils.showImages(
-                        'assets/images/trends_message.png', 18 * 2.w, 18 * 2.w),
-                    WidgetUtils.commonSizedBox(0, 5 * 2.w),
-                    WidgetUtils.onlyText(
-                        _list[i].comment == 0
-                            ? '评论'
-                            : _list[i].comment.toString(),
-                        StyleUtils.getCommonTextStyle(
-                          color: Colors.grey,
-                          fontSize: ScreenUtil().setSp(21),
-                        )),
-                  ],
-                ),
-              ),
+            WidgetUtils.commonSizedBox(10.h, 0),
+            Row(
+              children: [
+                WidgetUtils.commonSizedBox(0, 10.w),
+                WidgetUtils.CircleHeadImage(
+                    25 * 2.w, 25 * 2.w, _list[index].avatar!),
+                WidgetUtils.commonSizedBox(0, 10.w),
+                WidgetUtils.onlyText(_list[index].nickname!, StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: 24.sp,)),
+                const Spacer(),
+                GestureDetector(
+                    onTap:((){
+                      doPostLike(_list[index].id.toString(), index);
+                    }),
+                    child: WidgetUtils.showImages(_list[index].isLike == 0 ? 'assets/images/dt_dianzan1.png' : 'assets/images/dt_dianzan2.png', 56.h, 115.w)),
+                WidgetUtils.commonSizedBox(0, 10.w),
+              ],
             ),
+            WidgetUtils.commonSizedBox(10.h, 0),
           ],
         ),
-        WidgetUtils.commonSizedBox(10 * 2.w, 0),
-        WidgetUtils.myLine()
-      ],
-    );
-  }
-
-  _initializeVideoController(List<String> listImg, int i) async {
-    final fileName = await VideoThumbnail.thumbnailFile(
-      video: listImg[0],
-      thumbnailPath: (await getTemporaryDirectory()).path,
-      quality: 30,
-    );
-    setState(() {
-      _list[i].imgUrl![1] = fileName!;
-    });
-    LogE('视频图片 $fileName');
-  }
-
-  Widget showVideo(List<String> listImg, int i) {
-    _initializeVideoController(listImg, i);
-    return Row(
-      children: [
-        Container(
-          width: ScreenUtil().setHeight(200),
-          height: ScreenUtil().setHeight(200),
-          decoration: const BoxDecoration(
-            //背景
-            color: Colors.black87,
-            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-          ),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Container(
-                width: ScreenUtil().setHeight(200),
-                height: ScreenUtil().setHeight(200),
-                //超出部分，可裁剪
-                clipBehavior: Clip.hardEdge,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.h),
-                ),
-                child: _list[i].imgUrl![1].isNotEmpty
-                    ? Image.file(
-                        File(_list[i].imgUrl![1]),
-                        fit: BoxFit.cover,
-                        gaplessPlayback: true,
-                      )
-                    : const Text(''),
-              ),
-              GestureDetector(
-                onTap: () {
-                  MyUtils.goTransparentRFPage(
-                      context, PagePreviewVideo(url: listImg[0]));
-                },
-                child: const Icon(
-                  Icons.play_circle_fill_outlined,
-                  color: Colors.white,
-                  size: 50,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const Spacer(),
-      ],
-    );
-  }
-
-  ///显示图片
-  Widget showImag(List<String> listImg, int i) {
-    if (listImg.length == 1) {
-      return GestureDetector(
-        onTap: (() {
-          imgListUrl = listImg;
-          Navigator.of(context).push(PageRouteBuilder(
-              opaque: false,
-              pageBuilder: (context, animation, secondaryAnimation) {
-                return SwiperPage(imgList: imgListUrl);
-              }));
-        }),
-        child: Container(
-          height: ScreenUtil().setHeight(300),
-          alignment: Alignment.centerLeft,
-          child: WidgetUtils.CircleImageNet(
-              ScreenUtil().setHeight(300),
-              ScreenUtil().setHeight(280),
-              ScreenUtil().setHeight(10),
-              listImg[0]),
-        ),
-      );
-    } else if (listImg.length == 2) {
-      return GestureDetector(
-        onTap: (() {
-          imgListUrl = listImg;
-          Navigator.of(context).push(PageRouteBuilder(
-              opaque: false,
-              pageBuilder: (context, animation, secondaryAnimation) {
-                return SwiperPage(imgList: imgListUrl);
-              }));
-        }),
-        child: SizedBox(
-          height: ScreenUtil().setHeight(240),
-          child: Row(
-            children: [
-              Expanded(
-                  child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(240),
-                      double.infinity, ScreenUtil().setHeight(10), listImg[0])),
-              WidgetUtils.commonSizedBox(0, 10),
-              Expanded(
-                  child: WidgetUtils.CircleImageNet(ScreenUtil().setHeight(240),
-                      double.infinity, ScreenUtil().setHeight(10), listImg[1])),
-            ],
-          ),
-        ),
-      );
-    } else if (listImg.length == 3) {
-      return GestureDetector(
-        onTap: (() {
-          imgListUrl = listImg;
-          Navigator.of(context).push(PageRouteBuilder(
-              opaque: false,
-              pageBuilder: (context, animation, secondaryAnimation) {
-                return SwiperPage(imgList: imgListUrl);
-              }));
-        }),
-        child: SizedBox(
-          height: ScreenUtil().setHeight(350),
-          child: Row(
-            children: [
-              WidgetUtils.CircleImageNet(
-                  ScreenUtil().setHeight(350),
-                  ScreenUtil().setHeight(350),
-                  ScreenUtil().setHeight(10),
-                  listImg[0]),
-              WidgetUtils.commonSizedBox(0, 10),
-              Expanded(
-                  child: Column(
-                children: [
-                  WidgetUtils.CircleImageNet(ScreenUtil().setHeight(170),
-                      double.infinity, ScreenUtil().setHeight(10), listImg[1]),
-                  const Spacer(),
-                  WidgetUtils.CircleImageNet(ScreenUtil().setHeight(170),
-                      double.infinity, ScreenUtil().setHeight(10), listImg[2]),
-                ],
-              )),
-            ],
-          ),
-        ),
-      );
-    } else if (listImg.length == 4) {
-      return GestureDetector(
-        onTap: (() {
-          imgListUrl = listImg;
-          Navigator.of(context).push(PageRouteBuilder(
-              opaque: false,
-              pageBuilder: (context, animation, secondaryAnimation) {
-                return SwiperPage(imgList: imgListUrl);
-              }));
-        }),
-        child: SizedBox(
-          height: ScreenUtil().setHeight(490),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                      child: WidgetUtils.CircleImageNet(
-                          ScreenUtil().setHeight(240),
-                          double.infinity,
-                          ScreenUtil().setHeight(10),
-                          listImg[0])),
-                  WidgetUtils.commonSizedBox(0, 10),
-                  Expanded(
-                      child: WidgetUtils.CircleImageNet(
-                          ScreenUtil().setHeight(240),
-                          double.infinity,
-                          ScreenUtil().setHeight(10),
-                          listImg[1])),
-                ],
-              ),
-              WidgetUtils.commonSizedBox(ScreenUtil().setHeight(10), 10),
-              Row(
-                children: [
-                  Expanded(
-                      child: WidgetUtils.CircleImageNet(
-                          ScreenUtil().setHeight(240),
-                          double.infinity,
-                          ScreenUtil().setHeight(10),
-                          listImg[2])),
-                  WidgetUtils.commonSizedBox(0, 10),
-                  Expanded(
-                      child: WidgetUtils.CircleImageNet(
-                          ScreenUtil().setHeight(240),
-                          double.infinity,
-                          ScreenUtil().setHeight(10),
-                          listImg[3])),
-                ],
-              )
-            ],
-          ),
-        ),
-      );
-    } else if (listImg.length == 5) {
-      return GestureDetector(
-        onTap: (() {
-          imgListUrl = listImg;
-          Navigator.of(context).push(PageRouteBuilder(
-              opaque: false,
-              pageBuilder: (context, animation, secondaryAnimation) {
-                return SwiperPage(imgList: imgListUrl);
-              }));
-        }),
-        child: SizedBox(
-          height: ScreenUtil().setHeight(370),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                      child: WidgetUtils.CircleImageNet(
-                          ScreenUtil().setHeight(180),
-                          double.infinity,
-                          ScreenUtil().setHeight(10),
-                          listImg[0])),
-                  WidgetUtils.commonSizedBox(0, 10),
-                  Expanded(
-                      child: WidgetUtils.CircleImageNet(
-                          ScreenUtil().setHeight(180),
-                          double.infinity,
-                          ScreenUtil().setHeight(10),
-                          listImg[1])),
-                  WidgetUtils.commonSizedBox(0, 10),
-                  Expanded(
-                      child: WidgetUtils.CircleImageNet(
-                          ScreenUtil().setHeight(180),
-                          double.infinity,
-                          ScreenUtil().setHeight(10),
-                          listImg[2])),
-                ],
-              ),
-              WidgetUtils.commonSizedBox(ScreenUtil().setHeight(10), 10),
-              Row(
-                children: [
-                  Expanded(
-                      child: WidgetUtils.CircleImageNet(
-                          ScreenUtil().setHeight(180),
-                          double.infinity,
-                          ScreenUtil().setHeight(10),
-                          listImg[3])),
-                  WidgetUtils.commonSizedBox(0, 10),
-                  Expanded(
-                      child: WidgetUtils.CircleImageNet(
-                          ScreenUtil().setHeight(180),
-                          double.infinity,
-                          ScreenUtil().setHeight(10),
-                          listImg[4])),
-                  WidgetUtils.commonSizedBox(0, 10),
-                  Expanded(
-                      child: Opacity(
-                    opacity: 0,
-                    child: WidgetUtils.CircleImageNet(
-                        ScreenUtil().setHeight(180),
-                        double.infinity,
-                        ScreenUtil().setHeight(10),
-                        listImg[0]),
-                  )),
-                ],
-              )
-            ],
-          ),
-        ),
-      );
-    } else if (listImg.length == 6) {
-      return GestureDetector(
-        onTap: (() {
-          imgListUrl = listImg;
-          Navigator.of(context).push(PageRouteBuilder(
-              opaque: false,
-              pageBuilder: (context, animation, secondaryAnimation) {
-                return SwiperPage(imgList: imgListUrl);
-              }));
-        }),
-        child: SizedBox(
-          height: ScreenUtil().setHeight(370),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                      child: WidgetUtils.CircleImageNet(
-                          ScreenUtil().setHeight(180),
-                          double.infinity,
-                          ScreenUtil().setHeight(10),
-                          listImg[0])),
-                  WidgetUtils.commonSizedBox(0, 10),
-                  Expanded(
-                      child: WidgetUtils.CircleImageNet(
-                          ScreenUtil().setHeight(180),
-                          double.infinity,
-                          ScreenUtil().setHeight(10),
-                          listImg[1])),
-                  WidgetUtils.commonSizedBox(0, 10),
-                  Expanded(
-                      child: WidgetUtils.CircleImageNet(
-                          ScreenUtil().setHeight(180),
-                          double.infinity,
-                          ScreenUtil().setHeight(10),
-                          listImg[2])),
-                ],
-              ),
-              WidgetUtils.commonSizedBox(ScreenUtil().setHeight(10), 10),
-              Row(
-                children: [
-                  Expanded(
-                      child: WidgetUtils.CircleImageNet(
-                          ScreenUtil().setHeight(180),
-                          double.infinity,
-                          ScreenUtil().setHeight(10),
-                          listImg[3])),
-                  WidgetUtils.commonSizedBox(0, 10),
-                  Expanded(
-                      child: WidgetUtils.CircleImageNet(
-                          ScreenUtil().setHeight(180),
-                          double.infinity,
-                          ScreenUtil().setHeight(10),
-                          listImg[4])),
-                  WidgetUtils.commonSizedBox(0, 10),
-                  Expanded(
-                      child: WidgetUtils.CircleImageNet(
-                          ScreenUtil().setHeight(180),
-                          double.infinity,
-                          ScreenUtil().setHeight(10),
-                          listImg[5])),
-                ],
-              )
-            ],
-          ),
-        ),
-      );
-    } else {
-      return const Text('');
-    }
-  }
-
-  Widget waterCard(BuildContext context, int index){
-    return Container(
-      decoration: BoxDecoration(
-          border:Border.all(color:Colors.yellow,width:1),
-          color: Colors.white,
-      ),
-      child: Column(
-        children: [
-          WidgetUtils.CircleImageNetTop(350.h, 350.w, 30.h,'http://image.nbd.com.cn/uploads/articles/images/673466/500352700_banner.jpg'),
-          WidgetUtils.onlyText('可可爱爱。可可爱爱。可可爱爱。可可爱爱。', StyleUtils.getCommonTextStyle(color: MyColors.newHomeBlack, fontSize: 30.sp, fontWeight: FontWeight.w600)),
-          WidgetUtils.commonSizedBox(10.h, 0),
-          Row(
-            children: [
-              WidgetUtils.commonSizedBox(0, 10.w),
-              WidgetUtils.CircleHeadImage(
-                  25 * 2.w, 25 * 2.w, 'http://image.nbd.com.cn/uploads/articles/images/673466/500352700_banner.jpg'),
-              WidgetUtils.commonSizedBox(0, 10.w),
-              WidgetUtils.onlyText('昵称', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: 24.sp,)),
-              const Spacer(),
-              WidgetUtils.showImages('assets/images/dt_dianzan1.png', 56.h, 115.w),
-              WidgetUtils.commonSizedBox(0, 10.w),
-            ],
-          )
-        ],
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTapDown: ((details) {
-        final tapPosition = details.globalPosition;
-        setState(() {
-          x = tapPosition.dx;
-          y = tapPosition.dy;
-        });
-      }),
-      child: Stack(
-        children: [
-          Column(
-            children: [
-              WidgetUtils.commonSizedBox(20, 0),
-              Expanded(
-                child: SmartRefresher(
-                  header: MyUtils.myHeader(),
-                  footer: MyUtils.myFotter(),
-                  controller: _refreshController,
-                  enablePullUp: true,
-                  onLoading: _onLoading,
-                  onRefresh: _onRefresh,
-                  child: SingleChildScrollView(
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Transform.translate(
+        offset: Offset(0, -40.h),
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                Expanded(
+                  child: SmartRefresher(
+                    header: MyUtils.myHeader(),
+                    footer: MyUtils.myFotter(),
+                    controller: _refreshController,
+                    enablePullUp: true,
+                    onLoading: _onLoading,
+                    onRefresh: _onRefresh,
+                    child: SingleChildScrollView(
                       child: Container(
-                        padding: EdgeInsets.all(10),
+                        color: Colors.transparent,
+                        padding: const EdgeInsets.all(10),
                         child: MasonryGridView.count(
                           // 展示几列
                           crossAxisCount: 2,
                           // 元素总个数
-                          itemCount: 7,
+                          itemCount: _list.length,
                           // 单个子元素
                           itemBuilder: waterCard,
                           // 纵向元素间距
-                          mainAxisSpacing: 10,
+                          mainAxisSpacing: 15.h,
                           // 横向元素间距
                           crossAxisSpacing: 10,
                           //本身不滚动，让外面的singlescrollview来滚动
@@ -756,20 +204,21 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
                           shrinkWrap: true, //收缩，让元素宽度自适应
                         ),
                       ),
+                    ),
                   ),
-                ),
-              )
-            ],
-          ),
-          // ///点赞显示样式
-          // isShow ? Positioned(
-          //   left: x-ScreenUtil().setHeight(50),
-          //   top: y-ScreenUtil().setHeight(175),
-          //   height: ScreenUtil().setHeight(100),
-          //   width: ScreenUtil().setHeight(100),
-          //   child: SVGAImage(animationController!),
-          // ) : const Text('')
-        ],
+                )
+              ],
+            ),
+            // ///点赞显示样式
+            // isShow ? Positioned(
+            //   left: x-ScreenUtil().setHeight(50),
+            //   top: y-ScreenUtil().setHeight(175),
+            //   height: ScreenUtil().setHeight(100),
+            //   width: ScreenUtil().setHeight(100),
+            //   child: SVGAImage(animationController!),
+            // ) : const Text('')
+          ],
+        ),
       ),
     );
   }

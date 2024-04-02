@@ -56,6 +56,9 @@ class AnchorList {
   int? age;
   int? live;
   int? roomId;
+  String? voiceCardUrl;
+  String? constellation;
+  String? label;
 
   AnchorList(
       {this.uid,
@@ -67,7 +70,10 @@ class AnchorList {
         this.level,
         this.age,
         this.live,
-        this.roomId});
+        this.roomId,
+        this.voiceCardUrl,
+        this.constellation,
+        this.label});
 
   AnchorList.fromJson(Map<String, dynamic> json) {
     uid = json['uid'];
@@ -80,6 +86,9 @@ class AnchorList {
     age = json['age'];
     live = json['live'];
     roomId = json['room_id'];
+    voiceCardUrl = json['voice_card_url'];
+    constellation = json['constellation'];
+    label = json['label'];
   }
 
   Map<String, dynamic> toJson() {
@@ -94,6 +103,9 @@ class AnchorList {
     data['age'] = this.age;
     data['live'] = this.live;
     data['room_id'] = this.roomId;
+    data['voice_card_url'] = this.voiceCardUrl;
+    data['constellation'] = this.constellation;
+    data['label'] = this.label;
     return data;
   }
 }

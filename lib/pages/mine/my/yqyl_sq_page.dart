@@ -298,7 +298,7 @@ class _YQYLSQPageState extends State<YQYLSQPage> {
                           MyUtils.goTransparentRFPage(
                               context,
                               ChatPage(
-                                nickName: '维C客服',
+                                nickName: '小柴客服',
                                 otherUid: widget.kefuUid,
                                 otherImg: widget.kefUavatar,
                               ));

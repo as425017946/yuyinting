@@ -99,7 +99,7 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
                             //     ScreenUtil().setHeight(31),
                             //     ScreenUtil().setHeight(29)),
                             const Expanded(child: Text('')),
-                            listMessage[i]['nickName'].toString() == '维C客服'
+                            listMessage[i]['nickName'].toString() == '小柴客服'
                                 ? Text(
                                     '官方客服',
                                     style: StyleUtils.getCommonTextStyle(

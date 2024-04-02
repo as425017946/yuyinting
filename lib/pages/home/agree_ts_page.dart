@@ -44,7 +44,7 @@ class _AgreeTSPageState extends State<AgreeTSPage> {
                         fontWeight: FontWeight.w600)),
                 WidgetUtils.commonSizedBox(15.h, 0),
                 WidgetUtils.onlyText(
-                    '感谢你选择维C语音!我们非常重视你的个人信息和隐私保护:',
+                    '感谢你选择小柴派对!我们非常重视你的个人信息和隐私保护:',
                     StyleUtils.getCommonTextStyle(
                         color: MyColors.g6, fontSize: 25.sp)),
                 WidgetUtils.commonSizedBox(15.h, 0),

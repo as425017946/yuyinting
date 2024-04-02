@@ -275,15 +275,15 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
                           GestureDetector(
                             onTap: (() {
                               if(MyUtils.checkClick()) {
-                                doPostSendDT();
                                 MyUtils.hideKeyboard(context);
+                                doPostSendDT();
                               }
                             }),
                             child: WidgetUtils.myContainer(
                                 ScreenUtil().setHeight(55),
                                 ScreenUtil().setWidth(120),
-                                MyColors.zhouBangBg,
-                                MyColors.zhouBangBg,
+                                MyColors.newLoginblue2,
+                                MyColors.newLoginblue2,
                                 '发布',
                                 ScreenUtil().setSp(30),
                                 Colors.white),

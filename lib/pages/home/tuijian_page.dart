@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:sqflite/sqflite.dart';
@@ -23,6 +22,9 @@ import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../gongping/gp_quanxian_page.dart';
+import '../gongping/gp_room_page.dart';
+import '../message/geren/people_info_page.dart';
+import '../mine/my/my_info_page.dart';
 import '../room/room_page.dart';
 import '../room/room_ts_mima_page.dart';
 
@@ -91,7 +93,8 @@ class _TuijianPageState extends State<TuijianPage>
     doPostPushStreamer();
     _refreshController.loadComplete();
   }
-
+  // 显示推荐房间弹窗次数是否刷新
+  int tjRoom = 0;
   var listen;
   @override
   void initState() {
@@ -131,26 +134,30 @@ class _TuijianPageState extends State<TuijianPage>
 
   // 推荐主播
   Widget tuijian(context, i) {
+    List<String> biaoqian = [];
+    if(listAnchor[i].label!.contains(',')){
+      biaoqian = listAnchor[i].label!.split(',');
+    }
     return Column(
       children: [
         WidgetUtils.commonSizedBox(10.h, 0),
         GestureDetector(
           onTap: (() {
-            // if (MyUtils.checkClick()) {
-            //   // 如果点击的是自己，进入自己的主页
-            //   if (sp.getString('user_id').toString() ==
-            //       listAnchor[i].uid.toString()) {
-            //     MyUtils.goTransparentRFPage(context, const MyInfoPage());
-            //   } else {
-            //     sp.setString('other_id', listAnchor[i].uid.toString());
-            //     MyUtils.goTransparentRFPage(
-            //         context,
-            //         PeopleInfoPage(
-            //           otherId: listAnchor[i].uid.toString(),
-            //           title: '其他',
-            //         ));
-            //   }
-            // }
+            if (MyUtils.checkClick()) {
+              // 如果点击的是自己，进入自己的主页
+              if (sp.getString('user_id').toString() ==
+                  listAnchor[i].uid.toString()) {
+                MyUtils.goTransparentRFPage(context, const MyInfoPage());
+              } else {
+                sp.setString('other_id', listAnchor[i].uid.toString());
+                MyUtils.goTransparentRFPage(
+                    context,
+                    PeopleInfoPage(
+                      otherId: listAnchor[i].uid.toString(),
+                      title: '其他',
+                    ));
+              }
+            }
           }),
           child: Container(
             width: double.infinity,
@@ -170,7 +177,7 @@ class _TuijianPageState extends State<TuijianPage>
                 Row(
                   children: [
                     WidgetUtils.CircleHeadImage(
-                        (110 * 1.3).w, (110 * 1.3).w, 'http://image.nbd.com.cn/uploads/articles/images/673466/500352700_banner.jpg'),
+                        (110 * 1.3).w, (110 * 1.3).w, listAnchor[i].avatar!),
                     Expanded(
                       child: Container(
                         height: 110.h,
@@ -181,7 +188,7 @@ class _TuijianPageState extends State<TuijianPage>
                             Row(
                               children: [
                                 WidgetUtils.commonSizedBox(0, 30.w),
-                                WidgetUtils.onlyText('名称', StyleUtils.getCommonTextStyle( color: MyColors.newHomeBlack, fontSize: 30.sp, fontWeight: FontWeight.w600)),
+                                WidgetUtils.onlyText(listAnchor[i].nickname!, StyleUtils.getCommonTextStyle( color: MyColors.newHomeBlack, fontSize: 30.sp, fontWeight: FontWeight.w600)),
                                 const Spacer(),
                                 WidgetUtils.showImages('assets/images/tj_zaixian.png', 30.h, 70.w),
                                 WidgetUtils.commonSizedBox(0, 20.w),
@@ -191,18 +198,18 @@ class _TuijianPageState extends State<TuijianPage>
                             Row(
                               children: [
                                 WidgetUtils.commonSizedBox(0, 30.w),
-                                WidgetUtils.onlyText('女', StyleUtils.getCommonTextStyle( color: MyColors.g9, fontSize: 24.sp)),
+                                WidgetUtils.onlyText(listAnchor[i].gender == 0 ? '未知' : listAnchor[i].gender == 1 ? "男" : '女', StyleUtils.getCommonTextStyle( color: MyColors.g9, fontSize: 24.sp)),
                                 WidgetUtils.commonSizedBox(0, 10.w),
-                                WidgetUtils.onlyText('20岁', StyleUtils.getCommonTextStyle( color: MyColors.g9, fontSize: 24.sp)),
+                                WidgetUtils.onlyText('${listAnchor[i].age}岁', StyleUtils.getCommonTextStyle( color: MyColors.g9, fontSize: 24.sp)),
                                 WidgetUtils.commonSizedBox(0, 10.w),
-                                WidgetUtils.onlyText('水瓶座', StyleUtils.getCommonTextStyle( color: MyColors.g9, fontSize: 24.sp)),
+                                WidgetUtils.onlyText(listAnchor[i].constellation!, StyleUtils.getCommonTextStyle( color: MyColors.g9, fontSize: 24.sp)),
                               ],
                             ),
                             const Spacer(),
                             Row(
                               children: [
                                 WidgetUtils.commonSizedBox(0, 30.w),
-                                Container(
+                                biaoqian.isNotEmpty ? Container(
                                   padding: EdgeInsets.only(left: 10.w,right: 10.w,top: 8.h,bottom: 8.h),
                                   //边框设置
                                   decoration: const BoxDecoration(
@@ -212,10 +219,10 @@ class _TuijianPageState extends State<TuijianPage>
                                     borderRadius: BorderRadius.all(
                                         Radius.circular(20.0)),
                                   ),
-                                  child: WidgetUtils.onlyTextCenter('个性标签', StyleUtils.getCommonTextStyle( color: MyColors.newHomeBlack, fontSize: 19.sp)),
-                                ),
-                                WidgetUtils.commonSizedBox(0, 10.w),
-                                Container(
+                                  child: WidgetUtils.onlyTextCenter(biaoqian[0], StyleUtils.getCommonTextStyle( color: MyColors.newHomeBlack, fontSize: 19.sp)),
+                                ) : const Text(''),
+                                biaoqian.isNotEmpty ? WidgetUtils.commonSizedBox(0, 10.w) : const Text(''),
+                                biaoqian.length > 1 ? Container(
                                   padding: EdgeInsets.only(left: 10.w,right: 10.w,top: 8.h,bottom: 8.h),
                                   //边框设置
                                   decoration: const BoxDecoration(
@@ -225,10 +232,10 @@ class _TuijianPageState extends State<TuijianPage>
                                     borderRadius: BorderRadius.all(
                                         Radius.circular(20.0)),
                                   ),
-                                  child: WidgetUtils.onlyTextCenter('个性标签', StyleUtils.getCommonTextStyle( color: MyColors.newHomeBlack, fontSize: 19.sp)),
-                                ),
-                                WidgetUtils.commonSizedBox(0, 10.w),
-                                Container(
+                                  child: WidgetUtils.onlyTextCenter(biaoqian[1], StyleUtils.getCommonTextStyle( color: MyColors.newHomeBlack, fontSize: 19.sp)),
+                                ) : const Text(''),
+                                biaoqian.length > 1 ? WidgetUtils.commonSizedBox(0, 10.w) : const Text(''),
+                                biaoqian.length > 2 ? Container(
                                   padding: EdgeInsets.only(left: 10.w,right: 10.w,top: 8.h,bottom: 8.h),
                                   //边框设置
                                   decoration: const BoxDecoration(
@@ -238,8 +245,8 @@ class _TuijianPageState extends State<TuijianPage>
                                     borderRadius: BorderRadius.all(
                                         Radius.circular(20.0)),
                                   ),
-                                  child: WidgetUtils.onlyTextCenter('个性标签', StyleUtils.getCommonTextStyle( color: MyColors.newHomeBlack, fontSize: 19.sp)),
-                                ),
+                                  child: WidgetUtils.onlyTextCenter(biaoqian[2], StyleUtils.getCommonTextStyle( color: MyColors.newHomeBlack, fontSize: 19.sp)),
+                                ) : const Text(''),
                               ],
                             )
                           ],
@@ -254,16 +261,16 @@ class _TuijianPageState extends State<TuijianPage>
                   width: double.infinity,
                   padding: EdgeInsets.only(left: 30.w,right: 10.w,top: 8.h,bottom: 8.h),
                   //边框设置
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     //背景
-                    color: Colors.white,
+                    color: listAnchor[i].description!.isEmpty ? Colors.transparent : Colors.white,
                     //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                    borderRadius: BorderRadius.all(
+                    borderRadius: const BorderRadius.all(
                         Radius.circular(20.0)),
                   ),
                   child: Row(
                     children: [
-                      WidgetUtils.onlyText('个性标签', StyleUtils.getCommonTextStyle( color: MyColors.newHomeBlack, fontSize: 24.sp)),
+                      WidgetUtils.onlyText(listAnchor[i].description!.length > 15 ? listAnchor[i].description!.substring(0,15) : listAnchor[i].description!, StyleUtils.getCommonTextStyle( color: MyColors.newHomeBlack, fontSize: 24.sp)),
                       const Spacer(),
                       WidgetUtils.showImages('assets/images/tj_zhaota.png', 55.h, 140.w),
                     ],
@@ -405,7 +412,7 @@ class _TuijianPageState extends State<TuijianPage>
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: tuijian,
-                    itemCount: 8,
+                    itemCount: listAnchor.length,
                   ),
                   WidgetUtils.commonSizedBox(20, 0),
                 ],
@@ -826,7 +833,7 @@ class _TuijianPageState extends State<TuijianPage>
   /// 加入房间前
   Future<void> doPostBeforeJoin(roomID, String anchorUid) async {
     //判断房间id是否为空的
-    if (sp.getString('roomID') == null || sp.getString('').toString().isEmpty) {
+    if (roomID == null || roomID.isEmpty) {
       return;
     } else {
       // 不是空的，并且不是之前进入的房间
@@ -931,7 +938,13 @@ class _TuijianPageState extends State<TuijianPage>
             list.clear();
             if (bean.data!.isNotEmpty) {
               list = bean.data!;
+              if (tjRoom== 0) {
+                tjRoom++;
+                // 推荐房间
+                MyUtils.goTransparentPageCom(context, GPRoomPage(roomID: bean.data![0].id.toString(), roomUrl: bean.data![0].coverImg!, roomName: bean.data![0].roomName!,));
+              }
             }
+
           });
           break;
         case MyHttpConfig.errorloginCode:

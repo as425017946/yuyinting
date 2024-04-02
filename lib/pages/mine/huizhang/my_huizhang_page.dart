@@ -372,7 +372,7 @@ class _MyHuiZhangPageState extends State<MyHuiZhangPage> {
                         MyUtils.goTransparentRFPage(
                             context,
                             ChatPage(
-                              nickName: '维C客服',
+                              nickName: '小柴客服',
                               otherUid: kefuUid,
                               otherImg: kefUavatar,
                             ));

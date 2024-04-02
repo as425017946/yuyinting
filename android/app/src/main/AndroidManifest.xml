@@ -27,7 +27,7 @@
     <!--    获取包名-->
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
     <application
-        android:label="维C语音"
+        android:label="小柴派对"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true"

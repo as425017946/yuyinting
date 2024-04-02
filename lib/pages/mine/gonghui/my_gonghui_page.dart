@@ -395,7 +395,7 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                               MyUtils.goTransparentRFPage(
                                   context,
                                   ChatPage(
-                                    nickName: '维C客服',
+                                    nickName: '小柴客服',
                                     otherUid: kefuUid,
                                     otherImg: kefUavatar,
                                   ));

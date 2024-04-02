@@ -26,6 +26,7 @@ import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
 import '../../../utils/regex_formatter.dart';
 import '../../../utils/widget_utils.dart';
+import 'edit_biaoqian_page.dart';
 import 'edit_head_page.dart';
 
 ///个人资料编辑页面
@@ -653,65 +654,65 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                 ),
                 WidgetUtils.myLine(thickness: 10),
 
-                /// 我的标签
-                // GestureDetector(
-                //   onTap: (() {
-                //     if (MyUtils.checkClick()) {
-                //       Future.delayed(const Duration(seconds: 0), () {
-                //         Navigator.of(context).push(PageRouteBuilder(
-                //             opaque: false,
-                //             pageBuilder: (context, animation, secondaryAnimation) {
-                //               return const EditBiaoqianPage();
-                //             }));
-                //       });
-                //     }
-                //   }),
-                //   child: Container(
-                //     constraints: BoxConstraints(
-                //       minHeight: ScreenUtil().setHeight(120),
-                //     ),
-                //     alignment: Alignment.center,
-                //     padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
-                //     child: Column(
-                //       children: [
-                //         WidgetUtils.commonSizedBox(10, 0),
-                //         Row(
-                //           children: [
-                //             WidgetUtils.onlyText(
-                //                 '我的标签',
-                //                 StyleUtils.getCommonTextStyle(
-                //                     color: Colors.black,
-                //                     fontSize: ScreenUtil().setSp(28),
-                //                     fontWeight: FontWeight.w600)),
-                //             const Expanded(child: Text('')),
-                //             WidgetUtils.showImages(
-                //                 'assets/images/mine_more2.png',
-                //                 ScreenUtil().setHeight(27),
-                //                 ScreenUtil().setHeight(16))
-                //           ],
-                //         ),
-                //         WidgetUtils.commonSizedBox(10, 0),
-                //         Container(
-                //           alignment: Alignment.centerLeft,
-                //           child: Wrap(
-                //             alignment: WrapAlignment.start,
-                //             spacing: ScreenUtil().setHeight(15),
-                //             runSpacing: ScreenUtil().setHeight(15),
-                //             children: List.generate(
-                //                 list_label.length,
-                //                 (index) => WidgetUtils.myContainerZishiying(
-                //                     MyColors.careBlue,
-                //                     list_label[index],
-                //                     StyleUtils.getCommonTextStyle(
-                //                         color: Colors.white,
-                //                         fontSize: ScreenUtil().setSp(26)))),
-                //           ),
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // ),
-                // WidgetUtils.myLine(thickness: 10),
+                // 我的标签
+                GestureDetector(
+                  onTap: (() {
+                    if (MyUtils.checkClick()) {
+                      Future.delayed(const Duration(seconds: 0), () {
+                        Navigator.of(context).push(PageRouteBuilder(
+                            opaque: false,
+                            pageBuilder: (context, animation, secondaryAnimation) {
+                              return const EditBiaoqianPage();
+                            }));
+                      });
+                    }
+                  }),
+                  child: Container(
+                    constraints: BoxConstraints(
+                      minHeight: ScreenUtil().setHeight(120),
+                    ),
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                    child: Column(
+                      children: [
+                        WidgetUtils.commonSizedBox(10, 0),
+                        Row(
+                          children: [
+                            WidgetUtils.onlyText(
+                                '我的标签',
+                                StyleUtils.getCommonTextStyle(
+                                    color: Colors.black,
+                                    fontSize: ScreenUtil().setSp(28),
+                                    fontWeight: FontWeight.w600)),
+                            const Expanded(child: Text('')),
+                            WidgetUtils.showImages(
+                                'assets/images/mine_more2.png',
+                                ScreenUtil().setHeight(27),
+                                ScreenUtil().setHeight(16))
+                          ],
+                        ),
+                        WidgetUtils.commonSizedBox(10, 0),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          child: Wrap(
+                            alignment: WrapAlignment.start,
+                            spacing: ScreenUtil().setHeight(15),
+                            runSpacing: ScreenUtil().setHeight(15),
+                            children: List.generate(
+                                list_label.length,
+                                (index) => WidgetUtils.myContainerZishiying(
+                                    MyColors.newLoginblue2,
+                                    list_label[index],
+                                    StyleUtils.getCommonTextStyle(
+                                        color: Colors.white,
+                                        fontSize: ScreenUtil().setSp(26)))),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                WidgetUtils.myLine(thickness: 10),
 
                 /// 照片墙
                 Container(
@@ -975,7 +976,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
       return;
     }
 
-    if (controller.text.trim().toString().contains('维C客服')) {
+    if (controller.text.trim().toString().contains('小柴客服')) {
       MyToastUtils.showToastBottom('昵称不合法');
       return;
     }

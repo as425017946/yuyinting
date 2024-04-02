@@ -17,7 +17,6 @@ import '../../http/my_http_config.dart';
 import '../../main.dart';
 import '../../utils/custom_dialog.dart';
 import '../../utils/line_painter2.dart';
-import '../../utils/loading.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
@@ -32,7 +31,10 @@ class MessagePage extends StatefulWidget {
   State<MessagePage> createState() => _MessagePageState();
 }
 
-class _MessagePageState extends State<MessagePage> {
+class _MessagePageState extends State<MessagePage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
   List<ListXT> list = [];
   List<Map<String, dynamic>> listMessage = [];
   List<int> listRead = [];
@@ -187,7 +189,7 @@ class _MessagePageState extends State<MessagePage> {
                                   fontSize: ScreenUtil().setSp(32)),
                             ),
                             const Expanded(child: Text('')),
-                            listMessage[i]['nickName'].toString() == '维C客服'
+                            listMessage[i]['nickName'].toString() == '小柴客服'
                                 ? Text(
                                     '官方客服',
                                     style: StyleUtils.getCommonTextStyle(
@@ -305,129 +307,141 @@ class _MessagePageState extends State<MessagePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        body: Column(
-          children: [
-            WidgetUtils.commonSizedBox(isDevices == 'ios' ? 80.h : 60.h, 0),
-
-            ///头部信息
-            Container(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              height: ScreenUtil().setHeight(60),
-              width: double.infinity,
-              alignment: Alignment.bottomLeft,
-              child: Row(
-                children: [
-                  WidgetUtils.onlyTextBottom(
-                      '消息',
-                      StyleUtils.getCommonTextStyle(
-                          color: Colors.black,
-                          fontSize: ScreenUtil().setSp(46),
-                          fontWeight: FontWeight.w600)),
-                  const Expanded(child: Text('')),
-                  GestureDetector(
-                    onTap: (() {
-                      exitLogin(context);
-                    }),
-                    child: Container(
-                      height: 50.h,
-                      width: 50.h,
-                      color: Colors.transparent,
-                      alignment: Alignment.centerRight,
-                      child: WidgetUtils.showImages(
-                          'assets/images/messages_yidu.png',
-                          ScreenUtil().setHeight(30),
-                          ScreenUtil().setHeight(30)),
-                    ),
-                  )
-                ],
-              ),
+        backgroundColor: Colors.transparent,
+        body: Container(
+          height: double.infinity,
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            //设置Container修饰
+            image: DecorationImage(
+              //背景图片修饰
+              image: AssetImage("assets/images/all_bg.png"),
+              fit: BoxFit.fill, //覆盖
             ),
-            WidgetUtils.commonSizedBox(35, 0),
+          ),
+          child: Column(
+            children: [
+              WidgetUtils.commonSizedBox(isDevices == 'ios' ? 80.h : 60.h, 0),
 
-            /// 系统消息
-            GestureDetector(
-              onTap: (() {
-                MyUtils.goTransparentRFPage(context, const XitongMorePage());
-              }),
-              child: Container(
-                height: ScreenUtil().setHeight(130),
-                width: double.infinity,
+              ///头部信息
+              Container(
                 padding: const EdgeInsets.only(left: 20, right: 20),
+                height: ScreenUtil().setHeight(60),
+                width: double.infinity,
+                alignment: Alignment.bottomLeft,
                 child: Row(
                   children: [
-                    Stack(
-                      alignment: Alignment.topRight,
-                      children: [
-                        WidgetUtils.showImages(
-                            'assets/images/message_xt.webp',
-                            ScreenUtil().setHeight(100),
-                            ScreenUtil().setHeight(100)),
-                        unRead > 0
-                            ? Positioned(
-                                top: ScreenUtil().setHeight(10),
-                                right: ScreenUtil().setHeight(20),
-                                child: CustomPaint(
-                                  painter: LinePainter2(colors: Colors.red),
-                                ))
-                            : const Text('')
-                      ],
-                    ),
-                    WidgetUtils.commonSizedBox(0, 10),
-                    Expanded(
-                      child: Column(
-                        children: [
-                          const Expanded(child: Text('')),
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            width: double.infinity,
-                            child: Row(
-                              children: [
-                                Text(
-                                  '系统消息',
-                                  style: StyleUtils.getCommonTextStyle(
-                                      color: Colors.black,
-                                      fontSize: ScreenUtil().setSp(32)),
-                                ),
-                                const Expanded(child: Text('')),
-                                Text(
-                                  time,
-                                  style: StyleUtils.getCommonTextStyle(
-                                      color: MyColors.g9,
-                                      fontSize: ScreenUtil().setSp(25)),
-                                ),
-                              ],
-                            ),
-                          ),
-                          WidgetUtils.commonSizedBox(10.h, 0),
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            width: double.infinity,
-                            child: Text(
-                              info,
-                              style: StyleUtils.getCommonTextStyle(
-                                  color: MyColors.g9,
-                                  fontSize: ScreenUtil().setSp(25)),
-                            ),
-                          ),
-                          const Expanded(child: Text('')),
-                        ],
+                    WidgetUtils.onlyTextBottom(
+                        '消息',
+                        StyleUtils.getCommonTextStyle(
+                            color: Colors.black,
+                            fontSize: ScreenUtil().setSp(46),
+                            fontWeight: FontWeight.w600)),
+                    const Expanded(child: Text('')),
+                    GestureDetector(
+                      onTap: (() {
+                        exitLogin(context);
+                      }),
+                      child: Container(
+                        height: 50.h,
+                        width: 50.h,
+                        color: Colors.transparent,
+                        alignment: Alignment.centerRight,
+                        child: WidgetUtils.showImages(
+                            'assets/images/messages_yidu.png',
+                            ScreenUtil().setHeight(30),
+                            ScreenUtil().setHeight(30)),
                       ),
                     )
                   ],
                 ),
               ),
-            ),
-            (listMessage.isNotEmpty && listU.isNotEmpty)
-                ? Expanded(
-                    child: ListView.builder(
-                      padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
-                      itemBuilder: message,
-                      itemCount: listMessage.length,
-                    ),
-                  )
-                : const Text('')
-          ],
+              WidgetUtils.commonSizedBox(35, 0),
+
+              /// 系统消息
+              GestureDetector(
+                onTap: (() {
+                  MyUtils.goTransparentRFPage(context, const XitongMorePage());
+                }),
+                child: Container(
+                  height: ScreenUtil().setHeight(130),
+                  width: double.infinity,
+                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  child: Row(
+                    children: [
+                      Stack(
+                        alignment: Alignment.topRight,
+                        children: [
+                          WidgetUtils.showImages(
+                              'assets/images/message_xt.png',
+                              ScreenUtil().setHeight(100),
+                              ScreenUtil().setHeight(100)),
+                          unRead > 0
+                              ? Positioned(
+                                  top: ScreenUtil().setHeight(10),
+                                  right: ScreenUtil().setHeight(20),
+                                  child: CustomPaint(
+                                    painter: LinePainter2(colors: Colors.red),
+                                  ))
+                              : const Text('')
+                        ],
+                      ),
+                      WidgetUtils.commonSizedBox(0, 10),
+                      Expanded(
+                        child: Column(
+                          children: [
+                            const Expanded(child: Text('')),
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              width: double.infinity,
+                              child: Row(
+                                children: [
+                                  Text(
+                                    '系统消息',
+                                    style: StyleUtils.getCommonTextStyle(
+                                        color: Colors.black,
+                                        fontSize: ScreenUtil().setSp(32)),
+                                  ),
+                                  const Expanded(child: Text('')),
+                                  Text(
+                                    time,
+                                    style: StyleUtils.getCommonTextStyle(
+                                        color: MyColors.g9,
+                                        fontSize: ScreenUtil().setSp(25)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            WidgetUtils.commonSizedBox(10.h, 0),
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              width: double.infinity,
+                              child: Text(
+                                info,
+                                style: StyleUtils.getCommonTextStyle(
+                                    color: MyColors.g9,
+                                    fontSize: ScreenUtil().setSp(25)),
+                              ),
+                            ),
+                            const Expanded(child: Text('')),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              (listMessage.isNotEmpty && listU.isNotEmpty)
+                  ? Expanded(
+                      child: ListView.builder(
+                        padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
+                        itemBuilder: message,
+                        itemCount: listMessage.length,
+                      ),
+                    )
+                  : const Text('')
+            ],
+          ),
         ));
   }
 
@@ -506,7 +520,6 @@ class _MessagePageState extends State<MessagePage> {
   Future<void> doPostSystemMsgList() async {
     DatabaseHelper databaseHelper = DatabaseHelper();
     Database? db = await databaseHelper.database;
-    // Loading.show();
     try {
       xtListBean bean = await DataUtils.postSystemMsgList();
       switch (bean.code) {
@@ -589,51 +602,50 @@ class _MessagePageState extends State<MessagePage> {
       List<Map<String, dynamic>> result2 = await db.rawQuery(query, args);
       LogE('长度== ${result2}');
       String myIds = '';
-      setState(() {
-        listMessage = result2;
-        listRead.clear();
+      if(result2 != listMessage){
+        setState(() {
+          listMessage = result2;
+          listRead.clear();
+          for (int i = 0; i < listMessage.length; i++) {
+            listRead.add(0);
+            if (myIds.isNotEmpty) {
+              myIds = '$myIds,${listMessage[i]['otherUid'].toString()}';
+            } else {
+              myIds = listMessage[i]['otherUid'].toString();
+            }
+          }
+        });
         for (int i = 0; i < listMessage.length; i++) {
-          listRead.add(0);
-          if (myIds.isNotEmpty) {
-            myIds = '$myIds,${listMessage[i]['otherUid'].toString()}';
+          // 更新头像和昵称
+          await db.update(
+              'messageSLTable',
+              {
+                'otherHeadNetImg': listMessage[i]['otherHeadNetImg'],
+                'nickName': listMessage[i]['nickName']
+              },
+              whereArgs: [listMessage[i]['combineID']],
+              where: 'combineID = ?');
+          String query =
+              "SELECT * FROM messageSLTable WHERE  combineID = '${listMessage[i]['combineID']}' and readStatus = 0  and uid = ${sp.getString('user_id')} ";
+          List<Map<String, dynamic>> result3 = await db.rawQuery(query);
+          if (result3.isNotEmpty) {
+            setState(() {
+              listRead[i] = result3.length;
+              LogE('结果==${listRead.length}');
+            });
           } else {
-            myIds = listMessage[i]['otherUid'].toString();
+            setState(() {
+              listRead[i] = 0;
+            });
           }
         }
-      });
-      for (int i = 0; i < listMessage.length; i++) {
-        // 更新头像和昵称
-        await db.update(
-            'messageSLTable',
-            {
-              'otherHeadNetImg': listMessage[i]['otherHeadNetImg'],
-              'nickName': listMessage[i]['nickName']
-            },
-            whereArgs: [listMessage[i]['combineID']],
-            where: 'combineID = ?');
-        String query =
-            "SELECT * FROM messageSLTable WHERE  combineID = '${listMessage[i]['combineID']}' and readStatus = 0  and uid = ${sp.getString('user_id')} ";
-        List<Map<String, dynamic>> result3 = await db.rawQuery(query);
-        if (result3.isNotEmpty) {
-          setState(() {
-            listRead[i] = result3.length;
-            LogE('结果==${listRead.length}');
-          });
-        } else {
-          setState(() {
-            listRead[i] = 0;
-          });
+        if (myIds.isNotEmpty) {
+          //调用接口
+          doPostSendUserMsg(myIds);
         }
       }
-      if (myIds.isNotEmpty) {
-        //调用接口
-        doPostSendUserMsg(myIds);
-      }
-      Loading.dismiss();
     } catch (e) {
       LogE('错误信息$e');
-      Loading.dismiss();
-      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -651,10 +663,6 @@ class _MessagePageState extends State<MessagePage> {
             listU.clear();
             if (bean.data!.isNotEmpty) {
               listU = bean.data!;
-              // for (int i = 0; i < bean.data!.length; i++) {
-              //   listMessage[i]['liveStatus'] = bean.data![i].liveStatus;
-              //   listMessage[i]['loginStatus'] = bean.data![i].loginStatus;
-              // }
             }
           });
           break;

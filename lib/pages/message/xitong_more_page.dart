@@ -51,7 +51,7 @@ class _XitongMorePageState extends State<XitongMorePage> {
                       color: MyColors.g9, fontSize: ScreenUtil().setSp(25))),
               Row(
                 children: [
-                  WidgetUtils.showImages('assets/images/message_xt.webp',
+                  WidgetUtils.showImages('assets/images/message_xt.png',
                       ScreenUtil().setHeight(80), ScreenUtil().setHeight(80)),
                   WidgetUtils.commonSizedBox(0, 10),
                   WidgetUtils.onlyTextCenter(
@@ -190,7 +190,7 @@ class _XitongMorePageState extends State<XitongMorePage> {
                       color: MyColors.g9, fontSize: ScreenUtil().setSp(25))),
               Row(
                 children: [
-                  WidgetUtils.showImages('assets/images/message_xt.webp',
+                  WidgetUtils.showImages('assets/images/message_xt.png',
                       ScreenUtil().setHeight(80), ScreenUtil().setHeight(80)),
                   WidgetUtils.commonSizedBox(0, 10),
                   WidgetUtils.onlyTextCenter(

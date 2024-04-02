@@ -169,10 +169,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                         onTap: (() {
                           doPostFollow();
                         }),
-                        child: WidgetUtils.PeopleButton(
-                            'assets/images/people_jia.png',
-                            isFollow == '0' ? '加关注' : '取消关注',
-                            MyColors.peopleYellow)),
+                        child: WidgetUtils.showImagesFill(  isFollow == '0' ? 'assets/images/zy_guanzhu1.png' : 'assets/images/zy_guanzhu2.png', 80.h, 300.w)),
                     const Expanded(child: Text('')),
                     GestureDetector(
                       onTap: (() {
@@ -181,10 +178,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                           doPostCanSendUser();
                         }
                       }),
-                      child: WidgetUtils.PeopleButton(
-                          'assets/images/people_sixin.png',
-                          '私信',
-                          MyColors.peopleBlue2),
+                      child: WidgetUtils.showImagesFill('assets/images/zy_chat.png',  80.h, 300.w)
                     ),
                     const Expanded(child: Text('')),
                   ],

@@ -49,8 +49,8 @@ class Tab_Navigator extends StatefulWidget {
 
 class _Tab_NavigatorState extends State<Tab_Navigator>
     with TickerProviderStateMixin {
-  final _defaultColor = MyColors.btn_d;
-  final _activetColor = MyColors.btn_a;
+  // final _defaultColor = MyColors.btn_d;
+  // final _activetColor = MyColors.btn_a;
   int _currentIndex = 0;
 
   //定义个变量，检测两次点击返回键的时间，如果在1秒内点击两次就退出
@@ -216,6 +216,9 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         }
         saveChatInfo(event.map!, '9', cb.fromNickname!,
             '${cb.fromNickname};向;${cb.toNickname};赠送了;$info');
+      } else if (event.map!['type'] == 'clean_charm' && sp.getString('sqRoomID').toString() == event.map!['room_id'].toString()) {
+        // 防止用户被顶号时没有清空表
+        deleteChatInfo();
       }
     });
     // 收起房间使用
@@ -736,6 +739,8 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
             bottomNavigationBar: BottomNavigationBar(
                 selectedFontSize: 12,
                 unselectedFontSize: 12,
+                selectedItemColor: MyColors.newHomeBlack2,
+                unselectedItemColor: MyColors.newHomeBlack2,
                 currentIndex: _currentIndex,
                 onTap: (index) {
                   _controller.jumpToPage(index);
@@ -761,7 +766,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
 
           isRed
               ? Positioned(
-                  bottom: (isDevices == 'ios' ? 110 : 70) * 1.3 / 2,
+                  bottom: (isDevices == 'ios' ? 105 : 65) * 1.3 / 2,
                   right: 295.w,
                   child: Container(
                     width: 15 * 1.3 / 2,

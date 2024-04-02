@@ -9,7 +9,6 @@ import '../../bean/roomInfoBean.dart';
 import '../../colors/my_colors.dart';
 import '../../main.dart';
 import '../../utils/event_utils.dart';
-import '../../utils/log_util.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../../widget/Marquee.dart';
