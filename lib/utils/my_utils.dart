@@ -322,7 +322,7 @@ class MyUtils {
           // headerBody = WidgetUtils.showImagesFill('assets/images/a1.gif',
           // ScreenUtil().setHeight(100), ScreenUtil().setHeight(100));
           headerBody =
-              WidgetUtils.showImagesFill('assets/images/a1.gif', 50, 50);
+              WidgetUtils.showImagesFill('assets/images/cy/GO.gif', 50, 50);
         } else if (mode == RefreshStatus.failed) {
           headerBody = const Text('刷新失败');
         } else if (mode == RefreshStatus.completed) {
