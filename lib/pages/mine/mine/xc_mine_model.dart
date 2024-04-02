@@ -122,9 +122,9 @@ class XCMineController extends GetxController {
     }
   }
 
-  void onSwitch(bool value, BuildContext context) {
-    switchValue.value = value;
-    doPostSetDisturb(value ? '1' : '0', context);
+  void onSwitch(BuildContext context) {
+    switchValue.value = !switchValue.value;
+    doPostSetDisturb(switchValue.value ? '1' : '0', context);
   }
   /// 勿扰模式
   Future<void> doPostSetDisturb(String isDisturb, BuildContext context) async {

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,7 +20,6 @@ import '../gonghui/gonghui_home_page.dart';
 import '../gonghui/my_gonghui_page.dart';
 import '../huizhang/my_huizhang_page.dart';
 import '../mine_smz_page.dart';
-import '../my/my_info_page.dart';
 import '../my/yqyl_page.dart';
 import '../my_kefu_page.dart';
 
@@ -97,19 +95,46 @@ class _MinePageContent extends StatelessWidget {
             ),
           ),
         ),
-        _nav(),
+        _nav(context),
       ],
     );
   }
 
-  Widget _nav() {
+  Widget _nav(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: Get.statusBarHeight, right: 34.w),
+      margin: EdgeInsets.only(top: Get.statusBarHeight, right: 34.w, left: 34.w),
       height: 50.w,
       width: double.infinity,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          Obx(() {
+            if (c.userNumber.value.isEmpty) {
+              return const Text('');
+            }
+            return GestureDetector(
+              onTap: () {
+                c.onSwitch(context);
+              },
+              child: Row(
+                children: [
+                  Image(
+                    width: 74.w,
+                    height: 49.w,
+                    image: AssetImage('assets/images/mine_switch_${c.switchValue.value ? 1 : 0}.png'),
+                  ),
+                  SizedBox(width: 10.w),
+                  Text(
+                    '勿扰',
+                    style: TextStyle(
+                      color: Color(c.switchValue.value ? 0xFFFE5D9C : 0xFF949494),
+                      fontSize: 28.sp,
+                    ),
+                  )
+                ],
+              ),
+            );
+          }),
+          const Expanded(child: Text('')),
           GestureDetector(
             onTap: () { // 编辑
               if (MyUtils.checkClick()) {
@@ -453,11 +478,13 @@ class _MinePageContent extends StatelessWidget {
                   Get.toNamed('ZhuangbanPage');
                 }),
                 if (c.userNumber.value.isNotEmpty)
-                  c.identity == 'president'
+                  c.identity.value == 'president'
                       ? _moreItem('会长后台', 'huizhang', () { 
                         Get.to(MyHuiZhangPage(type: c.identity.value));
                       })
-                      : _moreItem('公会中心', 'gonghui', () {
+                      : _morePoint(
+                        c.isShenHe.value, 
+                        _moreItem('公会中心', 'gonghui', () {
                           switch (sp.getString('shimingzhi').toString()) {
                             case '2':
                             case '3':
@@ -476,26 +503,7 @@ class _MinePageContent extends StatelessWidget {
                             default:
                           }
                         }),
-                      
-                      // GestureDetector(
-                      //     onTap: () {
-                      //       if (MyUtils.checkClick()) {
-                              
-                      //       }
-                      //     },
-                      //     child: Row(
-                      //       children: [
-                      //         Text('公会中心'),
-                      //         if (c.isShenHe.value)
-                      //           Transform.translate(
-                      //             offset: Offset(0, -5.h),
-                      //             child: CustomPaint(
-                      //               painter: LinePainter2(colors: Colors.red),
-                      //             ),
-                      //           ),
-                      //       ],
-                      //     ),
-                      //   ),
+                      ),
                 if (c.userNumber.value.isNotEmpty)
                   c.isAgent.value
                     ? _moreItem('全民代理', 'quanmin', () { 
@@ -507,19 +515,6 @@ class _MinePageContent extends StatelessWidget {
                 _moreItem('等级成就', 'dengji', () { 
                   Get.toNamed('ChengJiuPage');
                 }),
-                // if (c.userNumber.value.isNotEmpty)
-                //   Column(
-                //     children: [
-                //       CupertinoSwitch(
-                //               value: c.switchValue.value,
-                //               onChanged: (value) {
-                //                 c.onSwitch(value, context);
-                //               },
-                //               activeColor: const Color(0xFF5b46b9),
-                //             ),
-                //       Text('勿扰模式'),
-                //     ],
-                //   ),
                 _moreItem('联系客服', 'kefu', () { 
                   Future.delayed(
                         const Duration(seconds: 0),
@@ -544,6 +539,20 @@ class _MinePageContent extends StatelessWidget {
     );
   }
 
+  Widget _morePoint(bool isPoint, Widget child) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        child,
+        if (isPoint)
+          Positioned(
+            right: 30,
+            top: 20,
+            child: CustomPaint(painter: LinePainter2(colors: Colors.red)),
+          ),
+      ],
+    );
+  }
   Widget _moreItem(String title, String img, void Function() action) {
     return GestureDetector(
         onTap: () {
