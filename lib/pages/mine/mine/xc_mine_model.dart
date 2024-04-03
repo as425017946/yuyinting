@@ -26,11 +26,11 @@ class XCMineController extends GetxController {
   /// 动态头像框
   final avatarFrameGifImg = ''.obs;
   /// 关注
-  final care = '8'.obs;
+  final care = ''.obs;
   /// 被关注
-  final beCare = '8'.obs;
+  final beCare = ''.obs;
   /// 看过我
-  final lookMe = '8'.obs;
+  final lookMe = ''.obs;
   /// 是否开通贵族
   final isGuizu = false.obs;
   /// 身份
