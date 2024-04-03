@@ -118,8 +118,8 @@ class _MinePageContent extends StatelessWidget {
               child: Row(
                 children: [
                   Image(
-                    width: 74.w,
-                    height: 49.w,
+                    width: 74.w*0.8,
+                    height: 49.w*0.8,
                     image: AssetImage('assets/images/mine_switch_${c.switchValue.value ? 1 : 0}.png'),
                   ),
                   SizedBox(width: 10.w),
@@ -566,8 +566,8 @@ class _MinePageContent extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image(
-                width: 96,
-                height: 99,
+                width: 96*0.7,
+                height: 99*0.7,
                 image: AssetImage('assets/images/mine_icon_$img.png'),
               ),
               const SizedBox(height: 15),
