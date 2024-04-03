@@ -471,7 +471,7 @@ class _MinePageContent extends StatelessWidget {
                 crossAxisCount: 4,
                 mainAxisSpacing: 20,
                 crossAxisSpacing: 20,
-                childAspectRatio: 0.8,
+                childAspectRatio: 1,
               ),
               children: [
                 _moreItem('装扮商城', 'zhuangban', () {
@@ -546,7 +546,7 @@ class _MinePageContent extends StatelessWidget {
         child,
         if (isPoint)
           Positioned(
-            right: 30,
+            right: 50,
             top: 20,
             child: CustomPaint(painter: LinePainter2(colors: Colors.red)),
           ),
@@ -566,11 +566,11 @@ class _MinePageContent extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image(
-                width: 96*0.7,
-                height: 99*0.7,
+                width: 96*0.5,
+                height: 99*0.5,
                 image: AssetImage('assets/images/mine_icon_$img.png'),
               ),
-              const SizedBox(height: 15),
+              const SizedBox(height: 25),
               Text(
                 title,
                 style: const TextStyle(
