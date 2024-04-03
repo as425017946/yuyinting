@@ -5,7 +5,7 @@ import '../main.dart';
 import '../utils/log_util.dart';
 
 enum OnlineConfigType { online, test, zhaozeng, pengfei }
-const onlineType = OnlineConfigType.test;
+const onlineType = OnlineConfigType.online;
 
 class OnlineConfig {
   /// Ping
@@ -36,9 +36,7 @@ class OnlineConfig {
         return "http://${sp.getString('isDian').toString()}:8081/api";
       case OnlineConfigType.online:
         //正式环境
-        return sp.getString('isDian').toString().isEmpty
-            ? "http://119.45.157.111:8080/api"
-            : "http://${sp.getString('isDian').toString()}:8080/api";
+        return "http://119.45.100.48:8080/api";
 
       // 正式环境
       // return "http://www.aa986.com:8080/api";
@@ -49,9 +47,7 @@ class OnlineConfig {
     switch (onlineType) {
       case OnlineConfigType.online:
         //上传用户声网日志正式
-        return sp.getString('isDian').toString().isEmpty
-            ? "http://43.198.138.251:8080/api/upload/filelog"
-            : "http://${sp.getString('isDian').toString()}:8080/api/upload/filelog";
+        return "http://119.45.100.48:8080/api/upload/filelog";
       default:
         //上传用户声网日志测试
         return "http://18.162.113.63:8080/api/upload/filelog";

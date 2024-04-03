@@ -31,6 +31,7 @@ import 'dongtai_page.dart';
 class PeopleInfoPage extends StatefulWidget {
   String otherId;
   String title;
+
   PeopleInfoPage({Key? key, required this.otherId, required this.title})
       : super(key: key);
 
@@ -119,151 +120,184 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.black,
-        body: Stack(
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                //设置Container修饰
-                image: DecorationImage(
-                  //背景图片修饰
-                  image: AssetImage("assets/images/people_bg.jpg"),
-                  fit: BoxFit.fill, //覆盖
-                ),
+        body: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              pinned: true, //设置为true时，当SliverAppBar内容滑出屏幕时，将始终渲染一个固定在顶部的收起状态
+              expandedHeight: 350.h,
+              backgroundColor: Colors.white,
+              flexibleSpace: FlexibleSpaceBar(
+                // title: const Text("测试信息"),
+                centerTitle: true,
+                background: WidgetUtils.showImagesNet(headImg.isEmpty ? '' : headImg, 350.h, double.infinity),
               ),
-              child: Stack(
-                alignment: Alignment.topCenter,
-                children: [
-                  _bg(),
-                  _content(),
-                  _head(),
-                  _nav(),
-                ],
-              ),
+              // bottom: PreferredSize(
+              //   // 这里是吸附到 AppBar 下面的按钮
+              //   preferredSize: const Size.fromHeight(0),
+              //   child: Container(
+              //     height: 80.h,
+              //     color: Colors.blue,
+              //     child: Center(child: Text('Button')),
+              //   ),
+              // ),
             ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                height: ScreenUtil().setHeight(120),
-                width: double.infinity,
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                alignment: Alignment.center,
-                decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                        //渐变位置
-                        begin: Alignment.topCenter, //右上
-                        end: Alignment.bottomCenter, //左下
-                        stops: [
-                      0.0,
-                      1.0
-                    ], //[渐变起始点, 渐变结束点]
-                        //渐变颜色[始点颜色, 结束颜色]
-                        colors: [
-                      Color.fromRGBO(255, 255, 255, 0),
-                      Color.fromRGBO(255, 255, 255, 1)
-                    ])),
-                child: Row(
-                  children: [
-                    // WidgetUtils.PeopleButton('assets/images/people_hongbao.png', '发红包', MyColors.peopleRed),
-                    const Expanded(child: Text('')),
-                    GestureDetector(
-                        onTap: (() {
-                          doPostFollow();
-                        }),
-                        child: WidgetUtils.showImagesFill(  isFollow == '0' ? 'assets/images/zy_guanzhu1.png' : 'assets/images/zy_guanzhu2.png', 75.h, 300.w)),
-                    const Expanded(child: Text('')),
-                    GestureDetector(
-                      onTap: (() {
-                        if (MyUtils.checkClick()) {
-                          // 先判断能否发私聊
-                          doPostCanSendUser();
-                        }
-                      }),
-                      child: WidgetUtils.showImagesFill('assets/images/zy_chat.png',  75.h, 300.w)
-                    ),
-                    const Expanded(child: Text('')),
-                  ],
-                ),
-              ),
-            ),
-            Positioned(
-              right: 10.h,
-              top: 50.h,
-              child: GestureDetector(
-                onTap: (() {
-                  setState(() {
-                    isShow = true;
-                  });
-                }),
-                child: Container(
-                  width: ScreenUtil().setWidth(120),
-                  height: 60.h,
-                  color: Colors.transparent,
-                  alignment: Alignment.centerRight,
-                  child: WidgetUtils.showImages(
-                      'assets/images/chat_dian_white.png',
-                      ScreenUtil().setHeight(50),
-                      ScreenUtil().setHeight(80)),
-                ),
-              ),
-            ),
-            // 头部黑名单
-            isShow
-                ? GestureDetector(
-                    onTap: (() {
-                      setState(() {
-                        isShow = false;
-                      });
-                    }),
-                    child: Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      alignment: Alignment.topRight,
-                      color: Colors.transparent,
-                      child: Row(
-                        children: [
-                          const Spacer(),
-                          GestureDetector(
-                            onTap: (() {
-                              setState(() {
-                                isShow = false;
-                              });
-                              doPostUpdateBlack();
-                            }),
-                            child: Container(
-                              height: ScreenUtil().setHeight(80),
-                              width: ScreenUtil().setHeight(220),
-                              margin: EdgeInsets.only(
-                                  top: ScreenUtil().setHeight(100), right: 15),
-                              //边框设置
-                              decoration: const BoxDecoration(
-                                //背景
-                                color: Colors.white,
-                                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
-                              ),
-                              child: Row(
-                                children: [
-                                  const Spacer(),
-                                  WidgetUtils.showImages(
-                                      'assets/images/chat_black_p.png',
-                                      ScreenUtil().setHeight(42),
-                                      ScreenUtil().setHeight(38)),
-                                  WidgetUtils.commonSizedBox(
-                                      0, ScreenUtil().setHeight(10)),
-                                  WidgetUtils.onlyText(
-                                      isBlack == 0 ? '加入黑名单' : '移除黑名单',
-                                      StyleUtils.loginHintTextStyle),
-                                  const Spacer(),
-                                ],
-                              ),
-                            ),
-                          )
-                        ],
+            SliverList(
+              delegate: SliverChildBuilderDelegate((context, index) {
+                return Container(
+                  height: 2000.h,
+                  child: Stack(
+                    children: [
+                      Container(
+                        color: Colors.white,
+                        child: Stack(
+                          alignment: Alignment.topCenter,
+                          children: [
+                            // _bg(),
+                            _content(),
+                            _head(),
+                            _nav(),
+                          ],
+                        ),
                       ),
-                    ),
-                  )
-                : const Text(''),
+                      Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          height: ScreenUtil().setHeight(120),
+                          width: double.infinity,
+                          padding: const EdgeInsets.only(left: 20, right: 20),
+                          alignment: Alignment.center,
+                          decoration: const BoxDecoration(
+                              gradient: LinearGradient(
+                                  //渐变位置
+                                  begin: Alignment.topCenter, //右上
+                                  end: Alignment.bottomCenter, //左下
+                                  stops: [
+                                0.0,
+                                1.0
+                              ], //[渐变起始点, 渐变结束点]
+                                  //渐变颜色[始点颜色, 结束颜色]
+                                  colors: [
+                                Color.fromRGBO(255, 255, 255, 0),
+                                Color.fromRGBO(255, 255, 255, 1)
+                              ])),
+                          child: Row(
+                            children: [
+                              // WidgetUtils.PeopleButton('assets/images/people_hongbao.png', '发红包', MyColors.peopleRed),
+                              const Expanded(child: Text('')),
+                              GestureDetector(
+                                  onTap: (() {
+                                    doPostFollow();
+                                  }),
+                                  child: WidgetUtils.showImagesFill(
+                                      isFollow == '0'
+                                          ? 'assets/images/zy_guanzhu1.png'
+                                          : 'assets/images/zy_guanzhu2.png',
+                                      75.h,
+                                      300.w)),
+                              const Expanded(child: Text('')),
+                              GestureDetector(
+                                  onTap: (() {
+                                    if (MyUtils.checkClick()) {
+                                      // 先判断能否发私聊
+                                      doPostCanSendUser();
+                                    }
+                                  }),
+                                  child: WidgetUtils.showImagesFill(
+                                      'assets/images/zy_chat.png',
+                                      75.h,
+                                      300.w)),
+                              const Expanded(child: Text('')),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        right: 10.h,
+                        top: 50.h,
+                        child: GestureDetector(
+                          onTap: (() {
+                            setState(() {
+                              isShow = true;
+                            });
+                          }),
+                          child: Container(
+                            width: ScreenUtil().setWidth(120),
+                            height: 60.h,
+                            color: Colors.transparent,
+                            alignment: Alignment.centerRight,
+                            child: WidgetUtils.showImages(
+                                'assets/images/chat_dian_white.png',
+                                ScreenUtil().setHeight(50),
+                                ScreenUtil().setHeight(80)),
+                          ),
+                        ),
+                      ),
+                      // 头部黑名单
+                      isShow
+                          ? GestureDetector(
+                              onTap: (() {
+                                setState(() {
+                                  isShow = false;
+                                });
+                              }),
+                              child: Container(
+                                width: double.infinity,
+                                height: double.infinity,
+                                alignment: Alignment.topRight,
+                                color: Colors.transparent,
+                                child: Row(
+                                  children: [
+                                    const Spacer(),
+                                    GestureDetector(
+                                      onTap: (() {
+                                        setState(() {
+                                          isShow = false;
+                                        });
+                                        doPostUpdateBlack();
+                                      }),
+                                      child: Container(
+                                        height: ScreenUtil().setHeight(80),
+                                        width: ScreenUtil().setHeight(220),
+                                        margin: EdgeInsets.only(
+                                            top: ScreenUtil().setHeight(100),
+                                            right: 15),
+                                        //边框设置
+                                        decoration: const BoxDecoration(
+                                          //背景
+                                          color: Colors.white,
+                                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10.0)),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            const Spacer(),
+                                            WidgetUtils.showImages(
+                                                'assets/images/chat_black_p.png',
+                                                ScreenUtil().setHeight(42),
+                                                ScreenUtil().setHeight(38)),
+                                            WidgetUtils.commonSizedBox(
+                                                0, ScreenUtil().setHeight(10)),
+                                            WidgetUtils.onlyText(
+                                                isBlack == 0
+                                                    ? '加入黑名单'
+                                                    : '移除黑名单',
+                                                StyleUtils.loginHintTextStyle),
+                                            const Spacer(),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            )
+                          : const Text(''),
+                    ],
+                  ),
+                );
+              }, childCount: 1),
+            ),
           ],
         ));
   }
@@ -294,6 +328,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
       ),
     );
   }
+
   Widget _bg() {
     return WidgetUtils.showImagesNet(
       headImg,
@@ -301,10 +336,11 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
       Get.width,
     );
   }
+
   Widget _head() {
-    final top = Get.width*0.7;
+    final top = Get.width * 0.7;
     return Container(
-      margin: EdgeInsets.only(left: 20.w, right: 20.w, top: top - 80.w),
+      margin: EdgeInsets.only(left: 20.w, right: 20.w, top: 0.h),
       height: 270.w,
       alignment: Alignment.topLeft,
       child: Column(
@@ -337,7 +373,8 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                   WidgetUtils.CircleHeadImage(110.w, 110.w, headImg),
                   // 头像框静态图
                   (avatarFrameGifImg.isEmpty && avatarFrameImg.isNotEmpty)
-                      ? WidgetUtils.CircleHeadImage(150.w, 150.w, avatarFrameImg)
+                      ? WidgetUtils.CircleHeadImage(
+                          150.w, 150.w, avatarFrameImg)
                       : const Text(''),
                   // 头像框动态图
                   avatarFrameGifImg.isNotEmpty
@@ -411,7 +448,9 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                           borderRadius: BorderRadius.all(Radius.circular(15.w)),
                         ),
                         child: WidgetUtils.showImages(
-                            sex == 1 ? 'assets/images/nan.png' : 'assets/images/nv.png',
+                            sex == 1
+                                ? 'assets/images/nan.png'
+                                : 'assets/images/nv.png',
                             22.w,
                             22.w),
                       )
@@ -452,27 +491,27 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                         alignment: Alignment.centerLeft,
                         children: [
                           WidgetUtils.showImagesFill(
-                              (level >= 1 && level <= 10)
-                                  ? 'assets/images/dj/dj_c_1-10.png'
-                                  : (level >= 11 && level <= 15)
-                                      ? 'assets/images/dj/dj_c_11-15.png'
-                                      : (level >= 16 && level <= 20)
-                                          ? 'assets/images/dj/dj_c_16-20.png'
-                                          : (level >= 21 && level <= 25)
-                                              ? 'assets/images/dj/dj_c_21-25.png'
-                                              : (level >= 26 && level <= 30)
-                                                  ? 'assets/images/dj/dj_c_26-30.png'
-                                                  : (level >= 31 && level <= 35)
-                                                      ? 'assets/images/dj/dj_c_31-35.png'
-                                                      : (level >= 36 &&
-                                                              level <= 40)
-                                                          ? 'assets/images/dj/dj_c_36-40.png'
-                                                          : (level >= 41 &&
-                                                                  level <= 45)
-                                                              ? 'assets/images/dj/dj_c_41-45.png'
-                                                              : 'assets/images/dj/dj_c_46-50.png',
-                              30.w,
-                              85.w,
+                            (level >= 1 && level <= 10)
+                                ? 'assets/images/dj/dj_c_1-10.png'
+                                : (level >= 11 && level <= 15)
+                                    ? 'assets/images/dj/dj_c_11-15.png'
+                                    : (level >= 16 && level <= 20)
+                                        ? 'assets/images/dj/dj_c_16-20.png'
+                                        : (level >= 21 && level <= 25)
+                                            ? 'assets/images/dj/dj_c_21-25.png'
+                                            : (level >= 26 && level <= 30)
+                                                ? 'assets/images/dj/dj_c_26-30.png'
+                                                : (level >= 31 && level <= 35)
+                                                    ? 'assets/images/dj/dj_c_31-35.png'
+                                                    : (level >= 36 &&
+                                                            level <= 40)
+                                                        ? 'assets/images/dj/dj_c_36-40.png'
+                                                        : (level >= 41 &&
+                                                                level <= 45)
+                                                            ? 'assets/images/dj/dj_c_41-45.png'
+                                                            : 'assets/images/dj/dj_c_46-50.png',
+                            30.w,
+                            85.w,
                           ),
                           Positioned(
                               left: 30.w,
@@ -538,138 +577,142 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
       ),
     );
   }
+
   Widget _content() {
     var top = Get.width * 0.7;
     return Column(
       children: [
         /// 音频
         Container(
-          height: top,
+          height: 180.h,
           alignment: Alignment.bottomRight,
           padding: EdgeInsets.all(20.w),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               (live == 1 && widget.title != '小主页')
-            ? GestureDetector(
-                onTap: (() {
-                  if (sp.getString('roomID').toString() == roomID) {
-                    if (MyUtils.checkClick()) {
-                      MyToastUtils.showToastBottom('您已在本房间');
-                    }
-                    return;
-                  } else {
-                    if (sp.getBool('joinRoom') == false) {
-                      setState(() {
-                        sp.setBool('joinRoom', true);
-                      });
-                      doPostBeforeJoin(roomID);
-                    }
-                  }
-                }),
-                child: Container(
-                  height: ScreenUtil().setHeight(40),
-                  width: ScreenUtil().setWidth(130),
-                  padding: const EdgeInsets.only(left: 8),
-                  alignment: Alignment.center,
-                  //边框设置
-                  decoration: const BoxDecoration(
-                    //背景
-                    color: Colors.white,
-                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20.0),
-                      bottomLeft: Radius.circular(20.0),
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      WidgetUtils.showImages(
-                          'assets/images/zhibozhong2.webp',
-                          ScreenUtil().setHeight(22),
-                          ScreenUtil().setWidth(22)),
-                      WidgetUtils.commonSizedBox(0, 5),
-                      WidgetUtils.onlyText(
-                          '踩房间',
-                          StyleUtils.getCommonTextStyle(
-                              color: MyColors.careBlue,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 21.sp)),
-                    ],
-                  ),
-                ),
-              )
-            : const Text(''),
-            /// 音频
-        voice_card.isNotEmpty
-            ? Row(
-                children: [
-                  GestureDetector(
-                    onTap: (() {
-                      if (MyUtils.checkClick() && playRecord == false) {
-                        play();
-                      }
-                    }),
-                    child: Container(
-                      height: ScreenUtil().setHeight(45),
-                      width: ScreenUtil().setWidth(220),
-                      margin: const EdgeInsets.only(left: 20),
-                      alignment: Alignment.center,
-                      //边框设置
-                      decoration: const BoxDecoration(
-                        //背景
-                        color: MyColors.peopleYellow,
-                        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                  ? GestureDetector(
+                      onTap: (() {
+                        if (sp.getString('roomID').toString() == roomID) {
+                          if (MyUtils.checkClick()) {
+                            MyToastUtils.showToastBottom('您已在本房间');
+                          }
+                          return;
+                        } else {
+                          if (sp.getBool('joinRoom') == false) {
+                            setState(() {
+                              sp.setBool('joinRoom', true);
+                            });
+                            doPostBeforeJoin(roomID);
+                          }
+                        }
+                      }),
+                      child: Container(
+                        height: ScreenUtil().setHeight(40),
+                        width: ScreenUtil().setWidth(130),
+                        padding: const EdgeInsets.only(left: 8),
+                        alignment: Alignment.center,
+                        //边框设置
+                        decoration: const BoxDecoration(
+                          //背景
+                          color: Colors.white,
+                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20.0),
+                            bottomLeft: Radius.circular(20.0),
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            WidgetUtils.showImages(
+                                'assets/images/zhibozhong2.webp',
+                                ScreenUtil().setHeight(22),
+                                ScreenUtil().setWidth(22)),
+                            WidgetUtils.commonSizedBox(0, 5),
+                            WidgetUtils.onlyText(
+                                '踩房间',
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.careBlue,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 21.sp)),
+                          ],
+                        ),
                       ),
-                      child: Row(
-                        children: [
-                          const Expanded(
-                              child: SVGASimpleImage(
-                            assetsName: 'assets/svga/audio_xindiaotu.svga',
-                          )),
-                          WidgetUtils.commonSizedBox(0, 10.h),
-                          WidgetUtils.showImages(
-                              'assets/images/people_bofang.png',
-                              ScreenUtil().setHeight(35),
-                              ScreenUtil().setWidth(35)),
-                          WidgetUtils.commonSizedBox(0, 10.h),
-                        ],
-                      ),
-                      // child: playRecord == false
-                      //     ? Row(
-                      //         children: [
-                      //           const Expanded(
-                      //               child: SVGASimpleImage(
-                      //             assetsName:
-                      //                 'assets/svga/audio_xindiaotu.svga',
-                      //           )),
-                      //           WidgetUtils.commonSizedBox(0, 10.h),
-                      //           WidgetUtils.showImages(
-                      //               'assets/images/people_bofang.png',
-                      //               ScreenUtil().setHeight(35),
-                      //               ScreenUtil().setWidth(35)),
-                      //           WidgetUtils.commonSizedBox(0, 10.h),
-                      //         ],
-                      //       )
-                      //     : const Expanded(
-                      //         child: SVGASimpleImage(
-                      //         assetsName:
-                      //             'assets/svga/audio_bolang.svga',
-                      //       )),
-                    ),
-                  ),
-                  const Expanded(child: Text('')),
-                ],
-              )
-            : const Text(''),
+                    )
+                  : const Text(''),
+
+              /// 音频
+              voice_card.isNotEmpty
+                  ? Row(
+                      children: [
+                        GestureDetector(
+                          onTap: (() {
+                            if (MyUtils.checkClick() && playRecord == false) {
+                              play();
+                            }
+                          }),
+                          child: Container(
+                            height: ScreenUtil().setHeight(45),
+                            width: ScreenUtil().setWidth(220),
+                            margin: const EdgeInsets.only(left: 20),
+                            alignment: Alignment.center,
+                            //边框设置
+                            decoration: const BoxDecoration(
+                              //背景
+                              color: MyColors.peopleYellow,
+                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20.0)),
+                            ),
+                            child: Row(
+                              children: [
+                                const Expanded(
+                                    child: SVGASimpleImage(
+                                  assetsName:
+                                      'assets/svga/audio_xindiaotu.svga',
+                                )),
+                                WidgetUtils.commonSizedBox(0, 10.h),
+                                WidgetUtils.showImages(
+                                    'assets/images/people_bofang.png',
+                                    ScreenUtil().setHeight(35),
+                                    ScreenUtil().setWidth(35)),
+                                WidgetUtils.commonSizedBox(0, 10.h),
+                              ],
+                            ),
+                            // child: playRecord == false
+                            //     ? Row(
+                            //         children: [
+                            //           const Expanded(
+                            //               child: SVGASimpleImage(
+                            //             assetsName:
+                            //                 'assets/svga/audio_xindiaotu.svga',
+                            //           )),
+                            //           WidgetUtils.commonSizedBox(0, 10.h),
+                            //           WidgetUtils.showImages(
+                            //               'assets/images/people_bofang.png',
+                            //               ScreenUtil().setHeight(35),
+                            //               ScreenUtil().setWidth(35)),
+                            //           WidgetUtils.commonSizedBox(0, 10.h),
+                            //         ],
+                            //       )
+                            //     : const Expanded(
+                            //         child: SVGASimpleImage(
+                            //         assetsName:
+                            //             'assets/svga/audio_bolang.svga',
+                            //       )),
+                          ),
+                        ),
+                        const Expanded(child: Text('')),
+                      ],
+                    )
+                  : const Text(''),
             ],
           ),
         ),
         Expanded(
           child: Container(
             height: double.infinity,
-            padding: EdgeInsets.only(left: 20, right: 20, top: 180.w),
+            padding: EdgeInsets.only(left: 20, right: 20, top: 0.w),
             //边框设置
             decoration: const BoxDecoration(
               //背景
