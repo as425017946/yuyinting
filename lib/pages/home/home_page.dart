@@ -38,7 +38,6 @@ import '../../utils/log_util.dart';
 import '../../utils/my_ping.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
-import '../gongping/gp_room_page.dart';
 import '../room/room_page.dart';
 import '../room/room_ts_mima_page.dart';
 
@@ -362,7 +361,6 @@ class _HomePageState extends State<HomePage>
                         alignment: Alignment.bottomRight,
                         child: Row(
                           children: [
-                            WidgetUtils.commonSizedBox(0, 10.h),
                             GestureDetector(
                               onTap: (() {
                                 if (MyUtils.checkClick()) {
@@ -373,7 +371,7 @@ class _HomePageState extends State<HomePage>
                               child: WidgetUtils.showImages(
                                   "assets/images/home_search.png", 40.h, 40.h),
                             ),
-                            WidgetUtils.commonSizedBox(0, 15.h),
+                            WidgetUtils.commonSizedBox(0, (25 *1.3).w),
                             GestureDetector(
                               onTap: (() {
                                 if (MyUtils.checkClick()) {

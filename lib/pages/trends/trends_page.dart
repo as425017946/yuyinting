@@ -119,43 +119,43 @@ class _TrendsPageState extends State<TrendsPage>
                                     : FontWeight.normal)),
                       ),
                       const Expanded(child: Text('')),
-                      GestureDetector(
-                        onTap: (() {
-                          if (MyUtils.checkClick()) {
-                            Navigator.pushNamed(context, 'TrendsSendPage');
-                          }
-                        }),
-                        child: Container(
-                          height: ScreenUtil().setHeight(60),
-                          width: ScreenUtil().setWidth(150),
-                          color: Colors.transparent,
-                          alignment: Alignment.bottomLeft,
-                          child: Stack(
-                            children: [
-                              WidgetUtils.showImages(
-                                  'assets/images/trends_fabu_btn.png',
-                                  ScreenUtil().setHeight(60),
-                                  ScreenUtil().setWidth(150)),
-                              Row(
-                                children: [
-                                  WidgetUtils.commonSizedBox(0, 10.h),
-                                  WidgetUtils.showImages(
-                                      'assets/images/trends_xiangji.webp',
-                                      40.h,
-                                      40.h),
-                                  WidgetUtils.onlyText(
-                                      '发动态',
-                                      StyleUtils.getCommonTextStyle(
-                                          color: Colors.white,
-                                          fontSize: 21.sp,
-                                          fontWeight: FontWeight.w600)),
-                                  const Expanded(child: Text('')),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      )
+                      // GestureDetector(
+                      //   onTap: (() {
+                      //     if (MyUtils.checkClick()) {
+                      //       Navigator.pushNamed(context, 'TrendsSendPage');
+                      //     }
+                      //   }),
+                      //   child: Container(
+                      //     height: ScreenUtil().setHeight(60),
+                      //     width: ScreenUtil().setWidth(150),
+                      //     color: Colors.transparent,
+                      //     alignment: Alignment.bottomLeft,
+                      //     child: Stack(
+                      //       children: [
+                      //         WidgetUtils.showImages(
+                      //             'assets/images/trends_fabu_btn.png',
+                      //             ScreenUtil().setHeight(60),
+                      //             ScreenUtil().setWidth(150)),
+                      //         Row(
+                      //           children: [
+                      //             WidgetUtils.commonSizedBox(0, 10.h),
+                      //             WidgetUtils.showImages(
+                      //                 'assets/images/trends_xiangji.webp',
+                      //                 40.h,
+                      //                 40.h),
+                      //             WidgetUtils.onlyText(
+                      //                 '发动态',
+                      //                 StyleUtils.getCommonTextStyle(
+                      //                     color: Colors.white,
+                      //                     fontSize: 21.sp,
+                      //                     fontWeight: FontWeight.w600)),
+                      //             const Expanded(child: Text('')),
+                      //           ],
+                      //         )
+                      //       ],
+                      //     ),
+                      //   ),
+                      // )
                     ],
                   ),
                 ),

@@ -633,19 +633,19 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                      MyUtils.goTransparentPage(context, const MHPage());
                   }),
                   child: Container(
-                    height: 80.h,
+                    height: 60.h,
                     width: double.infinity,
                     alignment: Alignment.center,
                     color: Colors.transparent,
                     child: Stack(
                       children: [
-                        WidgetUtils.showImagesFill('assets/images/room_lh_sm.png', 80.h, double.infinity),
+                        WidgetUtils.showImagesFill('assets/images/room_lh_sm.png', 60.h, double.infinity),
                         Row(
                           children: [
                             WidgetUtils.commonSizedBox(0, 100.w),
-                            WidgetUtils.onlyText('惊喜礼盒玩法', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 35.sp,fontWeight: FontWeight.w600,)),
+                            WidgetUtils.onlyText('惊喜礼盒玩法', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 26.sp,)),
                             const Spacer(),
-                            WidgetUtils.onlyText('查看详情 》', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 28.sp,)),
+                            WidgetUtils.onlyText('查看详情 》', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 22.sp,)),
                             WidgetUtils.commonSizedBox(0, 100.w),
                           ],
                         )

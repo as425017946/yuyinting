@@ -143,7 +143,6 @@ class _TuijianPageState extends State<TuijianPage>
     }
     return Column(
       children: [
-        WidgetUtils.commonSizedBox(10.h, 0),
         GestureDetector(
           onTap: (() {
             if (MyUtils.checkClick()) {
@@ -164,20 +163,36 @@ class _TuijianPageState extends State<TuijianPage>
           }),
           child: Container(
             width: double.infinity,
-            height: ScreenUtil().setWidth(240 * 1.25),
+            height: ScreenUtil().setWidth(220 * 1.25),
             margin: EdgeInsets.only(left: 20.h, right: 20.h),
             padding: EdgeInsets.only(
                 left: 30.w, right: 30.w, top: 15.h, bottom: 15.h),
-            //边框设置
             decoration: BoxDecoration(
-              //背景
-              color: i % 4 == 0
-                  ? MyColors.newY1
-                  : i % 4 == 1
-                      ? MyColors.newY2
-                      : i % 4 == 2
-                          ? MyColors.newY3
-                          : MyColors.newY4,
+              gradient: LinearGradient(
+                  //渐变位置
+                  begin: Alignment.centerRight, //右上
+                  end: Alignment.centerLeft, //左下
+                  stops: const [
+                    0.0,
+                    1.0
+                  ], //[渐变起始点, 渐变结束点]
+                  //渐变颜色[始点颜色, 结束颜色]
+                  colors: [
+                    i % 4 == 0
+                        ? MyColors.newY1
+                        : i % 4 == 1
+                            ? MyColors.newY2
+                            : i % 4 == 2
+                                ? MyColors.newY3
+                                : MyColors.newY4,
+                    i % 4 == 0
+                        ? MyColors.newY11
+                        : i % 4 == 1
+                            ? MyColors.newY22
+                            : i % 4 == 2
+                                ? MyColors.newY33
+                                : MyColors.newY44
+                  ]),
               //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
               borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(50.0),
@@ -365,6 +380,7 @@ class _TuijianPageState extends State<TuijianPage>
             ),
           ),
         ),
+        WidgetUtils.commonSizedBox(10.h, 0),
       ],
     );
   }

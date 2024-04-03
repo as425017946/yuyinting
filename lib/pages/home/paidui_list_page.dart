@@ -59,7 +59,31 @@ class PaiduiListPage extends StatelessWidget {
       width: double.infinity,
       height: double.infinity,
       decoration: BoxDecoration(
-        color: i % 4 == 0 ? MyColors.newY1 : i % 4 == 1 ? MyColors.newY2 : i % 4 == 2 ? MyColors.newY3 : MyColors.newY4,
+        gradient: LinearGradient(
+          //渐变位置
+            begin: Alignment.centerRight, //右上
+            end: Alignment.centerLeft, //左下
+            stops: const [
+              0.0,
+              1.0
+            ], //[渐变起始点, 渐变结束点]
+            //渐变颜色[始点颜色, 结束颜色]
+            colors: [
+              i % 4 == 0
+                  ? MyColors.newY1
+                  : i % 4 == 1
+                  ? MyColors.newY2
+                  : i % 4 == 2
+                  ? MyColors.newY3
+                  : MyColors.newY4,
+              i % 4 == 0
+                  ? MyColors.newY11
+                  : i % 4 == 1
+                  ? MyColors.newY22
+                  : i % 4 == 2
+                  ? MyColors.newY33
+                  : MyColors.newY44
+            ]),
         borderRadius: BorderRadius.all(Radius.circular(20.w)),
         boxShadow: [
           BoxShadow(
