@@ -1117,6 +1117,7 @@ class _PaiduiPageState extends State<PaiduiPage>
                                 doPostBeforeJoin(id.toString());
                               }
                             },
+                            listBanner: listBanner,
                           );
                         })
                       : const Text(''),
@@ -1338,6 +1339,7 @@ class _PaiduiPageState extends State<PaiduiPage>
   List<RoomList1> listRoom = [];
   List<RoomList2> listRoom2 = [];
   List<RoomList3> listRoom3 = [];
+  List<BannerList> listBanner = [];
 
   /// 首页 推荐房间/海报轮播/推荐主播
   Future<void> doPostPushRoom() async {
@@ -1361,6 +1363,7 @@ class _PaiduiPageState extends State<PaiduiPage>
             if (bean.data!.roomList3!.isNotEmpty) {
               listRoom3 = bean.data!.roomList3!;
             }
+            listBanner = bean.data?.bannerList ?? [];
             // _refreshController.loadNoData();
           });
           break;
