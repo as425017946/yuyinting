@@ -3395,7 +3395,11 @@ class _RoomPageState extends State<RoomPage>
     //3. 页面销毁时，移出监听者
     WidgetsBinding.instance?.removeObserver(this);
     // 在页面销毁时，取消事件监听
-    _engine?.unregisterEventHandler(_eventHandler);
+    try {
+      _engine?.unregisterEventHandler(_eventHandler);
+    } catch(e) {
+      LogE(e.toString());
+    }
     listen.cancel();
     listenRoomback.cancel();
     listenCheckBG.cancel();
@@ -3419,7 +3423,6 @@ class _RoomPageState extends State<RoomPage>
     animationControllerBG.dispose();
     animationControllerSL.dispose();
     animationControllerZJ.dispose();
-    animationControllerSL.dispose();
     animationControllerPK.dispose();
     animationControllerJL.dispose();
     _subscription.cancel();
