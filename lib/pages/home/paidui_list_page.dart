@@ -1,12 +1,21 @@
+import 'dart:math';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+// ignore: import_of_legacy_library_into_null_safe
+import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:get/get.dart';
 
 import '../../bean/fenleiBean.dart';
+import '../../bean/homeTJBean.dart';
 import '../../bean/tjRoomListBean.dart';
 import '../../colors/my_colors.dart';
 import '../../utils/SVGASimpleImage3.dart';
+import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
+import '../gongping/web_page.dart';
 
 class PaiduiListPage extends StatelessWidget {
   final bool isList;
@@ -16,6 +25,7 @@ class PaiduiListPage extends StatelessWidget {
   final List<DataPH> list;
   final List<DataFL> listFL;
   final void Function(int? id) action;
+  final List<BannerList> listBanner;
   const PaiduiListPage({
     super.key,
     required this.isList,
@@ -24,11 +34,16 @@ class PaiduiListPage extends StatelessWidget {
     required this.list,
     required this.listFL,
     required this.action,
+    required this.listBanner,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (list.isEmpty) {
+    int itemCount = list.length;
+    if (isList && listBanner.isNotEmpty) {
+      itemCount += 1;
+    }
+    if (itemCount == 0) {
       return const Text('');
     }
     return GridView.builder(
@@ -41,13 +56,22 @@ class PaiduiListPage extends StatelessWidget {
         crossAxisSpacing: 24.w,
         childAspectRatio: isList ? (694.0 / 160.0) : 1,
       ),
-      itemCount: list.length,
+      itemCount: itemCount,
       itemBuilder: _itemBuilder,
     );
   }
 
   Widget _itemBuilder(BuildContext context, int index) {
-    final item = list[index];
+    DataPH? model;
+    if (isList && listBanner.isNotEmpty) {
+      const num = 2;
+      if (index > num) {
+        model = list[index-1];
+      } else if (index == min(num, list.length)) {
+        return _banner();
+      }  
+    }
+    final item = model ?? list[index];
     return GestureDetector(
       onTap: () => action(item.id),
       child: isList ? _tableItem(item, index) : _collectItem(item),
@@ -390,4 +414,55 @@ class PaiduiListPage extends StatelessWidget {
     }
     return Row(children: children);
   }
+
+  Widget _banner() {
+    final height = 140*1.25.w;
+    return Container(
+      height: height,
+      //超出部分，可裁剪
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20.w),
+      ),
+      child: Swiper(
+        key: UniqueKey(),
+        itemBuilder: (BuildContext context, int index) {
+          // 配置图片地址
+          return CachedNetworkImage(
+            imageUrl: listBanner[index].img!,
+            fit: BoxFit.fill,
+            placeholder: (context, url) => WidgetUtils.CircleImageAss(
+              height,
+              double.infinity,
+              0,
+              'assets/images/img_placeholder.png',
+            ),
+            errorWidget: (context, url, error) => WidgetUtils.CircleImageAss(
+              height,
+              double.infinity,
+              0,
+              'assets/images/img_placeholder.png',
+            ),
+          );
+        },
+        // 配置图片数量
+        itemCount: listBanner.length,
+        // 无限循环
+        loop: true,
+        // 自动轮播
+        autoplay: true,
+        autoplayDelay: 5000,
+        duration: 2000,
+        onIndexChanged: (index) {
+          // LogE('用户拖动或者自动播放引起下标改变调用');
+        },
+        onTap: (index) {
+          if (MyUtils.checkClick()) {
+            Get.to(WebPage(url: listBanner[index].url!));
+          }
+        },
+      ),
+    );
+  }
+
 }
