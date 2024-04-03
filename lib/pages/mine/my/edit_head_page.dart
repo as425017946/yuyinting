@@ -168,104 +168,110 @@ class _EditHeadPageState extends State<EditHeadPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.transparent,
-        body: Column(
-          children: [
-            const Expanded(child: Text('')),
-            Container(
-              //边框设置
-              decoration: const BoxDecoration(
-                //背景
-                color: Colors.white,
-                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(25.0),
-                    topRight: Radius.circular(25.0)),
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    height: ScreenUtil().setHeight(540),
-                    padding: const EdgeInsets.only(left: 20, right: 20),
-                    alignment: Alignment.center,
-                    child: WidgetUtils.showImages(
-                        'assets/images/mine_head_shili.png',
-                        ScreenUtil().setHeight(520),
-                        double.infinity),
-                  ),
-                  WidgetUtils.myLine(thickness: 10),
-                  GestureDetector(
-                    onTap: (() {
-                      if (MyUtils.checkClick()) {
-                        onTapPickFromCamera();
-                      }
-                    }),
-                    child: Container(
-                      width: double.infinity,
-                      height: ScreenUtil().setHeight(70),
-                      color: Colors.white,
-                      child: Center(
-                        child: Text(
-                          '拍照',
-                          style: StyleUtils.getCommonTextStyle(
+    return WillPopScope(
+      onWillPop: () async {
+        Loading.dismiss();
+        return true;
+      },
+      child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Column(
+            children: [
+              const Expanded(child: Text('')),
+              Container(
+                //边框设置
+                decoration: const BoxDecoration(
+                  //背景
+                  color: Colors.white,
+                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(25.0),
+                      topRight: Radius.circular(25.0)),
+                ),
+                child: Column(
+                  children: [
+                    Container(
+                      height: ScreenUtil().setHeight(540),
+                      padding: const EdgeInsets.only(left: 20, right: 20),
+                      alignment: Alignment.center,
+                      child: WidgetUtils.showImages(
+                          'assets/images/mine_head_shili.png',
+                          ScreenUtil().setHeight(520),
+                          double.infinity),
+                    ),
+                    WidgetUtils.myLine(thickness: 10),
+                    GestureDetector(
+                      onTap: (() {
+                        if (MyUtils.checkClick()) {
+                          onTapPickFromCamera();
+                        }
+                      }),
+                      child: Container(
+                        width: double.infinity,
+                        height: ScreenUtil().setHeight(70),
+                        color: Colors.white,
+                        child: Center(
+                          child: Text(
+                            '拍照',
+                            style: StyleUtils.getCommonTextStyle(
+                                color: Colors.black,
+                                fontSize: ScreenUtil().setSp(38)),
+                          ),
+                        ),
+                      ),
+                    ),
+                    WidgetUtils.myLine(thickness: 1),
+                    GestureDetector(
+                      onTap: (() {
+                        // selectAssets();
+                        if (MyUtils.checkClick()) {
+                          onTapPickFromGallery();
+                        }
+                      }),
+                      child: Container(
+                        width: double.infinity,
+                        height: ScreenUtil().setHeight(70),
+                        color: Colors.white,
+                        child: Center(
+                          child: Text(
+                            '从相册选择',
+                            style: StyleUtils.getCommonTextStyle(
                               color: Colors.black,
-                              fontSize: ScreenUtil().setSp(38)),
-                        ),
-                      ),
-                    ),
-                  ),
-                  WidgetUtils.myLine(thickness: 1),
-                  GestureDetector(
-                    onTap: (() {
-                      // selectAssets();
-                      if (MyUtils.checkClick()) {
-                        onTapPickFromGallery();
-                      }
-                    }),
-                    child: Container(
-                      width: double.infinity,
-                      height: ScreenUtil().setHeight(70),
-                      color: Colors.white,
-                      child: Center(
-                        child: Text(
-                          '从相册选择',
-                          style: StyleUtils.getCommonTextStyle(
-                            color: Colors.black,
-                            fontSize: ScreenUtil().setSp(38),
+                              fontSize: ScreenUtil().setSp(38),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  WidgetUtils.myLine(thickness: 10),
-                  GestureDetector(
-                    onTap: (() {
-                      // selectAssets();
-                      if (MyUtils.checkClick()) {
-                        Navigator.pop(context);
-                      }
-                    }),
-                    child: Container(
-                      width: double.infinity,
-                      height: ScreenUtil().setHeight(70),
-                      color: Colors.white,
-                      child: Center(
-                        child: Text(
-                          '取消',
-                          style: StyleUtils.getCommonTextStyle(
-                            color: Colors.black,
-                            fontSize: ScreenUtil().setSp(38),
+                    WidgetUtils.myLine(thickness: 10),
+                    GestureDetector(
+                      onTap: (() {
+                        // selectAssets();
+                        if (MyUtils.checkClick()) {
+                          Navigator.pop(context);
+                        }
+                      }),
+                      child: Container(
+                        width: double.infinity,
+                        height: ScreenUtil().setHeight(70),
+                        color: Colors.white,
+                        child: Center(
+                          child: Text(
+                            '取消',
+                            style: StyleUtils.getCommonTextStyle(
+                              color: Colors.black,
+                              fontSize: ScreenUtil().setSp(38),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
-        ));
+                    )
+                  ],
+                ),
+              )
+            ],
+          )),
+    );
   }
 
   /// 获取文件url

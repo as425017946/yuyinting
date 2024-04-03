@@ -163,8 +163,12 @@ class MyColors {
   static const Color newLoginblue2 = Color(0xFF61dcde);
   static const Color newHomeBlack = Color(0xFF212121);
   static const Color newHomeBlack2 = Color(0xFF454545);
-  static const Color newY1 = Color(0xFFF1F9FD);
-  static const Color newY2 = Color(0xFFFDF5F9);
-  static const Color newY3 = Color(0xFFFDFCF1);
-  static const Color newY4 = Color(0xFFe0e5ff);
+  static const Color newY1 = Color(0xFFeaffd7);
+  static const Color newY11 = Color(0xFFfff9de);
+  static const Color newY2 = Color(0xFFd4f2ff);
+  static const Color newY22 = Color(0xFFe7f4ff);
+  static const Color newY3 = Color(0xFFcfdfff);
+  static const Color newY33 = Color(0xFFf9eeff);
+  static const Color newY4 = Color(0xFFd7f8f7);
+  static const Color newY44 = Color(0xFFe7fff0);
 }

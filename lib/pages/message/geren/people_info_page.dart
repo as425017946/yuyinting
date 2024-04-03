@@ -169,7 +169,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                         onTap: (() {
                           doPostFollow();
                         }),
-                        child: WidgetUtils.showImagesFill(  isFollow == '0' ? 'assets/images/zy_guanzhu1.png' : 'assets/images/zy_guanzhu2.png', 80.h, 300.w)),
+                        child: WidgetUtils.showImagesFill(  isFollow == '0' ? 'assets/images/zy_guanzhu1.png' : 'assets/images/zy_guanzhu2.png', 75.h, 300.w)),
                     const Expanded(child: Text('')),
                     GestureDetector(
                       onTap: (() {
@@ -178,7 +178,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                           doPostCanSendUser();
                         }
                       }),
-                      child: WidgetUtils.showImagesFill('assets/images/zy_chat.png',  80.h, 300.w)
+                      child: WidgetUtils.showImagesFill('assets/images/zy_chat.png',  75.h, 300.w)
                     ),
                     const Expanded(child: Text('')),
                   ],
@@ -295,11 +295,10 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
     );
   }
   Widget _bg() {
-    return WidgetUtils.CircleImageNet(
-      Get.width,
-      Get.width,
-      0,
+    return WidgetUtils.showImagesNet(
       headImg,
+      Get.width,
+      Get.width,
     );
   }
   Widget _head() {

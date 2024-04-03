@@ -21,7 +21,12 @@ class GPRoomPage extends StatefulWidget {
   String roomID;
   String roomUrl;
   String roomName;
-  GPRoomPage({super.key, required this.roomID, required this.roomUrl, required this.roomName});
+
+  GPRoomPage(
+      {super.key,
+      required this.roomID,
+      required this.roomUrl,
+      required this.roomName});
 
   @override
   State<GPRoomPage> createState() => _GPRoomPageState();
@@ -32,12 +37,13 @@ class _GPRoomPageState extends State<GPRoomPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(const Duration(seconds: 5),(){
-      if(mounted) {
+    Future.delayed(const Duration(seconds: 5), () {
+      if (mounted) {
         // Navigator.pop(context);
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,38 +63,35 @@ class _GPRoomPageState extends State<GPRoomPage> {
           ),
           child: Stack(
             children: [
-              Positioned(
-                top: 50.h,
-                child: Center(
-                  child: SizedBox(
-                    height: 500.h,
-                    width: 500.h,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        const SVGASimpleImage(
-                          assetsName: 'assets/svga/gp/gp_room2.svga',
+              Center(
+                child: SizedBox(
+                  height: 500.h,
+                  width: 500.h,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      const SVGASimpleImage(
+                        assetsName: 'assets/svga/gp/gp_room2.svga',
+                      ),
+                      SizedBox(
+                        height: 300.h,
+                        child: Column(
+                          children: [
+                            WidgetUtils.commonSizedBox(60.h, 0),
+                            WidgetUtils.CircleImageNet(
+                                180.h, 180.h, 10.0, widget.roomUrl),
+                            WidgetUtils.commonSizedBox(10.h, 0),
+                            WidgetUtils.onlyTextCenter(
+                                widget.roomName,
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.a5,
+                                    fontSize: 24.sp,
+                                    fontWeight: FontWeight.w600)),
+                            const Spacer(),
+                          ],
                         ),
-                        SizedBox(
-                          height: 300.h,
-                          child: Column(
-                            children: [
-                              WidgetUtils.commonSizedBox(60.h, 0),
-                              WidgetUtils.CircleImageNet(180.h, 180.h, 10.0,
-                                  widget.roomUrl),
-                              WidgetUtils.commonSizedBox(10.h, 0),
-                              WidgetUtils.onlyTextCenter(
-                                  widget.roomName,
-                                  StyleUtils.getCommonTextStyle(
-                                      color: MyColors.a5,
-                                      fontSize: 24.sp,
-                                      fontWeight: FontWeight.w600)),
-                              const Spacer(),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
+                      )
+                    ],
                   ),
                 ),
               ),
@@ -98,7 +101,7 @@ class _GPRoomPageState extends State<GPRoomPage> {
                 right: 20.h,
                 child: GestureDetector(
                     onTap: (() {
-                      if(MyUtils.checkClick()){
+                      if (MyUtils.checkClick()) {
                         Navigator.pop(context);
                       }
                     }),
@@ -110,14 +113,14 @@ class _GPRoomPageState extends State<GPRoomPage> {
                 bottom: 50.h,
                 child: GestureDetector(
                   onTap: (() {
-                    if(MyUtils.checkClick()){
+                    if (MyUtils.checkClick()) {
                       doPostBeforeJoin(widget.roomID);
                     }
                   }),
                   child: Container(
                     height: 65.h,
-                    width: 400.h,
-                    margin: EdgeInsets.only(left: 50.h, right: 50.h),
+                    width: (400 * 1.3).w,
+                    margin: EdgeInsets.only(left: (40 * 1.3).w, right: (40 * 1.3).w),
                     //边框设置
                     decoration: BoxDecoration(
                       //背景
@@ -140,7 +143,6 @@ class _GPRoomPageState extends State<GPRoomPage> {
       ),
     );
   }
-
 
   /// 加入房间前
   Future<void> doPostBeforeJoin(roomID) async {
@@ -165,17 +167,17 @@ class _GPRoomPageState extends State<GPRoomPage> {
           doPostRoomJoin(roomID, '', '', bean.data!.rtc!);
           break;
         case MyHttpConfig.errorRoomCode: //需要密码
-        MyToastUtils.showToastBottom('此房间需要密码~');
-        // // ignore: use_build_context_synchronously
-        //   MyUtils.goTransparentPageCom(
-        //       context,
-        //       RoomTSMiMaPage(
-        //           roomID: roomID,
-        //           roomToken: bean.data!.rtc!,
-        //           anchorUid: ''));
+          MyToastUtils.showToastBottom('此房间需要密码~');
+          // // ignore: use_build_context_synchronously
+          //   MyUtils.goTransparentPageCom(
+          //       context,
+          //       RoomTSMiMaPage(
+          //           roomID: roomID,
+          //           roomToken: bean.data!.rtc!,
+          //           anchorUid: ''));
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -208,7 +210,7 @@ class _GPRoomPageState extends State<GPRoomPage> {
       CommonBean bean = await DataUtils.postRoomJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.goTransparentRFPage(
               context,
               RoomPage(
@@ -220,7 +222,7 @@ class _GPRoomPageState extends State<GPRoomPage> {
           Navigator.pop(context);
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:

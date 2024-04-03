@@ -24,7 +24,6 @@ import '../../../utils/loading.dart';
 import '../../../utils/log_util.dart';
 import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
-import '../../../utils/regex_formatter.dart';
 import '../../../utils/widget_utils.dart';
 import 'edit_biaoqian_page.dart';
 import 'edit_head_page.dart';
@@ -280,6 +279,7 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
       backgroundColor: Colors.white,
       body: WillPopScope(
         onWillPop: () async {
+          Loading.dismiss();
           photo_id = '';
           for (int i = 0; i < list_pID.length; i++) {
             if (photo_id.isNotEmpty) {

@@ -8,7 +8,6 @@ import 'package:yuyinting/utils/my_utils.dart';
 
 import '../../../bean/Common_bean.dart';
 import '../../../colors/my_colors.dart';
-import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../utils/loading.dart';
@@ -71,6 +70,7 @@ class _ShimingzhiCardPageState extends State<ShimingzhiCardPage> {
       backgroundColor: MyColors.homeBG,
       body: WillPopScope(
         onWillPop: () async {
+          Loading.dismiss();
           return false;
         },
         child: GestureDetector(

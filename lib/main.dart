@@ -55,18 +55,18 @@ void main() async {
 }
 
 MaterialColor my_green = const MaterialColor(
-  0xFF5B46B9,
+  0xFF61dcde,
   <int, Color>{
-    50: Color(0xFF5B46B9),
-    100: Color(0xFF5B46B9),
-    200: Color(0xFF5B46B9),
-    300: Color(0xFF5B46B9),
-    400: Color(0xFF5B46B9),
-    500: Color(0xFF5B46B9),
-    600: Color(0xFF5B46B9),
-    700: Color(0xFF5B46B9),
-    800: Color(0xFF5B46B9),
-    900: Color(0xFF5B46B9),
+    50: Color(0xFF61dcde),
+    100: Color(0xFF61dcde),
+    200: Color(0xFF61dcde),
+    300: Color(0xFF61dcde),
+    400: Color(0xFF61dcde),
+    500: Color(0xFF61dcde),
+    600: Color(0xFF61dcde),
+    700: Color(0xFF61dcde),
+    800: Color(0xFF61dcde),
+    900: Color(0xFF61dcde),
   },
 );
 
