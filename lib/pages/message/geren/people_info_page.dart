@@ -120,183 +120,187 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.black,
-        body: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              pinned: true, //设置为true时，当SliverAppBar内容滑出屏幕时，将始终渲染一个固定在顶部的收起状态
-              expandedHeight: 350.h,
-              backgroundColor: Colors.white,
-              flexibleSpace: FlexibleSpaceBar(
-                // title: const Text("测试信息"),
-                centerTitle: true,
-                background: WidgetUtils.showImagesNet(headImg.isEmpty ? '' : headImg, 350.h, double.infinity),
-              ),
-              // bottom: PreferredSize(
-              //   // 这里是吸附到 AppBar 下面的按钮
-              //   preferredSize: const Size.fromHeight(0),
-              //   child: Container(
-              //     height: 80.h,
-              //     color: Colors.blue,
-              //     child: Center(child: Text('Button')),
-              //   ),
-              // ),
-            ),
-            SliverList(
-              delegate: SliverChildBuilderDelegate((context, index) {
-                return Container(
-                  height: 2000.h,
-                  child: Stack(
-                    children: [
-                      Container(
-                        color: Colors.white,
-                        child: Stack(
-                          alignment: Alignment.topCenter,
-                          children: [
-                            // _bg(),
-                            _content(),
-                            _head(),
-                            _nav(),
-                          ],
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Container(
-                          height: ScreenUtil().setHeight(120),
-                          width: double.infinity,
-                          padding: const EdgeInsets.only(left: 20, right: 20),
-                          alignment: Alignment.center,
-                          decoration: const BoxDecoration(
-                              gradient: LinearGradient(
-                                  //渐变位置
-                                  begin: Alignment.topCenter, //右上
-                                  end: Alignment.bottomCenter, //左下
-                                  stops: [
-                                0.0,
-                                1.0
-                              ], //[渐变起始点, 渐变结束点]
-                                  //渐变颜色[始点颜色, 结束颜色]
-                                  colors: [
-                                Color.fromRGBO(255, 255, 255, 0),
-                                Color.fromRGBO(255, 255, 255, 1)
-                              ])),
-                          child: Row(
-                            children: [
-                              // WidgetUtils.PeopleButton('assets/images/people_hongbao.png', '发红包', MyColors.peopleRed),
-                              const Expanded(child: Text('')),
-                              GestureDetector(
-                                  onTap: (() {
-                                    doPostFollow();
-                                  }),
-                                  child: WidgetUtils.showImagesFill(
-                                      isFollow == '0'
-                                          ? 'assets/images/zy_guanzhu1.png'
-                                          : 'assets/images/zy_guanzhu2.png',
-                                      75.h,
-                                      300.w)),
-                              const Expanded(child: Text('')),
-                              GestureDetector(
-                                  onTap: (() {
-                                    if (MyUtils.checkClick()) {
-                                      // 先判断能否发私聊
-                                      doPostCanSendUser();
-                                    }
-                                  }),
-                                  child: WidgetUtils.showImagesFill(
-                                      'assets/images/zy_chat.png',
-                                      75.h,
-                                      300.w)),
-                              const Expanded(child: Text('')),
-                            ],
+        body: Stack(
+          children: [
+            CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  pinned: true, //设置为true时，当SliverAppBar内容滑出屏幕时，将始终渲染一个固定在顶部的收起状态
+                  expandedHeight: 350.h,
+                  backgroundColor: Colors.white,
+                  flexibleSpace: FlexibleSpaceBar(
+                    // title: const Text("测试信息"),
+                    centerTitle: true,
+                    background: WidgetUtils.showImagesNet(headImg.isEmpty ? '' : headImg, 350.h, double.infinity),
+                  ),
+                  // bottom: PreferredSize(
+                  //   // 这里是吸附到 AppBar 下面的按钮
+                  //   preferredSize: const Size.fromHeight(0),
+                  //   child: Container(
+                  //     height: 80.h,
+                  //     color: Colors.blue,
+                  //     child: Center(child: Text('Button')),
+                  //   ),
+                  // ),
+                ),
+                SliverList(
+                  delegate: SliverChildBuilderDelegate((context, index) {
+                    return SizedBox(
+                      height: 1390.h,
+                      child: Stack(
+                        children: [
+                          Container(
+                            color: Colors.white,
+                            child: Stack(
+                              alignment: Alignment.topCenter,
+                              children: [
+                                // _bg(),
+                                _content(),
+                                _head(),
+                                _nav(),
+                              ],
+                            ),
                           ),
-                        ),
-                      ),
-                      Positioned(
-                        right: 10.h,
-                        top: 50.h,
-                        child: GestureDetector(
-                          onTap: (() {
-                            setState(() {
-                              isShow = true;
-                            });
-                          }),
-                          child: Container(
-                            width: ScreenUtil().setWidth(120),
-                            height: 60.h,
-                            color: Colors.transparent,
-                            alignment: Alignment.centerRight,
-                            child: WidgetUtils.showImages(
-                                'assets/images/chat_dian_white.png',
-                                ScreenUtil().setHeight(50),
-                                ScreenUtil().setHeight(80)),
-                          ),
-                        ),
-                      ),
-                      // 头部黑名单
-                      isShow
-                          ? GestureDetector(
+                          Positioned(
+                            right: 10.h,
+                            top: 50.h,
+                            child: GestureDetector(
                               onTap: (() {
                                 setState(() {
-                                  isShow = false;
+                                  isShow = true;
                                 });
                               }),
                               child: Container(
-                                width: double.infinity,
-                                height: double.infinity,
-                                alignment: Alignment.topRight,
+                                width: ScreenUtil().setWidth(120),
+                                height: 60.h,
                                 color: Colors.transparent,
-                                child: Row(
-                                  children: [
-                                    const Spacer(),
-                                    GestureDetector(
-                                      onTap: (() {
-                                        setState(() {
-                                          isShow = false;
-                                        });
-                                        doPostUpdateBlack();
-                                      }),
-                                      child: Container(
-                                        height: ScreenUtil().setHeight(80),
-                                        width: ScreenUtil().setHeight(220),
-                                        margin: EdgeInsets.only(
-                                            top: ScreenUtil().setHeight(100),
-                                            right: 15),
-                                        //边框设置
-                                        decoration: const BoxDecoration(
-                                          //背景
-                                          color: Colors.white,
-                                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(10.0)),
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            const Spacer(),
-                                            WidgetUtils.showImages(
-                                                'assets/images/chat_black_p.png',
-                                                ScreenUtil().setHeight(42),
-                                                ScreenUtil().setHeight(38)),
-                                            WidgetUtils.commonSizedBox(
-                                                0, ScreenUtil().setHeight(10)),
-                                            WidgetUtils.onlyText(
-                                                isBlack == 0
-                                                    ? '加入黑名单'
-                                                    : '移除黑名单',
-                                                StyleUtils.loginHintTextStyle),
-                                            const Spacer(),
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
+                                alignment: Alignment.centerRight,
+                                child: WidgetUtils.showImages(
+                                    'assets/images/chat_dian_white.png',
+                                    ScreenUtil().setHeight(50),
+                                    ScreenUtil().setHeight(80)),
                               ),
-                            )
-                          : const Text(''),
-                    ],
-                  ),
-                );
-              }, childCount: 1),
+                            ),
+                          ),
+                          // 头部黑名单
+                          isShow
+                              ? GestureDetector(
+                                  onTap: (() {
+                                    setState(() {
+                                      isShow = false;
+                                    });
+                                  }),
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    alignment: Alignment.topRight,
+                                    color: Colors.transparent,
+                                    child: Row(
+                                      children: [
+                                        const Spacer(),
+                                        GestureDetector(
+                                          onTap: (() {
+                                            setState(() {
+                                              isShow = false;
+                                            });
+                                            doPostUpdateBlack();
+                                          }),
+                                          child: Container(
+                                            height: ScreenUtil().setHeight(80),
+                                            width: ScreenUtil().setHeight(220),
+                                            margin: EdgeInsets.only(
+                                                top: ScreenUtil().setHeight(100),
+                                                right: 15),
+                                            //边框设置
+                                            decoration: const BoxDecoration(
+                                              //背景
+                                              color: Colors.white,
+                                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10.0)),
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                const Spacer(),
+                                                WidgetUtils.showImages(
+                                                    'assets/images/chat_black_p.png',
+                                                    ScreenUtil().setHeight(42),
+                                                    ScreenUtil().setHeight(38)),
+                                                WidgetUtils.commonSizedBox(
+                                                    0, ScreenUtil().setHeight(10)),
+                                                WidgetUtils.onlyText(
+                                                    isBlack == 0
+                                                        ? '加入黑名单'
+                                                        : '移除黑名单',
+                                                    StyleUtils.loginHintTextStyle),
+                                                const Spacer(),
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              : const Text(''),
+                        ],
+                      ),
+                    );
+                  }, childCount: 1),
+                ),
+              ],
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                height: ScreenUtil().setHeight(120),
+                width: double.infinity,
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                alignment: Alignment.center,
+                decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      //渐变位置
+                        begin: Alignment.topCenter, //右上
+                        end: Alignment.bottomCenter, //左下
+                        stops: [
+                          0.0,
+                          1.0
+                        ], //[渐变起始点, 渐变结束点]
+                        //渐变颜色[始点颜色, 结束颜色]
+                        colors: [
+                          Color.fromRGBO(255, 255, 255, 0),
+                          Color.fromRGBO(255, 255, 255, 1)
+                        ])),
+                child: Row(
+                  children: [
+                    // WidgetUtils.PeopleButton('assets/images/people_hongbao.png', '发红包', MyColors.peopleRed),
+                    const Expanded(child: Text('')),
+                    GestureDetector(
+                        onTap: (() {
+                          doPostFollow();
+                        }),
+                        child: WidgetUtils.showImagesFill(
+                            isFollow == '0'
+                                ? 'assets/images/zy_guanzhu1.png'
+                                : 'assets/images/zy_guanzhu2.png',
+                            75.h,
+                            300.w)),
+                    const Expanded(child: Text('')),
+                    GestureDetector(
+                        onTap: (() {
+                          if (MyUtils.checkClick()) {
+                            // 先判断能否发私聊
+                            doPostCanSendUser();
+                          }
+                        }),
+                        child: WidgetUtils.showImagesFill(
+                            'assets/images/zy_chat.png',
+                            75.h,
+                            300.w)),
+                    const Expanded(child: Text('')),
+                  ],
+                ),
+              ),
             ),
           ],
         ));

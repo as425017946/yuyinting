@@ -102,7 +102,7 @@ class _BiZhuanDouPageState extends State<BiZhuanDouPage> {
                       alignment: Alignment.bottomRight,
                       children: [
                         WidgetUtils.showImagesFill(
-                            'assets/images/mine_wallet_bbj.jpg',
+                            'assets/images/mine_wallet_bbj.png',
                             ScreenUtil().setHeight(250),
                             double.infinity),
                         Row(

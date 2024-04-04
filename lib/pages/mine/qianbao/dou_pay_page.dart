@@ -198,7 +198,7 @@ class _DouPayPageState extends State<DouPayPage> {
                       alignment: Alignment.bottomRight,
                       children: [
                         WidgetUtils.showImagesFill(
-                            'assets/images/mine_wallet_dbj.jpg',
+                            'assets/images/mine_wallet_dbj.png',
                             ScreenUtil().setHeight(250),
                             double.infinity),
                         Row(

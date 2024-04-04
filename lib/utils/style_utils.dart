@@ -114,4 +114,22 @@ class StyleUtils {
         decoration: decoration ?? TextDecoration.none,
         overflow: textOverflow);
   }
+
+  //自己定义自己修改颜色样式字体大小
+  static TextStyle getCommonFFTextStyle(
+      {Color color = MyColors.g3,
+        double? fontSize,
+        String? fontFamily = 'LR',
+        FontWeight? fontWeight,
+        TextDecoration? decoration,
+        TextOverflow? textOverflow = TextOverflow.ellipsis}) {
+    return TextStyle(
+        color: color,
+        decorationColor: color,
+        height: 1.2,
+        fontFamily: fontFamily,
+        fontSize: fontSize ?? ConfigScreenUtil.autoSize36,
+        decoration: decoration ?? TextDecoration.none,
+        overflow: textOverflow);
+  }
 }

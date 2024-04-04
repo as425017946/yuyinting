@@ -230,7 +230,7 @@ class _HomePageState extends State<HomePage>
                                 alignment: Alignment.center,
                                 child: WidgetUtils.onlyTextCenter(
                                     '收藏',
-                                    StyleUtils.getCommonTextStyle(
+                                    StyleUtils.getCommonFFTextStyle(
                                         color: MyColors.newHomeBlack,
                                         fontSize: _currentIndex == 0
                                             ? ScreenUtil().setSp(38)
@@ -253,7 +253,7 @@ class _HomePageState extends State<HomePage>
                                 color: Colors.transparent,
                                 child: WidgetUtils.onlyTextCenter(
                                     '推荐',
-                                    StyleUtils.getCommonTextStyle(
+                                    StyleUtils.getCommonFFTextStyle(
                                         color: MyColors.newHomeBlack,
                                         fontSize: _currentIndex == 1
                                             ? ScreenUtil().setSp(38)
@@ -276,7 +276,7 @@ class _HomePageState extends State<HomePage>
                                 color: Colors.transparent,
                                 child: WidgetUtils.onlyTextCenter(
                                     '派对',
-                                    StyleUtils.getCommonTextStyle(
+                                    StyleUtils.getCommonFFTextStyle(
                                         color: MyColors.newHomeBlack,
                                         fontSize: _currentIndex == 2
                                             ? ScreenUtil().setSp(38)
@@ -327,7 +327,7 @@ class _HomePageState extends State<HomePage>
                                       color: Colors.transparent,
                                       child: WidgetUtils.onlyTextCenter(
                                           '在线',
-                                          StyleUtils.getCommonTextStyle(
+                                          StyleUtils.getCommonFFTextStyle(
                                               color: MyColors.newHomeBlack,
                                               fontSize: _currentIndex == 4
                                                   ? ScreenUtil().setSp(38)
@@ -342,7 +342,7 @@ class _HomePageState extends State<HomePage>
                                     opacity: 0,
                                     child: WidgetUtils.onlyTextCenter(
                                         '在线',
-                                        StyleUtils.getCommonTextStyle(
+                                        StyleUtils.getCommonFFTextStyle(
                                             color: Colors.white,
                                             fontSize: _currentIndex == 4
                                                 ? ScreenUtil().setSp(38)

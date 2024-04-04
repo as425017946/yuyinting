@@ -78,7 +78,7 @@ class _WalletPageState extends State<WalletPage> {
                       alignment: Alignment.bottomRight,
                       children: [
                         WidgetUtils.showImagesFill(
-                            'assets/images/mine_wallet_dbj.jpg',
+                            'assets/images/mine_wallet_dbj.png',
                             ScreenUtil().setHeight(250),
                             double.infinity),
                         Row(
@@ -231,7 +231,7 @@ class _WalletPageState extends State<WalletPage> {
                       alignment: Alignment.bottomRight,
                       children: [
                         WidgetUtils.showImagesFill(
-                            'assets/images/mine_wallet_bbj.jpg',
+                            'assets/images/mine_wallet_bbj.png',
                             ScreenUtil().setHeight(250),
                             double.infinity),
                         Row(
@@ -522,7 +522,7 @@ class _WalletPageState extends State<WalletPage> {
       ),
     ];
     return _card(
-      'assets/images/mine_wallet_bbj.jpg',
+      'assets/images/mine_wallet_bbj.png',
       'assets/images/mine_wallet_bb.png',
       'V币',
       '礼物/全民代理/公会收益',
@@ -569,7 +569,7 @@ class _WalletPageState extends State<WalletPage> {
       );
     }
     return _card(
-      'assets/images/mine_wallet_dbj.jpg',
+      'assets/images/mine_wallet_dbj.png',
       'assets/images/mine_wallet_dd.png',
       'V豆',
       '可用于游戏和打赏礼物',

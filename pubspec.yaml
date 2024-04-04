@@ -229,3 +229,6 @@ flutter:
     - family: YOUSHEBIAOTIHEI
       fonts:
         - asset: assets/font/YOUSHEBIAOTIHEI-2.TTF
+    - family: LR
+      fonts:
+        - asset: assets/font/lr.ttf
