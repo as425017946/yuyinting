@@ -40,6 +40,7 @@ class _ZiliaoPageState extends State<ZiliaoPage> {
       constellation = '',
       xzUrl = '';
 
+  List<String> list_label = [];
   List<String> list_p = [];
   List<ReceiveGift> list_a = [];
   TextEditingController controller = TextEditingController();
@@ -266,6 +267,34 @@ class _ZiliaoPageState extends State<ZiliaoPage> {
               ],
             ),
           ),
+          Container(
+            height: ScreenUtil().setHeight(70),
+            width: double.infinity,
+            alignment: Alignment.centerLeft,
+            child: Row(
+              children: [
+                WidgetUtils.showImages('assets/images/people_bb.png',
+                    ScreenUtil().setHeight(40), ScreenUtil().setHeight(40)),
+                WidgetUtils.commonSizedBox(0, 10),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Wrap(
+                    alignment: WrapAlignment.start,
+                    spacing: ScreenUtil().setHeight(15),
+                    runSpacing: ScreenUtil().setHeight(15),
+                    children: List.generate(
+                        list_label.length,
+                            (index) => WidgetUtils.myContainerZishiying(
+                            MyColors.newLoginblue2,
+                            list_label[index],
+                            StyleUtils.getCommonTextStyle(
+                                color: Colors.white,
+                                fontSize: ScreenUtil().setSp(26)))),
+                  ),
+                ),
+              ],
+            ),
+          ),
           WidgetUtils.myLine(thickness: 5),
           WidgetUtils.commonSizedBox(10, 0),
           WidgetUtils.onlyText(
@@ -313,6 +342,7 @@ class _ZiliaoPageState extends State<ZiliaoPage> {
         case MyHttpConfig.successCode:
           list_p.clear();
           list_a.clear();
+          list_label.clear();
           setState(() {
             headImg = bean.data!.userInfo!.avatarUrl!;
             gender = bean.data!.userInfo!.gender as int;
@@ -333,6 +363,9 @@ class _ZiliaoPageState extends State<ZiliaoPage> {
             all_gift_type = bean.data!.giftList!.allGiftType!;
             receive_gift_type = bean.data!.giftList!.receiveGiftType!;
 
+            if(bean.data!.userInfo!.label!.contains(',')){
+              list_label = bean.data!.userInfo!.label!.split(',');
+            }
 
             if (bean.data!.userInfo!.constellation! == '白羊座') {
               xzUrl = 'assets/images/xz/baiyang.png';

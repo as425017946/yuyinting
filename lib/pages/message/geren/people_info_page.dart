@@ -134,15 +134,6 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                     centerTitle: true,
                     background: WidgetUtils.showImagesNet(headImg.isEmpty ? '' : headImg, 350.h, double.infinity),
                   ),
-                  // bottom: PreferredSize(
-                  //   // 这里是吸附到 AppBar 下面的按钮
-                  //   preferredSize: const Size.fromHeight(0),
-                  //   child: Container(
-                  //     height: 80.h,
-                  //     color: Colors.blue,
-                  //     child: Center(child: Text('Button')),
-                  //   ),
-                  // ),
                 ),
                 SliverList(
                   delegate: SliverChildBuilderDelegate((context, index) {
@@ -161,12 +152,6 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                               MyColors.newY5,
                               Colors.white
                             ]),
-                        // //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                        // borderRadius: BorderRadius.only(
-                        //     topLeft: Radius.circular(50.0),
-                        //     topRight: Radius.circular(20.0),
-                        //     bottomLeft: Radius.circular(20.0),
-                        //     bottomRight: Radius.circular(20.0)),
                       ),
                       height: 1415.h,
                       child: Stack(

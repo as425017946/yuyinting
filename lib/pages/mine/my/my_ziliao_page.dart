@@ -37,6 +37,7 @@ class _MyZiliaoPageState extends State<MyZiliaoPage> {
       constellation = '',
       xzUrl = '';
 
+  List<String> list_label = [];
   List<String> list_p = [];
   List<ReceiveGift> list_a = [];
   TextEditingController controller = TextEditingController();
@@ -119,6 +120,7 @@ class _MyZiliaoPageState extends State<MyZiliaoPage> {
 
   void saveInfo(){
     setState(() {
+      list_label.clear();
       sp.setString("user_headimg", widget.userInfo!.avatarUrl!);
       headImg = widget.userInfo!.avatarUrl!;
       gender = widget.userInfo!.gender as int;
@@ -151,6 +153,9 @@ class _MyZiliaoPageState extends State<MyZiliaoPage> {
         xzUrl = 'assets/images/xz/tiancheng.png';
       } else if (widget.userInfo!.constellation! == '天蝎座') {
         xzUrl = 'assets/images/xz/tianxie.png';
+      }
+      if(widget.userInfo!.label!.contains(',')){
+        list_label = widget.userInfo!.label!.split(',');
       }
       if (widget.userInfo!.photoId!.isNotEmpty) {
         list_p = widget.userInfo!.photoUrl!;
@@ -313,6 +318,34 @@ class _MyZiliaoPageState extends State<MyZiliaoPage> {
                     widget.userInfo!.city!.isEmpty ? '外太空' : widget.userInfo!.city!,
                     StyleUtils.getCommonTextStyle(
                         color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
+              ],
+            ),
+          ),
+          Container(
+            height: ScreenUtil().setHeight(70),
+            width: double.infinity,
+            alignment: Alignment.centerLeft,
+            child: Row(
+              children: [
+                WidgetUtils.showImages('assets/images/people_bb.png',
+                    ScreenUtil().setHeight(40), ScreenUtil().setHeight(40)),
+                WidgetUtils.commonSizedBox(0, 10),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Wrap(
+                    alignment: WrapAlignment.start,
+                    spacing: ScreenUtil().setHeight(15),
+                    runSpacing: ScreenUtil().setHeight(15),
+                    children: List.generate(
+                        list_label.length,
+                            (index) => WidgetUtils.myContainerZishiying(
+                            MyColors.newLoginblue2,
+                            list_label[index],
+                            StyleUtils.getCommonTextStyle(
+                                color: Colors.white,
+                                fontSize: ScreenUtil().setSp(26)))),
+                  ),
+                ),
               ],
             ),
           ),

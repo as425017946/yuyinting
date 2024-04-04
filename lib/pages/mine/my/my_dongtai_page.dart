@@ -66,7 +66,7 @@ class _MyDongtaiPageState extends State<MyDongtaiPage> {
   Widget _itemPeople(BuildContext context, int i) {
     return Container(
       width: double.infinity,
-      color: Colors.white,
+      color: Colors.transparent,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
