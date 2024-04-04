@@ -375,6 +375,7 @@ class _EditInfoPageState extends State<EditInfoPage> {
             //有房间直接进入
             doPostBeforeJoin(sp.getString('daili_roomid').toString(),'');
           }else{
+            eventBus.fire(FirstInfoBack(isOk: true));
             // ignore: use_build_context_synchronously
             Navigator.pop(context);
           }

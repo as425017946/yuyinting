@@ -3,7 +3,6 @@ import 'package:android_package_manager/android_package_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:yuyinting/pages/login/login_page.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/my_utils.dart';
 import '../../bean/Common_bean.dart';
@@ -69,7 +68,7 @@ class _StarPageState extends State<StarPage> {
     }
 
     doPostAheadPunish();
-    doPostPdAddress();
+    // doPostPdAddress();
     Future.delayed(const Duration(milliseconds: 2000), (() {
       sp.setBool('joinRoom', false);
       sp.setString('roomID', '');
@@ -168,18 +167,8 @@ class _StarPageState extends State<StarPage> {
   /// 打开app
   Future<void> doPostAheadPunish() async {
     try {
+      LogE('用户token ${sp.getString('user_token')}');
       CommonBean bean = await DataUtils.postAppOpen();
-      switch (bean.code) {
-        case MyHttpConfig.successCode:
-          break;
-        case MyHttpConfig.errorloginCode:
-          // ignore: use_build_context_synchronously
-          MyUtils.jumpLogin(context);
-          break;
-        default:
-          MyToastUtils.showToastBottom(bean.msg!);
-          break;
-      }
     } catch (e) {
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }

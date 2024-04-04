@@ -395,11 +395,6 @@ class _APageState extends State<RoomBQPage> {
       "url2": "assets/images/cy/暗中观察.gif",
     },
     {
-      'name': '暗中观察',
-      "url1": "assets/images/cy/暗中观察.png",
-      "url2": "assets/images/cy/暗中观察.gif",
-    },
-    {
       'name': '来呀~',
       "url1": "assets/images/cy/来呀~.png",
       "url2": "assets/images/cy/来呀~.gif",

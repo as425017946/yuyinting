@@ -97,23 +97,16 @@ class _TuijianPageState extends State<TuijianPage>
 
   // 显示推荐房间弹窗次数是否刷新
   int tjRoom = 0;
-  var listen;
+  var listen,listen2;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     doPostHotRoom();
-    LogE('值 ==  ${sp.getInt('tjFirst')}');
-    if (sp.getInt('tjFirst') == 0) {
-      doPostHotRoom();
-      doPostPushRoom();
-      doPostPushStreamer();
-      setState(() {
-        int zhi = int.parse(sp.getInt('tjFirst').toString()) + 1;
-        sp.setInt('tjFirst', zhi);
-      });
-    }
+    doPostPushRoom();
+    doPostPushStreamer();
+
     listen = eventBus.on<SubmitButtonBack>().listen((event) {
       if (event.title == '退出房间' ||
           event.title == '收起房间' ||
@@ -126,6 +119,19 @@ class _TuijianPageState extends State<TuijianPage>
         doPostPushStreamer();
       }
     });
+    listen2 = eventBus.on<FirstInfoBack>().listen((event) {
+      if(event.isOk){
+        LogE('=---==--=--2');
+        // 推荐房间
+        MyUtils.goTransparentPageCom(
+            context,
+            GPRoomPage(
+              roomID: list[0].id.toString(),
+              roomUrl: list[0].coverImg!,
+              roomName: list[0].roomName!,
+            ));
+      }
+    });
   }
 
   @override
@@ -133,6 +139,7 @@ class _TuijianPageState extends State<TuijianPage>
     // TODO: implement dispose
     super.dispose();
     listen.cancel();
+    listen2.cancel();
   }
 
   // 推荐主播
@@ -1011,6 +1018,9 @@ class _TuijianPageState extends State<TuijianPage>
               list = bean.data!;
               if (tjRoom == 0) {
                 tjRoom++;
+              }
+              if(sp.getBool('isFirst') == false){
+                LogE('=---==--=--1');
                 // 推荐房间
                 MyUtils.goTransparentPageCom(
                     context,

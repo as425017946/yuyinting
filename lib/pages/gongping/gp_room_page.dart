@@ -97,16 +97,22 @@ class _GPRoomPageState extends State<GPRoomPage> {
               ),
               // 关闭按钮
               Positioned(
-                top: 20.h,
-                right: 20.h,
+                top: 0.h,
+                right: 0.h,
                 child: GestureDetector(
                     onTap: (() {
                       if (MyUtils.checkClick()) {
                         Navigator.pop(context);
                       }
                     }),
-                    child: WidgetUtils.showImages(
-                        'assets/images/login_colse.png', 30.h, 30.h)),
+                    child: Container(
+                      height: 60.h,
+                      width: 60.h,
+                      color: Colors.transparent,
+                      alignment: Alignment.center,
+                      child: WidgetUtils.showImages(
+                          'assets/images/login_colse.png', 30.h, 30.h),
+                    )),
               ),
               // 进入房间按钮
               Positioned(

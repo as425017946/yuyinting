@@ -1540,7 +1540,9 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
                             style: StyleUtils.loginTextStyle,
                             onSubmitted: (value) {
                               // MyUtils.sendMessage(widget.otherUid, value);
-                              doPostSendUserMsg(value);
+                              if(MyUtils.checkClick()){
+                                doPostCanSendUser(1);
+                              }
                             },
                             decoration: InputDecoration(
                               // border: InputBorder.none,
@@ -2067,7 +2069,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
             'weight': widget.otherUid.toString() == '1' ? 1 : 0,
             'msgId': '',
             'msgRead': 2,
-            'msgJson': textMsg.msgId,
+            'msgJson': '1',
           };
           // 插入数据
           await databaseHelper.insertData('messageSLTable', params);
@@ -2436,6 +2438,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
 
   /// 能否发私聊
   Future<void> doPostCanSendUser(int type) async {
+    LogE('私聊类型== $type');
     Map<String, dynamic> params = <String, dynamic>{'uid': widget.otherUid};
     try {
       CommonBean bean = await DataUtils.postCanSendUser(params);

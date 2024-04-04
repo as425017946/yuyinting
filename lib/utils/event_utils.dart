@@ -311,3 +311,10 @@ class siliaoBack {
   String title;
   siliaoBack({required this.info, required this.title});
 }
+
+
+/// 首次编辑完个人资料
+class FirstInfoBack {
+  bool isOk;
+  FirstInfoBack({required this.isOk});
+}

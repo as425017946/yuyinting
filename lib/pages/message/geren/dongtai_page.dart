@@ -70,7 +70,7 @@ class _DongtaiPageState extends State<DongtaiPage> {
       }),
       child: Container(
         width: double.infinity,
-        color: Colors.white,
+        color: Colors.transparent,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,

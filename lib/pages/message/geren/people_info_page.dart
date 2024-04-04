@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sound/public/flutter_sound_player.dart';
 import 'package:get/get.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
+import 'package:yuyinting/config/online_config.dart';
 import 'package:yuyinting/pages/message/geren/ziliao_page.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 
@@ -119,7 +120,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.transparent,
         body: Stack(
           children: [
             CustomScrollView(
@@ -145,104 +146,40 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                 ),
                 SliverList(
                   delegate: SliverChildBuilderDelegate((context, index) {
-                    return SizedBox(
-                      height: 1390.h,
+                    return Container(
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          //渐变位置
+                            begin: Alignment.topCenter, //右上
+                            end: Alignment.bottomCenter, //左下
+                            stops: [
+                              0.0,
+                              1.0
+                            ], //[渐变起始点, 渐变结束点]
+                            //渐变颜色[始点颜色, 结束颜色]
+                            colors: [
+                              MyColors.newY5,
+                              Colors.white
+                            ]),
+                        // //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                        // borderRadius: BorderRadius.only(
+                        //     topLeft: Radius.circular(50.0),
+                        //     topRight: Radius.circular(20.0),
+                        //     bottomLeft: Radius.circular(20.0),
+                        //     bottomRight: Radius.circular(20.0)),
+                      ),
+                      height: 1415.h,
                       child: Stack(
                         children: [
-                          Container(
-                            color: Colors.white,
-                            child: Stack(
-                              alignment: Alignment.topCenter,
-                              children: [
-                                // _bg(),
-                                _content(),
-                                _head(),
-                                _nav(),
-                              ],
-                            ),
+                          Stack(
+                            alignment: Alignment.topCenter,
+                            children: [
+                              // _bg(),
+                              _content(),
+                              _head(),
+                              // _nav(),
+                            ],
                           ),
-                          Positioned(
-                            right: 10.h,
-                            top: 50.h,
-                            child: GestureDetector(
-                              onTap: (() {
-                                setState(() {
-                                  isShow = true;
-                                });
-                              }),
-                              child: Container(
-                                width: ScreenUtil().setWidth(120),
-                                height: 60.h,
-                                color: Colors.transparent,
-                                alignment: Alignment.centerRight,
-                                child: WidgetUtils.showImages(
-                                    'assets/images/chat_dian_white.png',
-                                    ScreenUtil().setHeight(50),
-                                    ScreenUtil().setHeight(80)),
-                              ),
-                            ),
-                          ),
-                          // 头部黑名单
-                          isShow
-                              ? GestureDetector(
-                                  onTap: (() {
-                                    setState(() {
-                                      isShow = false;
-                                    });
-                                  }),
-                                  child: Container(
-                                    width: double.infinity,
-                                    height: double.infinity,
-                                    alignment: Alignment.topRight,
-                                    color: Colors.transparent,
-                                    child: Row(
-                                      children: [
-                                        const Spacer(),
-                                        GestureDetector(
-                                          onTap: (() {
-                                            setState(() {
-                                              isShow = false;
-                                            });
-                                            doPostUpdateBlack();
-                                          }),
-                                          child: Container(
-                                            height: ScreenUtil().setHeight(80),
-                                            width: ScreenUtil().setHeight(220),
-                                            margin: EdgeInsets.only(
-                                                top: ScreenUtil().setHeight(100),
-                                                right: 15),
-                                            //边框设置
-                                            decoration: const BoxDecoration(
-                                              //背景
-                                              color: Colors.white,
-                                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(10.0)),
-                                            ),
-                                            child: Row(
-                                              children: [
-                                                const Spacer(),
-                                                WidgetUtils.showImages(
-                                                    'assets/images/chat_black_p.png',
-                                                    ScreenUtil().setHeight(42),
-                                                    ScreenUtil().setHeight(38)),
-                                                WidgetUtils.commonSizedBox(
-                                                    0, ScreenUtil().setHeight(10)),
-                                                WidgetUtils.onlyText(
-                                                    isBlack == 0
-                                                        ? '加入黑名单'
-                                                        : '移除黑名单',
-                                                    StyleUtils.loginHintTextStyle),
-                                                const Spacer(),
-                                              ],
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                )
-                              : const Text(''),
                         ],
                       ),
                     );
@@ -250,6 +187,88 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                 ),
               ],
             ),
+            Positioned(
+              right: 40.w,
+              top: 78.h,
+              child: GestureDetector(
+                onTap: (() {
+                  setState(() {
+                    isShow = true;
+                  });
+                }),
+                child: Container(
+                  width: ScreenUtil().setWidth(120),
+                  height: 60.h,
+                  color: Colors.transparent,
+                  alignment: Alignment.centerRight,
+                  child: WidgetUtils.showImages(
+                      'assets/images/chat_dian.png',
+                      ScreenUtil().setHeight(30),
+                      ScreenUtil().setHeight(60)),
+                ),
+              ),
+            ),
+            // 头部黑名单
+            isShow
+                ? GestureDetector(
+              onTap: (() {
+                setState(() {
+                  isShow = false;
+                });
+              }),
+              child: Container(
+                width: double.infinity,
+                height: double.infinity,
+                alignment: Alignment.topRight,
+                color: Colors.transparent,
+                child: Row(
+                  children: [
+                    const Spacer(),
+                    GestureDetector(
+                      onTap: (() {
+                        setState(() {
+                          isShow = false;
+                        });
+                        doPostUpdateBlack();
+                      }),
+                      child: Container(
+                        height: ScreenUtil().setHeight(80),
+                        width: ScreenUtil().setHeight(220),
+                        margin: EdgeInsets.only(
+                            top: ScreenUtil().setHeight(120),
+                            right: 15),
+                        //边框设置
+                        decoration: const BoxDecoration(
+                          //背景
+                          color: Colors.white,
+                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(10.0)),
+                        ),
+                        child: Row(
+                          children: [
+                            const Spacer(),
+                            WidgetUtils.showImages(
+                                'assets/images/chat_black_p.png',
+                                ScreenUtil().setHeight(42),
+                                ScreenUtil().setHeight(38)),
+                            WidgetUtils.commonSizedBox(
+                                0, ScreenUtil().setHeight(10)),
+                            WidgetUtils.onlyText(
+                                isBlack == 0
+                                    ? '加入黑名单'
+                                    : '移除黑名单',
+                                StyleUtils.loginHintTextStyle),
+                            const Spacer(),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            )
+                : const Text(''),
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
@@ -428,7 +447,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                       ),
                       WidgetUtils.commonSizedBox(0, 10.w),
                       WidgetUtils.showImages(
-                        'assets/images/people_fuzhi.png',
+                        'assets/images/mine_fuzhi.png',
                         40.w,
                         40.w,
                       ),
@@ -438,32 +457,34 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
               ],
             ),
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
+          Container(
+            margin: EdgeInsets.only(top: 10.h),
+            padding: EdgeInsets.only(left: 20.w,),
+            color: Colors.transparent,
             child: Row(
               children: [
                 sex != 0
                     ? Container(
-                        height: 30.w,
-                        width: 50.w,
+                        height: 40.w,
+                        width: 80.w,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                           color: sex == 1 ? MyColors.dtBlue : MyColors.dtPink,
-                          borderRadius: BorderRadius.all(Radius.circular(15.w)),
+                          borderRadius: BorderRadius.all(Radius.circular(25.w)),
                         ),
                         child: WidgetUtils.showImages(
                             sex == 1
                                 ? 'assets/images/nan.png'
                                 : 'assets/images/nv.png',
-                            22.w,
-                            22.w),
+                            25.w,
+                            25.w),
                       )
                     : const Text(''),
                 WidgetUtils.commonSizedBox(0, 10.w),
                 // 只有不是新贵或者新锐的时候展示萌新
                 (isNew == 1 && isNewNoble == 0)
                     ? WidgetUtils.showImages(
-                        'assets/images/dj/room_role_common.png', 30.w, 50..w)
+                        'assets/images/dj/room_role_common.png', 40.w, 80.w)
                     : const Text(''),
                 (isNew == 1 && isNewNoble == 0)
                     ? WidgetUtils.commonSizedBox(0, 10.w)
@@ -486,9 +507,6 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                     ? WidgetUtils.showImages(
                         'assets/images/dj/lianghao.png', 30.w, 30.w)
                     : const Text(''),
-                isPretty == 1
-                    ? WidgetUtils.commonSizedBox(0, 10.w)
-                    : WidgetUtils.commonSizedBox(0, 0),
                 // 用户等级
                 level != 0
                     ? Stack(
@@ -514,18 +532,18 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                                                                 level <= 45)
                                                             ? 'assets/images/dj/dj_c_41-45.png'
                                                             : 'assets/images/dj/dj_c_46-50.png',
-                            30.w,
-                            85.w,
+                            40.w,
+                            100.w,
                           ),
                           Positioned(
-                              left: 30.w,
+                              left: 40.w,
                               child: Stack(
                                 alignment: Alignment.center,
                                 children: [
                                   Text(
                                     'LV.${level.toString()}',
                                     style: TextStyle(
-                                        fontSize: 16.sp,
+                                        fontSize: 18.sp,
                                         fontWeight: FontWeight.w600,
                                         fontFamily: 'ARIAL',
                                         foreground: Paint()
@@ -565,7 +583,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                                     'LV.${level.toString()}',
                                     style: TextStyle(
                                         color: MyColors.djOne,
-                                        fontSize: 16.sp,
+                                        fontSize: 18.sp,
                                         fontWeight: FontWeight.w600,
                                         fontFamily: 'ARIAL'),
                                   ),
@@ -594,7 +612,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              (live == 1 && widget.title != '小主页')
+              (live != 1 && widget.title != '小主页')
                   ? GestureDetector(
                       onTap: (() {
                         if (sp.getString('roomID').toString() == roomID) {
@@ -613,32 +631,31 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                       }),
                       child: Container(
                         height: ScreenUtil().setHeight(40),
-                        width: ScreenUtil().setWidth(130),
-                        padding: const EdgeInsets.only(left: 8),
+                        width: ScreenUtil().setWidth(170),
+                        padding: EdgeInsets.only(left: 10.w),
                         alignment: Alignment.center,
-                        //边框设置
                         decoration: const BoxDecoration(
-                          //背景
-                          color: Colors.white,
-                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20.0),
-                            bottomLeft: Radius.circular(20.0),
+                          //设置Container修饰
+                          image: DecorationImage(
+                            //背景图片修饰
+                            image: AssetImage('assets/images/people_info_room.png'),
+                            fit: BoxFit.fill, //覆盖
                           ),
                         ),
                         child: Row(
                           children: [
+                            WidgetUtils.CircleHeadImage(30.w, 30.w, headImg),
+                            WidgetUtils.commonSizedBox(0, 10.w),
                             WidgetUtils.showImages(
-                                'assets/images/zhibozhong2.webp',
+                                'assets/images/zhibo2.webp',
                                 ScreenUtil().setHeight(22),
                                 ScreenUtil().setWidth(22)),
-                            WidgetUtils.commonSizedBox(0, 5),
+                            WidgetUtils.commonSizedBox(0, 5.w),
                             WidgetUtils.onlyText(
-                                '踩房间',
+                                '跟TA进房',
                                 StyleUtils.getCommonTextStyle(
-                                    color: MyColors.careBlue,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 21.sp)),
+                                    color: Colors.white,
+                                    fontSize: 18.sp)),
                           ],
                         ),
                       ),
@@ -716,11 +733,11 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
         Expanded(
           child: Container(
             height: double.infinity,
-            padding: EdgeInsets.only(left: 20, right: 20, top: 0.w),
+            padding: EdgeInsets.only(left: 20, right: 20, top: 20.w),
             //边框设置
             decoration: const BoxDecoration(
               //背景
-              color: Colors.white,
+              color: Colors.transparent,
               //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20.0),

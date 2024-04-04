@@ -77,7 +77,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
     });
     // TODO: implement initState
     super.initState();
-    doPostPdAddress();
+    // doPostPdAddress();
     // getIPAddress();
     getDeviceIMEI();
     // 在登录页先设置所有游戏的音频开关默认开启，false为开始，true为关闭
@@ -266,7 +266,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
           child: Stack(
             children: [
               Container(
-                height: 800.h,
+                height: 1000.h,
                 decoration: const BoxDecoration(
                     gradient: LinearGradient(
                       //渐变位置
@@ -282,7 +282,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
                         MyUtils.hideKeyboard(context);
                       }),
                       child: Container(
-                        height: 550.h,
+                        height: 1000.h,
                         width: double.infinity,
                         color: Colors.transparent,
                         child: SVGAImage(

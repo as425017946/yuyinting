@@ -31,7 +31,7 @@ class MyColors {
   static const Color home_hx = Color(0xFFE8EBF2);
   static const Color origin = Color(0xFFFF9601);
   static const Color btn_d = Color(0xFF8061FF);
-  static const Color btn_a = Color(0xFF5b46b9);
+  static const Color btn_a = Color(0xFF61dcde);
   static const Color loginBtnP = Color(0xFF61dcde);
   static const Color homeTopBG = Color(0xFF61dcde);
   static const Color homeBG = Color(0xFFF6F7F8);
@@ -171,4 +171,5 @@ class MyColors {
   static const Color newY33 = Color(0xFFf9eeff);
   static const Color newY4 = Color(0xFFd7f8f7);
   static const Color newY44 = Color(0xFFe7fff0);
+  static const Color newY5 = Color(0xFFffecff);
 }

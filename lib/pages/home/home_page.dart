@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage>
   void initState() {
     // TODO: implement initState
     doCheck();
-    doPostPdAddress();
+    // doPostPdAddress();
     //更新身份
     setState(() {
       identity = sp.getString('user_identity').toString();
@@ -231,10 +231,10 @@ class _HomePageState extends State<HomePage>
                                 child: WidgetUtils.onlyTextCenter(
                                     '收藏',
                                     StyleUtils.getCommonFFTextStyle(
-                                        color: MyColors.newHomeBlack,
+                                        color: _currentIndex == 0 ? MyColors.newHomeBlack :  MyColors.newHomeBlack2,
                                         fontSize: _currentIndex == 0
-                                            ? ScreenUtil().setSp(38)
-                                            : ScreenUtil().setSp(32),
+                                            ? ScreenUtil().setSp(46)
+                                            : ScreenUtil().setSp(36),
                                         fontWeight: _currentIndex == 0
                                             ? FontWeight.w600
                                             : FontWeight.normal)),
@@ -254,10 +254,10 @@ class _HomePageState extends State<HomePage>
                                 child: WidgetUtils.onlyTextCenter(
                                     '推荐',
                                     StyleUtils.getCommonFFTextStyle(
-                                        color: MyColors.newHomeBlack,
+                                        color: _currentIndex == 1 ? MyColors.newHomeBlack :  MyColors.newHomeBlack2,
                                         fontSize: _currentIndex == 1
-                                            ? ScreenUtil().setSp(38)
-                                            : ScreenUtil().setSp(32),
+                                            ? ScreenUtil().setSp(46)
+                                            : ScreenUtil().setSp(36),
                                         fontWeight: _currentIndex == 1
                                             ? FontWeight.w600
                                             : FontWeight.normal)),
@@ -277,10 +277,10 @@ class _HomePageState extends State<HomePage>
                                 child: WidgetUtils.onlyTextCenter(
                                     '派对',
                                     StyleUtils.getCommonFFTextStyle(
-                                        color: MyColors.newHomeBlack,
+                                        color: _currentIndex == 2 ? MyColors.newHomeBlack :  MyColors.newHomeBlack2,
                                         fontSize: _currentIndex == 2
-                                            ? ScreenUtil().setSp(38)
-                                            : ScreenUtil().setSp(32),
+                                            ? ScreenUtil().setSp(46)
+                                            : ScreenUtil().setSp(36),
                                         fontWeight: _currentIndex == 2
                                             ? FontWeight.w600
                                             : FontWeight.normal)),
@@ -296,7 +296,7 @@ class _HomePageState extends State<HomePage>
                               }),
                               child: Column(
                                 children: [
-                                  const Spacer(),
+                                  WidgetUtils.commonSizedBox(26.h, 0),
                                   _currentIndex == 3
                                       ? WidgetUtils.showImages(
                                           'assets/images/home_yx2.png',
@@ -330,8 +330,8 @@ class _HomePageState extends State<HomePage>
                                           StyleUtils.getCommonFFTextStyle(
                                               color: MyColors.newHomeBlack,
                                               fontSize: _currentIndex == 4
-                                                  ? ScreenUtil().setSp(38)
-                                                  : ScreenUtil().setSp(32),
+                                                  ? ScreenUtil().setSp(46)
+                                                  : ScreenUtil().setSp(36),
                                               fontWeight: _currentIndex == 4
                                                   ? FontWeight.w600
                                                   : FontWeight.normal)),
@@ -345,8 +345,8 @@ class _HomePageState extends State<HomePage>
                                         StyleUtils.getCommonFFTextStyle(
                                             color: Colors.white,
                                             fontSize: _currentIndex == 4
-                                                ? ScreenUtil().setSp(38)
-                                                : ScreenUtil().setSp(32),
+                                                ? ScreenUtil().setSp(46)
+                                                : ScreenUtil().setSp(36),
                                             fontWeight: _currentIndex == 4
                                                 ? FontWeight.w600
                                                 : FontWeight.normal)),
