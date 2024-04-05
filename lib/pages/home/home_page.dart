@@ -1000,6 +1000,7 @@ class _HomePageState extends State<HomePage>
       child: Container(
         height: 75.h,
         color: Colors.transparent,
+        alignment: Alignment.center,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
