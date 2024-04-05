@@ -756,6 +756,8 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                               GestureDetector(
                                 onTap: (() {
                                   setState(() {
+                                    isTS = false;
+                                    shuliang = 1;
                                     isReduce = false;
                                     url = '';
                                     svga = '';
@@ -796,6 +798,8 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                               GestureDetector(
                                 onTap: (() {
                                   setState(() {
+                                    isTS = false;
+                                    shuliang = 1;
                                     isReduce = false;
                                     url = '';
                                     svga = '';
@@ -877,6 +881,8 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                               GestureDetector(
                                 onTap: (() {
                                   setState(() {
+                                    isTS = false;
+                                    shuliang = 1;
                                     isReduce = false;
                                     url = '';
                                     svga = '';
@@ -1190,7 +1196,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                       ),
                       isTS
                           ? Container(
-                              height: 450.h,
+                              height: leixing != 3 ? 450.h : 350.h,
                               width: 250.h,
                               margin:
                                   EdgeInsets.only(right: 30.h, bottom: 90.h),
@@ -1203,6 +1209,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                               ),
                               child: Column(
                                 children: [
+                                  if (leixing != 3)
                                   GestureDetector(
                                     onTap: (() {
                                       setState(() {
@@ -1239,6 +1246,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                       ),
                                     ),
                                   ),
+                                  if (leixing != 3)
                                   GestureDetector(
                                     onTap: (() {
                                       setState(() {
