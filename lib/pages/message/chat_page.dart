@@ -2069,7 +2069,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
             'weight': widget.otherUid.toString() == '1' ? 1 : 0,
             'msgId': '',
             'msgRead': 2,
-            'msgJson': '1',
+            'msgJson': textMsg.msgId,
           };
           // 插入数据
           await databaseHelper.insertData('messageSLTable', params);
