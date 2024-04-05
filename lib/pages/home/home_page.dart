@@ -205,8 +205,9 @@ class _HomePageState extends State<HomePage>
                   WidgetUtils.commonSizedBox(35, 0),
                   Row(
                     children: [
-                      WidgetUtils.commonSizedBox(0, 20),
+                      WidgetUtils.commonSizedBox(0, 10),
                       _titleTab(),
+                      WidgetUtils.commonSizedBox(0, 10),
                       /*
                       Expanded(
                           child: Container(
@@ -998,9 +999,9 @@ class _HomePageState extends State<HomePage>
   Widget _titleTab() {
     return Expanded(
       child: Container(
-        height: 75.h,
+        height: 55.h,
         color: Colors.transparent,
-        alignment: Alignment.center,
+        alignment: Alignment.bottomCenter,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
