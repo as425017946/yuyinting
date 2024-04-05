@@ -206,6 +206,8 @@ class _HomePageState extends State<HomePage>
                   Row(
                     children: [
                       WidgetUtils.commonSizedBox(0, 20),
+                      _titleTab(),
+                      /*
                       Expanded(
                           child: Container(
                         width: double.infinity,
@@ -354,6 +356,7 @@ class _HomePageState extends State<HomePage>
                           ],
                         ),
                       )),
+                      */
                       Container(
                         width: ScreenUtil().setHeight(160),
                         height: ScreenUtil().setHeight(75),
@@ -989,6 +992,83 @@ class _HomePageState extends State<HomePage>
       Loading.dismiss();
     } catch (e) {
       Loading.dismiss();
+    }
+  }
+
+  Widget _titleTab() {
+    return Expanded(
+      child: Container(
+        height: 75.h,
+        color: Colors.transparent,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            _titleItem('收藏', 0, true),
+            _titleItem('推荐', 1, true),
+            _titleItem('派对', 2, true),
+            _titleItem('游戏', 3, true),
+            _titleItem('在线', 4, identity != 'user'),
+          ],
+        ),
+      ),
+    );
+  }
+  Widget _titleItem(String title, int index, bool isShow) { // 182x38
+    if (!isShow) {
+      return const Expanded(child: Text(''));
+    }
+    final isSelect = index == _currentIndex;
+    return Expanded(
+      child: GestureDetector(
+        onTap: (() {
+          setState(() {
+            _currentIndex = index;
+            _controller.jumpToPage(index);
+          });
+        }),
+        child: title == '游戏'
+            ? _gameItem(isSelect)
+            : Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  if (isSelect)
+                    Image(
+                      width: 182.w*0.7,
+                      height: 38.w*0.7,
+                      image: const AssetImage('assets/images/paidui_title_bg.png'),
+                    ),
+                  Text(
+                    title,
+                    style: StyleUtils.getCommonFFTextStyle(
+                      color: isSelect
+                          ? MyColors.newHomeBlack
+                          : MyColors.newHomeBlack2,
+                      fontSize: isSelect
+                          ? ScreenUtil().setSp(46)
+                          : ScreenUtil().setSp(36),
+                      fontWeight:
+                          isSelect ? FontWeight.w600 : FontWeight.normal,
+                    ),
+                  ),
+                ],
+              ),
+      ),
+    );
+  }
+  Widget _gameItem(bool isSelect) { // 148x60 222x88
+    const sacle = 0.55;
+    if (isSelect) {
+      return Image(
+        width: 222.w * sacle,
+        height: 88.w * sacle,
+        image: const AssetImage('assets/images/home_yx2.png'),
+      );
+    } else {
+      return Image(
+        width: 148.w * sacle,
+        height: 60.w * sacle,
+        image: const AssetImage('assets/images/home_yx1.png'),
+      );
     }
   }
 }

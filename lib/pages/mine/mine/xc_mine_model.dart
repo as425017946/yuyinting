@@ -14,7 +14,7 @@ import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
 
 class XCMineController extends GetxController {
-  final controller = RefreshController();
+  final controller = RefreshController(initialRefresh: false, initialRefreshStatus: RefreshStatus.idle);
   /// 头像
   final userHeadImg = sp.getString('user_headimg').toString().obs;
   /// 昵称

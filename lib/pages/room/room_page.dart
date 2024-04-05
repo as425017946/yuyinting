@@ -3398,7 +3398,7 @@ class _RoomPageState extends State<RoomPage>
     try {
       _engine?.unregisterEventHandler(_eventHandler);
     } catch(e) {
-      LogE(e.toString());
+      LogE('声网 dispose: ${e.toString()}');
     }
     listen.cancel();
     listenRoomback.cancel();

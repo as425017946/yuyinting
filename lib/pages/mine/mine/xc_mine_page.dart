@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flukit/flukit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -95,7 +96,7 @@ class _MinePageContent extends StatelessWidget {
             ),
           ),
         ),
-        _nav(context),
+        HitTestBlocker(child: _nav(context)),
       ],
     );
   }
@@ -546,8 +547,8 @@ class _MinePageContent extends StatelessWidget {
         child,
         if (isPoint)
           Positioned(
-            right: 50,
-            top: 20,
+            right: 45,
+            top: 15,
             child: CustomPaint(painter: LinePainter2(colors: Colors.red)),
           ),
       ],
@@ -566,8 +567,8 @@ class _MinePageContent extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image(
-                width: 96*0.5,
-                height: 99*0.5,
+                width: 96*0.6,
+                height: 99*0.6,
                 image: AssetImage('assets/images/mine_icon_$img.png'),
               ),
               const SizedBox(height: 25),

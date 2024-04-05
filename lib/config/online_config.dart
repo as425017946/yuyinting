@@ -58,6 +58,7 @@ class OnlineConfig {
   static EMOptions getEMOptions() {
     switch (onlineType) {
       case OnlineConfigType.online:
+      continue zz;
         // 正式环境
         return EMOptions(
             appKey: "1129240201157233#cc",
@@ -70,6 +71,7 @@ class OnlineConfig {
       //     autoLogin: false,
       //     debugModel: true,
       //     isAutoDownloadThumbnail: true);
+      zz:
       case OnlineConfigType.zhaozeng:
       // 本地环境
         return EMOptions(
