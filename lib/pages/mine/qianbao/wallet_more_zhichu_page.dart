@@ -61,7 +61,7 @@ class _WalletMoreZhichuPageState extends State<WalletMoreZhichuPage> {
 
   Widget _itemLiwu(BuildContext context, int i) {
     //明细类型  1充值 2红包 3公会礼物即时分润 4公会礼物周返 5全民代理分润 6提现 7兑换 8 装扮 9个人礼物分润 10刷礼物
-    String leixing = '', showImg = '';
+    String leixing = '', showImg = '', showText = '';
     switch(list[i].type!){
       case 1:
         leixing = '充值';
@@ -136,6 +136,22 @@ class _WalletMoreZhichuPageState extends State<WalletMoreZhichuPage> {
           showImg = 'assets/images/mine_wallet_bb.png';
         }
         break;
+      case 13:
+        leixing = '惊喜礼盒';
+        switch (list[i].objId) {
+          case 3:
+            showText = '黄金礼盒';
+            showImg = "assets/images/room_lh_hj.png";
+            break;
+          case 2:
+            showText = '白银礼盒';
+            showImg = "assets/images/room_lh_by.png";
+            break;
+          default:
+            showText = '青铜礼盒';
+            showImg = "assets/images/room_lh_qt.png";
+        } 
+        break;
     }
     return Column(
       children: [
@@ -167,8 +183,9 @@ class _WalletMoreZhichuPageState extends State<WalletMoreZhichuPage> {
                     const Expanded(child: Text('')),
                     Row(
                       children: [
+                        leixing == '惊喜礼盒' ? WidgetUtils.onlyText('礼物：$showText', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(25))) : const Text(''),
                         leixing == '打赏' ? WidgetUtils.onlyText('礼物：${list[i].name}', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(25))) : const Text(''),
-                        leixing == '打赏' ? WidgetUtils.onlyText('（x${list[i].number}）', StyleUtils.getCommonTextStyle(color: Colors.red, fontSize: ScreenUtil().setSp(25))) : const Text(''),
+                        (leixing == '打赏' || leixing == '惊喜礼盒') ? WidgetUtils.onlyText('（x${list[i].number}）', StyleUtils.getCommonTextStyle(color: Colors.red, fontSize: ScreenUtil().setSp(25))) : const Text(''),
                         const Expanded(child: Text('')),
                         WidgetUtils.onlyText(list[i].curType == 1 ? 'V豆' : list[i].curType == 2 ? '钻石' : 'V币', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(25))),
                         WidgetUtils.commonSizedBox(0, 20),
