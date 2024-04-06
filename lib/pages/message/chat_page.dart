@@ -348,7 +348,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
           toFile: path,
           codec: Codec.aacADTS,
           bitRate: 128000,
-          sampleRate: 44100,
+          sampleRate: 44000,
           audioSource: AudioSource.microphone);
       print('===>  开始录音');
       if (isDevices == 'ios') {
