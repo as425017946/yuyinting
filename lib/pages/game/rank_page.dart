@@ -95,7 +95,7 @@ class _RankPageState extends State<RankPage> {
                               color: Colors.white, fontSize: 28.sp)),
                       WidgetUtils.commonSizedBox(5.h, 0),
                       WidgetUtils.onlyText(
-                          ('${list[i].giftPrice}V豆'),
+                          ('${list[i].giftPrice}金豆'),
                           StyleUtils.getCommonTextStyle(
                               color: MyColors.mineOrange, fontSize: 26.sp)),
                       const Spacer(),

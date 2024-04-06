@@ -101,7 +101,7 @@ class _MoFangGuiZePageState extends State<MoFangGuiZePage> {
                               ),
                               children: [
                                 TextSpan(
-                                    text: '20V豆',
+                                    text: '20金豆',
                                     style: TextStyle(
                                         height: 2,
                                         color: MyColors.mfZGBlue,
@@ -115,7 +115,7 @@ class _MoFangGuiZePageState extends State<MoFangGuiZePage> {
                                         fontSize: 24.sp
                                     )),
                                 TextSpan(
-                                    text: '500V豆',
+                                    text: '500金豆',
                                     style: TextStyle(
                                         height: 2,
                                         color: MyColors.mfZGBlue,
@@ -135,7 +135,7 @@ class _MoFangGuiZePageState extends State<MoFangGuiZePage> {
                       // Padding(
                       //   padding: EdgeInsets.only(left: 20.h, right: 20.h),
                       //   child: WidgetUtils.onlyText(
-                      //       '游戏自动付款顺序为先付V豆，V豆余额不够时付钻石；',
+                      //       '游戏自动付款顺序为先付金豆，金豆余额不够时付钻石；',
                       //       StyleUtils.getCommonTextStyle(
                       //           color: Colors.white, fontSize: 24.sp)),
                       // ),
@@ -180,7 +180,7 @@ class _MoFangGuiZePageState extends State<MoFangGuiZePage> {
                       // //     ),
                       // //   ),
                       // //   child: WidgetUtils.onlyTextCenter(
-                      // //       '蓝色魔方（20V豆、钻石/次）奖励概率：',
+                      // //       '蓝色魔方（20金豆、钻石/次）奖励概率：',
                       // //       StyleUtils.getCommonTextStyle(
                       // //           color: Colors.white, fontSize: 24.sp)),
                       // // ),
@@ -206,7 +206,7 @@ class _MoFangGuiZePageState extends State<MoFangGuiZePage> {
                       // //     ),
                       // //   ),
                       // //   child: WidgetUtils.onlyTextCenter(
-                      // //       '金色魔方（500V豆、钻石/次）奖励概率：',
+                      // //       '金色魔方（500金豆、钻石/次）奖励概率：',
                       // //       StyleUtils.getCommonTextStyle(
                       // //           color: Colors.white, fontSize: 24.sp)),
                       // // ),

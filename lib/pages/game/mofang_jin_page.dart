@@ -384,7 +384,7 @@ class _MofangJinPageState extends State<MofangJinPage>
                       ),
 
                       const Spacer(),
-                      // 花费多少v豆提示
+                      // 花费多少金豆提示
                       Row(
                         children: [
                           Container(
@@ -409,7 +409,7 @@ class _MofangJinPageState extends State<MofangJinPage>
                                 Transform.translate(
                                   offset: Offset(0, -2.h),
                                   child: WidgetUtils.onlyTextCenter(
-                                      '200V豆',
+                                      '200金豆',
                                       StyleUtils.getCommonTextStyle(
                                           color: Colors.white,
                                           fontSize: ScreenUtil().setSp(21),
@@ -442,7 +442,7 @@ class _MofangJinPageState extends State<MofangJinPage>
                                 Transform.translate(
                                   offset: Offset(0, -2.h),
                                   child: WidgetUtils.onlyTextCenter(
-                                      '2000V豆',
+                                      '2000金豆',
                                       StyleUtils.getCommonTextStyle(
                                           color: Colors.white,
                                           fontSize: ScreenUtil().setSp(21),
@@ -475,7 +475,7 @@ class _MofangJinPageState extends State<MofangJinPage>
                                 Transform.translate(
                                   offset: Offset(0, -2.h),
                                   child: WidgetUtils.onlyTextCenter(
-                                      '6000V豆',
+                                      '6000金豆',
                                       StyleUtils.getCommonTextStyle(
                                           color: Colors.white,
                                           fontSize: ScreenUtil().setSp(21),
@@ -996,7 +996,7 @@ class _MofangJinPageState extends State<MofangJinPage>
           if (bean.data!.curType == 1) {
             if (double.parse(jinbi) > 10000) {
               jinbi = sp.getString('mofangJBY').toString();
-              // 减去花费的V豆
+              // 减去花费的金豆
               jinbi = '${(double.parse(jinbi) - int.parse(number) * 200)}';
               if (double.parse(jinbi) > 10000) {
                 //保留2位小数
@@ -1021,7 +1021,7 @@ class _MofangJinPageState extends State<MofangJinPage>
           } else if (bean.data!.curType == 2) {
             if (double.parse(zuanshi) > 10000) {
               zuanshi = sp.getString('mofangZSY').toString();
-              // 减去花费的V豆
+              // 减去花费的金豆
               zuanshi = '${(double.parse(zuanshi) - int.parse(number) * 200)}';
               if (double.parse(zuanshi) > 10000) {
                 //保留2位小数

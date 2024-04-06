@@ -15,7 +15,7 @@ import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 
-/// 充值V豆页面
+/// 充值金豆页面
 class DouPayPage extends StatefulWidget {
   String shuliang;
 
@@ -161,7 +161,7 @@ class _DouPayPageState extends State<DouPayPage> {
     super.initState();
     doPostBalance();
     doPostGetPayment();
-    appBar = WidgetUtils.getAppBar('充值V豆', true, context, false, 0);
+    appBar = WidgetUtils.getAppBar('充值金豆', true, context, false, 0);
     listen = eventBus.on<SubmitButtonBack>().listen((event) {
       if (event.title == '确认充值') {
         doPostOrderCreate();
@@ -229,7 +229,7 @@ class _DouPayPageState extends State<DouPayPage> {
                                 Row(
                                   children: [
                                     WidgetUtils.onlyText(
-                                        'V豆',
+                                        '金豆',
                                         StyleUtils.getCommonTextStyle(
                                             color: Colors.white,
                                             fontSize: ScreenUtil().setSp(38))),
@@ -252,7 +252,7 @@ class _DouPayPageState extends State<DouPayPage> {
                         // Container(
                         //   margin: const EdgeInsets.only(right: 15,bottom: 15),
                         //   child: Text(
-                        //     '10V豆=1元',
+                        //     '10金豆=1元',
                         //     style: TextStyle(fontSize: ScreenUtil().setSp(21), color: Colors.white),
                         //   ),
                         // ),

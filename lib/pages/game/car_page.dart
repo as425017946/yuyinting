@@ -2145,7 +2145,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
           //   if (bean.data!.curType == 1) {
           //     if (double.parse(jinbi) > 10000) {
           //       jinbi = sp.getString('car_jinbi').toString();
-          //       // 减去花费的V豆
+          //       // 减去花费的金豆
           //       jinbi =
           //           '${(double.parse(jinbi) - int.parse(xiazhujine.toString()))}';
           //       if(double.parse(jinbi) > 10000){
@@ -2170,7 +2170,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
           //   } else if (bean.data!.curType == 2) {
           //     if (double.parse(zuanshi) > 10000) {
           //       zuanshi = sp.getString('car_zuanshi').toString();
-          //       // 减去花费的V豆
+          //       // 减去花费的金豆
           //       zuanshi =
           //           '${(double.parse(zuanshi) - int.parse(xiazhujine.toString()))}';
           //       if(double.parse(zuanshi) > 10000){
@@ -2197,7 +2197,7 @@ class _CarpageState extends State<Carpage> with TickerProviderStateMixin {
           //   } else {
           //     if (double.parse(mogubi) > 10000) {
           //       mogubi = sp.getString('car_mogu').toString();
-          //       // 减去花费的V豆
+          //       // 减去花费的金豆
           //       mogubi =
           //           '${(double.parse(mogubi) - int.parse(xiazhujine.toString()))}';
           //       if(double.parse(mogubi) > 10000){

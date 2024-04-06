@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:yuyinting/main.dart';
+import 'package:yuyinting/pages/mine/zhuangban/show_liwu_page.dart';
 
 import '../../../bean/Common_bean.dart';
 import '../../../bean/balanceBean.dart';
-import '../../../bean/myShopListBean.dart';
 import '../../../bean/shopListBean.dart';
 import '../../../colors/my_colors.dart';
 import '../../../config/my_config.dart';
@@ -42,7 +42,7 @@ class _ZuojiaPageState extends State<ZuojiaPage>{
   int price=0;
   // 装扮id
   String dressID = '';
-  String useDayLW = '2', priceLW = '100';
+  String useDayLW = '0', priceLW = '0';
 
   void _onRefresh() async {
     // monitor network fetch
@@ -84,26 +84,37 @@ class _ZuojiaPageState extends State<ZuojiaPage>{
   Widget _itemLiwu(BuildContext context, int i) {
     return GestureDetector(
       onTap: (() {
-        setState(() {
-          for (int a = 0; a < length; a++) {
-            if (a == i) {
-              listB[a] = !listB[a];
-            } else {
-              listB[a] = false;
-            }
+        //如果不是空的则展示多个购买信息
+        if(_list[i].stepPriceDay!.isNotEmpty){
+          if(MyUtils.checkClick()){
+            MyUtils.goTransparentPage(context, ShowLiWuPage(imgUrl: _list[i].img!, imgSVGAUrl: _list[i].gifImg!, dressID: _list[i].gid.toString(), list: _list[i].stepPriceDay!,yue: jinbi2,));
           }
-          for (int a = 0; a < length; a++) {
-            if (listB[a]) {
-              isChoose = true;
-              price = _list[a].price!;
-              dressID = _list[i].gid.toString();
-              break;
-            } else {
-              isChoose = false;
-              dressID = '';
+        }else{
+          setState(() {
+            for (int a = 0; a < length; a++) {
+              if (a == i) {
+                listB[a] = !listB[a];
+              } else {
+                listB[a] = false;
+              }
             }
-          }
-        });
+            for (int a = 0; a < length; a++) {
+              if (listB[a]) {
+                isChoose = true;
+                price = _list[a].price!;
+                dressID = _list[i].gid.toString();
+                useDayLW = _list[a].useDay.toString();
+                priceLW = _list[a].price!.toString();
+                break;
+              } else {
+                isChoose = false;
+                dressID = '';
+                useDayLW = '';
+                priceLW = '';
+              }
+            }
+          });
+        }
       }),
       child: Container(
         width: ScreenUtil().setHeight(211),
@@ -202,7 +213,7 @@ class _ZuojiaPageState extends State<ZuojiaPage>{
                                   fontSize: ScreenUtil().setSp(50))),
                           WidgetUtils.commonSizedBox(0, 10),
                           WidgetUtils.onlyText(
-                              'V豆',
+                              '金豆',
                               StyleUtils.getCommonTextStyle(
                                   color: Colors.white,
                                   fontSize: ScreenUtil().setSp(25))),
@@ -216,7 +227,7 @@ class _ZuojiaPageState extends State<ZuojiaPage>{
                           }
                         }),
                         child: WidgetUtils.onlyText(
-                            '$jinbi V豆 | 充值 >',
+                            '$jinbi 金豆 | 充值 >',
                             StyleUtils.getCommonTextStyle(
                                 color: MyColors.zhuangbanWZ,
                                 fontSize: ScreenUtil().setSp(25))),
@@ -317,14 +328,11 @@ class _ZuojiaPageState extends State<ZuojiaPage>{
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
+            jinbi2 = bean.data!.goldBean!;
             if(double.parse(bean.data!.goldBean!) > 10000){
               jinbi = '${(double.parse(bean.data!.goldBean!)/10000)}w';
-              List<String> a = jinbi.split('.');
-              LogE('余额 == ${a[1]}');
-              jinbi2 = '${a[0]}.${a[1].substring(0,2)}w';
             }else{
               jinbi = bean.data!.goldBean!;
-              jinbi2 = bean.data!.goldBean!;
             }
             if(double.parse(bean.data!.diamond!) > 10000){
               zuanshi = '${(double.parse(bean.data!.diamond!)/10000)}w';

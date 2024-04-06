@@ -82,7 +82,7 @@ class _MoFangBeiBaoPageState extends State<MoFangBeiBaoPage> {
                           color: MyColors.roomTCWZ2,
                           fontSize: ScreenUtil().setSp(25))),
                   WidgetUtils.onlyTextCenter(
-                      '${listPl[index].price}V豆',
+                      '${listPl[index].price}金豆',
                       StyleUtils.getCommonTextStyle(
                           color: MyColors.roomTCWZ3,
                           fontSize: ScreenUtil().setSp(21))),

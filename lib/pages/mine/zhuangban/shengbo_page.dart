@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
+import 'package:yuyinting/pages/mine/zhuangban/show_liwu_page.dart';
 
 import '../../../bean/Common_bean.dart';
 import '../../../bean/balanceBean.dart';
@@ -40,6 +41,7 @@ class _ShengboPageState extends State<ShengboPage> {
   int price=0;
   // 装扮id
   String dressID = '';
+  String useDayLW = '0', priceLW = '0';
 
 
   void _onRefresh() async {
@@ -82,26 +84,38 @@ class _ShengboPageState extends State<ShengboPage> {
   Widget _itemLiwu(BuildContext context, int i) {
     return GestureDetector(
       onTap: (() {
-        setState(() {
-          for (int a = 0; a < length; a++) {
-            if (a == i) {
-              listB[a] = !listB[a];
-            } else {
-              listB[a] = false;
-            }
+        //如果不是空的则展示多个购买信息
+        if(_list[i].stepPriceDay!.isNotEmpty){
+          if(MyUtils.checkClick()){
+            MyUtils.goTransparentPage(context, ShowLiWuPage(imgUrl: _list[i].img!, imgSVGAUrl: _list[i].gifImg!, dressID: _list[i].gid.toString(), list: _list[i].stepPriceDay!,yue: jinbi2,));
           }
-          for (int a = 0; a < length; a++) {
-            if (listB[a]) {
-              isChoose = true;
-              price = _list[a].price!;
-              dressID = _list[i].gid.toString();
-              break;
-            } else {
-              isChoose = false;
-              dressID = '';
+        }else{
+          setState(() {
+            for (int a = 0; a < length; a++) {
+              if (a == i) {
+                listB[a] = !listB[a];
+              } else {
+                listB[a] = false;
+              }
             }
-          }
-        });
+            for (int a = 0; a < length; a++) {
+              if (listB[a]) {
+                isChoose = true;
+                price = _list[a].price!;
+                dressID = _list[i].gid.toString();
+                useDayLW = _list[a].useDay.toString();
+                priceLW = _list[a].price!.toString();
+                break;
+              } else {
+                isChoose = false;
+                dressID = '';
+                useDayLW = '';
+                priceLW = '';
+              }
+            }
+          });
+        }
+
       }),
       child: Container(
         width: ScreenUtil().setHeight(211),
@@ -214,7 +228,7 @@ class _ShengboPageState extends State<ShengboPage> {
                           }
                         }),
                         child: WidgetUtils.onlyText(
-                            '$jinbi V豆 | 充值 >',
+                            '$jinbi 金豆 | 充值 >',
                             StyleUtils.getCommonTextStyle(
                                 color: MyColors.zhuangbanWZ,
                                 fontSize: ScreenUtil().setSp(25))),
@@ -338,6 +352,8 @@ class _ShengboPageState extends State<ShengboPage> {
   Future<void> doPostBuyDress(String dressID) async {
     Map<String, dynamic> params = <String, dynamic>{
       'dress_id': dressID, //装扮id
+      'use_day': useDayLW,
+      'price': priceLW
     };
     try {
       CommonBean bean = await DataUtils.postBuyDress(params);

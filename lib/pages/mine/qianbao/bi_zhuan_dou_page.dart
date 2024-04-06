@@ -33,7 +33,7 @@ class _BiZhuanDouPageState extends State<BiZhuanDouPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    appBar = WidgetUtils.getAppBar('V币兑换V豆', true, context, false, 0);
+    appBar = WidgetUtils.getAppBar('金币兑换金豆', true, context, false, 0);
     listenTX = eventBus.on<SubmitButtonBack>().listen((event) {
       if(event.title == '确认兑换'){
         LogE('数量 ${controllerNumber.text.toString()}');
@@ -120,7 +120,7 @@ class _BiZhuanDouPageState extends State<BiZhuanDouPage> {
                                     Row(
                                       children: [
                                         WidgetUtils.onlyText(
-                                            'V币',
+                                            '金币',
                                             StyleUtils.getCommonTextStyle(
                                                 color: Colors.white,
                                                 fontSize: ScreenUtil().setSp(38))),
@@ -144,7 +144,7 @@ class _BiZhuanDouPageState extends State<BiZhuanDouPage> {
                         Container(
                           margin: const EdgeInsets.only(right: 15, bottom: 15),
                           child: Text(
-                            '1V币=1V豆',
+                            '1金币=1金豆',
                             style: TextStyle(
                                 fontSize: ScreenUtil().setSp(21),
                                 color: Colors.white),
@@ -167,14 +167,14 @@ class _BiZhuanDouPageState extends State<BiZhuanDouPage> {
                     child: Column(
                       children: [
                         WidgetUtils.commonSizedBox(30, 20),
-                        WidgetUtils.onlyText('提取V币', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(32))),
+                        WidgetUtils.onlyText('提取金币', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(32))),
                         Row(
                           children: [
                             WidgetUtils.showImages('assets/images/mine_wallet_bb.png', ScreenUtil().setHeight(48), ScreenUtil().setHeight(48)),
                             WidgetUtils.commonSizedBox(0, 20),
                             Expanded(
                               child: WidgetUtils.commonTextFieldNumber(
-                                  controller: controllerNumber, hintText: '请输入V币数量'),
+                                  controller: controllerNumber, hintText: '请输入金币数量'),
                             ),
                             GestureDetector(
                               onTap: ((){
@@ -199,7 +199,7 @@ class _BiZhuanDouPageState extends State<BiZhuanDouPage> {
                             WidgetUtils.onlyText('到账', StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: ScreenUtil().setSp(32))),
                             WidgetUtils.showImages('assets/images/mine_wallet_dd.png', ScreenUtil().setHeight(30), ScreenUtil().setHeight(30)),
                             WidgetUtils.commonSizedBox(0, 10),
-                            WidgetUtils.onlyText('$daozhang V豆', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(32), fontWeight: FontWeight.w600)),
+                            WidgetUtils.onlyText('$daozhang 金豆', StyleUtils.getCommonTextStyle(color: Colors.black, fontSize: ScreenUtil().setSp(32), fontWeight: FontWeight.w600)),
                           ],
                         )
                       ],

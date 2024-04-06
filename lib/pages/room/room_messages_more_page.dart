@@ -214,7 +214,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> with MsgRea
                     allData2[i]['otherHeadNetImg']),
               ),
               WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(10)),
-              // 6v豆红包
+              // 6金豆红包
               allData2[i]['type'] == 6
                   ? SizedBox(
                       height: 130.h,
@@ -379,7 +379,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> with MsgRea
                 padding: EdgeInsets.only(right: 10.h),
                 child: msgReadText(allData2[i]['msgRead']),
               ),
-              // 6v豆红包
+              // 6金豆红包
               allData2[i]['type'] == 6
                   ? SizedBox(
                       height: 130.h,

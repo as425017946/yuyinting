@@ -206,7 +206,7 @@ class _PayHBTSPageState extends State<PayHBTSPage> {
       'whoUid': sp.getString('user_id').toString(),
       'combineID': combineID,
       'nickName': widget.nickName,
-      'content': '送出$info个V豆',
+      'content': '送出$info个金豆',
       'headNetImg': sp.getString('user_headimg').toString(),
       'otherHeadNetImg': widget.otherImg,
       'add_time': DateTime.now().millisecondsSinceEpoch,

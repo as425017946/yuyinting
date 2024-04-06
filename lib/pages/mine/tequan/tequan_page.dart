@@ -446,7 +446,7 @@ class _TequanPageState extends State<TequanPage> {
                             color: MyColors.guizuYellow,
                             fontSize: ScreenUtil().setSp(25))),
                     WidgetUtils.onlyText(
-                        ' V豆',
+                        ' 金豆',
                         StyleUtils.getCommonTextStyle(
                             color: MyColors.guizuGrey,
                             fontSize: ScreenUtil().setSp(25))),

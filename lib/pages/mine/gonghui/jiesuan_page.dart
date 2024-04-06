@@ -105,7 +105,7 @@ class _JiesuanPageState extends State<JiesuanPage> {
             WidgetUtils.commonSizedBox(10, 10),
             Row(
               children: [
-                WidgetUtils.onlyText('V币直刷流水：', StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
+                WidgetUtils.onlyText('金币直刷流水：', StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
                 WidgetUtils.onlyText(list[i].gbDirectSp!, StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(25), fontWeight: FontWeight.w600)),
                 const Expanded(child: Text('')),
                 WidgetUtils.onlyText('背包流水：', StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
@@ -125,7 +125,7 @@ class _JiesuanPageState extends State<JiesuanPage> {
             WidgetUtils.commonSizedBox(10, 10),
             // Row(
             //   children: [
-            //     WidgetUtils.onlyText('扣款V币：', StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
+            //     WidgetUtils.onlyText('扣款金币：', StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
             //     WidgetUtils.onlyText(list[i].deductibleGc!, StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(25), fontWeight: FontWeight.w600)),
             //     const Expanded(child: Text('')),
             //     WidgetUtils.onlyText('扣款钻石：', StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),

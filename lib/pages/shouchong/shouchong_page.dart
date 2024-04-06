@@ -82,7 +82,7 @@ class _ShouChongPageState extends State<ShouChongPage> {
                                     left: 80.w,
                                     top: 345 * 1.25.w,
                                     child: WidgetUtils.onlyText(
-                                        '赠送${listDou[0]}V豆，限定礼物x1',
+                                        '赠送${listDou[0]}金豆，限定礼物x1',
                                         StyleUtils.getCommonTextStyle(
                                           color: Colors.white,
                                           fontSize: 26.sp,
@@ -132,7 +132,7 @@ class _ShouChongPageState extends State<ShouChongPage> {
                                         left: 80.w,
                                         top: 345 * 1.25.w,
                                         child: WidgetUtils.onlyText(
-                                            '赠送${listDou[1]}V豆，限定礼物x2',
+                                            '赠送${listDou[1]}金豆，限定礼物x2',
                                             StyleUtils.getCommonTextStyle(
                                               color: Colors.white,
                                               fontSize: 26.sp,
@@ -181,7 +181,7 @@ class _ShouChongPageState extends State<ShouChongPage> {
                                         left: 80.w,
                                         top: 345 * 1.25.w,
                                         child: WidgetUtils.onlyText(
-                                            '赠送${listDou[2]}V豆，限定礼物x3',
+                                            '赠送${listDou[2]}金豆，限定礼物x3',
                                             StyleUtils.getCommonTextStyle(
                                               color: Colors.white,
                                               fontSize: 26.sp,
@@ -244,7 +244,7 @@ class _ShouChongPageState extends State<ShouChongPage> {
               //                     children: [
               //                       WidgetUtils.commonSizedBox(0, 25.h),
               //                       WidgetUtils.onlyText(
-              //                           '赠送300V豆',
+              //                           '赠送300金豆',
               //                           StyleUtils.getCommonTextStyle(
               //                               color: Colors.white,
               //                               fontSize: 18.sp)),
@@ -410,7 +410,7 @@ class _ShouChongPageState extends State<ShouChongPage> {
               //                     children: [
               //                       WidgetUtils.commonSizedBox(0, 25.h),
               //                       WidgetUtils.onlyText(
-              //                           '赠送680V豆',
+              //                           '赠送680金豆',
               //                           StyleUtils.getCommonTextStyle(
               //                               color: Colors.white,
               //                               fontSize: 18.sp)),
@@ -581,7 +581,7 @@ class _ShouChongPageState extends State<ShouChongPage> {
               //                     children: [
               //                       WidgetUtils.commonSizedBox(0, 25.h),
               //                       WidgetUtils.onlyText(
-              //                           '赠送980V豆',
+              //                           '赠送980金豆',
               //                           StyleUtils.getCommonTextStyle(
               //                               color: Colors.white,
               //                               fontSize: 18.sp)),

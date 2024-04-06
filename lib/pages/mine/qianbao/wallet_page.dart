@@ -67,7 +67,7 @@ class _WalletPageState extends State<WalletPage> {
                   _bean(),
                   WidgetUtils.commonSizedBox(20, 20),
 
-                  /// V币
+                  /// 金币
                   _currency(),
                   WidgetUtils.commonSizedBox(20, 20),
 /*
@@ -109,7 +109,7 @@ class _WalletPageState extends State<WalletPage> {
                                 Row(
                                   children: [
                                     WidgetUtils.onlyText(
-                                        'V豆',
+                                        '金豆',
                                         StyleUtils.getCommonTextStyle(
                                             color: Colors.white,
                                             fontSize: ScreenUtil().setSp(38))),
@@ -224,7 +224,7 @@ class _WalletPageState extends State<WalletPage> {
                   ),
                   WidgetUtils.commonSizedBox(20, 20),
 
-                  /// V币
+                  /// 金币
                   SizedBox(
                     height: ScreenUtil().setHeight(250),
                     child: Stack(
@@ -262,7 +262,7 @@ class _WalletPageState extends State<WalletPage> {
                                 Row(
                                   children: [
                                     WidgetUtils.onlyText(
-                                        'V币',
+                                        '金币',
                                         StyleUtils.getCommonTextStyle(
                                             color: Colors.white,
                                             fontSize: ScreenUtil().setSp(38))),
@@ -485,7 +485,7 @@ class _WalletPageState extends State<WalletPage> {
     );
   }
 
-  /// V币
+  /// 金币
   Widget _currency() {
     List<_WalletPageAction> actions = [
       // 提现
@@ -524,7 +524,7 @@ class _WalletPageState extends State<WalletPage> {
     return _card(
       'assets/images/mine_wallet_bbj.png',
       'assets/images/mine_wallet_bb.png',
-      'V币',
+      '金币',
       '礼物/全民代理/公会收益',
       shouyi,
       actions,
@@ -571,7 +571,7 @@ class _WalletPageState extends State<WalletPage> {
     return _card(
       'assets/images/mine_wallet_dbj.png',
       'assets/images/mine_wallet_dd.png',
-      'V豆',
+      '金豆',
       '可用于游戏和打赏礼物',
       jinbi,
       actions,

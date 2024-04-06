@@ -51,7 +51,7 @@ class _BaobiaoPageState extends State<BaobiaoPage> {
                       fontWeight: FontWeight.w600)),
               const Expanded(child: Text('')),
               // WidgetUtils.onlyText(
-              //     'V币/钻石分润:',
+              //     '金币/钻石分润:',
               //     StyleUtils.getCommonTextStyle(
               //         color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
               // WidgetUtils.onlyText(
@@ -61,7 +61,7 @@ class _BaobiaoPageState extends State<BaobiaoPage> {
               //         fontSize: ScreenUtil().setSp(25),
               //         fontWeight: FontWeight.w600)),
               WidgetUtils.onlyText(
-                  'V币:',
+                  '金币:',
                   StyleUtils.getCommonTextStyle(
                       color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
               WidgetUtils.onlyText(

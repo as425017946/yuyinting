@@ -140,7 +140,7 @@ class _ZhuBoLiuShuiPageState extends State<ZhuBoLiuShuiPage> {
             Row(
               children: [
                 WidgetUtils.onlyText(
-                    'V币直刷流水：',
+                    '金币直刷流水：',
                     StyleUtils.getCommonTextStyle(
                         color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
                 WidgetUtils.onlyText(

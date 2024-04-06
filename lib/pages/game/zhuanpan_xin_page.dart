@@ -468,7 +468,7 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
             ],
           ),
         ),
-        // 花费多少v豆提示
+        // 花费多少金豆提示
         Row(
           children: [
             WidgetUtils.commonSizedBox(0, 20),
@@ -491,7 +491,7 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
                   Transform.translate(
                     offset: Offset(0, -2.h),
                     child: WidgetUtils.onlyTextCenter(
-                        '100V豆',
+                        '100金豆',
                         StyleUtils.getCommonTextStyle(
                             color: Colors.white,
                             fontSize: ScreenUtil().setSp(23),
@@ -521,7 +521,7 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
                   Transform.translate(
                     offset: Offset(0, -2.h),
                     child: WidgetUtils.onlyTextCenter(
-                        '1000V豆',
+                        '1000金豆',
                         StyleUtils.getCommonTextStyle(
                             color: Colors.white,
                             fontSize: ScreenUtil().setSp(23),
@@ -551,7 +551,7 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
                   Transform.translate(
                     offset: Offset(0, -2.h),
                     child: WidgetUtils.onlyTextCenter(
-                        '5000V豆',
+                        '5000金豆',
                         StyleUtils.getCommonTextStyle(
                             color: Colors.white,
                             fontSize: ScreenUtil().setSp(23),
@@ -666,7 +666,7 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
         case MyHttpConfig.successCode:
           // 通知用户游戏开始不能离开
           eventBus.fire(GameBack(isBack: true));
-          // 发送要减多少V豆
+          // 发送要减多少金豆
           eventBus.fire(XiaZhuBack(jine: int.parse(number)*100, type: bean.data!.curType as int));
           // 获取数据并赋值
           list.clear();

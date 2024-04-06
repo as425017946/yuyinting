@@ -491,7 +491,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
             ],
           ),
         ),
-        // 花费多少v豆提示
+        // 花费多少金豆提示
         Row(
           children: [
             WidgetUtils.commonSizedBox(0, 20),
@@ -514,7 +514,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                   Transform.translate(
                     offset: Offset(0, -2.h),
                     child: WidgetUtils.onlyTextCenter(
-                        '1000V豆',
+                        '1000金豆',
                         StyleUtils.getCommonTextStyle(
                             color: Colors.white,
                             fontSize: ScreenUtil().setSp(23),
@@ -544,7 +544,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                   Transform.translate(
                     offset: Offset(0, -2.h),
                     child: WidgetUtils.onlyTextCenter(
-                        '5000V豆',
+                        '5000金豆',
                         StyleUtils.getCommonTextStyle(
                             color: Colors.white,
                             fontSize: ScreenUtil().setSp(23),
@@ -574,7 +574,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                   Transform.translate(
                     offset: Offset(0, -2.h),
                     child: WidgetUtils.onlyTextCenter(
-                        '10000V豆',
+                        '10000金豆',
                         StyleUtils.getCommonTextStyle(
                             color: Colors.white,
                             fontSize: ScreenUtil().setSp(23),
@@ -691,7 +691,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
         case MyHttpConfig.successCode:
           // 通知用户游戏开始不能离开
           eventBus.fire(GameBack(isBack: true));
-          // 发送要减多少V豆
+          // 发送要减多少金豆
           eventBus.fire(XiaZhuBack(jine: int.parse(number)*1000, type: bean.data!.curType as int));
           // 获取数据并赋值
           list.clear();

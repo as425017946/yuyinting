@@ -360,7 +360,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                 color: MyColors.roomTCWZ2,
                                 fontSize: ScreenUtil().setSp(25))),
                         WidgetUtils.onlyTextCenter(
-                            '${listC[index].price}V豆',
+                            '${listC[index].price}金豆',
                             StyleUtils.getCommonTextStyle(
                                 color: MyColors.roomTCWZ3,
                                 fontSize: ScreenUtil().setSp(21))),
@@ -407,7 +407,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                     color: MyColors.roomTCWZ2,
                                     fontSize: ScreenUtil().setSp(25))),
                             WidgetUtils.onlyTextCenter(
-                                '${listPV[index].price}V豆',
+                                '${listPV[index].price}金豆',
                                 StyleUtils.getCommonTextStyle(
                                     color: MyColors.roomTCWZ3,
                                     fontSize: ScreenUtil().setSp(21))),
@@ -454,7 +454,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                         color: MyColors.roomTCWZ2,
                                         fontSize: ScreenUtil().setSp(25))),
                                 WidgetUtils.onlyTextCenter(
-                                    '${listLH[index]['price']}V豆',
+                                    '${listLH[index]['price']}金豆',
                                     StyleUtils.getCommonTextStyle(
                                         color: MyColors.roomTCWZ3,
                                         fontSize: ScreenUtil().setSp(21))),
@@ -529,7 +529,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                         color: MyColors.roomTCWZ2,
                                         fontSize: ScreenUtil().setSp(25))),
                                 WidgetUtils.onlyTextCenter(
-                                    '${listPl[index].price}V豆',
+                                    '${listPl[index].price}金豆',
                                     StyleUtils.getCommonTextStyle(
                                         color: MyColors.roomTCWZ3,
                                         fontSize: ScreenUtil().setSp(21))),

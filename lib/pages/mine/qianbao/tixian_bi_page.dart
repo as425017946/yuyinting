@@ -19,7 +19,7 @@ import '../../../utils/widget_utils.dart';
 import '../../message/pay_ts_page.dart';
 import '../setting/password_pay_page.dart';
 
-/// V币提现
+/// 金币提现
 class TixianBiPage extends StatefulWidget {
   String shuliang;
 
@@ -212,7 +212,7 @@ class _TixianBiPageState extends State<TixianBiPage> {
                             Row(
                               children: [
                                 WidgetUtils.onlyText(
-                                    'V币',
+                                    '金币',
                                     StyleUtils.getCommonTextStyle(
                                         color: Colors.white,
                                         fontSize: ScreenUtil().setSp(38))),
@@ -236,7 +236,7 @@ class _TixianBiPageState extends State<TixianBiPage> {
                     // Container(
                     //   margin: const EdgeInsets.only(right: 15, bottom: 15),
                     //   child: Text(
-                    //     '10V币=1元',
+                    //     '10金币=1元',
                     //     style: TextStyle(
                     //         fontSize: ScreenUtil().setSp(21),
                     //         color: Colors.white),
@@ -505,7 +505,7 @@ class _TixianBiPageState extends State<TixianBiPage> {
                         : WidgetUtils.commonSizedBox(0, 0),
                     WidgetUtils.myLine(),
                     WidgetUtils.onlyText(
-                        '提取V币',
+                        '提取金币',
                         StyleUtils.getCommonTextStyle(
                             color: MyColors.g9,
                             fontSize: ScreenUtil().setSp(32))),
@@ -519,7 +519,7 @@ class _TixianBiPageState extends State<TixianBiPage> {
                         Expanded(
                           child: WidgetUtils.commonTextFieldNumber(
                               controller: controllerNumber,
-                              hintText: '请输入V币数量'),
+                              hintText: '请输入金币数量'),
                         ),
                         GestureDetector(
                           onTap: (() {
@@ -578,12 +578,12 @@ class _TixianBiPageState extends State<TixianBiPage> {
                       color: MyColors.g6, fontSize: ScreenUtil().setSp(25))),
               WidgetUtils.commonSizedBox(5, 20),
               WidgetUtils.onlyText(
-                  '2.提取V币数必须≥1100 V币，否则无法发起申请',
+                  '2.提取金币数必须≥1100 金币，否则无法发起申请',
                   StyleUtils.getCommonTextStyle(
                       color: MyColors.g6, fontSize: ScreenUtil().setSp(25))),
               WidgetUtils.commonSizedBox(5, 20),
               WidgetUtils.onlyText(
-                  '3.V币提现收取${double.parse(feilv)*100}%手续费',
+                  '3.金币提现收取${double.parse(feilv)*100}%手续费',
                   StyleUtils.getCommonTextStyle(
                       color: MyColors.g6, fontSize: ScreenUtil().setSp(25))),
               WidgetUtils.commonSizedBox(5, 20),

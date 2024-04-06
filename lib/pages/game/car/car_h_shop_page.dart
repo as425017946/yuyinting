@@ -155,7 +155,7 @@ class _CarHShopPageState extends State<CarHShopPage> {
                         ],
                       ),
                       WidgetUtils.commonSizedBox(10, 0),
-                      WidgetUtils.onlyTextCenter('在金蘑菇商店里兑换的礼物，价值与V豆相等', StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: 10)),
+                      WidgetUtils.onlyTextCenter('在金蘑菇商店里兑换的礼物，价值与金豆相等', StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: 10)),
                       WidgetUtils.commonSizedBox(10, 0),
                       Expanded(
                           child: OptionGridView(
@@ -249,7 +249,7 @@ class _CarHShopPageState extends State<CarHShopPage> {
             if(mogubi.contains('w')){
               // 目的是先把 1w 转换成 10000
               mogubi = (double.parse(mogubi.substring(0,mogubi.length - 1)) * 10000).toString();
-              // 减去花费的V豆
+              // 减去花费的金豆
               mogubi = '${(double.parse(mogubi) - sl)/10000}w';
             }else{
               mogubi = (double.parse(mogubi) - sl).toString();

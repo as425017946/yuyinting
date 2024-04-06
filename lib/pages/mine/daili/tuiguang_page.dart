@@ -25,7 +25,7 @@ class TuiguangPage extends StatefulWidget {
 }
 
 class _TuiguangPageState extends State<TuiguangPage> {
-  /// 推广总人数，今日推广人数，今日游戏参与额，今日中奖礼物额，今日直刷礼物额，今日实际分润额，分润比例，历史分润V豆，历史分润钻石，可领取V豆，可领取钻石
+  /// 推广总人数，今日推广人数，今日游戏参与额，今日中奖礼物额，今日直刷礼物额，今日实际分润额，分润比例，历史分润金豆，历史分润钻石，可领取金豆，可领取钻石
   String allPeople = '',
       dayPeople = '',
       dayGameMoney = '',
@@ -233,7 +233,7 @@ class _TuiguangPageState extends State<TuiguangPage> {
                   children: [
                     const Expanded(child: Text('')),
                     WidgetUtils.onlyTextCenter(
-                        '历史总V币分润',
+                        '历史总金币分润',
                         StyleUtils.getCommonTextStyle(
                             color: Colors.black,
                             fontSize: ScreenUtil().setSp(28))),
@@ -277,7 +277,7 @@ class _TuiguangPageState extends State<TuiguangPage> {
                   children: [
                     const Expanded(child: Text('')),
                     WidgetUtils.onlyTextCenter(
-                        '可领取V币',
+                        '可领取金币',
                         StyleUtils.getCommonTextStyle(
                             color: Colors.black,
                             fontSize: ScreenUtil().setSp(28))),
@@ -365,7 +365,7 @@ class _TuiguangPageState extends State<TuiguangPage> {
                             double.infinity,
                             MyColors.homeTopBG,
                             MyColors.homeTopBG,
-                            '领取V币',
+                            '领取金币',
                             ScreenUtil().setSp(28),
                             Colors.white),
                       ),

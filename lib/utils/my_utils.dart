@@ -548,9 +548,9 @@ class MyUtils {
       if (reason == LeaveReason.Kicked) {
         LogE(
             '客户主动离开聊天室 $roomId 房间名称 $roomName == $participantreason ** $reason');
-        if (sp.getString('roomID').toString() == roomId.toString()) {
-          EMClient.getInstance.chatRoomManager.joinChatRoom(roomId);
-        }
+        // if (sp.getString('roomID').toString() == roomId.toString()) {
+        //   EMClient.getInstance.chatRoomManager.joinChatRoom(roomId);
+        // }
       } else {
         //非客户主动离开聊天室 并且判断是否为当前登录的房间
         if (sp.getString('roomID').toString() == roomId.toString()) {
@@ -797,7 +797,7 @@ class MyUtils {
                     'whoUid': msg.from,
                     'combineID': combineID,
                     'nickName': nickName,
-                    'content': '收到${info['value']}个V豆',
+                    'content': '收到${info['value']}个金豆',
                     'bigImg': '',
                     'headNetImg': sp.getString('user_headimg').toString(),
                     'otherHeadNetImg': headImg,

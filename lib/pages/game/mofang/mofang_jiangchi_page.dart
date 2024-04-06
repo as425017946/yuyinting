@@ -43,7 +43,7 @@ class _MoFangJiangChiPageState extends State<MoFangJiangChiPage> {
               list[i].img!, 100.h, 100.h),
           WidgetUtils.commonSizedBox(10.h, 0),
           WidgetUtils.onlyTextCenter(
-              '${list[i].price!}V豆',
+              '${list[i].price!}金豆',
               StyleUtils.getCommonTextStyle(
                   color: MyColors.loginBlue2, fontSize: 18.sp)),
           WidgetUtils.commonSizedBox(5.h, 0),

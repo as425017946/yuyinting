@@ -66,7 +66,7 @@ class _LiwuShoudaoPageState extends State<LiwuShoudaoPage> {
   Widget _itemLiwu(BuildContext context, int i) {
     String info = '';
     if(list[i].curType == 1){
-      info = 'V豆';
+      info = '金豆';
     }else{
       info = '钻石';
     }

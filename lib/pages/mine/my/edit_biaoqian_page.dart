@@ -25,7 +25,6 @@ class _EditBiaoqianPageState extends State<EditBiaoqianPage> {
   List<Data> list = [];
   List<bool> list_b = [];
   int length = 0;
-  var listen;
   String label = '';
   String labelName = '';
 
@@ -34,21 +33,6 @@ class _EditBiaoqianPageState extends State<EditBiaoqianPage> {
     // TODO: implement initState
     super.initState();
     doPostLabelList();
-    listen = eventBus.on<SubmitButtonBack>().listen((event) {
-      if (event.title == '选好了') {
-        sp.setString('label_id', '');
-        for (int i = 0; i < list_b.length; i++) {
-          if (list_b[i]) {
-            label = '$label${list[i].id},';
-            labelName = '$labelName${list[i].name},';
-          }
-        }
-        sp.setString('label_id', label);
-        sp.setString('label_name', labelName);
-        eventBus.fire(SubmitButtonBack(title: '标签选完'));
-        Navigator.pop(context);
-      }
-    });
   }
 
   @override
@@ -61,6 +45,16 @@ class _EditBiaoqianPageState extends State<EditBiaoqianPage> {
             GestureDetector(
               onTap: (() {
                 if (MyUtils.checkClick()) {
+                  sp.setString('label_id', '');
+                  for (int i = 0; i < list_b.length; i++) {
+                    if (list_b[i]) {
+                      label = '$label${list[i].id},';
+                      labelName = '$labelName${list[i].name},';
+                    }
+                  }
+                  sp.setString('label_id', label);
+                  sp.setString('label_name', labelName);
+                  eventBus.fire(SubmitButtonBack(title: '标签选完'));
                   Navigator.pop(context);
                 }
               }),
@@ -70,82 +64,85 @@ class _EditBiaoqianPageState extends State<EditBiaoqianPage> {
                   double.infinity),
             ),
             Container(
+              height: 700.h,
               color: Colors.white,
               padding: const EdgeInsets.only(left: 20, right: 20),
-              child: Column(
-                children: [
-                  WidgetUtils.commonSizedBox(10, 0),
-                  Row(
-                    children: [
-                      WidgetUtils.showImages(
-                          'assets/images/mine_biaoqian_ren.png',
-                          ScreenUtil().setHeight(42),
-                          ScreenUtil().setHeight(42)),
-                      WidgetUtils.commonSizedBox(0, 5),
-                      WidgetUtils.onlyText(
-                          '你是？',
-                          StyleUtils.getCommonTextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w600,
-                              fontSize: ScreenUtil().setSp(35))),
-                      WidgetUtils.commonSizedBox(0, 10),
-                      WidgetUtils.onlyText(
-                          '$length/3',
-                          StyleUtils.getCommonTextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w600,
-                              fontSize: ScreenUtil().setSp(35))),
-                    ],
-                  ),
-                  WidgetUtils.commonSizedBox(10, 0),
-                  Wrap(
-                    spacing: ScreenUtil().setHeight(15),
-                    runSpacing: ScreenUtil().setHeight(15),
-                    children: List.generate(
-                        list.length,
-                        (index) => GestureDetector(
-                              onTap: (() {
-                                if (MyUtils.checkClick()) {
-                                  if (length < 3) {
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    WidgetUtils.commonSizedBox(10, 0),
+                    Row(
+                      children: [
+                        WidgetUtils.showImages(
+                            'assets/images/mine_biaoqian_ren.png',
+                            ScreenUtil().setHeight(42),
+                            ScreenUtil().setHeight(42)),
+                        WidgetUtils.commonSizedBox(0, 5),
+                        WidgetUtils.onlyText(
+                            '你是？',
+                            StyleUtils.getCommonTextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
+                                fontSize: ScreenUtil().setSp(35))),
+                        WidgetUtils.commonSizedBox(0, 10),
+                        WidgetUtils.onlyText(
+                            '$length/3',
+                            StyleUtils.getCommonTextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
+                                fontSize: ScreenUtil().setSp(35))),
+                      ],
+                    ),
+                    WidgetUtils.commonSizedBox(10, 0),
+                    Wrap(
+                      spacing: ScreenUtil().setHeight(15),
+                      runSpacing: ScreenUtil().setHeight(15),
+                      children: List.generate(
+                          list.length,
+                              (index) => GestureDetector(
+                            onTap: (() {
+                              if (MyUtils.checkClick()) {
+                                if (length < 3) {
+                                  setState(() {
+                                    list_b[index] = !list_b[index];
+                                    if (list_b[index]) {
+                                      length++;
+                                    } else {
+                                      length--;
+                                    }
+                                  });
+                                } else {
+                                  if (list_b[index]) {
                                     setState(() {
                                       list_b[index] = !list_b[index];
-                                      if (list_b[index]) {
-                                        length++;
-                                      } else {
-                                        length--;
-                                      }
+                                      length--;
                                     });
-                                  } else {
-                                    if (list_b[index]) {
-                                      setState(() {
-                                        list_b[index] = !list_b[index];
-                                        length--;
-                                      });
-                                    }
                                   }
                                 }
-                              }),
-                              child: WidgetUtils.myContainerZishiying2(
-                                  list_b[index]
-                                      ? MyColors.homeTopBG
-                                      : Colors.white,
-                                  list_b[index]
-                                      ? MyColors.homeTopBG
-                                      : MyColors.f2,
-                                  list[index].name!,
-                                  StyleUtils.getCommonTextStyle(
-                                      color: list_b[index] == false
-                                          ? Colors.black
-                                          : Colors.white,
-                                      fontSize: ScreenUtil().setSp(28))),
-                            )),
-                  ),
-                  WidgetUtils.commonSizedBox(60, 0),
-                  WidgetUtils.commonSubmitButton('选好了'),
-                  WidgetUtils.commonSizedBox(20, 0),
-                ],
+                              }
+                            }),
+                            child: WidgetUtils.myContainerZishiying2(
+                                list_b[index]
+                                    ? MyColors.homeTopBG
+                                    : Colors.white,
+                                list_b[index]
+                                    ? MyColors.homeTopBG
+                                    : MyColors.f2,
+                                list[index].name!,
+                                StyleUtils.getCommonTextStyle(
+                                    color: list_b[index] == false
+                                        ? Colors.black
+                                        : Colors.white,
+                                    fontSize: ScreenUtil().setSp(28))),
+                          )),
+                    ),
+                    // WidgetUtils.commonSizedBox(60, 0),
+                    // WidgetUtils.commonSubmitButton('选好了'),
+                    WidgetUtils.commonSizedBox(20, 0),
+                  ],
+                ),
               ),
-            )
+            ),
           ],
         ));
   }
@@ -170,6 +167,7 @@ class _EditBiaoqianPageState extends State<EditBiaoqianPage> {
                   .getString('label_id')
                   .toString()
                   .contains(list[i].id.toString())) {
+                length++;
                 list_b.insert(i, true);
               }
             }

@@ -274,7 +274,7 @@ class _ZonglanPageState extends State<ZonglanPage> {
                       child: Opacity(
                         opacity: 0,
                         child: WidgetUtils.onlyTextCenter(
-                            '总V币/钻石分润',
+                            '总金币/钻石分润',
                             StyleUtils.getCommonTextStyle(
                                 color: Colors.black,
                                 fontSize: ScreenUtil().setSp(28))),

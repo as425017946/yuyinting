@@ -59,7 +59,7 @@ class _JiesuanMorePageState extends State<JiesuanMorePage> {
           WidgetUtils.commonSizedBox(10, 10),
           Row(
             children: [
-              WidgetUtils.onlyText('V豆直刷流水：', StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
+              WidgetUtils.onlyText('金豆直刷流水：', StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
               WidgetUtils.onlyText(list[i].gbDirectSp!, StyleUtils.getCommonTextStyle(color: MyColors.g2, fontSize: ScreenUtil().setSp(25), fontWeight: FontWeight.w600)),
               const Expanded(child: Text('')),
               WidgetUtils.onlyText('背包流水：', StyleUtils.getCommonTextStyle(color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),

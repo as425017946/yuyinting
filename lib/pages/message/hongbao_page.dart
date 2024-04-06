@@ -29,7 +29,7 @@ class HongBaoPage extends StatefulWidget {
 class _HongBaoPageState extends State<HongBaoPage> {
   TextEditingController controllerDou = TextEditingController();
 
-  // 0钻石 1V豆
+  // 0钻石 1金豆
   int type = 0;
 
   // 是否显示全的
@@ -215,7 +215,7 @@ class _HongBaoPageState extends State<HongBaoPage> {
                                     49.h),
                                 WidgetUtils.commonSizedBox(0, 10.h),
                                 WidgetUtils.onlyText(
-                                    '发V豆',
+                                    '发金豆',
                                     StyleUtils.getCommonTextStyle(
                                         color: type != 1
                                             ? MyColors.walletMingxi
@@ -248,7 +248,7 @@ class _HongBaoPageState extends State<HongBaoPage> {
                   children: [
                     WidgetUtils.commonSizedBox(0.h, 20.h),
                     WidgetUtils.onlyText(
-                        '输入V豆数量',
+                        '输入金豆数量',
                         StyleUtils.getCommonTextStyle(
                             color: Colors.black87,
                             fontSize: 32.sp,
@@ -325,7 +325,7 @@ class _HongBaoPageState extends State<HongBaoPage> {
                 onTap: (() {
                   if (MyUtils.checkClick()) {
                     if (controllerDou.text.isEmpty) {
-                      MyToastUtils.showToastBottom('请输入要发送的V豆数量');
+                      MyToastUtils.showToastBottom('请输入要发送的金豆数量');
                     } else {
                       // 进入输入密码页面
                       MyUtils.goTransparentPage(context, PayHBTSPage(uid: widget.uid, number: controllerDou.text.trim().toString(), otherImg: widget.otherImg, nickName: widget.nickName,));

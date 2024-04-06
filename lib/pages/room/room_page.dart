@@ -3082,12 +3082,12 @@ class _RoomPageState extends State<RoomPage>
   }
 
   //拿到本地svga存储路径
-  saveSVGAIMAGE(name) async {
+  saveSVGAIMAGE(name){
     LogE('礼物名称 $name');
     List<String> lujing = name.toString().split('/');
-    // 获取保存路径
-    Directory? directory = await getExternalStorageDirectory();
-    LogE('获取保存路径 $directory');
+    // // 获取保存路径
+    // Directory? directory = await getExternalStorageDirectory();
+    // LogE('获取保存路径 $directory');
     String savePath =
         "/sdcard/Android/data/com.leimu.yuyinting/files/${lujing[lujing.length - 1]}";
     LogE('礼物地址 $savePath');
@@ -5245,7 +5245,7 @@ class _RoomPageState extends State<RoomPage>
       }
       String zzMoney = (double.parse(cb.amount!) * 0.8).toStringAsFixed(2);
       String content =
-          '我向你赠送了全部背包礼物：\n$infos\n总额为：${cb.amount!}*0.8=${zzMoney}V豆';
+          '我向你赠送了全部背包礼物：\n$infos\n总额为：${cb.amount!}*0.8=${zzMoney}金豆';
       //请求发消息的接口
       doPostSendUserMsg(content, cb);
     }

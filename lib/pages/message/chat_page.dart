@@ -649,7 +649,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
                     allData2[i]['otherHeadNetImg']),
               ),
               WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(10)),
-              // 6v豆红包
+              // 6金豆红包
               allData2[i]['type'] == 6
                   ? SizedBox(
                       height: 130.h,
@@ -866,7 +866,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
                 padding: EdgeInsets.only(right: 10.h),
                 child: msgReadText(allData2[i]['msgRead']),
               ),
-              // 6v豆红包
+              // 6金豆红包
               allData2[i]['type'] == 6
                   ? SizedBox(
                       height: 130.h,

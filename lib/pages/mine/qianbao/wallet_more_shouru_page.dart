@@ -90,13 +90,13 @@ class _WalletMoreShouruPageState extends State<WalletMoreShouruPage> {
         break;
       case 6:
         if(list[i].curType == 1){
-          leixing = 'V豆提现失败充回';
+          leixing = '金豆提现失败充回';
           showImg = 'assets/images/wallet_d.png';
         }else if(list[i].curType == 2){
           leixing = '钻石提现失败充回';
           showImg = 'assets/images/wallet_z.png';
         }else{
-          leixing = 'V币提现失败充回';
+          leixing = '金币提现失败充回';
           showImg = 'assets/images/mine_wallet_bb.png';
         }
         break;
@@ -184,7 +184,7 @@ class _WalletMoreShouruPageState extends State<WalletMoreShouruPage> {
                             : const Text(''),
                         const Expanded(child: Text('')),
                         WidgetUtils.onlyText(
-                            list[i].curType == 1 ? 'V豆' : list[i].curType == 2 ? '钻石' : 'V币',
+                            list[i].curType == 1 ? '金豆' : list[i].curType == 2 ? '钻石' : '金币',
                             StyleUtils.getCommonTextStyle(
                                 color: Colors.black,
                                 fontSize: ScreenUtil().setSp(25))),

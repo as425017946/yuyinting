@@ -78,7 +78,7 @@ class _ZhuanPanGuiZePageState extends State<ZhuanPanGuiZePage> {
                             StyleUtils.getCommonTextStyle(
                                 color: MyColors.zpGZYellow, fontSize: 24.sp)),
                         WidgetUtils.onlyText(
-                            '转盘游戏是独立的游戏玩法，仅在转盘页面可参与； 用户通过消耗V豆可打开转盘获得旋转得到的对应礼物奖励。',
+                            '转盘游戏是独立的游戏玩法，仅在转盘页面可参与； 用户通过消耗金豆可打开转盘获得旋转得到的对应礼物奖励。',
                             StyleUtils.getCommonTextStyle(
                                 color: Colors.white, fontSize: 24.sp)),
                         WidgetUtils.commonSizedBox(20.h, 0),
@@ -87,11 +87,11 @@ class _ZhuanPanGuiZePageState extends State<ZhuanPanGuiZePage> {
                             StyleUtils.getCommonTextStyle(
                                 color: MyColors.zpGZYellow, fontSize: 24.sp)),
                         WidgetUtils.onlyText(
-                            '消耗100V豆开启一次心动转盘， 消耗1000V豆开启一次超级转盘。',
+                            '消耗100金豆开启一次心动转盘， 消耗1000金豆开启一次超级转盘。',
                             StyleUtils.getCommonTextStyle(
                                 color: Colors.white, fontSize: 24.sp)),
                         // WidgetUtils.onlyText(
-                        //     '游戏自动付款顺序为先付V豆，V豆余额不够时付钻石。',
+                        //     '游戏自动付款顺序为先付金豆，金豆余额不够时付钻石。',
                         //     StyleUtils.getCommonTextStyle(
                         //         color: Colors.white, fontSize: 24.sp)),
                         WidgetUtils.commonSizedBox(20.h, 0),

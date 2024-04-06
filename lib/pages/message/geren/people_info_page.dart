@@ -600,7 +600,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              (live != 1 && widget.title != '小主页')
+              (live == 1 && widget.title != '小主页')
                   ? GestureDetector(
                       onTap: (() {
                         if (sp.getString('roomID').toString() == roomID) {

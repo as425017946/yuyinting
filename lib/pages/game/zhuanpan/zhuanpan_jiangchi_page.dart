@@ -93,7 +93,7 @@ class _ZhuanPanJiangChiPageState extends State<ZhuanPanJiangChiPage> {
                         height: 30.h,
                         alignment: Alignment.centerLeft,
                         child: WidgetUtils.onlyTextCenter(
-                            '${list[i].price!}V豆',
+                            '${list[i].price!}金豆',
                             StyleUtils.getCommonTextStyle(
                                 color: MyColors.peopleYellow, fontSize: 18.sp))
                       )

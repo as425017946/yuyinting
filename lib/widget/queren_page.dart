@@ -58,7 +58,7 @@ class _QueRenPageState extends State<QueRenPage> {
                           style: StyleUtils.getCommonTextStyle(
                               color: MyColors.origin, fontSize: 32.sp, fontWeight: FontWeight.w600)),
                       TextSpan(
-                          text: widget.title == '赛车商店' && widget.isDuiHuan ? '蘑菇币，请确认' : '金蘑菇/V豆/钻石',
+                          text: widget.title == '赛车商店' && widget.isDuiHuan ? '蘑菇币，请确认' : '金蘑菇/金豆/钻石',
                           style: StyleUtils.getCommonTextStyle(
                               color: MyColors.g2, fontSize: 32.sp, fontWeight: FontWeight.w600)),
                     ]),

@@ -58,7 +58,7 @@ class _QueRenPageState extends State<XiaZhuQueRenPage> {
                           style: StyleUtils.getCommonTextStyle(
                               color: MyColors.origin, fontSize: 32.sp, fontWeight: FontWeight.w600)),
                       TextSpan(
-                          text:'个V豆',
+                          text:'个金豆',
                           style: StyleUtils.getCommonTextStyle(
                               color: MyColors.g2, fontSize: 32.sp, fontWeight: FontWeight.w600)),
                     ]),

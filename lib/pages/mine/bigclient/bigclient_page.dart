@@ -586,7 +586,7 @@ class _BigClientPageList0 extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'V豆',
+                        '金豆',
                         style: textStyle(FontWeight.w500),
                       ),
                     ],
@@ -655,7 +655,7 @@ class _BigClientPageList1 extends StatelessWidget {
         Text('如何增加荣耀值提升荣耀等级？', style: qStyle),
         SizedBox(height: 12),
         Text(
-          '每参与游戏消耗1 V豆或赠送价值1 V豆的礼物，均可获得1荣耀值。',
+          '每参与游戏消耗1 金豆或赠送价值1 金豆的礼物，均可获得1荣耀值。',
           style: aStyle,
         ),
         SizedBox(height: 42),

@@ -46,7 +46,7 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
         //cur_type 1金豆 2钻石 3蘑菇
         if(event.type == 1){
           if(double.parse(jinbi) > 10000){
-            // 减去花费的V豆
+            // 减去花费的金豆
             jinbi = '${(double.parse(jinbi) - event.jine)}';
             if(double.parse(jinbi) > 10000){
               //保留2位小数
@@ -67,7 +67,7 @@ class _ZhuanPanPageState extends State<ZhuanPanPage> {
           sp.setString('zp_jinbi', jinbi);
         }else if(event.type == 2){
           if(double.parse(zuanshi) > 10000){
-            // 减去花费的V豆
+            // 减去花费的金豆
             zuanshi = '${(double.parse(zuanshi) - event.jine)}';
             if(double.parse(zuanshi) > 10000){
               zuanshi2 = '${(double.parse(zuanshi) / 10000)}';

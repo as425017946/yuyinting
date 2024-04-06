@@ -52,7 +52,7 @@ class _TuijianPageState extends State<TuijianPage>
   List<AnchorList> listAnchor = [];
   List<int> listI = [];
   int a = 0, b = 0, c = 0;
-
+  bool isFirstUp = false;//是否首次打开进入
   bool isUp = true; //是否允许上拉
   bool isDown = true; //是否允许下拉
   void _onRefresh() async {
@@ -121,7 +121,6 @@ class _TuijianPageState extends State<TuijianPage>
     });
     listen2 = eventBus.on<FirstInfoBack>().listen((event) {
       if(event.isOk){
-        LogE('=---==--=--2');
         // 推荐房间
         MyUtils.goTransparentPageCom(
             context,
@@ -1013,14 +1012,15 @@ class _TuijianPageState extends State<TuijianPage>
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
+
             list.clear();
             if (bean.data!.isNotEmpty) {
               list = bean.data!;
               if (tjRoom == 0) {
                 tjRoom++;
               }
-              if(sp.getBool('isFirst') == false){
-                LogE('=---==--=--1');
+              if(sp.getBool('isFirst') == false && isFirstUp == false){
+                isFirstUp = true;
                 // 推荐房间
                 MyUtils.goTransparentPageCom(
                     context,

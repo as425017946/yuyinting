@@ -161,7 +161,7 @@ class _CarShopPageState extends State<CarShopPage> {
                 ),
                 WidgetUtils.commonSizedBox(40 * 1.25.w, 0.h),
                 WidgetUtils.onlyTextCenter(
-                    '在金蘑菇商店里兑换的礼物，价值与V豆相等',
+                    '在金蘑菇商店里兑换的礼物，价值与金豆相等',
                     StyleUtils.getCommonTextStyle(
                         color: MyColors.g3, fontSize: 25.sp)),
                 WidgetUtils.commonSizedBox(30 * 1.25.w, 0.h),
