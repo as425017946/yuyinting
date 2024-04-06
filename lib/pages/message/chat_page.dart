@@ -2278,7 +2278,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
       'otherHeadNetImg': widget.otherImg,
       'add_time': DateTime.now().millisecondsSinceEpoch,
       'type': 3,
-      'number': audioNum,
+      'number': (msg.body as EMVoiceMessageBody).duration,//audioNum,
       'status': 0,
       'readStatus': 1,
       'liveStatus': 0,
