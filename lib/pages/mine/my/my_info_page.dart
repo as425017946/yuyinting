@@ -114,6 +114,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
 
   @override
   Widget build(BuildContext context) {
+    final imgHeight = Get.width;
     return Scaffold(
         backgroundColor: Colors.transparent,
         body: Stack(
@@ -122,12 +123,13 @@ class _MyInfoPageState extends State<MyInfoPage> {
               slivers: [
                 SliverAppBar(
                   pinned: true, //设置为true时，当SliverAppBar内容滑出屏幕时，将始终渲染一个固定在顶部的收起状态
-                  expandedHeight: 350.h,
+                  expandedHeight: imgHeight * 0.6,
+                  collapsedHeight: 56,
                   backgroundColor: Colors.white,
                   flexibleSpace: FlexibleSpaceBar(
                     // title: const Text("测试信息"),
                     centerTitle: true,
-                    background: WidgetUtils.showImagesNet(sp.getString('user_headimg').toString(), 350.h, double.infinity),
+                    background: WidgetUtils.showImagesNet(sp.getString('user_headimg').toString(), imgHeight, double.infinity),
                   ),
                 ),
                 SliverList(
@@ -148,7 +150,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
                               Colors.white
                             ]),
                       ),
-                      height: 1415.h,
+                      height: Get.height - Get.statusBarHeight - 30 + 280.w,//1415.h,
                       child: Stack(
                         children: [
                           Stack(
@@ -236,8 +238,8 @@ class _MyInfoPageState extends State<MyInfoPage> {
   Widget _head() {
     final top = Get.width * 0.7;
     return Container(
-      margin: EdgeInsets.only(left: 20.w, right: 20.w, top: 0.h),
-      height: 270.w,
+      margin: EdgeInsets.only(left: 20.w, right: 20.w, top: 0),
+      height: 280.w,
       alignment: Alignment.topLeft,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -331,7 +333,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: 10.h),
+            margin: EdgeInsets.only(top: 10.w),
             padding: EdgeInsets.only(left: 20.w,),
             color: Colors.transparent,
             child: Row(
@@ -479,7 +481,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
       children: [
         /// 音频
         Container(
-          height: 180.h,
+          height: 240.w,
           alignment: Alignment.bottomRight,
           padding: EdgeInsets.all(20.w),
           child: Column(
@@ -573,7 +575,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
                   children: [
                     Container(
                         alignment: Alignment.bottomLeft,
-                        height: ScreenUtil().setHeight(80),
+                        height: 80*1.25.w,
                         child: Row(
                           children: [
                             GestureDetector(
