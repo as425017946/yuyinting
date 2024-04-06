@@ -323,8 +323,8 @@ class _MyInfoPageState extends State<MyInfoPage> {
                       WidgetUtils.commonSizedBox(0, 10.w),
                       WidgetUtils.showImages(
                         'assets/images/mine_fuzhi.png',
-                        40.w,
-                        40.w,
+                        25.w,
+                        25.w,
                       ),
                     ],
                   ),
