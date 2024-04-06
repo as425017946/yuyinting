@@ -755,7 +755,7 @@ class MyUtils {
                   'loginStatus': 0,
                   'weight': msg.from.toString() == '1' ? 1 : 0,
                   'msgId': msg.msgId,
-                  'msgRead': 2,
+                  'msgRead': 3,
                   'msgJson': jsonEncode(msg.toJson()),
                 };
                 // 插入数据
@@ -891,7 +891,7 @@ class MyUtils {
                 break;
               case MessageType.VOICE:
                 LogE('语音发送成功 $msg');
-                eventBus.fire(SubmitButtonBack(title: '语音发送成功'));
+                eventBus.fire(SubmitButtonBack(title: '语音发送成功', msg: msg));
                 break;
             }
             addLogToConsole("send message succeed");
@@ -970,8 +970,8 @@ class MyUtils {
   static void addLogToConsole(String log) {}
 
   // 消息已读回执
-  static void didMsgRead(params) async {
-    if (params['msgRead'] == 2) {
+  static void didMsgRead(params, {int index = 2}) async {
+    if (params['msgRead'] == index) {
       try {
         String json = params['msgJson'];
         final msg = EMMessage.fromJson(jsonDecode(json));

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
@@ -165,7 +166,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
     });
     listenYY = eventBus.on<SubmitButtonBack>().listen((event) {
       if (event.title == '语音发送成功') {
-        successAudio();
+        successAudio(event.msg!);
       } else if (event.title == '语音发送失败') {
         //重新初始化音频信息
         setState(() {
@@ -786,6 +787,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
                                           stopPlayer();
                                         } else {
                                           play(allData2[i]['content']);
+                                          MyUtils.didMsgRead(allData2[i], index: 3);
                                         }
                                       }),
                                       child: Container(
@@ -995,6 +997,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
                                           play(allData2[i]['content']);
                                         }
                                       }),
+                                      onLongPress: onImgLongPress(context, allData2[i]),
                                       child: Container(
                                         constraints: BoxConstraints(
                                             minWidth:
@@ -2254,7 +2257,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
   }
 
   /// 发送成功音频记录到本地
-  successAudio() async {
+  successAudio(EMMessage msg) async {
     DatabaseHelper databaseHelper = DatabaseHelper();
     Database? db = await databaseHelper.database;
     String combineID = '';
@@ -2281,6 +2284,9 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
       'liveStatus': 0,
       'loginStatus': 0,
       'weight': widget.otherUid.toString() == '1' ? 1 : 0,
+      'msgId': msg.msgId,
+      'msgRead': 2,
+      'msgJson': jsonEncode(msg.toJson()),
     };
     // 插入数据
     await databaseHelper.insertData('messageSLTable', params);
