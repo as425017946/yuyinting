@@ -1,5 +1,6 @@
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:event_bus/event_bus.dart';
+import 'package:im_flutter_sdk/im_flutter_sdk.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 import '../bean/myHomeBean.dart';
@@ -16,8 +17,9 @@ class ResidentBack {
 ///提交类的按钮
 class SubmitButtonBack {
   String title;
+  EMMessage? msg;
 
-  SubmitButtonBack({required this.title});
+  SubmitButtonBack({required this.title, this.msg});
 }
 
 ///提交类的按钮
