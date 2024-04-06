@@ -347,8 +347,8 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
       await recorderModule.startRecorder(
           toFile: path,
           codec: Codec.aacADTS,
-          bitRate: 8000,
-          sampleRate: 8000,
+          bitRate: 128000,
+          sampleRate: 44100,
           audioSource: AudioSource.microphone);
       print('===>  开始录音');
       if (isDevices == 'ios') {
