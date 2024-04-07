@@ -154,10 +154,9 @@ class _ReDuOnLinePageState extends State<ReDuOnLinePage> {
                             // 只有不是新贵或者新锐的时候展示萌新
                             (list[i].isNew.toString() == '1' &&
                                 list[i].newNoble.toString() == '0')
-                                ? WidgetUtils.showImages(
+                                ? WidgetUtils.showImagesFill(
                                 'assets/images/dj/room_role_common.png',
-                                30.h,
-                                50.h)
+                                45.w, 85.w)
                                 : const Text(''),
                             (list[i].isNew.toString() == '1' &&
                                 list[i].newNoble.toString() == '0')
@@ -166,17 +165,15 @@ class _ReDuOnLinePageState extends State<ReDuOnLinePage> {
                             // 展示新贵或者新锐图标
                             list[i].newNoble.toString() == '1'
                                 ? WidgetUtils.showImages(
-                                'assets/images/dj/room_rui.png', 30.h, 50.h)
+                                'assets/images/dj/room_rui.png', 35.w, 85.w)
                                 : list[i].newNoble.toString() == '2'
                                 ? WidgetUtils.showImages(
                                 'assets/images/dj/room_gui.png',
-                                30.h,
-                                50.h)
+                                35.w, 85.w)
                                 : list[i].newNoble.toString() == '3'
                                 ? WidgetUtils.showImages(
-                                'assets/images/dj/room_gui.png',
-                                30.h,
-                                50.h)
+                                'assets/images/dj/room_qc.png',
+                                35.w, 85.w)
                                 : const Text(''),
                             list[i].newNoble.toString() != '0'
                                 ? WidgetUtils.commonSizedBox(0, 5)

@@ -141,10 +141,10 @@ class HomeItems {
         '${hf.fromNickname}在${hf.roomName}向${hf.toNickname}送出价值${hf.giftInfo![0].giftPrice}${hf.giftInfo![0].giftName} x${hf.giftInfo![0].giftNumber}';
         break;
       case '盲盒礼物横幅':
-        gd = 20.h;
+        gd = 35.h;
         topHD = 135.h;
         info =
-        '${hf.fromNickname}在${hf.roomName}向${hf.toNickname}送出价值${hf.giftInfo![0].giftPrice}${hf.giftInfo![0].giftName} x${hf.giftInfo![0].giftNumber}';
+        '${hf.fromNickname}在${hf.roomName}向${hf.toNickname}惊喜礼盒爆出${hf.giftInfo![0].giftName}(${hf.giftInfo![0].giftPrice}) x${hf.giftInfo![0].giftNumber}';
         break;
     }
     return IgnorePointer(

@@ -315,42 +315,42 @@ class _MinePageState extends State<MinePage> {
                                           fontSize: ScreenUtil().setSp(38)),
                                     ),
                               WidgetUtils.commonSizedBox(0, 5),
-                              // 只有不是新贵或者新锐的时候展示萌新
-                              (isNew == 1 && isNewNoble == 0)
-                                  ? WidgetUtils.showImages(
-                                      'assets/images/dj/room_role_common.png',
-                                      30.h,
-                                      50.h)
-                                  : const Text(''),
-                              (isNew == 1 && isNewNoble == 0)
-                                  ? WidgetUtils.commonSizedBox(0, 5)
-                                  : const Text(''),
-                              // 展示新贵或者新锐图标
-                              isNewNoble == 1
-                                  ? WidgetUtils.showImages(
-                                      'assets/images/dj/room_rui.png',
-                                      30.h,
-                                      50.h)
-                                  : isNewNoble == 2
-                                      ? WidgetUtils.showImages(
-                                          'assets/images/dj/room_gui.png',
-                                          30.h,
-                                          50.h)
-                                      : isNewNoble == 3
-                                          ? WidgetUtils.showImages(
-                                              'assets/images/dj/room_gui.png',
-                                              30.h,
-                                              50.h)
-                                          : const Text(''),
-                              isNewNoble != 0
-                                  ? WidgetUtils.commonSizedBox(0, 5)
-                                  : const Text(''),
-                              isPretty == 1
-                                  ? WidgetUtils.showImages(
-                                      'assets/images/dj/lianghao.png',
-                                      30.h,
-                                      30.h)
-                                  : const Text(''),
+                              // // 只有不是新贵或者新锐的时候展示萌新
+                              // (isNew == 1 && isNewNoble == 0)
+                              //     ? WidgetUtils.showImages(
+                              //         'assets/images/dj/room_role_common.png',
+                              //         30.h,
+                              //         50.h)
+                              //     : const Text(''),
+                              // (isNew == 1 && isNewNoble == 0)
+                              //     ? WidgetUtils.commonSizedBox(0, 5)
+                              //     : const Text(''),
+                              // // 展示新贵或者新锐图标
+                              // isNewNoble == 1
+                              //     ? WidgetUtils.showImages(
+                              //         'assets/images/dj/room_rui.png',
+                              //         30.h,
+                              //         50.h)
+                              //     : isNewNoble == 2
+                              //         ? WidgetUtils.showImages(
+                              //             'assets/images/dj/room_gui.png',
+                              //             30.h,
+                              //             50.h)
+                              //         : isNewNoble == 3
+                              //             ? WidgetUtils.showImages(
+                              //                 'assets/images/dj/room_gui.png',
+                              //                 30.h,
+                              //                 50.h)
+                              //             : const Text(''),
+                              // isNewNoble != 0
+                              //     ? WidgetUtils.commonSizedBox(0, 5)
+                              //     : const Text(''),
+                              // isPretty == 1
+                              //     ? WidgetUtils.showImages(
+                              //         'assets/images/dj/lianghao.png',
+                              //         30.h,
+                              //         30.h)
+                              //     : const Text(''),
                             ],
                           ),
                         ),
@@ -379,97 +379,51 @@ class _MinePageState extends State<MinePage> {
                                   ScreenUtil().setWidth(24)), // 12,
                             ),
                             WidgetUtils.commonSizedBox(0, 5),
-                            // 用户等级
-                            level != 0
-                                ? Stack(
-                                    alignment: Alignment.centerLeft,
-                                    children: [
-                                      WidgetUtils.showImagesFill(
-                                          (level >= 1 && level <= 10)
-                                              ? 'assets/images/dj/dj_c_1-10.png'
-                                              : (level >= 11 && level <= 15)
-                                                  ? 'assets/images/dj/dj_c_11-15.png'
-                                                  : (level >= 16 && level <= 20)
-                                                      ? 'assets/images/dj/dj_c_16-20.png'
-                                                      : (level >= 21 &&
-                                                              level <= 25)
-                                                          ? 'assets/images/dj/dj_c_21-25.png'
-                                                          : (level >= 26 &&
-                                                                  level <= 30)
-                                                              ? 'assets/images/dj/dj_c_26-30.png'
-                                                              : (level >= 31 &&
-                                                                      level <=
-                                                                          35)
-                                                                  ? 'assets/images/dj/dj_c_31-35.png'
-                                                                  : (level >= 36 &&
-                                                                          level <=
-                                                                              40)
-                                                                      ? 'assets/images/dj/dj_c_36-40.png'
-                                                                      : (level >= 41 &&
-                                                                              level <= 45)
-                                                                          ? 'assets/images/dj/dj_c_41-45.png'
-                                                                          : 'assets/images/dj/dj_c_46-50.png',
-                                          ScreenUtil().setHeight(30),
-                                          ScreenUtil().setHeight(85)),
-                                      Positioned(
-                                          left: 35.h, //45.w,
-                                          child: Stack(
-                                            alignment: Alignment.center,
-                                            children: [
-                                              Text(
-                                                'LV.${level.toString()}',
-                                                style: TextStyle(
-                                                    fontSize:
-                                                        ScreenUtil().setSp(18),
-                                                    fontWeight: FontWeight.w600,
-                                                    fontFamily: 'ARIAL',
-                                                    foreground: Paint()
-                                                      ..style =
-                                                          PaintingStyle.stroke
-                                                      ..strokeWidth = 2
-                                                      ..color = (level >= 1 &&
-                                                              level <= 10)
-                                                          ? MyColors.djOneM
-                                                          : (level >= 11 &&
-                                                                  level <= 15)
-                                                              ? MyColors.djTwoM
-                                                              : (level >= 16 &&
-                                                                      level <=
-                                                                          20)
-                                                                  ? MyColors
-                                                                      .djThreeM
-                                                                  : (level >= 21 &&
-                                                                          level <=
-                                                                              25)
-                                                                      ? MyColors
-                                                                          .djFourM
-                                                                      : (level >= 26 &&
-                                                                              level <=
-                                                                                  30)
-                                                                          ? MyColors
-                                                                              .djFiveM
-                                                                          : (level >= 31 && level <= 35)
-                                                                              ? MyColors.djSixM
-                                                                              : (level >= 36 && level <= 40)
-                                                                                  ? MyColors.djSevenM
-                                                                                  : (level >= 41 && level <= 45)
-                                                                                      ? MyColors.djEightM
-                                                                                      : MyColors.djNineM),
-                                              ),
-                                              Text(
-                                                'LV.${level.toString()}',
-                                                style: TextStyle(
-                                                    color: MyColors.djOne,
-                                                    fontSize:
-                                                        ScreenUtil().setSp(18),
-                                                    fontWeight: FontWeight.w600,
-                                                    fontFamily: 'ARIAL'),
-                                              ),
-                                            ],
-                                          ))
-                                    ],
-                                  )
-                                : const Text(''),
+                            // // 用户等级
+                            // level != 0
+                            //     ? Stack(
+                            //         alignment: Alignment.centerLeft,
+                            //         children: [
+                            //           WidgetUtils.showImagesFill(
+                            //               (level >= 1 && level <= 10)
+                            //                   ? 'assets/images/dj/dj_c_1-10.png'
+                            //                   : (level >= 11 && level <= 15)
+                            //                       ? 'assets/images/dj/dj_c_11-15.png'
+                            //                       : (level >= 16 && level <= 20)
+                            //                           ? 'assets/images/dj/dj_c_16-20.png'
+                            //                           : (level >= 21 &&
+                            //                                   level <= 25)
+                            //                               ? 'assets/images/dj/dj_c_21-25.png'
+                            //                               : (level >= 26 &&
+                            //                                       level <= 30)
+                            //                                   ? 'assets/images/dj/dj_c_26-30.png'
+                            //                                   : (level >= 31 &&
+                            //                                           level <=
+                            //                                               35)
+                            //                                       ? 'assets/images/dj/dj_c_31-35.png'
+                            //                                       : (level >= 36 &&
+                            //                                               level <=
+                            //                                                   40)
+                            //                                           ? 'assets/images/dj/dj_c_36-40.png'
+                            //                                           : (level >= 41 &&
+                            //                                                   level <= 45)
+                            //                                               ? 'assets/images/dj/dj_c_41-45.png'
+                            //                                               : 'assets/images/dj/dj_c_46-50.png',
+                            //               ScreenUtil().setHeight(30),
+                            //               ScreenUtil().setHeight(85)),
+                            //           Positioned(
+                            //               left: 55.w,
+                            //               child: Text(
+                            //                 level.toString(),
+                            //                 style: TextStyle(
+                            //                     color: MyColors.djOne,
+                            //                     fontSize: 26.sp,
+                            //                     fontWeight: FontWeight.w600,
+                            //                     fontFamily: 'LR'),
+                            //               ))
+                            //         ],
+                            //       )
+                            //     : const Text(''),
                             WidgetUtils.commonSizedBox(0, 5),
                             GestureDetector(
                               onTap: (() {
@@ -1254,6 +1208,7 @@ class _MinePageState extends State<MinePage> {
             sp.setString("nickname", bean.data!.nickname!);
             sp.setString('user_id', bean.data!.uid.toString());
             sp.setString('user_phone', bean.data!.phone!);
+            sp.setInt("user_level", bean.data!.level as int);
             userNumber = bean.data!.number.toString();
             care = bean.data!.followNum.toString();
             beCare = bean.data!.isFollowNum.toString();
@@ -1268,6 +1223,10 @@ class _MinePageState extends State<MinePage> {
             if (sp.getString('user_identity').toString() != identity) {
               eventBus.fire(SubmitButtonBack(title: '更换了身份'));
               sp.setString('user_identity', identity);
+            }
+            // 等级变了
+            if (bean.data!.level! >= 3) {
+              eventBus.fire(SubmitButtonBack(title: '等级大于3级'));
             }
             avatarFrameImg = bean.data!.avatarFrameImg!;
             avatarFrameGifImg = bean.data!.avatarFrameGifImg!;

@@ -212,22 +212,22 @@ class RoomItems {
                   WidgetSpan(
                       child: list[i]['new_noble'].toString() == '0' &&
                           list[i]['is_new'].toString() == '1'
-                          ? WidgetUtils.showImages(
+                          ? WidgetUtils.showImagesFill(
                           'assets/images/dj/room_role_common.png',
                           30.h,
-                          50.h)
+                          60.h)
                           : const Text('')),
                   // 不管是不是萌新，只要是新锐或者新贵就优先展示
                   WidgetSpan(
                       child: list[i]['new_noble'].toString() == "1"
-                          ? WidgetUtils.showImages(
-                          'assets/images/dj/room_rui.png', 30.h, 50.h)
+                          ? WidgetUtils.showImagesFill(
+                          'assets/images/dj/room_rui.png', 26.h, 50.h)
                           : list[i]['new_noble'].toString() == "2"
-                          ? WidgetUtils.showImages(
-                          'assets/images/dj/room_gui.png', 30.h, 50.h)
+                          ? WidgetUtils.showImagesFill(
+                          'assets/images/dj/room_gui.png', 26.h, 50.h)
                           : list[i]['new_noble'].toString() == "3"
-                          ? WidgetUtils.showImages(
-                          'assets/images/dj/room_gui.png',
+                          ? WidgetUtils.showImagesFill(
+                          'assets/images/dj/room_qc.png',
                           30.h,
                           50.h)
                           : const Text('')),
@@ -295,60 +295,11 @@ class RoomItems {
                                   style: TextStyle(
                                       fontSize: 18.sp,
                                       fontWeight: FontWeight.w600,
-                                      fontFamily: 'Impact',
+                                      fontFamily: 'LR',
                                       foreground: Paint()
                                         ..style = PaintingStyle.stroke
                                         ..strokeWidth = 2
-                                        ..color = (int.parse(
-                                            list[i]['lv'].toString()) >= 1 &&
-                                            int.parse(
-                                                list[i]['lv'].toString()) <=
-                                                10)
-                                            ? MyColors.djOneM
-                                            : (int.parse(
-                                            list[i]['lv'].toString()) >= 11 &&
-                                            int.parse(
-                                                list[i]['lv'].toString()) <=
-                                                15)
-                                            ? MyColors.djTwoM
-                                            : (int.parse(
-                                            list[i]['lv'].toString()) >=
-                                            16 &&
-                                            int.parse(
-                                                list[i]['lv'].toString()) <=
-                                                20)
-                                            ? MyColors.djThreeM
-                                            : (int.parse(
-                                            list[i]['lv'].toString()) >=
-                                            21 &&
-                                            int.parse(
-                                                list[i]['lv'].toString()) <=
-                                                25)
-                                            ? MyColors.djFourM
-                                            : (int.parse(
-                                            list[i]['lv'].toString()) >=
-                                            26 &&
-                                            int.parse(
-                                                list[i]['lv'].toString()) <=
-                                                30)
-                                            ? MyColors.djFiveM
-                                            : (int.parse(
-                                            list[i]['lv'].toString()) >=
-                                            31 &&
-                                            int.parse(
-                                                list[i]['lv'].toString()) <= 35)
-                                            ? MyColors.djSixM
-                                            : (int.parse(
-                                            list[i]['lv'].toString()) >= 36 &&
-                                            int.parse(
-                                                list[i]['lv'].toString()) <= 40)
-                                            ? MyColors.djSevenM
-                                            : (int.parse(
-                                            list[i]['lv'].toString()) >= 41 &&
-                                            int.parse(
-                                                list[i]['lv'].toString()) <= 45)
-                                            ? MyColors.djEightM
-                                            : MyColors.djNineM),
+                                        ..color = MyColors.djTwoM),
                                 ),
                                 Text(
                                   int.parse(list[i]['lv'].toString())
@@ -357,7 +308,7 @@ class RoomItems {
                                       color: MyColors.djOne,
                                       fontSize: 18.sp,
                                       fontWeight: FontWeight.w600,
-                                      fontFamily: 'Impact'),
+                                      fontFamily: 'LR'),
                                 ),
                               ],
                             ),
@@ -1842,7 +1793,8 @@ class RoomItems {
       String roomID,
       String wherePeople,
       List<bool> listPeople,
-      bool audio9,String jianLiWu,SVGAAnimationController animationControllerJL) {
+      bool audio9, String jianLiWu,
+      SVGAAnimationController animationControllerJL) {
     return Row(
       children: [
         WidgetUtils.commonSizedBox(0, 20 * 2.w),
@@ -2134,7 +2086,8 @@ class RoomItems {
       bool audio5,
       bool audio6,
       bool audio7,
-      bool audio8, String whoWin,String jianLiWu,SVGAAnimationController animationControllerJL) {
+      bool audio8, String whoWin, String jianLiWu,
+      SVGAAnimationController animationControllerJL) {
     return Transform.translate(
       offset: Offset(0, (-60 * 2 / 1.25).h),
       child: Column(
@@ -3966,7 +3919,7 @@ class RoomItems {
                         // 头像框动态图
                         listm[7].avatarFrameGifImg!.isNotEmpty
                             ? SizedBox(
-                          height:110.h,
+                          height: 110.h,
                           width: 110.h,
                           child: SVGASimpleImage(
                             resUrl: listm[7].avatarFrameGifImg!,
@@ -4315,7 +4268,7 @@ class RoomItems {
             ],
           ),
           WidgetUtils.commonSizedBox(0, 5),
-          Stack(
+          sp.getInt('user_level')! >= 3 ? Stack(
             children: [
               Container(
                 height: ScreenUtil().setHeight(50),
@@ -4336,8 +4289,10 @@ class RoomItems {
                     color: Colors.transparent),
               )
             ],
-          ),
-          WidgetUtils.commonSizedBox(0, 10),
+          ) : const Text(''),
+          sp.getInt('user_level')! >= 3
+              ? WidgetUtils.commonSizedBox(0, 10)
+              : const Text(''),
           //消息
           GestureDetector(
             onTap: (() {

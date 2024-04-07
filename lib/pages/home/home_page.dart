@@ -61,6 +61,8 @@ class _HomePageState extends State<HomePage>
 
   // 用户身份
   String identity = 'user';
+  // 用户身份
+  int level = 0;
 
   // 显示马里奥弹窗次数是否刷新
   int mla = 0;
@@ -73,6 +75,7 @@ class _HomePageState extends State<HomePage>
     //更新身份
     setState(() {
       identity = sp.getString('user_identity').toString();
+      level = sp.getInt('user_level') as int;
     });
 
     /// 如果是全屏就切换竖屏
@@ -104,6 +107,10 @@ class _HomePageState extends State<HomePage>
         //更新身份
         setState(() {
           identity = sp.getString('user_identity').toString();
+        });
+      }else if(event.title == '等级大于3级'){
+        setState(() {
+          level = sp.getString('user_level') as int;
         });
       }
     });
@@ -1011,7 +1018,7 @@ class _HomePageState extends State<HomePage>
             _titleItem('推荐', 1, true),
             _titleItem('派对', 2, true),
             _titleItem('游戏', 3, true),
-            _titleItem('在线', 4, identity != 'user'),
+            level >= 3 ? _titleItem('在线', 4, identity != 'user') : const Text(''),
           ],
         ),
       ),

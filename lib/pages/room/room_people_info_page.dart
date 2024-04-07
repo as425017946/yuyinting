@@ -299,10 +299,9 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                           WidgetUtils.commonSizedBox(0, 5),
                           // 只有不是新贵或者新锐的时候展示萌新
                           (isNew == 1 && isNewNoble == 0)
-                              ? WidgetUtils.showImages(
+                              ? WidgetUtils.showImagesFill(
                               'assets/images/dj/room_role_common.png',
-                              30.h,
-                              50.h)
+                              45.w, 85.w)
                               : const Text(''),
                           (isNew == 1 && isNewNoble == 0)
                               ? WidgetUtils.commonSizedBox(0, 5)
@@ -310,16 +309,14 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                           // 展示新贵或者新锐图标
                           isNewNoble == 1
                               ? WidgetUtils.showImages(
-                              'assets/images/dj/room_rui.png', 30.h, 50.h)
+                              'assets/images/dj/room_rui.png', 35.w, 85.w)
                               : isNewNoble == 2
                               ? WidgetUtils.showImages(
                               'assets/images/dj/room_gui.png',
-                              30.h,
-                              50.h)
+                              35.w, 85.w)
                               :  isNewNoble == 3 ? WidgetUtils.showImages(
-                              'assets/images/dj/room_gui.png',
-                              30.h,
-                              50.h) : const Text(''),
+                              'assets/images/dj/room_qc.png',
+                              35.w, 85.w) : const Text(''),
                           isNewNoble != 0
                               ? WidgetUtils.commonSizedBox(0, 5)
                               : const Text(''),
@@ -361,58 +358,27 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                         ScreenUtil().setHeight(30),
                                         ScreenUtil().setHeight(85)),
                                     Positioned(
-                                        left: 42.w,
+                                        left: 55.w,
                                         child: Stack(
-                                          alignment: Alignment.center,
                                           children: [
                                             Text(
-                                              'LV.${level.toString()}',
+                                              level.toString(),
                                               style: TextStyle(
-                                                  fontSize:
-                                                      ScreenUtil().setSp(18),
+                                                  fontSize: 26.sp,
                                                   fontWeight: FontWeight.w600,
-                                                  fontFamily: 'ARIAL',
+                                                  fontFamily: 'LR',
                                                   foreground: Paint()
-                                                    ..style =
-                                                        PaintingStyle.stroke
+                                                    ..style = PaintingStyle.stroke
                                                     ..strokeWidth = 2
-                                                    ..color = (level >= 1 &&
-                                                            level <= 10)
-                                                        ? MyColors.djOneM
-                                                        : (level >= 11 &&
-                                                                level <= 15)
-                                                            ? MyColors.djTwoM
-                                                            : (level >= 16 &&
-                                                                    level <= 20)
-                                                                ? MyColors
-                                                                    .djThreeM
-                                                                : (level >= 21 &&
-                                                                        level <=
-                                                                            25)
-                                                                    ? MyColors
-                                                                        .djFourM
-                                                                    : (level >= 26 &&
-                                                                            level <=
-                                                                                30)
-                                                                        ? MyColors
-                                                                            .djFiveM
-                                                                        : (level >= 31 &&
-                                                                                level <= 35)
-                                                                            ? MyColors.djSixM
-                                                                            : (level >= 36 && level <= 40)
-                                                                                ? MyColors.djSevenM
-                                                                                : (level >= 41 && level <= 45)
-                                                                                    ? MyColors.djEightM
-                                                                                    : MyColors.djNineM),
+                                                    ..color = MyColors.djTwoM),
                                             ),
                                             Text(
-                                              'LV.${level.toString()}',
+                                              level.toString(),
                                               style: TextStyle(
                                                   color: MyColors.djOne,
-                                                  fontSize:
-                                                      ScreenUtil().setSp(18),
+                                                  fontSize: 26.sp,
                                                   fontWeight: FontWeight.w600,
-                                                  fontFamily: 'ARIAL'),
+                                                  fontFamily: 'LR'),
                                             ),
                                           ],
                                         ))

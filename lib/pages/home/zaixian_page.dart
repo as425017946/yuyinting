@@ -168,8 +168,8 @@ class _ZaixianPageState extends State<ZaixianPage>
                                     list[i].newNoble.toString() == '0')
                                 ? WidgetUtils.showImages(
                                     'assets/images/dj/room_role_common.png',
-                                    30 * 1.3.w,
-                                    50 * 1.3.w)
+                                    40 * 1.3.w,
+                                    60 * 1.3.w)
                                 : const Text(''),
                             (list[i].isNew.toString() == '1' &&
                                     list[i].newNoble.toString() == '0')

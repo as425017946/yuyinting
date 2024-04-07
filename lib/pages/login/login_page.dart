@@ -970,6 +970,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
           }
 
           // MyToastUtils.showToastBottom("登录成功");
+          sp.setInt("user_level", loginBean.data!.level as int);
           sp.setString("user_account", userName);
           sp.setString("user_id", loginBean.data!.uid.toString());
           sp.setString("em_pwd", loginBean.data!.emPwd.toString());

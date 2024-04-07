@@ -238,18 +238,21 @@ class UserInfo {
   String? role;
   String? nobleId;
   String? carDressGifImg;
-  UserInfo({this.role, this.nobleId, this.carDressGifImg});
+  int? level;
+  UserInfo({this.role, this.nobleId, this.carDressGifImg, this.level});
 
   UserInfo.fromJson(Map<String, dynamic> json) {
     role = json['role'];
     nobleId = json['noble_id'];
+    level = json['level'];
     carDressGifImg = json['car_dress_gif_img'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['role'] = this.role;
-    data['noble_id'] = this.nobleId;
+    data['noble_id'] = this.nobleId;;
+    data['level'] = this.level;
     data['car_dress_gif_img'] = this.carDressGifImg;
     return data;
   }
