@@ -89,11 +89,7 @@ class _TuiguangPageState extends State<TuiguangPage> with YQYLItem {
   Widget _btn(String title, void Function() action) {
     return Expanded(
       child: GestureDetector(
-        onTap: (() {
-          if (MyUtils.checkClick()) {
-            Navigator.pushNamed(context, 'ShareTuiguangPage');
-          }
-        }),
+        onTap: action,
         child: Container(
           height: 83.w,
           margin: EdgeInsets.symmetric(horizontal: 20.w),
