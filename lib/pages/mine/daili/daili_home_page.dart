@@ -26,7 +26,7 @@ class _DailiHomePageState extends State<DailiHomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    appBar = WidgetUtils.getAppBar('全民代理', true, context, false, 0);
+    appBar = WidgetUtils.getAppBar('邀请有礼', true, context, false, 0);
 
     _currentIndex = 0;
     _controller = PageController(
@@ -40,6 +40,30 @@ class _DailiHomePageState extends State<DailiHomePage> {
     super.dispose();
   }
 
+  Widget _btn(String text, int index) {
+    final bool isSelect = index == _currentIndex;
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 15.w),
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            _currentIndex = index;
+            _controller.jumpToPage(index);
+          });
+        },
+        child: WidgetUtils.myContainer(
+          49.w,
+          139.w,
+          isSelect ? MyColors.homeTopBG : Colors.white,
+          isSelect ? MyColors.homeTopBG : Colors.white,
+          text,
+          25.sp,
+          isSelect ? Colors.white : Colors.black,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,91 +73,18 @@ class _DailiHomePageState extends State<DailiHomePage> {
       body: Column(
         children: [
           SizedBox(
-            height: ScreenUtil().setHeight(80),
+            height: 85.w,
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Expanded(child: Text('')),
-                GestureDetector(
-                  onTap: (() {
-                    setState(() {
-                      _currentIndex = 0;
-                      _controller.jumpToPage(0);
-                    });
-                  }),
-                  child: WidgetUtils.myContainer(
-                      ScreenUtil().setHeight(50),
-                      ScreenUtil().setHeight(120),
-                      _currentIndex == 0 ? MyColors.homeTopBG : Colors.white,
-                      _currentIndex == 0 ? MyColors.homeTopBG : Colors.white,
-                      '我的推广',
-                      ScreenUtil().setSp(25),
-                      _currentIndex == 0 ? Colors.white : Colors.black),
-                ),
-                WidgetUtils.commonSizedBox(0, 10),
-                GestureDetector(
-                  onTap: (() {
-                    setState(() {
-                      _currentIndex = 1;
-                      _controller.jumpToPage(1);
-                    });
-                  }),
-                  child: WidgetUtils.myContainer(
-                      ScreenUtil().setHeight(50),
-                      ScreenUtil().setHeight(120),
-                      _currentIndex == 1 ? MyColors.homeTopBG : Colors.white,
-                      _currentIndex == 1 ? MyColors.homeTopBG : Colors.white,
-                      '团队总览',
-                      ScreenUtil().setSp(25),
-                      _currentIndex == 1 ? Colors.white : Colors.black),
-                ),
-                WidgetUtils.commonSizedBox(0, 10),
-                GestureDetector(
-                  onTap: (() {
-                    setState(() {
-                      _currentIndex = 2;
-                      // _controller.animateToPage(2,
-                      //     duration: const Duration(milliseconds: 500),
-                      //     curve: Curves.ease);
-                      _controller.jumpToPage(2);
-                    });
-                  }),
-                  child: WidgetUtils.myContainer(
-                      ScreenUtil().setHeight(50),
-                      ScreenUtil().setHeight(120),
-                      _currentIndex == 2 ? MyColors.homeTopBG : Colors.white,
-                      _currentIndex == 2 ? MyColors.homeTopBG : Colors.white,
-                      '团队报表',
-                      ScreenUtil().setSp(25),
-                      _currentIndex == 2 ? Colors.white : Colors.black),
-                ),
-                // WidgetUtils.commonSizedBox(0, 10),
-                // GestureDetector(
-                //   onTap: (() {
-                //     setState(() {
-                //       _currentIndex = 3;
-                //       // _controller.animateToPage(3,
-                //       //     duration: const Duration(milliseconds: 500),
-                //       //     curve: Curves.ease);
-                //       _controller.jumpToPage(3);
-                //     });
-                //   }),
-                //   child: WidgetUtils.myContainer(
-                //       ScreenUtil().setHeight(50),
-                //       ScreenUtil().setHeight(120),
-                //       _currentIndex == 3 ? MyColors.homeTopBG : Colors.white,
-                //       _currentIndex == 3 ? MyColors.homeTopBG : Colors.white,
-                //       '手工开户',
-                //       ScreenUtil().setSp(25),
-                //       _currentIndex == 3 ? Colors.white : Colors.black),
-                // ),
-                const Expanded(child: Text('')),
+                _btn('我的推广', 0),
+                _btn('团队总览', 1),
+                _btn('团队报表', 2),
               ],
             ),
           ),
           Expanded(
-            child: Transform.translate(
-              offset: const Offset(0, -10),
-              child: PageView(
+            child:PageView(
                 controller: _controller,
                 onPageChanged: (index) {
                   setState(() {
@@ -148,7 +99,6 @@ class _DailiHomePageState extends State<DailiHomePage> {
                   // KaihuiPage()
                 ],
               ),
-            ),
           )
         ],
       ),

@@ -24,7 +24,7 @@ class TuiguangPage extends StatefulWidget {
   State<TuiguangPage> createState() => _TuiguangPageState();
 }
 
-class _TuiguangPageState extends State<TuiguangPage> {
+class _TuiguangPageState extends State<TuiguangPage> with YQYLItem {
   /// 推广总人数，今日推广人数，今日游戏参与额，今日中奖礼物额，今日直刷礼物额，今日实际分润额，分润比例，历史分润金豆，历史分润钻石，可领取金豆，可领取钻石
   String allPeople = '',
       dayPeople = '',
@@ -52,11 +52,66 @@ class _TuiguangPageState extends State<TuiguangPage> {
     });
   }
 
+  Widget _bottomItem(String title, String content, Color bg) {
+    return Expanded(
+      child: Container(
+        height: 173.w,
+        margin: EdgeInsets.all(31.w),
+        decoration: BoxDecoration(
+          color: bg,
+          borderRadius: BorderRadius.all(Radius.circular(23.w)),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            WidgetUtils.onlyTextCenter(
+              title,
+              StyleUtils.getCommonTextStyle(
+                color: Colors.black,
+                fontSize: 28.sp,
+              ),
+            ),
+            SizedBox(height: 15.w),
+            WidgetUtils.onlyTextCenter(
+              content,
+              StyleUtils.getCommonTextStyle(
+                color: Colors.black,
+                fontSize: 33.sp,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _btn(String title, void Function() action) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: action,
+        child: Container(
+          height: 83.w,
+          margin: EdgeInsets.symmetric(horizontal: 20.w),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: MyColors.homeTopBG,
+            borderRadius: BorderRadius.all(Radius.circular(83.w / 2)),
+            border: Border.all(width: 1, color: MyColors.homeTopBG),
+          ),
+          child: Text(
+            title,
+            style: StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 33.sp),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        WidgetUtils.commonSizedBox(40.h, 10),
         // Row(
         //   children: [
         //     const Expanded(child: Text('')),
@@ -68,268 +123,80 @@ class _TuiguangPageState extends State<TuiguangPage> {
         //     const Expanded(child: Text('')),
         //   ],
         // ),
+        SizedBox(height: 31.w),
         Container(
           width: double.infinity,
-          height: ScreenUtil().setHeight(485),
-          margin: EdgeInsets.all(20.h),
-          //边框设置
-          decoration: const BoxDecoration(
-            //背景
+          margin: EdgeInsets.symmetric(horizontal: 31.w),
+          padding: EdgeInsets.only(bottom: 22.w),
+          decoration: BoxDecoration(
             color: MyColors.dailiBlue,
-            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            borderRadius: BorderRadius.all(Radius.circular(21.w)),
           ),
           child: Column(
             children: [
-              WidgetUtils.commonSizedBox(20, 10),
-              Row(
+              GridView(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 328.0 / 122,
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 35.w),
                 children: [
-                  Expanded(
-                      child: WidgetUtils.onlyTextCenter(
-                          '推广总人数',
-                          StyleUtils.getCommonTextStyle(
-                              color: Colors.black,
-                              fontSize: ScreenUtil().setSp(28)))),
-                  Expanded(
-                      child: WidgetUtils.onlyTextCenter(
-                          '今日推广人数',
-                          StyleUtils.getCommonTextStyle(
-                              color: Colors.black,
-                              fontSize: ScreenUtil().setSp(28)))),
-                ],
-              ),
-              WidgetUtils.commonSizedBox(20, 10),
-              Row(
-                children: [
-                  Expanded(
-                      child: WidgetUtils.onlyTextCenter(
-                          allPeople,
-                          StyleUtils.getCommonTextStyle(
-                              color: Colors.black,
-                              fontSize: ScreenUtil().setSp(28),
-                              fontWeight: FontWeight.w600))),
-                  Expanded(
-                      child: WidgetUtils.onlyTextCenter(
-                          dayPeople,
-                          StyleUtils.getCommonTextStyle(
-                              color: Colors.black,
-                              fontSize: ScreenUtil().setSp(28),
-                              fontWeight: FontWeight.w600))),
-                ],
-              ),
-              WidgetUtils.commonSizedBox(20, 10),
-              Row(
-                children: [
-                  Expanded(
-                      child: WidgetUtils.onlyTextCenter(
-                          '今日游戏参与额',
-                          StyleUtils.getCommonTextStyle(
-                              color: Colors.black,
-                              fontSize: ScreenUtil().setSp(28)))),
-                  Expanded(
-                      child: WidgetUtils.onlyTextCenter(
-                          '今日中奖礼物额',
-                          StyleUtils.getCommonTextStyle(
-                              color: Colors.black,
-                              fontSize: ScreenUtil().setSp(28)))),
-                ],
-              ),
-              WidgetUtils.commonSizedBox(20, 10),
-              Row(
-                children: [
-                  Expanded(
-                      child: WidgetUtils.onlyTextCenter(
-                          dayGameMoney,
-                          StyleUtils.getCommonTextStyle(
-                              color: Colors.black,
-                              fontSize: ScreenUtil().setSp(28),
-                              fontWeight: FontWeight.w600))),
-                  Expanded(
-                      child: WidgetUtils.onlyTextCenter(
-                          dayZjMoney,
-                          StyleUtils.getCommonTextStyle(
-                              color: Colors.black,
-                              fontSize: ScreenUtil().setSp(28),
-                              fontWeight: FontWeight.w600))),
-                ],
-              ),
-              WidgetUtils.commonSizedBox(20, 10),
-              Row(
-                children: [
-                  Expanded(
-                      child: WidgetUtils.onlyTextCenter(
-                          '今日直刷礼物额',
-                          StyleUtils.getCommonTextStyle(
-                              color: Colors.black,
-                              fontSize: ScreenUtil().setSp(28)))),
-                  Expanded(
-                      child: GestureDetector(
-                    onTap: (() {
-                      if (MyUtils.checkClick()) {
-                        MyUtils.goTransparentPageCom(
-                            context, const FenRunTSPage());
-                      }
-                    }),
-                    child: Row(
-                      children: [
-                        const Spacer(),
-                        WidgetUtils.onlyTextCenter(
-                            '今日实时分润',
-                            StyleUtils.getCommonTextStyle(
-                                color: Colors.black,
-                                fontSize: ScreenUtil().setSp(28))),
-                        WidgetUtils.commonSizedBox(0, 5.h),
-                        WidgetUtils.showImages(
-                            'assets/images/daili_wenti.png', 30.h, 30.h),
-                        const Spacer(),
-                      ],
+                  gridItem('推广总人数', allPeople),
+                  gridItem('今日推广人数', dayPeople),
+                  gridItem('今日礼物打赏额', dayZSMoney),
+                  gridItem('今日实时分润', daySjMoney, child: GestureDetector(
+                      onTap: (() {
+                        if (MyUtils.checkClick()) {
+                          MyUtils.goTransparentPageCom(context, const FenRunTSPage());
+                        }
+                      }),
+                      child: WidgetUtils.showImages('assets/images/daili_wenti.png', 30.w, 30.w),
                     ),
-                  )),
+                  ),
                 ],
               ),
-              WidgetUtils.commonSizedBox(20, 10),
-              Row(
-                children: [
-                  Expanded(
-                      child: WidgetUtils.onlyTextCenter(
-                          dayZSMoney,
-                          StyleUtils.getCommonTextStyle(
-                              color: Colors.black,
-                              fontSize: ScreenUtil().setSp(28),
-                              fontWeight: FontWeight.w600))),
-                  Expanded(
-                      child: WidgetUtils.onlyTextCenter(
-                          daySjMoney,
-                          StyleUtils.getCommonTextStyle(
-                              color: Colors.black,
-                              fontSize: ScreenUtil().setSp(28),
-                              fontWeight: FontWeight.w600))),
-                ],
-              ),
-              WidgetUtils.commonSizedBox(30, 10),
               WidgetUtils.onlyTextCenter(
-                  '经典股份：$jdFenRun    /   游戏股份：$yxFenRun',
-                  StyleUtils.getCommonTextStyle(
-                      color: MyColors.g9, fontSize: ScreenUtil().setSp(21)))
+                '拉新股份：$jdFenRun',
+                StyleUtils.getCommonTextStyle(
+                  color: MyColors.g9,
+                  fontSize: 21.sp,
+                ),
+              ),
             ],
           ),
         ),
-
         ///历史总分润
         Row(
           children: [
-            WidgetUtils.commonSizedBox(0, 20.h),
-            Expanded(
-              child: Container(
-                height: 220.h,
-                //边框设置
-                decoration: const BoxDecoration(
-                  //背景
-                  color: MyColors.dailiPink,
-                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                ),
-                child: Column(
-                  children: [
-                    const Expanded(child: Text('')),
-                    WidgetUtils.onlyTextCenter(
-                        '历史总金币分润',
-                        StyleUtils.getCommonTextStyle(
-                            color: Colors.black,
-                            fontSize: ScreenUtil().setSp(28))),
-                    WidgetUtils.commonSizedBox(15.h, 0),
-                    WidgetUtils.onlyTextCenter(
-                        lsVMoney,
-                        StyleUtils.getCommonTextStyle(
-                            color: Colors.black,
-                            fontSize: ScreenUtil().setSp(33),
-                            fontWeight: FontWeight.w600)),
-                    // WidgetUtils.commonSizedBox(15.h, 0),
-                    // WidgetUtils.onlyTextCenter(
-                    //     '历史总钻石分润',
-                    //     StyleUtils.getCommonTextStyle(
-                    //         color: Colors.black,
-                    //         fontSize: ScreenUtil().setSp(28))),
-                    // WidgetUtils.commonSizedBox(15.h, 0),
-                    // WidgetUtils.onlyTextCenter(
-                    //     lsZSMoney,
-                    //     StyleUtils.getCommonTextStyle(
-                    //         color: Colors.black,
-                    //         fontSize: ScreenUtil().setSp(33),
-                    //         fontWeight: FontWeight.w600)),
-                    const Expanded(child: Text('')),
-                  ],
-                ),
-              ),
-            ),
-            WidgetUtils.commonSizedBox(0, 20.h),
-            Expanded(
-              child: Container(
-                height: 220.h,
-                //边框设置
-                decoration: const BoxDecoration(
-                  //背景
-                  color: MyColors.dailiPurple,
-                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                ),
-                child: Column(
-                  children: [
-                    const Expanded(child: Text('')),
-                    WidgetUtils.onlyTextCenter(
-                        '可领取金币',
-                        StyleUtils.getCommonTextStyle(
-                            color: Colors.black,
-                            fontSize: ScreenUtil().setSp(28))),
-                    WidgetUtils.commonSizedBox(15, 10),
-                    WidgetUtils.onlyTextCenter(
-                        lqVMoney,
-                        StyleUtils.getCommonTextStyle(
-                            color: Colors.black,
-                            fontSize: ScreenUtil().setSp(33),
-                            fontWeight: FontWeight.w600)),
-                    const Expanded(child: Text('')),
-                  ],
-                ),
-              ),
-            ),
-            // WidgetUtils.commonSizedBox(0, 20.h),
-            // Expanded(
-            //   child: Container(
-            //     height: 220.h,
-            //     //边框设置
-            //     decoration: const BoxDecoration(
-            //       //背景
-            //       color: MyColors.dailiPurple,
-            //       //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-            //       borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            //     ),
-            //     child: Column(
-            //       children: [
-            //         const Expanded(child: Text('')),
-            //         WidgetUtils.onlyTextCenter(
-            //             '可领取钻石',
-            //             StyleUtils.getCommonTextStyle(
-            //                 color: Colors.black,
-            //                 fontSize: ScreenUtil().setSp(28))),
-            //         WidgetUtils.commonSizedBox(15, 10),
-            //         WidgetUtils.onlyTextCenter(
-            //             lqZSMoney,
-            //             StyleUtils.getCommonTextStyle(
-            //                 color: Colors.black,
-            //                 fontSize: ScreenUtil().setSp(33),
-            //                 fontWeight: FontWeight.w600)),
-            //         const Expanded(child: Text('')),
-            //       ],
-            //     ),
-            //   ),
-            // ),
-            WidgetUtils.commonSizedBox(0, 20.h),
+            _bottomItem('历史总金币分润', lsVMoney, MyColors.dailiPink),
+            _bottomItem('可领取金币', lqVMoney, MyColors.dailiPurple),
           ],
         ),
-        WidgetUtils.commonSizedBox(50, 20),
 
         /// 立即推广按钮
+        Expanded(
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 11.w),
+            alignment: Alignment.center,
+            child: Row(
+              children: [
+                _btn('立即推广', () { 
+                  if (MyUtils.checkClick()) {
+                    Navigator.pushNamed(context, 'ShareTuiguangPage');
+                  }
+                }),
+                if (isShow) _btn('领取金币', () {
+                  if (MyUtils.checkClick()) {
+                    doPostRoomUserInfo(1);
+                  }
+                })
+              ],
+            ),
+          ),
+        ),
+        /*
         Container(
           margin: const EdgeInsets.only(left: 20, right: 20),
           child: Row(
@@ -394,6 +261,7 @@ class _TuiguangPageState extends State<TuiguangPage> {
             ],
           ),
         )
+        */
       ],
     );
   }
@@ -472,5 +340,42 @@ class _TuiguangPageState extends State<TuiguangPage> {
     } catch (e) {
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
+  }
+}
+
+mixin YQYLItem {
+  Widget gridItem(String title, String content, { Widget? child}) { // 328 x 122 35 16
+    Widget top = WidgetUtils.onlyTextCenter(
+          title,
+          StyleUtils.getCommonTextStyle(
+            color: Colors.black,
+            fontSize: 28.sp,
+          ),
+        );
+    if (child != null) {
+      top = Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          top,
+          SizedBox(width: 5.w),
+          child,
+        ],
+      );
+    }
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        top,
+        SizedBox(height: 22.w),
+        WidgetUtils.onlyTextCenter(
+          content,
+          StyleUtils.getCommonTextStyle(
+            color: Colors.black,
+            fontSize: 25.sp,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
+    );
   }
 }

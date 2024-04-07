@@ -14,7 +14,7 @@ class _FenRunTSPageState extends State<FenRunTSPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: Column(
+      body: Stack(
         children: [
           Expanded(
               child: GestureDetector(
@@ -27,9 +27,9 @@ class _FenRunTSPageState extends State<FenRunTSPage> {
           )),
           Center(
             child: Container(
-              height: 270.h,
-              width: 350.h,
-              padding: EdgeInsets.all(20.h),
+              // height: 240.w,//270*1.25.w,
+              width: 380.w,//350*1.25.w,
+              padding: EdgeInsets.all(25.w),
               //边框设置
               decoration: const BoxDecoration(
                 //背景
@@ -38,7 +38,8 @@ class _FenRunTSPageState extends State<FenRunTSPage> {
                 borderRadius: BorderRadius.all(Radius.circular(10.0)),
               ),
               child: Text(
-                  '今日实时分润=（游戏参与额-中奖礼物额）*游戏股份比例 + 直刷礼物额*直刷股份比例\n今日分润金将在明日转存到您的“可领取分润',
+                  // '今日实时分润=（游戏参与额-中奖礼物额）*游戏股份比例 + 直刷礼物额*直刷股份比例\n今日分润金将在明日转存到您的“可领取分润',
+                  '今日实时分润 = 打赏礼物额 x 分成比例\n今日分润金将在明日转存到您的“可领取金币”',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 32.sp
@@ -46,15 +47,15 @@ class _FenRunTSPageState extends State<FenRunTSPage> {
               ),
             ),
           ),
-          Expanded(
-              child: GestureDetector(
-                onTap: (() {
-                  Navigator.pop(context);
-                }),
-                child: Container(
-                  color: Colors.transparent,
-                ),
-              )),
+          // Expanded(
+          //     child: GestureDetector(
+          //       onTap: (() {
+          //         Navigator.pop(context);
+          //       }),
+          //       child: Container(
+          //         color: Colors.transparent,
+          //       ),
+          //     )),
         ],
       ),
     );
