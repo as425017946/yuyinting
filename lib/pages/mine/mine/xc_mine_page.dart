@@ -507,7 +507,7 @@ class _MinePageContent extends StatelessWidget {
                       ),
                 if (c.userNumber.value.isNotEmpty)
                   c.isAgent.value
-                    ? _moreItem('全民代理', 'quanmin', () { 
+                    ? _moreItem('邀请有礼', 'quanmin', () { 
                       Get.toNamed('DailiHomePage');
                     })
                     : _moreItem('邀请有礼', 'yaoqing', () { 

@@ -27,8 +27,8 @@ class _FenRunTSPageState extends State<FenRunTSPage> {
           )),
           Center(
             child: Container(
-              height: 270.h,
-              width: 350.h,
+              height: 270*1.25.w,
+              width: 350*1.25.w,
               padding: EdgeInsets.all(20.h),
               //边框设置
               decoration: const BoxDecoration(

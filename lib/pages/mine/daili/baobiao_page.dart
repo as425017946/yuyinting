@@ -29,99 +29,47 @@ class _BaobiaoPageState extends State<BaobiaoPage> {
   String starTime = '', endTime = '', keyword = '';
 
   Widget _itemBB(BuildContext context, int i) {
+    const space = Expanded(child: Text(''));
+    final item = ((String title, String content) {
+      return Row(children: [
+        WidgetUtils.onlyText(
+          title,
+          StyleUtils.getCommonTextStyle(
+            color: MyColors.g3,
+            fontSize: ScreenUtil().setSp(25),
+          ),
+        ),
+        WidgetUtils.onlyText(
+          content,
+          StyleUtils.getCommonTextStyle(
+              color: MyColors.g2,
+              fontSize: ScreenUtil().setSp(25),
+              fontWeight: FontWeight.w600),
+        ),
+      ]);
+    });
     return Container(
       width: double.infinity,
-      height: ScreenUtil().setHeight(240),
-      padding: const EdgeInsets.all(20),
-      margin: EdgeInsets.all(20.h),
+      height: 184.w,
+      padding: EdgeInsets.symmetric(horizontal: 50.w),
+      margin: EdgeInsets.symmetric(vertical: 20.w),
       color: MyColors.dailiBaobiao,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
             children: [
-              WidgetUtils.onlyText(
-                  '用户名:',
-                  StyleUtils.getCommonTextStyle(
-                      color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
-              WidgetUtils.onlyText(
-                  list[i].nickname!,
-                  StyleUtils.getCommonTextStyle(
-                      color: MyColors.g2,
-                      fontSize: ScreenUtil().setSp(25),
-                      fontWeight: FontWeight.w600)),
-              const Expanded(child: Text('')),
-              // WidgetUtils.onlyText(
-              //     '金币/钻石分润:',
-              //     StyleUtils.getCommonTextStyle(
-              //         color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
-              // WidgetUtils.onlyText(
-              //     '${list[i].rebateGb}/${list[i].rebateD}',
-              //     StyleUtils.getCommonTextStyle(
-              //         color: MyColors.g2,
-              //         fontSize: ScreenUtil().setSp(25),
-              //         fontWeight: FontWeight.w600)),
-              WidgetUtils.onlyText(
-                  '金币:',
-                  StyleUtils.getCommonTextStyle(
-                      color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
-              WidgetUtils.onlyText(
-                  '${list[i].rebateGb}',
-                  StyleUtils.getCommonTextStyle(
-                      color: MyColors.g2,
-                      fontSize: ScreenUtil().setSp(25),
-                      fontWeight: FontWeight.w600)),
+              item('用户名: ', list[i].nickname!),
+              space,
+              item('金币: ', '${list[i].rebateGb}'),
             ],
           ),
-          WidgetUtils.commonSizedBox(20, 10),
+          SizedBox(height: 20.w),
           Row(
             children: [
-              WidgetUtils.onlyText(
-                  '游戏参与额：',
-                  StyleUtils.getCommonTextStyle(
-                      color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
-              WidgetUtils.onlyText(
-                  list[i].game!,
-                  StyleUtils.getCommonTextStyle(
-                      color: MyColors.g2,
-                      fontSize: ScreenUtil().setSp(25),
-                      fontWeight: FontWeight.w600)),
-              const Expanded(child: Text('')),
-              WidgetUtils.onlyText(
-                  '中奖礼物额：',
-                  StyleUtils.getCommonTextStyle(
-                      color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
-              WidgetUtils.onlyText(
-                  list[i].win!,
-                  StyleUtils.getCommonTextStyle(
-                      color: MyColors.g2,
-                      fontSize: ScreenUtil().setSp(25),
-                      fontWeight: FontWeight.w600)),
-            ],
-          ),
-          WidgetUtils.commonSizedBox(20, 10),
-          Row(
-            children: [
-              WidgetUtils.onlyText(
-                  '直刷礼物额：',
-                  StyleUtils.getCommonTextStyle(
-                      color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
-              WidgetUtils.onlyText(
-                  list[i].direct!,
-                  StyleUtils.getCommonTextStyle(
-                      color: MyColors.g2,
-                      fontSize: ScreenUtil().setSp(25),
-                      fontWeight: FontWeight.w600)),
-              const Expanded(child: Text('')),
-              WidgetUtils.onlyText(
-                  '运营支出金:',
-                  StyleUtils.getCommonTextStyle(
-                      color: MyColors.g3, fontSize: ScreenUtil().setSp(25))),
-              WidgetUtils.onlyText(
-                  list[i].operate!,
-                  StyleUtils.getCommonTextStyle(
-                      color: MyColors.g2,
-                      fontSize: ScreenUtil().setSp(25),
-                      fontWeight: FontWeight.w600)),
+              item('礼物打赏额: ', list[i].direct!),
+              space,
+              item('运营支出金: ', list[i].operate!),
             ],
           ),
         ],
@@ -129,6 +77,117 @@ class _BaobiaoPageState extends State<BaobiaoPage> {
     );
   }
 
+  Widget _top() {
+    final TextStyle style = StyleUtils.getCommonTextStyle(
+      color: MyColors.g6,
+      fontSize: 28.sp,
+    );
+    return Container(
+      height: 184.w,
+      padding: EdgeInsets.symmetric(horizontal: 74.w),
+      alignment: Alignment.center,
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  children: [
+                    WidgetUtils.onlyText('账号：', style),
+                    Container(
+                      color: MyColors.dailiTime,
+                      height: 42.w,
+                      width: 349.w,
+                      padding: const EdgeInsets.all(2),
+                      child: WidgetUtils.commonTextField(controller, '输入ID或用户名'),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 30.w),
+                Row(
+                  children: [
+                    WidgetUtils.onlyText('时间：', style),
+                    GestureDetector(
+                      onTap: (() {
+                        if(MyUtils.checkClick()) {
+                          DateTime now = DateTime.now();
+                          int year = now.year;
+                          int month = now.month;
+                          int day = now.day;
+
+                          DatePicker.show(
+                            context,
+                            startDate: DateTime(1970, 1, 1),
+                            selectedDate: DateTime(year, month, day),
+                            endDate: DateTime(2024, 12, 31),
+                            onSelected: (date) {
+                              setState(() {
+                                starTime = date.toString().substring(0, 10);
+                              });
+                            },
+                          );
+                        }
+                      }),
+                      child: Container(
+                        color: MyColors.dailiTime,
+                        padding: const EdgeInsets.all(2),
+                        child: WidgetUtils.onlyText(starTime, style),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 9.w),
+                      child: WidgetUtils.onlyText('至', style),
+                    ),
+                    GestureDetector(
+                      onTap: (() {
+                        DateTime now = DateTime.now();
+                        int year = now.year;
+                        int month = now.month;
+                        int day = now.day;
+
+                        DatePicker.show(
+                          context,
+                          startDate: DateTime(1970, 1, 1),
+                          selectedDate: DateTime(year, month, day),
+                          endDate: DateTime(2024, 12, 31),
+                          onSelected: (date) {
+                            setState(() {
+                              endTime = date.toString().substring(0, 10);
+                            });
+                          },
+                        );
+                      }),
+                      child: Container(
+                        color: MyColors.dailiTime,
+                        padding: const EdgeInsets.all(2),
+                        child: WidgetUtils.onlyText(endTime, style),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          GestureDetector(
+            onTap: (() {
+              MyUtils.hideKeyboard(context);
+              doPostTeamReport();
+            }),
+            child: WidgetUtils.myContainer(
+              49.w,
+              139.w,
+              MyColors.homeTopBG,
+              MyColors.homeTopBG,
+              '查询',
+              25.sp,
+              Colors.white,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
   var listen;
 
   @override
@@ -159,135 +218,10 @@ class _BaobiaoPageState extends State<BaobiaoPage> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        WidgetUtils.commonSizedBox(20, 10),
-        Row(
-          children: [
-            const Expanded(child: Text('')),
-            Column(
-              children: [
-                Row(
-                  children: [
-                    WidgetUtils.onlyText(
-                        '账号：',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.g6,
-                            fontSize: ScreenUtil().setSp(28))),
-                    Container(
-                      color: MyColors.dailiTime,
-                      height: ScreenUtil().setHeight(40),
-                      width: ScreenUtil().setHeight(300),
-                      padding: const EdgeInsets.all(2),
-                      child:
-                          WidgetUtils.commonTextField(controller, '输入ID或用户名'),
-                    ),
-                  ],
-                ),
-                WidgetUtils.commonSizedBox(20, 10),
-                Row(
-                  children: [
-                    WidgetUtils.onlyText(
-                        '时间：',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.g6,
-                            fontSize: ScreenUtil().setSp(28))),
-                    GestureDetector(
-                      onTap: (() {
-                        if(MyUtils.checkClick()) {
-                          DateTime now = DateTime.now();
-                          int year = now.year;
-                          int month = now.month;
-                          int day = now.day;
-
-                          DatePicker.show(
-                            context,
-                            startDate: DateTime(1970, 1, 1),
-                            selectedDate: DateTime(year, month, day),
-                            endDate: DateTime(2024, 12, 31),
-                            onSelected: (date) {
-                              setState(() {
-                                starTime = date.toString().substring(0, 10);
-                              });
-                            },
-                          );
-                        }
-                      }),
-                      child: Container(
-                        color: MyColors.dailiTime,
-                        padding: const EdgeInsets.all(2),
-                        child: WidgetUtils.onlyText(
-                            starTime,
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.g6,
-                                fontSize: ScreenUtil().setSp(28))),
-                      ),
-                    ),
-                    Opacity(
-                        opacity: 1, child: WidgetUtils.commonSizedBox(0, 10)),
-                    Opacity(
-                        opacity: 1,
-                        child: WidgetUtils.onlyText(
-                            '至',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.g6,
-                                fontSize: ScreenUtil().setSp(28)))),
-                    Opacity(
-                        opacity: 1, child: WidgetUtils.commonSizedBox(0, 10)),
-                    GestureDetector(
-                      onTap: (() {
-                        DateTime now = DateTime.now();
-                        int year = now.year;
-                        int month = now.month;
-                        int day = now.day;
-
-                        DatePicker.show(
-                          context,
-                          startDate: DateTime(1970, 1, 1),
-                          selectedDate: DateTime(year, month, day),
-                          endDate: DateTime(2024, 12, 31),
-                          onSelected: (date) {
-                            setState(() {
-                              endTime = date.toString().substring(0, 10);
-                            });
-                          },
-                        );
-                      }),
-                      child: Container(
-                        color: MyColors.dailiTime,
-                        padding: const EdgeInsets.all(2),
-                        child: WidgetUtils.onlyText(
-                            endTime,
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.g6,
-                                fontSize: ScreenUtil().setSp(28))),
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-            WidgetUtils.commonSizedBox(0, 10),
-            GestureDetector(
-              onTap: (() {
-                MyUtils.hideKeyboard(context);
-                doPostTeamReport();
-              }),
-              child: WidgetUtils.myContainer(
-                  ScreenUtil().setHeight(50),
-                  ScreenUtil().setHeight(120),
-                  MyColors.homeTopBG,
-                  MyColors.homeTopBG,
-                  '查询',
-                  ScreenUtil().setSp(25),
-                  Colors.white),
-            ),
-            const Expanded(child: Text('')),
-          ],
-        ),
-        WidgetUtils.commonSizedBox(40, 10),
+        _top(),
         Expanded(
           child: list.isNotEmpty
               ? ListView.builder(
-                  padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
                   itemBuilder: _itemBB,
                   itemCount: list.length,
                 )
