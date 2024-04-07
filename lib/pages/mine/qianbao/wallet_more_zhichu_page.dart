@@ -66,7 +66,7 @@ class _WalletMoreZhichuPageState extends State<WalletMoreZhichuPage> {
       case 1:
         leixing = '充值';
         if(list[i].curType == 1){
-          showImg = 'assets/images/wallet_d.png';
+          showImg = 'assets/images/mine_wallet_dd.png';//'assets/images/wallet_d.png';
         }else{
           showImg = 'assets/images/wallet_z.png';
         }
@@ -89,7 +89,7 @@ class _WalletMoreZhichuPageState extends State<WalletMoreZhichuPage> {
         break;
       case 6:
         if(list[i].curType == 1){
-          showImg = 'assets/images/wallet_d.png';
+          showImg = 'assets/images/mine_wallet_dd.png';//'assets/images/wallet_d.png';
         }else if(list[i].curType == 2){
           showImg = 'assets/images/wallet_z.png';
         }else{
@@ -99,7 +99,7 @@ class _WalletMoreZhichuPageState extends State<WalletMoreZhichuPage> {
       case 7:
         leixing = '兑换';
         if(list[i].curType == 1){
-          showImg = 'assets/images/wallet_d.png';
+          showImg = 'assets/images/mine_wallet_dd.png';//'assets/images/wallet_d.png';
         }else if(list[i].curType == 2){
           showImg = 'assets/images/wallet_z.png';
         }else{
@@ -109,7 +109,7 @@ class _WalletMoreZhichuPageState extends State<WalletMoreZhichuPage> {
       case 8:
         leixing = '装扮';
         if(list[i].curType == 1){
-          showImg = 'assets/images/wallet_d.png';
+          showImg = 'assets/images/mine_wallet_dd.png';//'assets/images/wallet_d.png';
         }else{
           showImg = 'assets/images/wallet_z.png';
         }
@@ -117,7 +117,7 @@ class _WalletMoreZhichuPageState extends State<WalletMoreZhichuPage> {
       case 9:
         leixing = '个人礼物分润';
         if(list[i].curType == 1){
-          showImg = 'assets/images/wallet_d.png';
+          showImg = 'assets/images/mine_wallet_dd.png';//'assets/images/wallet_d.png';
         }else{
           showImg = 'assets/images/wallet_z.png';
         }
@@ -129,7 +129,7 @@ class _WalletMoreZhichuPageState extends State<WalletMoreZhichuPage> {
       case 12:
         leixing = '提现申请冻结金';
         if(list[i].curType == 1){
-          showImg = 'assets/images/wallet_d.png';
+          showImg = 'assets/images/mine_wallet_dd.png';//'assets/images/wallet_d.png';
         }else if(list[i].curType == 2){
           showImg = 'assets/images/wallet_z.png';
         }else{
