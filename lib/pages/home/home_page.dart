@@ -541,6 +541,8 @@ class _HomePageState extends State<HomePage>
                     });
                     if (index == 1) {
                       eventBus.fire(SubmitButtonBack(title: '回到首页'));
+                    }else{
+                      eventBus.fire(SubmitButtonBack(title: '首页其他页面'));
                     }
                   },
                   children: identity != 'user'

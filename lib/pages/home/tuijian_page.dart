@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_sound/public/flutter_sound_player.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:sqflite/sqflite.dart';
@@ -117,6 +118,10 @@ class _TuijianPageState extends State<TuijianPage>
           });
         }
         doPostPushStreamer();
+      }else if(event.title == '首页其他页面'){
+        if(_mPlayer.isPlaying){
+          _mPlayer.stopPlayer();
+        }
       }
     });
     listen2 = eventBus.on<FirstInfoBack>().listen((event) {
@@ -133,12 +138,52 @@ class _TuijianPageState extends State<TuijianPage>
     });
   }
 
+
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
     listen.cancel();
     listen2.cancel();
+    if (_mPlayer.isPlaying) {
+      _mPlayer.stopPlayer();
+    }
+  }
+
+
+
+  final FlutterSoundPlayer _mPlayer = FlutterSoundPlayer();
+  bool playRecord = false; //音频文件播放状态
+  //播放录音
+  void play(String voiceCard) {
+    LogE('录音地址**$voiceCard');
+    _mPlayer
+        .startPlayer(
+        fromURI: voiceCard,
+        whenFinished: () {
+          setState(() {
+            playRecord = false;
+          });
+        })
+        .then((value) {
+      setState(() {
+        playRecord = true;
+      });
+    });
+  }
+
+//停止播放录音
+  void stopPlayer() {
+    _mPlayer!.stopPlayer().then((value) {
+      setState(() {
+        playRecord = false;
+      });
+    });
+  }
+
+  void _initialize() async {
+    await _mPlayer!.closePlayer();
+    await _mPlayer!.openPlayer();
   }
 
   // 推荐主播
@@ -239,6 +284,20 @@ class _TuijianPageState extends State<TuijianPage>
                                         color: MyColors.newHomeBlack,
                                         fontSize: 30.sp,
                                         fontWeight: FontWeight.w600)),
+                                WidgetUtils.commonSizedBox(0, 10.w),
+                                listAnchor[i].voiceCardUrl!.isNotEmpty ? GestureDetector(
+                                  onTap: ((){
+                                    if(MyUtils.checkClick()) {
+                                      if (_mPlayer.isPlaying) {
+                                        _mPlayer.stopPlayer();
+                                      } else {
+                                        play(listAnchor[i].voiceCardUrl!);
+                                      }
+                                    }
+                                  }),
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/tuijian_audio.png', 42.h, 100.w),
+                                ) : const Text(''),
                                 const Spacer(),
                                 WidgetUtils.showImages(
                                     'assets/images/tj_zaixian.png', 30.h, 70.w),

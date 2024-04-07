@@ -3,10 +3,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:yuyinting/pages/room/room_messages_more_page.dart';
 import 'package:yuyinting/pages/room/room_search_page.dart';
+import '../../bean/userStatusBean.dart';
 import '../../colors/my_colors.dart';
 import '../../db/DatabaseHelper.dart';
+import '../../http/data_utils.dart';
+import '../../http/my_http_config.dart';
 import '../../main.dart';
 import '../../utils/event_utils.dart';
+import '../../utils/line_painter2.dart';
+import '../../utils/log_util.dart';
+import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
@@ -74,11 +80,26 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
             color: Colors.transparent,
             child: Row(
               children: [
-                WidgetUtils.CircleImageNet(
-                  ScreenUtil().setHeight(90),
-                  ScreenUtil().setHeight(90),
-                  45.h,
-                  listMessage[i]['otherHeadNetImg'],
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    WidgetUtils.CircleImageNet(
+                      ScreenUtil().setHeight(90),
+                      ScreenUtil().setHeight(90),
+                      45.h,
+                      listMessage[i]['otherHeadNetImg'],
+                    ),
+                    listU[i].loginStatus == 1
+                        ? Container(
+                      height: 60.h,
+                      width: 60.h,
+                      alignment: Alignment.bottomRight,
+                      child: CustomPaint(
+                        painter: LinePainter2(colors: Colors.green),
+                      ),
+                    )
+                        : const Text(''),
+                  ],
                 ),
                 WidgetUtils.commonSizedBox(0, 10),
                 Expanded(
@@ -280,7 +301,7 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
                   WidgetUtils.commonSizedBox(15, 0),
 
                   /// 展示在线用户
-                  Expanded(
+                  (listMessage.isNotEmpty && listU.isNotEmpty) ? Expanded(
                     child: listMessage.isNotEmpty
                         ? ListView.builder(
                             padding: EdgeInsets.only(
@@ -289,7 +310,7 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
                             itemCount: listMessage.length,
                           )
                         : const Text(''),
-                  )
+                  ) : const Text(''),
                 ],
               ),
             )
@@ -364,9 +385,41 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
         });
       }
     }
-    // if (myIds.isNotEmpty) {
-    //   //调用是否开播接口
-    //   // doPostSendUserMsg(myIds);
-    // }
+    if (myIds.isNotEmpty) {
+      //调用是否开播接口
+      doPostSendUserMsg(myIds);
+    }
+  }
+
+
+
+  /// 用户开播、在线状态
+  List<DataU> listU = [];
+  Future<void> doPostSendUserMsg(String uids) async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'uids': uids,
+    };
+    try {
+      userStatusBean bean = await DataUtils.postUserStatus(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            listU.clear();
+            if (bean.data!.isNotEmpty) {
+              listU = bean.data!;
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      LogE('错误信息== ${e.toString()}');
+    }
   }
 }

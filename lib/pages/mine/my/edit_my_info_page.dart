@@ -25,6 +25,7 @@ import '../../../utils/log_util.dart';
 import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
 import '../../../utils/widget_utils.dart';
+import 'edit_audio_page.dart';
 import 'edit_biaoqian_page.dart';
 import 'edit_head_page.dart';
 
@@ -591,33 +592,33 @@ class _EditMyInfoPageState extends State<EditMyInfoPage> {
                 ),
                 WidgetUtils.myLine(indent: 20, endIndent: 20),
 
-                // /// 声音名片
-                // GestureDetector(
-                //   onTap: (() {
-                //     if (MyUtils.checkClick()) {
-                //       MyUtils.goTransparentPageCom(
-                //           context, EditAudioPage(audioUrl: voiceCardUrl));
-                //     }
-                //   }),
-                //   child: Container(
-                //     height: ScreenUtil().setHeight(100),
-                //     alignment: Alignment.center,
-                //     padding: const EdgeInsets.only(left: 20, right: 20),
-                //     child: Row(
-                //       children: [
-                //         WidgetUtils.onlyText(
-                //             '声音名片',
-                //             StyleUtils.getCommonTextStyle(
-                //                 color: Colors.black,
-                //                 fontSize: ScreenUtil().setSp(28))),
-                //         const Expanded(child: Text('')),
-                //         WidgetUtils.showImages('assets/images/mine_more2.png',
-                //             ScreenUtil().setHeight(27), ScreenUtil().setHeight(16))
-                //       ],
-                //     ),
-                //   ),
-                // ),
-                // WidgetUtils.myLine(indent: 20, endIndent: 20),
+                /// 声音名片
+                GestureDetector(
+                  onTap: (() {
+                    if (MyUtils.checkClick()) {
+                      MyUtils.goTransparentPageCom(
+                          context, EditAudioPage(audioUrl: voiceCardUrl));
+                    }
+                  }),
+                  child: Container(
+                    height: ScreenUtil().setHeight(100),
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    child: Row(
+                      children: [
+                        WidgetUtils.onlyText(
+                            '声音名片',
+                            StyleUtils.getCommonTextStyle(
+                                color: Colors.black,
+                                fontSize: ScreenUtil().setSp(28))),
+                        const Expanded(child: Text('')),
+                        WidgetUtils.showImages('assets/images/mine_more2.png',
+                            ScreenUtil().setHeight(27), ScreenUtil().setHeight(16))
+                      ],
+                    ),
+                  ),
+                ),
+                WidgetUtils.myLine(indent: 20, endIndent: 20),
 
                 /// 所在城市
                 GestureDetector(

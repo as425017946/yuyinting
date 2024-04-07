@@ -601,7 +601,9 @@ class MyUtils {
                   eventBus.fire(JoinRoomYBack(map: info, type: 'burstlight'));
                 } else if (body.content == '盲盒礼物') {
                   eventBus.fire(JoinRoomYBack(map: info, type: 'blind_box'));
-                } else {
+                } else if (body.content == '盲盒礼物横幅') {
+                  eventBus.fire(JoinRoomYBack(map: info, type: 'blind_box_all'));
+                }else {
                   if (info['lv'] == '' || info['lv'] == null) {
                     if (info['type'] == 'clean_charm') {
                       // 厅内清空魅力值

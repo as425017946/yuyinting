@@ -153,7 +153,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     // 接受自定义消息
     listenZdy = eventBus.on<JoinRoomYBack>().listen((event) {
       LogE('聊天室消息  ${sp.getString('sqRoomID').toString() == event.map!['room_id'].toString()}');
-      if (event.map!['type'] == 'send_all_user') {
+      if (event.map!['type'] == 'send_all_user' || event.map!['type'] == 'blind_box_all') {
         LogE('前面有没有横幅  ${listMP.length}');
         if (listMP.isEmpty) {
           hengFuBean hf = hengFuBean.fromJson(event.map!);
@@ -664,6 +664,12 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           isBig = true;
           isShowHF = false;
           bigType = 1;
+        });
+        break;
+      case '盲盒礼物横幅':
+        setState(() {
+          name = '盲盒礼物横幅';
+          path = 'assets/svga/gp/gp_mh.svga';
         });
         break;
     }

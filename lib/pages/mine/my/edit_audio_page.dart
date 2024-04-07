@@ -12,6 +12,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 
+import '../../../bean/CommonMyIntBean.dart';
 import '../../../bean/labelListBean.dart';
 import '../../../colors/my_colors.dart';
 import '../../../config/my_config.dart';
@@ -241,14 +242,14 @@ class _EditAudioPageState extends State<EditAudioPage> {
       Directory tempDir = await getTemporaryDirectory();
       var time = DateTime.now().millisecondsSinceEpoch;
       String path =
-          '${tempDir.path}}-$time${ext[Codec.aacADTS.index]}' ;
+          '${tempDir.path}-$time${ext[Codec.aacADTS.index]}' ;
 
       print('===>  准备开始录音');
       await recorderModule.startRecorder(
           toFile: path,
           codec: Codec.aacADTS,
-          bitRate: 8000,
-          sampleRate: 8000,
+          bitRate: 128000,
+          sampleRate: 44000,
           audioSource: AudioSource.microphone);
       print('===>  开始录音');
 
@@ -285,7 +286,6 @@ class _EditAudioPageState extends State<EditAudioPage> {
         _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
           if (isPlay == 2) {
             LogE('停止了==');
-            _stopRecorder(); // 确保录音器停止并保存数据到文件
             timer.cancel();
           } else {
             setState(() {
@@ -299,7 +299,6 @@ class _EditAudioPageState extends State<EditAudioPage> {
               isPlay = 2;
             });
             timer.cancel();
-            _stopRecorder();
           }
         });
       }
@@ -311,7 +310,6 @@ class _EditAudioPageState extends State<EditAudioPage> {
     } catch (err) {
       setState(() {
         print(err.toString());
-        _stopRecorder();
         _state = RecordPlayState.record;
       });
     }
@@ -550,7 +548,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
                                       MyToastUtils.showToastBottom(
                                           '请先选择一个声音标签');
                                     } else {
-                                      doPostPostFileUpload(_path);
+                                      doUpAudio(_path);
                                     }
                                   }
                                 }),
@@ -718,6 +716,182 @@ class _EditAudioPageState extends State<EditAudioPage> {
     } catch (e) {
       Loading.dismiss();
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+  doUpAudio(String path) async{
+    Map<String, dynamic> directTransferData;
+    try {
+      directTransferData = await _getStsDirectSign(path);
+    } catch (err) {
+      print(err);
+      throw Exception("getStsDirectSign fail");
+    }
+    Loading.show('上传中...');
+    String cosHost = directTransferData['cosHost'];
+    String cosKey = directTransferData['cosKey'];
+    String authorization = directTransferData['authorization'];
+    String securityToken = directTransferData['sessionToken'];
+    String url = 'https://$cosHost/$cosKey';
+    File file = File(path);
+    int fileSize = await file.length();
+    HttpClient httpClient = HttpClient();
+    HttpClientRequest request = await httpClient.putUrl(Uri.parse(url));
+    request.headers.set('Content-Type', 'application/octet-stream');
+    request.headers.set('Content-Length', fileSize.toString());
+    request.headers.set('Authorization', authorization);
+    request.headers.set('x-cos-security-token', securityToken);
+    request.headers.set('Host', cosHost);
+    request.contentLength = fileSize;
+    Stream<List<int>> stream = file.openRead();
+    int bytesSent = 0;
+    stream.listen(
+          (List<int> chunk) {
+        bytesSent += chunk.length;
+        double progress = bytesSent / fileSize;
+        print('Progress: ${progress.toStringAsFixed(2)}');
+        request.add(chunk);
+      },
+      onDone: () async {
+        HttpClientResponse response = await request.close();
+        LogE('上传状态 ${response.statusCode}');
+        if (response.statusCode == 200) {
+          doPostRoomJoin(cosKey);
+          print('上传成功');
+        } else {
+          Loading.dismiss();
+          throw Exception("上传失败 $response");
+        }
+      },
+      onError: (error) {
+        Loading.dismiss();
+        print('Error: $error');
+        throw Exception("上传失败 ${error.toString()}");
+      },
+      cancelOnError: true,
+    );
+  }
+
+  /// 腾讯云id
+  Future<void> doPostRoomJoin(String filePath) async {
+    String fileType = '';
+    if (filePath.contains('.gif') ||
+        filePath.contains('.GIF') ||
+        filePath.contains('.jpg') ||
+        filePath.contains('.JPG') ||
+        filePath.contains('.jpeg') ||
+        filePath.contains('.GPEG') ||
+        filePath.contains('.webp') ||
+        filePath.contains('.WEBP') ||
+        filePath.contains('.png') ||
+        filePath.contains('.png')) {
+      fileType = 'image';
+    }else if(filePath.contains('.avi') ||
+        filePath.contains('.AVI') ||
+        filePath.contains('.wmv') ||
+        filePath.contains('.WMV') ||
+        filePath.contains('.mpeg') ||
+        filePath.contains('.MPEG') ||
+        filePath.contains('.mp4') ||
+        filePath.contains('.MP4') ||
+        filePath.contains('.m4v') ||
+        filePath.contains('.M4V')||
+        filePath.contains('.mov') ||
+        filePath.contains('.MOV') ||
+        filePath.contains('.asf') ||
+        filePath.contains('.ASF') ||
+        filePath.contains('.flv') ||
+        filePath.contains('.FLV') ||
+        filePath.contains('.f4v') ||
+        filePath.contains('.F4V')||
+        filePath.contains('.rmvb') ||
+        filePath.contains('.RMVB') ||
+        filePath.contains('.rm') ||
+        filePath.contains('.RM') ||
+        filePath.contains('.3gp')||
+        filePath.contains('.3GP') ||
+        filePath.contains('.vob') ||
+        filePath.contains('.VOB')){
+      fileType = 'video';
+    }else if(filePath.contains('.mp3') ||
+        filePath.contains('.MP3') ||
+        filePath.contains('.wma') ||
+        filePath.contains('.WMA') ||
+        filePath.contains('.wav') ||
+        filePath.contains('.WAV') ||
+        filePath.contains('.flac') ||
+        filePath.contains('.FLAC') ||
+        filePath.contains('.ogg') ||
+        filePath.contains('.OGG')||
+        filePath.contains('.aac') ||
+        filePath.contains('.AAC') ||
+        filePath.contains('.mp4') ||
+        filePath.contains('.MP4') ){
+      fileType = 'audio';
+    }
+    Map<String, dynamic> params = <String, dynamic>{
+      'file_type': fileType,
+      'file_path': filePath,
+    };
+    try {
+      CommonMyIntBean bean = await DataUtils.postTencentID(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            eventBus.fire(
+                FileBack(info: filePath, id: bean.data.toString(), type: 1));
+            MyToastUtils.showToastBottom('音频上传成功');
+            Loading.dismiss();
+            // ignore: use_build_context_synchronously
+            Navigator.pop(context);
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+  /// 获取直传的url和签名等
+  /// @param ext 文件后缀 直传后端会根据后缀生成cos key
+  /// @return 直传url和签名等
+  static Future<Map<String, dynamic>> _getStsDirectSign(String ext) async {
+    HttpClient httpClient = HttpClient();
+    //直传签名业务服务端url（正式环境 请替换成正式的直传签名业务url）
+    //直传签名业务服务端代码示例可以参考：https://github.com/tencentyun/cos-demo/blob/main/server/direct-sign/nodejs/app.js
+    //10.91.22.16为直传签名业务服务器的地址 例如上述node服务，总之就是访问到直传签名业务服务器的url
+    HttpClientRequest request = await httpClient
+        .getUrl(Uri.parse("${MyHttpConfig.baseURL}/upload/uploadCos?type=audio&ext=$ext"));
+    // 添加 header 头信息
+    request.headers.add("Content-Type", "application/json"); // 例如，设置 Content-Type 为 application/json
+    request.headers.add("Authorization", sp.getString('user_token') ?? ''); // 例如，设置 Authorization 头
+    HttpClientResponse response = await request.close();
+    String responseBody = await response.transform(utf8.decoder).join();
+    if (response.statusCode == 200) {
+      Map<String, dynamic> json = jsonDecode(responseBody);
+      print(json);
+      // LogE('上传地址== ${json['data']['cosKey']}');
+      // LogE('上传地址request_id== ${json['data']['request_id']}');
+      // LogE('上传地址cosHost== ${json['data']['cosHost']}');
+      // LogE('上传地址cosKey== ${json['data']['cosKey']}');
+      httpClient.close();
+      if (json['code'] == 200) {
+        return json['data'];
+      } else {
+        throw Exception(
+            'getStsDirectSign error code: ${json['code']}, error message: ${json['message']}');
+      }
+    } else {
+      httpClient.close();
+      throw Exception(
+          'getStsDirectSign HTTP error code: ${response.statusCode}');
     }
   }
 }

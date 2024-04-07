@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:flukit/flukit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -65,7 +63,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
     _controller = PageController(
       initialPage: 0,
     );
-    // _initialize();
+    _initialize();
     doPostMyIfon();
   }
 
@@ -254,38 +252,81 @@ class _MyInfoPageState extends State<MyInfoPage> {
                     }));
               }
             }),
-            child: SizedBox(
-              width: 160.w,
-              height: 160.w,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    width: 120.w,
-                    height: 120.w,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(60.w),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 160.w,
+                  height: 160.w,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        width: 120.w,
+                        height: 120.w,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(60.w),
+                        ),
+                      ),
+                      WidgetUtils.CircleHeadImage(110.w, 110.w, sp.getString('user_headimg').toString()),
+                      // 头像框静态图
+                      (avatarFrameGifImg.isEmpty && avatarFrameImg.isNotEmpty)
+                          ? WidgetUtils.CircleHeadImage(
+                          150.w, 150.w, avatarFrameImg)
+                          : const Text(''),
+                      // 头像框动态图
+                      avatarFrameGifImg.isNotEmpty
+                          ? SizedBox(
+                        height: 150.w,
+                        width: 150.w,
+                        child: SVGASimpleImage(
+                          resUrl: avatarFrameGifImg,
+                        ),
+                      )
+                          : const Text(''),
+                    ],
+                  ),
+                ),
+                /// 音频
+                voice_card.isNotEmpty
+                    ? GestureDetector(
+                  onTap: (() {
+                    if (MyUtils.checkClick() && playRecord == false) {
+                      play();
+                    }
+                  }),
+                  child: Container(
+                    height: ScreenUtil().setHeight(45),
+                    width: ScreenUtil().setWidth(220),
+                    margin: const EdgeInsets.only(left: 20),
+                    alignment: Alignment.center,
+                    //边框设置
+                    decoration: const BoxDecoration(
+                      //背景
+                      color: MyColors.peopleYellow,
+                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                      borderRadius:
+                      BorderRadius.all(Radius.circular(20.0)),
+                    ),
+                    child: Row(
+                      children: [
+                        const Expanded(
+                            child: SVGASimpleImage(
+                              assetsName:
+                              'assets/svga/audio_xindiaotu.svga',
+                            )),
+                        WidgetUtils.commonSizedBox(0, 10.h),
+                        WidgetUtils.showImages(
+                            'assets/images/people_bofang.png',
+                            ScreenUtil().setHeight(35),
+                            ScreenUtil().setWidth(35)),
+                        WidgetUtils.commonSizedBox(0, 10.h),
+                      ],
                     ),
                   ),
-                  WidgetUtils.CircleHeadImage(110.w, 110.w, sp.getString('user_headimg').toString()),
-                  // 头像框静态图
-                  (avatarFrameGifImg.isEmpty && avatarFrameImg.isNotEmpty)
-                      ? WidgetUtils.CircleHeadImage(
-                      150.w, 150.w, avatarFrameImg)
-                      : const Text(''),
-                  // 头像框动态图
-                  avatarFrameGifImg.isNotEmpty
-                      ? SizedBox(
-                    height: 150.w,
-                    width: 150.w,
-                    child: SVGASimpleImage(
-                      resUrl: avatarFrameGifImg,
-                    ),
-                  )
-                      : const Text(''),
-                ],
-              ),
+                )
+                    : const Text(''),
+              ],
             ),
           ),
           Padding(
@@ -484,76 +525,6 @@ class _MyInfoPageState extends State<MyInfoPage> {
           height: 240.w,
           alignment: Alignment.bottomRight,
           padding: EdgeInsets.all(20.w),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              /// 音频
-              voice_card.isNotEmpty
-                  ? Row(
-                children: [
-                  GestureDetector(
-                    onTap: (() {
-                      if (MyUtils.checkClick() && playRecord == false) {
-                        play();
-                      }
-                    }),
-                    child: Container(
-                      height: ScreenUtil().setHeight(45),
-                      width: ScreenUtil().setWidth(220),
-                      margin: const EdgeInsets.only(left: 20),
-                      alignment: Alignment.center,
-                      //边框设置
-                      decoration: const BoxDecoration(
-                        //背景
-                        color: MyColors.peopleYellow,
-                        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(20.0)),
-                      ),
-                      child: Row(
-                        children: [
-                          const Expanded(
-                              child: SVGASimpleImage(
-                                assetsName:
-                                'assets/svga/audio_xindiaotu.svga',
-                              )),
-                          WidgetUtils.commonSizedBox(0, 10.h),
-                          WidgetUtils.showImages(
-                              'assets/images/people_bofang.png',
-                              ScreenUtil().setHeight(35),
-                              ScreenUtil().setWidth(35)),
-                          WidgetUtils.commonSizedBox(0, 10.h),
-                        ],
-                      ),
-                      // child: playRecord == false
-                      //     ? Row(
-                      //         children: [
-                      //           const Expanded(
-                      //               child: SVGASimpleImage(
-                      //             assetsName:
-                      //                 'assets/svga/audio_xindiaotu.svga',
-                      //           )),
-                      //           WidgetUtils.commonSizedBox(0, 10.h),
-                      //           WidgetUtils.showImages(
-                      //               'assets/images/people_bofang.png',
-                      //               ScreenUtil().setHeight(35),
-                      //               ScreenUtil().setWidth(35)),
-                      //           WidgetUtils.commonSizedBox(0, 10.h),
-                      //         ],
-                      //       )
-                      //     : const Expanded(
-                      //         child: SVGASimpleImage(
-                      //         assetsName:
-                      //             'assets/svga/audio_bolang.svga',
-                      //       )),
-                    ),
-                  ),
-                  const Expanded(child: Text('')),
-                ],
-              )
-                  : const Text(''),
-            ],
-          ),
         ),
         Expanded(
           child: Container(

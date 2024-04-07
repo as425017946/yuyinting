@@ -138,7 +138,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
         isDevices = 'android';
       });
     } else if (Platform.isIOS) {
-      // init();
+      init();
       setState(() {
         isDevices = 'ios';
       });
@@ -231,32 +231,6 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
       // 用户拒绝了权限请求，需要处理此情况
       LogE('权限拒绝');
     }
-    // //设置订阅计时器
-    // await recorderModule
-    //     .setSubscriptionDuration(const Duration(milliseconds: 10));
-    // //设置音频
-    // final session = await AudioSession.instance;
-    // await session.configure(AudioSessionConfiguration(
-    //   avAudioSessionCategory: AVAudioSessionCategory.playAndRecord,
-    //   avAudioSessionCategoryOptions:
-    //   AVAudioSessionCategoryOptions.allowBluetooth |
-    //   AVAudioSessionCategoryOptions.defaultToSpeaker,
-    //   avAudioSessionMode: AVAudioSessionMode.spokenAudio,
-    //   avAudioSessionRouteSharingPolicy:
-    //   AVAudioSessionRouteSharingPolicy.defaultPolicy,
-    //   avAudioSessionSetActiveOptions: AVAudioSessionSetActiveOptions.none,
-    //   androidAudioAttributes: const AndroidAudioAttributes(
-    //     contentType: AndroidAudioContentType.speech,
-    //     flags: AndroidAudioFlags.none,
-    //     usage: AndroidAudioUsage.voiceCommunication,
-    //   ),
-    //   androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
-    //   androidWillPauseWhenDucked: true,
-    // ));
-    // await playerModule.closePlayer();
-    // await playerModule.openPlayer();
-    // await playerModule
-    //     .setSubscriptionDuration(const Duration(milliseconds: 10));
   }
 
   Future<bool> getPermissionStatus() async {
