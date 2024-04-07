@@ -16,15 +16,14 @@ class _FenRunTSPageState extends State<FenRunTSPage> {
       backgroundColor: Colors.transparent,
       body: Stack(
         children: [
-          Expanded(
-              child: GestureDetector(
+          GestureDetector(
             onTap: (() {
               Navigator.pop(context);
             }),
             child: Container(
               color: Colors.transparent,
             ),
-          )),
+          ),
           Center(
             child: Container(
               // height: 240.w,//270*1.25.w,
