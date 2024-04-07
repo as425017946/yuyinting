@@ -331,6 +331,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> with MsgRea
                                           stopPlayer();
                                         } else {
                                           play(allData2[i]['content']);
+                                          MyUtils.didMsgRead(allData2[i], index: 3);
                                         }
                                       }),
                                       child: Container(
@@ -488,6 +489,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> with MsgRea
                                               play(allData2[i]['content']);
                                             }
                                           }),
+                                          onLongPress: onImgLongPress(context, allData2[i]),
                                           child: Container(
                                             color: Colors.transparent,
                                             width: widthAudio,
