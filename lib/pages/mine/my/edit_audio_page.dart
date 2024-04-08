@@ -239,7 +239,7 @@ class _EditAudioPageState extends State<EditAudioPage> {
   late Timer _timer;
   _startRecorder() async {
     try {
-      Directory tempDir = await getTemporaryDirectory();
+      Directory tempDir = await getApplicationSupportDirectory();
       var time = DateTime.now().millisecondsSinceEpoch;
       String path =
           '${tempDir.path}-$time${ext[Codec.aacADTS.index]}' ;

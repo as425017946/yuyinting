@@ -314,7 +314,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
   /// 开始录音
   _startRecorder() async {
     try {
-      Directory tempDir = await getTemporaryDirectory();
+      Directory tempDir = await getApplicationSupportDirectory();
       var time = DateTime.now().millisecondsSinceEpoch;
       String path = '${tempDir.path}}-$time${ext[Codec.aacADTS.index]}';
 

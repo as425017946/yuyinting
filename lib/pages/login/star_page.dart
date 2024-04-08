@@ -9,7 +9,6 @@ import '../../bean/Common_bean.dart';
 import '../../config/my_config.dart';
 import '../../config/online_config.dart';
 import '../../http/data_utils.dart';
-import '../../http/my_http_config.dart';
 import '../../main.dart';
 import '../../utils/log_util.dart';
 import '../../utils/my_ping.dart';
@@ -31,9 +30,14 @@ class _StarPageState extends State<StarPage> {
     // TODO: implement initState
     super.initState();
     setState(() {
+      sp.setString('scIsOk', '0');
       sp.setString('userIP', '');
       sp.setInt('tjFirst', 0);
       sp.setString('isShouQi', '0');
+      if (sp.getString('isFirstMessage').toString() == 'null' ||
+          sp.getString('isFirstMessage').toString().isEmpty) {
+        sp.setString('isFirstMessage', '1');
+      }
     });
     if (Platform.isAndroid) {
       setState(() {

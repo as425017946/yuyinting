@@ -521,11 +521,15 @@ class _MessagePageState extends State<MessagePage>
     DatabaseHelper databaseHelper = DatabaseHelper();
     Database? db = await databaseHelper.database;
     try {
-      xtListBean bean = await DataUtils.postSystemMsgList();
+      Map<String, dynamic> params = <String, dynamic>{
+        'is_all': sp.getString('isFirstMessage') == '1' ? '1' : '',
+      };
+      xtListBean bean = await DataUtils.postSystemMsgList(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
           if (bean.data!.list!.isNotEmpty) {
             setState(() {
+              sp.setString('isFirstMessage','2');
               info = bean.data!.list![bean.data!.list!.length - 1].text!;
               time = bean.data!.list![bean.data!.list!.length - 1].addTime!
                   .substring(0, 10);

@@ -1181,7 +1181,10 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     DatabaseHelper databaseHelper = DatabaseHelper();
     Database? db = await databaseHelper.database;
     try {
-      xtListBean bean = await DataUtils.postSystemMsgList();
+      Map<String, dynamic> params = <String, dynamic>{
+        'is_all': '',
+      };
+      xtListBean bean = await DataUtils.postSystemMsgList(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
           if (bean.data!.list!.isNotEmpty) {

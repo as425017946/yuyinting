@@ -76,6 +76,7 @@ class _HomePageState extends State<HomePage>
     setState(() {
       identity = sp.getString('user_identity').toString();
       level = sp.getInt('user_level') as int;
+      LogE('用户等级 == $level');
     });
 
     /// 如果是全屏就切换竖屏
@@ -1017,8 +1018,8 @@ class _HomePageState extends State<HomePage>
             _titleItem('收藏', 0, true),
             _titleItem('推荐', 1, true),
             _titleItem('派对', 2, true),
-            _titleItem('游戏', 3, true),
-            level >= 3 ? _titleItem('在线', 4, identity != 'user') : const Text(''),
+            level >= 3 ? _titleItem('游戏', 3, true) : const Text(''),
+            _titleItem('在线', 4, identity != 'user'),
           ],
         ),
       ),

@@ -51,9 +51,10 @@ class _TuijianPageState extends State<TuijianPage>
   List<RoomList2> listRoom2 = [];
   List<RoomList3> listRoom3 = [];
   List<AnchorList> listAnchor = [];
+  List<bool> listB = [];
   List<int> listI = [];
   int a = 0, b = 0, c = 0;
-  bool isFirstUp = false;//是否首次打开进入
+  bool isFirstUp = false; //是否首次打开进入
   bool isUp = true; //是否允许上拉
   bool isDown = true; //是否允许下拉
   void _onRefresh() async {
@@ -98,7 +99,7 @@ class _TuijianPageState extends State<TuijianPage>
 
   // 显示推荐房间弹窗次数是否刷新
   int tjRoom = 0;
-  var listen,listen2;
+  var listen, listen2;
 
   @override
   void initState() {
@@ -107,7 +108,7 @@ class _TuijianPageState extends State<TuijianPage>
     doPostHotRoom();
     doPostPushRoom();
     doPostPushStreamer();
-
+    _initialize();
     listen = eventBus.on<SubmitButtonBack>().listen((event) {
       if (event.title == '退出房间' ||
           event.title == '收起房间' ||
@@ -118,14 +119,14 @@ class _TuijianPageState extends State<TuijianPage>
           });
         }
         doPostPushStreamer();
-      }else if(event.title == '首页其他页面'){
-        if(_mPlayer.isPlaying){
+      } else if (event.title == '首页其他页面') {
+        if (_mPlayer.isPlaying) {
           _mPlayer.stopPlayer();
         }
       }
     });
     listen2 = eventBus.on<FirstInfoBack>().listen((event) {
-      if(event.isOk){
+      if (event.isOk) {
         // 推荐房间
         MyUtils.goTransparentPageCom(
             context,
@@ -138,7 +139,6 @@ class _TuijianPageState extends State<TuijianPage>
     });
   }
 
-
   @override
   void dispose() {
     // TODO: implement dispose
@@ -146,11 +146,9 @@ class _TuijianPageState extends State<TuijianPage>
     listen.cancel();
     listen2.cancel();
     if (_mPlayer.isPlaying) {
-      _mPlayer.stopPlayer();
+      stopPlayer();
     }
   }
-
-
 
   final FlutterSoundPlayer _mPlayer = FlutterSoundPlayer();
   bool playRecord = false; //音频文件播放状态
@@ -159,12 +157,15 @@ class _TuijianPageState extends State<TuijianPage>
     LogE('录音地址**$voiceCard');
     _mPlayer
         .startPlayer(
-        fromURI: voiceCard,
-        whenFinished: () {
-          setState(() {
-            playRecord = false;
-          });
-        })
+            fromURI: voiceCard,
+            whenFinished: () {
+              setState(() {
+                for(int i = 0; i < listB.length; i++){
+                  listB[i] = false;
+                }
+                playRecord = false;
+              });
+            })
         .then((value) {
       setState(() {
         playRecord = true;
@@ -176,6 +177,9 @@ class _TuijianPageState extends State<TuijianPage>
   void stopPlayer() {
     _mPlayer!.stopPlayer().then((value) {
       setState(() {
+        for(int i = 0; i < listB.length; i++){
+          listB[i] = false;
+        }
         playRecord = false;
       });
     });
@@ -285,19 +289,54 @@ class _TuijianPageState extends State<TuijianPage>
                                         fontSize: 30.sp,
                                         fontWeight: FontWeight.w600)),
                                 WidgetUtils.commonSizedBox(0, 10.w),
-                                listAnchor[i].voiceCardUrl!.isNotEmpty ? GestureDetector(
-                                  onTap: ((){
-                                    if(MyUtils.checkClick()) {
-                                      if (_mPlayer.isPlaying) {
-                                        _mPlayer.stopPlayer();
-                                      } else {
-                                        play(listAnchor[i].voiceCardUrl!);
-                                      }
-                                    }
-                                  }),
-                                  child: WidgetUtils.showImages(
-                                      'assets/images/tuijian_audio.png', 42.h, 100.w),
-                                ) : const Text(''),
+                                listAnchor[i].voiceCardUrl!.isNotEmpty
+                                    ? GestureDetector(
+                                        onTap: (() {
+                                          if (MyUtils.checkClick()) {
+                                            if (_mPlayer.isPlaying) {
+                                              listB[i] = false;
+                                              stopPlayer();
+                                            } else {
+                                              listB[i] = true;
+                                              play(listAnchor[i].voiceCardUrl!);
+                                            }
+                                            setState(() {});
+                                          }
+                                        }),
+                                        child: Stack(
+                                          children: [
+                                            WidgetUtils.showImages(
+                                                'assets/images/tuijian_audio.png',
+                                                42.h,
+                                                100.w),
+                                            SizedBox(
+                                              height: 42.h,
+                                              width: 100.w,
+                                              child: Row(
+                                                children: [
+                                                  const Spacer(),
+                                                  listB[i]
+                                                      ? SizedBox(
+                                                          height: 30.h,
+                                                          width: 50.w,
+                                                          child:
+                                                              const SVGASimpleImage(
+                                                            assetsName:
+                                                                'assets/svga/tj_audio.svga',
+                                                          ))
+                                                      : WidgetUtils.showImages(
+                                                          'assets/images/tj_audio.png',
+                                                          30.h,
+                                                          50.w),
+                                                  WidgetUtils.commonSizedBox(
+                                                      0, 10.w),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    : const Text(''),
                                 const Spacer(),
                                 WidgetUtils.showImages(
                                     'assets/images/tj_zaixian.png', 30.h, 70.w),
@@ -576,13 +615,13 @@ class _TuijianPageState extends State<TuijianPage>
                             fontSize: ScreenUtil().setSp(33),
                             fontWeight: FontWeight.w600)),
                   ),
-                  ListView.builder(
+                  listAnchor.isNotEmpty ? ListView.builder(
                     padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: tuijian,
                     itemCount: listAnchor.length,
-                  ),
+                  ) : const Text(''),
                   WidgetUtils.commonSizedBox(20, 0),
                 ],
               ),
@@ -932,13 +971,18 @@ class _TuijianPageState extends State<TuijianPage>
           setState(() {
             if (page == 1) {
               listAnchor.clear();
+              listB.clear();
               if (bean.data!.anchorList!.isNotEmpty) {
                 listAnchor = bean.data!.anchorList!;
+                for (int i = 0; i < bean.data!.anchorList!.length; i++) {
+                  listB.add(false);
+                }
               }
             } else {
               if (bean.data!.anchorList!.isNotEmpty) {
                 for (int i = 0; i < bean.data!.anchorList!.length; i++) {
                   listAnchor.add(bean.data!.anchorList![i]);
+                  listB.add(false);
                 }
               } else {
                 if (bean.data!.anchorList!.length < 6) {
@@ -946,7 +990,6 @@ class _TuijianPageState extends State<TuijianPage>
                 }
               }
             }
-
             isUp = true;
             isDown = true;
           });
@@ -1071,14 +1114,13 @@ class _TuijianPageState extends State<TuijianPage>
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
-
             list.clear();
             if (bean.data!.isNotEmpty) {
               list = bean.data!;
               if (tjRoom == 0) {
                 tjRoom++;
               }
-              if(sp.getBool('isFirst') == false && isFirstUp == false){
+              if (sp.getBool('isFirst') == false && isFirstUp == false) {
                 isFirstUp = true;
                 // 推荐房间
                 MyUtils.goTransparentPageCom(

@@ -699,9 +699,10 @@ class DataUtils {
   }
 
   /// 获取系统消息
-  static Future<xtListBean> postSystemMsgList() async {
+  static Future<xtListBean> postSystemMsgList(Map<String, dynamic> params) async {
+    print("获取系统消息：$params");
     Map<String, dynamic>? respons =
-        await MyHttpRequest.post(MyHttpConfig.systemMsgList, {}, {});
+        await MyHttpRequest.post(MyHttpConfig.systemMsgList, {}, params);
     print("获取系统消息：$respons");
     return xtListBean.fromJson(respons!);
   }
