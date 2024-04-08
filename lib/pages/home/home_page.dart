@@ -111,7 +111,7 @@ class _HomePageState extends State<HomePage>
         });
       }else if(event.title == '等级大于3级'){
         setState(() {
-          level = sp.getString('user_level') as int;
+          level = sp.getInt('user_level') as int;
         });
       }
     });

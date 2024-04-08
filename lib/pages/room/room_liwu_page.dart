@@ -1136,15 +1136,19 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                               isCheck = true;
                                             });
                                             if (isMaiPeople == false) {
-                                              if (giftId.isEmpty) {
-                                                setState(() {
-                                                  isCheck = false;
-                                                });
-                                                MyToastUtils.showToastBottom(
-                                                    '请选择要送的礼物');
-                                                return;
-                                              } else {
-                                                doPostSendGift();
+                                              if(leixing != 3){
+                                                if (giftId.isEmpty) {
+                                                  setState(() {
+                                                    isCheck = false;
+                                                  });
+                                                  MyToastUtils.showToastBottom(
+                                                      '请选择要送的礼物');
+                                                  return;
+                                                } else {
+                                                  doPostSendGift();
+                                                }
+                                              }else{
+                                                doPostPlayBlindBox();
                                               }
                                             } else {
                                               if (isChoosePeople == false) {
