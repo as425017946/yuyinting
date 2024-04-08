@@ -285,7 +285,7 @@ class _MinePageContent extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           if (MyUtils.checkClick()) {
-            Get.to(CareHomePage(index: index));
+            Get.to(() => CareHomePage(index: index));
           }
         },
         child: Column(
@@ -481,7 +481,7 @@ class _MinePageContent extends StatelessWidget {
                 if (c.userNumber.value.isNotEmpty)
                   c.identity.value == 'president'
                       ? _moreItem('会长后台', 'huizhang', () { 
-                        Get.to(MyHuiZhangPage(type: c.identity.value));
+                        Get.to(() => MyHuiZhangPage(type: c.identity.value));
                       })
                       : _morePoint(
                         c.isShenHe.value, 
@@ -493,9 +493,9 @@ class _MinePageContent extends StatelessWidget {
                               break;
                             case '1': //身份 user普通用户，未加入公会 streamer主播 leader会长
                               if (c.identity.value == 'user') {
-                                Get.to(GonghuiHomePage(kefuUid: c.kefuUid, kefuAvatar: c.kefuAvatar));
+                                Get.to(() => GonghuiHomePage(kefuUid: c.kefuUid, kefuAvatar: c.kefuAvatar));
                               } else {
-                                Get.to(MyGonghuiPage(type: c.identity.value));
+                                Get.to(() => MyGonghuiPage(type: c.identity.value));
                               }
                               break;
                             case '0':
@@ -511,7 +511,7 @@ class _MinePageContent extends StatelessWidget {
                       Get.toNamed('DailiHomePage');
                     })
                     : _moreItem('邀请有礼', 'yaoqing', () { 
-                      Get.to(YQYLPage(kefuUid: c.kefuUid, kefUavatar: c.kefuAvatar));
+                      Get.to(() => YQYLPage(kefuUid: c.kefuUid, kefUavatar: c.kefuAvatar));
                     }),
                 _moreItem('等级成就', 'dengji', () { 
                   Get.toNamed('ChengJiuPage');

@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -359,20 +360,25 @@ class PaiduiListPage extends StatelessWidget {
     }
   }
 
-  Widget _head(String img) {
-    return WidgetUtils.CircleHeadImage(36.w, 36.w, img);
+  Widget _head(String img, {double size = 36}) {
+    return WidgetUtils.CircleHeadImage(size.w, size.w, img);
   }
 
   Widget _headList(List<MemberList> list) {
     return Row(
       children: list
           .map(
-            (e) => SizedBox(
-              width: 28.w,
-              child: UnconstrainedBox(
-                alignment: Alignment.centerLeft,
-                child: _head(e.avatar!),
-              ),
+            // (e) => SizedBox(
+            //   width: 28.w,
+            //   child: UnconstrainedBox(
+            //     alignment: Alignment.centerLeft,
+            //     child: _head(e.avatar!),
+            //   ),
+            // ),
+            (e) => Transform.scale(
+              alignment: Alignment.centerLeft,
+              scale: 36.0 / 28.0,
+              child: _head(e.avatar!, size: 28),
             ),
           )
           .toList(),
@@ -458,7 +464,7 @@ class PaiduiListPage extends StatelessWidget {
         },
         onTap: (index) {
           if (MyUtils.checkClick()) {
-            Get.to(WebPage(url: listBanner[index].url!));
+            Get.to(() => WebPage(url: listBanner[index].url!));
           }
         },
       ),
