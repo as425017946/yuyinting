@@ -553,8 +553,10 @@ class MyUtils {
         // }
       } else {
         //非客户主动离开聊天室 并且判断是否为当前登录的房间
-        if (sp.getString('roomID').toString() == roomId.toString()) {
-          EMClient.getInstance.chatRoomManager.joinChatRoom(roomId);
+        if(sp.getString('roomID').toString().isNotEmpty) {
+          if (sp.getString('roomID').toString() == roomId.toString()) {
+            EMClient.getInstance.chatRoomManager.joinChatRoom(roomId);
+          }
         }
         LogE(
             '非客户主动离开聊天室 $roomId 房间名称 $roomName == $participantreason ** $reason');

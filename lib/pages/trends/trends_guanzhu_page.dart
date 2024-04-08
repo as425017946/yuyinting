@@ -94,8 +94,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
     super.initState();
     doPostGZFollowList();
     doPostRecommendList("1");
-    animationController = SVGAAnimationController(vsync: this);
-    loadAnimation();
+
 
     listen = eventBus.on<HiBack>().listen((event) {
       if (event.isBack) {
@@ -120,38 +119,10 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
 
   @override
   void dispose() {
-    animationController?.stop(); // 停止动画播放
-    animationController?.dispose();
-    animationController = null;
     super.dispose();
     listen.cancel();
   }
 
-  SVGAAnimationController? animationController;
-
-  //动画是否在播放
-  bool isShow = false;
-
-  void loadAnimation() async {
-    final videoItem = await _loadSVGA(false, 'assets/svga/dianzan_2.svga');
-    videoItem.autorelease = false;
-    animationController?.videoItem = videoItem;
-    animationController
-        ?.repeat() // Try to use .forward() .reverse()
-        .whenComplete(() => animationController?.videoItem = null);
-
-    // 监听动画
-    animationController?.addListener(() {
-      if (animationController!.currentFrame >=
-          animationController!.frames - 1) {
-        // 动画播放到最后一帧时停止播放
-        animationController?.stop();
-        setState(() {
-          isShow = false;
-        });
-      }
-    });
-  }
 
   Future _loadSVGA(isUrl, svgaUrl) {
     Future Function(String) decoder;

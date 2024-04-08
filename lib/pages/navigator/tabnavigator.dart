@@ -78,7 +78,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
   late Animation<double> _animation;
 
   /// 公屏使用
-  late SlideAnimationController slideAnimationController;
+  SlideAnimationController? slideAnimationController;
   String path = ''; // 图片地址
   String name = ''; // 要展示公屏的名称
   bool isShowHF = false; // 是否显示横幅
@@ -239,10 +239,10 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
             isFirstJoinRoom = false;
             isJoinRoom = false;
             //取消订阅所有远端用户的音频流。
-            _engine.muteAllRemoteAudioStreams(true);
+            _engine!.muteAllRemoteAudioStreams(true);
             // 取消发布本地音频流
-            _engine.muteLocalAudioStream(true);
-            _engine.disableAudio();
+            _engine!.muteLocalAudioStream(true);
+            _engine!.disableAudio();
             _dispose();
             // 调用离开房间接口
             // doPostLeave(sp.getString('roomIDJoinOther').toString());
@@ -254,10 +254,10 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
             isFirstJoinRoom = false;
             isJoinRoom = false;
             //取消订阅所有远端用户的音频流。
-            _engine.muteAllRemoteAudioStreams(true);
+            _engine!.muteAllRemoteAudioStreams(true);
             // 取消发布本地音频流
-            _engine.muteLocalAudioStream(true);
-            _engine.disableAudio();
+            _engine!.muteLocalAudioStream(true);
+            _engine!.disableAudio();
             _dispose();
             MyUtils.jumpLogin(context);
           });
@@ -269,10 +269,10 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
             isFirstJoinRoom = false;
             isJoinRoom = false;
             //取消订阅所有远端用户的音频流。
-            _engine.muteAllRemoteAudioStreams(true);
+            _engine!.muteAllRemoteAudioStreams(true);
             // 取消发布本地音频流
-            _engine.muteLocalAudioStream(true);
-            _engine.disableAudio();
+            _engine!.muteLocalAudioStream(true);
+            _engine!.disableAudio();
             _dispose();
           });
         }
@@ -296,10 +296,10 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
             isFirstJoinRoom = false;
             isJoinRoom = false;
             //取消订阅所有远端用户的音频流。
-            _engine.muteAllRemoteAudioStreams(true);
+            _engine!.muteAllRemoteAudioStreams(true);
             // 取消发布本地音频流
-            _engine.muteLocalAudioStream(true);
-            _engine.disableAudio();
+            _engine!.muteLocalAudioStream(true);
+            _engine!.disableAudio();
             _dispose();
             // 调用离开房间接口
             // doPostLeave(sp.getString('roomID').toString());
@@ -313,10 +313,10 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
             isFirstJoinRoom = false;
             isJoinRoom = false;
             //取消订阅所有远端用户的音频流。
-            _engine.muteAllRemoteAudioStreams(true);
+            _engine!.muteAllRemoteAudioStreams(true);
             // 取消发布本地音频流
-            _engine.muteLocalAudioStream(true);
-            _engine.disableAudio();
+            _engine!.muteLocalAudioStream(true);
+            _engine!.disableAudio();
             _dispose();
           });
         }
@@ -375,8 +375,8 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
                   sp.getString('user_id').toString() && event.map!['from_uid'].toString().isNotEmpty) {
             MyToastUtils.showToastBottom('你已被管理下掉了麦序！');
             // 取消发布本地音频流
-            _engine.muteLocalAudioStream(true);
-            _engine.disableAudio();
+            _engine!.muteLocalAudioStream(true);
+            _engine!.disableAudio();
             _dispose();
           }
         }
@@ -388,10 +388,10 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
             isJoinRoom = false;
           });
           // 取消发布本地音频流
-          _engine.muteLocalAudioStream(true);
+          _engine!.muteLocalAudioStream(true);
           // 调用离开房间接口
           // doPostLeave(sp.getString('roomID').toString());
-          _engine.disableAudio();
+          _engine!.disableAudio();
           _dispose();
           sp.setString('user_token', '');
           sp.setString("user_account", '');
@@ -431,10 +431,10 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
                   event.map!['room_id'].toString()) {
             MyToastUtils.showToastBottom('你已被房间设置为黑名单用户！');
             // 取消发布本地音频流
-            _engine.muteLocalAudioStream(true);
+            _engine!.muteLocalAudioStream(true);
             // 调用离开房间接口
             // doPostLeave(sp.getString('roomID').toString());
-            _engine.disableAudio();
+            _engine!.disableAudio();
             _dispose();
           }
         }
@@ -478,7 +478,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     Screen.keepOn(true);
   }
 
-  late RtcEngine _engine;
+  RtcEngine? _engine;
 
   //初始化
   void initE() async {
@@ -487,8 +487,10 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
   }
 
   Future<void> _dispose() async {
-    await _engine.leaveChannel(); // 离开频道
-    await _engine.release(); // 释放资源
+    if(_engine != null) {
+      await _engine!.leaveChannel(); // 离开频道
+      await _engine!.release(); // 释放资源
+    }
   }
 
   Timer? _timer;
@@ -679,14 +681,16 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       duration: const Duration(seconds: 16), // 自定义时间
     );
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      slideAnimationController.playAnimation();
+      slideAnimationController!.playAnimation();
     });
   }
 
   @override
   void dispose() {
     _repeatController.dispose();
-    slideAnimationController.dispose();
+    if(slideAnimationController != null){
+      slideAnimationController!.dispose();
+    }
     listen.cancel();
     listenZdy.cancel();
     listenRoomBack.cancel();
@@ -708,10 +712,10 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           lastPopTime = DateTime.now();
           if (isJoinRoom) {
             // 取消发布本地音频流
-            _engine.muteLocalAudioStream(true);
+            _engine!.muteLocalAudioStream(true);
             // 调用离开房间接口
             doPostLeave(sp.getString('roomID').toString());
-            _engine.disableAudio();
+            _engine!.disableAudio();
             _dispose();
           }
           // 退出app
@@ -793,8 +797,8 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           isShowHF
               ? HomeItems.itemAnimation(
                   path,
-                  slideAnimationController.controller,
-                  slideAnimationController.animation,
+                  slideAnimationController!.controller,
+                  slideAnimationController!.animation,
                   name,
                   listMP[0],
                   '厅外点击横幅',
@@ -1088,10 +1092,10 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           break;
         case MyHttpConfig.errorloginCode:
           //取消订阅所有远端用户的音频流。
-          _engine.muteAllRemoteAudioStreams(true);
+          _engine!.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
-          _engine.muteLocalAudioStream(true);
-          _engine.disableAudio();
+          _engine!.muteLocalAudioStream(true);
+          _engine!.disableAudio();
           _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
@@ -1130,10 +1134,10 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
               isFirstJoinRoom = false;
               isJoinRoom = false;
               //取消订阅所有远端用户的音频流。
-              _engine.muteAllRemoteAudioStreams(true);
+              _engine!.muteAllRemoteAudioStreams(true);
               // 取消发布本地音频流
-              _engine.muteLocalAudioStream(true);
-              _engine.disableAudio();
+              _engine!.muteLocalAudioStream(true);
+              _engine!.disableAudio();
               _dispose();
             });
           }
@@ -1148,10 +1152,10 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           break;
         case MyHttpConfig.errorloginCode:
           //取消订阅所有远端用户的音频流。
-          _engine.muteAllRemoteAudioStreams(true);
+          _engine!.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
-          _engine.muteLocalAudioStream(true);
-          _engine.disableAudio();
+          _engine!.muteLocalAudioStream(true);
+          _engine!.disableAudio();
           _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
@@ -1480,10 +1484,10 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         case MyHttpConfig.errorloginCode:
           eventBus.fire(RoomBack(title: '顶号', index: ''));
           // 取消发布本地音频流
-          _engine.muteLocalAudioStream(true);
+          _engine!.muteLocalAudioStream(true);
           // 调用离开房间接口
           doPostLeave(sp.getString('roomID').toString());
-          _engine.disableAudio();
+          _engine!.disableAudio();
           _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
