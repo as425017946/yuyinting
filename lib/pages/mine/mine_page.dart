@@ -1209,6 +1209,7 @@ class _MinePageState extends State<MinePage> {
             sp.setString('user_id', bean.data!.uid.toString());
             sp.setString('user_phone', bean.data!.phone!);
             sp.setInt("user_level", bean.data!.level as int);
+            sp.setInt("user_grLevel", bean.data!.grLevel as int);
             userNumber = bean.data!.number.toString();
             care = bean.data!.followNum.toString();
             beCare = bean.data!.isFollowNum.toString();
@@ -1227,6 +1228,10 @@ class _MinePageState extends State<MinePage> {
             // 等级变了
             if (bean.data!.level! >= 3) {
               eventBus.fire(SubmitButtonBack(title: '等级大于3级'));
+            }
+            // 等级变了
+            if (bean.data!.grLevel! >= 3) {
+              eventBus.fire(SubmitButtonBack(title: '财富等级大于3级'));
             }
             avatarFrameImg = bean.data!.avatarFrameImg!;
             avatarFrameGifImg = bean.data!.avatarFrameGifImg!;

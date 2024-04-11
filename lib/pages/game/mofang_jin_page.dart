@@ -291,12 +291,12 @@ class _MofangJinPageState extends State<MofangJinPage>
                             SizedBox(
                               height: ScreenUtil().setHeight(500),
                               width: ScreenUtil().setHeight(500),
-                              // child: const SVGASimpleImage(
-                              //     assetsName: 'assets/svga/gp/l_mf.svga'),
-                              child: WidgetUtils.showImages(
-                                  'assets/images/mofang_jin_showbg.png',
-                                  500.h,
-                                  500.h),
+                              child: const SVGASimpleImage(
+                                  assetsName: 'assets/svga/mofang_jin_show.svga'),
+                              // child: WidgetUtils.showImages(
+                              //     'assets/images/mofang_jin_showbg.png',
+                              //     500.h,
+                              //     500.h),
                             ),
                             Opacity(
                               opacity: 0.4,

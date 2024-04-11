@@ -38,6 +38,14 @@ class _StarPageState extends State<StarPage> {
           sp.getString('isFirstMessage').toString().isEmpty) {
         sp.setString('isFirstMessage', '1');
       }
+      if (sp.getInt('user_level').toString() == 'null' ||
+          sp.getInt('user_level').toString().isEmpty) {
+        sp.setInt('user_level', 0);
+      }
+      if (sp.getInt('user_grLevel').toString() == 'null' ||
+          sp.getInt('user_grLevel').toString().isEmpty) {
+        sp.setInt('user_grLevel', 0);
+      }
     });
     if (Platform.isAndroid) {
       setState(() {

@@ -38,6 +38,7 @@ import '../../utils/log_util.dart';
 import '../../utils/my_ping.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
+import '../gongping/ceshi.dart';
 import '../room/room_page.dart';
 import '../room/room_ts_mima_page.dart';
 
@@ -62,7 +63,7 @@ class _HomePageState extends State<HomePage>
   // 用户身份
   String identity = 'user';
   // 用户身份
-  int level = 0;
+  int level = 0, grLevel = 0;
 
   // 显示马里奥弹窗次数是否刷新
   int mla = 0;
@@ -76,6 +77,7 @@ class _HomePageState extends State<HomePage>
     setState(() {
       identity = sp.getString('user_identity').toString();
       level = sp.getInt('user_level') as int;
+      grLevel = sp.getInt('user_grLevel') as int;
       LogE('用户等级 == $level');
     });
 
@@ -113,6 +115,10 @@ class _HomePageState extends State<HomePage>
         setState(() {
           level = sp.getInt('user_level') as int;
         });
+      }else if(event.title == '财富等级大于3级'){
+        setState(() {
+          grLevel = sp.getInt('user_grLevel') as int;
+        });
       }
     });
 
@@ -139,6 +145,8 @@ class _HomePageState extends State<HomePage>
     // }else{
     //   MyToastUtils.showToastBottom('未获取到房间id ${sp.getString('daili_roomid').toString()}');
     // }
+    
+    // MyUtils.goTransparentPage(context, CeShiPage());
   }
 
   Future<void> quanxian() async {
@@ -1018,7 +1026,7 @@ class _HomePageState extends State<HomePage>
             _titleItem('收藏', 0, true),
             _titleItem('推荐', 1, true),
             _titleItem('派对', 2, true),
-            level >= 3 ? _titleItem('游戏', 3, true) : const Text(''),
+            (level >= 3 || grLevel >= 3) ? _titleItem('游戏', 3, true) : const Text(''),
             _titleItem('在线', 4, identity != 'user'),
           ],
         ),

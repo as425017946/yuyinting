@@ -47,6 +47,7 @@ class Data {
   int? newNoble;
   int? isDisturb;
   String? phone;
+  int? grLevel;
 
   Data(
       {this.nickname,
@@ -72,7 +73,8 @@ class Data {
         this.isPretty,
         this.newNoble,
         this.isDisturb,
-        this.phone});
+        this.phone,
+        this.grLevel});
 
   Data.fromJson(Map<String, dynamic> json) {
     nickname = json['nickname'];
@@ -99,6 +101,7 @@ class Data {
     newNoble = json['new_noble'];
     isDisturb = json['is_disturb'];
     phone = json['phone'];
+    grLevel = json['gr_level'];
   }
 
   Map<String, dynamic> toJson() {
@@ -127,6 +130,7 @@ class Data {
     data['new_noble'] = this.newNoble;
     data['is_disturb'] = this.isDisturb;
     data['phone'] = this.phone;
+    data['gr_level'] = this.grLevel;
     return data;
   }
 }

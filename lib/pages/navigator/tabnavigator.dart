@@ -450,6 +450,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
 
     listenJoinHF = eventBus.on<hfJoinBack>().listen((event) {
       if (event.title == '厅外点击横幅') {
+        LogE('厅外点击横幅== ${event.roomID}');
         // 如果房间id不是0（0是大厅），没有收起房间，直接进入房间
         if (event.roomID != '0' && isJoinRoom == false) {
           doPostBeforeJoin2(event.roomID);
@@ -1061,11 +1062,10 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
 
   /// 加入房间前
   Future<void> doPostBeforeJoin2(roomID) async {
+    LogE('厅外点击横幅==1 $roomID');
     //判断房间id是否为空的
-    if (sp.getString('roomID') == null ||
-        sp.getString('roomID').toString().isEmpty) {
-      return;
-    } else {
+    if (sp.getString('roomID') != null ||
+        sp.getString('roomID').toString().isNotEmpty) {
       // 不是空的，并且不是之前进入的房间
       if (sp.getString('roomID').toString() != roomID) {
         sp.setString('roomIDJoinOther', roomID);

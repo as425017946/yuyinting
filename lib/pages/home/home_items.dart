@@ -211,6 +211,8 @@ class HomeItems {
               ),
               GestureDetector(
                 onTap: (() {
+                  LogE('横幅点击 ${hf.roomId} === $roomID');
+                  LogE('横幅点击*** $titleType');
                   if(MyUtils.checkClick() && hf.roomId != roomID && hf.roomId != '0'){
                     eventBus.fire(hfJoinBack(roomID: hf.roomId!, title: titleType));
                   }

@@ -239,12 +239,14 @@ class UserInfo {
   String? nobleId;
   String? carDressGifImg;
   int? level;
-  UserInfo({this.role, this.nobleId, this.carDressGifImg, this.level});
+  int? grLevel;
+  UserInfo({this.role, this.nobleId, this.carDressGifImg, this.level, this.grLevel});
 
   UserInfo.fromJson(Map<String, dynamic> json) {
     role = json['role'];
     nobleId = json['noble_id'];
     level = json['level'];
+    grLevel = json['gr_level'];
     carDressGifImg = json['car_dress_gif_img'];
   }
 
@@ -253,6 +255,7 @@ class UserInfo {
     data['role'] = this.role;
     data['noble_id'] = this.nobleId;;
     data['level'] = this.level;
+    data['gr_level'] = this.grLevel;
     data['car_dress_gif_img'] = this.carDressGifImg;
     return data;
   }

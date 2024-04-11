@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
@@ -1408,7 +1409,9 @@ class RoomItems {
                 : Container(
               margin: EdgeInsets.only(bottom: 10.h),
               padding: EdgeInsets.only(
-                  top: 5.h, bottom: 15.h, left: 10.h, right: 10.h),
+                  top: 15.h, bottom: 15.h, left: 10.h, right: 10.h),
+              //没有下面的最小高度的话，当只有一行文字的时候.9图片无法显示
+              constraints: BoxConstraints(minHeight: 50.h, minWidth: 50.w),
               //边框设置
               decoration: BoxDecoration(
                 //背景

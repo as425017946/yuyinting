@@ -53,39 +53,39 @@ class _ShouChongPageState extends State<ShouChongPage> {
                                     'assets/images/shouchong_30.png',
                                     400 * 1.25.w,
                                     double.infinity),
+                                // Positioned(
+                                //     left: 135.w,
+                                //     top: 15 * 1.25.w,
+                                //     child: WidgetUtils.onlyText(
+                                //         '${listMoney[0]}元',
+                                //         StyleUtils.getCommonTextStyle(
+                                //             color: Colors.white,
+                                //             fontSize: 26.sp,
+                                //             fontWeight: FontWeight.w600))),
+                                // Positioned(
+                                //     left: 275.w,
+                                //     top: 15 * 1.25.w,
+                                //     child: WidgetUtils.onlyText(
+                                //         '${listMoney[1]}元',
+                                //         StyleUtils.getCommonTextStyle(
+                                //             color: MyColors.g9,
+                                //             fontSize: 26.sp))),
+                                // Positioned(
+                                //     left: 400.w,
+                                //     top: 15 * 1.25.w,
+                                //     child: WidgetUtils.onlyText(
+                                //         '${listMoney[2]}元',
+                                //         StyleUtils.getCommonTextStyle(
+                                //             color: MyColors.g9,
+                                //             fontSize: 26.sp))),
                                 Positioned(
-                                    left: 135.w,
-                                    top: 15 * 1.25.w,
+                                    left: 70.w,
+                                    top: 346 * 1.25.w,
                                     child: WidgetUtils.onlyText(
-                                        '${listMoney[0]}元',
-                                        StyleUtils.getCommonTextStyle(
-                                            color: Colors.white,
-                                            fontSize: 26.sp,
-                                            fontWeight: FontWeight.w600))),
-                                Positioned(
-                                    left: 275.w,
-                                    top: 15 * 1.25.w,
-                                    child: WidgetUtils.onlyText(
-                                        '${listMoney[1]}元',
-                                        StyleUtils.getCommonTextStyle(
-                                            color: MyColors.g9,
-                                            fontSize: 26.sp))),
-                                Positioned(
-                                    left: 400.w,
-                                    top: 15 * 1.25.w,
-                                    child: WidgetUtils.onlyText(
-                                        '${listMoney[2]}元',
-                                        StyleUtils.getCommonTextStyle(
-                                            color: MyColors.g9,
-                                            fontSize: 26.sp))),
-                                Positioned(
-                                    left: 80.w,
-                                    top: 345 * 1.25.w,
-                                    child: WidgetUtils.onlyText(
-                                        '赠送${listDou[0]}金豆，限定礼物x1',
+                                        '赠送${listDou[0]}金豆',
                                         StyleUtils.getCommonTextStyle(
                                           color: Colors.white,
-                                          fontSize: 26.sp,
+                                          fontSize: 22.sp,
                                         )))
                               ],
                             )
@@ -103,39 +103,39 @@ class _ShouChongPageState extends State<ShouChongPage> {
                                         'assets/images/shouchong_68.png',
                                         400 * 1.25.w,
                                         double.infinity),
+                                    // Positioned(
+                                    //     left: 135.w,
+                                    //     top: 15 * 1.25.w,
+                                    //     child: WidgetUtils.onlyText(
+                                    //         '${listMoney[0]}元',
+                                    //         StyleUtils.getCommonTextStyle(
+                                    //             color: MyColors.g9,
+                                    //             fontSize: 26.sp))),
+                                    // Positioned(
+                                    //     left: 275.w,
+                                    //     top: 15 * 1.25.w,
+                                    //     child: WidgetUtils.onlyText(
+                                    //         '${listMoney[1]}元',
+                                    //         StyleUtils.getCommonTextStyle(
+                                    //             color: Colors.white,
+                                    //             fontSize: 26.sp,
+                                    //             fontWeight: FontWeight.w600))),
+                                    // Positioned(
+                                    //     left: 400.w,
+                                    //     top: 15 * 1.25.w,
+                                    //     child: WidgetUtils.onlyText(
+                                    //         '${listMoney[2]}元',
+                                    //         StyleUtils.getCommonTextStyle(
+                                    //             color: MyColors.g9,
+                                    //             fontSize: 26.sp))),
                                     Positioned(
-                                        left: 135.w,
-                                        top: 15 * 1.25.w,
+                                        left: 70.w,
+                                        top: 346 * 1.25.w,
                                         child: WidgetUtils.onlyText(
-                                            '${listMoney[0]}元',
-                                            StyleUtils.getCommonTextStyle(
-                                                color: MyColors.g9,
-                                                fontSize: 26.sp))),
-                                    Positioned(
-                                        left: 275.w,
-                                        top: 15 * 1.25.w,
-                                        child: WidgetUtils.onlyText(
-                                            '${listMoney[1]}元',
-                                            StyleUtils.getCommonTextStyle(
-                                                color: Colors.white,
-                                                fontSize: 26.sp,
-                                                fontWeight: FontWeight.w600))),
-                                    Positioned(
-                                        left: 400.w,
-                                        top: 15 * 1.25.w,
-                                        child: WidgetUtils.onlyText(
-                                            '${listMoney[2]}元',
-                                            StyleUtils.getCommonTextStyle(
-                                                color: MyColors.g9,
-                                                fontSize: 26.sp))),
-                                    Positioned(
-                                        left: 80.w,
-                                        top: 345 * 1.25.w,
-                                        child: WidgetUtils.onlyText(
-                                            '赠送${listDou[1]}金豆，限定礼物x2',
+                                            '赠送${listDou[1]}金豆',
                                             StyleUtils.getCommonTextStyle(
                                               color: Colors.white,
-                                              fontSize: 26.sp,
+                                              fontSize: 22.sp,
                                             )))
                                   ],
                                 )
@@ -152,39 +152,39 @@ class _ShouChongPageState extends State<ShouChongPage> {
                                         'assets/images/shouchong_98.png',
                                         400 * 1.25.w,
                                         double.infinity),
+                                    // Positioned(
+                                    //     left: 135.w,
+                                    //     top: 15 * 1.25.w,
+                                    //     child: WidgetUtils.onlyText(
+                                    //         '${listMoney[0]}元',
+                                    //         StyleUtils.getCommonTextStyle(
+                                    //             color: MyColors.g9,
+                                    //             fontSize: 26.sp))),
+                                    // Positioned(
+                                    //     left: 275.w,
+                                    //     top: 15 * 1.25.w,
+                                    //     child: WidgetUtils.onlyText(
+                                    //         '${listMoney[1]}元',
+                                    //         StyleUtils.getCommonTextStyle(
+                                    //             color: MyColors.g9,
+                                    //             fontSize: 26.sp))),
+                                    // Positioned(
+                                    //     left: 400.w,
+                                    //     top: 15 * 1.25.w,
+                                    //     child: WidgetUtils.onlyText(
+                                    //         '${listMoney[2]}元',
+                                    //         StyleUtils.getCommonTextStyle(
+                                    //             color: Colors.white,
+                                    //             fontSize: 26.sp,
+                                    //             fontWeight: FontWeight.w600))),
                                     Positioned(
-                                        left: 135.w,
-                                        top: 15 * 1.25.w,
+                                        left: 70.w,
+                                        top: 346 * 1.25.w,
                                         child: WidgetUtils.onlyText(
-                                            '${listMoney[0]}元',
-                                            StyleUtils.getCommonTextStyle(
-                                                color: MyColors.g9,
-                                                fontSize: 26.sp))),
-                                    Positioned(
-                                        left: 275.w,
-                                        top: 15 * 1.25.w,
-                                        child: WidgetUtils.onlyText(
-                                            '${listMoney[1]}元',
-                                            StyleUtils.getCommonTextStyle(
-                                                color: MyColors.g9,
-                                                fontSize: 26.sp))),
-                                    Positioned(
-                                        left: 400.w,
-                                        top: 15 * 1.25.w,
-                                        child: WidgetUtils.onlyText(
-                                            '${listMoney[2]}元',
-                                            StyleUtils.getCommonTextStyle(
-                                                color: Colors.white,
-                                                fontSize: 26.sp,
-                                                fontWeight: FontWeight.w600))),
-                                    Positioned(
-                                        left: 80.w,
-                                        top: 345 * 1.25.w,
-                                        child: WidgetUtils.onlyText(
-                                            '赠送${listDou[2]}金豆，限定礼物x3',
+                                            '赠送${listDou[2]}金豆',
                                             StyleUtils.getCommonTextStyle(
                                               color: Colors.white,
-                                              fontSize: 26.sp,
+                                              fontSize: 22.sp,
                                             )))
                                   ],
                                 )

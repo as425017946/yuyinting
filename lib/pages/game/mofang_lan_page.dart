@@ -294,13 +294,13 @@ class _MofangLanPageState extends State<MofangLanPage>
                             SizedBox(
                               height: ScreenUtil().setHeight(500),
                               width: ScreenUtil().setHeight(500),
-                              // child: const SVGASimpleImage(
-                              //     assetsName:
-                              //         'assets/svga/mofang_lan_show.svga'),
-                              child: WidgetUtils.showImages(
-                                  'assets/images/mofang_lan_showbg.png',
-                                  500.h,
-                                  500.h),
+                              child: const SVGASimpleImage(
+                                  assetsName:
+                                      'assets/svga/mofang_lan_show.svga'),
+                              // child: WidgetUtils.showImages(
+                              //     'assets/images/mofang_lan_showbg.png',
+                              //     500.h,
+                              //     500.h),
                             ),
                             Opacity(
                               opacity: 0.4,
