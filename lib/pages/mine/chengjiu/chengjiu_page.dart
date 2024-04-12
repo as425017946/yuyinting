@@ -15,7 +15,7 @@ class _ChengJiuPageState extends State<ChengJiuPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    appBar = WidgetUtils.getAppBar('等级成就', true, context, false, 0);
+    appBar = WidgetUtils.getAppBar('魅力等级', true, context, false, 0);
   }
   @override
   Widget build(BuildContext context) {
@@ -26,11 +26,11 @@ class _ChengJiuPageState extends State<ChengJiuPage> {
         child: Column(
           children: const [
             Image(image: AssetImage('assets/images/cj/user_dj_1.jpg')),
-            Image(image: AssetImage('assets/images/cj/user_dj_2.jpg')),
-            Image(image: AssetImage('assets/images/cj/user_dj_3.jpg')),
-            Image(image: AssetImage('assets/images/cj/user_dj_4.jpg')),
-            Image(image: AssetImage('assets/images/cj/user_dj_5.jpg')),
-            Image(image: AssetImage('assets/images/cj/user_dj_6.jpg')),
+            // Image(image: AssetImage('assets/images/cj/user_dj_2.jpg')),
+            // Image(image: AssetImage('assets/images/cj/user_dj_3.jpg')),
+            // Image(image: AssetImage('assets/images/cj/user_dj_4.jpg')),
+            // Image(image: AssetImage('assets/images/cj/user_dj_5.jpg')),
+            // Image(image: AssetImage('assets/images/cj/user_dj_6.jpg')),
           ],
         ),
       ),

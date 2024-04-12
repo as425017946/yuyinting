@@ -1309,8 +1309,8 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       isDown = true;
     });
     Map<String, dynamic> params = <String, dynamic>{
-      'is_first': sp.getString('isFirstDown').toString() == 'null'
-          ? '1'
+      'resource_id': sp.getString('isFirstDown').toString() == 'null'
+          ? '0'
           : sp.getString('isFirstDown').toString(),
     };
     try {
@@ -1356,8 +1356,8 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       isDown = true;
     });
     Map<String, dynamic> params = <String, dynamic>{
-      'is_first': sp.getString('isFirstDownZB').toString() == 'null'
-          ? '1'
+      'resource_id': sp.getString('isFirstDownZB').toString() == 'null'
+          ? '0'
           : sp.getString('isFirstDownZB').toString(),
     };
     try {
@@ -1402,12 +1402,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         print('图片 $i 下载成功');
         if (i == bean.data!.imgList!.length - 1) {
           setState(() {
-            sp.setString(
-                'isFirstDown',
-                sp.getString('isFirstDown').toString() == 'null'
-                    ? '1'
-                    : (int.parse(sp.getString('isFirstDown').toString()) + 1)
-                        .toString());
+            sp.setString('isFirstDown', bean.data!.nextResourceId.toString());
           });
           print('下载完成修改值 ${sp.getString('isFirstDown').toString()}');
         }
@@ -1432,12 +1427,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         print('装扮图片 $i 下载成功');
         if (i == bean.data!.imgList!.length - 1) {
           setState(() {
-            sp.setString(
-                'isFirstDownZB',
-                sp.getString('isFirstDownZB').toString() == 'null'
-                    ? '1'
-                    : (int.parse(sp.getString('isFirstDownZB').toString()) + 1)
-                    .toString());
+            sp.setString('isFirstDownZB',bean.data!.nextResourceId.toString());
           });
           print('装扮下载完成修改值 ${sp.getString('isFirstDownZB').toString()}');
         }

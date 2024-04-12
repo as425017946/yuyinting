@@ -25,8 +25,9 @@ class svgaAllBean {
 class Data {
   List<ImgList>? imgList;
   int? total;
+  int? nextResourceId;
 
-  Data({this.imgList, this.total});
+  Data({this.imgList, this.total,this.nextResourceId});
 
   Data.fromJson(Map<String, dynamic> json) {
     if (json['img_list'] != null) {
@@ -36,6 +37,7 @@ class Data {
       });
     }
     total = json['total'];
+    nextResourceId = json['next_resource_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -44,6 +46,7 @@ class Data {
       data['img_list'] = this.imgList!.map((v) => v.toJson()).toList();
     }
     data['total'] = this.total;
+    data['next_resource_id'] = this.nextResourceId;
     return data;
   }
 }
