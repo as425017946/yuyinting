@@ -42,7 +42,7 @@ class _BigClientPageState extends State<BigClientPage> {
           shadowColor: Colors.transparent,
           elevation: 0,
           title: Text(
-            "大客户体系",
+            "财富等级",
             style: TextStyle(
                 color: const Color(0xFFF9E7C9),
                 fontSize: ScreenUtil().setSp(33)),
