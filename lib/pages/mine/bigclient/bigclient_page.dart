@@ -213,7 +213,7 @@ class _BigClientPageTop extends StatelessWidget {
               ),
               const SizedBox(height: 5),
               Text(
-                '荣耀值:$ryz',
+                '财富值:$ryz',
                 style: const TextStyle(
                   color: Color(0xFFF9E7C9),
                   fontSize: 19,
@@ -317,7 +317,7 @@ class _BigClientPageTop extends StatelessWidget {
                       color: Color(0xFFFFDD61),
                     ),
                   ),
-                  const TextSpan(text: ' 荣耀值'),
+                  const TextSpan(text: ' 财富值'),
                 ],
               ),
             ),
@@ -563,7 +563,7 @@ class _BigClientPageList0 extends StatelessWidget {
           width: 750,
           child: Column(
             children: [
-              _item("日薪水", c.dayBean, c.data.next_lv_value, c.onDay),
+              _item("日俸禄", c.dayBean, c.data.next_lv_value, c.onDay),
               // _item("周薪水", c.weekBean, c.weekExp),
               // _item("月薪水", c.weekBean, c.weekExp),
             ],
@@ -584,7 +584,7 @@ class _BigClientPageList0 extends StatelessWidget {
     if (exp.isEmpty || int.parse(exp) == 0) {
       expText = '已达成';
     } else {
-      expText = '还差 $exp 经验可领取下一等级$title';
+      expText = '还差 $exp 财富值可领取下一等级$title';
     }
     return SizedBox(
       width: 750,
@@ -693,7 +693,7 @@ class _BigClientPageList1 extends StatelessWidget {
         Text('财富等级是什么？', style: qStyle),
         SizedBox(height: 12),
         Text(
-          '财富等级是您在平台成长的体现，等级越高象征着您的身份越高，除了独特的财富等级标识外，更可领取每日金豆俸禄，等级越高，账号价值越高！',
+          '财富等级是您在平台成长的体现，等级越高象征着您的身份越高，除了独特的财富等级标识外，达到相应等级可在每日18点领取每日金豆俸禄，等级越高，账号价值越高！（注：未领取的日俸禄最多累积保留7日）',
           style: aStyle,
         ),
         SizedBox(height: 26),
