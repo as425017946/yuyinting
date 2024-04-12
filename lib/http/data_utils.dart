@@ -88,11 +88,14 @@ import '../bean/userMaiInfoBean.dart';
 import '../bean/userOnlineBean.dart';
 import '../bean/userStatusBean.dart';
 import '../bean/walletListBean.dart';
+import '../bean/wealth_info_bean.dart';
 import '../bean/whoLockMe.dart';
 import '../bean/winListBean.dart';
 import '../bean/xtListBean.dart';
 import '../bean/zhuboLiuShuiBean.dart';
 import '../bean/zonglanBean.dart';
+import '../main.dart';
+import '../utils/event_utils.dart';
 import 'my_http_config.dart';
 import 'my_http_request.dart';
 
@@ -1658,6 +1661,31 @@ class DataUtils {
     Map<String, dynamic>? respons =
     await MyHttpRequest.post(MyHttpConfig.playBlindBox, {}, params);
     print("盲盒礼物 $respons");
+    return CommonBean.fromJson(respons!);
+  }
+
+  /// 大客户详情
+  static Future<WealthInfoBean> postWealthInfo() async {
+    Map<String, dynamic>? respons =
+    await MyHttpRequest.post('${MyHttpConfig.baseURL}/mine/wealthInfo', {}, {});
+    print("大客户详情 /mine/wealthInfo $respons");
+    final bean = WealthInfoBean.fromJson(respons);
+    if (bean.code == MyHttpConfig.successCode && bean.data is WealthInfoBeanData) {
+      final data = bean.data!;
+      sp.setString("user_headimg", data.avatar);
+      sp.setString("nickname", data.nickname);
+      sp.setInt("user_grLevel", data.gr_level);
+      if (data.gr_level >= 3) {
+        eventBus.fire(SubmitButtonBack(title: '财富等级大于3级'));
+      }
+    }  
+    return bean;
+  }
+  /// 领取日返
+  static Future<CommonBean> postGetDayReturn() async {
+    Map<String, dynamic>? respons =
+    await MyHttpRequest.post('${MyHttpConfig.baseURL}/mine/getDayReturn', {}, {});
+    print("领取日返 /mine/getDayReturn $respons");
     return CommonBean.fromJson(respons!);
   }
 }

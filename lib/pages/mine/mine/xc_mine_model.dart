@@ -5,15 +5,17 @@ import 'package:yuyinting/utils/log_util.dart';
 
 import '../../../bean/Common_bean.dart';
 import '../../../bean/myInfoBean.dart';
+import '../../../bean/wealth_info_bean.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../main.dart';
 import '../../../utils/event_utils.dart';
+import '../../../utils/getx_tools.dart';
 import '../../../utils/loading.dart';
 import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
 
-class XCMineController extends GetxController {
+class XCMineController extends GetxController with GetAntiCombo {
   final controller = RefreshController(initialRefresh: false, initialRefreshStatus: RefreshStatus.idle);
   /// 头像
   final userHeadImg = sp.getString('user_headimg').toString().obs;
@@ -44,7 +46,8 @@ class XCMineController extends GetxController {
   /// 是否靓号
   final isPretty = false.obs;
   ///用户等级
-  final level = 0.obs;
+  final level = (sp.getInt("user_level") ?? 0).obs;
+  final grLevel = (sp.getInt("user_grLevel") ?? 0).obs;
   /// 是否有入住审核信息
   final isShenHe = false.obs;
   /// 勿扰模式
@@ -72,6 +75,8 @@ class XCMineController extends GetxController {
             sp.setString("nickname", data.nickname!);
             sp.setString('user_id', data.uid.toString());
             sp.setString('user_phone', data.phone!);
+            sp.setInt("user_level", bean.data!.level as int);
+            sp.setInt("user_grLevel", bean.data!.grLevel as int);
             care.value = data.followNum.toString();
             beCare.value = data.isFollowNum.toString();
             lookMe.value = data.lookNum.toString();
@@ -86,6 +91,14 @@ class XCMineController extends GetxController {
               eventBus.fire(SubmitButtonBack(title: '更换了身份'));
               sp.setString('user_identity', identity.value);
             }
+            // 等级变了
+            if (bean.data!.level! >= 3) {
+              eventBus.fire(SubmitButtonBack(title: '等级大于3级'));
+            }
+            // 等级变了
+            if (bean.data!.grLevel! >= 3) {
+              eventBus.fire(SubmitButtonBack(title: '财富等级大于3级'));
+            }
             if (data.avatarFrameGifImg == null || data.avatarFrameGifImg!.isEmpty) {
               avatarFrameGifImg.value = '';
               avatarFrameImg.value = data.avatarFrameImg ?? '';
@@ -94,6 +107,7 @@ class XCMineController extends GetxController {
               avatarFrameImg.value = '';
             }
             level.value = data.level as int;
+            grLevel.value = data.grLevel as int;
             if (identity.value == 'leader' && data.unauditNum != 0) {
               isShenHe.value = true;
             } else {
@@ -152,5 +166,35 @@ class XCMineController extends GetxController {
     } catch (e) {
       LogE(e.toString());
     }
+  }
+
+  void toBigclient() {
+    action(() async {
+      Loading.show();
+      try {
+        WealthInfoBean bean = await DataUtils.postWealthInfo();
+        switch (bean.code) {
+          case MyHttpConfig.successCode:
+            final data = bean.data;
+            if (data != null) {
+              Get.toNamed('BigClientPage', arguments: data);
+            }
+            break;
+          case MyHttpConfig.errorloginCode:
+            final context = Get.context;
+            if (context != null) {
+              // ignore: use_build_context_synchronously
+              MyUtils.jumpLogin(context);
+            }
+            break;
+          default:
+            MyToastUtils.showToastBottom(bean.msg);
+        }
+      } catch (e) {
+        LogE(e.toString());
+      } finally {
+        Loading.dismiss();
+      }
+    });
   }
 }

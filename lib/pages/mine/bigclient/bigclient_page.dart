@@ -60,7 +60,10 @@ class _BigClientPageState extends State<BigClientPage> {
               MyUtils.hideKeyboard(context);
             }),
           )),
-      body: const _BigClientPageBody(),
+      body: WillPopScope(
+        onWillPop: () async => !Loading.isShow,
+        child: const _BigClientPageBody(),
+      ),
     );
   }
 }
@@ -97,11 +100,7 @@ class _BigClientPageTop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var args = ModalRoute.of(context)!.settings.arguments as List<String>;
     BigClientController c = Get.find();
-    c.avatarFrameGifImg = args[0];
-    c.avatarFrameImg = args[1];
-    c.level = args[2];
     return FittedBox(
       alignment: Alignment.topCenter,
       fit: BoxFit.fitWidth,
@@ -122,7 +121,7 @@ class _BigClientPageTop extends StatelessWidget {
   }
 
   Widget _head(double size, String avatarFrameGifImg, String avatarFrameImg,
-      String level) {
+      String level, String ryz) {
     final boxSize = size * 14 / 9.0;
     return Positioned(
       left: 10,
@@ -148,8 +147,7 @@ class _BigClientPageTop extends StatelessWidget {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  WidgetUtils.CircleHeadImage(
-                      size, size, sp.getString('user_headimg').toString()),
+                  WidgetUtils.CircleHeadImage(size, size, sp.getString('user_headimg').toString()),
                   // 头像框静态图
                   (avatarFrameGifImg.isEmpty && avatarFrameImg.isNotEmpty)
                       ? WidgetUtils.CircleHeadImage(
@@ -170,41 +168,59 @@ class _BigClientPageTop extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 5),
-          Container(
-            constraints: const BoxConstraints(maxWidth: 240),
-            child: Text(
-              sp.getString('nickname').toString(),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: Color(0xFFF9E7C9),
-                fontSize: 25,
-                fontWeight: FontWeight.normal,
-              ),
-            ),
-          ),
-          const SizedBox(width: 10),
-          ShaderMask(
-            shaderCallback: (Rect bounds) {
-              return const LinearGradient(
-                colors: [
-                  Color(0xFFCFFBFB),
-                  Color(0xFFFFFBF5),
-                  Color(0xFFFFE18F),
-                  Color(0xFF97F1F5),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    constraints: const BoxConstraints(maxWidth: 240),
+                    child: Text(
+                      sp.getString('nickname').toString(),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: Color(0xFFF9E7C9),
+                        fontSize: 25,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  ShaderMask(
+                    shaderCallback: (Rect bounds) {
+                      return const LinearGradient(
+                        colors: [
+                          Color(0xFFCFFBFB),
+                          Color(0xFFFFFBF5),
+                          Color(0xFFFFE18F),
+                          Color(0xFF97F1F5),
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ).createShader(bounds);
+                    },
+                    child: Text(
+                      level,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 25,
+                        fontFamily: 'YouSheBiaoTiHei',
+                      ),
+                    ),
+                  ),
                 ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ).createShader(bounds);
-            },
-            child: Text(
-              level,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 25,
-                fontFamily: 'YouSheBiaoTiHei',
               ),
-            ),
+              const SizedBox(height: 5),
+              Text(
+                '荣耀值:$ryz',
+                style: const TextStyle(
+                  color: Color(0xFFF9E7C9),
+                  fontSize: 19,
+                  fontFamily: 'YouSheBiaoTiHei',
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -249,6 +265,7 @@ class _BigClientPageTop extends StatelessWidget {
         scale: 0.9,
         onIndexChanged: c.onIndexChanged,
         onTap: (index) {},
+        controller: c.swiperController,
       ),
     );
   }
@@ -265,8 +282,9 @@ class _BigClientPageTop extends StatelessWidget {
             image: AssetImage('assets/images/bigclient_board_${index + 1}.png'),
             fit: BoxFit.fitWidth,
           ),
-          _head(70, c.avatarFrameGifImg, c.avatarFrameImg, c.level),
+          _head(70, c.avatarFrameGifImg, c.avatarFrameImg, 'LV.${c.grLevel}', c.data.gr_value),
           _point(c.texts[index]),
+          if (index < c.data.title)
           Positioned(
             left: 39,
             bottom: 35,
@@ -278,9 +296,9 @@ class _BigClientPageTop extends StatelessWidget {
                   fontWeight: FontWeight.normal,
                 ),
                 children: [
-                  const TextSpan(text: '达成该等级还需要 '),
+                  const TextSpan(text: '达成下一等级还需要 '),
                   TextSpan(
-                    text: c.exps[index],
+                    text: c.data.next_title_value,
                     style: const TextStyle(
                       color: Color(0xFFFFDD61),
                     ),
@@ -289,7 +307,8 @@ class _BigClientPageTop extends StatelessWidget {
                 ],
               ),
             ),
-          ),
+          )
+          else
           const Positioned(
             left: 196,
             bottom: 94,
@@ -300,20 +319,22 @@ class _BigClientPageTop extends StatelessWidget {
               fit: BoxFit.contain,
             ),
           ),
-          Positioned(
-            left: 201,
-            bottom: 130,
-            child: Obx(
-              () => Text(
-                c.ryz.value,
-                style: const TextStyle(
-                  color: Color(0xFFF9E7C9),
-                  fontSize: 19,
-                  fontFamily: 'YouSheBiaoTiHei',
-                ),
-              ),
-            ),
-          ),
+          
+          
+          // Positioned(
+          //   left: 201,
+          //   bottom: 130,
+          //   child: Obx(
+          //     () => Text(
+          //       c.ryz.obs,
+          //       style: const TextStyle(
+          //         color: Color(0xFFF9E7C9),
+          //         fontSize: 19,
+          //         fontFamily: 'YouSheBiaoTiHei',
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );
@@ -528,9 +549,9 @@ class _BigClientPageList0 extends StatelessWidget {
           width: 750,
           child: Column(
             children: [
-              _item("日薪水", c.dayBean, c.dayExp),
-              _item("周薪水", c.weekBean, c.weekExp),
-              _item("月薪水", c.weekBean, c.weekExp),
+              _item("日薪水", c.dayBean, c.data.next_lv_value, c.onDay),
+              // _item("周薪水", c.weekBean, c.weekExp),
+              // _item("月薪水", c.weekBean, c.weekExp),
             ],
           ),
         ),
@@ -538,13 +559,19 @@ class _BigClientPageList0 extends StatelessWidget {
     );
   }
 
-  Widget _item(String title, dynamic bean, dynamic exp) {
+  Widget _item(String title, Rx<int> bean, String exp, void Function() action) {
     const textColor = Color(0xFFF9E7C9);
     const detailColor = Color(0xFF91856F);
     textStyle(FontWeight fw) =>
         TextStyle(color: textColor, fontSize: 33, fontWeight: fw);
     const detailStyle = TextStyle(
         color: detailColor, fontSize: 21, fontWeight: FontWeight.normal);
+    final String expText;
+    if (exp.isEmpty || int.parse(exp) == 0) {
+      expText = '已达成';
+    } else {
+      expText = '还差 $exp 经验可领取当前等级$title';
+    }
     return SizedBox(
       width: 750,
       height: 167,
@@ -578,9 +605,9 @@ class _BigClientPageList0 extends StatelessWidget {
                               alignment: Alignment.bottomRight,
                               constraints: const BoxConstraints(minWidth: 137),
                               child: Obx(() => Text(
-                                    bean.value,
-                                    style: textStyle(FontWeight.w900),
-                                  )),
+                                bean.value.toString(),
+                                style: textStyle(FontWeight.w900),
+                              )),
                             ),
                           ),
                         ),
@@ -593,8 +620,7 @@ class _BigClientPageList0 extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 17),
-                Obx(() =>
-                    Text('还差 ${exp.value} 经验可领取当前等级$title', style: detailStyle))
+                Text(expText, style: detailStyle),
               ],
             ),
           ),
@@ -604,7 +630,7 @@ class _BigClientPageList0 extends StatelessWidget {
             width: 164,
             height: 55,
             child: GestureDetector(
-              onTap: () {},
+              onTap: action,
               child: const Image(
                 image: AssetImage('assets/images/bigclient_btn.png'),
                 fit: BoxFit.fill,
@@ -631,7 +657,12 @@ class _BigClientPageList1 extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 64, vertical: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [_text(), _excel(), const SizedBox(height: 30)],
+              children: [
+                _text(),
+                // _excel(), 
+                Image.asset('assets/images/bigclient_excel.png', fit: BoxFit.fitWidth),
+                const SizedBox(height: 30),
+              ],
             ),
           ),
         ),
@@ -645,17 +676,17 @@ class _BigClientPageList1 extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: const [
-        Text('荣耀值是什么？', style: qStyle),
+        Text('财富等级是什么？', style: qStyle),
         SizedBox(height: 12),
         Text(
-          '荣耀值是您在平台成长的体现，等级越高象征着您的身份越高，除了独特的VIP标识外，满足领取要求还可定期领取日、周、月红利。等级越高，账号价值越高！',
+          '财富等级是您在平台成长的体现，等级越高象征着您的身份越高，除了独特的财富等级标识外，更可领取每日金豆俸禄，等级越高，账号价值越高！',
           style: aStyle,
         ),
         SizedBox(height: 26),
-        Text('如何增加荣耀值提升荣耀等级？', style: qStyle),
+        Text('如何提升等级？', style: qStyle),
         SizedBox(height: 12),
         Text(
-          '每参与游戏消耗1 金豆或赠送价值1 金豆的礼物，均可获得1荣耀值。',
+          '根据用户赠送价值1金豆的礼物（注：所有礼物类型均可），均可获得1财富值，达到对应财富总值将提升财富等级。',
           style: aStyle,
         ),
         SizedBox(height: 42),
