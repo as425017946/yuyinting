@@ -411,9 +411,10 @@ class _MinePageContent extends StatelessWidget {
                   Text(
                     title,
                     style: const TextStyle(
+                      fontFamily: 'LR',
                       color: Colors.black,
                       fontSize: 33,
-                      fontWeight: FontWeight.w600,
+                      // fontWeight: FontWeight.w600,
                     ),
                   ),
                   const SizedBox(height: 5),
