@@ -120,7 +120,6 @@ class _MofangLanPageState extends State<MofangLanPage>
       LogE('播放完成');
       // 动画播放到最后一帧时停止播放
       animationController?.stop();
-      // animationController?.removeListener(_animListener);
       if (mounted) {
         setState(() {
           isShow = false;
@@ -155,6 +154,7 @@ class _MofangLanPageState extends State<MofangLanPage>
 
   @override
   void dispose() {
+    animationController?.removeListener(_animListener);
     animationController?.dispose();
     animationController = null;
     listenXZ.cancel();
@@ -381,10 +381,41 @@ class _MofangLanPageState extends State<MofangLanPage>
                             eventBus.fire(MofangBack(info: 1));
                           }
                         }),
-                        child: WidgetUtils.showImages(
-                            'assets/images/mofang_lan.png',
-                            ScreenUtil().setHeight(75),
-                            ScreenUtil().setHeight(316)),
+                        child: SizedBox(
+                          height: 75.h,
+                          width: 316.h,
+                          child: Stack(
+                            children: [
+                              WidgetUtils.showImages(
+                                  'assets/images/mofang_lan.png',
+                                  ScreenUtil().setHeight(75),
+                                  ScreenUtil().setHeight(316)),
+                              Row(
+                                children: [
+                                  WidgetUtils.commonSizedBox(0, 15.w),
+                                  Expanded(
+                                      child: Container(
+                                          width: double.infinity,
+                                          color: Colors.transparent,
+                                          child: WidgetUtils.onlyTextCenter(
+                                              '黄金幻宝',
+                                              StyleUtils.getCommonTextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 24.sp,
+                                                  fontWeight:
+                                                      FontWeight.w600)))),
+                                  Expanded(
+                                      child: WidgetUtils.onlyTextCenter(
+                                          '钻石幻宝',
+                                          StyleUtils.getCommonTextStyle(
+                                              color: Colors.white54,
+                                              fontSize: 24.sp))),
+                                  WidgetUtils.commonSizedBox(0, 15.w),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
                       ),
                       const Spacer(),
                       // 花费多少金豆提示
@@ -851,7 +882,8 @@ class _MofangLanPageState extends State<MofangLanPage>
                   isShow == true
                       ? Container(
                           height: ScreenUtil().setHeight(580),
-                          width: double.infinity, //ScreenUtil().setHeight(580),
+                          width: double.infinity,
+                          //ScreenUtil().setHeight(580),
                           margin:
                               EdgeInsets.only(top: ScreenUtil().setHeight(140)),
                           alignment: Alignment.center,

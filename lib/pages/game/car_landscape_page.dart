@@ -9,7 +9,6 @@ import 'package:soundpool/soundpool.dart';
 import 'package:svgaplayer_flutter/parser.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 
-import '../../bean/Common_bean.dart';
 import '../../bean/balanceBean.dart';
 import '../../bean/carTimerBean.dart';
 import '../../bean/carYZBean.dart';
@@ -341,35 +340,35 @@ class _CarLandScapePageState extends State<CarLandScapePage> with TickerProvider
 
   List<String> imagesa = [
     "assets/images/car_h_bg_qidian.jpg",
-    "assets/images/car_h_bg.jpg",
-    "assets/images/car_h_bg.jpg",
-    "assets/images/car_h_bg.jpg",
-    "assets/images/car_h_bg.jpg",
-    "assets/images/car_h_bg.jpg",
-    "assets/images/car_h_bg.jpg",
-    "assets/images/car_h_bg.jpg",
-    "assets/images/car_h_bg.jpg",
-    "assets/images/car_h_bg.jpg",
-    "assets/images/car_h_bg.jpg",
-    "assets/images/car_h_bg.jpg",
+    "assets/images/car_h_bg.png",
+    "assets/images/car_h_bg.png",
+    "assets/images/car_h_bg.png",
+    "assets/images/car_h_bg.png",
+    "assets/images/car_h_bg.png",
+    "assets/images/car_h_bg.png",
+    "assets/images/car_h_bg.png",
+    "assets/images/car_h_bg.png",
+    "assets/images/car_h_bg.png",
+    "assets/images/car_h_bg.png",
+    "assets/images/car_h_bg.png",
     "assets/images/car_h_bg_qidian.jpg",
-    "assets/images/car_h_bg.jpg",
-    "assets/images/car_h_bg.jpg",
-    "assets/images/car_h_bg.jpg",
-    "assets/images/car_h_bg.jpg",
-    "assets/images/car_h_bg.jpg",
+    "assets/images/car_h_bg.png",
+    "assets/images/car_h_bg.png",
+    "assets/images/car_h_bg.png",
+    "assets/images/car_h_bg.png",
+    "assets/images/car_h_bg.png",
     "assets/images/car_h_bg_qidian.jpg",
-    "assets/images/car_h_bg.jpg",
-    "assets/images/car_h_bg.jpg",
-    "assets/images/car_h_bg.jpg",
-    "assets/images/car_h_bg.jpg",
-    "assets/images/car_h_bg.jpg",
-    "assets/images/car_h_bg.jpg",
-    "assets/images/car_h_bg.jpg",
-    "assets/images/car_h_bg.jpg",
-    "assets/images/car_h_bg.jpg",
-    "assets/images/car_h_bg.jpg",
-    "assets/images/car_h_bg.jpg",
+    "assets/images/car_h_bg.png",
+    "assets/images/car_h_bg.png",
+    "assets/images/car_h_bg.png",
+    "assets/images/car_h_bg.png",
+    "assets/images/car_h_bg.png",
+    "assets/images/car_h_bg.png",
+    "assets/images/car_h_bg.png",
+    "assets/images/car_h_bg.png",
+    "assets/images/car_h_bg.png",
+    "assets/images/car_h_bg.png",
+    "assets/images/car_h_bg.png",
   ];
 
   //赛车使用
