@@ -584,7 +584,7 @@ class _BigClientPageList0 extends StatelessWidget {
     if (exp.isEmpty || int.parse(exp) == 0) {
       expText = '已达成';
     } else {
-      expText = '还差 $exp 经验可领取当前等级$title';
+      expText = '还差 $exp 经验可领取下一等级$title';
     }
     return SizedBox(
       width: 750,
