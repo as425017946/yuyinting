@@ -385,6 +385,65 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                   ],
                                 )
                               : const Text(''),
+                          WidgetUtils.commonSizedBox(0, 10.w),
+                          // 财富等级
+                          grLevel != 0
+                              ? SizedBox(
+                            height: 40.h,
+                            width: 105.w,
+                            child: Stack(
+                              alignment: Alignment.centerLeft,
+                              children: [
+                                WidgetUtils.showImagesFill(
+                                  (grLevel >= 1 && grLevel <= 9)
+                                      ? 'assets/images/bigclient_icon_bg_1.png'
+                                      : (grLevel >= 10 && grLevel <= 15)
+                                      ? 'assets/images/bigclient_icon_bg_2.png'
+                                      : (grLevel >= 16 && grLevel <= 23)
+                                      ? 'assets/images/bigclient_icon_bg_3.png'
+                                      : (grLevel >= 24 && grLevel <= 31)
+                                      ? 'assets/images/bigclient_icon_bg_4.png'
+                                      : (grLevel >= 32 && grLevel <= 36)
+                                      ? 'assets/images/bigclient_icon_bg_5.png'
+                                      : (grLevel >= 37 && grLevel <= 40)
+                                      ? 'assets/images/bigclient_icon_bg_6.png'
+                                      : (grLevel >= 41 &&
+                                      grLevel <= 46)
+                                      ? 'assets/images/bigclient_icon_bg_7.png'
+                                      : 'assets/images/bigclient_icon_bg_8.png',
+                                  40.h,
+                                  105.w,
+                                ),
+                                Positioned(
+                                    bottom: (grLevel >= 1 && grLevel <= 9) == true ? 8.w : 12.w,
+                                    left: (grLevel >= 1 && grLevel <= 9) == true ? 70.w : 65.w,
+                                    child: Stack(
+                                      children: [
+                                        Text(
+                                          grLevel.toString(),
+                                          style: TextStyle(
+                                              fontSize: 26.sp,
+                                              fontWeight: FontWeight.w600,
+                                              fontFamily: 'LR',
+                                              foreground: Paint()
+                                                ..style = PaintingStyle.stroke
+                                                ..strokeWidth = 2
+                                                ..color = MyColors.djTwoM),
+                                        ),
+                                        Text(
+                                          grLevel.toString(),
+                                          style: TextStyle(
+                                              color: MyColors.djOne,
+                                              fontSize: 26.sp,
+                                              fontWeight: FontWeight.w600,
+                                              fontFamily: 'LR'),
+                                        ),
+                                      ],
+                                    ))
+                              ],
+                            ),
+                          )
+                              : const Text(''),
                         ],
                       ),
                       WidgetUtils.commonSizedBox(10, 0),
@@ -807,6 +866,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
   }
 
   int level = 0; //用户等级
+  int grLevel = 0;
   int isNew = 0; // 是否萌新
   int isPretty = 0; // 是否靓号
   int isNewNoble = 0; // 是否新贵
@@ -829,6 +889,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
             sex = bean.data!.gender as int;
             status = bean.data!.followStatus!;
             level = bean.data!.level as int;
+            grLevel = bean.data!.grLevel as int;
             isNew = bean.data!.isNew as int;
             isPretty = bean.data!.isPretty as int;
             isNewNoble = bean.data!.newNoble as int;

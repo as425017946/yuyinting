@@ -73,7 +73,7 @@ class _ShowLiWuPageState extends State<ShowLiWuPage> {
             child: Column(
               children: [
                 WidgetUtils.commonSizedBox(20.h, 20.w),
-                GestureDetector(
+                widget.imgSVGAUrl.isNotEmpty ? GestureDetector(
                   onTap: (() {
                     setState(() {
                       isShow = true;
@@ -87,7 +87,7 @@ class _ShowLiWuPageState extends State<ShowLiWuPage> {
                       WidgetUtils.commonSizedBox(0, 20.w),
                     ],
                   ),
-                ),
+                ) : const Text(''),
                 isShow == false
                     ? WidgetUtils.showImagesNet(
                         widget.imgUrl,

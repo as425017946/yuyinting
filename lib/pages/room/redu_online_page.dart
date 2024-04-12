@@ -96,7 +96,7 @@ class _ReDuOnLinePageState extends State<ReDuOnLinePage> {
                       MyUtils.goTransparentRFPage(
                           context,
                           PeopleInfoPage(
-                            otherId: list[i].uid.toString(),title: '其他',
+                            otherId: list[i].uid.toString(),title: '小主页',
                           ));
                     }
                   }),

@@ -96,7 +96,7 @@ class _ReDuCaiFuPageState extends State<ReDuCaiFuPage>
                     context,
                     PeopleInfoPage(
                       otherId: _list[i].uid.toString(),
-                      title: '其他',
+                      title: '小主页',
                     ));
               }
             }

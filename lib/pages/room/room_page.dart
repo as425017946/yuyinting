@@ -531,7 +531,7 @@ class _RoomPageState extends State<RoomPage>
   ];
   List<Map> imgList2 = [
     {"url": "assets/svga/gp/l_zp.svga"},
-    {"url": "assets/svga/gp/l_mf.svga"},
+    {"url": "assets/svga/mofang_jin_show.svga"},
   ];
 
   // list里面的type 0 代表系统公告 1 房间内的公告 2谁进入了房间 3厅内用户正常聊天
@@ -861,7 +861,6 @@ class _RoomPageState extends State<RoomPage>
     //2.页面初始化的时候，添加一个状态的监听者
     WidgetsBinding.instance?.addObserver(this);
     if (Platform.isAndroid) {
-      _init();
       setState(() {
         isDevices = 'android';
       });
@@ -1909,6 +1908,8 @@ class _RoomPageState extends State<RoomPage>
               map['identity'] = event.map!['identity'];
               // 等级
               map['lv'] = event.map!['send_level'];
+              // 财富等级
+              map['newLv'] = event.map!['gr_lv'];
               // 贵族
               map['noble_id'] = event.map!['noble_id'];
               // 萌新
@@ -1919,7 +1920,8 @@ class _RoomPageState extends State<RoomPage>
               map['new_noble'] = event.map!['new_noble'];
               // 是否点击了欢迎 0未欢迎 1已欢迎
               map['isWelcome'] = '0';
-
+              map['bubble_img'] = event.map!['bubble_img'];
+              LogE('欢迎某人== ${event.map!['bubble_img']}');
               setState(() {
                 saveChatInfo(event.map!, '3', event.map!['send_nickname'],
                     '${event.map!['nickname']},${event.map!['content']}');
@@ -1977,6 +1979,8 @@ class _RoomPageState extends State<RoomPage>
               map['identity'] = event.map!['identity'];
               // 等级
               map['lv'] = event.map!['lv'];
+              // 财富等级
+              map['newLv'] = event.map!['gr_lv'];
               // 贵族
               map['noble_id'] = event.map!['noble_id'];
               // 萌新
@@ -1989,6 +1993,7 @@ class _RoomPageState extends State<RoomPage>
               map['isWelcome'] = '0';
               // svga动画是否播放完成
               map['isOk'] = 'false';
+              map['bubble_img'] = event.map!['bubble_img'];
 
               setState(() {
                 saveChatInfo(event.map!, '4', event.map!['nickname'],
@@ -2427,6 +2432,8 @@ class _RoomPageState extends State<RoomPage>
               map['identity'] = event.map!['identity'];
               //等级
               map['lv'] = event.map!['lv'];
+              // 财富等级
+              map['newLv'] = event.map!['gr_lv'];
               // 贵族
               map['noble_id'] = event.map!['noble_id'];
               // 萌新
@@ -3720,6 +3727,7 @@ class _RoomPageState extends State<RoomPage>
           clientRoleType: ClientRoleType.clientRoleBroadcaster),
       uid: int.parse(sp.getString('user_id').toString()),
     );
+    _init();
   }
 
   ///更新9个麦序的开麦状态
@@ -4004,34 +4012,38 @@ class _RoomPageState extends State<RoomPage>
 
                           Expanded(
                             child: Transform.translate(
-                              offset: Offset(0, -180.h),
-                              child: Stack(
-                                children: [
-                                  RoomItems.lunbotu1(
-                                      context,
-                                      (sp.getInt('user_level')! >= 3 ||
-                                                  sp.getInt('user_grLevel')! >=
-                                                      3) &&
-                                              sp
-                                                      .getString('scIsOk')
-                                                      .toString() ==
-                                                  '0'
-                                          ? imgList
-                                          : (sp.getInt('user_level')! >= 3 ||
-                                                      sp.getInt(
-                                                              'user_grLevel')! >=
-                                                          3) &&
-                                                  sp
-                                                          .getString('scIsOk')
-                                                          .toString() ==
-                                                      '1'
-                                              ? imgListSC
-                                              : imgListCar),
-                                  (sp.getInt('user_level')! >= 3 ||
-                                      sp.getInt('user_grLevel')! >=
-                                          3) ? RoomItems.lunbotu2(
-                                      context, imgList2, widget.roomId) : const Text(''),
-                                ],
+                              offset: Offset(0,-180.h),
+                              child: Container(
+                                width: double.infinity,
+                                color: Colors.transparent,
+                                child: Stack(
+                                  children: [
+                                    RoomItems.lunbotu1(
+                                        context,
+                                        (sp.getInt('user_level')! >= 3 ||
+                                            sp.getInt('user_grLevel')! >=
+                                                3) &&
+                                            sp
+                                                .getString('scIsOk')
+                                                .toString() ==
+                                                '0'
+                                            ? imgList
+                                            : (sp.getInt('user_level')! >= 3 ||
+                                            sp.getInt(
+                                                'user_grLevel')! >=
+                                                3) &&
+                                            sp
+                                                .getString('scIsOk')
+                                                .toString() ==
+                                                '1'
+                                            ? imgListCar
+                                            : imgListSC),
+                                    (sp.getInt('user_level')! >= 3 ||
+                                        sp.getInt('user_grLevel')! >=
+                                            3) ? RoomItems.lunbotu2(
+                                        context, imgList2, widget.roomId) : const Text(''),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -5673,8 +5685,8 @@ class _RoomPageState extends State<RoomPage>
       'new_noble': map!['new_noble'],
       'isWelcome': '1',
       'isOk': 'true',
-      'newLv': '',
-      'by1': '',
+      'newLv': map!['gr_lv'].toString(),
+      'by1': map!['bubble_img'].toString(),
       'by2': '',
       'by3': '',
     };

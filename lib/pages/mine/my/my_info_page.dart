@@ -148,7 +148,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
                               Colors.white
                             ]),
                       ),
-                      height: Get.height - Get.statusBarHeight - 30 + 280.w,//1415.h,
+                      height: Get.height - Get.statusBarHeight - 30 + 380.w,//1415.h,
                       child: Stack(
                         children: [
                           Stack(
@@ -237,7 +237,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
     final top = Get.width * 0.7;
     return Container(
       margin: EdgeInsets.only(left: 20.w, right: 20.w, top: 0),
-      height: 280.w,
+      height: 290.w,
       alignment: Alignment.topLeft,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -374,9 +374,8 @@ class _MyInfoPageState extends State<MyInfoPage> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: 10.w),
+            height: 60.h,
             padding: EdgeInsets.only(left: 20.w,),
-            color: Colors.transparent,
             child: Row(
               children: [
                 gender != 0
@@ -421,7 +420,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
                     : const Text(''),
                 isPretty == 1
                     ? WidgetUtils.showImages(
-                    'assets/images/dj/lianghao.png', 30.w, 30.w)
+                    'assets/images/dj/lianghao.png', 40.w, 40.w)
                     : const Text(''),
                 // 用户等级
                 level != 0
@@ -452,7 +451,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
                       100.w,
                     ),
                     Positioned(
-                        left: 55.w,
+                        left: (level >= 1 && level <= 10) == true ? 63.w : 55.w,
                         child: Stack(
                           children: [
                             Text(
@@ -478,6 +477,65 @@ class _MyInfoPageState extends State<MyInfoPage> {
                         ))
                   ],
                 )
+                    : const Text(''),
+                WidgetUtils.commonSizedBox(0, 10.w),
+                // 财富等级
+                grLevel != 0
+                    ? SizedBox(
+                  height: 40.h,
+                      width: 105.w,
+                      child: Stack(
+                  alignment: Alignment.centerLeft,
+                  children: [
+                      WidgetUtils.showImagesFill(
+                        (grLevel >= 1 && grLevel <= 9)
+                            ? 'assets/images/bigclient_icon_bg_1.png'
+                            : (grLevel >= 10 && grLevel <= 15)
+                            ? 'assets/images/bigclient_icon_bg_2.png'
+                            : (grLevel >= 16 && grLevel <= 23)
+                            ? 'assets/images/bigclient_icon_bg_3.png'
+                            : (grLevel >= 24 && grLevel <= 31)
+                            ? 'assets/images/bigclient_icon_bg_4.png'
+                            : (grLevel >= 32 && grLevel <= 36)
+                            ? 'assets/images/bigclient_icon_bg_5.png'
+                            : (grLevel >= 37 && grLevel <= 40)
+                            ? 'assets/images/bigclient_icon_bg_6.png'
+                            : (grLevel >= 41 &&
+                            grLevel <= 46)
+                            ? 'assets/images/bigclient_icon_bg_7.png'
+                            : 'assets/images/bigclient_icon_bg_8.png',
+                        40.h,
+                        105.w,
+                      ),
+                      Positioned(
+                          bottom: (grLevel >= 1 && grLevel <= 9) == true ? 8.w : 12.w,
+                          left: (grLevel >= 1 && grLevel <= 9) == true ? 70.w : 65.w,
+                          child: Stack(
+                            children: [
+                              Text(
+                                grLevel.toString(),
+                                style: TextStyle(
+                                    fontSize: 26.sp,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: 'LR',
+                                    foreground: Paint()
+                                      ..style = PaintingStyle.stroke
+                                      ..strokeWidth = 2
+                                      ..color = MyColors.djTwoM),
+                              ),
+                              Text(
+                                grLevel.toString(),
+                                style: TextStyle(
+                                    color: MyColors.djOne,
+                                    fontSize: 26.sp,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: 'LR'),
+                              ),
+                            ],
+                          ))
+                  ],
+                ),
+                    )
                     : const Text(''),
               ],
             ),
@@ -657,6 +715,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
 
   /// 个人主页
   int level = 0;
+  int grLevel = 0;
   late MyUserInfo userInfo;
   late GiftList giftList;
   bool isOK = false;
@@ -685,6 +744,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
             voice_card = bean.data!.userInfo!.voiceCardUrl!;
             is_pretty = bean.data!.userInfo!.isPretty as int;
             level = bean.data!.userInfo!.level as int;
+            grLevel = bean.data!.userInfo!.grLevel as int;
             userInfo = bean.data!.userInfo!;
             giftList = bean.data!.giftList!;
             isNew = bean.data!.userInfo!.isNew as int;

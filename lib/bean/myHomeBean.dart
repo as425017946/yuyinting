@@ -76,6 +76,7 @@ class MyUserInfo {
   String? avatarFrameGifImg;
   int? isNew;
   int? newNoble;
+  int? grLevel;
 
   MyUserInfo(
       {this.number,
@@ -103,7 +104,8 @@ class MyUserInfo {
         this.avatarFrameImg,
         this.avatarFrameGifImg,
         this.isNew,
-        this.newNoble});
+        this.newNoble,
+        this.grLevel});
 
   MyUserInfo.fromJson(Map<String, dynamic> json) {
     number = json['number'];
@@ -132,6 +134,7 @@ class MyUserInfo {
     avatarFrameGifImg = json['avatar_frame_gif_img'];
     isNew = json['is_new'];
     newNoble = json['new_noble'];
+    grLevel = json['gr_level'];
   }
 
   Map<String, dynamic> toJson() {
@@ -162,6 +165,7 @@ class MyUserInfo {
     data['avatar_frame_gif_img'] = this.avatarFrameGifImg;
     data['is_new'] = this.isNew;
     data['new_noble'] = this.newNoble;
+    data['gr_level'] = this.grLevel;
     return data;
   }
 }

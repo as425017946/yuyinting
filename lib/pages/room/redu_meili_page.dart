@@ -92,7 +92,7 @@ class _ReDuMeiLiPageState extends State<ReDuMeiLiPage>  with AutomaticKeepAliveC
                 MyUtils.goTransparentRFPage(
                     context,
                     PeopleInfoPage(
-                      otherId: _list[i].uid.toString(),title: '其他',
+                      otherId: _list[i].uid.toString(),title: '小主页',
                     ));
               }
             }

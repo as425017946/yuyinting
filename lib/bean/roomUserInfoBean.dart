@@ -40,6 +40,7 @@ class Data {
   int? isNew;
   int? isPretty;
   int? newNoble;
+  int? grLevel;
 
   Data(
       {this.uid,
@@ -58,7 +59,8 @@ class Data {
         this.avatarFrameImg,
         this.isNew,
         this.isPretty,
-        this.newNoble});
+        this.newNoble,
+        this.grLevel});
 
   Data.fromJson(Map<String, dynamic> json) {
     uid = json['uid'];
@@ -78,6 +80,7 @@ class Data {
     isNew = json['is_new'];
     isPretty = json['is_pretty'];
     newNoble = json['new_noble'];
+    grLevel = json['gr_level'];
   }
 
   Map<String, dynamic> toJson() {
@@ -99,6 +102,7 @@ class Data {
     data['is_new'] = this.isNew;
     data['is_pretty'] = this.isPretty;
     data['new_noble'] = this.newNoble;
+    data['gr_level'] = this.grLevel;
     return data;
   }
 }

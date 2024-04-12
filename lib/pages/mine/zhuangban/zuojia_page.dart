@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
-import 'package:yuyinting/main.dart';
 import 'package:yuyinting/pages/mine/zhuangban/show_liwu_page.dart';
 
 import '../../../bean/Common_bean.dart';

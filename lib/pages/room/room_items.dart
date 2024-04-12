@@ -319,6 +319,119 @@ class RoomItems {
                     ),
                   ),
                   WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
+                  //财富等级
+                  WidgetSpan(
+                    child: SizedBox(
+                      height: 38.h,
+                      width: 38.h,
+                      child: Stack(
+                        alignment: Alignment.bottomCenter,
+                        children: [
+                          int.parse(list[i]['newLv'].toString()) >= 1 &&
+                              int.parse(list[i]['newLv'].toString()) <= 9
+                              ? WidgetUtils.showImages(
+                              'assets/images/room_icon_1.png', 28.h, 28.h)
+                              : int.parse(list[i]['newLv'].toString()) >= 10 &&
+                              int.parse(list[i]['newLv'].toString()) <= 15
+                              ? Transform.translate(
+                            offset: Offset(0, 5.h),
+                            child: WidgetUtils.showImages(
+                                'assets/images/room_icon_2.png',
+                                28.h,
+                                28.h),
+                          )
+                              : int.parse(list[i]['newLv'].toString()) >= 16 &&
+                              int.parse(list[i]['newLv'].toString()) <=
+                                  23
+                              ? Transform.translate(
+                            offset: Offset(0, 5.h),
+                            child: WidgetUtils.showImagesFill(
+                                'assets/images/room_icon_3.png',
+                                38.h,
+                                38.h),
+                          )
+                              : int.parse(list[i]['newLv'].toString()) >= 24 &&
+                              int.parse(list[i]['newLv'].toString()) <=
+                                  31
+                              ? Transform.translate(
+                            offset: Offset(0, 5.h),
+                            child: WidgetUtils.showImagesFill(
+                                'assets/images/room_icon_4.png',
+                                38.h,
+                                38.h),
+                          )
+                              : int.parse(list[i]['newLv'].toString()) >= 32 &&
+                              int.parse(list[i]['newLv'].toString()) <=
+                                  36
+                              ? Transform.translate(
+                            offset: Offset(0, 5.h),
+                            child: WidgetUtils.showImagesFill(
+                                'assets/images/room_icon_5.png',
+                                38.h,
+                                38.h),
+                          )
+                              : int.parse(list[i]['newLv'].toString()) == 37 &&
+                              int.parse(list[i]['newLv'].toString()) <= 40
+                              ? Transform.translate(
+                            offset: Offset(0, 5.h),
+                            child: WidgetUtils.showImagesFill(
+                                'assets/images/room_icon_6.png',
+                                38.h,
+                                38.h),
+                          )
+                              : int.parse(list[i]['newLv'].toString()) >= 41 &&
+                              int.parse(list[i]['newLv'].toString()) <= 46
+                              ? Transform.translate(
+                            offset: Offset(0, 5.h),
+                            child: WidgetUtils.showImagesFill(
+                                'assets/images/room_icon_7.png',
+                                38.h,
+                                38.h),
+                          )
+                              : Transform.translate(
+                            offset: Offset(0, 5.h),
+                            child: WidgetUtils.showImagesFill(
+                                'assets/images/room_icon_8.png',
+                                35.h,
+                                35.h),
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: (int.parse(list[i]['newLv'].toString()) >=
+                                1 &&
+                                int.parse(list[i]['newLv'].toString()) < 10) ? 5
+                                .w : 0,
+                            child: Stack(
+                              children: [
+                                Text(
+                                  int.parse(list[i]['newLv'].toString())
+                                      .toString(),
+                                  style: TextStyle(
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: 'LR',
+                                      foreground: Paint()
+                                        ..style = PaintingStyle.stroke
+                                        ..strokeWidth = 2
+                                        ..color = MyColors.djTwoM),
+                                ),
+                                Text(
+                                  int.parse(list[i]['newLv'].toString())
+                                      .toString(),
+                                  style: TextStyle(
+                                      color: MyColors.djOne,
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: 'LR'),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
                   //贵族
                   WidgetSpan(
                       child: Transform.translate(
@@ -583,6 +696,119 @@ class RoomItems {
                 ),
               ),
               WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
+              //财富等级
+              WidgetSpan(
+                child: SizedBox(
+                  height: 38.h,
+                  width: 38.h,
+                  child: Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      int.parse(list[i]['newLv'].toString()) >= 1 &&
+                          int.parse(list[i]['newLv'].toString()) <= 9
+                          ? WidgetUtils.showImages(
+                          'assets/images/room_icon_1.png', 28.h, 28.h)
+                          : int.parse(list[i]['newLv'].toString()) >= 10 &&
+                          int.parse(list[i]['newLv'].toString()) <= 15
+                          ? Transform.translate(
+                        offset: Offset(0, 5.h),
+                        child: WidgetUtils.showImages(
+                            'assets/images/room_icon_2.png',
+                            28.h,
+                            28.h),
+                      )
+                          : int.parse(list[i]['newLv'].toString()) >= 16 &&
+                          int.parse(list[i]['newLv'].toString()) <=
+                              23
+                          ? Transform.translate(
+                        offset: Offset(0, 5.h),
+                        child: WidgetUtils.showImagesFill(
+                            'assets/images/room_icon_3.png',
+                            38.h,
+                            38.h),
+                      )
+                          : int.parse(list[i]['newLv'].toString()) >= 24 &&
+                          int.parse(list[i]['newLv'].toString()) <=
+                              31
+                          ? Transform.translate(
+                        offset: Offset(0, 5.h),
+                        child: WidgetUtils.showImagesFill(
+                            'assets/images/room_icon_4.png',
+                            38.h,
+                            38.h),
+                      )
+                          : int.parse(list[i]['newLv'].toString()) >= 32 &&
+                          int.parse(list[i]['newLv'].toString()) <=
+                              36
+                          ? Transform.translate(
+                        offset: Offset(0, 5.h),
+                        child: WidgetUtils.showImagesFill(
+                            'assets/images/room_icon_5.png',
+                            38.h,
+                            38.h),
+                      )
+                          : int.parse(list[i]['newLv'].toString()) == 37 &&
+                          int.parse(list[i]['newLv'].toString()) <= 40
+                          ? Transform.translate(
+                        offset: Offset(0, 5.h),
+                        child: WidgetUtils.showImagesFill(
+                            'assets/images/room_icon_6.png',
+                            38.h,
+                            38.h),
+                      )
+                          : int.parse(list[i]['newLv'].toString()) >= 41 &&
+                          int.parse(list[i]['newLv'].toString()) <= 46
+                          ? Transform.translate(
+                        offset: Offset(0, 5.h),
+                        child: WidgetUtils.showImagesFill(
+                            'assets/images/room_icon_7.png',
+                            38.h,
+                            38.h),
+                      )
+                          : Transform.translate(
+                        offset: Offset(0, 5.h),
+                        child: WidgetUtils.showImagesFill(
+                            'assets/images/room_icon_8.png',
+                            35.h,
+                            35.h),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: (int.parse(list[i]['newLv'].toString()) >= 1 &&
+                            int.parse(list[i]['newLv'].toString()) < 10)
+                            ? 5.w
+                            : 0,
+                        child: Stack(
+                          children: [
+                            Text(
+                              int.parse(list[i]['newLv'].toString())
+                                  .toString(),
+                              style: TextStyle(
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'LR',
+                                  foreground: Paint()
+                                    ..style = PaintingStyle.stroke
+                                    ..strokeWidth = 2
+                                    ..color = MyColors.djTwoM),
+                            ),
+                            Text(
+                              int.parse(list[i]['newLv'].toString())
+                                  .toString(),
+                              style: TextStyle(
+                                  color: MyColors.djOne,
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'LR'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
               //贵族
               WidgetSpan(
                   child: Transform.translate(
@@ -661,7 +887,42 @@ class RoomItems {
                     ));
               }
             }),
-            child: Container(
+            child: list[i]['bubble_img']
+                .toString()
+                .isNotEmpty ?
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 13),
+              // constraints: BoxConstraints(maxWidth: double.infinity - 130.w),
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                    centerSlice: const Rect.fromLTWH(13, 20, 1, 1),
+                    // image: AssetImage('assets/images/cj/chat_text.png'),
+                    image: CachedNetworkImageProvider(
+                        list[i]['bubble_img']),
+                    scale: 2,
+                  )
+              ),
+              child: RichText(
+                text: TextSpan(
+                    text: '@',
+                    style: StyleUtils.getCommonTextStyle(
+                        color: Colors.white, fontSize: 24.sp),
+                    children: [
+                      TextSpan(
+                          text: list[i]['content'].toString().split(',')[0],
+                          style: StyleUtils.getCommonTextStyle(
+                            color: MyColors.roomMessageYellow2,
+                            fontSize: 24.sp,
+                          )),
+                      TextSpan(
+                          text: list[i]['content'].toString().split(',')[1],
+                          style: StyleUtils.getCommonTextStyle(
+                            color: Colors.white,
+                            fontSize: 24.sp,
+                          )),
+                    ]),
+              ),
+            ) : Container(
               margin: EdgeInsets.only(bottom: 10.h),
               padding: EdgeInsets.only(
                   top: 10.h, bottom: 10.h, left: 10.h, right: 10.h),
@@ -1257,6 +1518,126 @@ class RoomItems {
                       ),
                     ),
                     WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
+                    //财富等级
+                    WidgetSpan(
+                      child: SizedBox(
+                        height: 38.h,
+                        width: 38.h,
+                        child: Stack(
+                          alignment: Alignment.bottomCenter,
+                          children: [
+                            int.parse(list[i]['newLv'].toString()) >= 1 &&
+                                int.parse(list[i]['newLv'].toString()) <= 9
+                                ? WidgetUtils.showImages(
+                                'assets/images/room_icon_1.png', 28.h, 28.h)
+                                : int.parse(list[i]['newLv'].toString()) >=
+                                10 &&
+                                int.parse(list[i]['newLv'].toString()) <= 15
+                                ? Transform.translate(
+                              offset: Offset(0, 5.h),
+                              child: WidgetUtils.showImages(
+                                  'assets/images/room_icon_2.png',
+                                  28.h,
+                                  28.h),
+                            )
+                                : int.parse(list[i]['newLv'].toString()) >=
+                                16 &&
+                                int.parse(list[i]['newLv'].toString()) <=
+                                    23
+                                ? Transform.translate(
+                              offset: Offset(0, 5.h),
+                              child: WidgetUtils.showImagesFill(
+                                  'assets/images/room_icon_3.png',
+                                  38.h,
+                                  38.h),
+                            )
+                                : int.parse(list[i]['newLv'].toString()) >=
+                                24 &&
+                                int.parse(list[i]['newLv'].toString()) <=
+                                    31
+                                ? Transform.translate(
+                              offset: Offset(0, 5.h),
+                              child: WidgetUtils.showImagesFill(
+                                  'assets/images/room_icon_4.png',
+                                  38.h,
+                                  38.h),
+                            )
+                                : int.parse(list[i]['newLv'].toString()) >=
+                                32 &&
+                                int.parse(list[i]['newLv'].toString()) <=
+                                    36
+                                ? Transform.translate(
+                              offset: Offset(0, 5.h),
+                              child: WidgetUtils.showImagesFill(
+                                  'assets/images/room_icon_5.png',
+                                  38.h,
+                                  38.h),
+                            )
+                                : int.parse(list[i]['newLv'].toString()) ==
+                                37 &&
+                                int.parse(list[i]['newLv'].toString()) <= 40
+                                ? Transform.translate(
+                              offset: Offset(0, 5.h),
+                              child: WidgetUtils.showImagesFill(
+                                  'assets/images/room_icon_6.png',
+                                  38.h,
+                                  38.h),
+                            )
+                                : int.parse(list[i]['newLv'].toString()) >=
+                                41 &&
+                                int.parse(list[i]['newLv'].toString()) <= 46
+                                ? Transform.translate(
+                              offset: Offset(0, 5.h),
+                              child: WidgetUtils.showImagesFill(
+                                  'assets/images/room_icon_7.png',
+                                  38.h,
+                                  38.h),
+                            )
+                                : Transform.translate(
+                              offset: Offset(0, 5.h),
+                              child: WidgetUtils.showImagesFill(
+                                  'assets/images/room_icon_8.png',
+                                  35.h,
+                                  35.h),
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              right: (int.parse(list[i]['newLv'].toString()) >=
+                                  1 &&
+                                  int.parse(list[i]['newLv'].toString()) < 10)
+                                  ? 5.w
+                                  : 0,
+                              child: Stack(
+                                children: [
+                                  Text(
+                                    int.parse(list[i]['newLv'].toString())
+                                        .toString(),
+                                    style: TextStyle(
+                                        fontSize: 18.sp,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'LR',
+                                        foreground: Paint()
+                                          ..style = PaintingStyle.stroke
+                                          ..strokeWidth = 2
+                                          ..color = MyColors.djTwoM),
+                                  ),
+                                  Text(
+                                    int.parse(list[i]['newLv'].toString())
+                                        .toString(),
+                                    style: TextStyle(
+                                        color: MyColors.djOne,
+                                        fontSize: 18.sp,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: 'LR'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
                     //贵族
                     WidgetSpan(
                         child: Transform.translate(
@@ -1406,36 +1787,58 @@ class RoomItems {
                 ),
               ],
             )
-                : Container(
+                : (list[i]['content']
+                .toString()
+                .isNotEmpty && list[i]['bubble_img']
+                .toString()
+                .isNotEmpty) ?
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 13),
+              // constraints: BoxConstraints(maxWidth: double.infinity - 130.w),
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                    centerSlice: const Rect.fromLTWH(13, 20, 1, 1),
+                    // image: AssetImage('assets/images/cj/chat_text.png'),
+                    image: CachedNetworkImageProvider(
+                        list[i]['bubble_img'] ?? list[i]['by1']),
+                    scale: 2,
+                  )
+              ),
+              child: Text(
+                list[i]['content'], maxLines: 2, style: TextStyle(
+                color: Colors.white, fontSize: 24.sp,
+              ),),
+            ) : (list[i]['content']
+                .toString()
+                .isNotEmpty && list[i]['bubble_img']
+                .toString()
+                .isEmpty) ? Container(
               margin: EdgeInsets.only(bottom: 10.h),
               padding: EdgeInsets.only(
                   top: 15.h, bottom: 15.h, left: 10.h, right: 10.h),
-              //没有下面的最小高度的话，当只有一行文字的时候.9图片无法显示
-              constraints: BoxConstraints(minHeight: 50.h, minWidth: 50.w),
               //边框设置
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 //背景
-                color: list[i]['content']
-                    .toString()
-                    .isNotEmpty
-                    ? Colors.white10
-                    : Colors.transparent,
+                color: Colors.white10,
                 //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                borderRadius: const BorderRadius.only(
+                borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(7),
                     topRight: Radius.circular(15),
                     bottomLeft: Radius.circular(15),
                     bottomRight: Radius.circular(15)),
               ),
-              child: list[i]['content']
-                  .toString()
-                  .isNotEmpty
-                  ? RichText(
-                  text: TextSpan(
-                      text: list[i]['content'],
-                      style: StyleUtils.getCommonTextStyle(
-                          color: Colors.white, fontSize: 24.sp)))
-                  : list[i]['image'].toString().contains('svga')
+              child: Text(
+                list[i]['content'], maxLines: 2, style: TextStyle(
+                color: Colors.white, fontSize: 24.sp,
+              ),),
+            ) : Container(
+              margin: EdgeInsets.only(bottom: 10.h),
+              //边框设置
+              decoration: const BoxDecoration(
+                //背景
+                color: Colors.transparent,
+              ),
+              child: list[i]['image'].toString().contains('svga')
                   ? SizedBox(
                 height:
                 !list[i]['image'].toString().contains('vc')
@@ -4007,9 +4410,9 @@ class RoomItems {
           },
           onTap: (index) {
             // LogE('用户点击引起下标改变调用');
-            if (index == 0) {
+            if (imgList[index].toString().contains('l_maliao')) {
               MyUtils.goTransparentPage(context, const Carpage());
-            } else if (index == 1) {
+            } else if (imgList[index].toString().contains('l_sc')) {
               MyUtils.goTransparentPage(context, const ShouChongPage());
             }
           },
