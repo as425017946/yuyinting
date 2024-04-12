@@ -1,19 +1,42 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_swiper/flutter_swiper.dart';
 
-class BigClientController extends GetxController {
-  var dayBean = '96006'.obs;
-  var dayExp = '996'.obs;
-  var weekBean = '96006'.obs;
-  var weekExp = '996'.obs;
-  var monthBean = '96006'.obs;
-  var monthExp = '996'.obs;
-  var ryz = '荣耀值:0'.obs;
+import '../../../bean/Common_bean.dart';
+import '../../../bean/wealth_info_bean.dart';
+import '../../../http/data_utils.dart';
+import '../../../http/my_http_config.dart';
+import '../../../utils/getx_tools.dart';
+import '../../../utils/loading.dart';
+import '../../../utils/my_toast_utils.dart';
+import '../../../utils/my_utils.dart';
+import '../mine/xc_mine_model.dart';
+
+class BigClientController extends GetxController with GetAntiCombo {
+  late final WealthInfoBeanData data;
+  var dayBean = 0.obs;
+  // var dayExp = '996'.obs;
+  // var weekBean = '96006'.obs;
+  // var weekExp = '996'.obs;
+  // var monthBean = '96006'.obs;
+  // var monthExp = '996'.obs;
+  // var ryz = '荣耀值:0'.obs;
   var select = 0.obs;
   var current = 0.obs;
-  late String avatarFrameGifImg, avatarFrameImg, level;
+
+  final XCMineController c = Get.find();
+  String get avatarFrameGifImg {
+    return c.avatarFrameGifImg.value;
+  }
+  String get avatarFrameImg {
+    return c.avatarFrameImg.value;
+  }
+  int get grLevel {
+    return data.gr_level;
+  }
+  // set grLevel(int grLevel){}
   final List<String> texts = ['曜星', '苍穹', '皓月', '辉耀', '星华', '天域', '银河', '至尊'];
   final List<String> exps = [
     '200',
@@ -46,5 +69,50 @@ class BigClientController extends GetxController {
   void onIndexChanged(int value) {
     current.value = value;
     // swiperController.move(value);
+  }
+
+  @override
+  void onInit() {
+    data = Get.arguments;
+    dayBean.value = data.day_return;
+    super.onInit();
+  }
+  @override
+  void onReady() {
+    final num = data.title - 1;
+    swiperController.move(num, animation: false);
+    current.value = num;
+    super.onReady();
+  }
+
+  void onDay() {
+    action(() async {
+      Loading.show();
+      try {
+        CommonBean bean = await DataUtils.postGetDayReturn();
+        switch (bean.code) {
+          case MyHttpConfig.successCode:
+            dayBean.value = 0;
+            MyToastUtils.showToastBottom('领取成功!');
+            break;
+          case MyHttpConfig.errorloginCode:
+            final context = Get.context;
+            if (context != null) {
+              // ignore: use_build_context_synchronously
+              MyUtils.jumpLogin(context);
+            }
+            break;
+          default:
+            final msg = bean.msg;
+            if (msg != null) {
+              MyToastUtils.showToastBottom(msg);
+            }
+        }
+      } catch (e) {
+        Get.log(e.toString());
+      } finally {
+        Loading.dismiss();
+      }
+    });
   }
 }

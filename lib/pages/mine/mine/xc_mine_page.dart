@@ -12,6 +12,7 @@ import 'package:yuyinting/pages/mine/mine/xc_mine_model.dart';
 
 import '../../../main.dart';
 import '../../../utils/event_utils.dart';
+import '../../../utils/getx_tools.dart';
 import '../../../utils/line_painter2.dart';
 import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
@@ -53,7 +54,7 @@ class _MinePageState extends State<MinePage> {
       child: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/all_bg.png'),
+            image: AssetImage('assets/images/mine_bg.png'),
             fit: BoxFit.fill,
           ),
         ),
@@ -91,6 +92,7 @@ class _MinePageContent extends StatelessWidget {
                 _top(),
                 _friends(),
                 _card(),
+                _collection2(),
                 _more(context),
               ],
             ),
@@ -352,40 +354,28 @@ class _MinePageContent extends StatelessWidget {
     );
   }
 
-  /// 钱包 礼物记录
+  /// 财富 魅力
   Widget _collection() {
     final Widget wallet = GestureDetector(
-      onTap: (() {
-        if (MyUtils.checkClick()) {
-          Get.toNamed('WalletPage');
-        }
-      }),
+      onTap: c.toBigclient,
       child: _collectionItem(
-        '我的钱包',
-        '充值、兑换',
+        '财富等级',
+        '千元金豆日日领',
         const Color(0xFFFBFBFF),
         const Color(0xFFE3E7FF),
-        const Image(
-          image: AssetImage('assets/images/mine_qianbao.png'),
-          fit: BoxFit.contain,
-        ),
+        Obx(() => WealthLevelTag(level: c.grLevel.value)),
       ),
     );
     final Widget liwu = GestureDetector(
-      onTap: (() {
-        if (MyUtils.checkClick()) {
-          Get.toNamed('LiwuPage');
-        }
+      onTap: () => c.action(() {
+        Get.toNamed('ChengJiuPage');
       }),
       child: _collectionItem(
-        '礼物记录',
-        '收送礼物明细',
+        '魅力等级',
+        '您的人气象征',
         const Color(0xFFFFFDF5),
         const Color(0xFFFFF3D9),
-        const Image(
-          image: AssetImage('assets/images/mine_liwu.png'),
-          fit: BoxFit.contain,
-        ),
+        Obx(() => CharmLevelTag(level: c.level.value)),
       ),
     );
     return Row(
@@ -449,10 +439,115 @@ class _MinePageContent extends StatelessWidget {
     );
   }
 
+  /// 装扮 钱包 礼物记录
+  Widget _collection2() {
+    final Widget zb = GestureDetector(
+      onTap: () => c.action(() {
+        Get.toNamed('ZhuangbanPage');
+      }),
+      child: _collection2Item(
+        '装扮商城',
+        '座驾头像框',
+        'zhuangban',
+        const Size(344.0/3.5, 390.0/3.5),
+      ),
+    );
+    final Widget wallet = GestureDetector(
+      onTap: () => c.action(() {
+        Get.toNamed('WalletPage');
+      }),
+      child: _collection2Item(
+        '我的钱包',
+        '充值、兑换',
+        'qianbao',
+        const Size(362.0/3.5, 363.0/3.5),
+      ),
+    );
+    final Widget liwu = GestureDetector(
+      onTap: () => c.action(() {
+        Get.toNamed('LiwuPage');
+      }),
+      child: _collection2Item(
+        '礼物记录',
+        '收送礼物明细',
+        'liwu',
+        const Size(378.0/3.5, 377.0/3.5),
+      ),
+    );
+    return Padding(
+      padding: const EdgeInsets.only(left: 30, right: 30, top: 20),
+      child: Row(
+        children: [
+          Expanded(child: zb),
+          const SizedBox(width: 20),
+          Expanded(child: wallet),
+          const SizedBox(width: 20),
+          Expanded(child: liwu),
+        ],
+      ),
+    );
+  }
+  
+  Widget _collection2Item(String title, String content, String img, Size size) {
+    return Container(
+      width: 215,
+      height: 131,
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(26)),
+      ),
+      clipBehavior: Clip.hardEdge,
+      child: Stack(
+        children: [
+          Positioned(
+            right: -20,
+            bottom: -20,
+            width: size.width,
+            height: size.height,
+            child: Image(
+              image: AssetImage('assets/images/mine_icon_$img.png'),
+              fit: BoxFit.contain,
+            ),
+          ),
+          Positioned(
+            top: 15,
+            left: 20,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 25,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  content,
+                  style: const TextStyle(
+                    color: Color(0xFFA39B86),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _more(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-      padding: const EdgeInsets.only(left: 37, right: 37, top: 32),
+      padding: const EdgeInsets.only(left: 37, right: 37, top: 32, bottom: 40),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius:  BorderRadius.all(Radius.circular(26)),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -475,9 +570,6 @@ class _MinePageContent extends StatelessWidget {
                 childAspectRatio: 1,
               ),
               children: [
-                _moreItem('装扮商城', 'zhuangban', () {
-                  Get.toNamed('ZhuangbanPage');
-                }),
                 if (c.userNumber.value.isNotEmpty)
                   c.identity.value == 'president'
                       ? _moreItem('会长后台', 'huizhang', () { 
@@ -513,9 +605,9 @@ class _MinePageContent extends StatelessWidget {
                     : _moreItem('邀请有礼', 'yaoqing', () { 
                       Get.to(() => YQYLPage(kefuUid: c.kefuUid, kefUavatar: c.kefuAvatar));
                     }),
-                _moreItem('等级成就', 'dengji', () { 
-                  Get.toNamed('ChengJiuPage');
-                }),
+                // _moreItem('等级成就', 'dengji', () { 
+                //   Get.toNamed('ChengJiuPage');
+                // }),
                 _moreItem('联系客服', 'kefu', () { 
                   Future.delayed(
                         const Duration(seconds: 0),

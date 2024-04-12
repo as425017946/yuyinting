@@ -46,4 +46,6 @@ class Loading {
     EasyLoading.instance.userInteractions = true;
     EasyLoading.dismiss();
   }
+
+  static bool get isShow => EasyLoading.isShow;
 }
