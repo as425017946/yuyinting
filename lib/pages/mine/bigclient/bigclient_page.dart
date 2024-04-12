@@ -241,14 +241,28 @@ class _BigClientPageTop extends StatelessWidget {
 
   Widget _light(BigClientController c) {
     return IgnorePointer(
-      child: Obx(
-        () => Image(
-          image: AssetImage(
-              'assets/images/bigclient_light_${c.current.value + 1}.png'),
-          fit: BoxFit.fitWidth,
-        ),
+      child: Obx(() {
+        return Stack(
+          alignment: Alignment.topCenter,
+          children: List.generate(8, (index) => AnimatedOpacity(
+            opacity: index == c.current.value ? 1.0 : 0.0, 
+            duration: const Duration(seconds: 1),
+            alwaysIncludeSemantics: true,
+            child: Image.asset('assets/images/bigclient_light_${index + 1}.png', fit: BoxFit.fitWidth),
+          )),
+        );
+      }
       ),
     );
+    // return IgnorePointer(
+    //   child: Obx(
+    //     () => Image(
+    //       image: AssetImage(
+    //           'assets/images/bigclient_light_${c.current.value + 1}.png'),
+    //       fit: BoxFit.fitWidth,
+    //     ),
+    //   ),
+    // );
   }
 
   Widget _swiper(BigClientController c) {
