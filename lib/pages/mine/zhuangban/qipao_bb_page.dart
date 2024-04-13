@@ -100,7 +100,7 @@ class _QiPaoBBPageState extends State<QiPaoBBPage>  with AutomaticKeepAliveClien
       }),
       child: Container(
         width: ScreenUtil().setHeight(211),
-        height: ScreenUtil().setHeight(325),
+        height: ScreenUtil().setHeight(230),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           //设置Container修饰
@@ -117,20 +117,20 @@ class _QiPaoBBPageState extends State<QiPaoBBPage>  with AutomaticKeepAliveClien
             WidgetUtils.commonSizedBox(20, 20),
             WidgetUtils.showImagesNet(
                 _list2[i].img!,
-                ScreenUtil().setHeight(200),
-                ScreenUtil().setHeight(200)),
+                ScreenUtil().setHeight(100),
+                ScreenUtil().setHeight(100)),
             WidgetUtils.commonSizedBox(10, 20),
             WidgetUtils.onlyTextCenter(
                 _list2[i].name!,
                 StyleUtils.getCommonTextStyle(
                     color: Colors.white,
                     fontSize: ScreenUtil().setSp(25))),
+            WidgetUtils.commonSizedBox(10.h, 20),
             WidgetUtils.onlyTextCenter(
                 _list2[i].isLong == 1 ? '有效时长：永久' : '到期：${_list2[i].expireTime}',
                 StyleUtils.getCommonTextStyle(
                     color: Colors.white,
                     fontSize: ScreenUtil().setSp(25))),
-            WidgetUtils.commonSizedBox(10, 20),
           ],
         ),
       ),

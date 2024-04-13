@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:svgaplayer_flutter/player.dart';
+import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/utils/loading.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:yuyinting/utils/style_utils.dart';
 
 import '../../../main.dart';
 import '../../../utils/my_utils.dart';
@@ -89,6 +91,8 @@ class _BigClientPageBody extends StatelessWidget {
               ],
             ),
           ),
+          WidgetUtils.onlyTextCenter('注:金豆俸禄将在您达到等级要求后，每日18点发放至本页', StyleUtils.getCommonTextStyle(color: MyColors.mineYellow, fontSize: 24.sp)),
+          WidgetUtils.commonSizedBox(20.h, 0),
         ],
       ),
     );

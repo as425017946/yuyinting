@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/pages/mine/daili/baobiao_page.dart';
-import 'package:yuyinting/pages/mine/daili/kaihui_page.dart';
 import 'package:yuyinting/pages/mine/daili/tuiguang_page.dart';
 import 'package:yuyinting/pages/mine/daili/zonglan_page.dart';
-
 import '../../../colors/my_colors.dart';
-import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 
-/// 全民代理
+/// 邀请有礼
 class DailiHomePage extends StatefulWidget {
   const DailiHomePage({Key? key}) : super(key: key);
 

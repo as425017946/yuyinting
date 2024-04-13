@@ -37,7 +37,7 @@ class _YQYLSQPageState extends State<YQYLSQPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    appBar = WidgetUtils.getAppBar('全民代理', true, context, false, 0);
+    appBar = WidgetUtils.getAppBar('邀请有礼', true, context, false, 0);
   }
 
   @override
@@ -53,11 +53,12 @@ class _YQYLSQPageState extends State<YQYLSQPage> {
             children: [
               WidgetUtils.commonSizedBox(130.h, 0),
               Container(
+                height: 120.h,
                 width: double.infinity,
                 alignment: Alignment.centerLeft,
                 margin: EdgeInsets.only(top: 80.h, left: 60.h),
                 child: WidgetUtils.onlyText(
-                    '全民代理\n火热招募中',
+                    '',
                     TextStyle(
                         fontSize: ScreenUtil().setSp(55),
                         color: MyColors.yzZi1,

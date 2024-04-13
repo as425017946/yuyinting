@@ -492,6 +492,10 @@ class _WalletPageState extends State<WalletPage> {
       _WalletPageAction(
         title: '提现',
         action: () {
+          if(sp.getString('user_identity').toString() == 'user'){
+            MyToastUtils.showToastBottom('非公会主播不可提现~');
+            return;
+          }
           if (sp.getString('shimingzhi').toString() == '1') {
             if (MyUtils.checkClick()) {
               Navigator.push(context, MaterialPageRoute(builder: (context) {

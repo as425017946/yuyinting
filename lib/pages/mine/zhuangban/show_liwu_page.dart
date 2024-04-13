@@ -59,7 +59,7 @@ class _ShowLiWuPageState extends State<ShowLiWuPage> {
             ),
           )),
           Container(
-            height: 650.h,
+            height: widget.imgSVGAUrl.isNotEmpty ? 650.h : 550.h,
             width: double.infinity,
             padding: EdgeInsets.only(left: 30.h, right: 20.h),
             decoration: const BoxDecoration(
@@ -73,26 +73,28 @@ class _ShowLiWuPageState extends State<ShowLiWuPage> {
             child: Column(
               children: [
                 WidgetUtils.commonSizedBox(20.h, 20.w),
-                widget.imgSVGAUrl.isNotEmpty ? GestureDetector(
-                  onTap: (() {
-                    setState(() {
-                      isShow = true;
-                    });
-                  }),
-                  child: Row(
-                    children: [
-                      const Spacer(),
-                      WidgetUtils.showImages(
-                          'assets/images/zb_show.png', 44.h, 157.w),
-                      WidgetUtils.commonSizedBox(0, 20.w),
-                    ],
-                  ),
-                ) : const Text(''),
+                widget.imgSVGAUrl.isNotEmpty
+                    ? GestureDetector(
+                        onTap: (() {
+                          setState(() {
+                            isShow = true;
+                          });
+                        }),
+                        child: Row(
+                          children: [
+                            const Spacer(),
+                            WidgetUtils.showImages(
+                                'assets/images/zb_show.png', 44.h, 157.w),
+                            WidgetUtils.commonSizedBox(0, 20.w),
+                          ],
+                        ),
+                      )
+                    : const Text(''),
                 isShow == false
                     ? WidgetUtils.showImagesNet(
                         widget.imgUrl,
-                        ScreenUtil().setHeight(200),
-                        ScreenUtil().setHeight(200))
+                        widget.imgSVGAUrl.isNotEmpty ? 200.h : 100.h,
+                        widget.imgSVGAUrl.isNotEmpty ? 200.h : 100.h)
                     : const Text(''),
                 isShow
                     ? SizedBox(
@@ -349,7 +351,7 @@ class _ShowLiWuPageState extends State<ShowLiWuPage> {
 
   /// 购买装扮
   Future<void> doPostBuyDress() async {
-    if(isChoose == false){
+    if (isChoose == false) {
       MyToastUtils.showToastBottom('请选择要购买的装扮');
       return;
     }

@@ -149,6 +149,13 @@ class _HomePageState extends State<HomePage>
     // MyUtils.goTransparentPage(context, CeShiPage());
   }
 
+  @override
+  void dispose() {
+    listen.cancel();
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   Future<void> quanxian() async {
     if (Platform.isAndroid) {
       var androidInfo = await DeviceInfoPlugin().androidInfo;

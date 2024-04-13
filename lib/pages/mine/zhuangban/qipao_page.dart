@@ -120,7 +120,7 @@ class _QipaoPageState extends State<QipaoPage>  with AutomaticKeepAliveClientMix
       }),
       child: Container(
         width: ScreenUtil().setHeight(211),
-        height: ScreenUtil().setHeight(325),
+        height: ScreenUtil().setHeight(230),
         alignment: Alignment.center,
         decoration: const BoxDecoration(
           //设置Container修饰
@@ -135,20 +135,20 @@ class _QipaoPageState extends State<QipaoPage>  with AutomaticKeepAliveClientMix
             WidgetUtils.commonSizedBox(20, 20),
             WidgetUtils.showImagesNet(
                 _list[i].img!,
-                ScreenUtil().setHeight(200),
-                ScreenUtil().setHeight(200)),
+                ScreenUtil().setHeight(100),
+                ScreenUtil().setHeight(100)),
             WidgetUtils.commonSizedBox(10, 20),
             WidgetUtils.onlyTextCenter(
                 _list[i].name!,
                 StyleUtils.getCommonTextStyle(
                     color: Colors.white,
                     fontSize: ScreenUtil().setSp(25))),
+            WidgetUtils.commonSizedBox(10.h, 20),
             WidgetUtils.onlyTextCenter(
                 _list[i].status == 1 ? '有效时长：永久' : '有效时长：${_list[i].useDay}天',
                 StyleUtils.getCommonTextStyle(
                     color: Colors.white,
                     fontSize: ScreenUtil().setSp(25))),
-            WidgetUtils.commonSizedBox(10, 20),
           ],
         ),
       ),
