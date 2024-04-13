@@ -61,7 +61,7 @@ class OnlineConfig {
       continue zz;
         // 正式环境
         return EMOptions(
-            appKey: "1129240201157233#cc",
+            appKey: "1129240201157233#xc",
             autoLogin: false,
             debugModel: true,
             requireAck: true, //已读回执

@@ -24,7 +24,6 @@ import '../../utils/my_ping.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
-import '../../widget/SVGASimpleImage2.dart';
 
 ///登录页面
 class LoginPage extends StatefulWidget {
@@ -77,7 +76,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
     });
     // TODO: implement initState
     super.initState();
-    // doPostPdAddress();
+    doPostPdAddress();
     // getIPAddress();
     getDeviceIMEI();
     // 在登录页先设置所有游戏的音频开关默认开启，false为开始，true为关闭

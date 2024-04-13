@@ -80,7 +80,7 @@ class _StarPageState extends State<StarPage> {
     }
 
     doPostAheadPunish();
-    // doPostPdAddress();
+    doPostPdAddress();
     Future.delayed(const Duration(milliseconds: 2000), (() {
       sp.setBool('joinRoom', false);
       sp.setString('roomID', '');
