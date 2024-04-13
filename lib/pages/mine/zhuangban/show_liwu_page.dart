@@ -35,11 +35,11 @@ class ShowLiWuPage extends StatefulWidget {
 }
 
 class _ShowLiWuPageState extends State<ShowLiWuPage> {
-  List<bool> listB = [false, false, false];
+  List<bool> listB = [true, false, false];
   bool isShow = false;
 
   /// 是否有选中的
-  bool isChoose = false;
+  bool isChoose = true;
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +95,7 @@ class _ShowLiWuPageState extends State<ShowLiWuPage> {
                         widget.imgUrl,
                         widget.imgSVGAUrl.isNotEmpty ? 200.h : 100.h,
                         widget.imgSVGAUrl.isNotEmpty ? 200.h : 100.h)
-                    : const Text(''),
+                    : WidgetUtils.commonSizedBox(0, 0),
                 isShow
                     ? SizedBox(
                         height: 200.h,
@@ -103,7 +103,8 @@ class _ShowLiWuPageState extends State<ShowLiWuPage> {
                         child: SVGASimpleImage(
                           resUrl: widget.imgSVGAUrl,
                         ))
-                    : const Text(''),
+                    : WidgetUtils.commonSizedBox(0, 0),
+                WidgetUtils.commonSizedBox(20.h, 20.w),
                 Row(
                   children: [
                     GestureDetector(
