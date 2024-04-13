@@ -87,6 +87,10 @@ class BigClientController extends GetxController with GetAntiCombo {
 
   void onDay() {
     action(() async {
+      if(dayBean.value.toString() == '0'){
+        MyToastUtils.showToastBottom('暂无可领取俸禄~');
+        return;
+      }
       Loading.show();
       try {
         CommonBean bean = await DataUtils.postGetDayReturn();

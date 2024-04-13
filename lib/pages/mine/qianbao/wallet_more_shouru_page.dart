@@ -130,6 +130,10 @@ class _WalletMoreShouruPageState extends State<WalletMoreShouruPage> {
         leixing = '会长分润';
         showImg = list[i].img!;
         break;
+      case 14:
+        leixing = '日俸禄收入';
+        showImg = 'assets/images/wallet_fenglu.png';
+        break;
     }
     return Column(
       children: [

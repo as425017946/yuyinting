@@ -298,73 +298,79 @@ class _MofangJinPageState extends State<MofangJinPage>
                               //     500.h,
                               //     500.h),
                             ),
-                            Opacity(
-                              opacity: 0.4,
-                              child: Container(
-                                width: ScreenUtil().setHeight(120),
-                                height: ScreenUtil().setHeight(50),
-                                decoration: const BoxDecoration(
-                                  //背景
-                                  color: Colors.black54,
-                                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(21)),
+                            Positioned(
+                              bottom: 180.h,
+                              child: Opacity(
+                                opacity: 0.4,
+                                child: Container(
+                                  width: ScreenUtil().setHeight(120),
+                                  height: ScreenUtil().setHeight(50),
+                                  decoration: const BoxDecoration(
+                                    //背景
+                                    color: Colors.black54,
+                                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(21)),
+                                  ),
                                 ),
                               ),
                             ),
-                            GestureDetector(
-                              onTap: (() {
-                                if (double.parse(sp
-                                            .getString('mofangJBY')
-                                            .toString()) <
-                                        200 &&
-                                    cishu == 1) {
-                                  MyToastUtils.showToastBottom('钱包余额不足');
-                                  return;
-                                }
-                                if (double.parse(sp
-                                            .getString('mofangJBY')
-                                            .toString()) <
-                                        2000 &&
-                                    cishu == 10) {
-                                  MyToastUtils.showToastBottom('钱包余额不足');
-                                  return;
-                                }
-                                if (double.parse(sp
-                                            .getString('mofangJBY')
-                                            .toString()) <
-                                        20000 &&
-                                    cishu == 100) {
-                                  MyToastUtils.showToastBottom('钱包余额不足');
-                                  return;
-                                }
-                                if (sp.getBool('mf2_queren') == null ||
-                                    sp.getBool('mf2_queren') == false) {
-                                  MyUtils.goTransparentPageCom(
-                                      context,
-                                      XiaZhuQueRenPage(
-                                        cishu: cishu.toString(),
-                                        feiyong: feiyong.toString(),
-                                        title: '金星魔方',
-                                      ));
-                                } else {
-                                  if (MyUtils.checkClick() &&
-                                      isShow == false &&
-                                      isXiazhu) {
-                                    eventBus.fire(GameBack(isBack: true));
-                                    doPostPlayRoulette(cishu.toString());
+                            Positioned(
+                              bottom: 180.h,
+                              child: GestureDetector(
+                                onTap: (() {
+                                  if (double.parse(sp
+                                              .getString('mofangJBY')
+                                              .toString()) <
+                                          200 &&
+                                      cishu == 1) {
+                                    MyToastUtils.showToastBottom('钱包余额不足');
+                                    return;
                                   }
-                                }
-                              }),
-                              child: SizedBox(
-                                width: ScreenUtil().setHeight(120),
-                                height: ScreenUtil().setHeight(50),
-                                child: WidgetUtils.onlyTextCenter(
-                                    '点击转动',
-                                    TextStyle(
-                                        color: Colors.white,
-                                        fontSize: ScreenUtil().setSp(26),
-                                        fontWeight: FontWeight.w600)),
+                                  if (double.parse(sp
+                                              .getString('mofangJBY')
+                                              .toString()) <
+                                          2000 &&
+                                      cishu == 10) {
+                                    MyToastUtils.showToastBottom('钱包余额不足');
+                                    return;
+                                  }
+                                  if (double.parse(sp
+                                              .getString('mofangJBY')
+                                              .toString()) <
+                                          20000 &&
+                                      cishu == 100) {
+                                    MyToastUtils.showToastBottom('钱包余额不足');
+                                    return;
+                                  }
+                                  if (sp.getBool('mf2_queren') == null ||
+                                      sp.getBool('mf2_queren') == false) {
+                                    MyUtils.goTransparentPageCom(
+                                        context,
+                                        XiaZhuQueRenPage(
+                                          cishu: cishu.toString(),
+                                          feiyong: feiyong.toString(),
+                                          title: '金星魔方',
+                                        ));
+                                  } else {
+                                    if (MyUtils.checkClick() &&
+                                        isShow == false &&
+                                        isXiazhu) {
+                                      eventBus.fire(GameBack(isBack: true));
+                                      doPostPlayRoulette(cishu.toString());
+                                    }
+                                  }
+                                }),
+                                child: SizedBox(
+                                  width: ScreenUtil().setHeight(120),
+                                  height: ScreenUtil().setHeight(50),
+                                  child: WidgetUtils.onlyTextCenter(
+                                      '点击开启',
+                                      TextStyle(
+                                          color: Colors.white,
+                                          fontSize: ScreenUtil().setSp(26),
+                                          fontWeight: FontWeight.w600)),
+                                ),
                               ),
                             ),
                           ],
