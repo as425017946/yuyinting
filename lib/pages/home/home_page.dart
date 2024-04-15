@@ -76,8 +76,8 @@ class _HomePageState extends State<HomePage>
     //更新身份
     setState(() {
       identity = sp.getString('user_identity').toString();
-      level = sp.getInt('user_level') as int;
-      grLevel = sp.getInt('user_grLevel') as int;
+      // level = sp.getInt('user_level') as int;
+      // grLevel = sp.getInt('user_grLevel') as int;
       LogE('用户等级 == $level');
     });
 
@@ -112,13 +112,13 @@ class _HomePageState extends State<HomePage>
           identity = sp.getString('user_identity').toString();
         });
       }else if(event.title == '等级大于3级'){
-        setState(() {
-          level = sp.getInt('user_level') as int;
-        });
+        // setState(() {
+        //   level = sp.getInt('user_level') as int;
+        // });
       }else if(event.title == '财富等级大于3级'){
-        setState(() {
-          grLevel = sp.getInt('user_grLevel') as int;
-        });
+        // setState(() {
+        //   grLevel = sp.getInt('user_grLevel') as int;
+        // });
       }
     });
 

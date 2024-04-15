@@ -588,18 +588,17 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                             100.w,
                           ),
                           Positioned(
-                              left: 55.w,
+                              left: (level >= 1 && level <= 10) ? 65.w : 55.w,
                               child: Stack(
                                 children: [
                                   Text(
                                     level.toString(),
                                     style: TextStyle(
                                         fontSize: 26.sp,
-                                        fontWeight: FontWeight.w600,
-                                        fontFamily: 'LR',
+                                        fontFamily: 'Impact',
                                         foreground: Paint()
                                           ..style = PaintingStyle.stroke
-                                          ..strokeWidth = 2
+                                          ..strokeWidth = 1
                                           ..color = MyColors.djTwoM),
                                   ),
                                   Text(
@@ -607,8 +606,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                                     style: TextStyle(
                                         color: MyColors.djOne,
                                         fontSize: 26.sp,
-                                        fontWeight: FontWeight.w600,
-                                        fontFamily: 'LR'),
+                                        fontFamily: 'Impact'),
                                   ),
                                 ],
                               ))
@@ -645,19 +643,18 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                         105.w,
                       ),
                       Positioned(
-                          bottom: (grLevel >= 1 && grLevel <= 9) == true ? 8.w : 12.w,
-                          left: (grLevel >= 1 && grLevel <= 9) == true ? 70.w : 65.w,
+                          bottom: (grLevel >= 1 && grLevel <= 9) == true ? 8.w : 10.w,
+                          left: (grLevel >= 1 && grLevel <= 9) == true ? 70.w : 68.w,
                           child: Stack(
                             children: [
                               Text(
                                 grLevel.toString(),
                                 style: TextStyle(
                                     fontSize: 26.sp,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: 'LR',
+                                    fontFamily: 'Impact',
                                     foreground: Paint()
                                       ..style = PaintingStyle.stroke
-                                      ..strokeWidth = 2
+                                      ..strokeWidth = 1
                                       ..color = MyColors.djTwoM),
                               ),
                               Text(
@@ -665,8 +662,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                                 style: TextStyle(
                                     color: MyColors.djOne,
                                     fontSize: 26.sp,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: 'LR'),
+                                    fontFamily: 'Impact'),
                               ),
                             ],
                           ))

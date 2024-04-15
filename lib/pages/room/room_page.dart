@@ -2415,62 +2415,91 @@ class _RoomPageState extends State<RoomPage>
               });
             } else {
               // 正常进入房间使用
-              bool isHave = false;
-              for (int i = 0; i < list.length; i++) {
-                if (list[i]['type'] == '1') {
-                  setState(() {
-                    isHave = true;
-                  });
-                }
-              }
+              LogE('正常进入房间===  ${event.map!['uid'].toString() != sp.getString('user_id').toString()}');
+              if(event.map!['uid'].toString() != sp.getString('user_id').toString()){
 
-              Map<dynamic, dynamic> map = {};
-              map['info'] = event.map!['nickname'];
-              map['type'] = '2';
-              map['uid'] = event.map!['uid'];
-              //身份
-              map['identity'] = event.map!['identity'];
-              //等级
-              map['lv'] = event.map!['lv'];
-              // 财富等级
-              map['newLv'] = event.map!['gr_lv'];
-              // 贵族
-              map['noble_id'] = event.map!['noble_id'];
-              // 萌新
-              map['is_new'] = event.map!['is_new'];
-              // 是否靓号
-              map['is_pretty'] = event.map!['is_pretty'];
-              // 新贵
-              map['new_noble'] = event.map!['new_noble'];
-              LogE('特权== ${event.map!['noble_id']}');
-              // if(event.map!['noble_id'].toString() != '0'){
-              //   setState(() {
-              //     isGuZu = true;
-              //   });
-              // }
-              // 是否点击了欢迎 0未欢迎 1已欢迎
-              map['isWelcome'] = '0';
-              // 座驾名称
-              map['mount_name'] = event.map!['mount_name'];
-              LogE('装扮名称 ==  ${event.map!['mount_name']}');
+                Map<dynamic, dynamic> map = {};
+                map['info'] = event.map!['nickname'];
+                map['type'] = '2';
+                map['uid'] = event.map!['uid'];
+                //身份
+                map['identity'] = event.map!['identity'];
+                //等级
+                map['lv'] = event.map!['lv'];
+                // 财富等级
+                map['newLv'] = event.map!['gr_lv'];
+                // 贵族
+                map['noble_id'] = event.map!['noble_id'];
+                // 萌新
+                map['is_new'] = event.map!['is_new'];
+                // 是否靓号
+                map['is_pretty'] = event.map!['is_pretty'];
+                // 新贵
+                map['new_noble'] = event.map!['new_noble'];
+                LogE('特权== ${event.map!['noble_id']}');
+                // if(event.map!['noble_id'].toString() != '0'){
+                //   setState(() {
+                //     isGuZu = true;
+                //   });
+                // }
+                // 是否点击了欢迎 0未欢迎 1已欢迎
+                map['isWelcome'] = '0';
+                // 座驾名称
+                map['mount_name'] = event.map!['mount_name'];
+                LogE('装扮名称 ==  ${event.map!['mount_name']}');
 
-              /// 判断如果装扮了座驾，需要播放
-              if (event.map!['mount'].toString().isNotEmpty) {
-                if (isDevices == 'android') {
-                  // 这个是为了让别人也能看见自己送出的礼物
-                  if (listUrlZJ.isEmpty) {
-                    if (event.map!['mount_name'].toString() == '白虎守护' ||
-                        event.map!['mount_name'].toString() == '飞鹰' ||
-                        event.map!['mount_name'].toString() == '飞鱼' ||
-                        event.map!['mount_name'].toString() == '凤凰涅槃' ||
-                        event.map!['mount_name'].toString() == '金龙降临' ||
-                        event.map!['mount_name'].toString() == '鲸鱼' ||
-                        event.map!['mount_name'].toString() == '旷世神龙' ||
-                        event.map!['mount_name'].toString() == '兰博基尼' ||
-                        event.map!['mount_name'].toString() == '青龙守护' ||
-                        event.map!['mount_name'].toString() == '星空战机') {
-                      saveSVGAIMAGEZJ(event.map!['mount'].toString());
+                /// 判断如果装扮了座驾，需要播放
+                if (event.map!['mount'].toString().isNotEmpty) {
+                  if (isDevices == 'android') {
+                    // 这个是为了让别人也能看见自己送出的礼物
+                    if (listUrlZJ.isEmpty) {
+                      if (event.map!['mount_name'].toString() == '白虎守护' ||
+                          event.map!['mount_name'].toString() == '飞鹰' ||
+                          event.map!['mount_name'].toString() == '飞鱼' ||
+                          event.map!['mount_name'].toString() == '凤凰涅槃' ||
+                          event.map!['mount_name'].toString() == '金龙降临' ||
+                          event.map!['mount_name'].toString() == '鲸鱼' ||
+                          event.map!['mount_name'].toString() == '旷世神龙' ||
+                          event.map!['mount_name'].toString() == '兰博基尼' ||
+                          event.map!['mount_name'].toString() == '青龙守护' ||
+                          event.map!['mount_name'].toString() == '星空战机') {
+                        saveSVGAIMAGEZJ(event.map!['mount'].toString());
+                      } else {
+                        setState(() {
+                          Map<dynamic, dynamic> map = {};
+                          map['svgaUrl'] = event.map!['mount'].toString();
+                          map['svgaBool'] = true;
+                          listUrlZJ.add(map);
+                          isZJShow = true;
+                        });
+                        showStarZJ(listUrlZJ[0]);
+                      }
                     } else {
+                      if (event.map!['mount_name'].toString() == '白虎守护' ||
+                          event.map!['mount_name'].toString() == '飞鹰' ||
+                          event.map!['mount_name'].toString() == '飞鱼' ||
+                          event.map!['mount_name'].toString() == '凤凰涅槃' ||
+                          event.map!['mount_name'].toString() == '金龙降临' ||
+                          event.map!['mount_name'].toString() == '鲸鱼' ||
+                          event.map!['mount_name'].toString() == '旷世神龙' ||
+                          event.map!['mount_name'].toString() == '兰博基尼' ||
+                          event.map!['mount_name'].toString() == '青龙守护' ||
+                          event.map!['mount_name'].toString() == '星空战机') {
+                        saveSVGAIMAGEZJ(event.map!['mount'].toString());
+                      } else {
+                        setState(() {
+                          Map<dynamic, dynamic> map = {};
+                          map['svgaUrl'] = event.map!['mount'].toString();
+                          map['svgaBool'] = true;
+                          listUrlZJ.add(map);
+                          isZJShow = true;
+                        });
+                        showStarZJ(listUrlZJ[0]);
+                      }
+                    }
+                  } else {
+                    // ios
+                    if (listUrlZJ.isEmpty) {
                       setState(() {
                         Map<dynamic, dynamic> map = {};
                         map['svgaUrl'] = event.map!['mount'].toString();
@@ -2479,20 +2508,8 @@ class _RoomPageState extends State<RoomPage>
                         isZJShow = true;
                       });
                       showStarZJ(listUrlZJ[0]);
-                    }
-                  } else {
-                    if (event.map!['mount_name'].toString() == '白虎守护' ||
-                        event.map!['mount_name'].toString() == '飞鹰' ||
-                        event.map!['mount_name'].toString() == '飞鱼' ||
-                        event.map!['mount_name'].toString() == '凤凰涅槃' ||
-                        event.map!['mount_name'].toString() == '金龙降临' ||
-                        event.map!['mount_name'].toString() == '鲸鱼' ||
-                        event.map!['mount_name'].toString() == '旷世神龙' ||
-                        event.map!['mount_name'].toString() == '兰博基尼' ||
-                        event.map!['mount_name'].toString() == '青龙守护' ||
-                        event.map!['mount_name'].toString() == '星空战机') {
-                      saveSVGAIMAGEZJ(event.map!['mount'].toString());
                     } else {
+                      // 直接用网络图地址
                       setState(() {
                         Map<dynamic, dynamic> map = {};
                         map['svgaUrl'] = event.map!['mount'].toString();
@@ -2500,35 +2517,13 @@ class _RoomPageState extends State<RoomPage>
                         listUrlZJ.add(map);
                         isZJShow = true;
                       });
-                      showStarZJ(listUrlZJ[0]);
                     }
                   }
-                } else {
-                  // ios
-                  if (listUrlZJ.isEmpty) {
-                    setState(() {
-                      Map<dynamic, dynamic> map = {};
-                      map['svgaUrl'] = event.map!['mount'].toString();
-                      map['svgaBool'] = true;
-                      listUrlZJ.add(map);
-                      isZJShow = true;
-                    });
-                    showStarZJ(listUrlZJ[0]);
-                  } else {
-                    // 直接用网络图地址
-                    setState(() {
-                      Map<dynamic, dynamic> map = {};
-                      map['svgaUrl'] = event.map!['mount'].toString();
-                      map['svgaBool'] = true;
-                      listUrlZJ.add(map);
-                      isZJShow = true;
-                    });
-                  }
                 }
+                setState(() {
+                  list.add(map);
+                });
               }
-              setState(() {
-                list.add(map);
-              });
             }
 
             WidgetsBinding.instance!.addPostFrameCallback((_) {
@@ -4725,7 +4720,104 @@ class _RoomPageState extends State<RoomPage>
             list.add(mapg);
             // 查询本地存储信息
             searchChatInfo();
+            // 存储本人进入房间，目的是为了自己能看见自己的坐骑
+            Map<dynamic, dynamic> map = {};
+            map['info'] = bean.data!.userInfo!.nickname!;
+            map['type'] = '2';
+            map['uid'] = sp.getString('user_id').toString();
+            //身份
+            map['identity'] = bean.data!.userInfo!.role!;
+            //等级
+            map['lv'] = bean.data!.userInfo!.level.toString();
+            // 财富等级
+            map['newLv'] = bean.data!.userInfo!.grLevel.toString();
+            // 贵族
+            map['noble_id'] = bean.data!.userInfo!.nobleId.toString();
+            // 萌新
+            map['is_new'] = bean.data!.userInfo!.isNew.toString();
+            // 是否靓号
+            map['is_pretty'] = bean.data!.userInfo!.isPretty.toString();
+            // 新贵
+            map['new_noble'] = bean.data!.userInfo!.newNoble.toString();
+            // 是否点击了欢迎 0未欢迎 1已欢迎
+            map['isWelcome'] = '0';
+            // 座驾名称
+            map['mount_name'] = bean.data!.userInfo!.carDressName!;
 
+            /// 判断如果装扮了座驾，需要播放
+            if (bean.data!.userInfo!.carDressGifImg!.isNotEmpty) {
+              if (isDevices == 'android') {
+                // 这个是为了让别人也能看见自己送出的礼物
+                if (listUrlZJ.isEmpty) {
+                  if (bean.data!.userInfo!.carDressName! == '白虎守护' ||
+                      bean.data!.userInfo!.carDressName! == '飞鹰' ||
+                      bean.data!.userInfo!.carDressName! == '飞鱼' ||
+                      bean.data!.userInfo!.carDressName! == '凤凰涅槃' ||
+                      bean.data!.userInfo!.carDressName! == '金龙降临' ||
+                      bean.data!.userInfo!.carDressName! == '鲸鱼' ||
+                      bean.data!.userInfo!.carDressName! == '旷世神龙' ||
+                      bean.data!.userInfo!.carDressName! == '兰博基尼' ||
+                      bean.data!.userInfo!.carDressName! == '青龙守护' ||
+                      bean.data!.userInfo!.carDressName! == '星空战机') {
+                    saveSVGAIMAGEZJ(bean.data!.userInfo!.carDressGifImg!);
+                  } else {
+                    setState(() {
+                      Map<dynamic, dynamic> map = {};
+                      map['svgaUrl'] = bean.data!.userInfo!.carDressGifImg!;
+                      map['svgaBool'] = true;
+                      listUrlZJ.add(map);
+                      isZJShow = true;
+                    });
+                    showStarZJ(listUrlZJ[0]);
+                  }
+                } else {
+                  if (bean.data!.userInfo!.carDressName! == '白虎守护' ||
+                      bean.data!.userInfo!.carDressName! == '飞鹰' ||
+                      bean.data!.userInfo!.carDressName! == '飞鱼' ||
+                      bean.data!.userInfo!.carDressName! == '凤凰涅槃' ||
+                      bean.data!.userInfo!.carDressName! == '金龙降临' ||
+                      bean.data!.userInfo!.carDressName! == '鲸鱼' ||
+                      bean.data!.userInfo!.carDressName! == '旷世神龙' ||
+                      bean.data!.userInfo!.carDressName! == '兰博基尼' ||
+                      bean.data!.userInfo!.carDressName! == '青龙守护' ||
+                      bean.data!.userInfo!.carDressName! == '星空战机') {
+                    saveSVGAIMAGEZJ(bean.data!.userInfo!.carDressGifImg!);
+                  } else {
+                    setState(() {
+                      Map<dynamic, dynamic> map = {};
+                      map['svgaUrl'] = bean.data!.userInfo!.carDressGifImg!;
+                      map['svgaBool'] = true;
+                      listUrlZJ.add(map);
+                      isZJShow = true;
+                    });
+                    showStarZJ(listUrlZJ[0]);
+                  }
+                }
+              } else {
+                // ios
+                if (listUrlZJ.isEmpty) {
+                  setState(() {
+                    Map<dynamic, dynamic> map = {};
+                    map['svgaUrl'] = bean.data!.userInfo!.carDressGifImg!;
+                    map['svgaBool'] = true;
+                    listUrlZJ.add(map);
+                    isZJShow = true;
+                  });
+                  showStarZJ(listUrlZJ[0]);
+                } else {
+                  // 直接用网络图地址
+                  setState(() {
+                    Map<dynamic, dynamic> map = {};
+                    map['svgaUrl'] = bean.data!.userInfo!.carDressGifImg!;
+                    map['svgaBool'] = true;
+                    listUrlZJ.add(map);
+                    isZJShow = true;
+                  });
+                }
+              }
+            }
+            list.add(map);
+            
             isOK = true;
           });
           break;
