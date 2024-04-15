@@ -247,7 +247,7 @@ class _TixianBiPageState extends State<TixianBiPage> {
               ),
               WidgetUtils.commonSizedBox(20, 20),
               Container(
-                height: methodID == '2' ? 550.h : 650.h,
+                // height: methodID == '2' ? 550.h : 650.h,
                 padding: const EdgeInsets.only(left: 30, right: 30),
                 //边框设置
                 decoration: const BoxDecoration(
@@ -562,7 +562,8 @@ class _TixianBiPageState extends State<TixianBiPage> {
                                 fontSize: ScreenUtil().setSp(32),
                                 fontWeight: FontWeight.w600)),
                       ],
-                    )
+                    ),
+                    WidgetUtils.commonSizedBox(40.w, 20),
                   ],
                 ),
               ),

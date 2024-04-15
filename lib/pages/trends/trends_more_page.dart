@@ -149,11 +149,11 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                 child: Stack(
                   alignment: Alignment.bottomRight,
                   children: [
-                    WidgetUtils.CircleHeadImage(35, 35, comList[i].avatar!),
+                    WidgetUtils.CircleHeadImage(35*2.w, 35*2.w, comList[i].avatar!),
                     comList[i].gender != 0
                         ? Container(
-                            height: ScreenUtil().setHeight(25),
-                            width: ScreenUtil().setWidth(30),
+                            height: 30.w,
+                            width: 30.w,
                             alignment: Alignment.center,
                             //边框设置
                             decoration: BoxDecoration(
@@ -163,14 +163,14 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                                   : MyColors.dtPink,
                               //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                               borderRadius:
-                                  const BorderRadius.all(Radius.circular(30.0)),
+                                BorderRadius.all(Radius.circular(15.w)),
                             ),
                             child: WidgetUtils.showImages(
                                 comList[i].gender == 1
                                     ? 'assets/images/nan.png'
                                     : 'assets/images/nv.png',
-                                10,
-                                10),
+                                10*2.w,
+                                10*2.w),
                           )
                         : const Text(''),
                   ],
@@ -225,7 +225,7 @@ class _TrendsMorePageState extends State<TrendsMorePage>
         ),
         Row(
           children: [
-            WidgetUtils.commonSizedBox(0, 45),
+            WidgetUtils.commonSizedBox(0, 45*2.w),
             Expanded(
                 child: Text(
               '${comList[i].addTime} · 来自：${comList[i].city!.isEmpty ? '未知' : comList[i].city!}',
@@ -605,7 +605,7 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                                     }
                                   }),
                                   child: WidgetUtils.CircleHeadImage(
-                                      40, 40, headImage)),
+                                      40*2.w, 40*2.w, headImage)),
                               WidgetUtils.commonSizedBox(0, 10),
                               Column(
                                 mainAxisSize: MainAxisSize.min,
@@ -623,8 +623,7 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                                     ),
                                   ),
                                   Container(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(5, 1, 5, 1),
+                                    padding: EdgeInsets.fromLTRB(5*2.w, 1*2.w, 5*2.w, 1*2.w),
                                     alignment: Alignment.center,
                                     //边框设置
                                     decoration: BoxDecoration(
@@ -644,16 +643,16 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                                             gender == 1
                                                 ? 'assets/images/nan.png'
                                                 : 'assets/images/nv.png',
-                                            10,
-                                            10),
-                                        WidgetUtils.commonSizedBox(0, 5),
+                                            10*2.w,
+                                            10*2.w),
+                                        WidgetUtils.commonSizedBox(0, 5*2.w),
                                         WidgetUtils.onlyText(
                                             age == -1
                                                 ? '0·$constellation'
                                                 : '${age.toString()}·$constellation',
                                             StyleUtils.getCommonTextStyle(
                                                 color: Colors.white,
-                                                fontSize: 11)),
+                                                fontSize: 11*2.w)),
                                       ],
                                     ),
                                   ),

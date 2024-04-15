@@ -85,6 +85,17 @@ class BigClientController extends GetxController with GetAntiCombo {
     super.onReady();
   }
 
+  String getTag(int index) {
+    final current = data.title - 1;
+    if (index == current) {
+      return 'dqdj';
+    }
+    if (index < current) {
+      return 'ydc';
+    }
+    return 'wjs';
+  }
+
   void onDay() {
     action(() async {
       if(dayBean.value.toString() == '0'){
