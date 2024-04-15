@@ -255,74 +255,37 @@ class PaiduiListPage extends StatelessWidget {
   }
 
   Widget _tag() {
-    Color color;
     String img;
     switch (index) {
       case 2:
-        color = MyColors.paiduiRed;
         img = 'assets/images/paidui_nvshen.png';
         break;
       case 3:
-        color = MyColors.paiduiBlue;
         img = 'assets/images/paidui_nanshen.png';
         break;
       case 4:
-        color = MyColors.paiduiOrange;
         img = 'assets/images/paidui_xinting.png';
         break;
       case 5:
-        color = MyColors.paiduiPurple;
         img = 'assets/images/paidui_youxi.png';
         break;
       case 6:
-        color = MyColors.paiduiXQ;
         img = 'assets/images/paidui_jiaoyou.png';
         break;
       case 7:
-        color = MyColors.paiduiXQ;
         img = 'assets/images/paidui_xiangqin.png';
         break;
       case 8:
-        color = MyColors.paiduiXQ;
         img = 'assets/images/paidui_dianchang.png';
         break;
       default:
         img = 'assets/images/paidui_dianchang.png';
     }
-    double width = index == 5 ? 105.w : 94.w;
 
-    return Stack(
-      alignment: Alignment.centerLeft,
-      children: [
-        // Container(
-        //   width: width,
-        //   height: 30.w,
-        //   alignment: Alignment.center,
-        //   margin: EdgeInsets.only(left: 8.w),
-        //   padding: EdgeInsets.only(left: 14.w),
-        //   decoration: BoxDecoration(
-        //     color: color,
-        //     borderRadius: BorderRadius.all(Radius.circular(15.w)),
-        //   ),
-        //   child: Text(
-        //     roomType,
-        //     style: StyleUtils.getCommonTextStyle(
-        //         color: Colors.white,
-        //         fontSize: ScreenUtil().setSp(18),
-        //         fontWeight: FontWeight.w600),
-        //   ),
-        // ),
-        SizedBox(
-          width: 72.w,
-          height: 30.h,
-          child: Image(
-            fit: BoxFit.fill,
-            image: AssetImage(img),
-            width: 72.w,
-            height: 30.h
-          ),
-        ),
-      ],
+    return Image(
+      image: AssetImage(img),
+      width: 111.w,
+      height: 42.w,
     );
   }
 
