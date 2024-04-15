@@ -91,8 +91,6 @@ class _BigClientPageBody extends StatelessWidget {
               ],
             ),
           ),
-          WidgetUtils.onlyTextCenter('注:金豆俸禄将在您达到等级要求后，每日18点发放至本页', StyleUtils.getCommonTextStyle(color: MyColors.mineYellow, fontSize: 24.sp)),
-          WidgetUtils.commonSizedBox(20.h, 0),
         ],
       ),
     );
@@ -559,21 +557,30 @@ class _BigClientPageList0 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     BigClientController c = Get.find();
-    return SingleChildScrollView(
-      child: FittedBox(
-        alignment: Alignment.topCenter,
-        fit: BoxFit.fitWidth,
-        child: SizedBox(
-          width: 750,
-          child: Column(
-            children: [
-              _item("日俸禄", c.dayBean, c.data.next_lv_value, c.onDay),
-              // _item("周薪水", c.weekBean, c.weekExp),
-              // _item("月薪水", c.weekBean, c.weekExp),
-            ],
+    return Column(
+      children: [
+        SingleChildScrollView(
+          child: FittedBox(
+            alignment: Alignment.topCenter,
+            fit: BoxFit.fitWidth,
+            child: SizedBox(
+              width: 750,
+              child: Column(
+                children: [
+                  _item("日俸禄", c.dayBean, c.data.next_lv_value, c.onDay),
+                  // _item("周薪水", c.weekBean, c.weekExp),
+                  // _item("月薪水", c.weekBean, c.weekExp),
+                ],
+              ),
+            ),
           ),
         ),
-      ),
+        const Spacer(),
+        Padding(
+          padding: EdgeInsets.only(bottom: Get.bottomBarHeight + 20.w),
+          child: WidgetUtils.onlyTextCenter('注:金豆俸禄将在您达到等级要求后，每日18点发放至本页', StyleUtils.getCommonTextStyle(color: MyColors.mineYellow, fontSize: 24.sp)),
+        ),
+      ],
     );
   }
 
