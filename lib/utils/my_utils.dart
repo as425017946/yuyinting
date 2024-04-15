@@ -904,10 +904,19 @@ class MyUtils {
             LogE('语音发送进度');
             addLogToConsole("send message succeed");
           },
-          onError: (msgId, msg, error) {
+          onError: (msgId, msg, error) async {
             LogE('语音发送失败2');
             if(msg.body.type == MessageType.VIDEO){
               eventBus.fire(SubmitButtonBack(title: '语音发送失败'));
+            } else {
+              Database? db = await databaseHelper.database;
+              await db.delete(
+                'messageSLTable',
+                whereArgs: [msgId],
+                where: 'msgJson = ?',
+              );
+              eventBus.fire(SendMessageBack(type: 1, msgID: msgId));
+              MyToastUtils.showToastBottom('消息发送失败');
             }
             addLogToConsole(
               "send message failed, code: ${error.code}, desc: ${error.description}",
