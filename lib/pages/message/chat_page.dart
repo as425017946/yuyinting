@@ -90,8 +90,6 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
   // 录音使用
   Codec _codec = Codec.aacADTS;
   FlutterSoundPlayer? _mPlayer = FlutterSoundPlayer();
-  //录制权限
-  bool _voiceRecorderIsInitialized = false;
   bool mediaRecord = true;
   bool playRecord = false; //音频文件播放状态
   bool hasRecord = false; //是否有音频文件可播放
@@ -101,8 +99,6 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
 
   bool _isEmojiPickerVisible = false;
   FocusNode? _focusNode;
-  // 是否有录音权限
-  bool isQuanxian = false;
 
   void _onFocusChange() {
     if (_focusNode!.hasFocus) {
@@ -1376,7 +1372,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
                           onVerticalDragUpdate: (details) async {
                             LogE('上滑== ${details.delta.dy}');
                             if(isLuZhi) {
-                              if (isDevices != 'ios' && isQuanxian) {
+                              if (isDevices != 'ios' && isMAI) {
                                 if (details.delta.dy < -1) {
                                   // 停止录音
                                   _stopRecorder();
@@ -1402,7 +1398,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
                               // 停止录音
                               _stopRecorder();
                               if(isLuZhi) {
-                                if (isDevices != 'ios' && isQuanxian) {
+                                if (isDevices != 'ios' && isMAI) {
                                   // 取消录音后抬起手指
                                   if (isCancel) {
                                     LogE('发送录音 1');
@@ -2434,7 +2430,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
             onTapPickFromGallery();
           } else if (type == 3) {
             if (isSendYY == false) {
-              if (isDevices != 'ios' && isQuanxian) {
+              if (isDevices != 'ios' && isMAI) {
                 setState(() {
                   // 开始录音
                   _startRecorder();

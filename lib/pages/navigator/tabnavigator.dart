@@ -220,6 +220,9 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       } else if (event.map!['type'] == 'clean_charm' && sp.getString('sqRoomID').toString() == event.map!['room_id'].toString()) {
         // 防止用户被顶号时没有清空表
         deleteChatInfo();
+      } else if(event.map!['type'] == 'clean_public_screen' && sp.getString('sqRoomID').toString() == event.map!['room_id'].toString()){
+        //清除了公屏
+        deleteChatInfo();
       }
     });
     // 收起房间使用
@@ -285,7 +288,6 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         // 防止用户被顶号时没有清空表
         setState(() {
           sp.setBool('sqRoom', false);
-          sp.setString('sqRoomID', '');
           isJoinRoom = false;
         });
       } else if (event.title == '添加新账号') {

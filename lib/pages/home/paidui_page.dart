@@ -148,7 +148,7 @@ class _PaiduiPageState extends State<PaiduiPage>
           onTap: (() {
             if (MyUtils.checkClick() && sp.getBool('joinRoom') == false) {
               setState(() {
-                sp.setBool('joinRoom', false);
+                sp.setBool('joinRoom', true);
               });
               if (index == 2) {
                 doPostBeforeJoin(list2[i].id.toString());
@@ -1112,7 +1112,7 @@ class _PaiduiPageState extends State<PaiduiPage>
                               if (MyUtils.checkClick() &&
                                   sp.getBool('joinRoom') == false) {
                                 setState(() {
-                                  sp.setBool('joinRoom', false);
+                                  sp.setBool('joinRoom', true);
                                 });
                                 doPostBeforeJoin(id.toString());
                               }
@@ -1306,6 +1306,9 @@ class _PaiduiPageState extends State<PaiduiPage>
       CommonBean bean = await DataUtils.postRoomJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
+          setState(() {
+            sp.setBool('joinRoom', false);
+          });
           // ignore: use_build_context_synchronously
           MyUtils.goTransparentRFPage(
               context,

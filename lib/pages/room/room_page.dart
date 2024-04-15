@@ -879,7 +879,7 @@ class _RoomPageState extends State<RoomPage>
     });
     //页面渲染完成
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-// 进入房间后清空代理房间id
+      // 进入房间后清空代理房间id
       sp.setString('daili_roomid', '');
       sp.setString('isShouQi', '0');
       LogE('用户id ${sp.getString('user_id').toString()}');
@@ -901,7 +901,6 @@ class _RoomPageState extends State<RoomPage>
 
       //保存进入房间的id
       sp.setString('roomID', widget.roomId);
-      sp.setString('sqRoomID', '');
       //保持屏幕常亮
       saveLiang();
       //把外面首页旋转的图去掉
@@ -1961,6 +1960,7 @@ class _RoomPageState extends State<RoomPage>
               }
             } else if (event.map!['type'] == 'clean_public_screen') {
               // 清除公屏
+              deleteChatInfo();
               setState(() {
                 list.clear();
                 list2.clear();
@@ -2415,9 +2415,10 @@ class _RoomPageState extends State<RoomPage>
               });
             } else {
               // 正常进入房间使用
-              LogE('正常进入房间===  ${event.map!['uid'].toString() != sp.getString('user_id').toString()}');
-              if(event.map!['uid'].toString() != sp.getString('user_id').toString()){
-
+              LogE(
+                  '正常进入房间===  ${event.map!['uid'].toString() != sp.getString('user_id').toString()}');
+              if (event.map!['uid'].toString() !=
+                  sp.getString('user_id').toString()) {
                 Map<dynamic, dynamic> map = {};
                 map['info'] = event.map!['nickname'];
                 map['type'] = '2';
@@ -4007,7 +4008,7 @@ class _RoomPageState extends State<RoomPage>
 
                           Expanded(
                             child: Transform.translate(
-                              offset: Offset(0,-180.h),
+                              offset: Offset(0, -180.h),
                               child: Container(
                                 width: double.infinity,
                                 color: Colors.transparent,
@@ -4016,27 +4017,29 @@ class _RoomPageState extends State<RoomPage>
                                     RoomItems.lunbotu1(
                                         context,
                                         (sp.getInt('user_level')! >= 3 ||
-                                            sp.getInt('user_grLevel')! >=
-                                                3) &&
-                                            sp
-                                                .getString('scIsOk')
-                                                .toString() ==
-                                                '0'
+                                                    sp.getInt(
+                                                            'user_grLevel')! >=
+                                                        3) &&
+                                                sp
+                                                        .getString('scIsOk')
+                                                        .toString() ==
+                                                    '0'
                                             ? imgList
                                             : (sp.getInt('user_level')! >= 3 ||
-                                            sp.getInt(
-                                                'user_grLevel')! >=
-                                                3) &&
-                                            sp
-                                                .getString('scIsOk')
-                                                .toString() ==
-                                                '1'
-                                            ? imgListCar
-                                            : imgListSC),
+                                                        sp.getInt(
+                                                                'user_grLevel')! >=
+                                                            3) &&
+                                                    sp
+                                                            .getString('scIsOk')
+                                                            .toString() ==
+                                                        '1'
+                                                ? imgListCar
+                                                : imgListSC),
                                     (sp.getInt('user_level')! >= 3 ||
-                                        sp.getInt('user_grLevel')! >=
-                                            3) ? RoomItems.lunbotu2(
-                                        context, imgList2, widget.roomId) : const Text(''),
+                                            sp.getInt('user_grLevel')! >= 3)
+                                        ? RoomItems.lunbotu2(
+                                            context, imgList2, widget.roomId)
+                                        : const Text(''),
                                   ],
                                 ),
                               ),
@@ -4713,54 +4716,91 @@ class _RoomPageState extends State<RoomPage>
               tequanzhuangban = '';
             }
 
-            // 有房间公告消息
-            Map<dynamic, dynamic> mapg = {};
-            mapg['info'] = notice;
-            mapg['type'] = '1';
-            list.add(mapg);
-            // 查询本地存储信息
-            searchChatInfo();
-            // 存储本人进入房间，目的是为了自己能看见自己的坐骑
-            Map<dynamic, dynamic> map = {};
-            map['info'] = bean.data!.userInfo!.nickname!;
-            map['type'] = '2';
-            map['uid'] = sp.getString('user_id').toString();
-            //身份
-            map['identity'] = bean.data!.userInfo!.role!;
-            //等级
-            map['lv'] = bean.data!.userInfo!.level.toString();
-            // 财富等级
-            map['newLv'] = bean.data!.userInfo!.grLevel.toString();
-            // 贵族
-            map['noble_id'] = bean.data!.userInfo!.nobleId.toString();
-            // 萌新
-            map['is_new'] = bean.data!.userInfo!.isNew.toString();
-            // 是否靓号
-            map['is_pretty'] = bean.data!.userInfo!.isPretty.toString();
-            // 新贵
-            map['new_noble'] = bean.data!.userInfo!.newNoble.toString();
-            // 是否点击了欢迎 0未欢迎 1已欢迎
-            map['isWelcome'] = '0';
-            // 座驾名称
-            map['mount_name'] = bean.data!.userInfo!.carDressName!;
+            if(sp.getString('sqRoomID').toString() != widget.roomId || sp.getString('sqRoomID').toString().isEmpty){
+              sp.setString('sqRoomID', '');
+              //进入房间
+              Map<dynamic, dynamic> mapg = {};
+              mapg['info'] = notice;
+              mapg['type'] = '1';
+              list.add(mapg);
+              // 查询本地存储信息
+              searchChatInfo();
+              // 存储本人进入房间，目的是为了自己能看见自己的坐骑
+              Map<dynamic, dynamic> map = {};
+              map['info'] = bean.data!.userInfo!.nickname!;
+              map['type'] = '2';
+              map['uid'] = sp.getString('user_id').toString();
+              //身份
+              map['identity'] = bean.data!.userInfo!.role!;
+              //等级
+              map['lv'] = bean.data!.userInfo!.level.toString();
+              // 财富等级
+              map['newLv'] = bean.data!.userInfo!.grLevel.toString();
+              // 贵族
+              map['noble_id'] = bean.data!.userInfo!.nobleId.toString();
+              // 萌新
+              map['is_new'] = bean.data!.userInfo!.isNew.toString();
+              // 是否靓号
+              map['is_pretty'] = bean.data!.userInfo!.isPretty.toString();
+              // 新贵
+              map['new_noble'] = bean.data!.userInfo!.newNoble.toString();
+              // 是否点击了欢迎 0未欢迎 1已欢迎
+              map['isWelcome'] = '0';
+              // 座驾名称
+              map['mount_name'] = bean.data!.userInfo!.carDressName!;
 
-            /// 判断如果装扮了座驾，需要播放
-            if (bean.data!.userInfo!.carDressGifImg!.isNotEmpty) {
-              if (isDevices == 'android') {
-                // 这个是为了让别人也能看见自己送出的礼物
-                if (listUrlZJ.isEmpty) {
-                  if (bean.data!.userInfo!.carDressName! == '白虎守护' ||
-                      bean.data!.userInfo!.carDressName! == '飞鹰' ||
-                      bean.data!.userInfo!.carDressName! == '飞鱼' ||
-                      bean.data!.userInfo!.carDressName! == '凤凰涅槃' ||
-                      bean.data!.userInfo!.carDressName! == '金龙降临' ||
-                      bean.data!.userInfo!.carDressName! == '鲸鱼' ||
-                      bean.data!.userInfo!.carDressName! == '旷世神龙' ||
-                      bean.data!.userInfo!.carDressName! == '兰博基尼' ||
-                      bean.data!.userInfo!.carDressName! == '青龙守护' ||
-                      bean.data!.userInfo!.carDressName! == '星空战机') {
-                    saveSVGAIMAGEZJ(bean.data!.userInfo!.carDressGifImg!);
+              /// 判断如果装扮了座驾，需要播放
+              if (bean.data!.userInfo!.carDressGifImg!.isNotEmpty) {
+                if (isDevices == 'android') {
+                  // 这个是为了让别人也能看见自己送出的礼物
+                  if (listUrlZJ.isEmpty) {
+                    if (bean.data!.userInfo!.carDressName! == '白虎守护' ||
+                        bean.data!.userInfo!.carDressName! == '飞鹰' ||
+                        bean.data!.userInfo!.carDressName! == '飞鱼' ||
+                        bean.data!.userInfo!.carDressName! == '凤凰涅槃' ||
+                        bean.data!.userInfo!.carDressName! == '金龙降临' ||
+                        bean.data!.userInfo!.carDressName! == '鲸鱼' ||
+                        bean.data!.userInfo!.carDressName! == '旷世神龙' ||
+                        bean.data!.userInfo!.carDressName! == '兰博基尼' ||
+                        bean.data!.userInfo!.carDressName! == '青龙守护' ||
+                        bean.data!.userInfo!.carDressName! == '星空战机') {
+                      saveSVGAIMAGEZJ(bean.data!.userInfo!.carDressGifImg!);
+                    } else {
+                      setState(() {
+                        Map<dynamic, dynamic> map = {};
+                        map['svgaUrl'] = bean.data!.userInfo!.carDressGifImg!;
+                        map['svgaBool'] = true;
+                        listUrlZJ.add(map);
+                        isZJShow = true;
+                      });
+                      showStarZJ(listUrlZJ[0]);
+                    }
                   } else {
+                    if (bean.data!.userInfo!.carDressName! == '白虎守护' ||
+                        bean.data!.userInfo!.carDressName! == '飞鹰' ||
+                        bean.data!.userInfo!.carDressName! == '飞鱼' ||
+                        bean.data!.userInfo!.carDressName! == '凤凰涅槃' ||
+                        bean.data!.userInfo!.carDressName! == '金龙降临' ||
+                        bean.data!.userInfo!.carDressName! == '鲸鱼' ||
+                        bean.data!.userInfo!.carDressName! == '旷世神龙' ||
+                        bean.data!.userInfo!.carDressName! == '兰博基尼' ||
+                        bean.data!.userInfo!.carDressName! == '青龙守护' ||
+                        bean.data!.userInfo!.carDressName! == '星空战机') {
+                      saveSVGAIMAGEZJ(bean.data!.userInfo!.carDressGifImg!);
+                    } else {
+                      setState(() {
+                        Map<dynamic, dynamic> map = {};
+                        map['svgaUrl'] = bean.data!.userInfo!.carDressGifImg!;
+                        map['svgaBool'] = true;
+                        listUrlZJ.add(map);
+                        isZJShow = true;
+                      });
+                      showStarZJ(listUrlZJ[0]);
+                    }
+                  }
+                } else {
+                  // ios
+                  if (listUrlZJ.isEmpty) {
                     setState(() {
                       Map<dynamic, dynamic> map = {};
                       map['svgaUrl'] = bean.data!.userInfo!.carDressGifImg!;
@@ -4769,20 +4809,8 @@ class _RoomPageState extends State<RoomPage>
                       isZJShow = true;
                     });
                     showStarZJ(listUrlZJ[0]);
-                  }
-                } else {
-                  if (bean.data!.userInfo!.carDressName! == '白虎守护' ||
-                      bean.data!.userInfo!.carDressName! == '飞鹰' ||
-                      bean.data!.userInfo!.carDressName! == '飞鱼' ||
-                      bean.data!.userInfo!.carDressName! == '凤凰涅槃' ||
-                      bean.data!.userInfo!.carDressName! == '金龙降临' ||
-                      bean.data!.userInfo!.carDressName! == '鲸鱼' ||
-                      bean.data!.userInfo!.carDressName! == '旷世神龙' ||
-                      bean.data!.userInfo!.carDressName! == '兰博基尼' ||
-                      bean.data!.userInfo!.carDressName! == '青龙守护' ||
-                      bean.data!.userInfo!.carDressName! == '星空战机') {
-                    saveSVGAIMAGEZJ(bean.data!.userInfo!.carDressGifImg!);
                   } else {
+                    // 直接用网络图地址
                     setState(() {
                       Map<dynamic, dynamic> map = {};
                       map['svgaUrl'] = bean.data!.userInfo!.carDressGifImg!;
@@ -4790,34 +4818,12 @@ class _RoomPageState extends State<RoomPage>
                       listUrlZJ.add(map);
                       isZJShow = true;
                     });
-                    showStarZJ(listUrlZJ[0]);
                   }
-                }
-              } else {
-                // ios
-                if (listUrlZJ.isEmpty) {
-                  setState(() {
-                    Map<dynamic, dynamic> map = {};
-                    map['svgaUrl'] = bean.data!.userInfo!.carDressGifImg!;
-                    map['svgaBool'] = true;
-                    listUrlZJ.add(map);
-                    isZJShow = true;
-                  });
-                  showStarZJ(listUrlZJ[0]);
-                } else {
-                  // 直接用网络图地址
-                  setState(() {
-                    Map<dynamic, dynamic> map = {};
-                    map['svgaUrl'] = bean.data!.userInfo!.carDressGifImg!;
-                    map['svgaBool'] = true;
-                    listUrlZJ.add(map);
-                    isZJShow = true;
-                  });
                 }
               }
+              list.add(map);
             }
-            list.add(map);
-            
+
             isOK = true;
           });
           break;
