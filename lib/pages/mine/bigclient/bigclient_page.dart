@@ -300,7 +300,7 @@ class _BigClientPageTop extends StatelessWidget {
           ),
           _head(70, c.avatarFrameGifImg, c.avatarFrameImg, 'LV.${c.grLevel}', c.data.gr_value),
           _point(c.texts[index]),
-          if (index < c.data.title)
+          if (index == c.data.title - 1)
           Positioned(
             left: 39,
             bottom: 35,
@@ -323,19 +323,17 @@ class _BigClientPageTop extends StatelessWidget {
                 ],
               ),
             ),
-          )
-          else
-          const Positioned(
+          ),
+          Positioned(
             left: 196,
             bottom: 94,
             width: 74,
             height: 29,
             child: Image(
-              image: AssetImage('assets/images/bigclient_tag_wjs.png'),
+              image: AssetImage('assets/images/bigclient_tag_${c.getTag(index)}.png'),
               fit: BoxFit.contain,
             ),
           ),
-          
           
           // Positioned(
           //   left: 201,
@@ -577,7 +575,7 @@ class _BigClientPageList0 extends StatelessWidget {
         ),
         const Spacer(),
         Padding(
-          padding: EdgeInsets.only(bottom: Get.bottomBarHeight + 20.w),
+          padding: EdgeInsets.only(bottom: Get.bottomBarHeight + 30.w),
           child: WidgetUtils.onlyTextCenter('注:金豆俸禄将在您达到等级要求后，每日18点发放至本页', StyleUtils.getCommonTextStyle(color: MyColors.mineYellow, fontSize: 24.sp)),
         ),
       ],
