@@ -42,6 +42,16 @@ class _ShowLiWuPageState extends State<ShowLiWuPage> {
   bool isChoose = true;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+      useDayLW = widget.list[0].useDay1!.toString();
+      priceLW = widget.list[0].price1!.toString();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black54,
@@ -117,7 +127,8 @@ class _ShowLiWuPageState extends State<ShowLiWuPage> {
                           listB[0] = true;
                           if (listB.length > 1) {
                             listB[1] = false;
-                          } else if (listB.length > 2) {
+                          }
+                          if (listB.length > 2) {
                             listB[2] = false;
                           }
                         });

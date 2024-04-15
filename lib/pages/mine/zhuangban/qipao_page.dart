@@ -164,7 +164,7 @@ class _QipaoPageState extends State<QipaoPage>  with AutomaticKeepAliveClientMix
           header: MyUtils.myHeader(),
           footer: MyUtils.myFotter(),
           controller: _refreshController,
-          enablePullUp: true,
+          enablePullUp: false,
           onLoading: _onLoading,
           onRefresh: _onRefresh,
           child: OptionGridView(
