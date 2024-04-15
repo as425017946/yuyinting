@@ -64,13 +64,13 @@ class RoomInfo {
   String? followStatus;
   int? isForbation;
   int? lockMic;
+  int? syTime;
   int? pkTime;
   int? pkStatus;
-  int? syTime;
-  List<MikeList>? mikeList;
   String? blueScore;
   String? redScore;
   String? win;
+  List<MikeList>? mikeList;
 
   RoomInfo(
       {this.roomNumber,
@@ -86,14 +86,14 @@ class RoomInfo {
         this.bgUrl,
         this.followStatus,
         this.isForbation,
-        this.mikeList,
         this.lockMic,
+        this.syTime,
         this.pkTime,
         this.pkStatus,
-        this.syTime,
         this.blueScore,
         this.redScore,
-        this.win});
+        this.win,
+        this.mikeList});
 
   RoomInfo.fromJson(Map<String, dynamic> json) {
     roomNumber = json['room_number'];
@@ -110,9 +110,9 @@ class RoomInfo {
     followStatus = json['follow_status'];
     isForbation = json['isForbation'];
     lockMic = json['lock_mic'];
+    syTime = json['sy_time'];
     pkTime = json['pk_time'];
     pkStatus = json['pk_status'];
-    syTime = json['sy_time'];
     blueScore = json['blue_score'];
     redScore = json['red_score'];
     win = json['win'];
@@ -140,9 +140,9 @@ class RoomInfo {
     data['follow_status'] = this.followStatus;
     data['isForbation'] = this.isForbation;
     data['lock_mic'] = this.lockMic;
+    data['sy_time'] = this.syTime;
     data['pk_time'] = this.pkTime;
     data['pk_status'] = this.pkStatus;
-    data['sy_time'] = this.syTime;
     data['blue_score'] = this.blueScore;
     data['red_score'] = this.redScore;
     data['win'] = this.win;
@@ -161,16 +161,17 @@ class MikeList {
   int? isBoss;
   int? isLock;
   int? isClose;
+  int? editTime;
   String? nickname;
   String? avatar;
   int? charm;
   String? identity;
   String? waveImg;
   String? waveGifImg;
+  String? waveName;
   String? avatarFrameImg;
   String? avatarFrameGifImg;
   bool? isAudio;
-  String? waveName;
 
   MikeList(
       {this.id,
@@ -180,16 +181,17 @@ class MikeList {
         this.isBoss,
         this.isLock,
         this.isClose,
+        this.editTime,
         this.nickname,
         this.avatar,
         this.charm,
         this.identity,
         this.waveImg,
         this.waveGifImg,
+        this.waveName,
         this.avatarFrameImg,
         this.avatarFrameGifImg,
-        this.isAudio,
-        this.waveName});
+        this.isAudio});
 
   MikeList.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -199,16 +201,17 @@ class MikeList {
     isBoss = json['is_boss'];
     isLock = json['is_lock'];
     isClose = json['is_close'];
+    editTime = json['edit_time'];
     nickname = json['nickname'];
     avatar = json['avatar'];
     charm = json['charm'];
     identity = json['identity'];
     waveImg = json['wave_img'];
     waveGifImg = json['wave_gif_img'];
+    waveName = json['wave_name'];
     avatarFrameImg = json['avatar_frame_img'];
     avatarFrameGifImg = json['avatar_frame_gif_img'];
     isAudio = json['is_audio'];
-    waveName = json['wave_name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -220,16 +223,17 @@ class MikeList {
     data['is_boss'] = this.isBoss;
     data['is_lock'] = this.isLock;
     data['is_close'] = this.isClose;
+    data['edit_time'] = this.editTime;
     data['nickname'] = this.nickname;
     data['avatar'] = this.avatar;
     data['charm'] = this.charm;
     data['identity'] = this.identity;
     data['wave_img'] = this.waveImg;
     data['wave_gif_img'] = this.waveGifImg;
+    data['wave_name'] = this.waveName;
     data['avatar_frame_img'] = this.avatarFrameImg;
     data['avatar_frame_gif_img'] = this.avatarFrameGifImg;
     data['is_audio'] = this.isAudio;
-    data['wave_name'] = this.waveName;
     return data;
   }
 }
@@ -238,25 +242,51 @@ class UserInfo {
   String? role;
   String? nobleId;
   String? carDressGifImg;
+  String? carDressName;
+  String? nickname;
   int? level;
   int? grLevel;
-  UserInfo({this.role, this.nobleId, this.carDressGifImg, this.level, this.grLevel});
+  int? isPretty;
+  int? isNew;
+  int? newNoble;
+
+  UserInfo(
+      {this.role,
+        this.nobleId,
+        this.carDressGifImg,
+        this.carDressName,
+        this.nickname,
+        this.level,
+        this.grLevel,
+        this.isPretty,
+        this.isNew,
+        this.newNoble});
 
   UserInfo.fromJson(Map<String, dynamic> json) {
     role = json['role'];
     nobleId = json['noble_id'];
+    carDressGifImg = json['car_dress_gif_img'];
+    carDressName = json['car_dress_name'];
+    nickname = json['nickname'];
     level = json['level'];
     grLevel = json['gr_level'];
-    carDressGifImg = json['car_dress_gif_img'];
+    isPretty = json['is_pretty'];
+    isNew = json['is_new'];
+    newNoble = json['new_noble'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['role'] = this.role;
-    data['noble_id'] = this.nobleId;;
+    data['noble_id'] = this.nobleId;
+    data['car_dress_gif_img'] = this.carDressGifImg;
+    data['car_dress_name'] = this.carDressName;
+    data['nickname'] = this.nickname;
     data['level'] = this.level;
     data['gr_level'] = this.grLevel;
-    data['car_dress_gif_img'] = this.carDressGifImg;
+    data['is_pretty'] = this.isPretty;
+    data['is_new'] = this.isNew;
+    data['new_noble'] = this.newNoble;
     return data;
   }
 }

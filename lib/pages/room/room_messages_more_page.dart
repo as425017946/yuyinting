@@ -1,36 +1,47 @@
+import 'dart:async';
 import 'dart:io';
-
+import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_sound/public/flutter_sound_player.dart';
+import 'package:flutter_sound/flutter_sound.dart';
 import 'package:im_flutter_sdk/im_flutter_sdk.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:yuyinting/colors/my_colors.dart';
+import 'package:yuyinting/main.dart';
+import 'package:yuyinting/pages/message/chat_recall_page.dart';
 import 'package:yuyinting/pages/room/room_send_info_sl_page.dart';
-import 'package:yuyinting/utils/widget_utils.dart';
-
+import 'package:yuyinting/utils/event_utils.dart';
+import 'package:yuyinting/utils/log_util.dart';
+import 'package:yuyinting/widget/SwiperPage.dart';
 import '../../bean/Common_bean.dart';
 import '../../bean/commonStringBean.dart';
 import '../../bean/isPayBean.dart';
-import '../../colors/my_colors.dart';
-import '../../config/my_config.dart';
 import '../../db/DatabaseHelper.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
-import '../../main.dart';
-import '../../utils/event_utils.dart';
-import '../../utils/log_util.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
-import '../../widget/SwiperPage.dart';
-import '../message/chat_recall_page.dart';
+import '../../utils/widget_utils.dart';
 import '../message/geren/people_info_page.dart';
 import '../message/hongbao_page.dart';
 import '../mine/my/my_info_page.dart';
 import '../mine/setting/password_pay_page.dart';
+import 'package:flutter_sound/public/flutter_sound_player.dart';
+import 'package:flutter_sound_platform_interface/flutter_sound_recorder_platform_interface.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
+
+enum RecordPlayState {
+  record,
+  recording,
+  play,
+  playing,
+}
 /// 厅内消息详情
 class RoomMessagesMorePage extends StatefulWidget {
   String otherUid;
@@ -56,13 +67,48 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> with MsgRea
   int length = 0;
   String isGZ = '0';
 
+
+  // 录音使用
+  Codec _codec = Codec.aacADTS;
+  //录制权限
+  bool _voiceRecorderIsInitialized = false;
+  bool mediaRecord = true;
+  bool hasRecord = false; //是否有音频文件可播放
+  int isPlay = 0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
+  int audioNum = 0; // 记录录了多久
+  bool isCancel = false, isLuZhi = false;
+  FlutterSoundRecorder recorderModule = FlutterSoundRecorder();
+  FlutterSoundPlayer playerModule = FlutterSoundPlayer();
+  late StreamSubscription _recorderSubscription;
+  RecordPlayState _state = RecordPlayState.record;
+  var _path = "";
+  var _maxLength = 60.0;
+  // 是否有麦克风权限
+  bool isMAI = false;
+  // 设备是安卓还是ios
+  String isDevices = 'android';
+
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    if (Platform.isAndroid) {
+      getPermissionStatus();
+      setState(() {
+        isDevices = 'android';
+      });
+    } else if (Platform.isIOS) {
+      init();
+      setState(() {
+        isDevices = 'ios';
+      });
+    }
     MyUtils.addChatListener();
     doPostUserFollowStatus();
     doLocationInfo();
+    _mPlayer!.openPlayer().then((value) {
+    });
     listen = eventBus.on<SendMessageBack>().listen((event) {
       doLocationInfo();
     });
@@ -90,11 +136,224 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> with MsgRea
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    super.dispose();
     listen.cancel();
     listenHB.cancel();
     listenSL.cancel();
+    _mPlayer!.closePlayer();
+    _mPlayer = null;
+    _releaseFlauto();
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  Future<void> init() async {
+    // 获取权限
+    await [Permission.microphone].request();
+    //开启录音
+    await recorderModule.openRecorder();
+    var status = await Permission.storage.request();
+    if (status.isGranted) {
+      setState(() {
+        isMAI = true;
+      });
+      // 用户已授予权限，可以访问文件
+      // 在这里执行打开文件等操作
+      LogE('权限同意');
+    } else {
+      setState(() {
+        isMAI = false;
+      });
+      // 用户拒绝了权限请求，需要处理此情况
+      LogE('权限拒绝');
+    }
+  }
+
+  Future<bool> getPermissionStatus() async {
+    Permission permission = Permission.microphone;
+    //granted 通过，denied 被拒绝，permanentlyDenied 拒绝且不在提示
+    PermissionStatus status = await permission.status;
+    if (status.isGranted) {
+      openTheRecorder();
+      setState(() {
+        isMAI = true;
+      });
+      return true;
+    } else if (status.isDenied) {
+      requestPermission(permission);
+    } else if (status.isPermanentlyDenied) {
+      openAppSettings();
+    } else if (status.isRestricted) {
+      requestPermission(permission);
+    } else {}
+    setState(() {
+      isMAI = false;
+    });
+    return false;
+  }
+
+  ///申请权限
+  void requestPermission(Permission permission) async {
+    PermissionStatus status = await permission.request();
+    if (status.isPermanentlyDenied) {
+      openAppSettings();
+    }
+  }
+
+  Future<void> openTheRecorder() async {
+    var status = await Permission.storage.request();
+    if (status.isGranted) {
+      // 用户已授予权限，可以访问文件
+      // 在这里执行打开文件等操作
+      LogE('权限同意');
+    } else {
+      // 用户拒绝了权限请求，需要处理此情况
+      LogE('权限拒绝');
+    }
+    if (!kIsWeb) {
+      var status = await Permission.microphone.request();
+      if (status != PermissionStatus.granted) {
+        throw RecordingPermissionException('Microphone permission not granted');
+      }
+    }
+    await recorderModule!.openRecorder();
+    if (!await recorderModule!.isEncoderSupported(_codec) && kIsWeb) {
+      _codec = Codec.opusWebM;
+      _path = 'tau_file.webm';
+      if (!await recorderModule!.isEncoderSupported(_codec) && kIsWeb) {
+        return;
+      }
+    }
+    final session = await AudioSession.instance;
+    await session.configure(AudioSessionConfiguration(
+      avAudioSessionCategory: AVAudioSessionCategory.playAndRecord,
+      avAudioSessionCategoryOptions:
+      AVAudioSessionCategoryOptions.allowBluetooth |
+      AVAudioSessionCategoryOptions.defaultToSpeaker,
+      avAudioSessionMode: AVAudioSessionMode.spokenAudio,
+      avAudioSessionRouteSharingPolicy:
+      AVAudioSessionRouteSharingPolicy.defaultPolicy,
+      avAudioSessionSetActiveOptions: AVAudioSessionSetActiveOptions.none,
+      androidAudioAttributes: const AndroidAudioAttributes(
+        contentType: AndroidAudioContentType.speech,
+        flags: AndroidAudioFlags.none,
+        usage: AndroidAudioUsage.voiceCommunication,
+      ),
+      androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
+      androidWillPauseWhenDucked: true,
+    ));
+  }
+
+  /// 开始录音
+  late Timer _timer;
+
+  /// 开始录音
+  _startRecorder() async {
+    try {
+      Directory tempDir = await getApplicationSupportDirectory();
+      var time = DateTime.now().millisecondsSinceEpoch;
+      String path = '${tempDir.path}}-$time${ext[Codec.aacADTS.index]}';
+
+      print('===>  准备开始录音');
+      await recorderModule.startRecorder(
+          toFile: path,
+          codec: Codec.aacADTS,
+          bitRate: 128000,
+          sampleRate: 44000,
+          audioSource: AudioSource.microphone);
+      print('===>  开始录音');
+      if (isDevices == 'ios') {
+        /// 监听录音
+        _recorderSubscription = recorderModule.onProgress!.listen((e) {
+          if (e != null && e.duration != null) {
+            DateTime date = DateTime.fromMillisecondsSinceEpoch(
+                e.duration.inMilliseconds,
+                isUtc: true);
+
+            if (date.second >= _maxLength) {
+              print('===>  到达时常停止录音');
+              setState(() {
+                audioNum = 60;
+                isPlay = 2;
+              });
+              _stopRecorder();
+            }
+            setState(() {
+              audioNum = date.second;
+              print("录制声音：$audioNum");
+              print("时间：${date.second}");
+              print("当前振幅：${e.decibels}");
+            });
+          }
+        });
+        setState(() {
+          _state = RecordPlayState.recording;
+          _path = path;
+          print("path == $path");
+        });
+      } else {
+        _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+          if (isPlay == 2) {
+            LogE('停止了==');
+            _stopRecorder(); // 确保录音器停止并保存数据到文件
+            timer.cancel();
+          } else {
+            setState(() {
+              _maxLength--;
+              audioNum++;
+            });
+          }
+          if (_maxLength == 0) {
+            setState(() {
+              isPlay = 2;
+            });
+            timer.cancel();
+            _stopRecorder();
+          }
+        });
+      }
+      setState(() {
+        _state = RecordPlayState.recording;
+        _path = path;
+        print("path == $path");
+      });
+    } catch (err) {
+      setState(() {
+        print(err.toString());
+        _stopRecorder();
+        _state = RecordPlayState.record;
+      });
+    }
+  }
+
+  /// 结束录音
+  _stopRecorder() async {
+    try {
+      await recorderModule.stopRecorder();
+      if (isDevices != 'ios') {
+        _timer.cancel();
+      }
+      print('stopRecorder===> fliePath:$_path');
+      _cancelRecorderSubscriptions();
+    } catch (err) {
+      print('stopRecorder error: $err');
+    }
+    setState(() {
+      _state = RecordPlayState.play;
+    });
+  }
+
+  /// 取消录音监听
+  void _cancelRecorderSubscriptions() {
+    if (_recorderSubscription != null) {
+      _recorderSubscription.cancel();
+    }
+  }
+
+  /// 释放录音
+  Future<void> _releaseFlauto() async {
+    try {
+      await recorderModule.closeRecorder();
+    } catch (e) {}
   }
 
   // 在数据变化后将滚动位置设置为最后一个item的位置
@@ -936,7 +1195,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> with MsgRea
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -972,7 +1231,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> with MsgRea
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 
@@ -1007,7 +1266,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage> with MsgRea
           break;
       }
     } catch (e) {
-      MyToastUtils.showToastBottom(MyConfig.errorTitle);
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
 

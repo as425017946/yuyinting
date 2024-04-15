@@ -458,11 +458,10 @@ class _MyInfoPageState extends State<MyInfoPage> {
                               level.toString(),
                               style: TextStyle(
                                   fontSize: 26.sp,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'LR',
+                                  fontFamily: 'Impact',
                                   foreground: Paint()
                                     ..style = PaintingStyle.stroke
-                                    ..strokeWidth = 2
+                                    ..strokeWidth = 1
                                     ..color = MyColors.djTwoM),
                             ),
                             Text(
@@ -470,8 +469,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
                               style: TextStyle(
                                   color: MyColors.djOne,
                                   fontSize: 26.sp,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: 'LR'),
+                                  fontFamily: 'Impact'),
                             ),
                           ],
                         ))
@@ -516,11 +514,10 @@ class _MyInfoPageState extends State<MyInfoPage> {
                                 grLevel.toString(),
                                 style: TextStyle(
                                     fontSize: 26.sp,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: 'LR',
+                                    fontFamily: 'Impact',
                                     foreground: Paint()
                                       ..style = PaintingStyle.stroke
-                                      ..strokeWidth = 2
+                                      ..strokeWidth = 1
                                       ..color = MyColors.djTwoM),
                               ),
                               Text(
@@ -528,8 +525,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
                                 style: TextStyle(
                                     color: MyColors.djOne,
                                     fontSize: 26.sp,
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: 'LR'),
+                                    fontFamily: 'Impact'),
                               ),
                             ],
                           ))

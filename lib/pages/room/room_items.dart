@@ -295,7 +295,6 @@ class RoomItems {
                                       .toString(),
                                   style: TextStyle(
                                       fontSize: 18.sp,
-                                      fontWeight: FontWeight.w600,
                                       fontFamily: 'LR',
                                       foreground: Paint()
                                         ..style = PaintingStyle.stroke
@@ -308,7 +307,6 @@ class RoomItems {
                                   style: TextStyle(
                                       color: MyColors.djOne,
                                       fontSize: 18.sp,
-                                      fontWeight: FontWeight.w600,
                                       fontFamily: 'LR'),
                                 ),
                               ],
@@ -408,7 +406,6 @@ class RoomItems {
                                       .toString(),
                                   style: TextStyle(
                                       fontSize: 18.sp,
-                                      fontWeight: FontWeight.w600,
                                       fontFamily: 'LR',
                                       foreground: Paint()
                                         ..style = PaintingStyle.stroke
@@ -421,7 +418,6 @@ class RoomItems {
                                   style: TextStyle(
                                       color: MyColors.djOne,
                                       fontSize: 18.sp,
-                                      fontWeight: FontWeight.w600,
                                       fontFamily: 'LR'),
                                 ),
                               ],
@@ -432,45 +428,45 @@ class RoomItems {
                     ),
                   ),
                   WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
-                  //贵族
-                  WidgetSpan(
-                      child: Transform.translate(
-                        offset: Offset(0, 5.h),
-                        child: list[i]['noble_id'].toString() == "1"
-                            ? WidgetUtils.showImages(
-                            'assets/images/tequan_yongshi.png', 38.h, 38.h)
-                            : list[i]['noble_id'].toString() == "2"
-                            ? WidgetUtils.showImages(
-                            'assets/images/tequan_qishi.png', 38.h, 38.h)
-                            : list[i]['noble_id'].toString() == "3"
-                            ? WidgetUtils.showImages(
-                            'assets/images/tequan_bojue.png',
-                            38.h,
-                            38.h)
-                            : list[i]['noble_id'].toString() == "4"
-                            ? WidgetUtils.showImages(
-                            'assets/images/tequan_houjue.png',
-                            38.h,
-                            38.h)
-                            : list[i]['noble_id'].toString() == "5"
-                            ? WidgetUtils.showImages(
-                            'assets/images/tequan_gongjue.png',
-                            38.h,
-                            38.h)
-                            : list[i]['noble_id'].toString() == "6"
-                            ? WidgetUtils.showImages(
-                            'assets/images/tequan_guowang.png',
-                            38.h,
-                            38.h)
-                            : list[i]['noble_id'].toString() ==
-                            "7"
-                            ? WidgetUtils.showImages(
-                            'assets/images/tequan_diwang.png',
-                            38.h,
-                            38.h)
-                            : const Text(''),
-                      )),
-                  WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
+                  // //贵族
+                  // WidgetSpan(
+                  //     child: Transform.translate(
+                  //       offset: Offset(0, 5.h),
+                  //       child: list[i]['noble_id'].toString() == "1"
+                  //           ? WidgetUtils.showImages(
+                  //           'assets/images/tequan_yongshi.png', 38.h, 38.h)
+                  //           : list[i]['noble_id'].toString() == "2"
+                  //           ? WidgetUtils.showImages(
+                  //           'assets/images/tequan_qishi.png', 38.h, 38.h)
+                  //           : list[i]['noble_id'].toString() == "3"
+                  //           ? WidgetUtils.showImages(
+                  //           'assets/images/tequan_bojue.png',
+                  //           38.h,
+                  //           38.h)
+                  //           : list[i]['noble_id'].toString() == "4"
+                  //           ? WidgetUtils.showImages(
+                  //           'assets/images/tequan_houjue.png',
+                  //           38.h,
+                  //           38.h)
+                  //           : list[i]['noble_id'].toString() == "5"
+                  //           ? WidgetUtils.showImages(
+                  //           'assets/images/tequan_gongjue.png',
+                  //           38.h,
+                  //           38.h)
+                  //           : list[i]['noble_id'].toString() == "6"
+                  //           ? WidgetUtils.showImages(
+                  //           'assets/images/tequan_guowang.png',
+                  //           38.h,
+                  //           38.h)
+                  //           : list[i]['noble_id'].toString() ==
+                  //           "7"
+                  //           ? WidgetUtils.showImages(
+                  //           'assets/images/tequan_diwang.png',
+                  //           38.h,
+                  //           38.h)
+                  //           : const Text(''),
+                  //     )),
+                  // WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
                   // 靓号
                   WidgetSpan(
                       child: Transform.translate(
@@ -672,7 +668,6 @@ class RoomItems {
                                   .toString(),
                               style: TextStyle(
                                   fontSize: 18.sp,
-                                  fontWeight: FontWeight.w600,
                                   fontFamily: 'LR',
                                   foreground: Paint()
                                     ..style = PaintingStyle.stroke
@@ -685,7 +680,6 @@ class RoomItems {
                               style: TextStyle(
                                   color: MyColors.djOne,
                                   fontSize: 18.sp,
-                                  fontWeight: FontWeight.w600,
                                   fontFamily: 'LR'),
                             ),
                           ],
@@ -785,7 +779,6 @@ class RoomItems {
                                   .toString(),
                               style: TextStyle(
                                   fontSize: 18.sp,
-                                  fontWeight: FontWeight.w600,
                                   fontFamily: 'LR',
                                   foreground: Paint()
                                     ..style = PaintingStyle.stroke
@@ -798,7 +791,6 @@ class RoomItems {
                               style: TextStyle(
                                   color: MyColors.djOne,
                                   fontSize: 18.sp,
-                                  fontWeight: FontWeight.w600,
                                   fontFamily: 'LR'),
                             ),
                           ],
@@ -809,42 +801,42 @@ class RoomItems {
                 ),
               ),
               WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
-              //贵族
-              WidgetSpan(
-                  child: Transform.translate(
-                    offset: Offset(0, 5.h),
-                    child: list[i]['noble_id'].toString() == "1"
-                        ? WidgetUtils.showImages(
-                        'assets/images/tequan_yongshi.png', 38.h, 38.h)
-                        : list[i]['noble_id'].toString() == "2"
-                        ? WidgetUtils.showImages(
-                        'assets/images/tequan_qishi.png', 38.h, 38.h)
-                        : list[i]['noble_id'].toString() == "3"
-                        ? WidgetUtils.showImages(
-                        'assets/images/tequan_bojue.png', 38.h, 38.h)
-                        : list[i]['noble_id'].toString() == "4"
-                        ? WidgetUtils.showImages(
-                        'assets/images/tequan_houjue.png',
-                        38.h,
-                        38.h)
-                        : list[i]['noble_id'].toString() == "5"
-                        ? WidgetUtils.showImages(
-                        'assets/images/tequan_gongjue.png',
-                        38.h,
-                        38.h)
-                        : list[i]['noble_id'].toString() == "6"
-                        ? WidgetUtils.showImages(
-                        'assets/images/tequan_guowang.png',
-                        38.h,
-                        38.h)
-                        : list[i]['noble_id'].toString() == "7"
-                        ? WidgetUtils.showImages(
-                        'assets/images/tequan_diwang.png',
-                        38.h,
-                        38.h)
-                        : const Text(''),
-                  )),
-              WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
+              // //贵族
+              // WidgetSpan(
+              //     child: Transform.translate(
+              //       offset: Offset(0, 5.h),
+              //       child: list[i]['noble_id'].toString() == "1"
+              //           ? WidgetUtils.showImages(
+              //           'assets/images/tequan_yongshi.png', 38.h, 38.h)
+              //           : list[i]['noble_id'].toString() == "2"
+              //           ? WidgetUtils.showImages(
+              //           'assets/images/tequan_qishi.png', 38.h, 38.h)
+              //           : list[i]['noble_id'].toString() == "3"
+              //           ? WidgetUtils.showImages(
+              //           'assets/images/tequan_bojue.png', 38.h, 38.h)
+              //           : list[i]['noble_id'].toString() == "4"
+              //           ? WidgetUtils.showImages(
+              //           'assets/images/tequan_houjue.png',
+              //           38.h,
+              //           38.h)
+              //           : list[i]['noble_id'].toString() == "5"
+              //           ? WidgetUtils.showImages(
+              //           'assets/images/tequan_gongjue.png',
+              //           38.h,
+              //           38.h)
+              //           : list[i]['noble_id'].toString() == "6"
+              //           ? WidgetUtils.showImages(
+              //           'assets/images/tequan_guowang.png',
+              //           38.h,
+              //           38.h)
+              //           : list[i]['noble_id'].toString() == "7"
+              //           ? WidgetUtils.showImages(
+              //           'assets/images/tequan_diwang.png',
+              //           38.h,
+              //           38.h)
+              //           : const Text(''),
+              //     )),
+              // WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
               // 靓号
               WidgetSpan(
                   child: Transform.translate(
@@ -1494,7 +1486,6 @@ class RoomItems {
                                         .toString(),
                                     style: TextStyle(
                                         fontSize: 18.sp,
-                                        fontWeight: FontWeight.w600,
                                         fontFamily: 'LR',
                                         foreground: Paint()
                                           ..style = PaintingStyle.stroke
@@ -1507,7 +1498,6 @@ class RoomItems {
                                     style: TextStyle(
                                         color: MyColors.djOne,
                                         fontSize: 18.sp,
-                                        fontWeight: FontWeight.w600,
                                         fontFamily: 'LR'),
                                   ),
                                 ],
@@ -1614,7 +1604,6 @@ class RoomItems {
                                         .toString(),
                                     style: TextStyle(
                                         fontSize: 18.sp,
-                                        fontWeight: FontWeight.w600,
                                         fontFamily: 'LR',
                                         foreground: Paint()
                                           ..style = PaintingStyle.stroke
@@ -1627,7 +1616,6 @@ class RoomItems {
                                     style: TextStyle(
                                         color: MyColors.djOne,
                                         fontSize: 18.sp,
-                                        fontWeight: FontWeight.w600,
                                         fontFamily: 'LR'),
                                   ),
                                 ],
@@ -1638,47 +1626,47 @@ class RoomItems {
                       ),
                     ),
                     WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
-                    //贵族
-                    WidgetSpan(
-                        child: Transform.translate(
-                          offset: Offset(0, 5.h),
-                          child: list[i]['noble_id'].toString() == "1"
-                              ? WidgetUtils.showImages(
-                              'assets/images/tequan_yongshi.png', 38.h, 38.h)
-                              : list[i]['noble_id'].toString() == "2"
-                              ? WidgetUtils.showImages(
-                              'assets/images/tequan_qishi.png', 38.h, 38.h)
-                              : list[i]['noble_id'].toString() == "3"
-                              ? WidgetUtils.showImages(
-                              'assets/images/tequan_bojue.png',
-                              38.h,
-                              38.h)
-                              : list[i]['noble_id'].toString() == "4"
-                              ? WidgetUtils.showImages(
-                              'assets/images/tequan_houjue.png',
-                              38.h,
-                              38.h)
-                              : list[i]['noble_id'].toString() == "5"
-                              ? WidgetUtils.showImages(
-                              'assets/images/tequan_gongjue.png',
-                              38.h,
-                              38.h)
-                              : list[i]['noble_id'].toString() ==
-                              "6"
-                              ? WidgetUtils.showImages(
-                              'assets/images/tequan_guowang.png',
-                              38.h,
-                              38.h)
-                              : list[i]['noble_id']
-                              .toString() ==
-                              "7"
-                              ? WidgetUtils.showImages(
-                              'assets/images/tequan_diwang.png',
-                              38.h,
-                              38.h)
-                              : const Text(''),
-                        )),
-                    WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
+                    // //贵族
+                    // WidgetSpan(
+                    //     child: Transform.translate(
+                    //       offset: Offset(0, 5.h),
+                    //       child: list[i]['noble_id'].toString() == "1"
+                    //           ? WidgetUtils.showImages(
+                    //           'assets/images/tequan_yongshi.png', 38.h, 38.h)
+                    //           : list[i]['noble_id'].toString() == "2"
+                    //           ? WidgetUtils.showImages(
+                    //           'assets/images/tequan_qishi.png', 38.h, 38.h)
+                    //           : list[i]['noble_id'].toString() == "3"
+                    //           ? WidgetUtils.showImages(
+                    //           'assets/images/tequan_bojue.png',
+                    //           38.h,
+                    //           38.h)
+                    //           : list[i]['noble_id'].toString() == "4"
+                    //           ? WidgetUtils.showImages(
+                    //           'assets/images/tequan_houjue.png',
+                    //           38.h,
+                    //           38.h)
+                    //           : list[i]['noble_id'].toString() == "5"
+                    //           ? WidgetUtils.showImages(
+                    //           'assets/images/tequan_gongjue.png',
+                    //           38.h,
+                    //           38.h)
+                    //           : list[i]['noble_id'].toString() ==
+                    //           "6"
+                    //           ? WidgetUtils.showImages(
+                    //           'assets/images/tequan_guowang.png',
+                    //           38.h,
+                    //           38.h)
+                    //           : list[i]['noble_id']
+                    //           .toString() ==
+                    //           "7"
+                    //           ? WidgetUtils.showImages(
+                    //           'assets/images/tequan_diwang.png',
+                    //           38.h,
+                    //           38.h)
+                    //           : const Text(''),
+                    //     )),
+                    // WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
                     // 靓号
                     WidgetSpan(
                         child: Transform.translate(
@@ -4586,7 +4574,8 @@ class RoomItems {
             ],
           ),
           WidgetUtils.commonSizedBox(0, 5),
-          sp.getInt('user_level')! >= 3 ? Stack(
+          (sp.getInt('user_level')! >= 3 || sp.getInt('user_grLevel')! >= 3)
+              ? Stack(
             children: [
               Container(
                 height: ScreenUtil().setHeight(50),
@@ -4607,8 +4596,9 @@ class RoomItems {
                     color: Colors.transparent),
               )
             ],
-          ) : const Text(''),
-          sp.getInt('user_level')! >= 3
+          )
+              : const Text(''),
+          (sp.getInt('user_level')! >= 3 || sp.getInt('user_grLevel')! >= 3)
               ? WidgetUtils.commonSizedBox(0, 10)
               : const Text(''),
           //消息

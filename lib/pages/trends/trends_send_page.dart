@@ -151,7 +151,7 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
     // print('选择照片路径:$chooseImagesPath');
   }
 
-  late VideoPlayerController _videoController;
+  VideoPlayerController? _videoController;
   bool _isVideoSelected = false;
   onTapVideoFromGallery() async {
     Navigator.pop(context);
@@ -162,7 +162,7 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
     if (pickedFile == null) return;
     if (pickedFile != null) {
       _videoController = VideoPlayerController.file(File(pickedFile.path));
-      await _videoController.initialize();
+      await _videoController!.initialize();
       setState(() {
         videoUrl = pickedFile.path;
         _isVideoSelected = true;
@@ -379,8 +379,8 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
                                  width: ScreenUtil().setHeight(200),
                                  height: ScreenUtil().setHeight(200),
                                  child: AspectRatio(
-                                   aspectRatio: _videoController.value.aspectRatio,
-                                   child: VideoPlayer(_videoController),
+                                   aspectRatio: _videoController!.value.aspectRatio,
+                                   child: VideoPlayer(_videoController!),
                                  ),
                                ),
                                GestureDetector(

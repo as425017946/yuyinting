@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:yuyinting/bean/userStatusBean.dart';
 import 'package:yuyinting/colors/my_colors.dart';
@@ -46,6 +47,46 @@ class _MessagePageState extends State<MessagePage>
   // 设备是安卓还是ios
   String isDevices = 'android';
 
+  final RefreshController _refreshController =
+  RefreshController(initialRefresh: false);
+  int page = 1;
+  bool isUp = false; //是否允许上拉
+  bool isDown = true; //是否允许下拉
+  void _onRefresh() async {
+    // 重新初始化
+    _refreshController.resetNoData();
+    setState(() {
+      isUp = false;
+    });
+    // monitor network fetch
+    await Future.delayed(const Duration(milliseconds: 1000));
+    // if failed,use refreshFailed()
+    _refreshController.refreshCompleted();
+    if (mounted) {
+      setState(() {
+        page = 1;
+      });
+    }
+    doPostSystemMsgList();
+  }
+
+  void _onLoading() async {
+    setState(() {
+      isDown = false;
+    });
+    // monitor network fetch
+    await Future.delayed(const Duration(milliseconds: 1000));
+    // if failed,use loadFailed(),if no data return,use LoadNodata()
+    if (mounted) {
+      setState(() {
+        page++;
+      });
+    }
+    doPostSystemMsgList();
+    _refreshController.loadComplete();
+  }
+
+
   @override
   void initState() {
     // TODO: implement initState
@@ -66,8 +107,10 @@ class _MessagePageState extends State<MessagePage>
         unRead = 0;
       });
     });
-    list2 = eventBus.on<SendMessageBack>().listen((event) {
-      doPostSystemMsgList();
+    list2 = eventBus.on<BiLiBack>().listen((event) {
+      if(event.number == '消息'){
+        doPostSystemMsgList2();
+      }
     });
     list3 = eventBus.on<SubmitButtonBack>().listen((event) {
       if (event.title == '聊天返回') {
@@ -319,128 +362,134 @@ class _MessagePageState extends State<MessagePage>
               fit: BoxFit.fill, //覆盖
             ),
           ),
-          child: Column(
-            children: [
-              WidgetUtils.commonSizedBox(isDevices == 'ios' ? 80.h : 60.h, 0),
-
-              ///头部信息
-              Container(
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                height: ScreenUtil().setHeight(60),
-                width: double.infinity,
-                alignment: Alignment.bottomLeft,
-                child: Row(
-                  children: [
-                    WidgetUtils.onlyTextBottom(
-                        '消息',
-                        StyleUtils.getCommonTextStyle(
-                            color: Colors.black,
-                            fontSize: ScreenUtil().setSp(46),
-                            fontWeight: FontWeight.w600)),
-                    const Expanded(child: Text('')),
-                    GestureDetector(
-                      onTap: (() {
-                        exitLogin(context);
-                      }),
-                      child: Container(
-                        height: 50.h,
-                        width: 50.h,
-                        color: Colors.transparent,
-                        alignment: Alignment.centerRight,
-                        child: WidgetUtils.showImages(
-                            'assets/images/messages_yidu.png',
-                            ScreenUtil().setHeight(30),
-                            ScreenUtil().setHeight(30)),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              WidgetUtils.commonSizedBox(35, 0),
-
-              /// 系统消息
-              GestureDetector(
-                onTap: (() {
-                  MyUtils.goTransparentRFPage(context, const XitongMorePage());
-                }),
-                child: Container(
-                  height: ScreenUtil().setHeight(130),
-                  width: double.infinity,
+          child: SmartRefresher(
+            header: MyUtils.myHeader(),
+            footer: MyUtils.myFotter(),
+            controller: _refreshController,
+            enablePullUp: false,
+            onLoading: _onLoading,
+            onRefresh: _onRefresh,
+            child: Column(
+              children: [
+                WidgetUtils.commonSizedBox(isDevices == 'ios' ? 80.h : 60.h, 0),
+                ///头部信息
+                Container(
                   padding: const EdgeInsets.only(left: 20, right: 20),
+                  height: ScreenUtil().setHeight(60),
+                  width: double.infinity,
+                  alignment: Alignment.bottomLeft,
                   child: Row(
                     children: [
-                      Stack(
-                        alignment: Alignment.topRight,
-                        children: [
-                          WidgetUtils.showImages(
-                              'assets/images/message_xt.png',
-                              ScreenUtil().setHeight(100),
-                              ScreenUtil().setHeight(100)),
-                          unRead > 0
-                              ? Positioned(
-                                  top: ScreenUtil().setHeight(10),
-                                  right: ScreenUtil().setHeight(20),
-                                  child: CustomPaint(
-                                    painter: LinePainter2(colors: Colors.red),
-                                  ))
-                              : const Text('')
-                        ],
-                      ),
-                      WidgetUtils.commonSizedBox(0, 10),
-                      Expanded(
-                        child: Column(
-                          children: [
-                            const Expanded(child: Text('')),
-                            Container(
-                              alignment: Alignment.centerLeft,
-                              width: double.infinity,
-                              child: Row(
-                                children: [
-                                  Text(
-                                    '系统消息',
-                                    style: StyleUtils.getCommonTextStyle(
-                                        color: Colors.black,
-                                        fontSize: ScreenUtil().setSp(32)),
-                                  ),
-                                  const Expanded(child: Text('')),
-                                  Text(
-                                    time,
-                                    style: StyleUtils.getCommonTextStyle(
-                                        color: MyColors.g9,
-                                        fontSize: ScreenUtil().setSp(25)),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            WidgetUtils.commonSizedBox(10.h, 0),
-                            Container(
-                              alignment: Alignment.centerLeft,
-                              width: double.infinity,
-                              child: Text(
-                                info,
-                                style: StyleUtils.getCommonTextStyle(
-                                    color: MyColors.g9,
-                                    fontSize: ScreenUtil().setSp(25)),
-                              ),
-                            ),
-                            const Expanded(child: Text('')),
-                          ],
+                      WidgetUtils.onlyTextBottom(
+                          '消息',
+                          StyleUtils.getCommonTextStyle(
+                              color: Colors.black,
+                              fontSize: ScreenUtil().setSp(46),
+                              fontWeight: FontWeight.w600)),
+                      const Expanded(child: Text('')),
+                      GestureDetector(
+                        onTap: (() {
+                          exitLogin(context);
+                        }),
+                        child: Container(
+                          height: 50.h,
+                          width: 50.h,
+                          color: Colors.transparent,
+                          alignment: Alignment.centerRight,
+                          child: WidgetUtils.showImages(
+                              'assets/images/messages_yidu.png',
+                              ScreenUtil().setHeight(30),
+                              ScreenUtil().setHeight(30)),
                         ),
                       )
                     ],
                   ),
                 ),
-              ),
-              (listMessage.isNotEmpty && listU.isNotEmpty)
-                  ? Expanded(
-                      child: ListView.builder(
-                        padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
-                        itemBuilder: message,
-                        itemCount: listMessage.length,
-                      ),
-                    )
-                  : const Text('')
-            ],
+                WidgetUtils.commonSizedBox(35, 0),
+                /// 系统消息
+                GestureDetector(
+                  onTap: (() {
+                    MyUtils.goTransparentRFPage(context, const XitongMorePage());
+                  }),
+                  child: Container(
+                    height: ScreenUtil().setHeight(130),
+                    width: double.infinity,
+                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    child: Row(
+                      children: [
+                        Stack(
+                          alignment: Alignment.topRight,
+                          children: [
+                            WidgetUtils.showImages(
+                                'assets/images/message_xt.png',
+                                ScreenUtil().setHeight(100),
+                                ScreenUtil().setHeight(100)),
+                            unRead > 0
+                                ? Positioned(
+                                top: ScreenUtil().setHeight(10),
+                                right: ScreenUtil().setHeight(20),
+                                child: CustomPaint(
+                                  painter: LinePainter2(colors: Colors.red),
+                                ))
+                                : const Text('')
+                          ],
+                        ),
+                        WidgetUtils.commonSizedBox(0, 10),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              const Expanded(child: Text('')),
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                width: double.infinity,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      '系统消息',
+                                      style: StyleUtils.getCommonTextStyle(
+                                          color: Colors.black,
+                                          fontSize: ScreenUtil().setSp(32)),
+                                    ),
+                                    const Expanded(child: Text('')),
+                                    Text(
+                                      time,
+                                      style: StyleUtils.getCommonTextStyle(
+                                          color: MyColors.g9,
+                                          fontSize: ScreenUtil().setSp(25)),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              WidgetUtils.commonSizedBox(10.h, 0),
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                width: double.infinity,
+                                child: Text(
+                                  info,
+                                  style: StyleUtils.getCommonTextStyle(
+                                      color: MyColors.g9,
+                                      fontSize: ScreenUtil().setSp(25)),
+                                ),
+                              ),
+                              const Expanded(child: Text('')),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                (listMessage.isNotEmpty && listU.isNotEmpty)
+                    ? Expanded(
+                  child: ListView.builder(
+                    padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
+                    itemBuilder: message,
+                    itemCount: listMessage.length,
+                  ),
+                )
+                    : const Text('')
+              ],
+            ),
           ),
         ));
   }
@@ -517,6 +566,74 @@ class _MessagePageState extends State<MessagePage>
   }
 
   /// 获取系统消息
+  Future<void> doPostSystemMsgList2() async {
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    Database? db = await databaseHelper.database;
+    try {
+      Map<String, dynamic> params = <String, dynamic>{
+        'is_all': sp.getString('isFirstMessage') == '1' ? '1' : '',
+      };
+      xtListBean bean = await DataUtils.postSystemMsgList(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            sp.setString('isFirstMessage','2');
+          });
+          if (bean.data!.list!.isNotEmpty) {
+            setState(() {
+              info = bean.data!.list![bean.data!.list!.length - 1].text!;
+              time = bean.data!.list![bean.data!.list!.length - 1].addTime!
+                  .substring(0, 10);
+              unRead = bean.data!.list!.length;
+            });
+            for (int i = 0; i < bean.data!.list!.length; i++) {
+              Map<String, dynamic> params = <String, dynamic>{
+                'messageID': bean.data!.list![i].id as int,
+                'type': bean.data!.list![i].type,
+                'title': bean.data!.list![i].title,
+                'text': bean.data!.list![i].text,
+                'img': bean.data!.list![i].img,
+                'url': bean.data!.list![i].url,
+                'add_time': bean.data!.list![i].addTime,
+                'data_status': 0,
+                'img_url': bean.data!.list![i].imgUrl,
+              };
+              // 插入数据
+              await databaseHelper.insertData('messageXTTable', params);
+            }
+          } else {
+            // 获取所有数据
+            List<Map<String, dynamic>> allData =
+            await databaseHelper.getAllData('messageXTTable');
+            if (allData.isNotEmpty) {
+              for (int i = 0; i < allData.length; i++) {
+                if (allData[i]['data_status'] == 0) {
+                  setState(() {
+                    unRead++;
+                  });
+                }
+              }
+              setState(() {
+                info = allData[allData.length - 1]['text'];
+                time = allData[allData.length - 1]['add_time'].substring(0, 10);
+              });
+            }
+          }
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      LogE('错误信息$e');
+    }
+  }
+
+  /// 获取系统消息
   Future<void> doPostSystemMsgList() async {
     DatabaseHelper databaseHelper = DatabaseHelper();
     Database? db = await databaseHelper.database;
@@ -527,9 +644,11 @@ class _MessagePageState extends State<MessagePage>
       xtListBean bean = await DataUtils.postSystemMsgList(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
+          setState(() {
+            sp.setString('isFirstMessage','2');
+          });
           if (bean.data!.list!.isNotEmpty) {
             setState(() {
-              sp.setString('isFirstMessage','2');
               info = bean.data!.list![bean.data!.list!.length - 1].text!;
               time = bean.data!.list![bean.data!.list!.length - 1].addTime!
                   .substring(0, 10);
