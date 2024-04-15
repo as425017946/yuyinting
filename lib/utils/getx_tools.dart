@@ -4,21 +4,30 @@ import 'package:get/get.dart';
 import '../colors/my_colors.dart';
 
 mixin GetAntiCombo {
-  final Rx<int> _action = 0.obs;
-  Worker? _worker;
+  // final Rx<int> _action = 0.obs;
+  // Worker? _worker;
 
+  // void action(void Function() a) {
+  //   if (_worker == null) {
+  //     done() {
+  //       _worker?.dispose();
+  //       _worker = null;
+  //       _action.value = 0;
+  //     }
+
+  //     _worker = interval(_action, (_) => done(), onError: () => done());
+  //     a();
+  //   }
+  //   _action.value++;
+  // }
+
+  bool _canTapAction = true;
   void action(void Function() a) {
-    if (_worker == null) {
-      done() {
-        _worker?.dispose();
-        _worker = null;
-        _action.value = 0;
-      }
-
-      _worker = interval(_action, (_) => done(), onError: () => done());
+    if (_canTapAction) {
+      _canTapAction = false;
+      Future.delayed(const Duration(seconds: 1), () => _canTapAction = true);
       a();
     }
-    _action.value++;
   }
 }
 
