@@ -906,7 +906,9 @@ class MyUtils {
           },
           onError: (msgId, msg, error) {
             LogE('语音发送失败2');
-            eventBus.fire(SubmitButtonBack(title: '语音发送失败'));
+            if(msg.body.type == MessageType.VIDEO){
+              eventBus.fire(SubmitButtonBack(title: '语音发送失败'));
+            }
             addLogToConsole(
               "send message failed, code: ${error.code}, desc: ${error.description}",
             );
