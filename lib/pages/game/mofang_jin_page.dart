@@ -378,11 +378,11 @@ class _MofangJinPageState extends State<MofangJinPage>
                       ),
                       // 蓝色魔方和金色魔方按钮切换
                       GestureDetector(
-                        onTap: (() {
-                          if (isXiazhu) {
-                            eventBus.fire(MofangBack(info: 0));
-                          }
-                        }),
+                        // onTap: (() {
+                        //   if (isXiazhu) {
+                        //     eventBus.fire(MofangBack(info: 0));
+                        //   }
+                        // }),
                         child: SizedBox(
                           height: 75.h,
                           width: 316.h,
@@ -396,16 +396,25 @@ class _MofangJinPageState extends State<MofangJinPage>
                                 children: [
                                   WidgetUtils.commonSizedBox(0, 15.w),
                                   Expanded(
+                                    child: GestureDetector(
+                                      onTap: (() {
+                                        if (isXiazhu) {
+                                          eventBus.fire(MofangBack(info: 0));
+                                        }
+                                      }),
                                       child: Container(
-                                          width: double.infinity,
-                                          color: Colors.transparent,
-                                          child: WidgetUtils.onlyTextCenter(
-                                              '黄金幻宝',
-                                              StyleUtils.getCommonTextStyle(
-                                                  color: Colors.white54,
-                                                  fontSize: 24.sp,
-                                                  fontWeight:
-                                                  FontWeight.w600)))),
+                                        width: double.infinity,
+                                        color: Colors.transparent,
+                                        child: WidgetUtils.onlyTextCenter(
+                                          '黄金幻宝',
+                                          StyleUtils.getCommonTextStyle(
+                                            color: Colors.white54,
+                                            fontSize: 24.sp,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                   Expanded(
                                       child: WidgetUtils.onlyTextCenter(
                                           '钻石幻宝',

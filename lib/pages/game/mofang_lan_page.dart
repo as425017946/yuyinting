@@ -387,11 +387,11 @@ class _MofangLanPageState extends State<MofangLanPage>
                       ),
                       // 蓝色魔方和金色魔方按钮切换
                       GestureDetector(
-                        onTap: (() {
-                          if (isXiazhu) {
-                            eventBus.fire(MofangBack(info: 1));
-                          }
-                        }),
+                        // onTap: (() {
+                        //   if (isXiazhu) {
+                        //     eventBus.fire(MofangBack(info: 1));
+                        //   }
+                        // }),
                         child: SizedBox(
                           height: 75.h,
                           width: 316.h,
@@ -416,11 +416,24 @@ class _MofangLanPageState extends State<MofangLanPage>
                                                   fontWeight:
                                                       FontWeight.w600)))),
                                   Expanded(
-                                      child: WidgetUtils.onlyTextCenter(
+                                    child: GestureDetector(
+                                      onTap: (() {
+                                        if (isXiazhu) {
+                                          eventBus.fire(MofangBack(info: 1));
+                                        }
+                                      }),
+                                      child: Container(
+                                        color: Colors.transparent,
+                                        child: WidgetUtils.onlyTextCenter(
                                           '钻石幻宝',
                                           StyleUtils.getCommonTextStyle(
-                                              color: Colors.white54,
-                                              fontSize: 24.sp))),
+                                            color: Colors.white54,
+                                            fontSize: 24.sp,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                   WidgetUtils.commonSizedBox(0, 15.w),
                                 ],
                               )
