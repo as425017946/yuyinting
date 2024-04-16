@@ -117,6 +117,12 @@ class _MessagePageState extends State<MessagePage>
         doPostSystemMsgList();
       }
     });
+    _scListener = (){
+      setState(() {
+        _scOffset = _sc.offset;
+      });
+    };
+    _sc.addListener(_scListener!);
   }
 
   @override
@@ -125,8 +131,15 @@ class _MessagePageState extends State<MessagePage>
     list1.cancel();
     list2.cancel();
     list3.cancel();
+    if (_scListener != null) {
+      _sc.removeListener(_scListener!);
+    }
     super.dispose();
   }
+
+  void Function()? _scListener;
+  final ScrollController _sc = ScrollController();
+  double _scOffset = 0;
 
   Widget buildIconSlideAction(
       String title, IconData icons, Color color, int i) {
@@ -349,6 +362,7 @@ class _MessagePageState extends State<MessagePage>
 
   @override
   Widget build(BuildContext context) {
+    final top = isDevices == 'ios' ? 80.h : 60.h;
     return Scaffold(
         backgroundColor: Colors.transparent,
         body: Container(
@@ -362,136 +376,151 @@ class _MessagePageState extends State<MessagePage>
               fit: BoxFit.fill, //覆盖
             ),
           ),
-          child: SmartRefresher(
-            header: MyUtils.myHeader(),
-            footer: MyUtils.myFotter(),
-            controller: _refreshController,
-            enablePullUp: false,
-            onLoading: _onLoading,
-            onRefresh: _onRefresh,
-            child: Column(
-              children: [
-                WidgetUtils.commonSizedBox(isDevices == 'ios' ? 80.h : 60.h, 0),
-                ///头部信息
-                Container(
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  height: ScreenUtil().setHeight(60),
-                  width: double.infinity,
-                  alignment: Alignment.bottomLeft,
-                  child: Row(
-                    children: [
-                      WidgetUtils.onlyTextBottom(
-                          '消息',
-                          StyleUtils.getCommonTextStyle(
-                              color: Colors.black,
-                              fontSize: ScreenUtil().setSp(46),
-                              fontWeight: FontWeight.w600)),
-                      const Expanded(child: Text('')),
-                      GestureDetector(
-                        onTap: (() {
-                          exitLogin(context);
-                        }),
-                        child: Container(
-                          height: 50.h,
-                          width: 50.h,
-                          color: Colors.transparent,
-                          alignment: Alignment.centerRight,
-                          child: WidgetUtils.showImages(
-                              'assets/images/messages_yidu.png',
-                              ScreenUtil().setHeight(30),
-                              ScreenUtil().setHeight(30)),
-                        ),
-                      )
-                    ],
-                  ),
+          child: Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              SmartRefresher(
+                header: MyUtils.myHeader(),
+                footer: MyUtils.myFotter(),
+                controller: _refreshController,
+                enablePullUp: false,
+                onLoading: _onLoading,
+                onRefresh: _onRefresh,
+                scrollController: _sc,
+                child: SingleChildScrollView(
+                  child: _content(),
                 ),
-                WidgetUtils.commonSizedBox(35, 0),
-                /// 系统消息
-                GestureDetector(
-                  onTap: (() {
-                    MyUtils.goTransparentRFPage(context, const XitongMorePage());
-                  }),
-                  child: Container(
-                    height: ScreenUtil().setHeight(130),
-                    width: double.infinity,
-                    padding: const EdgeInsets.only(left: 20, right: 20),
-                    child: Row(
-                      children: [
-                        Stack(
-                          alignment: Alignment.topRight,
+              ),
+              _nav(top),
+            ],
+          ),
+        ));
+  }
+
+  Widget _nav(double top) {
+    return Container(
+      padding: EdgeInsets.only(left: 20, right: 20, top: top, bottom: 5),
+      height: top + 60.h + 5,
+      width: double.infinity,
+      alignment: Alignment.bottomLeft,
+      color: _scOffset > 35 ? Colors.white : Colors.transparent,
+      child: Row(
+        children: [
+          WidgetUtils.onlyTextBottom(
+              '消息',
+              StyleUtils.getCommonTextStyle(
+                  color: Colors.black,
+                  fontSize: ScreenUtil().setSp(46),
+                  fontWeight: FontWeight.w600)),
+          const Expanded(child: Text('')),
+          GestureDetector(
+            onTap: (() {
+              exitLogin(context);
+            }),
+            child: Container(
+              height: 50.h,
+              width: 50.h,
+              color: Colors.transparent,
+              alignment: Alignment.centerRight,
+              child: WidgetUtils.showImages('assets/images/messages_yidu.png',
+                  ScreenUtil().setHeight(30), ScreenUtil().setHeight(30)),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _content() {
+    return Column(
+      children: [
+        WidgetUtils.commonSizedBox(isDevices == 'ios' ? 80.h : 60.h, 0),
+        WidgetUtils.commonSizedBox(35 + 60.h, 0),
+
+        /// 系统消息
+        GestureDetector(
+          onTap: (() {
+            MyUtils.goTransparentRFPage(context, const XitongMorePage());
+          }),
+          child: Container(
+            height: ScreenUtil().setHeight(130),
+            width: double.infinity,
+            padding: const EdgeInsets.only(left: 20, right: 20),
+            child: Row(
+              children: [
+                Stack(
+                  alignment: Alignment.topRight,
+                  children: [
+                    WidgetUtils.showImages(
+                        'assets/images/message_xt.png',
+                        ScreenUtil().setHeight(100),
+                        ScreenUtil().setHeight(100)),
+                    unRead > 0
+                        ? Positioned(
+                            top: ScreenUtil().setHeight(10),
+                            right: ScreenUtil().setHeight(20),
+                            child: CustomPaint(
+                              painter: LinePainter2(colors: Colors.red),
+                            ))
+                        : const Text('')
+                  ],
+                ),
+                WidgetUtils.commonSizedBox(0, 10),
+                Expanded(
+                  child: Column(
+                    children: [
+                      const Expanded(child: Text('')),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        width: double.infinity,
+                        child: Row(
                           children: [
-                            WidgetUtils.showImages(
-                                'assets/images/message_xt.png',
-                                ScreenUtil().setHeight(100),
-                                ScreenUtil().setHeight(100)),
-                            unRead > 0
-                                ? Positioned(
-                                top: ScreenUtil().setHeight(10),
-                                right: ScreenUtil().setHeight(20),
-                                child: CustomPaint(
-                                  painter: LinePainter2(colors: Colors.red),
-                                ))
-                                : const Text('')
+                            Text(
+                              '系统消息',
+                              style: StyleUtils.getCommonTextStyle(
+                                  color: Colors.black,
+                                  fontSize: ScreenUtil().setSp(32)),
+                            ),
+                            const Expanded(child: Text('')),
+                            Text(
+                              time,
+                              style: StyleUtils.getCommonTextStyle(
+                                  color: MyColors.g9,
+                                  fontSize: ScreenUtil().setSp(25)),
+                            ),
                           ],
                         ),
-                        WidgetUtils.commonSizedBox(0, 10),
-                        Expanded(
-                          child: Column(
-                            children: [
-                              const Expanded(child: Text('')),
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                width: double.infinity,
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      '系统消息',
-                                      style: StyleUtils.getCommonTextStyle(
-                                          color: Colors.black,
-                                          fontSize: ScreenUtil().setSp(32)),
-                                    ),
-                                    const Expanded(child: Text('')),
-                                    Text(
-                                      time,
-                                      style: StyleUtils.getCommonTextStyle(
-                                          color: MyColors.g9,
-                                          fontSize: ScreenUtil().setSp(25)),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              WidgetUtils.commonSizedBox(10.h, 0),
-                              Container(
-                                alignment: Alignment.centerLeft,
-                                width: double.infinity,
-                                child: Text(
-                                  info,
-                                  style: StyleUtils.getCommonTextStyle(
-                                      color: MyColors.g9,
-                                      fontSize: ScreenUtil().setSp(25)),
-                                ),
-                              ),
-                              const Expanded(child: Text('')),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                (listMessage.isNotEmpty && listU.isNotEmpty)
-                    ? Expanded(
-                  child: ListView.builder(
-                    padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
-                    itemBuilder: message,
-                    itemCount: listMessage.length,
+                      ),
+                      WidgetUtils.commonSizedBox(10.h, 0),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        width: double.infinity,
+                        child: Text(
+                          info,
+                          style: StyleUtils.getCommonTextStyle(
+                              color: MyColors.g9,
+                              fontSize: ScreenUtil().setSp(25)),
+                        ),
+                      ),
+                      const Expanded(child: Text('')),
+                    ],
                   ),
                 )
-                    : const Text('')
               ],
             ),
           ),
-        ));
+        ),
+        (listMessage.isNotEmpty && listU.isNotEmpty)
+            ? ListView.builder(
+                padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
+                itemBuilder: message,
+                itemCount: listMessage.length,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+              )
+            : const Text('')
+      ],
+    );
   }
 
   /// 一键已读
