@@ -443,6 +443,7 @@ class _MessagePageState extends State<MessagePage>
             MyUtils.goTransparentRFPage(context, const XitongMorePage());
           }),
           child: Container(
+            color: Colors.transparent,
             height: ScreenUtil().setHeight(130),
             width: double.infinity,
             padding: const EdgeInsets.only(left: 20, right: 20),
