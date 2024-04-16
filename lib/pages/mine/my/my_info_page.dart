@@ -129,6 +129,35 @@ class _MyInfoPageState extends State<MyInfoPage> {
                     centerTitle: true,
                     background: WidgetUtils.showImagesNet(sp.getString('user_headimg').toString(), imgHeight, double.infinity),
                   ),
+                  actions: [
+                    GestureDetector(
+                      onTap: (() {
+                        if (MyUtils.checkClick()) {
+                          stopPlayer();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const EditMyInfoPage(),
+                            ),
+                          ).then((value) {
+                            doPostMyIfon();
+                          });
+                        }
+                      }),
+                      child: Container(
+                        width: 99.h,
+                        // height: 33.h,
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.only(right: 20.w),
+                        padding: EdgeInsets.symmetric(horizontal: 33.h),
+                        color: Colors.transparent,
+                        child: WidgetUtils.showImages(
+                            'assets/images/mine_edit_black.png',
+                            ScreenUtil().setHeight(33),
+                            ScreenUtil().setHeight(33)),
+                      ),
+                    ),
+                  ],
                 ),
                 SliverList(
                   delegate: SliverChildBuilderDelegate((context, index) {
@@ -167,32 +196,32 @@ class _MyInfoPageState extends State<MyInfoPage> {
                 ),
               ],
             ),
-            Positioned(
-              right: 20.w,
-              top: 90.h,
-              child:  GestureDetector(
-                onTap: (() {
-                  if (MyUtils.checkClick()) {
-                    stopPlayer();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const EditMyInfoPage(),
-                      ),
-                    ).then((value) {
-                      doPostMyIfon();
-                    });
-                  }
-                }),
-                child: Container(
-                  width: 100.h,
-                  height: 33.h,
-                  color: Colors.transparent,
-                  child: WidgetUtils.showImages('assets/images/mine_edit_black.png',
-                      ScreenUtil().setHeight(33), ScreenUtil().setHeight(33)),
-                ),
-              ),
-            ),
+            // Positioned(
+            //   right: 20.w,
+            //   top: 90.h,
+            //   child:  GestureDetector(
+            //     onTap: (() {
+            //       if (MyUtils.checkClick()) {
+            //         stopPlayer();
+            //         Navigator.push(
+            //           context,
+            //           MaterialPageRoute(
+            //             builder: (context) => const EditMyInfoPage(),
+            //           ),
+            //         ).then((value) {
+            //           doPostMyIfon();
+            //         });
+            //       }
+            //     }),
+            //     child: Container(
+            //       width: 100.h,
+            //       height: 33.h,
+            //       color: Colors.transparent,
+            //       child: WidgetUtils.showImages('assets/images/mine_edit_black.png',
+            //           ScreenUtil().setHeight(33), ScreenUtil().setHeight(33)),
+            //     ),
+            //   ),
+            // ),
           
           ],
         ));
