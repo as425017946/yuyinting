@@ -284,8 +284,8 @@ class PaiduiListPage extends StatelessWidget {
 
     return Image(
       image: AssetImage(img),
-      width: 111.w,
-      height: 42.w,
+      width: 111.w*0.7,
+      height: 42.w*0.7,
     );
   }
 
