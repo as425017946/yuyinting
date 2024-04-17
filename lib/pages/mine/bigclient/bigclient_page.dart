@@ -301,29 +301,36 @@ class _BigClientPageTop extends StatelessWidget {
           _head(70, c.avatarFrameGifImg, c.avatarFrameImg, 'LV.${c.grLevel}', c.data.gr_value),
           _point(c.texts[index]),
           if (index == c.data.title - 1)
-          Positioned(
-            left: 39,
-            bottom: 35,
-            child: Text.rich(
-              TextSpan(
-                style: const TextStyle(
-                  color: Color(0xFFF9E7C9),
-                  fontSize: 19,
-                  fontWeight: FontWeight.normal,
-                ),
-                children: [
-                  const TextSpan(text: '达成下一等级还需要 '),
-                  TextSpan(
-                    text: c.data.next_title_value,
-                    style: const TextStyle(
-                      color: Color(0xFFFFDD61),
-                    ),
+            Positioned(
+              left: 39,
+              bottom: 20,
+              child: Text.rich(
+                TextSpan(
+                  style: const TextStyle(
+                    color: Color(0xFFF9E7C9),
+                    fontSize: 19,
+                    fontWeight: FontWeight.normal,
                   ),
-                  const TextSpan(text: ' 财富值'),
-                ],
+                  children: [
+                    const TextSpan(text: '获得下一级财富徽章还需 '),
+                    TextSpan(
+                      text: c.data.next_title_value,
+                      style: const TextStyle(
+                        color: Color(0xFFFFDD61),
+                      ),
+                    ),
+                    const TextSpan(text: ' 财富值\n当前等级可领取 '),
+                    TextSpan(
+                      text: '${c.data.day_salary}',
+                      style: const TextStyle(
+                        color: Color(0xFFFFDD61),
+                      ),
+                    ),
+                    const TextSpan(text: ' 金豆日俸禄'),
+                  ],
+                ),
               ),
             ),
-          ),
           Positioned(
             left: 196,
             bottom: 94,
@@ -597,11 +604,12 @@ class _BigClientPageList0 extends StatelessWidget {
     }
     return SizedBox(
       width: 750,
-      height: 167,
+      height: 167 + 30,
       child: Stack(
         children: [
           const Image(
             image: AssetImage('assets/images/bigclient_box.png'),
+            height: double.infinity,
             fit: BoxFit.fill,
           ),
           Positioned(
@@ -649,7 +657,7 @@ class _BigClientPageList0 extends StatelessWidget {
           ),
           Positioned(
             right: 84,
-            bottom: 56,
+            bottom: 56 + 15,
             width: 164,
             height: 55,
             child: GestureDetector(
