@@ -42,7 +42,7 @@ class _MessagePageState extends State<MessagePage>
   String info = '', time = '';
   int unRead = 0;
   int length = 0;
-  var list1, list2, list3;
+  var list1, list2, list3,listenMessage;
 
   // 设备是安卓还是ios
   String isDevices = 'android';
@@ -117,6 +117,9 @@ class _MessagePageState extends State<MessagePage>
         doPostSystemMsgList();
       }
     });
+    listenMessage = eventBus.on<SendMessageBack>().listen((event) {
+      doPostSystemMsgList();
+    });
     _scListener = (){
       setState(() {
         _scOffset = _sc.offset;
@@ -131,6 +134,7 @@ class _MessagePageState extends State<MessagePage>
     list1.cancel();
     list2.cancel();
     list3.cancel();
+    listenMessage.cancel();
     if (_scListener != null) {
       _sc.removeListener(_scListener!);
     }
@@ -675,6 +679,7 @@ class _MessagePageState extends State<MessagePage>
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
+            listU.clear();
             sp.setString('isFirstMessage','2');
           });
           if (bean.data!.list!.isNotEmpty) {
@@ -726,8 +731,6 @@ class _MessagePageState extends State<MessagePage>
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
-      List<Map<String, dynamic>> allData =
-          await databaseHelper.getAllData('messageSLTable');
       // 执行查询操作
       String queryM =
           'select MAX(id) AS id from messageSLTable group by combineID order by weight desc,add_time desc';

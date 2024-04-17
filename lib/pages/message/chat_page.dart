@@ -1158,7 +1158,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
                   ),
                 ),
                 // 在房间
-                isRoomShow
+                (isRoomShow && sp.getString('roomID').toString().isEmpty)
                     ? Container(
                         height: ScreenUtil().setHeight(90),
                         width: double.infinity,
