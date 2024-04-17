@@ -95,8 +95,8 @@ class _GPRoomPageState extends State<GPRoomPage> {
               ),
               // 关闭按钮
               Positioned(
-                top: 0.h,
-                right: 0.h,
+                top: 80.h,
+                right: 20.w,
                 child: GestureDetector(
                     onTap: (() {
                       if (MyUtils.checkClick()) {

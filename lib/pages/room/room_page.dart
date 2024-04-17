@@ -1868,6 +1868,13 @@ class _RoomPageState extends State<RoomPage>
               mhType = '黄金礼盒(500)x${cb.number!}';
             }
             for (int a = 0; a < cb.giftInfo![i].giftList!.length; a++) {
+              setState(() {
+                giftName = cb.giftInfo![i].giftList![a].giftName!;
+                nickName = cb.fromNickname!;
+                otherNickName = cb.giftInfo![i].nickName!;
+              });
+              // 保存信息
+              saveGiftInfo(cb.fromUid!, cb.fromNickname!,cb.giftInfo![i].nickName!, cb.toUids!, cb.giftInfo![i].giftList![a].giftImgStatic!, cb.giftInfo![i].giftList![a].giftNumber.toString(), cb.giftInfo![i].giftList![a].giftName!, cb.giftInfo![i].giftList![a].giftPrice.toString(),);
               if (giftInfos.isEmpty) {
                 giftInfos =
                     ' 爆出${cb.giftInfo![i].giftList![a].giftName!}(${cb.giftInfo![i].giftList![a].giftPrice.toString()}) x${cb.giftInfo![i].giftList![a].giftNumber.toString()}';

@@ -141,14 +141,16 @@ class GiftList {
   String? giftImg;
   int? giftPrice;
   int? giftNumber;
+  String? giftImgStatic;
 
-  GiftList({this.giftName, this.giftImg, this.giftPrice, this.giftNumber});
+  GiftList({this.giftName, this.giftImg, this.giftPrice, this.giftNumber, this.giftImgStatic});
 
   GiftList.fromJson(Map<String, dynamic> json) {
     giftName = json['gift_name'];
     giftImg = json['gift_img'];
     giftPrice = json['gift_price'];
     giftNumber = json['gift_number'];
+    giftImgStatic = json['gift_img_static'];
   }
 
   Map<String, dynamic> toJson() {
@@ -157,6 +159,7 @@ class GiftList {
     data['gift_img'] = this.giftImg;
     data['gift_price'] = this.giftPrice;
     data['gift_number'] = this.giftNumber;
+    data['gift_img_static'] = this.giftImgStatic;
     return data;
   }
 }
