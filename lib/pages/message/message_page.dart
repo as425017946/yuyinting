@@ -166,6 +166,7 @@ class _MessagePageState extends State<MessagePage>
   }
 
   Widget message(BuildContext context, int i) {
+    final DataU dataU = listU.firstWhere((element) => element.uid.toString() == listMessage[i]['otherUid'], orElse: () => DataU(liveStatus: 0, loginStatus: 0));
     return Slidable(
       //列表中只有一个能滑动
       key: Key(UniqueKey().toString()),
@@ -199,13 +200,13 @@ class _MessagePageState extends State<MessagePage>
                       100.h,
                       50.h,
                       listMessage[i]['otherHeadNetImg']),
-                  listU[i].liveStatus == 1
+                  dataU.liveStatus == 1
                       ? WidgetUtils.showImages(
                           'assets/images/zhibozhong.webp',
                           110.h,
                           110.h,
                         )
-                      :listU[i].loginStatus == 1
+                      :dataU.loginStatus == 1
                           ? Container(
                               height: 60.h,
                               width: 60.h,
@@ -679,7 +680,6 @@ class _MessagePageState extends State<MessagePage>
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
-            listU.clear();
             sp.setString('isFirstMessage','2');
           });
           if (bean.data!.list!.isNotEmpty) {
