@@ -30,11 +30,14 @@ class WealthInfoBeanData {
   late String next_title_value; //下一称号需要荣耀值
   // ignore: non_constant_identifier_names
   late String gr_value; // 当前荣耀值
+  // ignore: non_constant_identifier_names
+  late int day_salary; // 当前等级每日可领取金豆数
   
   // ignore: unused_element
   WealthInfoBeanData._private();
   factory WealthInfoBeanData.fromJson(Map<String, dynamic> map) {
     return WealthInfoBeanData._private()
+      ..day_salary = map['day_salary'] ?? 0
       ..gr_value = map['gr_value'] ?? ''
       ..avatar = map['avatar'] ?? ''
       ..nickname = map['nickname'] ?? ''
