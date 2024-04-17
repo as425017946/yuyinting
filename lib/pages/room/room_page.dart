@@ -107,6 +107,8 @@ class _RoomPageState extends State<RoomPage>
 
   String jianLiWu = '';
 
+  String giftName = '', nickName = '', otherNickName = '';
+
   /// 播放svga动画使用
   late SVGAAnimationController animationControllerBG;
   late SVGAAnimationController animationControllerSL;
@@ -922,6 +924,7 @@ class _RoomPageState extends State<RoomPage>
         isDevices = 'ios';
       });
     }
+    searchHaveGiftInfo();
     // 在页面中使用自定义时间和图片地址
     slideAnimationController = SlideAnimationController(
       vsync: this,
@@ -2068,6 +2071,29 @@ class _RoomPageState extends State<RoomPage>
               }
               //厅内发送的送礼物消息
               charmAllBean cb = charmAllBean.fromJson(event.map);
+
+              // 本地记录送礼
+              if(cb.recordToNickname!.contains(',')){
+                List lName = cb.recordToNickname!.split(',');
+                List lUid = cb.toUids!.split(',');
+                for(int i = 0; i < lName.length; i++){
+                  // 保存信息
+                  saveGiftInfo(cb.fromUid!, cb.fromNickname!, lName[i], lUid[i], cb.giftInfo![0].giftImgStatic!, cb.giftInfo![0].giftNumber.toString(), cb.giftInfo![0].giftName!, cb.giftInfo![0].giftPrice.toString(),);
+                }
+                setState(() {
+                  giftName = cb.giftInfo![0].giftName!;
+                  nickName = cb.fromNickname!;
+                  otherNickName = lName[lName.length-1];
+                });
+              }else{
+                setState(() {
+                  giftName = cb.giftInfo![0].giftName!;
+                  nickName = cb.fromNickname!;
+                  otherNickName = cb.toNickname!;
+                });
+                // 保存信息
+                saveGiftInfo(cb.fromUid!, cb.fromNickname!, cb.toNickname!, cb.toUids!, cb.giftInfo![0].giftImgStatic!, cb.giftInfo![0].giftNumber.toString(), cb.giftInfo![0].giftName!, cb.giftInfo![0].giftPrice.toString(),);
+              }
               for (int i = 0; i < listM.length; i++) {
                 for (int a = 0; a < cb.charm!.length; a++) {
                   if (listM[i].uid.toString() == cb.charm![a].uid) {
@@ -2281,8 +2307,13 @@ class _RoomPageState extends State<RoomPage>
               //赠送全部背包礼物
               String infos = ''; // 这个是拼接用户送的礼物信息使用
               charmAllBean cb = charmAllBean.fromJson(event.map);
-              //判断一键赠送给的谁加入本地数据库里面
-              saveImages(cb);
+              setState(() {
+                giftName = cb.giftInfo![0].giftName!;
+                nickName = cb.fromNickname!;
+                otherNickName = cb.toNickname!;
+              });
+              // //判断一键赠送给的谁加入本地数据库里面
+              // saveImages(cb);
               for (int i = 0; i < listM.length; i++) {
                 for (int a = 0; a < cb.charm!.length; a++) {
                   if (listM[i].uid.toString() == cb.charm![a].uid) {
@@ -2322,6 +2353,8 @@ class _RoomPageState extends State<RoomPage>
                     listUrl.add(map);
                   }
                 });
+                // 保存信息
+                saveGiftInfo(cb.fromUid!, cb.fromNickname!, cb.toNickname!, cb.toUids!, cb.giftInfo![i].giftImgStatic!, cb.giftInfo![i].giftNumber.toString(), cb.giftInfo![i].giftName!, cb.giftInfo![i].giftPrice.toString(),);
               }
               //厅内发送的送礼物消息
               Map<dynamic, dynamic> map = {};
@@ -2408,7 +2441,13 @@ class _RoomPageState extends State<RoomPage>
               map['uid'] = event.map!['uid'];
               map['type'] = '9';
               // 发送的信息
-              map['content'] = '${cb.nickName};在;${cb.gameName};中赢得;$info';
+              if(cb.gameName == '金星魔方'){
+                map['content'] = '${cb.nickName};在;黄金幻宝;中赢得;$info';
+              }else if(cb.gameName == '金星魔方'){
+                map['content'] = '${cb.nickName};在;钻石幻宝;中赢得;$info';
+              }else{
+                map['content'] = '${cb.nickName};在;${cb.gameName};中赢得;$info';
+              }
               setState(() {
                 list.add(map);
                 // list2.add(map);
@@ -2619,7 +2658,13 @@ class _RoomPageState extends State<RoomPage>
               map['uid'] = event.map!['uid'];
               map['type'] = '9';
               // 发送的信息
-              map['content'] = '${cb.nickName};在;${cb.gameName};中赢得;$info';
+              if(cb.gameName == '水星魔方'){
+                map['content'] = '${cb.nickName};在;黄金幻宝;中赢得;$info';
+              }else if(cb.gameName == '金星魔方'){
+                map['content'] = '${cb.nickName};在;钻石幻宝;中赢得;$info';
+              }else{
+                map['content'] = '${cb.nickName};在;${cb.gameName};中赢得;$info';
+              }
               setState(() {
                 list.add(map);
                 // list2.add(map);
@@ -4228,7 +4273,7 @@ class _RoomPageState extends State<RoomPage>
                       RoomItems.isMe(8, listM, isMy[8]),
 
                       /// 送礼展示
-                      Positioned(
+                      nickName.isNotEmpty ? Positioned(
                         bottom: 750.w,
                           child: Container(
                             width: MediaQuery.of(context).size.width,
@@ -4255,7 +4300,7 @@ class _RoomPageState extends State<RoomPage>
                                     child: Wrap(
                                       alignment: WrapAlignment.center,
                                       children: [
-                                        Text('姓名',
+                                        Text(nickName,
                                             style: TextStyle(
                                               color: MyColors.djEightM,
                                               fontSize: 24.sp,
@@ -4267,7 +4312,13 @@ class _RoomPageState extends State<RoomPage>
                                               fontSize: 24.sp,
                                               height: 2,
                                             )),
-                                        Text('礼物',
+                                        Text(otherNickName,
+                                            style: TextStyle(
+                                              color: MyColors.djEightM,
+                                              fontSize: 24.sp,
+                                              height: 2,
+                                            )),
+                                        Text(giftName,
                                             style: TextStyle(
                                               color: MyColors.peopleYellow,
                                               fontSize: 24.sp,
@@ -4280,7 +4331,7 @@ class _RoomPageState extends State<RoomPage>
                                 const Spacer(),
                               ],
                             ),
-                          )),
+                          )) : const Text(''),
 
                       /// 聊天除使用
                       Positioned(
@@ -5850,7 +5901,7 @@ class _RoomPageState extends State<RoomPage>
     await databaseHelper.insertData('roomInfoTable', params);
   }
 
-  /// 查询本房间消息本房间消息
+  /// 查询本房间消息
   Future<void> searchChatInfo() async {
     DatabaseHelper databaseHelper = DatabaseHelper();
     Database? db = await databaseHelper.database;
@@ -5872,16 +5923,69 @@ class _RoomPageState extends State<RoomPage>
     }
   }
 
+  /// 保存本房间送礼
+  Future<void> saveGiftInfo(String uid, String nickeName, String otherNickName, String otherUid, String giftImage, String number, String giftName, String price,) async {
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    Database? db = await databaseHelper.database;
+    Map<String, dynamic> params = <String, dynamic>{
+      'roomID': widget.roomId,
+      'headImage': sp.getString('user_headimg').toString(),
+      'uid': uid,
+      'nickeName': nickeName,
+      'otherNickName': otherNickName,
+      'otherUid': otherUid,
+      'giftImage': giftImage,
+      'number': number,
+      'giftName': giftName,
+      'price': price,
+      'by1': '',
+      'by2': '',
+      'by3': '',
+    };
+    // 插入数据
+    await databaseHelper.insertData('roomGiftTable', params);
+  }
+
+  /// 查询本房间送礼
+  Future<void> searchGiftInfo() async {
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    Database? db = await databaseHelper.database;
+    // 获取所有数据
+    List<Map<String, dynamic>> allData =
+    await databaseHelper.getAllData('roomGiftTable');
+    if (allData.isNotEmpty) {
+
+    }
+  }
+
   /// 删除本房间消息本房间消息
   Future<void> deleteChatInfo() async {
     DatabaseHelper databaseHelper = DatabaseHelper();
     Database? db = await databaseHelper.database;
     //删除
     db.delete('roomInfoTable');
+    //删除
+    db.delete('roomGiftTable');
     // 防止用户被顶号时没有清空表
     if (sp.getString('sqRoomID').toString().isNotEmpty) {
       sp.setString('sqRoomID', '');
     }
+  }
+
+  /// 查询本房间是否有送礼物信息
+  Future<void> searchHaveGiftInfo() async {
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    Database? db = await databaseHelper.database;
+    // 获取所有数据
+    // 执行查询操作
+    String queryM =
+        'select * from roomGiftTable order by id desc';
+    List<Map<String, dynamic>>? result = await db.rawQuery(queryM);
+    setState(() {
+      giftName = result[0]['giftName'];
+      nickName = result[0]['nickeName'];
+      otherNickName = result[0]['otherNickName'];
+    });
   }
 
   /// 爆灯

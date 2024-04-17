@@ -909,7 +909,7 @@ class _MofangLanPageState extends State<MofangLanPage>
                           width: double.infinity,
                           //ScreenUtil().setHeight(580),
                           margin:
-                              EdgeInsets.only(top: ScreenUtil().setHeight(140)),
+                              EdgeInsets.only(top: ScreenUtil().setHeight(110)),
                           alignment: Alignment.center,
                           child: SVGAImage(animationController!),
                         )

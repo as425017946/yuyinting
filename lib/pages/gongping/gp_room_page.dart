@@ -14,8 +14,6 @@ import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../room/room_page.dart';
-import '../room/room_ts_mima_page.dart';
-
 /// 公屏 邀请进入房间使用
 class GPRoomPage extends StatefulWidget {
   String roomID;

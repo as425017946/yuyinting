@@ -111,7 +111,7 @@ class _MofangJinPageState extends State<MofangJinPage>
 
   void loadAnimation() async {
     final videoItem =
-        await _loadSVGA(false, 'assets/svga/mofang_jin_baozha.svga');
+        await _loadSVGA(false, 'assets/svga/mofang_lan_baozha.svga');
     videoItem.autorelease = false;
     animationController?.videoItem = videoItem;
     animationController

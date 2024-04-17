@@ -1554,6 +1554,8 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     Database? db = await databaseHelper.database;
     //删除
     db.delete('roomInfoTable');
+    //删除
+    db.delete('roomGiftTable');
     // 防止用户被顶号时没有清空表
     if (sp.getString('sqRoomID').toString().isNotEmpty) {
       sp.setString('sqRoomID', '');

@@ -521,7 +521,7 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
                   Transform.translate(
                     offset: Offset(0, -2.h),
                     child: WidgetUtils.onlyTextCenter(
-                        '1000金豆',
+                        '500金豆',
                         StyleUtils.getCommonTextStyle(
                             color: Colors.white,
                             fontSize: ScreenUtil().setSp(23),
@@ -551,7 +551,7 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
                   Transform.translate(
                     offset: Offset(0, -2.h),
                     child: WidgetUtils.onlyTextCenter(
-                        '5000金豆',
+                        '1000金豆',
                         StyleUtils.getCommonTextStyle(
                             color: Colors.white,
                             fontSize: ScreenUtil().setSp(23),
@@ -596,6 +596,30 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
             GestureDetector(
               onTap: (() {
                 setState(() {
+                  isCheck = 3;
+                  cishu = 5;
+                  feiyong = 500;
+                });
+              }),
+              child: Container(
+                height: ScreenUtil().setHeight(60),
+                width: ScreenUtil().setHeight(170),
+                decoration: BoxDecoration(
+                  //设置Container修饰
+                  image: DecorationImage(
+                    //背景图片修饰
+                    image: AssetImage(isCheck == 3
+                        ? "assets/images/zhuanpan_two_z1001.png"
+                        : 'assets/images/zhuanpan_two_z100.png'),
+                    fit: BoxFit.fill, //覆盖
+                  ),
+                ),
+              ),
+            ),
+            const Spacer(),
+            GestureDetector(
+              onTap: (() {
+                setState(() {
                   isCheck = 2;
                   cishu = 10;
                   feiyong = 1000;
@@ -611,30 +635,6 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
                     image: AssetImage(isCheck == 2
                         ? "assets/images/zhuanpan_two_z101.png"
                         : 'assets/images/zhuanpan_two_z10.png'),
-                    fit: BoxFit.fill, //覆盖
-                  ),
-                ),
-              ),
-            ),
-            const Spacer(),
-            GestureDetector(
-              onTap: (() {
-                setState(() {
-                  isCheck = 3;
-                  cishu = 50;
-                  feiyong = 5000;
-                });
-              }),
-              child: Container(
-                height: ScreenUtil().setHeight(60),
-                width: ScreenUtil().setHeight(170),
-                decoration: BoxDecoration(
-                  //设置Container修饰
-                  image: DecorationImage(
-                    //背景图片修饰
-                    image: AssetImage(isCheck == 3
-                        ? "assets/images/zhuanpan_two_z1001.png"
-                        : 'assets/images/zhuanpan_two_z100.png'),
                     fit: BoxFit.fill, //覆盖
                   ),
                 ),

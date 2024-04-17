@@ -358,7 +358,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                         ScreenUtil().setHeight(35),
                                         ScreenUtil().setHeight(85)),
                                     Positioned(
-                                        left: (level >= 1 && level <= 10) ? 65.w : 55.w,
+                                        left: (level >= 1 && level <= 10) ? 65.w : 60.w,
                                         child: Stack(
                                           children: [
                                             Text(
@@ -413,7 +413,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                   105.w,
                                 ),
                                 Positioned(
-                                    bottom: (grLevel >= 1 && grLevel <= 9) == true ? 8.w : 10.w,
+                                    bottom: (grLevel >= 1 && grLevel <= 9) == true ? 8.w : 8.w,
                                     left: (grLevel >= 1 && grLevel <= 9) == true ? 70.w : 68.w,
                                     child: Stack(
                                       children: [

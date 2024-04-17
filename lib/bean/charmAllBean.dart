@@ -13,6 +13,7 @@ class charmAllBean {
   List<GiftInfo>? giftInfo;
   String? blueScore;
   String? redScore;
+  String? recordToNickname;
 
   charmAllBean(
       {
@@ -29,7 +30,8 @@ class charmAllBean {
         this.fromUid,
         this.avatar,
         this.blueScore,
-        this.redScore});
+        this.redScore,
+        this.recordToNickname});
 
   charmAllBean.fromJson(Map<dynamic, dynamic> json) {
     roomId = json['room_id'];
@@ -56,6 +58,7 @@ class charmAllBean {
       });
     }
     roomName = json['room_name'];
+    recordToNickname = json['record_to_nickname'];
   }
 
   Map<String, dynamic> toJson() {
@@ -78,6 +81,7 @@ class charmAllBean {
       data['gift_info'] = this.giftInfo!.map((v) => v.toJson()).toList();
     }
     data['room_name'] = this.roomName;
+    data['record_to_nickname'] = this.recordToNickname;
     return data;
   }
 }
@@ -106,14 +110,16 @@ class GiftInfo {
   String? giftImg;
   int? giftPrice;
   int? giftNumber;
+  String? giftImgStatic;
 
-  GiftInfo({this.giftName, this.giftImg,this.giftPrice, this.giftNumber});
+  GiftInfo({this.giftName, this.giftImg,this.giftPrice, this.giftNumber, this.giftImgStatic});
 
   GiftInfo.fromJson(Map<String, dynamic> json) {
     giftName = json['gift_name'];
     giftImg = json['gift_img'];
     giftPrice = json['gift_price'];
     giftNumber = json['gift_number'];
+    giftImgStatic = json['gift_img_static'];
   }
 
   Map<String, dynamic> toJson() {
@@ -122,6 +128,7 @@ class GiftInfo {
     data['gift_img'] = this.giftImg;
     data['gift_price'] = this.giftPrice;
     data['gift_number'] = this.giftNumber;
+    data['gift_img_static'] = this.giftImgStatic;
     return data;
   }
 }
