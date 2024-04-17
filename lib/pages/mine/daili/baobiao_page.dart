@@ -61,7 +61,7 @@ class _BaobiaoPageState extends State<BaobiaoPage> {
             children: [
               item('用户名: ', list[i].nickname!),
               space,
-              item('金币: ', '${list[i].rebateGb}'),
+              item('分润金币: ', '${list[i].rebateGb}'),
             ],
           ),
           SizedBox(height: 20.w),

@@ -231,156 +231,6 @@ class _HomePageState extends State<HomePage>
                       WidgetUtils.commonSizedBox(0, 10),
                       _titleTab(),
                       WidgetUtils.commonSizedBox(0, 10),
-                      /*
-                      Expanded(
-                          child: Container(
-                        width: double.infinity,
-                        height: ScreenUtil().setHeight(75),
-                        alignment: Alignment.center,
-                        color: Colors.transparent,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                                child: GestureDetector(
-                              onTap: (() {
-                                setState(() {
-                                  _currentIndex = 0;
-                                  _controller.jumpToPage(0);
-                                });
-                              }),
-                              child: Container(
-                                width: double.infinity,
-                                color: Colors.transparent,
-                                alignment: Alignment.center,
-                                child: WidgetUtils.onlyTextCenter(
-                                    '收藏',
-                                    StyleUtils.getCommonFFTextStyle(
-                                        color: _currentIndex == 0 ? MyColors.newHomeBlack :  MyColors.newHomeBlack2,
-                                        fontSize: _currentIndex == 0
-                                            ? ScreenUtil().setSp(46)
-                                            : ScreenUtil().setSp(36),
-                                        fontWeight: _currentIndex == 0
-                                            ? FontWeight.w600
-                                            : FontWeight.normal)),
-                              ),
-                            )),
-                            Expanded(
-                                child: GestureDetector(
-                              onTap: (() {
-                                setState(() {
-                                  _currentIndex = 1;
-                                  _controller.jumpToPage(1);
-                                });
-                              }),
-                              child: Container(
-                                width: double.infinity,
-                                color: Colors.transparent,
-                                child: WidgetUtils.onlyTextCenter(
-                                    '推荐',
-                                    StyleUtils.getCommonFFTextStyle(
-                                        color: _currentIndex == 1 ? MyColors.newHomeBlack :  MyColors.newHomeBlack2,
-                                        fontSize: _currentIndex == 1
-                                            ? ScreenUtil().setSp(46)
-                                            : ScreenUtil().setSp(36),
-                                        fontWeight: _currentIndex == 1
-                                            ? FontWeight.w600
-                                            : FontWeight.normal)),
-                              ),
-                            )),
-                            Expanded(
-                                child: GestureDetector(
-                              onTap: (() {
-                                setState(() {
-                                  _currentIndex = 2;
-                                  _controller.jumpToPage(2);
-                                });
-                              }),
-                              child: Container(
-                                width: double.infinity,
-                                color: Colors.transparent,
-                                child: WidgetUtils.onlyTextCenter(
-                                    '派对',
-                                    StyleUtils.getCommonFFTextStyle(
-                                        color: _currentIndex == 2 ? MyColors.newHomeBlack :  MyColors.newHomeBlack2,
-                                        fontSize: _currentIndex == 2
-                                            ? ScreenUtil().setSp(46)
-                                            : ScreenUtil().setSp(36),
-                                        fontWeight: _currentIndex == 2
-                                            ? FontWeight.w600
-                                            : FontWeight.normal)),
-                              ),
-                            )),
-                            Expanded(
-                                child: GestureDetector(
-                              onTap: (() {
-                                setState(() {
-                                  _currentIndex = 3;
-                                  _controller.jumpToPage(3);
-                                });
-                              }),
-                              child: Column(
-                                children: [
-                                  WidgetUtils.commonSizedBox(26.h, 0),
-                                  _currentIndex == 3
-                                      ? WidgetUtils.showImages(
-                                          'assets/images/home_yx2.png',
-                                          ScreenUtil().setWidth(40 * 1.3),
-                                          ScreenUtil().setWidth(75 * 1.3))
-                                      : WidgetUtils.showImagesFill(
-                                          'assets/images/home_yx1.png',
-                                          ScreenUtil().setWidth(25 * 1.3),
-                                          ScreenUtil().setWidth(62 * 1.3)),
-                                  _currentIndex != 3
-                                      ? WidgetUtils.commonSizedBox(3, 0)
-                                      : WidgetUtils.commonSizedBox(0, 0),
-                                  const Spacer(),
-                                ],
-                              ),
-                            )),
-                            identity != 'user'
-                                ? Expanded(
-                                    child: GestureDetector(
-                                    onTap: (() {
-                                      setState(() {
-                                        _currentIndex = 4;
-                                        _controller.jumpToPage(4);
-                                      });
-                                    }),
-                                    child: Container(
-                                      width: double.infinity,
-                                      color: Colors.transparent,
-                                      child: WidgetUtils.onlyTextCenter(
-                                          '在线',
-                                          StyleUtils.getCommonFFTextStyle(
-                                              color: MyColors.newHomeBlack,
-                                              fontSize: _currentIndex == 4
-                                                  ? ScreenUtil().setSp(46)
-                                                  : ScreenUtil().setSp(36),
-                                              fontWeight: _currentIndex == 4
-                                                  ? FontWeight.w600
-                                                  : FontWeight.normal)),
-                                    ),
-                                  ))
-                                : Expanded(
-                                    child: Opacity(
-                                    opacity: 0,
-                                    child: WidgetUtils.onlyTextCenter(
-                                        '在线',
-                                        StyleUtils.getCommonFFTextStyle(
-                                            color: Colors.white,
-                                            fontSize: _currentIndex == 4
-                                                ? ScreenUtil().setSp(46)
-                                                : ScreenUtil().setSp(36),
-                                            fontWeight: _currentIndex == 4
-                                                ? FontWeight.w600
-                                                : FontWeight.normal)),
-                                  )),
-                          ],
-                        ),
-                      )),
-                      */
                       Container(
                         width: ScreenUtil().setHeight(160),
                         height: ScreenUtil().setHeight(75),
@@ -413,141 +263,6 @@ class _HomePageState extends State<HomePage>
                       ),
                     ],
                   ),
-                  // Container(
-                  //   width: double.infinity,
-                  //   height: ScreenUtil().setHeight(5),
-                  //   margin: EdgeInsets.only(
-                  //       left: 20, right: ScreenUtil().setHeight(140)),
-                  //   child: Row(
-                  //     children: [
-                  //       _currentIndex == 0
-                  //           ? Expanded(
-                  //               child: SizedBox(
-                  //               width: ScreenUtil().setHeight(68),
-                  //               height: ScreenUtil().setHeight(10),
-                  //               child: Row(
-                  //                 children: [
-                  //                   const Expanded(child: Text('')),
-                  //                   Container(
-                  //                     width: ScreenUtil().setHeight(20),
-                  //                     height: ScreenUtil().setHeight(4),
-                  //                     //边框设置
-                  //                     decoration: const BoxDecoration(
-                  //                       //背景
-                  //                       color: Colors.white,
-                  //                       //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                  //                       borderRadius: BorderRadius.all(
-                  //                           Radius.circular(10.0)),
-                  //                     ),
-                  //                   ),
-                  //                   const Expanded(child: Text('')),
-                  //                 ],
-                  //               ),
-                  //             ))
-                  //           : const Expanded(child: Text('')),
-                  //       _currentIndex == 1
-                  //           ? Expanded(
-                  //               child: SizedBox(
-                  //               width: ScreenUtil().setHeight(68),
-                  //               height: ScreenUtil().setHeight(10),
-                  //               child: Row(
-                  //                 children: [
-                  //                   const Expanded(child: Text('')),
-                  //                   Container(
-                  //                     width: ScreenUtil().setHeight(20),
-                  //                     height: ScreenUtil().setHeight(4),
-                  //                     //边框设置
-                  //                     decoration: const BoxDecoration(
-                  //                       //背景
-                  //                       color: Colors.white,
-                  //                       //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                  //                       borderRadius: BorderRadius.all(
-                  //                           Radius.circular(10.0)),
-                  //                     ),
-                  //                   ),
-                  //                   const Expanded(child: Text('')),
-                  //                 ],
-                  //               ),
-                  //             ))
-                  //           : const Expanded(child: Text('')),
-                  //       _currentIndex == 2
-                  //           ? Expanded(
-                  //               child: SizedBox(
-                  //               width: ScreenUtil().setHeight(68),
-                  //               height: ScreenUtil().setHeight(10),
-                  //               child: Row(
-                  //                 children: [
-                  //                   const Expanded(child: Text('')),
-                  //                   Container(
-                  //                     width: ScreenUtil().setHeight(20),
-                  //                     height: ScreenUtil().setHeight(4),
-                  //                     //边框设置
-                  //                     decoration: const BoxDecoration(
-                  //                       //背景
-                  //                       color: Colors.white,
-                  //                       //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                  //                       borderRadius: BorderRadius.all(
-                  //                           Radius.circular(10.0)),
-                  //                     ),
-                  //                   ),
-                  //                   const Expanded(child: Text('')),
-                  //                 ],
-                  //               ),
-                  //             ))
-                  //           : const Expanded(child: Text('')),
-                  //       _currentIndex == 3
-                  //           ? Expanded(
-                  //               child: SizedBox(
-                  //               width: ScreenUtil().setHeight(68),
-                  //               height: ScreenUtil().setHeight(10),
-                  //               child: Row(
-                  //                 children: [
-                  //                   const Expanded(child: Text('')),
-                  //                   Container(
-                  //                     width: ScreenUtil().setHeight(20),
-                  //                     height: ScreenUtil().setHeight(4),
-                  //                     //边框设置
-                  //                     decoration: const BoxDecoration(
-                  //                       //背景
-                  //                       color: Colors.white,
-                  //                       //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                  //                       borderRadius: BorderRadius.all(
-                  //                           Radius.circular(10.0)),
-                  //                     ),
-                  //                   ),
-                  //                   const Expanded(child: Text('')),
-                  //                 ],
-                  //               ),
-                  //             ))
-                  //           : const Expanded(child: Text('')),
-                  //       (_currentIndex == 4 && identity != 'user')
-                  //           ? Expanded(
-                  //               child: SizedBox(
-                  //               width: ScreenUtil().setHeight(68),
-                  //               height: ScreenUtil().setHeight(10),
-                  //               child: Row(
-                  //                 children: [
-                  //                   const Expanded(child: Text('')),
-                  //                   Container(
-                  //                     width: ScreenUtil().setHeight(20),
-                  //                     height: ScreenUtil().setHeight(4),
-                  //                     //边框设置
-                  //                     decoration: const BoxDecoration(
-                  //                       //背景
-                  //                       color: Colors.white,
-                  //                       //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                  //                       borderRadius: BorderRadius.all(
-                  //                           Radius.circular(10.0)),
-                  //                     ),
-                  //                   ),
-                  //                   const Expanded(child: Text('')),
-                  //                 ],
-                  //               ),
-                  //             ))
-                  //           : const Expanded(child: Text('')),
-                  //     ],
-                  //   ),
-                  // )
                 ],
               ),
             ),
@@ -573,14 +288,12 @@ class _HomePageState extends State<HomePage>
                           ShoucangPage(),
                           TuijianPage(),
                           PaiduiPage(),
-                          YouxiPage(),
                           ZaixianPage()
                         ]
                       : const [
                           ShoucangPage(),
                           TuijianPage(),
                           PaiduiPage(),
-                          YouxiPage(),
                         ],
                 ),
               ),
@@ -1033,7 +746,7 @@ class _HomePageState extends State<HomePage>
             _titleItem('收藏', 0, true),
             _titleItem('推荐', 1, true),
             _titleItem('派对', 2, true),
-            (level >= 3 || grLevel >= 3) ? _titleItem('游戏', 3, true) : const Text(''),
+            // (level >= 3 || grLevel >= 3) ? _titleItem('游戏', 3, true) : const Text(''),
             _titleItem('在线', 4, identity != 'user'),
           ],
         ),

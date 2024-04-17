@@ -112,11 +112,12 @@ class _WalletMoreShouruPageState extends State<WalletMoreShouruPage> {
         break;
       case 8:
         leixing = '装扮';
-        if (list[i].curType == 1) {
-          showImg = 'assets/images/mine_wallet_dd.png';//'assets/images/wallet_d.png';
-        } else {
-          showImg = 'assets/images/wallet_z.png';
-        }
+        // if (list[i].curType == 1) {
+        //   showImg = 'assets/images/mine_wallet_dd.png';//'assets/images/wallet_d.png';
+        // } else {
+        //   showImg = 'assets/images/wallet_z.png';
+        // }
+        showImg = list[i].img!;
         break;
       case 9:
         leixing = '个人打赏分润';
@@ -160,7 +161,7 @@ class _WalletMoreShouruPageState extends State<WalletMoreShouruPage> {
           child: Row(
             children: [
               WidgetUtils.commonSizedBox(0, 20),
-              (leixing == '打赏收益' || leixing == '个人打赏分润' || leixing == '厅主分润' || leixing == '会长分润')
+              (leixing == '打赏收益' || leixing == '个人打赏分润' || leixing == '厅主分润' || leixing == '会长分润' || leixing == '装扮')
                   ? WidgetUtils.showImagesNet(showImg,
                       ScreenUtil().setHeight(100), ScreenUtil().setHeight(100))
                   : WidgetUtils.showImages(showImg, ScreenUtil().setHeight(100),

@@ -13,6 +13,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:yuyinting/config/my_config.dart';
 import 'package:yuyinting/pages/room/room_bq_page.dart';
+import 'package:yuyinting/pages/room/room_new_gift_page.dart';
 import 'package:yuyinting/pages/room/room_send_info_page.dart';
 import 'package:yuyinting/pages/room/room_show_liwu_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
@@ -101,6 +102,9 @@ class _RoomPageState extends State<RoomPage>
   // 存是否展示座驾
   bool isZJShow = false;
 
+  // 存是否展示新的进场特效
+  bool isJRShow = false;
+
   String jianLiWu = '';
 
   /// 播放svga动画使用
@@ -109,6 +113,7 @@ class _RoomPageState extends State<RoomPage>
   late SVGAAnimationController animationControllerZJ;
   late SVGAAnimationController animationControllerPK;
   late SVGAAnimationController animationControllerJL;
+  late SVGAAnimationController animationControllerJR;
 
   Future _loadSVGA(isUrl, svgaUrl) {
     LogE('动画类型 $isUrl === $svgaUrl');
@@ -344,6 +349,51 @@ class _RoomPageState extends State<RoomPage>
           } else {
             Future.delayed(const Duration(milliseconds: 1), () {
               showStarJL(listUrlJL[0]); // 递归调用showStar方法播放下一个动画
+            });
+          }
+        }
+      });
+    }
+  }
+
+
+  // 展示用户进入房间展示svga
+  void showStarJoinRoom(Map m) async {
+    // 动画正在进行中不做处理
+    if (animationControllerJR.isAnimating) {
+      LogE('进行中====');
+    } else {
+      //本地图
+      final videoItem = await _loadSVGA(false, m['svgaUrl']);
+      animationControllerJR?.videoItem = videoItem;
+      animationControllerJR
+          ?.forward() // Try to use .forward() .reverse()
+          .whenComplete(() => animationControllerJR?.videoItem = null);
+      // 监听动画
+      animationControllerJR?.addListener(_animListenerJoinRoom);
+    }
+  }
+
+  //展示用户进入房间监听
+  void _animListenerJoinRoom() {
+    //TODO
+    if (animationControllerJR.isCompleted) {
+      LogE('动画结束 ${DateTime.now()}');
+      setState(() {
+        // 动画播放到最后一帧时停止播放
+        animationControllerJR?.stop();
+        animationControllerJR.removeListener(_animListenerJoinRoom);
+        if (listJoinRoom.isNotEmpty) {
+          listJoinRoom.removeAt(0);
+          if (listJoinRoom.isEmpty) {
+            setState(() {
+              isJRShow = false;
+            });
+            // 全部动画结束的处理逻辑
+            // ...
+          } else {
+            Future.delayed(const Duration(milliseconds: 1), () {
+              showStarJoinRoom(listJoinRoom[0]); // 递归调用showStar方法播放下一个动画
             });
           }
         }
@@ -790,6 +840,9 @@ class _RoomPageState extends State<RoomPage>
   // 是否返回了
   bool isBack = false;
 
+  // 新增默认进场播放
+  List<Map> listJoinRoom = [];
+
   Widget roomHouse(BuildContext context, int i) {
     return Column(children: [
       GestureDetector(
@@ -898,6 +951,7 @@ class _RoomPageState extends State<RoomPage>
       animationControllerBG = SVGAAnimationController(vsync: this);
       animationControllerPK = SVGAAnimationController(vsync: this);
       animationControllerJL = SVGAAnimationController(vsync: this);
+      animationControllerJR = SVGAAnimationController(vsync: this);
 
       //保存进入房间的id
       sp.setString('roomID', widget.roomId);
@@ -2419,6 +2473,20 @@ class _RoomPageState extends State<RoomPage>
                   '正常进入房间===  ${event.map!['uid'].toString() != sp.getString('user_id').toString()}');
               if (event.map!['uid'].toString() !=
                   sp.getString('user_id').toString()) {
+
+                //展示新增svga
+                Map<dynamic, dynamic> mapNew = {};
+                mapNew['svgaUrl'] = 'assets/svga/room_moren.svga';
+                mapNew['svgaBool'] = false;
+                mapNew['nickNanme'] = event.map!['nickname'];
+                if(listJoinRoom.isEmpty){
+                  listJoinRoom.add(mapNew);
+                  showStarJoinRoom(listJoinRoom[0]);
+                  isJRShow = true;
+                }else{
+                  listJoinRoom.add(mapNew);
+                }
+
                 Map<dynamic, dynamic> map = {};
                 map['info'] = event.map!['nickname'];
                 map['type'] = '2';
@@ -3477,6 +3545,7 @@ class _RoomPageState extends State<RoomPage>
     animationControllerZJ.dispose();
     animationControllerPK.dispose();
     animationControllerJL.dispose();
+    animationControllerJR.dispose();
     _subscription.cancel();
     _cancelTimer();
     // TODO: implement dispose
@@ -4158,21 +4227,77 @@ class _RoomPageState extends State<RoomPage>
                       RoomItems.isMe(7, listM, isMy[7]),
                       RoomItems.isMe(8, listM, isMy[8]),
 
+                      /// 送礼展示
+                      Positioned(
+                        bottom: 750.w,
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            color: Colors.transparent,
+                            child: Row(
+                              children: [
+                                const Spacer(),
+                                GestureDetector(
+                                  onTap: ((){
+                                    if(MyUtils.checkClick()){
+                                      MyUtils.goTransparentPage(context, RoomNewGiftPage(roomID: widget.roomId,));
+                                    }
+                                  }),
+                                  child: Container(
+                                    padding: EdgeInsets.only(
+                                        top: 0.h, bottom: 5.h, left: 10.h, right: 10.h),
+                                    //边框设置
+                                    decoration: const BoxDecoration(
+                                      //背景
+                                      color: Colors.white10,
+                                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                                    ),
+                                    child: Wrap(
+                                      alignment: WrapAlignment.center,
+                                      children: [
+                                        Text('姓名',
+                                            style: TextStyle(
+                                              color: MyColors.djEightM,
+                                              fontSize: 24.sp,
+                                              height: 2,
+                                            )),
+                                        Text('打赏',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 24.sp,
+                                              height: 2,
+                                            )),
+                                        Text('礼物',
+                                            style: TextStyle(
+                                              color: MyColors.peopleYellow,
+                                              fontSize: 24.sp,
+                                              height: 2,
+                                            ))
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                const Spacer(),
+                              ],
+                            ),
+                          )),
+
                       /// 聊天除使用
                       Positioned(
                         bottom: 80.h,
                         child:
 
                             /// 消息列表最外层
-                            SizedBox(
+                            Container(
                           height: (isDevices == 'ios' && isPK == 0)
-                              ? 560.h
+                              ? 520.h
                               : (isDevices == 'ios' && isPK != 0)
-                                  ? 490.h
+                                  ? 450.h
                                   : (isDevices == 'android' && isPK == 0)
-                                      ? 570.h
+                                      ? 530.h
                                       : 500.h,
                           width: 420.h,
+                          color: Colors.transparent,
                           child: Column(
                             children: [
                               //分类使用 先把公屏和房间注释
@@ -4285,6 +4410,39 @@ class _RoomPageState extends State<RoomPage>
                             )
                           : const Text(''),
 
+                      /// New提示进入房间
+                      (isJRShow == true)
+                          ? IgnorePointer(
+                        ignoring: true,
+                        child: Center(
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  height: 30.h,
+                                  width: 400.w,
+                                  child: Stack(
+                                    children: [
+                                      SVGAImage(
+                                        animationControllerJR,
+                                        fit: BoxFit.fitWidth,
+                                      ),
+                                      Row(
+                                        children: [
+                                          WidgetUtils.commonSizedBox(0, 20.w),
+                                          WidgetUtils.onlyText(listJoinRoom[0]['nickNanme'], StyleUtils.getCommonTextStyle(color: Colors.yellow,fontSize: 22.sp)),
+                                          WidgetUtils.onlyText('进来了', StyleUtils.getCommonTextStyle(color: Colors.white,fontSize: 22.sp)),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                const Spacer(),
+                              ],
+                            )
+                        ),
+                      )
+                          : const Text(''),
+
                       /// 装扮座驾进入房间
                       (isZJShow == true)
                           ? IgnorePointer(
@@ -4334,121 +4492,7 @@ class _RoomPageState extends State<RoomPage>
 
                       /// 页面返回出现推荐房间
                       isBack
-                          ? /*Row(
-                              children: [
-                                GestureDetector(
-                                  onTap: (() {
-                                    if (sp.getBool('joinRoom') == false) {
-                                      setState(() {
-                                        isBack = false;
-                                      });
-                                    }
-                                  }),
-                                  child: Container(
-                                    height: double.infinity,
-                                    width: (240 * 1.3).w,
-                                    color: Colors.transparent,
-                                  ),
-                                ),
-                                Expanded(
-                                    child: Container(
-                                  height: double.infinity,
-                                  color: Colors.black87,
-                                  child: Column(
-                                    children: [
-                                      WidgetUtils.commonSizedBox(35, 0),
-                                      Row(
-                                        children: [
-                                          const Expanded(child: Text('')),
-                                          GestureDetector(
-                                            onTap: (() {
-                                              if (MyUtils.checkClick()) {
-                                                sp.setString('roomID', '');
-                                                // 调用离开房间接口
-                                                doPostLeave();
-                                                // 清空存储信息
-                                                deleteChatInfo();
-                                                if (_timerHot != null) {
-                                                  _timerHot!.cancel();
-                                                }
-                                                sp.setString('isShouQi', '0');
-                                                //离开频道并释放资源
-                                                _dispose();
-                                                eventBus.fire(SubmitButtonBack(
-                                                    title: '退出房间'));
-                                                Navigator.pop(context);
-                                              }
-                                            }),
-                                            child: Column(
-                                              children: [
-                                                WidgetUtils.showImages(
-                                                    'assets/images/room_exit.png',
-                                                    ScreenUtil().setHeight(60),
-                                                    ScreenUtil().setHeight(60)),
-                                                WidgetUtils.onlyTextCenter(
-                                                    '退出房间',
-                                                    StyleUtils
-                                                        .getCommonTextStyle(
-                                                            color: MyColors
-                                                                .roomTCWZ3,
-                                                            fontSize:
-                                                                ScreenUtil()
-                                                                    .setSp(
-                                                                        24))),
-                                              ],
-                                            ),
-                                          ),
-                                          WidgetUtils.commonSizedBox(0, 50),
-                                          GestureDetector(
-                                            onTap: (() {
-                                              if (MyUtils.checkClick()) {
-                                                if (_timerHot != null) {
-                                                  _timerHot!.cancel();
-                                                }
-                                                sp.setString('isShouQi', '1');
-                                                sp.setString(
-                                                    'sqRoomID', widget.roomId);
-                                                eventBus.fire(SubmitButtonBack(
-                                                    title: '收起房间'));
-                                                Navigator.pop(context);
-                                              }
-                                            }),
-                                            child: Column(
-                                              children: [
-                                                WidgetUtils.showImages(
-                                                    'assets/images/room_shouqi.png',
-                                                    ScreenUtil().setHeight(60),
-                                                    ScreenUtil().setHeight(60)),
-                                                WidgetUtils.onlyTextCenter(
-                                                    '收起房间',
-                                                    StyleUtils
-                                                        .getCommonTextStyle(
-                                                            color: MyColors
-                                                                .roomTCWZ3,
-                                                            fontSize:
-                                                                ScreenUtil()
-                                                                    .setSp(
-                                                                        24))),
-                                              ],
-                                            ),
-                                          ),
-                                          WidgetUtils.commonSizedBox(0, 40),
-                                        ],
-                                      ),
-                                      WidgetUtils.commonSizedBox(40, 0),
-                                      Expanded(
-                                        child: ListView.builder(
-                                          padding: EdgeInsets.only(
-                                              top: ScreenUtil().setHeight(5)),
-                                          itemBuilder: roomHouse,
-                                          itemCount: listPH.length,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ))
-                              ],
-                            )*/
+                          ?
                           _backView()
                           : const Text('')
                     ],
@@ -4718,6 +4762,20 @@ class _RoomPageState extends State<RoomPage>
 
             if(sp.getString('sqRoomID').toString() != widget.roomId || sp.getString('sqRoomID').toString().isEmpty){
               sp.setString('sqRoomID', '');
+              //展示新增svga
+              Map<dynamic, dynamic> mapNew = {};
+              mapNew['svgaUrl'] = 'assets/svga/room_moren.svga';
+              mapNew['svgaBool'] = false;
+              mapNew['nickNanme'] = bean.data!.userInfo!.nickname!;
+              if(listJoinRoom.isEmpty){
+                listJoinRoom.add(mapNew);
+                showStarJoinRoom(listJoinRoom[0]);
+                isJRShow = true;
+              }else{
+                listJoinRoom.add(mapNew);
+              }
+
+
               //进入房间
               Map<dynamic, dynamic> mapg = {};
               mapg['info'] = notice;
