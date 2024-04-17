@@ -2159,7 +2159,7 @@ class _RoomPageState extends State<RoomPage>
                     if (isDevices == 'android') {
                       // 这个是为了让别人也能看见自己送出的礼物
                       if (listUrl.isEmpty) {
-                        if (cb.giftInfo![0].giftName! == '远古霸下（限定投放）' ||
+                        if (cb.giftInfo![0].giftName! == '远古霸下（幸运）' ||
                             cb.giftInfo![0].giftName! == '北欧天马' ||
                             cb.giftInfo![0].giftName! == '浮生若梦' ||
                             cb.giftInfo![0].giftName! == '圣光之子' ||
@@ -2170,7 +2170,7 @@ class _RoomPageState extends State<RoomPage>
                             cb.giftInfo![0].giftName! == '狂欢宇宙' ||
                             cb.giftInfo![0].giftName! == '恋爱摩天轮' ||
                             cb.giftInfo![0].giftName! == '玫瑰花海' ||
-                            cb.giftInfo![0].giftName! == '梦游长安（限定投放）' ||
+                            cb.giftInfo![0].giftName! == '梦游长安（幸运）' ||
                             cb.giftInfo![0].giftName! == '魔幻泡泡' ||
                             cb.giftInfo![0].giftName! == '木马奇缘' ||
                             cb.giftInfo![0].giftName! == '奇幻游记' ||
@@ -2186,8 +2186,8 @@ class _RoomPageState extends State<RoomPage>
                             cb.giftInfo![0].giftName! == '天行巨鲲' ||
                             cb.giftInfo![0].giftName! == '超级嘉年华' ||
                             cb.giftInfo![0].giftName! == '为爱启航' ||
-                            cb.giftInfo![0].giftName! == '宝象传说（限定投放）' ||
-                            cb.giftInfo![0].giftName! == '巅峰之证（限定投放）' ||
+                            cb.giftInfo![0].giftName! == '宝象传说（幸运）' ||
+                            cb.giftInfo![0].giftName! == '巅峰之证（幸运）' ||
                             cb.giftInfo![0].giftName! == '樱花快线' ||
                             cb.giftInfo![0].giftName! == '摘星少女' ||
                             cb.giftInfo![0].giftName! == '吞星之鲸' ||
@@ -2205,7 +2205,7 @@ class _RoomPageState extends State<RoomPage>
                           showStar(listUrl[0]);
                         }
                       } else {
-                        if (cb.giftInfo![0].giftName! == '远古霸下（限定投放）' ||
+                        if (cb.giftInfo![0].giftName! == '远古霸下（幸运）' ||
                             cb.giftInfo![0].giftName! == '北欧天马' ||
                             cb.giftInfo![0].giftName! == '浮生若梦' ||
                             cb.giftInfo![0].giftName! == '圣光之子' ||
@@ -2216,7 +2216,7 @@ class _RoomPageState extends State<RoomPage>
                             cb.giftInfo![0].giftName! == '狂欢宇宙' ||
                             cb.giftInfo![0].giftName! == '恋爱摩天轮' ||
                             cb.giftInfo![0].giftName! == '玫瑰花海' ||
-                            cb.giftInfo![0].giftName! == '梦游长安（限定投放）' ||
+                            cb.giftInfo![0].giftName! == '梦游长安（幸运）' ||
                             cb.giftInfo![0].giftName! == '魔幻泡泡' ||
                             cb.giftInfo![0].giftName! == '木马奇缘' ||
                             cb.giftInfo![0].giftName! == '奇幻游记' ||
@@ -2232,8 +2232,8 @@ class _RoomPageState extends State<RoomPage>
                             cb.giftInfo![0].giftName! == '天行巨鲲' ||
                             cb.giftInfo![0].giftName! == '超级嘉年华' ||
                             cb.giftInfo![0].giftName! == '为爱启航' ||
-                            cb.giftInfo![0].giftName! == '宝象传说（限定投放）' ||
-                            cb.giftInfo![0].giftName! == '巅峰之证（限定投放）' ||
+                            cb.giftInfo![0].giftName! == '宝象传说（幸运）' ||
+                            cb.giftInfo![0].giftName! == '巅峰之证（幸运）' ||
                             cb.giftInfo![0].giftName! == '樱花快线' ||
                             cb.giftInfo![0].giftName! == '摘星少女' ||
                             cb.giftInfo![0].giftName! == '吞星之鲸' ||
@@ -2801,7 +2801,7 @@ class _RoomPageState extends State<RoomPage>
           if (isDevices == 'android' && !event.isJian) {
             setState(() {
               if (listUrl.isEmpty) {
-                if (event.url.contains('远古霸下（限定投放）') ||
+                if (event.url.contains('远古霸下（幸运）') ||
                     event.url.contains('北欧天马') ||
                     event.url.contains('浮生若梦') ||
                     event.url.contains('圣光之子') ||
@@ -2812,7 +2812,7 @@ class _RoomPageState extends State<RoomPage>
                     event.url.contains('狂欢宇宙') ||
                     event.url.contains('恋爱摩天轮') ||
                     event.url.contains('玫瑰花海') ||
-                    event.url.contains('梦游长安（限定投放）') ||
+                    event.url.contains('梦游长安（幸运）') ||
                     event.url.contains('魔幻泡泡') ||
                     event.url.contains('木马奇缘') ||
                     event.url.contains('奇幻游记') ||
@@ -2828,8 +2828,8 @@ class _RoomPageState extends State<RoomPage>
                     event.url.contains('天行巨鲲') ||
                     event.url.contains('超级嘉年华') ||
                     event.url.contains('为爱启航') ||
-                    event.url.contains('宝象传说（限定投放）') ||
-                    event.url.contains('巅峰之证（限定投放）') ||
+                    event.url.contains('宝象传说（幸运）') ||
+                    event.url.contains('巅峰之证（幸运）') ||
                     event.url.contains('樱花快线') ||
                     event.url.contains('摘星少女') ||
                     event.url.contains('吞星之鲸') ||
@@ -2848,7 +2848,7 @@ class _RoomPageState extends State<RoomPage>
                   showStar(listUrl[0]);
                 }
               } else {
-                if (event.url.contains('远古霸下（限定投放）') ||
+                if (event.url.contains('远古霸下（幸运）') ||
                     event.url.contains('北欧天马') ||
                     event.url.contains('浮生若梦') ||
                     event.url.contains('圣光之子') ||
@@ -2859,7 +2859,7 @@ class _RoomPageState extends State<RoomPage>
                     event.url.contains('狂欢宇宙') ||
                     event.url.contains('恋爱摩天轮') ||
                     event.url.contains('玫瑰花海') ||
-                    event.url.contains('梦游长安（限定投放）') ||
+                    event.url.contains('梦游长安（幸运）') ||
                     event.url.contains('魔幻泡泡') ||
                     event.url.contains('木马奇缘') ||
                     event.url.contains('奇幻游记') ||
@@ -2875,8 +2875,8 @@ class _RoomPageState extends State<RoomPage>
                     event.url.contains('天行巨鲲') ||
                     event.url.contains('超级嘉年华') ||
                     event.url.contains('为爱启航') ||
-                    event.url.contains('宝象传说（限定投放）') ||
-                    event.url.contains('巅峰之证（限定投放）') ||
+                    event.url.contains('宝象传说（幸运）') ||
+                    event.url.contains('巅峰之证（幸运）') ||
                     event.url.contains('樱花快线') ||
                     event.url.contains('摘星少女') ||
                     event.url.contains('吞星之鲸') ||

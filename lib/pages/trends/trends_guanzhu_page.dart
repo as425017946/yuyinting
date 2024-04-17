@@ -26,7 +26,6 @@ import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../../widget/SwiperPage.dart';
-import 'package:video_player/video_player.dart';
 import '../message/chat_page.dart';
 import '../message/geren/people_info_page.dart';
 import '../mine/my/my_info_page.dart';
@@ -1188,8 +1187,13 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
               }
               length = _list.length;
             } else {
-              // 没有关注的人，需要请求推荐的接口
-              doPostRecommendList("1");
+              if(page == 1){
+                // 没有关注的人，需要请求推荐的接口
+                doPostRecommendList("1");
+              }else{
+                // 没有关注的人，需要请求推荐的接口
+                doPostRecommendList("0");
+              }
 
               if (page > 1) {
                 if (bean.data!.list!.length < MyConfig.pageSize) {

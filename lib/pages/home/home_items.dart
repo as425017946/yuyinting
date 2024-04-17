@@ -93,7 +93,7 @@ class HomeItems {
         '${hf.fromNickname}在${hf.roomName}获得价值${hf.giftInfo![0].giftPrice}${hf.giftInfo![0].giftName} x${hf.giftInfo![0].giftNumber}';
         break;
       case '抽奖金魔方':
-        gd = 100.h;
+        gd = 50.h;
         topHD = 130.h;
         info =
         '${hf.fromNickname}在${hf.roomName}获得价值${hf.giftInfo![0].giftPrice}${hf.giftInfo![0].giftName} x${hf.giftInfo![0].giftNumber}';
