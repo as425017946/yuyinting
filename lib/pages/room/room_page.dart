@@ -1072,9 +1072,9 @@ class _RoomPageState extends State<RoomPage>
           }
         } else if (event.title == '聊天') {
           // 判断是不是贵族，除了0都是贵族身份
-          LogE('我的身份 1==$noble_id');
-          LogE('我的身份 2==$_timeCount');
-          LogE('我的身份 3==$isForbation');
+          // LogE('我的身份 1==$noble_id');
+          // LogE('我的身份 2==$_timeCount');
+          // LogE('我的身份 3==$isForbation');
           if (noble_id == '0') {
             if (_timeCount == 5) {
               if (isForbation == 0) {
@@ -4281,7 +4281,7 @@ class _RoomPageState extends State<RoomPage>
 
                       /// 送礼展示
                       nickName.isNotEmpty ? Positioned(
-                        bottom: 750.w,
+                        bottom: (whoWin != 'draw' && isPK != 0) ? 650.w : 750.w,
                           child: Container(
                             width: MediaQuery.of(context).size.width,
                             color: Colors.transparent,
@@ -4304,8 +4304,7 @@ class _RoomPageState extends State<RoomPage>
                                       //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                                       borderRadius: BorderRadius.all(Radius.circular(15)),
                                     ),
-                                    child: Wrap(
-                                      alignment: WrapAlignment.center,
+                                    child: Row(
                                       children: [
                                         Text(nickName,
                                             style: TextStyle(
@@ -4350,10 +4349,10 @@ class _RoomPageState extends State<RoomPage>
                           height: (isDevices == 'ios' && isPK == 0)
                               ? 520.h
                               : (isDevices == 'ios' && isPK != 0)
-                                  ? 450.h
+                                  ? 400.h
                                   : (isDevices == 'android' && isPK == 0)
                                       ? 530.h
-                                      : 500.h,
+                                      : 440.h,
                           width: 420.h,
                           color: Colors.transparent,
                           child: Column(

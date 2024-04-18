@@ -103,7 +103,7 @@ class _MofangLanPageState extends State<MofangLanPage>
 
   void loadAnimation() async {
     final videoItem =
-        await _loadSVGA(false, 'assets/svga/mofang_lan_baozha.svga');
+        await _loadSVGA(false, 'assets/svga/mofang_open.svga');
     videoItem.autorelease = false;
     animationController?.videoItem = videoItem;
     animationController
@@ -914,22 +914,22 @@ class _MofangLanPageState extends State<MofangLanPage>
                           child: SVGAImage(animationController!),
                         )
                       : WidgetUtils.commonSizedBox(0, 0),
-                  // 如果没有跳过动画，则直接显示图片
-                  isTiaoguoLW
-                      ? Center(
-                          child: SizedBox(
-                            height: 210.h,
-                            width: 200.h,
-                            child: Column(
-                              children: [
-                                WidgetUtils.commonSizedBox(10.h, 0),
-                                WidgetUtils.showImagesNet(
-                                    list[0].img!, 180.h, 180.h),
-                              ],
-                            ),
-                          ),
-                        )
-                      : const Text('')
+                  // // 如果没有跳过动画，则直接显示图片
+                  // isTiaoguoLW
+                  //     ? Center(
+                  //         child: SizedBox(
+                  //           height: 210.h,
+                  //           width: 200.h,
+                  //           child: Column(
+                  //             children: [
+                  //               WidgetUtils.commonSizedBox(10.h, 0),
+                  //               WidgetUtils.showImagesNet(
+                  //                   list[0].img!, 180.h, 180.h),
+                  //             ],
+                  //           ),
+                  //         ),
+                  //       )
+                  //     : const Text('')
                 ],
               ),
             ),
