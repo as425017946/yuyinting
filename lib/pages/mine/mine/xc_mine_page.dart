@@ -248,6 +248,7 @@ class _MinePageContent extends StatelessWidget {
               headWidth,
               c.userHeadImg.value,
             ),
+            // WidgetUtils.showImages('assets/images/gz_guowang.gif', headWidth+50.w, headWidth+50.w),
             if (c.avatarFrameImg.value.isNotEmpty)
               WidgetUtils.CircleHeadImage(
                 frameWidth,

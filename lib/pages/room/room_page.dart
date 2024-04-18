@@ -924,6 +924,8 @@ class _RoomPageState extends State<RoomPage>
         isDevices = 'ios';
       });
     }
+    // 查询本地存储信息
+    searchChatInfo();
     searchHaveGiftInfo();
     // 在页面中使用自定义时间和图片地址
     slideAnimationController = SlideAnimationController(
@@ -4838,8 +4840,6 @@ class _RoomPageState extends State<RoomPage>
               mapg['info'] = notice;
               mapg['type'] = '1';
               list.add(mapg);
-              // 查询本地存储信息
-              searchChatInfo();
               // 存储本人进入房间，目的是为了自己能看见自己的坐骑
               Map<dynamic, dynamic> map = {};
               map['info'] = bean.data!.userInfo!.nickname!;
@@ -5966,6 +5966,7 @@ class _RoomPageState extends State<RoomPage>
 
   /// 删除本房间消息本房间消息
   Future<void> deleteChatInfo() async {
+    LogE('清空表数据');
     DatabaseHelper databaseHelper = DatabaseHelper();
     Database? db = await databaseHelper.database;
     //删除
