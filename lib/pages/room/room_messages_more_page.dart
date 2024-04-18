@@ -544,7 +544,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage>
                             //背景
                             color: allData2[i]['type'] == 2
                                 ? Colors.transparent
-                                : Colors.white,
+                                : playColor(playRecord, i),//Colors.white,
                             //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                             borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(0),
@@ -614,6 +614,9 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage>
                                         if (playRecord) {
                                           stopPlayer();
                                         } else {
+                                          setState(() {
+                                            onPlay(i);
+                                          });
                                           play(allData2[i]['content']);
                                           MyUtils.didMsgRead(allData2[i],
                                               index: 3);
@@ -711,7 +714,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage>
                             //背景
                             color: allData2[i]['type'] == 2
                                 ? Colors.transparent
-                                : Colors.white,
+                                : playColor(playRecord, i),//Colors.white,
                             //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                             borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(20.0),
@@ -772,6 +775,9 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage>
                                             if (playRecord) {
                                               stopPlayer();
                                             } else {
+                                              setState(() {
+                                                onPlay(i);
+                                              });
                                               play(allData2[i]['content']);
                                             }
                                           }),

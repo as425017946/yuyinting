@@ -168,56 +168,33 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Transform.translate(
-        offset: Offset(0, -40.h),
-        child: Stack(
-          children: [
-            Column(
-              children: [
-                Expanded(
-                  child: SmartRefresher(
-                    header: MyUtils.myHeader(),
-                    footer: MyUtils.myFotter(),
-                    controller: _refreshController,
-                    enablePullUp: true,
-                    onLoading: _onLoading,
-                    onRefresh: _onRefresh,
-                    child: SingleChildScrollView(
-                      child: Container(
-                        color: Colors.transparent,
-                        padding: const EdgeInsets.all(10),
-                        child: MasonryGridView.count(
-                          // 展示几列
-                          crossAxisCount: 2,
-                          // 元素总个数
-                          itemCount: _list.length,
-                          // 单个子元素
-                          itemBuilder: waterCard,
-                          // 纵向元素间距
-                          mainAxisSpacing: 15.h,
-                          // 横向元素间距
-                          crossAxisSpacing: 10,
-                          //本身不滚动，让外面的singlescrollview来滚动
-                          physics:const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true, //收缩，让元素宽度自适应
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-            // ///点赞显示样式
-            // isShow ? Positioned(
-            //   left: x-ScreenUtil().setHeight(50),
-            //   top: y-ScreenUtil().setHeight(175),
-            //   height: ScreenUtil().setHeight(100),
-            //   width: ScreenUtil().setHeight(100),
-            //   child: SVGAImage(animationController!),
-            // ) : const Text('')
-          ],
+    return SmartRefresher(
+      header: MyUtils.myHeader(),
+      footer: MyUtils.myFotter(),
+      controller: _refreshController,
+      enablePullUp: true,
+      onLoading: _onLoading,
+      onRefresh: _onRefresh,
+      child: SingleChildScrollView(
+        child: Container(
+          color: Colors.transparent,
+          padding: const EdgeInsets.all(10),
+          child: MasonryGridView.count(
+            // 展示几列
+            crossAxisCount: 2,
+            // 元素总个数
+            itemCount: _list.length,
+            // 单个子元素
+            itemBuilder: waterCard,
+            // 纵向元素间距
+            mainAxisSpacing: 15.h,
+            // 横向元素间距
+            crossAxisSpacing: 10,
+            //本身不滚动，让外面的singlescrollview来滚动
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true, //收缩，让元素宽度自适应
+            padding: EdgeInsets.zero,
+          ),
         ),
       ),
     );

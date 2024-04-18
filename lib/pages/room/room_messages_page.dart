@@ -55,6 +55,7 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
 
   /// 消息列表
   Widget _itemTuiJian(BuildContext context, int i) {
+    final DataU dataU = listU.firstWhere((element) => element.uid.toString() == listMessage[i]['otherUid'], orElse: () => DataU(liveStatus: 0, loginStatus: 0));
     return Column(
       children: [
         GestureDetector(
@@ -89,7 +90,7 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
                       45.h,
                       listMessage[i]['otherHeadNetImg'],
                     ),
-                    listU[i].loginStatus == 1
+                    dataU.loginStatus == 1
                         ? Container(
                       height: 60.h,
                       width: 60.h,

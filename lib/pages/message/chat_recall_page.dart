@@ -41,6 +41,14 @@ mixin MsgReadText {
       Get.bottomSheet(ChatRecallPage(params: params));
     });
   }
+
+  int _playIndex = -1;
+  void onPlay(int index) {
+    _playIndex = index;
+  }
+  Color playColor(bool playRecord, int index) {
+    return (playRecord && index == _playIndex) ? const Color.fromARGB(255, 207, 255, 208) : Colors.white;
+  }
 }
 
 class ChatRecallPage extends StatelessWidget {
