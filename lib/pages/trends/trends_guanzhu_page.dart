@@ -1073,90 +1073,85 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Transform.translate(
-        offset: Offset(0, -40.h),
-        child: Stack(
-          children: [
-            (isOk == true && length == 0)
-                ? SmartRefresher(
-              header: MyUtils.myHeader(),
-              footer: MyUtils.myFotter(),
-              controller: _refreshController,
-              enablePullUp: true,
-              onLoading: _onLoading,
-              onRefresh: _onRefresh,
-              child: SingleChildScrollView(
-                child: Wrap(
-                  alignment: WrapAlignment.center,
-                  children: [
-                    WidgetUtils.showImages(
-                        'assets/images/trends_no.jpg',
-                        ScreenUtil().setHeight(242),
-                        ScreenUtil().setWidth(221)),
-                    WidgetUtils.onlyTextBottom(
-                        '您还没有关注的人',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.homeNoHave,
-                            fontSize: ScreenUtil().setSp(32))),
-                    WidgetUtils.commonSizedBox(50, 0),
-                    Row(
-                      children: [
-                        Expanded(child: WidgetUtils.myLine()),
-                        WidgetUtils.commonSizedBox(0, 10),
-                        WidgetUtils.onlyTextBottom(
-                            '为您推荐一些有趣的内容',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.homeNoHave,
-                                fontSize: ScreenUtil().setSp(25))),
-                        WidgetUtils.commonSizedBox(0, 10),
-                        Expanded(child: WidgetUtils.myLine()),
-                      ],
-                    ),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      padding: const EdgeInsets.all(20),
-                      itemBuilder: _itemsTuijian2,
-                      itemCount: _list_tj.length,
-                    )
-                  ],
+    return Stack(
+      children: [
+        (isOk == true && length == 0)
+            ? SmartRefresher(
+                header: MyUtils.myHeader(),
+                footer: MyUtils.myFotter(),
+                controller: _refreshController,
+                enablePullUp: true,
+                onLoading: _onLoading,
+                onRefresh: _onRefresh,
+                child: SingleChildScrollView(
+                  child: Wrap(
+                    alignment: WrapAlignment.center,
+                    children: [
+                      WidgetUtils.showImages(
+                          'assets/images/trends_no.jpg',
+                          ScreenUtil().setHeight(242),
+                          ScreenUtil().setWidth(221)),
+                      WidgetUtils.onlyTextBottom(
+                          '您还没有关注的人',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.homeNoHave,
+                              fontSize: ScreenUtil().setSp(32))),
+                      WidgetUtils.commonSizedBox(50, 0),
+                      Row(
+                        children: [
+                          Expanded(child: WidgetUtils.myLine()),
+                          WidgetUtils.commonSizedBox(0, 10),
+                          WidgetUtils.onlyTextBottom(
+                              '为您推荐一些有趣的内容',
+                              StyleUtils.getCommonTextStyle(
+                                  color: MyColors.homeNoHave,
+                                  fontSize: ScreenUtil().setSp(25))),
+                          WidgetUtils.commonSizedBox(0, 10),
+                          Expanded(child: WidgetUtils.myLine()),
+                        ],
+                      ),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: const EdgeInsets.all(20),
+                        itemBuilder: _itemsTuijian2,
+                        itemCount: _list_tj.length,
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            )
-                : SmartRefresher(
-              header: MyUtils.myHeader(),
-              footer: MyUtils.myFotter(),
-              controller: _refreshController,
-              enablePullUp: true,
-              onLoading: _onLoading,
-              onRefresh: _onRefresh,
-              child: SingleChildScrollView(
-                child: Container(
-                  color: Colors.transparent,
-                  padding: const EdgeInsets.all(10),
-                  child: MasonryGridView.count(
-                    // 展示几列
-                    crossAxisCount: 2,
-                    // 元素总个数
-                    itemCount: _list.length,
-                    // 单个子元素
-                    itemBuilder: waterCard,
-                    // 纵向元素间距
-                    mainAxisSpacing: 15.h,
-                    // 横向元素间距
-                    crossAxisSpacing: 10,
-                    //本身不滚动，让外面的singlescrollview来滚动
-                    physics:const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true, //收缩，让元素宽度自适应
+              )
+            : SmartRefresher(
+                header: MyUtils.myHeader(),
+                footer: MyUtils.myFotter(),
+                controller: _refreshController,
+                enablePullUp: true,
+                onLoading: _onLoading,
+                onRefresh: _onRefresh,
+                child: SingleChildScrollView(
+                  child: Container(
+                    color: Colors.transparent,
+                    padding: const EdgeInsets.all(10),
+                    child: MasonryGridView.count(
+                      // 展示几列
+                      crossAxisCount: 2,
+                      // 元素总个数
+                      itemCount: _list.length,
+                      // 单个子元素
+                      itemBuilder: waterCard,
+                      // 纵向元素间距
+                      mainAxisSpacing: 15.h,
+                      // 横向元素间距
+                      crossAxisSpacing: 10,
+                      //本身不滚动，让外面的singlescrollview来滚动
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true, //收缩，让元素宽度自适应
+                      padding: EdgeInsets.zero,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ),
+      ],
     );
   }
 
