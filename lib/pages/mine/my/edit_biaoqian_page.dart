@@ -166,6 +166,7 @@ class _EditBiaoqianPageState extends State<EditBiaoqianPage> {
               if (sp
                   .getString('label_id')
                   .toString()
+                  .split(',')
                   .contains(list[i].id.toString())) {
                 length++;
                 list_b.insert(i, true);
