@@ -17,6 +17,7 @@ import '../../colors/my_colors.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../utils/event_utils.dart';
+import '../../utils/getx_tools.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/widget_utils.dart';
@@ -294,8 +295,8 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                               sex == 1
                                   ? 'assets/images/room_nan.png'
                                   : 'assets/images/room_nv.png',
-                              ScreenUtil().setHeight(31),
-                              ScreenUtil().setHeight(29)),
+                              31*1.25.w,
+                              29*1.25.w),
                           WidgetUtils.commonSizedBox(0, 5),
                           // 只有不是新贵或者新锐的时候展示萌新
                           (isNew == 1 && isNewNoble == 0)
@@ -322,10 +323,13 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                               : const Text(''),
                           isPretty == 1
                               ? WidgetUtils.showImages(
-                              'assets/images/dj/lianghao.png', 30.h, 30.h)
+                              'assets/images/dj/lianghao.png', 30.w, 30.w)
                               : const Text(''),
                           isPretty == 1 ? WidgetUtils.commonSizedBox(0, 5) : WidgetUtils.commonSizedBox(0, 0),
                           // 用户等级
+                          if (level > 0)
+                            CharmLevelFlag(level: level, width: 75.w, height: 30.w),
+                          /*
                           level != 0
                               ? Stack(
                                   alignment: Alignment.centerLeft,
@@ -383,8 +387,12 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                   ],
                                 )
                               : const Text(''),
+                          */
                           WidgetUtils.commonSizedBox(0, 10.w),
                           // 财富等级
+                          if (grLevel > 0)
+                            WealthLevelFlag(level: grLevel, width: 75.w, height: 30.w),
+                          /*
                           grLevel != 0
                               ? SizedBox(
                             height: 40.h,
@@ -440,6 +448,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                             ),
                           )
                               : const Text(''),
+                          */
                         ],
                       ),
                       WidgetUtils.commonSizedBox(10, 0),

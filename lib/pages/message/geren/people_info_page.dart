@@ -17,6 +17,7 @@ import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../main.dart';
 import '../../../utils/event_utils.dart';
+import '../../../utils/getx_tools.dart';
 import '../../../utils/loading.dart';
 import '../../../utils/log_util.dart';
 import '../../../utils/my_toast_utils.dart';
@@ -559,7 +560,13 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                     ? WidgetUtils.showImages(
                         'assets/images/dj/lianghao.png', 30.w, 30.w)
                     : const Text(''),
+                isPretty == 1
+                    ? WidgetUtils.commonSizedBox(0, 10.w)
+                    : const Text(''),
                 // 用户等级
+                if (level > 0)
+                  CharmLevelFlag(level: level, width: 75.w, height: 30.w),
+                /*
                 level != 0
                     ? Stack(
                         alignment: Alignment.centerLeft,
@@ -613,8 +620,12 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                         ],
                       )
                     : const Text(''),
+                */
                 WidgetUtils.commonSizedBox(0, 10.w),
                 // 财富等级
+                if (grLevel > 0)
+                  WealthLevelFlag(level: grLevel, width: 75.w, height: 30.w),
+                /*
                 grLevel != 0
                     ? SizedBox(
                   height: 40.h,
@@ -670,6 +681,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                   ),
                 )
                     : const Text(''),
+                */
               ],
             ),
           ),

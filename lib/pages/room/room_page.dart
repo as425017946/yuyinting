@@ -4281,7 +4281,7 @@ class _RoomPageState extends State<RoomPage>
 
                       /// 送礼展示
                       nickName.isNotEmpty ? Positioned(
-                        bottom: (whoWin != 'draw' && isPK != 0) ? 650.w : 750.w,
+                        bottom: (whoWin != 'draw' && isPK != 0) ? 520.h : 610.h,
                           child: Container(
                             width: MediaQuery.of(context).size.width,
                             color: Colors.transparent,
@@ -4346,13 +4346,13 @@ class _RoomPageState extends State<RoomPage>
 
                             /// 消息列表最外层
                             Container(
-                          height: (isDevices == 'ios' && isPK == 0)
+                          height: ((isDevices == 'ios' && isPK == 0)
                               ? 520.h
                               : (isDevices == 'ios' && isPK != 0)
                                   ? 400.h
                                   : (isDevices == 'android' && isPK == 0)
                                       ? 530.h
-                                      : 440.h,
+                                      : 440.h) - 10.h,
                           width: 420.h,
                           color: Colors.transparent,
                           child: Column(

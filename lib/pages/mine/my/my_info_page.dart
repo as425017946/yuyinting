@@ -13,6 +13,7 @@ import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../utils/event_utils.dart';
+import '../../../utils/getx_tools.dart';
 import '../../../utils/loading.dart';
 import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
@@ -451,7 +452,13 @@ class _MyInfoPageState extends State<MyInfoPage> {
                     ? WidgetUtils.showImages(
                     'assets/images/dj/lianghao.png', 40.w, 40.w)
                     : const Text(''),
+                isPretty == 1
+                    ? WidgetUtils.commonSizedBox(0, 10.w)
+                    : const Text(''),
                 // 用户等级
+                if (level > 0)
+                  CharmLevelFlag(level: level, width: 75.w, height: 30.w),
+                /*
                 level != 0
                     ? Stack(
                   alignment: Alignment.centerLeft,
@@ -505,8 +512,12 @@ class _MyInfoPageState extends State<MyInfoPage> {
                   ],
                 )
                     : const Text(''),
+                    */
                 WidgetUtils.commonSizedBox(0, 10.w),
                 // 财富等级
+                if (grLevel > 0)
+                  WealthLevelFlag(level: grLevel, width: 75.w, height: 30.w),
+                /*
                 grLevel != 0
                     ? SizedBox(
                   height: 40.h,
@@ -562,6 +573,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
                 ),
                     )
                     : const Text(''),
+                    */
               ],
             ),
           ),

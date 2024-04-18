@@ -103,6 +103,80 @@ class CharmLevelFlag extends StatelessWidget {
               ),
               Positioned(
                 left: 55,
+                bottom: 5,
+                child: Stack(
+                  children: [
+                    Text(
+                      level.toString(),
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'LR',
+                        foreground: Paint()
+                          ..style = PaintingStyle.stroke
+                          ..strokeWidth = 2
+                          ..color = MyColors.djTwoM,
+                      ),
+                    ),
+                    Text(
+                      level.toString(),
+                      style: const TextStyle(
+                        color: MyColors.djOne,
+                        fontSize: 26,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'LR',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class WealthLevelFlag extends StatelessWidget {
+  final int level;
+  final double? width;
+  final double? height;
+  const WealthLevelFlag({super.key, required this.level, this.width, this.height});
+
+  @override
+  Widget build(BuildContext context) { // 697 x 358
+    if (level == 0) {
+      return SizedBox(
+        width: width,
+        height: height,
+      );
+    }
+    return SizedBox(
+      width: width,
+      height: height,
+      child: FittedBox(
+        fit: BoxFit.contain,
+        child: SizedBox(
+          width: 100,//40 * 697.0 / 358.0,
+          height: 40,
+          child: Stack(
+            clipBehavior: Clip.none,
+            alignment: Alignment.center,
+            children: [
+              Transform.translate(
+                offset: const Offset(0, 2),
+                child: Transform.scale(
+                  scale: 1.3,
+                  child: Image(
+                    image: AssetImage('assets/images/bigclient_icon_bg_${wealthLevelIcon(level)}.png'),
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+              Positioned(
+                left: 62,
+                bottom: 5,
                 child: Stack(
                   children: [
                     Text(
