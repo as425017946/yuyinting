@@ -957,7 +957,6 @@ class _RoomPageState extends State<RoomPage>
       animationControllerPK = SVGAAnimationController(vsync: this);
       animationControllerJL = SVGAAnimationController(vsync: this);
       animationControllerJR = SVGAAnimationController(vsync: this);
-      sp.setString('sqRoomID', '');
       //保存进入房间的id
       sp.setString('roomID', widget.roomId);
       //保持屏幕常亮

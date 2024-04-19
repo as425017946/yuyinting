@@ -174,18 +174,18 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
             listMP.add(hf);
           });
         }
-      } else if (event.map!['type'] == 'chatroom_msg' && sp.getString('sqRoomID').toString() == event.map!['room_id'].toString()) {
+      } else if (event.map!['type'] == 'chatroom_msg' && sp.getString('sqRoomID').toString() == event.map!['room_id'].toString() && isJoinRoom) {
         saveChatInfo(
             event.map!, '4', event.map!['nickname'], event.map!['content']);
-      } else if (event.map!['type'] == 'welcome_msg' && sp.getString('sqRoomID').toString() == event.map!['room_id'].toString()) {
+      } else if (event.map!['type'] == 'welcome_msg' && sp.getString('sqRoomID').toString() == event.map!['room_id'].toString() && isJoinRoom) {
         saveChatInfo(event.map!, '3', event.map!['send_nickname'],
             '${event.map!['nickname']},${event.map!['content']}');
-      } else if (event.map!['type'] == 'send_gift' && sp.getString('sqRoomID').toString() == event.map!['room_id'].toString()) {
+      } else if (event.map!['type'] == 'send_gift' && sp.getString('sqRoomID').toString() == event.map!['room_id'].toString() && isJoinRoom) {
         //厅内发送的送礼物消息
         charmAllBean cb = charmAllBean.fromJson(event.map);
         saveChatInfo(event.map!, '5', event.map!['nickname'],
             '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出${cb.giftInfo![0].giftName!}(${cb.giftInfo![0].giftPrice.toString()}); x${cb.giftInfo![0].giftNumber.toString()}');
-      } else if (event.map!['type'] == 'one_click_gift' && sp.getString('sqRoomID').toString() == event.map!['room_id'].toString()) {
+      } else if (event.map!['type'] == 'one_click_gift' && sp.getString('sqRoomID').toString() == event.map!['room_id'].toString() && isJoinRoom) {
         charmAllBean cb = charmAllBean.fromJson(event.map);
         String infos = ''; // 这个是拼接用户送的礼物信息使用
         for (int i = 0; i < cb.giftInfo!.length; i++) {
@@ -203,7 +203,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         }
         saveChatInfo(event.map!, '6', event.map!['from_nickname'],
             '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出;$infos');
-      } else if (event.map!['type'] == 'send_screen_all' && sp.getString('sqRoomID').toString() == event.map!['room_id'].toString()) {
+      } else if (event.map!['type'] == 'send_screen_all' && sp.getString('sqRoomID').toString() == event.map!['room_id'].toString() && isJoinRoom) {
         charmAllBean cb = charmAllBean.fromJson(event.map);
         String info = '';
         for (int i = 0; i < cb.giftInfo!.length; i++) {
