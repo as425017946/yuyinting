@@ -115,6 +115,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage>
     MyUtils.addChatListener();
     doPostUserFollowStatus();
     doLocationInfo();
+    doPostCanSendRedPacket();
     _mPlayer!.openPlayer().then((value) {});
     listen = eventBus.on<SendMessageBack>().listen((event) {
       doLocationInfo();
@@ -282,8 +283,8 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage>
       await recorderModule.startRecorder(
           toFile: path,
           codec: Codec.aacADTS,
-          bitRate: 128000,
-          sampleRate: 44000,
+          // bitRate: 128000,
+          // sampleRate: 44000,
           audioSource: AudioSource.microphone);
       print('===>  开始录音');
       if (isDevices == 'ios') {
@@ -301,6 +302,8 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage>
                 isPlay = 2;
               });
               _stopRecorder();
+              //发送录音
+              doSendAudio();
             }
             setState(() {
               audioNum = date.second;
@@ -319,6 +322,9 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage>
         _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
           if (isPlay == 2) {
             LogE('停止了==');
+            setState(() {
+              isLuZhi = false;
+            });
             _stopRecorder(); // 确保录音器停止并保存数据到文件
             timer.cancel();
           } else {
@@ -330,9 +336,12 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage>
           if (_maxLength == 0) {
             setState(() {
               isPlay = 2;
+              isLuZhi = false;
             });
             timer.cancel();
             _stopRecorder();
+            //发送录音
+            doSendAudio();
           }
         });
       }
@@ -632,7 +641,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage>
                                                 20.h,
                                                 20.h),
                                             WidgetUtils.onlyText(
-                                                "${allData2[i]['number']}''",
+                                                allData2[i]['number'].toString()== '0' ? "1''" : "${allData2[i]['number']}''",
                                                 StyleUtils.textStyleb1),
                                             const Spacer(),
                                           ],
@@ -790,7 +799,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage>
                                               children: [
                                                 const Spacer(),
                                                 WidgetUtils.onlyText(
-                                                    "${allData2[i]['number']}''",
+                                                    allData2[i]['number'].toString() == '0' ? "1''" : "${allData2[i]['number']}''",
                                                     StyleUtils.textStyleb1),
                                                 WidgetUtils.showImages(
                                                     'assets/images/chat_huatong.png',
@@ -1215,7 +1224,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage>
                                   ScreenUtil().setHeight(45)),
                             ),
                             WidgetUtils.commonSizedBox(0, 10.h),
-                            GestureDetector(
+                            isHB ? GestureDetector(
                               onTap: (() {
                                 if (MyUtils.checkClick()) {
                                   doPostCanSendUser(4, '');
@@ -1225,7 +1234,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage>
                                   'assets/images/chat_hongbao.png',
                                   ScreenUtil().setHeight(45),
                                   ScreenUtil().setHeight(45)),
-                            ),
+                            ) : const Text(''),
                             WidgetUtils.commonSizedBox(0, 20.h),
                           ],
                         ),
@@ -1715,5 +1724,30 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage>
       _maxLength = 60; // 录音时长
       audioNum = 0; // 记录录了多久
     });
+  }
+
+
+  bool isHB = false;
+  /// 是否有发红包权限
+  Future<void> doPostCanSendRedPacket() async {
+    try {
+      CommonBean bean = await DataUtils.postCanSendRedPacket();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            isHB = true;
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+        // MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
   }
 }

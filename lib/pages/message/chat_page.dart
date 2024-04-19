@@ -148,6 +148,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
     eventBus.fire(SubmitButtonBack(title: '清空红点'));
     doPostChatUserInfo();
     doLocationInfo();
+    doPostCanSendRedPacket();
     // _addChatListener();
     MyUtils.addChatListener();
     listen = eventBus.on<SendMessageBack>().listen((event) {
@@ -318,8 +319,8 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
       await recorderModule.startRecorder(
           toFile: path,
           codec: Codec.aacADTS,
-          bitRate: 128000,
-          sampleRate: 44000,
+          // bitRate: 128000,
+          // sampleRate: 44000,
           audioSource: AudioSource.microphone);
       print('===>  开始录音');
       if (isDevices == 'ios') {
@@ -337,6 +338,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
                 isPlay = 2;
               });
               _stopRecorder();
+              doSendAudio();
             }
             setState(() {
               audioNum = date.second;
@@ -355,6 +357,9 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
         _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
           if (isPlay == 2) {
             LogE('停止了==');
+            setState(() {
+              isLuZhi = false;
+            });
             _stopRecorder(); // 确保录音器停止并保存数据到文件
             timer.cancel();
           } else {
@@ -366,9 +371,11 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
           if (_maxLength == 0) {
             setState(() {
               isPlay = 2;
+              isLuZhi = false;
             });
             timer.cancel();
             _stopRecorder();
+            doSendAudio();
           }
         });
       }
@@ -802,7 +809,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
                                             children: [
                                               const Spacer(),
                                               WidgetUtils.onlyText(
-                                                  "${allData2[i]['number']}''",
+                                                  allData2[i]['number'].toString()== '0' ? "1''" : "${allData2[i]['number']}''",
                                                   StyleUtils.textStyleb1),
                                               WidgetUtils.showImages(
                                                   'assets/images/chat_huatong.png',
@@ -1013,7 +1020,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
                                             children: [
                                               const Spacer(),
                                               WidgetUtils.onlyText(
-                                                  "${allData2[i]['number']}''",
+                                                  allData2[i]['number'].toString()== '0' ? "1''" : "${allData2[i]['number']}''",
                                                   StyleUtils.textStyleb1),
                                               WidgetUtils.showImages(
                                                   'assets/images/chat_huatong.png',
@@ -1379,7 +1386,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
                             LogE('上滑== ${details.delta.dy}');
                             if(isLuZhi) {
                               if (isDevices != 'ios' && isMAI) {
-                                if (details.delta.dy < -1) {
+                                if (details.delta.dy < -3) {
                                   // 停止录音
                                   _stopRecorder();
                                   setState(() {
@@ -1388,7 +1395,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
                                 }
                               }else{
                                 ///ios
-                                if (details.delta.dy < -1) {
+                                if (details.delta.dy < -3) {
                                   // 停止录音
                                   _stopRecorder();
                                   setState(() {
@@ -1623,7 +1630,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
                       _isEmojiPickerVisible == false
                           ? WidgetUtils.commonSizedBox(0, 10)
                           : const Text(''),
-                      _isEmojiPickerVisible == false
+                      (_isEmojiPickerVisible == false && isHB)
                           ? GestureDetector(
                               onTap: (() {
                                 //判断红包发送
@@ -2463,6 +2470,30 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
           break;
         default:
           MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+  bool isHB = false;
+  /// 是否有发红包权限
+  Future<void> doPostCanSendRedPacket() async {
+    try {
+      CommonBean bean = await DataUtils.postCanSendRedPacket();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            isHB = true;
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          // MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
     } catch (e) {

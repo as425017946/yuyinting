@@ -46,6 +46,7 @@ class _StarPageState extends State<StarPage> {
           sp.getInt('user_grLevel').toString().isEmpty) {
         sp.setInt('user_grLevel', 0);
       }
+      sp.setString('sqRoomID', '');
     });
     if (Platform.isAndroid) {
       setState(() {

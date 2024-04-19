@@ -952,6 +952,8 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
                           _dispose();
                           // 调用离开房间接口
                           doPostLeave(sp.getString('roomID').toString());
+                          // 防止用户被顶号时没有清空表
+                          deleteChatInfo();
                           sp.setString('roomID', '');
                           isRemove = false;
                           isJoinRoom = false;
@@ -1539,8 +1541,8 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       'new_noble': map!['new_noble'],
       'isWelcome': '1',
       'isOk': 'true',
-      'newLv': '',
-      'by1': '',
+      'newLv': map!['gr_lv'].toString(),
+      'by1': map!['bubble_img'].toString(),
       'by2': '',
       'by3': '',
     };

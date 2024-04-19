@@ -1688,4 +1688,12 @@ class DataUtils {
     print("领取日返 /mine/getDayReturn $respons");
     return CommonBean.fromJson(respons!);
   }
+
+  /// 是否有发红包权限
+  static Future<CommonBean> postCanSendRedPacket() async {
+    Map<String, dynamic>? respons =
+    await MyHttpRequest.post(MyHttpConfig.canSendRedPacket, {}, {});
+    print("是否有发红包权限 $respons");
+    return CommonBean.fromJson(respons!);
+  }
 }

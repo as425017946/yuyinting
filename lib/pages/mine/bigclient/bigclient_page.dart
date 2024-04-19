@@ -693,6 +693,10 @@ class _BigClientPageList1 extends StatelessWidget {
                 // _excel(), 
                 Image.asset('assets/images/bigclient_excel.png', fit: BoxFit.fitWidth),
                 const SizedBox(height: 30),
+                Padding(
+                  padding: EdgeInsets.only(bottom: Get.bottomBarHeight + 30.w),
+                  child: WidgetUtils.onlyTextCenter('*此活动的有效日期及最终解释权归小柴派对本司所有', StyleUtils.getCommonTextStyle(color: MyColors.mineYellow, fontSize: 42.sp)),
+                ),
               ],
             ),
           ),

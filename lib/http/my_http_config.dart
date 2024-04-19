@@ -371,6 +371,8 @@ class MyHttpConfig{
   static  String svgaDressList = "$baseURL/shop/svgaDressList";
   // 盲盒礼物-业务
   static  String playBlindBox = "$baseURL/play/playBlindBox";
+  // 是否有发红包权限
+  static  String canSendRedPacket = "$baseURL/user/canSendRedPacket";
 
 
 }

@@ -151,11 +151,21 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
                 WidgetUtils.commonSizedBox(0, 10.w),
                 WidgetUtils.onlyText(_list[index].nickname!, StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: 24.sp,)),
                 const Spacer(),
-                GestureDetector(
+                _list[index].isLike == 0 ?  GestureDetector(
                     onTap:((){
                       doPostLike(_list[index].id.toString(), index);
                     }),
-                    child: WidgetUtils.showImages(_list[index].isLike == 0 ? 'assets/images/dt_dianzan1.png' : 'assets/images/dt_dianzan2.png', 56.h, 115.w)),
+                    child: WidgetUtils.showImages('assets/images/dt_dianzan1.png', 56.h, 115.w))
+                : Container(
+                  color: Colors.transparent,
+                  child: Row(
+                    children: [
+                      WidgetUtils.showImages('assets/images/trends_zan.png', 30.h, 30.h),
+                      WidgetUtils.commonSizedBox(0, 5.w),
+                      WidgetUtils.onlyText(_list[index].like.toString(), StyleUtils.getCommonTextStyle(color: MyColors.g9, fontSize: 22.sp,))
+                    ],
+                  ),
+                ),
                 WidgetUtils.commonSizedBox(0, 10.w),
               ],
             ),

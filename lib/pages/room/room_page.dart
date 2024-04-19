@@ -594,7 +594,7 @@ class _RoomPageState extends State<RoomPage>
 
   // 发言倒计时
   Timer? _timer;
-  int _timeCount = 5;
+  int _timeCount = 3;
 
   // 发送爆灯使用 wherePeople在哪个麦序上，0不在麦上  _timer2和_timeCount2是爆灯的倒计时
   List<String> wherePeopleList = ["0", "0", "0", "0", "0", "0", "0", "0", "0"];
@@ -629,7 +629,7 @@ class _RoomPageState extends State<RoomPage>
                       setState(() {
                         if (_timeCount <= 0) {
                           _timer!.cancel();
-                          _timeCount = 5;
+                          _timeCount = 3;
                         } else {
                           _timeCount -= 1;
                         }
@@ -957,7 +957,7 @@ class _RoomPageState extends State<RoomPage>
       animationControllerPK = SVGAAnimationController(vsync: this);
       animationControllerJL = SVGAAnimationController(vsync: this);
       animationControllerJR = SVGAAnimationController(vsync: this);
-
+      sp.setString('sqRoomID', '');
       //保存进入房间的id
       sp.setString('roomID', widget.roomId);
       //保持屏幕常亮
@@ -1056,7 +1056,7 @@ class _RoomPageState extends State<RoomPage>
         } else if (event.title == '表情') {
           // 判断是不是贵族，除了0都是贵族身份
           if (noble_id == '0') {
-            if (_timeCount == 5) {
+            if (_timeCount == 3) {
               if (isForbation == 0) {
                 MyUtils.goTransparentPage(context, const RoomBQPage());
               } else {
@@ -1078,7 +1078,7 @@ class _RoomPageState extends State<RoomPage>
           // LogE('我的身份 2==$_timeCount');
           // LogE('我的身份 3==$isForbation');
           if (noble_id == '0') {
-            if (_timeCount == 5) {
+            if (_timeCount == 3) {
               if (isForbation == 0) {
                 MyUtils.goTransparentPage(
                     context,
@@ -2767,7 +2767,7 @@ class _RoomPageState extends State<RoomPage>
       });
       // 发消息监听
       listenSend = eventBus.on<SendRoomInfoBack>().listen((event) {
-        if (mounted) {
+        if (mounted && _timeCount == 3) {
           _startTimer();
         }
 
@@ -2775,7 +2775,7 @@ class _RoomPageState extends State<RoomPage>
       });
       // 发图片监听
       listenSendImg = eventBus.on<SendRoomImgBack>().listen((event) {
-        if (mounted) {
+        if (mounted && _timeCount == 3) {
           _startTimer();
         }
         doPostRoomMessageSend(event.info, 1);
@@ -3543,11 +3543,13 @@ class _RoomPageState extends State<RoomPage>
 
   // 在数据变化后将滚动位置设置为最后一个item的位置
   void scrollToLastItem() {
+    LogE('加载完成//////');
     _scrollController.animateTo(
       _scrollController.position.maxScrollExtent,
       duration: const Duration(milliseconds: 100),
       curve: Curves.easeInOut,
     );
+    // _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
   }
 
   // // 在数据变化后将滚动位置设置为最后一个item的位置
@@ -5915,17 +5917,17 @@ class _RoomPageState extends State<RoomPage>
     List<Map<String, dynamic>> allData =
         await databaseHelper.getAllData('roomInfoTable');
     if (allData.isNotEmpty) {
-      for (int i = 0; i < allData.length; i++) {
-        LogE('数据库存储id == ${allData[i]['roomID']}');
-        if (allData[i]['roomID'] == widget.roomId) {
-          setState(() {
-            list.add(allData[i]);
-          });
+      setState(() {
+        list.addAll(allData); // 使用addAll一次性添加所有数据
+        if(list.isNotEmpty) {
+          _scrollController.animateTo(
+            _scrollController.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 100),
+            curve: Curves.easeInOut,
+          );
         }
-      }
-      WidgetsBinding.instance!.addPostFrameCallback((_) {
-        scrollToLastItem();
       });
+
     }
   }
 
