@@ -235,6 +235,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           isFirstJoinRoom = false;
         });
       } else if (event.title == '加入其他房间') {
+        deleteChatInfo();
         sp.setBool('sqRoom', false);
         // 判断加入过其他房间，并且现在是收起的状态
         if (isJoinRoom) {

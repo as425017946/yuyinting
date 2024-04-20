@@ -5931,12 +5931,16 @@ class _RoomPageState extends State<RoomPage>
   }
 
   void scrollToEnd() {
-    if (list.isNotEmpty) {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: const Duration(milliseconds: 100),
-        curve: Curves.easeInOut,
-      );
+    try {
+      if (list.isNotEmpty) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 100),
+          curve: Curves.easeInOut,
+        );
+      }
+    } catch (e) {
+      LogE(e.toString());
     }
   }
 
