@@ -205,7 +205,7 @@ class _CeshiAudioPageState extends State<CeshiAudioPage> {
         await playerModule.startPlayer(
             fromURI: path,
             codec: Codec.mp3,
-            sampleRate: 44000,
+            // sampleRate: 44000,
             whenFinished: () {
               stopPlayer();
               callBack!(0);
@@ -219,7 +219,7 @@ class _CeshiAudioPageState extends State<CeshiAudioPage> {
           await playerModule.startPlayer(
               fromURI: path,
               codec: Codec.aacADTS,
-              sampleRate: 44000,
+              // sampleRate: 44000,
               whenFinished: () {
                 stopPlayer();
                 callBack!(0);

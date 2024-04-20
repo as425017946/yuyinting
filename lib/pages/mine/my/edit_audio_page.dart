@@ -248,8 +248,8 @@ class _EditAudioPageState extends State<EditAudioPage> {
       await recorderModule.startRecorder(
           toFile: path,
           codec: Codec.aacADTS,
-          bitRate: 128000,
-          sampleRate: 44000,
+          // bitRate: 128000,
+          // sampleRate: 44000,
           audioSource: AudioSource.microphone);
       print('===>  开始录音');
 

@@ -132,7 +132,7 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
             if (item.imgUrl != null && item.imgUrl!.isNotEmpty)
               WidgetUtils.CircleImageNetTop(350.h, 350.w, 30.h, item.imgUrl![0])
             else
-              Image.asset('assets/images/img_placeholder.png', width: 350.w, height: 350.w,),
+              Image.asset('assets/images/img_placeholder.png', width: 350.w, height: 350.w, fit: BoxFit.fill,),
             
             Container(
               padding: EdgeInsets.only(left: 10.w, right: 10.w),
