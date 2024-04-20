@@ -728,7 +728,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
       // ignore: use_build_context_synchronously
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => const Tab_Navigator()),
+        MaterialPageRoute(builder: (context) => const Tab_Navigator(), settings: const RouteSettings(name: '回首页')),
         // ignore: unnecessary_null_comparison
         (route) => route == null,
       );
@@ -997,7 +997,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin{
           //ignore: use_build_context_synchronously
           Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => const Tab_Navigator()),
+            MaterialPageRoute(builder: (context) => const Tab_Navigator(), settings: const RouteSettings(name: '回首页')),
             // ignore: unnecessary_null_comparison
             (route) => route == null,
           );

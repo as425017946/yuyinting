@@ -1631,7 +1631,8 @@ class _RoomPageState extends State<RoomPage>
                 deleteChatInfo();
                 _engine!.disableAudio();
                 _dispose();
-                Navigator.pop(context);
+                // Navigator.pop(context);
+                Navigator.popUntil(context, ModalRoute.withName('回首页'));
               }
               break;
             case 'room_admin': //设置管理员

@@ -747,10 +747,10 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                 onTap: (() {
                                   Navigator.pop(context);
                                   if (MyUtils.checkClick()) {
-                                    if (is_black == '1') {
-                                      doPostSetRoomBlack('0');
-                                    } else {
+                                    if (is_black == '0') {
                                       doPostSetRoomBlack('1');
+                                    } else {
+                                      doPostSetRoomBlack('0');
                                     }
                                   }
                                 }),
