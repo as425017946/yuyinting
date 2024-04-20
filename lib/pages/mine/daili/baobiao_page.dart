@@ -51,9 +51,15 @@ class _BaobiaoPageState extends State<BaobiaoPage> {
     return Container(
       width: double.infinity,
       height: 184.w,
-      padding: EdgeInsets.symmetric(horizontal: 50.w),
-      margin: EdgeInsets.symmetric(vertical: 20.w),
-      color: MyColors.dailiBaobiao,
+      padding: EdgeInsets.symmetric(horizontal: 30.w),
+      margin: EdgeInsets.all(20.w),
+      // color: MyColors.dailiBaobiao,
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/mine_yq_bg_big.png'),
+          fit: BoxFit.fill,
+        ),
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

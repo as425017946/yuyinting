@@ -16,7 +16,7 @@ class DailiHomePage extends StatefulWidget {
 
 class _DailiHomePageState extends State<DailiHomePage> {
   var appBar;
-  int _currentIndex = 0;
+  late int _currentIndex;
   late final PageController _controller;
 
   @override
@@ -25,9 +25,9 @@ class _DailiHomePageState extends State<DailiHomePage> {
     super.initState();
     appBar = WidgetUtils.getAppBar('邀请有礼', true, context, false, 0);
 
-    _currentIndex = 0;
+    _currentIndex = 1;
     _controller = PageController(
-      initialPage: 0,
+      initialPage: 1,
     );
   }
 
@@ -37,25 +37,52 @@ class _DailiHomePageState extends State<DailiHomePage> {
     super.dispose();
   }
 
-  Widget _btn(String text, int index) {
+  Widget _btn(double width, int index) {
     final bool isSelect = index == _currentIndex;
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 15.w),
-      child: GestureDetector(
+    return GestureDetector(
         onTap: () {
           setState(() {
             _currentIndex = index;
             _controller.jumpToPage(index);
           });
         },
-        child: WidgetUtils.myContainer(
-          49.w,
-          139.w,
-          isSelect ? MyColors.homeTopBG : Colors.white,
-          isSelect ? MyColors.homeTopBG : Colors.white,
-          text,
-          25.sp,
-          isSelect ? Colors.white : Colors.black,
+        child: Container(
+          width: width,
+          height: 153,
+          color: Colors.transparent,
+        ),
+      );
+  }
+
+  Widget _topBg(String img, int index) {
+    return Opacity(
+      opacity: index == _currentIndex ? 1 : 0,
+      child: Image.asset(
+        'assets/images/mine_yq_top_$img.png',
+        width: 997,
+        height: 153,
+      ),
+    );
+  }
+
+  Widget _top() {
+    return Padding(
+      padding: EdgeInsets.all(30.w),
+      child: FittedBox(
+        fit: BoxFit.fitWidth,
+        child: Stack(
+          children: [
+            _topBg('zl', 0),
+            _topBg('tg', 1),
+            _topBg('bb', 2),
+            Row(
+              children: [
+                _btn(327, 0),
+                _btn(336, 1),
+                _btn(334, 2),
+              ],
+            ),
+          ],
         ),
       ),
     );
@@ -65,37 +92,27 @@ class _DailiHomePageState extends State<DailiHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar,
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFF6F3FF),
       resizeToAvoidBottomInset: false, // 解决键盘顶起页面
       body: Column(
         children: [
-          SizedBox(
-            height: 85.w,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _btn('我的推广', 0),
-                _btn('团队总览', 1),
-                _btn('团队报表', 2),
+          _top(),
+          Expanded(
+            child: PageView(
+              controller: _controller,
+              onPageChanged: (index) {
+                setState(() {
+                  // 更新当前的索引值
+                  _currentIndex = index;
+                });
+              },
+              children: const [
+                ZonglanPage(),
+                TuiguangPage(),
+                BaobiaoPage(),
+                // KaihuiPage()
               ],
             ),
-          ),
-          Expanded(
-            child:PageView(
-                controller: _controller,
-                onPageChanged: (index) {
-                  setState(() {
-                    // 更新当前的索引值
-                    _currentIndex = index;
-                  });
-                },
-                children: const [
-                  TuiguangPage(),
-                  ZonglanPage(),
-                  BaobiaoPage(),
-                  // KaihuiPage()
-                ],
-              ),
           )
         ],
       ),

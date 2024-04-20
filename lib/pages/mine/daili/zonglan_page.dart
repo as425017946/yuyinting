@@ -153,9 +153,13 @@ class _ZonglanPageState extends State<ZonglanPage> with YQYLItem {
         Container(
           width: double.infinity,
           margin: EdgeInsets.symmetric(horizontal: 31.w),
-          decoration: BoxDecoration(
-            color: MyColors.dailiBlue,
-            borderRadius: BorderRadius.all(Radius.circular(21.w)),
+          decoration: const BoxDecoration(
+            // color: MyColors.dailiBlue,
+            // borderRadius: BorderRadius.all(Radius.circular(21.w)),
+            image: DecorationImage(
+              image: AssetImage('assets/images/mine_yq_bg_big.png'),
+              fit: BoxFit.fill,
+            ),
           ),
           child: GridView(
             shrinkWrap: true,

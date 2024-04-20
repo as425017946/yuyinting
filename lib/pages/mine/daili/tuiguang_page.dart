@@ -52,14 +52,18 @@ class _TuiguangPageState extends State<TuiguangPage> with YQYLItem {
     });
   }
 
-  Widget _bottomItem(String title, String content, Color bg) {
+  Widget _bottomItem(String title, String content, String img) {
     return Expanded(
       child: Container(
         height: 173.w,
         margin: EdgeInsets.all(31.w),
         decoration: BoxDecoration(
-          color: bg,
-          borderRadius: BorderRadius.all(Radius.circular(23.w)),
+          // color: bg,
+          // borderRadius: BorderRadius.all(Radius.circular(23.w)),
+          image: DecorationImage(
+            image: AssetImage('assets/images/mine_yq_bg_$img.png'),
+            fit: BoxFit.fill,
+          ),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -128,9 +132,13 @@ class _TuiguangPageState extends State<TuiguangPage> with YQYLItem {
           width: double.infinity,
           margin: EdgeInsets.symmetric(horizontal: 31.w),
           padding: EdgeInsets.only(bottom: 22.w),
-          decoration: BoxDecoration(
-            color: MyColors.dailiBlue,
-            borderRadius: BorderRadius.all(Radius.circular(21.w)),
+          decoration: const BoxDecoration(
+            // color: MyColors.dailiBlue,
+            // borderRadius: BorderRadius.all(Radius.circular(21.w)),
+            image: DecorationImage(
+              image: AssetImage('assets/images/mine_yq_bg_big.png'),
+              fit: BoxFit.fill,
+            ),
           ),
           child: Column(
             children: [
@@ -170,8 +178,8 @@ class _TuiguangPageState extends State<TuiguangPage> with YQYLItem {
         ///历史总分润
         Row(
           children: [
-            _bottomItem('历史总金币分润', lsVMoney, MyColors.dailiPink),
-            _bottomItem('可领取金币', lqVMoney, MyColors.dailiPurple),
+            _bottomItem('历史总金币分润', lsVMoney, 'left'),
+            _bottomItem('可领取金币', lqVMoney, 'right'),
           ],
         ),
 
