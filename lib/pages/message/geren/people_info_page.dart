@@ -1084,6 +1084,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
           MyUtils.jumpLogin(context);
           break;
         default:
+          sp.setString('roomID', '');
           setState(() {
             sp.setBool('joinRoom', false);
           });
@@ -1092,6 +1093,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
       }
       Loading.dismiss();
     } catch (e) {
+      sp.setString('roomID', '');
       setState(() {
         sp.setBool('joinRoom', false);
       });

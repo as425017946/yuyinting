@@ -1199,8 +1199,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
                             const Spacer(),
                             GestureDetector(
                               onTap: (() {
-                                if (sp.getString('roomID').toString() ==
-                                    roomId) {
+                                if (sp.getString('roomID').toString() == roomId) {
                                   if (MyUtils.checkClick()) {
                                     MyToastUtils.showToastBottom('您已在本房间');
                                   }
@@ -2333,6 +2332,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
           MyUtils.jumpLogin(context);
           break;
         default:
+          sp.setString('roomID', '');
           setState(() {
             sp.setBool('joinRoom', false);
           });
@@ -2341,6 +2341,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
       }
       Loading.dismiss();
     } catch (e) {
+      sp.setString('roomID', '');
       setState(() {
         sp.setBool('joinRoom', false);
       });
