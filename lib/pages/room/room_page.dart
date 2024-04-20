@@ -1078,7 +1078,7 @@ class _RoomPageState extends State<RoomPage>
           // LogE('我的身份 2==$_timeCount');
           // LogE('我的身份 3==$isForbation');
           if (noble_id == '0') {
-            if (_timeCount == 3) {
+            // if (_timeCount == 3) {
               if (isForbation == 0) {
                 MyUtils.goTransparentPage(
                     context,
@@ -1088,9 +1088,9 @@ class _RoomPageState extends State<RoomPage>
               } else {
                 MyToastUtils.showToastBottom('你已被房间禁言！');
               }
-            } else {
-              MyToastUtils.showToastBottom('太频繁啦，请歇一歇~');
-            }
+            // } else {
+            //   MyToastUtils.showToastBottom('太频繁啦，请歇一歇~');
+            // }
           } else {
             if (isForbation == 0) {
               MyUtils.goTransparentPage(

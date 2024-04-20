@@ -87,10 +87,12 @@ class _RoomSendInfoPageState extends State<RoomSendInfoPage> {
                           MyToastUtils.showToastBottom('请输入要发送的信息');
                           return;
                         }
-                        eventBus.fire(SendRoomInfoBack(info: value));
-                        setState(() {
-                          Navigator.pop(context);
-                        });
+                        if (MyUtils.checkClick()) {
+                          eventBus.fire(SendRoomInfoBack(info: value));
+                          setState(() {
+                            Navigator.pop(context);
+                          });
+                        }
                       },
                       decoration: InputDecoration(
                         // border: InputBorder.none,
