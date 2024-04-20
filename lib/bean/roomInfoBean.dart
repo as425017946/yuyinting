@@ -250,6 +250,12 @@ class UserInfo {
   int? isNew;
   int? newNoble;
 
+  String? avatar;
+  // ignore: non_constant_identifier_names
+  String? enter_dress_gif_img;
+  // ignore: non_constant_identifier_names
+  String? enter_dress_name;
+
   UserInfo(
       {this.role,
         this.nobleId,
@@ -273,6 +279,9 @@ class UserInfo {
     isPretty = json['is_pretty'];
     isNew = json['is_new'];
     newNoble = json['new_noble'];
+    avatar = json['avatar'] ?? '';
+    enter_dress_gif_img = json['enter_dress_gif_img'] ?? '';
+    enter_dress_name = json['enter_dress_name'] ?? '';
   }
 
   Map<String, dynamic> toJson() {
@@ -287,6 +296,9 @@ class UserInfo {
     data['is_pretty'] = this.isPretty;
     data['is_new'] = this.isNew;
     data['new_noble'] = this.newNoble;
+    data['avatar'] = this.avatar;
+    data['enter_dress_gif_img'] = this.enter_dress_gif_img;
+    data['enter_dress_name'] = this.enter_dress_name;
     return data;
-  }
+  }// 进厅横幅名称
 }

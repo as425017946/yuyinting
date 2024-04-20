@@ -367,7 +367,7 @@ class _RoomPageState extends State<RoomPage>
       LogE('进行中====');
     } else {
       //本地图
-      final videoItem = await _loadSVGA(false, m['svgaUrl']);
+      final videoItem = await _loadSVGA(m['svgaBool'], m['svgaUrl']);
       animationControllerJR?.videoItem = videoItem;
       animationControllerJR
           ?.forward() // Try to use .forward() .reverse()
@@ -2525,9 +2525,18 @@ class _RoomPageState extends State<RoomPage>
 
                 //展示新增svga
                 Map<dynamic, dynamic> mapNew = {};
-                mapNew['svgaUrl'] = 'assets/svga/room_moren.svga';
-                mapNew['svgaBool'] = false;
+                final img = event.map!['enter_dress_gif_img'];
+                if (img == null || img.isEmpty) {
+                  mapNew['svgaUrl'] = 'assets/svga/room_moren.svga';
+                  mapNew['svgaBool'] = false;
+                } else {
+                  mapNew['svgaUrl'] = img;
+                  mapNew['svgaBool'] = true;
+                }
                 mapNew['nickNanme'] = event.map!['nickname'];
+                mapNew['avatar'] = event.map!['avatar']; // 头像
+                // mapNew['enter_dress_gif_img'] = event.map!['enter_dress_gif_img']; // 进厅横幅动图
+                // mapNew['enter_dress_name'] = event.map!['enter_dress_name']; // 进厅横幅名称
                 if(listJoinRoom.isEmpty){
                   listJoinRoom.add(mapNew);
                   showStarJoinRoom(listJoinRoom[0]);
@@ -4494,11 +4503,12 @@ class _RoomPageState extends State<RoomPage>
                                         animationControllerJR,
                                         fit: BoxFit.fitWidth,
                                       ),
-                                      Row(
+                                      Row( // 头像 avatar 进厅横幅动图 enter_dress_gif_img 进厅横幅名称 enter_dress_name
                                         children: [
                                           WidgetUtils.commonSizedBox(0, 20.w),
                                           WidgetUtils.onlyText(listJoinRoom[0]['nickNanme'], StyleUtils.getCommonTextStyle(color: Colors.yellow,fontSize: 22.sp)),
                                           WidgetUtils.onlyText('进来了', StyleUtils.getCommonTextStyle(color: Colors.white,fontSize: 22.sp)),
+                                          
                                         ],
                                       )
                                     ],
@@ -4832,9 +4842,18 @@ class _RoomPageState extends State<RoomPage>
               sp.setString('sqRoomID', '');
               //展示新增svga
               Map<dynamic, dynamic> mapNew = {};
-              mapNew['svgaUrl'] = 'assets/svga/room_moren.svga';
-              mapNew['svgaBool'] = false;
+              final img = bean.data!.userInfo!.enter_dress_gif_img;
+              if (img == null || img.isEmpty) {
+                mapNew['svgaUrl'] = 'assets/svga/room_moren.svga';
+                mapNew['svgaBool'] = false;
+              } else {
+                mapNew['svgaUrl'] = img;
+                mapNew['svgaBool'] = true;
+              }
               mapNew['nickNanme'] = bean.data!.userInfo!.nickname!;
+              mapNew['avatar'] = bean.data!.userInfo!.avatar; // 头像
+              // mapNew['enter_dress_gif_img'] = bean.data!.userInfo!.enter_dress_gif_img; // 进厅横幅动图
+              // mapNew['enter_dress_name'] = bean.data!.userInfo!.enter_dress_name; // 进厅横幅名称
               if(listJoinRoom.isEmpty){
                 listJoinRoom.add(mapNew);
                 showStarJoinRoom(listJoinRoom[0]);
