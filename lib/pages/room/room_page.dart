@@ -5,6 +5,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:focus_detector/focus_detector.dart';
 import 'package:im_flutter_sdk/im_flutter_sdk.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -4423,15 +4424,21 @@ class _RoomPageState extends State<RoomPage>
                               //             itemCount: list.length,
                               //           ))
                               Expanded(
+                                child: FocusDetector(
+                                  onFocusGained: () {
+                                    scrollToEnd();
+                                  },
                                   child: ListView.builder(
-                                padding: EdgeInsets.only(
-                                  top: ScreenUtil().setHeight(10),
-                                  left: 20.h,
+                                    padding: EdgeInsets.only(
+                                      top: ScreenUtil().setHeight(10),
+                                      left: 20.h,
+                                    ),
+                                    itemBuilder: itemMessages,
+                                    controller: _scrollController,
+                                    itemCount: list.length,
+                                  ),
                                 ),
-                                itemBuilder: itemMessages,
-                                controller: _scrollController,
-                                itemCount: list.length,
-                              ))
+                              ),
                             ],
                           ),
                         ),
@@ -5918,15 +5925,18 @@ class _RoomPageState extends State<RoomPage>
     if (allData.isNotEmpty) {
       setState(() {
         list.addAll(allData); // 使用addAll一次性添加所有数据
-        if(list.isNotEmpty) {
-          _scrollController.animateTo(
-            _scrollController.position.maxScrollExtent,
-            duration: const Duration(milliseconds: 100),
-            curve: Curves.easeInOut,
-          );
-        }
+        scrollToEnd();
       });
+    }
+  }
 
+  void scrollToEnd() {
+    if (list.isNotEmpty) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 100),
+        curve: Curves.easeInOut,
+      );
     }
   }
 
