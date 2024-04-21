@@ -1778,8 +1778,7 @@ class RoomItems {
                 : (list[i]['content']
                 .toString()
                 .isNotEmpty && list[i]['bubble_img']
-                .toString()
-                .isNotEmpty) ?
+                .toString() != 'null') ?
             Container(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 13),
               // constraints: BoxConstraints(maxWidth: double.infinity - 130.w),
@@ -1799,8 +1798,7 @@ class RoomItems {
             ) : (list[i]['content']
                 .toString()
                 .isNotEmpty && list[i]['bubble_img']
-                .toString()
-                .isEmpty) ? Container(
+                .toString() == 'null') ? Container(
               margin: EdgeInsets.only(bottom: 10.h),
               padding: EdgeInsets.only(
                   top: 15.h, bottom: 15.h, left: 10.h, right: 10.h),

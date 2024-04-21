@@ -4,7 +4,6 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:yuyinting/pages/home/paidui_list_page.dart';
-import 'package:yuyinting/pages/home/wall/happy_wall_page.dart';
 import 'package:yuyinting/utils/SVGASimpleImage3.dart';
 
 import '../../bean/Common_bean.dart';
@@ -1270,7 +1269,18 @@ class _PaiduiPageState extends State<PaiduiPage>
       joinRoomBean bean = await DataUtils.postBeforeJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          doPostRoomJoin(roomID, '', bean.data!.rtc!);
+          if(sp.getString('sqRoomID').toString() == roomID){
+            // ignore: use_build_context_synchronously
+            MyUtils.goTransparentRFPage(
+                context,
+                RoomPage(
+                  roomId: roomID,
+                  beforeId: '',
+                  roomToken: bean.data!.rtc!,
+                ));
+          }else{
+            doPostRoomJoin(roomID, '', bean.data!.rtc!);
+          }
           break;
         case MyHttpConfig.errorRoomCode: //需要密码
           // ignore: use_build_context_synchronously

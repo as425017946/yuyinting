@@ -490,7 +490,7 @@ class _MofangJinPageState extends State<MofangJinPage>
                                 Transform.translate(
                                   offset: Offset(0, -2.h),
                                   child: WidgetUtils.onlyTextCenter(
-                                      '2000金豆',
+                                      '1000金豆',
                                       StyleUtils.getCommonTextStyle(
                                           color: Colors.white,
                                           fontSize: ScreenUtil().setSp(21),
@@ -523,7 +523,7 @@ class _MofangJinPageState extends State<MofangJinPage>
                                 Transform.translate(
                                   offset: Offset(0, -2.h),
                                   child: WidgetUtils.onlyTextCenter(
-                                      '6000金豆',
+                                      '2000金豆',
                                       StyleUtils.getCommonTextStyle(
                                           color: Colors.white,
                                           fontSize: ScreenUtil().setSp(21),
@@ -572,8 +572,8 @@ class _MofangJinPageState extends State<MofangJinPage>
                             onTap: (() {
                               setState(() {
                                 isCheck = 2;
-                                cishu = 10;
-                                feiyong = 2000;
+                                cishu = 5;
+                                feiyong = 1000;
                               });
                             }),
                             child: Container(
@@ -590,7 +590,7 @@ class _MofangJinPageState extends State<MofangJinPage>
                                 ),
                               ),
                               child: WidgetUtils.onlyTextCenter(
-                                  '转10次',
+                                  '转5次',
                                   StyleUtils.getCommonTextStyle(
                                       color: Colors.white,
                                       fontSize: ScreenUtil().setSp(28))),
@@ -601,8 +601,8 @@ class _MofangJinPageState extends State<MofangJinPage>
                             onTap: (() {
                               setState(() {
                                 isCheck = 3;
-                                cishu = 30;
-                                feiyong = 6000;
+                                cishu = 10;
+                                feiyong = 2000;
                               });
                             }),
                             child: Container(
@@ -619,7 +619,7 @@ class _MofangJinPageState extends State<MofangJinPage>
                                 ),
                               ),
                               child: WidgetUtils.onlyTextCenter(
-                                  '转30次',
+                                  '转10次',
                                   StyleUtils.getCommonTextStyle(
                                       color: Colors.white,
                                       fontSize: ScreenUtil().setSp(28))),

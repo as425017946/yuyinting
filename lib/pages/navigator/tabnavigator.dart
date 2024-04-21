@@ -1543,7 +1543,8 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       'isWelcome': '1',
       'isOk': 'true',
       'newLv': map!['gr_lv'].toString(),
-      'by1': map!['bubble_img'].toString(),
+      'bubble_img': map!['bubble_img'].toString(),
+      'by1': '',
       'by2': '',
       'by3': '',
     };

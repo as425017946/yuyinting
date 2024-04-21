@@ -1106,7 +1106,8 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
   Future<void> doPostRoomJoin(roomID, password, roomToken) async {
     Map<String, dynamic> params = <String, dynamic>{
       'room_id': roomID,
-      'password': password
+      'password': password,
+      'anchor_uid': widget.otherId
     };
     try {
       Loading.show();

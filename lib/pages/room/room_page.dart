@@ -70,6 +70,9 @@ class _RoomPageState extends State<RoomPage>
   @override
   bool get wantKeepAlive => true;
 
+  // 用户头像
+  String avatar = '';
+
   // 是否第一次进入
   int isFirst = 0;
 
@@ -4495,7 +4498,7 @@ class _RoomPageState extends State<RoomPage>
                             child: Row(
                               children: [
                                 SizedBox(
-                                  height: 30.h,
+                                  height: 50.h,
                                   width: 400.w,
                                   child: Stack(
                                     children: [
@@ -4503,13 +4506,24 @@ class _RoomPageState extends State<RoomPage>
                                         animationControllerJR,
                                         fit: BoxFit.fitWidth,
                                       ),
-                                      Row( // 头像 avatar 进厅横幅动图 enter_dress_gif_img 进厅横幅名称 enter_dress_name
-                                        children: [
-                                          WidgetUtils.commonSizedBox(0, 20.w),
-                                          WidgetUtils.onlyText(listJoinRoom[0]['nickNanme'], StyleUtils.getCommonTextStyle(color: Colors.yellow,fontSize: 22.sp)),
-                                          WidgetUtils.onlyText('进来了', StyleUtils.getCommonTextStyle(color: Colors.white,fontSize: 22.sp)),
-                                          
-                                        ],
+                                      Transform.translate(
+                                        offset: Offset(0,2.h),
+                                        child: Row( // 头像// avatar 进厅横幅动图 enter_dress_gif_img 进厅横幅名称 enter_dress_name
+                                          children: [
+                                            WidgetUtils.commonSizedBox(0, 15.w),
+                                            WidgetUtils.CircleHeadImage(45.h, 45.h, avatar),
+                                            WidgetUtils.commonSizedBox(0, 10.w),
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                const Spacer(),
+                                                WidgetUtils.onlyText(listJoinRoom[0]['nickNanme'], StyleUtils.getCommonTextStyle(color: Colors.yellow,fontSize: 22.sp)),
+                                                WidgetUtils.onlyText('进来了', StyleUtils.getCommonTextStyle(color: Colors.white,fontSize: 22.sp)),
+                                                const Spacer(),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       )
                                     ],
                                   ),
@@ -4587,22 +4601,26 @@ class _RoomPageState extends State<RoomPage>
           // setState(() {
           //   isBack = true;
           // });
-          if (MyUtils.checkClick()) {
-            if (_timerHot != null) {
-              _timerHot!.cancel();
+          if(isOK){
+            if (MyUtils.checkClick()) {
+              if (_timerHot != null) {
+                _timerHot!.cancel();
+              }
+              if (_timer != null) {
+                _timer!.cancel();
+                _timer = null;
+              }
+              _cancelTimer();
+              _cancelTimerAll();
+              sp.setString('isShouQi', '1');
+              sp.setString('sqRoomID', widget.roomId);
+              eventBus.fire(SubmitButtonBack(title: '收起房间'));
+              Navigator.pop(context);
             }
-            if (_timer != null) {
-              _timer!.cancel();
-              _timer = null;
-            }
-            _cancelTimer();
-            _cancelTimerAll();
-            sp.setString('isShouQi', '1');
-            sp.setString('sqRoomID', widget.roomId);
-            eventBus.fire(SubmitButtonBack(title: '收起房间'));
-            Navigator.pop(context);
+            return true;
+          }else{
+            return false;
           }
-          return true;
         },
       ),
     );
@@ -4785,6 +4803,7 @@ class _RoomPageState extends State<RoomPage>
             pkTime = bean.data!.roomInfo!.syTime as int;
             blueScore = bean.data!.roomInfo!.blueScore!;
             redScore = bean.data!.roomInfo!.redScore!;
+            avatar = bean.data!.userInfo!.avatar!;
             if (pkTime > 0) {
               _cancelTimer();
               //开启房间pk
@@ -4852,6 +4871,9 @@ class _RoomPageState extends State<RoomPage>
               }
               mapNew['nickNanme'] = bean.data!.userInfo!.nickname!;
               mapNew['avatar'] = bean.data!.userInfo!.avatar; // 头像
+              setState(() {
+                avatar = bean.data!.userInfo!.avatar!; // 头像
+              });
               // mapNew['enter_dress_gif_img'] = bean.data!.userInfo!.enter_dress_gif_img; // 进厅横幅动图
               // mapNew['enter_dress_name'] = bean.data!.userInfo!.enter_dress_name; // 进厅横幅名称
               if(listJoinRoom.isEmpty){
@@ -4971,6 +4993,9 @@ class _RoomPageState extends State<RoomPage>
           });
           break;
         case MyHttpConfig.errorloginCode:
+          setState(() {
+            isOK = true;
+          });
           //取消订阅所有远端用户的音频流。
           _engine!.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
@@ -4983,10 +5008,16 @@ class _RoomPageState extends State<RoomPage>
           MyUtils.jumpLogin(context);
           break;
         default:
+          setState(() {
+            isOK = true;
+          });
           MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
     } catch (e) {
+      setState(() {
+        isOK = true;
+      });
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
   }
@@ -5927,7 +5958,8 @@ class _RoomPageState extends State<RoomPage>
       'isWelcome': '1',
       'isOk': 'true',
       'newLv': map!['gr_lv'].toString(),
-      'by1': map!['bubble_img'].toString(),
+      'bubble_img': map!['bubble_img'].toString(),
+      'by1': '',
       'by2': '',
       'by3': '',
     };

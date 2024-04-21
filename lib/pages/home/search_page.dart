@@ -510,7 +510,18 @@ class _SearchPageState extends State<SearchPage> {
       joinRoomBean bean = await DataUtils.postBeforeJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          doPostRoomJoin(roomID, '', bean.data!.rtc!);
+          if(sp.getString('sqRoomID').toString() == roomID){
+            // ignore: use_build_context_synchronously
+            MyUtils.goTransparentRFPage(
+                context,
+                RoomPage(
+                  roomId: roomID,
+                  beforeId: '',
+                  roomToken: bean.data!.rtc!,
+                ));
+          }else{
+            doPostRoomJoin(roomID, '', bean.data!.rtc!);
+          }
           break;
         case MyHttpConfig.errorRoomCode: //需要密码
           // ignore: use_build_context_synchronously
