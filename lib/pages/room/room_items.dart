@@ -1778,7 +1778,7 @@ class RoomItems {
                 : (list[i]['content']
                 .toString()
                 .isNotEmpty && list[i]['bubble_img']
-                .toString() != 'null') ?
+                .toString().length > 0) ?
             Container(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 13),
               // constraints: BoxConstraints(maxWidth: double.infinity - 130.w),
@@ -1787,7 +1787,7 @@ class RoomItems {
                     centerSlice: const Rect.fromLTWH(13, 20, 1, 1),
                     // image: AssetImage('assets/images/cj/chat_text.png'),
                     image: CachedNetworkImageProvider(
-                        list[i]['bubble_img'] ?? list[i]['by1']),
+                        list[i]['bubble_img'].toString()),
                     scale: 2,
                   )
               ),
@@ -1798,7 +1798,7 @@ class RoomItems {
             ) : (list[i]['content']
                 .toString()
                 .isNotEmpty && list[i]['bubble_img']
-                .toString() == 'null') ? Container(
+                .toString().length == 0) ? Container(
               margin: EdgeInsets.only(bottom: 10.h),
               padding: EdgeInsets.only(
                   top: 15.h, bottom: 15.h, left: 10.h, right: 10.h),
