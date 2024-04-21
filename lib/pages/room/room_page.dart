@@ -20,6 +20,7 @@ import 'package:yuyinting/pages/room/room_show_liwu_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/my_utils.dart';
+import 'package:yuyinting/utils/svga_tools.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 import '../../bean/CommonMyIntBean.dart';
 import '../../bean/Common_bean.dart';
@@ -370,7 +371,11 @@ class _RoomPageState extends State<RoomPage>
       LogE('进行中====');
     } else {
       //本地图
-      final videoItem = await _loadSVGA(m['svgaBool'], m['svgaUrl']);
+      final bool svgaBool = m['svgaBool'];
+      final MovieEntity videoItem = await _loadSVGA(svgaBool, m['svgaUrl']);
+      if (svgaBool) {
+        await videoItem.hfItem(m['avatar'], m['nickNanme']);
+      }
       animationControllerJR?.videoItem = videoItem;
       animationControllerJR
           ?.forward() // Try to use .forward() .reverse()
@@ -4520,6 +4525,16 @@ class _RoomPageState extends State<RoomPage>
                         child: Center(
                             child: Row(
                               children: [
+                                if (listJoinRoom[0]['svgaBool'])
+                                    SizedBox(
+                                      height: 50.h*1.5,
+                                      width: 400.w*1.5,
+                                      child: SVGAImage(
+                                        animationControllerJR,
+                                        fit: BoxFit.fitWidth,
+                                      ),
+                                    )
+                                  else
                                 SizedBox(
                                   height: 50.h,
                                   width: 400.w,
