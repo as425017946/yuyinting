@@ -629,31 +629,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
               WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(10)),
               // 6金豆红包
               allData2[i]['type'] == 6
-                  ? SizedBox(
-                      height: 130.h,
-                      width: 300.h,
-                      child: Stack(
-                        children: [
-                          WidgetUtils.showImages(
-                              'assets/images/chat_hongbao_bg.png',
-                              130.h,
-                              300.h),
-                          Positioned(
-                              top: 40.h,
-                              left: 60.w,
-                              child: Row(
-                                children: [
-                                  WidgetUtils.commonSizedBox(0, 50.h),
-                                  WidgetUtils.onlyText(
-                                      allData2[i]['content'],
-                                      StyleUtils.getCommonTextStyle(
-                                          color: Colors.white,
-                                          fontSize: 25.sp)),
-                                ],
-                              ))
-                        ],
-                      ),
-                    )
+                  ? hbCard(allData2[i]['content'])
                   : Flexible(
                       child: allData2[i]['type'] == 1
                           ? GestureDetector(
@@ -850,31 +826,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
               ),
               // 6金豆红包
               allData2[i]['type'] == 6
-                  ? SizedBox(
-                      height: 130.h,
-                      width: 300.h,
-                      child: Stack(
-                        children: [
-                          WidgetUtils.showImages(
-                              'assets/images/chat_hongbao_bg.png',
-                              130.h,
-                              300.h),
-                          Positioned(
-                              top: 40.h,
-                              left: 60.w,
-                              child: Row(
-                                children: [
-                                  WidgetUtils.commonSizedBox(0, 50.h),
-                                  WidgetUtils.onlyText(
-                                      allData2[i]['content'],
-                                      StyleUtils.getCommonTextStyle(
-                                          color: Colors.white,
-                                          fontSize: 25.sp)),
-                                ],
-                              ))
-                        ],
-                      ),
-                    )
+                  ? hbCard(allData2[i]['content'])
                   : Flexible(
                       child: allData2[i]['type'] == 1
                           ? GestureDetector(

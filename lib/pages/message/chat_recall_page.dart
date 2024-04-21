@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../utils/my_utils.dart';
+import '../../utils/style_utils.dart';
+import '../../utils/widget_utils.dart';
 
 mixin MsgReadText {
   Widget msgReadText(int msgRead) {
@@ -48,6 +50,40 @@ mixin MsgReadText {
   }
   Color playColor(bool playRecord, int index) {
     return (playRecord && index == _playIndex) ? const Color.fromARGB(255, 207, 255, 208) : Colors.white;
+  }
+
+  Widget hbCard(String text) {
+    return SizedBox(
+      height: 130.h,
+      width: 300.h,
+      child: Stack(
+        children: [
+          WidgetUtils.showImages(
+            'assets/images/chat_hongbao_bg.png',
+            130.h,
+            300.h,
+          ),
+          Positioned(
+            top: 40.h,
+            left: 100.h,
+            width: 180.h,
+            child: FittedBox(
+              fit: BoxFit.fitWidth,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minWidth: 190.h),
+                child: WidgetUtils.onlyText(
+                  text,
+                  StyleUtils.getCommonTextStyle(
+                    color: Colors.white,
+                    fontSize: 25.h,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 

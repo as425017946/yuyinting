@@ -265,7 +265,8 @@ class _HongBaoPageState extends State<HongBaoPage> {
                           textAlign: TextAlign.end,
                           inputFormatters: [
                             // RegexFormatter(regex: MyUtils.regexFirstNotNull),
-                            FilteringTextInputFormatter.digitsOnly
+                            FilteringTextInputFormatter.digitsOnly,
+                            FilteringTextInputFormatter.allow(RegExp(r'[1-9]\d*'))
                           ],
                           keyboardType: TextInputType.number,
                           //设置键盘为数字
