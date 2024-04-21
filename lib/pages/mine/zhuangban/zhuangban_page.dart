@@ -275,7 +275,7 @@ mixin ZhuangbanContent<T extends StatefulWidget> on State<T> {
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Padding(
-            padding: EdgeInsets.all(10.w),
+            padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 10.w),
             child: Row(children: topChildren),
           ),
         ),

@@ -10,6 +10,7 @@ import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 import 'head_bb_page.dart';
+import 'hengfu_bb_page.dart';
 
 /// 背包
 class ShopPage extends StatefulWidget {
@@ -93,6 +94,7 @@ class _ShopPageState extends State<ShopPage> with ZhuangbanContent {
             ZhuangbanContentItem(name: '头像框', build: () => const HeadBBPage()),
             ZhuangbanContentItem(name: '公屏气泡', build: () => const QiPaoBBPage()),
             ZhuangbanContentItem(name: '麦上声波', build: () => const ShengBoBBPage()),
+            ZhuangbanContentItem(name: '进厅横幅', build: () => const HengfuBBPage()),
           ]),
           // SizedBox(
           //   height: ScreenUtil().setHeight(60),
