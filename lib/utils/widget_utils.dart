@@ -993,13 +993,13 @@ class WidgetUtils {
   }
 
   ///展示图片使用
-  static Widget showImagesNet(String url, double height, double width) {
+  static Widget showImagesNet(String url, double height, double width, {BoxFit fit = BoxFit.cover}) {
     return SizedBox(
       height: height,
       width: width,
       child: CachedNetworkImage(
         imageUrl: url,
-        fit: BoxFit.cover,
+        fit: fit,
         placeholder: (context, url) => CircleImageAss(
           height,
           width,
