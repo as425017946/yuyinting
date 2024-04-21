@@ -1952,7 +1952,7 @@ class _RoomPageState extends State<RoomPage>
             map['content'] =
                 '${event.map!['from_nickname']};向;${cb.giftInfo![i].nickName!};送出$mhType;$giftInfos';
             saveChatInfo(event.map!, '6', event.map!['from_nickname'],
-                '${event.map!['from_nickname']};向;${cb.giftInfo![i].nickName!};送出$mhType;$giftInfos');
+                '${event.map!['from_nickname']};向;${cb.giftInfo![i].nickName!};送出$mhType;$giftInfos',event.map!['from_uid']);
             setState(() {
               list.add(map);
             });
@@ -1993,7 +1993,7 @@ class _RoomPageState extends State<RoomPage>
               LogE('欢迎某人== ${event.map!['bubble_img']}');
               setState(() {
                 saveChatInfo(event.map!, '3', event.map!['send_nickname'],
-                    '${event.map!['nickname']},${event.map!['content']}');
+                    '${event.map!['nickname']},${event.map!['content']}', event.map!['from_uid']);
                 list.add(map);
               });
             } else if (event.map!['type'] == 'clean_charm') {
@@ -2067,7 +2067,7 @@ class _RoomPageState extends State<RoomPage>
 
               setState(() {
                 saveChatInfo(event.map!, '4', event.map!['nickname'],
-                    event.map!['content']);
+                    event.map!['content'], event.map!['uid']);
                 list.add(map);
               });
             } else if (event.map!['type'] == 'send_gift') {
@@ -2137,7 +2137,7 @@ class _RoomPageState extends State<RoomPage>
                   '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出${cb.giftInfo![0].giftName!}(${cb.giftInfo![0].giftPrice.toString()}); x${cb.giftInfo![0].giftNumber.toString()}';
 
               saveChatInfo(event.map!, '5', event.map!['nickname'],
-                  '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出${cb.giftInfo![0].giftName!}(${cb.giftInfo![0].giftPrice.toString()}); x${cb.giftInfo![0].giftNumber.toString()}');
+                  '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出${cb.giftInfo![0].giftName!}(${cb.giftInfo![0].giftPrice.toString()}); x${cb.giftInfo![0].giftNumber.toString()}', event.map!['from_uid']);
               if (cb.giftInfo![0].giftImg!.contains('png')) {
                 setState(() {
                   list.add(map);
@@ -2280,7 +2280,7 @@ class _RoomPageState extends State<RoomPage>
                 });
               }
             } else if (event.map!['type'] == 'send_reduce_gift') {
-              //厅内发送的送礼物消息
+              //厅内发送的负数礼物送礼物消息
               charmAllBean cb = charmAllBean.fromJson(event.map);
               for (int i = 0; i < listM.length; i++) {
                 for (int a = 0; a < cb.charm!.length; a++) {
@@ -2291,7 +2291,28 @@ class _RoomPageState extends State<RoomPage>
                   }
                 }
               }
-
+              // 本地记录送礼
+              if(cb.recordToNickname!.contains(',')){
+                List lName = cb.recordToNickname!.split(',');
+                List lUid = cb.toUids!.split(',');
+                for(int i = 0; i < lName.length; i++){
+                  // 保存信息
+                  saveGiftInfo(cb.fromUid!, cb.fromNickname!, lName[i], lUid[i], cb.giftInfo![0].giftImgStatic!, cb.giftInfo![0].giftNumber.toString(), cb.giftInfo![0].giftName!, cb.giftInfo![0].giftPrice.toString(),);
+                }
+                setState(() {
+                  giftName = cb.giftInfo![0].giftName!;
+                  nickName = cb.fromNickname!;
+                  otherNickName = lName[lName.length-1];
+                });
+              }else{
+                setState(() {
+                  giftName = cb.giftInfo![0].giftName!;
+                  nickName = cb.fromNickname!;
+                  otherNickName = cb.toNickname!;
+                });
+                // 保存信息
+                saveGiftInfo(cb.fromUid!, cb.fromNickname!, cb.toNickname!, cb.toUids!, cb.giftInfo![0].giftImgStatic!, cb.giftInfo![0].giftNumber.toString(), cb.giftInfo![0].giftName!, cb.giftInfo![0].giftPrice.toString(),);
+              }
               Map<dynamic, dynamic> map = {};
               map['info'] = event.map!['nickname'];
               map['uid'] = event.map!['from_uid'];
@@ -2301,7 +2322,7 @@ class _RoomPageState extends State<RoomPage>
                   '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出${cb.giftInfo![0].giftName!}(${cb.giftInfo![0].giftPrice.toString()}); x${cb.giftInfo![0].giftNumber.toString()}';
 
               saveChatInfo(event.map!, '5', event.map!['nickname'],
-                  '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出${cb.giftInfo![0].giftName!}(${cb.giftInfo![0].giftPrice.toString()}); x${cb.giftInfo![0].giftNumber.toString()}');
+                  '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出${cb.giftInfo![0].giftName!}(${cb.giftInfo![0].giftPrice.toString()}); x${cb.giftInfo![0].giftNumber.toString()}', event.map!['from_uid']);
 
               /// 收到送的减礼物的im
               setState(() {
@@ -2379,7 +2400,7 @@ class _RoomPageState extends State<RoomPage>
                   '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出;$infos';
               setState(() {
                 saveChatInfo(event.map!, '6', event.map!['from_nickname'],
-                    '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出;$infos');
+                    '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出;$infos',event.map!['from_uid']);
                 list.add(map);
                 // 这个是为了让别人也能看见自己送出的礼物
               });
@@ -2515,7 +2536,7 @@ class _RoomPageState extends State<RoomPage>
               map['content'] =
                   '${cb.fromNickname};向;${cb.toNickname};赠送了;$info';
               saveChatInfo(event.map!, '9', cb.fromNickname!,
-                  '${cb.fromNickname};向;${cb.toNickname};赠送了;$info');
+                  '${cb.fromNickname};向;${cb.toNickname};赠送了;$info',event.map!['from_uid']);
               setState(() {
                 list.add(map);
               });
@@ -2975,7 +2996,7 @@ class _RoomPageState extends State<RoomPage>
   final Connectivity _connectivity = Connectivity();
 
   // 消息订阅
-  late StreamSubscription<ConnectivityResult> _subscription;
+  StreamSubscription<ConnectivityResult>? _subscription;
 
   // 初始返回的网络状态
   ConnectivityResult? _connectivityStatus;
@@ -3615,7 +3636,9 @@ class _RoomPageState extends State<RoomPage>
     animationControllerPK.dispose();
     animationControllerJL.dispose();
     animationControllerJR.dispose();
-    _subscription.cancel();
+    if(_subscription != null){
+      _subscription!.cancel();
+    }
     _cancelTimer();
     // TODO: implement dispose
     super.dispose();
@@ -5939,13 +5962,13 @@ class _RoomPageState extends State<RoomPage>
 
   /// 保存本房间消息
   Future<void> saveChatInfo(Map<dynamic, dynamic> map, String type,
-      String chatInfos, String contenInfo) async {
+      String chatInfos, String contenInfo, String uid) async {
     DatabaseHelper databaseHelper = DatabaseHelper();
     Database? db = await databaseHelper.database;
     Map<String, dynamic> params = <String, dynamic>{
       'roomID': widget.roomId,
       'info': chatInfos,
-      'uid': map!['from_uid'],
+      'uid': uid,
       'type': type,
       'content': contenInfo,
       'image': map!['image'],
