@@ -21,6 +21,7 @@ class ShowLiWuPage extends StatefulWidget {
   String dressID;
   List<StepPriceDay> list;
   String yue;
+  BoxFit fit;
 
   ShowLiWuPage(
       {super.key,
@@ -28,7 +29,9 @@ class ShowLiWuPage extends StatefulWidget {
       required this.imgSVGAUrl,
       required this.dressID,
       required this.list,
-      required this.yue});
+      required this.yue,
+      this.fit = BoxFit.cover
+      });
 
   @override
   State<ShowLiWuPage> createState() => _ShowLiWuPageState();
@@ -104,7 +107,8 @@ class _ShowLiWuPageState extends State<ShowLiWuPage> {
                     ? WidgetUtils.showImagesNet(
                         widget.imgUrl,
                         widget.imgSVGAUrl.isNotEmpty ? 200.h : 100.h,
-                        widget.imgSVGAUrl.isNotEmpty ? 200.h : 100.h)
+                        widget.imgSVGAUrl.isNotEmpty ? 200.h : 100.h,
+                        fit: widget.fit)
                     : WidgetUtils.commonSizedBox(0, 0),
                 isShow
                     ? SizedBox(
