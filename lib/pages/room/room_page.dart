@@ -4639,9 +4639,8 @@ class _RoomPageState extends State<RoomPage>
           // setState(() {
           //   isBack = true;
           // });
-          if(isOK){
-            if (MyUtils.checkClick()) {
-              if (_timerHot != null) {
+          if(isOK && MyUtils.checkClick()){
+            if (_timerHot != null) {
                 _timerHot!.cancel();
               }
               if (_timer != null) {
@@ -4653,8 +4652,7 @@ class _RoomPageState extends State<RoomPage>
               sp.setString('isShouQi', '1');
               sp.setString('sqRoomID', widget.roomId);
               eventBus.fire(SubmitButtonBack(title: '收起房间'));
-              Navigator.pop(context);
-            }
+              // Navigator.pop(context);
             return true;
           }else{
             return false;
