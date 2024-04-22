@@ -102,7 +102,7 @@ class _MofangJinPageState extends State<MofangJinPage>
   Soundpool soundpool = Soundpool(streamType: StreamType.music);
   Future<void> playSound() async {
     int soundId = await rootBundle
-        .load('assets/audio/mofang_jin.wav')
+        .load('assets/audio/mofang_lan.wav')
         .then(((ByteData soundDate) {
       return soundpool.load(soundDate);
     }));
