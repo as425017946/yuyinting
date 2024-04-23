@@ -272,7 +272,7 @@ class _BigClientPageTop extends StatelessWidget {
       left: 0,
       bottom: 0,
       width: 750,
-      height: 405,
+      height: 415,
       child: Swiper(
         itemBuilder: _itemBuilder,
         itemCount: 8,
