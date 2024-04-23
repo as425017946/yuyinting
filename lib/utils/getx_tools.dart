@@ -330,3 +330,22 @@ class UserFrameHead extends StatelessWidget {
     );
   }
 }
+
+class UserGenderCircle extends StatelessWidget {
+  final double size;
+  final int gender;
+  const UserGenderCircle({super.key, required this.size, required this.gender});
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      padding: EdgeInsets.all(size / 6.0),
+      decoration: BoxDecoration(
+        color: gender == 0 ? MyColors.dtPink : MyColors.dtBlue,
+        borderRadius: BorderRadius.all(Radius.circular(size / 2.0)),
+      ),
+      child: Image.asset(gender == 0 ? 'assets/images/nv.png' : 'assets/images/nan.png'),
+    );
+  }
+}

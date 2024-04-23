@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import '../../../colors/my_colors.dart';
 import '../../../main.dart';
 import '../../../utils/getx_tools.dart';
 import '../../../utils/loading.dart';
@@ -175,16 +174,7 @@ class HappyWallPage extends StatelessWidget {
                 ),
               ),
               SizedBox(width: 8.w),
-              Container(
-                width: 24.w,
-                height: 24.w,
-                padding: EdgeInsets.all(4.w),
-                decoration: BoxDecoration(
-                  color: gender == 0 ? MyColors.dtPink : MyColors.dtBlue,
-                  borderRadius: BorderRadius.all(Radius.circular(12.w)),
-                ),
-                child: Image.asset( gender == 0 ? 'assets/images/nv.png' : 'assets/images/nan.png'),
-              ),
+              UserGenderCircle(size: 24.w, gender: gender),
             ],
           )
         ],
