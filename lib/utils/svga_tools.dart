@@ -8,6 +8,7 @@ extension SvgaTools on MovieEntity {
 
   Future<void> hfItem(String img, String name) async {
     // await dynamicItem.setImageWithUrl(img, '03');
+    dynamicItem.setHidden(true, '04');
     final image = await _getNetImage(img);
     dynamicItem.setDynamicDrawer((canvas, frameIndex) {
       canvas.clipPath(Path()..addOval(Rect.fromCircle(center: const Offset(30, 30), radius: 30)));
@@ -21,7 +22,6 @@ extension SvgaTools on MovieEntity {
         maxLines: 1,
       )..layout(maxWidth: 192);
       textPainter.paint(canvas, const Offset(15, -2.5));
-      
     }, '01');
     dynamicItem.setDynamicDrawer((canvas, frameIndex) {
       final textPainter = TextPainter(
