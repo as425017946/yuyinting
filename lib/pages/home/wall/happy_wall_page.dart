@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../../../colors/my_colors.dart';
+import '../../../main.dart';
+import '../../../utils/getx_tools.dart';
 import '../../../utils/loading.dart';
 import 'happy_wall_model.dart';
 
@@ -74,63 +77,145 @@ class HappyWallPage extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        shadowColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          color: Colors.black,
+          onPressed: (() {
+            Loading.dismiss();
+            Get.back();
+          }),
+        ),
+        centerTitle: true,
+        title: Text(
+          "幸福墙",
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 34.sp,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+      body: _body(),
+    );
+  }
+
+  Widget _body() {
     return Container(
-      color: Colors.pink,
-      child: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            pinned: true, //设置为true时，当SliverAppBar内容滑出屏幕时，将始终渲染一个固定在顶部的收起状态
-            expandedHeight: 100,
-            collapsedHeight: 56,
-            backgroundColor: Colors.white,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                color: Colors.pink,
-              ),
-            ),
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back_ios),
-              color: Colors.black,
-              onPressed: (() {
-                Loading.dismiss();
-                Get.back();
-              }),
-            ),
-            centerTitle: true,
-            title: Text(
-              "幸福墙",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 33.sp,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/happy_wall_bj.png'),
+          fit: BoxFit.fill,
+        ),
+      ),
+      child: Padding(
+        padding: EdgeInsets.only(top: 290.w),
+        child: _list(),
+      ),
+    );
+  }
+
+  Widget _list() {
+    return ListView.builder(
+      padding: EdgeInsets.symmetric(vertical: 10.w),
+      itemBuilder: _builder,
+      itemCount: 10,
+    );
+  }
+
+  Widget _builder(BuildContext context, int index) {
+    final img = 'assets/images/happy_wall_box_${index%2 + 1}.png';
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 30.w),
+      height: 404.w,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage(img),
+          fit: BoxFit.fill,
+        ),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _head(sp.getString('user_headimg').toString(), '骄阳', 1),
+              SizedBox(width: 189.w),
+              _head(sp.getString('user_headimg').toString(), '骄阳', 0),
+            ],
           ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(_content, childCount: 1),
-          ),
+          SizedBox(height: 30.w),
+          _text(),
         ],
       ),
     );
   }
 
-  Widget _content(BuildContext context, int index) {
+  Widget _head(String avatar, String name, int gender) {
     return Container(
-      child: ListView.builder(
-        padding: EdgeInsets.all(20.w),
-        itemBuilder: _builder,
-        itemCount: 20,
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
+      width: 200.w,
+      alignment: Alignment.topCenter,
+      child: Column(
+        children: [
+          UserFrameHead(size: 125.w, avatar: avatar),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                name,
+                style: TextStyle(
+                  color: const Color(0xFF181926),
+                  fontSize: 21.sp,
+                ),
+              ),
+              SizedBox(width: 8.w),
+              Container(
+                width: 24.w,
+                height: 24.w,
+                padding: EdgeInsets.all(4.w),
+                decoration: BoxDecoration(
+                  color: gender == 0 ? MyColors.dtPink : MyColors.dtBlue,
+                  borderRadius: BorderRadius.all(Radius.circular(12.w)),
+                ),
+                child: Image.asset( gender == 0 ? 'assets/images/nv.png' : 'assets/images/nan.png'),
+              ),
+            ],
+          )
+        ],
       ),
     );
   }
 
-  Widget _builder(BuildContext context, int index) {
+  Widget _text() {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
-      height: 120,
-      color: Colors.blue,
+      height: 30.w,
+      margin: EdgeInsets.fromLTRB(60.w, 0, 60.w, 60.w),
+      child: Text.rich(
+        TextSpan(
+          text: '2024-04-15 送出了',
+          style: TextStyle(
+            color: Colors.black,
+            fontFamily: 'Arial',
+            fontSize: 21.sp,
+          ),
+          children: [
+            TextSpan(
+              text: '锡纸城堡',
+              style: TextStyle(
+                color: const Color(0xFF8B2BE7),
+                fontFamily: 'Arial',
+                fontSize: 21.sp,
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }

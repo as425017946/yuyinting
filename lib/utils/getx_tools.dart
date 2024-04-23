@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
+import 'package:yuyinting/utils/widget_utils.dart';
 
 import '../colors/my_colors.dart';
 
@@ -296,6 +298,34 @@ mixin _Tag {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class UserFrameHead extends StatelessWidget {
+  final double size;
+  final String avatar;
+  final String avatarFrameGifImg;
+  final String avatarFrameImg;
+  const UserFrameHead({super.key, required this.size, required this.avatar, this.avatarFrameGifImg = '', this.avatarFrameImg = ''});
+  @override
+  Widget build(BuildContext context) {
+    final boxSize = size * 4.0 / 3.0;
+    return SizedBox(
+      height: boxSize,
+      width: boxSize,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          WidgetUtils.CircleHeadImage(size, size, avatar),
+          if (avatarFrameGifImg.isNotEmpty) // 头像框动态图
+            SVGASimpleImage(
+              resUrl: avatarFrameGifImg,
+            )
+          else if (avatarFrameImg.isNotEmpty) // 头像框静态图
+            WidgetUtils.CircleHeadImage(boxSize, boxSize, avatarFrameImg)
+        ],
       ),
     );
   }

@@ -4,6 +4,7 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:yuyinting/pages/home/paidui_list_page.dart';
+import 'package:yuyinting/pages/home/wall/happy_wall_page.dart';
 import 'package:yuyinting/utils/SVGASimpleImage3.dart';
 
 import '../../bean/Common_bean.dart';
