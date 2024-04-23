@@ -110,33 +110,33 @@ class HomeItems {
         info =
             '${hf.fromNickname}在${hf.roomName}向${hf.toNickname}送出价值${hf.giftInfo![0].giftPrice}${hf.giftInfo![0].giftName} x${hf.giftInfo![0].giftNumber}';
         break;
-      case '5000_9990背包礼物':
+      case '3000_6999背包礼物':
         gd = 30.h;
         topHD = 150.h;
         info =
         '${hf.fromNickname}在${hf.roomName}向${hf.toNickname}送出价值${hf.giftInfo![0].giftPrice}${hf.giftInfo![0].giftName} x${hf.giftInfo![0].giftNumber}';
         break;
-      case '10000_49990背包礼物':
+      case '7000_19999背包礼物':
         gd = 30.h;
         topHD = 150.h;
         info =
         '${hf.fromNickname}在${hf.roomName}向${hf.toNickname}送出价值${hf.giftInfo![0].giftPrice}${hf.giftInfo![0].giftName} x${hf.giftInfo![0].giftNumber}';
         break;
-      case '50000_99990背包礼物':
+      case '20000_99999背包礼物':
         gd = 30.h;
         topHD = 150.h;
         info =
         '${hf.fromNickname}在${hf.roomName}向${hf.toNickname}送出价值${hf.giftInfo![0].giftPrice}${hf.giftInfo![0].giftName} x${hf.giftInfo![0].giftNumber}';
         break;
-      case '100000_380000背包礼物':
+      case '100000背包礼物':
         gd = 20.h;
-        topHD = 155.h;
+        topHD = 200.h;
         info =
         '${hf.fromNickname}在${hf.roomName}向${hf.toNickname}送出价值${hf.giftInfo![0].giftPrice}${hf.giftInfo![0].giftName} x${hf.giftInfo![0].giftNumber}';
         break;
       case '388800背包礼物':
         gd = 20.h;
-        topHD = 175.h;
+        topHD = 200.h;
         info =
         '${hf.fromNickname}在${hf.roomName}向${hf.toNickname}送出价值${hf.giftInfo![0].giftPrice}${hf.giftInfo![0].giftName} x${hf.giftInfo![0].giftNumber}';
         break;

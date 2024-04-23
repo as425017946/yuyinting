@@ -640,28 +640,28 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           bigType = 1;
         });
         break;
-      case '5000_9990背包礼物':
+      case '3000_6999背包礼物':
         setState(() {
-          name = '5000_9990背包礼物';
-          path = 'assets/svga/gp/bb_500_999.svga';
+          name = '3000_6990背包礼物';
+          path = 'assets/svga/gp/bb_3000_6999.svga';
         });
         break;
-      case '10000_49990背包礼物':
+      case '7000_19999背包礼物':
         setState(() {
-          name = '10000_49990背包礼物';
-          path = 'assets/svga/gp/bb_1000_4999.svga';
+          name = '7000_19999背包礼物';
+          path = 'assets/svga/gp/bb_7000_19999.svga';
         });
         break;
-      case '50000_99990背包礼物':
+      case '20000_99999背包礼物':
         setState(() {
-          name = '50000_99990背包礼物';
-          path = 'assets/svga/gp/bb_5000_9999.svga';
+          name = '20000_99999背包礼物';
+          path = 'assets/svga/gp/bb_20000_99999.svga';
         });
         break;
-      case '100000_380000背包礼物':
+      case '100000背包礼物':
         setState(() {
-          name = '100000_380000背包礼物';
-          path = 'assets/svga/gp/bb_10000_38000.svga';
+          name = '100000背包礼物';
+          path = 'assets/svga/gp/bb_100000.svga';
         });
         break;
       case '388800背包礼物':
