@@ -374,7 +374,7 @@ class _RoomPageState extends State<RoomPage>
       final bool svgaBool = m['svgaBool'];
       final MovieEntity videoItem = await _loadSVGA(svgaBool, m['svgaUrl']);
       if (svgaBool) {
-        await videoItem.hfItem(m['avatar'], m['nickNanme']);
+        await videoItem.hfItem(m['avatar'], m['nickNanme'], m['svgaName']);
       }
       animationControllerJR?.videoItem = videoItem;
       animationControllerJR
@@ -2561,6 +2561,7 @@ class _RoomPageState extends State<RoomPage>
                 } else {
                   mapNew['svgaUrl'] = img;
                   mapNew['svgaBool'] = true;
+                  mapNew['svgaName'] = event.map['enter_dress_name'];
                 }
                 mapNew['nickNanme'] = event.map!['nickname'];
                 mapNew['avatar'] = event.map!['avatar']; // 头像
@@ -4904,6 +4905,7 @@ class _RoomPageState extends State<RoomPage>
               } else {
                 mapNew['svgaUrl'] = img;
                 mapNew['svgaBool'] = true;
+                mapNew['svgaName'] = bean.data!.userInfo!.enter_dress_name;
               }
               mapNew['nickNanme'] = bean.data!.userInfo!.nickname!;
               mapNew['avatar'] = bean.data!.userInfo!.avatar; // 头像

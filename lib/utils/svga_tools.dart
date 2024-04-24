@@ -6,31 +6,52 @@ import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 
 extension SvgaTools on MovieEntity {
 
-  Future<void> hfItem(String img, String name) async {
+  Future<void> hfItem(String img, String name, String svgaName) async {
     // await dynamicItem.setImageWithUrl(img, '03');
-    final image = await _getNetImage(img);
-    dynamicItem.setDynamicDrawer((canvas, frameIndex) {
-      canvas.clipPath(Path()..addOval(Rect.fromCircle(center: const Offset(30, 30), radius: 30)));
-      final size = min(image.width, image.height).toDouble();
-      canvas.drawImageRect(image, Rect.fromLTWH((image.width - size)/2, (image.height - size)/2, size, size), const Rect.fromLTWH(0, 0, 60, 60), Paint());
-    }, '03');
-    dynamicItem.setDynamicDrawer((canvas, frameIndex) {
-      final textPainter = TextPainter(
-        text: TextSpan(text: name, style: const TextStyle(fontSize: 30, color: Colors.yellow)),
-        textDirection: TextDirection.ltr,
-        maxLines: 1,
-      )..layout(maxWidth: 192);
-      textPainter.paint(canvas, const Offset(15, -2.5));
-      
-    }, '01');
-    dynamicItem.setDynamicDrawer((canvas, frameIndex) {
-      final textPainter = TextPainter(
-        text: const TextSpan(text: '进来了', style: TextStyle(fontSize: 20, color: Colors.white)),
-        textDirection: TextDirection.ltr,
-        maxLines: 1,
-      )..layout(maxWidth: 192);
-      textPainter.paint(canvas, const Offset(15, 0));
-    }, '02');
+    dynamicItem.setHidden(true, '04');
+    // const AssetImage('assets/images/empty.png')
+    final image = await _drawNetCircleImage(img);
+    dynamicItem.setImage(image, '03');
+    // dynamicItem.setDynamicDrawer((canvas, frameIndex) {
+    //   canvas.clipPath(Path()..addOval(Rect.fromCircle(center: const Offset(30, 30), radius: 30)));
+    //   final size = min(image.width, image.height).toDouble();
+    //   canvas.drawImageRect(image, Rect.fromLTWH((image.width - size)/2, (image.height - size)/2, size, size), const Rect.fromLTWH(0, 0, 60, 60), Paint());
+    // }, '03');
+    switch (svgaName) {
+      case '龙年':
+        dynamicItem.setDynamicDrawer((canvas, frameIndex) {
+          final textPainter = TextPainter(
+            text: TextSpan(
+              text: name, 
+              style: const TextStyle(fontSize: 37, color: Colors.yellow),
+              children: const [
+                 TextSpan(text: ' 进来了', style: TextStyle(fontSize: 30, color: Colors.white)),
+              ]
+            ),
+            textDirection: TextDirection.ltr,
+            maxLines: 1,
+          )..layout(maxWidth: 192);
+          textPainter.paint(canvas, const Offset(15, 0));
+        }, '02');
+        break;
+      default:
+        dynamicItem.setDynamicDrawer((canvas, frameIndex) {
+          final textPainter = TextPainter(
+            text: TextSpan(text: name, style: const TextStyle(fontSize: 30, color: Colors.yellow)),
+            textDirection: TextDirection.ltr,
+            maxLines: 1,
+          )..layout(maxWidth: 192);
+          textPainter.paint(canvas, const Offset(15, -2.5));
+        }, '01');
+        dynamicItem.setDynamicDrawer((canvas, frameIndex) {
+          final textPainter = TextPainter(
+            text: const TextSpan(text: '进来了', style: TextStyle(fontSize: 20, color: Colors.white)),
+            textDirection: TextDirection.ltr,
+            maxLines: 1,
+          )..layout(maxWidth: 192);
+          textPainter.paint(canvas, const Offset(15, 0));
+        }, '02');
+    }
   }
 
   Future<ui.Image> _getNetImage(String url, {width, height}) async {
@@ -38,5 +59,24 @@ extension SvgaTools on MovieEntity {
     ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width, targetHeight: height);
     ui.FrameInfo fi = await codec.getNextFrame();
     return fi.image;
+  }
+
+  Future<ui.Image> _drawNetCircleImage(String url) async {
+    ByteData data = await NetworkAssetBundle(Uri.parse(url)).load(url);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List());
+    ui.FrameInfo fi = await codec.getNextFrame();
+
+    final image = fi.image;
+    final size = min(image.width, image.height).toDouble();
+
+    final ui.PictureRecorder recorder = ui.PictureRecorder();
+    final canvas = Canvas(recorder);
+    final radius = size/2.0;
+    canvas.clipPath(Path()..addOval(Rect.fromCircle(center: Offset(radius, radius), radius: radius)));
+    canvas.drawImageRect(image, Rect.fromLTWH((image.width - size)/2, (image.height - size)/2, size, size), Rect.fromLTWH(0, 0, size, size), Paint());
+
+    final ui.Picture picture = recorder.endRecording();
+    final int imgSize = size.toInt();
+    return await picture.toImage(imgSize, imgSize);
   }
 }

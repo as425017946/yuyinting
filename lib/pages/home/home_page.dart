@@ -747,7 +747,7 @@ class _HomePageState extends State<HomePage>
             _titleItem('推荐', 1, true),
             _titleItem('派对', 2, true),
             // (level >= 3 || grLevel >= 3) ? _titleItem('游戏', 3, true) : const Text(''),
-            _titleItem('在线', 4, identity != 'user'),
+            _titleItem('在线', 3, identity != 'user'),
           ],
         ),
       ),
