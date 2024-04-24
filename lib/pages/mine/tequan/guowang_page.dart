@@ -66,7 +66,7 @@ class _GuowangPageState extends State<GuowangPage>  with TickerProviderStateMixi
                       ScreenUtil().setHeight(271),
                       ScreenUtil().setHeight(266)),
                 ),
-                WidgetUtils.showImages('assets/images/tequan_guowang.png',
+                WidgetUtils.showImages('assets/images/tequan_tianshen.png',
                     ScreenUtil().setHeight(223), ScreenUtil().setHeight(209)),
               ],
             ),
@@ -83,7 +83,7 @@ class _GuowangPageState extends State<GuowangPage>  with TickerProviderStateMixi
         ),
         WidgetUtils.commonSizedBox(20, 15),
         WidgetUtils.onlyTextCenter(
-            '国王',
+            '天神',
             StyleUtils.getCommonTextStyle(
                 color: Colors.white,
                 fontSize: ScreenUtil().setSp(33),

@@ -66,7 +66,7 @@ class _BojuePageState extends State<BojuePage>  with TickerProviderStateMixin {
                       ScreenUtil().setHeight(271),
                       ScreenUtil().setHeight(266)),
                 ),
-                WidgetUtils.showImages('assets/images/tequan_bojue.png',
+                WidgetUtils.showImages('assets/images/tequan_jinxian.png',
                     ScreenUtil().setHeight(223), ScreenUtil().setHeight(209)),
               ],
             ),
@@ -83,7 +83,7 @@ class _BojuePageState extends State<BojuePage>  with TickerProviderStateMixin {
         ),
         WidgetUtils.commonSizedBox(20, 15),
         WidgetUtils.onlyTextCenter(
-            '伯爵',
+            '金仙',
             StyleUtils.getCommonTextStyle(
                 color: Colors.white,
                 fontSize: ScreenUtil().setSp(33),

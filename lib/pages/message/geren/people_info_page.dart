@@ -354,219 +354,222 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
     return Container(
       margin: EdgeInsets.only(left: 20.w, right: 20.w, top: 0),
       height: 290.w,
+      color: Colors.transparent,
       alignment: Alignment.topLeft,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          GestureDetector(
-            onTap: (() {
-              if (MyUtils.checkClick()) {
-                Navigator.of(context).push(PageRouteBuilder(
-                    opaque: false,
-                    pageBuilder: (context, animation, secondaryAnimation) {
-                      return SwiperPage(imgList: imageList);
-                    }));
-              }
-            }),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 160.w,
-                  height: 160.w,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Container(
-                        width: 120.w,
-                        height: 120.w,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(60.w),
-                        ),
-                      ),
-                      WidgetUtils.CircleHeadImage(110.w, 110.w, headImg),
-                      // 头像框静态图
-                      (avatarFrameGifImg.isEmpty && avatarFrameImg.isNotEmpty)
-                          ? WidgetUtils.CircleHeadImage(
-                              150.w, 150.w, avatarFrameImg)
-                          : const Text(''),
-                      // 头像框动态图
-                      avatarFrameGifImg.isNotEmpty
-                          ? SizedBox(
-                              height: 150.w,
-                              width: 150.w,
-                              child: SVGASimpleImage(
-                                resUrl: avatarFrameGifImg,
-                              ),
-                            )
-                          : const Text(''),
-                    ],
-                  ),
-                ),
-                /// 音频
-                voice_card.isNotEmpty
-                    ? GestureDetector(
-                  onTap: (() {
-                    if (MyUtils.checkClick() && playRecord == false) {
-                      play();
-                    }
-                  }),
-                  child: Container(
-                    height: ScreenUtil().setHeight(45),
-                    width: ScreenUtil().setWidth(220),
-                    margin: const EdgeInsets.only(left: 20),
-                    alignment: Alignment.center,
-                    //边框设置
-                    decoration: const BoxDecoration(
-                      //背景
-                      color: MyColors.peopleYellow,
-                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                      borderRadius:
-                      BorderRadius.all(Radius.circular(20.0)),
-                    ),
-                    child: Row(
-                      children: [
-                        const Expanded(
-                            child: SVGASimpleImage(
-                              assetsName:
-                              'assets/svga/audio_xindiaotu.svga',
-                            )),
-                        WidgetUtils.commonSizedBox(0, 10.h),
-                        WidgetUtils.showImages(
-                            'assets/images/people_bofang.png',
-                            ScreenUtil().setHeight(35),
-                            ScreenUtil().setWidth(35)),
-                        WidgetUtils.commonSizedBox(0, 10.h),
-                      ],
-                    ),
-                    // child: playRecord == false
-                    //     ? Row(
-                    //         children: [
-                    //           const Expanded(
-                    //               child: SVGASimpleImage(
-                    //             assetsName:
-                    //                 'assets/svga/audio_xindiaotu.svga',
-                    //           )),
-                    //           WidgetUtils.commonSizedBox(0, 10.h),
-                    //           WidgetUtils.showImages(
-                    //               'assets/images/people_bofang.png',
-                    //               ScreenUtil().setHeight(35),
-                    //               ScreenUtil().setWidth(35)),
-                    //           WidgetUtils.commonSizedBox(0, 10.h),
-                    //         ],
-                    //       )
-                    //     : const Expanded(
-                    //         child: SVGASimpleImage(
-                    //         assetsName:
-                    //             'assets/svga/audio_bolang.svga',
-                    //       )),
-                  ),
-                )
-                    : const Text(''),
-              ],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
-            child: Row(
-              children: [
-                Text(
-                  nickName,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 42.sp,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                SizedBox(width: 20.w),
-                GestureDetector(
-                  onTap: (() {
-                    Clipboard.setData(ClipboardData(
-                      text: userNumber,
-                    ));
-                    MyToastUtils.showToastBottom('已成功复制到剪切板');
-                  }),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      WidgetUtils.onlyText(
-                        'ID: $userNumber',
-                        StyleUtils.getCommonTextStyle(
-                          color: Colors.black,
-                          fontSize: 24.sp,
-                        ),
-                      ),
-                      WidgetUtils.commonSizedBox(0, 10.w),
-                      WidgetUtils.showImages(
-                        'assets/images/mine_fuzhi.png',
-                        25.w,
-                        25.w,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 10.w),
-            padding: EdgeInsets.only(left: 20.w,),
-            color: Colors.transparent,
-            child: Row(
-              children: [
-                sex != 0
-                    ? Container(
-                        height: 40.w,
-                        width: 80.w,
+          Expanded(child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              GestureDetector(
+                onTap: (() {
+                  if (MyUtils.checkClick()) {
+                    Navigator.of(context).push(PageRouteBuilder(
+                        opaque: false,
+                        pageBuilder: (context, animation, secondaryAnimation) {
+                          return SwiperPage(imgList: imageList);
+                        }));
+                  }
+                }),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 160.w,
+                      height: 160.w,
+                      child: Stack(
                         alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: sex == 1 ? MyColors.dtBlue : MyColors.dtPink,
-                          borderRadius: BorderRadius.all(Radius.circular(25.w)),
+                        children: [
+                          Container(
+                            width: 120.w,
+                            height: 120.w,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(60.w),
+                            ),
+                          ),
+                          WidgetUtils.CircleHeadImage(110.w, 110.w, headImg),
+                          // 头像框静态图
+                          (avatarFrameGifImg.isEmpty && avatarFrameImg.isNotEmpty)
+                              ? WidgetUtils.CircleHeadImage(
+                              150.w, 150.w, avatarFrameImg)
+                              : const Text(''),
+                          // 头像框动态图
+                          avatarFrameGifImg.isNotEmpty
+                              ? SizedBox(
+                            height: 150.w,
+                            width: 150.w,
+                            child: SVGASimpleImage(
+                              resUrl: avatarFrameGifImg,
+                            ),
+                          )
+                              : const Text(''),
+                        ],
+                      ),
+                    ),
+                    /// 音频
+                    voice_card.isNotEmpty
+                        ? GestureDetector(
+                      onTap: (() {
+                        if (MyUtils.checkClick() && playRecord == false) {
+                          play();
+                        }
+                      }),
+                      child: Container(
+                        height: ScreenUtil().setHeight(45),
+                        width: ScreenUtil().setWidth(220),
+                        margin: const EdgeInsets.only(left: 20),
+                        alignment: Alignment.center,
+                        //边框设置
+                        decoration: const BoxDecoration(
+                          //背景
+                          color: MyColors.peopleYellow,
+                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(20.0)),
                         ),
-                        child: WidgetUtils.showImages(
-                            sex == 1
-                                ? 'assets/images/nan.png'
-                                : 'assets/images/nv.png',
+                        child: Row(
+                          children: [
+                            const Expanded(
+                                child: SVGASimpleImage(
+                                  assetsName:
+                                  'assets/svga/audio_xindiaotu.svga',
+                                )),
+                            WidgetUtils.commonSizedBox(0, 10.h),
+                            WidgetUtils.showImages(
+                                'assets/images/people_bofang.png',
+                                ScreenUtil().setHeight(35),
+                                ScreenUtil().setWidth(35)),
+                            WidgetUtils.commonSizedBox(0, 10.h),
+                          ],
+                        ),
+                        // child: playRecord == false
+                        //     ? Row(
+                        //         children: [
+                        //           const Expanded(
+                        //               child: SVGASimpleImage(
+                        //             assetsName:
+                        //                 'assets/svga/audio_xindiaotu.svga',
+                        //           )),
+                        //           WidgetUtils.commonSizedBox(0, 10.h),
+                        //           WidgetUtils.showImages(
+                        //               'assets/images/people_bofang.png',
+                        //               ScreenUtil().setHeight(35),
+                        //               ScreenUtil().setWidth(35)),
+                        //           WidgetUtils.commonSizedBox(0, 10.h),
+                        //         ],
+                        //       )
+                        //     : const Expanded(
+                        //         child: SVGASimpleImage(
+                        //         assetsName:
+                        //             'assets/svga/audio_bolang.svga',
+                        //       )),
+                      ),
+                    )
+                        : const Text(''),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: Row(
+                  children: [
+                    Text(
+                      nickName,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 42.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    SizedBox(width: 20.w),
+                    GestureDetector(
+                      onTap: (() {
+                        Clipboard.setData(ClipboardData(
+                          text: userNumber,
+                        ));
+                        MyToastUtils.showToastBottom('已成功复制到剪切板');
+                      }),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          WidgetUtils.onlyText(
+                            'ID: $userNumber',
+                            StyleUtils.getCommonTextStyle(
+                              color: Colors.black,
+                              fontSize: 24.sp,
+                            ),
+                          ),
+                          WidgetUtils.commonSizedBox(0, 10.w),
+                          WidgetUtils.showImages(
+                            'assets/images/mine_fuzhi.png',
                             25.w,
-                            25.w),
-                      )
-                    : const Text(''),
-                WidgetUtils.commonSizedBox(0, 10.w),
-                // 只有不是新贵或者新锐的时候展示萌新
-                (isNew == 1 && isNewNoble == 0)
-                    ? WidgetUtils.showImagesFill(
+                            25.w,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 10.w),
+                padding: EdgeInsets.only(left: 20.w,),
+                color: Colors.transparent,
+                child: Row(
+                  children: [
+                    sex != 0
+                        ? Container(
+                      height: 40.w,
+                      width: 80.w,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: sex == 1 ? MyColors.dtBlue : MyColors.dtPink,
+                        borderRadius: BorderRadius.all(Radius.circular(25.w)),
+                      ),
+                      child: WidgetUtils.showImages(
+                          sex == 1
+                              ? 'assets/images/nan.png'
+                              : 'assets/images/nv.png',
+                          25.w,
+                          25.w),
+                    )
+                        : const Text(''),
+                    WidgetUtils.commonSizedBox(0, 10.w),
+                    // 只有不是新贵或者新锐的时候展示萌新
+                    (isNew == 1 && isNewNoble == 0)
+                        ? WidgetUtils.showImagesFill(
                         'assets/images/dj/room_role_common.png', 45.w, 85.w)
-                    : const Text(''),
-                (isNew == 1 && isNewNoble == 0)
-                    ? WidgetUtils.commonSizedBox(0, 10.w)
-                    : const Text(''),
-                // 展示新贵或者新锐图标
-                isNewNoble == 1
-                    ? WidgetUtils.showImages(
-                        'assets/images/dj/room_rui.png', 35.w, 85.w)
-                    : isNewNoble == 2
+                        : const Text(''),
+                    (isNew == 1 && isNewNoble == 0)
+                        ? WidgetUtils.commonSizedBox(0, 10.w)
+                        : const Text(''),
+                    // 展示新贵或者新锐图标
+                    isNewNoble == 1
                         ? WidgetUtils.showImages(
-                            'assets/images/dj/room_gui.png', 35.w, 85.w)
+                        'assets/images/dj/room_rui.png', 35.w, 85.w)
+                        : isNewNoble == 2
+                        ? WidgetUtils.showImages(
+                        'assets/images/dj/room_gui.png', 35.w, 85.w)
                         : isNewNoble == 3
-                            ? WidgetUtils.showImages(
-                                'assets/images/dj/room_qc.png', 35.w, 85.w)
-                            : const Text(''),
-                isNewNoble != 0
-                    ? WidgetUtils.commonSizedBox(0, 10.w)
-                    : const Text(''),
-                isPretty == 1
-                    ? WidgetUtils.showImages(
+                        ? WidgetUtils.showImages(
+                        'assets/images/dj/room_qc.png', 35.w, 85.w)
+                        : const Text(''),
+                    isNewNoble != 0
+                        ? WidgetUtils.commonSizedBox(0, 10.w)
+                        : const Text(''),
+                    isPretty == 1
+                        ? WidgetUtils.showImages(
                         'assets/images/dj/lianghao.png', 30.w, 30.w)
-                    : const Text(''),
-                isPretty == 1
-                    ? WidgetUtils.commonSizedBox(0, 10.w)
-                    : const Text(''),
-                // 用户等级
-                if (level > 0)
-                  CharmLevelFlag(level: level, width: 75.w, height: 30.w),
-                /*
+                        : const Text(''),
+                    isPretty == 1
+                        ? WidgetUtils.commonSizedBox(0, 10.w)
+                        : const Text(''),
+                    // 用户等级
+                    if (level > 0)
+                      CharmLevelFlag(level: level, width: 75.w, height: 30.w),
+                    /*
                 level != 0
                     ? Stack(
                         alignment: Alignment.centerLeft,
@@ -621,11 +624,11 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                       )
                     : const Text(''),
                 */
-                WidgetUtils.commonSizedBox(0, 10.w),
-                // 财富等级
-                if (grLevel > 0)
-                  WealthLevelFlag(level: grLevel, width: 75.w, height: 30.w),
-                /*
+                    WidgetUtils.commonSizedBox(0, 10.w),
+                    // 财富等级
+                    if (grLevel > 0)
+                      WealthLevelFlag(level: grLevel, width: 75.w, height: 30.w),
+                    /*
                 grLevel != 0
                     ? SizedBox(
                   height: 40.h,
@@ -682,11 +685,22 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                 )
                     : const Text(''),
                 */
-              ],
-            ),
-          ),
+                  ],
+                ),
+              ),
+            ],
+          ),),
+          Container(
+            height: 200.h,
+            width: 140.h,
+            padding: EdgeInsets.only(top: 90.h),
+            alignment: Alignment.center,
+            child: WidgetUtils.showImages(
+                'assets/images/tequan_chuanshuo.png', 120.h,
+                120.h),
+          )
         ],
-      ),
+      )
     );
   }
 
@@ -697,62 +711,58 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
         /// 房间
         Container(
           height: 240.w,
-          alignment: Alignment.bottomRight,
+          color: Colors.transparent,
+          alignment: Alignment.topRight,
           padding: EdgeInsets.all(20.w),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              (live == 1 && widget.title != '小主页')
-                  ? GestureDetector(
-                      onTap: (() {
-                        if (sp.getString('roomID').toString() == roomID) {
-                          if (MyUtils.checkClick()) {
-                            MyToastUtils.showToastBottom('您已在本房间');
-                          }
-                          return;
-                        } else {
-                          if (sp.getBool('joinRoom') == false) {
-                            setState(() {
-                              sp.setBool('joinRoom', true);
-                            });
-                            doPostBeforeJoin(roomID);
-                          }
-                        }
-                      }),
-                      child: Container(
-                        height: ScreenUtil().setHeight(40),
-                        width: ScreenUtil().setWidth(170),
-                        padding: EdgeInsets.only(left: 10.w),
-                        alignment: Alignment.center,
-                        decoration: const BoxDecoration(
-                          //设置Container修饰
-                          image: DecorationImage(
-                            //背景图片修饰
-                            image: AssetImage('assets/images/people_info_room.png'),
-                            fit: BoxFit.fill, //覆盖
-                          ),
-                        ),
-                        child: Row(
-                          children: [
-                            WidgetUtils.CircleHeadImage(30.w, 30.w, headImg),
-                            WidgetUtils.commonSizedBox(0, 10.w),
-                            WidgetUtils.showImages(
-                                'assets/images/zhibo2.webp',
-                                ScreenUtil().setHeight(22),
-                                ScreenUtil().setWidth(22)),
-                            WidgetUtils.commonSizedBox(0, 5.w),
-                            WidgetUtils.onlyText(
-                                '跟TA进房',
-                                StyleUtils.getCommonTextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18.sp)),
-                          ],
-                        ),
-                      ),
-                    )
-                  : const Text(''),
-            ],
-          ),
+          child: (live == 1 && widget.title != '小主页')
+              ? GestureDetector(
+            onTap: (() {
+              if (sp.getString('roomID').toString() == roomID) {
+                if (MyUtils.checkClick()) {
+                  MyToastUtils.showToastBottom('您已在本房间');
+                }
+                return;
+              } else {
+                if (sp.getBool('joinRoom') == false) {
+                  setState(() {
+                    sp.setBool('joinRoom', true);
+                  });
+                  doPostBeforeJoin(roomID);
+                }
+              }
+            }),
+            child: Container(
+              height: ScreenUtil().setHeight(40),
+              width: ScreenUtil().setWidth(170),
+              padding: EdgeInsets.only(left: 10.w),
+              alignment: Alignment.center,
+              decoration: const BoxDecoration(
+                //设置Container修饰
+                image: DecorationImage(
+                  //背景图片修饰
+                  image: AssetImage('assets/images/people_info_room.png'),
+                  fit: BoxFit.fill, //覆盖
+                ),
+              ),
+              child: Row(
+                children: [
+                  WidgetUtils.CircleHeadImage(30.w, 30.w, headImg),
+                  WidgetUtils.commonSizedBox(0, 10.w),
+                  WidgetUtils.showImages(
+                      'assets/images/zhibo2.webp',
+                      ScreenUtil().setHeight(22),
+                      ScreenUtil().setWidth(22)),
+                  WidgetUtils.commonSizedBox(0, 5.w),
+                  WidgetUtils.onlyText(
+                      '跟TA进房',
+                      StyleUtils.getCommonTextStyle(
+                          color: Colors.white,
+                          fontSize: 18.sp)),
+                ],
+              ),
+            ),
+          )
+              : const Text(''),
         ),
         Expanded(
           child: Container(

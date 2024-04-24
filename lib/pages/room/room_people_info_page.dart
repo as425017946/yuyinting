@@ -276,225 +276,132 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                   ],
                                 ),
                       const Spacer(),
-                      const Spacer(),
 
-                      /// 昵称 性别
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          WidgetUtils.onlyText(
-                              nickName.length > 12
-                                  ? '${nickName.substring(0, 12)}...'
-                                  : nickName,
-                              StyleUtils.getCommonTextStyle(
-                                  color: MyColors.roomTCWZ2,
-                                  fontSize: ScreenUtil().setSp(32),
-                                  fontWeight: FontWeight.w600)),
-                          WidgetUtils.commonSizedBox(0, 10),
-                          WidgetUtils.showImages(
-                              sex == 1
-                                  ? 'assets/images/room_nan.png'
-                                  : 'assets/images/room_nv.png',
-                              31*1.25.w,
-                              29*1.25.w),
-                          WidgetUtils.commonSizedBox(0, 5),
-                          // 只有不是新贵或者新锐的时候展示萌新
-                          (isNew == 1 && isNewNoble == 0)
-                              ? WidgetUtils.showImagesFill(
-                              'assets/images/dj/room_role_common.png',
-                              45.w, 85.w)
-                              : const Text(''),
-                          (isNew == 1 && isNewNoble == 0)
-                              ? WidgetUtils.commonSizedBox(0, 5)
-                              : const Text(''),
-                          // 展示新贵或者新锐图标
-                          isNewNoble == 1
-                              ? WidgetUtils.showImages(
-                              'assets/images/dj/room_rui.png', 35.w, 85.w)
-                              : isNewNoble == 2
-                              ? WidgetUtils.showImages(
-                              'assets/images/dj/room_gui.png',
-                              35.w, 85.w)
-                              :  isNewNoble == 3 ? WidgetUtils.showImages(
-                              'assets/images/dj/room_qc.png',
-                              35.w, 85.w) : const Text(''),
-                          isNewNoble != 0
-                              ? WidgetUtils.commonSizedBox(0, 5)
-                              : const Text(''),
-                          isPretty == 1
-                              ? WidgetUtils.showImages(
-                              'assets/images/dj/lianghao.png', 30.w, 30.w)
-                              : const Text(''),
-                          isPretty == 1 ? WidgetUtils.commonSizedBox(0, 5) : WidgetUtils.commonSizedBox(0, 0),
-                          // 用户等级
-                          if (level > 0)
-                            CharmLevelFlag(level: level, width: 75.w, height: 30.w),
-                          /*
-                          level != 0
-                              ? Stack(
-                                  alignment: Alignment.centerLeft,
-                                  children: [
-                                    WidgetUtils.showImagesFill(
-                                        (level >= 1 && level <= 10)
-                                            ? 'assets/images/dj/dj_c_1-10.png'
-                                            : (level >= 11 && level <= 15)
-                                                ? 'assets/images/dj/dj_c_11-15.png'
-                                                : (level >= 16 && level <= 20)
-                                                    ? 'assets/images/dj/dj_c_16-20.png'
-                                                    : (level >= 21 &&
-                                                            level <= 25)
-                                                        ? 'assets/images/dj/dj_c_21-25.png'
-                                                        : (level >= 26 &&
-                                                                level <= 30)
-                                                            ? 'assets/images/dj/dj_c_26-30.png'
-                                                            : (level >= 31 &&
-                                                                    level <= 35)
-                                                                ? 'assets/images/dj/dj_c_31-35.png'
-                                                                : (level >= 36 &&
-                                                                        level <=
-                                                                            40)
-                                                                    ? 'assets/images/dj/dj_c_36-40.png'
-                                                                    : (level >= 41 &&
-                                                                            level <=
-                                                                                45)
-                                                                        ? 'assets/images/dj/dj_c_41-45.png'
-                                                                        : 'assets/images/dj/dj_c_46-50.png',
-                                        ScreenUtil().setHeight(35),
-                                        ScreenUtil().setHeight(85)),
-                                    Positioned(
-                                        left: (level >= 1 && level <= 10) ? 65.w : 60.w,
-                                        child: Stack(
-                                          children: [
-                                            Text(
-                                              level.toString(),
-                                              style: TextStyle(
-                                                  fontSize: 26.sp,
-                                                  fontFamily: 'Impact',
-                                                  foreground: Paint()
-                                                    ..style = PaintingStyle.stroke
-                                                    ..strokeWidth = 1
-                                                    ..color = MyColors.djTwoM),
-                                            ),
-                                            Text(
-                                              level.toString(),
-                                              style: TextStyle(
-                                                  color: MyColors.djOne,
-                                                  fontSize: 26.sp,
-                                                  fontFamily: 'Impact'),
-                                            ),
-                                          ],
-                                        ))
-                                  ],
-                                )
-                              : const Text(''),
-                          */
-                          WidgetUtils.commonSizedBox(0, 10.w),
-                          // 财富等级
-                          if (grLevel > 0)
-                            WealthLevelFlag(level: grLevel, width: 75.w, height: 30.w),
-                          /*
-                          grLevel != 0
-                              ? SizedBox(
-                            height: 40.h,
-                            width: 105.w,
-                            child: Stack(
-                              alignment: Alignment.centerLeft,
-                              children: [
-                                WidgetUtils.showImagesFill(
-                                  (grLevel >= 1 && grLevel <= 9)
-                                      ? 'assets/images/bigclient_icon_bg_1.png'
-                                      : (grLevel >= 10 && grLevel <= 15)
-                                      ? 'assets/images/bigclient_icon_bg_2.png'
-                                      : (grLevel >= 16 && grLevel <= 23)
-                                      ? 'assets/images/bigclient_icon_bg_3.png'
-                                      : (grLevel >= 24 && grLevel <= 31)
-                                      ? 'assets/images/bigclient_icon_bg_4.png'
-                                      : (grLevel >= 32 && grLevel <= 36)
-                                      ? 'assets/images/bigclient_icon_bg_5.png'
-                                      : (grLevel >= 37 && grLevel <= 40)
-                                      ? 'assets/images/bigclient_icon_bg_6.png'
-                                      : (grLevel >= 41 &&
-                                      grLevel <= 46)
-                                      ? 'assets/images/bigclient_icon_bg_7.png'
-                                      : 'assets/images/bigclient_icon_bg_8.png',
-                                  40.h,
-                                  105.w,
-                                ),
-                                Positioned(
-                                    bottom: (grLevel >= 1 && grLevel <= 9) == true ? 8.w : 8.w,
-                                    left: (grLevel >= 1 && grLevel <= 9) == true ? 70.w : 68.w,
-                                    child: Stack(
-                                      children: [
-                                        Text(
-                                          grLevel.toString(),
-                                          style: TextStyle(
-                                              fontSize: 26.sp,
-                                              fontFamily: 'Impact',
-                                              foreground: Paint()
-                                                ..style = PaintingStyle.stroke
-                                                ..strokeWidth = 1
-                                                ..color = MyColors.djTwoM),
-                                        ),
-                                        Text(
-                                          grLevel.toString(),
-                                          style: TextStyle(
-                                              color: MyColors.djOne,
-                                              fontSize: 26.sp,
-                                              fontFamily: 'Impact'),
-                                        ),
-                                      ],
-                                    ))
-                              ],
+                          Expanded(
+                            child: Container(
+                              width: double.infinity,
+                              color: Colors.transparent,
+                              margin: EdgeInsets.only(left: 20.w),
+                              child: Column(
+                                children: [
+                                  /// 昵称 性别
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      WidgetUtils.onlyText(
+                                          nickName.length > 12
+                                              ? '${nickName.substring(0, 12)}...'
+                                              : nickName,
+                                          StyleUtils.getCommonTextStyle(
+                                              color: MyColors.roomTCWZ2,
+                                              fontSize: ScreenUtil().setSp(32),
+                                              fontWeight: FontWeight.w600)),
+                                      WidgetUtils.commonSizedBox(0, 10),
+                                      WidgetUtils.showImages(
+                                          sex == 1
+                                              ? 'assets/images/room_nan.png'
+                                              : 'assets/images/room_nv.png',
+                                          31*1.25.w,
+                                          29*1.25.w),
+                                    ],
+                                  ),
+                                  WidgetUtils.commonSizedBox(10, 0),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      // 只有不是新贵或者新锐的时候展示萌新
+                                      (isNew == 1 && isNewNoble == 0)
+                                          ? WidgetUtils.showImagesFill(
+                                          'assets/images/dj/room_role_common.png',
+                                          45.w, 85.w)
+                                          : const Text(''),
+                                      (isNew == 1 && isNewNoble == 0)
+                                          ? WidgetUtils.commonSizedBox(0, 5)
+                                          : const Text(''),
+                                      // 展示新贵或者新锐图标
+                                      isNewNoble == 1
+                                          ? WidgetUtils.showImages(
+                                          'assets/images/dj/room_rui.png', 35.w, 85.w)
+                                          : isNewNoble == 2
+                                          ? WidgetUtils.showImages(
+                                          'assets/images/dj/room_gui.png',
+                                          35.w, 85.w)
+                                          :  isNewNoble == 3 ? WidgetUtils.showImages(
+                                          'assets/images/dj/room_qc.png',
+                                          35.w, 85.w) : const Text(''),
+                                      isNewNoble != 0
+                                          ? WidgetUtils.commonSizedBox(0, 5)
+                                          : const Text(''),
+                                      isPretty == 1
+                                          ? WidgetUtils.showImages(
+                                          'assets/images/dj/lianghao.png', 30.w, 30.w)
+                                          : const Text(''),
+                                      isPretty == 1 ? WidgetUtils.commonSizedBox(0, 5) : WidgetUtils.commonSizedBox(0, 0),
+                                      // 用户等级
+                                      if (level > 0)
+                                        CharmLevelFlag(level: level, width: 75.w, height: 30.w),
+                                      WidgetUtils.commonSizedBox(0, 10.w),
+                                      // 财富等级
+                                      if (grLevel > 0)
+                                        WealthLevelFlag(level: grLevel, width: 75.w, height: 30.w),
+                                    ],
+                                  ),
+                                  WidgetUtils.commonSizedBox(10, 0),
+                                  /// id 地区
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      WidgetUtils.showImages(
+                                          'assets/images/room_id.png',
+                                          ScreenUtil().setHeight(26),
+                                          ScreenUtil().setHeight(18)),
+                                      WidgetUtils.commonSizedBox(0, 2),
+                                      WidgetUtils.onlyText(
+                                          userNumber,
+                                          StyleUtils.getCommonTextStyle(
+                                              color: MyColors.roomTCWZ2,
+                                              fontSize: ScreenUtil().setSp(25),
+                                              fontWeight: FontWeight.w600)),
+                                      WidgetUtils.commonSizedBox(0, 5),
+                                      GestureDetector(
+                                          onTap: (() {
+                                            Clipboard.setData(ClipboardData(
+                                              text: userNumber,
+                                            ));
+                                            MyToastUtils.showToastBottom('已成功复制到剪切板');
+                                          }),
+                                          child: WidgetUtils.showImages(
+                                              'assets/images/room_fuzhu.png',
+                                              ScreenUtil().setHeight(18),
+                                              ScreenUtil().setHeight(18))),
+                                      WidgetUtils.commonSizedBox(0, 20),
+                                      Container(
+                                        height: ScreenUtil().setHeight(10),
+                                        width: ScreenUtil().setWidth(1),
+                                        color: MyColors.g9,
+                                      ),
+                                      WidgetUtils.commonSizedBox(0, 20),
+                                      WidgetUtils.onlyText(
+                                          city,
+                                          StyleUtils.getCommonTextStyle(
+                                              color: MyColors.roomTCWZ2,
+                                              fontSize: ScreenUtil().setSp(25))),
+                                    ],
+                                  ),
+                                  WidgetUtils.commonSizedBox(10, 0),
+                                ],
+                              ),
                             ),
-                          )
-                              : const Text(''),
-                          */
-                        ],
-                      ),
-                      WidgetUtils.commonSizedBox(10, 0),
-
-                      /// id 地区
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          WidgetUtils.showImages(
-                              'assets/images/room_id.png',
-                              ScreenUtil().setHeight(26),
-                              ScreenUtil().setHeight(18)),
-                          WidgetUtils.commonSizedBox(0, 2),
-                          WidgetUtils.onlyText(
-                              userNumber,
-                              StyleUtils.getCommonTextStyle(
-                                  color: MyColors.roomTCWZ2,
-                                  fontSize: ScreenUtil().setSp(25),
-                                  fontWeight: FontWeight.w600)),
-                          WidgetUtils.commonSizedBox(0, 5),
-                          GestureDetector(
-                              onTap: (() {
-                                Clipboard.setData(ClipboardData(
-                                  text: userNumber,
-                                ));
-                                MyToastUtils.showToastBottom('已成功复制到剪切板');
-                              }),
-                              child: WidgetUtils.showImages(
-                                  'assets/images/room_fuzhu.png',
-                                  ScreenUtil().setHeight(18),
-                                  ScreenUtil().setHeight(18))),
-                          WidgetUtils.commonSizedBox(0, 20),
-                          Container(
-                            height: ScreenUtil().setHeight(10),
-                            width: ScreenUtil().setWidth(1),
-                            color: MyColors.g9,
                           ),
-                          WidgetUtils.commonSizedBox(0, 20),
-                          WidgetUtils.onlyText(
-                              city,
-                              StyleUtils.getCommonTextStyle(
-                                  color: MyColors.roomTCWZ2,
-                                  fontSize: ScreenUtil().setSp(25))),
+
+                          WidgetUtils.showImages(
+                              'assets/images/tequan_chuanshuo.png', 120.h,
+                              120.h),
+                          WidgetUtils.commonSizedBox(0, 20.w),
                         ],
                       ),
-                      WidgetUtils.commonSizedBox(10, 0),
 
                       /// 个性签名
                       Row(

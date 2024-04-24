@@ -67,7 +67,7 @@ class _HoujuePageState extends State<HoujuePage> with TickerProviderStateMixin {
                       ScreenUtil().setHeight(271),
                       ScreenUtil().setHeight(266)),
                 ),
-                WidgetUtils.showImages('assets/images/tequan_houjue.png',
+                WidgetUtils.showImages('assets/images/tequan_xiandi.png',
                     ScreenUtil().setHeight(223), ScreenUtil().setHeight(209)),
               ],
             ),
@@ -84,7 +84,7 @@ class _HoujuePageState extends State<HoujuePage> with TickerProviderStateMixin {
         ),
         WidgetUtils.commonSizedBox(20, 15),
         WidgetUtils.onlyTextCenter(
-            '侯爵',
+            '仙帝',
             StyleUtils.getCommonTextStyle(
                 color: Colors.white,
                 fontSize: ScreenUtil().setSp(33),

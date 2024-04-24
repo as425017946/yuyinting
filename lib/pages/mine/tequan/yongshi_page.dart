@@ -66,8 +66,8 @@ class _YongshiPageState extends State<YongshiPage>
                       ScreenUtil().setHeight(271),
                       ScreenUtil().setHeight(266)),
                 ),
-                WidgetUtils.showImages('assets/images/tequan_yongshi.png',
-                    ScreenUtil().setHeight(223), ScreenUtil().setHeight(209)),
+                WidgetUtils.showImages('assets/images/tequan_xuanxian.png',
+                    ScreenUtil().setHeight(260), ScreenUtil().setHeight(260)),
               ],
             ),
             const Expanded(child: Text('')),
@@ -83,7 +83,7 @@ class _YongshiPageState extends State<YongshiPage>
         ),
         WidgetUtils.commonSizedBox(20, 15),
         WidgetUtils.onlyTextCenter(
-            '勇士',
+            '玄仙',
             StyleUtils.getCommonTextStyle(
                 color: Colors.white,
                 fontSize: ScreenUtil().setSp(33),

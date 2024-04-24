@@ -66,7 +66,7 @@ class _GongjuePageState extends State<GongjuePage>  with TickerProviderStateMixi
                       ScreenUtil().setHeight(271),
                       ScreenUtil().setHeight(266)),
                 ),
-                WidgetUtils.showImages('assets/images/tequan_gongjue.png',
+                WidgetUtils.showImages('assets/images/tequan_zhushen.png',
                     ScreenUtil().setHeight(223), ScreenUtil().setHeight(209)),
               ],
             ),
@@ -83,7 +83,7 @@ class _GongjuePageState extends State<GongjuePage>  with TickerProviderStateMixi
         ),
         WidgetUtils.commonSizedBox(20, 15),
         WidgetUtils.onlyTextCenter(
-            '公爵',
+            '主神',
             StyleUtils.getCommonTextStyle(
                 color: Colors.white,
                 fontSize: ScreenUtil().setSp(33),

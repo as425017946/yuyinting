@@ -66,7 +66,7 @@ class _QishiPageState extends State<QishiPage>  with TickerProviderStateMixin {
                       ScreenUtil().setHeight(271),
                       ScreenUtil().setHeight(266)),
                 ),
-                WidgetUtils.showImages('assets/images/tequan_qishi.png',
+                WidgetUtils.showImages('assets/images/tequan_shangxian.png',
                     ScreenUtil().setHeight(223), ScreenUtil().setHeight(209)),
               ],
             ),
@@ -83,7 +83,7 @@ class _QishiPageState extends State<QishiPage>  with TickerProviderStateMixin {
         ),
         WidgetUtils.commonSizedBox(20, 15),
         WidgetUtils.onlyTextCenter(
-            '骑士',
+            '上仙',
             StyleUtils.getCommonTextStyle(
                 color: Colors.white,
                 fontSize: ScreenUtil().setSp(33),

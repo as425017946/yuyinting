@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/colors/my_colors.dart';
@@ -18,6 +19,7 @@ class RoomBQPage extends StatefulWidget {
 
 class _APageState extends State<RoomBQPage> {
   int typeB = 0;
+
   // 水果机使用
   List<String> shuiguoji = [
     'assets/svga/0.svga',
@@ -51,6 +53,7 @@ class _APageState extends State<RoomBQPage> {
     'assets/images/hd/j_12.png',
     'assets/images/hd/j_13.png',
   ];
+
   // 见到石头布
   List<String> jiandao = [
     'assets/svga/vc_emo_paper.svga',
@@ -62,6 +65,7 @@ class _APageState extends State<RoomBQPage> {
     'assets/images/hd/s_q.png',
     'assets/images/hd/s_j.png',
   ];
+
   // 筛子
   List<String> shaizi = [
     'assets/svga/vc_emo_dice_1.svga',
@@ -461,6 +465,174 @@ class _APageState extends State<RoomBQPage> {
     },
   ];
 
+  List<Map> list4 = [
+    {
+      'name': '886',
+      "url1": "assets/images/gz/886.png",
+      "url2": "assets/images/gz/886.gif",
+    },
+    {
+      'name': 'NO',
+      "url1": "assets/images/gz/NO.png",
+      "url2": "assets/images/gz/NO.gif",
+    },
+    {
+      'name': 'thankyou',
+      "url1": "assets/images/gz/thankyou.png",
+      "url2": "assets/images/gz/thankyou.gif",
+    },
+    {
+      'name': 'yeach',
+      "url1": "assets/images/gz/yeach.png",
+      "url2": "assets/images/gz/yeach.gif",
+    },
+    {
+      'name': 'YOYOYO',
+      "url1": "assets/images/gz/YOYOYO.png",
+      "url2": "assets/images/gz/YOYOYO.gif",
+    },
+    {
+      'name': '你最棒',
+      "url1": "assets/images/gz/你最棒.png",
+      "url2": "assets/images/gz/你最棒.gif",
+    },
+    {
+      'name': '你礼貌吗',
+      "url1": "assets/images/gz/你礼貌吗.png",
+      "url2": "assets/images/gz/你礼貌吗.gif",
+    },
+    {
+      'name': '冲冲冲',
+      "url1": "assets/images/gz/冲冲冲.png",
+      "url2": "assets/images/gz/冲冲冲.gif",
+    },
+    {
+      'name': '冲呀',
+      "url1": "assets/images/gz/冲呀.png",
+      "url2": "assets/images/gz/冲呀.gif",
+    },
+    {
+      'name': '哈哈哈哈',
+      "url1": "assets/images/gz/哈哈哈哈.png",
+      "url2": "assets/images/gz/哈哈哈哈.gif",
+    },
+    {
+      'name': '喜报',
+      "url1": "assets/images/gz/喜报.png",
+      "url2": "assets/images/gz/喜报.gif",
+    },
+    {
+      'name': '喝红酒',
+      "url1": "assets/images/gz/喝红酒.png",
+      "url2": "assets/images/gz/喝红酒.gif",
+    },
+    {
+      'name': '坐莲',
+      "url1": "assets/images/gz/坐莲.png",
+      "url2": "assets/images/gz/坐莲.gif",
+    },
+    {
+      'name': '好的',
+      "url1": "assets/images/gz/好的.png",
+      "url2": "assets/images/gz/好的.gif",
+    },
+    {
+      'name': '帅气',
+      "url1": "assets/images/gz/帅气.png",
+      "url2": "assets/images/gz/帅气.gif",
+    },
+    {
+      'name': '感动',
+      "url1": "assets/images/gz/感动.png",
+      "url2": "assets/images/gz/感动.gif",
+    },
+    {
+      'name': '我很快乐',
+      "url1": "assets/images/gz/我很快乐.png",
+      "url2": "assets/images/gz/我很快乐.gif",
+    },
+    {
+      'name': '我想静静',
+      "url1": "assets/images/gz/我想静静.png",
+      "url2": "assets/images/gz/我想静静.gif",
+    },
+    {
+      'name': '打篮球',
+      "url1": "assets/images/gz/打篮球.png",
+      "url2": "assets/images/gz/打篮球.gif",
+    },
+    {
+      'name': '收到',
+      "url1": "assets/images/gz/收到.png",
+      "url2": "assets/images/gz/收到.gif",
+    },
+    {
+      'name': '无语',
+      "url1": "assets/images/gz/无语.png",
+      "url2": "assets/images/gz/无语.gif",
+    },
+    {
+      'name': '求求你',
+      "url1": "assets/images/gz/求求你.png",
+      "url2": "assets/images/gz/求求你.gif",
+    },
+    {
+      'name': '滚来滚去',
+      "url1": "assets/images/gz/滚来滚去.png",
+      "url2": "assets/images/gz/滚来滚去.gif",
+    },
+    {
+      'name': '点头',
+      "url1": "assets/images/gz/点头.png",
+      "url2": "assets/images/gz/点头.gif",
+    },
+    {
+      'name': '点赞',
+      "url1": "assets/images/gz/点赞.png",
+      "url2": "assets/images/gz/点赞.gif",
+    },
+    {
+      'name': '爱心',
+      "url1": "assets/images/gz/爱心.png",
+      "url2": "assets/images/gz/爱心.gif",
+    },
+    {
+      'name': '瞅你咋地',
+      "url1": "assets/images/gz/瞅你咋地.png",
+      "url2": "assets/images/gz/瞅你咋地.gif",
+    },
+    {
+      'name': '答应',
+      "url1": "assets/images/gz/答应.png",
+      "url2": "assets/images/gz/答应.gif",
+    },
+    {
+      'name': '表示同意',
+      "url1": "assets/images/gz/表示同意.png",
+      "url2": "assets/images/gz/表示同意.gif",
+    },
+    {
+      'name': '辛苦了',
+      "url1": "assets/images/gz/辛苦了.png",
+      "url2": "assets/images/gz/辛苦了.gif",
+    },
+    {
+      'name': '阿巴阿巴',
+      "url1": "assets/images/gz/阿巴阿巴.png",
+      "url2": "assets/images/gz/阿巴阿巴.gif",
+    },
+    {
+      'name': '难受',
+      "url1": "assets/images/gz/难受.png",
+      "url2": "assets/images/gz/难受.gif",
+    },
+    {
+      'name': '震惊',
+      "url1": "assets/images/gz/震惊.png",
+      "url2": "assets/images/gz/震惊.gif",
+    },
+  ];
+
   @override
   void initState() {
     // TODO: implement initState
@@ -473,13 +645,16 @@ class _APageState extends State<RoomBQPage> {
       backgroundColor: Colors.transparent,
       body: Column(
         children: [
-          Expanded(child: GestureDetector(
-            onTap: ((){
-              if(MyUtils.checkClick()) {
+          Expanded(
+              child: GestureDetector(
+            onTap: (() {
+              if (MyUtils.checkClick()) {
                 Navigator.pop(context);
               }
             }),
-            child: Container(color: Colors.transparent,),
+            child: Container(
+              color: Colors.transparent,
+            ),
           )),
           Container(
             height: 500.h,
@@ -507,10 +682,11 @@ class _APageState extends State<RoomBQPage> {
                                 height: 50.h,
                                 decoration: BoxDecoration(
                                   //背景
-                                  color: typeB == 0 ? MyColors.d8 : Colors.white,
+                                  color:
+                                      typeB == 0 ? MyColors.d8 : Colors.white,
                                   //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                  borderRadius:
-                                  const BorderRadius.all(Radius.circular(10)),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10)),
                                 ),
                               ),
                               WidgetUtils.showImages(
@@ -533,10 +709,11 @@ class _APageState extends State<RoomBQPage> {
                                 height: 50.h,
                                 decoration: BoxDecoration(
                                   //背景
-                                  color: typeB == 1 ? MyColors.d8 : Colors.white,
+                                  color:
+                                      typeB == 1 ? MyColors.d8 : Colors.white,
                                   //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                  borderRadius:
-                                  const BorderRadius.all(Radius.circular(10)),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10)),
                                 ),
                               ),
                               WidgetUtils.showImagesFill(
@@ -559,10 +736,11 @@ class _APageState extends State<RoomBQPage> {
                                 height: 50.h,
                                 decoration: BoxDecoration(
                                   //背景
-                                  color: typeB == 2 ? MyColors.d8 : Colors.white,
+                                  color:
+                                      typeB == 2 ? MyColors.d8 : Colors.white,
                                   //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                  borderRadius:
-                                  const BorderRadius.all(Radius.circular(10)),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10)),
                                 ),
                               ),
                               WidgetUtils.showImages(
@@ -570,13 +748,47 @@ class _APageState extends State<RoomBQPage> {
                             ],
                           ),
                         ),
+                        WidgetUtils.commonSizedBox(0, 20.w),
+                        GestureDetector(
+                          onTap: (() {
+                            setState(() {
+                              typeB = 3;
+                            });
+                          }),
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Container(
+                                width: 50.h,
+                                height: 50.h,
+                                decoration: BoxDecoration(
+                                  //背景
+                                  color:
+                                      typeB == 3 ? MyColors.d8 : Colors.white,
+                                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10)),
+                                ),
+                              ),
+                              WidgetUtils.showImages(
+                                  'assets/images/gz/zuolian.png', 40.h, 40.h)
+                            ],
+                          ),
+                        ),
                         const Spacer(),
                         GestureDetector(
-                          onTap: ((){
+                          onTap: (() {
                             Navigator.pop(context);
-                            MyUtils.goTransparentPage(context, RoomSendInfoPage(info: '',));
+                            MyUtils.goTransparentPage(
+                                context,
+                                RoomSendInfoPage(
+                                  info: '',
+                                ));
                           }),
-                          child: WidgetUtils.showImages('assets/images/chat_jianpan.png', ScreenUtil().setHeight(50), ScreenUtil().setHeight(50)),
+                          child: WidgetUtils.showImages(
+                              'assets/images/chat_jianpan.png',
+                              ScreenUtil().setHeight(50),
+                              ScreenUtil().setHeight(50)),
                         ),
                         WidgetUtils.commonSizedBox(0, 20.h),
                       ],
@@ -601,118 +813,188 @@ class _APageState extends State<RoomBQPage> {
                   child: SingleChildScrollView(
                     child: typeB == 0
                         ? Wrap(
-                      spacing: 10.h,
-                      runSpacing: 20.h,
-                      children: [
-                        for (int i = 0; i < list1.length; i++)
-                          GestureDetector(
-                            onTap: ((){
-                              if(MyUtils.checkClick()) {
-                                // 通知厅内我发表情了
-                                // 这里需要判断0是爆灯1是水果机2是剪刀石头布3是筛子
-                                if (i == 0) {
-                                  eventBus.fire(
-                                      SubmitButtonBack(title: '爆灯'));
-                                } else if (i == 1) {
-                                  // 生成0-13的随机数
-                                  var a = Random().nextInt(14);
-                                  var b = Random().nextInt(14);
-                                  var c = Random().nextInt(14);
-                                  eventBus.fire(SendRoomImgBack(
-                                      info: '${shuiguoji[a]}、${shuiguoji[b]}、${shuiguoji[c]},${shuiguoji2[a]}、${shuiguoji2[b]}、${shuiguoji2[c]}'));
-                                } else if (i == 2) {
-                                  // 生成0-9的随机数
-                                  var a = Random().nextInt(10);
-                                  eventBus.fire(SendRoomImgBack(
-                                      info: '${shuiguoji[a]},${shuiguoji2[a]}'));
-                                } else if (i == 3) {
-                                  // 生成0-2的随机数
-                                  var a = Random().nextInt(3);
-                                  eventBus.fire(SendRoomImgBack(
-                                      info: '${jiandao[a]},${jiandao2[a]}'));
-                                } else if (i == 4) {
-                                  // 生成0-5的随机数
-                                  var a = Random().nextInt(6);
-                                  eventBus.fire(SendRoomImgBack(
-                                      info: '${shaizi[a]},${shaizi2[a]}'));
-                                } else {
-                                  eventBus.fire(
-                                      SendRoomImgBack(info: list1[i]));
-                                }
-                                Navigator.pop(context);
-                              }
-                            }),
-                            child: Container(
-                              margin: EdgeInsets.only(left: 15.h),
-                              child:
-                              WidgetUtils.showImages(list1[i], 60.h, 60.h),
-                            ),
+                            spacing: 10.h,
+                            runSpacing: 20.h,
+                            children: [
+                              for (int i = 0; i < list1.length; i++)
+                                GestureDetector(
+                                  onTap: (() {
+                                    if (MyUtils.checkClick()) {
+                                      // 通知厅内我发表情了
+                                      // 这里需要判断0是爆灯1是水果机2是剪刀石头布3是筛子
+                                      if (i == 0) {
+                                        eventBus.fire(
+                                            SubmitButtonBack(title: '爆灯'));
+                                      } else if (i == 1) {
+                                        // 生成0-13的随机数
+                                        var a = Random().nextInt(14);
+                                        var b = Random().nextInt(14);
+                                        var c = Random().nextInt(14);
+                                        eventBus.fire(SendRoomImgBack(
+                                            info:
+                                                '${shuiguoji[a]}、${shuiguoji[b]}、${shuiguoji[c]},${shuiguoji2[a]}、${shuiguoji2[b]}、${shuiguoji2[c]}'));
+                                      } else if (i == 2) {
+                                        // 生成0-9的随机数
+                                        var a = Random().nextInt(10);
+                                        eventBus.fire(SendRoomImgBack(
+                                            info:
+                                                '${shuiguoji[a]},${shuiguoji2[a]}'));
+                                      } else if (i == 3) {
+                                        // 生成0-2的随机数
+                                        var a = Random().nextInt(3);
+                                        eventBus.fire(SendRoomImgBack(
+                                            info:
+                                                '${jiandao[a]},${jiandao2[a]}'));
+                                      } else if (i == 4) {
+                                        // 生成0-5的随机数
+                                        var a = Random().nextInt(6);
+                                        eventBus.fire(SendRoomImgBack(
+                                            info:
+                                                '${shaizi[a]},${shaizi2[a]}'));
+                                      } else {
+                                        eventBus.fire(
+                                            SendRoomImgBack(info: list1[i]));
+                                      }
+                                      Navigator.pop(context);
+                                    }
+                                  }),
+                                  child: Container(
+                                    margin: EdgeInsets.only(left: 15.h),
+                                    child: WidgetUtils.showImages(
+                                        list1[i], 60.h, 60.h),
+                                  ),
+                                )
+                            ],
                           )
-                      ],
-                    )
                         : typeB == 1
-                        ? Wrap(
-                      spacing: 15.h,
-                      runSpacing: 20.h,
-                      children: [
-                        for (int i = 0; i < list2.length; i++)
-                          GestureDetector(
-                            onTap: ((){
-                              eventBus.fire(SendRoomImgBack(info: list2[i]['url2']));
-                              Navigator.pop(context);
-                            }),
-                            child: Container(
-                              height: 120.h,
-                              width: 100.h,
-                              margin: EdgeInsets.only(left: 8.h),
-                              alignment: Alignment.center,
-                              child: Column(
+                            ? Wrap(
+                                spacing: 15.h,
+                                runSpacing: 20.h,
                                 children: [
-                                  WidgetUtils.showImages(
-                                      list2[i]['url1'], 90.h, 111.h),
-                                  WidgetUtils.onlyTextCenter(
-                                      list2[i]['name'],
-                                      StyleUtils.getCommonTextStyle(
-                                          color: Colors.black,
-                                          fontSize: 18.sp))
+                                  for (int i = 0; i < list2.length; i++)
+                                    GestureDetector(
+                                      onTap: (() {
+                                        eventBus.fire(SendRoomImgBack(
+                                            info: list2[i]['url2']));
+                                        Navigator.pop(context);
+                                      }),
+                                      child: Container(
+                                        height: 120.h,
+                                        width: 100.h,
+                                        margin: EdgeInsets.only(left: 8.h),
+                                        alignment: Alignment.center,
+                                        child: Column(
+                                          children: [
+                                            WidgetUtils.showImages(
+                                                list2[i]['url1'], 90.h, 111.h),
+                                            WidgetUtils.onlyTextCenter(
+                                                list2[i]['name'],
+                                                StyleUtils.getCommonTextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 18.sp))
+                                          ],
+                                        ),
+                                      ),
+                                    )
                                 ],
-                              ),
-                            ),
-                          )
-                      ],
-                    )
-                        : Wrap(
-                      spacing: 15.h,
-                      runSpacing: 20.h,
-                      children: [
-                        for (int i = 0; i < list3.length; i++)
-                          GestureDetector(
-                            onTap: ((){
-                              eventBus.fire(SendRoomImgBack(info: list3[i]['url2']));
-                              Navigator.pop(context);
-                            }),
-                            child: Container(
-                              height: 120.h,
-                              width: 100.h,
-                              margin: EdgeInsets.only(left: 8.h),
-                              alignment: Alignment.center,
-                              child: Column(
-                                children: [
-                                  WidgetUtils.showImages(
-                                      list3[i]['url1'], 90.h, 111.h),
-                                  WidgetUtils.onlyTextCenter(
-                                      list3[i]['name'],
-                                      StyleUtils.getCommonTextStyle(
-                                          color: Colors.black,
-                                          fontSize: 18.sp))
-                                ],
-                              ),
-                            ),
-                          )
-                      ],
-                    ),
+                              )
+                            : typeB == 2
+                                ? Wrap(
+                                    spacing: 15.h,
+                                    runSpacing: 20.h,
+                                    children: [
+                                      for (int i = 0; i < list3.length; i++)
+                                        GestureDetector(
+                                          onTap: (() {
+                                            eventBus.fire(SendRoomImgBack(
+                                                info: list3[i]['url2']));
+                                            Navigator.pop(context);
+                                          }),
+                                          child: Container(
+                                            height: 120.h,
+                                            width: 100.h,
+                                            margin: EdgeInsets.only(left: 8.h),
+                                            alignment: Alignment.center,
+                                            child: Column(
+                                              children: [
+                                                WidgetUtils.showImages(
+                                                    list3[i]['url1'],
+                                                    90.h,
+                                                    111.h),
+                                                WidgetUtils.onlyTextCenter(
+                                                    list3[i]['name'],
+                                                    StyleUtils
+                                                        .getCommonTextStyle(
+                                                            color: Colors.black,
+                                                            fontSize: 18.sp))
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                    ],
+                                  )
+                                : Wrap(
+                                    spacing: 15.h,
+                                    runSpacing: 20.h,
+                                    children: [
+                                      for (int i = 0; i < list4.length; i++)
+                                        GestureDetector(
+                                          onTap: (() {
+                                            eventBus.fire(SendRoomImgBack(
+                                                info: list4[i]['url2']));
+                                            Navigator.pop(context);
+                                          }),
+                                          child: Stack(
+                                            alignment: Alignment.center,
+                                            children: [
+                                              Container(
+                                                height: 120.h,
+                                                width: 100.h,
+                                                margin: EdgeInsets.only(left: 8.h),
+                                                alignment: Alignment.center,
+                                                child: Column(
+                                                  children: [
+                                                    WidgetUtils.showImages(
+                                                        list4[i]['url1'],
+                                                        90.h,
+                                                        111.h),
+                                                    WidgetUtils.onlyTextCenter(
+                                                        list4[i]['name'],
+                                                        StyleUtils
+                                                            .getCommonTextStyle(
+                                                            color: Colors.black,
+                                                            fontSize: 18.sp))
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        )
+                                    ],
+                                  ),
                   ),
                 ),
+                typeB == 3 ? Container(
+                  margin: EdgeInsets.only(top: 130.h),
+                  height: double.infinity,
+                  width: double.infinity,
+                  color: Colors.black54,
+                  alignment: Alignment.center,
+                  child: Column(
+                    children: [
+                      const Spacer(),
+                      WidgetUtils.showImages('assets/images/gz/bq_suo.png', 50.h, 50.h),
+                      WidgetUtils.commonSizedBox(10.h, 0),
+                      WidgetUtils.onlyTextCenter(
+                          '达成贵族等级解锁',
+                          StyleUtils
+                              .getCommonTextStyle(
+                              color: Colors.white,
+                              fontSize: 26.sp)),
+                      const Spacer(),
+                    ],
+                  ),
+                ) : const Text('')
               ],
             ),
           )

@@ -66,18 +66,24 @@ class _DiwangPageState extends State<DiwangPage>  with TickerProviderStateMixin 
                       ScreenUtil().setHeight(271),
                       ScreenUtil().setHeight(266)),
                 ),
-                WidgetUtils.showImages('assets/images/tequan_diwang.png',
+                WidgetUtils.showImages('assets/images/tequan_shenwang.png',
                     ScreenUtil().setHeight(223), ScreenUtil().setHeight(209)),
               ],
             ),
             const Expanded(child: Text('')),
-            WidgetUtils.commonSizedBox(0, 26),
+            GestureDetector(
+              onTap: ((){
+                eventBus.fire(GuizuButtonBack(index: 6, title: '右'));
+              }),
+              child: WidgetUtils.showImages('assets/images/guizu_right.png',
+                  ScreenUtil().setHeight(52), ScreenUtil().setHeight(26)),
+            ),
             WidgetUtils.commonSizedBox(0, 15),
           ],
         ),
         WidgetUtils.commonSizedBox(20, 15),
         WidgetUtils.onlyTextCenter(
-            '帝王',
+            '神王',
             StyleUtils.getCommonTextStyle(
                 color: Colors.white,
                 fontSize: ScreenUtil().setSp(33),
