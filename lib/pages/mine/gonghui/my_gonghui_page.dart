@@ -45,7 +45,8 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
       kefuUid = '',
       ratio = '',
       guildID = '',
-      notice = '';
+      notice = '',
+      roomLength = '';
   List<StreamerList> listPeople = [];
   List<RoomList> listRoom = [];
   int qianyue = 0;
@@ -279,7 +280,7 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
                           ),
                           WidgetUtils.commonSizedBox(30, 20),
                           WidgetUtils.onlyText(
-                              '厅房间(${listRoom.length})',
+                              '厅房间($roomLength)',
                               StyleUtils.getCommonTextStyle(
                                 color: MyColors.g2,
                                 fontSize: ScreenUtil().setSp(29),
@@ -516,6 +517,7 @@ class _MyGonghuiPageState extends State<MyGonghuiPage> {
             if (bean.data!.roomList!.isNotEmpty) {
               listRoom = bean.data!.roomList!;
             }
+            roomLength = bean.data!.roomTotal.toString();
             kefUavatar = bean.data!.kefUavatar!;
             kefuUid = bean.data!.kefuUid!.toString();
             identity = bean.data!.identity!;

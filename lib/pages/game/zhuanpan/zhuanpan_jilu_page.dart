@@ -178,7 +178,7 @@ class _ZhuanPanJiLuPageState extends State<ZhuanPanJiLuPage> {
   Future<void> doPostGetMineRouletteWinList() async {
     Map<String, dynamic> params = <String, dynamic>{
       'game_id': '2', // 1魔方2转盘
-      'price': widget.type == 0 ? '100' : '1000',
+      'price': widget.type == 0 ? '100' : '500',
       'page': page,
       'pageSize': MyConfig.pageSize,
     };

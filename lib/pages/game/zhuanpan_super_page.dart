@@ -52,7 +52,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
   // 是否关闭了音效
   bool isClose = false;
   // 转几次 要花费多少
-  int cishu = 1, feiyong = 1000;
+  int cishu = 1, feiyong = 500;
   var listen, listenZDY, listen2;
   // 展示值
   int zhanshizhi = 0;
@@ -597,7 +597,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                 setState(() {
                   isCheck = 1;
                   cishu = 1;
-                  feiyong = 1000;
+                  feiyong = 500;
                 });
               }),
               child: Container(
@@ -621,7 +621,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                 setState(() {
                   isCheck = 2;
                   cishu = 5;
-                  feiyong = 5000;
+                  feiyong = 2500;
                 });
               }),
               child: Container(
@@ -645,7 +645,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                 setState(() {
                   isCheck = 3;
                   cishu = 10;
-                  feiyong = 10000;
+                  feiyong = 5000;
                 });
               }),
               child: Container(
@@ -683,7 +683,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
       'number': number, //数量
       'room_id': widget.roomId, //房间id
       'game_id': '2', //1魔方 2转盘
-      'price': '1000'
+      'price': '500'
     };
     try {
       playRouletteBean bean = await DataUtils.postPlayRoulette(params);

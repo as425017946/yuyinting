@@ -2480,7 +2480,7 @@ class _RoomPageState extends State<RoomPage>
               map['uid'] = event.map!['uid'];
               map['type'] = '9';
               // 发送的信息
-              if(cb.gameName == '金星魔方'){
+              if(cb.gameName == '水星魔方'){
                 map['content'] = '${cb.nickName};在;黄金幻宝;中赢得;$info';
               }else if(cb.gameName == '金星魔方'){
                 map['content'] = '${cb.nickName};在;钻石幻宝;中赢得;$info';
@@ -4950,6 +4950,10 @@ class _RoomPageState extends State<RoomPage>
               // 座驾名称
               map['mount_name'] = bean.data!.userInfo!.carDressName!;
 
+
+              LogE('房间信息== ${bean.data!.userInfo!.carDressGifImg!}');
+              LogE('房间信息== ${bean.data!.userInfo!.carDressName!}');
+
               /// 判断如果装扮了座驾，需要播放
               if (bean.data!.userInfo!.carDressGifImg!.isNotEmpty) {
                 if (isDevices == 'android') {
@@ -6091,11 +6095,13 @@ class _RoomPageState extends State<RoomPage>
     String queryM =
         'select * from roomGiftTable order by id desc';
     List<Map<String, dynamic>>? result = await db.rawQuery(queryM);
-    setState(() {
-      giftName = result[0]['giftName'];
-      nickName = result[0]['nickeName'];
-      otherNickName = result[0]['otherNickName'];
-    });
+    if(result.isNotEmpty){
+      setState(() {
+        giftName = result[0]['giftName'];
+        nickName = result[0]['nickeName'];
+        otherNickName = result[0]['otherNickName'];
+      });
+    }
   }
 
   /// 爆灯
