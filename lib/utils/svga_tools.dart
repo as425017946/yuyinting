@@ -25,7 +25,7 @@ extension SvgaTools on MovieEntity {
               text: name, 
               style: const TextStyle(fontSize: 37, color: Colors.yellow),
               children: const [
-                 TextSpan(text: ' 进来了', style: TextStyle(fontSize: 30, color: Colors.white)),
+                 TextSpan(text: ' 进入聊天室', style: TextStyle(fontSize: 30, color: Colors.white)),
               ]
             ),
             textDirection: TextDirection.ltr,
@@ -45,7 +45,7 @@ extension SvgaTools on MovieEntity {
         }, '01');
         dynamicItem.setDynamicDrawer((canvas, frameIndex) {
           final textPainter = TextPainter(
-            text: const TextSpan(text: '进来了', style: TextStyle(fontSize: 20, color: Colors.white)),
+            text: const TextSpan(text: '进入聊天室', style: TextStyle(fontSize: 20, color: Colors.white)),
             textDirection: TextDirection.ltr,
             maxLines: 1,
           )..layout(maxWidth: 192);

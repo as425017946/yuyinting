@@ -4557,7 +4557,7 @@ class _RoomPageState extends State<RoomPage>
                                               children: [
                                                 const Spacer(),
                                                 WidgetUtils.onlyText(listJoinRoom[0]['nickNanme'], StyleUtils.getCommonTextStyle(color: Colors.yellow,fontSize: 22.sp)),
-                                                WidgetUtils.onlyText('进来了', StyleUtils.getCommonTextStyle(color: Colors.white,fontSize: 22.sp)),
+                                                WidgetUtils.onlyText('进入聊天室', StyleUtils.getCommonTextStyle(color: Colors.white,fontSize: 22.sp)),
                                                 const Spacer(),
                                               ],
                                             ),
