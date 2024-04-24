@@ -144,7 +144,7 @@ class HappyWallPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _head(sp.getString('user_headimg').toString(), '骄阳', 1),
+              _head(sp.getString('user_headimg').toString(), '骄阳骄阳骄阳骄阳骄阳骄阳骄阳骄阳骄阳', 1),
               SizedBox(width: 189.w),
               _head(sp.getString('user_headimg').toString(), '骄阳', 0),
             ],
@@ -166,12 +166,17 @@ class HappyWallPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 168.w),
+                child: Text(
                 name,
                 style: TextStyle(
                   color: const Color(0xFF181926),
                   fontSize: 21.sp,
                 ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
               ),
               SizedBox(width: 8.w),
               UserGenderCircle(size: 24.w, gender: gender),
