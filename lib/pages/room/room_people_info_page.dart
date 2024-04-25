@@ -112,7 +112,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
           ),
           SizedBox(
             height: (sp.getString('role').toString() == 'user' ||
-                sp.getString('role').toString() == 'streamer')
+                    sp.getString('role').toString() == 'streamer')
                 ? ScreenUtil().setHeight(450)
                 : ScreenUtil().setHeight(530),
             width: double.infinity,
@@ -121,7 +121,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
               children: [
                 Container(
                   height: (sp.getString('role').toString() == 'user' ||
-                      sp.getString('role').toString() == 'streamer')
+                          sp.getString('role').toString() == 'streamer')
                       ? ScreenUtil().setHeight(390)
                       : ScreenUtil().setHeight(470),
                   width: double.infinity,
@@ -139,7 +139,8 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                       WidgetUtils.commonSizedBox(10, 0),
 
                       /// @某人
-                      (sp.getString('role').toString() == 'leader' || sp.getString('role').toString() == 'president')
+                      (sp.getString('role').toString() == 'leader' ||
+                              sp.getString('role').toString() == 'president')
                           ? Row(
                               children: [
                                 WidgetUtils.commonSizedBox(0, 20),
@@ -226,7 +227,6 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                           ScreenUtil().setHeight(48)),
                                     ),
                                     const Expanded(child: Text('')),
-                                    WidgetUtils.commonSizedBox(0, 20),
                                     GestureDetector(
                                       onTap: (() {
                                         setState(() {
@@ -244,7 +244,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                             ScreenUtil().setHeight(33)),
                                       ),
                                     ),
-                                    WidgetUtils.commonSizedBox(0, 20),
+                                    // WidgetUtils.commonSizedBox(0, 20.w),
                                   ],
                                 )
                               : Row(
@@ -303,8 +303,8 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                           sex == 1
                                               ? 'assets/images/room_nan.png'
                                               : 'assets/images/room_nv.png',
-                                          31*1.25.w,
-                                          29*1.25.w),
+                                          31 * 1.25.w,
+                                          29 * 1.25.w),
                                     ],
                                   ),
                                   WidgetUtils.commonSizedBox(10, 0),
@@ -314,8 +314,9 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                       // 只有不是新贵或者新锐的时候展示萌新
                                       (isNew == 1 && isNewNoble == 0)
                                           ? WidgetUtils.showImagesFill(
-                                          'assets/images/dj/room_role_common.png',
-                                          45.w, 85.w)
+                                              'assets/images/dj/room_role_common.png',
+                                              45.w,
+                                              85.w)
                                           : const Text(''),
                                       (isNew == 1 && isNewNoble == 0)
                                           ? WidgetUtils.commonSizedBox(0, 5)
@@ -323,32 +324,49 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                       // 展示新贵或者新锐图标
                                       isNewNoble == 1
                                           ? WidgetUtils.showImages(
-                                          'assets/images/dj/room_rui.png', 35.w, 85.w)
+                                              'assets/images/dj/room_rui.png',
+                                              35.w,
+                                              85.w)
                                           : isNewNoble == 2
-                                          ? WidgetUtils.showImages(
-                                          'assets/images/dj/room_gui.png',
-                                          35.w, 85.w)
-                                          :  isNewNoble == 3 ? WidgetUtils.showImages(
-                                          'assets/images/dj/room_qc.png',
-                                          35.w, 85.w) : const Text(''),
+                                              ? WidgetUtils.showImages(
+                                                  'assets/images/dj/room_gui.png',
+                                                  35.w,
+                                                  85.w)
+                                              : isNewNoble == 3
+                                                  ? WidgetUtils.showImages(
+                                                      'assets/images/dj/room_qc.png',
+                                                      35.w,
+                                                      85.w)
+                                                  : const Text(''),
                                       isNewNoble != 0
                                           ? WidgetUtils.commonSizedBox(0, 5)
                                           : const Text(''),
                                       isPretty == 1
                                           ? WidgetUtils.showImages(
-                                          'assets/images/dj/lianghao.png', 30.w, 30.w)
+                                              'assets/images/dj/lianghao.png',
+                                              30.w,
+                                              30.w)
                                           : const Text(''),
-                                      isPretty == 1 ? WidgetUtils.commonSizedBox(0, 5) : WidgetUtils.commonSizedBox(0, 0),
+                                      isPretty == 1
+                                          ? WidgetUtils.commonSizedBox(0, 5)
+                                          : WidgetUtils.commonSizedBox(0, 0),
                                       // 用户等级
                                       if (level > 0)
-                                        CharmLevelFlag(level: level, width: 75.w, height: 30.w),
+                                        CharmLevelFlag(
+                                            level: level,
+                                            width: 75.w,
+                                            height: 30.w),
                                       WidgetUtils.commonSizedBox(0, 10.w),
                                       // 财富等级
                                       if (grLevel > 0)
-                                        WealthLevelFlag(level: grLevel, width: 75.w, height: 30.w),
+                                        WealthLevelFlag(
+                                            level: grLevel,
+                                            width: 75.w,
+                                            height: 30.w),
                                     ],
                                   ),
                                   WidgetUtils.commonSizedBox(10, 0),
+
                                   /// id 地区
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -370,7 +388,8 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                             Clipboard.setData(ClipboardData(
                                               text: userNumber,
                                             ));
-                                            MyToastUtils.showToastBottom('已成功复制到剪切板');
+                                            MyToastUtils.showToastBottom(
+                                                '已成功复制到剪切板');
                                           }),
                                           child: WidgetUtils.showImages(
                                               'assets/images/room_fuzhu.png',
@@ -387,7 +406,8 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                           city,
                                           StyleUtils.getCommonTextStyle(
                                               color: MyColors.roomTCWZ2,
-                                              fontSize: ScreenUtil().setSp(25))),
+                                              fontSize:
+                                                  ScreenUtil().setSp(25))),
                                     ],
                                   ),
                                   WidgetUtils.commonSizedBox(10, 0),
@@ -395,9 +415,9 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                               ),
                             ),
                           ),
-
                           WidgetUtils.showImages(
-                              'assets/images/tequan_chuanshuo.png', 120.h,
+                              'assets/images/tequan_chuanshuo.png',
+                              120.h,
                               120.h),
                           WidgetUtils.commonSizedBox(0, 20.w),
                         ],
@@ -426,8 +446,10 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                       /// 上麦下麦
                       isMai
                           ? (sp.getString('role').toString() == 'leader' ||
-                                  sp.getString('role').toString() == 'adminer' ||
-                          sp.getString('role').toString() == 'president')
+                                  sp.getString('role').toString() ==
+                                      'adminer' ||
+                                  sp.getString('role').toString() ==
+                                      'president')
                               ? Row(
                                   children: [
                                     WidgetUtils.commonSizedBox(0, 20),
@@ -722,7 +744,6 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                         ),
                       )
                     : const Text(''),
-
                 GestureDetector(
                   onTap: (() {
                     if (MyUtils.checkClick()) {
@@ -735,7 +756,8 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                         MyUtils.goTransparentRFPage(
                             context,
                             PeopleInfoPage(
-                              otherId: widget.uid,title: '小主页',
+                              otherId: widget.uid,
+                              title: '小主页',
                             ));
                       }
                     }
@@ -769,6 +791,10 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                     ),
                   ),
                 ),
+                // Positioned(
+                //     top: -40.h,
+                //     child: WidgetUtils.showImages(
+                //         'assets/images/a01.png', 260.h, 520.w)),
               ],
             ),
           )

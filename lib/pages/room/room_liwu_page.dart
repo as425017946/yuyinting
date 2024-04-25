@@ -67,7 +67,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
     {
       'name': '青铜礼盒',
       "url": "assets/images/room_lh_qt.png",
-      "price": "22",
+      "price": "33",
     },
     {
       'name': '白银礼盒',

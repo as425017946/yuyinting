@@ -178,7 +178,7 @@ class _HuiZhangPeoplePageState extends State<HuiZhangPeoplePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           WidgetUtils.onlyText(
-                              'ID:${list[i].id.toString()}',
+                              'ID:${list[i].number.toString()}',
                               StyleUtils.getCommonTextStyle(
                                   color: Colors.black, fontSize: 14)),
                         ],

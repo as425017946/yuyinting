@@ -74,7 +74,7 @@ class _SwiperPageState extends State<SwiperPage> {
               return SizedBox(
                   width: double.infinity,
                   child:
-                      (widget.imgList[index].contains('com.leimu.yuyinting') ||
+                      (widget.imgList[index].contains('com.littledog.yyt') ||
                               widget.imgList[index].contains('storage'))
                           ? Image.file(
                               File(widget.imgList[index].toString()),
@@ -116,7 +116,7 @@ class _SwiperPageState extends State<SwiperPage> {
   void _saveImg() {
     LogE('保存图片: $current');
     final str = widget.imgList[current].toString();
-    if (str.contains('com.leimu.yuyinting') || str.contains('storage')) {
+    if (str.contains('com.littledog.yyt') || str.contains('storage')) {
       MyUtils.saveLocalImageToGallery(str);
     } else {
       MyUtils.saveNetworkImageToGallery(str);

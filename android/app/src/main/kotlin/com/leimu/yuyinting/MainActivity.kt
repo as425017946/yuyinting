@@ -1,4 +1,4 @@
-package com.leimu.yuyinting
+package com.littledog.yyt
 
 import io.flutter.embedding.android.FlutterActivity
 

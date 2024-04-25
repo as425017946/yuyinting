@@ -163,8 +163,8 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                             alignment: Alignment.topCenter,
                             children: [
                               // _bg(),
-                              _content(),
                               _head(),
+                              _content(),
                               // _nav(),
                             ],
                           ),
