@@ -810,7 +810,7 @@ class _PaiduiPageState extends State<PaiduiPage>
                   ///顶部排行
                   _rmtj(),
 
-                  // HappyWallBanner(),
+                  HappyWallBanner(),
 
                   WidgetUtils.commonSizedBox(10, 0),
 

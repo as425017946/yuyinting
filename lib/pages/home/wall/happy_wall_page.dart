@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
 import '../../../main.dart';
 import '../../../utils/getx_tools.dart';
 import '../../../utils/loading.dart';
+import '../../../utils/my_utils.dart';
+import '../../../utils/widget_utils.dart';
 import 'happy_wall_model.dart';
 
 class HappyWallBanner extends StatelessWidget {
@@ -155,40 +158,88 @@ class HappyWallPage extends StatelessWidget {
     );
   }
 
+  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  void _onRefresh() async {
+    await c.doPostHappinessWall();
+    _refreshController.refreshCompleted();
+  }
   Widget _list() {
-    return ListView.builder(
-      padding: EdgeInsets.symmetric(vertical: 10.w),
-      itemBuilder: _builder,
-      itemCount: 10,
-    );
+    return Obx(() {
+      if (c.itemCount == 0) {
+        return const Text('');
+      }
+      return SmartRefresher(
+        controller: _refreshController,
+        enablePullDown: true,
+        onRefresh: _onRefresh,
+        header: MyUtils.myHeader(),
+        child: ListView.builder(
+          padding: EdgeInsets.symmetric(vertical: 10.w),
+          itemBuilder: _builder,
+          itemCount: c.itemCount,
+        ),
+      );
+    });
   }
 
   Widget _builder(BuildContext context, int index) {
     final img = 'assets/images/happy_wall_box_${index%2 + 1}.png';
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 30.w),
-      height: 404.w,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage(img),
-          fit: BoxFit.fill,
+    final item = c.listItem(index);
+    return GestureDetector(
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 30.w),
+        height: 404.w,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(img),
+            fit: BoxFit.fill,
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                _head(item.from_avatar, item.from_nickname, item.from_gender),
+                SizedBox(
+                  width: 189.w,
+                  child: _gift(item.gift_img, item.gift_name, item.number),
+                ),
+                _head(item.to_avatar, item.to_nickname, item.to_gender),
+              ],
+            ),
+            SizedBox(height: 30.w),
+            _text(item),
+          ],
         ),
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _head(sp.getString('user_headimg').toString(), '骄阳骄阳骄阳骄阳骄阳骄阳骄阳骄阳骄阳', 1),
-              SizedBox(width: 189.w),
-              _head(sp.getString('user_headimg').toString(), '骄阳', 0),
-            ],
+    );
+  }
+
+  Widget _gift(String img, String name, int num) {
+    return Column(
+      children: [
+        WidgetUtils.showImagesNet(img, 104.w, 104.w),
+        Padding(
+          padding: EdgeInsets.all(10.w),
+          child: FittedBox(
+            fit: BoxFit.fitWidth,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minWidth: 169.w),
+              child: Text(
+                '$name x$num',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 21.sp,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
           ),
-          SizedBox(height: 30.w),
-          _text(),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -223,13 +274,13 @@ class HappyWallPage extends StatelessWidget {
     );
   }
 
-  Widget _text() {
+  Widget _text(HapplyWallItem item) {
     return Container(
       height: 30.w,
       margin: EdgeInsets.fromLTRB(60.w, 0, 60.w, 60.w),
       child: Text.rich(
         TextSpan(
-          text: '2024-04-15 送出了',
+          text: '${item.add_time} 送出了',
           style: TextStyle(
             color: Colors.black,
             fontFamily: 'Arial',
@@ -237,7 +288,7 @@ class HappyWallPage extends StatelessWidget {
           ),
           children: [
             TextSpan(
-              text: '锡纸城堡',
+              text: '${item.gift_name}x${item.number}',
               style: TextStyle(
                 color: const Color(0xFF8B2BE7),
                 fontFamily: 'Arial',

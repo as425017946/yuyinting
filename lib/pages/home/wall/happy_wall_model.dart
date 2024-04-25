@@ -14,8 +14,10 @@ class HapplyWallController extends GetxController with GetAntiCombo {
   final _item = HapplyWallItem.empty().obs;
   HapplyWallItem? get item => _item.value;
   bool get isShow => !_item.value.isNull;
-  List<HapplyWallItem> _list = [];
-  List<HapplyWallItem> _listData = [];
+  final List<HapplyWallItem> _list = [];
+  final _listData = List<HapplyWallItem>.empty().obs;
+  int get itemCount => _listData.length;
+  HapplyWallItem listItem(int index) => _listData[index];
 
   void _loop() async {
     if (_list.isEmpty) { 
@@ -35,7 +37,7 @@ class HapplyWallController extends GetxController with GetAntiCombo {
   bool _isRun = false;
   bool isFirstRun = true;
   void _runLoop() {
-    if (_list.isEmpty || _isRun) {
+    if (_listData.isEmpty || _isRun) {
       return;
     }
     _isRun = true;
@@ -43,7 +45,7 @@ class HapplyWallController extends GetxController with GetAntiCombo {
     _loop();
   }
 
-  bool _checkList(List<HapplyWallItem> l1, List<HapplyWallItem> l2) {
+  bool _checkList(List<HapplyWallItem> l1, RxList<HapplyWallItem> l2) {
     if (l1.length != l2.length) {
       return false;
     }
@@ -62,9 +64,8 @@ class HapplyWallController extends GetxController with GetAntiCombo {
         case MyHttpConfig.successCode:
           final ls = bean.data?.ls ?? [];
           if (!_checkList(ls, _listData)) {
-            _listData.clear();
-            _listData.addAll(ls);
-            _list = ls;
+            _listData(ls);
+            _list.clear();
             _runLoop();
           }
           break;
