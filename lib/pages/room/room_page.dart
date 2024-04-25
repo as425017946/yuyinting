@@ -374,7 +374,7 @@ class _RoomPageState extends State<RoomPage>
       final bool svgaBool = m['svgaBool'];
       final MovieEntity videoItem = await _loadSVGA(svgaBool, m['svgaUrl']);
       if (svgaBool) {
-        await videoItem.hfItem(m['avatar'], m['nickNanme'], m['svgaName']);
+        await videoItem.hfItem(m['avatar'], m['nickNanme'], m['svgaName'], m['gender']);
       }
       animationControllerJR?.videoItem = videoItem;
       animationControllerJR
@@ -2578,6 +2578,7 @@ class _RoomPageState extends State<RoomPage>
                 }
                 mapNew['nickNanme'] = event.map!['nickname'];
                 mapNew['avatar'] = event.map!['avatar']; // 头像
+                mapNew['gender'] = event.map!['gender']; // 性别
                 // mapNew['enter_dress_gif_img'] = event.map!['enter_dress_gif_img']; // 进厅横幅动图
                 // mapNew['enter_dress_name'] = event.map!['enter_dress_name']; // 进厅横幅名称
                 if(listJoinRoom.isEmpty){
@@ -4932,6 +4933,7 @@ class _RoomPageState extends State<RoomPage>
               }
               mapNew['nickNanme'] = bean.data!.userInfo!.nickname!;
               mapNew['avatar'] = bean.data!.userInfo!.avatar; // 头像
+              mapNew['gender'] = bean.data!.userInfo!.gender;
               setState(() {
                 avatar = bean.data!.userInfo!.avatar!; // 头像
               });

@@ -9,48 +9,83 @@ import 'happy_wall_model.dart';
 
 class HappyWallBanner extends StatelessWidget {
   HappyWallBanner({super.key});
-  final c = Get.put(HapplyWallController());
+  final HapplyWallController c = Get.find();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { // 994*156
+    final double width = 750.w - 20;
+    final double height = width*156.0/994.0;
     return GestureDetector(
       onTap: () => c.action(() {
         Get.to(HappyWallPage());
       }),
-      child: AnimatedContainer(
+      child: Obx(() => AnimatedContainer(
         duration: const Duration(milliseconds: 250),
-        padding: EdgeInsets.all(20.w),
-        height: c.isShow ? 100.w : 0,
-        color: Colors.red,
+        padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 30.w),
+        height: c.isShow ? height : 0,
+        decoration: const BoxDecoration(
+          image: DecorationImage(image: AssetImage('assets/images/happy_wall_flag.png'), fit: BoxFit.fill,)
+        ),
         clipBehavior: Clip.hardEdge,
         alignment: Alignment.center,
         child: Row(
           children: [
             Expanded(child: _animate(_builder)),
-            Container(
-              width: 10.w,
-              height: 30.w,
-              color: Colors.blue,
+            Icon(
+              Icons.arrow_forward_ios,
+              color: Colors.black,
+              size: 26.w,
             ),
           ],
         ),
-      ),
+      )),
     );
   }
 
-  Widget _builder(dynamic item) {
-    return Row(
-      children: [
-         Text(item),
-      ],
-    );
+  Widget _builder(HapplyWallItem item) {
+    const style = TextStyle(color: Colors.purple);
+    return FittedBox(
+      fit: BoxFit.fitWidth,
+      alignment: Alignment.centerLeft,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(minWidth: 650.w),
+        child: Text.rich(
+          TextSpan(
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 26.sp
+            ),
+            children: [
+              TextSpan(
+                text: item.from_nickname,
+                style: style,
+              ),
+              const TextSpan(text: ' 送给了 '),
+              TextSpan(
+                text: '${item.to_nickname} ${item.gift_name}x${item.number}',
+                style: style,
+              ),
+              const TextSpan(text: ' 去围观'),
+            ]
+          ),
+         ),
+      ),
+    )
+    ;
   }
-  Widget _animate(Widget Function(dynamic) builder) {
-    return Obx(
-      () => AnimatedSwitcher(
+  Widget _animate(Widget Function(HapplyWallItem) builder) {
+    return Obx(() {
+      final item = c.item;
+      if (item == null) {
+        return const Text('');
+      }
+      return AnimatedSwitcher(
         duration: const Duration(seconds: 1),
         transitionBuilder: (child, animation) {
-          final double start = animation.isDismissed ? -1 : 1;
+          if (c.isFirstRun) {
+            return child;
+          }
+          final double start = animation.isDismissed ? 1 : -1;
           var tween = Tween<Offset>(begin: Offset(0, start), end: Offset.zero);
           return FadeTransition(
             opacity: animation,
@@ -61,11 +96,12 @@ class HappyWallBanner extends StatelessWidget {
           );
         },
         child: SizedBox(
-          key: Key(c.text),
-          child: builder(c.text),
+          key: Key(item.id.toString()),
+          height: 40.w,
+          child: builder(item),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 

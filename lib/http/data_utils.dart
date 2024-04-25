@@ -31,6 +31,7 @@ import '../bean/ghJieSuanListMoreBean.dart';
 import '../bean/ghPeopleBean.dart';
 import '../bean/ghRoomBean.dart';
 import '../bean/giftListBean.dart';
+import '../bean/happy_wall_bean.dart';
 import '../bean/homeTJBean.dart';
 import '../bean/hotRoomBean.dart';
 import '../bean/hzRoomBean.dart';
@@ -1695,5 +1696,13 @@ class DataUtils {
     await MyHttpRequest.post(MyHttpConfig.canSendRedPacket, {}, {});
     print("是否有发红包权限 $respons");
     return CommonBean.fromJson(respons!);
+  }
+
+  /// 幸福墙
+  static Future<HappinessWallBean> postHappinessWall() async {
+    Map<String, dynamic>? respons =
+    await MyHttpRequest.post('${MyHttpConfig.baseURL}/activity/happinessWall', {}, {});
+    print("幸福墙 /activity/happinessWall $respons");
+    return HappinessWallBean.fromJson(respons!);
   }
 }
