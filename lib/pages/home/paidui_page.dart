@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:get/get.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:yuyinting/pages/home/paidui_list_page.dart';
+import 'package:yuyinting/pages/home/wall/happy_wall_model.dart';
 import 'package:yuyinting/pages/home/wall/happy_wall_page.dart';
 import 'package:yuyinting/utils/SVGASimpleImage3.dart';
 
@@ -62,6 +64,8 @@ class _PaiduiPageState extends State<PaiduiPage>
   bool isOK = false;
   bool isList = sp.getBool('paidui_list_type') ?? true;
 
+  final c = Get.put(HapplyWallController());
+
   void _onRefresh() async {
     // 重新初始化
     _refreshController.resetNoData();
@@ -69,6 +73,7 @@ class _PaiduiPageState extends State<PaiduiPage>
       sp.setBool('joinRoom', false);
       isUp = false;
     });
+    c.doPostHappinessWall();
     // monitor network fetch
     await Future.delayed(const Duration(milliseconds: 1000));
     // if failed,use refreshFailed()
@@ -110,6 +115,7 @@ class _PaiduiPageState extends State<PaiduiPage>
     doPostPushRoom();
     // 2女厅 3男厅 4新厅 5游戏厅
     doPostTJRoomList2('2');
+    c.doPostHappinessWall();
   }
 
   Widget _itemPaihang(BuildContext context, int i) {
@@ -804,11 +810,9 @@ class _PaiduiPageState extends State<PaiduiPage>
                   ///顶部排行
                   _rmtj(),
 
-                  WidgetUtils.commonSizedBox(5, 0),
-
                   // HappyWallBanner(),
 
-                  WidgetUtils.commonSizedBox(5, 0),
+                  WidgetUtils.commonSizedBox(10, 0),
 
                   /// 标题栏 、 导航栏
                   Row(

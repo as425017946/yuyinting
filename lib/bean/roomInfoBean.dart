@@ -255,6 +255,7 @@ class UserInfo {
   String? enter_dress_gif_img;
   // ignore: non_constant_identifier_names
   String? enter_dress_name;
+  int? gender;
 
   UserInfo(
       {this.role,
@@ -280,6 +281,7 @@ class UserInfo {
     isNew = json['is_new'];
     newNoble = json['new_noble'];
     avatar = json['avatar'] ?? '';
+    gender = json['gender'] ?? 0;
     enter_dress_gif_img = json['enter_dress_gif_img'] ?? '';
     enter_dress_name = json['enter_dress_name'] ?? '';
   }
@@ -297,6 +299,7 @@ class UserInfo {
     data['is_new'] = this.isNew;
     data['new_noble'] = this.newNoble;
     data['avatar'] = this.avatar;
+    data['gender'] = this.gender;
     data['enter_dress_gif_img'] = this.enter_dress_gif_img;
     data['enter_dress_name'] = this.enter_dress_name;
     return data;
