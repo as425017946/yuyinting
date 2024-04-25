@@ -20,12 +20,14 @@ extension SvgaTools on MovieEntity {
     switch (svgaName) {
       case '龙年':
         dynamicItem.setDynamicDrawer((canvas, frameIndex) {
+          const size = 25.0;
+          const height = 37.0/size;
           final textPainter = TextPainter(
             text: TextSpan(
               text: name, 
-              style: const TextStyle(fontSize: 37, color: Colors.yellow),
+              style: const TextStyle(fontSize: size, color: Colors.yellow, height: height),
               children: const [
-                 TextSpan(text: ' 进入聊天室', style: TextStyle(fontSize: 30, color: Colors.white)),
+                 TextSpan(text: ' 进入聊天室', style: TextStyle(fontSize: size, color: Colors.white, height: height)),
               ]
             ),
             textDirection: TextDirection.ltr,
@@ -36,16 +38,20 @@ extension SvgaTools on MovieEntity {
         break;
       default:
         dynamicItem.setDynamicDrawer((canvas, frameIndex) {
+          const size = 25.0;
+          const height = 30.0/size;
           final textPainter = TextPainter(
-            text: TextSpan(text: name, style: const TextStyle(fontSize: 30, color: Colors.yellow)),
+            text: TextSpan(text: name, style: const TextStyle(fontSize: size, color: Colors.yellow, height: height)),
             textDirection: TextDirection.ltr,
             maxLines: 1,
           )..layout(maxWidth: 192);
-          textPainter.paint(canvas, const Offset(15, -2.5));
+          textPainter.paint(canvas, const Offset(15, 0));
         }, '01');
         dynamicItem.setDynamicDrawer((canvas, frameIndex) {
+          const size = 20.0;
+          const height = 30.0/size;
           final textPainter = TextPainter(
-            text: const TextSpan(text: '进入聊天室', style: TextStyle(fontSize: 20, color: Colors.white)),
+            text: const TextSpan(text: '进入聊天室', style: TextStyle(fontSize: size, color: Colors.white, height: height)),
             textDirection: TextDirection.ltr,
             maxLines: 1,
           )..layout(maxWidth: 192);
