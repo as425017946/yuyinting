@@ -85,7 +85,7 @@ class _MyKeFuPageState extends State<MyKeFuPage> {
                   GestureDetector(
                     onTap: (() {
                       Clipboard.setData(const ClipboardData(
-                        text: '3327618471',
+                        text: '1411768710',
                       ));
                       MyToastUtils.showToastBottom('已成功复制到剪切板');
                       Navigator.pop(context);
@@ -96,7 +96,7 @@ class _MyKeFuPageState extends State<MyKeFuPage> {
                       color: Colors.white,
                       child: Center(
                         child: Text(
-                          'qq客服',
+                          'QQ客服（点击复制）',
                           style: StyleUtils.getCommonTextStyle(
                               color: Colors.black,
                               fontSize: ScreenUtil().setSp(35)),

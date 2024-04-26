@@ -514,7 +514,37 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                   Transform.translate(
                     offset: Offset(0, -2.h),
                     child: WidgetUtils.onlyTextCenter(
-                        '1000金豆',
+                        '500金豆',
+                        StyleUtils.getCommonTextStyle(
+                            color: Colors.white,
+                            fontSize: ScreenUtil().setSp(23),
+                            fontWeight: FontWeight.w600)),
+                  ),
+                  const Spacer(),
+                ],
+              ),
+            ),
+            const Spacer(),
+            Container(
+              height: ScreenUtil().setHeight(40),
+              width: ScreenUtil().setHeight(150),
+              margin: EdgeInsets.only(left: 10.h, right: 10.h),
+              decoration: const BoxDecoration(
+                //背景
+                color: Colors.black38,
+                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                borderRadius: BorderRadius.all(Radius.circular(20.0)),
+              ),
+              child: Row(
+                children: [
+                  const Spacer(),
+                  WidgetUtils.showImages('assets/images/mine_wallet_dd.png',
+                      ScreenUtil().setHeight(26), ScreenUtil().setHeight(24)),
+                  WidgetUtils.commonSizedBox(0, 5),
+                  Transform.translate(
+                    offset: Offset(0, -2.h),
+                    child: WidgetUtils.onlyTextCenter(
+                        '2500金豆',
                         StyleUtils.getCommonTextStyle(
                             color: Colors.white,
                             fontSize: ScreenUtil().setSp(23),
@@ -545,36 +575,6 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                     offset: Offset(0, -2.h),
                     child: WidgetUtils.onlyTextCenter(
                         '5000金豆',
-                        StyleUtils.getCommonTextStyle(
-                            color: Colors.white,
-                            fontSize: ScreenUtil().setSp(23),
-                            fontWeight: FontWeight.w600)),
-                  ),
-                  const Spacer(),
-                ],
-              ),
-            ),
-            const Spacer(),
-            Container(
-              height: ScreenUtil().setHeight(40),
-              width: ScreenUtil().setHeight(150),
-              margin: EdgeInsets.only(left: 10.h, right: 10.h),
-              decoration: const BoxDecoration(
-                //背景
-                color: Colors.black38,
-                //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                borderRadius: BorderRadius.all(Radius.circular(20.0)),
-              ),
-              child: Row(
-                children: [
-                  const Spacer(),
-                  WidgetUtils.showImages('assets/images/mine_wallet_dd.png',
-                      ScreenUtil().setHeight(26), ScreenUtil().setHeight(24)),
-                  WidgetUtils.commonSizedBox(0, 5),
-                  Transform.translate(
-                    offset: Offset(0, -2.h),
-                    child: WidgetUtils.onlyTextCenter(
-                        '10000金豆',
                         StyleUtils.getCommonTextStyle(
                             color: Colors.white,
                             fontSize: ScreenUtil().setSp(23),
@@ -710,17 +710,17 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
           }else{
             setState(() {
               switch(bean.data!.gifts![0].giftId){
-                case 1124: // 多彩伞
+                case 1124: // 比翼鸟
                   int randomNum = Random().nextInt(6);
                   luckyName = randomNum;
                   break;
-                case 1133: // 天行巨鲲
+                case 1133: // 美杜莎
                   int min = 103;
                   int max = 114; // 注意这里是 18 而不是 17，因为范围是左闭右开的
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;
-                case 1125: // 天鹅梦
+                case 1125: // 林深见鹿
                   int min = 91;
                   int max = 102;
                   int randomNumber = Random().nextInt(max - min) + min;
@@ -738,7 +738,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;
-                case 1129: // 为爱启航  //1124,1133,1125,1131,1128,1129,1127,1130,1126,1135
+                case 1129: // 为爱起航
                   int min = 55;
                   int max = 66;
                   int randomNumber = Random().nextInt(max - min) + min;
@@ -762,7 +762,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;
-                case 1135: // 瑞麟庇佑
+                case 1135: // 白龙
                   int min = 7;
                   int max = 18;
                   int randomNumber = Random().nextInt(max - min) + min;

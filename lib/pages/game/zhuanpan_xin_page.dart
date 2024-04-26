@@ -695,7 +695,7 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;
-                case 1114: // 魔法池
+                case 1114: // 月光吊坠
                   int min = 91;
                   int max = 102;
                   int randomNumber = Random().nextInt(max - min) + min;
@@ -707,13 +707,13 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;
-                case 1115: // 酷玩小柴
+                case 1115: // 瓶中女孩
                   int min = 67;
                   int max = 78;
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;
-                case 1117: // 速度激情
+                case 1117: // 香槟酒
                   int min = 55;
                   int max = 66;
                   int randomNumber = Random().nextInt(max - min) + min;
@@ -725,7 +725,7 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;
-                case 1120: // 御龙英豪
+                case 1120: // 御龙豪杰
                   int min = 31;
                   int max = 42;
                   int randomNumber = Random().nextInt(max - min) + min;
@@ -737,7 +737,7 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
                   int randomNumber = Random().nextInt(max - min) + min;
                   luckyName = randomNumber;
                   break;
-                case 1123: // 樱花快线
+                case 1123: // 羽神
                   int min = 7;
                   int max = 18;
                   int randomNumber = Random().nextInt(max - min) + min;

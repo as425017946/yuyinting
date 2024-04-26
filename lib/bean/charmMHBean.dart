@@ -16,6 +16,7 @@ class charmMHBean {
   String? redScore;
   String? boxId;
   String? number;
+  String? fromAvatar;
 
   charmMHBean(
       {
@@ -34,7 +35,8 @@ class charmMHBean {
         this.blueScore,
         this.redScore,
         this.boxId,
-        this.number});
+        this.number,
+        this.fromAvatar});
 
   charmMHBean.fromJson(Map<dynamic, dynamic> json) {
     roomId = json['room_id'];
@@ -63,6 +65,7 @@ class charmMHBean {
     roomName = json['room_name'];
     boxId = json['box_id'];
     number = json['number'];
+    fromAvatar = json['from_avatar'];
   }
 
   Map<String, dynamic> toJson() {
@@ -87,6 +90,7 @@ class charmMHBean {
     data['room_name'] = this.roomName;
     data['box_id'] = this.boxId;
     data['number'] = this.number;
+    data['from_avatar'] = this.fromAvatar;
     return data;
   }
 }
