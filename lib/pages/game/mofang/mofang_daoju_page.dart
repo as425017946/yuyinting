@@ -26,13 +26,13 @@ class _MoFangDaoJuPageState extends State<MoFangDaoJuPage> {
     // TODO: implement initState
     super.initState();
     if(widget.title == '水星魔方'){
-      if(widget.list[0].price as int > 300){
+      if(widget.list[0].price as int >= 500){
         setState(() {
           isShow = true;
         });
       }
     }else{
-      if(widget.list[0].price as int > 3000){
+      if(widget.list[0].price as int >= 3000){
         setState(() {
           isShow = true;
         });

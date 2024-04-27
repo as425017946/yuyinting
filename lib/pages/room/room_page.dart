@@ -1519,6 +1519,10 @@ class _RoomPageState extends State<RoomPage>
               }
               break;
             case 'down_mic': //下麦
+              if(event.map!['from_uid'].toString() !=
+                  sp.getString('user_id').toString()){
+                MyToastUtils.showToastBottom('你已被管理下掉了麦序！');
+              }
               setState(() {
                 for (int i = 0; i < 9; i++) {
                   isMy[i] = false;
@@ -6067,7 +6071,7 @@ class _RoomPageState extends State<RoomPage>
   }
 
   /// 保存本房间送礼
-  Future<void> saveGiftInfo(String uid, String headImage, String nickeName, String otherNickName, String otherUid, String giftImage, String number, String giftName, String price,) async {
+  Future<void> saveGiftInfo(String headImage, String uid, String nickeName, String otherNickName, String otherUid, String giftImage, String number, String giftName, String price,) async {
     DatabaseHelper databaseHelper = DatabaseHelper();
     Database? db = await databaseHelper.database;
     Map<String, dynamic> params = <String, dynamic>{
@@ -6087,18 +6091,6 @@ class _RoomPageState extends State<RoomPage>
     };
     // 插入数据
     await databaseHelper.insertData('roomGiftTable', params);
-  }
-
-  /// 查询本房间送礼
-  Future<void> searchGiftInfo() async {
-    DatabaseHelper databaseHelper = DatabaseHelper();
-    Database? db = await databaseHelper.database;
-    // 获取所有数据
-    List<Map<String, dynamic>> allData =
-    await databaseHelper.getAllData('roomGiftTable');
-    if (allData.isNotEmpty) {
-
-    }
   }
 
   /// 删除本房间消息本房间消息

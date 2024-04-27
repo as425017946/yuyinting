@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
+import 'package:yuyinting/pages/mine/tequan/tequan_shuoming_page.dart';
 
 import '../../../colors/my_colors.dart';
 import '../../../utils/event_utils.dart';
+import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 class ChuanShuoPage extends StatefulWidget {
@@ -66,8 +69,13 @@ class _ChuanShuoPageState extends State<ChuanShuoPage>  with TickerProviderState
                       ScreenUtil().setHeight(271),
                       ScreenUtil().setHeight(266)),
                 ),
-                WidgetUtils.showImages('assets/images/tequan_chuanshuo.png',
-                    ScreenUtil().setHeight(223), ScreenUtil().setHeight(209)),
+                SizedBox(
+                  height: 260.h,
+                  width: 260.h,
+                  child: const SVGASimpleImage(
+                    assetsName: 'assets/svga/gz/gz_chuanshuo.svga',
+                  ),
+                )
               ],
             ),
             const Expanded(child: Text('')),
@@ -76,12 +84,41 @@ class _ChuanShuoPageState extends State<ChuanShuoPage>  with TickerProviderState
           ],
         ),
         WidgetUtils.commonSizedBox(20, 15),
-        WidgetUtils.onlyTextCenter(
-            '传说',
-            StyleUtils.getCommonTextStyle(
-                color: Colors.white,
-                fontSize: ScreenUtil().setSp(33),
-                fontWeight: FontWeight.w600)),
+        GestureDetector(
+          onTap: ((){
+            if(MyUtils.checkClick()){
+              MyUtils.goTransparentPage(context, TeQuanShuoMingPage(title: '贵族值说明',));
+            }
+          }),
+          child: Container(
+            height: 30.h,
+            width: 200.w,
+            //边框设置
+            decoration: BoxDecoration(
+              //背景
+              color: MyColors.newGZ,
+              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+              borderRadius: BorderRadius.all(Radius.circular(15.h)),
+            ),
+            child: Row(
+              children: [
+                const Spacer(),
+                WidgetUtils.onlyTextCenter(
+                    '200000',
+                    StyleUtils.getCommonTextStyle(
+                        color: Colors.white,
+                        fontSize: ScreenUtil().setSp(22))),
+                WidgetUtils.onlyTextCenter(
+                    '贵族值',
+                    StyleUtils.getCommonTextStyle(
+                        color: Colors.white,
+                        fontSize: ScreenUtil().setSp(22))),
+                WidgetUtils.showImages('assets/images/tequan_wen2.png', 30.h, 30.h),
+                const Spacer(),
+              ],
+            ),
+          ),
+        ),
 
         /// 特权展示
         WidgetUtils.commonSizedBox(70, 0),
@@ -98,7 +135,7 @@ class _ChuanShuoPageState extends State<ChuanShuoPage>  with TickerProviderState
                         child: Column(
                           children: [
                             WidgetUtils.showImages(
-                                'assets/images/guizu_xunzhang.png',
+                                'assets/images/tequan_xz.png',
                                 ScreenUtil().setHeight(103),
                                 ScreenUtil().setHeight(103)),
                             WidgetUtils.onlyTextCenter(
@@ -114,11 +151,11 @@ class _ChuanShuoPageState extends State<ChuanShuoPage>  with TickerProviderState
                         child: Column(
                           children: [
                             WidgetUtils.showImages(
-                                'assets/images/guizu_guangquan.png',
+                                'assets/images/tequan_lw.png',
                                 ScreenUtil().setHeight(103),
                                 ScreenUtil().setHeight(103)),
                             WidgetUtils.onlyTextCenter(
-                                '麦上声波',
+                                '特权礼物',
                                 StyleUtils.getCommonTextStyle(
                                     color: MyColors.guizuYellow,
                                     fontSize: ScreenUtil().setSp(25))),
@@ -130,11 +167,11 @@ class _ChuanShuoPageState extends State<ChuanShuoPage>  with TickerProviderState
                         child: Column(
                           children: [
                             WidgetUtils.showImages(
-                                'assets/images/guizu_fayan.png',
+                                'assets/images/tequan_jc.png',
                                 ScreenUtil().setHeight(103),
                                 ScreenUtil().setHeight(103)),
                             WidgetUtils.onlyTextCenter(
-                                '无发言间隔',
+                                '专属进场横幅',
                                 StyleUtils.getCommonTextStyle(
                                     color: MyColors.guizuYellow,
                                     fontSize: ScreenUtil().setSp(25))),
@@ -152,11 +189,11 @@ class _ChuanShuoPageState extends State<ChuanShuoPage>  with TickerProviderState
                         child: Column(
                           children: [
                             WidgetUtils.showImages(
-                                'assets/images/guizu_liwu.png',
+                                'assets/images/tequan_bq.png',
                                 ScreenUtil().setHeight(103),
                                 ScreenUtil().setHeight(103)),
                             WidgetUtils.onlyTextCenter(
-                                '贵族专属礼物',
+                                '限定表情包',
                                 StyleUtils.getCommonTextStyle(
                                     color: MyColors.guizuYellow,
                                     fontSize: ScreenUtil().setSp(25))),
@@ -168,11 +205,11 @@ class _ChuanShuoPageState extends State<ChuanShuoPage>  with TickerProviderState
                         child: Column(
                           children: [
                             WidgetUtils.showImages(
-                                'assets/images/guizu_guangbo.png',
+                                'assets/images/tequan_gb.png',
                                 ScreenUtil().setHeight(103),
                                 ScreenUtil().setHeight(103)),
                             WidgetUtils.onlyTextCenter(
-                                '开通全服广播',
+                                '全服播报',
                                 StyleUtils.getCommonTextStyle(
                                     color: MyColors.guizuYellow,
                                     fontSize: ScreenUtil().setSp(25))),
@@ -184,11 +221,11 @@ class _ChuanShuoPageState extends State<ChuanShuoPage>  with TickerProviderState
                         child: Column(
                           children: [
                             WidgetUtils.showImages(
-                                'assets/images/guizu_texiao.png',
+                                'assets/images/tequan_qp.png',
                                 ScreenUtil().setHeight(103),
                                 ScreenUtil().setHeight(103)),
                             WidgetUtils.onlyTextCenter(
-                                '进场特效',
+                                '特权公屏气泡',
                                 StyleUtils.getCommonTextStyle(
                                     color: MyColors.guizuYellow,
                                     fontSize: ScreenUtil().setSp(25))),
@@ -206,11 +243,11 @@ class _ChuanShuoPageState extends State<ChuanShuoPage>  with TickerProviderState
                         child: Column(
                           children: [
                             WidgetUtils.showImages(
-                                'assets/images/guizu_yanse.png',
+                                'assets/images/tequan_mp.png',
                                 ScreenUtil().setHeight(103),
                                 ScreenUtil().setHeight(103)),
                             WidgetUtils.onlyTextCenter(
-                                '昵称颜色特权',
+                                '奢华名片栏',
                                 StyleUtils.getCommonTextStyle(
                                     color: MyColors.guizuYellow,
                                     fontSize: ScreenUtil().setSp(25))),
@@ -222,11 +259,11 @@ class _ChuanShuoPageState extends State<ChuanShuoPage>  with TickerProviderState
                         child: Column(
                           children: [
                             WidgetUtils.showImages(
-                                'assets/images/guizu_zuoqi.png',
+                                'assets/images/tequan_mw.png',
                                 ScreenUtil().setHeight(103),
                                 ScreenUtil().setHeight(103)),
                             WidgetUtils.onlyTextCenter(
-                                '专属贵族坐骑',
+                                '炫彩麦位昵称',
                                 StyleUtils.getCommonTextStyle(
                                     color: MyColors.guizuYellow,
                                     fontSize: ScreenUtil().setSp(25))),
@@ -238,11 +275,11 @@ class _ChuanShuoPageState extends State<ChuanShuoPage>  with TickerProviderState
                         child: Column(
                           children: [
                             WidgetUtils.showImages(
-                                'assets/images/guizu_jiasu.png',
+                                'assets/images/tequan_hm.png',
                                 ScreenUtil().setHeight(103),
                                 ScreenUtil().setHeight(103)),
                             WidgetUtils.onlyTextCenter(
-                                '升级经验加速',
+                                '好友红名',
                                 StyleUtils.getCommonTextStyle(
                                     color: MyColors.guizuYellow,
                                     fontSize: ScreenUtil().setSp(25))),
@@ -260,11 +297,11 @@ class _ChuanShuoPageState extends State<ChuanShuoPage>  with TickerProviderState
                         child: Column(
                           children: [
                             WidgetUtils.showImages(
-                                'assets/images/guizu_renqi.png',
+                                'assets/images/tequan_zq.png',
                                 ScreenUtil().setHeight(103),
                                 ScreenUtil().setHeight(103)),
                             WidgetUtils.onlyTextCenter(
-                                '房间人气加成',
+                                '专属座驾',
                                 StyleUtils.getCommonTextStyle(
                                     color: MyColors.guizuYellow,
                                     fontSize: ScreenUtil().setSp(25))),
@@ -276,23 +313,7 @@ class _ChuanShuoPageState extends State<ChuanShuoPage>  with TickerProviderState
                         child: Column(
                           children: [
                             WidgetUtils.showImages(
-                                'assets/images/guizu_touxiang.png',
-                                ScreenUtil().setHeight(103),
-                                ScreenUtil().setHeight(103)),
-                            WidgetUtils.onlyTextCenter(
-                                '贵族头像框',
-                                StyleUtils.getCommonTextStyle(
-                                    color: MyColors.guizuYellow,
-                                    fontSize: ScreenUtil().setSp(25))),
-                          ],
-                        )),
-                    const Expanded(child: Text('')),
-                    SizedBox(
-                        width: ScreenUtil().setWidth(200),
-                        child: Column(
-                          children: [
-                            WidgetUtils.showImages(
-                                'assets/images/guizu_kefu.jpg',
+                                'assets/images/tequan_kf.jpg',
                                 ScreenUtil().setHeight(103),
                                 ScreenUtil().setHeight(103)),
                             WidgetUtils.onlyTextCenter(
@@ -302,11 +323,80 @@ class _ChuanShuoPageState extends State<ChuanShuoPage>  with TickerProviderState
                                     fontSize: ScreenUtil().setSp(25))),
                           ],
                         )),
+                    const Expanded(child: Text('')),
+                    SizedBox(
+                        width: ScreenUtil().setWidth(200),
+                        child: Column(
+                          children: [
+                            WidgetUtils.showImages(
+                                'assets/images/tequan_ys.png',
+                                ScreenUtil().setHeight(103),
+                                ScreenUtil().setHeight(103)),
+                            WidgetUtils.onlyTextCenter(
+                                '进房隐身',
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.guizuYellow,
+                                    fontSize: ScreenUtil().setSp(25))),
+                          ],
+                        )),
                     WidgetUtils.commonSizedBox(0, 20),
                   ],
                 ),
                 WidgetUtils.commonSizedBox(10, 0),
-                WidgetUtils.commonSizedBox(50, 0),
+                Row(
+                  children: [
+                    WidgetUtils.commonSizedBox(0, 20),
+                    SizedBox(
+                        width: ScreenUtil().setWidth(200),
+                        child: Column(
+                          children: [
+                            WidgetUtils.showImages(
+                                'assets/images/tequan_ft.png',
+                                ScreenUtil().setHeight(103),
+                                ScreenUtil().setHeight(103)),
+                            WidgetUtils.onlyTextCenter(
+                                '房间防踢防禁言',
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.guizuYellow,
+                                    fontSize: ScreenUtil().setSp(25))),
+                          ],
+                        )),
+                    const Expanded(child: Text('')),
+                    SizedBox(
+                        width: ScreenUtil().setWidth(200),
+                        child: Column(
+                          children: [
+                            WidgetUtils.showImages(
+                                'assets/images/tequan_fxm.png',
+                                ScreenUtil().setHeight(103),
+                                ScreenUtil().setHeight(103)),
+                            WidgetUtils.onlyTextCenter(
+                                '防开/关/上/下麦',
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.guizuYellow,
+                                    fontSize: ScreenUtil().setSp(25))),
+                          ],
+                        )),
+                    const Expanded(child: Text('')),
+                    SizedBox(
+                        width: ScreenUtil().setWidth(200),
+                        child: Column(
+                          children: [
+                            WidgetUtils.showImages(
+                                'assets/images/tequan_zzh.png',
+                                ScreenUtil().setHeight(103),
+                                ScreenUtil().setHeight(103)),
+                            WidgetUtils.onlyTextCenter(
+                                '至尊靓号ID',
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.guizuYellow,
+                                    fontSize: ScreenUtil().setSp(25))),
+                          ],
+                        )),
+                    WidgetUtils.commonSizedBox(0, 20),
+                  ],
+                ),
+                WidgetUtils.commonSizedBox(60, 0),
               ],
             ),
           ),

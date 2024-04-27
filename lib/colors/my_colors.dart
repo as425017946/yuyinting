@@ -172,4 +172,7 @@ class MyColors {
   static const Color newY4 = Color(0xFFd7f8f7);
   static const Color newY44 = Color(0xFFe7fff0);
   static const Color newY5 = Color(0xFFffecff);
+  static const Color newGZ = Color(0xFF35283B);
+  static const Color newGZ2 = Color(0xFF473b2b);
+  static const Color newGZ3 = Color(0xFF4d493c);
 }

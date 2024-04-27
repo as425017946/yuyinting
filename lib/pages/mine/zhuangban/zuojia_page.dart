@@ -142,11 +142,11 @@ class _ZuojiaPageState extends State<ZuojiaPage>{
                 StyleUtils.getCommonTextStyle(
                     color: Colors.white,
                     fontSize: ScreenUtil().setSp(25))),
-            WidgetUtils.onlyTextCenter(
-                _list[i].status == 1 ? '有效时长：永久' : '有效时长：${_list[i].useDay}天',
-                StyleUtils.getCommonTextStyle(
-                    color: Colors.white,
-                    fontSize: ScreenUtil().setSp(25))),
+            // WidgetUtils.onlyTextCenter(
+            //     _list[i].status == 1 ? '有效时长：永久' : '有效时长：${_list[i].useDay}天',
+            //     StyleUtils.getCommonTextStyle(
+            //         color: Colors.white,
+            //         fontSize: ScreenUtil().setSp(25))),
             WidgetUtils.commonSizedBox(10, 20),
           ],
         ),

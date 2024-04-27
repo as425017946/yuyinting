@@ -188,9 +188,7 @@ flutter:
     - assets/images/gz/
     - assets/svga/
     - assets/svga/gp/
-    - assets/svga/shengbo/
-    - assets/svga/touxiang/
-    - assets/svga/zuoji/
+    - assets/svga/gz/
     - assets/svga/pk/
     - assets/audio/
     - assets/audio/car_321.MP3

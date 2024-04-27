@@ -6,6 +6,7 @@ import 'package:yuyinting/pages/mine/tequan/guowang_page.dart';
 import 'package:yuyinting/pages/mine/tequan/houjue_page.dart';
 import 'package:yuyinting/pages/mine/tequan/qishi_page.dart';
 import 'package:yuyinting/pages/mine/tequan/shenhuang_page.dart';
+import 'package:yuyinting/pages/mine/tequan/tequan_shuoming_page.dart';
 import 'package:yuyinting/pages/mine/tequan/tianzun_page.dart';
 import 'package:yuyinting/pages/mine/tequan/yongshi_page.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
@@ -29,9 +30,10 @@ class TequanPage extends StatefulWidget {
 class _TequanPageState extends State<TequanPage> {
   int _currentIndex = 0;
   late final PageController _controller;
-  int priceDou=360;
-  int priceYue=36;
+  int priceDou = 360;
+  int priceYue = 36;
   var listen;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -41,22 +43,25 @@ class _TequanPageState extends State<TequanPage> {
       initialPage: 0,
     );
     listen = eventBus.on<GuizuButtonBack>().listen((event) {
-      if(event.title == '右'){
+      if (event.title == '右') {
         setState(() {
-          _currentIndex = event.index+1;
-          _controller.animateToPage(_currentIndex, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+          _currentIndex = event.index + 1;
+          _controller.animateToPage(_currentIndex,
+              duration: const Duration(milliseconds: 500), curve: Curves.ease);
           // _controller.jumpToPage(_currentIndex);
         });
       }
-      if(event.title == '左'){
+      if (event.title == '左') {
         setState(() {
-          _currentIndex = event.index-1;
+          _currentIndex = event.index - 1;
           // _controller.jumpToPage(_currentIndex);
-          _controller.animateToPage(_currentIndex, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+          _controller.animateToPage(_currentIndex,
+              duration: const Duration(milliseconds: 500), curve: Curves.ease);
         });
       }
     });
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -141,10 +146,12 @@ class _TequanPageState extends State<TequanPage> {
                           onTap: (() {
                             setState(() {
                               _currentIndex = 0;
-                              _controller.animateToPage(0, duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                              _controller.animateToPage(0,
+                                  duration: const Duration(milliseconds: 500),
+                                  curve: Curves.ease);
 
-                              priceDou=360;
-                              priceYue=36;
+                              priceDou = 360;
+                              priceYue = 36;
                             });
                           }),
                           child: Column(
@@ -174,9 +181,11 @@ class _TequanPageState extends State<TequanPage> {
                           onTap: (() {
                             setState(() {
                               _currentIndex = 1;
-                              _controller.animateToPage(1, duration: const Duration(milliseconds: 500), curve: Curves.ease);
-                              priceDou=2800;
-                              priceYue=280;
+                              _controller.animateToPage(1,
+                                  duration: const Duration(milliseconds: 500),
+                                  curve: Curves.ease);
+                              priceDou = 2800;
+                              priceYue = 280;
                             });
                           }),
                           child: Column(
@@ -206,9 +215,11 @@ class _TequanPageState extends State<TequanPage> {
                           onTap: (() {
                             setState(() {
                               _currentIndex = 2;
-                              _controller.animateToPage(2, duration: const Duration(milliseconds: 500), curve: Curves.ease);
-                              priceDou=9000;
-                              priceYue=900;
+                              _controller.animateToPage(2,
+                                  duration: const Duration(milliseconds: 500),
+                                  curve: Curves.ease);
+                              priceDou = 9000;
+                              priceYue = 900;
                             });
                           }),
                           child: Column(
@@ -238,9 +249,11 @@ class _TequanPageState extends State<TequanPage> {
                           onTap: (() {
                             setState(() {
                               _currentIndex = 3;
-                              _controller.animateToPage(3, duration: const Duration(milliseconds: 500), curve: Curves.ease);
-                              priceDou=50000;
-                              priceYue=5000;
+                              _controller.animateToPage(3,
+                                  duration: const Duration(milliseconds: 500),
+                                  curve: Curves.ease);
+                              priceDou = 50000;
+                              priceYue = 5000;
                             });
                           }),
                           child: Column(
@@ -270,9 +283,11 @@ class _TequanPageState extends State<TequanPage> {
                           onTap: (() {
                             setState(() {
                               _currentIndex = 4;
-                              _controller.animateToPage(4, duration: const Duration(milliseconds: 500), curve: Curves.ease);
-                              priceDou=120000;
-                              priceYue=12000;
+                              _controller.animateToPage(4,
+                                  duration: const Duration(milliseconds: 500),
+                                  curve: Curves.ease);
+                              priceDou = 120000;
+                              priceYue = 12000;
                             });
                           }),
                           child: Column(
@@ -302,9 +317,11 @@ class _TequanPageState extends State<TequanPage> {
                           onTap: (() {
                             setState(() {
                               _currentIndex = 5;
-                              _controller.animateToPage(5, duration: const Duration(milliseconds: 500), curve: Curves.ease);
-                              priceDou=360000;
-                              priceYue=36000;
+                              _controller.animateToPage(5,
+                                  duration: const Duration(milliseconds: 500),
+                                  curve: Curves.ease);
+                              priceDou = 360000;
+                              priceYue = 36000;
                             });
                           }),
                           child: Column(
@@ -334,9 +351,11 @@ class _TequanPageState extends State<TequanPage> {
                           onTap: (() {
                             setState(() {
                               _currentIndex = 6;
-                              _controller.animateToPage(6, duration: const Duration(milliseconds: 500), curve: Curves.ease);
-                              priceDou=580000;
-                              priceYue=58000;
+                              _controller.animateToPage(6,
+                                  duration: const Duration(milliseconds: 500),
+                                  curve: Curves.ease);
+                              priceDou = 580000;
+                              priceYue = 58000;
                             });
                           }),
                           child: Column(
@@ -366,9 +385,11 @@ class _TequanPageState extends State<TequanPage> {
                           onTap: (() {
                             setState(() {
                               _currentIndex = 7;
-                              _controller.animateToPage(7, duration: const Duration(milliseconds: 500), curve: Curves.ease);
-                              priceDou=580000;
-                              priceYue=58000;
+                              _controller.animateToPage(7,
+                                  duration: const Duration(milliseconds: 500),
+                                  curve: Curves.ease);
+                              priceDou = 580000;
+                              priceYue = 58000;
                             });
                           }),
                           child: Column(
@@ -384,12 +405,12 @@ class _TequanPageState extends State<TequanPage> {
                               WidgetUtils.commonSizedBox(8, 0),
                               _currentIndex == 7
                                   ? WidgetUtils.showImages(
-                                  'assets/images/guizu_xian.png',
-                                  ScreenUtil().setHeight(3),
-                                  ScreenUtil().setHeight(65))
+                                      'assets/images/guizu_xian.png',
+                                      ScreenUtil().setHeight(3),
+                                      ScreenUtil().setHeight(65))
                                   : WidgetUtils.commonSizedBox(
-                                  ScreenUtil().setHeight(3),
-                                  ScreenUtil().setHeight(65)),
+                                      ScreenUtil().setHeight(3),
+                                      ScreenUtil().setHeight(65)),
                             ],
                           ),
                         ),
@@ -398,9 +419,11 @@ class _TequanPageState extends State<TequanPage> {
                           onTap: (() {
                             setState(() {
                               _currentIndex = 8;
-                              _controller.animateToPage(8, duration: const Duration(milliseconds: 500), curve: Curves.ease);
-                              priceDou=580000;
-                              priceYue=58000;
+                              _controller.animateToPage(8,
+                                  duration: const Duration(milliseconds: 500),
+                                  curve: Curves.ease);
+                              priceDou = 580000;
+                              priceYue = 58000;
                             });
                           }),
                           child: Column(
@@ -416,12 +439,12 @@ class _TequanPageState extends State<TequanPage> {
                               WidgetUtils.commonSizedBox(8, 0),
                               _currentIndex == 8
                                   ? WidgetUtils.showImages(
-                                  'assets/images/guizu_xian.png',
-                                  ScreenUtil().setHeight(3),
-                                  ScreenUtil().setHeight(65))
+                                      'assets/images/guizu_xian.png',
+                                      ScreenUtil().setHeight(3),
+                                      ScreenUtil().setHeight(65))
                                   : WidgetUtils.commonSizedBox(
-                                  ScreenUtil().setHeight(3),
-                                  ScreenUtil().setHeight(65)),
+                                      ScreenUtil().setHeight(3),
+                                      ScreenUtil().setHeight(65)),
                             ],
                           ),
                         ),
@@ -430,9 +453,11 @@ class _TequanPageState extends State<TequanPage> {
                           onTap: (() {
                             setState(() {
                               _currentIndex = 9;
-                              _controller.animateToPage(9, duration: const Duration(milliseconds: 500), curve: Curves.ease);
-                              priceDou=580000;
-                              priceYue=58000;
+                              _controller.animateToPage(9,
+                                  duration: const Duration(milliseconds: 500),
+                                  curve: Curves.ease);
+                              priceDou = 580000;
+                              priceYue = 58000;
                             });
                           }),
                           child: Column(
@@ -448,12 +473,12 @@ class _TequanPageState extends State<TequanPage> {
                               WidgetUtils.commonSizedBox(8, 0),
                               _currentIndex == 9
                                   ? WidgetUtils.showImages(
-                                  'assets/images/guizu_xian.png',
-                                  ScreenUtil().setHeight(3),
-                                  ScreenUtil().setHeight(65))
+                                      'assets/images/guizu_xian.png',
+                                      ScreenUtil().setHeight(3),
+                                      ScreenUtil().setHeight(65))
                                   : WidgetUtils.commonSizedBox(
-                                  ScreenUtil().setHeight(3),
-                                  ScreenUtil().setHeight(65)),
+                                      ScreenUtil().setHeight(3),
+                                      ScreenUtil().setHeight(65)),
                             ],
                           ),
                         ),
@@ -512,80 +537,103 @@ class _TequanPageState extends State<TequanPage> {
               ],
             ),
           ),
-          // Container(
-          //   height: ScreenUtil().setHeight(206),
-          //   width: double.infinity,
-          //   color: MyColors.guizuBlack,
-          //   child: Column(
-          //     children: [
-          //       WidgetUtils.commonSizedBox(10, 0),
-          //       Expanded(
-          //           child: Row(
-          //         children: [
-          //           WidgetUtils.commonSizedBox(0, 20),
-          //           WidgetUtils.onlyText(
-          //               '开通 ',
-          //               StyleUtils.getCommonTextStyle(
-          //                   color: Colors.white,
-          //                   fontWeight: FontWeight.w600,
-          //                   fontSize: ScreenUtil().setSp(33))),
-          //           WidgetUtils.onlyText(
-          //               priceYue.toString(),
-          //               StyleUtils.getCommonTextStyle(
-          //                   color: MyColors.guizuYellow,
-          //                   fontWeight: FontWeight.w600,
-          //                   fontSize: ScreenUtil().setSp(33))),
-          //           WidgetUtils.onlyText(
-          //               ' 元 / 月',
-          //               StyleUtils.getCommonTextStyle(
-          //                   color: Colors.white,
-          //                   fontWeight: FontWeight.w600,
-          //                   fontSize: ScreenUtil().setSp(33))),
-          //           WidgetUtils.commonSizedBox(0, 20),
-          //           WidgetUtils.onlyText(
-          //               '赠送 ',
-          //               StyleUtils.getCommonTextStyle(
-          //                   color: MyColors.guizuGrey,
-          //                   fontSize: ScreenUtil().setSp(25))),
-          //           WidgetUtils.onlyText(
-          //               priceDou.toString(),
-          //               StyleUtils.getCommonTextStyle(
-          //                   color: MyColors.guizuYellow,
-          //                   fontSize: ScreenUtil().setSp(25))),
-          //           WidgetUtils.onlyText(
-          //               ' 金豆',
-          //               StyleUtils.getCommonTextStyle(
-          //                   color: MyColors.guizuGrey,
-          //                   fontSize: ScreenUtil().setSp(25))),
-          //         ],
-          //       )),
-          //       GestureDetector(
-          //         onTap: (() {
-          //           MyToastUtils.showToastBottom('荣誉升级，敬请期待');
-          //         }),
-          //         child: Container(
-          //           height: ScreenUtil().setHeight(74),
-          //           margin: const EdgeInsets.only(left: 20, right: 20),
-          //           width: double.infinity,
-          //           //边框设置
-          //           decoration: const BoxDecoration(
-          //             //背景
-          //             color: MyColors.guizuYellow,
-          //             //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-          //             borderRadius: BorderRadius.all(Radius.circular(37.0)),
-          //           ),
-          //           child: WidgetUtils.onlyTextCenter(
-          //               '开通贵族',
-          //               StyleUtils.getCommonTextStyle(
-          //                   color: MyColors.guizuYellow2,
-          //                   fontSize: ScreenUtil().setSp(33),
-          //                   fontWeight: FontWeight.w600)),
-          //         ),
-          //       ),
-          //       WidgetUtils.commonSizedBox(20, 0),
-          //     ],
-          //   ),
-          // )
+          Container(
+            height: ScreenUtil().setHeight(200),
+            width: double.infinity,
+            color: MyColors.guizuBlack,
+            child: Column(
+              children: [
+                WidgetUtils.commonSizedBox(90.h, 0),
+                Row(
+                  children: [
+                    WidgetUtils.commonSizedBox(0, 20),
+                    WidgetUtils.onlyText(
+                        '还差 ',
+                        StyleUtils.getCommonTextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: ScreenUtil().setSp(33))),
+                    WidgetUtils.onlyText(
+                        priceYue.toString(),
+                        StyleUtils.getCommonTextStyle(
+                            color: MyColors.guizuYellow,
+                            fontWeight: FontWeight.w600,
+                            fontSize: ScreenUtil().setSp(33))),
+                    WidgetUtils.onlyText(
+                        ' 贵族制升玄仙',
+                        StyleUtils.getCommonTextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: ScreenUtil().setSp(33))),
+                    const Spacer(),
+                    WidgetUtils.onlyText(
+                        '专属客服',
+                        StyleUtils.getCommonTextStyle(
+                            color: MyColors.guizuYellow,
+                            fontSize: ScreenUtil().setSp(25))),
+                    WidgetUtils.commonSizedBox(0, 5.w),
+                    WidgetUtils.showImages(
+                        'assets/images/tequan_right.png', 20.h, 10.w),
+                    WidgetUtils.commonSizedBox(0, 20),
+                  ],
+                ),
+                WidgetUtils.commonSizedBox(20.h, 0),
+                WidgetUtils.bgLine(1.h),
+                const Spacer(),
+                GestureDetector(
+                  onTap: ((){
+                    if(MyUtils.checkClick()){
+                      MyUtils.goTransparentPage(context, TeQuanShuoMingPage(title: '剩余时间说明',));
+                    }
+                  }),
+                  child: Row(
+                    children: [
+                      WidgetUtils.commonSizedBox(0, 20),
+                      WidgetUtils.onlyText(
+                          '暂未成为贵族',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.black_1,
+                              fontSize: ScreenUtil().setSp(26))),
+                      const Spacer(),
+                      WidgetUtils.onlyText(
+                          '当前贵族值',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.black_1,
+                              fontSize: ScreenUtil().setSp(26))),
+                      WidgetUtils.onlyText(
+                          '0',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.guizuYellow,
+                              fontSize: ScreenUtil().setSp(26))),
+                      const Spacer(),
+                      WidgetUtils.onlyText(
+                          ' 剩余时间',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.black_1,
+                              fontSize: ScreenUtil().setSp(26))),
+                      WidgetUtils.onlyText(
+                          '02-05-10',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.guizuYellow,
+                              fontSize: ScreenUtil().setSp(26))),
+                      WidgetUtils.commonSizedBox(0, 10.w),
+                      WidgetUtils.showImages(
+                          'assets/images/tequan_wen1.png', 20.h, 20.h),
+                      WidgetUtils.commonSizedBox(0, 20),
+                    ],
+                  ),
+                ),
+                const Spacer(),
+              ],
+            ),
+          ),
+          Positioned(
+              bottom: 130.h,
+              child: Container(
+                padding: EdgeInsets.only(left: 20.h, right: 20.h),
+                child: WidgetUtils.showImagesFill(
+                    'assets/images/bigclient_box.png', 110.h, 660.w),
+              )),
         ],
       ),
     );
