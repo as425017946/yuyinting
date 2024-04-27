@@ -68,7 +68,7 @@ class HappyWallBanner extends StatelessWidget {
                 style: style,
               ),
               const TextSpan(text: ' 去围观'),
-            ]
+            ],
           ),
          ),
       ),
