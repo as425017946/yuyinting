@@ -65,6 +65,7 @@ class _PaiduiPageState extends State<PaiduiPage>
   bool isList = sp.getBool('paidui_list_type') ?? true;
 
   final c = Get.put(HapplyWallController());
+  final _happyWall = HappyWallBanner();
 
   void _onRefresh() async {
     // 重新初始化
@@ -810,7 +811,7 @@ class _PaiduiPageState extends State<PaiduiPage>
                   ///顶部排行
                   _rmtj(),
 
-                  HappyWallBanner(),
+                  _happyWall,
 
                   WidgetUtils.commonSizedBox(10, 0),
 

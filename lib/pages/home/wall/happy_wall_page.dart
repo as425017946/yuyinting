@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 
-import '../../../main.dart';
 import '../../../utils/getx_tools.dart';
 import '../../../utils/loading.dart';
 import '../../../utils/my_utils.dart';
@@ -79,7 +78,7 @@ class HappyWallBanner extends StatelessWidget {
   Widget _animate(Widget Function(HapplyWallItem) builder) {
     return Obx(() {
       final item = c.item;
-      if (item == null) {
+      if (item == null ) {
         return const Text('');
       }
       return AnimatedSwitcher(
@@ -139,7 +138,12 @@ class HappyWallPage extends StatelessWidget {
           ),
         ),
       ),
-      body: _body(),
+      body: WillPopScope(
+         onWillPop: () async {
+          return c.canTapAction && !Loading.isShow;
+         },
+        child: _body(),
+      ),
     );
   }
 
@@ -186,6 +190,7 @@ class HappyWallPage extends StatelessWidget {
     final img = 'assets/images/happy_wall_box_${index%2 + 1}.png';
     final item = c.listItem(index);
     return GestureDetector(
+      onTap: () => c.toRoom(item.room_id),
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 30.w),
         height: 404.w,
@@ -202,12 +207,12 @@ class HappyWallPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                _head(item.from_avatar, item.from_nickname, item.from_gender),
+                _head(item.from_avatar, item.from_nickname, item.from_gender, item.from_uid),
                 SizedBox(
                   width: 189.w,
                   child: _gift(item.gift_img, item.gift_name, item.number),
                 ),
-                _head(item.to_avatar, item.to_nickname, item.to_gender),
+                _head(item.to_avatar, item.to_nickname, item.to_gender, item.to_uid),
               ],
             ),
             SizedBox(height: 30.w),
@@ -243,33 +248,36 @@ class HappyWallPage extends StatelessWidget {
     );
   }
 
-  Widget _head(String avatar, String name, int gender) {
-    return Container(
-      width: 200.w,
-      alignment: Alignment.topCenter,
-      child: Column(
-        children: [
-          UserFrameHead(size: 125.w, avatar: avatar),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: 168.w),
-                child: Text(
-                name,
-                style: TextStyle(
-                  color: const Color(0xFF181926),
-                  fontSize: 21.sp,
+  Widget _head(String avatar, String name, int gender, int uid) {
+    return GestureDetector(
+      onTap: () => c.toInfo(uid),
+      child: Container(
+        width: 200.w,
+        alignment: Alignment.topCenter,
+        child: Column(
+          children: [
+            UserFrameHead(size: 125.w, avatar: avatar),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: 168.w),
+                  child: Text(
+                    name,
+                    style: TextStyle(
+                      color: const Color(0xFF181926),
+                      fontSize: 21.sp,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              ),
-              SizedBox(width: 8.w),
-              UserGenderCircle(size: 24.w, gender: gender),
-            ],
-          )
-        ],
+                SizedBox(width: 8.w),
+                UserGenderCircle(size: 24.w, gender: gender),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

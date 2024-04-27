@@ -3,16 +3,19 @@ import 'package:get/get.dart';
 import '../../../bean/happy_wall_bean.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
+import '../../../main.dart';
 import '../../../utils/getx_tools.dart';
 import '../../../utils/log_util.dart';
 import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
+import '../../message/geren/people_info_page.dart';
+import '../../mine/my/my_info_page.dart';
 
 typedef HapplyWallItem = HappinessWallBeanDataLs;
 
 class HapplyWallController extends GetxController with GetAntiCombo {
   final _item = HapplyWallItem.empty().obs;
-  HapplyWallItem? get item => _item.value;
+  HapplyWallItem? get item => _item.value.isNull ? null : _item.value;
   bool get isShow => !_item.value.isNull;
   final List<HapplyWallItem> _list = [];
   final _listData = List<HapplyWallItem>.empty().obs;
@@ -83,5 +86,28 @@ class HapplyWallController extends GetxController with GetAntiCombo {
     } catch (e) {
       LogE(e.toString());
     }
+  }
+
+  void toRoom(int id) async {
+    action(() {
+      final context = Get.context;
+      if (context != null) {
+        joinRoom(id, context);
+      }
+    });
+  }
+  void toInfo(int id) async {
+    action(() {
+      // 如果点击的是自己，进入自己的主页
+      if (sp.getString('user_id').toString() == id.toString()) {
+        Get.to(const MyInfoPage());
+      } else {
+        sp.setString('other_id', id.toString());
+        Get.to(PeopleInfoPage(
+          otherId: id.toString(),
+          title: '其他',
+        ));
+      }
+    });
   }
 }
