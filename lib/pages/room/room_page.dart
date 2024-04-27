@@ -372,6 +372,7 @@ class _RoomPageState extends State<RoomPage>
     } else {
       //本地图
       final bool svgaBool = m['svgaBool'];
+      LogE('进厅横幅== $svgaBool');
       final MovieEntity videoItem = await _loadSVGA(svgaBool, m['svgaUrl']);
       if (svgaBool) {
         await videoItem.hfItem(m['avatar'], m['nickNanme'], m['svgaName'], m['gender']);
@@ -1820,6 +1821,7 @@ class _RoomPageState extends State<RoomPage>
           // 上下麦操作不是本地才刷新
           if (event.map!['uid'].toString() != sp.getString('user_id')) {
           } else {
+            MyToastUtils.showToastBottom('您已被管理开麦~');
             setState(() {
               isJinyiin = false;
             });
@@ -1837,6 +1839,7 @@ class _RoomPageState extends State<RoomPage>
           doUpdateOtherInfo(event.map!['serial_number'].toString(), '闭麦');
           if (event.map!['uid'].toString() != sp.getString('user_id')) {
           } else {
+            MyToastUtils.showToastBottom('您已被管理闭麦~');
             setState(() {
               isJinyiin = true;
             });
@@ -1890,7 +1893,7 @@ class _RoomPageState extends State<RoomPage>
                 otherNickName = cb.giftInfo![i].nickName!;
               });
               // 保存信息
-              saveGiftInfo(cb.fromUid!, cb.fromNickname!,cb.giftInfo![i].nickName!, cb.toUids!, cb.giftInfo![i].giftList![a].giftImgStatic!, cb.giftInfo![i].giftList![a].giftNumber.toString(), cb.giftInfo![i].giftList![a].giftName!, cb.giftInfo![i].giftList![a].giftPrice.toString(),);
+              saveGiftInfo(cb.fromAvatar!,cb.fromUid!, cb.fromNickname!,cb.giftInfo![i].nickName!, cb.toUids!, cb.giftInfo![i].giftList![a].giftImgStatic!, cb.giftInfo![i].giftList![a].giftNumber.toString(), cb.giftInfo![i].giftList![a].giftName!, cb.giftInfo![i].giftList![a].giftPrice.toString(),);
               if (giftInfos.isEmpty) {
                 giftInfos =
                     ' 爆出${cb.giftInfo![i].giftList![a].giftName!}(${cb.giftInfo![i].giftList![a].giftPrice.toString()}) x${cb.giftInfo![i].giftList![a].giftNumber.toString()}';
@@ -2101,7 +2104,7 @@ class _RoomPageState extends State<RoomPage>
                 List lUid = cb.toUids!.split(',');
                 for(int i = 0; i < lName.length; i++){
                   // 保存信息
-                  saveGiftInfo(cb.fromUid!, cb.fromNickname!, lName[i], lUid[i], cb.giftInfo![0].giftImgStatic!, cb.giftInfo![0].giftNumber.toString(), cb.giftInfo![0].giftName!, cb.giftInfo![0].giftPrice.toString(),);
+                  saveGiftInfo(cb.fromAvatar!,cb.fromUid!, cb.fromNickname!, lName[i], lUid[i], cb.giftInfo![0].giftImgStatic!, cb.giftInfo![0].giftNumber.toString(), cb.giftInfo![0].giftName!, cb.giftInfo![0].giftPrice.toString(),);
                 }
                 setState(() {
                   giftName = cb.giftInfo![0].giftName!;
@@ -2115,7 +2118,7 @@ class _RoomPageState extends State<RoomPage>
                   otherNickName = cb.toNickname!;
                 });
                 // 保存信息
-                saveGiftInfo(cb.fromUid!, cb.fromNickname!, cb.toNickname!, cb.toUids!, cb.giftInfo![0].giftImgStatic!, cb.giftInfo![0].giftNumber.toString(), cb.giftInfo![0].giftName!, cb.giftInfo![0].giftPrice.toString(),);
+                saveGiftInfo(cb.fromAvatar!,cb.fromUid!, cb.fromNickname!, cb.toNickname!, cb.toUids!, cb.giftInfo![0].giftImgStatic!, cb.giftInfo![0].giftNumber.toString(), cb.giftInfo![0].giftName!, cb.giftInfo![0].giftPrice.toString(),);
               }
               for (int i = 0; i < listM.length; i++) {
                 for (int a = 0; a < cb.charm!.length; a++) {
@@ -2315,7 +2318,7 @@ class _RoomPageState extends State<RoomPage>
                 List lUid = cb.toUids!.split(',');
                 for(int i = 0; i < lName.length; i++){
                   // 保存信息
-                  saveGiftInfo(cb.fromUid!, cb.fromNickname!, lName[i], lUid[i], cb.giftInfo![0].giftImgStatic!, cb.giftInfo![0].giftNumber.toString(), cb.giftInfo![0].giftName!, cb.giftInfo![0].giftPrice.toString(),);
+                  saveGiftInfo(cb.fromAvatar!,cb.fromUid!, cb.fromNickname!, lName[i], lUid[i], cb.giftInfo![0].giftImgStatic!, cb.giftInfo![0].giftNumber.toString(), cb.giftInfo![0].giftName!, cb.giftInfo![0].giftPrice.toString(),);
                 }
                 setState(() {
                   giftName = cb.giftInfo![0].giftName!;
@@ -2329,7 +2332,7 @@ class _RoomPageState extends State<RoomPage>
                   otherNickName = cb.toNickname!;
                 });
                 // 保存信息
-                saveGiftInfo(cb.fromUid!, cb.fromNickname!, cb.toNickname!, cb.toUids!, cb.giftInfo![0].giftImgStatic!, cb.giftInfo![0].giftNumber.toString(), cb.giftInfo![0].giftName!, cb.giftInfo![0].giftPrice.toString(),);
+                saveGiftInfo(cb.fromAvatar!,cb.fromUid!, cb.fromNickname!, cb.toNickname!, cb.toUids!, cb.giftInfo![0].giftImgStatic!, cb.giftInfo![0].giftNumber.toString(), cb.giftInfo![0].giftName!, cb.giftInfo![0].giftPrice.toString(),);
               }
               Map<dynamic, dynamic> map = {};
               map['info'] = event.map!['nickname'];
@@ -2406,7 +2409,7 @@ class _RoomPageState extends State<RoomPage>
                   }
                 });
                 // 保存信息
-                saveGiftInfo(cb.fromUid!, cb.fromNickname!, cb.toNickname!, cb.toUids!, cb.giftInfo![i].giftImgStatic!, cb.giftInfo![i].giftNumber.toString(), cb.giftInfo![i].giftName!, cb.giftInfo![i].giftPrice.toString(),);
+                saveGiftInfo(cb.fromAvatar!,cb.fromUid!, cb.fromNickname!, cb.toNickname!, cb.toUids!, cb.giftInfo![i].giftImgStatic!, cb.giftInfo![i].giftNumber.toString(), cb.giftInfo![i].giftName!, cb.giftInfo![i].giftPrice.toString(),);
               }
               //厅内发送的送礼物消息
               Map<dynamic, dynamic> map = {};
@@ -6064,12 +6067,12 @@ class _RoomPageState extends State<RoomPage>
   }
 
   /// 保存本房间送礼
-  Future<void> saveGiftInfo(String uid, String nickeName, String otherNickName, String otherUid, String giftImage, String number, String giftName, String price,) async {
+  Future<void> saveGiftInfo(String uid, String headImage, String nickeName, String otherNickName, String otherUid, String giftImage, String number, String giftName, String price,) async {
     DatabaseHelper databaseHelper = DatabaseHelper();
     Database? db = await databaseHelper.database;
     Map<String, dynamic> params = <String, dynamic>{
       'roomID': widget.roomId,
-      'headImage': sp.getString('user_headimg').toString(),
+      'headImage': headImage,
       'uid': uid,
       'nickeName': nickeName,
       'otherNickName': otherNickName,

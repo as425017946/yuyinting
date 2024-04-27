@@ -14,6 +14,7 @@ class charmAllBean {
   String? blueScore;
   String? redScore;
   String? recordToNickname;
+  String? fromAvatar;
 
   charmAllBean(
       {
@@ -31,7 +32,8 @@ class charmAllBean {
         this.avatar,
         this.blueScore,
         this.redScore,
-        this.recordToNickname});
+        this.recordToNickname,
+        this.fromAvatar});
 
   charmAllBean.fromJson(Map<dynamic, dynamic> json) {
     roomId = json['room_id'];
@@ -59,6 +61,7 @@ class charmAllBean {
     }
     roomName = json['room_name'];
     recordToNickname = json['record_to_nickname'];
+    fromAvatar = json['from_avatar'];
   }
 
   Map<String, dynamic> toJson() {
@@ -82,6 +85,7 @@ class charmAllBean {
     }
     data['room_name'] = this.roomName;
     data['record_to_nickname'] = this.recordToNickname;
+    data['from_avatar'] = this.fromAvatar;
     return data;
   }
 }
