@@ -1,9 +1,20 @@
 import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 
+import '../bean/Common_bean.dart';
+import '../bean/joinRoomBean.dart';
 import '../colors/my_colors.dart';
+import '../http/data_utils.dart';
+import '../http/my_http_config.dart';
+import '../main.dart';
+import '../pages/room/room_page.dart';
+import '../pages/room/room_ts_mima_page.dart';
+import 'event_utils.dart';
+import 'loading.dart';
+import 'log_util.dart';
+import 'my_toast_utils.dart';
+import 'my_utils.dart';
 
 mixin GetAntiCombo {
   // final Rx<int> _action = 0.obs;
@@ -23,12 +34,112 @@ mixin GetAntiCombo {
   //   _action.value++;
   // }
 
-  bool _canTapAction = true;
+  bool canTapAction = true;
   void action(void Function() a) {
-    if (_canTapAction) {
-      _canTapAction = false;
-      Future.delayed(const Duration(seconds: 1), () => _canTapAction = true);
+    if (canTapAction) {
+      canTapAction = false;
+      Future.delayed(const Duration(seconds: 1), () => canTapAction = true);
       a();
+    }
+  }
+
+  void joinRoom(int id, BuildContext context) async {
+    if (sp.getBool('joinRoom') == false) {
+      sp.setBool('joinRoom', true);
+      try {
+        Loading.show();
+        final String roomID = id.toString();
+        final roomToken = await _doPostBeforeJoin(roomID, context);
+        if (roomToken.isNotEmpty) {
+          // ignore: use_build_context_synchronously
+          await _doPostRoomJoin(roomID, '', roomToken, context);
+        }
+      } catch (e) {
+        LogE(e.toString());
+        sp.setBool('joinRoom', false);
+      } finally {
+        Loading.dismiss();
+      }
+      
+    }
+  }
+
+  /// 加入房间前
+  Future<String> _doPostBeforeJoin(roomID, BuildContext context) async {
+    //判断房间id是否为空的
+    if (roomID == null || roomID.toString().isEmpty) {
+      throw 'roomID 为空';
+    } else {
+      // 不是空的，并且不是之前进入的房间
+      if (sp.getString('roomID').toString() != roomID) {
+        sp.setString('roomID', roomID);
+        eventBus.fire(SubmitButtonBack(title: '加入其他房间'));
+      }
+    }
+    Map<String, dynamic> params = <String, dynamic>{
+      'room_id': roomID,
+    };
+    joinRoomBean bean = await DataUtils.postBeforeJoin(params);
+    switch (bean.code) {
+      case MyHttpConfig.successCode:
+        if (sp.getString('sqRoomID').toString() == roomID) {
+          // ignore: use_build_context_synchronously
+          MyUtils.goTransparentRFPage(
+            context,
+            RoomPage(
+              roomId: roomID,
+              beforeId: '',
+              roomToken: bean.data!.rtc!,
+            ),
+          );
+        } else {
+          return bean.data!.rtc!;
+        }
+        return '';
+      case MyHttpConfig.errorRoomCode: //需要密码
+        // ignore: use_build_context_synchronously
+        MyUtils.goTransparentPageCom(
+          context,
+          RoomTSMiMaPage(roomID: roomID, roomToken: bean.data!.rtc!, anchorUid: ''),
+        );
+        throw '需要密码';
+      case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+        MyUtils.jumpLogin(context);
+        throw '未登录';
+      default:
+        MyToastUtils.showToastBottom(bean.msg!);
+        throw bean.msg!;
+    }
+  }
+
+  /// 加入房间
+  Future<void> _doPostRoomJoin(roomID, password, roomToken, BuildContext context) async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'room_id': roomID,
+      'password': password
+    };
+    CommonBean bean = await DataUtils.postRoomJoin(params);
+    switch (bean.code) {
+      case MyHttpConfig.successCode:
+        sp.setBool('joinRoom', false);
+        // ignore: use_build_context_synchronously
+        MyUtils.goTransparentRFPage(
+          context,
+          RoomPage(
+            roomId: roomID,
+            beforeId: '',
+            roomToken: roomToken,
+          ),
+        );
+        break;
+      case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
+        MyUtils.jumpLogin(context);
+        throw '未登录';
+      default:
+        MyToastUtils.showToastBottom(bean.msg!);
+        throw bean.msg!;
     }
   }
 }
