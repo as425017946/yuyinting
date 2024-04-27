@@ -5,13 +5,11 @@ import 'package:yuyinting/pages/mine/zhuangban/show_liwu_page.dart';
 
 import '../../../bean/Common_bean.dart';
 import '../../../bean/balanceBean.dart';
-import '../../../bean/myShopListBean.dart';
 import '../../../bean/shopListBean.dart';
 import '../../../colors/my_colors.dart';
 import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
-import '../../../main.dart';
 import '../../../utils/loading.dart';
 import '../../../utils/my_toast_utils.dart';
 import '../../../utils/my_utils.dart';
@@ -146,11 +144,11 @@ class _HengfuPageState extends State<HengfuPage> {
                 StyleUtils.getCommonTextStyle(
                     color: Colors.white,
                     fontSize: ScreenUtil().setSp(25))),
-            WidgetUtils.onlyTextCenter(
-                _list[i].status == 1 ? '有效时长：永久' : '有效时长：${_list[i].useDay}天',
-                StyleUtils.getCommonTextStyle(
-                    color: Colors.white,
-                    fontSize: ScreenUtil().setSp(25))),
+            // WidgetUtils.onlyTextCenter(
+            //     _list[i].status == 1 ? '有效时长：永久' : '有效时长：${_list[i].useDay}天',
+            //     StyleUtils.getCommonTextStyle(
+            //         color: Colors.white,
+            //         fontSize: ScreenUtil().setSp(25))),
             WidgetUtils.commonSizedBox(10, 20),
           ],
         ),

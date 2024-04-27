@@ -76,7 +76,7 @@ class _GiftAllPageState extends State<GiftAllPage> {
               alignment: Alignment.centerLeft,
               child: Column(
                 children: [
-                  WidgetUtils.commonSizedBox(20.h, 0),
+                  const Spacer(),
                   WidgetUtils.onlyText(
                       result![i]['nickeName'],
                       StyleUtils.getCommonTextStyle(
@@ -88,7 +88,7 @@ class _GiftAllPageState extends State<GiftAllPage> {
                       StyleUtils.getCommonTextStyle(
                           color: MyColors.roomTCWZ1,
                           fontSize: ScreenUtil().setSp(25))),
-                  WidgetUtils.commonSizedBox(10.h, 0),
+                  const Spacer(),
                 ],
               ),
             ),

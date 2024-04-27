@@ -792,9 +792,9 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                   ),
                 ),
                 // Positioned(
-                //     top: -40.h,
+                //     top: -45.h,
                 //     child: WidgetUtils.showImages(
-                //         'assets/images/a01.png', 260.h, 520.w)),
+                //         'assets/images/a01.png', 260.h, 750.w)),
               ],
             ),
           )

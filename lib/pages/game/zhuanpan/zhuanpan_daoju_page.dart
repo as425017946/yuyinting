@@ -32,13 +32,13 @@ class _ZhuanPanDaoJuPageState extends State<ZhuanPanDaoJuPage> {
     // TODO: implement initState
     super.initState();
     if(widget.title == '心动转盘'){
-      if(widget.list[0].price as int > 500){
+      if(widget.list[0].price as int >= 1000){
         setState(() {
           isShow = true;
         });
       }
     }else{
-      if(widget.list[0].price as int > 10000){
+      if(widget.list[0].price as int >= 5000){
         setState(() {
           isShow = true;
         });
