@@ -56,6 +56,7 @@ class HappinessWallBeanDataLs {
   late int to_gender; //性别 1男 2女
   late String gift_name; //礼物名称 "风之铃"
   late String gift_img; //礼物图片 "https://oawawb.cn/resouce/img/gift/风之铃.png"
+  late String gift_amount; //总价
 
   bool isNull = false;
   factory HappinessWallBeanDataLs.empty() {
@@ -82,6 +83,7 @@ class HappinessWallBeanDataLs {
       ..to_avatar = map['to_avatar'] ?? ''
       ..to_gender = map['to_gender'] ?? 0
       ..gift_name = map['gift_name'] ?? ''
+      ..gift_amount = map['gift_amount'] ?? ''
       ..gift_img = map['gift_img'] ?? '';
   }
 }

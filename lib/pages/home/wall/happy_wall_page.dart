@@ -122,7 +122,7 @@ class HappyWallPage extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
-          color: Colors.black,
+          color: Colors.white,
           onPressed: (() {
             Loading.dismiss();
             Get.back();
@@ -132,7 +132,7 @@ class HappyWallPage extends StatelessWidget {
         title: Text(
           "幸福墙",
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontSize: 34.sp,
             fontWeight: FontWeight.w600,
           ),
@@ -187,8 +187,8 @@ class HappyWallPage extends StatelessWidget {
   }
 
   Widget _builder(BuildContext context, int index) {
-    final img = 'assets/images/happy_wall_box_${index%2 + 1}.png';
     final item = c.listItem(index);
+    final img = 'assets/images/happy_wall_box_${int.parse(item.gift_amount) > 10000 ? 2 : 1}.png';
     return GestureDetector(
       onTap: () => c.toRoom(item.room_id),
       child: Container(
@@ -226,9 +226,9 @@ class HappyWallPage extends StatelessWidget {
   Widget _gift(String img, String name, int num) {
     return Column(
       children: [
-        WidgetUtils.showImagesNet(img, 104.w, 104.w),
+        WidgetUtils.showImagesNet(img, 154.w, 154.w),
         Padding(
-          padding: EdgeInsets.all(10.w),
+          padding: EdgeInsets.symmetric(horizontal: 10.w),
           child: FittedBox(
             fit: BoxFit.fitWidth,
             child: ConstrainedBox(
@@ -288,7 +288,7 @@ class HappyWallPage extends StatelessWidget {
       margin: EdgeInsets.fromLTRB(60.w, 0, 60.w, 60.w),
       child: Text.rich(
         TextSpan(
-          text: '${item.add_time} 送出了',
+          text: '${item.add_time}在${item.room_name} 送出了',
           style: TextStyle(
             color: Colors.black,
             fontFamily: 'Arial',
