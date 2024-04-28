@@ -642,7 +642,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         break;
       case '3000_6999背包礼物':
         setState(() {
-          name = '3000_6990背包礼物';
+          name = '3000_6999背包礼物';
           path = 'assets/svga/gp/bb_3000_6999.svga';
         });
         break;
