@@ -6,6 +6,7 @@ import 'package:yuyinting/pages/mine/tequan/guowang_page.dart';
 import 'package:yuyinting/pages/mine/tequan/houjue_page.dart';
 import 'package:yuyinting/pages/mine/tequan/qishi_page.dart';
 import 'package:yuyinting/pages/mine/tequan/shenhuang_page.dart';
+import 'package:yuyinting/pages/mine/tequan/tequan_listofgods.dart';
 import 'package:yuyinting/pages/mine/tequan/tequan_shuoming_page.dart';
 import 'package:yuyinting/pages/mine/tequan/tianzun_page.dart';
 import 'package:yuyinting/pages/mine/tequan/yongshi_page.dart';
@@ -91,7 +92,7 @@ class _TequanPageState extends State<TequanPage> {
 
                 ///头部信息
                 Container(
-                  padding: const EdgeInsets.only(left: 10, right: 20),
+                  padding: const EdgeInsets.only(left: 10),
                   height: ScreenUtil().setHeight(60),
                   width: double.infinity,
                   alignment: Alignment.bottomLeft,
@@ -118,17 +119,20 @@ class _TequanPageState extends State<TequanPage> {
                               fontWeight: FontWeight.w600)),
                       const Expanded(child: Text('')),
                       GestureDetector(
-                        onTap: (() {}),
+                        onTap: () {
+                          if (MyUtils.checkClick()) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const TequanListofgodsPage(),
+                              ),
+                            );
+                          }
+                        },
                         child: Container(
                           width: ScreenUtil().setWidth(150),
                           alignment: Alignment.centerRight,
-                          child: Text(
-                            '',
-                            style: StyleUtils.getCommonTextStyle(
-                              color: Colors.white,
-                              fontSize: ScreenUtil().setSp(25),
-                            ),
-                          ),
+                          child: Image.asset('assets/images/tequan_fengshen.png', width: 43*3.w, height: 15*3.w,),
                         ),
                       )
                     ],

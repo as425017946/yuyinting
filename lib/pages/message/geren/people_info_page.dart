@@ -519,10 +519,10 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                     height: 40.w,
                     child: (live == 1 && widget.title != '小主页') ? _follow() : null,
                   ),
-                  SizedBox(
-                    height: 220.w,
-                    child: WidgetUtils.showImages('assets/images/tequan_chuanshuo.png', 150.w, 150.w),
-                  ),
+                  // SizedBox(
+                  //   height: 220.w,
+                  //   child: WidgetUtils.showImages('assets/images/tequan_chuanshuo.png', 150.w, 150.w),
+                  // ),
                 ],
               ),
             ),
