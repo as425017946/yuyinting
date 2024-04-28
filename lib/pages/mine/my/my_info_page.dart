@@ -193,7 +193,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
   Widget _head() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 20.w),
-      height: 280.w,
+      height: 290.w,
       alignment: Alignment.topLeft,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -339,7 +339,8 @@ class _MyInfoPageState extends State<MyInfoPage> {
                           ? 'assets/images/nan.png'
                           : 'assets/images/nv.png',
                       25.w,
-                      25.w),
+                      25.w,
+                    ),
                 ),
                 // 只有不是新贵或者新锐的时候展示萌新
                 if (isNew == 1 && isNewNoble == 0) ...[
