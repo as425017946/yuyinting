@@ -178,96 +178,21 @@ class _MyInfoPageState extends State<MyInfoPage> {
                               Colors.white
                             ]),
                       ),
-                      height: Get.height - Get.statusBarHeight - 30 + 380.w,//1415.h,
-                      child: Stack(
-                        children: [
-                          Stack(
-                            alignment: Alignment.topCenter,
-                            children: [
-                              // _bg(),
-                              _content(),
-                              _head(),
-                              // _nav(),
-                            ],
-                          ),
-                        ],
-                      ),
+                      height: Get.height - Get.statusBarHeight - 30 + 300.w,//1415.h,
+                      child: _content(),
                     );
                   }, childCount: 1),
                 ),
               ],
             ),
-            // Positioned(
-            //   right: 20.w,
-            //   top: 90.h,
-            //   child:  GestureDetector(
-            //     onTap: (() {
-            //       if (MyUtils.checkClick()) {
-            //         stopPlayer();
-            //         Navigator.push(
-            //           context,
-            //           MaterialPageRoute(
-            //             builder: (context) => const EditMyInfoPage(),
-            //           ),
-            //         ).then((value) {
-            //           doPostMyIfon();
-            //         });
-            //       }
-            //     }),
-            //     child: Container(
-            //       width: 100.h,
-            //       height: 33.h,
-            //       color: Colors.transparent,
-            //       child: WidgetUtils.showImages('assets/images/mine_edit_black.png',
-            //           ScreenUtil().setHeight(33), ScreenUtil().setHeight(33)),
-            //     ),
-            //   ),
-            // ),
-          
           ],
         ));
   }
 
-  Widget _nav() {
-    ///头部信息
-    return Container(
-      height: ScreenUtil().setHeight(60),
-      margin: const EdgeInsets.only(top: 35),
-      width: double.infinity,
-      alignment: Alignment.bottomLeft,
-      child: Row(
-        children: [
-          GestureDetector(
-            onTap: (() {
-              Navigator.pop(context);
-            }),
-            child: Container(
-              width: 100.h,
-              color: Colors.transparent,
-              alignment: Alignment.center,
-              child: WidgetUtils.showImages(
-                  'assets/images/back_other_white.png', 40.h, 40.h),
-            ),
-          ),
-          const Expanded(child: Text('')),
-        ],
-      ),
-    );
-  }
-
-  Widget _bg() {
-    return WidgetUtils.showImagesNet(
-      sp.getString('user_headimg').toString(),
-      Get.width,
-      Get.width,
-    );
-  }
-
   Widget _head() {
-    final top = Get.width * 0.7;
     return Container(
-      margin: EdgeInsets.only(left: 20.w, right: 20.w, top: 0),
-      height: 290.w,
+      margin: EdgeInsets.symmetric(horizontal: 20.w),
+      height: 280.w,
       alignment: Alignment.topLeft,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -298,22 +223,12 @@ class _MyInfoPageState extends State<MyInfoPage> {
                           borderRadius: BorderRadius.circular(60.w),
                         ),
                       ),
-                      WidgetUtils.CircleHeadImage(110.w, 110.w, sp.getString('user_headimg').toString()),
-                      // 头像框静态图
-                      (avatarFrameGifImg.isEmpty && avatarFrameImg.isNotEmpty)
-                          ? WidgetUtils.CircleHeadImage(
-                          150.w, 150.w, avatarFrameImg)
-                          : const Text(''),
-                      // 头像框动态图
-                      avatarFrameGifImg.isNotEmpty
-                          ? SizedBox(
-                        height: 150.w,
-                        width: 150.w,
-                        child: SVGASimpleImage(
-                          resUrl: avatarFrameGifImg,
-                        ),
-                      )
-                          : const Text(''),
+                      UserFrameHead(
+                        size: 110.w,
+                        avatar: sp.getString('user_headimg').toString(),
+                        avatarFrameGifImg: avatarFrameGifImg,
+                        avatarFrameImg: avatarFrameImg,
+                      ),
                     ],
                   ),
                 ),
@@ -404,14 +319,15 @@ class _MyInfoPageState extends State<MyInfoPage> {
             ),
           ),
           Container(
-            height: 60.h,
-            padding: EdgeInsets.only(left: 20.w,),
+            height: 60.w,
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Row(
               children: [
-                gender != 0
-                    ? Container(
+                if (gender != 0)
+                Container(
                   height: 40.w,
                   width: 80.w,
+                  margin: EdgeInsets.only(right: 10.w),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     color: gender == 1 ? MyColors.dtBlue : MyColors.dtPink,
@@ -423,17 +339,13 @@ class _MyInfoPageState extends State<MyInfoPage> {
                           : 'assets/images/nv.png',
                       25.w,
                       25.w),
-                )
-                    : const Text(''),
-                WidgetUtils.commonSizedBox(0, 10.w),
+                ),
                 // 只有不是新贵或者新锐的时候展示萌新
-                (isNew == 1 && isNewNoble == 0)
-                    ? WidgetUtils.showImagesFill(
-                    'assets/images/dj/room_role_common.png', 45.w, 85.w)
-                    : const Text(''),
-                (isNew == 1 && isNewNoble == 0)
-                    ? WidgetUtils.commonSizedBox(0, 10.w)
-                    : const Text(''),
+                if (isNew == 1 && isNewNoble == 0) ...[
+                  WidgetUtils.showImagesFill(
+                      'assets/images/dj/room_role_common.png', 45.w, 85.w),
+                  WidgetUtils.commonSizedBox(0, 10.w)
+                ],
                 // 展示新贵或者新锐图标
                 isNewNoble == 1
                     ? WidgetUtils.showImages(
@@ -456,124 +368,13 @@ class _MyInfoPageState extends State<MyInfoPage> {
                     ? WidgetUtils.commonSizedBox(0, 10.w)
                     : const Text(''),
                 // 用户等级
-                if (level > 0)
+                if (level > 0) ...[
                   CharmLevelFlag(level: level, width: 75.w, height: 30.w),
-                /*
-                level != 0
-                    ? Stack(
-                  alignment: Alignment.centerLeft,
-                  children: [
-                    WidgetUtils.showImagesFill(
-                      (level >= 1 && level <= 10)
-                          ? 'assets/images/dj/dj_c_1-10.png'
-                          : (level >= 11 && level <= 15)
-                          ? 'assets/images/dj/dj_c_11-15.png'
-                          : (level >= 16 && level <= 20)
-                          ? 'assets/images/dj/dj_c_16-20.png'
-                          : (level >= 21 && level <= 25)
-                          ? 'assets/images/dj/dj_c_21-25.png'
-                          : (level >= 26 && level <= 30)
-                          ? 'assets/images/dj/dj_c_26-30.png'
-                          : (level >= 31 && level <= 35)
-                          ? 'assets/images/dj/dj_c_31-35.png'
-                          : (level >= 36 &&
-                          level <= 40)
-                          ? 'assets/images/dj/dj_c_36-40.png'
-                          : (level >= 41 &&
-                          level <= 45)
-                          ? 'assets/images/dj/dj_c_41-45.png'
-                          : 'assets/images/dj/dj_c_46-50.png',
-                      40.w,
-                      100.w,
-                    ),
-                    Positioned(
-                        left: (level >= 1 && level <= 10) == true ? 63.w : 55.w,
-                        child: Stack(
-                          children: [
-                            Text(
-                              level.toString(),
-                              style: TextStyle(
-                                  fontSize: 26.sp,
-                                  fontFamily: 'Impact',
-                                  foreground: Paint()
-                                    ..style = PaintingStyle.stroke
-                                    ..strokeWidth = 1
-                                    ..color = MyColors.djTwoM),
-                            ),
-                            Text(
-                              level.toString(),
-                              style: TextStyle(
-                                  color: MyColors.djOne,
-                                  fontSize: 26.sp,
-                                  fontFamily: 'Impact'),
-                            ),
-                          ],
-                        ))
-                  ],
-                )
-                    : const Text(''),
-                    */
-                WidgetUtils.commonSizedBox(0, 10.w),
+                  WidgetUtils.commonSizedBox(0, 10.w),
+                ],
                 // 财富等级
                 if (grLevel > 0)
                   WealthLevelFlag(level: grLevel, width: 75.w, height: 30.w),
-                /*
-                grLevel != 0
-                    ? SizedBox(
-                  height: 40.h,
-                      width: 105.w,
-                      child: Stack(
-                  alignment: Alignment.centerLeft,
-                  children: [
-                      WidgetUtils.showImagesFill(
-                        (grLevel >= 1 && grLevel <= 9)
-                            ? 'assets/images/bigclient_icon_bg_1.png'
-                            : (grLevel >= 10 && grLevel <= 15)
-                            ? 'assets/images/bigclient_icon_bg_2.png'
-                            : (grLevel >= 16 && grLevel <= 23)
-                            ? 'assets/images/bigclient_icon_bg_3.png'
-                            : (grLevel >= 24 && grLevel <= 31)
-                            ? 'assets/images/bigclient_icon_bg_4.png'
-                            : (grLevel >= 32 && grLevel <= 36)
-                            ? 'assets/images/bigclient_icon_bg_5.png'
-                            : (grLevel >= 37 && grLevel <= 40)
-                            ? 'assets/images/bigclient_icon_bg_6.png'
-                            : (grLevel >= 41 &&
-                            grLevel <= 46)
-                            ? 'assets/images/bigclient_icon_bg_7.png'
-                            : 'assets/images/bigclient_icon_bg_8.png',
-                        40.h,
-                        105.w,
-                      ),
-                      Positioned(
-                          bottom: (grLevel >= 1 && grLevel <= 9) == true ? 8.w : 12.w,
-                          left: (grLevel >= 1 && grLevel <= 9) == true ? 70.w : 65.w,
-                          child: Stack(
-                            children: [
-                              Text(
-                                grLevel.toString(),
-                                style: TextStyle(
-                                    fontSize: 26.sp,
-                                    fontFamily: 'Impact',
-                                    foreground: Paint()
-                                      ..style = PaintingStyle.stroke
-                                      ..strokeWidth = 1
-                                      ..color = MyColors.djTwoM),
-                              ),
-                              Text(
-                                grLevel.toString(),
-                                style: TextStyle(
-                                    color: MyColors.djOne,
-                                    fontSize: 26.sp,
-                                    fontFamily: 'Impact'),
-                              ),
-                            ],
-                          ))
-                  ],
-                ),
-                    )
-                    : const Text(''),
-                    */
               ],
             ),
           ),
@@ -583,36 +384,20 @@ class _MyInfoPageState extends State<MyInfoPage> {
   }
 
   Widget _content() {
-    var top = Get.width * 0.7;
     return Column(
       children: [
-        /// 音频
-        Container(
-          height: 240.w,
-          alignment: Alignment.bottomRight,
-          padding: EdgeInsets.all(20.w),
-        ),
+        _head(),
         Expanded(
           child: Container(
             height: double.infinity,
-            padding: EdgeInsets.only(left: 20, right: 20, top: 20.w),
-            //边框设置
-            decoration: const BoxDecoration(
-              //背景
-              color: Colors.transparent,
-              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20.0),
-                topRight: Radius.circular(20.0),
-              ),
-            ),
+            padding: const EdgeInsets.only(left: 20, right: 20),
             child: Column(
               children: [
                 Row(
                   children: [
                     Container(
                         alignment: Alignment.bottomLeft,
-                        height: 80*1.25.w,
+                        height: 80.w,
                         child: Row(
                           children: [
                             GestureDetector(
