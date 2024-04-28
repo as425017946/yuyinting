@@ -422,20 +422,26 @@ class UserFrameHead extends StatelessWidget {
   const UserFrameHead({super.key, required this.size, required this.avatar, this.avatarFrameGifImg = '', this.avatarFrameImg = ''});
   @override
   Widget build(BuildContext context) {
-    final boxSize = size * 4.0 / 3.0;
+    const scale = 4.0 / 3.0;
     return SizedBox(
-      height: boxSize,
-      width: boxSize,
+      height: size,
+      width: size,
       child: Stack(
         alignment: Alignment.center,
         children: [
           WidgetUtils.CircleHeadImage(size, size, avatar),
           if (avatarFrameGifImg.isNotEmpty) // 头像框动态图
-            SVGASimpleImage(
-              resUrl: avatarFrameGifImg,
+            Transform.scale(
+              scale: scale,
+              child: SVGASimpleImage(
+                resUrl: avatarFrameGifImg,
+              ),
             )
           else if (avatarFrameImg.isNotEmpty) // 头像框静态图
-            WidgetUtils.CircleHeadImage(boxSize, boxSize, avatarFrameImg)
+            Transform.scale(
+              scale: scale,
+              child: WidgetUtils.CircleHeadImage(size, size, avatarFrameImg),
+            )
         ],
       ),
     );

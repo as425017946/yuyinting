@@ -257,6 +257,7 @@ class HappyWallPage extends StatelessWidget {
         child: Column(
           children: [
             UserFrameHead(size: 125.w, avatar: avatar),
+            SizedBox(height: 20.w),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
