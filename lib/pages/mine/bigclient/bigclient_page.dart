@@ -583,7 +583,7 @@ class _BigClientPageList0 extends StatelessWidget {
         const Spacer(),
         Padding(
           padding: EdgeInsets.only(bottom: Get.bottomBarHeight + 30.w),
-          child: WidgetUtils.onlyTextCenter('注:金豆俸禄将在您达到等级要求后，每日18点发放至本页', StyleUtils.getCommonTextStyle(color: MyColors.mineYellow, fontSize: 24.sp)),
+          child: WidgetUtils.onlyTextCenter('注:金豆俸禄将在每日18点发放至本页，且至多保存最早未领取三日俸禄', StyleUtils.getCommonTextStyle(color: MyColors.mineYellow, fontSize: 20.sp)),
         ),
       ],
     );

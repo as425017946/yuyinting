@@ -516,11 +516,11 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   SizedBox(
-                    height: 50.w,
+                    height: 40.w,
                     child: (live == 1 && widget.title != '小主页') ? _follow() : null,
                   ),
                   SizedBox(
-                    height: 200.w,
+                    height: 220.w,
                     child: WidgetUtils.showImages('assets/images/tequan_chuanshuo.png', 150.w, 150.w),
                   ),
                 ],
