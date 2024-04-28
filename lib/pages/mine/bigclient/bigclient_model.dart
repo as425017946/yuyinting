@@ -82,6 +82,7 @@ class BigClientController extends GetxController with GetAntiCombo {
     final num = data.title - 1;
     swiperController.move(num, animation: false);
     current.value = num;
+    doPostDayReturnList();
     super.onReady();
   }
 
@@ -98,7 +99,7 @@ class BigClientController extends GetxController with GetAntiCombo {
 
   void onDay() {
     action(() async {
-      if(dayBean.value.toString() == '0'){
+      if(dayBean.value == 0){
         MyToastUtils.showToastBottom('暂无可领取俸禄~');
         return;
       }
@@ -108,6 +109,10 @@ class BigClientController extends GetxController with GetAntiCombo {
         switch (bean.code) {
           case MyHttpConfig.successCode:
             dayBean.value = 0;
+            returnList(returnList.map((element) {
+              element.is_receive = 1;
+              return element;
+            }).toList());
             MyToastUtils.showToastBottom('领取成功!');
             break;
           case MyHttpConfig.errorloginCode:
@@ -119,7 +124,7 @@ class BigClientController extends GetxController with GetAntiCombo {
             break;
           default:
             final msg = bean.msg;
-            if (msg != null) {
+            if (msg != null && msg.isNotEmpty) {
               MyToastUtils.showToastBottom(msg);
             }
         }
@@ -129,5 +134,31 @@ class BigClientController extends GetxController with GetAntiCombo {
         Loading.dismiss();
       }
     });
+  }
+
+  final returnList = List<WealthDayReturnBeanData>.empty().obs;
+  void doPostDayReturnList() async {
+    try {
+        WealthDayReturnBean bean = await DataUtils.postDayReturnList();
+        switch (bean.code) {
+          case MyHttpConfig.successCode:
+            returnList.value = bean.data;
+            break;
+          case MyHttpConfig.errorloginCode:
+            final context = Get.context;
+            if (context != null) {
+              // ignore: use_build_context_synchronously
+              MyUtils.jumpLogin(context);
+            }
+            break;
+          default:
+            final msg = bean.msg;
+            if (msg.isNotEmpty) {
+              MyToastUtils.showToastBottom(msg);
+            }
+        }
+      } catch (e) {
+        Get.log(e.toString());
+      }
   }
 }

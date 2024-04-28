@@ -9,6 +9,7 @@ import 'package:yuyinting/utils/loading.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 
+import '../../../bean/wealth_info_bean.dart';
 import '../../../main.dart';
 import '../../../utils/my_utils.dart';
 import '../../../utils/widget_utils.dart';
@@ -575,6 +576,7 @@ class _BigClientPageList0 extends StatelessWidget {
                   _item("日俸禄", c.dayBean, c.data.next_lv_value, c.onDay),
                   // _item("周薪水", c.weekBean, c.weekExp),
                   // _item("月薪水", c.weekBean, c.weekExp),
+                  _excel(c),
                 ],
               ),
             ),
@@ -669,6 +671,54 @@ class _BigClientPageList0 extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _excel(BigClientController c) {
+    const color = Color(0xFFF9E7C9);
+    BigClientController c = Get.find();
+    return Container(
+      margin: const EdgeInsets.all(40),
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(20)),
+        border: Border.all(width: 2, color: color),
+      ),
+      child: Obx(() =>  Column(
+        children: c.returnList.fold([], (previousValue, element) {
+          if (previousValue.isNotEmpty) {
+            previousValue.add(Container(width: double.infinity, height: 1, color: color));
+          }
+          previousValue.add(_excelItem(element));
+          return previousValue;
+        }),
+      )),
+    );
+  }
+  Widget _excelItem(WealthDayReturnBeanData item) {
+    const color = Color(0xFFF9E7C9);
+    const height = 50.0;
+    return SizedBox(
+      height: height,
+      child: Row(
+        children: [
+          _excelItemText(item.grant_daytime),
+          Container(width: 1, height: height, color: color),
+          _excelItemText('${item.amount} 豆'),
+          Container(width: 1, height: height, color: color),
+          _excelItemText(item.is_receive == 1 ? '已领取' : '待领取'),
+        ],
+      ),
+    );
+  }
+  Widget _excelItemText(String text) {
+    const color = Color(0xFFF9E7C9);
+    const style = TextStyle(color: color, fontSize: 22, fontWeight: FontWeight.w400);
+    return Expanded(
+      child: Text(
+        text,
+        style: style,
+        textAlign: TextAlign.center,
       ),
     );
   }

@@ -1689,6 +1689,13 @@ class DataUtils {
     print("领取日返 /mine/getDayReturn $respons");
     return CommonBean.fromJson(respons!);
   }
+  /// 日返记录
+  static Future<WealthDayReturnBean> postDayReturnList() async {
+    Map<String, dynamic>? respons =
+    await MyHttpRequest.post('${MyHttpConfig.baseURL}/mine/dayReturnList', {}, {});
+    print("领取日返 /mine/getDayReturn $respons");
+    return WealthDayReturnBean.fromJson(respons!);
+  }
 
   /// 是否有发红包权限
   static Future<CommonBean> postCanSendRedPacket() async {

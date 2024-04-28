@@ -48,3 +48,58 @@ class WealthInfoBeanData {
       ..next_title_value = map['next_title_value'] ?? '';
   }
 }
+
+class WealthDayReturnBean {
+  late int code;
+  late String msg;
+  late List<WealthDayReturnBeanData> data;
+
+  // ignore: unused_element
+  WealthDayReturnBean._private();
+  factory WealthDayReturnBean.fromJson(Map<String, dynamic>? map) {
+    if (map == null) {
+      throw '数据错误';
+    }
+    List<WealthDayReturnBeanData> ls = [];
+    if (map['data'] is List) {
+      for (var element in map['data']) {
+        if (element is Map<String, dynamic>) {
+          ls.add(WealthDayReturnBeanData.fromJson(element));
+        }
+      }
+    }
+    return WealthDayReturnBean._private()
+      ..code = map['code'] ?? -1
+      ..msg = map['msg'] ?? ''
+      ..data = ls;
+  }
+}
+
+class WealthDayReturnBeanData {
+  late int id;
+  late int uid; //用户id
+  late int type;
+  late int amount; //金豆数
+// ignore: non_constant_identifier_names
+  late int is_receive; //是否领取 1是 0否
+// ignore: non_constant_identifier_names
+  late String grant_daytime; //发放日期 "04月16日"
+// ignore: non_constant_identifier_names
+  late int get_time;
+// ignore: non_constant_identifier_names
+  late int add_time;
+  
+  // ignore: unused_element
+  WealthDayReturnBeanData._private();
+  factory WealthDayReturnBeanData.fromJson(Map<String, dynamic> map) {
+    return WealthDayReturnBeanData._private()
+      ..id = map['id'] ?? 0
+      ..uid = map['uid'] ?? 0
+      ..type = map['type'] ?? 0
+      ..amount = map['amount'] ?? 0
+      ..is_receive = map['is_receive'] ?? 0
+      ..grant_daytime = map['grant_daytime'] ?? ''
+      ..get_time = map['get_time'] ?? 0
+      ..add_time = map['add_time'] ?? 0;
+  }
+}
