@@ -1884,11 +1884,11 @@ class _RoomPageState extends State<RoomPage>
             String giftInfos = '';
             String mhType = '';
             if (cb.boxId == '1') {
-              mhType = '青铜礼盒(33)x${cb.number!}';
+              mhType = '青铜礼盒(66)x${cb.number!}';
             } else if (cb.boxId == '2') {
-              mhType = '白银礼盒(99)x${cb.number!}';
+              mhType = '白银礼盒(300)x${cb.number!}';
             } else if (cb.boxId == '3') {
-              mhType = '黄金礼盒(500)x${cb.number!}';
+              mhType = '黄金礼盒(660)x${cb.number!}';
             }
             for (int a = 0; a < cb.giftInfo![i].giftList!.length; a++) {
               setState(() {

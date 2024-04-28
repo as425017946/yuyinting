@@ -67,17 +67,17 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
     {
       'name': '青铜礼盒',
       "url": "assets/images/room_lh_qt.png",
-      "price": "33",
+      "price": "66",
     },
     {
       'name': '白银礼盒',
       "url": "assets/images/room_lh_by.png",
-      "price": "99",
+      "price": "300",
     },
     {
       'name': '黄金礼盒',
       "url": "assets/images/room_lh_hj.png",
-      "price": "500",
+      "price": "660",
     },
   ];
   List<bool> listLHBool = [false,false,false];
