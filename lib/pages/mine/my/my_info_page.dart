@@ -35,16 +35,18 @@ class MyInfoPage extends StatefulWidget {
 class _MyInfoPageState extends State<MyInfoPage> {
   var width0 = 0.0.obs;
   var width1 = 0.0.obs;
+  // ignore: non_constant_identifier_names
   int _currentIndex = 0, gender = 0, is_pretty = 0, all_gift_type = 0;
   late final PageController _controller;
   String userNumber = '',
+      // ignore: non_constant_identifier_names
       voice_card = '',
       description = '',
       city = '',
       constellation = '',
       avatarFrameImg = '',
       avatarFrameGifImg = '';
-  final TextEditingController _souSuoName = TextEditingController();
+  // final TextEditingController _souSuoName = TextEditingController();
   List<String> imageList = [];
   // 设备是安卓还是ios
   String isDevices = 'android';
@@ -90,7 +92,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
 
 //停止播放录音
   void stopPlayer() {
-    _mPlayer!.stopPlayer().then((value) {
+    _mPlayer.stopPlayer().then((value) {
       setState(() {
         playRecord = false;
       });
@@ -98,13 +100,12 @@ class _MyInfoPageState extends State<MyInfoPage> {
   }
 
   void _initialize() async {
-    await _mPlayer!.closePlayer();
-    await _mPlayer!.openPlayer();
+    await _mPlayer.closePlayer();
+    await _mPlayer.openPlayer();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     if (_mPlayer.isPlaying) {
       _mPlayer.stopPlayer();
