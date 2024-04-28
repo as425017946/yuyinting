@@ -1519,8 +1519,9 @@ class _RoomPageState extends State<RoomPage>
               }
               break;
             case 'down_mic': //下麦
-              if(event.map!['from_uid'].toString() !=
-                  sp.getString('user_id').toString()){
+              if(event.map!['uid'].toString() ==
+                    sp.getString('user_id').toString() && event.map!['from_uid'].toString() !=
+                  sp.getString('user_id').toString()  && event.map!['from_uid'].toString().isNotEmpty){
                 MyToastUtils.showToastBottom('你已被管理下掉了麦序！');
               }
               setState(() {
