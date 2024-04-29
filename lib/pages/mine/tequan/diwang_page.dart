@@ -119,7 +119,8 @@ class _DiwangPageState extends State<DiwangPage>  with TickerProviderStateMixin 
                     StyleUtils.getCommonTextStyle(
                         color: Colors.white,
                         fontSize: ScreenUtil().setSp(22))),
-                WidgetUtils.showImages('assets/images/tequan_wen2.png', 30.h, 30.h),
+                WidgetUtils.commonSizedBox(0, 5.w),
+                WidgetUtils.showImages('assets/images/tequan_wen2.png', 20.h, 20.h),
                 const Spacer(),
               ],
             ),

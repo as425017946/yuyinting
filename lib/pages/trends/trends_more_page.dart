@@ -1,12 +1,9 @@
-import 'dart:io';
-
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:svgaplayer_flutter/parser.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
-import 'package:yuyinting/pages/trends/trends_hi_page.dart';
 import 'package:yuyinting/utils/loading.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
@@ -21,13 +18,11 @@ import '../../config/smile_utils.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
 import '../../main.dart';
-import '../../utils/event_utils.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/regex_formatter.dart';
 import '../../utils/style_utils.dart';
 import '../../widget/SwiperPage.dart';
-import '../message/chat_page.dart';
 import '../message/geren/people_info_page.dart';
 import '../mine/my/my_info_page.dart';
 import 'PagePreviewVideo.dart';
@@ -209,7 +204,9 @@ class _TrendsMorePageState extends State<TrendsMorePage>
               (isMe || comList[i].uid.toString() == sp.getString('user_id'))
                   ? GestureDetector(
                       onTap: (() {
-                        doPostComment('delete', comList[i].id.toString(), i);
+                        if(MyUtils.checkClick()) {
+                          doPostComment('delete', comList[i].id.toString(), i);
+                        }
                       }),
                       child: Container(
                         height: 25.h,

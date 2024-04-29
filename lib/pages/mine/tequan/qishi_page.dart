@@ -119,7 +119,8 @@ class _QishiPageState extends State<QishiPage>  with TickerProviderStateMixin {
                     StyleUtils.getCommonTextStyle(
                         color: Colors.white,
                         fontSize: ScreenUtil().setSp(22))),
-                WidgetUtils.showImages('assets/images/tequan_wen2.png', 30.h, 30.h),
+                WidgetUtils.commonSizedBox(0, 5.w),
+                WidgetUtils.showImages('assets/images/tequan_wen2.png', 20.h, 20.h),
                 const Spacer(),
               ],
             ),
@@ -224,7 +225,7 @@ class _QishiPageState extends State<QishiPage>  with TickerProviderStateMixin {
                   child: Column(
                     children: [
                       WidgetUtils.showImages(
-                          'assets/images/guizu_jiasu.png',
+                          'assets/images/tequan_gb.png',
                           ScreenUtil().setHeight(103),
                           ScreenUtil().setHeight(103)),
                       WidgetUtils.onlyTextCenter(

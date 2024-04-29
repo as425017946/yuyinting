@@ -882,6 +882,7 @@ class _RoomPageState extends State<RoomPage>
               _dispose();
               // 清空存储信息
               deleteChatInfo();
+              deleteGifInfo();
               doPostBeforeJoin(listPH[i].id.toString());
             }
           }
@@ -1015,6 +1016,7 @@ class _RoomPageState extends State<RoomPage>
           _dispose();
           // 清空存储信息
           deleteChatInfo();
+          deleteGifInfo();
           // MyUtils.jumpLogin(context);
         } else if (event.title == '老板位1') {
           setState(() {
@@ -1147,6 +1149,7 @@ class _RoomPageState extends State<RoomPage>
           _dispose();
           // 清空存储信息
           deleteChatInfo();
+          deleteGifInfo();
         } else if (event.title == 'im重连') {
           setState(() {
             //订阅所有远端用户的音频流。
@@ -1286,8 +1289,6 @@ class _RoomPageState extends State<RoomPage>
           case 'leave_room':
             // 调用离开房间接口
             doPostLeave();
-            // 清空存储信息
-            deleteChatInfo();
             if (_timerHot != null) {
               _timerHot!.cancel();
             }
@@ -1295,18 +1296,18 @@ class _RoomPageState extends State<RoomPage>
             _dispose();
             // 清空存储信息
             deleteChatInfo();
+            deleteGifInfo();
             Navigator.pop(context);
             break;
           case '顶号':
             // 调用离开房间接口
             doPostLeave();
-            // 清空存储信息
-            deleteChatInfo();
             if (_timerHot != null) {
               _timerHot!.cancel();
             }
             // 清空存储信息
             deleteChatInfo();
+            deleteGifInfo();
             //离开频道并释放资源
             _dispose();
             break;
@@ -1648,6 +1649,7 @@ class _RoomPageState extends State<RoomPage>
                 doPostLeave();
                 // 清空存储信息
                 deleteChatInfo();
+                deleteGifInfo();
                 _engine!.disableAudio();
                 _dispose();
                 // Navigator.pop(context);
@@ -1744,6 +1746,7 @@ class _RoomPageState extends State<RoomPage>
             doPostLeave();
             // 清空存储信息
             deleteChatInfo();
+            deleteGifInfo();
             sp.setString('user_token', '');
             sp.setString("user_account", '');
             sp.setString("user_id", '');
@@ -1770,6 +1773,7 @@ class _RoomPageState extends State<RoomPage>
           }
           // 清空存储信息
           deleteChatInfo();
+          deleteGifInfo();
           //取消订阅所有远端用户的音频流。
           _engine!.muteAllRemoteAudioStreams(true);
           // 取消发布本地音频流
@@ -4730,6 +4734,7 @@ class _RoomPageState extends State<RoomPage>
                         doPostLeave();
                         // 清空存储信息
                         deleteChatInfo();
+                        deleteGifInfo();
                         if (_timerHot != null) {
                           _timerHot!.cancel();
                         }
@@ -5078,6 +5083,7 @@ class _RoomPageState extends State<RoomPage>
           _engine!.disableAudio();
           // 清空存储信息
           deleteChatInfo();
+          deleteGifInfo();
           _dispose();
           // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
@@ -5974,6 +5980,7 @@ class _RoomPageState extends State<RoomPage>
           _dispose();
           // 清空存储信息
           deleteChatInfo();
+          deleteGifInfo();
           // ignore: use_build_context_synchronously
           Navigator.pop(context);
           // ignore: use_build_context_synchronously
@@ -6101,12 +6108,19 @@ class _RoomPageState extends State<RoomPage>
     Database? db = await databaseHelper.database;
     //删除
     db.delete('roomInfoTable');
-    //删除
-    db.delete('roomGiftTable');
     // 防止用户被顶号时没有清空表
     if (sp.getString('sqRoomID').toString().isNotEmpty) {
       sp.setString('sqRoomID', '');
     }
+  }
+
+  /// 删除本房间消息本房间送礼信息消息
+  Future<void> deleteGifInfo() async {
+    LogE('清空表数据');
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    Database? db = await databaseHelper.database;
+    //删除
+    db.delete('roomGiftTable');
   }
 
   /// 查询本房间是否有送礼物信息

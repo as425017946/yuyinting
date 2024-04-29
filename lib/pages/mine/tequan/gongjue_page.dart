@@ -119,7 +119,8 @@ class _GongjuePageState extends State<GongjuePage>  with TickerProviderStateMixi
                     StyleUtils.getCommonTextStyle(
                         color: Colors.white,
                         fontSize: ScreenUtil().setSp(22))),
-                WidgetUtils.showImages('assets/images/tequan_wen2.png', 30.h, 30.h),
+                WidgetUtils.commonSizedBox(0, 5.w),
+                WidgetUtils.showImages('assets/images/tequan_wen2.png', 20.h, 20.h),
                 const Spacer(),
               ],
             ),
@@ -283,7 +284,7 @@ class _GongjuePageState extends State<GongjuePage>  with TickerProviderStateMixi
                           child: Column(
                             children: [
                               WidgetUtils.showImages(
-                                  'assets/images/guizu_touxiang.png',
+                                  'assets/images/tequan_mp.png',
                                   ScreenUtil().setHeight(103),
                                   ScreenUtil().setHeight(103)),
                               WidgetUtils.onlyTextCenter(
