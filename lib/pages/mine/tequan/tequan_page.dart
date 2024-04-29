@@ -134,7 +134,8 @@ class _TequanPageState extends State<TequanPage> {
                           alignment: Alignment.centerRight,
                           child: Image.asset('assets/images/tequan_fengshen.png', width: 43*3.w, height: 15*3.w,),
                         ),
-                      )
+                      ),
+                      WidgetUtils.commonSizedBox(0, 20.w),
                     ],
                   ),
                 ),
@@ -542,12 +543,12 @@ class _TequanPageState extends State<TequanPage> {
             ),
           ),
           Container(
-            height: ScreenUtil().setHeight(200),
+            height: ScreenUtil().setHeight(180),
             width: double.infinity,
             color: MyColors.guizuBlack,
             child: Column(
               children: [
-                WidgetUtils.commonSizedBox(90.h, 0),
+                WidgetUtils.commonSizedBox(70.h, 0),
                 Row(
                   children: [
                     WidgetUtils.commonSizedBox(0, 20),
@@ -636,7 +637,7 @@ class _TequanPageState extends State<TequanPage> {
               child: Container(
                 padding: EdgeInsets.only(left: 20.h, right: 20.h),
                 child: WidgetUtils.showImagesFill(
-                    'assets/images/bigclient_box.png', 110.h, 660.w),
+                    'assets/images/tequan_shenmiren.png', 100.h, 660.w),
               )),
         ],
       ),
