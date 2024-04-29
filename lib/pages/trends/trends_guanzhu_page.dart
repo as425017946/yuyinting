@@ -1015,6 +1015,7 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
 
 
   Widget waterCard(BuildContext context, int index){
+    final item = _list[index];
     return GestureDetector(
       onTap: ((){
         if(MyUtils.checkClick()){
@@ -1032,7 +1033,11 @@ class _TrendsGuanZhuPageState extends State<TrendsGuanZhuPage>
         ),
         child: Column(
           children: [
-            WidgetUtils.CircleImageNetTop(350.h, 350.w, 30.h,_list[index].imgUrl![0]),
+            if (item.imgUrl != null && item.imgUrl!.isNotEmpty)
+              WidgetUtils.CircleImageNetTop(350.h, 350.w, 30.h, item.imgUrl![0])
+            else
+              Image.asset('assets/images/img_placeholder.png', width: 350.w, height: 350.w, fit: BoxFit.fill,),
+
             Container(
               padding: EdgeInsets.only(left: 10.w, right: 10.w),
               alignment: Alignment.topLeft,
