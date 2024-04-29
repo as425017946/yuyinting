@@ -53,7 +53,7 @@ class _TequanListofgodsPageState extends State<TequanListofgodsPage> {
             left: 85.w,
             width: 580.w,
             top: 320.h,
-            // height: 82.h,
+            height: 42.h,
             child: _marquee(),
           ),
           Positioned(
