@@ -807,7 +807,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           isRed
               ? Positioned(
                   bottom: (isDevices == 'ios' ? 105 : 65) * 1.3 / 2,
-                  right: 295.w,
+                  right: 195.w,
                   child: Container(
                     width: 15 * 1.3 / 2,
                     height: 15 * 1.3 / 2,
