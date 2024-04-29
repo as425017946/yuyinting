@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sound/public/flutter_sound_player.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:sqflite/sqflite.dart';
@@ -160,7 +161,7 @@ class _TuijianPageState extends State<TuijianPage>
             fromURI: voiceCard,
             whenFinished: () {
               setState(() {
-                for(int i = 0; i < listB.length; i++){
+                for (int i = 0; i < listB.length; i++) {
                   listB[i] = false;
                 }
                 playRecord = false;
@@ -177,7 +178,7 @@ class _TuijianPageState extends State<TuijianPage>
   void stopPlayer() {
     _mPlayer!.stopPlayer().then((value) {
       setState(() {
-        for(int i = 0; i < listB.length; i++){
+        for (int i = 0; i < listB.length; i++) {
           listB[i] = false;
         }
         playRecord = false;
@@ -615,13 +616,16 @@ class _TuijianPageState extends State<TuijianPage>
                             fontSize: ScreenUtil().setSp(33),
                             fontWeight: FontWeight.w600)),
                   ),
-                  listAnchor.isNotEmpty ? ListView.builder(
-                    padding: EdgeInsets.only(top: ScreenUtil().setHeight(20)),
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: tuijian,
-                    itemCount: listAnchor.length,
-                  ) : const Text(''),
+                  listAnchor.isNotEmpty
+                      ? ListView.builder(
+                          padding:
+                              EdgeInsets.only(top: ScreenUtil().setHeight(20)),
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: tuijian,
+                          itemCount: listAnchor.length,
+                        )
+                      : const Text(''),
                   WidgetUtils.commonSizedBox(20, 0),
                 ],
               ),
@@ -641,244 +645,90 @@ class _TuijianPageState extends State<TuijianPage>
             ? SizedBox(
                 width: double.infinity,
                 child: FittedBox(
-                  child: SizedBox(
+                  child: Container(
                     width: ScreenUtil().setHeight(280 + 137.5 + 137.5 + 10),
                     height: ScreenUtil().setHeight(280),
+                    color: Colors.transparent,
                     child: Row(
                       children: [
                         list.isNotEmpty
-                            ? GestureDetector(
-                                onTap: (() {
-                                  if (MyUtils.checkClick() &&
-                                      sp.getBool('joinRoom') == false) {
-                                    setState(() {
-                                      sp.setBool('joinRoom', true);
-                                    });
-                                    doPostBeforeJoin(list[0].id.toString(), '');
-                                  }
-                                }),
-                                child: Stack(
-                                  alignment: Alignment.topRight,
-                                  children: [
-                                    WidgetUtils.CircleImageNet(
-                                        ScreenUtil().setHeight(280),
-                                        ScreenUtil().setHeight(280),
+                            ? SizedBox(
+                                height: 280.h,
+                                width: 280.h,
+                                child: Swiper(
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return Stack(
+                                      alignment: Alignment.bottomLeft,
+                                      children: [
+                                        WidgetUtils.CircleImageNet(
+                                        280.h, 280.h,
                                         10,
-                                        list[0].coverImg!),
-                                    Transform.translate(
-                                      offset: const Offset(-5, 0),
-                                      child: WidgetUtils.showImages(
-                                          'assets/images/paidui_one.png',
-                                          ScreenUtil().setHeight(84),
-                                          ScreenUtil().setHeight(79)),
-                                    ),
-                                    Positioned(
-                                        bottom: 10.h,
-                                        left: 10.h,
-                                        child: SizedBox(
-                                          width: 270.h,
+                                        list[index].coverImg!),
+                                        Padding(
+                                          padding: const EdgeInsets.all(10),
                                           child: Text(
-                                            list[0].roomName!,
+                                            list[index].roomName!,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
                                             style:
                                                 StyleUtils.getCommonTextStyle(
                                                     color: Colors.white,
-                                                    fontSize: 30.sp),
+                                                    fontSize: 21.sp),
                                           ),
-                                        ))
-                                  ],
+                                        ),
+                                        Positioned(
+                                          right: 0,
+                                          bottom: 0.h,
+                                          child: SizedBox(
+                                              height: 200.h,
+                                              width: 100.w,
+                                              child: const SVGASimpleImage(
+                                                assetsName:
+                                                    'assets/svga/home_xinxing.svga',
+                                              )),
+                                        )
+                                      ],
+                                    );
+                                  },
+                                  // 配置图片数量
+                                  itemCount: list.length,
+                                  // 无限循环
+                                  loop: true,
+                                  // 自动轮播
+                                  autoplay: true,
+                                  autoplayDelay: 4000,
+                                  duration: 2500,
+                                  onIndexChanged: (index) {},
+                                  onTap: (index) {
+                                    if (MyUtils.checkClick() &&
+                                        sp.getBool('joinRoom') == false) {
+                                      setState(() {
+                                        sp.setBool('joinRoom', true);
+                                      });
+                                      doPostBeforeJoin(
+                                          list[index].id.toString(), '');
+                                    }
+                                  },
                                 ),
                               )
                             : SizedBox(
                                 height: 280.h,
                                 width: 280.h,
                               ),
-                        const Expanded(child: Text('')),
-                        Column(
-                          children: [
-                            list.length > 1
-                                ? GestureDetector(
-                                    onTap: (() {
-                                      if (MyUtils.checkClick() &&
-                                          sp.getBool('joinRoom') == false) {
-                                        setState(() {
-                                          sp.setBool('joinRoom', true);
-                                        });
-                                        doPostBeforeJoin(
-                                            list[1].id.toString(), '');
-                                      }
-                                    }),
-                                    child: Stack(
-                                      alignment: Alignment.topRight,
-                                      children: [
-                                        WidgetUtils.CircleImageNet(
-                                            ScreenUtil().setHeight(137.5),
-                                            ScreenUtil().setHeight(137.5),
-                                            10,
-                                            list[1].coverImg!),
-                                        Transform.translate(
-                                          offset: const Offset(-5, 0),
-                                          child: WidgetUtils.showImages(
-                                              'assets/images/paidui_two.png',
-                                              ScreenUtil().setHeight(60),
-                                              ScreenUtil().setHeight(55)),
-                                        ),
-                                        Positioned(
-                                            bottom: 5.h,
-                                            left: 5.h,
-                                            child: SizedBox(
-                                              width: 132.5.h,
-                                              child: Text(
-                                                list[1].roomName!,
-                                                maxLines: 1,
-                                                style: StyleUtils
-                                                    .getCommonTextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 21.sp),
-                                              ),
-                                            ))
-                                      ],
-                                    ),
-                                  )
-                                : SizedBox(
-                                    height: 137.5.h,
-                                    width: 137.5.h,
-                                  ),
-                            const Expanded(child: Text('')),
-                            list.length > 3
-                                ? GestureDetector(
-                                    onTap: (() {
-                                      if (MyUtils.checkClick() &&
-                                          sp.getBool('joinRoom') == false) {
-                                        setState(() {
-                                          sp.setBool('joinRoom', true);
-                                        });
-                                        doPostBeforeJoin(
-                                            list[3].id.toString(), '');
-                                      }
-                                    }),
-                                    child: Stack(
-                                      children: [
-                                        WidgetUtils.CircleImageNet(
-                                            ScreenUtil().setHeight(137.5),
-                                            ScreenUtil().setHeight(137.5),
-                                            10,
-                                            list[3].coverImg!),
-                                        Positioned(
-                                            bottom: 5.h,
-                                            left: 5.h,
-                                            child: SizedBox(
-                                              width: 132.5.h,
-                                              child: Text(
-                                                list[3].roomName!,
-                                                maxLines: 1,
-                                                style: StyleUtils
-                                                    .getCommonTextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 21.sp),
-                                              ),
-                                            ))
-                                      ],
-                                    ),
-                                  )
-                                : SizedBox(
-                                    height: 137.5.h,
-                                    width: 137.5.h,
-                                  ),
-                          ],
-                        ),
-                        const Expanded(child: Text('')),
-                        Column(
-                          children: [
-                            list.length > 2
-                                ? GestureDetector(
-                                    onTap: (() {
-                                      if (MyUtils.checkClick() &&
-                                          sp.getBool('joinRoom') == false) {
-                                        setState(() {
-                                          sp.setBool('joinRoom', true);
-                                        });
-                                        doPostBeforeJoin(
-                                            list[2].id.toString(), '');
-                                      }
-                                    }),
-                                    child: Stack(
-                                      alignment: Alignment.topRight,
-                                      children: [
-                                        WidgetUtils.CircleImageNet(
-                                            ScreenUtil().setHeight(137.5),
-                                            ScreenUtil().setHeight(137.5),
-                                            10,
-                                            list[2].coverImg!),
-                                        Transform.translate(
-                                          offset: const Offset(-5, 0),
-                                          child: WidgetUtils.showImages(
-                                              'assets/images/paidui_three.png',
-                                              ScreenUtil().setHeight(60),
-                                              ScreenUtil().setHeight(42)),
-                                        ),
-                                        Positioned(
-                                            bottom: 5.h,
-                                            left: 5.h,
-                                            child: SizedBox(
-                                              width: 132.5.h,
-                                              child: Text(
-                                                list[2].roomName!,
-                                                maxLines: 1,
-                                                style: StyleUtils
-                                                    .getCommonTextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 21.sp),
-                                              ),
-                                            ))
-                                      ],
-                                    ),
-                                  )
-                                : SizedBox(
-                                    height: 137.5.h,
-                                    width: 137.5.h,
-                                  ),
-                            const Expanded(child: Text('')),
-                            list.length > 4
-                                ? GestureDetector(
-                                    onTap: (() {
-                                      if (MyUtils.checkClick() &&
-                                          sp.getBool('joinRoom') == false) {
-                                        setState(() {
-                                          sp.setBool('joinRoom', true);
-                                        });
-                                        doPostBeforeJoin(
-                                            list[4].id.toString(), '');
-                                      }
-                                    }),
-                                    child: Stack(
-                                      children: [
-                                        WidgetUtils.CircleImageNet(
-                                            ScreenUtil().setHeight(137.5),
-                                            ScreenUtil().setHeight(137.5),
-                                            10,
-                                            list[4].coverImg!),
-                                        Positioned(
-                                            bottom: 5.h,
-                                            left: 5.h,
-                                            child: SizedBox(
-                                              width: 132.5.h,
-                                              child: Text(
-                                                list[4].roomName!,
-                                                maxLines: 1,
-                                                style: StyleUtils
-                                                    .getCommonTextStyle(
-                                                        color: Colors.white,
-                                                        fontSize: 21.sp),
-                                              ),
-                                            ))
-                                      ],
-                                    ),
-                                  )
-                                : SizedBox(
-                                    height: 137.5.h,
-                                    width: 137.5.h,
-                                  ),
-                          ],
+                        WidgetUtils.commonSizedBox(10.h, 15.w),
+                        Expanded(
+                          child: SizedBox(
+                            height: double.infinity,
+                            width: double.infinity,
+                            child: Column(
+                              children: [
+                                Expanded(child: WidgetUtils.showImagesFill('assets/images/car_qidian.png', double.infinity, double.infinity)),
+                                WidgetUtils.commonSizedBox(10.h, 0),
+                                Expanded(child: WidgetUtils.showImagesFill('assets/images/car_qidian.png', double.infinity, double.infinity)),
+                              ],
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -1029,7 +879,7 @@ class _TuijianPageState extends State<TuijianPage>
       joinRoomBean bean = await DataUtils.postBeforeJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          if(sp.getString('sqRoomID').toString() == roomID){
+          if (sp.getString('sqRoomID').toString() == roomID) {
             // ignore: use_build_context_synchronously
             MyUtils.goTransparentRFPage(
                 context,
@@ -1038,7 +888,7 @@ class _TuijianPageState extends State<TuijianPage>
                   beforeId: '',
                   roomToken: bean.data!.rtc!,
                 ));
-          }else{
+          } else {
             doPostRoomJoin(roomID, '', anchorUid, bean.data!.rtc!);
           }
           break;

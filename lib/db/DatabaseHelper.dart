@@ -36,7 +36,7 @@ class DatabaseHelper {
             'CREATE TABLE IF NOT EXISTS roomInfoTable (id INTEGER PRIMARY KEY, roomID TEXT, info TEXT, uid TEXT,type TEXT,content TEXT,image TEXT,identity TEXT,lv TEXT,noble_id TEXT,is_new TEXT,is_pretty TEXT,new_noble TEXT,isWelcome TEXT,isOk TEXT,newLv TEXT,bubble_img TEXT,by1 TEXT,by2 TEXT,by3 TEXT)');
         // 保存房间送礼物信息 (房间id、headImage赠送人头像、用户uid、赠送人昵称、被赠送人昵称、礼物、礼物图片地址、数量、礼物名称、价格、预留3个备用字段)
         await db.execute(
-            'CREATE TABLE IF NOT EXISTS roomGiftTable (id INTEGER PRIMARY KEY, roomID TEXT, headImage TEXT, uid TEXT,nickeName TEXT,otherNickName TEXT,otherUid TEXT,giftImage TEXT,number TEXT,giftName TEXT,price INTEGER,by1 TEXT,by2 TEXT,by3 TEXT)');
+            'CREATE TABLE IF NOT EXISTS roomGiftTable (id INTEGER PRIMARY KEY, roomID TEXT, headImage TEXT, uid TEXT,nickeName TEXT,otherNickName TEXT,otherUid TEXT,giftImage TEXT,number TEXT,giftName TEXT,price INTEGER,sum TEXT,by1 TEXT,by2 TEXT,by3 TEXT)');
       },
     );
   }

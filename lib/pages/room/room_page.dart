@@ -6093,6 +6093,7 @@ class _RoomPageState extends State<RoomPage>
       'number': number,
       'giftName': giftName,
       'price': price,
+      'sum': (int.parse(price)*int.parse(number)).toString(),
       'by1': '',
       'by2': '',
       'by3': '',

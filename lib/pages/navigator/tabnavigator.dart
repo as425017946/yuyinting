@@ -1006,7 +1006,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       label: title,
       icon: Image.asset(
         i == 0
-            ? "assets/images/ic_bottom_menu1.png"
+            ? "assets/images/ic_bottom_menu5.png"
             : i == 1
                 ? "assets/images/ic_bottom_menu1.png"
                 : i == 2
@@ -1020,7 +1020,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       ),
       activeIcon: Image.asset(
         i == 0
-            ? "assets/images/ic_bottom_menu11.png"
+            ? "assets/images/ic_bottom_menu55.png"
             : i == 1
                 ? "assets/images/ic_bottom_menu11.png"
                 : i == 2

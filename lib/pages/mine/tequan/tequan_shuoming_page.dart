@@ -90,7 +90,7 @@ class _TeQuanShuoMingPageState extends State<TeQuanShuoMingPage> {
               Navigator.pop(context);
             }),
             child:
-                WidgetUtils.showImages('assets/images/close.png', 50.h, 50.h),
+                WidgetUtils.showImages('assets/images/tequan_colse.png', 50.h, 50.h),
           ),
           const Spacer(),
         ],

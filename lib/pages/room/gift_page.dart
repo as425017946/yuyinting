@@ -168,7 +168,7 @@ class _GiftPageState extends State<GiftPage> {
     // 获取所有数据
     // 执行查询操作
     String queryM =
-        'select * from roomGiftTable where price >= 100 order by id desc ';
+        'select * from roomGiftTable where sum >= 100 order by id desc ';
     result = await db.rawQuery(queryM);
     setState(() {
       length = result!.length;

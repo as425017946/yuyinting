@@ -140,6 +140,7 @@ class _TrendsSendPageState extends State<TrendsSendPage> {
     //遍历
     for (var entity in entitys) {
       File? imgFile = await entity.file;
+      print('照片路径****:${imgFile!.path}');
       if (imgFile != null) chooseImagesPath.add(imgFile.path);
       setState(() {
         imgArray.add(imgFile!);
