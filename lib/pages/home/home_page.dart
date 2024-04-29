@@ -20,7 +20,6 @@ import 'package:yuyinting/pages/home/search_page.dart';
 import 'package:yuyinting/pages/home/shoucang_page.dart';
 import 'package:yuyinting/pages/home/tuijian_page.dart';
 import 'package:yuyinting/pages/home/update_app_page.dart';
-import 'package:yuyinting/pages/home/youxi_page.dart';
 import 'package:yuyinting/pages/home/zaixian_page.dart';
 import 'package:yuyinting/pages/login/edit_info_page.dart';
 import 'package:yuyinting/utils/style_utils.dart';
@@ -38,7 +37,6 @@ import '../../utils/log_util.dart';
 import '../../utils/my_ping.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
-import '../gongping/ceshi.dart';
 import '../room/room_page.dart';
 import '../room/room_ts_mima_page.dart';
 

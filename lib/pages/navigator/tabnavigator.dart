@@ -35,7 +35,6 @@ import '../../utils/widget_utils.dart';
 import '../gongping/gp_hi_page.dart';
 import '../home/home_items.dart';
 import '../home/home_page.dart';
-// import '../mine/mine_page.dart';
 import '../mine/mine/xc_mine_page.dart';
 import '../room/room_page.dart';
 import '../room/room_ts_mima_page.dart';
@@ -52,7 +51,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     with TickerProviderStateMixin {
   // final _defaultColor = MyColors.btn_d;
   // final _activetColor = MyColors.btn_a;
-  int _currentIndex = 0;
+  int _currentIndex = 1;
 
   //定义个变量，检测两次点击返回键的时间，如果在1秒内点击两次就退出
   DateTime? lastPopTime = null;
@@ -127,9 +126,9 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     doPostIsFirstOrder();
     super.initState();
     initE();
-    _currentIndex = 0;
+    _currentIndex = 1;
     _controller = PageController(
-      initialPage: 0,
+      initialPage: 1,
     );
 
     /// 动画持续时间是 3秒，此处的this指 TickerProviderStateMixin
@@ -152,8 +151,10 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     });
     // 接受自定义消息
     listenZdy = eventBus.on<JoinRoomYBack>().listen((event) {
-      LogE('聊天室消息  ${sp.getString('sqRoomID').toString() == event.map!['room_id'].toString()}');
-      if (event.map!['type'] == 'send_all_user' || event.map!['type'] == 'blind_box_all') {
+      LogE(
+          '聊天室消息  ${sp.getString('sqRoomID').toString() == event.map!['room_id'].toString()}');
+      if (event.map!['type'] == 'send_all_user' ||
+          event.map!['type'] == 'blind_box_all') {
         LogE('前面有没有横幅  ${listMP.length}');
         if (listMP.isEmpty) {
           hengFuBean hf = hengFuBean.fromJson(event.map!);
@@ -174,18 +175,30 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
             listMP.add(hf);
           });
         }
-      } else if (event.map!['type'] == 'chatroom_msg' && sp.getString('sqRoomID').toString() == event.map!['room_id'].toString() && isJoinRoom) {
+      } else if (event.map!['type'] == 'chatroom_msg' &&
+          sp.getString('sqRoomID').toString() ==
+              event.map!['room_id'].toString() &&
+          isJoinRoom) {
         saveChatInfo(
             event.map!, '4', event.map!['nickname'], event.map!['content']);
-      } else if (event.map!['type'] == 'welcome_msg' && sp.getString('sqRoomID').toString() == event.map!['room_id'].toString() && isJoinRoom) {
+      } else if (event.map!['type'] == 'welcome_msg' &&
+          sp.getString('sqRoomID').toString() ==
+              event.map!['room_id'].toString() &&
+          isJoinRoom) {
         saveChatInfo(event.map!, '3', event.map!['send_nickname'],
             '${event.map!['nickname']},${event.map!['content']}');
-      } else if (event.map!['type'] == 'send_gift' && sp.getString('sqRoomID').toString() == event.map!['room_id'].toString() && isJoinRoom) {
+      } else if (event.map!['type'] == 'send_gift' &&
+          sp.getString('sqRoomID').toString() ==
+              event.map!['room_id'].toString() &&
+          isJoinRoom) {
         //厅内发送的送礼物消息
         charmAllBean cb = charmAllBean.fromJson(event.map);
         saveChatInfo(event.map!, '5', event.map!['nickname'],
             '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出${cb.giftInfo![0].giftName!}(${cb.giftInfo![0].giftPrice.toString()}); x${cb.giftInfo![0].giftNumber.toString()}');
-      } else if (event.map!['type'] == 'one_click_gift' && sp.getString('sqRoomID').toString() == event.map!['room_id'].toString() && isJoinRoom) {
+      } else if (event.map!['type'] == 'one_click_gift' &&
+          sp.getString('sqRoomID').toString() ==
+              event.map!['room_id'].toString() &&
+          isJoinRoom) {
         charmAllBean cb = charmAllBean.fromJson(event.map);
         String infos = ''; // 这个是拼接用户送的礼物信息使用
         for (int i = 0; i < cb.giftInfo!.length; i++) {
@@ -203,7 +216,10 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         }
         saveChatInfo(event.map!, '6', event.map!['from_nickname'],
             '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出;$infos');
-      } else if (event.map!['type'] == 'send_screen_all' && sp.getString('sqRoomID').toString() == event.map!['room_id'].toString() && isJoinRoom) {
+      } else if (event.map!['type'] == 'send_screen_all' &&
+          sp.getString('sqRoomID').toString() ==
+              event.map!['room_id'].toString() &&
+          isJoinRoom) {
         charmAllBean cb = charmAllBean.fromJson(event.map);
         String info = '';
         for (int i = 0; i < cb.giftInfo!.length; i++) {
@@ -217,10 +233,14 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         }
         saveChatInfo(event.map!, '9', cb.fromNickname!,
             '${cb.fromNickname};向;${cb.toNickname};赠送了;$info');
-      } else if (event.map!['type'] == 'clean_charm' && sp.getString('sqRoomID').toString() == event.map!['room_id'].toString()) {
+      } else if (event.map!['type'] == 'clean_charm' &&
+          sp.getString('sqRoomID').toString() ==
+              event.map!['room_id'].toString()) {
         // 防止用户被顶号时没有清空表
         deleteChatInfo();
-      } else if(event.map!['type'] == 'clean_public_screen' && sp.getString('sqRoomID').toString() == event.map!['room_id'].toString()){
+      } else if (event.map!['type'] == 'clean_public_screen' &&
+          sp.getString('sqRoomID').toString() ==
+              event.map!['room_id'].toString()) {
         //清除了公屏
         deleteChatInfo();
       }
@@ -375,7 +395,8 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           if (event.map!['uid'].toString() ==
                   sp.getString('user_id').toString() &&
               event.map!['from_uid'].toString() !=
-                  sp.getString('user_id').toString() && event.map!['from_uid'].toString().isNotEmpty) {
+                  sp.getString('user_id').toString() &&
+              event.map!['from_uid'].toString().isNotEmpty) {
             MyToastUtils.showToastBottom('你已被管理下掉了麦序！');
             // 取消发布本地音频流
             _engine!.muteLocalAudioStream(true);
@@ -491,7 +512,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
   }
 
   Future<void> _dispose() async {
-    if(_engine != null) {
+    if (_engine != null) {
       await _engine!.leaveChannel(); // 离开频道
       await _engine!.release(); // 释放资源
     }
@@ -692,7 +713,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
   @override
   void dispose() {
     _repeatController.dispose();
-    if(slideAnimationController != null){
+    if (slideAnimationController != null) {
       slideAnimationController!.dispose();
     }
     listen.cancel();
@@ -746,6 +767,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
                 });
               },
               children: const [
+                HomePage(),//修改
                 HomePage(),
                 TrendsPage(),
                 MessagePage(),
@@ -763,27 +785,29 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
                   setState(() {
                     _currentIndex = index;
                   });
-                  if (index == 0) {
+                  if (index == 1) {
                     eventBus.fire(SubmitButtonBack(title: '回到首页'));
                   }
                 },
                 type: BottomNavigationBarType.fixed,
                 items: [
                   _bottomNavigationBarItem(
-                      '首页', 'assets/images/ic_bottom_menu1.png', 0),
+                      '找对象', 'assets/images/ic_bottom_menu1.png', 0),
                   _bottomNavigationBarItem(
-                      '动态', 'assets/images/ic_bottom_menu2.png', 1),
+                      '首页', 'assets/images/ic_bottom_menu1.png', 1),
                   _bottomNavigationBarItem(
-                      '消息', 'assets/images/ic_bottom_menu3.png', 2),
+                      '动态', 'assets/images/ic_bottom_menu2.png', 2),
                   _bottomNavigationBarItem(
-                      '我的', 'assets/images/ic_bottom_menu3.png', 3),
+                      '消息', 'assets/images/ic_bottom_menu3.png', 3),
+                  _bottomNavigationBarItem(
+                      '我的', 'assets/images/ic_bottom_menu3.png', 4),
                 ]),
           ),
 
           isRed
               ? Positioned(
                   bottom: (isDevices == 'ios' ? 105 : 65) * 1.3 / 2,
-                  right: 295.w,
+                  right: 195.w,
                   child: Container(
                     width: 15 * 1.3 / 2,
                     height: 15 * 1.3 / 2,
@@ -984,10 +1008,12 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         i == 0
             ? "assets/images/ic_bottom_menu1.png"
             : i == 1
-                ? "assets/images/ic_bottom_menu2.png"
+                ? "assets/images/ic_bottom_menu1.png"
                 : i == 2
-                    ? "assets/images/ic_bottom_menu3.png"
-                    : "assets/images/ic_bottom_menu4.png",
+                    ? "assets/images/ic_bottom_menu2.png"
+                    : i == 3
+                        ? "assets/images/ic_bottom_menu3.png"
+                        : "assets/images/ic_bottom_menu4.png",
         fit: BoxFit.fill,
         width: 25,
         height: 25,
@@ -996,10 +1022,12 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         i == 0
             ? "assets/images/ic_bottom_menu11.png"
             : i == 1
-                ? "assets/images/ic_bottom_menu22.png"
+                ? "assets/images/ic_bottom_menu11.png"
                 : i == 2
-                    ? "assets/images/ic_bottom_menu33.png"
-                    : "assets/images/ic_bottom_menu44.png",
+                    ? "assets/images/ic_bottom_menu22.png"
+                    : i == 3
+                        ? "assets/images/ic_bottom_menu33.png"
+                        : "assets/images/ic_bottom_menu44.png",
         width: 25,
         height: 25,
       ),
@@ -1433,7 +1461,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         print('装扮图片 $i 下载成功');
         if (i == bean.data!.imgList!.length - 1) {
           setState(() {
-            sp.setString('isFirstDownZB',bean.data!.nextResourceId.toString());
+            sp.setString('isFirstDownZB', bean.data!.nextResourceId.toString());
           });
           print('装扮下载完成修改值 ${sp.getString('isFirstDownZB').toString()}');
         }
