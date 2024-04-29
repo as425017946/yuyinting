@@ -215,7 +215,7 @@ class HappyWallPage extends StatelessWidget {
                 _head(item.to_avatar, item.to_nickname, item.to_gender, item.to_uid),
               ],
             ),
-            SizedBox(height: 30.w),
+            SizedBox(height: 25.w),
             _text(item),
           ],
         ),
@@ -283,29 +283,43 @@ class HappyWallPage extends StatelessWidget {
     );
   }
 
-  Widget _text(HapplyWallItem item) {
+  Widget _text(HapplyWallItem item) { // 172x51
+    String name = item.room_name;
+    if (name.length > 6) {
+      name = '${name.substring(0, 6)}…';
+    }
     return Container(
-      height: 30.w,
-      margin: EdgeInsets.fromLTRB(60.w, 0, 60.w, 60.w),
-      child: Text.rich(
-        TextSpan(
-          text: '${item.add_time}在${item.room_name} 送出了',
-          style: TextStyle(
-            color: Colors.black,
-            fontFamily: 'Arial',
-            fontSize: 21.sp,
-          ),
-          children: [
+      height: 40.w,
+      margin: EdgeInsets.fromLTRB(60.w, 0, 60.w, 55.w),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text.rich(
             TextSpan(
-              text: '${item.gift_name}x${item.number}',
+              text: '${item.add_time}在$name送出了',
               style: TextStyle(
-                color: const Color(0xFF8B2BE7),
+                color: Colors.black,
                 fontFamily: 'Arial',
                 fontSize: 21.sp,
               ),
-            )
-          ],
-        ),
+              children: [
+                TextSpan(
+                  text: '${item.gift_name}x${item.number}',
+                  style: TextStyle(
+                    color: const Color(0xFF8B2BE7),
+                    fontFamily: 'Arial',
+                    fontSize: 21.sp,
+                  ),
+                )
+              ],
+            ),
+          ),
+          SizedBox(width: 10.w),
+          Image.asset(
+            'assets/images/happy_wall_qwg.png',
+            fit: BoxFit.fitHeight,
+          ),
+        ],
       ),
     );
   }
