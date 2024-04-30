@@ -84,7 +84,7 @@ class _PayTSWZPageState extends State<PayTSWZPage> {
 
   Future<void>  tiaozhuan() async{
     if (widget.payUrl!.isNotEmpty) {
-      await launch(widget.payUrl!, forceSafariVC: false);
+      await launch(widget.payUrl!);
     } else {
       throw 'Could not launch ${widget.payUrl}';
     }

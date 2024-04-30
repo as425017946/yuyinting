@@ -4079,7 +4079,8 @@ class _RoomPageState extends State<RoomPage>
                               follow_status,
                               hot_degree,
                               widget.roomId,
-                              listM),
+                              listM,
+                              role),
                           WidgetUtils.commonSizedBox(10, 0),
 
                           /// 公告 和 厅主

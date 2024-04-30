@@ -15,7 +15,8 @@ import '../../utils/widget_utils.dart';
 class RoomReDuPage extends StatefulWidget {
   String roomID;
   List<MikeList> listm;
-  RoomReDuPage({super.key, required this.roomID, required this.listm});
+  String role;
+  RoomReDuPage({super.key, required this.roomID, required this.listm, required this.role});
 
   @override
   State<RoomReDuPage> createState() => _RoomReDuPageState();
@@ -32,7 +33,7 @@ class _RoomReDuPageState extends State<RoomReDuPage> {
     super.initState();
     //更新身份
     setState(() {
-      identity = sp.getString('user_identity').toString();
+      identity = widget.role;
     });
     _currentIndex = 0;
     _controller = PageController(
@@ -168,7 +169,7 @@ class _RoomReDuPageState extends State<RoomReDuPage> {
                         });
                       },
                       children: [
-                        ReDuZaiXianPage(roomID: widget.roomID,listM:widget.listm),
+                        ReDuZaiXianPage(roomID: widget.roomID,listM:widget.listm, role: widget.role),
                         ReDuCaiFuPage(roomID: widget.roomID),
                         ReDuMeiLiPage(roomID: widget.roomID),
                         const ReDuOnLinePage(),

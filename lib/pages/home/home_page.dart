@@ -14,6 +14,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/pages/home/paidui_page.dart';
 import 'package:yuyinting/pages/home/search_page.dart';
@@ -69,6 +70,8 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     // TODO: implement initState
+    // // 加载本地 HTML 文件
+    // WebView.loadFile('assets/my_local_file.html');
     doCheck();
     // doPostPdAddress();
     //更新身份
@@ -277,6 +280,8 @@ class _HomePageState extends State<HomePage>
                     });
                     if (index == 1) {
                       eventBus.fire(SubmitButtonBack(title: '回到首页'));
+                    }else if (index == 3) {
+                      eventBus.fire(SubmitButtonBack(title: '在线'));
                     }else{
                       eventBus.fire(SubmitButtonBack(title: '首页其他页面'));
                     }
@@ -809,4 +814,5 @@ class _HomePageState extends State<HomePage>
       );
     }
   }
+
 }

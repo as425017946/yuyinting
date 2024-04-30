@@ -21,8 +21,8 @@ import '../../utils/widget_utils.dart';
 class ReDuZaiXianPage extends StatefulWidget {
   String roomID;
   List<MikeList> listM;
-
-  ReDuZaiXianPage({super.key, required this.roomID, required this.listM});
+  String role;
+  ReDuZaiXianPage({super.key, required this.roomID, required this.listM, required this.role});
 
   @override
   State<ReDuZaiXianPage> createState() => _ReDuZaiXianPageState();
@@ -130,7 +130,7 @@ class _ReDuZaiXianPageState extends State<ReDuZaiXianPage>
                   ),
                 ),
                 ///邀请上麦
-                (sp.getString('user_identity').toString() != 'user' &&
+                (widget.role != 'user' &&
                         sp.getString('user_id').toString() !=
                             list[i].uid.toString() && list[i].isOnMic == 0)
                     ? GestureDetector(

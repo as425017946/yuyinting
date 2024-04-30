@@ -12,6 +12,7 @@ import '../../bean/homeTJBean.dart';
 import '../../bean/hotRoomBean.dart';
 import '../../bean/joinRoomBean.dart';
 import '../../bean/pushStreamerBean.dart';
+import '../../bean/soundBean.dart';
 import '../../colors/my_colors.dart';
 import '../../db/DatabaseHelper.dart';
 import '../../http/data_utils.dart';
@@ -641,104 +642,123 @@ class _TuijianPageState extends State<TuijianPage>
     return Column(
       children: [
         ///顶部排行
-        list.isNotEmpty
-            ? SizedBox(
-                width: double.infinity,
-                child: FittedBox(
-                  child: Container(
-                    width: ScreenUtil().setHeight(280 + 137.5 + 137.5 + 10),
-                    height: ScreenUtil().setHeight(280),
-                    color: Colors.transparent,
-                    child: Row(
-                      children: [
-                        list.isNotEmpty
-                            ? SizedBox(
-                                height: 280.h,
-                                width: 280.h,
-                                child: Swiper(
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return Stack(
-                                      alignment: Alignment.bottomLeft,
-                                      children: [
-                                        WidgetUtils.CircleImageNet(
-                                        280.h, 280.h,
-                                        10,
-                                        list[index].coverImg!),
-                                        Padding(
-                                          padding: const EdgeInsets.all(10),
-                                          child: Text(
-                                            list[index].roomName!,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style:
-                                                StyleUtils.getCommonTextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 21.sp),
-                                          ),
-                                        ),
-                                        Positioned(
-                                          right: 0,
-                                          bottom: 0.h,
-                                          child: SizedBox(
-                                              height: 200.h,
-                                              width: 100.w,
-                                              child: const SVGASimpleImage(
-                                                assetsName:
-                                                    'assets/svga/home_xinxing.svga',
-                                              )),
-                                        )
-                                      ],
-                                    );
-                                  },
-                                  // 配置图片数量
-                                  itemCount: list.length,
-                                  // 无限循环
-                                  loop: true,
-                                  // 自动轮播
-                                  autoplay: true,
-                                  autoplayDelay: 4000,
-                                  duration: 2500,
-                                  onIndexChanged: (index) {},
-                                  onTap: (index) {
+        SizedBox(
+          width: double.infinity,
+          child: FittedBox(
+            child: Container(
+              width: ScreenUtil().setHeight(280 + 137.5 + 137.5 + 10),
+              height: 320.h,
+              color: Colors.transparent,
+              child: Row(
+                children: [
+                  list.isNotEmpty
+                      ? Container(
+                          height: 320.h,
+                          width: 300.h,
+                          color: Colors.transparent,
+                          child: Swiper(
+                            itemBuilder: (BuildContext context, int index) {
+                              return Stack(
+                                alignment: Alignment.bottomLeft,
+                                children: [
+                                  WidgetUtils.CircleImageNet(
+                                      320.h, 300.h, 10, list[index].coverImg!),
+                                  Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: Text(
+                                      list[index].roomName!,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: StyleUtils.getCommonTextStyle(
+                                          color: Colors.white, fontSize: 21.sp),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    right: 0,
+                                    bottom: 0.h,
+                                    child: SizedBox(
+                                        height: 200.h,
+                                        width: 100.w,
+                                        child: const SVGASimpleImage(
+                                          assetsName:
+                                              'assets/svga/home_xinxing.svga',
+                                        )),
+                                  )
+                                ],
+                              );
+                            },
+                            // 配置图片数量
+                            itemCount: list.length,
+                            // 无限循环
+                            loop: true,
+                            // 自动轮播
+                            autoplay: true,
+                            autoplayDelay: 4000,
+                            duration: 2500,
+                            onIndexChanged: (index) {},
+                            onTap: (index) {
+                              if (MyUtils.checkClick() &&
+                                  sp.getBool('joinRoom') == false) {
+                                setState(() {
+                                  sp.setBool('joinRoom', true);
+                                });
+                                doPostBeforeJoin(list[index].id.toString(), '');
+                              }
+                            },
+                          ),
+                        )
+                      : SizedBox(
+                          height: 280.h,
+                          width: 280.h,
+                        ),
+                  WidgetUtils.commonSizedBox(10.h, 15.w),
+                  Expanded(
+                    child: SizedBox(
+                      height: double.infinity,
+                      width: double.infinity,
+                      child: Column(
+                        children: [
+                          WidgetUtils.commonSizedBox(5.h, 0),
+                          Expanded(
+                              child: GestureDetector(
+                                  onTap: (() {
                                     if (MyUtils.checkClick() &&
                                         sp.getBool('joinRoom') == false) {
                                       setState(() {
                                         sp.setBool('joinRoom', true);
                                       });
-                                      doPostBeforeJoin(
-                                          list[index].id.toString(), '');
+                                      doPostPushSound(0);
                                     }
-                                  },
-                                ),
-                              )
-                            : SizedBox(
-                                height: 280.h,
-                                width: 280.h,
-                              ),
-                        WidgetUtils.commonSizedBox(10.h, 15.w),
-                        Expanded(
-                          child: SizedBox(
-                            height: double.infinity,
-                            width: double.infinity,
-                            child: Column(
-                              children: [
-                                Expanded(child: WidgetUtils.showImagesFill('assets/images/car_qidian.png', double.infinity, double.infinity)),
-                                WidgetUtils.commonSizedBox(10.h, 0),
-                                Expanded(child: WidgetUtils.showImagesFill('assets/images/car_qidian.png', double.infinity, double.infinity)),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
+                                  }),
+                                  child: WidgetUtils.showImagesFill(
+                                      sp.getInt('user_gender') == 2 ? 'assets/images/home_nansheng.png' : 'assets/images/home_nvsheng.png',
+                                      double.infinity,
+                                      double.infinity))),
+                          WidgetUtils.commonSizedBox(20.h, 0),
+                          Expanded(
+                              child: GestureDetector(
+                                  onTap: (() {
+                                    if (MyUtils.checkClick() &&
+                                        sp.getBool('joinRoom') == false) {
+                                      setState(() {
+                                        sp.setBool('joinRoom', true);
+                                      });
+                                      doPostPushSound(1);
+                                    }
+                                  }),
+                                  child: WidgetUtils.showImagesFill(
+                                      'assets/images/home_yule.png',
+                                      double.infinity,
+                                      double.infinity))),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              )
-            : WidgetUtils.commonSizedBox(0, 0),
-        list.isNotEmpty
-            ? WidgetUtils.commonSizedBox(10, 0)
-            : WidgetUtils.commonSizedBox(0, 0),
+                ],
+              ),
+            ),
+          ),
+        )
       ],
     );
     // return SizedBox(
@@ -1005,6 +1025,43 @@ class _TuijianPageState extends State<TuijianPage>
       }
       Loading.dismiss();
     } catch (e) {
+      Loading.dismiss();
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
+  }
+
+  /// 推荐声音
+  Future<void> doPostPushSound(int type) async {
+    try {
+      Loading.show();
+      soundBean bean = await DataUtils.postPushSound();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            sp.setBool('joinRoom', false);
+            if (type == 0) {
+              doPostBeforeJoin(bean.data!.findSound.toString(), '');
+            } else {
+              doPostBeforeJoin(bean.data!.amuse.toString(), '');
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+          // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      setState(() {
+        sp.setBool('joinRoom', false);
+      });
+      Loading.dismiss();
+    } catch (e) {
+      setState(() {
+        sp.setBool('joinRoom', false);
+      });
       Loading.dismiss();
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }

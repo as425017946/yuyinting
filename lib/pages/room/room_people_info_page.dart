@@ -113,8 +113,8 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
           SizedBox(
             height: (sp.getString('role').toString() == 'user' ||
                     sp.getString('role').toString() == 'streamer')
-                ? ScreenUtil().setHeight(450)
-                : ScreenUtil().setHeight(530),
+                ? ScreenUtil().setHeight(500)
+                : ScreenUtil().setHeight(580),
             width: double.infinity,
             child: Stack(
               alignment: Alignment.topCenter,
@@ -122,8 +122,8 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                 Container(
                   height: (sp.getString('role').toString() == 'user' ||
                           sp.getString('role').toString() == 'streamer')
-                      ? ScreenUtil().setHeight(390)
-                      : ScreenUtil().setHeight(470),
+                      ? ScreenUtil().setHeight(440)
+                      : ScreenUtil().setHeight(520),
                   width: double.infinity,
                   margin: EdgeInsets.only(top: ScreenUtil().setHeight(60)),
                   decoration: const BoxDecoration(
@@ -275,7 +275,8 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                     const Expanded(child: Text('')),
                                   ],
                                 ),
-                      const Spacer(),
+
+                      WidgetUtils.commonSizedBox(70.h, 0),
 
                       Row(
                         children: [
@@ -613,7 +614,6 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                     ],
                   ),
                 ),
-
                 /// 禁言使用
                 jinyan
                     ? Positioned(
@@ -762,39 +762,46 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                       }
                     }
                   }),
-                  child: SizedBox(
-                    width: 170.h,
-                    height: 170.h,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(110),
-                            ScreenUtil().setHeight(110), headImg),
-                        // 头像框静态图
-                        (avatarFrameGifImg.isEmpty && avatarFrameImg.isNotEmpty)
-                            ? WidgetUtils.CircleHeadImage(
-                                ScreenUtil().setHeight(150),
-                                ScreenUtil().setHeight(150),
-                                avatarFrameImg)
-                            : const Text(''),
-                        // 头像框动态图
-                        avatarFrameGifImg.isNotEmpty
-                            ? SizedBox(
-                                height: 150.h,
-                                width: 150.h,
-                                child: SVGASimpleImage(
-                                  resUrl: avatarFrameGifImg,
-                                ),
-                              )
-                            : const Text(''),
-                      ],
+                  child: Transform.translate(
+                    offset: Offset(0,-20.h),
+                    child: Container(
+                      width: 200.h,
+                      height: 200.h,
+                      color: Colors.transparent,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(135),
+                              ScreenUtil().setHeight(135), headImg),
+                          // 头像框静态图
+                          (avatarFrameGifImg.isEmpty && avatarFrameImg.isNotEmpty)
+                              ? WidgetUtils.CircleHeadImage(
+                                  ScreenUtil().setHeight(170),
+                                  ScreenUtil().setHeight(170),
+                                  avatarFrameImg)
+                              : const Text(''),
+                          // 头像框动态图
+                          avatarFrameGifImg.isNotEmpty
+                              ? SizedBox(
+                                  height: 200.h,
+                                  width: 200.h,
+                                  child: SVGASimpleImage(
+                                    resUrl: avatarFrameGifImg,
+                                  ),
+                                )
+                              : const Text(''),
+                        ],
+                      ),
                     ),
                   ),
                 ),
                 // Positioned(
                 //     top: -45.h,
-                //     child: WidgetUtils.showImages(
-                //         'assets/images/a01.png', 260.h, 750.w)),
+                //     child: IgnorePointer(
+                //       ignoring: true,
+                //       child: WidgetUtils.showImages(
+                //           'assets/images/a01.png', 260.h, 750.w),
+                //     )),
               ],
             ),
           )

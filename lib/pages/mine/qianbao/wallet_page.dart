@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/pages/mine/qianbao/bi_zhuan_dou_page.dart';
 import 'package:yuyinting/pages/mine/qianbao/dou_pay_page.dart';
 import 'package:yuyinting/pages/mine/qianbao/tixian_bi_page.dart';
-import 'package:yuyinting/pages/mine/qianbao/tixian_zuan_page.dart';
 import 'package:yuyinting/pages/mine/qianbao/tq_dou_pay_page.dart';
 import 'package:yuyinting/pages/mine/qianbao/wallet_more_page.dart';
-import 'package:yuyinting/pages/mine/qianbao/zuan_pay_page.dart';
 import 'package:yuyinting/utils/loading.dart';
 import 'package:yuyinting/utils/my_utils.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
-
 import '../../../bean/balanceBean.dart';
-import '../../../config/my_config.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../main.dart';

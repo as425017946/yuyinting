@@ -79,6 +79,7 @@ import '../bean/searchAllBean.dart';
 import '../bean/searchGonghuiBean.dart';
 import '../bean/shopListBean.dart';
 import '../bean/shoucangBean.dart';
+import '../bean/soundBean.dart';
 import '../bean/svgaAllBean.dart';
 import '../bean/tgMyShareBean.dart';
 import '../bean/tgmBean.dart';
@@ -1711,5 +1712,13 @@ class DataUtils {
     await MyHttpRequest.post('${MyHttpConfig.baseURL}/activity/happinessWall', {}, {});
     print("幸福墙 /activity/happinessWall $respons");
     return HappinessWallBean.fromJson(respons!);
+  }
+
+  /// 推荐声音
+  static Future<soundBean> postPushSound() async {
+    Map<String, dynamic>? respons =
+    await MyHttpRequest.post(MyHttpConfig.pushSound, {}, {});
+    print("推荐声音 $respons");
+    return soundBean.fromJson(respons!);
   }
 }

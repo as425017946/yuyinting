@@ -543,7 +543,7 @@ class _TequanPageState extends State<TequanPage> {
             ),
           ),
           Container(
-            height: ScreenUtil().setHeight(180),
+            height: ScreenUtil().setHeight(220),
             width: double.infinity,
             color: MyColors.guizuBlack,
             child: Column(
@@ -633,7 +633,7 @@ class _TequanPageState extends State<TequanPage> {
             ),
           ),
           Positioned(
-              bottom: 130.h,
+              bottom: 180.h,
               child: Container(
                 padding: EdgeInsets.only(left: 20.h, right: 20.h),
                 child: WidgetUtils.showImagesFill(

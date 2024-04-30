@@ -373,6 +373,8 @@ class MyHttpConfig{
   static  String playBlindBox = "$baseURL/play/playBlindBox";
   // 是否有发红包权限
   static  String canSendRedPacket = "$baseURL/user/canSendRedPacket";
+  // 推荐声音
+  static  String pushSound = "$baseURL/room/pushSound";
 
 
 }

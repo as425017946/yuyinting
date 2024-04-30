@@ -25,13 +25,10 @@ class ZaixianPage extends StatefulWidget {
   State<ZaixianPage> createState() => _ZaixianPageState();
 }
 
-class _ZaixianPageState extends State<ZaixianPage>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
+class _ZaixianPageState extends State<ZaixianPage> {
 
   List<Data> list = [];
-  var listen;
+  var listen, listen2;
   int page = 1;
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -81,6 +78,25 @@ class _ZaixianPageState extends State<ZaixianPage>
         });
       }
     });
+
+    listen2 = eventBus.on<SubmitButtonBack>().listen((event) {
+      if (event.title == '在线') {
+        if (mounted) {
+          setState(() {
+            page = 1;
+          });
+        }
+        doPostRoomJoin();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    listen.cancel();
+    listen2.cancel();
   }
 
   /// 在线用户推荐使用

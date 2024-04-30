@@ -126,13 +126,13 @@ class _MeiLiDayPageState extends State<MeiLiDayPage> {
                       alignment: Alignment.center,
                       children: [
                         Positioned(
-                            top:50.h,
+                            top:40.h,
                             child: WidgetUtils.CricleImagess(160.h, 160.h, _list[0].avatar!)),
                         Positioned(
                           top:10.h,
                           child: SizedBox(
-                            height: ScreenUtil().setHeight(231),
-                            width: ScreenUtil().setWidth(228),
+                            height: 220.h,
+                            width: 220.h,
                             child:  WidgetUtils.showImages(
                                 'assets/images/py_one.png',
                                 ScreenUtil().setHeight(231),
@@ -273,8 +273,8 @@ class _MeiLiDayPageState extends State<MeiLiDayPage> {
                         WidgetUtils.CricleImagess(100.h, 100.h, _list[1].avatar!),
                         WidgetUtils.showImages(
                             'assets/images/py_two.png',
-                            ScreenUtil().setHeight(154),
-                            ScreenUtil().setWidth(146)),
+                            130.h,
+                            130.h),
                         Positioned(
                             bottom: 70.h,
                             child: WidgetUtils.onlyTextCenter(
@@ -346,8 +346,8 @@ class _MeiLiDayPageState extends State<MeiLiDayPage> {
                         Positioned(
                           top:10.h,
                           child: SizedBox(
-                            height: ScreenUtil().setHeight(231),
-                            width: ScreenUtil().setWidth(228),
+                            height: 220.h,
+                            width: 220.h,
                             child:  WidgetUtils.showImages(
                                 'assets/images/py_one.png',
                                 ScreenUtil().setHeight(231),
@@ -488,8 +488,8 @@ class _MeiLiDayPageState extends State<MeiLiDayPage> {
                         WidgetUtils.CricleImagess(100.h, 100.h, _list[1].avatar!),
                         WidgetUtils.showImages(
                             'assets/images/py_two.png',
-                            ScreenUtil().setHeight(154),
-                            ScreenUtil().setWidth(146)),
+                            130.h,
+                            130.h),
                         Positioned(
                             bottom: 70.h,
                             child: WidgetUtils.onlyTextCenter(
@@ -556,13 +556,13 @@ class _MeiLiDayPageState extends State<MeiLiDayPage> {
                       alignment: Alignment.center,
                       children: [
                         Positioned(
-                            top:50.h,
+                            top:40.h,
                             child: WidgetUtils.CricleImagess(160.h, 160.h, _list[0].avatar!)),
                         Positioned(
                           top:10.h,
                           child: SizedBox(
-                            height: ScreenUtil().setHeight(231),
-                            width: ScreenUtil().setWidth(228),
+                            height: 220.h,
+                            width: 220.h,
                             child:  WidgetUtils.showImages(
                                 'assets/images/py_one.png',
                                 ScreenUtil().setHeight(231),
@@ -637,8 +637,8 @@ class _MeiLiDayPageState extends State<MeiLiDayPage> {
                         WidgetUtils.CricleImagess(100.h, 100.h, _list[2].avatar!),
                         WidgetUtils.showImages(
                             'assets/images/py_three.png',
-                            ScreenUtil().setHeight(154),
-                            ScreenUtil().setWidth(146)),
+                            130.h,
+                            130.h),
                         Positioned(
                             bottom: 70.h,
                             child: WidgetUtils.onlyTextCenter(

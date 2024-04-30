@@ -1805,7 +1805,8 @@ class RoomItems {
               // constraints: BoxConstraints(maxWidth: double.infinity - 130.w),
               decoration: BoxDecoration(
                   image: DecorationImage(
-                    centerSlice: const Rect.fromLTWH(20, 20, 1, 1),
+                    centerSlice: sp.getString('isEmulation') == '1' ? Rect.fromLTWH(20.h, 20.h, 1, 1) : Rect.fromLTWH(40.w, 40.w
+                        , 1, 1),
                     // image: AssetImage('assets/images/cj/chat_text.png'),
                     image: CachedNetworkImageProvider(
                         list[i]['bubble_img'].toString()),
@@ -1894,7 +1895,8 @@ class RoomItems {
       String follow_status,
       String hot_degree,
       String roomID,
-      List<MikeList> listm) {
+      List<MikeList> listm,
+      String role) {
     return Row(
       children: [
         WidgetUtils.commonSizedBox(0, 20 * 2.w),
@@ -2047,6 +2049,7 @@ class RoomItems {
                       RoomReDuPage(
                         roomID: roomID,
                         listm: listm,
+                        role: role,
                       ));
                 }
               }),
