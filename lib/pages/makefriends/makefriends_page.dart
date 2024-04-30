@@ -17,6 +17,7 @@ class MakefriendsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return FocusDetector(
       onFocusGained: c.onAppear,
+      onFocusLost: c.onDisAppear,
       child: Container(
         height: double.infinity,
         width: double.infinity,
@@ -133,13 +134,13 @@ class MakefriendsPage extends StatelessWidget {
               height: double.infinity,
               placeholder: (context, url) => Image.asset(
                 'assets/images/img_placeholder.png',
-                fit: BoxFit.contain,
+                fit: BoxFit.cover,
               ),
               errorWidget: (context, url, error) {
                 Get.log('加载错误提示 $error');
                 return Image.asset(
                   'assets/images/img_placeholder.png',
-                  fit: BoxFit.contain,
+                  fit: BoxFit.cover,
                 );
               },
             ),

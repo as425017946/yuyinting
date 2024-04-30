@@ -32,9 +32,13 @@ class MakefriendsController extends GetxController with GetAntiCombo {
       postFindMate(gender: _gender.value);
     }
   }
+  void onDisAppear() {
+    _stopVoice();
+  }
 
   void onChoose() {
     action(() {
+      _stopVoice();
       postFindMate(gender: _gender.value != 1 ? 1 : 2);
     });
   }
@@ -50,6 +54,7 @@ class MakefriendsController extends GetxController with GetAntiCombo {
       if (_current >= list.length) {
         return;
       }
+      _stopVoice();
       final item = list[_current];
       final id = item.uid;
       // 如果点击的是自己，进入自己的主页
@@ -67,10 +72,7 @@ class MakefriendsController extends GetxController with GetAntiCombo {
   int _current = 0;
   void onSwipe(int index, AppinioSwiperDirection direction) {
     _current = index;
-    if (_mPlayer.isPlaying) {
-      _mPlayer.stopPlayer();
-    }
-    _voice.value = '';
+    _stopVoice();
   }
 
   final _isFirstLoading = true.obs;
@@ -126,5 +128,11 @@ class MakefriendsController extends GetxController with GetAntiCombo {
         _canVoice = true;
       }
     });
+  }
+  void _stopVoice() {
+    if (_mPlayer.isPlaying) {
+      _mPlayer.stopPlayer();
+    }
+    _voice.value = '';
   }
 }
