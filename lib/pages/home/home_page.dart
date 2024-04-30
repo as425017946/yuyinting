@@ -14,7 +14,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/pages/home/paidui_page.dart';
 import 'package:yuyinting/pages/home/search_page.dart';
@@ -40,7 +39,6 @@ import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../room/room_page.dart';
 import '../room/room_ts_mima_page.dart';
-import 'ceshi.dart';
 
 ///首页
 class HomePage extends StatefulWidget {
@@ -146,7 +144,7 @@ class _HomePageState extends State<HomePage>
     //   MyToastUtils.showToastBottom('未获取到房间id ${sp.getString('daili_roomid').toString()}');
     // }
     
-    MyUtils.goTransparentPage(context, CeShi());
+    // MyUtils.goTransparentPage(context, CeShiPage());
   }
 
   @override
@@ -280,7 +278,7 @@ class _HomePageState extends State<HomePage>
                     if (index == 1) {
                       eventBus.fire(SubmitButtonBack(title: '回到首页'));
                     }else if (index == 3) {
-                      eventBus.fire(SubmitButtonBack(title: '在线'));
+                      eventBus.fire(SubmitButtonBack(title: ''));
                     }else{
                       eventBus.fire(SubmitButtonBack(title: '首页其他页面'));
                     }
@@ -813,5 +811,4 @@ class _HomePageState extends State<HomePage>
       );
     }
   }
-
 }
