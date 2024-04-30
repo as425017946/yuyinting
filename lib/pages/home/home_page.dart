@@ -40,6 +40,7 @@ import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../room/room_page.dart';
 import '../room/room_ts_mima_page.dart';
+import 'ceshi.dart';
 
 ///首页
 class HomePage extends StatefulWidget {
@@ -70,8 +71,6 @@ class _HomePageState extends State<HomePage>
   @override
   void initState() {
     // TODO: implement initState
-    // // 加载本地 HTML 文件
-    WebView(initialUrl: 'assets/version.html',);
     doCheck();
     // doPostPdAddress();
     //更新身份
@@ -147,7 +146,7 @@ class _HomePageState extends State<HomePage>
     //   MyToastUtils.showToastBottom('未获取到房间id ${sp.getString('daili_roomid').toString()}');
     // }
     
-    // MyUtils.goTransparentPage(context, CeShiPage());
+    MyUtils.goTransparentPage(context, CeShi());
   }
 
   @override

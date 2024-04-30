@@ -194,6 +194,7 @@ flutter:
     - assets/audio/
     - assets/audio/car_321.MP3
     - assets/audio/car_bg.MP3
+    - assets/version.html
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
