@@ -8,6 +8,7 @@ import 'package:yuyinting/config/online_config.dart';
 import 'package:yuyinting/pages/message/geren/ziliao_page.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 
+import '../../../bean/CommonIntBean.dart';
 import '../../../bean/Common_bean.dart';
 import '../../../bean/joinRoomBean.dart';
 import '../../../bean/userInfoBean.dart';
@@ -806,7 +807,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
   Future<void> doPostCanSendUser() async {
     Map<String, dynamic> params = <String, dynamic>{'uid': widget.otherId};
     try {
-      CommonBean bean = await DataUtils.postCanSendUser(params);
+      CommonIntBean bean = await DataUtils.postCanSendUser(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
           //可以发私聊跳转

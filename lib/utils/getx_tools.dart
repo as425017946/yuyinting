@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
 
@@ -38,7 +39,7 @@ mixin GetAntiCombo {
   void action(void Function() a) {
     if (canTapAction) {
       canTapAction = false;
-      Future.delayed(const Duration(seconds: 1), () => canTapAction = true);
+      Future.delayed(const Duration(milliseconds: 500), () => canTapAction = true);
       a();
     }
   }
@@ -140,6 +141,26 @@ mixin GetAntiCombo {
       default:
         MyToastUtils.showToastBottom(bean.msg!);
         throw bean.msg!;
+    }
+  }
+
+  Future<T> doRequest<T>(Future<T> Function() request, {bool Function(int)? showErrMsg}) async {
+    final bean = await request() as GetBean;
+    switch (bean.code) {
+      case MyHttpConfig.successCode:
+        return bean as T;
+      case MyHttpConfig.errorloginCode:
+        final context = Get.context;
+        if (context != null) {
+          // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+        }
+        throw '未登录';
+      default:
+        if ((showErrMsg == null || showErrMsg(bean.code)) && bean.msg.isNotEmpty) {
+          MyToastUtils.showToastBottom(bean.msg);
+        }
+        throw bean;
     }
   }
 }
@@ -465,4 +486,9 @@ class UserGenderCircle extends StatelessWidget {
       child: Image.asset(gender == 0 ? 'assets/images/nv.png' : 'assets/images/nan.png'),
     );
   }
+}
+
+mixin GetBean {
+  late int code;
+  late String msg;
 }

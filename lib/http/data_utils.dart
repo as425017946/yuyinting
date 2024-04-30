@@ -79,7 +79,6 @@ import '../bean/searchAllBean.dart';
 import '../bean/searchGonghuiBean.dart';
 import '../bean/shopListBean.dart';
 import '../bean/shoucangBean.dart';
-import '../bean/soundBean.dart';
 import '../bean/svgaAllBean.dart';
 import '../bean/tgMyShareBean.dart';
 import '../bean/tgmBean.dart';
@@ -741,12 +740,12 @@ class DataUtils {
   }
 
   /// 能否私聊
-  static Future<CommonBean> postCanSendUser(Map<String, dynamic> params) async {
+  static Future<CommonIntBean> postCanSendUser(Map<String, dynamic> params) async {
     print("能否私聊：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.canSendUser, {}, params);
     print("能否私聊：$respons");
-    return CommonBean.fromJson(respons!);
+    return CommonIntBean.fromJson(respons!);
   }
 
   /// 房间信息
@@ -1712,6 +1711,16 @@ class DataUtils {
     await MyHttpRequest.post('${MyHttpConfig.baseURL}/activity/happinessWall', {}, {});
     print("幸福墙 /activity/happinessWall $respons");
     return HappinessWallBean.fromJson(respons!);
+  }
+
+  /// 找对象-正式
+  static Future<FindMateBean> postFindMate(int? gender) async {
+    Map<String, dynamic>? respons =
+    await MyHttpRequest.post('${MyHttpConfig.baseURL}/user/findMate', {}, {
+      if (gender != null) 'gender': gender
+    });
+    print("找对象 /user/findMate $respons");
+    return FindMateBean.fromJson(respons!);
   }
 
   /// 推荐声音

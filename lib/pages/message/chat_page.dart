@@ -20,6 +20,7 @@ import 'package:yuyinting/utils/event_utils.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/widget/SwiperPage.dart';
 
+import '../../bean/CommonIntBean.dart';
 import '../../bean/Common_bean.dart';
 import '../../bean/chatUserInfoBean.dart';
 import '../../bean/isPayBean.dart';
@@ -1950,8 +1951,8 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
   /// 发送消息
   late List<Map<String, dynamic>> allData2;
 
-  Future<void> doPostSendUserMsg(String content) async {
-    if (content.trim().isEmpty) {
+  Future<void> doPostSendUserMsg(String content1) async {
+    if (content1.trim().isEmpty) {
       return;
     }
 
@@ -1960,12 +1961,12 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
     Map<String, dynamic> params = <String, dynamic>{
       'uid': widget.otherUid,
       'type': '1',
-      'content': content
+      'content': content1
     };
 
     try {
       // CommonBean bean = await DataUtils.postSendUserMsg(params);
-      CommonBean bean = await DataUtils.postCanSendUser(params);
+      CommonIntBean bean = await DataUtils.postCanSendUser(params);
       String combineID = '';
       if (int.parse(sp.getString('user_id').toString()) >
           int.parse(widget.otherUid)) {
@@ -1973,6 +1974,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
       } else {
         combineID = '${sp.getString('user_id').toString()}-${widget.otherUid}';
       }
+      final content = bean.data ?? content1;
       switch (bean.code) {
         case MyHttpConfig.successCode:
           final textMsg = EMMessage.createTxtSendMessage(
@@ -2383,7 +2385,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
     LogE('私聊类型== $type');
     Map<String, dynamic> params = <String, dynamic>{'uid': widget.otherUid};
     try {
-      CommonBean bean = await DataUtils.postCanSendUser(params);
+      CommonIntBean bean = await DataUtils.postCanSendUser(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
           //可以发私聊跳转 type 1发表情 2图片 3录音 4红包

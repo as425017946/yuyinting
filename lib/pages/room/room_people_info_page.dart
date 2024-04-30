@@ -9,6 +9,7 @@ import 'package:yuyinting/pages/room/room_send_info_page.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 
+import '../../bean/CommonIntBean.dart';
 import '../../bean/Common_bean.dart';
 import '../../bean/roomInfoBean.dart';
 import '../../bean/roomInfoUserManagerBean.dart';
@@ -1059,7 +1060,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
   Future<void> doPostCanSendUser() async {
     Map<String, dynamic> params = <String, dynamic>{'uid': widget.uid};
     try {
-      CommonBean bean = await DataUtils.postCanSendUser(params);
+      CommonIntBean bean = await DataUtils.postCanSendUser(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
           //可以发私聊跳转
