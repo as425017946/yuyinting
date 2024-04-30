@@ -22,6 +22,7 @@ import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/my_utils.dart';
 import 'package:yuyinting/utils/svga_tools.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
+import '../../bean/CommonIntBean.dart';
 import '../../bean/CommonMyIntBean.dart';
 import '../../bean/Common_bean.dart';
 import '../../bean/charmAllBean.dart';
@@ -5733,7 +5734,7 @@ class _RoomPageState extends State<RoomPage>
     };
     try {
       // CommonBean bean = await DataUtils.postSendUserMsg(params);
-      CommonBean bean = await DataUtils.postCanSendUser(params);
+      CommonIntBean bean = await DataUtils.postCanSendUser(params);
       String combineID = '';
       if (int.parse(sp.getString('user_id').toString()) >
           int.parse(cb.toUids!)) {

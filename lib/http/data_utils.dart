@@ -741,12 +741,12 @@ class DataUtils {
   }
 
   /// 能否私聊
-  static Future<CommonBean> postCanSendUser(Map<String, dynamic> params) async {
+  static Future<CommonIntBean> postCanSendUser(Map<String, dynamic> params) async {
     print("能否私聊：$params");
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.canSendUser, {}, params);
     print("能否私聊：$respons");
-    return CommonBean.fromJson(respons!);
+    return CommonIntBean.fromJson(respons!);
   }
 
   /// 房间信息
