@@ -35,6 +35,7 @@ import '../../utils/widget_utils.dart';
 import '../gongping/gp_hi_page.dart';
 import '../home/home_items.dart';
 import '../home/home_page.dart';
+import '../makefriends/makefriends_page.dart';
 import '../mine/mine/xc_mine_page.dart';
 import '../room/room_page.dart';
 import '../room/room_ts_mima_page.dart';
@@ -766,12 +767,12 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
                   }
                 });
               },
-              children: const [
-                HomePage(),//修改
-                HomePage(),
-                TrendsPage(),
-                MessagePage(),
-                MinePage()
+              children: [
+                MakefriendsPage(),
+                const HomePage(),
+                const TrendsPage(),
+                const MessagePage(),
+                const MinePage()
               ],
             ),
             bottomNavigationBar: BottomNavigationBar(

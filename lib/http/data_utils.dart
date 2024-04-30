@@ -22,6 +22,7 @@ import '../bean/commonStringBean.dart';
 import '../bean/feilvBean.dart';
 import '../bean/fenleiBean.dart';
 import '../bean/fileUpdateBean.dart';
+import '../bean/find_mate_bean.dart';
 import '../bean/gameListBean.dart';
 import '../bean/gameStoreBean.dart';
 import '../bean/getHeadImageBean.dart';
@@ -1711,5 +1712,15 @@ class DataUtils {
     await MyHttpRequest.post('${MyHttpConfig.baseURL}/activity/happinessWall', {}, {});
     print("幸福墙 /activity/happinessWall $respons");
     return HappinessWallBean.fromJson(respons!);
+  }
+
+  /// 找对象-正式
+  static Future<FindMateBean> postFindMate(int? gender) async {
+    Map<String, dynamic>? respons =
+    await MyHttpRequest.post('${MyHttpConfig.baseURL}/user/findMate', {}, {
+      if (gender != null) 'gender': gender
+    });
+    print("找对象 /user/findMate $respons");
+    return FindMateBean.fromJson(respons!);
   }
 }
