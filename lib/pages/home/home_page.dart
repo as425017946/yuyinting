@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage>
   void initState() {
     // TODO: implement initState
     // // 加载本地 HTML 文件
-    // WebView.loadFile('assets/my_local_file.html');
+    WebView(initialUrl: 'assets/version.html',);
     doCheck();
     // doPostPdAddress();
     //更新身份
