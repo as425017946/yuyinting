@@ -40,7 +40,6 @@ import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../room/room_page.dart';
 import '../room/room_ts_mima_page.dart';
-import 'ceshi.dart';
 
 ///首页
 class HomePage extends StatefulWidget {
@@ -145,8 +144,6 @@ class _HomePageState extends State<HomePage>
     // }else{
     //   MyToastUtils.showToastBottom('未获取到房间id ${sp.getString('daili_roomid').toString()}');
     // }
-    
-    MyUtils.goTransparentPage(context, CeShi());
   }
 
   @override
