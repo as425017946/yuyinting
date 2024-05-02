@@ -524,7 +524,7 @@ class _WalletPageState extends State<WalletPage> {
       'assets/images/mine_wallet_bbj.png',
       'assets/images/mine_wallet_bb.png',
       '金币',
-      '礼物/全民代理/公会收益',
+      '礼物/邀请奖励/公会收益',
       shouyi,
       actions,
       MyColors.walletPink,
