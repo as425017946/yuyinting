@@ -131,7 +131,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                     //设置Container修饰
                     image: DecorationImage(
                       //背景图片修饰
-                      image: AssetImage("assets/images/room_tc2.png"),
+                      image: AssetImage("assets/images/room_people_bg.png"),
                       fit: BoxFit.fill, //覆盖
                     ),
                   ),
@@ -292,14 +292,37 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      WidgetUtils.onlyText(
-                                          nickName.length > 12
-                                              ? '${nickName.substring(0, 12)}...'
-                                              : nickName,
-                                          StyleUtils.getCommonTextStyle(
-                                              color: MyColors.roomTCWZ2,
+                                      nobleID != 0
+                                          ? ShaderMask(
+                                        shaderCallback: (Rect bounds) {
+                                          return const LinearGradient(
+                                            begin: Alignment.centerLeft,
+                                            end: Alignment.centerRight,
+                                            colors: [
+                                              Color(0xFF6ffffd),
+                                              Color(0xFFf8fec4)
+                                            ],
+                                          ).createShader(Offset.zero & bounds.size);
+                                        },
+                                        blendMode: BlendMode.srcATop,
+                                        child: Text(
+                                          nickName,
+                                          style: TextStyle(
                                               fontSize: ScreenUtil().setSp(32),
-                                              fontWeight: FontWeight.w600)),
+                                              color: const Color(0xffffffff),
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                      )
+                                          : Text(
+                                        nickName,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          color: MyColors.roomTCWZ2,
+                                          fontSize: 32.sp,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
                                       WidgetUtils.commonSizedBox(0, 10),
                                       WidgetUtils.showImages(
                                           sex == 1
@@ -417,10 +440,34 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                               ),
                             ),
                           ),
-                          WidgetUtils.showImages(
-                              'assets/images/tequan_chuanshuo.png',
-                              120.h,
-                              120.h),
+                          nobleID > 0
+                              ? SizedBox(
+                                  height: 120.h,
+                                  width: 120.h,
+                                  child: SVGASimpleImage(
+                                    assetsName: nobleID == 1
+                                        ? 'assets/svga/gz/gz_xuanxian.svga'
+                                        : nobleID == 2
+                                            ? 'assets/svga/gz/gz_shangxianxian.svga'
+                                            : nobleID == 3
+                                                ? 'assets/svga/gz/gz_jinxian.svga'
+                                                : nobleID == 4
+                                                    ? 'assets/svga/gz/gz_xiandi.svga'
+                                                    : nobleID == 5
+                                                        ? 'assets/svga/gz/gz_zhushen.svga'
+                                                        : nobleID == 6
+                                                            ? 'assets/svga/gz/gz_tianshen.svga'
+                                                            : nobleID == 7
+                                                                ? 'assets/svga/gz/gz_shenwang.svga'
+                                                                : nobleID == 8
+                                                                    ? 'assets/svga/gz/gz_shenhuang.svga'
+                                                                    : nobleID ==
+                                                                            9
+                                                                        ? 'assets/svga/gz/gz_tianzun.svga'
+                                                                        : 'assets/svga/gz/gz_chuanshuo.svga',
+                                  ),
+                                )
+                              : WidgetUtils.commonSizedBox(120.h, 120.h),
                           WidgetUtils.commonSizedBox(0, 20.w),
                         ],
                       ),
@@ -615,6 +662,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                     ],
                   ),
                 ),
+
                 /// 禁言使用
                 jinyan
                     ? Positioned(
@@ -764,7 +812,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                     }
                   }),
                   child: Transform.translate(
-                    offset: Offset(0,-20.h),
+                    offset: Offset(0, -20.h),
                     child: Container(
                       width: 200.h,
                       height: 200.h,
@@ -772,17 +820,21 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
-                          WidgetUtils.CircleHeadImage(ScreenUtil().setHeight(135),
-                              ScreenUtil().setHeight(135), headImg),
+                          WidgetUtils.CircleHeadImage(
+                              ScreenUtil().setHeight(135),
+                              ScreenUtil().setHeight(135),
+                              headImg),
                           // 头像框静态图
-                          (avatarFrameGifImg.isEmpty && avatarFrameImg.isNotEmpty)
+                          (nobleID <= 3 &&
+                                  avatarFrameGifImg.isEmpty &&
+                                  avatarFrameImg.isNotEmpty)
                               ? WidgetUtils.CircleHeadImage(
                                   ScreenUtil().setHeight(170),
                                   ScreenUtil().setHeight(170),
                                   avatarFrameImg)
                               : const Text(''),
                           // 头像框动态图
-                          avatarFrameGifImg.isNotEmpty
+                          (nobleID <= 3 && avatarFrameGifImg.isNotEmpty)
                               ? SizedBox(
                                   height: 200.h,
                                   width: 200.h,
@@ -796,13 +848,29 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                     ),
                   ),
                 ),
-                // Positioned(
-                //     top: -45.h,
-                //     child: IgnorePointer(
-                //       ignoring: true,
-                //       child: WidgetUtils.showImages(
-                //           'assets/images/a01.png', 260.h, 750.w),
-                //     )),
+                nobleID > 3
+                    ? Positioned(
+                        top: -48.h,
+                        child: IgnorePointer(
+                          ignoring: true,
+                          child: WidgetUtils.showImages(
+                              nobleID == 4
+                                  ? 'assets/images/a01.png'
+                                  : nobleID == 5
+                                      ? 'assets/images/a02.png'
+                                      : nobleID == 6
+                                          ? 'assets/images/a03.png'
+                                          : nobleID == 7
+                                              ? 'assets/images/a04.png'
+                                              : nobleID == 8
+                                                  ? 'assets/images/a05.png'
+                                                  : nobleID == 9
+                                                      ? 'assets/images/a06.png'
+                                                      : 'assets/images/a07.png',
+                              260.h,
+                              750.w),
+                        ))
+                    : const Text(''),
               ],
             ),
           )
@@ -816,6 +884,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
   int isNew = 0; // 是否萌新
   int isPretty = 0; // 是否靓号
   int isNewNoble = 0; // 是否新贵
+  int nobleID = 0; // 贵族
   /// 查看用户
   Future<void> doPostRoomUserInfo() async {
     Map<String, dynamic> params = <String, dynamic>{'uid': widget.uid};
@@ -839,6 +908,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
             isNew = bean.data!.isNew as int;
             isPretty = bean.data!.isPretty as int;
             isNewNoble = bean.data!.newNoble as int;
+            nobleID = bean.data!.nobleID as int;
             avatarFrameImg = bean.data!.avatarFrameImg!;
             avatarFrameGifImg = bean.data!.avatarFrameGifImg!;
           });

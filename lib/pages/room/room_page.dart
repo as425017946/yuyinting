@@ -4582,7 +4582,7 @@ class _RoomPageState extends State<RoomPage>
                                     )
                                   else
                                 SizedBox(
-                                  height: 50.h,
+                                  height: 55.h,
                                   width: 400.w,
                                   child: Stack(
                                     children: [

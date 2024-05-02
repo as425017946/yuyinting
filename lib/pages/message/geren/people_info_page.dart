@@ -30,6 +30,7 @@ import '../../room/room_ts_mima_page.dart';
 import '../chat_page.dart';
 import 'dongtai_page.dart';
 
+/// 他人主页
 class PeopleInfoPage extends StatefulWidget {
   final String otherId;
   final String title;
@@ -47,6 +48,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
   late final PageController _controller; //
   // 0-未知 1-男 2-女
   int sex = 0;
+  int nobleID = 0; // 贵族
   String headImg = '',
       headImgID = '',
       nickName = '',
@@ -69,8 +71,10 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
 
   // ignore: non_constant_identifier_names
   List<String> list_p = [];
+
   // ignore: non_constant_identifier_names
   List<String> list_pID = [];
+
   // ignore: non_constant_identifier_names
   List<String> list_label = [];
 
@@ -134,8 +138,8 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
             CustomScrollView(
               slivers: [
                 SliverAppBar(
-                  pinned:
-                      true, //设置为true时，当SliverAppBar内容滑出屏幕时，将始终渲染一个固定在顶部的收起状态
+                  pinned: true,
+                  //设置为true时，当SliverAppBar内容滑出屏幕时，将始终渲染一个固定在顶部的收起状态
                   expandedHeight: imgHeight * 0.6,
                   collapsedHeight: 56,
                   backgroundColor: Colors.white,
@@ -397,16 +401,37 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                     padding: EdgeInsets.symmetric(horizontal: 20.w),
                     child: Row(
                       children: [
-                        Text(
-                          nickName,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 42.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                        nobleID != 0
+                            ? ShaderMask(
+                                shaderCallback: (Rect bounds) {
+                                  return const LinearGradient(
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                    colors: [
+                                      Color(0xFF6ffffd),
+                                      Color(0xFFf8fec4)
+                                    ],
+                                  ).createShader(Offset.zero & bounds.size);
+                                },
+                                blendMode: BlendMode.srcATop,
+                                child: Text(
+                                  nickName,
+                                  style: TextStyle(
+                                      fontSize: ScreenUtil().setSp(42),
+                                      color: const Color(0xffffffff),
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              )
+                            : Text(
+                                nickName,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 42.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                         SizedBox(width: 20.w),
                         GestureDetector(
                           onTap: (() {
@@ -518,12 +543,36 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                 children: [
                   SizedBox(
                     height: 40.w,
-                    child: (live == 1 && widget.title != '小主页') ? _follow() : null,
+                    child:
+                        (live == 1 && widget.title != '小主页') ? _follow() : null,
                   ),
-                  // SizedBox(
-                  //   height: 220.w,
-                  //   child: WidgetUtils.showImages('assets/images/tequan_chuanshuo.png', 150.w, 150.w),
-                  // ),
+                  nobleID > 0
+                      ? SizedBox(
+                          height: 220.w,
+                          width: 150.w,
+                          child: SVGASimpleImage(
+                            assetsName: nobleID == 1
+                                ? 'assets/svga/gz/gz_xuanxian.svga'
+                                : nobleID == 2
+                                    ? 'assets/svga/gz/gz_shangxianxian.svga'
+                                    : nobleID == 3
+                                        ? 'assets/svga/gz/gz_jinxian.svga'
+                                        : nobleID == 4
+                                            ? 'assets/svga/gz/gz_xiandi.svga'
+                                            : nobleID == 5
+                                                ? 'assets/svga/gz/gz_zhushen.svga'
+                                                : nobleID == 6
+                                                    ? 'assets/svga/gz/gz_tianshen.svga'
+                                                    : nobleID == 7
+                                                        ? 'assets/svga/gz/gz_shenwang.svga'
+                                                        : nobleID == 8
+                                                            ? 'assets/svga/gz/gz_shenhuang.svga'
+                                                            : nobleID == 9
+                                                                ? 'assets/svga/gz/gz_tianzun.svga'
+                                                                : 'assets/svga/gz/gz_chuanshuo.svga',
+                          ),
+                        )
+                      : WidgetUtils.commonSizedBox(220.w, 150.w),
                 ],
               ),
             ),
@@ -771,6 +820,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
             isNewNoble = bean.data!.newNoble as int;
             avatarFrameImg = bean.data!.avatarFrameImg!;
             avatarFrameGifImg = bean.data!.avatarFrameGifImg!;
+            nobleID = bean.data!.nobleID as int;
             if (bean.data!.label!.isNotEmpty) {
               list_label = bean.data!.label!.split(',');
             }

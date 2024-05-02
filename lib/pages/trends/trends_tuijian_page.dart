@@ -1,13 +1,9 @@
-import 'dart:io';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
-import 'package:yuyinting/pages/trends/trends_hi_page.dart';
 import 'package:yuyinting/pages/trends/trends_more_page.dart';
 import 'package:yuyinting/utils/log_util.dart';
 
@@ -17,18 +13,12 @@ import '../../colors/my_colors.dart';
 import '../../config/my_config.dart';
 import '../../http/data_utils.dart';
 import '../../http/my_http_config.dart';
-import '../../main.dart';
 import '../../utils/event_utils.dart';
 import '../../utils/loading.dart';
 import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/style_utils.dart';
 import '../../utils/widget_utils.dart';
-import '../../widget/SwiperPage.dart';
-import '../message/chat_page.dart';
-import '../message/geren/people_info_page.dart';
-import '../mine/my/my_info_page.dart';
-import 'PagePreviewVideo.dart';
 
 /// 动态-推荐页面
 class TrendsTuiJianPage extends StatefulWidget {
@@ -110,7 +100,22 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
     listen.cancel();
   }
 
+  _initializeVideoController(List<String> listImg,int i) async {
+    final fileName = await VideoThumbnail.thumbnailFile(
+      video: listImg[0],
+      thumbnailPath: (await getTemporaryDirectory()).path,
+      quality: 30,
+    );
+    setState(() {
+      _list[i].imgUrl![1] = fileName!;
+    });
+    // LogE('视频图片 $fileName');
+  }
+
   Widget waterCard(BuildContext context, int index){
+    if (_list[index].type == 2){
+      _initializeVideoController(_list[index].imgUrl!,index);
+    }
     final item = _list[index];
     return GestureDetector(
       onTap: ((){
@@ -129,7 +134,9 @@ class _TrendsTuiJianPageState extends State<TrendsTuiJianPage>
         ),
         child: Column(
           children: [
-            if (item.imgUrl != null && item.imgUrl!.isNotEmpty)
+            if (item.type == 2)
+              WidgetUtils.CircleImageNetTop(350.h, 350.w, 30.h, item.imgUrl![1])
+            else if (item.imgUrl != null && item.imgUrl!.isNotEmpty)
               WidgetUtils.CircleImageNetTop(350.h, 350.w, 30.h, item.imgUrl![0])
             else
               Image.asset('assets/images/img_placeholder.png', width: 350.w, height: 350.w, fit: BoxFit.fill,),

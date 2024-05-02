@@ -35,8 +35,11 @@ class MyInfoPage extends StatefulWidget {
 class _MyInfoPageState extends State<MyInfoPage> {
   var width0 = 0.0.obs;
   var width1 = 0.0.obs;
+
   // ignore: non_constant_identifier_names
   int _currentIndex = 0, gender = 0, is_pretty = 0, all_gift_type = 0;
+
+  int nobleID = 0; // 贵族
   late final PageController _controller;
   String userNumber = '',
       // ignore: non_constant_identifier_names
@@ -46,10 +49,13 @@ class _MyInfoPageState extends State<MyInfoPage> {
       constellation = '',
       avatarFrameImg = '',
       avatarFrameGifImg = '';
+
   // final TextEditingController _souSuoName = TextEditingController();
   List<String> imageList = [];
+
   // 设备是安卓还是ios
   String isDevices = 'android';
+
   @override
   void initState() {
     super.initState();
@@ -122,14 +128,18 @@ class _MyInfoPageState extends State<MyInfoPage> {
             CustomScrollView(
               slivers: [
                 SliverAppBar(
-                  pinned: true, //设置为true时，当SliverAppBar内容滑出屏幕时，将始终渲染一个固定在顶部的收起状态
+                  pinned: true,
+                  //设置为true时，当SliverAppBar内容滑出屏幕时，将始终渲染一个固定在顶部的收起状态
                   expandedHeight: imgHeight * 0.6,
                   collapsedHeight: 56,
                   backgroundColor: Colors.white,
                   flexibleSpace: FlexibleSpaceBar(
                     // title: const Text("测试信息"),
                     centerTitle: true,
-                    background: WidgetUtils.showImagesNet(sp.getString('user_headimg').toString(), imgHeight, double.infinity),
+                    background: WidgetUtils.showImagesNet(
+                        sp.getString('user_headimg').toString(),
+                        imgHeight,
+                        double.infinity),
                   ),
                   actions: [
                     GestureDetector(
@@ -166,20 +176,15 @@ class _MyInfoPageState extends State<MyInfoPage> {
                     return Container(
                       decoration: const BoxDecoration(
                         gradient: LinearGradient(
-                          //渐变位置
+                            //渐变位置
                             begin: Alignment.topCenter, //右上
                             end: Alignment.bottomCenter, //左下
-                            stops: [
-                              0.0,
-                              1.0
-                            ], //[渐变起始点, 渐变结束点]
+                            stops: [0.0, 1.0], //[渐变起始点, 渐变结束点]
                             //渐变颜色[始点颜色, 结束颜色]
-                            colors: [
-                              MyColors.newY5,
-                              Colors.white
-                            ]),
+                            colors: [MyColors.newY5, Colors.white]),
                       ),
-                      height: Get.height - Get.statusBarHeight - 30 + 300.w,//1415.h,
+                      height: Get.height - Get.statusBarHeight - 30 + 300.w,
+                      //1415.h,
                       child: _content(),
                     );
                   }, childCount: 1),
@@ -192,197 +197,265 @@ class _MyInfoPageState extends State<MyInfoPage> {
 
   Widget _head() {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20.w),
-      height: 290.w,
-      alignment: Alignment.topLeft,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          GestureDetector(
-            onTap: (() {
-              if (MyUtils.checkClick()) {
-                Navigator.of(context).push(PageRouteBuilder(
-                    opaque: false,
-                    pageBuilder: (context, animation, secondaryAnimation) {
-                      return SwiperPage(imgList: imageList);
-                    }));
-              }
-            }),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 160.w,
-                  height: 160.w,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Container(
-                        width: 120.w,
-                        height: 120.w,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(60.w),
-                        ),
-                      ),
-                      UserFrameHead(
-                        size: 110.w,
-                        avatar: sp.getString('user_headimg').toString(),
-                        avatarFrameGifImg: avatarFrameGifImg,
-                        avatarFrameImg: avatarFrameImg,
-                      ),
-                    ],
-                  ),
-                ),
-                /// 音频
-                voice_card.isNotEmpty
-                    ? GestureDetector(
-                  onTap: (() {
-                    if (MyUtils.checkClick() && playRecord == false) {
-                      play();
-                    }
-                  }),
-                  child: Container(
-                    height: ScreenUtil().setHeight(45),
-                    width: ScreenUtil().setWidth(220),
-                    margin: const EdgeInsets.only(left: 20),
-                    alignment: Alignment.center,
-                    //边框设置
-                    decoration: const BoxDecoration(
-                      //背景
-                      color: MyColors.peopleYellow,
-                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                      borderRadius:
-                      BorderRadius.all(Radius.circular(20.0)),
-                    ),
+        margin: EdgeInsets.symmetric(horizontal: 20.w),
+        height: 290.w,
+        alignment: Alignment.topLeft,
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: (() {
+                      if (MyUtils.checkClick()) {
+                        Navigator.of(context).push(PageRouteBuilder(
+                            opaque: false,
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) {
+                              return SwiperPage(imgList: imageList);
+                            }));
+                      }
+                    }),
                     child: Row(
                       children: [
-                        const Expanded(
-                            child: SVGASimpleImage(
-                              assetsName:
-                              'assets/svga/audio_xindiaotu.svga',
-                            )),
-                        WidgetUtils.commonSizedBox(0, 10.h),
-                        WidgetUtils.showImages(
-                            'assets/images/people_bofang.png',
-                            ScreenUtil().setHeight(35),
-                            ScreenUtil().setWidth(35)),
-                        WidgetUtils.commonSizedBox(0, 10.h),
+                        SizedBox(
+                          width: 160.w,
+                          height: 160.w,
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Container(
+                                width: 120.w,
+                                height: 120.w,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(60.w),
+                                ),
+                              ),
+                              UserFrameHead(
+                                size: 110.w,
+                                avatar: sp.getString('user_headimg').toString(),
+                                avatarFrameGifImg: avatarFrameGifImg,
+                                avatarFrameImg: avatarFrameImg,
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        /// 音频
+                        voice_card.isNotEmpty
+                            ? GestureDetector(
+                                onTap: (() {
+                                  if (MyUtils.checkClick() &&
+                                      playRecord == false) {
+                                    play();
+                                  }
+                                }),
+                                child: Container(
+                                  height: ScreenUtil().setHeight(45),
+                                  width: ScreenUtil().setWidth(220),
+                                  margin: const EdgeInsets.only(left: 20),
+                                  alignment: Alignment.center,
+                                  //边框设置
+                                  decoration: const BoxDecoration(
+                                    //背景
+                                    color: MyColors.peopleYellow,
+                                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20.0)),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      const Expanded(
+                                          child: SVGASimpleImage(
+                                        assetsName:
+                                            'assets/svga/audio_xindiaotu.svga',
+                                      )),
+                                      WidgetUtils.commonSizedBox(0, 10.h),
+                                      WidgetUtils.showImages(
+                                          'assets/images/people_bofang.png',
+                                          ScreenUtil().setHeight(35),
+                                          ScreenUtil().setWidth(35)),
+                                      WidgetUtils.commonSizedBox(0, 10.h),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : const Text(''),
                       ],
                     ),
                   ),
-                )
-                    : const Text(''),
-              ],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
-            child: Row(
-              children: [
-                Text(
-                  sp.getString('nickname').toString(),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 42.sp,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                SizedBox(width: 20.w),
-                GestureDetector(
-                  onTap: (() {
-                    Clipboard.setData(ClipboardData(
-                      text: userNumber,
-                    ));
-                    MyToastUtils.showToastBottom('已成功复制到剪切板');
-                  }),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      WidgetUtils.onlyText(
-                        'ID: $userNumber',
-                        StyleUtils.getCommonTextStyle(
-                          color: Colors.black,
-                          fontSize: 24.sp,
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.w),
+                    child: Row(
+                      children: [
+                        nobleID != 0
+                            ? ShaderMask(
+                                shaderCallback: (Rect bounds) {
+                                  return const LinearGradient(
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                    colors: [
+                                      Color(0xFF6ffffd),
+                                      Color(0xFFf8fec4)
+                                    ],
+                                  ).createShader(Offset.zero & bounds.size);
+                                },
+                                blendMode: BlendMode.srcATop,
+                                child: Text(
+                                  sp.getString('nickname').toString(),
+                                  style: TextStyle(
+                                      fontSize: ScreenUtil().setSp(42),
+                                      color: const Color(0xffffffff),
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              )
+                            : Text(
+                                sp.getString('nickname').toString(),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 42.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                        SizedBox(width: 20.w),
+                        GestureDetector(
+                          onTap: (() {
+                            Clipboard.setData(ClipboardData(
+                              text: userNumber,
+                            ));
+                            MyToastUtils.showToastBottom('已成功复制到剪切板');
+                          }),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              WidgetUtils.onlyText(
+                                'ID: $userNumber',
+                                StyleUtils.getCommonTextStyle(
+                                  color: Colors.black,
+                                  fontSize: 24.sp,
+                                ),
+                              ),
+                              WidgetUtils.commonSizedBox(0, 10.w),
+                              WidgetUtils.showImages(
+                                'assets/images/mine_fuzhi.png',
+                                25.w,
+                                25.w,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      WidgetUtils.commonSizedBox(0, 10.w),
-                      WidgetUtils.showImages(
-                        'assets/images/mine_fuzhi.png',
-                        25.w,
-                        25.w,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            height: 60.w,
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
-            child: Row(
-              children: [
-                if (gender != 0)
-                Container(
-                  height: 40.w,
-                  width: 80.w,
-                  margin: EdgeInsets.only(right: 10.w),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: gender == 1 ? MyColors.dtBlue : MyColors.dtPink,
-                    borderRadius: BorderRadius.all(Radius.circular(25.w)),
-                  ),
-                  child: WidgetUtils.showImages(
-                      gender == 1
-                          ? 'assets/images/nan.png'
-                          : 'assets/images/nv.png',
-                      25.w,
-                      25.w,
+                      ],
                     ),
-                ),
-                // 只有不是新贵或者新锐的时候展示萌新
-                if (isNew == 1 && isNewNoble == 0) ...[
-                  WidgetUtils.showImagesFill(
-                      'assets/images/dj/room_role_common.png', 45.w, 85.w),
-                  WidgetUtils.commonSizedBox(0, 10.w)
+                  ),
+                  Container(
+                    height: 60.w,
+                    padding: EdgeInsets.symmetric(horizontal: 20.w),
+                    child: Row(
+                      children: [
+                        if (gender != 0)
+                          Container(
+                            height: 40.w,
+                            width: 80.w,
+                            margin: EdgeInsets.only(right: 10.w),
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: gender == 1
+                                  ? MyColors.dtBlue
+                                  : MyColors.dtPink,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(25.w)),
+                            ),
+                            child: WidgetUtils.showImages(
+                              gender == 1
+                                  ? 'assets/images/nan.png'
+                                  : 'assets/images/nv.png',
+                              25.w,
+                              25.w,
+                            ),
+                          ),
+                        // 只有不是新贵或者新锐的时候展示萌新
+                        if (isNew == 1 && isNewNoble == 0) ...[
+                          WidgetUtils.showImagesFill(
+                              'assets/images/dj/room_role_common.png',
+                              45.w,
+                              85.w),
+                          WidgetUtils.commonSizedBox(0, 10.w)
+                        ],
+                        // 展示新贵或者新锐图标
+                        isNewNoble == 1
+                            ? WidgetUtils.showImages(
+                                'assets/images/dj/room_rui.png', 35.w, 85.w)
+                            : isNewNoble == 2
+                                ? WidgetUtils.showImages(
+                                    'assets/images/dj/room_gui.png', 35.w, 85.w)
+                                : isNewNoble == 3
+                                    ? WidgetUtils.showImages(
+                                        'assets/images/dj/room_qc.png',
+                                        35.w,
+                                        85.w)
+                                    : const Text(''),
+                        isNewNoble != 0
+                            ? WidgetUtils.commonSizedBox(0, 10.w)
+                            : const Text(''),
+                        isPretty == 1
+                            ? WidgetUtils.showImages(
+                                'assets/images/dj/lianghao.png', 40.w, 40.w)
+                            : const Text(''),
+                        isPretty == 1
+                            ? WidgetUtils.commonSizedBox(0, 10.w)
+                            : const Text(''),
+                        // 用户等级
+                        if (level > 0) ...[
+                          CharmLevelFlag(
+                              level: level, width: 75.w, height: 30.w),
+                          WidgetUtils.commonSizedBox(0, 10.w),
+                        ],
+                        // 财富等级
+                        if (grLevel > 0)
+                          WealthLevelFlag(
+                              level: grLevel, width: 75.w, height: 30.w),
+                      ],
+                    ),
+                  ),
                 ],
-                // 展示新贵或者新锐图标
-                isNewNoble == 1
-                    ? WidgetUtils.showImages(
-                    'assets/images/dj/room_rui.png', 35.w, 85.w)
-                    : isNewNoble == 2
-                    ? WidgetUtils.showImages(
-                    'assets/images/dj/room_gui.png', 35.w, 85.w)
-                    : isNewNoble == 3
-                    ? WidgetUtils.showImages(
-                    'assets/images/dj/room_qc.png', 35.w, 85.w)
-                    : const Text(''),
-                isNewNoble != 0
-                    ? WidgetUtils.commonSizedBox(0, 10.w)
-                    : const Text(''),
-                isPretty == 1
-                    ? WidgetUtils.showImages(
-                    'assets/images/dj/lianghao.png', 40.w, 40.w)
-                    : const Text(''),
-                isPretty == 1
-                    ? WidgetUtils.commonSizedBox(0, 10.w)
-                    : const Text(''),
-                // 用户等级
-                if (level > 0) ...[
-                  CharmLevelFlag(level: level, width: 75.w, height: 30.w),
-                  WidgetUtils.commonSizedBox(0, 10.w),
-                ],
-                // 财富等级
-                if (grLevel > 0)
-                  WealthLevelFlag(level: grLevel, width: 75.w, height: 30.w),
-              ],
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+            Padding(
+              padding: EdgeInsets.only(top: 30.w, right: 20.w, left: 10.w),
+              child: nobleID > 0
+                  ? SizedBox(
+                      height: 220.w,
+                      width: 150.w,
+                      child: SVGASimpleImage(
+                        assetsName: nobleID == 1
+                            ? 'assets/svga/gz/gz_xuanxian.svga'
+                            : nobleID == 2
+                                ? 'assets/svga/gz/gz_shangxianxian.svga'
+                                : nobleID == 3
+                                    ? 'assets/svga/gz/gz_jinxian.svga'
+                                    : nobleID == 4
+                                        ? 'assets/svga/gz/gz_xiandi.svga'
+                                        : nobleID == 5
+                                            ? 'assets/svga/gz/gz_zhushen.svga'
+                                            : nobleID == 6
+                                                ? 'assets/svga/gz/gz_tianshen.svga'
+                                                : nobleID == 7
+                                                    ? 'assets/svga/gz/gz_shenwang.svga'
+                                                    : nobleID == 8
+                                                        ? 'assets/svga/gz/gz_shenhuang.svga'
+                                                        : nobleID == 9
+                                                            ? 'assets/svga/gz/gz_tianzun.svga'
+                                                            : 'assets/svga/gz/gz_chuanshuo.svga',
+                      ),
+                    )
+                  : WidgetUtils.commonSizedBox(220.w, 150.w),
+            ),
+          ],
+        ));
   }
 
   Widget _content() {
@@ -408,7 +481,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
                                   _currentIndex = 0;
                                   _controller.animateToPage(0,
                                       duration:
-                                      const Duration(milliseconds: 500),
+                                          const Duration(milliseconds: 500),
                                       curve: Curves.ease);
                                 });
                               }),
@@ -432,7 +505,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
                                   _currentIndex = 1;
                                   _controller.animateToPage(1,
                                       duration:
-                                      const Duration(milliseconds: 500),
+                                          const Duration(milliseconds: 500),
                                       curve: Curves.ease);
                                 });
                               }),
@@ -457,77 +530,77 @@ class _MyInfoPageState extends State<MyInfoPage> {
                   children: [
                     _currentIndex == 0
                         ? SizedBox(
-                      width: ScreenUtil().setHeight(55),
-                      height: ScreenUtil().setHeight(10),
-                      child: Row(
-                        children: [
-                          const Expanded(child: Text('')),
-                          Container(
-                            width: ScreenUtil().setHeight(20),
-                            height: ScreenUtil().setHeight(4),
-                            //边框设置
-                            decoration: const BoxDecoration(
-                              //背景
-                              color: MyColors.homeTopBG,
-                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                              borderRadius:
-                              BorderRadius.all(Radius.circular(10.0)),
+                            width: ScreenUtil().setHeight(55),
+                            height: ScreenUtil().setHeight(10),
+                            child: Row(
+                              children: [
+                                const Expanded(child: Text('')),
+                                Container(
+                                  width: ScreenUtil().setHeight(20),
+                                  height: ScreenUtil().setHeight(4),
+                                  //边框设置
+                                  decoration: const BoxDecoration(
+                                    //背景
+                                    color: MyColors.homeTopBG,
+                                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10.0)),
+                                  ),
+                                ),
+                                const Expanded(child: Text('')),
+                              ],
                             ),
-                          ),
-                          const Expanded(child: Text('')),
-                        ],
-                      ),
-                    )
+                          )
                         : WidgetUtils.commonSizedBox(ScreenUtil().setHeight(10),
-                        ScreenUtil().setHeight(55)),
+                            ScreenUtil().setHeight(55)),
                     WidgetUtils.commonSizedBox(0, 20),
                     _currentIndex == 1
                         ? SizedBox(
-                      width: ScreenUtil().setHeight(68),
-                      height: ScreenUtil().setHeight(10),
-                      child: Row(
-                        children: [
-                          const Expanded(child: Text('')),
-                          Container(
-                            width: ScreenUtil().setHeight(20),
-                            height: ScreenUtil().setHeight(4),
-                            //边框设置
-                            decoration: const BoxDecoration(
-                              //背景
-                              color: MyColors.homeTopBG,
-                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                              borderRadius:
-                              BorderRadius.all(Radius.circular(10.0)),
+                            width: ScreenUtil().setHeight(68),
+                            height: ScreenUtil().setHeight(10),
+                            child: Row(
+                              children: [
+                                const Expanded(child: Text('')),
+                                Container(
+                                  width: ScreenUtil().setHeight(20),
+                                  height: ScreenUtil().setHeight(4),
+                                  //边框设置
+                                  decoration: const BoxDecoration(
+                                    //背景
+                                    color: MyColors.homeTopBG,
+                                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10.0)),
+                                  ),
+                                ),
+                                const Expanded(child: Text('')),
+                              ],
                             ),
-                          ),
-                          const Expanded(child: Text('')),
-                        ],
-                      ),
-                    )
+                          )
                         : WidgetUtils.commonSizedBox(ScreenUtil().setHeight(10),
-                        ScreenUtil().setHeight(68)),
+                            ScreenUtil().setHeight(68)),
                   ],
                 ),
                 isOK
                     ? Expanded(
-                  child: PageView(
-                    reverse: false,
-                    controller: _controller,
-                    onPageChanged: (index) {
-                      setState(() {
-                        // 更新当前的索引值
-                        _currentIndex = index;
-                      });
-                    },
-                    children: [
-                      MyZiliaoPage(
-                        userInfo: userInfo,
-                        giftList: giftList,
-                      ),
-                      const MyDongtaiPage(),
-                    ],
-                  ),
-                )
+                        child: PageView(
+                          reverse: false,
+                          controller: _controller,
+                          onPageChanged: (index) {
+                            setState(() {
+                              // 更新当前的索引值
+                              _currentIndex = index;
+                            });
+                          },
+                          children: [
+                            MyZiliaoPage(
+                              userInfo: userInfo,
+                              giftList: giftList,
+                            ),
+                            const MyDongtaiPage(),
+                          ],
+                        ),
+                      )
                     : const Text('')
               ],
             ),
@@ -561,7 +634,8 @@ class _MyInfoPageState extends State<MyInfoPage> {
           setState(() {
             imageList.clear();
             isOK = true;
-            sp.setString("user_sp.getString('user_headimg').toString()", bean.data!.userInfo!.avatarUrl!);
+            sp.setString("user_sp.getString('user_headimg').toString()",
+                bean.data!.userInfo!.avatarUrl!);
             sp.setString("nickname", bean.data!.userInfo!.nickname!);
             gender = bean.data!.userInfo!.gender as int;
             userNumber = bean.data!.userInfo!.number.toString();
@@ -575,6 +649,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
             isPretty = bean.data!.userInfo!.isPretty as int;
             isNewNoble = bean.data!.userInfo!.newNoble as int;
             imageList.add(bean.data!.userInfo!.avatarUrl!);
+            nobleID = bean.data!.userInfo!.nobleID as int;
             avatarFrameImg = bean.data!.userInfo!.avatarFrameImg!;
             avatarFrameGifImg = bean.data!.userInfo!.avatarFrameGifImg!;
           });

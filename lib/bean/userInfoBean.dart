@@ -52,6 +52,7 @@ class Data {
   int? isNew;
   int? newNoble;
   int? grLevel;
+  int? nobleID;
 
   Data(
       {this.number,
@@ -82,7 +83,8 @@ class Data {
         this.level,
         this.isNew,
         this.newNoble,
-        this.grLevel});
+        this.grLevel,
+        this.nobleID});
 
   Data.fromJson(Map<String, dynamic> json) {
     number = json['number'];
@@ -114,6 +116,7 @@ class Data {
     isNew = json['is_new'];
     newNoble = json['new_noble'];
     grLevel = json['gr_level'];
+    nobleID = json['noble_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -145,6 +148,7 @@ class Data {
     data['is_new'] = this.isNew;
     data['new_noble'] = this.newNoble;
     data['gr_level'] = this.grLevel;
+    data['noble_id'] = this.nobleID;
     return data;
   }
 }

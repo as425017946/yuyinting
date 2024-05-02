@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:svgaplayer_flutter/parser.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:yuyinting/utils/loading.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
@@ -50,7 +54,8 @@ class _TrendsMorePageState extends State<TrendsMorePage>
       constellation = '',
       add_time = '',
       city = '',
-      myUid = '';
+      myUid = '',
+      videoImg = '';
   int gender = 0,
       like = 0,
       comment = 0,
@@ -237,12 +242,21 @@ class _TrendsMorePageState extends State<TrendsMorePage>
 
   late VideoPlayerController _videoController;
 
-  Widget showVideo(List<String> listImg) {
-    String a = listImg[0];
-    _videoController = VideoPlayerController.network(
-      a,
-      videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+  _initializeVideoController(List<String> listImg) async {
+    final fileName = await VideoThumbnail.thumbnailFile(
+      video: listImg[0],
+      thumbnailPath: (await getTemporaryDirectory()).path,
+      quality: 30,
     );
+    setState(() {
+      videoImg = fileName!;
+    });
+    // LogE('视频图片 $fileName');
+  }
+
+  Widget showVideo(List<String> listImg) {
+    _initializeVideoController(listImg);
+    String a = listImg[0];
     return Row(
       children: [
         Container(
@@ -257,14 +271,21 @@ class _TrendsMorePageState extends State<TrendsMorePage>
           child: Stack(
             alignment: Alignment.center,
             children: [
-              SizedBox(
+              Container(
                 width: ScreenUtil().setHeight(200),
                 height: ScreenUtil().setHeight(200),
-                child: AspectRatio(
-                  aspectRatio: _videoController.value.aspectRatio,
-                  child: VideoPlayer(_videoController),
+                //超出部分，可裁剪
+                clipBehavior: Clip.hardEdge,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.h),
                 ),
+                child:  videoImg.isNotEmpty ?Image.file(
+                  File(videoImg),
+                  fit: BoxFit.cover,
+                  gaplessPlayback: true,
+                ) : const Text(''),
               ),
+
               GestureDetector(
                 onTap: () {
                   MyUtils.goTransparentRFPage(
@@ -657,38 +678,6 @@ class _TrendsMorePageState extends State<TrendsMorePage>
                                 ],
                               ),
                               const Expanded(child: Text('')),
-                              // myUid == sp.getString('user_id')
-                              //     ? const Text('')
-                              //     : is_hi == 0
-                              //         ? GestureDetector(
-                              //           onTap: ((){
-                              //             MyUtils.goTransparentPageCom(context, TrendsHiPage(imgUrl: headImage, uid: myUid, index: widget.index));
-                              //           }),
-                              //           child: WidgetUtils.showImages(
-                              //               'assets/images/trends_hi.png',
-                              //               124,
-                              //               59),
-                              //         )
-                              //         : GestureDetector(
-                              //             onTap: (() {
-                              //               MyUtils.goTransparentRFPage(
-                              //                   context,
-                              //                   ChatPage(
-                              //                       nickName: nickName,
-                              //                       otherUid: sp
-                              //                           .getString('user_id')
-                              //                           .toString(),
-                              //                       otherImg: headImage));
-                              //             }),
-                              //             child: WidgetUtils.myContainer(
-                              //                 ScreenUtil().setHeight(45),
-                              //                 ScreenUtil().setHeight(100),
-                              //                 Colors.white,
-                              //                 MyColors.homeTopBG,
-                              //                 '私信',
-                              //                 ScreenUtil().setSp(25),
-                              //                 MyColors.homeTopBG),
-                              //           ),
                             ],
                           ),
                         ),

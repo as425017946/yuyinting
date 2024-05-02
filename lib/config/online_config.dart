@@ -5,7 +5,7 @@ import '../main.dart';
 import '../utils/log_util.dart';
 
 enum OnlineConfigType { online, test, zhaozeng, pengfei }
-const onlineType = OnlineConfigType.online;
+const onlineType = OnlineConfigType.zhaozeng;
 
 class OnlineConfig {
   /// Ping
