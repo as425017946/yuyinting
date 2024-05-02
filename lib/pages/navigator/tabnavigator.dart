@@ -33,7 +33,6 @@ import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../../utils/widget_utils.dart';
 import '../gongping/gp_hi_page.dart';
-import '../home/ceshi.dart';
 import '../home/home_items.dart';
 import '../home/home_page.dart';
 import '../makefriends/makefriends_page.dart';
@@ -770,7 +769,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
               },
               children: [
                 MakefriendsPage(),
-                const CeShi(),
+                const HomePage(),
                 const TrendsPage(),
                 const MessagePage(),
                 const MinePage()

@@ -1152,6 +1152,13 @@ class _RoomPageState extends State<RoomPage>
           deleteChatInfo();
           deleteGifInfo();
         } else if (event.title == 'im重连') {
+          try {
+            if (sp.getString('roomID').toString() == widget.roomId.toString()) {
+              EMClient.getInstance.chatRoomManager.joinChatRoom(widget.roomId);
+            }
+          } catch (e) {
+            LogE(e.toString());
+          }
           setState(() {
             //订阅所有远端用户的音频流。
             _engine!.muteAllRemoteAudioStreams(false);

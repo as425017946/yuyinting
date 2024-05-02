@@ -8,6 +8,7 @@ import 'package:focus_detector/focus_detector.dart';
 import 'package:get/get.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:svgaplayer_flutter/player.dart';
+import 'package:yuyinting/pages/home/ceshi.dart';
 import 'package:yuyinting/pages/mine/mine/xc_mine_model.dart';
 
 import '../../../main.dart';
@@ -43,6 +44,12 @@ class _MinePageState extends State<MinePage> {
         c.isShenHe.value = false;
       }
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    listen.cancel();
   }
 
   @override
@@ -626,6 +633,14 @@ class _MinePageContent extends StatelessWidget {
                         },
                       );
                 }),
+                GestureDetector(
+                  onTap: () => Get.to(const CeShi()),
+                  child: Container(
+                    color: Colors.transparent,
+                    alignment: Alignment.center,
+                    child: const Text('去支付', style: TextStyle(fontSize: 30)),
+                  ),
+                ),
               ],
             ),
           ),

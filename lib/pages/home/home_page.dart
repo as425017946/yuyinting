@@ -40,7 +40,6 @@ import '../../utils/my_toast_utils.dart';
 import '../../utils/my_utils.dart';
 import '../room/room_page.dart';
 import '../room/room_ts_mima_page.dart';
-import 'ceshi.dart';
 
 ///首页
 class HomePage extends StatefulWidget {
@@ -145,8 +144,6 @@ class _HomePageState extends State<HomePage>
     // }else{
     //   MyToastUtils.showToastBottom('未获取到房间id ${sp.getString('daili_roomid').toString()}');
     // }
-
-    MyUtils.goTransparentPage(context, CeShi());
   }
 
   @override
@@ -287,16 +284,16 @@ class _HomePageState extends State<HomePage>
                   },
                   children: identity != 'user'
                       ? const [
-                    ShoucangPage(),
-                    TuijianPage(),
-                    PaiduiPage(),
-                    ZaixianPage()
-                  ]
+                          ShoucangPage(),
+                          TuijianPage(),
+                          PaiduiPage(),
+                          ZaixianPage()
+                        ]
                       : const [
-                    ShoucangPage(),
-                    TuijianPage(),
-                    PaiduiPage(),
-                  ],
+                          ShoucangPage(),
+                          TuijianPage(),
+                          PaiduiPage(),
+                        ],
                 ),
               ),
             )
@@ -394,7 +391,7 @@ class _HomePageState extends State<HomePage>
         });
         MyPing.checkIp(
           respons.ips,
-              (ip) {
+          (ip) {
             setState(() {
               // sp.setString('isDian', ip);
               // LogE('Ping 设置: ${sp.getString('isDian')}');
@@ -566,30 +563,30 @@ class _HomePageState extends State<HomePage>
             ),
             actions: forceUpdate == '1'
                 ? [
-              CupertinoDialogAction(
-                child: const Text('立即更新'),
-                onPressed: () {
-                  // 在这里放置确认操作的代码
-                  doUpdate(context, version, url);
-                },
-              ),
-            ]
+                    CupertinoDialogAction(
+                      child: const Text('立即更新'),
+                      onPressed: () {
+                        // 在这里放置确认操作的代码
+                        doUpdate(context, version, url);
+                      },
+                    ),
+                  ]
                 : [
-              CupertinoDialogAction(
-                child: const Text('下次在说'),
-                onPressed: () {
-                  // 在这里放置取消操作的代码
-                  Navigator.of(context).pop(); // 关闭对话框
-                },
-              ),
-              CupertinoDialogAction(
-                child: const Text('立即更新'),
-                onPressed: () {
-                  // 在这里放置确认操作的代码
-                  doUpdate(context, version, url);
-                },
-              ),
-            ],
+                    CupertinoDialogAction(
+                      child: const Text('下次在说'),
+                      onPressed: () {
+                        // 在这里放置取消操作的代码
+                        Navigator.of(context).pop(); // 关闭对话框
+                      },
+                    ),
+                    CupertinoDialogAction(
+                      child: const Text('立即更新'),
+                      onPressed: () {
+                        // 在这里放置确认操作的代码
+                        doUpdate(context, version, url);
+                      },
+                    ),
+                  ],
           ),
         );
       },
@@ -621,7 +618,7 @@ class _HomePageState extends State<HomePage>
       String appDocPath = appDocDir.path;
       // destinationFilename 是对下载的apk进行重命名
       OtaUpdate().execute(url, destinationFilename: 'lmkj.apk').listen(
-            (OtaEvent event) {
+        (OtaEvent event) {
           print('status:${event.status},value:${event.value} }');
           switch (event.status) {
             case OtaStatus.DOWNLOADING: // 下载中
@@ -678,7 +675,7 @@ class _HomePageState extends State<HomePage>
           doPostRoomJoin(roomID, '', anchorUid, bean.data!.rtc!);
           break;
         case MyHttpConfig.errorRoomCode: //需要密码
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.goTransparentPageCom(
               context,
               RoomTSMiMaPage(
@@ -687,7 +684,7 @@ class _HomePageState extends State<HomePage>
                   anchorUid: anchorUid));
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -713,7 +710,7 @@ class _HomePageState extends State<HomePage>
       CommonBean bean = await DataUtils.postRoomJoin(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.goTransparentRFPage(
               context,
               RoomPage(
@@ -723,7 +720,7 @@ class _HomePageState extends State<HomePage>
               ));
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -771,29 +768,29 @@ class _HomePageState extends State<HomePage>
         child: title == '游戏'
             ? _gameItem(isSelect)
             : Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            if (isSelect)
-              Image(
-                width: 182.w*0.7,
-                height: 38.w*0.7,
-                image: const AssetImage('assets/images/paidui_title_bg.png'),
+                alignment: Alignment.bottomCenter,
+                children: [
+                  if (isSelect)
+                    Image(
+                      width: 182.w*0.7,
+                      height: 38.w*0.7,
+                      image: const AssetImage('assets/images/paidui_title_bg.png'),
+                    ),
+                  Text(
+                    title,
+                    style: StyleUtils.getCommonFFTextStyle(
+                      color: isSelect
+                          ? MyColors.newHomeBlack
+                          : MyColors.newHomeBlack2,
+                      fontSize: isSelect
+                          ? ScreenUtil().setSp(46)
+                          : ScreenUtil().setSp(36),
+                      fontWeight:
+                          isSelect ? FontWeight.w600 : FontWeight.normal,
+                    ),
+                  ),
+                ],
               ),
-            Text(
-              title,
-              style: StyleUtils.getCommonFFTextStyle(
-                color: isSelect
-                    ? MyColors.newHomeBlack
-                    : MyColors.newHomeBlack2,
-                fontSize: isSelect
-                    ? ScreenUtil().setSp(46)
-                    : ScreenUtil().setSp(36),
-                fontWeight:
-                isSelect ? FontWeight.w600 : FontWeight.normal,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
