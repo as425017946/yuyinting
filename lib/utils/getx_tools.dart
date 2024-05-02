@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
@@ -491,4 +492,38 @@ class UserGenderCircle extends StatelessWidget {
 mixin GetBean {
   late int code;
   late String msg;
+}
+
+class VoiceCardBtn extends StatelessWidget {
+  final bool isPlay;
+  final double? top;
+  const VoiceCardBtn({super.key, required this.isPlay, this.top});
+  
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 44.w,
+      width: 220.w,
+      padding: EdgeInsets.symmetric(horizontal: 10.w),
+      margin: EdgeInsets.only(top: top ?? 20.w),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF4E13F),
+        borderRadius: BorderRadius.all(Radius.circular(22.w)),
+      ),
+      child: Row(
+        children: [
+          Image.asset(
+            'assets/images/makefriends_${isPlay ? 'pause' : 'play'}.png',
+            width: 30.w,
+            height: 30.w,
+          ),
+          Expanded(
+            child: SVGASimpleImage(
+              assetsName: 'assets/svga/audio_${isPlay ? 'xintiao' : 'xindiaotu'}.svga',
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

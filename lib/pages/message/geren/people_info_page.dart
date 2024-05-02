@@ -111,6 +111,14 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
       });
     });
   }
+  //停止播放录音
+  void stopPlayer() {
+    _mPlayer.stopPlayer().then((value) {
+      setState(() {
+        playRecord = false;
+      });
+    });
+  }
 
   @override
   void dispose() {
@@ -359,39 +367,19 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
 
                         /// 音频
                         if (voice_card.isNotEmpty)
-                          GestureDetector(
-                            onTap: (() {
-                              if (MyUtils.checkClick() && playRecord == false) {
-                                play();
-                              }
-                            }),
-                            child: Container(
-                              height: 45 * 1.25.w,
-                              width: 220.w,
-                              margin: EdgeInsets.only(left: 40.w),
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: MyColors.peopleYellow,
-                                borderRadius: BorderRadius.all(
-                                    Radius.circular(45 * 1.25.w / 2.0)),
-                              ),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: SVGASimpleImage(
-                                      assetsName:
-                                          'assets/svga/audio_${playRecord ? 'xintiao' : 'xindiaotu'}.svga',
-                                    ),
-                                  ),
-                                  WidgetUtils.commonSizedBox(0, 10.w),
-                                  WidgetUtils.showImages(
-                                    'assets/images/people_bofang.png',
-                                    35.w,
-                                    35.w,
-                                  ),
-                                  WidgetUtils.commonSizedBox(0, 10.w),
-                                ],
-                              ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 40.w),
+                            child: GestureDetector(
+                              onTap: (() {
+                                if (MyUtils.checkClick()) {
+                                  if (playRecord) {
+                                    stopPlayer();
+                                  } else {
+                                    play();
+                                  }
+                                }
+                              }),
+                              child: VoiceCardBtn(isPlay: playRecord, top: 0),
                             ),
                           ),
                       ],

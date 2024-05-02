@@ -6,6 +6,7 @@ import 'package:focus_detector/focus_detector.dart';
 import 'package:get/get.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 
+import '../../utils/getx_tools.dart';
 import 'makefriends_model.dart';
 
 
@@ -193,31 +194,7 @@ class MakefriendsPage extends StatelessWidget {
   Widget _voice(String voice) {
     return GestureDetector(
       onTap: () => c.onVoice(voice),
-      child: Container(
-        height: 44.w,
-        width: 220.w,
-        padding: EdgeInsets.symmetric(horizontal: 10.w),
-        margin: EdgeInsets.only(top: 20.w),
-        decoration: BoxDecoration(
-          color: const Color(0xFFF4E13F),
-          borderRadius: BorderRadius.all(Radius.circular(22.w)),
-        ),
-        child: Obx(
-          () => Row(
-            children: [
-              Image.asset(
-                'assets/images/makefriends_${c.isPlaying == voice ? 'pause' : 'play'}.png',
-                width: 30.w,
-                height: 30.w,
-              ),
-              Expanded(
-                child: SVGASimpleImage(
-                    assetsName: 'assets/svga/audio_${c.isPlaying == voice ? 'xintiao' : 'xindiaotu'}.svga'),
-              ),
-            ],
-          ),
-        ),
-      ),
+      child: Obx(() => VoiceCardBtn(isPlay: c.isPlaying == voice)),
     );
   }
 
