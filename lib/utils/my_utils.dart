@@ -546,20 +546,18 @@ class MyUtils {
             (roomId, roomName, participantreason, reason) {
       // ignore: unrelated_type_equality_checks
       if (reason == LeaveReason.Kicked) {
-        LogE(
-            '客户主动离开聊天室 $roomId 房间名称 $roomName == $participantreason ** $reason');
+        LogE('客户主动离开聊天室 $roomId 房间名称 $roomName == $participantreason ** $reason');
         // if (sp.getString('roomID').toString() == roomId.toString()) {
         //   EMClient.getInstance.chatRoomManager.joinChatRoom(roomId);
         // }
       } else {
         //非客户主动离开聊天室 并且判断是否为当前登录的房间
         if(sp.getString('roomID').toString().isNotEmpty) {
-          if (sp.getString('roomID').toString() == roomId.toString()) {
+          if (sp.getString('chatRoomId').toString() == roomId.toString()) {
             EMClient.getInstance.chatRoomManager.joinChatRoom(roomId);
           }
         }
-        LogE(
-            '非客户主动离开聊天室 $roomId 房间名称 $roomName == $participantreason ** $reason');
+        LogE('非客户主动离开聊天室 $roomId 房间名称 $roomName == $participantreason ** $reason');
       }
     }));
 

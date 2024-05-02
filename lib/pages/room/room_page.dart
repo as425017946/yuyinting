@@ -1152,13 +1152,14 @@ class _RoomPageState extends State<RoomPage>
           deleteChatInfo();
           deleteGifInfo();
         } else if (event.title == 'im重连') {
-          try {
-            if (sp.getString('roomID').toString() == widget.roomId.toString()) {
-              EMClient.getInstance.chatRoomManager.joinChatRoom(widget.roomId);
-            }
-          } catch (e) {
-            LogE(e.toString());
-          }
+          // try {
+          //   if (sp.getString('roomID').toString() == widget.roomId.toString()) {
+          //     EMClient.getInstance.chatRoomManager
+          //         .joinChatRoom(widget.roomId.toString());
+          //   }
+          // } catch (e) {
+          //   LogE(e.toString());
+          // }
           setState(() {
             //订阅所有远端用户的音频流。
             _engine!.muteAllRemoteAudioStreams(false);
@@ -5853,8 +5854,17 @@ class _RoomPageState extends State<RoomPage>
           setState(() {
             LogE('状态=== ${bean.data!.uid}');
             if (bean.data!.uid != null) {
-              if (sp.getString('user_id').toString() ==
-                  bean.data!.uid.toString()) {
+              if (sp.getString('user_id').toString() == bean.data!.uid.toString()) {
+                try {
+                  if (sp.getString('roomID').toString() == widget.roomId.toString()) {
+                    final chatRoomId = sp.getString('chatRoomId').toString();
+                    if (chatRoomId.isNotEmpty) {
+                      EMClient.getInstance.chatRoomManager.joinChatRoom(chatRoomId);
+                    }
+                  }
+                } catch (e) {
+                  LogE(e.toString());
+                }
                 isMeUp = true;
                 mxIndex = bean.data!.serialNumber.toString();
                 if (bean.data!.isClose == 0) {

@@ -649,6 +649,12 @@ class DataUtils {
     Map<String, dynamic>? respons =
         await MyHttpRequest.post(MyHttpConfig.roomJoin, {}, params);
     print("加入房间：$respons");
+    try {
+      final chatRoomId = respons!['data']!['em_room_id'] as String;
+      sp.setString('chatRoomId', chatRoomId);
+    } catch (e) {
+      print(e.toString());
+    }
     return CommonBean.fromJson(respons!);
   }
 
