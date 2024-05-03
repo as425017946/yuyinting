@@ -767,12 +767,12 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
                   }
                 });
               },
-              children: [
-                MakefriendsPage(),
-                const HomePage(),
-                const TrendsPage(),
-                const MessagePage(),
-                const MinePage()
+              children: const [
+                DatingPage(),
+                HomePage(),
+                TrendsPage(),
+                MessagePage(),
+                MinePage()
               ],
             ),
             bottomNavigationBar: BottomNavigationBar(

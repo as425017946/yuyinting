@@ -7,11 +7,39 @@ import 'package:get/get.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 
 import '../../utils/getx_tools.dart';
+import 'cp_speed_page.dart';
 import 'makefriends_model.dart';
 
+class DatingPage extends StatefulWidget {
+  const DatingPage({Key? key}) : super(key: key);
+
+  @override
+  State<DatingPage> createState() => _DatingPageState();
+}
+
+class _DatingPageState extends State<DatingPage> {
+  @override
+  void initState() {
+    Get.lazyPut(() => MakefriendsController());
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      final MakefriendsController c = Get.find();
+      switch (c.select) {
+        case 1:
+          return CPSpeedPage();
+        default:
+          return MakefriendsPage();
+      }
+    });
+  }
+}
 
 class MakefriendsPage extends StatelessWidget {
-  final MakefriendsController c = Get.put(MakefriendsController());
+  final MakefriendsController c = Get.find();
   MakefriendsPage({super.key});
 
   @override
@@ -57,7 +85,24 @@ class MakefriendsPage extends StatelessWidget {
       height: 60.w,
       alignment: Alignment.bottomLeft,
       padding: EdgeInsets.only(left: 25.w),
-      child: Image.asset('assets/images/makefriends_bhi.png', width: 160.w, height: 43.w),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Image.asset('assets/images/makefriends_bhi.png', width: 160.w, height: 43.w),
+          SizedBox(width: 44.w),
+          GestureDetector(
+            onTap: () => c.select = 1,
+            child: Text(
+              '告白纸条',
+              style: TextStyle(
+                color: Colors.blueGrey,
+                fontSize: 33.sp,
+                fontFamily: 'LR',
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

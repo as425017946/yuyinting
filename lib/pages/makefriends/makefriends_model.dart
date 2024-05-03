@@ -14,6 +14,10 @@ import '../mine/my/my_info_page.dart';
 typedef FindMateItem = FindMateBeanData;
 
 class MakefriendsController extends GetxController with GetAntiCombo {
+  final _select = 0.obs;
+  int get select => _select.value;
+  set select(int value) => _select.value = value;
+
   final _gender = (sp.getInt('user_gender') ?? 1).obs;
   final _list = List<FindMateItem>.empty().obs;
 
