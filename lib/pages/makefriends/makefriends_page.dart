@@ -114,9 +114,13 @@ class MakefriendsPage extends StatelessWidget {
       padding: EdgeInsets.zero,
       onSwipe: c.onSwipe,
       cardsBuilder: _builder,
+      onSwiping: c.onSwiping,
+      onEnd: c.onSwipeEnd,
+      onSwipeCancelled: c.onSwipeEnd,
     );
   }
   Widget _builder(BuildContext context, int index) {
+    c.current = index;
     final item = c.list[index];
     return GestureDetector(
       onTap: () => c.onItem(item),

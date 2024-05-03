@@ -36,6 +36,10 @@ class MakefriendsController extends GetxController with GetAntiCombo {
     _stopVoice();
   }
 
+  void onBuild() {
+
+  }
+
   void onChoose() {
     action(() {
       _stopVoice();
@@ -49,9 +53,10 @@ class MakefriendsController extends GetxController with GetAntiCombo {
     });
   }
 
+  bool _canTa = false;
   void onTa() {
     action(() {
-      if (_current >= list.length) {
+      if (!_canTa || _current >= list.length) {
         return;
       }
       _stopVoice();
@@ -70,9 +75,17 @@ class MakefriendsController extends GetxController with GetAntiCombo {
     });
   }
   int _current = 0;
+  set current(int value) => _current = value;
   void onSwipe(int index, AppinioSwiperDirection direction) {
     _current = index;
     _stopVoice();
+    _canTa = true;
+  }
+  void onSwiping(AppinioSwiperDirection direction) {
+    _canTa = false;
+  }
+  void onSwipeEnd() {
+    _canTa = true;
   }
 
   final _isFirstLoading = true.obs;
@@ -81,14 +94,15 @@ class MakefriendsController extends GetxController with GetAntiCombo {
     try {
       Loading.show();
       final bean = await doRequest(() => DataUtils.postFindMate(gender));
-      if (bean.data.length != _list.length) {
-        _current = 0;
-      }
+      // if (bean.data.length != _list.length) {
+      //   _current = 0;
+      // }
       _list.value = bean.data;
       if (gender != null) {
         _gender.value = gender;
       }
       _isFirstLoading.value = false;
+      _canTa = true;
     } catch (e) {
       if (e is GetBean) {
         Get.log(e.msg);
