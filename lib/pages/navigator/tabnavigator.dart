@@ -95,7 +95,8 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       listenMessage,
       listenZDY,
       listenShouQi,
-      listenJoinHF;
+      listenJoinHF,
+      listenBarVisible;
   bool isSDKInit = false;
 
   // 是否开始预下载
@@ -141,6 +142,12 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     // 创建一个从0到360弧度的补间动画 v * 2 * π
     _animation = Tween<double>(begin: 0, end: 1).animate(_repeatController);
 
+    listenBarVisible = eventBus.on<BottomBarVisibleBack>().listen((event) {
+      setState(() {
+        _visible = event.visible;
+      });
+    });
+    
     // 中大奖使用，目前接口没有接，所以先注释
     // setState(() {
     //   isBig = true;
@@ -721,9 +728,10 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     listenZdy.cancel();
     listenRoomBack.cancel();
     listenZDY.cancel();
+    listenBarVisible.cancel();
     super.dispose();
   }
-
+  bool _visible = true;
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -775,7 +783,10 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
                 MinePage()
               ],
             ),
-            bottomNavigationBar: BottomNavigationBar(
+            bottomNavigationBar: Visibility(
+              visible: _visible,
+              child: 
+            BottomNavigationBar(
                 selectedFontSize: 12,
                 unselectedFontSize: 12,
                 selectedItemColor: MyColors.newHomeBlack2,
@@ -802,7 +813,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
                       '消息', 'assets/images/ic_bottom_menu3.png', 3),
                   _bottomNavigationBarItem(
                       '我的', 'assets/images/ic_bottom_menu3.png', 4),
-                ]),
+                ]),),
           ),
 
           isRed

@@ -1,10 +1,12 @@
 import 'package:appinio_swiper/appinio_swiper.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_sound/public/flutter_sound_player.dart';
 import 'package:get/get.dart';
 
 import '../../bean/find_mate_bean.dart';
 import '../../http/data_utils.dart';
 import '../../main.dart';
+import '../../utils/event_utils.dart';
 import '../../utils/getx_tools.dart';
 import '../../utils/loading.dart';
 import '../../widget/SwiperPage.dart';
@@ -16,7 +18,10 @@ typedef FindMateItem = FindMateBeanData;
 class MakefriendsController extends GetxController with GetAntiCombo {
   final _select = 0.obs;
   int get select => _select.value;
-  set select(int value) => _select.value = value;
+  set select(int value) {
+    _select.value = value;
+    eventBus.fire(BottomBarVisibleBack(visible: value != 1));
+  }
 
   final _gender = (sp.getInt('user_gender') ?? 1).obs;
   final _list = List<FindMateItem>.empty().obs;
