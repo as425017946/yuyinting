@@ -171,10 +171,16 @@ class CPSpeedPage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         GestureDetector(
+          onTap: () => c.action(() {
+            Get.dialog(_DialogReceive());
+          }),
           child: _btn('cp_btn_chouqu.png'),
         ),
         SizedBox(width: 37.w),
         GestureDetector(
+          onTap: () => c.action(() {
+            Get.dialog(_DialogSend());
+          }),
           child: _btn('cp_btn_fangru.png'),
         ),
       ],
@@ -355,6 +361,42 @@ class _BarrageItem extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _DialogReceive extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: 620.w,
+        height: 620.w,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/cp_choudao.png'),
+            fit: BoxFit.fill,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DialogSend extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: 620.w,
+        height: 652.w,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/cp_fangru.png'),
+            fit: BoxFit.fill,
+          ),
+        ),
       ),
     );
   }
