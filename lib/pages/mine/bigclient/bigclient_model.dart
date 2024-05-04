@@ -82,7 +82,7 @@ class BigClientController extends GetxController with GetAntiCombo {
     final num = data.title - 1;
     swiperController.move(num, animation: false);
     current.value = num;
-    doPostDayReturnList();
+    // doPostDayReturnList();
     super.onReady();
   }
 
