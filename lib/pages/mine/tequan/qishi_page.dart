@@ -9,7 +9,8 @@ import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 class QishiPage extends StatefulWidget {
-  const QishiPage({Key? key}) : super(key: key);
+  String zhi;
+  QishiPage({Key? key, required this.zhi}) : super(key: key);
 
   @override
   State<QishiPage> createState() => _QishiPageState();
@@ -110,7 +111,7 @@ class _QishiPageState extends State<QishiPage>  with TickerProviderStateMixin {
               children: [
                 const Spacer(),
                 WidgetUtils.onlyTextCenter(
-                    '10000',
+                    widget.zhi,
                     StyleUtils.getCommonTextStyle(
                         color: Colors.white,
                         fontSize: ScreenUtil().setSp(22))),

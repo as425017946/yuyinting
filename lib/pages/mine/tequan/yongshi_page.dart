@@ -12,7 +12,8 @@ import '../../../utils/my_utils.dart';
 
 /// 勇士
 class YongshiPage extends StatefulWidget {
-  const YongshiPage({Key? key}) : super(key: key);
+  String zhi;
+  YongshiPage({Key? key, required this.zhi}) : super(key: key);
 
   @override
   State<YongshiPage> createState() => _YongshiPageState();
@@ -110,7 +111,7 @@ class _YongshiPageState extends State<YongshiPage>
               children: [
                 const Spacer(),
                 WidgetUtils.onlyTextCenter(
-                    '5000',
+                    widget.zhi,
                     StyleUtils.getCommonTextStyle(
                         color: Colors.white,
                         fontSize: ScreenUtil().setSp(22))),

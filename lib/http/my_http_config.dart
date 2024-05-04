@@ -375,6 +375,8 @@ class MyHttpConfig{
   static  String canSendRedPacket = "$baseURL/user/canSendRedPacket";
   // 推荐声音
   static  String pushSound = "$baseURL/room/pushSound";
+  // 我的贵族
+  static  String myNoble = "$baseURL/noble/myNoble";
 
 
 }

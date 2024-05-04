@@ -12,8 +12,12 @@ import 'package:yuyinting/pages/mine/tequan/tianzun_page.dart';
 import 'package:yuyinting/pages/mine/tequan/yongshi_page.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 
+import '../../../bean/gzBean.dart';
 import '../../../colors/my_colors.dart';
+import '../../../http/data_utils.dart';
+import '../../../http/my_http_config.dart';
 import '../../../utils/event_utils.dart';
+import '../../../utils/loading.dart';
 import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
@@ -39,10 +43,7 @@ class _TequanPageState extends State<TequanPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _currentIndex = 0;
-    _controller = PageController(
-      initialPage: 0,
-    );
+    doPostMyNoble();
     listen = eventBus.on<GuizuButtonBack>().listen((event) {
       if (event.title == '右') {
         setState(() {
@@ -74,573 +75,702 @@ class _TequanPageState extends State<TequanPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: MyColors.zhuangbanBg,
-      body: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              //设置Container修饰
-              image: DecorationImage(
-                //背景图片修饰
-                image: AssetImage("assets/images/guizu_bg.jpg"),
-                fit: BoxFit.fill, //覆盖
-              ),
-            ),
-            child: Column(
+      body: isOK
+          ? Stack(
+              alignment: Alignment.bottomCenter,
               children: [
-                WidgetUtils.commonSizedBox(35, 0),
-
-                ///头部信息
                 Container(
-                  padding: const EdgeInsets.only(left: 10),
-                  height: ScreenUtil().setHeight(60),
-                  width: double.infinity,
-                  alignment: Alignment.bottomLeft,
-                  child: Row(
-                    children: [
-                      Container(
-                        width: ScreenUtil().setHeight(150),
-                        alignment: Alignment.centerLeft,
-                        child: IconButton(
-                          icon: const Icon(Icons.arrow_back_ios),
-                          color: Colors.white,
-                          onPressed: (() {
-                            Navigator.of(context).pop();
-                            MyUtils.hideKeyboard(context);
-                          }),
-                        ),
-                      ),
-                      const Expanded(child: Text('')),
-                      WidgetUtils.onlyTextCenter(
-                          '贵族',
-                          StyleUtils.getCommonTextStyle(
-                              color: Colors.white,
-                              fontSize: ScreenUtil().setSp(34),
-                              fontWeight: FontWeight.w600)),
-                      const Expanded(child: Text('')),
-                      GestureDetector(
-                        onTap: () {
-                          if (MyUtils.checkClick()) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const TequanListofgodsPage(),
-                              ),
-                            );
-                          }
-                        },
-                        child: Container(
-                          width: ScreenUtil().setWidth(150),
-                          alignment: Alignment.centerRight,
-                          child: Image.asset('assets/images/tequan_fengshen.png', width: 43*3.w, height: 15*3.w,),
-                        ),
-                      ),
-                      WidgetUtils.commonSizedBox(0, 20.w),
-                    ],
-                  ),
-                ),
-                WidgetUtils.commonSizedBox(10, 0),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: SizedBox(
-                    width: 850.h,
-                    child: Row(
-                      children: [
-                        WidgetUtils.commonSizedBox(0, 10.h),
-                        GestureDetector(
-                          onTap: (() {
-                            setState(() {
-                              _currentIndex = 0;
-                              _controller.animateToPage(0,
-                                  duration: const Duration(milliseconds: 500),
-                                  curve: Curves.ease);
-
-                              priceDou = 360;
-                              priceYue = 36;
-                            });
-                          }),
-                          child: Column(
-                            children: [
-                              WidgetUtils.onlyText(
-                                  '玄仙',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: _currentIndex == 0
-                                          ? Colors.white
-                                          : MyColors.zhuangbanWZ,
-                                      fontSize: ScreenUtil().setSp(29),
-                                      fontWeight: FontWeight.w600)),
-                              WidgetUtils.commonSizedBox(8, 0),
-                              _currentIndex == 0
-                                  ? WidgetUtils.showImages(
-                                      'assets/images/guizu_xian.png',
-                                      ScreenUtil().setHeight(3),
-                                      ScreenUtil().setHeight(65))
-                                  : WidgetUtils.commonSizedBox(
-                                      ScreenUtil().setHeight(3),
-                                      ScreenUtil().setHeight(65)),
-                            ],
-                          ),
-                        ),
-                        const Spacer(),
-                        GestureDetector(
-                          onTap: (() {
-                            setState(() {
-                              _currentIndex = 1;
-                              _controller.animateToPage(1,
-                                  duration: const Duration(milliseconds: 500),
-                                  curve: Curves.ease);
-                              priceDou = 2800;
-                              priceYue = 280;
-                            });
-                          }),
-                          child: Column(
-                            children: [
-                              WidgetUtils.onlyText(
-                                  '上仙',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: _currentIndex == 1
-                                          ? Colors.white
-                                          : MyColors.zhuangbanWZ,
-                                      fontSize: ScreenUtil().setSp(29),
-                                      fontWeight: FontWeight.w600)),
-                              WidgetUtils.commonSizedBox(8, 0),
-                              _currentIndex == 1
-                                  ? WidgetUtils.showImages(
-                                      'assets/images/guizu_xian.png',
-                                      ScreenUtil().setHeight(3),
-                                      ScreenUtil().setHeight(65))
-                                  : WidgetUtils.commonSizedBox(
-                                      ScreenUtil().setHeight(3),
-                                      ScreenUtil().setHeight(65)),
-                            ],
-                          ),
-                        ),
-                        const Spacer(),
-                        GestureDetector(
-                          onTap: (() {
-                            setState(() {
-                              _currentIndex = 2;
-                              _controller.animateToPage(2,
-                                  duration: const Duration(milliseconds: 500),
-                                  curve: Curves.ease);
-                              priceDou = 9000;
-                              priceYue = 900;
-                            });
-                          }),
-                          child: Column(
-                            children: [
-                              WidgetUtils.onlyText(
-                                  '金仙',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: _currentIndex == 2
-                                          ? Colors.white
-                                          : MyColors.zhuangbanWZ,
-                                      fontSize: ScreenUtil().setSp(29),
-                                      fontWeight: FontWeight.w600)),
-                              WidgetUtils.commonSizedBox(8, 0),
-                              _currentIndex == 2
-                                  ? WidgetUtils.showImages(
-                                      'assets/images/guizu_xian.png',
-                                      ScreenUtil().setHeight(3),
-                                      ScreenUtil().setHeight(65))
-                                  : WidgetUtils.commonSizedBox(
-                                      ScreenUtil().setHeight(3),
-                                      ScreenUtil().setHeight(65)),
-                            ],
-                          ),
-                        ),
-                        const Spacer(),
-                        GestureDetector(
-                          onTap: (() {
-                            setState(() {
-                              _currentIndex = 3;
-                              _controller.animateToPage(3,
-                                  duration: const Duration(milliseconds: 500),
-                                  curve: Curves.ease);
-                              priceDou = 50000;
-                              priceYue = 5000;
-                            });
-                          }),
-                          child: Column(
-                            children: [
-                              WidgetUtils.onlyText(
-                                  '仙帝',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: _currentIndex == 3
-                                          ? Colors.white
-                                          : MyColors.zhuangbanWZ,
-                                      fontSize: ScreenUtil().setSp(29),
-                                      fontWeight: FontWeight.w600)),
-                              WidgetUtils.commonSizedBox(8, 0),
-                              _currentIndex == 3
-                                  ? WidgetUtils.showImages(
-                                      'assets/images/guizu_xian.png',
-                                      ScreenUtil().setHeight(3),
-                                      ScreenUtil().setHeight(65))
-                                  : WidgetUtils.commonSizedBox(
-                                      ScreenUtil().setHeight(3),
-                                      ScreenUtil().setHeight(65)),
-                            ],
-                          ),
-                        ),
-                        const Spacer(),
-                        GestureDetector(
-                          onTap: (() {
-                            setState(() {
-                              _currentIndex = 4;
-                              _controller.animateToPage(4,
-                                  duration: const Duration(milliseconds: 500),
-                                  curve: Curves.ease);
-                              priceDou = 120000;
-                              priceYue = 12000;
-                            });
-                          }),
-                          child: Column(
-                            children: [
-                              WidgetUtils.onlyText(
-                                  '主神',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: _currentIndex == 4
-                                          ? Colors.white
-                                          : MyColors.zhuangbanWZ,
-                                      fontSize: ScreenUtil().setSp(29),
-                                      fontWeight: FontWeight.w600)),
-                              WidgetUtils.commonSizedBox(8, 0),
-                              _currentIndex == 4
-                                  ? WidgetUtils.showImages(
-                                      'assets/images/guizu_xian.png',
-                                      ScreenUtil().setHeight(3),
-                                      ScreenUtil().setHeight(65))
-                                  : WidgetUtils.commonSizedBox(
-                                      ScreenUtil().setHeight(3),
-                                      ScreenUtil().setHeight(65)),
-                            ],
-                          ),
-                        ),
-                        const Spacer(),
-                        GestureDetector(
-                          onTap: (() {
-                            setState(() {
-                              _currentIndex = 5;
-                              _controller.animateToPage(5,
-                                  duration: const Duration(milliseconds: 500),
-                                  curve: Curves.ease);
-                              priceDou = 360000;
-                              priceYue = 36000;
-                            });
-                          }),
-                          child: Column(
-                            children: [
-                              WidgetUtils.onlyText(
-                                  '天神',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: _currentIndex == 5
-                                          ? Colors.white
-                                          : MyColors.zhuangbanWZ,
-                                      fontSize: ScreenUtil().setSp(29),
-                                      fontWeight: FontWeight.w600)),
-                              WidgetUtils.commonSizedBox(8, 0),
-                              _currentIndex == 5
-                                  ? WidgetUtils.showImages(
-                                      'assets/images/guizu_xian.png',
-                                      ScreenUtil().setHeight(3),
-                                      ScreenUtil().setHeight(65))
-                                  : WidgetUtils.commonSizedBox(
-                                      ScreenUtil().setHeight(3),
-                                      ScreenUtil().setHeight(65)),
-                            ],
-                          ),
-                        ),
-                        const Spacer(),
-                        GestureDetector(
-                          onTap: (() {
-                            setState(() {
-                              _currentIndex = 6;
-                              _controller.animateToPage(6,
-                                  duration: const Duration(milliseconds: 500),
-                                  curve: Curves.ease);
-                              priceDou = 580000;
-                              priceYue = 58000;
-                            });
-                          }),
-                          child: Column(
-                            children: [
-                              WidgetUtils.onlyText(
-                                  '神王',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: _currentIndex == 6
-                                          ? Colors.white
-                                          : MyColors.zhuangbanWZ,
-                                      fontSize: ScreenUtil().setSp(29),
-                                      fontWeight: FontWeight.w600)),
-                              WidgetUtils.commonSizedBox(8, 0),
-                              _currentIndex == 6
-                                  ? WidgetUtils.showImages(
-                                      'assets/images/guizu_xian.png',
-                                      ScreenUtil().setHeight(3),
-                                      ScreenUtil().setHeight(65))
-                                  : WidgetUtils.commonSizedBox(
-                                      ScreenUtil().setHeight(3),
-                                      ScreenUtil().setHeight(65)),
-                            ],
-                          ),
-                        ),
-                        const Spacer(),
-                        GestureDetector(
-                          onTap: (() {
-                            setState(() {
-                              _currentIndex = 7;
-                              _controller.animateToPage(7,
-                                  duration: const Duration(milliseconds: 500),
-                                  curve: Curves.ease);
-                              priceDou = 580000;
-                              priceYue = 58000;
-                            });
-                          }),
-                          child: Column(
-                            children: [
-                              WidgetUtils.onlyText(
-                                  '神皇',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: _currentIndex == 7
-                                          ? Colors.white
-                                          : MyColors.zhuangbanWZ,
-                                      fontSize: ScreenUtil().setSp(29),
-                                      fontWeight: FontWeight.w600)),
-                              WidgetUtils.commonSizedBox(8, 0),
-                              _currentIndex == 7
-                                  ? WidgetUtils.showImages(
-                                      'assets/images/guizu_xian.png',
-                                      ScreenUtil().setHeight(3),
-                                      ScreenUtil().setHeight(65))
-                                  : WidgetUtils.commonSizedBox(
-                                      ScreenUtil().setHeight(3),
-                                      ScreenUtil().setHeight(65)),
-                            ],
-                          ),
-                        ),
-                        const Spacer(),
-                        GestureDetector(
-                          onTap: (() {
-                            setState(() {
-                              _currentIndex = 8;
-                              _controller.animateToPage(8,
-                                  duration: const Duration(milliseconds: 500),
-                                  curve: Curves.ease);
-                              priceDou = 580000;
-                              priceYue = 58000;
-                            });
-                          }),
-                          child: Column(
-                            children: [
-                              WidgetUtils.onlyText(
-                                  '天尊',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: _currentIndex == 8
-                                          ? Colors.white
-                                          : MyColors.zhuangbanWZ,
-                                      fontSize: ScreenUtil().setSp(29),
-                                      fontWeight: FontWeight.w600)),
-                              WidgetUtils.commonSizedBox(8, 0),
-                              _currentIndex == 8
-                                  ? WidgetUtils.showImages(
-                                      'assets/images/guizu_xian.png',
-                                      ScreenUtil().setHeight(3),
-                                      ScreenUtil().setHeight(65))
-                                  : WidgetUtils.commonSizedBox(
-                                      ScreenUtil().setHeight(3),
-                                      ScreenUtil().setHeight(65)),
-                            ],
-                          ),
-                        ),
-                        const Spacer(),
-                        GestureDetector(
-                          onTap: (() {
-                            setState(() {
-                              _currentIndex = 9;
-                              _controller.animateToPage(9,
-                                  duration: const Duration(milliseconds: 500),
-                                  curve: Curves.ease);
-                              priceDou = 580000;
-                              priceYue = 58000;
-                            });
-                          }),
-                          child: Column(
-                            children: [
-                              WidgetUtils.onlyText(
-                                  '传说',
-                                  StyleUtils.getCommonTextStyle(
-                                      color: _currentIndex == 9
-                                          ? Colors.white
-                                          : MyColors.zhuangbanWZ,
-                                      fontSize: ScreenUtil().setSp(29),
-                                      fontWeight: FontWeight.w600)),
-                              WidgetUtils.commonSizedBox(8, 0),
-                              _currentIndex == 9
-                                  ? WidgetUtils.showImages(
-                                      'assets/images/guizu_xian.png',
-                                      ScreenUtil().setHeight(3),
-                                      ScreenUtil().setHeight(65))
-                                  : WidgetUtils.commonSizedBox(
-                                      ScreenUtil().setHeight(3),
-                                      ScreenUtil().setHeight(65)),
-                            ],
-                          ),
-                        ),
-                        WidgetUtils.commonSizedBox(0, 10.h),
-                      ],
+                  decoration: const BoxDecoration(
+                    //设置Container修饰
+                    image: DecorationImage(
+                      //背景图片修饰
+                      image: AssetImage("assets/images/guizu_bg.jpg"),
+                      fit: BoxFit.fill, //覆盖
                     ),
                   ),
-                ),
-                WidgetUtils.commonSizedBox(10, 0),
-                Expanded(
-                  child: PageView(
-                    controller: _controller,
-                    onPageChanged: (index) {
-                      setState(() {
-                        // 更新当前的索引值
-                        _currentIndex = index;
-                        // if(index == 0){
-                        //   priceDou=360;
-                        //   priceYue=36;
-                        // }else if(index == 1){
-                        //   priceDou=2800;
-                        //   priceYue=280;
-                        // }else if(index == 2){
-                        //   priceDou=9000;
-                        //   priceYue=900;
-                        // }else if(index == 3){
-                        //   priceDou=50000;
-                        //   priceYue=5000;
-                        // }else if(index == 4){
-                        //   priceDou=120000;
-                        //   priceYue=12000;
-                        // }else if(index == 5){
-                        //   priceDou=360000;
-                        //   priceYue=36000;
-                        // }else if(index == 6){
-                        //   priceDou=580000;
-                        //   priceYue=58000;
-                        // }
-                      });
-                    },
-                    children: const [
-                      YongshiPage(),
-                      QishiPage(),
-                      BojuePage(),
-                      HoujuePage(),
-                      GongjuePage(),
-                      GuowangPage(),
-                      DiwangPage(),
-                      ShenHuangPage(),
-                      TianZunPage(),
-                      ChuanShuoPage()
-                    ],
-                  ),
-                ),
-                WidgetUtils.commonSizedBox(20.h, 0),
-              ],
-            ),
-          ),
-          Container(
-            height: ScreenUtil().setHeight(220),
-            width: double.infinity,
-            color: MyColors.guizuBlack,
-            child: Column(
-              children: [
-                WidgetUtils.commonSizedBox(70.h, 0),
-                Row(
-                  children: [
-                    WidgetUtils.commonSizedBox(0, 20),
-                    WidgetUtils.onlyText(
-                        '还差 ',
-                        StyleUtils.getCommonTextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                            fontSize: ScreenUtil().setSp(33))),
-                    WidgetUtils.onlyText(
-                        priceYue.toString(),
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.guizuYellow,
-                            fontWeight: FontWeight.w600,
-                            fontSize: ScreenUtil().setSp(33))),
-                    WidgetUtils.onlyText(
-                        ' 贵族制升玄仙',
-                        StyleUtils.getCommonTextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                            fontSize: ScreenUtil().setSp(33))),
-                    const Spacer(),
-                    WidgetUtils.onlyText(
-                        '专属客服',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.guizuYellow,
-                            fontSize: ScreenUtil().setSp(25))),
-                    WidgetUtils.commonSizedBox(0, 5.w),
-                    WidgetUtils.showImages(
-                        'assets/images/tequan_right.png', 20.h, 10.w),
-                    WidgetUtils.commonSizedBox(0, 20),
-                  ],
-                ),
-                WidgetUtils.commonSizedBox(20.h, 0),
-                WidgetUtils.bgLine(1.h),
-                const Spacer(),
-                GestureDetector(
-                  onTap: ((){
-                    if(MyUtils.checkClick()){
-                      MyUtils.goTransparentPage(context, TeQuanShuoMingPage(title: '剩余时间说明',));
-                    }
-                  }),
-                  child: Row(
+                  child: Column(
                     children: [
-                      WidgetUtils.commonSizedBox(0, 20),
-                      WidgetUtils.onlyText(
-                          '暂未成为贵族',
-                          StyleUtils.getCommonTextStyle(
-                              color: MyColors.black_1,
-                              fontSize: ScreenUtil().setSp(26))),
-                      const Spacer(),
-                      WidgetUtils.onlyText(
-                          '当前贵族值',
-                          StyleUtils.getCommonTextStyle(
-                              color: MyColors.black_1,
-                              fontSize: ScreenUtil().setSp(26))),
-                      WidgetUtils.onlyText(
-                          '0',
-                          StyleUtils.getCommonTextStyle(
-                              color: MyColors.guizuYellow,
-                              fontSize: ScreenUtil().setSp(26))),
-                      const Spacer(),
-                      WidgetUtils.onlyText(
-                          ' 剩余时间',
-                          StyleUtils.getCommonTextStyle(
-                              color: MyColors.black_1,
-                              fontSize: ScreenUtil().setSp(26))),
-                      WidgetUtils.onlyText(
-                          '02-05-10',
-                          StyleUtils.getCommonTextStyle(
-                              color: MyColors.guizuYellow,
-                              fontSize: ScreenUtil().setSp(26))),
-                      WidgetUtils.commonSizedBox(0, 10.w),
-                      WidgetUtils.showImages(
-                          'assets/images/tequan_wen1.png', 20.h, 20.h),
-                      WidgetUtils.commonSizedBox(0, 20),
+                      WidgetUtils.commonSizedBox(35, 0),
+
+                      ///头部信息
+                      Container(
+                        padding: const EdgeInsets.only(left: 10),
+                        height: ScreenUtil().setHeight(60),
+                        width: double.infinity,
+                        alignment: Alignment.bottomLeft,
+                        child: Row(
+                          children: [
+                            Container(
+                              width: ScreenUtil().setHeight(150),
+                              alignment: Alignment.centerLeft,
+                              child: IconButton(
+                                icon: const Icon(Icons.arrow_back_ios),
+                                color: Colors.white,
+                                onPressed: (() {
+                                  Navigator.of(context).pop();
+                                  MyUtils.hideKeyboard(context);
+                                }),
+                              ),
+                            ),
+                            const Expanded(child: Text('')),
+                            WidgetUtils.onlyTextCenter(
+                                '贵族',
+                                StyleUtils.getCommonTextStyle(
+                                    color: Colors.white,
+                                    fontSize: ScreenUtil().setSp(34),
+                                    fontWeight: FontWeight.w600)),
+                            const Expanded(child: Text('')),
+                            GestureDetector(
+                              onTap: () {
+                                if (MyUtils.checkClick()) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const TequanListofgodsPage(),
+                                    ),
+                                  );
+                                }
+                              },
+                              child: Container(
+                                width: ScreenUtil().setWidth(150),
+                                alignment: Alignment.centerRight,
+                                child: Image.asset(
+                                  'assets/images/tequan_fengshen.png',
+                                  width: 43 * 3.w,
+                                  height: 15 * 3.w,
+                                ),
+                              ),
+                            ),
+                            WidgetUtils.commonSizedBox(0, 20.w),
+                          ],
+                        ),
+                      ),
+                      WidgetUtils.commonSizedBox(10, 0),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: SizedBox(
+                          width: 850.h,
+                          child: Row(
+                            children: [
+                              WidgetUtils.commonSizedBox(0, 10.h),
+                              GestureDetector(
+                                onTap: (() {
+                                  setState(() {
+                                    _currentIndex = 0;
+                                    _controller.animateToPage(0,
+                                        duration:
+                                            const Duration(milliseconds: 500),
+                                        curve: Curves.ease);
+
+                                    priceDou = 360;
+                                    priceYue = 36;
+                                  });
+                                }),
+                                child: Column(
+                                  children: [
+                                    WidgetUtils.onlyText(
+                                        '玄仙',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: _currentIndex == 0
+                                                ? Colors.white
+                                                : MyColors.zhuangbanWZ,
+                                            fontSize: ScreenUtil().setSp(29),
+                                            fontWeight: FontWeight.w600)),
+                                    WidgetUtils.commonSizedBox(8, 0),
+                                    _currentIndex == 0
+                                        ? WidgetUtils.showImages(
+                                            'assets/images/guizu_xian.png',
+                                            ScreenUtil().setHeight(3),
+                                            ScreenUtil().setHeight(65))
+                                        : WidgetUtils.commonSizedBox(
+                                            ScreenUtil().setHeight(3),
+                                            ScreenUtil().setHeight(65)),
+                                  ],
+                                ),
+                              ),
+                              const Spacer(),
+                              GestureDetector(
+                                onTap: (() {
+                                  setState(() {
+                                    _currentIndex = 1;
+                                    _controller.animateToPage(1,
+                                        duration:
+                                            const Duration(milliseconds: 500),
+                                        curve: Curves.ease);
+                                    priceDou = 2800;
+                                    priceYue = 280;
+                                  });
+                                }),
+                                child: Column(
+                                  children: [
+                                    WidgetUtils.onlyText(
+                                        '上仙',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: _currentIndex == 1
+                                                ? Colors.white
+                                                : MyColors.zhuangbanWZ,
+                                            fontSize: ScreenUtil().setSp(29),
+                                            fontWeight: FontWeight.w600)),
+                                    WidgetUtils.commonSizedBox(8, 0),
+                                    _currentIndex == 1
+                                        ? WidgetUtils.showImages(
+                                            'assets/images/guizu_xian.png',
+                                            ScreenUtil().setHeight(3),
+                                            ScreenUtil().setHeight(65))
+                                        : WidgetUtils.commonSizedBox(
+                                            ScreenUtil().setHeight(3),
+                                            ScreenUtil().setHeight(65)),
+                                  ],
+                                ),
+                              ),
+                              const Spacer(),
+                              GestureDetector(
+                                onTap: (() {
+                                  setState(() {
+                                    _currentIndex = 2;
+                                    _controller.animateToPage(2,
+                                        duration:
+                                            const Duration(milliseconds: 500),
+                                        curve: Curves.ease);
+                                    priceDou = 9000;
+                                    priceYue = 900;
+                                  });
+                                }),
+                                child: Column(
+                                  children: [
+                                    WidgetUtils.onlyText(
+                                        '金仙',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: _currentIndex == 2
+                                                ? Colors.white
+                                                : MyColors.zhuangbanWZ,
+                                            fontSize: ScreenUtil().setSp(29),
+                                            fontWeight: FontWeight.w600)),
+                                    WidgetUtils.commonSizedBox(8, 0),
+                                    _currentIndex == 2
+                                        ? WidgetUtils.showImages(
+                                            'assets/images/guizu_xian.png',
+                                            ScreenUtil().setHeight(3),
+                                            ScreenUtil().setHeight(65))
+                                        : WidgetUtils.commonSizedBox(
+                                            ScreenUtil().setHeight(3),
+                                            ScreenUtil().setHeight(65)),
+                                  ],
+                                ),
+                              ),
+                              const Spacer(),
+                              GestureDetector(
+                                onTap: (() {
+                                  setState(() {
+                                    _currentIndex = 3;
+                                    _controller.animateToPage(3,
+                                        duration:
+                                            const Duration(milliseconds: 500),
+                                        curve: Curves.ease);
+                                    priceDou = 50000;
+                                    priceYue = 5000;
+                                  });
+                                }),
+                                child: Column(
+                                  children: [
+                                    WidgetUtils.onlyText(
+                                        '仙帝',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: _currentIndex == 3
+                                                ? Colors.white
+                                                : MyColors.zhuangbanWZ,
+                                            fontSize: ScreenUtil().setSp(29),
+                                            fontWeight: FontWeight.w600)),
+                                    WidgetUtils.commonSizedBox(8, 0),
+                                    _currentIndex == 3
+                                        ? WidgetUtils.showImages(
+                                            'assets/images/guizu_xian.png',
+                                            ScreenUtil().setHeight(3),
+                                            ScreenUtil().setHeight(65))
+                                        : WidgetUtils.commonSizedBox(
+                                            ScreenUtil().setHeight(3),
+                                            ScreenUtil().setHeight(65)),
+                                  ],
+                                ),
+                              ),
+                              const Spacer(),
+                              GestureDetector(
+                                onTap: (() {
+                                  setState(() {
+                                    _currentIndex = 4;
+                                    _controller.animateToPage(4,
+                                        duration:
+                                            const Duration(milliseconds: 500),
+                                        curve: Curves.ease);
+                                    priceDou = 120000;
+                                    priceYue = 12000;
+                                  });
+                                }),
+                                child: Column(
+                                  children: [
+                                    WidgetUtils.onlyText(
+                                        '主神',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: _currentIndex == 4
+                                                ? Colors.white
+                                                : MyColors.zhuangbanWZ,
+                                            fontSize: ScreenUtil().setSp(29),
+                                            fontWeight: FontWeight.w600)),
+                                    WidgetUtils.commonSizedBox(8, 0),
+                                    _currentIndex == 4
+                                        ? WidgetUtils.showImages(
+                                            'assets/images/guizu_xian.png',
+                                            ScreenUtil().setHeight(3),
+                                            ScreenUtil().setHeight(65))
+                                        : WidgetUtils.commonSizedBox(
+                                            ScreenUtil().setHeight(3),
+                                            ScreenUtil().setHeight(65)),
+                                  ],
+                                ),
+                              ),
+                              const Spacer(),
+                              GestureDetector(
+                                onTap: (() {
+                                  setState(() {
+                                    _currentIndex = 5;
+                                    _controller.animateToPage(5,
+                                        duration:
+                                            const Duration(milliseconds: 500),
+                                        curve: Curves.ease);
+                                    priceDou = 360000;
+                                    priceYue = 36000;
+                                  });
+                                }),
+                                child: Column(
+                                  children: [
+                                    WidgetUtils.onlyText(
+                                        '天神',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: _currentIndex == 5
+                                                ? Colors.white
+                                                : MyColors.zhuangbanWZ,
+                                            fontSize: ScreenUtil().setSp(29),
+                                            fontWeight: FontWeight.w600)),
+                                    WidgetUtils.commonSizedBox(8, 0),
+                                    _currentIndex == 5
+                                        ? WidgetUtils.showImages(
+                                            'assets/images/guizu_xian.png',
+                                            ScreenUtil().setHeight(3),
+                                            ScreenUtil().setHeight(65))
+                                        : WidgetUtils.commonSizedBox(
+                                            ScreenUtil().setHeight(3),
+                                            ScreenUtil().setHeight(65)),
+                                  ],
+                                ),
+                              ),
+                              const Spacer(),
+                              GestureDetector(
+                                onTap: (() {
+                                  setState(() {
+                                    _currentIndex = 6;
+                                    _controller.animateToPage(6,
+                                        duration:
+                                            const Duration(milliseconds: 500),
+                                        curve: Curves.ease);
+                                    priceDou = 580000;
+                                    priceYue = 58000;
+                                  });
+                                }),
+                                child: Column(
+                                  children: [
+                                    WidgetUtils.onlyText(
+                                        '神王',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: _currentIndex == 6
+                                                ? Colors.white
+                                                : MyColors.zhuangbanWZ,
+                                            fontSize: ScreenUtil().setSp(29),
+                                            fontWeight: FontWeight.w600)),
+                                    WidgetUtils.commonSizedBox(8, 0),
+                                    _currentIndex == 6
+                                        ? WidgetUtils.showImages(
+                                            'assets/images/guizu_xian.png',
+                                            ScreenUtil().setHeight(3),
+                                            ScreenUtil().setHeight(65))
+                                        : WidgetUtils.commonSizedBox(
+                                            ScreenUtil().setHeight(3),
+                                            ScreenUtil().setHeight(65)),
+                                  ],
+                                ),
+                              ),
+                              const Spacer(),
+                              GestureDetector(
+                                onTap: (() {
+                                  setState(() {
+                                    _currentIndex = 7;
+                                    _controller.animateToPage(7,
+                                        duration:
+                                            const Duration(milliseconds: 500),
+                                        curve: Curves.ease);
+                                    priceDou = 580000;
+                                    priceYue = 58000;
+                                  });
+                                }),
+                                child: Column(
+                                  children: [
+                                    WidgetUtils.onlyText(
+                                        '神皇',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: _currentIndex == 7
+                                                ? Colors.white
+                                                : MyColors.zhuangbanWZ,
+                                            fontSize: ScreenUtil().setSp(29),
+                                            fontWeight: FontWeight.w600)),
+                                    WidgetUtils.commonSizedBox(8, 0),
+                                    _currentIndex == 7
+                                        ? WidgetUtils.showImages(
+                                            'assets/images/guizu_xian.png',
+                                            ScreenUtil().setHeight(3),
+                                            ScreenUtil().setHeight(65))
+                                        : WidgetUtils.commonSizedBox(
+                                            ScreenUtil().setHeight(3),
+                                            ScreenUtil().setHeight(65)),
+                                  ],
+                                ),
+                              ),
+                              const Spacer(),
+                              GestureDetector(
+                                onTap: (() {
+                                  setState(() {
+                                    _currentIndex = 8;
+                                    _controller.animateToPage(8,
+                                        duration:
+                                            const Duration(milliseconds: 500),
+                                        curve: Curves.ease);
+                                    priceDou = 580000;
+                                    priceYue = 58000;
+                                  });
+                                }),
+                                child: Column(
+                                  children: [
+                                    WidgetUtils.onlyText(
+                                        '天尊',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: _currentIndex == 8
+                                                ? Colors.white
+                                                : MyColors.zhuangbanWZ,
+                                            fontSize: ScreenUtil().setSp(29),
+                                            fontWeight: FontWeight.w600)),
+                                    WidgetUtils.commonSizedBox(8, 0),
+                                    _currentIndex == 8
+                                        ? WidgetUtils.showImages(
+                                            'assets/images/guizu_xian.png',
+                                            ScreenUtil().setHeight(3),
+                                            ScreenUtil().setHeight(65))
+                                        : WidgetUtils.commonSizedBox(
+                                            ScreenUtil().setHeight(3),
+                                            ScreenUtil().setHeight(65)),
+                                  ],
+                                ),
+                              ),
+                              const Spacer(),
+                              GestureDetector(
+                                onTap: (() {
+                                  setState(() {
+                                    _currentIndex = 9;
+                                    _controller.animateToPage(9,
+                                        duration:
+                                            const Duration(milliseconds: 500),
+                                        curve: Curves.ease);
+                                    priceDou = 580000;
+                                    priceYue = 58000;
+                                  });
+                                }),
+                                child: Column(
+                                  children: [
+                                    WidgetUtils.onlyText(
+                                        '传说',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: _currentIndex == 9
+                                                ? Colors.white
+                                                : MyColors.zhuangbanWZ,
+                                            fontSize: ScreenUtil().setSp(29),
+                                            fontWeight: FontWeight.w600)),
+                                    WidgetUtils.commonSizedBox(8, 0),
+                                    _currentIndex == 9
+                                        ? WidgetUtils.showImages(
+                                            'assets/images/guizu_xian.png',
+                                            ScreenUtil().setHeight(3),
+                                            ScreenUtil().setHeight(65))
+                                        : WidgetUtils.commonSizedBox(
+                                            ScreenUtil().setHeight(3),
+                                            ScreenUtil().setHeight(65)),
+                                  ],
+                                ),
+                              ),
+                              WidgetUtils.commonSizedBox(0, 10.h),
+                            ],
+                          ),
+                        ),
+                      ),
+                      WidgetUtils.commonSizedBox(10, 0),
+                      Expanded(
+                        child: PageView(
+                          controller: _controller,
+                          onPageChanged: (index) {
+                            setState(() {
+                              // 更新当前的索引值
+                              _currentIndex = index;
+                              // if(index == 0){
+                              //   priceDou=360;
+                              //   priceYue=36;
+                              // }else if(index == 1){
+                              //   priceDou=2800;
+                              //   priceYue=280;
+                              // }else if(index == 2){
+                              //   priceDou=9000;
+                              //   priceYue=900;
+                              // }else if(index == 3){
+                              //   priceDou=50000;
+                              //   priceYue=5000;
+                              // }else if(index == 4){
+                              //   priceDou=120000;
+                              //   priceYue=12000;
+                              // }else if(index == 5){
+                              //   priceDou=360000;
+                              //   priceYue=36000;
+                              // }else if(index == 6){
+                              //   priceDou=580000;
+                              //   priceYue=58000;
+                              // }
+                            });
+                          },
+                          children: [
+                            YongshiPage(zhi: list[0].upValue!,),
+                            QishiPage(zhi: list[1].upValue!,),
+                            BojuePage(zhi: list[2].upValue!,),
+                            HoujuePage(zhi: list[3].upValue!,),
+                            GongjuePage(zhi: list[4].upValue!,),
+                            GuowangPage(zhi: list[5].upValue!,),
+                            DiwangPage(zhi: list[6].upValue!,),
+                            ShenHuangPage(zhi: list[7].upValue!,),
+                            TianZunPage(zhi: list[8].upValue!,),
+                            ChuanShuoPage(zhi: list[9].upValue!,),
+                          ],
+                        ),
+                      ),
+                      WidgetUtils.commonSizedBox(20.h, 0),
                     ],
                   ),
                 ),
-                const Spacer(),
+                Container(
+                  height: ScreenUtil().setHeight(220),
+                  width: double.infinity,
+                  color: MyColors.guizuBlack,
+                  child: Column(
+                    children: [
+                      WidgetUtils.commonSizedBox(70.h, 0),
+                      Row(
+                        children: [
+                          WidgetUtils.commonSizedBox(0, 20),
+                          gzID != '10'
+                              ? WidgetUtils.onlyText(
+                                  '还差 ',
+                                  StyleUtils.getCommonTextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: ScreenUtil().setSp(33)))
+                              : WidgetUtils.commonSizedBox(0, 0),
+                          gzID != '10'
+                              ? WidgetUtils.onlyText(
+                                  gzCha,
+                                  StyleUtils.getCommonTextStyle(
+                                      color: MyColors.guizuYellow,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: ScreenUtil().setSp(33)))
+                              : WidgetUtils.commonSizedBox(0, 0),
+                          gzID != '10'
+                              ? WidgetUtils.onlyText(
+                                  ' 贵族制升$gzNextTitle',
+                                  StyleUtils.getCommonTextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: ScreenUtil().setSp(33)))
+                              : WidgetUtils.commonSizedBox(0, 0),
+                          const Spacer(),
+                          WidgetUtils.onlyText(
+                              '专属客服',
+                              StyleUtils.getCommonTextStyle(
+                                  color: MyColors.guizuYellow,
+                                  fontSize: ScreenUtil().setSp(25))),
+                          WidgetUtils.commonSizedBox(0, 5.w),
+                          WidgetUtils.showImages(
+                              'assets/images/tequan_right.png', 20.h, 10.w),
+                          WidgetUtils.commonSizedBox(0, 20),
+                        ],
+                      ),
+                      WidgetUtils.commonSizedBox(20.h, 0),
+                      WidgetUtils.bgLine(1.h),
+                      const Spacer(),
+                      GestureDetector(
+                        onTap: (() {
+                          if (MyUtils.checkClick()) {
+                            MyUtils.goTransparentPage(
+                                context,
+                                TeQuanShuoMingPage(
+                                  title: '剩余时间说明',
+                                ));
+                          }
+                        }),
+                        child: Row(
+                          children: [
+                            WidgetUtils.commonSizedBox(0, 20),
+                            WidgetUtils.onlyText(
+                                gzTitle,
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.black_1,
+                                    fontSize: ScreenUtil().setSp(26))),
+                            const Spacer(),
+                            WidgetUtils.onlyText(
+                                '当前贵族值',
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.black_1,
+                                    fontSize: ScreenUtil().setSp(26))),
+                            WidgetUtils.onlyText(
+                                gzZhi,
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.guizuYellow,
+                                    fontSize: ScreenUtil().setSp(26))),
+                            const Spacer(),
+                            WidgetUtils.onlyText(
+                                ' 剩余时间',
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.black_1,
+                                    fontSize: ScreenUtil().setSp(26))),
+                            WidgetUtils.onlyText(
+                                gzTime,
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.guizuYellow,
+                                    fontSize: ScreenUtil().setSp(26))),
+                            WidgetUtils.commonSizedBox(0, 10.w),
+                            WidgetUtils.showImages(
+                                'assets/images/tequan_wen1.png', 20.h, 20.h),
+                            WidgetUtils.commonSizedBox(0, 20),
+                          ],
+                        ),
+                      ),
+                      const Spacer(),
+                    ],
+                  ),
+                ),
+                Positioned(
+                    bottom: 180.h,
+                    child: Container(
+                      padding: EdgeInsets.only(left: 20.h, right: 20.h),
+                      child: WidgetUtils.showImagesFill(
+                          'assets/images/tequan_shenmiren.png', 100.h, 660.w),
+                    )),
               ],
-            ),
-          ),
-          Positioned(
-              bottom: 180.h,
-              child: Container(
-                padding: EdgeInsets.only(left: 20.h, right: 20.h),
-                child: WidgetUtils.showImagesFill(
-                    'assets/images/tequan_shenmiren.png', 100.h, 660.w),
-              )),
-        ],
-      ),
+            )
+          : const Text(''),
     );
+  }
+
+  bool isOK = false;
+  String gzZhi = '',
+      gzTime = '',
+      gzTitle = '暂未成为贵族',
+      gzNextTitle = '玄仙',
+      gzCha = '',
+      gzID = '0';
+  List<Ls> list = [];
+  /// 我的贵族
+  Future<void> doPostMyNoble() async {
+    Loading.show();
+    try {
+      gzBean bean = await DataUtils.postMyNoble();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            list.clear();
+            isOK = true;
+            gzZhi = bean.data!.my!.nobleValue!;
+            gzTime = bean.data!.my!.nobleExpireTime!;
+            gzID = bean.data!.my!.nobleId.toString();
+            list.addAll(bean.data!.ls!);
+            if ((bean.data!.my!.nobleId as int) > 0) {
+              _currentIndex = (bean.data!.my!.nobleId as int) - 1;
+              _controller = PageController(
+                initialPage: _currentIndex,
+              );
+              if (bean.data!.my!.nobleId == 1) {
+                gzTitle = '当前等级：玄仙';
+                gzNextTitle = '上仙';
+                gzCha = (int.parse(bean.data!.ls![1].upValue!) -
+                        int.parse(bean.data!.my!.nobleValue!))
+                    .toString();
+              } else if (bean.data!.my!.nobleId == 2) {
+                gzTitle = '当前等级：上仙';
+                gzNextTitle = '金仙';
+                gzCha = (int.parse(bean.data!.ls![2].upValue!) -
+                        int.parse(bean.data!.my!.nobleValue!))
+                    .toString();
+              } else if (bean.data!.my!.nobleId == 3) {
+                gzTitle = '当前等级：金仙';
+                gzNextTitle = '仙帝';
+                gzCha = (int.parse(bean.data!.ls![3].upValue!) -
+                        int.parse(bean.data!.my!.nobleValue!))
+                    .toString();
+              } else if (bean.data!.my!.nobleId == 4) {
+                gzTitle = '当前等级：仙帝';
+                gzNextTitle = '主神';
+                gzCha = (int.parse(bean.data!.ls![4].upValue!) -
+                        int.parse(bean.data!.my!.nobleValue!))
+                    .toString();
+              } else if (bean.data!.my!.nobleId == 5) {
+                gzTitle = '当前等级：主神';
+                gzNextTitle = '天神';
+                gzCha = (int.parse(bean.data!.ls![5].upValue!) -
+                        int.parse(bean.data!.my!.nobleValue!))
+                    .toString();
+              } else if (bean.data!.my!.nobleId == 6) {
+                gzTitle = '当前等级：天神';
+                gzNextTitle = '神王';
+                gzCha = (int.parse(bean.data!.ls![6].upValue!) -
+                        int.parse(bean.data!.my!.nobleValue!))
+                    .toString();
+              } else if (bean.data!.my!.nobleId == 7) {
+                gzTitle = '当前等级：神王';
+                gzNextTitle = '神皇';
+                gzCha = (int.parse(bean.data!.ls![7].upValue!) -
+                        int.parse(bean.data!.my!.nobleValue!))
+                    .toString();
+              } else if (bean.data!.my!.nobleId == 8) {
+                gzTitle = '当前等级：神皇';
+                gzNextTitle = '天尊';
+                gzCha = (int.parse(bean.data!.ls![8].upValue!) -
+                        int.parse(bean.data!.my!.nobleValue!))
+                    .toString();
+              } else if (bean.data!.my!.nobleId == 9) {
+                gzTitle = '当前等级：天尊';
+                gzNextTitle = '传说';
+                gzCha = (int.parse(bean.data!.ls![1].upValue!) -
+                        int.parse(bean.data!.my!.nobleValue!))
+                    .toString();
+              } else {
+                gzTitle = '当前等级：传说';
+              }
+            }
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+          // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
   }
 }

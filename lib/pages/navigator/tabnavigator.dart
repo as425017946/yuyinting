@@ -463,6 +463,38 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
             _dispose();
           }
         }
+      } else if (event.type == 'up_noble') {
+        LogE('贵族升级  ${event.type == 'up_noble'}');
+        sp.setString('nobleID', event.map!['noble_id'].toString());
+        if (listMP.isEmpty) {
+          hengFuBean hf  = hengFuBean();
+          setState(() {
+            hf.title = '贵族';
+            hf.fromNickname = event.map!['nickname'];
+            hf.nobleId = int.parse(event.map!['noble_id'].toString());
+          });
+          myhf = hf;
+          //显示横幅、map赋值
+          setState(() {
+            isShowHF = true;
+            listMP.add(hf);
+          });
+          // 判断数据显示使用
+          showInfo(hf);
+          // 看看集合里面有几个，10s一执行
+          hpTimer();
+        } else {
+          hengFuBean hf  = hengFuBean();
+          setState(() {
+            hf.title = '贵族';
+            hf.fromNickname = event.map!['nickname'];
+            hf.nobleId = int.parse(event.map!['noble_id'].toString());
+          });
+          myhf = hf;
+          setState(() {
+            listMP.add(hf);
+          });
+        }
       }
     });
 
@@ -555,13 +587,19 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           // 低贵族
           setState(() {
             name = '低贵族';
-            path = 'assets/svga/gp/gp_guizu_d.svga';
+            path = 'assets/svga/gp/gp_guizu_1.svga';
           });
         } else if (hf.nobleId! > 4 && hf.nobleId! < 8) {
+          // 中贵族
+          setState(() {
+            name = '中贵族';
+            path = 'assets/svga/gp/gp_guizu_2.svga';
+          });
+        }else if (hf.nobleId! > 7) {
           // 高贵族
           setState(() {
             name = '高贵族';
-            path = 'assets/svga/gp/gp_guizu_g.svga';
+            path = 'assets/svga/gp/gp_guizu_3.svga';
           });
         }
         break;

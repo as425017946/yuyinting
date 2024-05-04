@@ -9,7 +9,8 @@ import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 class ShenHuangPage extends StatefulWidget {
-  const ShenHuangPage({Key? key}) : super(key: key);
+  String zhi;
+  ShenHuangPage({Key? key, required this.zhi}) : super(key: key);
 
   @override
   State<ShenHuangPage> createState() => _ShenHuangPageState();
@@ -110,7 +111,7 @@ class _ShenHuangPageState extends State<ShenHuangPage>  with TickerProviderState
               children: [
                 const Spacer(),
                 WidgetUtils.onlyTextCenter(
-                    '500000',
+                    widget.zhi,
                     StyleUtils.getCommonTextStyle(
                         color: Colors.white,
                         fontSize: ScreenUtil().setSp(22))),

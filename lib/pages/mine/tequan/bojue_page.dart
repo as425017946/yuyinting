@@ -9,7 +9,8 @@ import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 class BojuePage extends StatefulWidget {
-  const BojuePage({Key? key}) : super(key: key);
+  String zhi;
+  BojuePage({Key? key, required this.zhi}) : super(key: key);
 
   @override
   State<BojuePage> createState() => _BojuePageState();
@@ -110,7 +111,7 @@ class _BojuePageState extends State<BojuePage>  with TickerProviderStateMixin {
               children: [
                 const Spacer(),
                 WidgetUtils.onlyTextCenter(
-                    '30000',
+                    widget.zhi,
                     StyleUtils.getCommonTextStyle(
                         color: Colors.white,
                         fontSize: ScreenUtil().setSp(22))),

@@ -9,7 +9,8 @@ import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 class GuowangPage extends StatefulWidget {
-  const GuowangPage({Key? key}) : super(key: key);
+  String zhi;
+  GuowangPage({Key? key, required this.zhi}) : super(key: key);
 
   @override
   State<GuowangPage> createState() => _GuowangPageState();
@@ -110,7 +111,7 @@ class _GuowangPageState extends State<GuowangPage>  with TickerProviderStateMixi
               children: [
                 const Spacer(),
                 WidgetUtils.onlyTextCenter(
-                    '150000',
+                    widget.zhi,
                     StyleUtils.getCommonTextStyle(
                         color: Colors.white,
                         fontSize: ScreenUtil().setSp(22))),

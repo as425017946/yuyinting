@@ -9,7 +9,8 @@ import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 class DiwangPage extends StatefulWidget {
-  const DiwangPage({Key? key}) : super(key: key);
+  String zhi;
+  DiwangPage({Key? key, required this.zhi}) : super(key: key);
 
   @override
   State<DiwangPage> createState() => _DiwangPageState();
@@ -110,7 +111,7 @@ class _DiwangPageState extends State<DiwangPage>  with TickerProviderStateMixin 
               children: [
                 const Spacer(),
                 WidgetUtils.onlyTextCenter(
-                    '20000',
+                    widget.zhi,
                     StyleUtils.getCommonTextStyle(
                         color: Colors.white,
                         fontSize: ScreenUtil().setSp(22))),
