@@ -73,6 +73,9 @@ class CPSpeedPage extends StatelessWidget {
           ),
           const Spacer(),
           GestureDetector(
+            onTap: () => c.action(() {
+              Get.dialog(_DialogHelp());
+            }),
             child: Image.asset('assets/images/cp_help.png', width: 30.w, height: 30.w),
           ),
         ],
@@ -400,4 +403,68 @@ class _DialogSend extends StatelessWidget {
       ),
     );
   }
+}
+
+class _DialogHelp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: 620.w,
+        height: 760.w,
+        padding: EdgeInsets.only(left: 33.w, right: 33.w, top: 33.w),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(30.w)),
+        ),
+        child: Column(
+          children: [
+            _nav(),
+            SizedBox(height: 20.w),
+            Text(
+              _text,
+              style: TextStyle(
+                fontSize: 17.sp,
+                height: 1.6,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _nav() {
+    return Row(
+      children: [
+        Expanded(
+          child: Text(
+            '说明',
+            style: TextStyle(
+              fontSize: 33.sp,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        GestureDetector(
+          onTap: () => Get.back(),
+          child: Image.asset('assets/images/cp_close.png', width: 27.w, height: 27.w),
+        ),
+      ],
+    );
+  }
+
+  final _text = '''
+一、游戏简介
+你准备好探索未知的交友世界了吗？欢迎来到纸条交友游戏，一个充满神秘与期待的社交平台。在这里，你将有机会抽取来自不同用户的神秘小纸条，同时也有机会让你的小纸条落入他人的手中。但请记住，这是一个充满未知的游戏，你无法预知会抽到谁的小纸条，也无法知道你的小纸条会被谁所发现。
+二、真诚交友，认真对待
+我们鼓励每一位玩家以真诚的态度参与游戏。当你准备放入小纸条时，请务必认真填写内容，让接收者能够通过你的文字更深入地了解你。乱填或虚假的信息不仅会被视为无效，也是对他人时间的不尊重。
+三、真实交友，费用机制
+为了确保交友信息的真实性和质量，我们设置了费用机制。当你每天抽放纸条的次数超过3次后，需要支付一定的费用。这样做的目的是为了提高参与门槛，筛选出真正有诚意和需求的用户。
+四、信息甄别，保护自我
+虽然我们希望每一位玩家都能以真诚的态度参与游戏，但我们也必须提醒你，我们无法保证所有纸条内容的真实性。在与其他玩家交流时，请务必保持警惕，仔细甄别信息。切勿轻易进行转账或其他涉及金钱的交易，以防被骗。
+五、祝福与期待
+最后，我们衷心祝愿你能在这个纸条交友游戏中收获一段美好的姻缘或深厚的友谊。但请记住，交友需要时间和耐心，不要急于求成。慢慢来，享受这个过程，也许你会发现更多的惊喜和可能。
+''';
 }
