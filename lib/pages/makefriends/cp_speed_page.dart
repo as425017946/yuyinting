@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:flukit/flukit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:focus_detector/focus_detector.dart';
 import 'package:get/get.dart';
 
 import 'makefriends_model.dart';
@@ -182,71 +185,157 @@ class CPSpeedPage extends StatelessWidget {
   }
 
   Widget _banner() {
-    final list = List.generate(100, (_) => 'K***梦  抽到了  纸条男友  A***明 ');
     return SizedBox(
       width: double.infinity,
       height: 138.h,
-      child: _Banner(list: list),
+      child: _Banner(),
+    );
+  }
+}
+
+class _Banner extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        _Barrage(),
+        const Spacer(),
+        _Barrage(),
+      ],
     );
   }
 }
 
 // ignore: must_be_immutable
-class _Banner extends StatelessWidget {
-  final List<String> list;
-  _Banner({required this.list});
-  int _current = 0;
+class _Barrage extends StatelessWidget {
+  final _isFirst = true.obs;
+  final _items = [
+    _BarrageType.empty().obs,
+    _BarrageType.empty().obs,
+    _BarrageType.empty().obs,
+    _BarrageType.empty().obs,
+  ];
+  double _total = 0;
+  double _width = 0;
+  void _callBack(double total, double width) {
+    _total = total;
+    _width = width;
+  }
+  void _run(int index, int itemIndex, int time) async {
+    final item = _items[itemIndex];
+    int t = 7000 + Random().nextInt(3000);
+    item(_BarrageType(index, t));
+    await Future.delayed(const Duration(milliseconds: 500));
+    final interval = t.toDouble() * (_width + 20.h) / (_width + _total);
+    await Future.delayed(Duration(milliseconds: interval.toInt() + 1000 + Random().nextInt(500)));
+    _run((index + 1), (itemIndex  + 1)%_items.length, time);
+  }
+  final _all = '清风晨曦诗意独步琴瑟浮生梦幻繁星烟雨飘渺落花流水蝴蝶倾城晨曦彼岸柔情倚楼漫步清风听风茉莉蓝天蒙蒙如梦忆梦西游无悔醉舞青春';
+  String _getName() {
+    if (Random().nextInt(3) == 1) {
+      return '萌***';
+    }
+    final start = Random().nextInt(_all.length);
+    final name = _all.substring(start, start + 1);
+    return '$name***';
+  }
+  String _text() {
+    final String sex;
+    if (Random().nextInt(3) == 1) {
+      sex = '男';
+    } else {
+      sex = '女';
+    }
+    return '${_getName()}  抽到了  纸条$sex友  ${_getName()}';
+  }
   
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        _barrage(100),
-        const Spacer(),
-        _barrage(250),
-      ],
+    return FocusDetector(
+      onFocusGained: () {
+        if (_isFirst.value) {
+          _isFirst.value = false;
+          _run(0, 0, 0);
+        }
+      },
+      child: SizedBox(
+        width: double.infinity,
+        height: 49.h,
+        child: Stack(
+          alignment: Alignment.centerLeft,
+          children: _items
+              .map((element) => Obx(() => _item(element.value, _callBack)))
+              .toList(),
+        ),
+      ),
     );
   }
-
-  Widget _barrage(double start) {
-    return _Barrage(start, () {
-      if (_current >= list.length) {
-        _current = 0;
-      }
-      final item = _BarrageType(_current, list[_current]);
-      _current++;
-      return item;
-    });
+  Widget _item(_BarrageType type, void Function(double, double) callBack) {
+    return _BarrageItem(
+      aniKey: type.index,
+      text: _text(),
+      time: type.time,
+      callBack: callBack,
+    );
   }
 }
-class _BarrageType { 
+class _BarrageType {
   final int index;
-  final String text;
-  const _BarrageType(this.index, this.text);
+  final int time;
+  _BarrageType(this.index, this.time);
+  factory _BarrageType.empty() {
+    return _BarrageType(-1, 0);
+  }
 }
-class _Barrage extends StatelessWidget {
-  final double start;
-  final _BarrageType Function() next;
-  _Barrage(this.start, this.next);
-  final distance = 0.0.obs;
-  final type = (const _BarrageType(-1, '')).obs;
+
+class _BarrageItem extends StatelessWidget {
+  // final double start;
+  final int aniKey;
+  final String text;
+  final int time;
+  final void Function(double, double) callBack;
+  const _BarrageItem({required this.aniKey, required this.text, required this.time, required this.callBack});
   @override
   Widget build(BuildContext context) {
-   return SizedBox(
-    // width: double.infinity,
-    height: 49.h,
-    child: _item(next()),
-   );
+    return LayoutBuilder(builder: (context, type) {
+      final width = 0.0.obs;
+      return AfterLayout(
+        callback: (RenderAfterLayout ral) {
+          width.value = ral.size.width;
+          if (aniKey >= 0) {
+            callBack(context.width, ral.size.width);
+          }
+        },
+        child: _switcher(context.width, width),
+      );
+    });
+  }
+  Widget _switcher(double total, Rx<double> width) {
+    final key = Key(aniKey.toString());
+    return Obx(() {
+      var tween = Tween<Offset>(begin: Offset.zero, end: Offset(-(total/width.value + 1), 0));
+      return Transform.translate(
+        offset: Offset(total, 0),
+        child: AnimatedSwitcher(
+        duration: Duration(milliseconds: time),
+        transitionBuilder: (child, animation) {
+          if (child.key != key || aniKey < 0) {
+            return const SizedBox();
+          }
+          return SlideTransition(
+            position: tween.animate(animation),
+            child: child,
+          );
+        },
+        child: _item(key),
+      ),
+      );
+    });
   }
 
-  // Widget _animate() {
-  //   // return LayoutBuilder(builder: (context, type) {
-
-  //   // });
-  // }
-
-  Widget _item(_BarrageType type) {
+  Widget _item(Key key) {
     return Container(
+      key: key,
       padding: EdgeInsets.symmetric(horizontal: 16.h),
       height: 49.h,
       decoration: BoxDecoration(
@@ -257,14 +346,14 @@ class _Barrage extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Image.asset('assets/images/cp_heart.png', width: 38.h, height: 33.h),
-              SizedBox(width: 7.h),
-              Text(
-                type.text,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24.h,
-                ),
-              ),
+          SizedBox(width: 7.h),
+          Text(
+            text,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 24.h,
+            ),
+          ),
         ],
       ),
     );
