@@ -1,3 +1,4 @@
+import 'package:flukit/flukit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -190,12 +191,82 @@ class CPSpeedPage extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class _Banner extends StatelessWidget {
   final List<String> list;
-  const _Banner({required this.list});
+  _Banner({required this.list});
+  int _current = 0;
   
   @override
   Widget build(BuildContext context) {
-    return Text('_Banner');
+    return Column(
+      children: [
+        _barrage(100),
+        const Spacer(),
+        _barrage(250),
+      ],
+    );
+  }
+
+  Widget _barrage(double start) {
+    return _Barrage(start, () {
+      if (_current >= list.length) {
+        _current = 0;
+      }
+      final item = _BarrageType(_current, list[_current]);
+      _current++;
+      return item;
+    });
+  }
+}
+class _BarrageType { 
+  final int index;
+  final String text;
+  const _BarrageType(this.index, this.text);
+}
+class _Barrage extends StatelessWidget {
+  final double start;
+  final _BarrageType Function() next;
+  _Barrage(this.start, this.next);
+  final distance = 0.0.obs;
+  final type = (const _BarrageType(-1, '')).obs;
+  @override
+  Widget build(BuildContext context) {
+   return SizedBox(
+    // width: double.infinity,
+    height: 49.h,
+    child: _item(next()),
+   );
+  }
+
+  // Widget _animate() {
+  //   // return LayoutBuilder(builder: (context, type) {
+
+  //   // });
+  // }
+
+  Widget _item(_BarrageType type) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16.h),
+      height: 49.h,
+      decoration: BoxDecoration(
+        color: const Color(0x4CE9DEFF),
+        borderRadius: BorderRadius.circular(24.5.h),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Image.asset('assets/images/cp_heart.png', width: 38.h, height: 33.h),
+              SizedBox(width: 7.h),
+              Text(
+                type.text,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24.h,
+                ),
+              ),
+        ],
+      ),
+    );
   }
 }
