@@ -80,97 +80,102 @@ class PaiduiListPage extends StatelessWidget {
   }
 
   Widget _tableItem(DataPH item, int i) {
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          //渐变位置
-            begin: Alignment.centerRight, //右上
-            end: Alignment.centerLeft, //左下
-            stops: const [
-              0.0,
-              1.0
-            ], //[渐变起始点, 渐变结束点]
-            //渐变颜色[始点颜色, 结束颜色]
-            colors: [
-              i % 4 == 0
-                  ? MyColors.newY1
-                  : i % 4 == 1
-                  ? MyColors.newY2
-                  : i % 4 == 2
-                  ? MyColors.newY3
-                  : MyColors.newY4,
-              i % 4 == 0
-                  ? MyColors.newY11
-                  : i % 4 == 1
-                  ? MyColors.newY22
-                  : i % 4 == 2
-                  ? MyColors.newY33
-                  : MyColors.newY44
-            ]),
-        borderRadius: BorderRadius.all(Radius.circular(20.w)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: const Offset(0, 3), // 阴影偏移量
+    return Stack(
+      children: [
+        Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              //渐变位置
+                begin: Alignment.centerRight, //右上
+                end: Alignment.centerLeft, //左下
+                stops: const [
+                  0.0,
+                  1.0
+                ], //[渐变起始点, 渐变结束点]
+                //渐变颜色[始点颜色, 结束颜色]
+                colors: [
+                  i % 4 == 0
+                      ? MyColors.newY1
+                      : i % 4 == 1
+                      ? MyColors.newY2
+                      : i % 4 == 2
+                      ? MyColors.newY3
+                      : MyColors.newY4,
+                  i % 4 == 0
+                      ? MyColors.newY11
+                      : i % 4 == 1
+                      ? MyColors.newY22
+                      : i % 4 == 2
+                      ? MyColors.newY33
+                      : MyColors.newY44
+                ]),
+            borderRadius: BorderRadius.all(Radius.circular(20.w)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 2,
+                blurRadius: 5,
+                offset: const Offset(0, 3), // 阴影偏移量
+              ),
+            ],
           ),
-        ],
-      ),
-      padding: EdgeInsets.all(14.w),
-      child: Row(
-        children: [
-          _coverImg(item, 130.w),
-          SizedBox(width: 26.w),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+          padding: EdgeInsets.all(14.w),
+          child: Row(
+            children: [
+              _coverImg(item, 130.w),
+              SizedBox(width: 26.w),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: WidgetUtils.onlyText(
-                        item.roomName!,
-                        StyleUtils.getCommonTextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 29.sp,
-                        ),
-                      ),
-                    ),
-                    // index == 4
-                    //     ? WidgetUtils.showImages(
-                    //         'assets/images/room_xinting_tj.png', 30.w, 100.w)
-                    //     : const Text('')
-                  ],
-                ),
-                const Expanded(child: Text('')),
-                Row(
-                  children: [
-                    _tag(),
-                    SizedBox(width: 18.w),
-                    index == 5
-                        ? WidgetUtils.onlyText(
-                            item.notice!,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: WidgetUtils.onlyText(
+                            item.roomName!,
                             StyleUtils.getCommonTextStyle(
-                              color: MyColors.paiduiPurple,
+                              color: Colors.black,
                               fontWeight: FontWeight.w600,
-                              fontSize: ScreenUtil().setSp(18),
+                              fontSize: 29.sp,
                             ),
-                          )
-                        : const Text('')
+                          ),
+                        ),
+                        // index == 4
+                        //     ? WidgetUtils.showImages(
+                        //         'assets/images/room_xinting_tj.png', 30.w, 100.w)
+                        //     : const Text('')
+                      ],
+                    ),
+                    const Expanded(child: Text('')),
+                    Row(
+                      children: [
+                        _tag(),
+                        SizedBox(width: 18.w),
+                        index == 5
+                            ? WidgetUtils.onlyText(
+                          item.notice!,
+                          StyleUtils.getCommonTextStyle(
+                            color: MyColors.paiduiPurple,
+                            fontWeight: FontWeight.w600,
+                            fontSize: ScreenUtil().setSp(18),
+                          ),
+                        )
+                            : const Text('')
+                      ],
+                    ),
+                    const Expanded(child: Text('')),
+                    _tableBottom(item),
                   ],
                 ),
-                const Expanded(child: Text('')),
-                _tableBottom(item),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+        WidgetUtils.showImagesFill('assets/images/111.png', double.infinity, double.infinity)
+      ],
     );
   }
 
