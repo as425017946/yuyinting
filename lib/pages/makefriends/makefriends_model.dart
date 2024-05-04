@@ -1,10 +1,12 @@
 import 'package:appinio_swiper/appinio_swiper.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_sound/public/flutter_sound_player.dart';
 import 'package:get/get.dart';
 
 import '../../bean/find_mate_bean.dart';
 import '../../http/data_utils.dart';
 import '../../main.dart';
+import '../../utils/event_utils.dart';
 import '../../utils/getx_tools.dart';
 import '../../utils/loading.dart';
 import '../../widget/SwiperPage.dart';
@@ -14,6 +16,13 @@ import '../mine/my/my_info_page.dart';
 typedef FindMateItem = FindMateBeanData;
 
 class MakefriendsController extends GetxController with GetAntiCombo {
+  final _select = 0.obs;
+  int get select => _select.value;
+  set select(int value) {
+    _select.value = value;
+    eventBus.fire(BottomBarVisibleBack(visible: value != 1));
+  }
+
   final _gender = (sp.getInt('user_gender') ?? 1).obs;
   final _list = List<FindMateItem>.empty().obs;
 
@@ -36,6 +45,10 @@ class MakefriendsController extends GetxController with GetAntiCombo {
     _stopVoice();
   }
 
+  void onBuild() {
+
+  }
+
   void onChoose() {
     action(() {
       _stopVoice();
@@ -49,9 +62,10 @@ class MakefriendsController extends GetxController with GetAntiCombo {
     });
   }
 
+  bool _canTa = false;
   void onTa() {
     action(() {
-      if (_current >= list.length) {
+      if (!_canTa || _current >= list.length) {
         return;
       }
       _stopVoice();
@@ -70,9 +84,17 @@ class MakefriendsController extends GetxController with GetAntiCombo {
     });
   }
   int _current = 0;
+  set current(int value) => _current = value;
   void onSwipe(int index, AppinioSwiperDirection direction) {
     _current = index;
     _stopVoice();
+    _canTa = true;
+  }
+  void onSwiping(AppinioSwiperDirection direction) {
+    _canTa = false;
+  }
+  void onSwipeEnd() {
+    _canTa = true;
   }
 
   final _isFirstLoading = true.obs;
@@ -81,14 +103,15 @@ class MakefriendsController extends GetxController with GetAntiCombo {
     try {
       Loading.show();
       final bean = await doRequest(() => DataUtils.postFindMate(gender));
-      if (bean.data.length != _list.length) {
-        _current = 0;
-      }
+      // if (bean.data.length != _list.length) {
+      //   _current = 0;
+      // }
       _list.value = bean.data;
       if (gender != null) {
         _gender.value = gender;
       }
       _isFirstLoading.value = false;
+      _canTa = true;
     } catch (e) {
       if (e is GetBean) {
         Get.log(e.msg);

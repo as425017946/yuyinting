@@ -20,6 +20,7 @@ import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
 import '../../../main.dart';
 import '../../../utils/event_utils.dart';
+import '../../../utils/getx_tools.dart';
 import '../../../utils/loading.dart';
 import '../../../utils/log_util.dart';
 import '../../../utils/my_toast_utils.dart';
@@ -422,42 +423,54 @@ class _EditAudioPageState extends State<EditAudioPage> {
                             color: Colors.white,
                             fontSize: ScreenUtil().setSp(28),
                             fontWeight: FontWeight.w600)),
-                    WidgetUtils.commonSizedBox(10, 0),
                     GestureDetector(
                       onTap: (() {
                         if (MyUtils.checkClick()) {
-                          play();
+                          if (playRecord) {
+                            stopPlayer();
+                          } else {
+                            play();
+                          }
                         }
                       }),
-                      child: Container(
-                        height: ScreenUtil().setHeight(50),
-                        width: ScreenUtil().setWidth(220),
-                        padding: const EdgeInsets.only(left: 8),
-                        alignment: Alignment.topLeft,
-                        //边框设置
-                        decoration: const BoxDecoration(
-                          //背景
-                          color: MyColors.peopleYellow,
-                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                        ),
-                        child: Row(
-                          children: [
-                            const Expanded(
-                                child: SVGASimpleImage(
-                                  assetsName:
-                                  'assets/svga/audio_xindiaotu.svga',
-                                )),
-                            WidgetUtils.commonSizedBox(0, 10.h),
-                            WidgetUtils.showImages(
-                                'assets/images/people_bofang.png',
-                                ScreenUtil().setHeight(35),
-                                ScreenUtil().setWidth(35)),
-                            WidgetUtils.commonSizedBox(0, 10.h),
-                          ],
-                        ),
-                      ),
-                    )
+                      child: VoiceCardBtn(isPlay: playRecord, top: 10.h),
+                    ),
+                    // WidgetUtils.commonSizedBox(10, 0),
+                    // GestureDetector(
+                    //   onTap: (() {
+                    //     if (MyUtils.checkClick()) {
+                    //       play();
+                    //     }
+                    //   }),
+                    //   child: Container(
+                    //     height: ScreenUtil().setHeight(50),
+                    //     width: ScreenUtil().setWidth(220),
+                    //     padding: const EdgeInsets.only(left: 8),
+                    //     alignment: Alignment.topLeft,
+                    //     //边框设置
+                    //     decoration: const BoxDecoration(
+                    //       //背景
+                    //       color: MyColors.peopleYellow,
+                    //       //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                    //       borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                    //     ),
+                    //     child: Row(
+                    //       children: [
+                    //         const Expanded(
+                    //             child: SVGASimpleImage(
+                    //               assetsName:
+                    //               'assets/svga/audio_xindiaotu.svga',
+                    //             )),
+                    //         WidgetUtils.commonSizedBox(0, 10.h),
+                    //         WidgetUtils.showImages(
+                    //             'assets/images/people_bofang.png',
+                    //             ScreenUtil().setHeight(35),
+                    //             ScreenUtil().setWidth(35)),
+                    //         WidgetUtils.commonSizedBox(0, 10.h),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // )
                   ],
                 ),
               )

@@ -245,41 +245,19 @@ class _MyInfoPageState extends State<MyInfoPage> {
 
                         /// 音频
                         voice_card.isNotEmpty
-                            ? GestureDetector(
-                                onTap: (() {
-                                  if (MyUtils.checkClick() &&
-                                      playRecord == false) {
-                                    play();
-                                  }
-                                }),
-                                child: Container(
-                                  height: ScreenUtil().setHeight(45),
-                                  width: ScreenUtil().setWidth(220),
-                                  margin: const EdgeInsets.only(left: 20),
-                                  alignment: Alignment.center,
-                                  //边框设置
-                                  decoration: const BoxDecoration(
-                                    //背景
-                                    color: MyColors.peopleYellow,
-                                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20.0)),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      const Expanded(
-                                          child: SVGASimpleImage(
-                                        assetsName:
-                                            'assets/svga/audio_xindiaotu.svga',
-                                      )),
-                                      WidgetUtils.commonSizedBox(0, 10.h),
-                                      WidgetUtils.showImages(
-                                          'assets/images/people_bofang.png',
-                                          ScreenUtil().setHeight(35),
-                                          ScreenUtil().setWidth(35)),
-                                      WidgetUtils.commonSizedBox(0, 10.h),
-                                    ],
-                                  ),
+                            ? Padding(
+                                padding: EdgeInsets.only(left: 40.w),
+                                child: GestureDetector(
+                                  onTap: (() {
+                                    if (MyUtils.checkClick()) {
+                                      if (playRecord) {
+                                        stopPlayer();
+                                      } else {
+                                        play();
+                                      }
+                                    }
+                                  }),
+                                  child: VoiceCardBtn(isPlay: playRecord, top: 0),
                                 ),
                               )
                             : const Text(''),

@@ -320,3 +320,9 @@ class FirstInfoBack {
   bool isOk;
   FirstInfoBack({required this.isOk});
 }
+
+/// 首次编辑完个人资料
+class BottomBarVisibleBack {
+  bool visible;
+  BottomBarVisibleBack({required this.visible});
+}

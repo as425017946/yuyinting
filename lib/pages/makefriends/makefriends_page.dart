@@ -6,11 +6,40 @@ import 'package:focus_detector/focus_detector.dart';
 import 'package:get/get.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 
+import '../../utils/getx_tools.dart';
+import 'cp_speed_page.dart';
 import 'makefriends_model.dart';
 
+class DatingPage extends StatefulWidget {
+  const DatingPage({Key? key}) : super(key: key);
+
+  @override
+  State<DatingPage> createState() => _DatingPageState();
+}
+
+class _DatingPageState extends State<DatingPage> {
+  @override
+  void initState() {
+    Get.lazyPut(() => MakefriendsController());
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      final MakefriendsController c = Get.find();
+      switch (c.select) {
+        case 1:
+          return CPSpeedPage();
+        default:
+          return MakefriendsPage();
+      }
+    });
+  }
+}
 
 class MakefriendsPage extends StatelessWidget {
-  final MakefriendsController c = Get.put(MakefriendsController());
+  final MakefriendsController c = Get.find();
   MakefriendsPage({super.key});
 
   @override
@@ -56,7 +85,24 @@ class MakefriendsPage extends StatelessWidget {
       height: 60.w,
       alignment: Alignment.bottomLeft,
       padding: EdgeInsets.only(left: 25.w),
-      child: Image.asset('assets/images/makefriends_bhi.png', width: 160.w, height: 43.w),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Image.asset('assets/images/makefriends_bhi.png', width: 160.w, height: 43.w),
+          SizedBox(width: 44.w),
+          GestureDetector(
+            onTap: () => c.select = 1,
+            child: Text(
+              '告白纸条',
+              style: TextStyle(
+                color: Colors.blueGrey,
+                fontSize: 33.sp,
+                fontFamily: 'LR',
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -113,9 +159,13 @@ class MakefriendsPage extends StatelessWidget {
       padding: EdgeInsets.zero,
       onSwipe: c.onSwipe,
       cardsBuilder: _builder,
+      onSwiping: c.onSwiping,
+      onEnd: c.onSwipeEnd,
+      onSwipeCancelled: c.onSwipeEnd,
     );
   }
   Widget _builder(BuildContext context, int index) {
+    c.current = index;
     final item = c.list[index];
     return GestureDetector(
       onTap: () => c.onItem(item),
@@ -193,31 +243,7 @@ class MakefriendsPage extends StatelessWidget {
   Widget _voice(String voice) {
     return GestureDetector(
       onTap: () => c.onVoice(voice),
-      child: Container(
-        height: 44.w,
-        width: 220.w,
-        padding: EdgeInsets.symmetric(horizontal: 10.w),
-        margin: EdgeInsets.only(top: 20.w),
-        decoration: BoxDecoration(
-          color: const Color(0xFFF4E13F),
-          borderRadius: BorderRadius.all(Radius.circular(22.w)),
-        ),
-        child: Obx(
-          () => Row(
-            children: [
-              Image.asset(
-                'assets/images/makefriends_${c.isPlaying == voice ? 'pause' : 'play'}.png',
-                width: 30.w,
-                height: 30.w,
-              ),
-              Expanded(
-                child: SVGASimpleImage(
-                    assetsName: 'assets/svga/audio_${c.isPlaying == voice ? 'xintiao' : 'xindiaotu'}.svga'),
-              ),
-            ],
-          ),
-        ),
-      ),
+      child: Obx(() => VoiceCardBtn(isPlay: c.isPlaying == voice)),
     );
   }
 
