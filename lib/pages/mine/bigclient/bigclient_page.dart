@@ -576,7 +576,7 @@ class _BigClientPageList0 extends StatelessWidget {
                   _item("日俸禄", c.dayBean, c.data.next_lv_value, c.onDay),
                   // _item("周薪水", c.weekBean, c.weekExp),
                   // _item("月薪水", c.weekBean, c.weekExp),
-                  _excel(c),
+                  // _excel(c),
                 ],
               ),
             ),
@@ -585,7 +585,7 @@ class _BigClientPageList0 extends StatelessWidget {
         const Spacer(),
         Padding(
           padding: EdgeInsets.only(bottom: Get.bottomBarHeight + 30.w),
-          child: WidgetUtils.onlyTextCenter('注:金豆俸禄将在每日18点发放至本页，且至多保存最早未领取三日俸禄', StyleUtils.getCommonTextStyle(color: MyColors.mineYellow, fontSize: 20.sp)),
+          child: WidgetUtils.onlyTextCenter('注:金豆俸禄将在每日18点发放至本页，每日未领取俸禄将在24小时后自动回收', StyleUtils.getCommonTextStyle(color: MyColors.mineYellow, fontSize: 20.sp)),
         ),
       ],
     );
@@ -764,7 +764,7 @@ class _BigClientPageList1 extends StatelessWidget {
         Text('财富等级是什么？', style: qStyle),
         SizedBox(height: 12),
         Text(
-          '财富等级是您在平台成长的体现，等级越高象征着您的身份越高，除了独特的财富等级标识外，达到相应等级可在每日18点领取每日金豆俸禄，等级越高，账号价值越高！（注：未领取的日俸禄最多累积保留3日）',
+          '财富等级是您在平台成长的体现，等级越高象征着您的身份越高，除了独特的财富等级标识外，达到相应等级可在每日18点领取每日金豆俸禄，等级越高，账号价值越高！（注：每日未领取俸禄将在24小时后自动回收）',
           style: aStyle,
         ),
         SizedBox(height: 26),
