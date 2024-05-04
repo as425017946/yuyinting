@@ -9,7 +9,8 @@ import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 class GongjuePage extends StatefulWidget {
-  const GongjuePage({Key? key}) : super(key: key);
+  String zhi;
+  GongjuePage({Key? key, required this.zhi}) : super(key: key);
 
   @override
   State<GongjuePage> createState() => _GongjuePageState();
@@ -110,7 +111,7 @@ class _GongjuePageState extends State<GongjuePage>  with TickerProviderStateMixi
               children: [
                 const Spacer(),
                 WidgetUtils.onlyTextCenter(
-                    '100000',
+                    widget.zhi,
                     StyleUtils.getCommonTextStyle(
                         color: Colors.white,
                         fontSize: ScreenUtil().setSp(22))),

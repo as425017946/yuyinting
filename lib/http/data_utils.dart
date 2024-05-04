@@ -32,6 +32,7 @@ import '../bean/ghJieSuanListMoreBean.dart';
 import '../bean/ghPeopleBean.dart';
 import '../bean/ghRoomBean.dart';
 import '../bean/giftListBean.dart';
+import '../bean/gzBean.dart';
 import '../bean/happy_wall_bean.dart';
 import '../bean/homeTJBean.dart';
 import '../bean/hotRoomBean.dart';
@@ -1737,5 +1738,14 @@ class DataUtils {
     await MyHttpRequest.post(MyHttpConfig.pushSound, {}, {});
     print("推荐声音 $respons");
     return soundBean.fromJson(respons!);
+  }
+
+
+  /// 我的贵族
+  static Future<gzBean> postMyNoble() async {
+    Map<String, dynamic>? respons =
+    await MyHttpRequest.post(MyHttpConfig.myNoble, {}, {});
+    print("我的贵族 $respons");
+    return gzBean.fromJson(respons!);
   }
 }

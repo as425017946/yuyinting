@@ -1,16 +1,17 @@
 import 'dart:math';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yuyinting/colors/my_colors.dart';
 import 'package:yuyinting/pages/room/room_send_info_page.dart';
 import 'package:yuyinting/utils/event_utils.dart';
+import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/style_utils.dart';
 import 'package:yuyinting/utils/widget_utils.dart';
+import '../../main.dart';
 import '../../utils/my_utils.dart';
 
 class RoomBQPage extends StatefulWidget {
+
   const RoomBQPage({super.key});
 
   @override
@@ -637,6 +638,7 @@ class _APageState extends State<RoomBQPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    LogE('贵族等级 ${int.parse(sp.getString('nobleID').toString()) == 0 }');
   }
 
   @override
@@ -974,7 +976,7 @@ class _APageState extends State<RoomBQPage> {
                                   ),
                   ),
                 ),
-                typeB == 3 ? Container(
+                (typeB == 3 && int.parse(sp.getString('nobleID').toString()) == 0 )? Container(
                   margin: EdgeInsets.only(top: 130.h),
                   height: double.infinity,
                   width: double.infinity,

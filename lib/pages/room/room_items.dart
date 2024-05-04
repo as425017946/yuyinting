@@ -432,59 +432,56 @@ class RoomItems {
                   WidgetSpan(
                       child: Transform.translate(
                         offset: Offset(0, 5.h),
-                        child: WidgetUtils.showImages(
-                            'assets/images/tequan_icon_chuanshuo.png', 40.h,
-                            40.h),
-                        // child: list[i]['noble_id'].toString() == "1"
-                        //     ? WidgetUtils.showImages(
-                        //     'assets/images/tequan_icon_xuanxian.png', 38.h,
-                        //     38.h)
-                        //     : list[i]['noble_id'].toString() == "2"
-                        //     ? WidgetUtils.showImages(
-                        //     'assets/images/tequan_icon_shangxian.png', 38.h, 38
-                        //     .h)
-                        //     : list[i]['noble_id'].toString() == "3"
-                        //     ? WidgetUtils.showImages(
-                        //     'assets/images/tequan_icon_jinxian.png',
-                        //     38.h,
-                        //     38.h)
-                        //     : list[i]['noble_id'].toString() == "4"
-                        //     ? WidgetUtils.showImages(
-                        //     'assets/images/tequan_icon_xiandi.png',
-                        //     38.h,
-                        //     38.h)
-                        //     : list[i]['noble_id'].toString() == "5"
-                        //     ? WidgetUtils.showImages(
-                        //     'assets/images/tequan_icon_zhushen.png',
-                        //     38.h,
-                        //     38.h)
-                        //     : list[i]['noble_id'].toString() == "6"
-                        //     ? WidgetUtils.showImages(
-                        //     'assets/images/tequan_icon_tianshen.png',
-                        //     38.h,
-                        //     38.h)
-                        //     : list[i]['noble_id'].toString() ==
-                        //     "7"
-                        //     ? WidgetUtils.showImages(
-                        //     'assets/images/tequan_icon_shenwang.png',
-                        //     38.h,
-                        //     38.h)
-                        //     : list[i]['noble_id'].toString() ==
-                        //     "8"
-                        //     ? WidgetUtils.showImages(
-                        //     'assets/images/tequan_icon_shenhuang.png',
-                        //     38.h,
-                        //     38.h) : list[i]['noble_id'].toString() ==
-                        //     "9"
-                        //     ? WidgetUtils.showImages(
-                        //     'assets/images/tequan_icon_tianzun.png',
-                        //     38.h,
-                        //     38.h) : list[i]['noble_id'].toString() ==
-                        //     "10"
-                        //     ? WidgetUtils.showImages(
-                        //     'assets/images/tequan_icon_chuanshuo.png',
-                        //     38.h,
-                        //     38.h) : const Text(''),
+                        child: list[i]['noble_id'].toString() == "1"
+                            ? WidgetUtils.showImages(
+                            'assets/images/tequan_icon_xuanxian.png', 38.h,
+                            38.h)
+                            : list[i]['noble_id'].toString() == "2"
+                            ? WidgetUtils.showImages(
+                            'assets/images/tequan_icon_shangxian.png', 38.h, 38
+                            .h)
+                            : list[i]['noble_id'].toString() == "3"
+                            ? WidgetUtils.showImages(
+                            'assets/images/tequan_icon_jinxian.png',
+                            38.h,
+                            38.h)
+                            : list[i]['noble_id'].toString() == "4"
+                            ? WidgetUtils.showImages(
+                            'assets/images/tequan_icon_xiandi.png',
+                            38.h,
+                            38.h)
+                            : list[i]['noble_id'].toString() == "5"
+                            ? WidgetUtils.showImages(
+                            'assets/images/tequan_icon_zhushen.png',
+                            38.h,
+                            38.h)
+                            : list[i]['noble_id'].toString() == "6"
+                            ? WidgetUtils.showImages(
+                            'assets/images/tequan_icon_tianshen.png',
+                            38.h,
+                            38.h)
+                            : list[i]['noble_id'].toString() ==
+                            "7"
+                            ? WidgetUtils.showImages(
+                            'assets/images/tequan_icon_shenwang.png',
+                            38.h,
+                            38.h)
+                            : list[i]['noble_id'].toString() ==
+                            "8"
+                            ? WidgetUtils.showImages(
+                            'assets/images/tequan_icon_shenhuang.png',
+                            38.h,
+                            38.h) : list[i]['noble_id'].toString() ==
+                            "9"
+                            ? WidgetUtils.showImages(
+                            'assets/images/tequan_icon_tianzun.png',
+                            38.h,
+                            38.h) : list[i]['noble_id'].toString() ==
+                            "10"
+                            ? WidgetUtils.showImages(
+                            'assets/images/tequan_icon_chuanshuo.png',
+                            38.h,
+                            38.h) : const Text(''),
                       )),
                   WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
                   // 靓号
@@ -821,42 +818,62 @@ class RoomItems {
                 ),
               ),
               WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
-              // //贵族
-              // WidgetSpan(
-              //     child: Transform.translate(
-              //       offset: Offset(0, 5.h),
-              //       child: list[i]['noble_id'].toString() == "1"
-              //           ? WidgetUtils.showImages(
-              //           'assets/images/tequan_yongshi.png', 38.h, 38.h)
-              //           : list[i]['noble_id'].toString() == "2"
-              //           ? WidgetUtils.showImages(
-              //           'assets/images/tequan_qishi.png', 38.h, 38.h)
-              //           : list[i]['noble_id'].toString() == "3"
-              //           ? WidgetUtils.showImages(
-              //           'assets/images/tequan_bojue.png', 38.h, 38.h)
-              //           : list[i]['noble_id'].toString() == "4"
-              //           ? WidgetUtils.showImages(
-              //           'assets/images/tequan_houjue.png',
-              //           38.h,
-              //           38.h)
-              //           : list[i]['noble_id'].toString() == "5"
-              //           ? WidgetUtils.showImages(
-              //           'assets/images/tequan_gongjue.png',
-              //           38.h,
-              //           38.h)
-              //           : list[i]['noble_id'].toString() == "6"
-              //           ? WidgetUtils.showImages(
-              //           'assets/images/tequan_guowang.png',
-              //           38.h,
-              //           38.h)
-              //           : list[i]['noble_id'].toString() == "7"
-              //           ? WidgetUtils.showImages(
-              //           'assets/images/tequan_diwang.png',
-              //           38.h,
-              //           38.h)
-              //           : const Text(''),
-              //     )),
-              // WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
+              //贵族
+              WidgetSpan(
+                  child: Transform.translate(
+                    offset: Offset(0, 5.h),
+                    child: list[i]['noble_id'].toString() == "1"
+                        ? WidgetUtils.showImages(
+                        'assets/images/tequan_icon_xuanxian.png', 38.h,
+                        38.h)
+                        : list[i]['noble_id'].toString() == "2"
+                        ? WidgetUtils.showImages(
+                        'assets/images/tequan_icon_shangxian.png', 38.h, 38
+                        .h)
+                        : list[i]['noble_id'].toString() == "3"
+                        ? WidgetUtils.showImages(
+                        'assets/images/tequan_icon_jinxian.png',
+                        38.h,
+                        38.h)
+                        : list[i]['noble_id'].toString() == "4"
+                        ? WidgetUtils.showImages(
+                        'assets/images/tequan_icon_xiandi.png',
+                        38.h,
+                        38.h)
+                        : list[i]['noble_id'].toString() == "5"
+                        ? WidgetUtils.showImages(
+                        'assets/images/tequan_icon_zhushen.png',
+                        38.h,
+                        38.h)
+                        : list[i]['noble_id'].toString() == "6"
+                        ? WidgetUtils.showImages(
+                        'assets/images/tequan_icon_tianshen.png',
+                        38.h,
+                        38.h)
+                        : list[i]['noble_id'].toString() ==
+                        "7"
+                        ? WidgetUtils.showImages(
+                        'assets/images/tequan_icon_shenwang.png',
+                        38.h,
+                        38.h)
+                        : list[i]['noble_id'].toString() ==
+                        "8"
+                        ? WidgetUtils.showImages(
+                        'assets/images/tequan_icon_shenhuang.png',
+                        38.h,
+                        38.h) : list[i]['noble_id'].toString() ==
+                        "9"
+                        ? WidgetUtils.showImages(
+                        'assets/images/tequan_icon_tianzun.png',
+                        38.h,
+                        38.h) : list[i]['noble_id'].toString() ==
+                        "10"
+                        ? WidgetUtils.showImages(
+                        'assets/images/tequan_icon_chuanshuo.png',
+                        38.h,
+                        38.h) : const Text(''),
+                  )),
+              WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
               // 靓号
               WidgetSpan(
                   child: Transform.translate(
@@ -1646,47 +1663,62 @@ class RoomItems {
                       ),
                     ),
                     WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
-                    // //贵族
-                    // WidgetSpan(
-                    //     child: Transform.translate(
-                    //       offset: Offset(0, 5.h),
-                    //       child: list[i]['noble_id'].toString() == "1"
-                    //           ? WidgetUtils.showImages(
-                    //           'assets/images/tequan_yongshi.png', 38.h, 38.h)
-                    //           : list[i]['noble_id'].toString() == "2"
-                    //           ? WidgetUtils.showImages(
-                    //           'assets/images/tequan_qishi.png', 38.h, 38.h)
-                    //           : list[i]['noble_id'].toString() == "3"
-                    //           ? WidgetUtils.showImages(
-                    //           'assets/images/tequan_bojue.png',
-                    //           38.h,
-                    //           38.h)
-                    //           : list[i]['noble_id'].toString() == "4"
-                    //           ? WidgetUtils.showImages(
-                    //           'assets/images/tequan_houjue.png',
-                    //           38.h,
-                    //           38.h)
-                    //           : list[i]['noble_id'].toString() == "5"
-                    //           ? WidgetUtils.showImages(
-                    //           'assets/images/tequan_gongjue.png',
-                    //           38.h,
-                    //           38.h)
-                    //           : list[i]['noble_id'].toString() ==
-                    //           "6"
-                    //           ? WidgetUtils.showImages(
-                    //           'assets/images/tequan_guowang.png',
-                    //           38.h,
-                    //           38.h)
-                    //           : list[i]['noble_id']
-                    //           .toString() ==
-                    //           "7"
-                    //           ? WidgetUtils.showImages(
-                    //           'assets/images/tequan_diwang.png',
-                    //           38.h,
-                    //           38.h)
-                    //           : const Text(''),
-                    //     )),
-                    // WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
+                    //贵族
+                    WidgetSpan(
+                        child: Transform.translate(
+                          offset: Offset(0, 5.h),
+                          child: list[i]['noble_id'].toString() == "1"
+                              ? WidgetUtils.showImages(
+                              'assets/images/tequan_icon_xuanxian.png', 38.h,
+                              38.h)
+                              : list[i]['noble_id'].toString() == "2"
+                              ? WidgetUtils.showImages(
+                              'assets/images/tequan_icon_shangxian.png', 38.h, 38
+                              .h)
+                              : list[i]['noble_id'].toString() == "3"
+                              ? WidgetUtils.showImages(
+                              'assets/images/tequan_icon_jinxian.png',
+                              38.h,
+                              38.h)
+                              : list[i]['noble_id'].toString() == "4"
+                              ? WidgetUtils.showImages(
+                              'assets/images/tequan_icon_xiandi.png',
+                              38.h,
+                              38.h)
+                              : list[i]['noble_id'].toString() == "5"
+                              ? WidgetUtils.showImages(
+                              'assets/images/tequan_icon_zhushen.png',
+                              38.h,
+                              38.h)
+                              : list[i]['noble_id'].toString() == "6"
+                              ? WidgetUtils.showImages(
+                              'assets/images/tequan_icon_tianshen.png',
+                              38.h,
+                              38.h)
+                              : list[i]['noble_id'].toString() ==
+                              "7"
+                              ? WidgetUtils.showImages(
+                              'assets/images/tequan_icon_shenwang.png',
+                              38.h,
+                              38.h)
+                              : list[i]['noble_id'].toString() ==
+                              "8"
+                              ? WidgetUtils.showImages(
+                              'assets/images/tequan_icon_shenhuang.png',
+                              38.h,
+                              38.h) : list[i]['noble_id'].toString() ==
+                              "9"
+                              ? WidgetUtils.showImages(
+                              'assets/images/tequan_icon_tianzun.png',
+                              38.h,
+                              38.h) : list[i]['noble_id'].toString() ==
+                              "10"
+                              ? WidgetUtils.showImages(
+                              'assets/images/tequan_icon_chuanshuo.png',
+                              38.h,
+                              38.h) : const Text(''),
+                        )),
+                    WidgetSpan(child: WidgetUtils.commonSizedBox(0, 4.h)),
                     // 靓号
                     WidgetSpan(
                         child: Transform.translate(

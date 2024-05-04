@@ -9,7 +9,8 @@ import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 class TianZunPage extends StatefulWidget {
-  const TianZunPage({Key? key}) : super(key: key);
+  String zhi;
+  TianZunPage({Key? key, required this.zhi}) : super(key: key);
 
   @override
   State<TianZunPage> createState() => _TianZunPageState();
@@ -110,7 +111,7 @@ class _TianZunPageState extends State<TianZunPage>  with TickerProviderStateMixi
               children: [
                 const Spacer(),
                 WidgetUtils.onlyTextCenter(
-                    '1000000',
+                    widget.zhi,
                     StyleUtils.getCommonTextStyle(
                         color: Colors.white,
                         fontSize: ScreenUtil().setSp(22))),

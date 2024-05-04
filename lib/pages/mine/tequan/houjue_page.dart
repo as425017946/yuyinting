@@ -10,7 +10,8 @@ import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
 
 class HoujuePage extends StatefulWidget {
-  const HoujuePage({Key? key}) : super(key: key);
+  String zhi;
+  HoujuePage({Key? key, required this.zhi}) : super(key: key);
 
   @override
   State<HoujuePage> createState() => _HoujuePageState();
@@ -111,7 +112,7 @@ class _HoujuePageState extends State<HoujuePage> with TickerProviderStateMixin {
               children: [
                 const Spacer(),
                 WidgetUtils.onlyTextCenter(
-                    '50000',
+                    widget.zhi,
                     StyleUtils.getCommonTextStyle(
                         color: Colors.white,
                         fontSize: ScreenUtil().setSp(22))),
