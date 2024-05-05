@@ -2267,7 +2267,16 @@ class _RoomPageState extends State<RoomPage>
                             cb.giftInfo![0].giftName! == '玉兔抱月' ||
                             cb.giftInfo![0].giftName! == '缘定' ||
                             cb.giftInfo![0].giftName! == '月吟环' ||
-                            cb.giftInfo![0].giftName! == '至尊王座') {
+                            cb.giftInfo![0].giftName! == '至尊王座'||
+                            cb.giftInfo![0].giftName! == '女神龙骑' ||
+                            cb.giftInfo![0].giftName! == '天空之境' ||
+                            cb.giftInfo![0].giftName! == '战神' ||
+                            cb.giftInfo![0].giftName! == '堕落天使' ||
+                            cb.giftInfo![0].giftName! == '青丘狐仙' ||
+                            cb.giftInfo![0].giftName! == '黑龙' ||
+                            cb.giftInfo![0].giftName! == '神龙宝藏' ||
+                            cb.giftInfo![0].giftName! == '女神铠甲' ||
+                            cb.giftInfo![0].giftName! == '天鹅之女') {
                           saveSVGAIMAGE(cb.giftInfo![0].giftImg!);
                         } else {
                           Map<dynamic, dynamic> map = {};
@@ -2317,7 +2326,16 @@ class _RoomPageState extends State<RoomPage>
                             cb.giftInfo![0].giftName! == '玉兔抱月' ||
                             cb.giftInfo![0].giftName! == '缘定' ||
                             cb.giftInfo![0].giftName! == '月吟环' ||
-                            cb.giftInfo![0].giftName! == '至尊王座') {
+                            cb.giftInfo![0].giftName! == '至尊王座' ||
+                            cb.giftInfo![0].giftName! == '女神龙骑' ||
+                            cb.giftInfo![0].giftName! == '天空之境' ||
+                            cb.giftInfo![0].giftName! == '战神' ||
+                            cb.giftInfo![0].giftName! == '堕落天使' ||
+                            cb.giftInfo![0].giftName! == '青丘狐仙' ||
+                            cb.giftInfo![0].giftName! == '黑龙' ||
+                            cb.giftInfo![0].giftName! == '神龙宝藏' ||
+                            cb.giftInfo![0].giftName! == '女神铠甲' ||
+                            cb.giftInfo![0].giftName! == '天鹅之女') {
                           saveSVGAIMAGE(cb.giftInfo![0].giftImg!);
                         } else {
                           // 直接用网络图地址
@@ -2691,7 +2709,9 @@ class _RoomPageState extends State<RoomPage>
                           event.map!['mount_name'].toString() == '旷世神龙' ||
                           event.map!['mount_name'].toString() == '兰博基尼' ||
                           event.map!['mount_name'].toString() == '青龙守护' ||
-                          event.map!['mount_name'].toString() == '星空战机') {
+                          event.map!['mount_name'].toString() == '星空战机' ||
+                          event.map!['mount_name'].toString() == '钢铁侠' ||
+                          event.map!['mount_name'].toString() == '紫电跑车') {
                         saveSVGAIMAGEZJ(event.map!['mount'].toString());
                       } else {
                         setState(() {
@@ -2713,7 +2733,9 @@ class _RoomPageState extends State<RoomPage>
                           event.map!['mount_name'].toString() == '旷世神龙' ||
                           event.map!['mount_name'].toString() == '兰博基尼' ||
                           event.map!['mount_name'].toString() == '青龙守护' ||
-                          event.map!['mount_name'].toString() == '星空战机') {
+                          event.map!['mount_name'].toString() == '星空战机'||
+                          event.map!['mount_name'].toString() == '钢铁侠' ||
+                          event.map!['mount_name'].toString() == '紫电跑车') {
                         saveSVGAIMAGEZJ(event.map!['mount'].toString());
                       } else {
                         setState(() {
@@ -2952,7 +2974,16 @@ class _RoomPageState extends State<RoomPage>
                     event.url.contains('玉兔抱月') ||
                     event.url.contains('缘定') ||
                     event.url.contains('月吟环') ||
-                    event.url.contains('至尊王座')) {
+                    event.url.contains('至尊王座') ||
+                    event.url.contains('女神龙骑') ||
+                    event.url.contains('天空之境') ||
+                    event.url.contains('战神') ||
+                    event.url.contains('堕落天使') ||
+                    event.url.contains('青丘狐仙') ||
+                    event.url.contains('黑龙') ||
+                    event.url.contains('神龙宝藏') ||
+                    event.url.contains('女神铠甲') ||
+                    event.url.contains('天鹅之女')) {
                   saveSVGAIMAGE(event.url);
                 } else {
                   // 直接用网络图地址
@@ -3002,7 +3033,16 @@ class _RoomPageState extends State<RoomPage>
                     event.url.contains('玉兔抱月') ||
                     event.url.contains('缘定') ||
                     event.url.contains('月吟环') ||
-                    event.url.contains('至尊王座')) {
+                    event.url.contains('至尊王座') ||
+                    event.url.contains('女神龙骑') ||
+                    event.url.contains('天空之境') ||
+                    event.url.contains('战神') ||
+                    event.url.contains('堕落天使') ||
+                    event.url.contains('青丘狐仙') ||
+                    event.url.contains('黑龙') ||
+                    event.url.contains('神龙宝藏') ||
+                    event.url.contains('女神铠甲') ||
+                    event.url.contains('天鹅之女')) {
                   saveSVGAIMAGE(event.url);
                 } else {
                   // 直接用网络图地址
@@ -5062,7 +5102,9 @@ class _RoomPageState extends State<RoomPage>
                         bean.data!.userInfo!.carDressName! == '旷世神龙' ||
                         bean.data!.userInfo!.carDressName! == '兰博基尼' ||
                         bean.data!.userInfo!.carDressName! == '青龙守护' ||
-                        bean.data!.userInfo!.carDressName! == '星空战机') {
+                        bean.data!.userInfo!.carDressName! == '星空战机'||
+                        bean.data!.userInfo!.carDressName! == '钢铁侠' ||
+                        bean.data!.userInfo!.carDressName! == '紫电跑车') {
                       saveSVGAIMAGEZJ(bean.data!.userInfo!.carDressGifImg!);
                     } else {
                       setState(() {
@@ -5084,7 +5126,9 @@ class _RoomPageState extends State<RoomPage>
                         bean.data!.userInfo!.carDressName! == '旷世神龙' ||
                         bean.data!.userInfo!.carDressName! == '兰博基尼' ||
                         bean.data!.userInfo!.carDressName! == '青龙守护' ||
-                        bean.data!.userInfo!.carDressName! == '星空战机') {
+                        bean.data!.userInfo!.carDressName! == '星空战机'||
+                        bean.data!.userInfo!.carDressName! == '钢铁侠' ||
+                        bean.data!.userInfo!.carDressName! == '紫电跑车') {
                       saveSVGAIMAGEZJ(bean.data!.userInfo!.carDressGifImg!);
                     } else {
                       setState(() {
