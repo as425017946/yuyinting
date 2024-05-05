@@ -779,6 +779,15 @@ class _TequanPageState extends State<TequanPage> {
               } else {
                 gzTitle = '当前等级：传说';
               }
+            }else {
+              _currentIndex = 0;
+              _controller = PageController(
+                initialPage: _currentIndex,
+              );
+              gzNextTitle = '玄仙';
+              gzCha = (int.parse(bean.data!.ls![0].upValue!) -
+                  int.parse(bean.data!.my!.nobleValue!))
+                  .toString();
             }
           });
           break;

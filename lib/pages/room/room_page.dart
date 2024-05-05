@@ -2506,16 +2506,18 @@ class _RoomPageState extends State<RoomPage>
               });
             } else if (event.map!['type'] == 'join_room') {
               LogE('***信息 == ${event.map!['follow_info']}');
-              // 跟随主播进入房间
-              Map<dynamic, dynamic> map = {};
-              map['type'] = '8';
-              map['info'] = event.map!['nickname'];
-              map['uid'] = event.map!['uid'];
-              // 发送的信息
-              map['content'] = event.map!['follow_info'];
-              setState(() {
-                list.add(map);
-              });
+              if(event.map!['is_stealth'] == 0){
+                // 跟随主播进入房间
+                Map<dynamic, dynamic> map = {};
+                map['type'] = '8';
+                map['info'] = event.map!['nickname'];
+                map['uid'] = event.map!['uid'];
+                // 发送的信息
+                map['content'] = event.map!['follow_info'];
+                setState(() {
+                  list.add(map);
+                });
+              }
             } else if (event.map!['type'] == 'play_win_gift') {
               // 厅内小礼物不在显示
             } else if (event.map!['type'] == 'send_screen_gift') {
