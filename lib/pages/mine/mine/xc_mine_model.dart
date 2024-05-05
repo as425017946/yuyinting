@@ -34,7 +34,7 @@ class XCMineController extends GetxController with GetAntiCombo {
   /// 看过我
   final lookMe = ''.obs;
   /// 是否开通贵族
-  final isGuizu = ''.obs;
+  final isGuizu = 0.obs;
   /// 身份
   final identity = ''.obs;
   /// 是否有代理权限 0无1有
@@ -82,7 +82,7 @@ class XCMineController extends GetxController with GetAntiCombo {
             care.value = data.followNum.toString();
             beCare.value = data.isFollowNum.toString();
             lookMe.value = data.lookNum.toString();
-            isGuizu.value = data.nobleId.toString();
+            isGuizu.value = data.nobleId ?? 0;
             identity.value = data.identity!;
             isAgent.value = data.isAgent == 1;
             isNew.value = data.isNew == 1;
@@ -232,5 +232,21 @@ class XCMineController extends GetxController with GetAntiCombo {
         Loading.dismiss();
       }
     });
+  }
+
+  String get guizuText {
+    switch (isGuizu.value) {
+      case 1: return '恭喜您已成为：玄仙';
+      case 2: return '恭喜您已成为：上仙';
+      case 3: return '恭喜您已成为：金仙';
+      case 4: return '恭喜您已成为：仙帝';
+      case 5: return '恭喜您已成为：主神';
+      case 6: return '恭喜您已成为：天神';
+      case 7: return '恭喜您已成为：神王';
+      case 8: return '恭喜您已成为：神皇';
+      case 9: return '恭喜您已成为：天尊';
+      case 10: return '恭喜您已成为：传说';
+      default: return '暂未成为贵族，快来解锁贵族特权';
+    }
   }
 }
