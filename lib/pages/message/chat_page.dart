@@ -74,10 +74,11 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> with MsgReadText {
-
   bool isShow = false, isRoomShow = false, isAudio = false;
+
   // 记录按下的时间，如果不够1s，不发音频
   int downTime = 0;
+
   // 如果按下和抬起的时间接口还未反应，则直接取消发送音频
   bool isSendYY = true;
   int isBlack = 0, length = 0;
@@ -120,11 +121,14 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
   RecordPlayState _state = RecordPlayState.record;
   var _path = "";
   var _maxLength = 60.0;
+
   // 是否有麦克风权限
   bool isMAI = false;
+
   // 设备是安卓还是ios
   String isDevices = 'android';
   bool _mPlayerIsInited = false;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -183,6 +187,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
     _focusNode = FocusNode();
     _focusNode!.addListener(_onFocusChange);
   }
+
   // 保存发红包的信息 type 1自己给别人发，2收到别人发的红包
   saveHBinfo(String info) async {
     DatabaseHelper databaseHelper = DatabaseHelper();
@@ -632,7 +637,10 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
               allData2[i]['type'] == 6
                   ? hbCard(allData2[i]['content'])
                   : Flexible(
-                      child: allData2[i]['type'] == 1
+                      child: (allData2[i]['type'] == 1 &&
+                              !allData2[i]['content']
+                                  .toString()
+                                  .contains('.jpg'))
                           ? GestureDetector(
                               onLongPress: (() {
                                 Clipboard.setData(ClipboardData(
@@ -678,74 +686,21 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
                                     ),
                                   )),
                             )
-                          : allData2[i]['type'] == 2
-                              ? GestureDetector(
-                                  onTap: (() {
-                                    setState(() {
-                                      imgList.clear();
-                                      imgList.add(allData2[i]['content']);
-                                    });
-                                    MyUtils.goTransparentPageCom(
-                                        context, SwiperPage(imgList: imgList));
-                                  }),
-                                  child: Container(
-                                    constraints: BoxConstraints(
-                                        minWidth: ScreenUtil().setHeight(60)),
-                                    padding: EdgeInsets.all(
-                                        ScreenUtil().setHeight(20)),
-                                    //边框设置
-                                    decoration: const BoxDecoration(
-                                      //背景
-                                      color: Colors.transparent,
-                                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(0),
-                                          topRight: Radius.circular(20.0),
-                                          bottomLeft: Radius.circular(20.0),
-                                          bottomRight: Radius.circular(20.0)),
-                                      boxShadow: [],
-                                    ),
-                                    child: (allData2[i]['content']
-                                                .toString()
-                                                .contains(
-                                                    'com.littledog.yyt') ||
-                                            allData2[i]['content']
-                                                .toString()
-                                                .contains('storage'))
-                                        ? Image(
-                                            image: FileImage(
-                                                File(allData2[i]['content'])),
-                                            width: 160.h,
-                                            height: 200.h,
-                                            fit: BoxFit.cover,
-                                            errorBuilder: (BuildContext context,
-                                                Object error,
-                                                StackTrace? stackTrace) {
-                                              return WidgetUtils.showImages(
-                                                  'assets/images/img_placeholder.png',
-                                                  200.h,
-                                                  160.h);
-                                            },
-                                          )
-                                        : WidgetUtils.showImagesNet(
-                                            allData2[i]['content'].toString(),
-                                            200.h,
-                                            160.h),
-                                  ),
-                                )
-                              : allData2[i]['type'] == 3
+                          : (allData2[i]['type'] == 1 &&
+                                  allData2[i]['content']
+                                      .toString()
+                                      .contains('.jpg'))
+                              ? WidgetUtils.showImages(
+                                  allData2[i]['content'], 200.h, 200.h)
+                              : allData2[i]['type'] == 2
                                   ? GestureDetector(
                                       onTap: (() {
-                                        LogD('************');
-                                        if (playRecord) {
-                                          stopPlayer();
-                                        } else {
-                                          setState(() {
-                                            onPlay(i);
-                                          });
-                                          play(allData2[i]['content']);
-                                          MyUtils.didMsgRead(allData2[i], index: 3);
-                                        }
+                                        setState(() {
+                                          imgList.clear();
+                                          imgList.add(allData2[i]['content']);
+                                        });
+                                        MyUtils.goTransparentPageCom(context,
+                                            SwiperPage(imgList: imgList));
                                       }),
                                       child: Container(
                                         constraints: BoxConstraints(
@@ -754,50 +709,123 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
                                         padding: EdgeInsets.all(
                                             ScreenUtil().setHeight(20)),
                                         //边框设置
-                                        decoration: BoxDecoration(
+                                        decoration: const BoxDecoration(
                                           //背景
-                                          color: allData2[i]['type'] == 2
-                                              ? Colors.transparent
-                                              : playColor(playRecord, i),//Colors.white,
+                                          color: Colors.transparent,
                                           //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                          borderRadius: const BorderRadius.only(
+                                          borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(0),
                                               topRight: Radius.circular(20.0),
                                               bottomLeft: Radius.circular(20.0),
                                               bottomRight:
                                                   Radius.circular(20.0)),
-                                          boxShadow: allData2[i]['type'] == 2
-                                              ? []
-                                              : [
-                                                  BoxShadow(
-                                                    color: Colors.grey
-                                                        .withOpacity(0.1),
-                                                    spreadRadius: 2,
-                                                    blurRadius: 5,
-                                                    offset: const Offset(0,
-                                                        1), // 阴影的偏移量，向右下方偏移3像素
-                                                  ),
-                                                ],
+                                          boxShadow: [],
                                         ),
-                                        child: Container(
-                                          color: Colors.transparent,
-                                          width: widthAudio,
-                                          child: Row(
-                                            children: [
-                                              const Spacer(),
-                                              WidgetUtils.onlyText(
-                                                  allData2[i]['number'].toString()== '0' ? "1''" : "${allData2[i]['number']}''",
-                                                  StyleUtils.textStyleb1),
-                                              WidgetUtils.showImages(
-                                                  'assets/images/chat_huatong.png',
-                                                  20.h,
-                                                  20.h),
-                                            ],
-                                          ),
-                                        ),
+                                        child: (allData2[i]['content']
+                                                    .toString()
+                                                    .contains(
+                                                        'com.littledog.yyt') ||
+                                                allData2[i]['content']
+                                                    .toString()
+                                                    .contains('storage'))
+                                            ? Image(
+                                                image: FileImage(File(
+                                                    allData2[i]['content'])),
+                                                width: 160.h,
+                                                height: 200.h,
+                                                fit: BoxFit.cover,
+                                                errorBuilder: (BuildContext
+                                                        context,
+                                                    Object error,
+                                                    StackTrace? stackTrace) {
+                                                  return WidgetUtils.showImages(
+                                                      'assets/images/img_placeholder.png',
+                                                      200.h,
+                                                      160.h);
+                                                },
+                                              )
+                                            : WidgetUtils.showImagesNet(
+                                                allData2[i]['content']
+                                                    .toString(),
+                                                200.h,
+                                                160.h),
                                       ),
                                     )
-                                  : const Text(''),
+                                  : allData2[i]['type'] == 3
+                                      ? GestureDetector(
+                                          onTap: (() {
+                                            LogD('************');
+                                            if (playRecord) {
+                                              stopPlayer();
+                                            } else {
+                                              setState(() {
+                                                onPlay(i);
+                                              });
+                                              play(allData2[i]['content']);
+                                              MyUtils.didMsgRead(allData2[i],
+                                                  index: 3);
+                                            }
+                                          }),
+                                          child: Container(
+                                            constraints: BoxConstraints(
+                                                minWidth:
+                                                    ScreenUtil().setHeight(60)),
+                                            padding: EdgeInsets.all(
+                                                ScreenUtil().setHeight(20)),
+                                            //边框设置
+                                            decoration: BoxDecoration(
+                                              //背景
+                                              color: allData2[i]['type'] == 2
+                                                  ? Colors.transparent
+                                                  : playColor(playRecord, i),
+                                              //Colors.white,
+                                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                              borderRadius: const BorderRadius
+                                                      .only(
+                                                  topLeft: Radius.circular(0),
+                                                  topRight:
+                                                      Radius.circular(20.0),
+                                                  bottomLeft:
+                                                      Radius.circular(20.0),
+                                                  bottomRight:
+                                                      Radius.circular(20.0)),
+                                              boxShadow: allData2[i]['type'] ==
+                                                      2
+                                                  ? []
+                                                  : [
+                                                      BoxShadow(
+                                                        color: Colors.grey
+                                                            .withOpacity(0.1),
+                                                        spreadRadius: 2,
+                                                        blurRadius: 5,
+                                                        offset: const Offset(0,
+                                                            1), // 阴影的偏移量，向右下方偏移3像素
+                                                      ),
+                                                    ],
+                                            ),
+                                            child: Container(
+                                              color: Colors.transparent,
+                                              width: widthAudio,
+                                              child: Row(
+                                                children: [
+                                                  const Spacer(),
+                                                  WidgetUtils.onlyText(
+                                                      allData2[i]['number']
+                                                                  .toString() ==
+                                                              '0'
+                                                          ? "1''"
+                                                          : "${allData2[i]['number']}''",
+                                                      StyleUtils.textStyleb1),
+                                                  WidgetUtils.showImages(
+                                                      'assets/images/chat_huatong.png',
+                                                      20.h,
+                                                      20.h),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      : const Text(''),
                     ),
             ],
           ),
@@ -829,7 +857,10 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
               allData2[i]['type'] == 6
                   ? hbCard(allData2[i]['content'])
                   : Flexible(
-                      child: allData2[i]['type'] == 1
+                      child: (allData2[i]['type'] == 1 &&
+                              !allData2[i]['content']
+                                  .toString()
+                                  .contains('.jpg'))
                           ? GestureDetector(
                               onLongPress: (() {
                                 Clipboard.setData(ClipboardData(
@@ -875,65 +906,24 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
                                     ),
                                   )),
                             )
-                          : allData2[i]['type'] == 2
-                              ? GestureDetector(
-                                  onTap: (() {
-                                    setState(() {
-                                      imgList.clear();
-                                      imgList.add(allData2[i]['content']);
-                                    });
-                                    MyUtils.goTransparentPageCom(
-                                        context, SwiperPage(imgList: imgList));
-                                  }),
-                                  onLongPress: onImgLongPress(context, allData2[i]),
-                                  child: Container(
-                                    constraints: BoxConstraints(
-                                        minWidth: ScreenUtil().setHeight(60)),
-                                    padding: EdgeInsets.all(
-                                        ScreenUtil().setHeight(20)),
-                                    //边框设置
-                                    decoration: const BoxDecoration(
-                                      //背景
-                                      color: Colors.transparent,
-                                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(20.0),
-                                          topRight: Radius.circular(0),
-                                          bottomLeft: Radius.circular(20.0),
-                                          bottomRight: Radius.circular(20.0)),
-                                      boxShadow: [],
-                                    ),
-                                    child: Image(
-                                      image: FileImage(
-                                          File(allData2[i]['content'])),
-                                      width: 160.h,
-                                      height: 200.h,
-                                      fit: BoxFit.cover,
-                                      errorBuilder: (BuildContext context,
-                                          Object error,
-                                          StackTrace? stackTrace) {
-                                        return WidgetUtils.showImages(
-                                            'assets/images/img_placeholder.png',
-                                            200.h,
-                                            160.h);
-                                      },
-                                    ),
-                                  ),
-                                )
-                              : allData2[i]['type'] == 3
+                          : (allData2[i]['type'] == 1 &&
+                                  allData2[i]['content']
+                                      .toString()
+                                      .contains('.jpg'))
+                              ? WidgetUtils.showImages(
+                                  allData2[i]['content'], 200.h, 200.h)
+                              : allData2[i]['type'] == 2
                                   ? GestureDetector(
                                       onTap: (() {
-                                        LogD('************');
-                                        if (playRecord) {
-                                          stopPlayer();
-                                        } else {
-                                          setState(() {
-                                            onPlay(i);
-                                          });
-                                          play(allData2[i]['content']);
-                                        }
+                                        setState(() {
+                                          imgList.clear();
+                                          imgList.add(allData2[i]['content']);
+                                        });
+                                        MyUtils.goTransparentPageCom(context,
+                                            SwiperPage(imgList: imgList));
                                       }),
-                                      onLongPress: onImgLongPress(context, allData2[i]),
+                                      onLongPress:
+                                          onImgLongPress(context, allData2[i]),
                                       child: Container(
                                         constraints: BoxConstraints(
                                             minWidth:
@@ -941,50 +931,110 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
                                         padding: EdgeInsets.all(
                                             ScreenUtil().setHeight(20)),
                                         //边框设置
-                                        decoration: BoxDecoration(
+                                        decoration: const BoxDecoration(
                                           //背景
-                                          color: allData2[i]['type'] == 2
-                                              ? Colors.transparent
-                                              : playColor(playRecord, i),//Colors.white,
+                                          color: Colors.transparent,
                                           //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                          borderRadius: const BorderRadius.only(
+                                          borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(20.0),
                                               topRight: Radius.circular(0),
                                               bottomLeft: Radius.circular(20.0),
                                               bottomRight:
                                                   Radius.circular(20.0)),
-                                          boxShadow: allData2[i]['type'] == 2
-                                              ? []
-                                              : [
-                                                  BoxShadow(
-                                                    color: Colors.grey
-                                                        .withOpacity(0.1),
-                                                    spreadRadius: 2,
-                                                    blurRadius: 5,
-                                                    offset: const Offset(0,
-                                                        1), // 阴影的偏移量，向右下方偏移3像素
-                                                  ),
-                                                ],
+                                          boxShadow: [],
                                         ),
-                                        child: Container(
-                                          color: Colors.transparent,
-                                          width: widthAudio,
-                                          child: Row(
-                                            children: [
-                                              const Spacer(),
-                                              WidgetUtils.onlyText(
-                                                  allData2[i]['number'].toString()== '0' ? "1''" : "${allData2[i]['number']}''",
-                                                  StyleUtils.textStyleb1),
-                                              WidgetUtils.showImages(
-                                                  'assets/images/chat_huatong.png',
-                                                  20.h,
-                                                  20.h),
-                                            ],
-                                          ),
+                                        child: Image(
+                                          image: FileImage(
+                                              File(allData2[i]['content'])),
+                                          width: 160.h,
+                                          height: 200.h,
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (BuildContext context,
+                                              Object error,
+                                              StackTrace? stackTrace) {
+                                            return WidgetUtils.showImages(
+                                                'assets/images/img_placeholder.png',
+                                                200.h,
+                                                160.h);
+                                          },
                                         ),
                                       ),
                                     )
-                                  : const Text(''),
+                                  : allData2[i]['type'] == 3
+                                      ? GestureDetector(
+                                          onTap: (() {
+                                            LogD('************');
+                                            if (playRecord) {
+                                              stopPlayer();
+                                            } else {
+                                              setState(() {
+                                                onPlay(i);
+                                              });
+                                              play(allData2[i]['content']);
+                                            }
+                                          }),
+                                          onLongPress: onImgLongPress(
+                                              context, allData2[i]),
+                                          child: Container(
+                                            constraints: BoxConstraints(
+                                                minWidth:
+                                                    ScreenUtil().setHeight(60)),
+                                            padding: EdgeInsets.all(
+                                                ScreenUtil().setHeight(20)),
+                                            //边框设置
+                                            decoration: BoxDecoration(
+                                              //背景
+                                              color: allData2[i]['type'] == 2
+                                                  ? Colors.transparent
+                                                  : playColor(playRecord, i),
+                                              //Colors.white,
+                                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                              borderRadius: const BorderRadius
+                                                      .only(
+                                                  topLeft:
+                                                      Radius.circular(20.0),
+                                                  topRight: Radius.circular(0),
+                                                  bottomLeft:
+                                                      Radius.circular(20.0),
+                                                  bottomRight:
+                                                      Radius.circular(20.0)),
+                                              boxShadow: allData2[i]['type'] ==
+                                                      2
+                                                  ? []
+                                                  : [
+                                                      BoxShadow(
+                                                        color: Colors.grey
+                                                            .withOpacity(0.1),
+                                                        spreadRadius: 2,
+                                                        blurRadius: 5,
+                                                        offset: const Offset(0,
+                                                            1), // 阴影的偏移量，向右下方偏移3像素
+                                                      ),
+                                                    ],
+                                            ),
+                                            child: Container(
+                                              color: Colors.transparent,
+                                              width: widthAudio,
+                                              child: Row(
+                                                children: [
+                                                  const Spacer(),
+                                                  WidgetUtils.onlyText(
+                                                      allData2[i]['number']
+                                                                  .toString() ==
+                                                              '0'
+                                                          ? "1''"
+                                                          : "${allData2[i]['number']}''",
+                                                      StyleUtils.textStyleb1),
+                                                  WidgetUtils.showImages(
+                                                      'assets/images/chat_huatong.png',
+                                                      20.h,
+                                                      20.h),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      : const Text(''),
                     ),
               WidgetUtils.commonSizedBox(0, ScreenUtil().setHeight(10)),
               GestureDetector(
@@ -1045,6 +1095,75 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
       });
     });
   }
+
+  /// 新增表情包
+  List<String> list1 = [
+    'assets/images/tj/0fD.jpg',
+    'assets/images/tj/2CR.jpg',
+    'assets/images/tj/3Ek.jpg',
+    'assets/images/tj/3g_.jpg',
+    'assets/images/tj/3Hl.jpg',
+    'assets/images/tj/3s4.jpg',
+    'assets/images/tj/4RO.jpg',
+    'assets/images/tj/7Fu.jpg',
+    'assets/images/tj/9C9.jpg',
+    'assets/images/tj/_kp.jpg',
+    'assets/images/tj/bFS.jpg',
+    'assets/images/tj/bO4.jpg',
+    'assets/images/tj/Dx8.jpg',
+    'assets/images/tj/eBw.jpg',
+    'assets/images/tj/EgU.jpg',
+    'assets/images/tj/EJA.jpg',
+    'assets/images/tj/EJB.jpg',
+    'assets/images/tj/EJC.jpg',
+    'assets/images/tj/EJD.jpg',
+    'assets/images/tj/EJM.jpg',
+    'assets/images/tj/EJN.jpg',
+    'assets/images/tj/EJO.jpg',
+    'assets/images/tj/EJP.jpg',
+    'assets/images/tj/EJV.jpg',
+    'assets/images/tj/euo.jpg',
+    'assets/images/tj/F7L.jpg',
+    'assets/images/tj/F9h.jpg',
+    'assets/images/tj/G0S.jpg',
+    'assets/images/tj/GgG.jpg',
+    'assets/images/tj/IkQ.jpg',
+    'assets/images/tj/kug.jpg',
+    'assets/images/tj/L0P.jpg',
+    'assets/images/tj/lbA.jpg',
+    'assets/images/tj/LBC.jpg',
+    'assets/images/tj/LBy.jpg',
+    'assets/images/tj/LJr.jpg',
+    'assets/images/tj/MJg.jpg',
+    'assets/images/tj/MYb.jpg',
+    'assets/images/tj/mzK.jpg',
+    'assets/images/tj/mZx.jpg',
+    'assets/images/tj/n0j.jpg',
+    'assets/images/tj/n1E.jpg',
+    'assets/images/tj/oL1.jpg',
+    'assets/images/tj/Q3H.jpg',
+    'assets/images/tj/Q5z.jpg',
+    'assets/images/tj/Q_n.jpg',
+    'assets/images/tj/qEQ.jpg',
+    'assets/images/tj/QKj.jpg',
+    'assets/images/tj/QPk.jpg',
+    'assets/images/tj/QxT.jpg',
+    'assets/images/tj/QyY.jpg',
+    'assets/images/tj/rhd.jpg',
+    'assets/images/tj/RIy.jpg',
+    'assets/images/tj/t61.jpg',
+    'assets/images/tj/UZy.jpg',
+    'assets/images/tj/VDZ.jpg',
+    'assets/images/tj/vwj.jpg',
+    'assets/images/tj/WNC.jpg',
+    'assets/images/tj/wpL.jpg',
+    'assets/images/tj/Wt9.jpg',
+    'assets/images/tj/X8E.jpg',
+    'assets/images/tj/X_l.jpg',
+    'assets/images/tj/YCC.jpg',
+    'assets/images/tj/Z9N.jpg',
+    'assets/images/tj/zzR.jpg',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -1152,7 +1271,8 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
                             const Spacer(),
                             GestureDetector(
                               onTap: (() {
-                                if (sp.getString('roomID').toString() == roomId) {
+                                if (sp.getString('roomID').toString() ==
+                                    roomId) {
                                   if (MyUtils.checkClick()) {
                                     MyToastUtils.showToastBottom('您已在本房间');
                                   }
@@ -1296,307 +1416,355 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
                 ),
                 // 底部键盘
                 Container(
-                  height: isDevices == 'ios' ? 160.h : 140.h,
+                  height: isDevices == 'ios' ? 160.h : 240.h,
                   color: Colors.white,
-                  child: Row(
+                  child: Column(
                     children: [
-                      WidgetUtils.commonSizedBox(0, 20),
-
-                      /// 音频模块先注释
-                      GestureDetector(
-                        onTap: (() {
-                          setState(() {
-                            isAudio = !isAudio;
-                          });
-                        }),
-                        child: isAudio
-                            ? WidgetUtils.showImages(
-                            'assets/images/chat_jianpan.png',
-                            ScreenUtil().setHeight(45),
-                            ScreenUtil().setHeight(45))
-                            : WidgetUtils.showImages(
-                            'assets/images/chat_huatong.png',
-                            ScreenUtil().setHeight(45),
-                            ScreenUtil().setHeight(45)),
-                      ),
-                      WidgetUtils.commonSizedBox(0, 10),
-                      // 发送音频
-                      isAudio
-                          ? Expanded(
-                        child: GestureDetector(
-                          onVerticalDragStart: (details) async {
-                            //判断发送音频
-                            if (MyUtils.checkClick()) {
-                              setState(() {
-                                downTime = DateTime.now().millisecondsSinceEpoch;
-                                isSendYY = false;
-                              });
-                              doPostCanSendUser(3);
-                            }
-                          },
-                          onVerticalDragUpdate: (details) async {
-                            LogE('上滑== ${details.delta.dy}');
-                            if(isLuZhi) {
-                              if (isDevices != 'ios' && isMAI) {
-                                if (details.delta.dy < -3) {
-                                  // 停止录音
-                                  _stopRecorder();
-                                  setState(() {
-                                    isCancel = true;
-                                  });
-                                }
-                              }else{
-                                ///ios
-                                if (details.delta.dy < -3) {
-                                  // 停止录音
-                                  _stopRecorder();
-                                  setState(() {
-                                    isCancel = true;
-                                  });
-                                }
-                              }
-                            }
-                          },
-                          onVerticalDragEnd: (details) async {
-                            LogE('时间差 == ${(DateTime.now().millisecondsSinceEpoch - downTime)}');
-                            if((DateTime.now().millisecondsSinceEpoch - downTime) >=1000){
-                              // 停止录音
-                              _stopRecorder();
-                              if(isLuZhi) {
-                                if (isDevices != 'ios' && isMAI) {
-                                  // 取消录音后抬起手指
-                                  if (isCancel) {
-                                    LogE('发送录音 1');
-                                    //重新初始化音频信息
-                                    setState(() {
-                                      isCancel = false;
-                                      mediaRecord = true;
-                                      playRecord = false; //音频文件播放状态
-                                      hasRecord = false; //是否有音频文件可播放
-                                      isLuZhi = false;
-                                      isPlay =
-                                      0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
-                                      _maxLength = 60; // 录音时长
-                                      audioNum = 0; // 记录录了多久
-                                    });
-                                  }else{
-                                    LogE('发送录音 2');
-                                    //发送录音
-                                    doSendAudio();
+                      const Spacer(),
+                      WidgetUtils.onlyText(
+                          '  打个招呼吧~',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.g6, fontSize: 25.sp)),
+                      const Spacer(),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Wrap(
+                          spacing: 15.h,
+                          runSpacing: 20.h,
+                          children: [
+                            for (int i = 0; i < list1.length; i++)
+                              GestureDetector(
+                                onTap: (() {
+                                  if (MyUtils.checkClick()) {
+                                    doPostCanSendUser(5, list1[i]);
                                   }
-                                }else{
-                                  /// ios
-                                  // 取消录音后抬起手指
-                                  if (isCancel) {
-                                    LogE('发送录音 1');
-                                    //重新初始化音频信息
-                                    setState(() {
-                                      isCancel = false;
-                                      mediaRecord = true;
-                                      playRecord = false; //音频文件播放状态
-                                      hasRecord = false; //是否有音频文件可播放
-                                      isLuZhi = false;
-                                      isPlay =
-                                      0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
-                                      _maxLength = 60; // 录音时长
-                                      audioNum = 0; // 记录录了多久
-                                    });
-                                  }else{
-                                    LogE('发送录音 2');
-                                    //发送录音
-                                    doSendAudio();
-                                  }
-                                }
-                              }
-                            }else{
-                              setState(() {
-                                isSendYY = true;
-                              });
-                              // 停止录音
-                              _stopRecorder();
-                              MyToastUtils.showToastBottom(
-                                  '录音时长过短！');
-                              //重新初始化音频信息
-                              setState(() {
-                                mediaRecord = true;
-                                playRecord = false; //音频文件播放状态
-                                hasRecord = false; //是否有音频文件可播放
-                                isLuZhi = false;
-                                isPlay =
-                                0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
-                                _maxLength = 60; // 录音时长
-                                audioNum = 0; // 记录录了多久
-                              });
-                            }
-                          },
-                          child: Container(
-                            width: double.infinity,
-                            height: ScreenUtil().setHeight(80),
-                            padding: const EdgeInsets.only(
-                                left: 10, right: 10),
-                            alignment: Alignment.center,
-                            //边框设置
-                            decoration: const BoxDecoration(
-                              //背景
-                              color: MyColors.f2,
-                              //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                              borderRadius:
-                              BorderRadius.all(Radius.circular(30.0)),
-                            ),
-                            child: WidgetUtils.onlyTextCenter(
-                                '按住 说话',
-                                StyleUtils.getCommonTextStyle(
-                                    color: MyColors.g6,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 25.sp)),
-                          ),
-                        ),
-                      )
-                          : Expanded(
-                        child: Container(
-                          width: double.infinity,
-                          height: ScreenUtil().setHeight(60),
-                          padding: const EdgeInsets.only(left: 10, right: 10),
-                          alignment: Alignment.center,
-                          //边框设置
-                          decoration: const BoxDecoration(
-                            //背景
-                            color: MyColors.f2,
-                            //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(20.0)),
-                          ),
-                          child: TextField(
-                            focusNode: _focusNode,
-                            textInputAction: TextInputAction.send,
-                            // 设置为发送按钮
-                            controller: controller,
-                            inputFormatters: [
-                              RegexFormatter(regex: MyUtils.regexFirstNotNull),
-                              LengthLimitingTextInputFormatter(50) //限制输入长度
-                            ],
-                            style: StyleUtils.loginTextStyle,
-                            onSubmitted: (value) {
-                              // MyUtils.sendMessage(widget.otherUid, value);
-                              if(MyUtils.checkClick()){
-                                doPostCanSendUser(1);
-                              }
-                            },
-                            decoration: InputDecoration(
-                              // border: InputBorder.none,
-                              // labelText: "请输入用户名",
-                              // icon: Icon(Icons.people), //前面的图标
-                              hintText: '请输入文字信息',
-                              hintStyle: StyleUtils.loginHintTextStyle,
-
-                              contentPadding:
-                              const EdgeInsets.only(top: 0, bottom: 0),
-                              border: const OutlineInputBorder(
-                                borderSide:
-                                BorderSide(color: Colors.transparent),
-                              ),
-                              enabledBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.transparent,
+                                }),
+                                child: Container(
+                                  height: 100.h,
+                                  width: 100.h,
+                                  margin: EdgeInsets.only(left: 8.h),
+                                  alignment: Alignment.center,
+                                  child: WidgetUtils.CircleImageAss(
+                                      100.h, 100.h, 10.w, list1[i]),
                                 ),
-                              ),
-                              disabledBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.transparent,
-                                ),
-                              ),
-                              focusedBorder: const OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.transparent,
-                                ),
-                              ),
-                              // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
-                            ),
-                          ),
+                              )
+                          ],
                         ),
                       ),
-                      WidgetUtils.commonSizedBox(0, 10),
-                      GestureDetector(
-                        onTap: (() {
-                          setState(() {
-                            isAudio = false;
-                            MyUtils.hideKeyboard(context);
-                            _isEmojiPickerVisible = !_isEmojiPickerVisible;
-                          });
-                        }),
-                        child: WidgetUtils.showImages(
-                            'assets/images/trends_biaoqing.png',
-                            ScreenUtil().setHeight(45),
-                            ScreenUtil().setHeight(45)),
-                      ),
-                      WidgetUtils.commonSizedBox(0, 10),
-                      _isEmojiPickerVisible
-                          ? GestureDetector(
-                              onTap: (() {
-                                //判断表情发送
-                                if (MyUtils.checkClick()) {
-                                  if (controller.text.length > 50) {
-                                    MyToastUtils.showToastBottom(
-                                        '单条消息要小于50个字呦~');
-                                  } else {
-                                    if (controller.text.trim().isEmpty) {
-                                      MyToastUtils.showToastBottom('请输入要发送的信息');
-                                    } else {
-                                      doPostCanSendUser(1);
+                      const Spacer(),
+                      Row(
+                        children: [
+                          WidgetUtils.commonSizedBox(0, 20),
+
+                          /// 音频模块先注释
+                          GestureDetector(
+                            onTap: (() {
+                              setState(() {
+                                isAudio = !isAudio;
+                              });
+                            }),
+                            child: isAudio
+                                ? WidgetUtils.showImages(
+                                    'assets/images/chat_jianpan.png',
+                                    ScreenUtil().setHeight(45),
+                                    ScreenUtil().setHeight(45))
+                                : WidgetUtils.showImages(
+                                    'assets/images/chat_huatong.png',
+                                    ScreenUtil().setHeight(45),
+                                    ScreenUtil().setHeight(45)),
+                          ),
+                          WidgetUtils.commonSizedBox(0, 10),
+                          // 发送音频
+                          isAudio
+                              ? Expanded(
+                                  child: GestureDetector(
+                                    onVerticalDragStart: (details) async {
+                                      //判断发送音频
+                                      if (MyUtils.checkClick()) {
+                                        setState(() {
+                                          downTime = DateTime.now()
+                                              .millisecondsSinceEpoch;
+                                          isSendYY = false;
+                                        });
+                                        doPostCanSendUser(3, '');
+                                      }
+                                    },
+                                    onVerticalDragUpdate: (details) async {
+                                      LogE('上滑== ${details.delta.dy}');
+                                      if (isLuZhi) {
+                                        if (isDevices != 'ios' && isMAI) {
+                                          if (details.delta.dy < -3) {
+                                            // 停止录音
+                                            _stopRecorder();
+                                            setState(() {
+                                              isCancel = true;
+                                            });
+                                          }
+                                        } else {
+                                          ///ios
+                                          if (details.delta.dy < -3) {
+                                            // 停止录音
+                                            _stopRecorder();
+                                            setState(() {
+                                              isCancel = true;
+                                            });
+                                          }
+                                        }
+                                      }
+                                    },
+                                    onVerticalDragEnd: (details) async {
+                                      LogE(
+                                          '时间差 == ${(DateTime.now().millisecondsSinceEpoch - downTime)}');
+                                      if ((DateTime.now()
+                                                  .millisecondsSinceEpoch -
+                                              downTime) >=
+                                          1000) {
+                                        // 停止录音
+                                        _stopRecorder();
+                                        if (isLuZhi) {
+                                          if (isDevices != 'ios' && isMAI) {
+                                            // 取消录音后抬起手指
+                                            if (isCancel) {
+                                              LogE('发送录音 1');
+                                              //重新初始化音频信息
+                                              setState(() {
+                                                isCancel = false;
+                                                mediaRecord = true;
+                                                playRecord = false; //音频文件播放状态
+                                                hasRecord = false; //是否有音频文件可播放
+                                                isLuZhi = false;
+                                                isPlay =
+                                                    0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
+                                                _maxLength = 60; // 录音时长
+                                                audioNum = 0; // 记录录了多久
+                                              });
+                                            } else {
+                                              LogE('发送录音 2');
+                                              //发送录音
+                                              doSendAudio();
+                                            }
+                                          } else {
+                                            /// ios
+                                            // 取消录音后抬起手指
+                                            if (isCancel) {
+                                              LogE('发送录音 1');
+                                              //重新初始化音频信息
+                                              setState(() {
+                                                isCancel = false;
+                                                mediaRecord = true;
+                                                playRecord = false; //音频文件播放状态
+                                                hasRecord = false; //是否有音频文件可播放
+                                                isLuZhi = false;
+                                                isPlay =
+                                                    0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
+                                                _maxLength = 60; // 录音时长
+                                                audioNum = 0; // 记录录了多久
+                                              });
+                                            } else {
+                                              LogE('发送录音 2');
+                                              //发送录音
+                                              doSendAudio();
+                                            }
+                                          }
+                                        }
+                                      } else {
+                                        setState(() {
+                                          isSendYY = true;
+                                        });
+                                        // 停止录音
+                                        _stopRecorder();
+                                        MyToastUtils.showToastBottom('录音时长过短！');
+                                        //重新初始化音频信息
+                                        setState(() {
+                                          mediaRecord = true;
+                                          playRecord = false; //音频文件播放状态
+                                          hasRecord = false; //是否有音频文件可播放
+                                          isLuZhi = false;
+                                          isPlay =
+                                              0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
+                                          _maxLength = 60; // 录音时长
+                                          audioNum = 0; // 记录录了多久
+                                        });
+                                      }
+                                    },
+                                    child: Container(
+                                      width: double.infinity,
+                                      height: ScreenUtil().setHeight(80),
+                                      padding: const EdgeInsets.only(
+                                          left: 10, right: 10),
+                                      alignment: Alignment.center,
+                                      //边框设置
+                                      decoration: const BoxDecoration(
+                                        //背景
+                                        color: MyColors.f2,
+                                        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(30.0)),
+                                      ),
+                                      child: WidgetUtils.onlyTextCenter(
+                                          '按住 说话',
+                                          StyleUtils.getCommonTextStyle(
+                                              color: MyColors.g6,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 25.sp)),
+                                    ),
+                                  ),
+                                )
+                              : Expanded(
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: ScreenUtil().setHeight(60),
+                                    padding: const EdgeInsets.only(
+                                        left: 10, right: 10),
+                                    alignment: Alignment.center,
+                                    //边框设置
+                                    decoration: const BoxDecoration(
+                                      //背景
+                                      color: MyColors.f2,
+                                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(20.0)),
+                                    ),
+                                    child: TextField(
+                                      focusNode: _focusNode,
+                                      textInputAction: TextInputAction.send,
+                                      // 设置为发送按钮
+                                      controller: controller,
+                                      inputFormatters: [
+                                        RegexFormatter(
+                                            regex: MyUtils.regexFirstNotNull),
+                                        LengthLimitingTextInputFormatter(
+                                            50) //限制输入长度
+                                      ],
+                                      style: StyleUtils.loginTextStyle,
+                                      onSubmitted: (value) {
+                                        // MyUtils.sendMessage(widget.otherUid, value);
+                                        if (MyUtils.checkClick()) {
+                                          doPostCanSendUser(1, '');
+                                        }
+                                      },
+                                      decoration: InputDecoration(
+                                        // border: InputBorder.none,
+                                        // labelText: "请输入用户名",
+                                        // icon: Icon(Icons.people), //前面的图标
+                                        hintText: '请输入文字信息',
+                                        hintStyle:
+                                            StyleUtils.loginHintTextStyle,
+
+                                        contentPadding: const EdgeInsets.only(
+                                            top: 0, bottom: 0),
+                                        border: const OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.transparent),
+                                        ),
+                                        enabledBorder: const OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Colors.transparent,
+                                          ),
+                                        ),
+                                        disabledBorder:
+                                            const OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Colors.transparent,
+                                          ),
+                                        ),
+                                        focusedBorder: const OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Colors.transparent,
+                                          ),
+                                        ),
+                                        // prefixIcon: Icon(Icons.people_alt_rounded)//和文字一起的图标
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                          WidgetUtils.commonSizedBox(0, 10),
+                          GestureDetector(
+                            onTap: (() {
+                              setState(() {
+                                isAudio = false;
+                                MyUtils.hideKeyboard(context);
+                                _isEmojiPickerVisible = !_isEmojiPickerVisible;
+                              });
+                            }),
+                            child: WidgetUtils.showImages(
+                                'assets/images/trends_biaoqing.png',
+                                ScreenUtil().setHeight(45),
+                                ScreenUtil().setHeight(45)),
+                          ),
+                          WidgetUtils.commonSizedBox(0, 10),
+                          _isEmojiPickerVisible
+                              ? GestureDetector(
+                                  onTap: (() {
+                                    //判断表情发送
+                                    if (MyUtils.checkClick()) {
+                                      if (controller.text.length > 50) {
+                                        MyToastUtils.showToastBottom(
+                                            '单条消息要小于50个字呦~');
+                                      } else {
+                                        if (controller.text.trim().isEmpty) {
+                                          MyToastUtils.showToastBottom(
+                                              '请输入要发送的信息');
+                                        } else {
+                                          doPostCanSendUser(1, '');
+                                        }
+                                      }
                                     }
-                                  }
-                                }
-                              }),
-                              child: Container(
-                                width: 90.h,
-                                height: 50.h,
-                                //边框设置
-                                decoration: const BoxDecoration(
-                                  //背景
-                                  color: MyColors.riBangBg,
-                                  //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20.0)),
-                                ),
-                                child: WidgetUtils.onlyTextCenter(
-                                    '发送',
-                                    StyleUtils.getCommonTextStyle(
-                                        color: Colors.white, fontSize: 28.sp)),
-                              ),
-                            )
-                          : const Text(''),
-                      _isEmojiPickerVisible == false
-                          ? GestureDetector(
-                              onTap: (() {
-                                //判断图片发送
-                                if (MyUtils.checkClick()) {
-                                  doPostCanSendUser(2);
-                                }
-                              }),
-                              child: WidgetUtils.showImages(
-                                  'assets/images/chat_img.png',
-                                  ScreenUtil().setHeight(45),
-                                  ScreenUtil().setHeight(45)),
-                            )
-                          : const Text(''),
-                      _isEmojiPickerVisible == false
-                          ? WidgetUtils.commonSizedBox(0, 10)
-                          : const Text(''),
-                      (_isEmojiPickerVisible == false && isHB)
-                          ? GestureDetector(
-                              onTap: (() {
-                                //判断红包发送
-                                if (MyUtils.checkClick()) {
-                                  doPostCanSendUser(4);
-                                }
-                              }),
-                              child: WidgetUtils.showImages(
-                                  'assets/images/chat_hongbao.png',
-                                  ScreenUtil().setHeight(45),
-                                  ScreenUtil().setHeight(45)),
-                            )
-                          : const Text(''),
-                      WidgetUtils.commonSizedBox(0, 20),
+                                  }),
+                                  child: Container(
+                                    width: 90.h,
+                                    height: 50.h,
+                                    //边框设置
+                                    decoration: const BoxDecoration(
+                                      //背景
+                                      color: MyColors.riBangBg,
+                                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(20.0)),
+                                    ),
+                                    child: WidgetUtils.onlyTextCenter(
+                                        '发送',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: Colors.white,
+                                            fontSize: 28.sp)),
+                                  ),
+                                )
+                              : const Text(''),
+                          _isEmojiPickerVisible == false
+                              ? GestureDetector(
+                                  onTap: (() {
+                                    //判断图片发送
+                                    if (MyUtils.checkClick()) {
+                                      doPostCanSendUser(2, '');
+                                    }
+                                  }),
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/chat_img.png',
+                                      ScreenUtil().setHeight(45),
+                                      ScreenUtil().setHeight(45)),
+                                )
+                              : const Text(''),
+                          _isEmojiPickerVisible == false
+                              ? WidgetUtils.commonSizedBox(0, 10)
+                              : const Text(''),
+                          (_isEmojiPickerVisible == false && isHB)
+                              ? GestureDetector(
+                                  onTap: (() {
+                                    //判断红包发送
+                                    if (MyUtils.checkClick()) {
+                                      doPostCanSendUser(4, '');
+                                    }
+                                  }),
+                                  child: WidgetUtils.showImages(
+                                      'assets/images/chat_hongbao.png',
+                                      ScreenUtil().setHeight(45),
+                                      ScreenUtil().setHeight(45)),
+                                )
+                              : const Text(''),
+                          WidgetUtils.commonSizedBox(0, 20),
+                        ],
+                      ),
+                      const Spacer(),
                     ],
                   ),
                 ),
@@ -1951,7 +2119,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
   /// 发送消息
   late List<Map<String, dynamic>> allData2;
 
-  Future<void> doPostSendUserMsg(String content1) async {
+  Future<void> doPostSendUserMsg(String content1,int type) async {
     if (content1.trim().isEmpty) {
       return;
     }
@@ -1974,7 +2142,13 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
       } else {
         combineID = '${sp.getString('user_id').toString()}-${widget.otherUid}';
       }
-      final content = bean.data ?? content1;
+      final String content ;
+      if(type == 1){
+        content = bean.data ?? content1;
+      }else{
+        content = content1;
+      }
+
       switch (bean.code) {
         case MyHttpConfig.successCode:
           final textMsg = EMMessage.createTxtSendMessage(
@@ -2214,7 +2388,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
       'otherHeadNetImg': widget.otherImg,
       'add_time': DateTime.now().millisecondsSinceEpoch,
       'type': 3,
-      'number': (msg.body as EMVoiceMessageBody).duration,//audioNum,
+      'number': (msg.body as EMVoiceMessageBody).duration, //audioNum,
       'status': 0,
       'readStatus': 1,
       'liveStatus': 0,
@@ -2381,19 +2555,19 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
   }
 
   /// 能否发私聊
-  Future<void> doPostCanSendUser(int type) async {
+  Future<void> doPostCanSendUser(int type, String path) async {
     LogE('私聊类型== $type');
     Map<String, dynamic> params = <String, dynamic>{'uid': widget.otherUid};
     try {
       CommonIntBean bean = await DataUtils.postCanSendUser(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-          //可以发私聊跳转 type 1发表情 2图片 3录音 4红包
+          //可以发私聊跳转 type 1发表情 2图片 3录音 4红包 5推荐表情
           if (type == 1) {
             setState(() {
               _isEmojiPickerVisible = false;
             });
-            doPostSendUserMsg(controller.text);
+            doPostSendUserMsg(controller.text,type);
           } else if (type == 2) {
             onTapPickFromGallery();
           } else if (type == 3) {
@@ -2417,6 +2591,8 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
             }
           } else if (type == 4) {
             doPostPayPwd();
+          } else if (type == 5) {
+            doPostSendUserMsg(path,type);
           }
           break;
         case MyHttpConfig.errorloginCode:
@@ -2433,6 +2609,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
   }
 
   bool isHB = false;
+
   /// 是否有发红包权限
   Future<void> doPostCanSendRedPacket() async {
     try {
@@ -2444,7 +2621,7 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -2456,5 +2633,3 @@ class _ChatPageState extends State<ChatPage> with MsgReadText {
     }
   }
 }
-
-

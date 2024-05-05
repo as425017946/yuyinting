@@ -326,15 +326,15 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
                       ),
                       GestureDetector(
                         onTap: (() async {
-                          if(double.parse(sp.getString('zp_jinbi').toString()) < 1000 && cishu ==1 ){
+                          if(double.parse(sp.getString('zp_jinbi').toString()) < 500 && cishu ==1 ){
                             MyToastUtils.showToastBottom('钱包余额不足');
                             return;
                           }
-                          if(double.parse(sp.getString('zp_jinbi').toString()) < 10000 && cishu ==10 ){
+                          if(double.parse(sp.getString('zp_jinbi').toString()) < 2500 && cishu ==5 ){
                             MyToastUtils.showToastBottom('钱包余额不足');
                             return;
                           }
-                          if(double.parse(sp.getString('zp_jinbi').toString()) < 30000 && cishu ==30 ){
+                          if(double.parse(sp.getString('zp_jinbi').toString()) < 5000 && cishu ==10 ){
                             MyToastUtils.showToastBottom('钱包余额不足');
                             return;
                           }
@@ -692,7 +692,7 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
           // 通知用户游戏开始不能离开
           eventBus.fire(GameBack(isBack: true));
           // 发送要减多少金豆
-          eventBus.fire(XiaZhuBack(jine: int.parse(number)*1000, type: bean.data!.curType as int));
+          eventBus.fire(XiaZhuBack(jine: int.parse(number)*500, type: bean.data!.curType as int));
           // 获取数据并赋值
           list.clear();
           list = bean.data!.gifts!;

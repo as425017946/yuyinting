@@ -80,7 +80,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
       "price": "660",
     },
   ];
-  List<bool> listLHBool = [false,false,false];
+  List<bool> listLHBool = [false, false, false];
 
   // 麦上有几个人是否点击了选中
   List<bool> listChoose = [];
@@ -124,6 +124,9 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
 
   // 是否正常礼物  1正常礼物 0减魅力礼物
   bool isReduce = false;
+
+  // 贵族礼物专属提示
+  String gzTitle = '送礼';
 
   Widget _itemPeople(BuildContext context, int i) {
     return GestureDetector(
@@ -224,17 +227,6 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
             }
             //说明要送的人在麦序上
             if (isUpPeopleNum != 0) {
-              // isAll = true;
-              // for(int i = 0; i < listMaiXu.length; i++){
-              //   listChoose[i] = true;
-              //   listPeople[listMaiXu[i].serialNumber! - 1] = true;
-              //   isChoosePeople = true;
-              //   listUID.clear();
-              //   for(int i =0; i < listMaiXu.length; i++){
-              //     listUID.add(listMaiXu[i].uid.toString());
-              //   }
-              // }
-              // eventBus.fire(ChoosePeopleBack(listPeople: listPeople));
               giftId = listC[index].id.toString();
               for (int i = 0; i < listC.length; i++) {
                 listCBool[i] = false;
@@ -264,14 +256,92 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
             url = listC[index].img.toString();
             svga = listC[index].imgRendering.toString();
           } else if (leixing == 1) {
-            giftId = listPV[index].id.toString();
-            for (int i = 0; i < listPV.length; i++) {
-              listPVBool[i] = false;
+            //说明要送的人在麦序上
+            if (isUpPeopleNum != 0) {
+              giftId = listPV[index].id.toString();
+              for (int i = 0; i < listPV.length; i++) {
+                listPVBool[i] = false;
+              }
+              listPVBool[index] = true;
+            } else {
+              //点击厅内底部送礼按钮进来的
+              if (isMaiPeople) {
+                isAll = true;
+                for (int i = 0; i < listMaiXu.length; i++) {
+                  listChoose[i] = true;
+                  listPeople[listMaiXu[i].serialNumber! - 1] = true;
+                  isChoosePeople = true;
+                  listUID.clear();
+                  for (int i = 0; i < listMaiXu.length; i++) {
+                    listUID.add(listMaiXu[i].uid.toString());
+                  }
+                }
+                eventBus.fire(ChoosePeopleBack(listPeople: listPeople));
+              }
+              giftId = listPV[index].id.toString();
+              for (int i = 0; i < listPV.length; i++) {
+                listPVBool[i] = false;
+              }
+              listPVBool[index] = true;
             }
-            listPVBool[index] = true;
-
             url = listPV[index].img.toString();
             svga = listPV[index].imgRendering.toString();
+
+            if (int.parse(sp.getString('nobleID').toString()) <
+                listPV[index].nobleID!) {
+              switch (listPV[index].nobleID!) {
+                case 1:
+                  setState(() {
+                    gzTitle = '玄仙专属';
+                  });
+                  break;
+                case 2:
+                  setState(() {
+                    gzTitle = '上仙专属';
+                  });
+                  break;
+                case 3:
+                  setState(() {
+                    gzTitle = '金仙专属';
+                  });
+                  break;
+                case 4:
+                  setState(() {
+                    gzTitle = '仙帝专属';
+                  });
+                  break;
+                case 5:
+                  setState(() {
+                    gzTitle = '主神专属';
+                  });
+                  break;
+                case 6:
+                  setState(() {
+                    gzTitle = '天神专属';
+                  });
+                  break;
+                case 7:
+                  setState(() {
+                    gzTitle = '神王专属';
+                  });
+                  break;
+                case 8:
+                  setState(() {
+                    gzTitle = '神皇专属';
+                  });
+                  break;
+                case 9:
+                  setState(() {
+                    gzTitle = '天尊专属';
+                  });
+                  break;
+                case 10:
+                  setState(() {
+                    gzTitle = '传说专属';
+                  });
+                  break;
+              }
+            }
           } else if (leixing == 3) {
             //说明要送的人在麦序上
             if (isUpPeopleNum != 0) {
@@ -414,6 +484,16 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                           ],
                         ),
                       ),
+                      int.parse(sp.getString('nobleID').toString()) <
+                              listPV[index].nobleID!
+                          ? Positioned(
+                              top: 10.h,
+                              right: 10.w,
+                              child: WidgetUtils.showImages(
+                                  'assets/images/tequan_white_suo.png',
+                                  20.w,
+                                  20.w))
+                          : WidgetUtils.commonSizedBox(0, 0),
                       listPVBool[index]
                           ? WidgetUtils.showImagesFill(
                               'assets/images/room_liwu_bg.png',
@@ -628,31 +708,45 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                     ),
                   ),
                 ),
-                leixing == 3 ? GestureDetector(
-                  onTap: ((){
-                     MyUtils.goTransparentPage(context, const MHPage());
-                  }),
-                  child: Container(
-                    height: 60.h,
-                    width: double.infinity,
-                    alignment: Alignment.center,
-                    color: Colors.transparent,
-                    child: Stack(
-                      children: [
-                        WidgetUtils.showImagesFill('assets/images/room_lh_sm.png', 60.h, double.infinity),
-                        Row(
-                          children: [
-                            WidgetUtils.commonSizedBox(0, 100.w),
-                            WidgetUtils.onlyText('惊喜礼盒玩法', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 26.sp,)),
-                            const Spacer(),
-                            WidgetUtils.onlyText('查看详情 》', StyleUtils.getCommonTextStyle(color: Colors.white, fontSize: 22.sp,)),
-                            WidgetUtils.commonSizedBox(0, 100.w),
-                          ],
-                        )
-                      ],
-                    ),
-                  )
-                ) : const Text(''),
+                leixing == 3
+                    ? GestureDetector(
+                        onTap: (() {
+                          MyUtils.goTransparentPage(context, const MHPage());
+                        }),
+                        child: Container(
+                          height: 60.h,
+                          width: double.infinity,
+                          alignment: Alignment.center,
+                          color: Colors.transparent,
+                          child: Stack(
+                            children: [
+                              WidgetUtils.showImagesFill(
+                                  'assets/images/room_lh_sm.png',
+                                  60.h,
+                                  double.infinity),
+                              Row(
+                                children: [
+                                  WidgetUtils.commonSizedBox(0, 100.w),
+                                  WidgetUtils.onlyText(
+                                      '惊喜礼盒玩法',
+                                      StyleUtils.getCommonTextStyle(
+                                        color: Colors.white,
+                                        fontSize: 26.sp,
+                                      )),
+                                  const Spacer(),
+                                  WidgetUtils.onlyText(
+                                      '查看详情 》',
+                                      StyleUtils.getCommonTextStyle(
+                                        color: Colors.white,
+                                        fontSize: 22.sp,
+                                      )),
+                                  WidgetUtils.commonSizedBox(0, 100.w),
+                                ],
+                              )
+                            ],
+                          ),
+                        ))
+                    : const Text(''),
                 Container(
                   height: isMaiPeople ? 640.h : 600.h,
                   width: double.infinity,
@@ -831,48 +925,48 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                               : ScreenUtil().setSp(25))),
                                 ),
                               ),
-                              // Container(
-                              //   height: ScreenUtil().setHeight(10),
-                              //   width: ScreenUtil().setWidth(1),
-                              //   color: MyColors.roomTCWZ3,
-                              // ),
-                              // GestureDetector(
-                              //   onTap: (() {
-                              //     setState(() {
-                              //       isReduce = false;
-                              //       url = '';
-                              //       svga = '';
-                              //       leixing = 1;
-                              //       giftId = '';
-                              //       for (int i = 0; i < listPV.length; i++) {
-                              //         listPVBool[i] = false;
-                              //       }
-                              //       for (int i = 0; i < listC.length; i++) {
-                              //         listCBool[i] = false;
-                              //       }
-                              //       for (int i = 0; i < listPl.length; i++) {
-                              //         listPlBool[i] = false;
-                              //       }
-                              //     });
-                              //     if(listPV.isEmpty){
-                              //       doPostGiftList();
-                              //     }
-                              //   }),
-                              //   child: Container(
-                              //     color: Colors.transparent,
-                              //     width: 80.h,
-                              //     height: 40.h,
-                              //     child: WidgetUtils.onlyTextCenter(
-                              //         '特权',
-                              //         StyleUtils.getCommonTextStyle(
-                              //             color: leixing == 1
-                              //                 ? MyColors.roomTCWZ2
-                              //                 : MyColors.roomTCWZ3,
-                              //             fontSize: leixing == 1
-                              //                 ? ScreenUtil().setSp(28)
-                              //                 : ScreenUtil().setSp(25))),
-                              //   ),
-                              // ),
+                              Container(
+                                height: ScreenUtil().setHeight(10),
+                                width: ScreenUtil().setWidth(1),
+                                color: MyColors.roomTCWZ3,
+                              ),
+                              GestureDetector(
+                                onTap: (() {
+                                  setState(() {
+                                    isReduce = false;
+                                    url = '';
+                                    svga = '';
+                                    leixing = 1;
+                                    giftId = '';
+                                    for (int i = 0; i < listPV.length; i++) {
+                                      listPVBool[i] = false;
+                                    }
+                                    for (int i = 0; i < listC.length; i++) {
+                                      listCBool[i] = false;
+                                    }
+                                    for (int i = 0; i < listPl.length; i++) {
+                                      listPlBool[i] = false;
+                                    }
+                                  });
+                                  if (listPV.isEmpty) {
+                                    doPostGiftList();
+                                  }
+                                }),
+                                child: Container(
+                                  color: Colors.transparent,
+                                  width: 80.h,
+                                  height: 40.h,
+                                  child: WidgetUtils.onlyTextCenter(
+                                      '特权',
+                                      StyleUtils.getCommonTextStyle(
+                                          color: leixing == 1
+                                              ? MyColors.roomTCWZ2
+                                              : MyColors.roomTCWZ3,
+                                          fontSize: leixing == 1
+                                              ? ScreenUtil().setSp(28)
+                                              : ScreenUtil().setSp(25))),
+                                ),
+                              ),
                               Container(
                                 height: ScreenUtil().setHeight(10),
                                 width: ScreenUtil().setWidth(1),
@@ -1136,7 +1230,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                               isCheck = true;
                                             });
                                             if (isMaiPeople == false) {
-                                              if(leixing != 3){
+                                              if (leixing != 3) {
                                                 if (giftId.isEmpty) {
                                                   setState(() {
                                                     isCheck = false;
@@ -1147,7 +1241,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                                 } else {
                                                   doPostSendGift();
                                                 }
-                                              }else{
+                                              } else {
                                                 doPostPlayBlindBox();
                                               }
                                             } else {
@@ -1159,15 +1253,16 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                                     '请选择要送的对象');
                                                 return;
                                               } else {
-                                                if(leixing == 3){
+                                                if (leixing == 3) {
                                                   doPostPlayBlindBox();
-                                                }else{
+                                                } else {
                                                   if (giftId.isEmpty) {
                                                     setState(() {
                                                       isCheck = false;
                                                     });
-                                                    MyToastUtils.showToastBottom(
-                                                        '请选择要送的礼物');
+                                                    MyToastUtils
+                                                        .showToastBottom(
+                                                            '请选择要送的礼物');
                                                     return;
                                                   } else {
                                                     doPostSendGift();
@@ -1182,7 +1277,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                           width: double.infinity,
                                           color: Colors.transparent,
                                           child: WidgetUtils.onlyTextCenter(
-                                              '送礼',
+                                              gzTitle,
                                               StyleUtils.getCommonTextStyle(
                                                   color: Colors.white,
                                                   fontSize:
@@ -1214,79 +1309,81 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                               child: Column(
                                 children: [
                                   if (leixing != 3)
-                                  GestureDetector(
-                                    onTap: (() {
-                                      setState(() {
-                                        shuliang = 1314;
-                                        isTS = false;
-                                      });
-                                    }),
-                                    child: Container(
-                                      height: 50.h,
-                                      width: double.infinity,
-                                      alignment: Alignment.center,
-                                      color: Colors.transparent,
-                                      child: Row(
-                                        children: [
-                                          SizedBox(
-                                            height: 50.h,
-                                            width: 120.h,
-                                            child: WidgetUtils.onlyTextCenter(
-                                                '1314',
+                                    GestureDetector(
+                                      onTap: (() {
+                                        setState(() {
+                                          shuliang = 1314;
+                                          isTS = false;
+                                        });
+                                      }),
+                                      child: Container(
+                                        height: 50.h,
+                                        width: double.infinity,
+                                        alignment: Alignment.center,
+                                        color: Colors.transparent,
+                                        child: Row(
+                                          children: [
+                                            SizedBox(
+                                              height: 50.h,
+                                              width: 120.h,
+                                              child: WidgetUtils.onlyTextCenter(
+                                                  '1314',
+                                                  StyleUtils.getCommonTextStyle(
+                                                      color: Colors.redAccent,
+                                                      fontSize: 24.sp,
+                                                      fontWeight:
+                                                          FontWeight.w600)),
+                                            ),
+                                            WidgetUtils.onlyText(
+                                                '一生一世',
                                                 StyleUtils.getCommonTextStyle(
-                                                    color: Colors.redAccent,
-                                                    fontSize: 24.sp,
+                                                    color: Colors.black,
+                                                    fontSize: 22.sp,
                                                     fontWeight:
                                                         FontWeight.w600)),
-                                          ),
-                                          WidgetUtils.onlyText(
-                                              '一生一世',
-                                              StyleUtils.getCommonTextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 22.sp,
-                                                  fontWeight: FontWeight.w600)),
-                                          WidgetUtils.commonSizedBox(0, 20.h),
-                                        ],
+                                            WidgetUtils.commonSizedBox(0, 20.h),
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
                                   if (leixing != 3)
-                                  GestureDetector(
-                                    onTap: (() {
-                                      setState(() {
-                                        shuliang = 666;
-                                        isTS = false;
-                                      });
-                                    }),
-                                    child: Container(
-                                      height: 50.h,
-                                      width: double.infinity,
-                                      alignment: Alignment.center,
-                                      color: Colors.transparent,
-                                      child: Row(
-                                        children: [
-                                          SizedBox(
-                                            height: 50.h,
-                                            width: 120.h,
-                                            child: WidgetUtils.onlyTextCenter(
-                                                '666',
+                                    GestureDetector(
+                                      onTap: (() {
+                                        setState(() {
+                                          shuliang = 666;
+                                          isTS = false;
+                                        });
+                                      }),
+                                      child: Container(
+                                        height: 50.h,
+                                        width: double.infinity,
+                                        alignment: Alignment.center,
+                                        color: Colors.transparent,
+                                        child: Row(
+                                          children: [
+                                            SizedBox(
+                                              height: 50.h,
+                                              width: 120.h,
+                                              child: WidgetUtils.onlyTextCenter(
+                                                  '666',
+                                                  StyleUtils.getCommonTextStyle(
+                                                      color: Colors.redAccent,
+                                                      fontSize: 24.sp,
+                                                      fontWeight:
+                                                          FontWeight.w600)),
+                                            ),
+                                            WidgetUtils.onlyText(
+                                                '大吉大利',
                                                 StyleUtils.getCommonTextStyle(
-                                                    color: Colors.redAccent,
-                                                    fontSize: 24.sp,
+                                                    color: Colors.black,
+                                                    fontSize: 22.sp,
                                                     fontWeight:
                                                         FontWeight.w600)),
-                                          ),
-                                          WidgetUtils.onlyText(
-                                              '大吉大利',
-                                              StyleUtils.getCommonTextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 22.sp,
-                                                  fontWeight: FontWeight.w600)),
-                                          WidgetUtils.commonSizedBox(0, 20.h),
-                                        ],
+                                            WidgetUtils.commonSizedBox(0, 20.h),
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
                                   GestureDetector(
                                     onTap: (() {
                                       setState(() {
@@ -1859,9 +1956,9 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
     }
 
     String mh = '';
-    for(int i = 0; i < listLHBool.length; i++){
-      if(listLHBool[i]){
-        mh = (i+1).toString();
+    for (int i = 0; i < listLHBool.length; i++) {
+      if (listLHBool[i]) {
+        mh = (i + 1).toString();
       }
     }
     if (mh.isEmpty) {
@@ -1888,7 +1985,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
       CommonBean bean = await DataUtils.postPlayBlindBox(params);
       switch (bean.code) {
         case MyHttpConfig.successCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           Navigator.pop(context);
           eventBus.fire(ResidentBack(isBack: true));
           // ignore: use_build_context_synchronously
@@ -1898,7 +1995,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
           eventBus.fire(ChoosePeopleBack(listPeople: listPeople));
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -1915,7 +2012,6 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
       // MyToastUtils.showToastBottom(e.toString());
     }
   }
-
 
   // 金币 钻石
   String jinbi = '', jinbi2 = '', zuanshi = '', zuanshi2 = '';

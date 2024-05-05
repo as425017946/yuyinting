@@ -36,6 +36,7 @@ class MinePage extends StatefulWidget {
 class _MinePageState extends State<MinePage> {
   late StreamSubscription<dynamic> listen;
   final c = Get.put(XCMineController(), permanent: true);
+
   @override
   void initState() {
     super.initState();
@@ -85,6 +86,7 @@ class _MinePageState extends State<MinePage> {
 class _MinePageContent extends StatelessWidget {
   _MinePageContent({Key? key}) : super(key: key);
   final XCMineController c = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -105,48 +107,92 @@ class _MinePageContent extends StatelessWidget {
             ),
           ),
         ),
-        HitTestBlocker(child: _nav(context)),
+        Transform.translate(
+          offset: Offset(0,-70.h),
+            child: HitTestBlocker(child: _nav(context))),
       ],
     );
   }
 
   Widget _nav(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: Get.statusBarHeight, right: 34.w, left: 34.w),
-      height: 50.w,
+      margin:
+          EdgeInsets.only(top: Get.statusBarHeight, right: 34.w, left: 34.w),
+      height: 170.w,
       width: double.infinity,
+      alignment: Alignment.center,
+      color: Colors.transparent,
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Obx(() {
-            if (c.userNumber.value.isEmpty) {
-              return const Text('');
-            }
-            return GestureDetector(
-              onTap: () {
-                c.onSwitch(context);
-              },
-              child: Row(
-                children: [
-                  Image(
-                    width: 74.w*0.8,
-                    height: 49.w*0.8,
-                    image: AssetImage('assets/images/mine_switch_${c.switchValue.value ? 1 : 0}.png'),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Obx(() {
+                if (c.userNumber.value.isEmpty) {
+                  return const Text('');
+                }
+                return GestureDetector(
+                  onTap: () {
+                    c.onSwitch(context);
+                  },
+                  child: Row(
+                    children: [
+                      Image(
+                        width: 74.w * 0.8,
+                        height: 49.w * 0.8,
+                        image: AssetImage(
+                            'assets/images/mine_switch_${c.switchValue.value ? 1 : 0}.png'),
+                      ),
+                      SizedBox(width: 10.w),
+                      Text(
+                        '勿扰',
+                        style: TextStyle(
+                          color:
+                          Color(c.switchValue.value ? 0xFFFE5D9C : 0xFF949494),
+                          fontSize: 28.sp,
+                        ),
+                      )
+                    ],
                   ),
-                  SizedBox(width: 10.w),
-                  Text(
-                    '勿扰',
-                    style: TextStyle(
-                      color: Color(c.switchValue.value ? 0xFFFE5D9C : 0xFF949494),
-                      fontSize: 28.sp,
-                    ),
-                  )
-                ],
-              ),
-            );
-          }),
+                );
+              }),
+              int.parse(c.isGuizu.value.toString()) >= 7 ? Obx(() {
+                if (c.userNumber.value.isEmpty) {
+                  return const Text('');
+                }
+                return GestureDetector(
+                  onTap: () {
+                    c.onSwitch2(context);
+                  },
+                  child: Row(
+                    children: [
+                      Image(
+                        width: 74.w * 0.8,
+                        height: 49.w * 0.8,
+                        image: AssetImage(
+                            'assets/images/mine_switch_${c.switchValue2.value ? 1 : 0}.png'),
+                      ),
+                      SizedBox(width: 10.w),
+                      Text(
+                        '进房隐身',
+                        style: TextStyle(
+                          color:
+                          Color(c.switchValue2.value ? 0xFFFE5D9C : 0xFF949494),
+                          fontSize: 28.sp,
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              }) : const Text(''),
+            ],
+          ),
           const Expanded(child: Text('')),
           GestureDetector(
-            onTap: () { // 编辑
+            onTap: () {
+              // 编辑
               if (MyUtils.checkClick()) {
                 Get.toNamed('EditMyInfoPage');
               }
@@ -159,7 +205,8 @@ class _MinePageContent extends StatelessWidget {
           ),
           SizedBox(width: 54.w),
           GestureDetector(
-            onTap: () { // 设置
+            onTap: () {
+              // 设置
               if (MyUtils.checkClick()) {
                 Get.toNamed('SettingPage');
               }
@@ -177,7 +224,8 @@ class _MinePageContent extends StatelessWidget {
 
   Widget _top() {
     return GestureDetector(
-      onTap: () { // 主页
+      onTap: () {
+        // 主页
         if (MyUtils.checkClick()) {
           Get.toNamed('MyInfoPage');
         }
@@ -204,7 +252,8 @@ class _MinePageContent extends StatelessWidget {
               const SizedBox(height: 24),
               if (c.userNumber.value.isNotEmpty)
                 GestureDetector(
-                  onTap: () { // ID
+                  onTap: () {
+                    // ID
                     Clipboard.setData(ClipboardData(text: c.userNumber.value));
                     MyToastUtils.showToastBottom('已成功复制到剪切板');
                   },
@@ -336,19 +385,48 @@ class _MinePageContent extends StatelessWidget {
           ),
           Positioned(
             right: 37,
-            top: 25,
+            top: 26,
             child: GestureDetector(
-              onTap: () { // 贵族
+              onTap: () {
+                // 贵族
                 if (MyUtils.checkClick()) {
                   Get.toNamed('TequanPage');
                 }
               },
-              child: const Text(
-                '暂未成为贵族，快来解锁贵族特权',
-                style: TextStyle(
-                  color: Color(0xFF673D27),
-                  fontSize: 24,
-                  fontWeight: FontWeight.w400,
+              child: Container(
+                width: 800.w,
+                color: Colors.transparent,
+                alignment: Alignment.center,
+                child: Text(
+                  int.parse(c.isGuizu.value.toString()) == 1
+                      ? '恭喜您已成为：玄仙'
+                      : int.parse(c.isGuizu.value.toString()) == 2
+                          ? '恭喜您已成为：上仙'
+                          : int.parse(c.isGuizu.value.toString()) == 3
+                              ? '恭喜您已成为：金仙'
+                              : int.parse(c.isGuizu.value.toString()) == 4
+                                  ? '恭喜您已成为：仙帝'
+                                  : int.parse(c.isGuizu.value.toString()) == 5
+                                      ? '恭喜您已成为：主神'
+                                      : int.parse(c.isGuizu.value.toString()) == 6
+                                          ? '恭喜您已成为：天神'
+                                          : int.parse(c.isGuizu.value.toString()) == 7
+                                              ? '恭喜您已成为：神王'
+                                              : int.parse(c.isGuizu.value.toString()) == 8
+                                                  ? '恭喜您已成为：神皇'
+                                                  : int.parse(c.isGuizu.value.toString()) ==
+                                                          9
+                                                      ? '恭喜您已成为：天尊'
+                                                      : int.parse(c.isGuizu
+                                                                  .value.toString()) ==
+                                                              10
+                                                          ? '恭喜您已成为：传说'
+                                                              : '暂未成为贵族，快来解锁贵族特权',
+                  style: const TextStyle(
+                    color: Color(0xFF673D27),
+                    fontSize: 24,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
               ),
             ),
@@ -394,8 +472,9 @@ class _MinePageContent extends StatelessWidget {
       ],
     );
   }
-  
-  Widget _collectionItem(String title, String content, Color end, Color start, Widget child) {
+
+  Widget _collectionItem(
+      String title, String content, Color end, Color start, Widget child) {
     return Container(
       width: 309,
       height: 121,
@@ -458,7 +537,7 @@ class _MinePageContent extends StatelessWidget {
         '装扮商城',
         '座驾头像框',
         'zhuangban',
-        const Size(344.0/3.5, 390.0/3.5),
+        const Size(344.0 / 3.5, 390.0 / 3.5),
       ),
     );
     final Widget wallet = GestureDetector(
@@ -469,7 +548,7 @@ class _MinePageContent extends StatelessWidget {
         '我的钱包',
         '充值、兑换',
         'qianbao',
-        const Size(362.0/3.5, 363.0/3.5),
+        const Size(362.0 / 3.5, 363.0 / 3.5),
       ),
     );
     final Widget liwu = GestureDetector(
@@ -480,7 +559,7 @@ class _MinePageContent extends StatelessWidget {
         '礼物记录',
         '收送礼物明细',
         'liwu',
-        const Size(378.0/3.5, 377.0/3.5),
+        const Size(378.0 / 3.5, 377.0 / 3.5),
       ),
     );
     return Padding(
@@ -496,7 +575,7 @@ class _MinePageContent extends StatelessWidget {
       ),
     );
   }
-  
+
   Widget _collection2Item(String title, String content, String img, Size size) {
     return Container(
       width: 215,
@@ -555,7 +634,7 @@ class _MinePageContent extends StatelessWidget {
       padding: const EdgeInsets.only(left: 37, right: 37, top: 32, bottom: 40),
       decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius:  BorderRadius.all(Radius.circular(26)),
+        borderRadius: BorderRadius.all(Radius.circular(26)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -581,57 +660,63 @@ class _MinePageContent extends StatelessWidget {
               children: [
                 if (c.userNumber.value.isNotEmpty)
                   c.identity.value == 'president'
-                      ? _moreItem('会长后台', 'huizhang', () { 
-                        Get.to(() => MyHuiZhangPage(type: c.identity.value));
-                      })
+                      ? _moreItem('会长后台', 'huizhang', () {
+                          Get.to(() => MyHuiZhangPage(type: c.identity.value));
+                        })
                       : _morePoint(
-                        c.isShenHe.value, 
-                        _moreItem('公会中心', 'gonghui', () {
-                          switch (sp.getString('shimingzhi').toString()) {
-                            case '2':
-                            case '3':
-                              MyUtils.goTransparentPageCom(context, const MineSMZPage());
-                              break;
-                            case '1': //身份 user普通用户，未加入公会 streamer主播 leader会长
-                              if (c.identity.value == 'user') {
-                                Get.to(() => GonghuiHomePage(kefuUid: c.kefuUid, kefuAvatar: c.kefuAvatar));
-                              } else {
-                                Get.to(() => MyGonghuiPage(type: c.identity.value));
-                              }
-                              break;
-                            case '0':
-                              MyToastUtils.showToastBottom('实名审核中，请耐心等待');
-                              break;
-                            default:
-                          }
-                        }),
-                      ),
+                          c.isShenHe.value,
+                          _moreItem('公会中心', 'gonghui', () {
+                            switch (sp.getString('shimingzhi').toString()) {
+                              case '2':
+                              case '3':
+                                MyUtils.goTransparentPageCom(
+                                    context, const MineSMZPage());
+                                break;
+                              case '1': //身份 user普通用户，未加入公会 streamer主播 leader会长
+                                if (c.identity.value == 'user') {
+                                  Get.to(() => GonghuiHomePage(
+                                      kefuUid: c.kefuUid,
+                                      kefuAvatar: c.kefuAvatar));
+                                } else {
+                                  Get.to(() =>
+                                      MyGonghuiPage(type: c.identity.value));
+                                }
+                                break;
+                              case '0':
+                                MyToastUtils.showToastBottom('实名审核中，请耐心等待');
+                                break;
+                              default:
+                            }
+                          }),
+                        ),
                 if (c.userNumber.value.isNotEmpty)
                   c.isAgent.value
-                    ? _moreItem('邀请有礼', 'quanmin', () { 
-                      Get.toNamed('DailiHomePage');
-                    })
-                    : _moreItem('邀请有礼', 'yaoqing', () { 
-                      Get.to(() => YQYLPage(kefuUid: c.kefuUid, kefUavatar: c.kefuAvatar));
-                    }),
-                // _moreItem('等级成就', 'dengji', () { 
+                      ? _moreItem('邀请有礼', 'quanmin', () {
+                          Get.toNamed('DailiHomePage');
+                        })
+                      : _moreItem('邀请有礼', 'yaoqing', () {
+                          Get.to(() => YQYLPage(
+                              kefuUid: c.kefuUid, kefUavatar: c.kefuAvatar));
+                        }),
+                // _moreItem('等级成就', 'dengji', () {
                 //   Get.toNamed('ChengJiuPage');
                 // }),
-                _moreItem('联系客服', 'kefu', () { 
+                _moreItem('联系客服', 'kefu', () {
                   Future.delayed(
-                        const Duration(seconds: 0),
-                        () {
-                          Navigator.of(context).push(
-                            PageRouteBuilder(
-                              opaque: false,
-                              pageBuilder:
-                                  (context, animation, secondaryAnimation) {
-                                return MyKeFuPage(kefuUid: c.kefuUid, kefuAvatar: c.kefuAvatar);
-                              },
-                            ),
-                          );
-                        },
+                    const Duration(seconds: 0),
+                    () {
+                      Navigator.of(context).push(
+                        PageRouteBuilder(
+                          opaque: false,
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) {
+                            return MyKeFuPage(
+                                kefuUid: c.kefuUid, kefuAvatar: c.kefuAvatar);
+                          },
+                        ),
                       );
+                    },
+                  );
                 }),
                 GestureDetector(
                   onTap: () => Get.to(const CeShi()),
@@ -663,6 +748,7 @@ class _MinePageContent extends StatelessWidget {
       ],
     );
   }
+
   Widget _moreItem(String title, String img, void Function() action) {
     return GestureDetector(
         onTap: () {
@@ -676,8 +762,8 @@ class _MinePageContent extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image(
-                width: 96*0.6,
-                height: 99*0.6,
+                width: 96 * 0.6,
+                height: 99 * 0.6,
                 image: AssetImage('assets/images/mine_icon_$img.png'),
               ),
               const SizedBox(height: 25),

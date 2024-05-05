@@ -377,6 +377,10 @@ class MyHttpConfig{
   static  String pushSound = "$baseURL/room/pushSound";
   // 我的贵族
   static  String myNoble = "$baseURL/noble/myNoble";
+  // 贵族榜单
+  static  String rankListGZ = "$baseURL/noble/rankList";
+  // 设置隐身
+  static  String setStealth = "$baseURL/mine/setStealth";
 
 
 }

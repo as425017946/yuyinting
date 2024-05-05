@@ -842,7 +842,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
                 type: BottomNavigationBarType.fixed,
                 items: [
                   _bottomNavigationBarItem(
-                      '找对象', 'assets/images/ic_bottom_menu1.png', 0),
+                      '交友', 'assets/images/ic_bottom_menu1.png', 0),
                   _bottomNavigationBarItem(
                       '首页', 'assets/images/ic_bottom_menu1.png', 1),
                   _bottomNavigationBarItem(

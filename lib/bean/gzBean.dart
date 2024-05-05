@@ -55,14 +55,18 @@ class My {
   int? nobleId;
   String? nobleExpireTime;
   String? nobleValue;
+  int? kefuUid;
+  String? kefuAvatar;
 
-  My({this.uid, this.nobleId, this.nobleExpireTime, this.nobleValue});
+  My({this.uid, this.nobleId, this.nobleExpireTime, this.nobleValue, this.kefuUid, this.kefuAvatar});
 
   My.fromJson(Map<String, dynamic> json) {
     uid = json['uid'];
     nobleId = json['noble_id'];
     nobleExpireTime = json['noble_expire_time'];
     nobleValue = json['noble_value'];
+    kefuUid = json['kefu_uid'];
+    kefuAvatar = json['kefu_avatar'];
   }
 
   Map<String, dynamic> toJson() {
@@ -71,6 +75,8 @@ class My {
     data['noble_id'] = this.nobleId;
     data['noble_expire_time'] = this.nobleExpireTime;
     data['noble_value'] = this.nobleValue;
+    data['kefu_uid'] = this.kefuUid;
+    data['kefu_avatar'] = this.kefuAvatar;
     return data;
   }
 }

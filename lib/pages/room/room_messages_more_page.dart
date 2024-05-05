@@ -98,6 +98,7 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage>
   // 如果按下和抬起的时间接口还未反应，则直接取消发送音频
   bool isSendYY = true;
 
+
   @override
   void initState() {
     // TODO: implement initState
@@ -528,16 +529,24 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage>
                           //边框设置
                           decoration: BoxDecoration(
                             //背景
-                            color: allData2[i]['type'] == 2
+                            color: (allData2[i]['type'] == 1 &&
+                                        allData2[i]['content']
+                                            .toString()
+                                            .contains('.jpg')) ||
+                                    allData2[i]['type'] == 2
                                 ? Colors.transparent
-                                : playColor(playRecord, i),//Colors.white,
+                                : playColor(playRecord, i), //Colors.white,
                             //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                             borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(0),
                                 topRight: Radius.circular(20.0),
                                 bottomLeft: Radius.circular(20.0),
                                 bottomRight: Radius.circular(20.0)),
-                            boxShadow: allData2[i]['type'] == 2
+                            boxShadow: (allData2[i]['type'] == 1 &&
+                                        allData2[i]['content']
+                                            .toString()
+                                            .contains('.jpg')) ||
+                                    allData2[i]['type'] == 2
                                 ? []
                                 : [
                                     BoxShadow(
@@ -549,7 +558,10 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage>
                                     ),
                                   ],
                           ),
-                          child: allData2[i]['type'] == 1
+                          child: (allData2[i]['type'] == 1 &&
+                                  !allData2[i]['content']
+                                      .toString()
+                                      .contains('.jpg'))
                               ? Text(
                                   allData2[i]['content'],
                                   style: TextStyle(
@@ -557,74 +569,87 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage>
                                     color: Colors.black,
                                   ),
                                 )
-                              : allData2[i]['type'] == 2
-                                  ? GestureDetector(
-                                      onTap: (() {
-                                        setState(() {
-                                          imgList.clear();
-                                          imgList.add(allData2[i]['content']);
-                                        });
-                                        MyUtils.goTransparentPageCom(context,
-                                            SwiperPage(imgList: imgList));
-                                      }),
-                                      child: (allData2[i]['content']
-                                                  .toString()
-                                                  .contains(
-                                                      'com.littledog.yyt') ||
-                                              allData2[i]['content']
-                                                  .toString()
-                                                  .contains('storage'))
-                                          ? Image(
-                                              image: FileImage(
-                                                  File(allData2[i]['content'])),
-                                              width: 160.h,
-                                              height: 200.h,
-                                              errorBuilder:
-                                                  (BuildContext context,
+                              : (allData2[i]['type'] == 1 &&
+                                      allData2[i]['content']
+                                          .toString()
+                                          .contains('.jpg'))
+                                  ? WidgetUtils.showImages(
+                                      allData2[i]['content'], 150.h, 150.h)
+                                  : allData2[i]['type'] == 2
+                                      ? GestureDetector(
+                                          onTap: (() {
+                                            setState(() {
+                                              imgList.clear();
+                                              imgList
+                                                  .add(allData2[i]['content']);
+                                            });
+                                            MyUtils.goTransparentPageCom(
+                                                context,
+                                                SwiperPage(imgList: imgList));
+                                          }),
+                                          child: (allData2[i]['content']
+                                                      .toString()
+                                                      .contains(
+                                                          'com.littledog.yyt') ||
+                                                  allData2[i]['content']
+                                                      .toString()
+                                                      .contains('storage'))
+                                              ? Image(
+                                                  image: FileImage(File(
+                                                      allData2[i]['content'])),
+                                                  width: 160.h,
+                                                  height: 200.h,
+                                                  errorBuilder: (BuildContext
+                                                          context,
                                                       Object error,
                                                       StackTrace? stackTrace) {
-                                                return WidgetUtils.showImages(
-                                                    'assets/images/img_placeholder.png',
-                                                    200.h,
-                                                    160.h);
-                                              },
-                                            )
-                                          : WidgetUtils.showImagesNet(
-                                              allData2[i]['content'].toString(),
-                                              200.h,
-                                              160.h),
-                                    )
-                                  : GestureDetector(
-                                      onTap: (() {
-                                        LogD('************');
-                                        if (playRecord) {
-                                          stopPlayer();
-                                        } else {
-                                          setState(() {
-                                            onPlay(i);
-                                          });
-                                          play(allData2[i]['content']);
-                                          MyUtils.didMsgRead(allData2[i],
-                                              index: 3);
-                                        }
-                                      }),
-                                      child: Container(
-                                        color: Colors.transparent,
-                                        width: widthAudio,
-                                        child: Row(
-                                          children: [
-                                            WidgetUtils.showImages(
-                                                'assets/images/chat_huatong.png',
-                                                20.h,
-                                                20.h),
-                                            WidgetUtils.onlyText(
-                                                allData2[i]['number'].toString()== '0' ? "1''" : "${allData2[i]['number']}''",
-                                                StyleUtils.textStyleb1),
-                                            const Spacer(),
-                                          ],
+                                                    return WidgetUtils.showImages(
+                                                        'assets/images/img_placeholder.png',
+                                                        200.h,
+                                                        160.h);
+                                                  },
+                                                )
+                                              : WidgetUtils.showImagesNet(
+                                                  allData2[i]['content']
+                                                      .toString(),
+                                                  200.h,
+                                                  160.h),
+                                        )
+                                      : GestureDetector(
+                                          onTap: (() {
+                                            LogD('************');
+                                            if (playRecord) {
+                                              stopPlayer();
+                                            } else {
+                                              setState(() {
+                                                onPlay(i);
+                                              });
+                                              play(allData2[i]['content']);
+                                              MyUtils.didMsgRead(allData2[i],
+                                                  index: 3);
+                                            }
+                                          }),
+                                          child: Container(
+                                            color: Colors.transparent,
+                                            width: widthAudio,
+                                            child: Row(
+                                              children: [
+                                                WidgetUtils.showImages(
+                                                    'assets/images/chat_huatong.png',
+                                                    20.h,
+                                                    20.h),
+                                                WidgetUtils.onlyText(
+                                                    allData2[i]['number']
+                                                                .toString() ==
+                                                            '0'
+                                                        ? "1''"
+                                                        : "${allData2[i]['number']}''",
+                                                    StyleUtils.textStyleb1),
+                                                const Spacer(),
+                                              ],
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ),
                         ),
                       ),
                     ),
@@ -674,16 +699,24 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage>
                           //边框设置
                           decoration: BoxDecoration(
                             //背景
-                            color: allData2[i]['type'] == 2
+                            color: (allData2[i]['type'] == 1 &&
+                                        allData2[i]['content']
+                                            .toString()
+                                            .contains('.jpg')) ||
+                                    allData2[i]['type'] == 2
                                 ? Colors.transparent
-                                : playColor(playRecord, i),//Colors.white,
+                                : playColor(playRecord, i), //Colors.white,
                             //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
                             borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(20.0),
                                 topRight: Radius.circular(0),
                                 bottomLeft: Radius.circular(20.0),
                                 bottomRight: Radius.circular(20.0)),
-                            boxShadow: allData2[i]['type'] == 2
+                            boxShadow: (allData2[i]['type'] == 1 &&
+                                        allData2[i]['content']
+                                            .toString()
+                                            .contains('.jpg')) ||
+                                    allData2[i]['type'] == 2
                                 ? []
                                 : [
                                     BoxShadow(
@@ -695,7 +728,10 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage>
                                     ),
                                   ],
                           ),
-                          child: allData2[i]['type'] == 1
+                          child: (allData2[i]['type'] == 1 &&
+                                  !allData2[i]['content']
+                                      .toString()
+                                      .contains('.jpg'))
                               ? Text(
                                   allData2[i]['content'],
                                   style: TextStyle(
@@ -703,66 +739,78 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage>
                                     color: Colors.black,
                                   ),
                                 )
-                              : allData2[i]['type'] == 2
-                                  ? GestureDetector(
-                                      onTap: (() {
-                                        setState(() {
-                                          imgList.clear();
-                                          imgList.add(allData2[i]['content']);
-                                        });
-                                        MyUtils.goTransparentPageCom(context,
-                                            SwiperPage(imgList: imgList));
-                                      }),
-                                      onLongPress:
-                                          onImgLongPress(context, allData2[i]),
-                                      child: Image(
-                                        image: FileImage(
-                                            File(allData2[i]['content'])),
-                                        width: 160.h,
-                                        height: 200.h,
-                                        errorBuilder: (BuildContext context,
-                                            Object error,
-                                            StackTrace? stackTrace) {
-                                          return WidgetUtils.showImages(
-                                              'assets/images/img_placeholder.png',
-                                              200.h,
-                                              160.h);
-                                        },
-                                      ),
-                                    )
-                                  : allData2[i]['type'] == 3
+                              : (allData2[i]['type'] == 1 &&
+                                      allData2[i]['content']
+                                          .toString()
+                                          .contains('.jpg'))
+                                  ? WidgetUtils.showImages(
+                                      allData2[i]['content'], 150.h, 150.h)
+                                  : allData2[i]['type'] == 2
                                       ? GestureDetector(
                                           onTap: (() {
-                                            LogD('************');
-                                            if (playRecord) {
-                                              stopPlayer();
-                                            } else {
-                                              setState(() {
-                                                onPlay(i);
-                                              });
-                                              play(allData2[i]['content']);
-                                            }
+                                            setState(() {
+                                              imgList.clear();
+                                              imgList
+                                                  .add(allData2[i]['content']);
+                                            });
+                                            MyUtils.goTransparentPageCom(
+                                                context,
+                                                SwiperPage(imgList: imgList));
                                           }),
                                           onLongPress: onImgLongPress(
                                               context, allData2[i]),
-                                          child: Container(
-                                            color: Colors.transparent,
-                                            width: widthAudio,
-                                            child: Row(
-                                              children: [
-                                                const Spacer(),
-                                                WidgetUtils.onlyText(
-                                                    allData2[i]['number'].toString() == '0' ? "1''" : "${allData2[i]['number']}''",
-                                                    StyleUtils.textStyleb1),
-                                                WidgetUtils.showImages(
-                                                    'assets/images/chat_huatong.png',
-                                                    20.h,
-                                                    20.h),
-                                              ],
-                                            ),
+                                          child: Image(
+                                            image: FileImage(
+                                                File(allData2[i]['content'])),
+                                            width: 160.h,
+                                            height: 200.h,
+                                            errorBuilder: (BuildContext context,
+                                                Object error,
+                                                StackTrace? stackTrace) {
+                                              return WidgetUtils.showImages(
+                                                  'assets/images/img_placeholder.png',
+                                                  200.h,
+                                                  160.h);
+                                            },
                                           ),
                                         )
-                                      : const Text(''),
+                                      : allData2[i]['type'] == 3
+                                          ? GestureDetector(
+                                              onTap: (() {
+                                                LogD('************');
+                                                if (playRecord) {
+                                                  stopPlayer();
+                                                } else {
+                                                  setState(() {
+                                                    onPlay(i);
+                                                  });
+                                                  play(allData2[i]['content']);
+                                                }
+                                              }),
+                                              onLongPress: onImgLongPress(
+                                                  context, allData2[i]),
+                                              child: Container(
+                                                color: Colors.transparent,
+                                                width: widthAudio,
+                                                child: Row(
+                                                  children: [
+                                                    const Spacer(),
+                                                    WidgetUtils.onlyText(
+                                                        allData2[i]['number']
+                                                                    .toString() ==
+                                                                '0'
+                                                            ? "1''"
+                                                            : "${allData2[i]['number']}''",
+                                                        StyleUtils.textStyleb1),
+                                                    WidgetUtils.showImages(
+                                                        'assets/images/chat_huatong.png',
+                                                        20.h,
+                                                        20.h),
+                                                  ],
+                                                ),
+                                              ),
+                                            )
+                                          : const Text(''),
                         ),
                       ),
                     ),
@@ -935,9 +983,11 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage>
                                           alignment: Alignment.center,
                                           child: Text(
                                             isGZ == '0' ? '关注' : '已关注',
-                                            style: StyleUtils.getCommonTextStyle(
-                                                color: Colors.white,
-                                                fontSize: ScreenUtil().setSp(21)),
+                                            style:
+                                                StyleUtils.getCommonTextStyle(
+                                                    color: Colors.white,
+                                                    fontSize:
+                                                        ScreenUtil().setSp(21)),
                                           ),
                                         )
                                       ],
@@ -950,17 +1000,17 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage>
                           ),
                           length != 0
                               ? Expanded(
-                            child: Container(
-                              height: double.infinity,
-                              color: MyColors.roomMessageBlackBG,
-                              margin: EdgeInsets.only(bottom: 140.h),
-                              child: ListView.builder(
-                                itemBuilder: chatWidget,
-                                controller: _scrollController,
-                                itemCount: allData2.length,
-                              ),
-                            ),
-                          )
+                                  child: Container(
+                                    height: double.infinity,
+                                    color: MyColors.roomMessageBlackBG,
+                                    margin: EdgeInsets.only(bottom: 140.h),
+                                    child: ListView.builder(
+                                      itemBuilder: chatWidget,
+                                      controller: _scrollController,
+                                      itemCount: allData2.length,
+                                    ),
+                                  ),
+                                )
                               : const Text('')
                         ],
                       ),
@@ -989,181 +1039,197 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage>
                               }),
                               child: isAudio
                                   ? WidgetUtils.showImages(
-                                  'assets/images/chat_jianpan_white.png',
-                                  ScreenUtil().setHeight(45),
-                                  ScreenUtil().setHeight(45))
+                                      'assets/images/chat_jianpan_white.png',
+                                      ScreenUtil().setHeight(45),
+                                      ScreenUtil().setHeight(45))
                                   : WidgetUtils.showImages(
-                                  'assets/images/chat_huatong_white.png',
-                                  ScreenUtil().setHeight(45),
-                                  ScreenUtil().setHeight(45)),
+                                      'assets/images/chat_huatong_white.png',
+                                      ScreenUtil().setHeight(45),
+                                      ScreenUtil().setHeight(45)),
                             ),
                             isAudio
                                 ? Expanded(
-                              child: GestureDetector(
-                                onVerticalDragStart: (details) async {
-                                  LogE('点击了==');
-                                  //判断发送音频
-                                  if (MyUtils.checkClick()) {
-                                    setState(() {
-                                      downTime = DateTime.now()
-                                          .millisecondsSinceEpoch;
-                                      isSendYY = false;
-                                    });
-                                    doPostCanSendUser(3, '');
-                                  }
-                                },
-                                onVerticalDragUpdate: (details) async {
-                                  LogE('上滑== ${details.delta.dy}');
-                                  if (isLuZhi) {
-                                    if (isDevices != 'ios' && isMAI) {
-                                      if (details.delta.dy < -1) {
-                                        // 停止录音
-                                        _stopRecorder();
-                                        setState(() {
-                                          isCancel = true;
-                                        });
-                                      }
-                                    } else {
-                                      ///ios
-                                      if (details.delta.dy < -1) {
-                                        // 停止录音
-                                        _stopRecorder();
-                                        setState(() {
-                                          isCancel = true;
-                                        });
-                                      }
-                                    }
-                                  }
-                                },
-                                onVerticalDragEnd: (details) async {
-                                  LogE(
-                                      '时间差 == ${(DateTime.now().millisecondsSinceEpoch - downTime)}');
-                                  if ((DateTime.now()
-                                      .millisecondsSinceEpoch -
-                                      downTime) >=
-                                      1000) {
-                                    // 停止录音
-                                    _stopRecorder();
-                                    if (isLuZhi) {
-                                      if (isDevices != 'ios' && isMAI) {
-                                        // 取消录音后抬起手指
-                                        if (isCancel) {
-                                          LogE('发送录音 1');
+                                    child: GestureDetector(
+                                      onVerticalDragStart: (details) async {
+                                        LogE('点击了==');
+                                        //判断发送音频
+                                        if (MyUtils.checkClick()) {
+                                          setState(() {
+                                            downTime = DateTime.now()
+                                                .millisecondsSinceEpoch;
+                                            isSendYY = false;
+                                          });
+                                          doPostCanSendUser(3, '');
+                                        }
+                                      },
+                                      onVerticalDragUpdate: (details) async {
+                                        LogE('上滑== ${details.delta.dy}');
+                                        if (isLuZhi) {
+                                          if (isDevices != 'ios' && isMAI) {
+                                            if (details.delta.dy < -1) {
+                                              // 停止录音
+                                              _stopRecorder();
+                                              setState(() {
+                                                isCancel = true;
+                                              });
+                                            }
+                                          } else {
+                                            ///ios
+                                            if (details.delta.dy < -1) {
+                                              // 停止录音
+                                              _stopRecorder();
+                                              setState(() {
+                                                isCancel = true;
+                                              });
+                                            }
+                                          }
+                                        }
+                                      },
+                                      onVerticalDragEnd: (details) async {
+                                        LogE(
+                                            '时间差 == ${(DateTime.now().millisecondsSinceEpoch - downTime)}');
+                                        if ((DateTime.now()
+                                                    .millisecondsSinceEpoch -
+                                                downTime) >=
+                                            1000) {
+                                          // 停止录音
+                                          _stopRecorder();
+                                          if (isLuZhi) {
+                                            if (isDevices != 'ios' && isMAI) {
+                                              // 取消录音后抬起手指
+                                              if (isCancel) {
+                                                LogE('发送录音 1');
+                                                //重新初始化音频信息
+                                                setState(() {
+                                                  isCancel = false;
+                                                  mediaRecord = true;
+                                                  playRecord = false; //音频文件播放状态
+                                                  hasRecord =
+                                                      false; //是否有音频文件可播放
+                                                  isLuZhi = false;
+                                                  isPlay =
+                                                      0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
+                                                  _maxLength = 60; // 录音时长
+                                                  audioNum = 0; // 记录录了多久
+                                                });
+                                              } else {
+                                                LogE('发送录音 2');
+                                                //发送录音
+                                                doSendAudio();
+                                              }
+                                            } else {
+                                              /// ios
+                                              // 取消录音后抬起手指
+                                              if (isCancel) {
+                                                LogE('发送录音 1');
+                                                //重新初始化音频信息
+                                                setState(() {
+                                                  isCancel = false;
+                                                  mediaRecord = true;
+                                                  playRecord = false; //音频文件播放状态
+                                                  hasRecord =
+                                                      false; //是否有音频文件可播放
+                                                  isLuZhi = false;
+                                                  isPlay =
+                                                      0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
+                                                  _maxLength = 60; // 录音时长
+                                                  audioNum = 0; // 记录录了多久
+                                                });
+                                              } else {
+                                                LogE('发送录音 2');
+                                                //发送录音
+                                                doSendAudio();
+                                              }
+                                            }
+                                          }
+                                        } else {
+                                          setState(() {
+                                            isSendYY = true;
+                                          });
+                                          // 停止录音
+                                          _stopRecorder();
+                                          MyToastUtils.showToastBottom(
+                                              '录音时长过短！');
                                           //重新初始化音频信息
                                           setState(() {
-                                            isCancel = false;
                                             mediaRecord = true;
                                             playRecord = false; //音频文件播放状态
                                             hasRecord = false; //是否有音频文件可播放
                                             isLuZhi = false;
                                             isPlay =
-                                            0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
+                                                0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
                                             _maxLength = 60; // 录音时长
                                             audioNum = 0; // 记录录了多久
                                           });
-                                        } else {
-                                          LogE('发送录音 2');
-                                          //发送录音
-                                          doSendAudio();
                                         }
-                                      } else {
-                                        /// ios
-                                        // 取消录音后抬起手指
-                                        if (isCancel) {
-                                          LogE('发送录音 1');
-                                          //重新初始化音频信息
-                                          setState(() {
-                                            isCancel = false;
-                                            mediaRecord = true;
-                                            playRecord = false; //音频文件播放状态
-                                            hasRecord = false; //是否有音频文件可播放
-                                            isLuZhi = false;
-                                            isPlay =
-                                            0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
-                                            _maxLength = 60; // 录音时长
-                                            audioNum = 0; // 记录录了多久
-                                          });
-                                        } else {
-                                          LogE('发送录音 2');
-                                          //发送录音
-                                          doSendAudio();
-                                        }
-                                      }
-                                    }
-                                  } else {
-                                    setState(() {
-                                      isSendYY = true;
-                                    });
-                                    // 停止录音
-                                    _stopRecorder();
-                                    MyToastUtils.showToastBottom('录音时长过短！');
-                                    //重新初始化音频信息
-                                    setState(() {
-                                      mediaRecord = true;
-                                      playRecord = false; //音频文件播放状态
-                                      hasRecord = false; //是否有音频文件可播放
-                                      isLuZhi = false;
-                                      isPlay =
-                                      0; //0录制按钮未点击，1点了录制了，2录制结束或者点击暂停
-                                      _maxLength = 60; // 录音时长
-                                      audioNum = 0; // 记录录了多久
-                                    });
-                                  }
-                                },
-                                child: Container(
-                                  width: double.infinity,
-                                  height: ScreenUtil().setHeight(80),
-                                  margin: EdgeInsets.only(
-                                      left: 20.h, right: 20.h),
-                                  padding: EdgeInsets.only(
-                                      left: 20.h, right: 20.h),
-                                  alignment: Alignment.center,
-                                  //边框设置
-                                  decoration: const BoxDecoration(
-                                    //背景
-                                    color: MyColors.f2,
-                                    //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(30.0)),
-                                  ),
-                                  child: WidgetUtils.onlyTextCenter(
-                                      '按住 说话',
-                                      StyleUtils.getCommonTextStyle(
-                                          color: MyColors.g6,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 25.sp)),
-                                ),
-                              ),
-                            )
+                                      },
+                                      child: Container(
+                                        width: double.infinity,
+                                        height: ScreenUtil().setHeight(80),
+                                        margin: EdgeInsets.only(
+                                            left: 20.h, right: 20.h),
+                                        padding: EdgeInsets.only(
+                                            left: 20.h, right: 20.h),
+                                        alignment: Alignment.center,
+                                        //边框设置
+                                        decoration: const BoxDecoration(
+                                          //背景
+                                          color: MyColors.f2,
+                                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(30.0)),
+                                        ),
+                                        child: WidgetUtils.onlyTextCenter(
+                                            '按住 说话',
+                                            StyleUtils.getCommonTextStyle(
+                                                color: MyColors.g6,
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 25.sp)),
+                                      ),
+                                    ),
+                                  )
                                 : Expanded(
-                                child: GestureDetector(
-                                  onTap: (() {
-                                    if (MyUtils.checkClick()) {
-                                      MyUtils.goTransparentPage(
-                                          context, const RoomSendInfoSLPage());
-                                    }
-                                  }),
-                                  child: Container(
-                                    height: 78.h,
-                                    width: double.infinity,
-                                    margin: EdgeInsets.only(
-                                        left: 20.h, right: 20.h),
-                                    padding: EdgeInsets.only(
-                                        left: 20.h, right: 20.h),
-                                    decoration: const BoxDecoration(
-                                      //背景
-                                      color: MyColors.roomXZ2,
-                                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                      borderRadius:
-                                      BorderRadius.all(Radius.circular(38)),
+                                    child: GestureDetector(
+                                    onTap: (() {
+                                      if (MyUtils.checkClick()) {
+                                        MyUtils.goTransparentPage(context,
+                                            RoomSendInfoSLPage(type: 0,));
+                                      }
+                                    }),
+                                    child: Container(
+                                      height: 78.h,
+                                      width: double.infinity,
+                                      margin: EdgeInsets.only(
+                                          left: 20.h, right: 20.h),
+                                      padding: EdgeInsets.only(
+                                          left: 20.h, right: 20.h),
+                                      decoration: const BoxDecoration(
+                                        //背景
+                                        color: MyColors.roomXZ2,
+                                        //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(38)),
+                                      ),
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        '请输入信息...',
+                                        style: StyleUtils.loginHintTextStyle,
+                                      ),
                                     ),
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      '请输入信息...',
-                                      style: StyleUtils.loginHintTextStyle,
-                                    ),
-                                  ),
-                                )),
+                                  )),
+                            GestureDetector(
+                              onTap: (() {
+                                if (MyUtils.checkClick()) {
+                                  MyUtils.goTransparentPage(context,
+                                      RoomSendInfoSLPage(type: 1,));
+                                }
+                              }),
+                              child: WidgetUtils.showImages(
+                                  'assets/images/trends_white_biaoqing.png',
+                                  ScreenUtil().setHeight(45),
+                                  ScreenUtil().setHeight(45)),
+                            ),
+                            WidgetUtils.commonSizedBox(0, 10.h),
                             GestureDetector(
                               onTap: (() {
                                 //判断图片发送
@@ -1177,68 +1243,70 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage>
                                   ScreenUtil().setHeight(45)),
                             ),
                             WidgetUtils.commonSizedBox(0, 10.h),
-                            isHB ? GestureDetector(
-                              onTap: (() {
-                                if (MyUtils.checkClick()) {
-                                  doPostCanSendUser(4, '');
-                                }
-                              }),
-                              child: WidgetUtils.showImages(
-                                  'assets/images/chat_hongbao.png',
-                                  ScreenUtil().setHeight(45),
-                                  ScreenUtil().setHeight(45)),
-                            ) : const Text(''),
+                            isHB
+                                ? GestureDetector(
+                                    onTap: (() {
+                                      if (MyUtils.checkClick()) {
+                                        doPostCanSendUser(4, '');
+                                      }
+                                    }),
+                                    child: WidgetUtils.showImages(
+                                        'assets/images/chat_hongbao.png',
+                                        ScreenUtil().setHeight(45),
+                                        ScreenUtil().setHeight(45)),
+                                  )
+                                : const Text(''),
                             WidgetUtils.commonSizedBox(0, 20.h),
                           ],
                         ),
                       )
                     ],
                   ),
-                )
+                ),
               ],
             ),
             isLuZhi
                 ? Center(
-              child: Container(
-                width: 300.h,
-                height: 200.h,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: Colors.black54),
-                child: isCancel == false
-                    ? Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    const SVGASimpleImage(
-                      assetsName: 'assets/svga/audio_luzhi.svga',
+                    child: Container(
+                      width: 300.h,
+                      height: 200.h,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Colors.black54),
+                      child: isCancel == false
+                          ? Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                const SVGASimpleImage(
+                                  assetsName: 'assets/svga/audio_luzhi.svga',
+                                ),
+                                Positioned(
+                                    bottom: 0,
+                                    child: WidgetUtils.onlyTextCenter(
+                                        '手指上滑，取消发送',
+                                        StyleUtils.getCommonTextStyle(
+                                            color: MyColors.g9,
+                                            fontSize: 25.sp)))
+                              ],
+                            )
+                          : Row(
+                              children: [
+                                const Spacer(),
+                                WidgetUtils.showImages(
+                                    'assets/images/chat_back.png', 50.h, 50.h),
+                                WidgetUtils.commonSizedBox(0, 10.w),
+                                WidgetUtils.onlyText(
+                                    '松开手指，取消发送',
+                                    StyleUtils.getCommonTextStyle(
+                                        color: Colors.red,
+                                        fontSize: 28.sp,
+                                        fontWeight: FontWeight.w600)),
+                                const Spacer(),
+                              ],
+                            ),
                     ),
-                    Positioned(
-                        bottom: 0,
-                        child: WidgetUtils.onlyTextCenter(
-                            '手指上滑，取消发送',
-                            StyleUtils.getCommonTextStyle(
-                                color: MyColors.g9,
-                                fontSize: 25.sp)))
-                  ],
-                )
-                    : Row(
-                  children: [
-                    const Spacer(),
-                    WidgetUtils.showImages(
-                        'assets/images/chat_back.png', 50.h, 50.h),
-                    WidgetUtils.commonSizedBox(0, 10.w),
-                    WidgetUtils.onlyText(
-                        '松开手指，取消发送',
-                        StyleUtils.getCommonTextStyle(
-                            color: Colors.red,
-                            fontSize: 28.sp,
-                            fontWeight: FontWeight.w600)),
-                    const Spacer(),
-                  ],
-                ),
-              ),
-            )
+                  )
                 : const Text('')
           ],
         ),
@@ -1681,8 +1749,8 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage>
     });
   }
 
-
   bool isHB = false;
+
   /// 是否有发红包权限
   Future<void> doPostCanSendRedPacket() async {
     try {
@@ -1694,11 +1762,11 @@ class _RoomMessagesMorePageState extends State<RoomMessagesMorePage>
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
-        // MyToastUtils.showToastBottom(bean.msg!);
+          // MyToastUtils.showToastBottom(bean.msg!);
           break;
       }
     } catch (e) {

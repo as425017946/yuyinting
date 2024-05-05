@@ -3,9 +3,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:marquee/marquee.dart';
 
+import '../../../bean/rankListGZBean.dart';
+import '../../../http/data_utils.dart';
+import '../../../http/my_http_config.dart';
 import '../../../utils/getx_tools.dart';
 import '../../../utils/loading.dart';
+import '../../../utils/log_util.dart';
+import '../../../utils/my_toast_utils.dart';
+import '../../../utils/my_utils.dart';
+import '../../../utils/widget_utils.dart';
 
+/// 封神榜
 class TequanListofgodsPage extends StatefulWidget {
   const TequanListofgodsPage({Key? key}) : super(key: key);
 
@@ -14,7 +22,15 @@ class TequanListofgodsPage extends StatefulWidget {
 }
 
 class _TequanListofgodsPageState extends State<TequanListofgodsPage> {
-  final List<String> list = List.filled(8, '懒洋洋爱睡觉');
+  // final List<String> list = List.filled(8, '懒洋洋爱睡觉');
+  List<Rank> list = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    doPostRankListGZ();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,12 +144,53 @@ class _TequanListofgodsPageState extends State<TequanListofgodsPage> {
             child: Row(
               children: [
                 SizedBox(width: 30.w),
-                UserFrameHead(size: 80.w, avatar: 'https://oawawb.cn/image/202404/03/660d1a3cc7678.png'),
+                UserFrameHead(size: 80.w, avatar: item.avatar!),
                 SizedBox(width: 20.w),
-                Image.asset('assets/images/tequan_chuanshuo.png', width: 30.w, height: 30.w,),
+                item.nobleID.toString() == "1"
+                    ? WidgetUtils.showImages(
+                        'assets/images/tequan_icon_xuanxian.png', 38.h, 38.h)
+                    : item.nobleID.toString() == "2"
+                        ? WidgetUtils.showImages(
+                            'assets/images/tequan_icon_shangxian.png',
+                            38.h,
+                            38.h)
+                        : item.nobleID.toString() == "3"
+                            ? WidgetUtils.showImages(
+                                'assets/images/tequan_icon_jinxian.png',
+                                38.h,
+                                38.h)
+                            : item.nobleID.toString() == "4"
+                                ? WidgetUtils.showImages(
+                                    'assets/images/tequan_icon_xiandi.png',
+                                    38.h,
+                                    38.h)
+                                : item.nobleID.toString() == "5"
+                                    ? WidgetUtils.showImages(
+                                        'assets/images/tequan_icon_zhushen.png',
+                                        38.h,
+                                        38.h)
+                                    : item.nobleID.toString() == "6"
+                                        ? WidgetUtils.showImages(
+                                            'assets/images/tequan_icon_tianshen.png',
+                                            38.h,
+                                            38.h)
+                                        : item.nobleID.toString() == "7"
+                                            ? WidgetUtils.showImages(
+                                                'assets/images/tequan_icon_shenwang.png',
+                                                38.h,
+                                                38.h)
+                                            : item.nobleID.toString() == "8"
+                                                ? WidgetUtils.showImages(
+                                                    'assets/images/tequan_icon_shenhuang.png',
+                                                    38.h,
+                                                    38.h)
+                                                : item.nobleID.toString() == "9"
+                                                    ? WidgetUtils.showImages(
+                                                        'assets/images/tequan_icon_tianzun.png', 38.h, 38.h)
+                                                    : WidgetUtils.showImages('assets/images/tequan_icon_chuanshuo.png', 38.h, 38.h),
                 SizedBox(width: 20.w),
                 Text(
-                  item,
+                  item.nickname!,
                   style: TextStyle(
                     color: const Color(0xFFEAD1BA),
                     fontSize: 22.sp,
@@ -150,5 +207,33 @@ class _TequanListofgodsPageState extends State<TequanListofgodsPage> {
         ],
       ),
     );
+  }
+
+  /// 我的贵族
+  Future<void> doPostRankListGZ() async {
+    Loading.show();
+    try {
+      rankListGZBean bean = await DataUtils.postRankListGZ();
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          setState(() {
+            list.clear();
+            list.addAll(bean.data!.rank!);
+            LogE('長度-==-  ${list.length}');
+          });
+          break;
+        case MyHttpConfig.errorloginCode:
+          // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+      Loading.dismiss();
+    } catch (e) {
+      Loading.dismiss();
+      // MyToastUtils.showToastBottom(MyConfig.errorTitle);
+    }
   }
 }

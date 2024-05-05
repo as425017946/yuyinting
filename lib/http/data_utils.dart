@@ -70,6 +70,7 @@ import '../bean/quhao_bean.dart';
 import '../bean/quhao_searche_bean.dart';
 import '../bean/qyListBean.dart';
 import '../bean/rankListBean.dart';
+import '../bean/rankListGZBean.dart';
 import '../bean/recommendRoomBean.dart';
 import '../bean/roomBGBean.dart';
 import '../bean/roomInfoBean.dart';
@@ -1747,5 +1748,22 @@ class DataUtils {
     await MyHttpRequest.post(MyHttpConfig.myNoble, {}, {});
     print("我的贵族 $respons");
     return gzBean.fromJson(respons!);
+  }
+
+  /// 贵族榜单
+  static Future<rankListGZBean> postRankListGZ() async {
+    Map<String, dynamic>? respons =
+    await MyHttpRequest.post(MyHttpConfig.rankListGZ, {}, {});
+    print("贵族榜单 $respons");
+    return rankListGZBean.fromJson(respons!);
+  }
+
+  /// 设置隐身
+  static Future<CommonBean> postSetStealth(Map<String, dynamic> params) async {
+    print("设置隐身：$params");
+    Map<String, dynamic>? respons =
+    await MyHttpRequest.post(MyHttpConfig.setStealth, {}, params);
+    print("设置隐身：$respons");
+    return CommonBean.fromJson(respons!);
   }
 }

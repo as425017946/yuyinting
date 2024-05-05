@@ -249,6 +249,7 @@ class UserInfo {
   int? isPretty;
   int? isNew;
   int? newNoble;
+  int? isStealth;
 
   String? avatar;
   // ignore: non_constant_identifier_names
@@ -267,7 +268,8 @@ class UserInfo {
         this.grLevel,
         this.isPretty,
         this.isNew,
-        this.newNoble});
+        this.newNoble,
+        this.isStealth});
 
   UserInfo.fromJson(Map<String, dynamic> json) {
     role = json['role'];
@@ -284,6 +286,7 @@ class UserInfo {
     gender = json['gender'] ?? 0;
     enter_dress_gif_img = json['enter_dress_gif_img'] ?? '';
     enter_dress_name = json['enter_dress_name'] ?? '';
+    isStealth = json['is_stealth'];
   }
 
   Map<String, dynamic> toJson() {
@@ -302,6 +305,7 @@ class UserInfo {
     data['gender'] = this.gender;
     data['enter_dress_gif_img'] = this.enter_dress_gif_img;
     data['enter_dress_name'] = this.enter_dress_name;
+    data['is_stealth'] = this.isStealth;
     return data;
   }// 进厅横幅名称
 }

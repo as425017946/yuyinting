@@ -2617,7 +2617,7 @@ class _RoomPageState extends State<RoomPage>
               LogE(
                   '正常进入房间===  ${event.map!['uid'].toString() != sp.getString('user_id').toString()}');
               if (event.map!['uid'].toString() !=
-                  sp.getString('user_id').toString()) {
+                  sp.getString('user_id').toString() && int.parse(event.map!['is_stealth'].toString()) == 0) {
 
                 //展示新增svga
                 Map<dynamic, dynamic> mapNew = {};
@@ -3728,6 +3728,9 @@ class _RoomPageState extends State<RoomPage>
     animationControllerJR.dispose();
     if(_subscription != null){
       _subscription!.cancel();
+    }
+    if(_timerhf != null){
+      _timerhf!.cancel();
     }
     _cancelTimer();
     // TODO: implement dispose
@@ -4974,7 +4977,7 @@ class _RoomPageState extends State<RoomPage>
               }
             }
             // 判断有没有贵族特权装扮
-            if (bean.data!.userInfo!.carDressGifImg!.isNotEmpty) {
+            if (bean.data!.userInfo!.carDressGifImg!.isNotEmpty && bean.data!.userInfo!.isStealth == 0) {
               isGuZu = true;
               tequanzhuangban = bean.data!.userInfo!.carDressGifImg!;
             } else {
@@ -4982,7 +4985,7 @@ class _RoomPageState extends State<RoomPage>
               tequanzhuangban = '';
             }
 
-            if(sp.getString('sqRoomID').toString() != widget.roomId || sp.getString('sqRoomID').toString().isEmpty){
+            if((sp.getString('sqRoomID').toString() != widget.roomId || sp.getString('sqRoomID').toString().isEmpty) && bean.data!.userInfo!.isStealth == 0){
               sp.setString('sqRoomID', '');
               //展示新增svga
               Map<dynamic, dynamic> mapNew = {};

@@ -35,6 +35,7 @@ class DataL {
   String? imgRendering;
   int? number;
   int? isReduce;
+  int? nobleID;
 
   DataL(
       {this.id,
@@ -43,7 +44,8 @@ class DataL {
         this.img,
         this.imgRendering,
         this.number,
-        this.isReduce});
+        this.isReduce,
+        this.nobleID});
 
   DataL.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -53,6 +55,7 @@ class DataL {
     imgRendering = json['img_rendering'];
     number = json['number'];
     isReduce = json['is_reduce'];
+    nobleID = json['noble_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -64,6 +67,7 @@ class DataL {
     data['img_rendering'] = this.imgRendering;
     data['number'] = this.number;
     data['is_reduce'] = this.isReduce;
+    data['noble_id'] = this.nobleID;
     return data;
   }
 }

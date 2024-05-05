@@ -55,7 +55,9 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
 
   /// 消息列表
   Widget _itemTuiJian(BuildContext context, int i) {
-    final DataU dataU = listU.firstWhere((element) => element.uid.toString() == listMessage[i]['otherUid'], orElse: () => DataU(liveStatus: 0, loginStatus: 0));
+    final DataU dataU = listU.firstWhere(
+        (element) => element.uid.toString() == listMessage[i]['otherUid'],
+        orElse: () => DataU(liveStatus: 0, loginStatus: 0));
     return Column(
       children: [
         GestureDetector(
@@ -92,13 +94,13 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
                     ),
                     dataU.loginStatus == 1
                         ? Container(
-                      height: 60.h,
-                      width: 60.h,
-                      alignment: Alignment.bottomRight,
-                      child: CustomPaint(
-                        painter: LinePainter2(colors: Colors.green),
-                      ),
-                    )
+                            height: 60.h,
+                            width: 60.h,
+                            alignment: Alignment.bottomRight,
+                            child: CustomPaint(
+                              painter: LinePainter2(colors: Colors.green),
+                            ),
+                          )
                         : const Text(''),
                   ],
                 ),
@@ -146,7 +148,10 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
                       WidgetUtils.commonSizedBox(10, 0),
                       Row(
                         children: [
-                          listMessage[i]['type'] == 1
+                          (listMessage[i]['type'] == 1 &&
+                                  !listMessage[i]['content']
+                                      .toString()
+                                      .contains('.jpg'))
                               ? Text(
                                   listMessage[i]['content'].toString().length >
                                           15
@@ -159,26 +164,40 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
                                       color: MyColors.g9,
                                       fontSize: ScreenUtil().setSp(25)),
                                 )
-                              : listMessage[i]['type'] == 2
+                              : (listMessage[i]['type'] == 1 &&
+                                      listMessage[i]['content']
+                                          .toString()
+                                          .contains('.jpg'))
                                   ? Text(
                                       '[图片]',
                                       style: StyleUtils.getCommonTextStyle(
                                           color: MyColors.homeTopBG,
                                           fontSize: ScreenUtil().setSp(23)),
                                     )
-                                  : listMessage[i]['type'] == 3
+                                  : listMessage[i]['type'] == 2
                                       ? Text(
-                                          '[语音]',
+                                          '[图片]',
                                           style: StyleUtils.getCommonTextStyle(
                                               color: MyColors.homeTopBG,
                                               fontSize: ScreenUtil().setSp(23)),
                                         )
-                                      : Text(
-                                          '[红包]',
-                                          style: StyleUtils.getCommonTextStyle(
-                                              color: Colors.red,
-                                              fontSize: ScreenUtil().setSp(23)),
-                                        ),
+                                      : listMessage[i]['type'] == 3
+                                          ? Text(
+                                              '[语音]',
+                                              style:
+                                                  StyleUtils.getCommonTextStyle(
+                                                      color: MyColors.homeTopBG,
+                                                      fontSize: ScreenUtil()
+                                                          .setSp(23)),
+                                            )
+                                          : Text(
+                                              '[红包]',
+                                              style:
+                                                  StyleUtils.getCommonTextStyle(
+                                                      color: Colors.red,
+                                                      fontSize: ScreenUtil()
+                                                          .setSp(23)),
+                                            ),
                           const Spacer(),
                           listRead[i] > 0
                               ? Container(
@@ -302,16 +321,18 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
                   WidgetUtils.commonSizedBox(15, 0),
 
                   /// 展示在线用户
-                  (listMessage.isNotEmpty && listU.isNotEmpty) ? Expanded(
-                    child: listMessage.isNotEmpty
-                        ? ListView.builder(
-                            padding: EdgeInsets.only(
-                                top: ScreenUtil().setHeight(10)),
-                            itemBuilder: _itemTuiJian,
-                            itemCount: listMessage.length,
-                          )
-                        : const Text(''),
-                  ) : const Text(''),
+                  (listMessage.isNotEmpty && listU.isNotEmpty)
+                      ? Expanded(
+                          child: listMessage.isNotEmpty
+                              ? ListView.builder(
+                                  padding: EdgeInsets.only(
+                                      top: ScreenUtil().setHeight(10)),
+                                  itemBuilder: _itemTuiJian,
+                                  itemCount: listMessage.length,
+                                )
+                              : const Text(''),
+                        )
+                      : const Text(''),
                 ],
               ),
             )
@@ -392,10 +413,9 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
     }
   }
 
-
-
   /// 用户开播、在线状态
   List<DataU> listU = [];
+
   Future<void> doPostSendUserMsg(String uids) async {
     Map<String, dynamic> params = <String, dynamic>{
       'uids': uids,
@@ -412,7 +432,7 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
           });
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:

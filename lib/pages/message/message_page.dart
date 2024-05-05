@@ -42,13 +42,13 @@ class _MessagePageState extends State<MessagePage>
   String info = '', time = '';
   int unRead = 0;
   int length = 0;
-  var list1, list2, list3,listenMessage;
+  var list1, list2, list3, listenMessage;
 
   // 设备是安卓还是ios
   String isDevices = 'android';
 
   final RefreshController _refreshController =
-  RefreshController(initialRefresh: false);
+      RefreshController(initialRefresh: false);
   int page = 1;
   bool isUp = false; //是否允许上拉
   bool isDown = true; //是否允许下拉
@@ -86,7 +86,6 @@ class _MessagePageState extends State<MessagePage>
     _refreshController.loadComplete();
   }
 
-
   @override
   void initState() {
     // TODO: implement initState
@@ -108,7 +107,7 @@ class _MessagePageState extends State<MessagePage>
       });
     });
     list2 = eventBus.on<BiLiBack>().listen((event) {
-      if(event.number == '消息'){
+      if (event.number == '消息') {
         doPostSystemMsgList2();
       }
     });
@@ -120,7 +119,7 @@ class _MessagePageState extends State<MessagePage>
     listenMessage = eventBus.on<SendMessageBack>().listen((event) {
       doPostSystemMsgList();
     });
-    _scListener = (){
+    _scListener = () {
       setState(() {
         _scOffset = _sc.offset;
       });
@@ -166,7 +165,9 @@ class _MessagePageState extends State<MessagePage>
   }
 
   Widget message(BuildContext context, int i) {
-    final DataU dataU = listU.firstWhere((element) => element.uid.toString() == listMessage[i]['otherUid'], orElse: () => DataU(liveStatus: 0, loginStatus: 0));
+    final DataU dataU = listU.firstWhere(
+        (element) => element.uid.toString() == listMessage[i]['otherUid'],
+        orElse: () => DataU(liveStatus: 0, loginStatus: 0, nobleID: 0));
     return Slidable(
       //列表中只有一个能滑动
       key: Key(UniqueKey().toString()),
@@ -189,24 +190,22 @@ class _MessagePageState extends State<MessagePage>
                 MyUtils.goTransparentRFPage(
                     context,
                     PeopleInfoPage(
-                      otherId: listMessage[i]['otherUid'],title: '其他',
+                      otherId: listMessage[i]['otherUid'],
+                      title: '其他',
                     ));
               }),
               child: Stack(
                 alignment: Alignment.center,
                 children: [
                   WidgetUtils.CircleImageNet(
-                      100.h,
-                      100.h,
-                      50.h,
-                      listMessage[i]['otherHeadNetImg']),
+                      100.h, 100.h, 50.h, listMessage[i]['otherHeadNetImg']),
                   dataU.liveStatus == 1
                       ? WidgetUtils.showImages(
                           'assets/images/zhibozhong.webp',
                           110.h,
                           110.h,
                         )
-                      :dataU.loginStatus == 1
+                      : dataU.loginStatus == 1
                           ? Container(
                               height: 60.h,
                               width: 60.h,
@@ -246,7 +245,7 @@ class _MessagePageState extends State<MessagePage>
                             Text(
                               listMessage[i]['nickName'] ?? '',
                               style: StyleUtils.getCommonTextStyle(
-                                  color: Colors.black,
+                                  color: dataU.nobleID as int > 0 ? Colors.red : Colors.black,
                                   fontSize: ScreenUtil().setSp(32)),
                             ),
                             const Expanded(child: Text('')),
@@ -278,7 +277,10 @@ class _MessagePageState extends State<MessagePage>
                         color: Colors.transparent,
                         child: Row(
                           children: [
-                            listMessage[i]['type'] == 1
+                            (listMessage[i]['type'] == 1 &&
+                                    !listMessage[i]['content']
+                                        .toString()
+                                        .contains('.jpg'))
                                 ? Text(
                                     listMessage[i]['content']
                                                 .toString()
@@ -293,30 +295,43 @@ class _MessagePageState extends State<MessagePage>
                                         color: MyColors.g9,
                                         fontSize: ScreenUtil().setSp(25)),
                                   )
-                                : listMessage[i]['type'] == 2
+                                : (listMessage[i]['type'] == 1 &&
+                                        listMessage[i]['content']
+                                            .toString()
+                                            .contains('.jpg'))
                                     ? Text(
                                         '[图片]',
                                         style: StyleUtils.getCommonTextStyle(
                                             color: MyColors.homeTopBG,
                                             fontSize: ScreenUtil().setSp(23)),
                                       )
-                                    : listMessage[i]['type'] == 3
+                                    : listMessage[i]['type'] == 2
                                         ? Text(
-                                            '[语音]',
+                                            '[图片]',
                                             style:
                                                 StyleUtils.getCommonTextStyle(
                                                     color: MyColors.homeTopBG,
                                                     fontSize:
                                                         ScreenUtil().setSp(23)),
                                           )
-                                        : Text(
-                                            '[红包]',
-                                            style:
-                                                StyleUtils.getCommonTextStyle(
-                                                    color: Colors.red,
-                                                    fontSize:
-                                                        ScreenUtil().setSp(23)),
-                                          ),
+                                        : listMessage[i]['type'] == 3
+                                            ? Text(
+                                                '[语音]',
+                                                style: StyleUtils
+                                                    .getCommonTextStyle(
+                                                        color:
+                                                            MyColors.homeTopBG,
+                                                        fontSize: ScreenUtil()
+                                                            .setSp(23)),
+                                              )
+                                            : Text(
+                                                '[红包]',
+                                                style: StyleUtils
+                                                    .getCommonTextStyle(
+                                                        color: Colors.red,
+                                                        fontSize: ScreenUtil()
+                                                            .setSp(23)),
+                                              ),
                             const Spacer(),
                             listRead[i] > 0
                                 ? Container(
@@ -612,7 +627,7 @@ class _MessagePageState extends State<MessagePage>
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
-            sp.setString('isFirstMessage','2');
+            sp.setString('isFirstMessage', '2');
           });
           if (bean.data!.list!.isNotEmpty) {
             setState(() {
@@ -639,7 +654,7 @@ class _MessagePageState extends State<MessagePage>
           } else {
             // 获取所有数据
             List<Map<String, dynamic>> allData =
-            await databaseHelper.getAllData('messageXTTable');
+                await databaseHelper.getAllData('messageXTTable');
             if (allData.isNotEmpty) {
               for (int i = 0; i < allData.length; i++) {
                 if (allData[i]['data_status'] == 0) {
@@ -656,7 +671,7 @@ class _MessagePageState extends State<MessagePage>
           }
           break;
         case MyHttpConfig.errorloginCode:
-        // ignore: use_build_context_synchronously
+          // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
@@ -680,7 +695,7 @@ class _MessagePageState extends State<MessagePage>
       switch (bean.code) {
         case MyHttpConfig.successCode:
           setState(() {
-            sp.setString('isFirstMessage','2');
+            sp.setString('isFirstMessage', '2');
           });
           if (bean.data!.list!.isNotEmpty) {
             setState(() {
@@ -758,7 +773,7 @@ class _MessagePageState extends State<MessagePage>
       List<Map<String, dynamic>> result2 = await db.rawQuery(query, args);
       LogE('长度== ${result2}');
       String myIds = '';
-      if(result2 != listMessage){
+      if (result2 != listMessage) {
         setState(() {
           listMessage = result2;
           listRead.clear();
@@ -807,6 +822,7 @@ class _MessagePageState extends State<MessagePage>
 
   /// 用户开播、在线状态
   List<DataU> listU = [];
+
   Future<void> doPostSendUserMsg(String uids) async {
     Map<String, dynamic> params = <String, dynamic>{
       'uids': uids,
@@ -834,5 +850,4 @@ class _MessagePageState extends State<MessagePage>
       LogE('错误信息== ${e.toString()}');
     }
   }
-
 }

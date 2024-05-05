@@ -16,11 +16,13 @@ import '../../../bean/gzBean.dart';
 import '../../../colors/my_colors.dart';
 import '../../../http/data_utils.dart';
 import '../../../http/my_http_config.dart';
+import '../../../main.dart';
 import '../../../utils/event_utils.dart';
 import '../../../utils/loading.dart';
 import '../../../utils/my_utils.dart';
 import '../../../utils/style_utils.dart';
 import '../../../utils/widget_utils.dart';
+import '../../message/chat_page.dart';
 import 'bojue_page.dart';
 import 'chuanshuo_page.dart';
 
@@ -594,11 +596,28 @@ class _TequanPageState extends State<TequanPage> {
                                       fontSize: ScreenUtil().setSp(33)))
                               : WidgetUtils.commonSizedBox(0, 0),
                           const Spacer(),
-                          WidgetUtils.onlyText(
-                              '专属客服',
-                              StyleUtils.getCommonTextStyle(
-                                  color: MyColors.guizuYellow,
-                                  fontSize: ScreenUtil().setSp(25))),
+                          GestureDetector(
+                            onTap: (() {
+                              if(MyUtils.checkClick()) {
+                                if(int.parse(sp.getString('nobleID').toString()) < 7){
+                                    MyToastUtils.showToastBottom('贵族等级达到神王即可开启专属客服功能~');
+                                }else{
+                                  MyUtils.goTransparentRFPage(
+                                      context,
+                                      ChatPage(
+                                          nickName: '专属客服',
+                                          otherUid: kefuUid,
+                                          otherImg: kefuAvatar));
+
+                                }
+                              }                              
+                            }),
+                            child: WidgetUtils.onlyText(
+                                '专属客服',
+                                StyleUtils.getCommonTextStyle(
+                                    color: MyColors.guizuYellow,
+                                    fontSize: ScreenUtil().setSp(25))),
+                          ),
                           WidgetUtils.commonSizedBox(0, 5.w),
                           WidgetUtils.showImages(
                               'assets/images/tequan_right.png', 20.h, 10.w),
@@ -678,7 +697,9 @@ class _TequanPageState extends State<TequanPage> {
       gzTitle = '暂未成为贵族',
       gzNextTitle = '玄仙',
       gzCha = '',
-      gzID = '0';
+      gzID = '0',
+      kefuUid = '',
+      kefuAvatar = '';
   List<Ls> list = [];
   /// 我的贵族
   Future<void> doPostMyNoble() async {
@@ -693,6 +714,8 @@ class _TequanPageState extends State<TequanPage> {
             gzZhi = bean.data!.my!.nobleValue!;
             gzTime = bean.data!.my!.nobleExpireTime!;
             gzID = bean.data!.my!.nobleId.toString();
+            kefuUid = bean.data!.my!.kefuUid.toString();
+            kefuAvatar = bean.data!.my!.kefuAvatar!;
             list.addAll(bean.data!.ls!);
             if ((bean.data!.my!.nobleId as int) > 0) {
               _currentIndex = (bean.data!.my!.nobleId as int) - 1;

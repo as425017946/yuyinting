@@ -34,7 +34,7 @@ class XCMineController extends GetxController with GetAntiCombo {
   /// 看过我
   final lookMe = ''.obs;
   /// 是否开通贵族
-  final isGuizu = false.obs;
+  final isGuizu = ''.obs;
   /// 身份
   final identity = ''.obs;
   /// 是否有代理权限 0无1有
@@ -52,6 +52,8 @@ class XCMineController extends GetxController with GetAntiCombo {
   final isShenHe = false.obs;
   /// 勿扰模式
   final switchValue = false.obs;
+  /// 进房隐身
+  final switchValue2 = false.obs;
   // 客服
   String kefuUid = '';
   String kefuAvatar = '';
@@ -80,7 +82,7 @@ class XCMineController extends GetxController with GetAntiCombo {
             care.value = data.followNum.toString();
             beCare.value = data.isFollowNum.toString();
             lookMe.value = data.lookNum.toString();
-            isGuizu.value = data.nobleId == 1;
+            isGuizu.value = data.nobleId.toString();
             identity.value = data.identity!;
             isAgent.value = data.isAgent == 1;
             isNew.value = data.isNew == 1;
@@ -116,6 +118,7 @@ class XCMineController extends GetxController with GetAntiCombo {
             kefuUid = data.kefuUid.toString();
             kefuAvatar = data.kefuAvatar!;
             switchValue.value = data.isDisturb != 0;
+            switchValue2.value = data.isStealth != 0;
             userNumber.value = data.number.toString();
           break;
         case MyHttpConfig.errorloginCode:
@@ -157,6 +160,39 @@ class XCMineController extends GetxController with GetAntiCombo {
           break;
         case MyHttpConfig.errorloginCode:
           // ignore: use_build_context_synchronously
+          MyUtils.jumpLogin(context);
+          break;
+        default:
+          MyToastUtils.showToastBottom(bean.msg!);
+          break;
+      }
+    } catch (e) {
+      LogE(e.toString());
+    }
+  }
+
+
+  void onSwitch2(BuildContext context) {
+    switchValue2.value = !switchValue2.value;
+    doPostSetStealth(switchValue2.value ? '1' : '0', context);
+  }
+  /// 勿扰模式
+  Future<void> doPostSetStealth(String isDisturb, BuildContext context) async {
+    Map<String, dynamic> params = <String, dynamic>{
+      'is_stealth': isDisturb,
+    };
+    try {
+      CommonBean bean = await DataUtils.postSetStealth(params);
+      switch (bean.code) {
+        case MyHttpConfig.successCode:
+          if (isDisturb == "0") {
+            MyToastUtils.showToastBottom('进房隐身模式已关闭~');
+          } else {
+            MyToastUtils.showToastBottom('进房隐身模式已开启~');
+          }
+          break;
+        case MyHttpConfig.errorloginCode:
+        // ignore: use_build_context_synchronously
           MyUtils.jumpLogin(context);
           break;
         default:
