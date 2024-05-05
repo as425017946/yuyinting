@@ -5,6 +5,7 @@ import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screen/screen.dart';
 import 'package:sqflite/sqflite.dart';
@@ -35,6 +36,7 @@ import '../../utils/widget_utils.dart';
 import '../gongping/gp_hi_page.dart';
 import '../home/home_items.dart';
 import '../home/home_page.dart';
+import '../makefriends/makefriends_model.dart';
 import '../makefriends/makefriends_page.dart';
 import '../mine/mine/xc_mine_page.dart';
 import '../room/room_page.dart';
@@ -774,6 +776,11 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        if (!_visible) {
+          final MakefriendsController c = Get.find();
+          c.select = 0;
+          return false;
+        }
         if (lastPopTime == null ||
             DateTime.now().difference(lastPopTime!) > Duration(seconds: 1)) {
           lastPopTime = DateTime.now();
@@ -854,7 +861,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
                 ]),),
           ),
 
-          isRed
+          isRed && _visible
               ? Positioned(
                   bottom: (isDevices == 'ios' ? 105 : 65) * 1.3 / 2,
                   right: 195.w,
