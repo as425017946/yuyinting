@@ -114,7 +114,7 @@ class _MinePageContent extends StatelessWidget {
 
   Widget _nav(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: Get.statusBarHeight, right: 34.w, left: 34.w),
+      padding: EdgeInsets.only(top: getxWindowPadding.top, right: 34.w, left: 34.w),
       child: Column(
         children: [
           Container(

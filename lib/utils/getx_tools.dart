@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -527,3 +529,5 @@ class VoiceCardBtn extends StatelessWidget {
     );
   }
 }
+
+EdgeInsets get getxWindowPadding => MediaQueryData.fromWindow(window).padding;

@@ -183,8 +183,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
                             //渐变颜色[始点颜色, 结束颜色]
                             colors: [MyColors.newY5, Colors.white]),
                       ),
-                      height: Get.height - Get.statusBarHeight - 30 + 300.w,
-                      //1415.h,
+                      height: Get.height - getxWindowPadding.top - 60 + 300.w,
                       child: _content(),
                     );
                   }, childCount: 1),
