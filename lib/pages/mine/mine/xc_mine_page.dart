@@ -389,7 +389,7 @@ class _MinePageContent extends StatelessWidget {
                 }
               },
               child: Container(
-                width: 800.w,
+                width: 400,
                 color: Colors.transparent,
                 alignment: Alignment.center,
                 child: Obx(() => Text(
