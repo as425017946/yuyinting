@@ -107,116 +107,111 @@ class _MinePageContent extends StatelessWidget {
             ),
           ),
         ),
-        Transform.translate(
-          offset: Offset(0,-70.h),
-            child: HitTestBlocker(child: _nav(context))),
+        HitTestBlocker(child: _nav(context)),
       ],
     );
   }
 
   Widget _nav(BuildContext context) {
-    return Container(
-      margin:
-          EdgeInsets.only(top: Get.statusBarHeight, right: 34.w, left: 34.w),
-      height: 170.w,
-      width: double.infinity,
-      alignment: Alignment.center,
-      color: Colors.transparent,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+    return Padding(
+      padding: EdgeInsets.only(top: Get.statusBarHeight, right: 34.w, left: 34.w),
+      child: Column(
         children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Obx(() {
-                if (c.userNumber.value.isEmpty) {
-                  return const Text('');
-                }
-                return GestureDetector(
-                  onTap: () {
-                    c.onSwitch(context);
-                  },
-                  child: Row(
-                    children: [
-                      Image(
-                        width: 74.w * 0.8,
-                        height: 49.w * 0.8,
-                        image: AssetImage(
-                            'assets/images/mine_switch_${c.switchValue.value ? 1 : 0}.png'),
-                      ),
-                      SizedBox(width: 10.w),
-                      Text(
-                        '勿扰',
-                        style: TextStyle(
-                          color:
-                          Color(c.switchValue.value ? 0xFFFE5D9C : 0xFF949494),
-                          fontSize: 28.sp,
+          Container(
+            height: 50.w,
+            width: double.infinity,
+            alignment: Alignment.center,
+            color: Colors.transparent,
+            child: Row(
+              children: [
+                Obx(() {
+                  if (c.userNumber.value.isEmpty) {
+                    return const Text('');
+                  }
+                  return GestureDetector(
+                    onTap: () {
+                      c.onSwitch(context);
+                    },
+                    child: Row(
+                      children: [
+                        Image(
+                          width: 74.w * 0.8,
+                          height: 49.w * 0.8,
+                          image: AssetImage('assets/images/mine_switch_${c.switchValue.value ? 1 : 0}.png'),
                         ),
-                      )
-                    ],
-                  ),
-                );
-              }),
-              int.parse(c.isGuizu.value.toString()) >= 7 ? Obx(() {
-                if (c.userNumber.value.isEmpty) {
-                  return const Text('');
-                }
-                return GestureDetector(
+                        SizedBox(width: 10.w),
+                        Text(
+                          '勿扰',
+                          style: TextStyle(
+                            color: Color(
+                                c.switchValue.value ? 0xFFFE5D9C : 0xFF949494),
+                            fontSize: 28.sp,
+                          ),
+                        )
+                      ],
+                    ),
+                  );
+                }),
+                const Expanded(child: Text('')),
+                GestureDetector(
                   onTap: () {
-                    c.onSwitch2(context);
+                    // 编辑
+                    if (MyUtils.checkClick()) {
+                      Get.toNamed('EditMyInfoPage');
+                    }
                   },
-                  child: Row(
-                    children: [
-                      Image(
-                        width: 74.w * 0.8,
-                        height: 49.w * 0.8,
-                        image: AssetImage(
-                            'assets/images/mine_switch_${c.switchValue2.value ? 1 : 0}.png'),
-                      ),
-                      SizedBox(width: 10.w),
-                      Text(
-                        '进房隐身',
-                        style: TextStyle(
-                          color:
-                          Color(c.switchValue2.value ? 0xFFFE5D9C : 0xFF949494),
-                          fontSize: 28.sp,
-                        ),
-                      )
-                    ],
+                  child: Image(
+                    width: 43.w,
+                    height: 41.w,
+                    image: const AssetImage('assets/images/mine_icon_edit.png'),
                   ),
-                );
-              }) : const Text(''),
-            ],
-          ),
-          const Expanded(child: Text('')),
-          GestureDetector(
-            onTap: () {
-              // 编辑
-              if (MyUtils.checkClick()) {
-                Get.toNamed('EditMyInfoPage');
-              }
-            },
-            child: Image(
-              width: 43.w,
-              height: 41.w,
-              image: const AssetImage('assets/images/mine_icon_edit.png'),
+                ),
+                SizedBox(width: 54.w),
+                GestureDetector(
+                  onTap: () {
+                    // 设置
+                    if (MyUtils.checkClick()) {
+                      Get.toNamed('SettingPage');
+                    }
+                  },
+                  child: Image(
+                    width: 47.w,
+                    height: 44.w,
+                    image:
+                        const AssetImage('assets/images/mine_icon_setting.png'),
+                  ),
+                ),
+              ],
             ),
           ),
-          SizedBox(width: 54.w),
-          GestureDetector(
-            onTap: () {
-              // 设置
-              if (MyUtils.checkClick()) {
-                Get.toNamed('SettingPage');
-              }
-            },
-            child: Image(
-              width: 47.w,
-              height: 44.w,
-              image: const AssetImage('assets/images/mine_icon_setting.png'),
-            ),
-          ),
+          SizedBox(height: 20.w),
+          Obx(() {
+            if (c.isGuizu.value >= 7 && c.userNumber.value.isNotEmpty) {
+              return GestureDetector(
+                onTap: () {
+                  c.onSwitch2(context);
+                },
+                child: Row(
+                  children: [
+                    Image(
+                      width: 74.w * 0.8,
+                      height: 49.w * 0.8,
+                      image: AssetImage('assets/images/mine_switch_${c.switchValue2.value ? 1 : 0}.png'),
+                    ),
+                    SizedBox(width: 10.w),
+                    Text(
+                      '进房隐身',
+                      style: TextStyle(
+                        color: Color(c.switchValue2.value ? 0xFFFE5D9C : 0xFF949494),
+                        fontSize: 28.sp,
+                      ),
+                    )
+                  ],
+                ),
+              );
+            }
+            return const Text('');
+          }),
         ],
       ),
     );
@@ -397,37 +392,14 @@ class _MinePageContent extends StatelessWidget {
                 width: 800.w,
                 color: Colors.transparent,
                 alignment: Alignment.center,
-                child: Text(
-                  int.parse(c.isGuizu.value.toString()) == 1
-                      ? '恭喜您已成为：玄仙'
-                      : int.parse(c.isGuizu.value.toString()) == 2
-                          ? '恭喜您已成为：上仙'
-                          : int.parse(c.isGuizu.value.toString()) == 3
-                              ? '恭喜您已成为：金仙'
-                              : int.parse(c.isGuizu.value.toString()) == 4
-                                  ? '恭喜您已成为：仙帝'
-                                  : int.parse(c.isGuizu.value.toString()) == 5
-                                      ? '恭喜您已成为：主神'
-                                      : int.parse(c.isGuizu.value.toString()) == 6
-                                          ? '恭喜您已成为：天神'
-                                          : int.parse(c.isGuizu.value.toString()) == 7
-                                              ? '恭喜您已成为：神王'
-                                              : int.parse(c.isGuizu.value.toString()) == 8
-                                                  ? '恭喜您已成为：神皇'
-                                                  : int.parse(c.isGuizu.value.toString()) ==
-                                                          9
-                                                      ? '恭喜您已成为：天尊'
-                                                      : int.parse(c.isGuizu
-                                                                  .value.toString()) ==
-                                                              10
-                                                          ? '恭喜您已成为：传说'
-                                                              : '暂未成为贵族，快来解锁贵族特权',
+                child: Obx(() => Text(
+                  c.guizuText,
                   style: const TextStyle(
                     color: Color(0xFF673D27),
                     fontSize: 24,
                     fontWeight: FontWeight.w400,
                   ),
-                ),
+                )),
               ),
             ),
           ),
