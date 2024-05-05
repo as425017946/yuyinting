@@ -6,6 +6,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:focus_detector/focus_detector.dart';
 import 'package:get/get.dart';
 
+import '../../main.dart';
+import '../../utils/getx_tools.dart';
 import 'makefriends_model.dart';
 
 class CPSpeedPage extends StatelessWidget {
@@ -106,6 +108,9 @@ class CPSpeedPage extends StatelessWidget {
       width: 44.w,
       height: 156.w,
       child: GestureDetector(
+        onTap: () => c.action(() {
+          Get.bottomSheet(_BottomSheet());
+        }),
         child: Container(
           height: double.infinity,
           width: double.infinity,
@@ -207,9 +212,9 @@ class _Banner extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        _Barrage(),
+        _Barrage('1'),
         const Spacer(),
-        _Barrage(),
+        _Barrage('2'),
       ],
     );
   }
@@ -217,6 +222,8 @@ class _Banner extends StatelessWidget {
 
 // ignore: must_be_immutable
 class _Barrage extends StatelessWidget {
+  final String myKey;
+  _Barrage(this.myKey);
   final _isFirst = true.obs;
   final _items = [
     _BarrageType.empty().obs,
@@ -260,7 +267,8 @@ class _Barrage extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return FocusDetector(
+    final MakefriendsController c = Get.find();
+    return c.cpBanners[myKey] ??= FocusDetector(
       onFocusGained: () {
         if (_isFirst.value) {
           _isFirst.value = false;
@@ -369,36 +377,206 @@ class _BarrageItem extends StatelessWidget {
   }
 }
 
-class _DialogReceive extends StatelessWidget {
+class _DialogReceive extends StatelessWidget with _DialogMixin {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        width: 620.w,
-        height: 620.w,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/cp_choudao.png'),
-            fit: BoxFit.fill,
+    return content(
+      height: 620.w,
+      bg: 'cp_choudao',
+      btn: '立即私聊',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: 56.w),
+          _head(),
+          Padding(
+            padding: EdgeInsets.only(top: 55.w),
+            child: Text(
+              '家人们啊....快来找我玩啊',
+              style: TextStyle(
+                color: const Color(0xFF212121),
+                fontSize: 30.sp,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _head() {
+    return Row(
+      children: [
+        UserFrameHead(size: 120.w, avatar: sp.getString('user_headimg').toString()),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 30.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '小美',
+                style: TextStyle(
+                  color: const Color(0xFF212121),
+                  fontSize: 30.sp,
+                ),
+              ),
+              SizedBox(height: 16.w),
+              Row(
+                children: [
+                  UserGenderCircle(size: 24.w, gender: 0),
+                  Container(
+                    width: 59.w,
+                    height: 26.w,
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.only(left: 7.w),
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(66, 218, 169, 165),
+                      borderRadius: BorderRadius.circular(13.w),
+                    ),
+                    child: Text(
+                      '22岁',
+                      style: TextStyle(
+                        color: const Color(0xFFFF1313),
+                        fontSize: 18.sp,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
-      ),
+      ],
     );
   }
 }
 
-class _DialogSend extends StatelessWidget {
+class _DialogSend extends StatelessWidget with _DialogMixin {
+  final TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    return content(
+      height: 652.w,
+      bg: 'cp_fangru',
+      btn: '确认放入',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _textField(),
+          Padding(
+            padding: EdgeInsets.only(left: 21.w, top: 24.w, bottom: 15.w),
+            child: Text(
+              '放张照片更容易吸引Ta',
+              style: TextStyle(
+                color: const Color(0xFFC0BFBF),
+                fontSize: 24.sp,
+              ),
+            ),
+          ),
+          _content(),
+        ],
+      ),
+    );
+  }
+  
+  Widget _textField() {
+    const border = OutlineInputBorder(borderSide: BorderSide(color: Colors.transparent));
+    return Container(
+      width: double.infinity,
+      height: 180.w,
+      padding: EdgeInsets.symmetric(vertical: 14.w),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20.w),
+      ),
+      child: TextField(
+        controller: controller,
+        maxLength: 30,
+        maxLines: 8,
+        style: TextStyle(color: const Color(0xFF666666), fontSize: 30.sp),
+        decoration: InputDecoration(
+          hintText: '写下你想说的话，放入盒子...',
+          hintStyle: TextStyle(color: const Color(0xFFC0BFBF), fontSize: 30.sp),
+          contentPadding: EdgeInsets.symmetric(horizontal: 23.w),
+          border: border,
+          enabledBorder: border,
+          disabledBorder: border,
+          focusedBorder: border,
+        ),
+      ),
+    );
+  }
+
+  Widget _content() {
+    return Container(
+      width: 120.w,
+      height: 120.w,
+      padding: EdgeInsets.all(37.w),
+      decoration: BoxDecoration(
+        color: const Color(0xFFE7E7E7),
+        borderRadius: BorderRadius.circular(20.w),
+      ),
+      child: Image.asset('assets/images/cp_add.png'),
+    );
+  }
+}
+
+mixin _DialogMixin {
+  Widget content({required double height, required String bg, required String btn, void Function()? action, required Widget child}) {
     return Center(
       child: Container(
         width: 620.w,
-        height: 652.w,
-        decoration: const BoxDecoration(
+        height: height,
+        decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/cp_fangru.png'),
+            image: AssetImage('assets/images/$bg.png'),
             fit: BoxFit.fill,
           ),
+        ),
+        child: Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            Positioned(
+              left: 45.w,
+              right: 45.w,
+              top: 115.w,
+              bottom: 156.w,
+              child: child,
+            ),
+            GestureDetector(
+              onTap: action,
+              child: Container(
+                width: 442.w,
+                height: 112.w,
+                padding: EdgeInsets.only(bottom: 29.w),
+                margin: EdgeInsets.only(bottom: 25.w),
+                alignment: Alignment.center,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/cp_btn_bg.png'),
+                    fit: BoxFit.fill,
+                  ),
+                ),
+                child: Text(
+                  btn,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 30.sp
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              top: 32.w,
+              right: 33.w,
+              width: 27.w,
+              height: 27.w,
+              child: GestureDetector(
+                onTap: () => Get.back(),
+                child: Image.asset('assets/images/cp_close.png'),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -415,7 +593,7 @@ class _DialogHelp extends StatelessWidget {
         padding: EdgeInsets.only(left: 33.w, right: 33.w, top: 33.w),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(30.w)),
+          borderRadius: BorderRadius.circular(30.w),
         ),
         child: Column(
           children: [
@@ -467,4 +645,233 @@ class _DialogHelp extends StatelessWidget {
 五、祝福与期待
 最后，我们衷心祝愿你能在这个纸条交友游戏中收获一段美好的姻缘或深厚的友谊。但请记住，交友需要时间和耐心，不要急于求成。慢慢来，享受这个过程，也许你会发现更多的惊喜和可能。
 ''';
+}
+
+class _BottomSheet extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final radius = Radius.circular(30.w);
+    final MakefriendsController c = Get.find();
+    return Container(
+        width: double.infinity,
+        height: 854.h,
+        decoration: BoxDecoration(
+          color: const Color(0xFFFAFAFA),
+          borderRadius: BorderRadius.only(topLeft: radius, topRight: radius),
+        ),
+        child: Obx(() {
+          switch (c.cpSelect) {
+            case 1:
+              return _BottomSheetItem1();
+            default:
+              return _BottomSheetItem0();
+          }
+        }),
+      );
+  }
+}
+
+class _BottomSheetItem0 extends StatelessWidget with _BottomSheetItemMixin {
+  @override
+  Widget build(BuildContext context) {
+    final MakefriendsController c = Get.find();
+    return Stack(
+      alignment: Alignment.center,
+      clipBehavior: Clip.none,
+      children: [
+        positioned('cp_btn_shoudao_1', Rect.fromLTWH(42.w, -31.w, 335.w, 154.w)),
+        positioned('cp_btn_fangru_0', Rect.fromLTWH(449.w, 21.w, 196.w, 29.w), () => c.cpSelect = 1),
+        content(0, ['', '']),
+      ],
+    );
+  }
+}
+
+class _BottomSheetItem1 extends StatelessWidget with _BottomSheetItemMixin {
+  @override
+  Widget build(BuildContext context) {
+    final MakefriendsController c = Get.find();
+    return Stack(
+      alignment: Alignment.center,
+      clipBehavior: Clip.none,
+      children: [
+        positioned('cp_btn_fangru_1', Rect.fromLTWH(377.w, -31.w, 335.w, 154.w)),
+        positioned('cp_btn_shoudao_0', Rect.fromLTWH(114.w, 21.w, 196.w, 29.w), () => c.cpSelect = 0),
+        content(1, []),
+      ],
+    );
+  }
+}
+
+mixin _BottomSheetItemMixin {
+  Widget positioned(String img, Rect rect, [void Function()? action]) {
+    return Positioned(
+      left: rect.left,
+      top: rect.top,
+      width: rect.width,
+      height: rect.height,
+      child: GestureDetector(
+        onTap: action,
+        child: Image.asset('assets/images/$img.png'),
+      ),
+    );
+  }
+  Widget content(int type, List<String> list) {
+    return Positioned(
+      top: 123.w,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      child: Stack(
+        children: [
+          if (list.isEmpty)
+            _null()
+          else
+            ListView.builder(
+              padding: EdgeInsets.symmetric(vertical: 20.w, horizontal: 41.w),
+              itemBuilder: _builder,
+              itemCount: list.length,
+            ),
+        ],
+      ),
+    );
+  }
+  Widget _null() {
+    return Center(
+      child: Container(
+        width: 406.w,
+        height: 281.w,
+        alignment: Alignment.bottomCenter,
+        padding: EdgeInsets.only(bottom: 38.w),
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/cp_null.png'),
+            fit: BoxFit.fill,
+          ),
+        ),
+        child: Text(
+          '暂无纸条',
+          style: TextStyle(
+            color: const Color(0xFFADA5A5),
+            fontSize: 30.w,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _builder(BuildContext context, int index) {
+    return Container(
+      width: double.infinity,
+      // height: 438.w,
+      padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 20.w),
+      margin: EdgeInsets.only(bottom: 20.w),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20.w),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _head(),
+          Padding(
+            padding: EdgeInsets.only(top: 18.w),
+            child: Text(
+              '家人们啊....快来找我玩啊',
+              style: TextStyle(
+                color: const Color(0xFF212121),
+                fontSize: 30.sp,
+              ),
+            ),
+          ),
+          Container(
+            width: 180.w,
+            height: 180.w,
+            margin: EdgeInsets.only(top: 27.w),
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(20.w),
+            ),
+            clipBehavior: Clip.hardEdge,
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 24.w, bottom: 8.w),
+            child: Text(
+              '2024-04-18 10:24:12',
+              style: TextStyle(
+                color: const Color(0xFF999999),
+                fontSize: 20.sp,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  Widget _head() {
+    return Row(
+      children: [
+        UserFrameHead(
+            size: 80.w, avatar: sp.getString('user_headimg').toString()),
+        Expanded(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 13.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '小美',
+                  style: TextStyle(
+                    color: const Color(0xFF212121),
+                    fontSize: 30.sp,
+                  ),
+                ),
+                SizedBox(height: 8.w),
+                Row(
+                  children: [
+                    UserGenderCircle(size: 24.w, gender: 0),
+                    Container(
+                      width: 59.w,
+                      height: 26.w,
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.only(left: 7.w),
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(66, 218, 169, 165),
+                        borderRadius: BorderRadius.circular(13.w),
+                      ),
+                      child: Text(
+                        '22岁',
+                        style: TextStyle(
+                          color: const Color(0xFFFF1313),
+                          fontSize: 18.sp,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+        GestureDetector(
+          child: Container(
+            width: 120.w,
+            height: 54.w,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: const Color(0xFFFDDCF3),
+              borderRadius: BorderRadius.circular(27.w),
+            ),
+            child: Text(
+              '私聊',
+              style: TextStyle(
+                color: const Color(0xFFF13737),
+                fontSize: 24.sp,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }

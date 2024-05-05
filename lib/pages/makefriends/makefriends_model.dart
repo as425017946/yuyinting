@@ -1,5 +1,6 @@
 import 'package:appinio_swiper/appinio_swiper.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_sound/public/flutter_sound_player.dart';
 import 'package:get/get.dart';
 
@@ -158,4 +159,9 @@ class MakefriendsController extends GetxController with GetAntiCombo {
     }
     _voice.value = '';
   }
+
+  final _cpSelect = 0.obs;
+  int get cpSelect => _cpSelect.value;
+  set cpSelect(int value) => _cpSelect.value  = value;
+  Map<String, Widget> cpBanners = {};
 }
