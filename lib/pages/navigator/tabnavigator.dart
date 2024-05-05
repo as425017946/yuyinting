@@ -478,6 +478,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         if (listMP.isEmpty) {
           hengFuBean hf  = hengFuBean();
           setState(() {
+            hf.roomName = event.map!['room_name'];
             hf.title = '贵族';
             hf.fromNickname = event.map!['nickname'];
             hf.nobleId = int.parse(event.map!['noble_id'].toString());
@@ -495,6 +496,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
         } else {
           hengFuBean hf  = hengFuBean();
           setState(() {
+            hf.roomName = event.map!['room_name'];
             hf.title = '贵族';
             hf.fromNickname = event.map!['nickname'];
             hf.nobleId = int.parse(event.map!['noble_id'].toString());

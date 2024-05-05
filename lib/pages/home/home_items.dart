@@ -56,33 +56,33 @@ class HomeItems {
         gd = 20.h;
         topHD = 160.h;
         if (hf.nobleId! == 2) {
-          info = '${hf.fromNickname}晋升为上仙';
+          info = '${hf.fromNickname}在${hf.roomName}晋升为上仙';
         } else if (hf.nobleId! == 3) {
-          info = '${hf.fromNickname}晋升为金仙';
+          info = '${hf.fromNickname}在${hf.roomName}晋升为金仙';
         } else if (hf.nobleId! == 4) {
-          info = '${hf.fromNickname}晋升为仙帝';
+          info = '${hf.fromNickname}在${hf.roomName}晋升为仙帝';
         }
         break;
       case '中贵族':
         gd = 20.h;
         topHD = 160.h;
         if (hf.nobleId! == 5) {
-          info = '${hf.fromNickname}晋升为主神';
+          info = '${hf.fromNickname}在${hf.roomName}晋升为主神';
         } else if (hf.nobleId! == 6) {
-          info = '${hf.fromNickname}晋升为天神';
+          info = '${hf.fromNickname}在${hf.roomName}晋升为天神';
         } else if (hf.nobleId! == 7) {
-          info = '${hf.fromNickname}晋升为神王';
+          info = '${hf.fromNickname}在${hf.roomName}晋升为神王';
         }
         break;
       case '高贵族':
         gd = 50.h;
         topHD = 160.h;
         if (hf.nobleId! == 8) {
-          info = '${hf.fromNickname}晋升为神皇';
+          info = '${hf.fromNickname}在${hf.roomName}晋升为神皇';
         } else if (hf.nobleId! == 9) {
-          info = '${hf.fromNickname}晋升为天尊';
+          info = '${hf.fromNickname}在${hf.roomName}晋升为天尊';
         } else if (hf.nobleId! == 10) {
-          info = '${hf.fromNickname}晋升为传说';
+          info = '${hf.fromNickname}在${hf.roomName}晋升为传说';
         }
         break;
       case '蓝魔方':

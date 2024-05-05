@@ -599,7 +599,7 @@ class _TequanPageState extends State<TequanPage> {
                           GestureDetector(
                             onTap: (() {
                               if(MyUtils.checkClick()) {
-                                if(int.parse(sp.getString('nobleID').toString()) < 7){
+                                if(int.parse(gzID) < 7){
                                     MyToastUtils.showToastBottom('贵族等级达到神王即可开启专属客服功能~');
                                 }else{
                                   MyUtils.goTransparentRFPage(

@@ -1777,6 +1777,7 @@ class _RoomPageState extends State<RoomPage>
             if (listMP.isEmpty) {
               hengFuBean hf  = hengFuBean();
               setState(() {
+                hf.roomName = event.map!['room_name'];
                 hf.title = '贵族';
                 hf.fromNickname = event.map!['nickname'];
                 hf.nobleId = int.parse(event.map!['noble_id'].toString());
@@ -1794,6 +1795,7 @@ class _RoomPageState extends State<RoomPage>
             } else {
               hengFuBean hf  = hengFuBean();
               setState(() {
+                hf.roomName = event.map!['room_name'];
                 hf.title = '贵族';
                 hf.fromNickname = event.map!['nickname'];
                 hf.nobleId = int.parse(event.map!['noble_id'].toString());

@@ -39,7 +39,7 @@ class _TeQuanShuoMingPageState extends State<TeQuanShuoMingPage> {
           const Spacer(),
           Center(
             child: Container(
-              height: 500.h,
+              height: 300.h,
               width: 482.w,
               padding: EdgeInsets.only(left: 15.w, right: 15.w),
               //边框设置

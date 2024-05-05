@@ -174,7 +174,7 @@ class PaiduiListPage extends StatelessWidget {
             ],
           ),
         ),
-        WidgetUtils.showImagesFill('assets/images/111.png', double.infinity, double.infinity)
+        // WidgetUtils.showImagesFill('assets/images/111.png', double.infinity, double.infinity)
       ],
     );
   }
