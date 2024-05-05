@@ -503,6 +503,7 @@ class _DialogSend extends StatelessWidget with _DialogMixin {
           disabledBorder: border,
           focusedBorder: border,
         ),
+        textInputAction: TextInputAction.done,
       ),
     );
   }

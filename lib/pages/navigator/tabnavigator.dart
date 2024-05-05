@@ -806,6 +806,7 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
       child: Stack(
         children: [
           Scaffold(
+            resizeToAvoidBottomInset: false,
             body: PageView(
               controller: _controller,
               physics: const NeverScrollableScrollPhysics(), //禁止左右滑动
