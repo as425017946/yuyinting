@@ -57,7 +57,7 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
   Widget _itemTuiJian(BuildContext context, int i) {
     final DataU dataU = listU.firstWhere(
         (element) => element.uid.toString() == listMessage[i]['otherUid'],
-        orElse: () => DataU(liveStatus: 0, loginStatus: 0));
+        orElse: () => DataU(liveStatus: 0, loginStatus: 0, nobleID: 0));
     return Column(
       children: [
         GestureDetector(
@@ -115,7 +115,7 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
                             WidgetUtils.onlyText(
                                 listMessage[i]['nickName'],
                                 StyleUtils.getCommonTextStyle(
-                                    color: MyColors.roomTCWZ2,
+                                    color: dataU.nobleID as int > 0 ? Colors.red : MyColors.roomTCWZ2,
                                     fontSize: ScreenUtil().setSp(28))),
                             WidgetUtils.commonSizedBox(0, 5),
                             // WidgetUtils.showImages(
