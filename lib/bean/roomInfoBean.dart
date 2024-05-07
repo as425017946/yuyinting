@@ -172,6 +172,7 @@ class MikeList {
   String? avatarFrameImg;
   String? avatarFrameGifImg;
   bool? isAudio;
+  int? nobleID;
 
   MikeList(
       {this.id,
@@ -191,7 +192,8 @@ class MikeList {
         this.waveName,
         this.avatarFrameImg,
         this.avatarFrameGifImg,
-        this.isAudio});
+        this.isAudio,
+        this.nobleID});
 
   MikeList.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -212,6 +214,7 @@ class MikeList {
     avatarFrameImg = json['avatar_frame_img'];
     avatarFrameGifImg = json['avatar_frame_gif_img'];
     isAudio = json['is_audio'];
+    nobleID = json['noble_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -234,6 +237,7 @@ class MikeList {
     data['avatar_frame_img'] = this.avatarFrameImg;
     data['avatar_frame_gif_img'] = this.avatarFrameGifImg;
     data['is_audio'] = this.isAudio;
+    data['noble_id'] = this.nobleID;
     return data;
   }
 }

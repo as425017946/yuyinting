@@ -3184,6 +3184,7 @@ class _RoomPageState extends State<RoomPage>
             listM[i].avatarFrameImg = '';
             listM[i].avatarFrameGifImg = '';
             listM[i].isAudio = false;
+            listM[i].nobleID = 0;
             if (listM[i].serialNumber == 1) {
               m1 = false;
             } else if (listM[i].serialNumber == 2) {
@@ -3228,6 +3229,7 @@ class _RoomPageState extends State<RoomPage>
               listM[i].avatarFrameImg = '';
               listM[i].avatarFrameGifImg = '';
               listM[i].isAudio = false;
+              listM[i].nobleID = 0;
               if (listM[i].serialNumber == 1) {
                 m1 = false;
               } else if (listM[i].serialNumber == 2) {
@@ -3266,6 +3268,7 @@ class _RoomPageState extends State<RoomPage>
             listM[i].avatarFrameGifImg = map!['avatar_gif_img'].toString();
             listM[i].waveGifImg = map!['wave_gif_img'].toString();
             listM[i].waveName = map!['wave_name'].toString();
+            listM[i].nobleID = int.parse(map!['noble_id'].toString());
             if (listM[i].serialNumber == 1) {
               m1 = true;
             } else if (listM[i].serialNumber == 2) {
@@ -5325,6 +5328,7 @@ class _RoomPageState extends State<RoomPage>
               listM[i].avatarFrameImg = bean.data![i].avatarFrameImg;
               listM[i].avatarFrameGifImg = bean.data![i].avatarFrameGifImg;
               listM[i].waveName = bean.data![i].waveName;
+              listM[i].nobleID = bean.data![i].nobleID!;
               if (i == 0) {
                 m1 = bean.data![0].uid == 0 ? false : true;
               } else if (i == 1) {

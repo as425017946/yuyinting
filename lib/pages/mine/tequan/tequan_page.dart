@@ -627,52 +627,74 @@ class _TequanPageState extends State<TequanPage> {
                       WidgetUtils.commonSizedBox(20.h, 0),
                       WidgetUtils.bgLine(1.h),
                       const Spacer(),
-                      GestureDetector(
-                        onTap: (() {
-                          if (MyUtils.checkClick()) {
-                            MyUtils.goTransparentPage(
-                                context,
-                                TeQuanShuoMingPage(
-                                  title: '剩余时间说明',
-                                ));
-                          }
-                        }),
-                        child: Row(
-                          children: [
-                            WidgetUtils.commonSizedBox(0, 20),
-                            WidgetUtils.onlyText(
-                                gzTitle,
-                                StyleUtils.getCommonTextStyle(
-                                    color: MyColors.black_1,
-                                    fontSize: ScreenUtil().setSp(26))),
-                            const Spacer(),
-                            WidgetUtils.onlyText(
-                                '当前贵族值',
-                                StyleUtils.getCommonTextStyle(
-                                    color: MyColors.black_1,
-                                    fontSize: ScreenUtil().setSp(26))),
-                            WidgetUtils.onlyText(
-                                gzZhi,
-                                StyleUtils.getCommonTextStyle(
-                                    color: MyColors.guizuYellow,
-                                    fontSize: ScreenUtil().setSp(26))),
-                            const Spacer(),
-                            WidgetUtils.onlyText(
-                                ' 剩余时间',
-                                StyleUtils.getCommonTextStyle(
-                                    color: MyColors.black_1,
-                                    fontSize: ScreenUtil().setSp(26))),
-                            WidgetUtils.onlyText(
+                      Row(
+                        children: [
+                          WidgetUtils.commonSizedBox(0, 20),
+                          WidgetUtils.onlyText(
+                              gzTitle,
+                              StyleUtils.getCommonTextStyle(
+                                  color: MyColors.black_1,
+                                  fontSize: ScreenUtil().setSp(26))),
+                          const Spacer(),
+                          WidgetUtils.onlyText(
+                              '当前贵族值',
+                              StyleUtils.getCommonTextStyle(
+                                  color: MyColors.black_1,
+                                  fontSize: ScreenUtil().setSp(26))),
+                          WidgetUtils.onlyText(
+                              gzZhi,
+                              StyleUtils.getCommonTextStyle(
+                                  color: MyColors.guizuYellow,
+                                  fontSize: ScreenUtil().setSp(26))),
+                          const Spacer(),
+                          GestureDetector(
+                              onTap: (() {
+                                if (MyUtils.checkClick()) {
+                                  MyUtils.goTransparentPage(
+                                      context,
+                                      TeQuanShuoMingPage(
+                                        title: '剩余时间说明',
+                                      ));
+                                }
+                              }),
+                              child: WidgetUtils.onlyText(
+                                  ' 剩余时间',
+                                  StyleUtils.getCommonTextStyle(
+                                      color: MyColors.black_1,
+                                      fontSize: ScreenUtil().setSp(26))),
+                          ),
+                          GestureDetector(
+                            onTap: (() {
+                              if (MyUtils.checkClick()) {
+                                MyUtils.goTransparentPage(
+                                    context,
+                                    TeQuanShuoMingPage(
+                                      title: '剩余时间说明',
+                                    ));
+                              }
+                            }),
+                            child: WidgetUtils.onlyText(
                                 gzTime,
                                 StyleUtils.getCommonTextStyle(
                                     color: MyColors.guizuYellow,
                                     fontSize: ScreenUtil().setSp(26))),
-                            WidgetUtils.commonSizedBox(0, 10.w),
-                            WidgetUtils.showImages(
+                          ),
+                          WidgetUtils.commonSizedBox(0, 10.w),
+                          GestureDetector(
+                            onTap: (() {
+                              if (MyUtils.checkClick()) {
+                                MyUtils.goTransparentPage(
+                                    context,
+                                    TeQuanShuoMingPage(
+                                      title: '剩余时间说明',
+                                    ));
+                              }
+                            }),
+                            child:  WidgetUtils.showImages(
                                 'assets/images/tequan_wen1.png', 20.h, 20.h),
-                            WidgetUtils.commonSizedBox(0, 20),
-                          ],
-                        ),
+                          ),
+                          WidgetUtils.commonSizedBox(0, 20),
+                        ],
                       ),
                       const Spacer(),
                     ],

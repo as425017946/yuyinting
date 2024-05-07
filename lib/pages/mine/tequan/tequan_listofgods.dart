@@ -59,19 +59,19 @@ class _TequanListofgodsPageState extends State<TequanListofgodsPage> {
       height: double.infinity,
       decoration: const BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/images/tequan_fengshen_bg.jpg'),
+          image: AssetImage('assets/images/tequan_fengshen_bg.png'),
           fit: BoxFit.fill,
         ),
       ),
       child: Stack(
         children: [
-          Positioned(
-            left: 85.w,
-            width: 580.w,
-            top: 320.h,
-            height: 42.h,
-            child: _marquee(),
-          ),
+          // Positioned(
+          //   left: 85.w,
+          //   width: 580.w,
+          //   top: 320.h,
+          //   height: 42.h,
+          //   child: _marquee(),
+          // ),
           Positioned(
             left: 75.w,
             width: 600.w,

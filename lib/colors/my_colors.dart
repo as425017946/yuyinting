@@ -175,4 +175,12 @@ class MyColors {
   static const Color newGZ = Color(0xFF35283B);
   static const Color newGZ2 = Color(0xFF473b2b);
   static const Color newGZ3 = Color(0xFF4d493c);
+  /// 贵族颜色值
+  static const Color gz1 = Color(0xFFF5BF9F);
+  static const Color gz2 = Color(0xFFDB89DD);
+  static const Color gz3 = Color(0xFFFDDB45);
+  static const Color gz4 = Color(0xFFFB7099);
+  static const Color gz5 = Color(0xFFFEA97B);
+  static const Color gz6 = Color(0xFFB5325F);
+
 }

@@ -393,8 +393,8 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                                     begin: Alignment.centerLeft,
                                     end: Alignment.centerRight,
                                     colors: [
-                                      Color(0xFF6ffffd),
-                                      Color(0xFFf8fec4)
+                                      MyColors.gz1,
+                                      MyColors.gz2
                                     ],
                                   ).createShader(Offset.zero & bounds.size);
                                 },

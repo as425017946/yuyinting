@@ -771,6 +771,9 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
     listenRoomBack.cancel();
     listenZDY.cancel();
     listenBarVisible.cancel();
+    if(_timer != null){
+      _timer!.cancel();
+    }
     super.dispose();
   }
   bool _visible = true;

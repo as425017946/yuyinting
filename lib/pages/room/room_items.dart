@@ -1673,8 +1673,9 @@ class RoomItems {
                               38.h)
                               : list[i]['noble_id'].toString() == "2"
                               ? WidgetUtils.showImages(
-                              'assets/images/tequan_icon_shangxian.png', 38.h, 38
-                              .h)
+                              'assets/images/tequan_icon_shangxian.png', 38.h,
+                              38
+                                  .h)
                               : list[i]['noble_id'].toString() == "3"
                               ? WidgetUtils.showImages(
                               'assets/images/tequan_icon_jinxian.png',
@@ -1837,7 +1838,8 @@ class RoomItems {
               // constraints: BoxConstraints(maxWidth: double.infinity - 130.w),
               decoration: BoxDecoration(
                   image: DecorationImage(
-                    centerSlice: sp.getString('isEmulation') == '1' ? Rect.fromLTWH(20.h, 20.h, 1, 1) : Rect.fromLTWH(40.w, 40.w
+                    centerSlice: sp.getString('isEmulation') == '1' ? Rect
+                        .fromLTWH(20.h, 20.h, 1, 1) : Rect.fromLTWH(40.w, 40.w
                         , 1, 1),
                     // image: AssetImage('assets/images/cj/chat_text.png'),
                     image: CachedNetworkImageProvider(
@@ -2322,6 +2324,22 @@ class RoomItems {
                           : Row(
                         children: [
                           const Expanded(child: Text('')),
+                          listm[8].nobleID! > 0 ? ShaderMask(
+                            shaderCallback: (Rect bounds) {
+                              return const LinearGradient(
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                                colors: [MyColors.gz3, MyColors.gz4],
+                              ).createShader(Offset.zero & bounds.size);
+                            },
+                            blendMode: BlendMode.srcATop,
+                            child: Text(
+                              listm[8].nickname! ?? '',
+                              style: TextStyle(
+                                  fontSize: ScreenUtil().setSp(21),
+                                  color: const Color(0xffffffff)),
+                            ),
+                          ) :
                           WidgetUtils.onlyText(
                               listm[8].nickname!,
                               StyleUtils.getCommonTextStyle(
@@ -2563,6 +2581,22 @@ class RoomItems {
                               ? Row(
                             children: [
                               const Expanded(child: Text('')),
+                              listm[0].nobleID! > 0 ? ShaderMask(
+                                shaderCallback: (Rect bounds) {
+                                  return const LinearGradient(
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                    colors: [MyColors.gz3, MyColors.gz4],
+                                  ).createShader(Offset.zero & bounds.size);
+                                },
+                                blendMode: BlendMode.srcATop,
+                                child: Text(
+                                  listm[0].nickname! ?? '',
+                                  style: TextStyle(
+                                      fontSize: ScreenUtil().setSp(21),
+                                      color: const Color(0xffffffff)),
+                                ),
+                              ) :
                               WidgetUtils.onlyText(
                                   listm[0].nickname!,
                                   StyleUtils.getCommonTextStyle(
@@ -2773,6 +2807,22 @@ class RoomItems {
                               ? Row(
                             children: [
                               const Expanded(child: Text('')),
+                              listm[1].nobleID! > 0 ? ShaderMask(
+                                shaderCallback: (Rect bounds) {
+                                  return const LinearGradient(
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                    colors: [MyColors.gz3, MyColors.gz4],
+                                  ).createShader(Offset.zero & bounds.size);
+                                },
+                                blendMode: BlendMode.srcATop,
+                                child: Text(
+                                  listm[1].nickname! ?? '',
+                                  style: TextStyle(
+                                      fontSize: ScreenUtil().setSp(21),
+                                      color: const Color(0xffffffff)),
+                                ),
+                              ) :
                               WidgetUtils.onlyText(
                                   listm[1].nickname!,
                                   StyleUtils.getCommonTextStyle(
@@ -2983,6 +3033,22 @@ class RoomItems {
                               ? Row(
                             children: [
                               const Expanded(child: Text('')),
+                              listm[2].nobleID! > 0 ? ShaderMask(
+                                shaderCallback: (Rect bounds) {
+                                  return const LinearGradient(
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                    colors: [MyColors.gz3, MyColors.gz4],
+                                  ).createShader(Offset.zero & bounds.size);
+                                },
+                                blendMode: BlendMode.srcATop,
+                                child: Text(
+                                  listm[2].nickname! ?? '',
+                                  style: TextStyle(
+                                      fontSize: ScreenUtil().setSp(21),
+                                      color: const Color(0xffffffff)),
+                                ),
+                              ) :
                               WidgetUtils.onlyText(
                                   listm[2].nickname!,
                                   StyleUtils.getCommonTextStyle(
@@ -3194,6 +3260,22 @@ class RoomItems {
                               ? Row(
                             children: [
                               const Expanded(child: Text('')),
+                              listm[3].nobleID! > 0 ? ShaderMask(
+                                shaderCallback: (Rect bounds) {
+                                  return const LinearGradient(
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                    colors: [MyColors.gz3, MyColors.gz4],
+                                  ).createShader(Offset.zero & bounds.size);
+                                },
+                                blendMode: BlendMode.srcATop,
+                                child: Text(
+                                  listm[3].nickname! ?? '',
+                                  style: TextStyle(
+                                      fontSize: ScreenUtil().setSp(21),
+                                      color: const Color(0xffffffff)),
+                                ),
+                              ) :
                               WidgetUtils.onlyText(
                                   listm[3].nickname!,
                                   StyleUtils.getCommonTextStyle(
@@ -3413,6 +3495,22 @@ class RoomItems {
                                 ? Row(
                               children: [
                                 const Expanded(child: Text('')),
+                                listm[4].nobleID! > 0 ? ShaderMask(
+                                  shaderCallback: (Rect bounds) {
+                                    return const LinearGradient(
+                                      begin: Alignment.centerLeft,
+                                      end: Alignment.centerRight,
+                                      colors: [MyColors.gz3, MyColors.gz4],
+                                    ).createShader(Offset.zero & bounds.size);
+                                  },
+                                  blendMode: BlendMode.srcATop,
+                                  child: Text(
+                                    listm[4].nickname! ?? '',
+                                    style: TextStyle(
+                                        fontSize: ScreenUtil().setSp(21),
+                                        color: const Color(0xffffffff)),
+                                  ),
+                                ) :
                                 WidgetUtils.onlyText(
                                     listm[4].nickname!,
                                     StyleUtils.getCommonTextStyle(
@@ -3625,6 +3723,22 @@ class RoomItems {
                                 ? Row(
                               children: [
                                 const Expanded(child: Text('')),
+                                listm[5].nobleID! > 0 ? ShaderMask(
+                                  shaderCallback: (Rect bounds) {
+                                    return const LinearGradient(
+                                      begin: Alignment.centerLeft,
+                                      end: Alignment.centerRight,
+                                      colors: [MyColors.gz3, MyColors.gz4],
+                                    ).createShader(Offset.zero & bounds.size);
+                                  },
+                                  blendMode: BlendMode.srcATop,
+                                  child: Text(
+                                    listm[5].nickname! ?? '',
+                                    style: TextStyle(
+                                        fontSize: ScreenUtil().setSp(21),
+                                        color: const Color(0xffffffff)),
+                                  ),
+                                ) :
                                 WidgetUtils.onlyText(
                                     listm[5].nickname!,
                                     StyleUtils.getCommonTextStyle(
@@ -3837,6 +3951,22 @@ class RoomItems {
                                 ? Row(
                               children: [
                                 const Expanded(child: Text('')),
+                                listm[6].nobleID! > 0 ? ShaderMask(
+                                  shaderCallback: (Rect bounds) {
+                                    return const LinearGradient(
+                                      begin: Alignment.centerLeft,
+                                      end: Alignment.centerRight,
+                                      colors: [MyColors.gz3, MyColors.gz4],
+                                    ).createShader(Offset.zero & bounds.size);
+                                  },
+                                  blendMode: BlendMode.srcATop,
+                                  child: Text(
+                                    listm[6].nickname! ?? '',
+                                    style: TextStyle(
+                                        fontSize: ScreenUtil().setSp(21),
+                                        color: const Color(0xffffffff)),
+                                  ),
+                                ) :
                                 WidgetUtils.onlyText(
                                     listm[6].nickname!,
                                     StyleUtils.getCommonTextStyle(
@@ -4306,6 +4436,22 @@ class RoomItems {
                                 ? Row(
                               children: [
                                 const Expanded(child: Text('')),
+                                listm[7].nobleID! > 0 ? ShaderMask(
+                                  shaderCallback: (Rect bounds) {
+                                    return const LinearGradient(
+                                      begin: Alignment.centerLeft,
+                                      end: Alignment.centerRight,
+                                      colors: [MyColors.gz3, MyColors.gz4],
+                                    ).createShader(Offset.zero & bounds.size);
+                                  },
+                                  blendMode: BlendMode.srcATop,
+                                  child: Text(
+                                    listm[7].nickname! ?? '',
+                                    style: TextStyle(
+                                        fontSize: ScreenUtil().setSp(21),
+                                        color: const Color(0xffffffff)),
+                                  ),
+                                ) :
                                 WidgetUtils.onlyText(
                                     listm[7].nickname!,
                                     StyleUtils.getCommonTextStyle(

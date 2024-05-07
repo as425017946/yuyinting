@@ -242,12 +242,29 @@ class _MessagePageState extends State<MessagePage>
                         color: Colors.transparent,
                         child: Row(
                           children: [
-                            Text(
-                              listMessage[i]['nickName'] ?? '',
-                              style: StyleUtils.getCommonTextStyle(
-                                  color: dataU.nobleID as int > 0 ? Colors.red : Colors.black,
-                                  fontSize: ScreenUtil().setSp(32)),
-                            ),
+                            dataU.nobleID as int > 0
+                                ? ShaderMask(
+                                    shaderCallback: (Rect bounds) {
+                                      return const LinearGradient(
+                                        begin: Alignment.centerLeft,
+                                        end: Alignment.centerRight,
+                                        colors: [MyColors.gz5, MyColors.gz6],
+                                      ).createShader(Offset.zero & bounds.size);
+                                    },
+                                    blendMode: BlendMode.srcATop,
+                                    child: Text(
+                                      listMessage[i]['nickName'] ?? '',
+                                      style: TextStyle(
+                                          fontSize: ScreenUtil().setSp(32),
+                                          color: const Color(0xffffffff)),
+                                    ),
+                                  )
+                                : Text(
+                                    listMessage[i]['nickName'] ?? '',
+                                    style: StyleUtils.getCommonTextStyle(
+                                        color: Colors.black,
+                                        fontSize: ScreenUtil().setSp(32)),
+                                  ),
                             const Expanded(child: Text('')),
                             listMessage[i]['nickName'].toString() == '小柴客服'
                                 ? Text(

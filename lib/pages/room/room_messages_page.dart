@@ -112,11 +112,29 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
                         alignment: Alignment.centerLeft,
                         child: Row(
                           children: [
-                            WidgetUtils.onlyText(
-                                listMessage[i]['nickName'],
-                                StyleUtils.getCommonTextStyle(
-                                    color: dataU.nobleID as int > 0 ? Colors.red : MyColors.roomTCWZ2,
-                                    fontSize: ScreenUtil().setSp(28))),
+                            dataU.nobleID as int > 0
+                                ? ShaderMask(
+                              shaderCallback: (Rect bounds) {
+                                return const LinearGradient(
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                  colors: [MyColors.gz5, MyColors.gz6],
+                                ).createShader(Offset.zero & bounds.size);
+                              },
+                              blendMode: BlendMode.srcATop,
+                              child: Text(
+                                listMessage[i]['nickName'] ?? '',
+                                style: TextStyle(
+                                    fontSize: ScreenUtil().setSp(28),
+                                    color: const Color(0xffffffff)),
+                              ),
+                            )
+                                : Text(
+                              listMessage[i]['nickName'] ?? '',
+                              style: StyleUtils.getCommonTextStyle(
+                                  color: MyColors.roomTCWZ2,
+                                  fontSize: ScreenUtil().setSp(28)),
+                            ),
                             WidgetUtils.commonSizedBox(0, 5),
                             // WidgetUtils.showImages(
                             //     'assets/images/room_nan.png',

@@ -330,16 +330,16 @@ class _MofangJinPageState extends State<MofangJinPage>
                                   if (double.parse(sp
                                               .getString('mofangJBY')
                                               .toString()) <
-                                          2000 &&
-                                      cishu == 10) {
+                                          1000 &&
+                                      cishu == 5) {
                                     MyToastUtils.showToastBottom('钱包余额不足');
                                     return;
                                   }
                                   if (double.parse(sp
                                               .getString('mofangJBY')
                                               .toString()) <
-                                          20000 &&
-                                      cishu == 100) {
+                                          2000 &&
+                                      cishu == 10) {
                                     MyToastUtils.showToastBottom('钱包余额不足');
                                     return;
                                   }

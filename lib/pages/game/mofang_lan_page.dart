@@ -338,16 +338,16 @@ class _MofangLanPageState extends State<MofangLanPage>
                                     if (double.parse(sp
                                                 .getString('mofangJBY')
                                                 .toString()) <
-                                            200 &&
-                                        cishu == 10) {
+                                            100 &&
+                                        cishu == 5) {
                                       MyToastUtils.showToastBottom('钱包余额不足');
                                       return;
                                     }
                                     if (double.parse(sp
                                                 .getString('mofangJBY')
                                                 .toString()) <
-                                            2000 &&
-                                        cishu == 100) {
+                                            200 &&
+                                        cishu == 10) {
                                       MyToastUtils.showToastBottom('钱包余额不足');
                                       return;
                                     }

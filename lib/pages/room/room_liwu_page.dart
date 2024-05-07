@@ -840,13 +840,12 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                           isMaiPeople
                               ? WidgetUtils.myLine(
                                   color: MyColors.roomTCWZ3,
-                                  endIndent: 20,
-                                  indent: 20,
+                                  endIndent: 20.w,
+                                  indent: 20.w,
                                   thickness: 0.5)
                               : WidgetUtils.commonSizedBox(0, 0),
                           Row(
                             children: [
-                              WidgetUtils.commonSizedBox(0, 20),
                               GestureDetector(
                                 onTap: (() {
                                   setState(() {
@@ -1011,7 +1010,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                               : ScreenUtil().setSp(25))),
                                 ),
                               ),
-                              const Expanded(child: Text('')),
+                              WidgetUtils.commonSizedBox(0, 10.w),
                               leixing == 2
                                   ? WidgetUtils.onlyTextCenter(
                                       '总价值：$zonge',
@@ -1019,7 +1018,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                           color: MyColors.roomTCWZ2,
                                           fontSize: ScreenUtil().setSp(25)))
                                   : const Text(''),
-                              WidgetUtils.commonSizedBox(0, 20.h),
+                              const Spacer(),
                               leixing == 2
                                   ? GestureDetector(
                                       onTap: (() {
@@ -1052,7 +1051,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                                                   ScreenUtil().setSp(28))),
                                     )
                                   : const Text(''),
-                              WidgetUtils.commonSizedBox(0, 20),
+                              WidgetUtils.commonSizedBox(0, 20.w),
                             ],
                           ),
 
