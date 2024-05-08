@@ -581,22 +581,6 @@ class _RoomPageState extends State<RoomPage>
   // 是否抱麦
   bool isBaoMic = false;
 
-  ///大厅使用
-  List<Map> imgList = [
-    {"url": "assets/svga/gp/l_maliao.svga"},
-    {"url": "assets/svga/gp/l_sc.svga"},
-  ];
-  List<Map> imgListCar = [
-    {"url": "assets/svga/gp/l_maliao.svga"},
-  ];
-  List<Map> imgListSC = [
-    {"url": "assets/svga/gp/l_sc.svga"},
-  ];
-  List<Map> imgList2 = [
-    {"url": "assets/svga/gp/l_zp.svga"},
-    {"url": "assets/svga/mofang_jin_show.svga"},
-  ];
-
   // list里面的type 0 代表系统公告 1 房间内的公告 2谁进入了房间 3厅内用户正常聊天
   List<Map> list = [];
 
@@ -4308,45 +4292,7 @@ class _RoomPageState extends State<RoomPage>
                                 )
                               : const Text(''),
 
-                          Expanded(
-                            child: Transform.translate(
-                              offset: Offset(0, -180.h),
-                              child: Container(
-                                width: double.infinity,
-                                color: Colors.transparent,
-                                child: Stack(
-                                  children: [
-                                    RoomItems.lunbotu1(
-                                        context,
-                                        (sp.getInt('user_level')! >= 3 ||
-                                                    sp.getInt(
-                                                            'user_grLevel')! >=
-                                                        3) &&
-                                                sp
-                                                        .getString('scIsOk')
-                                                        .toString() ==
-                                                    '0'
-                                            ? imgList
-                                            : (sp.getInt('user_level')! >= 3 ||
-                                                        sp.getInt(
-                                                                'user_grLevel')! >=
-                                                            3) &&
-                                                    sp
-                                                            .getString('scIsOk')
-                                                            .toString() ==
-                                                        '1'
-                                                ? imgListCar
-                                                : imgListSC),
-                                    (sp.getInt('user_level')! >= 3 ||
-                                            sp.getInt('user_grLevel')! >= 3)
-                                        ? RoomItems.lunbotu2(
-                                            context, imgList2, widget.roomId)
-                                        : const Text(''),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
+                          _lunbotu(),
 
                           /// 底部按钮信息
                           RoomItems.footBtn(
@@ -6328,5 +6274,34 @@ class _RoomPageState extends State<RoomPage>
     } catch (e) {
       // MyToastUtils.showToastBottom(MyConfig.errorTitle);
     }
+  }
+
+  Widget _lunbotu() {
+    final hasGame = (sp.getInt('user_level')! >= 3 || sp.getInt('user_grLevel')! >= 3);
+    final isSc = sp.getString('scIsOk').toString() == '1';
+    final list1 = [
+      if (isSc) {"url": "assets/svga/gp/l_sc.svga", "type": "svga", "content": "sc"},
+      {"url": "assets/images/room_play_banner.png", "type": "image", "content": "wf"},
+    ];
+    final list2 = [
+      {"url": "assets/svga/gp/l_zp.svga"},
+      {"url": "assets/svga/mofang_jin_show.svga"},
+      {"url": "assets/svga/gp/l_maliao.svga"},
+    ];
+    return Expanded(
+      child: Transform.translate(
+        offset: Offset(0, -180.h),
+        child: Container(
+          width: double.infinity,
+          color: Colors.transparent,
+          child: Stack(
+            children: [
+              RoomItems.lunbotu1(context, list1),
+              if (hasGame) RoomItems.lunbotu2(context, list2, widget.roomId),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

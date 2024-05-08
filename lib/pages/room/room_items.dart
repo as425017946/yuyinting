@@ -7,6 +7,7 @@ import 'package:yuyinting/pages/room/room_youxi_page.dart';
 import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/my_utils.dart';
+import 'package:get/get.dart';
 import '../../bean/roomInfoBean.dart';
 import '../../colors/my_colors.dart';
 import '../../main.dart';
@@ -19,6 +20,7 @@ import '../game/car_page.dart';
 import '../game/mofang_page.dart';
 import '../game/zhuanpan_page.dart';
 import '../shouchong/shouchong_page.dart';
+import 'play/room_play_page.dart';
 import 'room_gongneng.dart';
 import 'room_liwu_page.dart';
 import 'room_manager_page.dart';
@@ -4584,8 +4586,15 @@ class RoomItems {
         ),
         child: Swiper(
           itemBuilder: (BuildContext context, int index) {
+            final String url = imgList[index]["url"];
             // 配置图片地址
-            return SVGASimpleImage(assetsName: imgList[index]["url"]);
+            if (imgList[index]["type"] == "svga") {
+              return SVGASimpleImage(assetsName: url);
+            }
+            return Padding(
+              padding: EdgeInsets.only(left: 20.h, right: 20.h, top: 40.h),
+              child: Image.asset(url),
+            );
           },
           // 配置图片数量
           itemCount: imgList.length,
@@ -4599,11 +4608,15 @@ class RoomItems {
             // LogE('用户拖动或者自动播放引起下标改变调用');
           },
           onTap: (index) {
-            // LogE('用户点击引起下标改变调用');
-            if (imgList[index].toString().contains('l_maliao')) {
-              MyUtils.goTransparentPage(context, const Carpage());
-            } else if (imgList[index].toString().contains('l_sc')) {
-              MyUtils.goTransparentPage(context, const ShouChongPage());
+            switch (imgList[index]["content"]) {
+              case 'sc':
+                MyUtils.goTransparentPage(context, const ShouChongPage());
+                break;
+              case 'wf':
+                Get.bottomSheet(RoomPlayPage());
+                break;
+              default:
+                break;
             }
           },
         ),
@@ -4657,6 +4670,9 @@ class RoomItems {
                   MoFangPage(
                     roomID: roomid,
                   ));
+            } else if (index == 2) {
+              // 马里奥
+              MyUtils.goTransparentPage(context, const Carpage());
             }
           },
         ),
