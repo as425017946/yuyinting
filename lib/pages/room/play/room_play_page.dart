@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import '../../../utils/event_utils.dart';
 import '../../../utils/getx_tools.dart';
 
+// ignore: must_be_immutable
 class RoomPlayPage extends StatelessWidget with GetAntiCombo {
   final list = _Model.getList();
   RoomPlayPage({super.key});

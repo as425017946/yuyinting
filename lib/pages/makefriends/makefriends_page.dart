@@ -154,7 +154,7 @@ class MakefriendsPage extends StatelessWidget {
       key: Key(c.list.length.toString()),
       cardsCount: c.list.length,
       loop: true,
-      cardsSpacing: -25,
+      cardsSpacing: -50.h,
       backgroundCardsCount: 2,
       padding: EdgeInsets.zero,
       onSwipe: c.onSwipe,
