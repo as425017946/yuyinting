@@ -276,7 +276,7 @@ class _TuijianPageState extends State<TuijianPage>
                     ),
                     Expanded(
                       child: Container(
-                        height: 110.h,
+                        height: (110 * 1.3).w,
                         width: double.infinity,
                         color: Colors.transparent,
                         child: Column(
