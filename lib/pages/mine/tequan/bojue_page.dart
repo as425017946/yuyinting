@@ -219,21 +219,24 @@ class _BojuePageState extends State<BojuePage>  with TickerProviderStateMixin {
                   ],
                 )),
             const Expanded(child: Text('')),
-            SizedBox(
-                width: ScreenUtil().setWidth(200),
-                child: Column(
-                  children: [
-                    WidgetUtils.showImages(
-                        'assets/images/tequan_qp.png',
-                        ScreenUtil().setHeight(103),
-                        ScreenUtil().setHeight(103)),
-                    WidgetUtils.onlyTextCenter(
-                        '特权公屏气泡',
-                        StyleUtils.getCommonTextStyle(
-                            color: MyColors.guizuYellow,
-                            fontSize: ScreenUtil().setSp(25))),
-                  ],
-                )),
+            Opacity(
+              opacity: 0,
+              child: SizedBox(
+                  width: ScreenUtil().setWidth(200),
+                  child: Column(
+                    children: [
+                      WidgetUtils.showImages(
+                          'assets/images/tequan_qp.png',
+                          ScreenUtil().setHeight(103),
+                          ScreenUtil().setHeight(103)),
+                      WidgetUtils.onlyTextCenter(
+                          '特权公屏气泡',
+                          StyleUtils.getCommonTextStyle(
+                              color: MyColors.guizuYellow,
+                              fontSize: ScreenUtil().setSp(25))),
+                    ],
+                  )),
+            ),
             WidgetUtils.commonSizedBox(0, 20),
           ],
         ),

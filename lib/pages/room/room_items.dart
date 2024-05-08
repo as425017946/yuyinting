@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:yuyinting/pages/room/room_youxi_page.dart';
+import 'package:yuyinting/utils/log_util.dart';
 import 'package:yuyinting/utils/my_toast_utils.dart';
 import 'package:yuyinting/utils/my_utils.dart';
 import '../../bean/roomInfoBean.dart';
@@ -368,7 +369,7 @@ class RoomItems {
                                 38.h,
                                 38.h),
                           )
-                              : int.parse(list[i]['newLv'].toString()) == 37 &&
+                              : int.parse(list[i]['newLv'].toString()) >= 37 &&
                               int.parse(list[i]['newLv'].toString()) <= 40
                               ? Transform.translate(
                             offset: Offset(0, 5.h),
@@ -758,7 +759,7 @@ class RoomItems {
                             38.h,
                             38.h),
                       )
-                          : int.parse(list[i]['newLv'].toString()) == 37 &&
+                          : int.parse(list[i]['newLv'].toString()) >= 37 &&
                           int.parse(list[i]['newLv'].toString()) <= 40
                           ? Transform.translate(
                         offset: Offset(0, 5.h),
@@ -1600,7 +1601,7 @@ class RoomItems {
                                   38.h,
                                   38.h),
                             )
-                                : int.parse(list[i]['newLv'].toString()) ==
+                                : int.parse(list[i]['newLv'].toString()) >=
                                 37 &&
                                 int.parse(list[i]['newLv'].toString()) <= 40
                                 ? Transform.translate(
@@ -2324,7 +2325,7 @@ class RoomItems {
                           : Row(
                         children: [
                           const Expanded(child: Text('')),
-                          listm[8].nobleID! > 0 ? ShaderMask(
+                          listm[8].nobleID! > 4 ? ShaderMask(
                             shaderCallback: (Rect bounds) {
                               return const LinearGradient(
                                 begin: Alignment.centerLeft,
@@ -2581,7 +2582,7 @@ class RoomItems {
                               ? Row(
                             children: [
                               const Expanded(child: Text('')),
-                              listm[0].nobleID! > 0 ? ShaderMask(
+                              listm[0].nobleID! > 4 ? ShaderMask(
                                 shaderCallback: (Rect bounds) {
                                   return const LinearGradient(
                                     begin: Alignment.centerLeft,
@@ -2807,7 +2808,7 @@ class RoomItems {
                               ? Row(
                             children: [
                               const Expanded(child: Text('')),
-                              listm[1].nobleID! > 0 ? ShaderMask(
+                              listm[1].nobleID! > 4 ? ShaderMask(
                                 shaderCallback: (Rect bounds) {
                                   return const LinearGradient(
                                     begin: Alignment.centerLeft,
@@ -3033,7 +3034,7 @@ class RoomItems {
                               ? Row(
                             children: [
                               const Expanded(child: Text('')),
-                              listm[2].nobleID! > 0 ? ShaderMask(
+                              listm[2].nobleID! > 4 ? ShaderMask(
                                 shaderCallback: (Rect bounds) {
                                   return const LinearGradient(
                                     begin: Alignment.centerLeft,
@@ -3260,7 +3261,7 @@ class RoomItems {
                               ? Row(
                             children: [
                               const Expanded(child: Text('')),
-                              listm[3].nobleID! > 0 ? ShaderMask(
+                              listm[3].nobleID! > 4 ? ShaderMask(
                                 shaderCallback: (Rect bounds) {
                                   return const LinearGradient(
                                     begin: Alignment.centerLeft,
@@ -3495,7 +3496,7 @@ class RoomItems {
                                 ? Row(
                               children: [
                                 const Expanded(child: Text('')),
-                                listm[4].nobleID! > 0 ? ShaderMask(
+                                listm[4].nobleID! > 4 ? ShaderMask(
                                   shaderCallback: (Rect bounds) {
                                     return const LinearGradient(
                                       begin: Alignment.centerLeft,
@@ -3723,7 +3724,7 @@ class RoomItems {
                                 ? Row(
                               children: [
                                 const Expanded(child: Text('')),
-                                listm[5].nobleID! > 0 ? ShaderMask(
+                                listm[5].nobleID! > 4 ? ShaderMask(
                                   shaderCallback: (Rect bounds) {
                                     return const LinearGradient(
                                       begin: Alignment.centerLeft,
@@ -3951,7 +3952,7 @@ class RoomItems {
                                 ? Row(
                               children: [
                                 const Expanded(child: Text('')),
-                                listm[6].nobleID! > 0 ? ShaderMask(
+                                listm[6].nobleID! > 4 ? ShaderMask(
                                   shaderCallback: (Rect bounds) {
                                     return const LinearGradient(
                                       begin: Alignment.centerLeft,
@@ -4436,7 +4437,7 @@ class RoomItems {
                                 ? Row(
                               children: [
                                 const Expanded(child: Text('')),
-                                listm[7].nobleID! > 0 ? ShaderMask(
+                                listm[7].nobleID! > 4 ? ShaderMask(
                                   shaderCallback: (Rect bounds) {
                                     return const LinearGradient(
                                       begin: Alignment.centerLeft,

@@ -242,7 +242,7 @@ class _MessagePageState extends State<MessagePage>
                         color: Colors.transparent,
                         child: Row(
                           children: [
-                            dataU.nobleID as int > 0
+                            dataU.nobleID as int > 5
                                 ? ShaderMask(
                                     shaderCallback: (Rect bounds) {
                                       return const LinearGradient(

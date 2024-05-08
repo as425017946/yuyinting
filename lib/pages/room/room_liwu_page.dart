@@ -849,6 +849,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                               GestureDetector(
                                 onTap: (() {
                                   setState(() {
+                                    gzTitle = '送礼';
                                     isTS = false;
                                     shuliang = 1;
                                     isReduce = false;
@@ -891,6 +892,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                               GestureDetector(
                                 onTap: (() {
                                   setState(() {
+                                    gzTitle = '送礼';
                                     isTS = false;
                                     shuliang = 1;
                                     isReduce = false;
@@ -932,6 +934,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                               GestureDetector(
                                 onTap: (() {
                                   setState(() {
+                                    gzTitle = '送礼';
                                     isReduce = false;
                                     url = '';
                                     svga = '';
@@ -974,6 +977,7 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
                               GestureDetector(
                                 onTap: (() {
                                   setState(() {
+                                    gzTitle = '送礼';
                                     isTS = false;
                                     shuliang = 1;
                                     isReduce = false;

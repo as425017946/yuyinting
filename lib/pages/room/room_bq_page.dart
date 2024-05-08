@@ -976,7 +976,7 @@ class _APageState extends State<RoomBQPage> {
                                   ),
                   ),
                 ),
-                (typeB == 3 && int.parse(sp.getString('nobleID').toString()) == 0 )? Container(
+                (typeB == 3 && int.parse(sp.getString('nobleID').toString()) < 2 )? Container(
                   margin: EdgeInsets.only(top: 130.h),
                   height: double.infinity,
                   width: double.infinity,
@@ -988,7 +988,7 @@ class _APageState extends State<RoomBQPage> {
                       WidgetUtils.showImages('assets/images/gz/bq_suo.png', 50.h, 50.h),
                       WidgetUtils.commonSizedBox(10.h, 0),
                       WidgetUtils.onlyTextCenter(
-                          '达成贵族等级解锁',
+                          '达成上仙及以上贵族等级解锁',
                           StyleUtils
                               .getCommonTextStyle(
                               color: Colors.white,

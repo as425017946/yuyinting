@@ -745,61 +745,61 @@ class _TequanPageState extends State<TequanPage> {
                 initialPage: _currentIndex,
               );
               if (bean.data!.my!.nobleId == 1) {
-                gzTitle = '当前等级：玄仙';
+                gzTitle = '当前：玄仙';
                 gzNextTitle = '上仙';
                 gzCha = (int.parse(bean.data!.ls![1].upValue!) -
                         int.parse(bean.data!.my!.nobleValue!))
                     .toString();
               } else if (bean.data!.my!.nobleId == 2) {
-                gzTitle = '当前等级：上仙';
+                gzTitle = '当前：上仙';
                 gzNextTitle = '金仙';
                 gzCha = (int.parse(bean.data!.ls![2].upValue!) -
                         int.parse(bean.data!.my!.nobleValue!))
                     .toString();
               } else if (bean.data!.my!.nobleId == 3) {
-                gzTitle = '当前等级：金仙';
+                gzTitle = '当前：金仙';
                 gzNextTitle = '仙帝';
                 gzCha = (int.parse(bean.data!.ls![3].upValue!) -
                         int.parse(bean.data!.my!.nobleValue!))
                     .toString();
               } else if (bean.data!.my!.nobleId == 4) {
-                gzTitle = '当前等级：仙帝';
+                gzTitle = '当前：仙帝';
                 gzNextTitle = '主神';
                 gzCha = (int.parse(bean.data!.ls![4].upValue!) -
                         int.parse(bean.data!.my!.nobleValue!))
                     .toString();
               } else if (bean.data!.my!.nobleId == 5) {
-                gzTitle = '当前等级：主神';
+                gzTitle = '当前：主神';
                 gzNextTitle = '天神';
                 gzCha = (int.parse(bean.data!.ls![5].upValue!) -
                         int.parse(bean.data!.my!.nobleValue!))
                     .toString();
               } else if (bean.data!.my!.nobleId == 6) {
-                gzTitle = '当前等级：天神';
+                gzTitle = '当前：天神';
                 gzNextTitle = '神王';
                 gzCha = (int.parse(bean.data!.ls![6].upValue!) -
                         int.parse(bean.data!.my!.nobleValue!))
                     .toString();
               } else if (bean.data!.my!.nobleId == 7) {
-                gzTitle = '当前等级：神王';
+                gzTitle = '当前：神王';
                 gzNextTitle = '神皇';
                 gzCha = (int.parse(bean.data!.ls![7].upValue!) -
                         int.parse(bean.data!.my!.nobleValue!))
                     .toString();
               } else if (bean.data!.my!.nobleId == 8) {
-                gzTitle = '当前等级：神皇';
+                gzTitle = '当前：神皇';
                 gzNextTitle = '天尊';
                 gzCha = (int.parse(bean.data!.ls![8].upValue!) -
                         int.parse(bean.data!.my!.nobleValue!))
                     .toString();
               } else if (bean.data!.my!.nobleId == 9) {
-                gzTitle = '当前等级：天尊';
+                gzTitle = '当前：天尊';
                 gzNextTitle = '传说';
-                gzCha = (int.parse(bean.data!.ls![1].upValue!) -
+                gzCha = (int.parse(bean.data!.ls![9].upValue!) -
                         int.parse(bean.data!.my!.nobleValue!))
                     .toString();
               } else {
-                gzTitle = '当前等级：传说';
+                gzTitle = '当前：传说';
               }
             }else {
               _currentIndex = 0;

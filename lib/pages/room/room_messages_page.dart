@@ -112,7 +112,7 @@ class _RoomMessagesPageState extends State<RoomMessagesPage> {
                         alignment: Alignment.centerLeft,
                         child: Row(
                           children: [
-                            dataU.nobleID as int > 0
+                            dataU.nobleID as int > 5
                                 ? ShaderMask(
                               shaderCallback: (Rect bounds) {
                                 return const LinearGradient(
