@@ -1841,9 +1841,10 @@ class RoomItems {
               // constraints: BoxConstraints(maxWidth: double.infinity - 130.w),
               decoration: BoxDecoration(
                   image: DecorationImage(
-                    centerSlice: sp.getString('isEmulation') == '1' ? Rect
-                        .fromLTWH(20.h, 20.h, 1, 1) : Rect.fromLTWH(40.w, 40.w
-                        , 1, 1),
+                    // centerSlice: sp.getString('isEmulation') == '1' ? Rect
+                    //     .fromLTWH(20.h, 20.h, 1, 1) : Rect.fromLTWH(40.w, 40.w
+                    //     , 1, 1),
+                    centerSlice: const Rect.fromLTWH(18, 17, 1, 1),
                     // image: AssetImage('assets/images/cj/chat_text.png'),
                     image: CachedNetworkImageProvider(
                         list[i]['bubble_img'].toString()),
