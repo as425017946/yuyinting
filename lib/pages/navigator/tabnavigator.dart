@@ -473,8 +473,9 @@ class _Tab_NavigatorState extends State<Tab_Navigator>
           }
         }
       } else if (event.type == 'up_noble') {
-        LogE('贵族升级  ${event.type == 'up_noble'}');
-        sp.setString('nobleID', event.map!['noble_id'].toString());
+        if(sp.getString('user_id').toString() == event.map!['uid'].toString()){
+          sp.setString('nobleID', event.map!['noble_id'].toString());
+        }
         if (listMP.isEmpty) {
           hengFuBean hf  = hengFuBean();
           setState(() {

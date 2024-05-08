@@ -1756,8 +1756,9 @@ class _RoomPageState extends State<RoomPage>
             // 直接杀死app
             SystemNavigator.pop();
           } else if (event.type == 'up_noble') {
-            LogE('前面有没有横幅  ${listMP.length}');
-            sp.setString('nobleID', event.map!['noble_id'].toString());
+            if(sp.getString('user_id').toString() == event.map!['uid'].toString()){
+              sp.setString('nobleID', event.map!['noble_id'].toString());
+            }
             if (listMP.isEmpty) {
               hengFuBean hf  = hengFuBean();
               setState(() {
