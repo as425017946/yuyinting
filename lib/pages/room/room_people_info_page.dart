@@ -114,8 +114,8 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
           SizedBox(
             height: (sp.getString('role').toString() == 'user' ||
                     sp.getString('role').toString() == 'streamer')
-                ? ScreenUtil().setHeight(500)
-                : ScreenUtil().setHeight(580),
+                ? (500*1.25).w
+                : (580*1.25).w,
             width: double.infinity,
             child: Stack(
               alignment: Alignment.topCenter,
@@ -123,10 +123,10 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                 Container(
                   height: (sp.getString('role').toString() == 'user' ||
                           sp.getString('role').toString() == 'streamer')
-                      ? ScreenUtil().setHeight(440)
-                      : ScreenUtil().setHeight(520),
+                      ? (440*1.25).w
+                      : (520*1.25).w,
                   width: double.infinity,
-                  margin: EdgeInsets.only(top: ScreenUtil().setHeight(60)),
+                  margin: EdgeInsets.only(top: (60*1.25).w),
                   decoration: const BoxDecoration(
                     //设置Container修饰
                     image: DecorationImage(
@@ -137,7 +137,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                   ),
                   child: Column(
                     children: [
-                      WidgetUtils.commonSizedBox(10, 0),
+                      WidgetUtils.commonSizedBox((20*1.25).w, 0),
 
                       /// @某人
                       (sp.getString('role').toString() == 'leader' ||
@@ -277,7 +277,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                   ],
                                 ),
 
-                      WidgetUtils.commonSizedBox(70.h, 0),
+                      WidgetUtils.commonSizedBox((70*1.25).w, 0),
 
                       Row(
                         children: [
@@ -442,8 +442,8 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                           ),
                           nobleID > 0
                               ? SizedBox(
-                                  height: 120.h,
-                                  width: 120.h,
+                                  height: (120*1.25).w,
+                                  width: (120*1.25).w,
                                   child: SVGASimpleImage(
                                     assetsName: nobleID == 1
                                         ? 'assets/svga/gz/gz_xuanxian.svga'
@@ -467,7 +467,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                                                         : 'assets/svga/gz/gz_chuanshuo.svga',
                                   ),
                                 )
-                              : WidgetUtils.commonSizedBox(120.h, 120.h),
+                              : WidgetUtils.commonSizedBox((120*1.25).w, (120*1.25).w),
                           WidgetUtils.commonSizedBox(0, 20.w),
                         ],
                       ),
@@ -812,32 +812,32 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                     }
                   }),
                   child: Transform.translate(
-                    offset: Offset(0, -20.h),
+                    offset: Offset(0, -(20*1.25).w),
                     child: Container(
-                      width: 200.h,
-                      height: 200.h,
+                      width: (200*1.25).w,
+                      height: (200*1.25).w,
                       color: Colors.transparent,
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
                           WidgetUtils.CircleHeadImage(
-                              ScreenUtil().setHeight(135),
-                              ScreenUtil().setHeight(135),
+                              (135*1.25).w,
+                              (135*1.25).w,
                               headImg),
                           // 头像框静态图
                           (nobleID <= 3 &&
                                   avatarFrameGifImg.isEmpty &&
                                   avatarFrameImg.isNotEmpty)
                               ? WidgetUtils.CircleHeadImage(
-                                  ScreenUtil().setHeight(170),
-                                  ScreenUtil().setHeight(170),
+                              (170*1.25).w,
+                              (170*1.25).w,
                                   avatarFrameImg)
                               : const Text(''),
                           // 头像框动态图
                           (nobleID <= 3 && avatarFrameGifImg.isNotEmpty)
                               ? SizedBox(
-                                  height: 200.h,
-                                  width: 200.h,
+                                  height: (200*1.25).w,
+                                  width: (200*1.25).w,
                                   child: SVGASimpleImage(
                                     resUrl: avatarFrameGifImg,
                                   ),
@@ -850,7 +850,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                 ),
                 nobleID > 3
                     ? Positioned(
-                        top: -48.h,
+                        top: -(48*1.3).w,
                         child: IgnorePointer(
                           ignoring: true,
                           child: WidgetUtils.showImages(
@@ -867,7 +867,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                                   : nobleID == 9
                                                       ? 'assets/images/a06.png'
                                                       : 'assets/images/a07.png',
-                              260.h,
+                              (260*1.25).w,
                               750.w),
                         ))
                     : const Text(''),

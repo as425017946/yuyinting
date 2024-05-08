@@ -256,6 +256,9 @@ class _RoomLiWuPageState extends State<RoomLiWuPage>
             url = listC[index].img.toString();
             svga = listC[index].imgRendering.toString();
           } else if (leixing == 1) {
+            setState(() {
+              gzTitle = '送礼';
+            });
             //说明要送的人在麦序上
             if (isUpPeopleNum != 0) {
               giftId = listPV[index].id.toString();
