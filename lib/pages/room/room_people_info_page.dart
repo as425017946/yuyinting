@@ -863,10 +863,10 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                           : nobleID == 7
                                               ? 'assets/images/a04.png'
                                               : nobleID == 8
-                                                  ? 'assets/images/a05.png'
+                                                  ? 'assets/images/a07.png'
                                                   : nobleID == 9
                                                       ? 'assets/images/a06.png'
-                                                      : 'assets/images/a07.png',
+                                                      : 'assets/images/a05.png',
                               (260*1.25).w,
                               750.w),
                         ))
