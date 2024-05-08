@@ -589,7 +589,7 @@ class _TequanPageState extends State<TequanPage> {
                               : WidgetUtils.commonSizedBox(0, 0),
                           gzID != '10'
                               ? WidgetUtils.onlyText(
-                                  ' 贵族制升$gzNextTitle',
+                                  ' 贵族值升$gzNextTitle',
                                   StyleUtils.getCommonTextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w600,

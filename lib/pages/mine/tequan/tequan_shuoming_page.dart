@@ -22,7 +22,7 @@ class _TeQuanShuoMingPageState extends State<TeQuanShuoMingPage> {
     // TODO: implement initState
     super.initState();
     if (widget.title.contains('时间')) {
-      info = '·剩余时间以30天为周期，从获得登记次日起算30天，周期内贵族等级出现变化则剩余时间自动充值30天;';
+      info = '·剩余时间以30天为周期，从获得等级次日起算30天，周期内贵族等级出现变化则剩余时间自动充值30天;';
     } else {
       info = '·1金豆=1贵族值，贵族值在30天内累计;';
       info2 = '·赠送经典、礼盒和贵族均可以获得贵族值;';
