@@ -197,6 +197,9 @@ class _RoomPageState extends State<RoomPage>
           if (listUrl.isEmpty) {
             // 全部动画结束的处理逻辑
             // ...
+            setState(() {
+              isShowSVGA = false;
+            });
           } else {
             Future.delayed(const Duration(milliseconds: 1), () {
               showStar(listUrl[0]); // 递归调用showStar方法播放下一个动画
@@ -364,7 +367,6 @@ class _RoomPageState extends State<RoomPage>
     }
   }
 
-
   // 展示用户进入房间展示svga
   void showStarJoinRoom(Map m) async {
     // 动画正在进行中不做处理
@@ -376,7 +378,8 @@ class _RoomPageState extends State<RoomPage>
       LogE('进厅横幅== $svgaBool');
       final MovieEntity videoItem = await _loadSVGA(svgaBool, m['svgaUrl']);
       if (svgaBool) {
-        await videoItem.hfItem(m['avatar'], m['nickNanme'], m['svgaName'], m['gender']);
+        await videoItem.hfItem(
+            m['avatar'], m['nickNanme'], m['svgaName'], m['gender']);
       }
       animationControllerJR?.videoItem = videoItem;
       animationControllerJR
@@ -1080,15 +1083,15 @@ class _RoomPageState extends State<RoomPage>
           // LogE('我的身份 3==$isForbation');
           if (noble_id == '0') {
             // if (_timeCount == 3) {
-              if (isForbation == 0) {
-                MyUtils.goTransparentPage(
-                    context,
-                    RoomSendInfoPage(
-                      info: '',
-                    ));
-              } else {
-                MyToastUtils.showToastBottom('你已被房间禁言！');
-              }
+            if (isForbation == 0) {
+              MyUtils.goTransparentPage(
+                  context,
+                  RoomSendInfoPage(
+                    info: '',
+                  ));
+            } else {
+              MyToastUtils.showToastBottom('你已被房间禁言！');
+            }
             // } else {
             //   MyToastUtils.showToastBottom('太频繁啦，请歇一歇~');
             // }
@@ -1514,9 +1517,11 @@ class _RoomPageState extends State<RoomPage>
               }
               break;
             case 'down_mic': //下麦
-              if(event.map!['uid'].toString() ==
-                    sp.getString('user_id').toString() && event.map!['from_uid'].toString() !=
-                  sp.getString('user_id').toString()  && event.map!['from_uid'].toString().isNotEmpty){
+              if (event.map!['uid'].toString() ==
+                      sp.getString('user_id').toString() &&
+                  event.map!['from_uid'].toString() !=
+                      sp.getString('user_id').toString() &&
+                  event.map!['from_uid'].toString().isNotEmpty) {
                 MyToastUtils.showToastBottom('你已被管理下掉了麦序！');
               }
               setState(() {
@@ -1756,11 +1761,12 @@ class _RoomPageState extends State<RoomPage>
             // 直接杀死app
             SystemNavigator.pop();
           } else if (event.type == 'up_noble') {
-            if(sp.getString('user_id').toString() == event.map!['uid'].toString()){
+            if (sp.getString('user_id').toString() ==
+                event.map!['uid'].toString()) {
               sp.setString('nobleID', event.map!['noble_id'].toString());
             }
             if (listMP.isEmpty) {
-              hengFuBean hf  = hengFuBean();
+              hengFuBean hf = hengFuBean();
               setState(() {
                 hf.roomName = event.map!['room_name'];
                 hf.title = '贵族';
@@ -1778,7 +1784,7 @@ class _RoomPageState extends State<RoomPage>
               // 看看集合里面有几个，10s一执行
               hpTimer();
             } else {
-              hengFuBean hf  = hengFuBean();
+              hengFuBean hf = hengFuBean();
               setState(() {
                 hf.roomName = event.map!['room_name'];
                 hf.title = '贵族';
@@ -1931,7 +1937,17 @@ class _RoomPageState extends State<RoomPage>
                 otherNickName = cb.giftInfo![i].nickName!;
               });
               // 保存信息
-              saveGiftInfo(cb.fromAvatar!,cb.fromUid!, cb.fromNickname!,cb.giftInfo![i].nickName!, cb.toUids!, cb.giftInfo![i].giftList![a].giftImgStatic!, cb.giftInfo![i].giftList![a].giftNumber.toString(), cb.giftInfo![i].giftList![a].giftName!, cb.giftInfo![i].giftList![a].giftPrice.toString(),);
+              saveGiftInfo(
+                cb.fromAvatar!,
+                cb.fromUid!,
+                cb.fromNickname!,
+                cb.giftInfo![i].nickName!,
+                cb.toUids!,
+                cb.giftInfo![i].giftList![a].giftImgStatic!,
+                cb.giftInfo![i].giftList![a].giftNumber.toString(),
+                cb.giftInfo![i].giftList![a].giftName!,
+                cb.giftInfo![i].giftList![a].giftPrice.toString(),
+              );
               if (giftInfos.isEmpty) {
                 giftInfos =
                     ' 爆出${cb.giftInfo![i].giftList![a].giftName!}(${cb.giftInfo![i].giftList![a].giftPrice.toString()}) x${cb.giftInfo![i].giftList![a].giftNumber.toString()}';
@@ -2002,8 +2018,12 @@ class _RoomPageState extends State<RoomPage>
             // 发送的信息
             map['content'] =
                 '${event.map!['from_nickname']};向;${cb.giftInfo![i].nickName!};送出$mhType;$giftInfos';
-            saveChatInfo(event.map!, '6', event.map!['from_nickname'],
-                '${event.map!['from_nickname']};向;${cb.giftInfo![i].nickName!};送出$mhType;$giftInfos',event.map!['from_uid']);
+            saveChatInfo(
+                event.map!,
+                '6',
+                event.map!['from_nickname'],
+                '${event.map!['from_nickname']};向;${cb.giftInfo![i].nickName!};送出$mhType;$giftInfos',
+                event.map!['from_uid']);
             setState(() {
               list.add(map);
             });
@@ -2043,8 +2063,12 @@ class _RoomPageState extends State<RoomPage>
               map['bubble_img'] = event.map!['bubble_img'];
               LogE('欢迎某人== ${event.map!['bubble_img']}');
               setState(() {
-                saveChatInfo(event.map!, '3', event.map!['send_nickname'],
-                    '${event.map!['nickname']},${event.map!['content']}', event.map!['from_uid']);
+                saveChatInfo(
+                    event.map!,
+                    '3',
+                    event.map!['send_nickname'],
+                    '${event.map!['nickname']},${event.map!['content']}',
+                    event.map!['from_uid']);
                 list.add(map);
               });
             } else if (event.map!['type'] == 'clean_charm') {
@@ -2137,26 +2161,46 @@ class _RoomPageState extends State<RoomPage>
               charmAllBean cb = charmAllBean.fromJson(event.map);
 
               // 本地记录送礼
-              if(cb.recordToNickname!.contains(',')){
+              if (cb.recordToNickname!.contains(',')) {
                 List lName = cb.recordToNickname!.split(',');
                 List lUid = cb.toUids!.split(',');
-                for(int i = 0; i < lName.length; i++){
+                for (int i = 0; i < lName.length; i++) {
                   // 保存信息
-                  saveGiftInfo(cb.fromAvatar!,cb.fromUid!, cb.fromNickname!, lName[i], lUid[i], cb.giftInfo![0].giftImgStatic!, cb.giftInfo![0].giftNumber.toString(), cb.giftInfo![0].giftName!, cb.giftInfo![0].giftPrice.toString(),);
+                  saveGiftInfo(
+                    cb.fromAvatar!,
+                    cb.fromUid!,
+                    cb.fromNickname!,
+                    lName[i],
+                    lUid[i],
+                    cb.giftInfo![0].giftImgStatic!,
+                    cb.giftInfo![0].giftNumber.toString(),
+                    cb.giftInfo![0].giftName!,
+                    cb.giftInfo![0].giftPrice.toString(),
+                  );
                 }
                 setState(() {
                   giftName = cb.giftInfo![0].giftName!;
                   nickName = cb.fromNickname!;
-                  otherNickName = lName[lName.length-1];
+                  otherNickName = lName[lName.length - 1];
                 });
-              }else{
+              } else {
                 setState(() {
                   giftName = cb.giftInfo![0].giftName!;
                   nickName = cb.fromNickname!;
                   otherNickName = cb.toNickname!;
                 });
                 // 保存信息
-                saveGiftInfo(cb.fromAvatar!,cb.fromUid!, cb.fromNickname!, cb.toNickname!, cb.toUids!, cb.giftInfo![0].giftImgStatic!, cb.giftInfo![0].giftNumber.toString(), cb.giftInfo![0].giftName!, cb.giftInfo![0].giftPrice.toString(),);
+                saveGiftInfo(
+                  cb.fromAvatar!,
+                  cb.fromUid!,
+                  cb.fromNickname!,
+                  cb.toNickname!,
+                  cb.toUids!,
+                  cb.giftInfo![0].giftImgStatic!,
+                  cb.giftInfo![0].giftNumber.toString(),
+                  cb.giftInfo![0].giftName!,
+                  cb.giftInfo![0].giftPrice.toString(),
+                );
               }
               for (int i = 0; i < listM.length; i++) {
                 for (int a = 0; a < cb.charm!.length; a++) {
@@ -2187,8 +2231,12 @@ class _RoomPageState extends State<RoomPage>
               map['content'] =
                   '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出${cb.giftInfo![0].giftName!}(${cb.giftInfo![0].giftPrice.toString()}); x${cb.giftInfo![0].giftNumber.toString()}';
 
-              saveChatInfo(event.map!, '5', event.map!['nickname'],
-                  '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出${cb.giftInfo![0].giftName!}(${cb.giftInfo![0].giftPrice.toString()}); x${cb.giftInfo![0].giftNumber.toString()}', event.map!['from_uid']);
+              saveChatInfo(
+                  event.map!,
+                  '5',
+                  event.map!['nickname'],
+                  '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出${cb.giftInfo![0].giftName!}(${cb.giftInfo![0].giftPrice.toString()}); x${cb.giftInfo![0].giftNumber.toString()}',
+                  event.map!['from_uid']);
               if (cb.giftInfo![0].giftImg!.contains('png')) {
                 setState(() {
                   list.add(map);
@@ -2254,7 +2302,7 @@ class _RoomPageState extends State<RoomPage>
                             cb.giftInfo![0].giftName! == '玉兔抱月' ||
                             cb.giftInfo![0].giftName! == '缘定' ||
                             cb.giftInfo![0].giftName! == '月吟环' ||
-                            cb.giftInfo![0].giftName! == '至尊王座'||
+                            cb.giftInfo![0].giftName! == '至尊王座' ||
                             cb.giftInfo![0].giftName! == '女神龙骑' ||
                             cb.giftInfo![0].giftName! == '天空之境' ||
                             cb.giftInfo![0].giftName! == '战神' ||
@@ -2369,26 +2417,46 @@ class _RoomPageState extends State<RoomPage>
                 }
               }
               // 本地记录送礼
-              if(cb.recordToNickname!.contains(',')){
+              if (cb.recordToNickname!.contains(',')) {
                 List lName = cb.recordToNickname!.split(',');
                 List lUid = cb.toUids!.split(',');
-                for(int i = 0; i < lName.length; i++){
+                for (int i = 0; i < lName.length; i++) {
                   // 保存信息
-                  saveGiftInfo(cb.fromAvatar!,cb.fromUid!, cb.fromNickname!, lName[i], lUid[i], cb.giftInfo![0].giftImgStatic!, cb.giftInfo![0].giftNumber.toString(), cb.giftInfo![0].giftName!, cb.giftInfo![0].giftPrice.toString(),);
+                  saveGiftInfo(
+                    cb.fromAvatar!,
+                    cb.fromUid!,
+                    cb.fromNickname!,
+                    lName[i],
+                    lUid[i],
+                    cb.giftInfo![0].giftImgStatic!,
+                    cb.giftInfo![0].giftNumber.toString(),
+                    cb.giftInfo![0].giftName!,
+                    cb.giftInfo![0].giftPrice.toString(),
+                  );
                 }
                 setState(() {
                   giftName = cb.giftInfo![0].giftName!;
                   nickName = cb.fromNickname!;
-                  otherNickName = lName[lName.length-1];
+                  otherNickName = lName[lName.length - 1];
                 });
-              }else{
+              } else {
                 setState(() {
                   giftName = cb.giftInfo![0].giftName!;
                   nickName = cb.fromNickname!;
                   otherNickName = cb.toNickname!;
                 });
                 // 保存信息
-                saveGiftInfo(cb.fromAvatar!,cb.fromUid!, cb.fromNickname!, cb.toNickname!, cb.toUids!, cb.giftInfo![0].giftImgStatic!, cb.giftInfo![0].giftNumber.toString(), cb.giftInfo![0].giftName!, cb.giftInfo![0].giftPrice.toString(),);
+                saveGiftInfo(
+                  cb.fromAvatar!,
+                  cb.fromUid!,
+                  cb.fromNickname!,
+                  cb.toNickname!,
+                  cb.toUids!,
+                  cb.giftInfo![0].giftImgStatic!,
+                  cb.giftInfo![0].giftNumber.toString(),
+                  cb.giftInfo![0].giftName!,
+                  cb.giftInfo![0].giftPrice.toString(),
+                );
               }
               Map<dynamic, dynamic> map = {};
               map['info'] = event.map!['nickname'];
@@ -2398,8 +2466,12 @@ class _RoomPageState extends State<RoomPage>
               map['content'] =
                   '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出${cb.giftInfo![0].giftName!}(${cb.giftInfo![0].giftPrice.toString()}); x${cb.giftInfo![0].giftNumber.toString()}';
 
-              saveChatInfo(event.map!, '5', event.map!['nickname'],
-                  '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出${cb.giftInfo![0].giftName!}(${cb.giftInfo![0].giftPrice.toString()}); x${cb.giftInfo![0].giftNumber.toString()}', event.map!['from_uid']);
+              saveChatInfo(
+                  event.map!,
+                  '5',
+                  event.map!['nickname'],
+                  '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出${cb.giftInfo![0].giftName!}(${cb.giftInfo![0].giftPrice.toString()}); x${cb.giftInfo![0].giftNumber.toString()}',
+                  event.map!['from_uid']);
 
               /// 收到送的减礼物的im
               setState(() {
@@ -2465,7 +2537,17 @@ class _RoomPageState extends State<RoomPage>
                   }
                 });
                 // 保存信息
-                saveGiftInfo(cb.fromAvatar!,cb.fromUid!, cb.fromNickname!, cb.toNickname!, cb.toUids!, cb.giftInfo![i].giftImgStatic!, cb.giftInfo![i].giftNumber.toString(), cb.giftInfo![i].giftName!, cb.giftInfo![i].giftPrice.toString(),);
+                saveGiftInfo(
+                  cb.fromAvatar!,
+                  cb.fromUid!,
+                  cb.fromNickname!,
+                  cb.toNickname!,
+                  cb.toUids!,
+                  cb.giftInfo![i].giftImgStatic!,
+                  cb.giftInfo![i].giftNumber.toString(),
+                  cb.giftInfo![i].giftName!,
+                  cb.giftInfo![i].giftPrice.toString(),
+                );
               }
               //厅内发送的送礼物消息
               Map<dynamic, dynamic> map = {};
@@ -2476,8 +2558,12 @@ class _RoomPageState extends State<RoomPage>
               map['content'] =
                   '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出;$infos';
               setState(() {
-                saveChatInfo(event.map!, '6', event.map!['from_nickname'],
-                    '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出;$infos',event.map!['from_uid']);
+                saveChatInfo(
+                    event.map!,
+                    '6',
+                    event.map!['from_nickname'],
+                    '${event.map!['from_nickname']};向;${event.map!['to_nickname']};送出;$infos',
+                    event.map!['from_uid']);
                 list.add(map);
                 // 这个是为了让别人也能看见自己送出的礼物
               });
@@ -2493,7 +2579,7 @@ class _RoomPageState extends State<RoomPage>
               });
             } else if (event.map!['type'] == 'join_room') {
               LogE('***信息 == ${event.map!['follow_info']}');
-              if(event.map!['is_stealth'] == 0){
+              if (event.map!['is_stealth'] == 0) {
                 // 跟随主播进入房间
                 Map<dynamic, dynamic> map = {};
                 map['type'] = '8';
@@ -2554,11 +2640,11 @@ class _RoomPageState extends State<RoomPage>
               map['uid'] = event.map!['uid'];
               map['type'] = '9';
               // 发送的信息
-              if(cb.gameName == '水星魔方'){
+              if (cb.gameName == '水星魔方') {
                 map['content'] = '${cb.nickName};在;黄金幻宝;中赢得;$info';
-              }else if(cb.gameName == '金星魔方'){
+              } else if (cb.gameName == '金星魔方') {
                 map['content'] = '${cb.nickName};在;钻石幻宝;中赢得;$info';
-              }else{
+              } else {
                 map['content'] = '${cb.nickName};在;${cb.gameName};中赢得;$info';
               }
               setState(() {
@@ -2614,8 +2700,12 @@ class _RoomPageState extends State<RoomPage>
               // 发送的信息
               map['content'] =
                   '${cb.fromNickname};向;${cb.toNickname};赠送了;$info';
-              saveChatInfo(event.map!, '9', cb.fromNickname!,
-                  '${cb.fromNickname};向;${cb.toNickname};赠送了;$info',event.map!['from_uid']);
+              saveChatInfo(
+                  event.map!,
+                  '9',
+                  cb.fromNickname!,
+                  '${cb.fromNickname};向;${cb.toNickname};赠送了;$info',
+                  event.map!['from_uid']);
               setState(() {
                 list.add(map);
               });
@@ -2624,8 +2714,8 @@ class _RoomPageState extends State<RoomPage>
               LogE(
                   '正常进入房间===  ${event.map!['uid'].toString() != sp.getString('user_id').toString()}');
               if (event.map!['uid'].toString() !=
-                  sp.getString('user_id').toString() && int.parse(event.map!['is_stealth'].toString()) == 0) {
-
+                      sp.getString('user_id').toString() &&
+                  int.parse(event.map!['is_stealth'].toString()) == 0) {
                 //展示新增svga
                 Map<dynamic, dynamic> mapNew = {};
                 final img = event.map!['enter_dress_gif_img'];
@@ -2642,11 +2732,11 @@ class _RoomPageState extends State<RoomPage>
                 mapNew['gender'] = event.map!['gender']; // 性别
                 // mapNew['enter_dress_gif_img'] = event.map!['enter_dress_gif_img']; // 进厅横幅动图
                 // mapNew['enter_dress_name'] = event.map!['enter_dress_name']; // 进厅横幅名称
-                if(listJoinRoom.isEmpty){
+                if (listJoinRoom.isEmpty) {
                   listJoinRoom.add(mapNew);
                   showStarJoinRoom(listJoinRoom[0]);
                   isJRShow = true;
-                }else{
+                } else {
                   listJoinRoom.add(mapNew);
                 }
 
@@ -2688,7 +2778,7 @@ class _RoomPageState extends State<RoomPage>
                 if (event.map!['mount'].toString().isNotEmpty) {
                   if (isDevices == 'android') {
                     // 这个是为了让别人也能看见自己送出的礼物
-                    if (listUrlZJ.isEmpty) {
+                    if (listUrl.isEmpty) {
                       if (event.map!['mount_name'].toString() == '白虎守护' ||
                           event.map!['mount_name'].toString() == '飞鹰' ||
                           event.map!['mount_name'].toString() == '飞鱼' ||
@@ -2707,10 +2797,11 @@ class _RoomPageState extends State<RoomPage>
                           Map<dynamic, dynamic> map = {};
                           map['svgaUrl'] = event.map!['mount'].toString();
                           map['svgaBool'] = true;
-                          listUrlZJ.add(map);
-                          isZJShow = true;
+                          map['isZuoJi'] = '1';
+                          listUrl.add(map);
+                          isShowSVGA = true;
                         });
-                        showStarZJ(listUrlZJ[0]);
+                        showStar(listUrl[0]);
                       }
                     } else {
                       if (event.map!['mount_name'].toString() == '白虎守护' ||
@@ -2722,7 +2813,7 @@ class _RoomPageState extends State<RoomPage>
                           event.map!['mount_name'].toString() == '旷世神龙' ||
                           event.map!['mount_name'].toString() == '兰博基尼' ||
                           event.map!['mount_name'].toString() == '青龙守护' ||
-                          event.map!['mount_name'].toString() == '星空战机'||
+                          event.map!['mount_name'].toString() == '星空战机' ||
                           event.map!['mount_name'].toString() == '钢铁侠' ||
                           event.map!['mount_name'].toString() == '紫电跑车') {
                         saveSVGAIMAGEZJ(event.map!['mount'].toString());
@@ -2731,31 +2822,34 @@ class _RoomPageState extends State<RoomPage>
                           Map<dynamic, dynamic> map = {};
                           map['svgaUrl'] = event.map!['mount'].toString();
                           map['svgaBool'] = true;
-                          listUrlZJ.add(map);
-                          isZJShow = true;
+                          map['isZuoJi'] = '1';
+                          listUrl.add(map);
+                          isShowSVGA = true;
                         });
-                        showStarZJ(listUrlZJ[0]);
+                        showStar(listUrl[0]);
                       }
                     }
                   } else {
                     // ios
-                    if (listUrlZJ.isEmpty) {
+                    if (listUrl.isEmpty) {
                       setState(() {
                         Map<dynamic, dynamic> map = {};
                         map['svgaUrl'] = event.map!['mount'].toString();
                         map['svgaBool'] = true;
-                        listUrlZJ.add(map);
-                        isZJShow = true;
+                        map['isZuoJi'] = '1';
+                        listUrl.add(map);
+                        isShowSVGA = true;
                       });
-                      showStarZJ(listUrlZJ[0]);
+                      showStar(listUrl[0]);
                     } else {
                       // 直接用网络图地址
                       setState(() {
                         Map<dynamic, dynamic> map = {};
                         map['svgaUrl'] = event.map!['mount'].toString();
                         map['svgaBool'] = true;
-                        listUrlZJ.add(map);
-                        isZJShow = true;
+                        map['isZuoJi'] = '1';
+                        listUrl.add(map);
+                        isShowSVGA = true;
                       });
                     }
                   }
@@ -2790,11 +2884,11 @@ class _RoomPageState extends State<RoomPage>
               map['uid'] = event.map!['uid'];
               map['type'] = '9';
               // 发送的信息
-              if(cb.gameName == '水星魔方'){
+              if (cb.gameName == '水星魔方') {
                 map['content'] = '${cb.nickName};在;黄金幻宝;中赢得;$info';
-              }else if(cb.gameName == '金星魔方'){
+              } else if (cb.gameName == '金星魔方') {
                 map['content'] = '${cb.nickName};在;钻石幻宝;中赢得;$info';
-              }else{
+              } else {
                 map['content'] = '${cb.nickName};在;${cb.gameName};中赢得;$info';
               }
               setState(() {
@@ -3437,23 +3531,25 @@ class _RoomPageState extends State<RoomPage>
     String savePath =
         "/sdcard/Android/data/com.littledog.yyt/files/${lujing[lujing.length - 1]}";
     LogE('礼物地址 $savePath');
-    if (listUrlZJ.isEmpty) {
+    if (listUrl.isEmpty) {
       setState(() {
         Map<dynamic, dynamic> map = {};
         map['svgaUrl'] = savePath;
         map['svgaBool'] = false;
+        map['isZuoJi'] = '1';
         // 直接用本地图
-        listUrlZJ.add(map);
+        listUrl.add(map);
       });
-      isZJShow = true;
-      showStarZJ(listUrlZJ[0]);
+      isShowSVGA = true;
+      showStar(listUrl[0]);
     } else {
       setState(() {
         Map<dynamic, dynamic> map = {};
         map['svgaUrl'] = savePath;
         map['svgaBool'] = false;
+        map['isZuoJi'] = '1';
         // 直接用本地图
-        listUrlZJ.add(map);
+        listUrl.add(map);
       });
     }
   }
@@ -3539,7 +3635,7 @@ class _RoomPageState extends State<RoomPage>
             name = '中贵族';
             path = 'assets/svga/gp/gp_guizu_2.svga';
           });
-        }else if (hf.nobleId! > 7) {
+        } else if (hf.nobleId! > 7) {
           // 高贵族
           setState(() {
             name = '高贵族';
@@ -3758,10 +3854,10 @@ class _RoomPageState extends State<RoomPage>
     animationControllerPK.dispose();
     animationControllerJL.dispose();
     animationControllerJR.dispose();
-    if(_subscription != null){
+    if (_subscription != null) {
       _subscription!.cancel();
     }
-    if(_timerhf != null){
+    if (_timerhf != null) {
       _timerhf!.cancel();
     }
     _cancelTimer();
@@ -4408,64 +4504,76 @@ class _RoomPageState extends State<RoomPage>
                       RoomItems.isMe(8, listM, isMy[8]),
 
                       /// 送礼展示
-                      nickName.isNotEmpty ? Positioned(
-                        bottom: (whoWin != 'draw' && isPK != 0) ? 520.h : 610.h,
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            color: Colors.transparent,
-                            child: Row(
-                              children: [
-                                const Spacer(),
-                                GestureDetector(
-                                  onTap: ((){
-                                    if(MyUtils.checkClick()){
-                                      MyUtils.goTransparentPage(context, RoomNewGiftPage(roomID: widget.roomId,));
-                                    }
-                                  }),
-                                  child: Container(
-                                    padding: EdgeInsets.only(
-                                        top: 0.h, bottom: 5.h, left: 10.h, right: 10.h),
-                                    //边框设置
-                                    decoration: const BoxDecoration(
-                                      //背景
-                                      color: Colors.white10,
-                                      //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
-                                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                      nickName.isNotEmpty
+                          ? Positioned(
+                              bottom: (whoWin != 'draw' && isPK != 0)
+                                  ? 520.h
+                                  : 610.h,
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                color: Colors.transparent,
+                                child: Row(
+                                  children: [
+                                    const Spacer(),
+                                    GestureDetector(
+                                      onTap: (() {
+                                        if (MyUtils.checkClick()) {
+                                          MyUtils.goTransparentPage(
+                                              context,
+                                              RoomNewGiftPage(
+                                                roomID: widget.roomId,
+                                              ));
+                                        }
+                                      }),
+                                      child: Container(
+                                        padding: EdgeInsets.only(
+                                            top: 0.h,
+                                            bottom: 5.h,
+                                            left: 10.h,
+                                            right: 10.h),
+                                        //边框设置
+                                        decoration: const BoxDecoration(
+                                          //背景
+                                          color: Colors.white10,
+                                          //设置四周圆角 角度 这里的角度应该为 父Container height 的一半
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(15)),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Text(nickName,
+                                                style: TextStyle(
+                                                  color: MyColors.djEightM,
+                                                  fontSize: 24.sp,
+                                                  height: 2,
+                                                )),
+                                            Text('打赏',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 24.sp,
+                                                  height: 2,
+                                                )),
+                                            Text(otherNickName,
+                                                style: TextStyle(
+                                                  color: MyColors.djEightM,
+                                                  fontSize: 24.sp,
+                                                  height: 2,
+                                                )),
+                                            Text(giftName,
+                                                style: TextStyle(
+                                                  color: MyColors.peopleYellow,
+                                                  fontSize: 24.sp,
+                                                  height: 2,
+                                                ))
+                                          ],
+                                        ),
+                                      ),
                                     ),
-                                    child: Row(
-                                      children: [
-                                        Text(nickName,
-                                            style: TextStyle(
-                                              color: MyColors.djEightM,
-                                              fontSize: 24.sp,
-                                              height: 2,
-                                            )),
-                                        Text('打赏',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 24.sp,
-                                              height: 2,
-                                            )),
-                                        Text(otherNickName,
-                                            style: TextStyle(
-                                              color: MyColors.djEightM,
-                                              fontSize: 24.sp,
-                                              height: 2,
-                                            )),
-                                        Text(giftName,
-                                            style: TextStyle(
-                                              color: MyColors.peopleYellow,
-                                              fontSize: 24.sp,
-                                              height: 2,
-                                            ))
-                                      ],
-                                    ),
-                                  ),
+                                    const Spacer(),
+                                  ],
                                 ),
-                                const Spacer(),
-                              ],
-                            ),
-                          )) : const Text(''),
+                              ))
+                          : const Text(''),
 
                       /// 聊天除使用
                       Positioned(
@@ -4475,12 +4583,13 @@ class _RoomPageState extends State<RoomPage>
                             /// 消息列表最外层
                             Container(
                           height: ((isDevices == 'ios' && isPK == 0)
-                              ? 520.h
-                              : (isDevices == 'ios' && isPK != 0)
-                                  ? 400.h
-                                  : (isDevices == 'android' && isPK == 0)
-                                      ? 530.h
-                                      : 440.h) - 10.h,
+                                  ? 520.h
+                                  : (isDevices == 'ios' && isPK != 0)
+                                      ? 400.h
+                                      : (isDevices == 'android' && isPK == 0)
+                                          ? 530.h
+                                          : 440.h) -
+                              10.h,
                           width: 420.h,
                           color: Colors.transparent,
                           child: Column(
@@ -4595,7 +4704,13 @@ class _RoomPageState extends State<RoomPage>
                                 width: double.infinity,
                                 child: SVGAImage(
                                   animationControllerSL,
-                                  fit: BoxFit.fitHeight,
+                                  fit: (listUrl[0]['isZuoJi']
+                                              .toString()
+                                              .isEmpty ||
+                                          listUrl[0]['isZuoJi'].toString() ==
+                                              'null')
+                                      ? BoxFit.fitHeight
+                                      : BoxFit.fitWidth,
                                 ),
                               ),
                             )
@@ -4604,56 +4719,75 @@ class _RoomPageState extends State<RoomPage>
                       /// New提示进入房间
                       (isJRShow == true)
                           ? IgnorePointer(
-                        ignoring: true,
-                        child: Center(
-                            child: Row(
-                              children: [
-                                if (listJoinRoom[0]['svgaBool'])
+                              ignoring: true,
+                              child: Center(
+                                  child: Row(
+                                children: [
+                                  if (listJoinRoom[0]['svgaBool'])
                                     SizedBox(
-                                      height: 50.h*1.5,
-                                      width: 400.w*1.5,
+                                      height: 50.h * 1.5,
+                                      width: 400.w * 1.5,
                                       child: SVGAImage(
                                         animationControllerJR,
                                         fit: BoxFit.fitWidth,
                                       ),
                                     )
                                   else
-                                SizedBox(
-                                  height: 55.h,
-                                  width: 400.w,
-                                  child: Stack(
-                                    children: [
-                                      SVGAImage(
-                                        animationControllerJR,
-                                        fit: BoxFit.fitWidth,
-                                      ),
-                                      Transform.translate(
-                                        offset: Offset(0,2.h),
-                                        child: Row( // 头像// avatar 进厅横幅动图 enter_dress_gif_img 进厅横幅名称 enter_dress_name
-                                          children: [
-                                            WidgetUtils.commonSizedBox(0, 15.w),
-                                            WidgetUtils.CircleHeadImage(45.h, 45.h, avatar),
-                                            WidgetUtils.commonSizedBox(0, 10.w),
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                    SizedBox(
+                                      height: 55.h,
+                                      width: 400.w,
+                                      child: Stack(
+                                        children: [
+                                          SVGAImage(
+                                            animationControllerJR,
+                                            fit: BoxFit.fitWidth,
+                                          ),
+                                          Transform.translate(
+                                            offset: Offset(0, 2.h),
+                                            child: Row(
+                                              // 头像// avatar 进厅横幅动图 enter_dress_gif_img 进厅横幅名称 enter_dress_name
                                               children: [
-                                                const Spacer(),
-                                                WidgetUtils.onlyText(listJoinRoom[0]['nickNanme'], StyleUtils.getCommonTextStyle(color: Colors.yellow,fontSize: 22.sp)),
-                                                WidgetUtils.onlyText('进入聊天室', StyleUtils.getCommonTextStyle(color: Colors.white,fontSize: 22.sp)),
-                                                const Spacer(),
+                                                WidgetUtils.commonSizedBox(
+                                                    0, 15.w),
+                                                WidgetUtils.CircleHeadImage(
+                                                    45.h, 45.h, avatar),
+                                                WidgetUtils.commonSizedBox(
+                                                    0, 10.w),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    const Spacer(),
+                                                    WidgetUtils.onlyText(
+                                                        listJoinRoom[0]
+                                                            ['nickNanme'],
+                                                        StyleUtils
+                                                            .getCommonTextStyle(
+                                                                color: Colors
+                                                                    .yellow,
+                                                                fontSize:
+                                                                    22.sp)),
+                                                    WidgetUtils.onlyText(
+                                                        '进入聊天室',
+                                                        StyleUtils
+                                                            .getCommonTextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize:
+                                                                    22.sp)),
+                                                    const Spacer(),
+                                                  ],
+                                                ),
                                               ],
                                             ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                const Spacer(),
-                              ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  const Spacer(),
+                                ],
+                              )),
                             )
-                        ),
-                      )
                           : const Text(''),
 
                       /// 装扮座驾进入房间
@@ -4704,10 +4838,7 @@ class _RoomPageState extends State<RoomPage>
                       //     : const Text(''),
 
                       /// 页面返回出现推荐房间
-                      isBack
-                          ?
-                          _backView()
-                          : const Text('')
+                      isBack ? _backView() : const Text('')
                     ],
                   ),
                 ),
@@ -4722,22 +4853,22 @@ class _RoomPageState extends State<RoomPage>
           // setState(() {
           //   isBack = true;
           // });
-          if(isOK && MyUtils.checkClick()){
+          if (isOK && MyUtils.checkClick()) {
             if (_timerHot != null) {
-                _timerHot!.cancel();
-              }
-              if (_timer != null) {
-                _timer!.cancel();
-                _timer = null;
-              }
-              _cancelTimer();
-              _cancelTimerAll();
-              sp.setString('isShouQi', '1');
-              sp.setString('sqRoomID', widget.roomId);
-              eventBus.fire(SubmitButtonBack(title: '收起房间'));
-              // Navigator.pop(context);
+              _timerHot!.cancel();
+            }
+            if (_timer != null) {
+              _timer!.cancel();
+              _timer = null;
+            }
+            _cancelTimer();
+            _cancelTimerAll();
+            sp.setString('isShouQi', '1');
+            sp.setString('sqRoomID', widget.roomId);
+            eventBus.fire(SubmitButtonBack(title: '收起房间'));
+            // Navigator.pop(context);
             return true;
-          }else{
+          } else {
             return false;
           }
         },
@@ -4971,7 +5102,8 @@ class _RoomPageState extends State<RoomPage>
               }
             }
             // 判断有没有贵族特权装扮
-            if (bean.data!.userInfo!.carDressGifImg!.isNotEmpty && bean.data!.userInfo!.isStealth == 0) {
+            if (bean.data!.userInfo!.carDressGifImg!.isNotEmpty &&
+                bean.data!.userInfo!.isStealth == 0) {
               isGuZu = true;
               tequanzhuangban = bean.data!.userInfo!.carDressGifImg!;
             } else {
@@ -4979,7 +5111,9 @@ class _RoomPageState extends State<RoomPage>
               tequanzhuangban = '';
             }
 
-            if((sp.getString('sqRoomID').toString() != widget.roomId || sp.getString('sqRoomID').toString().isEmpty) && bean.data!.userInfo!.isStealth == 0){
+            if ((sp.getString('sqRoomID').toString() != widget.roomId ||
+                    sp.getString('sqRoomID').toString().isEmpty) &&
+                bean.data!.userInfo!.isStealth == 0) {
               sp.setString('sqRoomID', '');
               //展示新增svga
               Map<dynamic, dynamic> mapNew = {};
@@ -5000,14 +5134,13 @@ class _RoomPageState extends State<RoomPage>
               });
               // mapNew['enter_dress_gif_img'] = bean.data!.userInfo!.enter_dress_gif_img; // 进厅横幅动图
               // mapNew['enter_dress_name'] = bean.data!.userInfo!.enter_dress_name; // 进厅横幅名称
-              if(listJoinRoom.isEmpty){
+              if (listJoinRoom.isEmpty) {
                 listJoinRoom.add(mapNew);
                 showStarJoinRoom(listJoinRoom[0]);
                 isJRShow = true;
-              }else{
+              } else {
                 listJoinRoom.add(mapNew);
               }
-
 
               //进入房间
               Map<dynamic, dynamic> mapg = {};
@@ -5038,7 +5171,6 @@ class _RoomPageState extends State<RoomPage>
               // 座驾名称
               map['mount_name'] = bean.data!.userInfo!.carDressName!;
 
-
               LogE('房间信息== ${bean.data!.userInfo!.carDressGifImg!}');
               LogE('房间信息== ${bean.data!.userInfo!.carDressName!}');
 
@@ -5056,7 +5188,7 @@ class _RoomPageState extends State<RoomPage>
                         bean.data!.userInfo!.carDressName! == '旷世神龙' ||
                         bean.data!.userInfo!.carDressName! == '兰博基尼' ||
                         bean.data!.userInfo!.carDressName! == '青龙守护' ||
-                        bean.data!.userInfo!.carDressName! == '星空战机'||
+                        bean.data!.userInfo!.carDressName! == '星空战机' ||
                         bean.data!.userInfo!.carDressName! == '钢铁侠' ||
                         bean.data!.userInfo!.carDressName! == '紫电跑车') {
                       saveSVGAIMAGEZJ(bean.data!.userInfo!.carDressGifImg!);
@@ -5080,7 +5212,7 @@ class _RoomPageState extends State<RoomPage>
                         bean.data!.userInfo!.carDressName! == '旷世神龙' ||
                         bean.data!.userInfo!.carDressName! == '兰博基尼' ||
                         bean.data!.userInfo!.carDressName! == '青龙守护' ||
-                        bean.data!.userInfo!.carDressName! == '星空战机'||
+                        bean.data!.userInfo!.carDressName! == '星空战机' ||
                         bean.data!.userInfo!.carDressName! == '钢铁侠' ||
                         bean.data!.userInfo!.carDressName! == '紫电跑车') {
                       saveSVGAIMAGEZJ(bean.data!.userInfo!.carDressGifImg!);
@@ -5897,12 +6029,15 @@ class _RoomPageState extends State<RoomPage>
           setState(() {
             LogE('状态=== ${bean.data!.uid}');
             if (bean.data!.uid != null) {
-              if (sp.getString('user_id').toString() == bean.data!.uid.toString()) {
+              if (sp.getString('user_id').toString() ==
+                  bean.data!.uid.toString()) {
                 try {
-                  if (sp.getString('roomID').toString() == widget.roomId.toString()) {
+                  if (sp.getString('roomID').toString() ==
+                      widget.roomId.toString()) {
                     final chatRoomId = sp.getString('chatRoomId').toString();
                     if (chatRoomId.isNotEmpty) {
-                      EMClient.getInstance.chatRoomManager.joinChatRoom(chatRoomId);
+                      EMClient.getInstance.chatRoomManager
+                          .joinChatRoom(chatRoomId);
                     }
                   }
                 } catch (e) {
@@ -6141,7 +6276,17 @@ class _RoomPageState extends State<RoomPage>
   }
 
   /// 保存本房间送礼
-  Future<void> saveGiftInfo(String headImage, String uid, String nickeName, String otherNickName, String otherUid, String giftImage, String number, String giftName, String price,) async {
+  Future<void> saveGiftInfo(
+    String headImage,
+    String uid,
+    String nickeName,
+    String otherNickName,
+    String otherUid,
+    String giftImage,
+    String number,
+    String giftName,
+    String price,
+  ) async {
     DatabaseHelper databaseHelper = DatabaseHelper();
     Database? db = await databaseHelper.database;
     Map<String, dynamic> params = <String, dynamic>{
@@ -6155,7 +6300,7 @@ class _RoomPageState extends State<RoomPage>
       'number': number,
       'giftName': giftName,
       'price': price,
-      'sum': (int.parse(price)*int.parse(number)).toString(),
+      'sum': (int.parse(price) * int.parse(number)).toString(),
       'by1': '',
       'by2': '',
       'by3': '',
@@ -6192,10 +6337,9 @@ class _RoomPageState extends State<RoomPage>
     Database? db = await databaseHelper.database;
     // 获取所有数据
     // 执行查询操作
-    String queryM =
-        'select * from roomGiftTable order by id desc';
+    String queryM = 'select * from roomGiftTable order by id desc';
     List<Map<String, dynamic>>? result = await db.rawQuery(queryM);
-    if(result.isNotEmpty){
+    if (result.isNotEmpty) {
       setState(() {
         giftName = result[0]['giftName'];
         nickName = result[0]['nickeName'];
@@ -6278,11 +6422,17 @@ class _RoomPageState extends State<RoomPage>
   }
 
   Widget _lunbotu() {
-    final hasGame = (sp.getInt('user_level')! >= 3 || sp.getInt('user_grLevel')! >= 3);
+    final hasGame =
+        (sp.getInt('user_level')! >= 3 || sp.getInt('user_grLevel')! >= 3);
     final isSc = sp.getString('scIsOk').toString() == '1';
     final list1 = [
-      if (!isSc) {"url": "assets/svga/gp/l_sc.svga", "type": "svga", "content": "sc"},
-      {"url": "assets/images/room_play_banner.png", "type": "image", "content": "wf"},
+      if (!isSc)
+        {"url": "assets/svga/gp/l_sc.svga", "type": "svga", "content": "sc"},
+      {
+        "url": "assets/images/room_play_banner.png",
+        "type": "image",
+        "content": "wf"
+      },
     ];
     final list2 = [
       {"url": "assets/svga/gp/l_zp.svga"},
