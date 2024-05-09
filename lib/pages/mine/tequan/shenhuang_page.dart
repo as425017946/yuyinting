@@ -129,7 +129,7 @@ class _ShenHuangPageState extends State<ShenHuangPage>  with TickerProviderState
         ),
 
         /// 特权展示
-        WidgetUtils.commonSizedBox(70, 0),
+        WidgetUtils.commonSizedBox((140*1.25).w, 0),
         SizedBox(
           height: ScreenUtil().setHeight(500),
           child: SingleChildScrollView(

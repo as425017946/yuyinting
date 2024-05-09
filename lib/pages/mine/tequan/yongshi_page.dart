@@ -128,7 +128,7 @@ class _YongshiPageState extends State<YongshiPage>
           ),
         ),
         /// 特权展示
-        WidgetUtils.commonSizedBox(70, 0),
+        WidgetUtils.commonSizedBox((140*1.25).w, 0),
         Row(
           children: [
             WidgetUtils.commonSizedBox(0, 20),
