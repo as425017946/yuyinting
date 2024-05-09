@@ -293,7 +293,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      nobleID != 0
+                                      nobleID > 4
                                           ? ShaderMask(
                                         shaderCallback: (Rect bounds) {
                                           return const LinearGradient(
@@ -402,7 +402,32 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                           ScreenUtil().setHeight(26),
                                           ScreenUtil().setHeight(18)),
                                       WidgetUtils.commonSizedBox(0, 2),
-                                      WidgetUtils.onlyText(
+                                      nobleID > 4
+                                          ? ShaderMask(
+                                              shaderCallback: (Rect bounds) {
+                                                return const LinearGradient(
+                                                  begin: Alignment.centerLeft,
+                                                  end: Alignment.centerRight,
+                                                  colors: [
+                                                    MyColors.gz1,
+                                                    MyColors.gz2
+                                                  ],
+                                                ).createShader(
+                                                    Offset.zero & bounds.size);
+                                              },
+                                              blendMode: BlendMode.srcATop,
+                                              child: Text(
+                                                userNumber,
+                                                style: TextStyle(
+                                                    fontSize:
+                                                        ScreenUtil().setSp(25),
+                                                    color:
+                                                        const Color(0xffffffff),
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              ),
+                                            )
+                                          : WidgetUtils.onlyText(
                                           userNumber,
                                           StyleUtils.getCommonTextStyle(
                                               color: MyColors.roomTCWZ2,

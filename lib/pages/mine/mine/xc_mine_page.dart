@@ -11,6 +11,7 @@ import 'package:svgaplayer_flutter/player.dart';
 import 'package:yuyinting/pages/home/ceshi.dart';
 import 'package:yuyinting/pages/mine/mine/xc_mine_model.dart';
 
+import '../../../colors/my_colors.dart';
 import '../../../main.dart';
 import '../../../utils/event_utils.dart';
 import '../../../utils/getx_tools.dart';
@@ -114,7 +115,8 @@ class _MinePageContent extends StatelessWidget {
 
   Widget _nav(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: getxWindowPadding.top, right: 34.w, left: 34.w),
+      padding:
+          EdgeInsets.only(top: getxWindowPadding.top, right: 34.w, left: 34.w),
       child: Column(
         children: [
           Container(
@@ -137,7 +139,8 @@ class _MinePageContent extends StatelessWidget {
                         Image(
                           width: 74.w * 0.8,
                           height: 49.w * 0.8,
-                          image: AssetImage('assets/images/mine_switch_${c.switchValue.value ? 1 : 0}.png'),
+                          image: AssetImage(
+                              'assets/images/mine_switch_${c.switchValue.value ? 1 : 0}.png'),
                         ),
                         SizedBox(width: 10.w),
                         Text(
@@ -196,13 +199,15 @@ class _MinePageContent extends StatelessWidget {
                     Image(
                       width: 74.w * 0.8,
                       height: 49.w * 0.8,
-                      image: AssetImage('assets/images/mine_switch_${c.switchValue2.value ? 1 : 0}.png'),
+                      image: AssetImage(
+                          'assets/images/mine_switch_${c.switchValue2.value ? 1 : 0}.png'),
                     ),
                     SizedBox(width: 10.w),
                     Text(
                       '进房隐身',
                       style: TextStyle(
-                        color: Color(c.switchValue2.value ? 0xFFFE5D9C : 0xFF949494),
+                        color: Color(
+                            c.switchValue2.value ? 0xFFFE5D9C : 0xFF949494),
                         fontSize: 28.sp,
                       ),
                     )
@@ -234,16 +239,34 @@ class _MinePageContent extends StatelessWidget {
             children: [
               _head(),
               const SizedBox(height: 17),
-              Text(
-                c.nickname.value,
-                style: const TextStyle(
-                  color: Color(0xFF212121),
-                  fontSize: 30,
-                  fontWeight: FontWeight.w700,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
+              c.isGuizu.value > 4
+                  ? ShaderMask(
+                      shaderCallback: (Rect bounds) {
+                        return const LinearGradient(
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
+                          colors: [MyColors.gz1, MyColors.gz2],
+                        ).createShader(Offset.zero & bounds.size);
+                      },
+                      blendMode: BlendMode.srcATop,
+                      child: Text(
+                        c.nickname.value,
+                        style: const TextStyle(
+                            fontSize: 30,
+                            color: Color(0xffffffff),
+                            fontWeight: FontWeight.w700),
+                      ),
+                    )
+                  : Text(
+                      c.nickname.value,
+                      style: const TextStyle(
+                        color: Color(0xFF212121),
+                        fontSize: 30,
+                        fontWeight: FontWeight.w700,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
               const SizedBox(height: 24),
               if (c.userNumber.value.isNotEmpty)
                 GestureDetector(
@@ -261,13 +284,31 @@ class _MinePageContent extends StatelessWidget {
                         image: AssetImage('assets/images/mine_icon_id.png'),
                       ),
                       const SizedBox(width: 3),
-                      Text(
-                        c.userNumber.value,
-                        style: const TextStyle(
-                          color: Color(0xFF8C8FA1),
-                          fontSize: 24,
-                        ),
-                      ),
+                      c.isGuizu.value > 4
+                          ? ShaderMask(
+                              shaderCallback: (Rect bounds) {
+                                return const LinearGradient(
+                                  begin: Alignment.centerLeft,
+                                  end: Alignment.centerRight,
+                                  colors: [MyColors.gz1, MyColors.gz2],
+                                ).createShader(Offset.zero & bounds.size);
+                              },
+                              blendMode: BlendMode.srcATop,
+                              child: Text(
+                                c.userNumber.value,
+                                style: const TextStyle(
+                                    fontSize: 24,
+                                    color: Color(0xffffffff),
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            )
+                          : Text(
+                              c.userNumber.value,
+                              style: const TextStyle(
+                                color: Color(0xFF8C8FA1),
+                                fontSize: 24,
+                              ),
+                            ),
                       const SizedBox(width: 9),
                       const Image(
                         width: 25,
@@ -393,13 +434,13 @@ class _MinePageContent extends StatelessWidget {
                 color: Colors.transparent,
                 alignment: Alignment.center,
                 child: Obx(() => Text(
-                  c.guizuText,
-                  style: const TextStyle(
-                    color: Color(0xFF673D27),
-                    fontSize: 24,
-                    fontWeight: FontWeight.w400,
-                  ),
-                )),
+                      c.guizuText,
+                      style: const TextStyle(
+                        color: Color(0xFF673D27),
+                        fontSize: 24,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    )),
               ),
             ),
           ),

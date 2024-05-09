@@ -111,6 +111,7 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
       });
     });
   }
+
   //停止播放录音
   void stopPlayer() {
     _mPlayer.stopPlayer().then((value) {
@@ -386,16 +387,13 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                     padding: EdgeInsets.symmetric(horizontal: 20.w),
                     child: Row(
                       children: [
-                        nobleID != 0
+                        nobleID > 4
                             ? ShaderMask(
                                 shaderCallback: (Rect bounds) {
                                   return const LinearGradient(
                                     begin: Alignment.centerLeft,
                                     end: Alignment.centerRight,
-                                    colors: [
-                                      MyColors.gz1,
-                                      MyColors.gz2
-                                    ],
+                                    colors: [MyColors.gz1, MyColors.gz2],
                                   ).createShader(Offset.zero & bounds.size);
                                 },
                                 blendMode: BlendMode.srcATop,
@@ -428,13 +426,32 @@ class _PeopleInfoPageState extends State<PeopleInfoPage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              WidgetUtils.onlyText(
-                                'ID: $userNumber',
-                                StyleUtils.getCommonTextStyle(
-                                  color: Colors.black,
-                                  fontSize: 24.sp,
-                                ),
-                              ),
+                              nobleID > 4
+                                  ? ShaderMask(
+                                      shaderCallback: (Rect bounds) {
+                                        return const LinearGradient(
+                                          begin: Alignment.centerLeft,
+                                          end: Alignment.centerRight,
+                                          colors: [MyColors.gz1, MyColors.gz2],
+                                        ).createShader(
+                                            Offset.zero & bounds.size);
+                                      },
+                                      blendMode: BlendMode.srcATop,
+                                      child: Text(
+                                        'ID: $userNumber',
+                                        style: TextStyle(
+                                            fontSize: ScreenUtil().setSp(24),
+                                            color: const Color(0xffffffff),
+                                            fontWeight: FontWeight.w700),
+                                      ),
+                                    )
+                                  : WidgetUtils.onlyText(
+                                      'ID: $userNumber',
+                                      StyleUtils.getCommonTextStyle(
+                                        color: Colors.black,
+                                        fontSize: 24.sp,
+                                      ),
+                                    ),
                               WidgetUtils.commonSizedBox(0, 10.w),
                               WidgetUtils.showImages(
                                 'assets/images/mine_fuzhi.png',

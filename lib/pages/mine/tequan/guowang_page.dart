@@ -296,7 +296,7 @@ class _GuowangPageState extends State<GuowangPage>  with TickerProviderStateMixi
                     WidgetUtils.commonSizedBox(0, 20),
                   ],
                 ),
-                WidgetUtils.commonSizedBox(60, 0),
+                WidgetUtils.commonSizedBox((200*1.25).w, 0),
               ],
             ),
           ),

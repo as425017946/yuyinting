@@ -267,7 +267,7 @@ class _MyInfoPageState extends State<MyInfoPage> {
                     padding: EdgeInsets.symmetric(horizontal: 20.w),
                     child: Row(
                       children: [
-                        nobleID != 0
+                        nobleID > 4
                             ? ShaderMask(
                                 shaderCallback: (Rect bounds) {
                                   return const LinearGradient(
@@ -309,6 +309,26 @@ class _MyInfoPageState extends State<MyInfoPage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              nobleID > 4
+                                  ? ShaderMask(
+                                shaderCallback: (Rect bounds) {
+                                  return const LinearGradient(
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                    colors: [MyColors.gz1, MyColors.gz2],
+                                  ).createShader(
+                                      Offset.zero & bounds.size);
+                                },
+                                blendMode: BlendMode.srcATop,
+                                child: Text(
+                                  'ID: $userNumber',
+                                  style: TextStyle(
+                                      fontSize: ScreenUtil().setSp(24),
+                                      color: const Color(0xffffffff),
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              )
+                                  :
                               WidgetUtils.onlyText(
                                 'ID: $userNumber',
                                 StyleUtils.getCommonTextStyle(
