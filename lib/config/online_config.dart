@@ -5,7 +5,7 @@ import '../main.dart';
 import '../utils/log_util.dart';
 
 enum OnlineConfigType { online, test, zhaozeng, pengfei }
-const onlineType = OnlineConfigType.online;
+const onlineType = OnlineConfigType.test;
 
 class OnlineConfig {
   /// Ping
@@ -31,9 +31,9 @@ class OnlineConfig {
         return "http://192.168.0.53/api";
       case OnlineConfigType.test:
         //测试环境
-        // return "http://18.162.113.63:8080/api";
+        return "http://18.162.113.63:8080/api";
         // 修改后的测试环境
-        return "http://${sp.getString('isDian').toString()}:8081/api";
+        // return "http://${sp.getString('isDian').toString()}:8081/api";
       case OnlineConfigType.online:
         //正式环境
         return "http://119.45.100.48:8080/api";
