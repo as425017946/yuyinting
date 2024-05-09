@@ -281,6 +281,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
 
                       Row(
                         children: [
+                          WidgetUtils.commonSizedBox(0, 20.w),
                           Expanded(
                             child: Container(
                               width: double.infinity,
@@ -467,7 +468,7 @@ class _RoomPeopleInfoPageState extends State<RoomPeopleInfoPage> {
                                                                         : 'assets/svga/gz/gz_chuanshuo.svga',
                                   ),
                                 )
-                              : WidgetUtils.commonSizedBox((120*1.25).w, (120*1.25).w),
+                              : WidgetUtils.commonSizedBox(0, 0),
                           WidgetUtils.commonSizedBox(0, 20.w),
                         ],
                       ),

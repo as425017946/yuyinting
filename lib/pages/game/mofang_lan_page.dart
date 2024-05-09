@@ -82,6 +82,30 @@ class _MofangLanPageState extends State<MofangLanPage>
       if (event.title == '水星魔方') {
         doPostPlayRoulette(event.cishu);
       } else if (event.title == '蓝魔方') {
+        if (double.parse(sp
+            .getString('mofangJBY')
+            .toString()) <
+            20 &&
+            cishu == 1) {
+          MyToastUtils.showToastBottom('钱包余额不足');
+          return;
+        }
+        if (double.parse(sp
+            .getString('mofangJBY')
+            .toString()) <
+            100 &&
+            cishu == 5) {
+          MyToastUtils.showToastBottom('钱包余额不足');
+          return;
+        }
+        if (double.parse(sp
+            .getString('mofangJBY')
+            .toString()) <
+            200 &&
+            cishu == 10) {
+          MyToastUtils.showToastBottom('钱包余额不足');
+          return;
+        }
         if (isShow == false && isXiazhu) {
           eventBus.fire(GameBack(isBack: true));
           doPostPlayRoulette(cishu.toString());
