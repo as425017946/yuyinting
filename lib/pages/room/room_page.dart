@@ -6281,7 +6281,7 @@ class _RoomPageState extends State<RoomPage>
     final hasGame = (sp.getInt('user_level')! >= 3 || sp.getInt('user_grLevel')! >= 3);
     final isSc = sp.getString('scIsOk').toString() == '1';
     final list1 = [
-      if (isSc) {"url": "assets/svga/gp/l_sc.svga", "type": "svga", "content": "sc"},
+      if (!isSc) {"url": "assets/svga/gp/l_sc.svga", "type": "svga", "content": "sc"},
       {"url": "assets/images/room_play_banner.png", "type": "image", "content": "wf"},
     ];
     final list2 = [
