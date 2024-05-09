@@ -109,6 +109,18 @@ class _ZhuanPanXinPageState extends State<ZhuanPanXinPage>
       if(event.title == '心动转盘') {
         doPostPlayRoulette(event.cishu);
       }else if(event.title == '小转盘'){
+        if(double.parse(sp.getString('zp_jinbi').toString()) < 100 && cishu ==1){
+          MyToastUtils.showToastBottom('钱包余额不足');
+          return;
+        }
+        if(double.parse(sp.getString('zp_jinbi').toString()) < 500 && cishu ==5){
+          MyToastUtils.showToastBottom('钱包余额不足');
+          return;
+        }
+        if(double.parse(sp.getString('zp_jinbi').toString()) < 1000 && cishu ==10){
+          MyToastUtils.showToastBottom('钱包余额不足');
+          return;
+        }
         if(isRunning == false && isXiazhu) {
           eventBus.fire(GameBack(isBack: true));
           doPostPlayRoulette(cishu.toString());
