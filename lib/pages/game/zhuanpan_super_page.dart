@@ -101,6 +101,18 @@ class _ZhuanPanSuperPageState extends State<ZhuanPanSuperPage> with TickerProvid
       if(event.title == '超级转盘') {
         doPostPlayRoulette(event.cishu);
       }else if(event.title == '大转盘'){
+        if(double.parse(sp.getString('zp_jinbi').toString()) < 500 && cishu ==1 ){
+          MyToastUtils.showToastBottom('钱包余额不足');
+          return;
+        }
+        if(double.parse(sp.getString('zp_jinbi').toString()) < 2500 && cishu ==5 ){
+          MyToastUtils.showToastBottom('钱包余额不足');
+          return;
+        }
+        if(double.parse(sp.getString('zp_jinbi').toString()) < 5000 && cishu ==10 ){
+          MyToastUtils.showToastBottom('钱包余额不足');
+          return;
+        }
         if(isRunning == false && isXiazhu) {
           eventBus.fire(GameBack(isBack: true));
           doPostPlayRoulette(cishu.toString());
